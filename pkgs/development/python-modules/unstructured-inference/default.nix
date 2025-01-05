@@ -19,6 +19,7 @@
   mypy,
   pytest-cov-stub,
   pdf2image,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -57,14 +58,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pdf2image
     huggingface-hub
+    tmpdirAsHomeHook
   ];
 
   # This dependency needs to be updated properly
   doCheck = false;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # not sure why this fails

@@ -14,6 +14,7 @@
   requests-mock,
   responses,
   rich,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     responses
+    tmpdirAsHomeHook
   ];
 
   pythonRelaxDeps = [
@@ -60,12 +62,6 @@ buildPythonPackage rec {
     "requests"
     "rich"
   ];
-
-  # The tests want to write a configuration file
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    mkdir -p $HOME
-  '';
 
   pythonImportsCheck = [ "censys" ];
 

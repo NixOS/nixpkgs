@@ -12,6 +12,7 @@
   pythonOlder,
   setuptools,
   setuptools-scm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -46,11 +47,10 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pytestFlagsArray = [ "tests/" ];
 

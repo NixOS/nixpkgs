@@ -7,6 +7,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pyomo" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTestPaths = [
     # Don't test the documentation and the examples

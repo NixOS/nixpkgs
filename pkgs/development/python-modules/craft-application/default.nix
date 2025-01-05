@@ -26,6 +26,7 @@
   setuptools-scm,
   snap-helpers,
   freezegun,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -78,11 +79,10 @@ buildPythonPackage rec {
     pytest-subprocess
     pytestCheckHook
     responses
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Tests require access to /etc/os-release, which isn't accessible in
     # the test environment, so create a fake file, and modify the code
     # to look for it.

@@ -10,6 +10,7 @@
   requests,
   responses,
   setuptools,
+  tmpdirAsHomeHook,
   typing-extensions,
 }:
 
@@ -29,17 +30,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   dependencies = [
     cryptography
     requests
     pyjwt
   ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   checkInputs = [
     flaky

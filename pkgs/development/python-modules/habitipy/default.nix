@@ -8,6 +8,7 @@
   hypothesis,
   pytestCheckHook,
   responses,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -34,11 +35,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     responses
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # network access

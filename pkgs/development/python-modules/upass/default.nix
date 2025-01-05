@@ -5,6 +5,7 @@
   pyperclip,
   urwid,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-IlNqPmDaRZ3yRV8O6YKjQkZ3fKNcFgzJHtIX0ADrOyU=";
   };
 
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -26,11 +31,10 @@ buildPythonPackage rec {
     urwid
   ];
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
 
   postInstall = ''
-    export HOME=$(mktemp -d);
     mkdir $HOME/.config
   '';
 

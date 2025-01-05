@@ -22,6 +22,7 @@
   pyopenssl,
   pytestCheckHook,
   pytest-trio,
+  tmpdirAsHomeHook,
   trustme,
   yapf,
 }:
@@ -66,12 +67,12 @@ buildPythonPackage rec {
     pyopenssl
     pytestCheckHook
     pytest-trio'
+    tmpdirAsHomeHook
     trustme
     yapf
   ];
 
   preCheck = ''
-    export HOME=$TMPDIR
     # $out is first in path which causes "import file mismatch"
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';

@@ -25,6 +25,7 @@
   rocmSupport ? config.rocmSupport,
   rocmPackages,
   triton,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage {
@@ -105,6 +106,7 @@ buildPythonPackage {
     # because we only support cudaPackages on x86_64-linux atm
     lit
     llvm
+    tmpdirAsHomeHook
   ];
 
   buildInputs = [
@@ -132,9 +134,6 @@ buildPythonPackage {
   preConfigure = ''
     # Ensure that the build process uses the requested number of cores
     export MAX_JOBS="$NIX_BUILD_CORES"
-
-    # Upstream's setup.py tries to write cache somewhere in ~/
-    export HOME=$(mktemp -d)
 
     # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
     echo "
@@ -201,13 +200,15 @@ buildPythonPackage {
     ];
 
     dontBuild = true;
-    nativeCheckInputs = [ pytestCheckHook ];
+    nativeCheckInputs = [
+      pytestCheckHook
+      tmpdirAsHomeHook
+    ];
 
     doCheck = true;
 
     preCheck = ''
       cd python/test/unit
-      export HOME=$TMPDIR
     '';
     checkPhase = "pytestCheckPhase";
 

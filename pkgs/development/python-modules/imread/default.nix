@@ -10,6 +10,7 @@
   libtiff,
   libwebp,
   numpy,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,10 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pytestFlagsArray = [
     # verbose build outputs needed to debug hard-to-reproduce hydra failures
@@ -47,8 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "imread" ];
 
   preCheck = ''
-    cd $TMPDIR
-    export HOME=$TMPDIR
+    cd $HOME
     export OMP_NUM_THREADS=1
   '';
 

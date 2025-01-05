@@ -21,9 +21,11 @@
   torch,
 
   # tests
+  addBinToPathHook,
   evaluate,
   parameterized,
   pytest7CheckHook,
+  tmpdirAsHomeHook,
   transformers,
   config,
   cudatoolkit,
@@ -56,19 +58,16 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     evaluate
     parameterized
     pytest7CheckHook
+    tmpdirAsHomeHook
     transformers
   ];
-  preCheck =
-    ''
-      export HOME=$(mktemp -d)
-      export PATH=$out/bin:$PATH
-    ''
-    + lib.optionalString config.cudaSupport ''
-      export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
-    '';
+  preCheck = lib.optionalString config.cudaSupport ''
+    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
+  '';
   pytestFlagsArray = [ "tests" ];
   disabledTests =
     [

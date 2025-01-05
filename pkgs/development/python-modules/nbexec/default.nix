@@ -11,6 +11,7 @@
   # check inputs
   unittestCheckHook,
   ipykernel,
+  tmpdirAsHomeHook,
 }:
 let
   pname = "nbexec";
@@ -41,11 +42,8 @@ buildPythonPackage {
   nativeCheckInputs = [
     unittestCheckHook
     ipykernel
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   unittestFlagsArray = [
     "-s"

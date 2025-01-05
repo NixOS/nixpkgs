@@ -16,6 +16,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -57,15 +58,14 @@ buildPythonPackage rec {
     rich
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTests = [
     "test_colorize"
-    # Tests are flaky, OSError: [Errno 24] Too many open files happpens
+    # Tests are flaky, OSError: [Errno 24] Too many open files happens
     "test_answer_links_using_l_option"
     "test_answers_bing"
     "test_answers"

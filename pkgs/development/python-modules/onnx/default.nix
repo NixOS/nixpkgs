@@ -22,6 +22,7 @@
   pillow,
   pytestCheckHook,
   tabulate,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     tabulate
+    tmpdirAsHomeHook
   ];
 
   postPatch = ''
@@ -93,8 +95,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # detecting source dir as a python package confuses pytest
     mv onnx/__init__.py onnx/__init__.py.hidden
   '';

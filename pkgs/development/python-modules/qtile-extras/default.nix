@@ -15,6 +15,7 @@
   qtile,
   requests,
   setuptools-scm,
+  tmpdirAsHomeHook,
   xorgserver,
 }:
 
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     python-dateutil
     qtile
     requests
+    tmpdirAsHomeHook
     xorgserver
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
@@ -77,7 +79,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
     sed -i 's#/usr/bin/sleep#sleep#' test/widget/test_snapcast.py
   '';

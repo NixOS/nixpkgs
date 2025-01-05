@@ -9,6 +9,7 @@
   scipy,
   numdifftools,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -36,11 +37,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numdifftools
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [ "aeppl" ];
 

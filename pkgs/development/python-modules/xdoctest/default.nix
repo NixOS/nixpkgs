@@ -4,7 +4,9 @@
   fetchFromGitHub,
   setuptools,
   wheel,
+  addBinToPathHook,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -24,12 +26,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-    export PATH=$out/bin:$PATH
-  '';
+  nativeCheckInputs = [
+    addBinToPathHook
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "xdoctest" ];
 

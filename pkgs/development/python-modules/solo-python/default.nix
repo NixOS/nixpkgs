@@ -12,6 +12,7 @@
   pyserial,
   pyusb,
   requests,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +29,10 @@ buildPythonPackage rec {
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
-  nativeBuildInputs = [ flit ];
+  nativeBuildInputs = [
+    flit
+    tmpdirAsHomeHook
+  ];
 
   propagatedBuildInputs = [
     click
@@ -40,10 +44,6 @@ buildPythonPackage rec {
     pyusb
     requests
   ];
-
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [
     "solo"

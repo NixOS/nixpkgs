@@ -11,6 +11,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -38,11 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "pudb" ];
 

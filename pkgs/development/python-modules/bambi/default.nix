@@ -19,6 +19,7 @@
   blackjax,
   numpyro,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -58,11 +59,8 @@ buildPythonPackage rec {
     blackjax
     numpyro
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

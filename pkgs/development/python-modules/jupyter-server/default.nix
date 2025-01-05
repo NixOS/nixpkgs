@@ -31,6 +31,8 @@
   overrides,
   requests,
   flaky,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -75,6 +77,7 @@ buildPythonPackage rec {
   stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "favicon.ico" ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     ipykernel
     pytestCheckHook
     pytest-console-scripts
@@ -82,17 +85,13 @@ buildPythonPackage rec {
     pytest-timeout
     requests
     flaky
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH=$out/bin:$PATH
-  '';
 
   disabledTests =
     [

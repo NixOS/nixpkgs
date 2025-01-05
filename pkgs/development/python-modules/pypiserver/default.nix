@@ -9,6 +9,7 @@
   pythonOlder,
   setuptools-git,
   setuptools,
+  tmpdirAsHomeHook,
   twine,
   watchdog,
   webtest,
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     twine
     webtest
     build
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
@@ -61,10 +63,6 @@ buildPythonPackage rec {
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
     (allow mach-lookup (global-name "com.apple.FSEvents"))
-  '';
-
-  preCheck = ''
-    export HOME=$TMPDIR
   '';
 
   disabledTests = [

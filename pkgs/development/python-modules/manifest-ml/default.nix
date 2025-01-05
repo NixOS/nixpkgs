@@ -20,6 +20,7 @@
   sqlitedict,
   tenacity,
   tiktoken,
+  tmpdirAsHomeHook,
   torch,
   transformers,
   uvicorn,
@@ -84,11 +85,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pytestFlagsArray = [
     # this file tries importing `deepspeed`, which is not yet packaged in nixpkgs
@@ -107,7 +105,7 @@ buildPythonPackage rec {
     "test_run_chat"
     "test_run"
     "test_score_run"
-    # Test is time-senstive
+    # Test is time-sensitive
     "test_timing"
   ];
 

@@ -14,6 +14,7 @@
   six,
   text-unidecode,
   tqdm,
+  tmpdirAsHomeHook,
   urllib3,
   webencodings,
 }:
@@ -46,12 +47,17 @@ buildPythonPackage rec {
     webencodings
   ];
 
+  nativeCheckInputs = [ tmpdirAsHomeHook ];
+
   # Tests try to access the network.
   checkPhase = ''
-    export HOME="$TMP"
+    runHook preCheck
+
     mkdir -p "$HOME/.kaggle/"
     echo '{"username":"foobar","key":"00000000000000000000000000000000"}' > "$HOME/.kaggle/kaggle.json"
     $out/bin/kaggle --help > /dev/null
+
+    runHook postCheck
   '';
   pythonImportsCheck = [ "kaggle" ];
 

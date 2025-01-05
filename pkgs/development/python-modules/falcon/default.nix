@@ -22,6 +22,7 @@
   pyyaml,
   rapidjson,
   requests,
+  tmpdirAsHomeHook,
   testtools,
   ujson,
   uvicorn,
@@ -47,7 +48,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
-    export HOME=$TMPDIR
     cp -R tests examples $TMPDIR
     pushd $TMPDIR
   '';
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     # https://github.com/falconry/falcon/blob/master/requirements/tests
     pytest7CheckHook
+    tmpdirAsHomeHook
     pyyaml
     requests
     rapidjson

@@ -7,6 +7,7 @@
   torch,
   torchvision,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   transformers,
 }:
 
@@ -40,12 +41,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
     transformers
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Skip as it downloads pretrained weights (require network access)

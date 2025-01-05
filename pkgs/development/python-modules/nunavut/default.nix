@@ -6,6 +6,7 @@
   importlib-resources,
   pydsdl,
   pyyaml,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -25,16 +26,15 @@ buildPythonPackage rec {
       --replace "pydsdl ~= 1.16" "pydsdl"
   '';
 
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
+
   propagatedBuildInputs = [
     importlib-resources
     pydsdl
     pyyaml
   ];
-
-  # allow for writable directory for darwin
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
 
   # No tests in pypy package and no git tags yet for release versions, see
   # https://github.com/UAVCAN/nunavut/issues/182

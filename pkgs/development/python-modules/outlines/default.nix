@@ -17,6 +17,7 @@
   nest-asyncio,
   numba,
   scipy,
+  tmpdirAsHomeHook,
   torch,
   transformers,
 }:
@@ -56,9 +57,16 @@ buildPythonPackage rec {
     pyairports
   ];
 
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
+
   checkPhase = ''
-    export HOME=$(mktemp -d)
+    runHook preCheck
+
     python3 -c 'import outlines'
+
+    runHook postCheck
   '';
 
   meta = with lib; {

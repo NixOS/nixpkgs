@@ -14,6 +14,7 @@
   pytestCheckHook,
   matplotlib,
   dufte,
+  tmpdirAsHomeHook,
   perfplot,
 }:
 
@@ -49,15 +50,12 @@ buildPythonPackage rec {
     pytestCheckHook
     matplotlib
     dufte
+    tmpdirAsHomeHook
   ];
 
   postConfigure = ''
     substituteInPlace setup.py \
       --replace-fail "/usr/include/eigen3/" "${eigen}/include/eigen3/"
-  '';
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
   '';
 
   # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.

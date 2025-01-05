@@ -12,6 +12,7 @@
   requests,
   responses,
   setuptools,
+  tmpdirAsHomeHook,
   unidiff,
 }:
 
@@ -47,11 +48,8 @@ buildPythonPackage rec {
     pkgs.gitMinimal
     pytestCheckHook
     responses
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # Tests are failing for various reasons (missing git repo, missing test data, etc.)

@@ -13,6 +13,7 @@
 
   # tests
   pytestCheckHook,
+  tmpdirAsHomeHook,
   torch,
   transformers,
   wurlitzer,
@@ -50,13 +51,12 @@ buildPythonPackage rec {
     torch
     transformers
     wurlitzer
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
     # run tests against build result, not sources
     rm -rf ctranslate2
-
-    export HOME=$TMPDIR
   '';
 
   disabledTests = [

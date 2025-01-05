@@ -24,6 +24,7 @@
   seaborn,
   svgutils,
   templateflow,
+  tmpdirAsHomeHook,
   traits,
   transforms3d,
 }:
@@ -73,8 +74,10 @@ buildPythonPackage rec {
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  preCheck = ''export HOME=$(mktemp -d)'';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
   pytestFlagsArray = [ "niworkflows" ];
   # try to download data:
   disabledTests = [

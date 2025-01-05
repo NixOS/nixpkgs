@@ -14,6 +14,7 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  tmpdirAsHomeHook,
   uvicorn,
 }:
 
@@ -43,14 +44,11 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     nodejs
     pytestCheckHook
     requests
+    tmpdirAsHomeHook
   ];
 
   meta = with lib; {

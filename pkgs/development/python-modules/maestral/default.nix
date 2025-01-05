@@ -26,6 +26,7 @@
   watchdog,
   xattr,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   nixosTests,
 }:
 
@@ -72,14 +73,13 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   # ModuleNotFoundError: No module named '_watchdog_fsevents'
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

@@ -14,6 +14,7 @@
   pymongo-inmemory,
   pandas,
   birch,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    tmpdirAsHomeHook
   ];
 
   dependencies = [
@@ -71,10 +73,6 @@ buildPythonPackage rec {
     "test_being_calc_next_time"
     "test_pickle_being_calculated"
   ];
-
-  preBuild = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   pythonImportsCheck = [ "cachier" ];
 

@@ -36,6 +36,7 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -92,12 +93,9 @@ buildPythonPackage rec {
     html5lib
     pytestCheckHook
     pytest-xdist
+    tmpdirAsHomeHook
     typing-extensions
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests =
     [

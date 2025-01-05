@@ -14,6 +14,7 @@
   ipython,
   ghostscript,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,10 @@ buildPythonPackage rec {
       --replace-fail "env.get(\"GMT_LIBRARY_PATH\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+    tmpdirAsHomeHook
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -54,10 +58,6 @@ buildPythonPackage rec {
 
   # The *entire* test suite requires network access
   doCheck = false;
-
-  postBuild = ''
-    export HOME=$TMP
-  '';
 
   pythonImportsCheck = [ "pygmt" ];
 

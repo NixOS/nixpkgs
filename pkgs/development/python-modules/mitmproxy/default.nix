@@ -41,6 +41,7 @@
   pytest-xdist,
   pytestCheckHook,
   requests,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -101,13 +102,10 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     requests
+    tmpdirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Tests require a git repository

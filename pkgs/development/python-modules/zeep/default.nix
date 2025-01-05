@@ -23,6 +23,7 @@
   requests-file,
   requests-mock,
   setuptools,
+  tmpdirAsHomeHook,
   xmlsec,
 }:
 
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
@@ -81,10 +83,6 @@ buildPythonPackage rec {
     "test_bytes_like_password_digest"
     "test_password_digest"
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   meta = with lib; {
     changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";

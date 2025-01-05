@@ -19,6 +19,7 @@
   seaborn,
   tensorflow,
   tensorflow-probability,
+  tmpdirAsHomeHook,
   tqdm,
 }:
 
@@ -67,11 +68,10 @@ buildPythonPackage rec {
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTests = [
     # Plot functionality requires additional packages.

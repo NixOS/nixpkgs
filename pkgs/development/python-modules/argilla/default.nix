@@ -54,6 +54,7 @@
   spacy,
   sqlalchemy,
   tqdm,
+  tmpdirAsHomeHook,
   transformers,
   typer,
   uvicorn,
@@ -169,15 +170,12 @@ buildPythonPackage rec {
   # Still quite a bit of optional dependencies missing
   doCheck = false;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-asyncio
     factory-boy
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];

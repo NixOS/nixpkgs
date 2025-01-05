@@ -5,6 +5,7 @@
   pythonOlder,
   setuptools,
   requests,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,7 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner', " ""
   '';
 
-  preBuild = "export HOME=$TMP";
+  nativeBuildInputs = [ tmpdirAsHomeHook ];
 
   build-system = [ setuptools ];
 

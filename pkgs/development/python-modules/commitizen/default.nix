@@ -27,6 +27,7 @@
   pytest-regressions,
   pytest7CheckHook,
   deprecated,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -75,6 +76,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-regressions
     pytest7CheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "commitizen" ];
@@ -82,8 +84,6 @@ buildPythonPackage rec {
   # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
-    export HOME="$(mktemp -d)"
-
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
     git init .

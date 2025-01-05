@@ -70,6 +70,7 @@
   scikit-learn,
   soundfile,
   tenacity,
+  tmpdirAsHomeHook,
   torch,
   tqdm,
 }:
@@ -235,13 +236,10 @@ buildPythonPackage rec {
     scikit-learn
     soundfile
     tenacity
+    tmpdirAsHomeHook
     torch
     tqdm
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # Require docker access

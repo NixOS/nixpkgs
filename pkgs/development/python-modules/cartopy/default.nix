@@ -20,6 +20,7 @@
   scipy,
   setuptools-scm,
   shapely,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -70,11 +71,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-    export HOME=$TMPDIR
   '';
 
   pytestFlagsArray = [

@@ -23,6 +23,7 @@
   rfc8785,
   pyasn1,
   platformdirs,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -65,11 +66,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pretend
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "sigstore" ];
 

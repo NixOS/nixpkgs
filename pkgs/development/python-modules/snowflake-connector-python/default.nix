@@ -24,6 +24,7 @@
   requests,
   setuptools,
   sortedcontainers,
+  tmpdirAsHomeHook,
   tomlkit,
   typing-extensions,
 }:
@@ -74,13 +75,10 @@ buildPythonPackage rec {
     secure-local-storage = [ keyring ];
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   disabledTestPaths = [

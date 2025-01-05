@@ -59,6 +59,7 @@
   pytest-asyncio,
   python,
   runtimeShell,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -175,6 +176,7 @@ let
         pytest-asyncio
         pytest-xdist
         pytestCheckHook
+        tmpdirAsHomeHook
       ]
       ++ lib.flatten (lib.attrValues optional-dependencies)
       ++ lib.optionals (stdenv.hostPlatform.isLinux) [
@@ -221,7 +223,6 @@ let
     # so change directory where `import .test` is able to be resolved
     preCheck =
       ''
-        export HOME=$TMPDIR
         export LC_ALL="en_US.UTF-8"
         cd $out/${python.sitePackages}/pandas
       ''

@@ -14,6 +14,7 @@
   deprecation,
   timeslot,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   gitUpdater,
 }:
 
@@ -53,12 +54,10 @@ buildPythonPackage rec {
     "platformdirs"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    # Fake home folder for tests that write to $HOME
-    export HOME="$TMPDIR"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "aw_core" ];
 

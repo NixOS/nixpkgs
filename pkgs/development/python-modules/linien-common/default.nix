@@ -9,6 +9,7 @@
   scipy,
   appdirs,
   callPackage,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/linien-common";
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [ setuptools ];
 

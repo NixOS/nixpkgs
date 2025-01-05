@@ -20,6 +20,7 @@
   scikit-build,
   # Check Inputs
   pytestCheckHook,
+  tmpdirAsHomeHook,
   ddt,
   fixtures,
   pytest-timeout,
@@ -125,6 +126,7 @@ buildPythonPackage rec {
     pytest-timeout
     qiskit-terra
     testtools
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [
@@ -134,7 +136,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     # Tests include a compiled "circuit" which is auto-built in $HOME
-    export HOME=$(mktemp -d)
     # move tests b/c by default try to find (missing) cython-ized code in /build/source dir
     cp -r $TMP/$sourceRoot/test $HOME
 

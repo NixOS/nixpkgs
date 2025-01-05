@@ -36,6 +36,7 @@
   pandas,
   pytest-cov-stub,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   websockets,
 
   testers,
@@ -112,6 +113,7 @@ buildPythonPackage rec {
     pandas
     pytest-cov-stub
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ optional-dependencies.all;
 
   disabledTests = [
@@ -126,10 +128,6 @@ buildPythonPackage rec {
     # https://github.com/python-lsp/python-lsp-server/issues/602
     "test_jedi_completion_with_fuzzy_enabled"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [
     "pylsp"

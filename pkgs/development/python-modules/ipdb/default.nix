@@ -11,7 +11,7 @@
   tomli,
   setuptools,
   pytestCheckHook,
-  pytest-timeout,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +38,10 @@ buildPythonPackage rec {
       tomli
     ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

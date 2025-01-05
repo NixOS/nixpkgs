@@ -8,6 +8,7 @@
   stdenv,
   pulseaudio,
   unittestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -34,11 +35,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     unittestCheckHook
     pulseaudio
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   meta = with lib; {
     description = "Python high-level interface and ctypes-based bindings for PulseAudio (libpulse)";

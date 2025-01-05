@@ -15,6 +15,7 @@
   python,
   scipy,
   fetchpatch,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -59,12 +60,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest
     pytest-xdist
+    tmpdirAsHomeHook
   ];
 
   checkPhase = ''
     runHook preCheck
-    # Cython cache lies in home directory
-    export HOME=$(mktemp -d)
     cd $HOME && ${python.interpreter} -c "import brian2;assert brian2.test()"
     runHook postCheck
   '';

@@ -6,6 +6,7 @@
   setuptools,
   stevedore,
   wheel,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,11 +29,10 @@ buildPythonPackage rec {
 
   dependencies = [ stevedore ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "plugin.core" ];
 

@@ -53,6 +53,7 @@
   sphinx-design,
   stdenv,
   stringcase,
+  tmpdirAsHomeHook,
   toml,
   tornado,
   types-protobuf,
@@ -116,6 +117,7 @@ stdenv.mkDerivation rec {
     pip-tools
     black
     yapf
+    tmpdirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -126,7 +128,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cd connectedhomeip
-    export HOME=$(mktemp -d)
 
     patchShebangs --build scripts
 

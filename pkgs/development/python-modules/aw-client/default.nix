@@ -11,6 +11,7 @@
   tabulate,
   typing-extensions,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   gitUpdater,
 }:
 
@@ -41,16 +42,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   # Only run this test, the others are integration tests that require
   # an instance of aw-server running in order to function.
   pytestFlagsArray = [ "tests/test_requestqueue.py" ];
-
-  preCheck = ''
-    # Fake home folder for tests that write to $HOME
-    export HOME="$TMPDIR"
-  '';
 
   pythonImportsCheck = [ "aw_client" ];
 

@@ -13,6 +13,8 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
   tomli,
   tqdm,
 }:
@@ -50,14 +52,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytest-asyncio
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin";
-  '';
 
   pythonImportsCheck = [ "sqlfmt" ];
 

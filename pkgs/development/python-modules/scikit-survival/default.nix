@@ -15,6 +15,7 @@
   scikit-learn,
   scipy,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sksurv" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   # can remove scikit-learn after 0.23.1
   postPatch = ''
@@ -60,7 +64,6 @@ buildPythonPackage rec {
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
   preCheck = ''
-    export HOME=$(mktemp -d)
     cp -r $TMP/$sourceRoot/tests $HOME
     pushd $HOME
   '';

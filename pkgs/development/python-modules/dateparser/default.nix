@@ -18,6 +18,7 @@
   parsel,
   requests,
   ruamel-yaml,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -60,11 +61,8 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
+    tmpdirAsHomeHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME="$TEMPDIR"
-  '';
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
   pytestFlagsArray = [ "tests" ];

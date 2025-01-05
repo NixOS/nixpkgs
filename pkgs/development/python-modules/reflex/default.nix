@@ -35,6 +35,7 @@
   rich,
   sqlmodel,
   starlette-admin,
+  tmpdirAsHomeHook,
   tomlkit,
   twine,
   typer,
@@ -113,12 +114,9 @@ buildPythonPackage rec {
     plotly
     pandas
     pillow
+    tmpdirAsHomeHook
     unzip
   ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   disabledTests = [
     # Tests touch network

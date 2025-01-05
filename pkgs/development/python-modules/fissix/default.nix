@@ -5,6 +5,7 @@
   flit-core,
   appdirs,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -27,11 +28,10 @@ buildPythonPackage {
 
   dependencies = [ appdirs ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "fissix" ];
 

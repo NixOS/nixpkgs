@@ -18,6 +18,7 @@
   git,
   pytest-tornado,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     git
     pytest-tornado
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   disabledTests = [
@@ -64,7 +66,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME="$TEMP"
     git config --global user.email "janedoe@example.com"
     git config --global user.name "Jane Doe"
   '';

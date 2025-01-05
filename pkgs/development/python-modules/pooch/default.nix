@@ -11,6 +11,7 @@
   platformdirs,
   requests,
   tqdm,
+  tmpdirAsHomeHook,
   paramiko,
   xxhash,
 }:
@@ -46,11 +47,11 @@ buildPythonPackage rec {
       xxhash = [ xxhash ];
     };
   };
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   # tries to touch network
   disabledTests = [

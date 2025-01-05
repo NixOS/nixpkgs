@@ -11,6 +11,7 @@
   skein,
   sqlalchemy,
   traitlets,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,10 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  nativeBuildInputs = [ go ];
+  nativeBuildInputs = [
+    go
+    tmpdirAsHomeHook
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -47,10 +51,6 @@ buildPythonPackage rec {
       sqlalchemy
     ];
   };
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # Tests requires cluster for testing
   doCheck = false;

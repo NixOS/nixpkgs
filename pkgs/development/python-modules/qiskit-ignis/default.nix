@@ -20,6 +20,7 @@
   ddt,
   pyfakefs,
   qiskit-aer,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -51,14 +52,12 @@ buildPythonPackage rec {
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
   dontUseSetuptoolsCheck = true;
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
   nativeCheckInputs = [
     pytestCheckHook
     ddt
     pyfakefs
     qiskit-aer
+    tmpdirAsHomeHook
   ];
   disabledTests =
     [

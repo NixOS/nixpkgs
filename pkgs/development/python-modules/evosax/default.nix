@@ -21,6 +21,7 @@
   # brax, (unpackaged)
   # gymnax, (unpackaged)
   pytestCheckHook,
+  tmpdirAsHomeHook,
   torch,
   torchvision,
 }:
@@ -54,14 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evosax" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     # brax
     # gymnax
     pytestCheckHook
+    tmpdirAsHomeHook
     torch
     torchvision
   ];

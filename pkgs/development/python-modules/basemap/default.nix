@@ -12,6 +12,7 @@
   pyshp,
   python,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -53,10 +54,15 @@ buildPythonPackage rec {
   # test have various problems including requiring internet connection, permissions issues, problems with latest version of pillow
   doCheck = false;
 
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
+
   checkPhase = ''
+    runHook preCheck
     cd ../../examples
-    export HOME=$TEMPDIR
     ${python.interpreter} run_all.py
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -8,6 +8,7 @@
   retrying,
   setuptools,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -37,11 +38,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # most tests talk to a network service, so only run ones that don't do that.
   pytestFlagsArray = [

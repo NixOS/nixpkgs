@@ -1,5 +1,6 @@
 {
   lib,
+  addBinToPathHook,
   asgiref,
   buildPythonPackage,
   certifi,
@@ -21,6 +22,7 @@
   setuptools,
   sqlparse,
   termcolor,
+  tmpdirAsHomeHook,
   tomli,
   tomli-w,
   tomlkit,
@@ -74,13 +76,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin";
-  '';
 
   pythonImportsCheck = [ "reptor" ];
 

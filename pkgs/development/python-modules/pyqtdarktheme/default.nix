@@ -12,6 +12,7 @@
   pytest-qt,
   pytestCheckHook,
   qt5,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-qt
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "qdarktheme" ];
@@ -48,7 +50,6 @@ buildPythonPackage rec {
   '';
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
     export QT_QPA_PLATFORM=offscreen

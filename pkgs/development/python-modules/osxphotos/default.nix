@@ -31,6 +31,7 @@
 
   pytestCheckHook,
   pytest-mock,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -84,11 +85,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [ "tests/test_comments.py" ];
   disabledTests = [

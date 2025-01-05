@@ -34,6 +34,7 @@
   pytestCheckHook,
   sphinx-inline-tabs,
   texsoup,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -87,11 +88,8 @@ buildPythonPackage rec {
     pytestCheckHook
     sphinx-inline-tabs
     texsoup
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # touch the network

@@ -25,6 +25,7 @@
   pytestCheckHook,
   requests,
   tiktoken,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -117,16 +118,13 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
     tiktoken
+    tmpdirAsHomeHook
   ];
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access
     mkdir $sourceRoot/tests/data
     ln -s ${test-data}/* $sourceRoot/tests/data/
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
   '';
 
   pythonImportsCheck = [ "tokenizers" ];

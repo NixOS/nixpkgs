@@ -7,6 +7,7 @@
   responses,
   pytestCheckHook,
   glibcLocalesUtf8,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,12 +29,8 @@ buildPythonPackage rec {
     pytestCheckHook
     glibcLocalesUtf8
     responses
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME=$(pwd)/check-phase
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/python-bugzilla/python-bugzilla";

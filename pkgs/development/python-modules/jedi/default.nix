@@ -14,6 +14,7 @@
   # tests
   attrs,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -38,11 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     attrs
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests =
     [

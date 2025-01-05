@@ -23,6 +23,7 @@
   setuptools,
   setuptools-scm,
   slicer,
+  tmpdirAsHomeHook,
   tqdm,
   transformers,
   xgboost,
@@ -99,7 +100,6 @@ buildPythonPackage rec {
       '';
     in
     ''
-      export HOME=$TMPDIR
       # when importing the local copy the extension is not found
       rm -r shap
 
@@ -119,6 +119,7 @@ buildPythonPackage rec {
     opencv4
     pyspark
     sentencepiece
+    tmpdirAsHomeHook
     #torch # we already skip all its tests due to slowness, adding it does nothing
     transformers
     xgboost

@@ -55,6 +55,7 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -68,6 +69,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-oNJVOz2FMMhUkYIajeWwRmHzLcXu5qTSQzjk0gciOnE=";
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [
     setuptools
@@ -189,10 +194,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'default-version = "0.0"' 'default-version = "${version}"' \
       --replace-fail 'asyncio_default_fixture_loop_scope = "function"' ""
-  '';
-
-  postInstall = ''
-    export HOME="$TMPDIR"
   '';
 
   meta = {

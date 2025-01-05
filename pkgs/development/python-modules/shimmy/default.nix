@@ -19,6 +19,7 @@
   imageio,
   pettingzoo,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -66,6 +67,7 @@ buildPythonPackage rec {
     imageio
     pettingzoo
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   disabledTestPaths = [
@@ -75,10 +77,6 @@ buildPythonPackage rec {
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Require network access

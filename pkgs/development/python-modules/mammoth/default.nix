@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   cobble,
+  addBinToPathHook,
   funk,
   pytestCheckHook,
   spur,
@@ -35,15 +36,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mammoth" ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     funk
     pytestCheckHook
     spur
     tempman
   ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
 
   passthru.updateScripts = gitUpdater { };
 

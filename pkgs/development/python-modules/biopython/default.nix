@@ -5,6 +5,7 @@
   pythonOlder,
   setuptools,
   numpy,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -31,10 +32,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Bio" ];
 
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
+
   checkPhase = ''
     runHook preCheck
 
-    export HOME=$(mktemp -d)
     cd Tests
     python run_tests.py --offline
 

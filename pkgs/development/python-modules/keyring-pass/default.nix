@@ -7,6 +7,7 @@
   pass,
   poetry-core,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 buildPythonPackage rec {
   pname = "keyring-pass";
@@ -32,10 +33,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     keyring
     gnupg
+    tmpdirAsHomeHook
   ];
 
   checkPhase = ''
-    export HOME="$TMPDIR"
+    runHook preCheck
 
     # generate temporary GPG identity
     cat <<EOF | gpg --gen-key --batch /dev/stdin
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     keyring set test-service test-username <<<"test-password"
     test "$(keyring get test-service test-username)" == "test-password"
     keyring del test-service test-username
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "keyring_pass" ];

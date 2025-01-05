@@ -11,6 +11,7 @@
   xxhash,
   pytestCheckHook,
   requests,
+  tmpdirAsHomeHook,
   xdoctest,
 }:
 
@@ -44,12 +45,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     requests
+    tmpdirAsHomeHook
     xdoctest
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # fail due to sandbox environment

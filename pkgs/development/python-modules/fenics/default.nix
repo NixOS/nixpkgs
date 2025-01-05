@@ -26,6 +26,7 @@
   suitesparse,
   swig,
   sympy,
+  tmpdirAsHomeHook,
   zlib,
   nixosTests,
 }:
@@ -44,10 +45,10 @@ let
       numpy
       six
     ];
-    nativeCheckInputs = [ pytest ];
-    preCheck = ''
-      export HOME=$PWD
-    '';
+    nativeCheckInputs = [
+      pytest
+      tmpdirAsHomeHook
+    ];
     checkPhase = ''
       runHook preCheck
       py.test test/
@@ -143,9 +144,11 @@ let
       ufl
       setuptools
     ];
-    nativeCheckInputs = [ pytest ];
+    nativeCheckInputs = [
+      pytest
+      tmpdirAsHomeHook
+    ];
     preCheck = ''
-      export HOME=$PWD
       rm test/unit/ufc/finite_element/test_evaluate.py
     '';
     checkPhase = ''

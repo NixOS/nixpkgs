@@ -7,6 +7,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
   traits,
   traitsui,
 }:
@@ -33,11 +34,10 @@ buildPythonPackage rec {
     traitsui
   ] ++ apptools.optional-dependencies.preferences;
 
-  preCheck = ''
-    export HOME=$PWD/HOME
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "envisage" ];
 

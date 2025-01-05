@@ -7,6 +7,7 @@
   flit-core,
   requests,
   tomli,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,11 +29,10 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "wn" ];
 

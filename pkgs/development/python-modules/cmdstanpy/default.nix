@@ -12,6 +12,7 @@
   xarray,
   pytestCheckHook,
   stdenv,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -55,11 +56,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "stanio" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ] ++ optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix

@@ -28,6 +28,7 @@
   pydot,
   pytestCheckHook,
   tf-keras,
+  tmpdirAsHomeHook,
   torch,
 }:
 
@@ -72,12 +73,9 @@ buildPythonPackage rec {
     pydot
     pytestCheckHook
     tf-keras
+    tmpdirAsHomeHook
     torch
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

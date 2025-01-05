@@ -25,6 +25,7 @@
   qt5,
   pytest-qt,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 
   stdenv,
   gitUpdater,
@@ -63,7 +64,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "orangecanvas" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
     export QT_QPA_PLATFORM=offscreen
@@ -72,6 +72,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-qt
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   disabledTests = [

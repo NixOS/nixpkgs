@@ -22,6 +22,7 @@
   nbconvert,
   pytest-xdist,
   netcdf4,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     fastparquet
     nbconvert
     netcdf4
+    tmpdirAsHomeHook
   ];
 
   # The complete extra is for usage with conda, which we
@@ -67,10 +69,6 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "dask[complete]" "dask" \
       --replace "xarray >=0.9.6" "xarray"
-  '';
-
-  preCheck = ''
-    export HOME=$TMPDIR
   '';
 
   pytestFlagsArray = [ "datashader" ];

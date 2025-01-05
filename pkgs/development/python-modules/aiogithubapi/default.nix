@@ -9,6 +9,7 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   pythonOlder,
   sigstore,
 }:
@@ -51,13 +52,12 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Need sigstore is an optional dependencies and need <2
     rm -rf tests/test_helper.py
   '';

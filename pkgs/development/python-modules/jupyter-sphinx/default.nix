@@ -11,6 +11,7 @@
   pythonOlder,
   sphinx,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -42,16 +43,15 @@ buildPythonPackage rec {
 
   env.JUPYTER_PLATFORM_DIRS = 1;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTests = [
     # https://github.com/jupyter/jupyter-sphinx/issues/280"
     "test_builder_priority"
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   __darwinAllowLocalNetworking = true;
 

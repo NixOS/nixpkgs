@@ -9,6 +9,7 @@
   nipreps-versions,
   pybids,
   requests,
+  tmpdirAsHomeHook,
   tqdm,
 }:
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
   };
 
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
+
   build-system = [
     setuptools-scm
     hatchling
@@ -40,10 +45,6 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # most tests try to download data
-
-  postFixup = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "templateflow" ];
 

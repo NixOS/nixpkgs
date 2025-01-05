@@ -12,6 +12,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -36,11 +37,13 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   preCheck = ''
     # specifically needed for darwin
-    export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';

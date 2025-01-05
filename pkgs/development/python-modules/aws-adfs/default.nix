@@ -14,6 +14,7 @@
   pythonOlder,
   requests,
   requests-kerberos,
+  tmpdirAsHomeHook,
   toml,
 }:
 
@@ -54,12 +55,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
     toml
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [ "aws_adfs" ];
 

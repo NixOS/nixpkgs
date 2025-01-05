@@ -10,6 +10,7 @@
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -49,9 +50,11 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ] ++ optional-dependencies.libjpeg;
   preCheck = ''
-    export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
     ln -s ${test_data}/data_store/data $HOME/.pydicom/data
   '';

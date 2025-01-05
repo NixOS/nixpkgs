@@ -12,6 +12,7 @@
   # tests
   pytest-asyncio,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -37,11 +38,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "aiodhcpwatcher" ];
 

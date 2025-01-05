@@ -32,10 +32,6 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "aiorun" ];
 
   meta = with lib; {

@@ -42,6 +42,7 @@
   setuptools-scm,
   setuptools,
   tenacity,
+  tmpdirAsHomeHook,
   tokenizers,
   tqdm,
   typer,
@@ -130,6 +131,7 @@ buildPythonPackage rec {
     psutil
     pytest-asyncio
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "chromadb" ];
@@ -142,7 +144,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export HOME=$(mktemp -d)
   '';
 
   disabledTests = [

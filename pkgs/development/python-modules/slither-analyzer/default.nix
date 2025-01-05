@@ -14,6 +14,7 @@
   withSolc ? false,
   testers,
   slither-analyzer,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     makeWrapper
     setuptools-scm
+    tmpdirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -45,11 +47,6 @@ buildPythonPackage rec {
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
-  '';
-
-  # required for pythonImportsCheck
-  postInstall = ''
-    export HOME="$TEMP"
   '';
 
   pythonImportsCheck = [

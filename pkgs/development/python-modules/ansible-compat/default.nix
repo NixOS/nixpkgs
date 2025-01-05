@@ -17,6 +17,12 @@
   flaky,
   pytest-mock,
   pytestCheckHook,
+  tmpdirAsHomeHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  subprocess-tee,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +48,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     substituteInPlace test/test_runtime.py \
       --replace-fail "printenv" "${lib.getExe' coreutils "printenv"}"
   '';
@@ -52,6 +57,7 @@ buildPythonPackage rec {
     flaky
     pytest-mock
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   disabledTests = [

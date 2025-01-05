@@ -15,6 +15,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
   versioningit,
 }:
 
@@ -55,11 +56,8 @@ buildPythonPackage rec {
     pytestCheckHook
     git
     git-annex
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "heudiconv" ];
 

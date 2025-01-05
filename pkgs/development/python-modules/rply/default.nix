@@ -5,6 +5,7 @@
   appdirs,
   py,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -24,11 +25,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     py
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = with lib; {
     description = "Python Lex/Yacc that works with RPython";

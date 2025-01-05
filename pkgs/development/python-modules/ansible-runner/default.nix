@@ -26,6 +26,13 @@
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
+  pythonOlder,
+  python-daemon,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -58,6 +65,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     ansible-core # required to place ansible CLI onto the PATH in tests
     glibcLocales
     mock
@@ -67,12 +75,13 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     versionCheckHook
+    mock
+    openssh
+    tmpdirAsHomeHook
   ];
   versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin";
     # avoid coverage flags
     rm pytest.ini
   '';

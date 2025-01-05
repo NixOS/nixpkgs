@@ -7,6 +7,7 @@
   typing-extensions,
   numpy,
   scipy,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +18,10 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/linien-client";
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    tmpdirAsHomeHook
+  ];
 
   propagatedBuildInputs = [
     fabric

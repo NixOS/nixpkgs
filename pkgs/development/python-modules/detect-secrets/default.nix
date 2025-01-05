@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gibberish-detector,
   mock,
-  pkgs,
+  gitMinimal,
   pyahocorasick,
   pytest7CheckHook,
   pythonOlder,
@@ -12,6 +12,7 @@
   requests,
   responses,
   unidiff,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -41,12 +42,9 @@ buildPythonPackage rec {
     pytest7CheckHook
     responses
     unidiff
-    pkgs.gitMinimal
+    gitMinimal
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # Tests are failing for various reasons. Needs to be adjusted with the next update

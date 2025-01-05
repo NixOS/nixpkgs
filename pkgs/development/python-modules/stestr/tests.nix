@@ -1,4 +1,9 @@
-{ buildPythonPackage, stestr }:
+{
+  buildPythonPackage,
+  stestr,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
+}:
 
 buildPythonPackage {
   pname = "stestr-tests";
@@ -17,10 +22,9 @@ buildPythonPackage {
     pythonOutputDistPhase() { touch $dist; }
   '';
 
-  nativeCheckInputs = [ stestr ];
-
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    addBinToPathHook
+    stestr
+    tmpdirAsHomeHook
+  ];
 }

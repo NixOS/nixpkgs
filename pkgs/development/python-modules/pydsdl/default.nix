@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -18,12 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-Q6Zt7qiFZvTK2pF4nWfHbjwQHZffzKOad6X/HQ94EUo=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ tmpdirAsHomeHook ];
 
-  # allow for writable directory for darwin
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pydsdl" ];
 

@@ -10,6 +10,7 @@
   responses,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -44,11 +45,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     responses
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # Tests require network access

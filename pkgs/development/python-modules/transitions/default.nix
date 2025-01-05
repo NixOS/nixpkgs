@@ -11,6 +11,7 @@
   pytestCheckHook,
   setuptools,
   six,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,11 +36,11 @@ buildPythonPackage rec {
     mock
     graphviz
     pycodestyle
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-    export HOME=$TMPDIR
   '';
 
   disabledTests =

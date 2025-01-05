@@ -13,6 +13,7 @@
   pycuda,
   pyopencl,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -50,11 +51,10 @@ buildPythonPackage rec {
     cuda = [ pycuda ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "sasmodels" ];
 

@@ -5,6 +5,7 @@
   cython,
   pytestCheckHook,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
   preCheck = ''
-    # Hack needed to make pytest + cython work
-    # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
-    export HOME=$(mktemp -d)
     cp -r $TMP/$sourceRoot/tests $HOME
     pushd $HOME
 

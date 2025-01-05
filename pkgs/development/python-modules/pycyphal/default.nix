@@ -11,6 +11,7 @@
   pyserial,
   pytestCheckHook,
   pytest-asyncio,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -45,10 +46,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    tmpdirAsHomeHook
   ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
 
   preCheck = ''
-    export HOME=$TMPDIR
     export PYTHONASYNCIODEBUG=1
     python -c ${lib.escapeShellArg ''
       import pycyphal

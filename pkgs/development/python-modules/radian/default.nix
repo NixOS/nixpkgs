@@ -8,7 +8,7 @@
   ptyprocess,
   pythonOlder,
   jedi,
-  git,
+  gitMinimal,
   lineedit,
   prompt-toolkit,
   pygments,
@@ -17,6 +17,7 @@
   rPackages,
   setuptools,
   setuptools-scm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -65,13 +66,13 @@ buildPythonPackage rec {
     pexpect
     ptyprocess
     jedi
-    git
+    gitMinimal
+    tmpdirAsHomeHook
   ];
 
   makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
 
   preCheck = ''
-    export HOME=$TMPDIR
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${R}/lib/R/lib
   '';
 

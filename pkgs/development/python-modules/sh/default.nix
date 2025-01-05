@@ -5,6 +5,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -21,14 +22,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pytestFlagsArray = [ "tests" ];
-
-  # A test needs the HOME directory to be different from $TMPDIR.
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

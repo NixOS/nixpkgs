@@ -8,6 +8,7 @@
   pyct,
   pytest-mpl,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -33,10 +34,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib

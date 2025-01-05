@@ -22,6 +22,7 @@
   # tests
   cudaSupport ? config.cudaSupport,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   torchvision,
 }:
 
@@ -64,7 +65,6 @@ buildPythonPackage rec {
   };
 
   preCheck = ''
-    export HOME=$TMP
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
@@ -72,6 +72,7 @@ buildPythonPackage rec {
   # package only requires `unittest`, but use `pytest` to exclude tests
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
     torchvision
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
