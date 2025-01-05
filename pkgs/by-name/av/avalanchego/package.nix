@@ -8,19 +8,19 @@
 
 buildGoModule rec {
   pname = "avalanchego";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
     tag = "v${version}";
-    hash = "sha256-iedhLVNtwU8wSQIaq0r0fAYGH8fNnCRJW69D7wPdyx0=";
+    hash = "sha256-elbY0KNsOmKSTX61nps2tjIFTJH5Nnqmwq6mWwd88aE=";
   };
 
   # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  vendorHash = "sha256-CNwqpRx0HNvYfkowEEZe/Ue6W2FDZVAkUgof5QH9XkI=";
+  vendorHash = "sha256-HRhgnf6vHBrJTHspH+HwR3g5o63i+dCm7kPuBKdSV8s=";
 
 
   subPackages = [ "main" ];
