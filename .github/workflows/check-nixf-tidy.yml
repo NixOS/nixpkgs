@@ -3,6 +3,7 @@ name: Check changed Nix files with nixf-tidy (experimental)
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited]
+
 permissions:
   contents: read
 
@@ -18,6 +19,7 @@ jobs:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
           # Fetches the merge commit and its parents
           fetch-depth: 2
+
       - name: Checking out base branch
         run: |
           base=$(mktemp -d)
@@ -25,6 +27,7 @@ jobs:
           git worktree add "$base" "$baseRev"
           echo "baseRev=$baseRev" >> "$GITHUB_ENV"
           echo "base=$base" >> "$GITHUB_ENV"
+
       - name: Get Nixpkgs revision for nixf
         run: |
           # pin to a commit from nixpkgs-unstable to avoid e.g. building nixf
@@ -32,14 +35,17 @@ jobs:
           # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
           rev=$(jq -r .rev ci/pinned-nixpkgs.json)
           echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
+
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=${{ env.url }}
+
       - name: Install nixf and jq
         # provided jq is incompatible with our expression
         run: "nix-env -f '<nixpkgs>' -iAP nixf jq"
+
       - name: Check that Nix files pass nixf-tidy
         run: |
           # Filtering error messages we don't like
