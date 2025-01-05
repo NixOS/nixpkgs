@@ -22101,6 +22101,12 @@
     githubId = 12595971;
     name = "Guillaume Girol";
   };
+  SyntaxualSugar = {
+    email = "mail@trentonfox.com";
+    github = "SyntaxualSugar";
+    githubId = 12888402;
+    name = "Trenton Fox";
+  };
   synthetica = {
     email = "nix@hilhorst.be";
     github = "Synthetica9";
