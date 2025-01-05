@@ -8,7 +8,8 @@ let
 
   cfg = config.fonts.fontDir;
 
-  x11Fonts = pkgs.callPackage (
+  needsNative = pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform;
+  x11Fonts = (if needsNative then pkgs else pkgs.pkgsBuildBuild).callPackage (
     {
       runCommand,
       gzip,
