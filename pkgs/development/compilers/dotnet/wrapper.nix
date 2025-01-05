@@ -104,7 +104,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           let
             sdk = finalAttrs.finalPackage;
             built = stdenv.mkDerivation {
-              name = "dotnet-test-${name}";
+              name = "${sdk.name}-test-${name}";
               buildInputs = [ sdk ] ++ buildInputs ++ lib.optional (usePackageSource) sdk.packages;
               # make sure ICU works in a sandbox
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
