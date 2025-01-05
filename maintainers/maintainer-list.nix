@@ -3202,6 +3202,13 @@
     github = "brendanreis";
     githubId = 10686906;
   };
+  bretek = {
+    email = "josephmadden999@gmail.com";
+    github = "bretek";
+    githubId = 79257746;
+    name = "Joseph Madden";
+    keys = [ { fingerprint = "3CF8 E983 2219 AB4B 0E19  158E 6112 1921 C9F8 117C"; } ];
+  };
   brettlyons = {
     email = "blyons@fastmail.com";
     github = "brettlyons";
