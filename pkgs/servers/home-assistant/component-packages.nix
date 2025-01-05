@@ -4155,7 +4155,8 @@
       ];
     "peblar" =
       ps: with ps; [
-      ]; # missing inputs: peblar
+        peblar
+      ];
     "peco" =
       ps: with ps; [
         peco
@@ -7055,6 +7056,7 @@
     "palazzetti"
     "panasonic_viera"
     "panel_custom"
+    "peblar"
     "peco"
     "pegel_online"
     "permobil"
