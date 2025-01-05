@@ -50,7 +50,7 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   buildInputs = [
     nodePackages.node-gyp-build
@@ -79,7 +79,7 @@ buildNpmPackage rec {
     # variable `HOMEPAGE_CACHE_DIR`, which is set by default in the
     # wrapper below.
     pushd $out
-    git apply ${./prerender_cache_path.patch}
+    patch -p1 <${./prerender_cache_path.patch}
     popd
 
     makeWrapper $out/share/homepage/server.js $out/bin/homepage \
