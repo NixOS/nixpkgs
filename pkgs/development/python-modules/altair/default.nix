@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.4.1";
+  version = "5.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
     tag = "v${version}";
-    hash = "sha256-7C51ACaBuNtOSXqLpuCI5bnLyE9U64vNXlD4/msPq2k=";
+    hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
   };
 
   build-system = [ hatchling ];
@@ -63,6 +63,8 @@ buildPythonPackage rec {
     # Sometimes conflict due to parallelism
     "test_dataframe_to_csv[polars]"
     "test_dataframe_to_csv[pandas]"
+    # Network access
+    "test_theme_remote_lambda"
   ];
 
   disabledTestPaths = [
