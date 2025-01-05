@@ -1,0 +1,49 @@
+--- a/Makefile.in	2024-05-21 17:03:50.488979000 -0700
++++ b/Makefile.in	2024-05-21 17:18:56.243091000 -0700
+@@ -692,8 +692,6 @@
+ @USE_PCLMUL_CRC32_TRUE@am__append_211 = $(cksum_pclmul_ldadd)
+ @USE_AVX2_WC_LINECOUNT_TRUE@am__append_212 = src/libwc_avx2.a
+ @USE_AVX2_WC_LINECOUNT_TRUE@am__append_213 = $(wc_avx2_ldadd)
+-@SINGLE_BINARY_FALSE@src_coreutils_DEPENDENCIES =  \
+-@SINGLE_BINARY_FALSE@	$(am__DEPENDENCIES_2)
+ # Command arch
+ # Command hostname
+ # Command chroot
+@@ -2825,6 +2823,12 @@
+ nodist_src_coreutils_OBJECTS =
+ src_coreutils_OBJECTS = $(am_src_coreutils_OBJECTS) \
+ 	$(nodist_src_coreutils_OBJECTS)
++@SINGLE_BINARY_FALSE@src_coreutils_DEPENDENCIES =  \
++@SINGLE_BINARY_FALSE@	$(am__DEPENDENCIES_2)
++@SINGLE_BINARY_TRUE@src_coreutils_DEPENDENCIES =  \
++@SINGLE_BINARY_TRUE@	$(am__DEPENDENCIES_1) \
++@SINGLE_BINARY_TRUE@	$(am__DEPENDENCIES_2) \
++@SINGLE_BINARY_TRUE@	$(am__DEPENDENCIES_1)
+ src_coreutils_LINK = $(CCLD) $(src_coreutils_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ am__objects_221 = src/copy.$(OBJEXT) src/cp-hash.$(OBJEXT) \
+@@ -7492,7 +7496,12 @@
+ src_libstdbuf_so_CFLAGS = -fPIC $(AM_CFLAGS)
+ # Single binary dependencies
+ @SINGLE_BINARY_TRUE@src_coreutils_CFLAGS = -DSINGLE_BINARY $(AM_CFLAGS)
+-@SINGLE_BINARY_TRUE@src_coreutils_DEPENDENCIES = $(LDADD) $(single_binary_deps)
++
++# Creates symlinks or shebangs to the installed programs when building
++# coreutils single binary.
++@SINGLE_BINARY_TRUE@EXTRA_src_coreutils_DEPENDENCIES =  \
++@SINGLE_BINARY_TRUE@	$(single_binary_deps) \
++@SINGLE_BINARY_TRUE@	src/coreutils_$(single_binary_install_type)
+ @SINGLE_BINARY_TRUE@src_libsinglebin_dir_a_DEPENDENCIES = src/libsinglebin_ls.a
+ @SINGLE_BINARY_TRUE@src_libsinglebin_vdir_a_DEPENDENCIES = src/libsinglebin_ls.a
+ @SINGLE_BINARY_TRUE@src_libsinglebin_arch_a_DEPENDENCIES = src/libsinglebin_uname.a
+@@ -7880,10 +7889,6 @@
+ @SINGLE_BINARY_TRUE@src_libsinglebin_yes_a_DEPENDENCIES = $(src_yes_DEPENDENCIES)
+ @SINGLE_BINARY_TRUE@src_libsinglebin_yes_a_CFLAGS = "-Dmain=single_binary_main_yes (int, char **);  int single_binary_main_yes"  -Dusage=_usage_yes $(src_coreutils_CFLAGS)
+ 
+-# Creates symlinks or shebangs to the installed programs when building
+-# coreutils single binary.
+-@SINGLE_BINARY_TRUE@EXTRA_src_coreutils_DEPENDENCIES = src/coreutils_$(single_binary_install_type)
+-
+ # false exits nonzero even with --help or --version.
+ # test doesn't support --help or --version.
+ # Tell automake to exempt then from that installcheck test.
