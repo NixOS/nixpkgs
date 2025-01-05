@@ -155,7 +155,9 @@ in
           startCLIList
           ++ lib.optionals (cfg.prometheusConfig != { }) [ "-promscrape.config=${prometheusConfigYml}" ]
           ++ lib.optional (cfg.basicAuthUsername != null) "-httpAuth.username=${cfg.basicAuthUsername}"
-          ++ lib.optional (cfg.basicAuthPasswordFile != null) "-httpAuth.password=file://\${CREDENTIALS_DIRECTORY}/basic_auth_password"
+          ++ lib.optional (
+            cfg.basicAuthPasswordFile != null
+          ) "-httpAuth.password=file://\${CREDENTIALS_DIRECTORY}/basic_auth_password"
         );
 
         DynamicUser = true;
