@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "fastecdsa";
-  version = "2.3.2";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-81JVptPkEQkWa11LCIZtWsu5ny4eZNOn50x3RmTNqEI=";
+    hash = "sha256-deOnwZYvjtOMps90fp7OUfzbMxDFsk0Oj72gFoMymAU=";
   };
 
   buildInputs = [ gmp ];
