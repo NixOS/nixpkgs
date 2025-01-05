@@ -3,7 +3,6 @@
   stdenv,
   chromium,
   nodejs,
-  python3,
   fetchpatch,
   fetchYarnDeps,
   fetchNpmDeps,
@@ -35,7 +34,15 @@ in
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
-  buildTargets = [ "electron:electron_dist_zip" ];
+  buildTargets = [
+    "electron:copy_node_headers"
+    "electron:electron_dist_zip"
+  ];
+
+  outputs = [
+    "out"
+    "headers"
+  ];
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
     nodejs
@@ -247,6 +254,12 @@ in
     mkdir -p $libExecPath
     unzip -d $libExecPath out/Release/dist.zip
 
+    # Create reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
+    tar --sort=name \
+      --mtime="@$SOURCE_DATE_EPOCH" \
+      --owner=0 --group=0 --numeric-owner \
+      -czf $headers -C out/Release/gen node_headers
+
     runHook postInstall
   '';
 
@@ -272,21 +285,6 @@ in
 
   passthru = {
     inherit info fetchedDeps;
-    headers = stdenv.mkDerivation rec {
-      name = "node-v${info.node}-headers.tar.gz";
-      nativeBuildInputs = [ python3 ];
-      src = fetchedDeps."src/third_party/electron_node";
-      buildPhase = ''
-        runHook preBuild
-        make tar-headers
-        runHook postBuild
-      '';
-      installPhase = ''
-        runHook preInstall
-        mv ${name} $out
-        runHook postInstall
-      '';
-    };
   };
 
   meta = with lib; {
