@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  termshot,
+  versionCheckHook,
   nix-update-script,
 }:
 buildGoModule rec {
@@ -27,10 +26,11 @@ buildGoModule rec {
 
   checkFlags = [ "-skip=^TestPtexec$" ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = termshot; };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Creates screenshots based on terminal command output";
