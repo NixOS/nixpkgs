@@ -38,6 +38,7 @@
     maintainers = with lib.maintainers; [
       rexim
       supa
+      marie
     ];
   };
 })
