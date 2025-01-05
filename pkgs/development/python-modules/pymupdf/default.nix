@@ -123,6 +123,11 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH="$out/bin:$PATH";
+
+    # Fixes at least one test; see:
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/scripts/sysinstall.py#L390>
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/tests/test_pixmap.py#L425-L428>
+    export PYMUPDF_SYSINSTALL_TEST=1
   '';
 
   meta = {
