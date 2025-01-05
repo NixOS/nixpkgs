@@ -1052,6 +1052,7 @@ mapAliases {
   playwright = lib.warnOnInstantiate "'playwright' will reference playwright-driver in 25.05. Reference 'python3Packages.playwright' for the python test launcher" (python3Packages.toPythonApplication python3Packages.playwright); # Added 2024-10-04
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   pltScheme = racket; # just to be sure
+  poac = cabinpkg; # Added 2025-01-22
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
   powerdns = pdns; # Added 2022-03-28
 
