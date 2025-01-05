@@ -3,8 +3,6 @@ name: "Check whether nix files are parseable v2"
 on:
   # avoids approving first time contributors
   pull_request_target:
-    branches-ignore:
-      - 'release-**'
 
 permissions:
   pull-requests: read
