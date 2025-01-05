@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 19059a41b..6e3ae0ad7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -82,15 +82,7 @@ endif ()
+ find_package (Boost 1.38 REQUIRED
+     COMPONENTS filesystem iostreams program_options regex system)
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-        fmt
+-        GIT_REPOSITORY  https://github.com/fmtlib/fmt.git
+-        GIT_TAG         10.2.1
+-        GIT_PROGRESS    TRUE
+-        USES_TERMINAL_DOWNLOAD TRUE
+-)
+-FetchContent_MakeAvailable(fmt)
++find_package(fmt REQUIRED)
+ 
+ find_package(Snappy)
+ if (SNAPPY_FOUND)
