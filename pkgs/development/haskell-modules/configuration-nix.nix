@@ -1473,9 +1473,6 @@ self: super: builtins.intersectAttrs super {
   postgresql-libpq = overrideCabal (drv: {
     # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
     configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
-    # Move postgresql from SystemDepends to PkgconfigDepends
-    libraryPkgconfigDepends = drv.librarySystemDepends;
-    librarySystemDepends = [];
   }) super.postgresql-libpq;
 
   # Test failure is related to a GHC implementation detail of primitives and doesn't
