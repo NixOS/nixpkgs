@@ -13,11 +13,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mactracker";
-  version = "7.13";
+  version = "7.13.2";
 
   src = fetchurl {
     url = "https://mactracker.ca/downloads/Mactracker_${finalAttrs.version}.zip";
-    hash = "sha256-GbaGhYF9Pf3EpzoLQd9fkWYxHFwCkYdlRyy33lieUxM=";
+    hash = "sha256-Ns2es6uMqfHKmeVV6ehGXV0pNtv2T3eNYLnRvsjOhpE=";
   };
 
   dontPatch = true;
