@@ -53,22 +53,15 @@ self: super: {
   #
   # Version upgrades
   #
-  th-abstraction = doDistribute self.th-abstraction_0_7_1_0;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_4_20241130;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   ghc-lib = doDistribute self.ghc-lib_9_8_4_20241130;
   megaparsec = doDistribute self.megaparsec_9_7_0;
-  # aeson 2.2.3.0 seemingly unnecessesarily bumped the lower bound on hashable
-  # https://github.com/haskell/aeson/commit/1a666febd0775d8e88d315ece1b97cd20602fb5f
-  aeson = doJailbreak (doDistribute self.aeson_2_2_3_0);
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   dependent-sum-template = self.dependent-sum-template_0_2_0_1; # template-haskell < 2.22
   xmonad = doDistribute self.xmonad_0_18_0;
   apply-refact = self.apply-refact_0_14_0_0;
-  ormolu = self.ormolu_0_7_4_0;
   fourmolu = self.fourmolu_0_15_0_0;
-  stylish-haskell = self.stylish-haskell_0_14_6_0;
-  hlint = self.hlint_3_8;
   ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_12_0;
   websockets = self.websockets_0_13_0_0;
   th-desugar = doJailbreak self.th-desugar_1_16; # th-abstraction >=0.6 && <0.7
