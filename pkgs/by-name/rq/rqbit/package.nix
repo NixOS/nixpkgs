@@ -68,6 +68,8 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
+  passthru.webui = rqbit-webui;
+
   meta = with lib; {
     description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
