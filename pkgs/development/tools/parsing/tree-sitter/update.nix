@@ -466,6 +466,10 @@ let
       orga = "tree-sitter-grammars";
       repo = "tree-sitter-hyprlang";
     };
+    "tree-sitter-kdl" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-kdl";
+    };
   };
 
   allGrammars =
