@@ -15576,10 +15576,6 @@ with pkgs;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
 
-  vcprompt = callPackage ../applications/version-management/vcprompt {
-    autoconf = buildPackages.autoconf269;
-  };
-
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vengi-tools = darwin.apple_sdk_11_0.callPackage ../applications/graphics/vengi-tools {
