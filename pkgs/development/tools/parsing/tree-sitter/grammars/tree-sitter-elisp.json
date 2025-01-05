@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/wilfred/tree-sitter-elisp",
+  "rev": "1991465e2722dd36c06e03dc7de6bc5d7da89d51",
+  "date": "2023-03-28T08:47:56-07:00",
+  "path": "/nix/store/mbb6q2yma6vszbzpw5hbpzf0iwg9y7vi-tree-sitter-elisp",
+  "sha256": "1m6lb60mlyk38pizcncp58f69kyf36b47rxnysf1l4193nscjqw6",
+  "hash": "sha256-hmPJtB0pEBqc9rbnQ5YZzs9kHCqXWfbjRWN6WoFZ1NQ=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
