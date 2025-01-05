@@ -79,7 +79,7 @@ buildDotnetModule rec {
       cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
     '';
     shouldInstallDesktopItem = lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm655 -t $out/share/icons/hicolor/scalable/apps Logo/openutau.svg 
+      install -Dm655 -t $out/share/icons/hicolor/scalable/apps Logo/openutau.svg
     '';
     in ''
       ${shouldInstallResampler}
