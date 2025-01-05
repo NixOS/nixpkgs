@@ -6239,8 +6239,8 @@ with pkgs;
     # until 9.8 is ready
     (if stdenv.hostPlatform.isStatic then haskell.packages.native-bignum.ghc94
     # JS backend can't use gmp
-    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc96
-    else haskell.packages.ghc96)
+    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc98
+    else haskell.packages.ghc98)
   // { __recurseIntoDerivationForReleaseJobs = true; };
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
