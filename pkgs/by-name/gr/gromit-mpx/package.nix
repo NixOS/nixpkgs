@@ -6,7 +6,6 @@
   pkg-config,
   gtk3,
   glib,
-  pcre,
   libappindicator-gtk3,
   libpthreadstubs,
   xorg,
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     glib
-    pcre
     libappindicator-gtk3
     libpthreadstubs
     xorg.libXdmcp
