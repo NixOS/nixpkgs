@@ -15,11 +15,11 @@
 }:
 
 let
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchzip {
     url = "https://github.com/carrotIndustries/usbkvm/releases/download/v${version}/usbkvm-v${version}.tar.gz";
-    sha256 = "sha256-OuZ7+IjsvK7/PaiTRwssaQFJDFWJ8HX+kqV13CUyTZA=";
+    sha256 = "sha256-ng6YpaN7sKEBPJcJAm0kcYtT++orweWRx6uOZFnOGG8=";
   };
 
   ms-tools-lib = buildGoModule {
