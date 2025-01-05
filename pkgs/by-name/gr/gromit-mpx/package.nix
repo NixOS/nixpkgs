@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
   };
 
