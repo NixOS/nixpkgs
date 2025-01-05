@@ -1750,7 +1750,6 @@
   ./tasks/trackpoint.nix
   ./testing/service-runner.nix
   ./virtualisation/amazon-options.nix
-  ./virtualisation/anbox.nix
   ./virtualisation/appvm.nix
   ./virtualisation/build-vm.nix
   ./virtualisation/container-config.nix
