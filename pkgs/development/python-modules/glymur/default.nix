@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "glymur";
-  version = "0.13.4";
+  version = "0.13.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "quintusdias";
     repo = "glymur";
     tag = "v${version}";
-    hash = "sha256-RzRZuSNvlUrB+J93a1ob7dDMacZB082JwVHQ9Fce2JA=";
+    hash = "sha256-tIvDhlFPpDxC3CgBDT0RN9MM8ycY+J1hjcLXzx14Zhs=";
   };
 
   patches = [
@@ -64,6 +64,12 @@ buildPythonPackage rec {
     # this test involves glymur's different ways of finding the openjpeg path on
     # fsh systems by reading an .rc file and such, and is obviated by the patch
     "tests/test_config.py"
+  ];
+
+  disabledTests = [
+    # fails with Numpy 2.x due to formatting differences
+    # https://github.com/quintusdias/glymur/pull/675
+    "test_exif_uuid"
   ];
 
   pythonImportsCheck = [ "glymur" ];
