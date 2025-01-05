@@ -23,6 +23,7 @@
 , vte
 , wrapGAppsHook3
 , xdg-utils
+, mutter
 }:
 let
   # Helper method to reduce redundancy
@@ -147,12 +148,13 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "tophat@fflewddur.github.io" (old: {
-    patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
-        gtop_path = "${libgtop}/lib/girepository-1.0";
-      })
-    ];
+    postPatch = ''
+      for js in lib/*.js; do
+        substituteInPlace $js \
+          --replace-quiet "import GTop from 'gi://GTop'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgtop}/lib/girepository-1.0'); const GTop = (await import('gi://GTop')).default" \
+          --replace-quiet "import Clutter from 'gi://Clutter'" "imports.gi.GIRepository.Repository.prepend_search_path('${mutter.passthru.libdir}'); const Clutter = (await import('gi://Clutter')).default";
+      done
+    '';
   }))
 
   (patchExtension "Vitals@CoreCoding.com" (old: {
@@ -170,6 +172,15 @@ super: lib.trivial.pipe super [
     postPatch = ''
       substituteInPlace "src/touchegg/ToucheggConfig.js" \
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
+    '';
+  }))
+
+  (patchExtension "todo.txt@bart.libert.gmail.com" (old: {
+    postPatch = ''
+      for js in libs/*.js; do
+        substituteInPlace $js \
+          --replace-quiet "import Clutter from 'gi://Clutter'" "imports.gi.GIRepository.Repository.prepend_search_path('${mutter.passthru.libdir}'); const Clutter = (await import('gi://Clutter')).default"
+      done
     '';
   }))
 ]
