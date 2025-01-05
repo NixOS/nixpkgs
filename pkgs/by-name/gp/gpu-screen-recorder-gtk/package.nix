@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchgit,
   pkg-config,
   addDriverRunpath,
   desktop-file-utils,
@@ -22,16 +22,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gpu-screen-recorder-gtk";
   version = "5.0.0";
 
-  src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.${finalAttrs.version}.tar.gz";
-    hash = "sha256-uXbiuA1XPWZVwQGLh47rKzCZSEUEPWqYALqMuCGA7do=";
+  src = fetchgit {
+    url = "https://repo.dec05eba.com/${pname}";
+    rev = version;
+    hash = "sha256-mgWr/17XXWKOtLGp2bk9DcAfpiRAQgiioOVbdT+9kZU=";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -69,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       })
     '';
 
-  passthru.updateScript = gitUpdater { url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk"; };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
@@ -80,4 +79,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}
