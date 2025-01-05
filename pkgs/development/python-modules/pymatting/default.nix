@@ -22,8 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
-    # https://github.com/pymatting/pymatting/issues/92
-    rev = "afd2dec073cb08b8119300feec18c179a9d436f3";
+    tag = "v${version}";
     hash = "sha256-AzdhRZgcT+gfLPZYKJLQUW7uLyXoRy6SP2raHWd9XUY=";
   };
 
