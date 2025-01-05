@@ -9,6 +9,9 @@
   libxml2,
   xmlstarlet,
   common-updater-scripts,
+  versionCheckHook,
+  writeShellScript,
+  xcbuild,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -52,6 +55,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       update-source-version mactracker "$version"
     '';
   });
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = writeShellScript "version-check" ''
+    ${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1"
+  '';
+  versionCheckProgramArg = [ "${placeholder "out"}/Applications/Mactracker.app/Contents/Info.plist" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Mactracker provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
