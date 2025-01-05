@@ -28,10 +28,6 @@ python3.pkgs.buildPythonApplication rec {
     scapy
   ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "killerbee" ];
 
   meta = {
