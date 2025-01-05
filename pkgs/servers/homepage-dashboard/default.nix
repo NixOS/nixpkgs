@@ -78,9 +78,7 @@ buildNpmPackage rec {
     # This patch ensures that the cache implementation respects the env
     # variable `HOMEPAGE_CACHE_DIR`, which is set by default in the
     # wrapper below.
-    pushd $out
-    patch -p1 <${./prerender_cache_path.patch}
-    popd
+    (cd "$out" && patch -p1 <${./prerender_cache_path.patch})
 
     makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
