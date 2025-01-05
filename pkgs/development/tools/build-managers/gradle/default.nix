@@ -153,7 +153,7 @@ rec {
           '';
         };
       };
-      passthru.jdk = defaultJava;
+      passthru.jdk = java;
 
       meta = with lib; {
         inherit platforms;
