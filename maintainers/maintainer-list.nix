@@ -7010,7 +7010,10 @@
     github = "ethancedwards8";
     githubId = 60861925;
     name = "Ethan Carter Edwards";
-    keys = [ { fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458"; } ];
+    keys = [
+      { fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458"; }
+      { fingerprint = "2E51 F618 39D1 FA94 7A73  00C2 34C0 4305 D581 DBFE"; }
+    ];
   };
   ethercrow = {
     email = "ethercrow@gmail.com";
@@ -25015,6 +25018,12 @@
     github = "ydlr";
     githubId = 58453832;
     keys = [ { fingerprint = "FD0A C425 9EF5 4084 F99F 9B47 2ACC 9749 7C68 FAD4"; } ];
+  };
+  yechielw = {
+    name = "yechielw";
+    email = "yechielworen@gmail.com";
+    github = "yechiel";
+    githubId = 41305372;
   };
   yelite = {
     name = "Lite Ye";
