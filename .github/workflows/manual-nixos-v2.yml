@@ -14,7 +14,6 @@ jobs:
   nixos:
     name: nixos-manual-build
     runs-on: ubuntu-24.04
-    if: github.repository_owner == 'NixOS'
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -27,6 +26,7 @@ jobs:
           extra_nix_config: sandbox = true
 
       - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
+        if: github.repository_owner == 'NixOS'
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
