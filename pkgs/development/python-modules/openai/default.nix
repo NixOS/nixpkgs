@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
 
   # build-system
@@ -36,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.58.1";
+  version = "1.59.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-QK0NNMJM4sj4u8nlNPBBQpqV0pBYUMcSwKqhna5q10c=";
+    hash = "sha256-gMykGfNgpTlh8LiFXL2p5ECSpeYCfS0LTsgHIzT1c1I=";
   };
 
   build-system = [
@@ -92,11 +93,16 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # Tests make network requests
-    "test_copy_build_request"
-    "test_basic_attribute_access_works"
-  ];
+  disabledTests =
+    [
+      # Tests make network requests
+      "test_copy_build_request"
+      "test_basic_attribute_access_works"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
+      "test_multi_byte_character_multiple_chunks"
+    ];
 
   disabledTestPaths = [
     # Test makes network requests
@@ -106,7 +112,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
+    changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
     mainProgram = "openai";

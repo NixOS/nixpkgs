@@ -22,7 +22,6 @@
   # tests
   opencv4,
   numpy,
-  pympler,
   pytestCheckHook,
 }:
 
@@ -72,7 +71,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     opencv4
     numpy
-    pympler
     pytestCheckHook
   ];
 

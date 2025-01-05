@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
   substituteAll,
@@ -9,6 +10,7 @@
   libopus,
   aiohttp,
   aiodns,
+  audioop-lts,
   brotli,
   faust-cchardet,
   orjson,
@@ -42,15 +44,19 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
-    aiodns
-    aiohttp
-    brotli
-    faust-cchardet
-    orjson
-    pynacl
-    setuptools # for pkg_resources, remove with next release
-  ];
+  dependencies =
+    [
+      aiodns
+      aiohttp
+      brotli
+      faust-cchardet
+      orjson
+      pynacl
+      setuptools # for pkg_resources, remove with next release
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      audioop-lts
+    ];
 
   # upstream has no tests
   doCheck = false;
