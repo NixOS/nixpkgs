@@ -14243,6 +14243,12 @@
     githubId = 585424;
     name = "Massimo Gengarelli";
   };
+  MasterEvarior = {
+    email = "nix-maintainer@giannin.ch";
+    github = "MasterEvarior";
+    githubId = 36074738;
+    name = "MasterEvarior";
+  };
   matdibu = {
     email = "contact@mateidibu.dev";
     github = "matdibu";
