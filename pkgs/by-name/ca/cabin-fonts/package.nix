@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "cabin";
+  pname = "cabin-fonts";
   version = "1.005";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -m444 -Dt $out/share/fonts/opentype fonts/OTF/*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+    install -m444 -Dt $out/share/doc/cabin-${version} README.md FONTLOG.txt
 
     runHook postInstall
   '';
