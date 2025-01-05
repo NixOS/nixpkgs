@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "py-flick";
+  pname = "pyflick";
   version = "1.1.2";
   pyproject = true;
 
