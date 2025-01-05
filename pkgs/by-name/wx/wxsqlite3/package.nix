@@ -3,12 +3,8 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK,
+  wxGTK32,
   sqlite,
-  Cocoa,
-  setfile,
-  rez,
-  derez,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,19 +18,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-1U8UF5FYKoigOLDMq1/nlchAdb8NeJhC6JluFDWNQ2M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
-  buildInputs =
-    [
-      sqlite
-      wxGTK
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      Cocoa
-      setfile
-      rez
-      derez
-    ];
+  buildInputs = [
+    sqlite
+    wxGTK32
+  ];
 
   meta = with lib; {
     homepage = "https://utelle.github.io/wxsqlite3/";
