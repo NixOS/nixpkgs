@@ -18234,18 +18234,6 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
-    wxGTK = wxGTK32;
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-    inherit (darwin.stubs) setfile rez derez;
-  };
-
-  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
-    wxGTK = wxGTK32;
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-    inherit (darwin.stubs) setfile;
-  };
-
   xhyve = callPackage ../applications/virtualization/xhyve {
     inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
     inherit (darwin.apple_sdk.libs) xpc;
