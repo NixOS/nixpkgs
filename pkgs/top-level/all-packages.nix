@@ -12874,9 +12874,9 @@ with pkgs;
 
   sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
-  scheherazade = callPackage ../data/fonts/scheherazade { version = "2.100"; };
-
-  scheherazade-new = callPackage ../data/fonts/scheherazade { };
+  scheherazade-new = scheherazade.override {
+    version = "4.300";
+  };
 
   starship = callPackage ../tools/misc/starship {
     inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
