@@ -10981,7 +10981,13 @@ with self; {
         hash = "sha256-/QAhKENSeP+QRoWx/v8EMFPOouZ36Qd78lhZpvInz7Q=";
       })
     ];
-    nativeCheckInputs = [ pkgs.cairo CairoGObject ];
+    nativeBuildInputs = [
+      pkgs.pkg-config
+    ];
+    nativeCheckInputs = [ CairoGObject ];
+    checkInputs = [
+      pkgs.cairo
+    ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     preCheck = ''
       # Our gobject-introspection patches make the shared library paths absolute
