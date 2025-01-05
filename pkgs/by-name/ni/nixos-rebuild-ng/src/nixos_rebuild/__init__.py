@@ -9,7 +9,7 @@ from typing import assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, NRError, Profile
+from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
@@ -176,6 +176,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--target-host", help="Specifies host to activate the configuration"
     )
     main_parser.add_argument("--no-build-nix", action="store_true", help="Deprecated")
+    main_parser.add_argument(
+        "--image-variant",
+        help="Selects an image variant to build from the "
+        + "config.system.build.images attribute of the given configuration",
+    )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -285,8 +290,7 @@ def reexec(
             )
     except CalledProcessError:
         logger.warning(
-            "could not build a newer version of nixos-rebuild, "
-            + "using current version"
+            "could not build a newer version of nixos-rebuild, using current version"
         )
 
     if drv:
@@ -372,6 +376,7 @@ def execute(argv: list[str]) -> None:
             | Action.BUILD
             | Action.DRY_BUILD
             | Action.DRY_ACTIVATE
+            | Action.BUILD_IMAGE
             | Action.BUILD_VM
             | Action.BUILD_VM_WITH_BOOTLOADER
         ):
@@ -383,7 +388,29 @@ def execute(argv: list[str]) -> None:
             flake_build_flags |= {"no_link": no_link, "dry_run": dry_run}
             rollback = bool(args.rollback)
 
+            def validate_image_variant(variants: ImageVariants) -> None:
+                if args.image_variant not in variants:
+                    raise NRError(
+                        "please specify one of the following "
+                        + "supported image variants via --image-variant:\n"
+                        + "\n".join(f"- {v}" for v in variants.keys())
+                    )
+
             match action:
+                case Action.BUILD_IMAGE if flake:
+                    variants = nix.get_build_image_variants_flake(
+                        flake,
+                        eval_flags=flake_common_flags,
+                    )
+                    validate_image_variant(variants)
+                    attr = f"config.system.build.images.{args.image_variant}"
+                case Action.BUILD_IMAGE:
+                    variants = nix.get_build_image_variants(
+                        build_attr,
+                        instantiate_flags=common_flags,
+                    )
+                    validate_image_variant(variants)
+                    attr = f"config.system.build.images.{args.image_variant}"
                 case Action.BUILD_VM:
                     attr = "config.system.build.vm"
                 case Action.BUILD_VM_WITH_BOOTLOADER:
@@ -473,8 +500,22 @@ def execute(argv: list[str]) -> None:
                 # If you get `not-found`, please open an issue
                 vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
                 print(
-                    f"Done. The virtual machine can be started by running '{vm_path}'"
+                    "Done. The virtual machine can be started by running",
+                    end=" ",
+                    file=sys.stderr,
+                    flush=True,
                 )
+                print(vm_path, flush=True)
+            elif action == Action.BUILD_IMAGE:
+                image_name = variants[args.image_variant]
+                disk_path = path_to_config / image_name
+                print(
+                    "Done. The disk image can be found in",
+                    end=" ",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                print(disk_path, flush=True)
         case Action.EDIT:
             nix.edit(flake, flake_build_flags)
         case Action.DRY_RUN:
