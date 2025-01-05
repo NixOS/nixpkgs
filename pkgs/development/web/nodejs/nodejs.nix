@@ -291,6 +291,7 @@ let
       "FLAKY_TESTS=skip"
       # Skip some tests that are not passing in this context
       "CI_SKIP_TESTS=${lib.concatStringsSep "," ([
+        # Tests don't work in sandbox.
         "test-child-process-exec-env"
         "test-child-process-uid-gid"
         "test-fs-write-stream-eagain"
@@ -321,6 +322,9 @@ let
         "test-watch-mode-files_watcher"
       ] ++ lib.optionals (!lib.versionAtLeast version "22") [
         "test-tls-multi-key"
+      ] ++ lib.optionals stdenv.hostPlatform.is32bit [
+        # utime (actually utimensat) fails with EINVAL on 2038 timestamp
+        "test-fs-utimes-y2K38"
       ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
         # Disable tests that don’t work under macOS sandbox.
         "test-macos-app-sandbox"
