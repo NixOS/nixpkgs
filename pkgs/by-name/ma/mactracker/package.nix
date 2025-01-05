@@ -3,6 +3,12 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  writeShellApplication,
+  curl,
+  cacert,
+  libxml2,
+  xmlstarlet,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,6 +36,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     unzip -d $out/Applications $src -x '__MACOSX/*'
     runHook postInstall
   '';
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "mactracker-update-script";
+    runtimeInputs = [
+      curl
+      cacert
+      libxml2
+      xmlstarlet
+      common-updater-scripts
+    ];
+    text = ''
+      url="https://mactracker.ca/releasenotes-mac.html"
+      version=$(curl -s "$url" | xmllint -html -xmlout - | xmlstarlet sel -t -v "//faq/h5[1]")
+      update-source-version mactracker "$version"
+    '';
+  });
 
   meta = {
     description = "Mactracker provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
