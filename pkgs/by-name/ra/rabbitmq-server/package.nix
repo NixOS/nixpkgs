@@ -120,6 +120,9 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+  # Needed for the check in installCheckPhase
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = {
     vm-test = nixosTests.rabbitmq;
   };
