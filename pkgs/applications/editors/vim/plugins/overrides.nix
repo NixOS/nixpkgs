@@ -2136,6 +2136,10 @@ in
     ];
   };
 
+  nvim-java-dap = super.nvim-java-dap.overrideAttrs {
+    dependencies = [ self.nvim-java-core ];
+  };
+
   nvim-java-refactor = super.nvim-java-refactor.overrideAttrs {
     dependencies = [ self.nvim-java-core ];
     nvimSkipModule = [

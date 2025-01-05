@@ -9138,6 +9138,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-java/nvim-java-core/";
   };
 
+  nvim-java-dap = buildVimPlugin {
+    pname = "nvim-java-dap";
+    version = "2024-07-25";
+    src = fetchFromGitHub {
+      owner = "nvim-java";
+      repo = "nvim-java-dap";
+      rev = "55f239532f7a3789d21ea68d1e795abc77484974";
+      sha256 = "01fscbw226djimzscpa7n20gfzyhw952ar4dymyw18svp5vg5g2y";
+    };
+    meta.homepage = "https://github.com/nvim-java/nvim-java-dap/";
+  };
+
   nvim-java-refactor = buildVimPlugin {
     pname = "nvim-java-refactor";
     version = "2024-07-25";
