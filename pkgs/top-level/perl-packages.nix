@@ -10705,6 +10705,8 @@ with self; {
       homepage = "https://metacpan.org/release/Games-Solitaire-Verify";
       license = with lib.licenses; [ mit ];
       mainProgram = "verify-solitaire-solution";
+      # Unsuccessful stat on filename containing newline at lib/perl5/5.40.0/File/Path.pm line 361.
+      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 
