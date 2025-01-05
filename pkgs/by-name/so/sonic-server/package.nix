@@ -26,8 +26,6 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
-
   postPatch = ''
     substituteInPlace src/main.rs \
       --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
