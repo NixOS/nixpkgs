@@ -18,6 +18,8 @@ buildPythonPackage rec {
     hash = "sha256-TmfLAkiofrQNWYBhIlY4zafbZPgFftISCGloO/rlEG4=";
   };
 
+  pythonRelaxDeps = [ "numpy" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
