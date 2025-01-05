@@ -2129,6 +2129,20 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  nvim-java = super.nvim-java.overrideAttrs {
+    dependencies = with self; [
+      lua-async-await
+      mason-nvim
+      nui-nvim
+      nvim-dap
+      nvim-java-core
+      nvim-java-dap
+      nvim-java-refactor
+      nvim-java-test
+      nvim-lspconfig
+    ];
+  };
+
   nvim-java-core = super.nvim-java-core.overrideAttrs {
     dependencies = with self; [
       mason-nvim
