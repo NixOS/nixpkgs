@@ -16,23 +16,24 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
-    repo = pname;
+    repo = "guppy3";
     tag = "v${version}";
     hash = "sha256-hgJcy4DRfZL50dCcRv2a6GJPDabsUMfDtq7HCXXYYz8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ tkinter ];
+  dependencies = [ tkinter ];
 
   # Tests are starting a Tkinter GUI
   doCheck = false;
+
   pythonImportsCheck = [ "guppy" ];
 
   meta = with lib; {
     description = "Python Programming Environment & Heap analysis toolset";
     homepage = "https://zhuyifei1999.github.io/guppy3/";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
