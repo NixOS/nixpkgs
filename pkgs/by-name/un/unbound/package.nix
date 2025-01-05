@@ -17,6 +17,7 @@
 , symlinkJoin
 , bison
 , nixosTests
+, buildPackages
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # common dependency. The transitive dependency closure of systemd also
@@ -74,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
+
+  depsBuildBuild = [
+    buildPackages.bison
+  ];
 
   enableParallelBuilding = true;
 
