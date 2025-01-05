@@ -60,6 +60,9 @@ buildPythonPackage rec {
   disabledTests = [
     # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
     "test_renderer_with_none_embed_options"
+    # Sometimes conflict due to parallelism
+    "test_dataframe_to_csv[polars]"
+    "test_dataframe_to_csv[pandas]"
   ];
 
   disabledTestPaths = [
