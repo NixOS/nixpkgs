@@ -52,12 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
         --replace '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-      # We normally don't want to use absolute paths in desktop file, but this one is special
-      # There appears to be some issue in lomiri-app-launch's lookup of relative Icon entries (while lomiri is starting up?)
-      # that makes the session segfault.
-      # As a compromise, hardcode /run/current-system
       substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
-        --replace 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=/run/current-system/sw/share/icons/hicolor/scalable/apps/morph-browser.svg' \
+        --replace 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
         --replace 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
     ''
     + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
