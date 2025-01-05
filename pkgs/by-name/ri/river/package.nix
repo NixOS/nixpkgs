@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.6";
+  version = "0.3.7";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-bLUotGbKHlMxNn8kC613cFp41qTXoxtwo0O4mZQLl7w=";
+    hash = "sha256-4ac0LGQtLldHyXJ2GIRMHV+VZfUrRFdBYLiAHX5lWcw=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
