@@ -40,6 +40,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # Broken with Numpy 2.x, https://github.com/wmayner/pyemd/issues/68
+    "test_emd_samples_2"
+    "test_emd_samples_3"
+  ];
+
   meta = with lib; {
     description = "Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
     homepage = "https://github.com/wmayner/pyemd";
