@@ -17,6 +17,7 @@
   libdbusmenu,
   lz4,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdbusmenu
     lz4
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Desktop annotation tool";
