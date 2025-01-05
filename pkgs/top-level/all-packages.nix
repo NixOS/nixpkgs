@@ -14470,12 +14470,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
-  mmex = callPackage ../applications/office/mmex {
-    wxGTK32 = wxGTK32.override {
-      withWebKit = true;
-    };
-  };
-
   mmlgui = callPackage ../applications/audio/mmlgui {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     libvgm = libvgm.override {
