@@ -76,7 +76,7 @@ buildNpmPackage rec {
     # write its prerender cache.
     #
     # This patch ensures that the cache implementation respects the env
-    # variable `HOMEPAGE_CACHE_DIR`, which is set by default in the
+    # variable `NIXPKGS_HOMEPAGE_CACHE_DIR`, which is set by default in the
     # wrapper below.
     pushd $out
     git apply ${./prerender_cache_path.patch}
@@ -85,7 +85,7 @@ buildNpmPackage rec {
     makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
-      --set-default HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard
+      --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard
 
     ${if enableLocalIcons then installLocalIcons else ""}
 
