@@ -8,28 +8,38 @@
   pytestCheckHook,
   scipy,
   setuptools,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cupy,
+  pyopencl,
 }:
 
 buildPythonPackage rec {
   pname = "pymatting";
-  version = "1.1.10";
+  version = "1.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
-    tag = "v${version}";
-    hash = "sha256-wHCTqcBvVN/pTXH3iW57DPpMEsnehutRQB5NaugS6Zs=";
+    # https://github.com/pymatting/pymatting/issues/92
+    rev = "afd2dec073cb08b8119300feec18c179a9d436f3";
+    hash = "sha256-AzdhRZgcT+gfLPZYKJLQUW7uLyXoRy6SP2raHWd9XUY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numba
-    numpy
-    pillow
-    scipy
-  ];
+  dependencies =
+    [
+      numba
+      numpy
+      pillow
+      scipy
+    ]
+    ++ lib.optionals cudaSupport [
+      cupy
+      pyopencl
+    ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -47,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";
-    changelog = "https://github.com/pymatting/pymatting/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pymatting/pymatting/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ blaggacao ];
   };
