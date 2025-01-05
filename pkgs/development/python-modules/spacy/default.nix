@@ -36,15 +36,20 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.2";
+  version = "3.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Szfr0lraQFmw3J4Ik+cN3l34NIUymgaO8EWA5wiSpl0=";
+    hash = "sha256-galn3D1qWgqaslBVlIP+IJIwZYKpGS+Yvnpjvc4nl/c=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+      "numpy>=2.0.0,<2.1.0" "numpy>=2.0.0"
+  '';
 
   build-system = [
     cymem
