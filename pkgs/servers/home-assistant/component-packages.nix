@@ -4274,7 +4274,8 @@
       ];
     "powerfox" =
       ps: with ps; [
-      ]; # missing inputs: powerfox
+        powerfox
+      ];
     "powerwall" =
       ps: with ps; [
         tesla-powerwall
@@ -7070,6 +7071,7 @@
     "plugwise"
     "point"
     "poolsense"
+    "powerfox"
     "powerwall"
     "private_ble_device"
     "profiler"
