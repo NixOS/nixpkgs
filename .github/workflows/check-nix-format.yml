@@ -3,12 +3,14 @@
 # https://github.com/NixOS/rfcs/pull/166.
 # Because of this, this action is not yet enabled for all files -- only for
 # those who have opted in.
+
 name: Check that Nix files are formatted
 
 on:
   pull_request_target:
     # See the comment at the same location in ./nixpkgs-vet.yml
     types: [opened, synchronize, reopened, edited]
+
 permissions:
   contents: read
 
@@ -28,6 +30,7 @@ jobs:
           ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
+
       - name: Checking out base branch
         run: |
           base=$(mktemp -d)
@@ -35,6 +38,7 @@ jobs:
           git worktree add "$base" "$baseRev"
           echo "baseRev=$baseRev" >> "$GITHUB_ENV"
           echo "base=$base" >> "$GITHUB_ENV"
+
       - name: Get Nixpkgs revision for nixfmt
         run: |
           # pin to a commit from nixpkgs-unstable to avoid e.g. building nixfmt
@@ -42,13 +46,16 @@ jobs:
           # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
           rev=$(jq -r .rev ci/pinned-nixpkgs.json)
           echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
+
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=${{ env.url }}
+
       - name: Install nixfmt
         run: "nix-env -f '<nixpkgs>' -iAP nixfmt-rfc-style"
+
       - name: Check that Nix files are formatted according to the RFC style
         run: |
           unformattedFiles=()

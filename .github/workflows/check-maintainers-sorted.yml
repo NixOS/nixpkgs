@@ -4,6 +4,7 @@ on:
   pull_request_target:
     paths:
       - 'maintainers/maintainer-list.nix'
+
 permissions:
   contents: read
 
@@ -21,9 +22,11 @@ jobs:
           sparse-checkout: |
             lib
             maintainers
+
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
+
       - name: Check that maintainer-list.nix is sorted
         run: nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
