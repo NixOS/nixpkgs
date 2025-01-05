@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   stdenv,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
+    substituteInPlace ucm2/lib/card-init.conf \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+      --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
 
     mkdir -p $out/share/alsa
     cp -r ucm ucm2 $out/share/alsa
