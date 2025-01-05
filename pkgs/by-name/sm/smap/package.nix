@@ -25,7 +25,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A drop-in replacement for Nmap powered by shodan.io";
+    description = "Drop-in replacement for Nmap powered by shodan.io";
     homepage = "https://github.com/s0md3v/Smap";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ];
