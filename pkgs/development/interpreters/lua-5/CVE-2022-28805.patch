@@ -1,0 +1,10 @@
+--- a/src/lparser.c
++++ b/src/lparser.c
+@@ -301,6 +301,7 @@
+     expdesc key;
+     singlevaraux(fs, ls->envn, var, 1);  /* get environment variable */
+     lua_assert(var->k == VLOCAL || var->k == VUPVAL);
++    luaK_exp2anyregup(fs, var);  /* but could be a constant */
+     codestring(ls, &key, varname);  /* key is variable name */
+     luaK_indexed(fs, var, &key);  /* env[varname] */
+   }

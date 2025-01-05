@@ -1,0 +1,75 @@
+diff --git a/buildit.bash b/buildit.bash
+index 47e861b..ce52387 100755
+--- a/buildit.bash
++++ b/buildit.bash
+@@ -63,7 +63,7 @@ EXCLUDEMESSAGE=" -vm6058,2005,5027 "	# cut down on compiler noise
+ # 6058 - note about things not being inlined
+ # 5027 - var not used
+ # 2005 - level 2 comment
+-FPCHARD=" -Cg  -k-pie -k-znow "   # might get cancelled with a NOHARDENING semaphore file.
++FPCHARD=""   # might get cancelled with a NOHARDENING semaphore file.
+ AUTODOWNLOAD=FALSE			      # downloading large file, use -d to allow it
+ 
+ # ------------------------ Some functions ------------------------
+@@ -196,8 +196,6 @@ if [ "$CPU" = "powerpc64le" ]; then	   # power does not like intel switches !
+ fi
+ 
+ TARGET="$CPU-$OS"
+-CheckFPC
+-CheckLazBuild
+ CheckForQt5
+ 
+ # OK, if to here, we have a fpc and lazbuild, but which FPC ?
+@@ -244,8 +242,8 @@ cd "$K_DIR"		# WARNING, kcontrols is not part of the github zip file, its added
+ 
+ # Here we build just the kmemo.pas part of kcontrols.
+ 
+-mkdir -p "lib/$TARGET"			# this is where kcontrols object files end up.
+-rm -f "lib/$CPU-$OS/kmemo.o"    # make sure we try to build a new one, but probably not there.
++OUTPUT=$(mktemp -d)
++mkdir -p "$OUTPUT/lib/$TARGET"
+ 
+ FPCKOPT=" -B -MObjFPC -Scgi -Cg -O1 -g -gl -l -vewnibq -vh- $EXCLUDEMESSAGES -Fi$K_DIR"
+ FPCKUNITS=" -Fu$LAZ_DIR/packager/units/$TARGET -Fu$LAZ_DIR/components/lazutils/lib/$TARGET"
+@@ -253,7 +251,7 @@ FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/buildintf/units/$TARGET -Fu$LAZ_DIR
+ FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/lib/$TARGET -Fu$LAZ_DIR/lcl/units/$TARGET -Fu$LAZ_DIR/lcl/units/$TARGET/$WIDGET"
+ FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/cairocanvas/lib/$TARGET/$WIDGET -Fu$LAZ_DIR/components/lazcontrols/lib/$TARGET/$WIDGET"
+ FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/ideintf/units/$TARGET/$WIDGET -Fu$LAZ_DIR/components/printers/lib/$TARGET/$WIDGET"
+-FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/tdbf/lib/$TARGET/$WIDGET -Fu. -FUlib/$TARGET"
++FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/tdbf/lib/$TARGET/$WIDGET -Fu. -FU$OUTPUT/lib/$TARGET"
+ 
+ RUNIT="$COMPILER $EXCLUDEMESSAGE $FPCKOPT  $FPCHARD $LAZUNITSRC  $FPCKUNITS kmemo.pas"
+ 
+@@ -261,12 +259,12 @@ echo "--------------- kcontrols COMPILE COMMAND -------------"
+ echo "$RUNIT"
+ echo "-----------------"
+ 
+-$RUNIT 1>tomboy-ng.log
++$RUNIT
+ 
+ # exit
+ 
+ 
+-if [ ! -e "$K_DIR/lib/$CPU-$OS/kmemo.o" ]; then
++if [ ! -e "$OUTPUT/lib/$CPU-$OS/kmemo.o" ]; then
+ 	echo "ERROR failed to build KControls, exiting..."
+ 	K_DIR=""
+ 	exit 1
+@@ -318,7 +316,7 @@ UNITS="$UNITS -Fu$LAZ_DIR/lcl/units/$TARGET"
+ UNITS="$UNITS -Fu$LAZ_DIR/packager/units/$TARGET"
+ 
+ UNITS="$UNITS -Fu$SOURCE_DIR/"
+-UNITS="$UNITS -FU$SOURCE_DIR/lib/$TARGET/" 
++UNITS="$UNITS -FU$OUTPUT/lib/$TARGET/" 
+ 
+ OPT2=" -dLCL -dLCL$WIDGET" 
+ DEFS="-dDisableLCLGIF -dDisableLCLJPEG -dDisableLCLPNM -dDisableLCLTIFF"
+@@ -339,7 +337,7 @@ RUNIT="$COMPILER $OPT1 $FPCHARD $UNITS $LAZUNITSRC $OPT2 $DEFS $PROJ.lpr"
+ echo "------------ tomboy-ng COMPILE COMMAND --------------------"
+ echo "$RUNIT" 
+ 
+-TOMBOY_NG_VER="$VERSION" $RUNIT 1>>tomboy-ng.log
++TOMBOY_NG_VER="$VERSION" $RUNIT
+ 
+ if [ ! -e "$PROJ" ]; then
+     echo "======== ERROR, COMPILE FAILED see source/tomboy-ng.log ====="
