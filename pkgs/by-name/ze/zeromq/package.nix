@@ -15,6 +15,7 @@
   zmqpp,
   ffmpeg,
   python3,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-q2h5y0Asad+fGB9haO4Vg7a1ffO2JSb7czzlhmT3VmI=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -37,12 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libsodium ];
 
-  doCheck = false; # fails all the tests (ctest)
-
   cmakeFlags = [
-    (lib.cmakeBool "WITH_LIBSODIUM" true)
+    (lib.cmakeBool "BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_CURVE" true)
     (lib.cmakeBool "ENABLE_DRAFTS" enableDrafts)
+    (lib.cmakeBool "WITH_LIBSODIUM" true)
   ];
 
   postPatch = ''
@@ -83,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pyzmq = python3.pkgs.pyzmq;
     ffmpeg = ffmpeg.override { withZmq = true; };
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {
@@ -92,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];
+    pkgConfigModules = [ "libzmq" ];
   };
 })
