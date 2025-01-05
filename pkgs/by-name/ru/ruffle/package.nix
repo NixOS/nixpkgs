@@ -66,6 +66,16 @@ rustPlatform.buildRustPackage {
 
   dontWrapGApps = true;
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 -t $out/share/icons/hicolor/scalable/apps/ desktop/packages/linux/rs.ruffle.Ruffle.svg
+
+    install -Dm644 -t $out/share/applications/ desktop/packages/linux/rs.ruffle.Ruffle.desktop
+    substituteInPlace $out/share/applications/rs.ruffle.Ruffle.desktop \
+    --replace-fail "Exec=ruffle %u" "Exec=ruffle_desktop %u"
+
+    install -Dm644 -t $out/share/metainfo/ desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml
+  '';
+
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/ruffle_desktop \
       --add-needed libxkbcommon-x11.so \
