@@ -9126,6 +9126,18 @@ final: prev:
     meta.homepage = "https://github.com/idanarye/nvim-impairative/";
   };
 
+  nvim-java = buildVimPlugin {
+    pname = "nvim-java";
+    version = "2024-12-24";
+    src = fetchFromGitHub {
+      owner = "nvim-java";
+      repo = "nvim-java";
+      rev = "e8e84413ca03e7d0541921e795b2e6bf8801f186";
+      sha256 = "0hhjhigmwydsa4wq5f6gkkv09bajvdyajg21k5xfqmh1mblxf5sr";
+    };
+    meta.homepage = "https://github.com/nvim-java/nvim-java/";
+  };
+
   nvim-java-core = buildVimPlugin {
     pname = "nvim-java-core";
     version = "2024-12-25";
