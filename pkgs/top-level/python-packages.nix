@@ -14359,6 +14359,8 @@ self: super: with self; {
 
   safe-pysha3 = callPackage ../development/python-modules/safe-pysha3 { };
 
+  safehttpx = callPackage ../development/python-modules/safehttpx { };
+
   safeio = callPackage ../development/python-modules/safeio { };
 
   safetensors = callPackage ../development/python-modules/safetensors { };
