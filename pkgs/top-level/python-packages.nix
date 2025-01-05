@@ -2568,6 +2568,8 @@ self: super: with self; {
 
   commonmark = callPackage ../development/python-modules/commonmark { };
 
+  commonregex = callPackage ../development/python-modules/commonregex { };
+
   complycube = callPackage ../development/python-modules/complycube { };
 
   compreffor = callPackage ../development/python-modules/compreffor { };
@@ -8160,6 +8162,8 @@ self: super: with self; {
   microsoft-security-utilities-secret-masker = callPackage ../development/python-modules/microsoft-security-utilities-secret-masker { };
 
   midea-beautiful-air = callPackage ../development/python-modules/midea-beautiful-air { };
+
+  midea-local = callPackage ../development/python-modules/midea-local { };
 
   midiutil = callPackage ../development/python-modules/midiutil { };
 
