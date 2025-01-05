@@ -1,28 +1,22 @@
 {
   lib,
-  buildPythonApplication,
-  fetchPypi,
+  fetchFromGitHub,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "badchars";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4neV1S5gwQ03kEXEyZezNSj+PVXJyA5MO4lyZzGKE/c=";
+  src = fetchFromGitHub {
+    owner = "cytopia";
+    repo = "badchars";
+    tag = version;
+    hash = "sha256-VWe3k34snEviBK7VBCDTWAu3YjZfh1gXHXjlnFlefJw=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "argparse" ""
-  '';
-
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   # no tests are available and it can't be imported (it's only a script, not a module)
   doCheck = false;
