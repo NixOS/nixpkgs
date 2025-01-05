@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.2.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     tag = version;
-    hash = "sha256-jYAzFqHuTpcgmnodt7vuNWTHRP3rd0B/3tp2Q04/N9o=";
+    hash = "sha256-srsSDMvZ7lDDfDuINB0nXR2u+X+bzMqOZL9tvl9GI/s=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
       jinja2
       oyaml
       pathspec
+      platformdirs
       pytest
       regex
       tblib
