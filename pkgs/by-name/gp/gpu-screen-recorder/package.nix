@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchgit,
   makeWrapper,
   meson,
   ninja,
@@ -25,16 +25,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gpu-screen-recorder";
   version = "5.2.0";
 
-  src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder.git.${finalAttrs.version}.tar.gz";
-    hash = "sha256-7aUW0WhoTpkJhj9WjjI2lnq+vOCG53vl/4DckHmLPBo=";
+  src = fetchgit {
+    url = "https://repo.dec05eba.com/${pname}";
+    tag = version;
+    hash = "sha256-8/EtO0nuretHWo7atgWXrmAPcvnYtdE06BkwlhbrNsI=";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [
     pkg-config
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH : "$out/bin"
   '';
 
-  passthru.updateScript = gitUpdater { url = "https://repo.dec05eba.com/gpu-screen-recorder"; };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
@@ -93,4 +92,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.babbaj ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}
