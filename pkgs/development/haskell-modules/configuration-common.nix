@@ -2218,20 +2218,9 @@ self: super: {
   }) super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  gi-gtk_4 = self.gi-gtk_4_0_11;
-  gi-gtk_4_0_11 = doDistribute (super.gi-gtk_4_0_11.override {
-    gi-gdk = self.gi-gdk_4;
-  });
-  gi-gdk_4 = self.gi-gdk_4_0_9;
-  gi-gdk_4_0_9 = doDistribute super.gi-gdk_4_0_9;
-  # GSK is only used for GTK 4.
-  gi-gsk = super.gi-gsk.override {
-    gi-gdk = self.gi-gdk_4;
-  };
-  gi-adwaita = super.gi-adwaita.override {
-    gi-gdk = self.gi-gdk_4;
-    gi-gtk = self.gi-gtk_4;
-  };
+  # FIXME: These should be removed as gi-gtk4/gi-gdk4 become the standard
+  gi-gtk_4 = self.gi-gtk_4_0_12;
+  gi-gdk_4 = self.gi-gdk_4_0_10;
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
