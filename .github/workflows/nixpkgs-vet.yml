@@ -2,6 +2,7 @@
 # Among other checks, it makes sure that `pkgs/by-name` (see `../../pkgs/by-name/README.md`) follows the validity rules outlined in [RFC 140](https://github.com/NixOS/rfcs/pull/140).
 # When you make changes to this workflow, please also update `ci/nixpkgs-vet.sh` to reflect the impact of your work to the CI.
 # See https://github.com/NixOS/nixpkgs-vet for details on the tool and its checks.
+
 name: Vet nixpkgs
 
 on:
@@ -37,12 +38,15 @@ jobs:
           ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
+
       - name: Checking out base branch
         run: |
           base=$(mktemp -d)
           git worktree add "$base" "$(git rev-parse HEAD^1)"
           echo "base=$base" >> "$GITHUB_ENV"
+
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
       - name: Fetching the pinned tool
         # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
         run: |
@@ -55,6 +59,7 @@ jobs:
 
           # Adds a result symlink as a GC root.
           nix-store --realise "$toolPath" --add-root result
+
       - name: Running nixpkgs-vet
         env:
           # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
