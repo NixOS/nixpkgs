@@ -10236,6 +10236,8 @@ with self; {
       description = "Locate per-dist and per-module shared files";
       homepage = "https://metacpan.org/release/File-ShareDir";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      # Can't load module IO, dynamic loading not available in this perl.
+      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 
