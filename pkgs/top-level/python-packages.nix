@@ -131,6 +131,8 @@ self: super: with self; {
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
+  ahocorapy = callPackage ../development/python-modules/ahocorapy { };
+
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
   aigpy = callPackage ../development/python-modules/aigpy { };
@@ -1564,6 +1566,8 @@ self: super: with self; {
     callPackage ../development/python-modules/bcrypt { };
 
   bdffont = callPackage ../development/python-modules/bdffont { };
+
+  beacontools = callPackage ../development/python-modules/beacontools { };
 
   beaker = callPackage ../development/python-modules/beaker { };
 
@@ -11886,6 +11890,8 @@ self: super: with self; {
 
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
+  pyjvcprojector = callPackage ../development/python-modules/pyjvcprojector { };
+
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
@@ -15506,6 +15512,12 @@ self: super: with self; {
   stix2-validator = callPackage ../development/python-modules/stix2-validator { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
+
+  standard-aifc = callPackage ../development/python-modules/standard-aifc { };
+
+  standard-chunk = callPackage ../development/python-modules/standard-chunk { };
+
+  standard-telnetlib = callPackage ../development/python-modules/standard-telnetlib { };
 
   stone = callPackage ../development/python-modules/stone { };
 

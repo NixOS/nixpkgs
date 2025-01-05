@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codereader";
     repo = "DarkRadiant";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-y0VzTnHobW36/25/nTV49OKnUMpnsjImioMdNKoTyYA=";
   };
 

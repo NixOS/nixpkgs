@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a5ot5ad8boANK3achn6PJ52k/xmxawbTM0/hEEC/fss=";
   };
 

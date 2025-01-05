@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fzbJjoBJ6zOw1ABN9PitbW2usm4NgqVfMWSAvRAVHj0=";
     fetchSubmodules = true;
   };

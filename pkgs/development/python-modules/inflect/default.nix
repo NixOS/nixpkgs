@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "inflect";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3I5AdMuxwKtztnrF0lbvBIUxfqn0WlY2Pv6GYitFrA8=";
   };
 

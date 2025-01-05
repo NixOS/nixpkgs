@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mechmotum";
     repo = "cyipopt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ddiSCVzywlCeeVbRJg2wxKIlAVlZw9Js95IbEDqhh5Q=";
   };
 

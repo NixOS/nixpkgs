@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blockstream";
     repo = "satellite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OmIQUrUH3kWgf+v+9Hl2OgDdGPwb3guNY0+H64CWkeg=";
   };
 

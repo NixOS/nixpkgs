@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jnHM3VSfi0KioNmXlkjVIlV7/7bKipEvpnV+z13+59Y=";
   };
 

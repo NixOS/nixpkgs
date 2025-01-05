@@ -33,7 +33,7 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Ldht7w1qgLTiqbRUJJvFQgl1VW6k+14w/jz58kAeMl0=";
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iQxPJgMxBtyindkNdQkehwPf7ZgWCI09PToqs2y1Hfw=";
   };
 

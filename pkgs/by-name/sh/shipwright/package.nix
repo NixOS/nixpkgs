@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-bA+Bm7M6udeZLpFhGa8fCtagfYBeRxWWqFuAj62XwGQ=";
     fetchSubmodules = true;
   };

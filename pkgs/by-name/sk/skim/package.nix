@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "skim-rs";
     repo = "skim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vUKHyrvCGtRKziUqgIbgVP7YdH+UW3PFBECV/mo5RxY=";
   };
 

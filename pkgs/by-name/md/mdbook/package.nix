@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aADNcuIeDef9+a3NOWQxo6IRnKJ6AbkvE4GqvFbubyI=";
   };
 

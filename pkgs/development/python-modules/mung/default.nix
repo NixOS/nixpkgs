@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "OMR-Research";
     repo = "mung";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QljGoZdUJRClQ/QzUsCKD0/ooWaFrKXI+93WFPvmIjE=";
   };
 

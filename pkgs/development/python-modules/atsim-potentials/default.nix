@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjdrushton";
     repo = "atsim-potentials";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
   };
 

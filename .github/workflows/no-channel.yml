@@ -13,7 +13,7 @@ permissions: {}
 jobs:
   fail:
     name: "This PR is is targeting a channel branch"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - run: |
         cat <<EOF

@@ -74,6 +74,8 @@ const RELOAD_LIST_FILE: &str = "/run/nixos/reload-list";
 // `stopIfChanged = true` is ignored, switch-to-configuration will handle `restartIfChanged =
 // false` and `reloadIfChanged = true`. This is the same as specifying a restart trigger in the
 // NixOS module.
+// In addition, switch-to-configuration will handle notSocketActivated=true to disable treatment
+// of units as "socket-activated" even though they might have any associated sockets.
 //
 // The reload file asks this program to reload a unit. This is the same as specifying a reload
 // trigger in the NixOS module and can be ignored if the unit is restarted in this activation.
@@ -152,7 +154,7 @@ fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
         Ok(Ok(status)) if status.success() => {}
         _ => {
             eprintln!("Pre-switch checks failed");
-            die()
+            std::process::exit(1);
         }
     }
 
@@ -174,7 +176,7 @@ fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
         Ok(Ok(status)) if status.success() => {}
         _ => {
             eprintln!("Failed to install bootloader");
-            die();
+            std::process::exit(1);
         }
     }
 
@@ -613,6 +615,8 @@ fn handle_modified_unit(
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
                 // restart the socket(s) instead of the service.
+                // We count as "socket-activated" any unit that doesn't declare itself not so
+                // via X-NotSocketActivated, that has any associated .socket units.
                 let mut socket_activated = false;
                 if unit.ends_with(".service") {
                     let mut sockets = if let Some(Some(Some(sockets))) = new_unit_info.map(|info| {
@@ -662,6 +666,12 @@ fn handle_modified_unit(
                             }
                         }
                     }
+                }
+                if parse_systemd_bool(new_unit_info, "Service", "X-NotSocketActivated", false) {
+                    // If the unit explicitly opts out of socket
+                    // activation, restart it as if it weren't (but do
+                    // restart its sockets, that's fine):
+                    socket_activated = false;
                 }
 
                 // If the unit is not socket-activated, record that this unit needs to be started

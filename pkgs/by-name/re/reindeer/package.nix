@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o8PHtGG3Ndz6Ei9ZBoAdeNmBb70m4c+jCvHCGOjaA+w=";
   };
 

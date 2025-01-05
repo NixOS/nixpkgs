@@ -26,7 +26,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
 
     nativeBuildInputs = [
       cacert

@@ -13,16 +13,25 @@
   pkg-config,
   libsass,
   stdenv,
+  fetchzip,
 }:
-
+let
+  version = "1.6.2";
+  # Fetch release tarball which contains language files
+  # https://github.com/InvoicePlane/InvoicePlane/issues/1170
+  languages = fetchzip {
+    url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
+    hash = "sha256-ME8ornP2uevvH8DzuI25Z8OV0EP98CBgbunvb2Hbr9M=";
+  };
+in
 php.buildComposerProject (finalAttrs: {
   pname = "invoiceplane";
-  version = "1.6.2";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
-    rev = "refs/tags/v${finalAttrs.version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
   };
 
@@ -64,9 +73,10 @@ php.buildComposerProject (finalAttrs: {
     grunt build
   '';
 
-  # Cleanup
+  # Cleanup and language files
   postInstall = ''
     mv $out/share/php/invoiceplane/* $out/
+    cp -r ${languages}/application/language $out/application/
     rm -r $out/{composer.json,composer.lock,CONTRIBUTING.md,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
   '';
 
@@ -76,7 +86,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     description = "Self-hosted open source application for managing your invoices, clients and payments";
-    changelog = "https://github.com/InvoicePlane/InvoicePlane/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/InvoicePlane/InvoicePlane/releases/tag/v${version}";
     homepage = "https://www.invoiceplane.com";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

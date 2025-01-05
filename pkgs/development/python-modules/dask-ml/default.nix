@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-ml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZiBpCk3b4Tk0Hwb4uapJLEx+Nb/qHFROCnkBTNGDzoU=";
   };
 

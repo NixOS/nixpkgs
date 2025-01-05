@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "groq";
     repo = "groq-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EkEXXHca4DJtY1joM1E4IXzaQzJL+QC+aYaTe46EWlE=";
   };
 

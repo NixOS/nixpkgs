@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
   };
 

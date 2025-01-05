@@ -14,7 +14,7 @@ jobs:
   backport:
     name: Backport Pull Request
     if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs

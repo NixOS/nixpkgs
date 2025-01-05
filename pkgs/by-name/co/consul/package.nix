@@ -21,7 +21,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nYWrJB98S2zPSBu8ZIHejnLP5OQyPxpJGLdLenGHzHM=";
   };
 

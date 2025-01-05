@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-snowflake";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XUHXyxAoIBHXmH2xXOGrCO2+WMwwJ7oVYt4+m/fT/Ko=";
   };
 

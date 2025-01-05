@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     # `git archive` replaces `$Format:%H %D$` in cmake/CcacheVersion.cmake
     # we need to replace it with something reproducible
     # see https://github.com/NixOS/nixpkgs/pull/316524

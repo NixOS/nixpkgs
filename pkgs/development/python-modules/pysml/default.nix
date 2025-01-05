@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtdcr";
     repo = "pysml";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-G4t0cHbJWMmDODeldj064SlKGagOfUnnRiGRwLu1bF0=";
   };
 

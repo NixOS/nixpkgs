@@ -73,5 +73,6 @@ rustPlatform.buildRustPackage rec {
       protoben
       ma27
     ];
+    mainProgram = "evcxr";
   };
 }

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "snitun";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jewDQqvLUh/066BSEADXkCvjLFRnodKtUPKfvi0KUpI=";
   };
 

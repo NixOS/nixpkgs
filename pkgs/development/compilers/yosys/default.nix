@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LzBx1bxpiPOiRTPgBcjNnuQemZG5xfvtA/NgqUib/6g=";
     fetchSubmodules = true;
     leaveDotGit = true;

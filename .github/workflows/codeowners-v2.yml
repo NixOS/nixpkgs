@@ -41,7 +41,7 @@ jobs:
   # Check that code owners is valid
   check:
     name: Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: get-merge-commit
     if: needs.get-merge-commit.outputs.mergedSha
     steps:
@@ -88,7 +88,7 @@ jobs:
   # Request reviews from code owners
   request:
     name: Request
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
@@ -106,6 +106,6 @@ jobs:
       run: nix-build ci -A requestReviews
 
     - name: Request reviews
-      run: result/bin/request-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+      run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}

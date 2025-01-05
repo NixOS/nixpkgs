@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "unifi-discovery";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ea+zxV2GUAaG/BxO103NhOLzzr/TNJaOsynDad2/2VA=";
   };
 

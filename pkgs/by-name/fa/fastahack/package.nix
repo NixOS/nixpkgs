@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ekg";
     repo = "fastahack";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SWu2iRwNgdhsn4sH9/3jPNG3+l1xFAHXPq5/ODVd4WY=";
   };
 

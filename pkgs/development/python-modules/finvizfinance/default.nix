@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lit26";
     repo = "finvizfinance";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HCxq8jCT3aHOXeYue7KP5sYzO6nJnB9Sy8gKGZpZHbc=";
   };
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lagadic";
     repo = "visp";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m5Tmr+cZab7eSjmbXb8HpJpFHb0UYFTyimY+CkfBIAo=";
   };
 

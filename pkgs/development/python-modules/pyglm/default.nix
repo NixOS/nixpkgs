@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Zuzu-Typ";
     repo = "PyGLM";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vQ4g2bBr6xV36DYrszcJnaJ8lj1uD1KyUblSL4u+U/E=";
     fetchSubmodules = true;
   };
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";
     description = "OpenGL Mathematics (GLM) library for Python written in C++";
-    changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${version}";
     license = licenses.zlib;
     maintainers = with maintainers; [ sund3RRR ];
   };

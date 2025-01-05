@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch2
 , pkg-config
 , libtool
 , bzip2Support ? true, bzip2
@@ -51,21 +50,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-40";
+  version = "7.1.1-43";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-NrTIx1OvwPIeVlA39hGkXZ2Atk4FCsU3/55SZeSc40E=";
+    hash = "sha256-4JzCBKtXiKGLsZ29+7z5U+3aN3ppusQ7mz+sOZYpXGY=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/ImageMagick/ImageMagick/commit/bf5650f0dd41b500102a129d6867cb568f4edee4.patch";
-      hash = "sha256-nxvSTyNZ35DqjR41nM5uidWwRFWzd1e/LFE0n3fpbb8=";
-    })
-  ];
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny

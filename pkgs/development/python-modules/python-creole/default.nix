@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jedie";
     repo = "python-creole";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8pXOnLNjhIv0d+BqjW8wlb6BT6CmFHSsxn5wLOv3LBQ=";
   };
 

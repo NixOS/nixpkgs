@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vzTT8tHpbJSt1PosgKTg3pT4a9UfPabtJppLLD9znhU=";
   };
 

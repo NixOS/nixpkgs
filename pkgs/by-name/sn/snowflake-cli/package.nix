@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1AXp2bCBNuYwnyQMIQn3uLLKdWVznBRK6HcB/E7Yjo8=";
   };
 

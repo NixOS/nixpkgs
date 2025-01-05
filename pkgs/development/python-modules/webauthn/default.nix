@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NBCR5GwmXA6COP9NOYnoD3l1vuOpym/kyNawd8FstLc=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0WYmkrMMeCkBYxy2qGovdxftzrYW9x/3tdeBcYC47Z0=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tedder";
     repo = "requests-aws4auth";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tRo38fdWqZmutGhWv8Hks+oFaLv770RlAHYgS3S6xJA=";
   };
 

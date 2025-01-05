@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datamllab";
     repo = "rlcard";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SWj6DBItQzSM+nioV54a350Li7tbBaVXsQxNAqVgB0k=";
   };
 

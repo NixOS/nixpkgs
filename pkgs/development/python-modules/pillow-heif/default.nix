@@ -22,7 +22,6 @@
   # tests
   opencv4,
   numpy,
-  pympler,
   pytestCheckHook,
 }:
 
@@ -34,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a1qCxI+mMuEYsCk2CUYGNKCe+SONuvVizqUvmQKy3sE=";
   };
 
@@ -72,7 +71,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     opencv4
     numpy
-    pympler
     pytestCheckHook
   ];
 

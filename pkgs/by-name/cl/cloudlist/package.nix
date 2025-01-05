@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cloudlist";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HV4qhQgeLKwkyrRFzRQibqjWRyjLBtoWVdliJ+iyyBc=";
   };
 

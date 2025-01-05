@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iz47BeBiSXIN/rZNOjuZYTFTIm0WAUg8cy0xV20gdwk=";
   };
 

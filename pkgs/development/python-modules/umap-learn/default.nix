@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-hPYmRDSeDa4JWGekUVq3CWf5NthHTpMpyuUQ1yIkVAE=";
   };
 

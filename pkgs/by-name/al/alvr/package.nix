@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true; #TODO devendor openvr
     hash = "sha256-d4KldPii8W1HcfnMSD8Fn+IGO/a3r8747APPjRCnbe8=";
   };

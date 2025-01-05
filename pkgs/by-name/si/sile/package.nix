@@ -29,17 +29,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.8";
+  version = "0.15.9";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    hash = "sha256-ZMF6uv1bHvMEGagbAAmYhwwbCBtjctVbwx35w7g/D2o=";
+    hash = "sha256-+9pZUDszPYJmFgHbZH0aKtZ6qLcJjh73jG2CFoRKxWc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-xv411fxOkjsbVNCNEIaopjLHbUCWdw+1JWePXHdrKBc=";
+    hash = "sha256-qw5XvXFhYLQJalk3fQwKakgBwfWMjhJzHKbqjchE2V0=";
   };
 
   nativeBuildInputs = [
@@ -167,7 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

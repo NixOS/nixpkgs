@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "spur.py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LTkZ1p2P9fsD+gZEQZaCS68Q6nGc4qFGMNtH75gQmXQ=";
   };
 

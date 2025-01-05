@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fushinari";
     repo = "Wordbook";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oiAXSDJJtlV6EIHzi+jFv+Ym1XHCMLx9DN1YRiXZNzc=";
   };
 

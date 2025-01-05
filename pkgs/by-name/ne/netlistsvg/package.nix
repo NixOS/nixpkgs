@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "nturley";
     repo = "netlistsvg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H37zhjfv7c/TV+pAk70eDiE6ZQ9JjZq1TFvac6OOKBk=";
   };
 
