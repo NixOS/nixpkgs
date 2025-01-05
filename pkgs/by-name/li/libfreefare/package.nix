@@ -29,9 +29,14 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.libobjc
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk
     ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+    ];
+  };
 
   meta = {
     description = "Libfreefare project aims to provide a convenient API for MIFARE card manipulations";
