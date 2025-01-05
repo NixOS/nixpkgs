@@ -29,14 +29,14 @@ self: super: {
   Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
   });
-  Cabal_3_14_1_0 = doDistribute (super.Cabal_3_14_1_0.override {
+  Cabal_3_14_1_1 = doDistribute (super.Cabal_3_14_1_1.override {
     Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   });
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
   # makes sense to use the non Stackage version if we want to use Cabal* >= 3.14
   hackage-security_0_6_2_6 = super.hackage-security_0_6_2_6.override {
-    Cabal = self.Cabal_3_14_1_0;
+    Cabal = self.Cabal_3_14_1_1;
     Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   };
 
@@ -49,7 +49,7 @@ self: super: {
         {
           hackage-security = self.hackage-security_0_6_2_6;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
-          Cabal = cself.Cabal_3_14_1_0;
+          Cabal = cself.Cabal_3_14_1_1;
           Cabal-syntax = cself.Cabal-syntax_3_14_1_0;
         };
     in
