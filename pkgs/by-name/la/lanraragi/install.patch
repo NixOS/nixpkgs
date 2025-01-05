@@ -1,5 +1,5 @@
 diff --git a/tools/install.pl b/tools/install.pl
-index f09218f..a63de58 100644
+index 9e155f0..a63de58 100644
 --- a/tools/install.pl
 +++ b/tools/install.pl
 @@ -9,6 +9,7 @@ use Config;
@@ -10,7 +10,7 @@ index f09218f..a63de58 100644
  
  #Vendor dependencies
  my @vendor_css = (
-@@ -90,32 +91,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+@@ -90,33 +91,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
      $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
  }
  
@@ -19,6 +19,7 @@ index f09218f..a63de58 100644
 -install_package( "Config::AutoConf", $cpanopt );
 -IPC::Cmd->import('can_run');
 -require Config::AutoConf;
+-
 -
 -say("\r\nWill now check if all LRR software dependencies are met. \r\n");
 -
@@ -43,7 +44,7 @@ index f09218f..a63de58 100644
  #Check for PerlMagick
  say("Checking for ImageMagick/PerlMagick...");
  my $imgk;
-@@ -135,37 +110,11 @@ if ($@) {
+@@ -136,37 +110,11 @@ if ($@) {
      say("OK!");
  }
  
@@ -81,7 +82,7 @@ index f09218f..a63de58 100644
      make_path getcwd . "/public/css/vendor";
      make_path getcwd . "/public/css/webfonts";
      make_path getcwd . "/public/js/vendor";
-@@ -212,19 +161,3 @@ sub cp_node_module {
+@@ -213,19 +161,3 @@ sub cp_node_module {
  
  }
  
