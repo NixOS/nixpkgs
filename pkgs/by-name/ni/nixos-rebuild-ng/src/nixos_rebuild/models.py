@@ -8,6 +8,8 @@ from typing import Any, Callable, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
+type ImageVariants = dict[str, str]
+
 
 class NRError(Exception):
     "nixos-rebuild general error."
@@ -30,6 +32,7 @@ class Action(Enum):
     DRY_BUILD = "dry-build"
     DRY_RUN = "dry-run"
     DRY_ACTIVATE = "dry-activate"
+    BUILD_IMAGE = "build-image"
     BUILD_VM = "build-vm"
     BUILD_VM_WITH_BOOTLOADER = "build-vm-with-bootloader"
     LIST_GENERATIONS = "list-generations"
