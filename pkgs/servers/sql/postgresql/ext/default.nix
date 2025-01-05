@@ -93,6 +93,8 @@ in {
 
     pgrouting = super.callPackage ./pgrouting.nix { };
 
+    pgx_ulid = super.callPackage ./pgx_ulid.nix { };
+
     pg_partman = super.callPackage ./pg_partman.nix { };
 
     pg_relusage = super.callPackage ./pg_relusage.nix { };
