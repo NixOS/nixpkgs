@@ -3,10 +3,10 @@
   fetchFromGitHub,
   lib,
   fetchpatch,
+  replaceVars,
   cmake,
   uthash,
   pkg-config,
-  makeWrapper,
   python3,
   freetype,
   zlib,
@@ -52,14 +52,31 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
       hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
     })
-    # Fixes translation compatibility with gettext 0.22
+
+    # Replace distutils use in the build script
     (fetchpatch {
-      url = "https://github.com/fontforge/fontforge/commit/55d58f87ab1440f628f2071a6f6cc7ef9626c641.patch";
-      hash = "sha256-rkYnKPXA8Ztvh9g0zjG2yTUCPd3lE1uqwvBuEd8+Oyw=";
+      name = "replace-distutils.patch";
+      url = "https://github.com/fontforge/fontforge/commit/8c75293e924602ed09a9481b0eeb67ba6c623a81.patch";
+      includes = [ "pyhook/CMakeLists.txt" ];
+      hash = "sha256-3CEwC8vygmCztKRmeD45aZIqyoj8yk5CLwxX2SGP7z4=";
     })
 
-    # https://github.com/fontforge/fontforge/pull/5423
-    ./replace-distutils.patch
+    # Fixes translation compatibility with gettext 0.22
+    (fetchpatch {
+      name = "update-translation-compatibility.patch";
+      url = "https://github.com/fontforge/fontforge/commit/642d8a3db6d4bc0e70b429622fdf01ecb09c4c10.patch";
+      hash = "sha256-uO9uEhB64hkVa6O2tJKE8BLFR96m27d8NEN9UikNcvg=";
+    })
+
+    # Updates to new Python initialization API
+    (fetchpatch {
+      name = "modern-python-initialization-api.patch";
+      url = "https://github.com/fontforge/fontforge/commit/2f2ba54c15c5565acbde04eb6608868cbc871e01.patch";
+      hash = "sha256-qF4DqFpiZDbULi9+POPM73HF6pEot8BAFSVaVCNQrMU=";
+    })
+
+    # Provide a Nix-controlled location for the initial `sys.path` entry.
+    (replaceVars ./set-python-sys-path.patch { python = "${py}/${py.sitePackages}"; })
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
@@ -77,7 +94,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    makeWrapper
   ];
 
   buildInputs =
@@ -115,10 +131,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
-  '';
-
-  postInstall = lib.optionalString withPython ''
-    wrapProgram $out/bin/fontforge --suffix PYTHONPATH : "${py}/${py.sitePackages}"
   '';
 
   meta = {
