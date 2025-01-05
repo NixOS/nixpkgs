@@ -52,14 +52,14 @@ assert withNetworking -> curl != null && openssl != null;
 assert withFFI -> libffi != null;
 assert withMisc -> libeb != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8.9";
   pname = "uim";
 
   src = fetchFromGitHub {
     owner = "uim";
     repo = "uim";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-OqbtuoV9xPg51BhboP4EtTZA2psd8sUk3l3RfvYtv3w=";
   };
@@ -165,14 +165,14 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  meta = with lib; {
-    homepage = src.meta.homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Multilingual input method framework";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       ericsagnes
       oxij
     ];
   };
-}
+})
