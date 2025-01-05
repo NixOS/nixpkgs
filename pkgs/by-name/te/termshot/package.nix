@@ -2,22 +2,21 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  termshot,
+  versionCheckHook,
   nix-update-script,
 }:
 buildGoModule rec {
   pname = "termshot";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
     tag = "v${version}";
-    hash = "sha256-vvSUdXVLuc3GmxPX9SzSeb8vbmqjhSLjXd9nmU7Q46g=";
+    hash = "sha256-x2XVA686E3GPMz1hzTWZ1FqVflfPWTwbAf8JAG8HMp0=";
   };
 
-  vendorHash = "sha256-nXAIU07SY/GdWZGASHXDg36cSGKw4elLOBDCoJk/xlU=";
+  vendorHash = "sha256-ON3dmwf9IYEf+e4Z5EJ72wC4IIr/0/ssgzAJmRb7MSk=";
 
   ldflags = [
     "-s"
@@ -25,10 +24,13 @@ buildGoModule rec {
     "-X github.com/homeport/termshot/internal/cmd.version=${version}"
   ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = termshot; };
-    updateScript = nix-update-script { };
-  };
+  checkFlags = [ "-skip=^TestPtexec$" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Creates screenshots based on terminal command output";
