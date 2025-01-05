@@ -12,7 +12,7 @@ permissions: {}
 
 jobs:
   resolve-merge-commit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       mergedSha: ${{ steps.merged.outputs.mergedSha }}
     steps:

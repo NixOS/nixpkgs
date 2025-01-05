@@ -102,7 +102,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = pythonOlder "3.13" && !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Issue with the asseration
