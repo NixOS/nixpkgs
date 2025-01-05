@@ -64,9 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ bison flex pkg-config ]
-    ++ lib.optionals withMakeWrapper [ makeWrapper ]
+  nativeBuildInputs =
+    lib.optionals withMakeWrapper [ makeWrapper ]
     ++ lib.optionals withDNSTAP [ protobufc ]
+    ++ [ pkg-config flex bison ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]

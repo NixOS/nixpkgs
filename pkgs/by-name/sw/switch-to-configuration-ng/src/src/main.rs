@@ -154,7 +154,7 @@ fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
         Ok(Ok(status)) if status.success() => {}
         _ => {
             eprintln!("Pre-switch checks failed");
-            die()
+            std::process::exit(1);
         }
     }
 
@@ -176,7 +176,7 @@ fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
         Ok(Ok(status)) if status.success() => {}
         _ => {
             eprintln!("Failed to install bootloader");
-            die();
+            std::process::exit(1);
         }
     }
 
