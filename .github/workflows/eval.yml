@@ -203,7 +203,7 @@ jobs:
         if: steps.baseRunId.outputs.baseRunId
         run: |
           git -C nixpkgs worktree add ../base ${{ needs.attrs.outputs.baseSha }}
-          git -C nixpkgs diff --name-only ${{ needs.attrs.outputs.baseSha }} ${{ needs.attrs.outputs.mergedSha }} \
+          git -C nixpkgs diff --name-only ${{ needs.attrs.outputs.baseSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the base branch to get accurate maintainer info
