@@ -15513,6 +15513,12 @@ self: super: with self; {
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
+  standard-aifc = callPackage ../development/python-modules/standard-aifc { };
+
+  standard-chunk = callPackage ../development/python-modules/standard-chunk { };
+
+  standard-telnetlib = callPackage ../development/python-modules/standard-telnetlib { };
+
   stone = callPackage ../development/python-modules/stone { };
 
   stookalert = callPackage ../development/python-modules/stookalert { };
