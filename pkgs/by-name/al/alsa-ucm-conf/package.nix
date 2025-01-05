@@ -7,12 +7,12 @@
   kmod,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
   version = "1.2.12";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/alsa-ucm-conf-${version}.tar.bz2";
+    url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Fo58BUm3v4mRCS+iv7kDYx33edxMQ+6PQnf8t3LYwDU=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     url = "https://www.alsa-project.org/files/pub/lib/";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alsa-project.org/";
     description = "ALSA Use Case Manager configuration";
 
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.bsd3;
-    maintainers = [ maintainers.roastiek ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.roastiek ];
+    platforms = lib.platforms.linux;
   };
-}
+})
