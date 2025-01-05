@@ -18,14 +18,14 @@ jobs:
     name: editorconfig-check
     runs-on: ubuntu-24.04
     needs: get-merge-commit
-    if: "needs.get-merge-commit.outputs.mergedSha && github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
+    if: "needs.get-merge-commit.outputs.mergedSha && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
       - name: Get list of changed files from PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api \
-            repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
+            repos/${{ github.repository }}/pulls/${{ github.event.number }}/files --paginate \
             | jq '.[] | select(.status != "removed") | .filename' \
             > "$HOME/changed_files"
 
