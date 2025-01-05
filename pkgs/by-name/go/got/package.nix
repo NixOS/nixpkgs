@@ -32,11 +32,11 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.106";
+  version = "0.107";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MHnXQsElBH3jOd2SPXXQuWCZWjpLVn7QjvNtESvbB8w=";
+    hash = "sha256-P1hR2EuihFDl2X0IDobes+5oeG3oyF0tCA1E88+raic=";
   };
 
   nativeBuildInputs = [
