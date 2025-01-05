@@ -1,69 +1,73 @@
 let
   lib = import ../../../lib;
-  stdenv-overridable = lib.makeOverridable (
+in
 
-    argsStdenv@{
-      name ? "stdenv",
-      preHook ? "",
-      initialPath,
+lib.makeOverridable (
+  {
+    name ? "stdenv",
+    preHook ? "",
+    initialPath,
 
-      # If we don't have a C compiler, we might either have `cc = null` or `cc =
-      # throw ...`, but if we do have a C compiler we should definiely have `cc !=
-      # null`.
-      #
-      # TODO(@Ericson2314): Add assert without creating infinite recursion
-      hasCC ? cc != null,
-      cc,
+    # If we don't have a C compiler, we might either have `cc = null` or `cc =
+    # throw ...`, but if we do have a C compiler we should definiely have `cc !=
+    # null`.
+    #
+    # TODO(@Ericson2314): Add assert without creating infinite recursion
+    hasCC ? cc != null,
+    cc,
 
-      shell,
-      allowedRequisites ? null,
-      extraAttrs ? { },
-      overrides ? (self: super: { }),
-      config,
-      disallowedRequisites ? [ ],
+    shell,
+    allowedRequisites ? null,
+    extraAttrs ? { },
+    overrides ? (self: super: { }),
+    config,
+    disallowedRequisites ? [ ],
 
-      # The `fetchurl' to use for downloading curl and its dependencies
-      # (see all-packages.nix).
-      fetchurlBoot,
+    # The `fetchurl' to use for downloading curl and its dependencies
+    # (see all-packages.nix).
+    fetchurlBoot,
 
-      setupScript ? ./setup.sh,
+    setupScript ? ./setup.sh,
 
-      extraNativeBuildInputs ? [ ],
-      extraBuildInputs ? [ ],
-      __stdenvImpureHostDeps ? [ ],
-      __extraImpureHostDeps ? [ ],
-      stdenvSandboxProfile ? "",
-      extraSandboxProfile ? "",
+    extraNativeBuildInputs ? [ ],
+    extraBuildInputs ? [ ],
+    __stdenvImpureHostDeps ? [ ],
+    __extraImpureHostDeps ? [ ],
+    stdenvSandboxProfile ? "",
+    extraSandboxProfile ? "",
 
-      ## Platform parameters
-      ##
-      ## The "build" "host" "target" terminology below comes from GNU Autotools. See
-      ## its documentation for more information on what those words mean. Note that
-      ## each should always be defined, even when not cross compiling.
-      ##
-      ## For purposes of bootstrapping, think of each stage as a "sliding window"
-      ## over a list of platforms. Specifically, the host platform of the previous
-      ## stage becomes the build platform of the current one, and likewise the
-      ## target platform of the previous stage becomes the host platform of the
-      ## current one.
-      ##
+    ## Platform parameters
+    ##
+    ## The "build" "host" "target" terminology below comes from GNU Autotools. See
+    ## its documentation for more information on what those words mean. Note that
+    ## each should always be defined, even when not cross compiling.
+    ##
+    ## For purposes of bootstrapping, think of each stage as a "sliding window"
+    ## over a list of platforms. Specifically, the host platform of the previous
+    ## stage becomes the build platform of the current one, and likewise the
+    ## target platform of the previous stage becomes the host platform of the
+    ## current one.
+    ##
 
-      # The platform on which packages are built. Consists of `system`, a
-      # string (e.g.,`i686-linux') identifying the most import attributes of the
-      # build platform, and `platform` a set of other details.
-      buildPlatform,
+    # The platform on which packages are built. Consists of `system`, a
+    # string (e.g.,`i686-linux') identifying the most import attributes of the
+    # build platform, and `platform` a set of other details.
+    buildPlatform,
 
-      # The platform on which packages run.
-      hostPlatform,
+    # The platform on which packages run.
+    hostPlatform,
 
-      # The platform which build tools (especially compilers) build for in this stage,
-      targetPlatform,
+    # The platform which build tools (especially compilers) build for in this stage,
+    targetPlatform,
 
-      # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
-      # This is convient to have as a parameter so the stdenv "adapters" work better
-      mkDerivationFromStdenv ?
-        stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
-    }:
+    # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
+    # This is convient to have as a parameter so the stdenv "adapters" work better
+    mkDerivationFromStdenv ?
+      stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+  }:
+
+  lib.fix (
+    stdenv:
 
     let
       defaultNativeBuildInputs =
@@ -86,9 +90,6 @@ let
         ++ lib.optionals hasCC [ cc ];
 
       defaultBuildInputs = extraBuildInputs;
-
-      stdenv = (stdenv-overridable argsStdenv);
-
     in
     # The stdenv that we are producing.
     derivation (
@@ -223,6 +224,5 @@ let
     # all-packages.nix for that platform (meaning that it has a line
     # like curl = if stdenv ? curl then stdenv.curl else ...).
     // extraAttrs
-  );
-in
-stdenv-overridable
+  )
+)
