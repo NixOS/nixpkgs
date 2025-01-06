@@ -12,6 +12,10 @@ import ./make-test-python.nix (
     ifAddr = node: iface: (pkgs.lib.head node.networking.interfaces.${iface}.ipv4.addresses).address;
 
     ospfConf1 = ''
+      interface eth2
+        ip ospf hello-interval 1
+        ip ospf dead-interval 5
+      !
       router ospf
         network 192.168.0.0/16 area 0
     '';
