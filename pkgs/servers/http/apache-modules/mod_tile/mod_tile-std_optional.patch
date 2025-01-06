@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e68d2e9..ddba150 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,7 +48,7 @@ find_package(LIBMEMCACHED)
+ find_package(LIBRADOS)
+ 
+ if(LIBMAPNIK_VERSION STRGREATER_EQUAL "4")
+-  set(CMAKE_CXX_STANDARD 14)
++  set(CMAKE_CXX_STANDARD 17)
+ endif()
+ 
+ # Programs
+diff --git a/src/parameterize_style.cpp b/src/parameterize_style.cpp
+index 8db7122..7100735 100644
+--- a/src/parameterize_style.cpp
++++ b/src/parameterize_style.cpp
+@@ -72,7 +74,7 @@ static void parameterize_map_language(mapnik::Map &m, char * parameter)
+ 		mapnik::parameters params = l.datasource()->params();
+ 
+ 		if (params.find("table") != params.end()) {
+-			boost::optional<std::string> table = params.get<std::string>("table");
++			auto table = params.get<std::string>("table");
+ 
+ 			if (table && table->find(",name") != std::string::npos) {
+ 				std::string str = *table;
