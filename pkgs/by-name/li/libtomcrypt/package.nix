@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "113vfrgapyv72lalhd3nkw7jnks8az0gcb5wqn9hj19nhcxlrbcn";
   };
 
-  # Fixes a build failure on aarch64-darwin. Define for all Darwin targets for when x86_64-darwin
-  # upgrades to a newer SDK.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_IPHONE=0";
-
   patches = [
     (fetchpatch {
       name = "CVE-2019-17362.patch";
