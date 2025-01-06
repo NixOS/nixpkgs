@@ -22,6 +22,15 @@ let
     label = "test";
   };
 
+  overrideStructuredAttrs =
+    enable: drv:
+    drv.overrideAttrs (old: {
+      failed = old.failed.overrideAttrs (oldFailed: {
+        name = oldFailed.name + "${lib.optionalString (!enable) "-no"}-structuredAttrs";
+        __structuredAttrs = enable;
+      });
+    });
+
 in
 lib.recurseIntoAttrs {
   lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
@@ -93,7 +102,7 @@ lib.recurseIntoAttrs {
     }
   );
 
-  testBuildFailure = lib.recurseIntoAttrs {
+  testBuildFailure = lib.recurseIntoAttrs rec {
     happy =
       runCommand "testBuildFailure-happy"
         {
@@ -122,6 +131,8 @@ lib.recurseIntoAttrs {
 
           touch $out
         '';
+
+    happyStructuredAttrs = overrideStructuredAttrs true happy;
 
     helloDoesNotFail =
       runCommand "testBuildFailure-helloDoesNotFail"
@@ -169,6 +180,8 @@ lib.recurseIntoAttrs {
           touch $out
         '';
 
+    multiOutputStructuredAttrs = overrideStructuredAttrs true multiOutput;
+
     sideEffects =
       runCommand "testBuildFailure-sideEffects"
         {
@@ -203,6 +216,8 @@ lib.recurseIntoAttrs {
 
           touch $out
         '';
+
+    sideEffectStructuredAttrs = overrideStructuredAttrs true sideEffects;
   };
 
   testEqualContents = lib.recurseIntoAttrs {
