@@ -67,8 +67,8 @@ in
 , glib
 , gnum4
 , gtk3
-, icu72
 , icu73
+, icu74
 , libGL
 , libGLU
 , libevent
@@ -528,11 +528,9 @@ buildStdenv.mkDerivation {
     ++ lib.optional  sndioSupport sndio
     ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ))
-  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
   # icu74 fails to build on 127 and older
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
-  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
+  ++ [ (if (lib.versionAtLeast version "134") then icu74 else icu73) ]
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optional  jemallocSupport jemalloc
   ++ extraBuildInputs;
