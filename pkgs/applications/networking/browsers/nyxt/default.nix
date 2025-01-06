@@ -10,7 +10,6 @@
   gobject-introspection,
   gsettings-desktop-schemas,
   glib-networking,
-  notify-osd,
   gtk3,
   glib,
   gdk-pixbuf,
@@ -51,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     gsettings-desktop-schemas
     glib-networking
-    notify-osd
     gtk3
     gstreamer
     gst-libav
