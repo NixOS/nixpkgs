@@ -8,21 +8,40 @@
   gettext,
   libtool,
   python3,
-  wxGTK,
-  openmp,
-  Cocoa,
+  wxGTK32,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wxHexEditor";
+  pname = "wxhexeditor";
   version = "0.24";
 
   src = fetchFromGitHub {
     repo = "wxHexEditor";
     owner = "EUA";
     rev = "v${version}";
-    sha256 = "08xnhaif8syv1fa0k6lc3jm7yg2k50b02lyds8w0jyzh4xi5crqj";
+    hash = "sha256-EmdWYifwewk40s1TARYoUzx/qhyMmgmUC9tr5KKCtiM=";
   };
+
+  patches = [
+    # https://github.com/EUA/wxHexEditor/issues/90
+    (fetchpatch {
+      url = "https://github.com/EUA/wxHexEditor/commit/d0fa3ddc3e9dc9b05f90b650991ef134f74eed01.patch";
+      hash = "sha256-0m+dvsPlEoRnc22O73InR+NLPWb5JiSzEwdDmyE4i/E=";
+    })
+    ./missing-semicolon.patch
+  ];
+
+  postPatch =
+    ''
+      substituteInPlace Makefile \
+        --replace-fail "/usr" "$out" \
+        --replace-fail "mhash; ./configure" "mhash; ./configure --prefix=$out"
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace Makefile \
+        --replace-fail "-lgomp" "-lomp"
+    '';
 
   strictDeps = true;
 
@@ -32,38 +51,18 @@ stdenv.mkDerivation rec {
     gettext
     libtool
     python3
-    wxGTK
+    wxGTK32
   ];
 
-  buildInputs =
-    lib.optionals stdenv.cc.isClang [
-      openmp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   preConfigure = "patchShebangs .";
 
-  prePatch =
-    ''
-      substituteInPlace Makefile --replace "/usr" "$out"
-      substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace Makefile --replace "-lgomp" "-lomp"
-    '';
-
-  patches = [
-    # https://github.com/EUA/wxHexEditor/issues/90
-    (fetchpatch {
-      url = "https://github.com/EUA/wxHexEditor/commit/d0fa3ddc3e9dc9b05f90b650991ef134f74eed01.patch";
-      sha256 = "1wcb70hrnhq72frj89prcqylpqs74xrfz3kdfdkq84p5qfz9svyj";
-    })
-    ./missing-semicolon.patch
+  makeFlags = lib.optionals stdenv.cc.isGNU [
+    "OPTFLAGS=-fopenmp"
   ];
-
-  makeFlags = lib.optionals stdenv.cc.isGNU [ "OPTFLAGS=-fopenmp" ];
 
   meta = {
     description = "Hex Editor / Disk Editor for Huge Files or Devices";
@@ -79,8 +78,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.wxhexeditor.org/";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "wxHexEditor";
+    platforms = lib.platforms.unix;
   };
 }
