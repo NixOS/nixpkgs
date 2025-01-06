@@ -10414,6 +10414,8 @@ self: super: with self; {
 
   pygelf = callPackage ../development/python-modules/pygelf { };
 
+  pygerber = callPackage ../development/python-modules/pygerber { };
+
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
 
   pygnmi = callPackage ../development/python-modules/pygnmi { };
