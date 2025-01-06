@@ -1,0 +1,127 @@
+From 448e4e14f4f188687580362a861ae4a0dbb5b1fb Mon Sep 17 00:00:00 2001
+From: "Krinkin, Mike" <krinkin.m.u@gmail.com>
+Date: Sat, 16 Nov 2024 00:40:40 +0000
+Subject: [PATCH] [contrib] Disable GCC warnings and broken features (#37131)
+
+Currently contrib does not build with GCC because of various false
+positive compiler warnings turned to errors and a GCC compiler bug.
+
+Let's first start with the bug, in GCC apparently
+using -gsplit-dwarf (debug fission) and -fdebug-types-section (used to
+optimize the size of debug inforamtion), when used together, can result
+in a linker failure.
+
+Refer to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110885 for the GCC
+bug report of this issue. When it comes to Envoy, optimized builds with
+GCC are affected on at least GCC 11 (used by --config=docker-gcc) and
+GCC 12 (and I'm pretty sure the bug isn't fixed in any newer versions
+either, though I didn't check each version).
+
+Given that we cannot have both debug fission and a debug types section,
+we decided to abandon the debug types sections and keep the fission.
+
+That being said, apparently both of those options are unmaintained in
+GCC which poses a question of long term viability of using those or GCC.
+
+Other changes in this commit disable GCC compiler errors for various
+warnings that happen when building contrib. I checked those warnings and
+didn't find any true
+positive.
+
+And additionally, for warnings that exists in both Clang and GCC, Clang
+warnings don't trigger, so Clang also disagrees with GCC here.
+
+Additionally missing-requires warning is new and does not exist in GCC
+11, but exists in later versions of GCC, so to avoid breaking on this
+warning for future versions of GCC I disabled it, but also tell GCC to
+not complain if it sees a flag related to an unknwon diagnostic.
+
+This is the last change required to make GCC contrib builds work (you
+can find more context and discussions in
+https://github.com/envoyproxy/envoy/issues/31807)
+
+Risk Level: Low
+Testing: building with --config=gcc and --config=docker-gcc
+Docs Changes: N/A
+Release Notes: N/A
+Platform Specific Features: N/A
+Fixes #31807
+
+Signed-off-by: Mikhail Krinkin <krinkin.m.u@gmail.com>
+---
+ .bazelrc                 | 18 +++++++++++++++++-
+ bazel/envoy_internal.bzl | 16 +++++++++++++++-
+ 2 files changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/.bazelrc b/.bazelrc
+index e0e4899cecf1..7df94c77944c 100644
+--- a/.bazelrc
++++ b/.bazelrc
+@@ -57,9 +57,9 @@ test --experimental_ui_max_stdouterr_bytes=11712829 #default 1048576
+ # Allow tags to influence execution requirements
+ common --experimental_allow_tags_propagation
+ 
++build:linux --copt=-fdebug-types-section
+ # Enable position independent code (this is the default on macOS and Windows)
+ # (Workaround for https://github.com/bazelbuild/rules_foreign_cc/issues/421)
+-build:linux --copt=-fdebug-types-section
+ build:linux --copt=-fPIC
+ build:linux --copt=-Wno-deprecated-declarations
+ build:linux --cxxopt=-std=c++20 --host_cxxopt=-std=c++20
+@@ -95,6 +95,21 @@ build:gcc --linkopt=-fuse-ld=gold --host_linkopt=-fuse-ld=gold
+ build:gcc --test_env=HEAPCHECK=
+ build:gcc --action_env=BAZEL_COMPILER=gcc
+ build:gcc --action_env=CC=gcc --action_env=CXX=g++
++# This is to work around a bug in GCC that makes debug-types-section
++# option not play well with fission:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110885
++build:gcc --copt=-fno-debug-types-section
++# These trigger errors in multiple places both in Envoy dependecies
++# and in Envoy code itself when using GCC.
++# And in all cases the reports appear to be clear false positives.
++build:gcc --copt=-Wno-error=restrict
++build:gcc --copt=-Wno-error=uninitialized
++build:gcc --cxxopt=-Wno-missing-requires
++# We need this because -Wno-missing-requires options is rather new
++# in GCC, so flags -Wno-missing-requires exists in GCC 12, but does
++# not in GCC 11 and GCC 11 is what is used in docker-gcc
++# configuration currently
++build:gcc --cxxopt=-Wno-unknown-warning
+ 
+ # Clang-tidy
+ # TODO(phlax): enable this, its throwing some errors as well as finding more issues
+@@ -375,6 +390,7 @@ build:docker-clang-libc++ --config=docker-sandbox
+ build:docker-clang-libc++ --config=rbe-toolchain-clang-libc++
+ 
+ build:docker-gcc --config=docker-sandbox
++build:docker-gcc --config=gcc
+ build:docker-gcc --config=rbe-toolchain-gcc
+ 
+ build:docker-asan --config=docker-sandbox
+diff --git a/bazel/envoy_internal.bzl b/bazel/envoy_internal.bzl
+index 015659851c1b..27ecaa0bbf47 100644
+--- a/bazel/envoy_internal.bzl
++++ b/bazel/envoy_internal.bzl
+@@ -68,7 +68,21 @@ def envoy_copts(repository, test = False):
+                    "-Wc++2a-extensions",
+                    "-Wrange-loop-analysis",
+                ],
+-               repository + "//bazel:gcc_build": ["-Wno-maybe-uninitialized"],
++               repository + "//bazel:gcc_build": [
++                   "-Wno-maybe-uninitialized",
++                   # GCC implementation of this warning is too noisy.
++                   #
++                   # It generates warnings even in cases where there is no ambiguity
++                   # between the overloaded version of a method and the hidden version
++                   # from the base class. E.g., when the two have different number of
++                   # arguments or incompatible types and therefore a wrong function
++                   # cannot be called by mistake without triggering a compiler error.
++                   #
++                   # As a safeguard, this warning is only disabled for GCC builds, so
++                   # if Clang catches a problem in the code we would get a warning
++                   # anyways.
++                   "-Wno-error=overloaded-virtual",
++               ],
+                # Allow 'nodiscard' function results values to be discarded for test code only
+                # TODO(envoyproxy/windows-dev): Replace /Zc:preprocessor with /experimental:preprocessor
+                # for msvc versions between 15.8 through 16.4.x. see
