@@ -1,51 +1,50 @@
 {
   lib,
   fetchFromGitHub,
-  pkg-config,
   flutter324,
   buildGoModule,
   libayatana-appindicator,
   makeDesktopItem,
   copyDesktopItems,
-  wrapGAppsHook3,
   autoPatchelfHook,
 }:
-let
-  pname = "hiddify-app";
-  version = "2.5.7-unstable-2025-01-06";
-  src = fetchFromGitHub {
-    owner = "hiddify";
-    repo = "hiddify-app";
-    rev = "e5a1e1d6661039afcdef68406f978f3b6ef56412";
-    hash = "sha256-OFT5sVFiE/8HytFis/s8FyM3lgKOAWj77zvhHkMaikk=";
-    fetchSubmodules = true;
-  };
-  libcore = buildGoModule rec {
-    inherit pname version src;
 
-    modRoot = "./libcore";
+let
+  metaCommon = {
+    description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc";
+    license = with lib.licenses; [
+      unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
+      gpl3Only
+    ];
+    maintainers = with lib.maintainers; [ aucub ];
+  };
+
+  libcore = buildGoModule rec {
+    pname = "hiddify-core";
+    version = "3.1.8";
+
+    src = fetchFromGitHub {
+      owner = "hiddify";
+      repo = "hiddify-core";
+      tag = "v${version}";
+      hash = "sha256-NRzzkC3xbRVP20Pm29bHf8YpxmnjISgF46c8l9qU4rA=";
+    };
 
     vendorHash = "sha256-a7NFZt4/w2+oaZG3ncaOrrhASxUptcWS/TeaIQrgLe4=";
 
-    GO_PUBLIC_FLAGS = ''
+    GO_BUILD_FLAGS = ''
       -tags "with_gvisor,with_quic,with_wireguard,with_ech,with_utls,with_clash_api,with_grpc" \
       -trimpath \
       -ldflags "-s -w" \
     '';
 
-    postPatch = ''
-      sed -i '/import (/a\ \t"os"\n\t"path/filepath"' ./libcore/v2/db/hiddify_db.go
-      substituteInPlace ./libcore/v2/db/hiddify_db.go \
-        --replace-fail 'NewGoLevelDBWithOpts(name, "./data", ' 'NewGoLevelDBWithOpts(name, filepath.Join(os.Getenv("HOME"), ".local", "share", "app.hiddify.com", "data"), '
-    '';
-
     buildPhase = ''
       runHook preBuild
 
-      go build ${GO_PUBLIC_FLAGS} -buildmode=c-shared -o bin/lib/libcore.so ./custom
+      go build ${GO_BUILD_FLAGS} -buildmode=c-shared -o bin/lib/libcore.so ./custom
       mkdir lib
       cp bin/lib/libcore.so ./lib/libcore.so
-      CGO_LDFLAGS="./lib/libcore.so" go build ${GO_PUBLIC_FLAGS} -o bin/HiddifyCli ./cli/bydll
+      CGO_LDFLAGS="./lib/libcore.so" go build ${GO_BUILD_FLAGS} -o bin/HiddifyCli ./cli/bydll
 
       runHook postBuild
     '';
@@ -59,33 +58,33 @@ let
       runHook postInstall
     '';
 
-    meta = {
-      description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc";
-      homepage = "https://hiddify.com";
+    meta = metaCommon // {
+      homepage = "https://github.com/hiddify/hiddify-core";
       mainProgram = "HiddifyCli";
-      license = with lib.licenses; [
-        unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
-        gpl3Only
-      ];
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ aucub ];
     };
   };
 in
+
 flutter324.buildFlutterApplication {
-  inherit pname version src;
+  pname = "hiddify-app";
+  version = "2.5.7-unstable-2025-01-06";
+
+  src = fetchFromGitHub {
+    owner = "hiddify";
+    repo = "hiddify-app";
+    rev = "a7547d298a5f8058446b6a470e56fe4efa3c1ccd";
+    hash = "sha256-5I/k2KxdWiNsgwJY+bqMVqtC2eGshKbpLYzsPrmvhmY=";
+  };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  buildInputs = [
-    libayatana-appindicator
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    autoPatchelfHook
-    wrapGAppsHook3
-    copyDesktopItems
+  buildInputs = [
+    libayatana-appindicator
   ];
 
   postPatch = ''
@@ -94,6 +93,7 @@ flutter324.buildFlutterApplication {
   '';
 
   preBuild = ''
+    mkdir -p libcore/bin
     cp -r ${libcore}/lib libcore/bin/lib
     cp ${libcore}/bin/HiddifyCli libcore/bin/HiddifyCli
     packageRun build_runner build --delete-conflicting-outputs
@@ -138,22 +138,16 @@ flutter324.buildFlutterApplication {
   };
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
+    --prefix LD_LIBRARY_PATH : $out/app/hiddify-app/lib
   '';
 
   preFixup = ''
-    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/${pname}/lib/lib*.so
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/hiddify-app/lib/lib*.so
   '';
 
-  meta = {
-    description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc";
+  meta = metaCommon // {
     homepage = "https://hiddify.com";
     mainProgram = "hiddify";
-    license = with lib.licenses; [
-      unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
-      gpl3Only
-    ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aucub ];
   };
 }
