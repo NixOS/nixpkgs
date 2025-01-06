@@ -4,7 +4,6 @@
   webkitgtk_4_1,
   libsoup_3,
   lib,
-  hicolor-icon-theme,
 }:
 let
   pname = "qidi-slicer";
