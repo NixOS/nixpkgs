@@ -40,7 +40,7 @@ let
       pciutils
       procps
       python3
-      qemu
+      (qemu.override { smbdSupport = true; })
       socat
       swtpm
       util-linux
