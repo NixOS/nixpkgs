@@ -14,11 +14,12 @@ in
       };
 
       dates = lib.mkOption {
-        default = ["03:45"];
-        type = with lib.types; listOf str;
+        default = "03:45";
+        type = with lib.types; either singleLineStr (listOf singleLineStr);
+        example = "weekly";
         description = ''
           Specification (in the format described by
-          {manpage}`systemd.time(7)`) of the time at
+          {manpage}`systemd.time(7)`) of the time(s) at
           which the optimiser will run.
         '';
       };
@@ -67,7 +68,9 @@ in
         # No point this if the nix daemon (and thus the nix store) is outside
         unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
-        startAt = lib.optionals cfg.automatic cfg.dates;
+        startAt = lib.optionals cfg.automatic (
+          if builtins.isString cfg.dates then [ cfg.dates ] else cfg.dates
+        );
       };
 
       timers.nix-optimise = lib.mkIf cfg.automatic {
