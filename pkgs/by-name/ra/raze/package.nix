@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   SDL2,
@@ -33,6 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf .git
     '';
   };
+
+  patches = [
+    # Fix build with gcc14
+    (fetchpatch {
+      name = "fix-gcc14.patch";
+      url = "https://github.com/ZDoom/Raze/commit/f3cad8426cd808be5ded036ed12a497d27d3742e.patch";
+      hash = "sha256-TMx5gFmcuSQbVPjpBnKgK7EluqPSWhLF+TU8ZRaL7LE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

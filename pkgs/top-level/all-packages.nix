@@ -1906,10 +1906,6 @@ with pkgs;
     inherit (androidenv.androidPkgs) platform-tools;
   };
 
-  anbox = callPackage ../os-specific/linux/anbox {
-    protobuf = protobuf_21;
-  };
-
   androidenv = callPackage ../development/mobile/androidenv { };
 
   androidndkPkgs = androidndkPkgs_26;
@@ -3482,11 +3478,6 @@ with pkgs;
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
-
-  gnupg22 = callPackage ../tools/security/gnupg/22.nix {
-    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
-    libgcrypt = libgcrypt_1_8;
-  };
 
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
     pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
@@ -9672,8 +9663,6 @@ with pkgs;
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
-
-  libgcrypt_1_8 = callPackage ../development/libraries/libgcrypt/1.8.nix { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
       inherit (darwin.apple_sdk.frameworks) Carbon;
