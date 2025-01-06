@@ -1,0 +1,11 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${exec_prefix}/include
+
+Name: libui
+Description: Simple and portable (but not inflexible) GUI library
+Version: @version@
+
+Libs: -L${libdir} -lui
+Cflags: -I${includedir}

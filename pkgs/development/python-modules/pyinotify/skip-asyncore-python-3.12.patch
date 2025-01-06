@@ -1,0 +1,84 @@
+From 478d595a7d086423733e9f5da5edfe9f1df48682 Mon Sep 17 00:00:00 2001
+From: Troy Curtis Jr <troy@troycurtisjr.com>
+Date: Thu, 10 Aug 2023 21:51:15 -0400
+Subject: [PATCH] Make asyncore support optional for Python 3.
+
+Fixes #204.
+---
+ python3/pyinotify.py | 50 +++++++++++++++++++++++++-------------------
+ 1 file changed, 28 insertions(+), 22 deletions(-)
+
+diff --git a/python3/pyinotify.py b/python3/pyinotify.py
+index bc24313..f4a5a90 100755
+--- a/python3/pyinotify.py
++++ b/python3/pyinotify.py
+@@ -68,7 +68,6 @@ def __init__(self, version):
+ from datetime import datetime, timedelta
+ import time
+ import re
+-import asyncore
+ import glob
+ import locale
+ import subprocess
+@@ -1494,33 +1493,40 @@ def run(self):
+         self.loop()
+ 
+ 
+-class AsyncNotifier(asyncore.file_dispatcher, Notifier):
+-    """
+-    This notifier inherits from asyncore.file_dispatcher in order to be able to
+-    use pyinotify along with the asyncore framework.
++try:
++    import asyncore
+ 
+-    """
+-    def __init__(self, watch_manager, default_proc_fun=None, read_freq=0,
+-                 threshold=0, timeout=None, channel_map=None):
++    class AsyncNotifier(asyncore.file_dispatcher, Notifier):
+         """
+-        Initializes the async notifier. The only additional parameter is
+-        'channel_map' which is the optional asyncore private map. See
+-        Notifier class for the meaning of the others parameters.
++        This notifier inherits from asyncore.file_dispatcher in order to be able to
++        use pyinotify along with the asyncore framework.
+ 
+         """
+-        Notifier.__init__(self, watch_manager, default_proc_fun, read_freq,
+-                          threshold, timeout)
+-        asyncore.file_dispatcher.__init__(self, self._fd, channel_map)
++        def __init__(self, watch_manager, default_proc_fun=None, read_freq=0,
++                     threshold=0, timeout=None, channel_map=None):
++            """
++            Initializes the async notifier. The only additional parameter is
++            'channel_map' which is the optional asyncore private map. See
++            Notifier class for the meaning of the others parameters.
+ 
+-    def handle_read(self):
+-        """
+-        When asyncore tells us we can read from the fd, we proceed processing
+-        events. This method can be overridden for handling a notification
+-        differently.
++            """
++            Notifier.__init__(self, watch_manager, default_proc_fun, read_freq,
++                              threshold, timeout)
++            asyncore.file_dispatcher.__init__(self, self._fd, channel_map)
+ 
+-        """
+-        self.read_events()
+-        self.process_events()
++        def handle_read(self):
++            """
++            When asyncore tells us we can read from the fd, we proceed processing
++            events. This method can be overridden for handling a notification
++            differently.
++
++            """
++            self.read_events()
++            self.process_events()
++except ImportError:
++    # asyncore was removed in Python 3.12, but try the import instead of a
++    # version check in case the compatibility package is installed.
++    pass
+ 
+ 
+ class TornadoAsyncNotifier(Notifier):

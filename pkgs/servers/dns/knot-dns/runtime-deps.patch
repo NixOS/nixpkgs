@@ -1,0 +1,13 @@
+Remove unnecessary runtime dependencies.
+
+`knotc status configure` shows summary from the configure script,
+but that contains also references like include paths.
+Filter these at least in a crude way (whole lines).
+--- a/configure.ac
++++ b/configure.ac
+@@ -788,5 +788,5 @@ result_msg_base="
+-result_msg_esc=$(echo -n "    Configure:$filtered_config_params\n$result_msg_base" | sed '$!s/$/\\n/' | tr -d '\n')
++result_msg_esc=$(echo -n "    Configure:$filtered_config_params\n$result_msg_base" | grep -Fv "$NIX_STORE" | sed '$!s/$/\\n/' | tr -d '\n')
+ 
+ AC_DEFINE_UNQUOTED([CONFIGURE_SUMMARY],["$result_msg_esc"],[Configure summary])
+ 
