@@ -1,4 +1,5 @@
 {
+  lib,
   pname,
   version,
   meta,
