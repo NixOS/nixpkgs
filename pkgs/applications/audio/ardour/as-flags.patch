@@ -1,0 +1,12 @@
+--- a/libs/ardour/wscript
++++ b/libs/ardour/wscript
+@@ -379,8 +379,7 @@ def build(bld):
+
+     # remove '${DEFINES_ST:DEFINES}' from run_str.
+     # x86_64-w64-mingw32-as (mingw) -D flag is for debug messages
+-    if bld.env['build_target'] == 'mingw':
+-        class asm(Task.classes['asm']): run_str = '${AS} ${ASFLAGS} ${ASMPATH_ST:INCPATHS} ${AS_SRC_F}${SRC} ${AS_TGT_F}${TGT}'
++    class asm(Task.classes['asm']): run_str = '${AS} ${ASFLAGS} ${ASMPATH_ST:INCPATHS} ${AS_SRC_F}${SRC} ${AS_TGT_F}${TGT}'
+
+     # operate on copy to avoid adding sources twice
+     sources = list(libardour_sources)

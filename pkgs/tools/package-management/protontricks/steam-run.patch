@@ -1,0 +1,65 @@
+diff --git a/src/protontricks/data/scripts/bwrap_launcher.sh b/src/protontricks/data/scripts/bwrap_launcher.sh
+index 922c59d..54742a4 100644
+--- a/src/protontricks/data/scripts/bwrap_launcher.sh
++++ b/src/protontricks/data/scripts/bwrap_launcher.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ # Helper script
+ set -o errexit
+ 
+diff --git a/src/protontricks/data/scripts/wine_launch.sh b/src/protontricks/data/scripts/wine_launch.sh
+index 1b0a0ce..127f13e 100644
+--- a/src/protontricks/data/scripts/wine_launch.sh
++++ b/src/protontricks/data/scripts/wine_launch.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ # Helper script created by Protontricks to run Wine binaries using Steam Runtime
+ set -o errexit
+ 
+diff --git a/src/protontricks/data/scripts/wineserver_keepalive.sh b/src/protontricks/data/scripts/wineserver_keepalive.sh
+index 8168dae..cb3e7d9 100644
+--- a/src/protontricks/data/scripts/wineserver_keepalive.sh
++++ b/src/protontricks/data/scripts/wineserver_keepalive.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ # A simple keepalive script that will ensure a wineserver process is kept alive
+ # for the duration of the Protontricks session.
+ # This is accomplished by launching a simple Windows batch script that will
+diff --git a/src/protontricks/util.py b/src/protontricks/util.py
+index 9262cd0..00b2b2f 100644
+--- a/src/protontricks/util.py
++++ b/src/protontricks/util.py
+@@ -99,7 +99,7 @@ def get_host_library_paths():
+     # Since that command is unavailable with newer Steam Runtime releases,
+     # do it ourselves here.
+     result = run(
+-        ["/sbin/ldconfig", "-XNv"],
++        ["@steamRun@", "/sbin/ldconfig", "-XNv"],
+         check=True, stdout=PIPE, stderr=PIPE
+     )
+     lines = result.stdout.decode("utf-8").split("\n")
+diff --git a/tests/conftest.py b/tests/conftest.py
+index a516437..88bf804 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -170,7 +170,7 @@ def steam_runtime_dir(steam_dir):
+     """
+     (steam_dir.parent / "root" / "ubuntu12_32" / "steam-runtime").mkdir(parents=True)
+     (steam_dir.parent / "root" / "ubuntu12_32" / "steam-runtime" / "run.sh").write_text(
+-        "#!/bin/bash\n"
++        "#!/bin/sh\n"
+         """if [ "$1" = "--print-steam-runtime-library-paths" ]; then\n"""
+         "    echo 'fake_steam_runtime/lib:fake_steam_runtime/lib64'\n"
+         "fi"
+@@ -764,7 +764,7 @@ def xdg_user_dir_bin(home_dir):
+     # Only mock PICTURES and DOWNLOAD; mocking everything isn't necessary
+     # for the tests.
+     (home_dir / ".local" / "bin" / "xdg-user-dir").write_text(
+-        '#!/bin/bash\n'
++        '#!/bin/sh\n'
+         'if [[ "$1" == "PICTURES" ]]; then\n'
+         '    echo "$HOME/Pictures"\n'
+         'elif [[ "$1" == "DOWNLOAD" ]]; then\n'
