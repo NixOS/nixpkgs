@@ -107,7 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     command = "cbmc --version";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "cbmc-(.*)"
+    ];
+  };
 
   meta = {
     description = "CBMC is a Bounded Model Checker for C and C++ programs";
