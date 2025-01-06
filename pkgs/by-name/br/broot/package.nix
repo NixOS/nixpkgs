@@ -7,7 +7,6 @@
   makeWrapper,
   pkg-config,
   libgit2,
-  oniguruma,
   zlib,
   buildPackages,
   withClipboard ? true,
@@ -33,11 +32,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  # TODO: once https://github.com/Canop/broot/issues/956 is released, oniguruma can be removed.
   buildInputs =
     [
       libgit2
-      oniguruma
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       zlib
