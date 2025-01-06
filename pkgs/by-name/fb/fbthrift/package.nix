@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove a line that breaks the build due to the CMake classic of
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
+
+    ./glog-0.7.patch
   ];
 
   nativeBuildInputs = [
