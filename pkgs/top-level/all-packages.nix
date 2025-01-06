@@ -10915,11 +10915,11 @@ with pkgs;
   inherit (libsForQt5.callPackage ../development/libraries/wt { })
     wt4;
 
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
+  wxGTK31 = callPackage ../by-name/wx/wxGTK31/package.nix {
     inherit (darwin.stubs) setfile;
   };
 
-  wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
+  wxGTK32 = callPackage ../by-name/wx/wxGTK32/package.nix {
     inherit (darwin.stubs) setfile;
   };
 
