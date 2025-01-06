@@ -28,6 +28,7 @@
   sqlite,
   xdg-utils,
   wrapGAppsHook3,
+  fetchurl,
   popplerSupport ? true,
   speechSupport ? true,
   unrarSupport ? false,
