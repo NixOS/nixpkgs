@@ -12,7 +12,6 @@
   perl,
   substituteAll,
   cudd,
-  fetchurl,
   nix-update-script,
 }:
 
