@@ -75,14 +75,11 @@ in
       environment.HOME = cfg.dataDir;
 
       serviceConfig = {
-        Type = "forking";
         User = "${cfg.user}";
         WorkingDirectory = cfg.dataDir;
-        PIDFile = "${cfg.dataDir}/muleLock";
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe' cfg.package "amuled")
           "--config-dir=${config.services.amule.dataDir}"
-          "--full-daemon"
         ];
         Restart = "on-failure";
         RestartSec = "5s";
