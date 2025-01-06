@@ -25187,8 +25187,8 @@
   yuka = {
     email = "yuka@yuka.dev";
     matrix = "@yuka:yuka.dev";
-    github = "yu-re-ka";
-    githubId = 86169957;
+    github = "yuyuyureka";
+    githubId = 193895068;
     name = "Yureka";
   };
   Yumasi = {
