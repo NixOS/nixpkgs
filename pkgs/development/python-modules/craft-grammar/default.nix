@@ -37,6 +37,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit" ];
 
+  # Temp fix for test incompatibility with Python 3.13
+  disabledTests = [
+    "test_grammar_strlist_error[value2]"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
