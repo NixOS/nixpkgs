@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   perl,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -22,6 +23,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp bin/xmlformat.pl $out/bin/xmlformat
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Configurable formatter (or 'pretty-printer') for XML documents";
