@@ -9,6 +9,7 @@
 
 , enableLTO
 , enableMultilib
+, enableOffload
 , enablePlugin
 , disableGdbPlugin ? !enablePlugin
 , enableShared
@@ -53,10 +54,10 @@ let
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
-    [
+    (lib.optionals (targetPlatform.config != "amdgcn-amdhsa") [
       "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
-    ]
+    ])
     ++ (if withoutTargetLibc then [
       "--disable-libssp"
       "--disable-nls"
@@ -84,9 +85,11 @@ let
       # See Note [Windows Exception Handling]
       "--enable-sjlj-exceptions"
       "--with-dwarf2"
-    ] else [
-      (if crossDarwin then "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
-       else                "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+    ] else (
+      lib.optional crossDarwin "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
+      ++ lib.optional (!crossDarwin && targetPlatform.config != "amdgcn-amdhsa")
+        "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
+      ++ [
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
@@ -97,9 +100,10 @@ let
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
-    ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
+    ] ++ lib.optional ((targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") &&
+            targetPlatform.config != "amdgcn-amdhsa") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
-    );
+    ));
 
   configureFlags =
     # Basic dependencies
@@ -110,7 +114,7 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optionals (!withoutTargetLibc) [
+    ++ lib.optionals (!withoutTargetLibc && targetPlatform.config != "amdgcn-amdhsa") [
       (if libcCross == null
        then (
         # GCC will search for the headers relative to SDKROOT on Darwin, so it will find them in the store.
@@ -160,7 +164,12 @@ let
       "--disable-libstdcxx-pch"
       "--without-included-gettext"
       "--with-system-zlib"
+    ] ++ lib.optionals (targetPlatform.config != "amdgcn-amdhsa") [
       "--enable-static"
+    ] ++ lib.optionals (targetPlatform.config == "amdgcn-amdhsa") [
+      "--disable-sjlj-exceptions"
+      "--disable-libquadmath"
+    ] ++ [
       "--enable-languages=${
         lib.concatStringsSep ","
           (  lib.optional langC        "c"
@@ -177,7 +186,7 @@ let
           )
       }"
     ]
-
+    ++ lib.optional enableOffload "--enable-offload-targets=amdgcn-amdhsa"
     ++ (if (enableMultilib || targetPlatform.isAvr)
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"])
@@ -208,7 +217,9 @@ let
     ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
-
+    ++ lib.optionals (targetPlatform.config == "amdgcn-amdhsa") [
+      "--target=amdgcn-amdhsa" "--enable-as-accelerator-for=x86_64-unknown-linux-gnu"
+    ]
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.

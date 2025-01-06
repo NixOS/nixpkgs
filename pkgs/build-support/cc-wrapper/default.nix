@@ -21,6 +21,7 @@
 , gnugrep ? null
 , expand-response-params
 , libcxx ? null
+, extraCompilerB ? []
 
 # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
 , useCcForLibs ?
@@ -614,7 +615,12 @@ stdenvNoCC.mkDerivation {
       ccLDFlags+=" -L${cc_solib}/lib"
       ccCFlags+=" -B${cc_solib}/lib"
 
-    '' + optionalString (cc.langAda or false && !isArocc) ''
+    '' + (concatMapStrings (p: ''
+        ccCFlags+=" -B${p}/libexec/gcc/${stdenvNoCC.buildPlatform.config}/${p.version}"
+        ccCFlags+=" -B${p}/bin"
+        ccCFlags+=" -foffload-options=-Wl,-L${p}/${p.stdenv.targetPlatform.config}/lib"
+      '') extraCompilerB)
+    + optionalString (cc.langAda or false && !isArocc) ''
       touch "$out/nix-support/gnat-cflags"
       touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)

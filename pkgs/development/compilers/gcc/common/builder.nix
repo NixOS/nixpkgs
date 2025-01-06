@@ -3,6 +3,7 @@
   stdenv,
   enableMultilib,
   targetConfig,
+  version,
 }:
 
 let
@@ -169,6 +170,10 @@ originalAttrs:
       fi
 
       eval "$oldOpts"
+    '' +  lib.optionalString (targetConfig == "amdgcn-amdhsa") ''
+      makeFlagsArray=''${makeFlagsArray[@]/CFLAGS_FOR_TARGET=*}
+      makeFlagsArray=''${makeFlagsArray[@]/CXXFLAGS_FOR_TARGET=*}
+      makeFlagsArray=''${makeFlagsArray[@]/FLAGS_FOR_TARGET=*}
     '';
 
     preConfigure =
@@ -219,7 +224,7 @@ originalAttrs:
         # symlink), this ensures that in every case we can assume that
         # $lib/lib contains the .so files
         lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
-          ln -Ts "''${!outputLib}/''${targetConfig}/lib" $lib/lib
+          ln -Ts "''${!outputLib}/''${targetConfig}/lib" "''${!outputLib}/lib"
         ''
       +
         # Make `lib64` symlinks to `lib`.
@@ -311,6 +316,11 @@ originalAttrs:
               man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
               ln -sf "$man_prefix"gcc.1 "$i"
           fi
+      done
+    '' + lib.optionalString (targetConfig == "amdgcn-amdhsa") ''
+      for a in ld as ar nm runlib; do
+        ln -s $(type -P amdgcn-amdhsa-$a) \
+           $out/lib/gcc/x86_64-unknown-linux-gnu/${version}/accel/amdgcn-amdhsa/$a
       done
     '';
   }

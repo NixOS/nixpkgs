@@ -23,7 +23,7 @@ in
           [
             "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
           ]
-          ++ lib.optionals (!withoutTargetLibc) [
+          ++ lib.optionals (!withoutTargetLibc && targetPlatform.config != "amdgcn-amdhsa") [
             "-B${lib.getLib dep}${dep.libdir or "/lib"}"
           ]
         );

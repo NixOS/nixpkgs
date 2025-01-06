@@ -31,11 +31,26 @@
 let
   inherit (lib) optionals;
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
+  ## llvm18 fails with gcc <14
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114419
+  llvmAmd =
+    let
+      llvm = buildPackages.llvmPackages_19;
+    in buildPackages.runCommand "${llvm.llvm.name}-wrapper" {} ''
+      mkdir -p $out/bin
+      for a in ar nm ranlib; do
+        ln -s ${llvm.llvm}/bin/llvm-$a $out/bin/amdgcn-amdhsa-$a
+      done
+      ln -s ${llvm.llvm}/bin/llvm-mc $out/bin/amdgcn-amdhsa-as
+      ln -s ${llvm.lld}/bin/lld $out/bin/amdgcn-amdhsa-ld
+    '';
 in
 
 {
   # same for all gcc's
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ] ++
+      lib.optional (targetPlatform.config == "amdgcn-amdhsa") llvmAmd;
 
   nativeBuildInputs =
     [
@@ -55,7 +70,9 @@ in
   # same for all gcc's
   depsBuildTarget =
     (
-      if hostPlatform == buildPlatform then
+      if (targetPlatform.config == "amdgcn-amdhsa") then
+        [ ]
+      else if hostPlatform == buildPlatform then
         [
           targetPackages.stdenv.cc.bintools # newly-built gcc will be used
         ]
@@ -75,7 +92,7 @@ in
       libmpc
     ]
     ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
-    ++ [
+    ++ optionals (targetPlatform.config != "amdgcn-amdhsa") [
       targetPackages.stdenv.cc.bintools # For linking code at run-time
     ]
     ++ optionals (isl != null) [ isl ]
