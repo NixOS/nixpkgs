@@ -254,7 +254,7 @@ buildStdenv.mkDerivation {
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
   ]
-  ++ [
+  ++ lib.optionals ((lib.versionAtLeast version "129" && lib.versionOlder version "134") || lib.versionOlder version "128.6.0") [
     # Python 3.12.8 compat
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
     # https://phabricator.services.mozilla.com/D231480
