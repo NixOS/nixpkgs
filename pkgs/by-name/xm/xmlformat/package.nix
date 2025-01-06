@@ -4,7 +4,8 @@
   fetchFromGitHub,
   perl,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation {
   pname = "xmlformat";
   version = "1.9-unstable-2021-09-15";
 
@@ -16,9 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl ];
-  buildPhase = ''
-    patchShebangs ./xmlformat.pl
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -27,12 +25,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Configurable formatter (or 'pretty-printer') for XML documents";
+    homepage = "https://github.com/someth2say/xmlformat";
+    license = lib.licenses.gpl3Only;
     mainProgram = "xmlformat";
     maintainers = with lib.maintainers; [
       gepbird
     ];
-    homepage = "https://github.com/someth2say/xmlformat";
-    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
   };
 }
