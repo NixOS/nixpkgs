@@ -18,7 +18,7 @@ let
   record =
     {
       fields ? { },
-      wildcard ? null,
+      freeformType ? null,
     }@args:
     let
       checkField =
@@ -27,14 +27,22 @@ let
           throw "Record field `${lib.escapeNixIdentifier name}` must be declared with `mkField`."
         else
           field;
+
+      checkFreeformType =
+        type:
+        if type._type or null == "option-type" then
+          type
+        else
+          throw "Record freeformType must be declared with `mkOptionType`.";
+
       checkedFields = mapAttrs checkField fields;
-      # TODO: maybe specify a freeformType instead of a wildcard-field
-      wildcard = if args ? wildcard then checkField "wildcard" args.wildcard else null;
+      freeformType = if args ? freeformType then checkFreeformType args.freeformType else null;
     in
     mkOptionType {
       name = "record";
-      description = if wildcard == null then "record" else "open record of ${wildcard.type.description}";
-      descriptionClass = if wildcard == null then "noun" else "composite";
+      description =
+        if freeformType == null then "record" else "open record of ${freeformType.description}";
+      descriptionClass = if freeformType == null then "noun" else "composite";
       check = isAttrs;
       merge =
         loc: defs:
@@ -67,26 +75,22 @@ let
           ) checkedFields;
           extraData = removeAttrs data (attrNames checkedFields);
           extraValues = mapAttrs (
-            fieldName: fieldDefs:
-            builtins.addErrorContext
-              "while evaluating the wildcard field `${fieldName}' of option `${showOption loc}'"
-              ((mergeDefinitions (loc ++ [ fieldName ]) wildcard.type fieldDefs).mergedValue)
+            name: defs:
+            builtins.addErrorContext "while evaluating freeform value `${name}' of option `${showOption loc}'" (
+              (mergeDefinitions (loc ++ [ name ]) freeformType defs).mergedValue
+            )
           ) extraData;
+          checkedExtraDefs =
+            if extraData == { } then
+              fieldValues
+            else
+              throw ''
+                A definition for option `${showOption loc}' has an unknown fields:
+                ${lib.concatMapAttrsStringSep "\n" (name: defs: "`${name}'${lib.showDefs defs}") extraData}'';
         in
-        if wildcard == null then
-          if extraData == { } then
-            fieldValues
-          else
-            # As per _module.check
-            throw ''
-              A definition for option `${showOption loc}' has an unknown fields:
-              ${lib.concatMapAttrsStringSep "\n" (name: defs: "`${name}'${lib.showDefs defs}") extraData}''
-        else
-          fieldValues // extraValues;
-      nestedTypes = checkedFields // {
-        # potential collision with `_wildcard` field
-        # TODO: should we prevent fields from having a wildcard?
-        _wildcard = wildcard;
+        if freeformType == null then checkedExtraDefs else fieldValues // extraValues;
+      nestedTypes = lib.optionalAttrs (freeformType != null) {
+        inherit freeformType;
       };
       # TODO: getSubOptions for documentation purposes, etc
     };

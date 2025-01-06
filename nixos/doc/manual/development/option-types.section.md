@@ -244,7 +244,7 @@ merging is handled.
 Records and submodules are detailed in [Record](#section-option-types-record) and [Submodule](#section-option-types-submodule) respectively.
 While submodules provide the full power of the module system, records are usually faster to evaluate and may be preferred in many scenarios.
 
-`types.record` { `fields` ? {}, `wildcard` ? null }.
+`types.record` { `fields` ? {}, `freeformType` ? null }.
 
 :   A set of sub options, represented as fields. A field can be almost
     any option, including record or submodule type options.
@@ -253,10 +253,10 @@ While submodules provide the full power of the module system, records are usuall
     -   *`fields`* An attribute set of fields that will be merged into
         the final value.
 
-    -   *`wildcard`* An option-type used to merge unknown field
+    -   *`freeformType`* An option-type used to merge unknown field
         definitions into the final value.
 
-        If null, definitions for unknown fields will throw an error.
+        If not defined, definitions for unknown fields will throw an error.
 
 `types.submodule` *`o`*
 
@@ -512,13 +512,13 @@ This means you can do things like `config.recordOption ? optionalField`.
     Optional fields should not define a `default`.
     :::
 
-### Record wildcard type
+### Freeform Records
 
-Records can optionally be declared with a "wildcard" type, which can be used to allow definitions that do not match the explicitly declared fields.
-Any definition that does not match a field will be checked against the "wildcard" type, for example you could set `wildcard = types.anything`.
+Records can optionally be declared with a freeformType, which can be used to allow definitions that do not match the explicitly declared fields.
+Any definition that does not match a field will be checked against the freeformType, for example you could set `freeformType = types.anything`.
 
     ::: {.info}
-    A wildcard record with no fields can be thought of as equivialent to `types.attrsOf`!
+    A freeform record without fields is effectively equivialent to `types.attrsOf`.
     :::
 
 ## Submodule {#section-option-types-submodule}
