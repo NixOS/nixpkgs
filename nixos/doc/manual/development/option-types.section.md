@@ -244,17 +244,14 @@ merging is handled.
 Records and submodules are detailed in [Record](#section-option-types-record) and [Submodule](#section-option-types-submodule) respectively.
 While submodules provide the full power of the module system, records are usually faster to evaluate and may be preferred in many scenarios.
 
-`types.record` { `fields` ? {}, `optionalFields` ? {}, `wildcard` ? null }.
+`types.record` { `fields` ? {}, `wildcard` ? null }.
 
 :   A set of sub options, represented as fields. A field can be almost
     any option, including record or submodule type options.
     It has parameters:
 
-    -   *`fields`* An attribute set of options that will be merged into
+    -   *`fields`* An attribute set of fields that will be merged into
         the final value.
-
-    -   *`optionalFields`* An attribute set of options that will only be
-        merged into the final value _if_ they are defined.
 
     -   *`wildcard`* An option-type used to merge unknown field
         definitions into the final value.
@@ -501,30 +498,24 @@ Rather than merging fully-fledged modules, a record consists only of "field" sub
 
 ### Record fields
 
-A record's sub-options are declared as `fields`. A field can be almost any option (restrictions listed below).
-You can also use other record or submodule options in a record's fields to implement "nested" options.
-
-#### Restrictions
-
-- Fields must be options (e.g. created using `lib.mkOption`)
-- Fields cannot have an `apply` function
-- Fields cannot be `readOnly`
+A record's sub-options are declared as `fields`, using `lib.mkField`. A field is very similar to an option.
+You can also use record or submodule type fields to implement _nested_ options.
 
 ### Record optional fields
 
-In addition to _required_ fields, a record can contain "optional" fields. Optional fields are similar to wildcard or freeform types, in that they are only merged into the final value when defined.
-This contrasts "required" fields and submodule sub-options, which will still be merged into the final value when undefined as a stub value that throws a "used but not defined" error when read.
+Normally, options and fields will always be present in the final value. When undefined they are present as a value that **throws**.
 
-Optional fields are a unique feature, not currently supported by submodules.
+Unlike normal options, record fields can be marked as `optional`. Optional fields are only present in the final value when they are defined.
+This means you can do things like `config.recordOption ? optionalField`.
 
-### Restrictions
-- All the same restrictions for required fields apply
-- Additionally, optional fields cannot have a `default`
+    ::: {.note}
+    Optional fields should not define a `default`.
+    :::
 
 ### Record wildcard type
 
-Records can optionally be declared with a "wildcard" type, which can be used to allow definitions that do not match the explicitly declared "field" options.
-Any definition that does not match a field option will be checked against the "wildcard" type, for example you could set `wildcard = types.anything`.
+Records can optionally be declared with a "wildcard" type, which can be used to allow definitions that do not match the explicitly declared fields.
+Any definition that does not match a field will be checked against the "wildcard" type, for example you could set `wildcard = types.anything`.
 
     ::: {.info}
     A wildcard record with no fields can be thought of as equivialent to `types.attrsOf`!

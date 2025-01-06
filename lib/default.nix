@@ -71,6 +71,7 @@ let
       modules = callLibs ./modules.nix;
       options = callLibs ./options.nix;
       types = callLibs ./types.nix;
+      fields = callLibs ./fields.nix;
 
       # constants
       licenses = callLibs ./licenses.nix;
@@ -438,6 +439,7 @@ let
         revOrTag
         repoRevToName
         ;
+      inherit (self.fields) mkField;
       inherit (self.modules)
         evalModules
         setDefaultModuleLocation
