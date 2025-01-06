@@ -5,6 +5,7 @@
   cryptography,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -35,13 +36,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cryptography
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=subarulink" ""
-  '';
 
   __darwinAllowLocalNetworking = true;
 
