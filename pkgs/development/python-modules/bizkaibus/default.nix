@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bizkaibus";
-  version = "0.1.4";
+  version = "0.2.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "UgaitzEtxebarria";
     repo = "BizkaibusRTPI";
     rev = version;
-    sha256 = "1v7k9fclndb4x9npzhzj68kbrc3lb3wr6cwal2x46ib207593ckr";
+    sha256 = "sha256-TM02pSSOELRGSwsKc5C+34W94K6mnS0C69aijsPqSWs=";
   };
 
   propagatedBuildInputs = [ requests ];
