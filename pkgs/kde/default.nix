@@ -5,6 +5,7 @@
   fetchurl,
   libsForQt5,
   qt6Packages,
+  stdenv,
   cmark,
   gpgme,
   taglib,
@@ -64,6 +65,10 @@ let
 
         # Alias because it's just data
         plasma-wayland-protocols = libsForQt5.plasma-wayland-protocols;
+
+        # Alias because `self.callPackage` would give deprecated
+        # `qt6Packages.stdenv` when asked for `stdenv`
+        inherit stdenv;
 
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 

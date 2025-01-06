@@ -74,10 +74,6 @@ stdenv.mkDerivation rec {
     "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-DAPPLE_OLD_XCODE"
-  ]);
-
   doCheck = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

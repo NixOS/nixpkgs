@@ -863,6 +863,7 @@ stdenv.mkDerivation (finalAttrs: {
       withBootloader
       withCryptsetup
       withEfi
+      withFido2
       withHostnamed
       withImportd
       withKmod

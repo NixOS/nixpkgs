@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "minio-warp";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
     rev = "v${version}";
-    hash = "sha256-Zfjj/cYxucjuJRzER6MczQFqu8kdfUUXqC0mcQFbk0Q=";
+    hash = "sha256-TqgF8WkWz+OZGSwrjIMFg4WaSdunOrcjuYDhWuPZTU8=";
   };
 
-  vendorHash = "sha256-GD9Om5jymrRbeCVGNXtaam5Dmfg99CtEeiAFENhwyyY=";
+  vendorHash = "sha256-i0npOEo+rplC+hU4yxGRpY8gX+VGjR7HwKbiv5mQ28M=";
 
   # See .goreleaser.yml
   ldflags = [

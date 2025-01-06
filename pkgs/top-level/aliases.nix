@@ -1052,7 +1052,6 @@ mapAliases {
 
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead.";
-  playwright = lib.warnOnInstantiate "'playwright' will reference playwright-driver in 25.05. Reference 'python3Packages.playwright' for the python test launcher" (python3Packages.toPythonApplication python3Packages.playwright); # Added 2024-10-04
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   pltScheme = racket; # just to be sure
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
