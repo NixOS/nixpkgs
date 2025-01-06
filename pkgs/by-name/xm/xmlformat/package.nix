@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Configurable formatter (or 'pretty-printer') for XML documents";
     mainProgram = "xmlformat";
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
     homepage = "https://github.com/someth2say/xmlformat";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
