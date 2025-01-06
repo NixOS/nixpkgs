@@ -2,21 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runCommand,
-  autoreconfHook,
-  nix,
+
+  # nativeBuildInputs
   nasm,
+  autoreconfHook,
+
+  versionCheckHook,
+
+  # passthru
+  runCommand,
+  nix,
+  pkgs,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isa-l";
-  version = "2.31.0-unstable-2024-04-25";
+  version = "2.31.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
-    rev = "dbaf284e112bea1b90983772a3164e794b923aaf";
-    sha256 = "sha256-eM1K3uObb4eZq0nSfafltp5DuZIDwknUYj9CdLn14lY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pv0Aq1Yp/NkGN7KXJ4oQMSG36k5v9YnsELuATl86Zp4=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export AS=nasm
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/igzip";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {
@@ -42,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
                   nativeBuildInputs = [ nix ];
                 }
                 ''
-                  nix nar --extra-experimental-features nix-command pack ${../../../../lib} > "$out"
+                  nix nar --extra-experimental-features nix-command pack ${pkgs.path + "/lib"} > "$out"
                 '';
             meta = {
               description = "Cross validation of igzip provided by isa-l with gzip";
@@ -68,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
             touch "$out"
           '';
     };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
@@ -75,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "igzip";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/intel/isa-l";
+    changelog = "https://github.com/intel/isa-l/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
   };
