@@ -71,9 +71,9 @@ in
       description = "AMule daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      environment.HOME = cfg.dataDir;
 
       serviceConfig = {
-        Environment = [ "HOME=${cfg.dataDir}" ];
         Type = "forking";
         User = "${cfg.user}";
         WorkingDirectory = cfg.dataDir;
