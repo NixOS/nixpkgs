@@ -144,6 +144,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion =
+          (cfg.basicAuthUsername != null && cfg.basicAuthPasswordFile == null)
+          || (cfg.basicAuthUsername == null && cfg.basicAuthPasswordFile != null);
+        message = "Both basicAuthUsername and basicAuthPasswordFile must be set together to enable basicAuth functionality, or neither should be set.";
+      }
+    ];
+
     systemd.services.victoriametrics = {
       description = "VictoriaMetrics time series database";
       wantedBy = [ "multi-user.target" ];
