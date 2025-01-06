@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-BytHkvm0gfMnsKe2gDTARWYIHBpfAfIisf2p4bmrpMA=";
   };
 

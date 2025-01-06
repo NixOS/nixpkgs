@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8tYa/fnc8km0Tl0N/OMP8GUUlIjzB8XP1Ivy9jDmY3s=";
+    tag = "v${version}";
+    hash = "sha256-N6XSf212orMf3vqIjBzu+4fpKX7kFinH180lCWXtjzc=";
   };
 
   postPatch = ''

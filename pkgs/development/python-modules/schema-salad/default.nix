@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DUBrKBFphOa5hbEtsLVSI186TrhCkiNPtqlA61MENx0=";
   };
 

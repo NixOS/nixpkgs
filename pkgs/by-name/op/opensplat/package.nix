@@ -31,7 +31,7 @@ stdenv'.mkDerivation {
   src = fetchFromGitHub {
     owner = "pierotofy";
     repo = "OpenSplat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
   };
 

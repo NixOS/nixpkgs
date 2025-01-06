@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "MCDReforged";
     repo = "MCDReforged";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4podJ3InBnNc+t4BpCQrg2QbJ9ZJr5fmroXyzo7JrZw=";
   };
 

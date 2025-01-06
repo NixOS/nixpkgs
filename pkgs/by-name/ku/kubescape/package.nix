@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-m1tfYuRDPxm8Q1e4RIzqfkv9vOjGUPvI0FADvYXep/c=";
     fetchSubmodules = true;
   };

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-photos-library-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xSwUzVwC7RPpmC9M1x/WYIaoiUlcF2h2fwiP6FYA6sw=";
   };
 

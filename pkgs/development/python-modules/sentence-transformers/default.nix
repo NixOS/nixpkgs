@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D8LHzEVHRuayod084B05cL3OvZiO1ByDZLxROGxTD0I=";
   };
 

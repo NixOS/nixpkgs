@@ -3055,7 +3055,6 @@ broken-packages:
   - iap-verifier # failure in job https://hydra.nixos.org/build/233202491 at 2023-09-02
   - iban # failure in job https://hydra.nixos.org/build/233236424 at 2023-09-02
   - ib-api # failure in job https://hydra.nixos.org/build/233223054 at 2023-09-02
-  - iCalendar # failure in job https://hydra.nixos.org/build/252886686 at 2024-03-16
   - ical # failure in job https://hydra.nixos.org/build/233200229 at 2023-09-02
   - icepeak # failure in job https://hydra.nixos.org/build/233242326 at 2023-09-02
   - icfpc2020-galaxy # failure in job https://hydra.nixos.org/build/233208746 at 2023-09-02

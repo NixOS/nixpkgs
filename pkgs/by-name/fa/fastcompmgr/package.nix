@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tycho-kirchner";
     repo = "fastcompmgr";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yH/+E2IBe9KZxKTiP8oNcb9fJcZ0ukuenqTSv97ed44=";
   };
 

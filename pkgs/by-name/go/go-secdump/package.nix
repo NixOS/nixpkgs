@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jfjallid";
     repo = "go-secdump";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HZAt/lSe13OjCjpJMNCvWoenhCMc2YGoys0S1eiLeKo=";
   };
 

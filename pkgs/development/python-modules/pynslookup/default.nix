@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wesinator";
     repo = "pynslookup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cb8oyI8D8SzBP+tm1jGPPshJYhPegYOH0RwIH03/K/A=";
   };
 

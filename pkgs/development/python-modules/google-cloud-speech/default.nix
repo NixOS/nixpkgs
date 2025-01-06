@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.29.0";
+  version = "2.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_speech";
     inherit version;
-    hash = "sha256-N1rr57Us5VJxcvBcpRDHycBpIYpuRCb6KNVQwzSzrD8=";
+    hash = "sha256-7GPL1MK72wMGRioPMAgvRJXe3FBvDEoaKZDubmNGVEw=";
   };
 
   build-system = [ setuptools ];

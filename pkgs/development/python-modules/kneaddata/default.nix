@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biobakery";
     repo = "kneaddata";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8pXabwMGNZETEXP0A31SInj37pvogyKpJAaAY7aTyns=";
   };
 

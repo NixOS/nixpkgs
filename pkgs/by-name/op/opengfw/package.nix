@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "opengfw";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6PFfsPfLzzeaImcteX9u/k5pwe3cvSQwT90TCizA3gI=";
   };
 

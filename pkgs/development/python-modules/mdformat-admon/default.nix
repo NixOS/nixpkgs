@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-admon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YyEiqry1dAm/2EEuQjPFEfdpLI+NiLhVcyx4jAyXs4E=";
   };
 

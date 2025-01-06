@@ -12,7 +12,6 @@
   llvm,
   zlib,
   zstd,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +42,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
       elfutils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
     ];
 
   preConfigure = ''

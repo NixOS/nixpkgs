@@ -6,6 +6,7 @@
   wxGTK31,
   prusa-slicer,
   libspnav,
+  opencascade-occt_7_6,
 }:
 let
   appname = "SuperSlicer";
@@ -59,7 +60,7 @@ let
       # - wxScintilla is not used on macOS
       # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
       postPatch =
-        super.postPatch
+        (super.postPatch or "")
         + ''
           substituteInPlace src/CMakeLists.txt \
             --replace "scintilla" "" \
@@ -125,9 +126,12 @@ let
       fetchSubmodules = true;
     };
   });
-  prusa-slicer-wxGTK-override = prusa-slicer.override { wxGTK-override = wxGTK31-prusa; };
+  prusa-slicer-deps-override = prusa-slicer.override {
+    wxGTK-override = wxGTK31-prusa;
+    opencascade-override = opencascade-occt_7_6;
+  };
   allVersions = builtins.mapAttrs (
-    _name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))
+    _name: version: (prusa-slicer-deps-override.overrideAttrs (override version))
   ) versions;
 in
 allVersions.stable

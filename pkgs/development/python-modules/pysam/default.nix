@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysam-developers";
     repo = "pysam";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1sivEf8xN4SJPtJiAcBZG1bbgy66yWXzQis1mPeU+sA=";
   };
 

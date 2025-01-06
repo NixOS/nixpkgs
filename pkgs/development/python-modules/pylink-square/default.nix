@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4tdtyb0AjsAmFOPdkxbbro8PH3akC5uihN59lgijhkc=";
   };
 

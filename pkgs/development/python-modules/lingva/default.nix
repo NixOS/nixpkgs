@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "lingva";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2h3J+pvXRmjD7noMA7Cyu5Tf/9R8Akv08A7xJMLVD08=";
   };
 

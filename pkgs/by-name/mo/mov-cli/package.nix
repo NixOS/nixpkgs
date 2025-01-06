@@ -18,7 +18,7 @@ python3.pkgs.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mHtKQtLhHYwd2GEA0rCZQ4C/DEgsc6Rk7ZLpXFyW5d8=";
   };
 

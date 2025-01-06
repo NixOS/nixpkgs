@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "HigherOrderCO";
     repo = "Bend";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-j4YMdeSxIbhp7xT42L42/y0ZncFPKBkxTh0LgO/RjkY=";
   };
 

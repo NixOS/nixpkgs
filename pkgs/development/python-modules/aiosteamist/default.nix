@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiosteamist";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vqCcQDUMFFhIOoiER5TMOxJPY7HYFS4K1fuu/1IqP44=";
   };
 

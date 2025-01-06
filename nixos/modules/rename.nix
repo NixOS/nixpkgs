@@ -80,6 +80,10 @@ in
     )
     (mkRemovedOptionModule [
       "services"
+      "anbox"
+    ] "The corresponding package was removed from nixpkgs as it is not maintained upstream anymore.")
+    (mkRemovedOptionModule [
+      "services"
       "ankisyncd"
     ] "`services.ankisyncd` has been replaced by `services.anki-sync-server`.")
     (mkRemovedOptionModule [

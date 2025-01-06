@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmcarpenter2";
     repo = "swifter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lgdf8E9GGjeLY4ERzxqtjQuYVtdtIZt2HFLSiNBbtX4=";
   };
 

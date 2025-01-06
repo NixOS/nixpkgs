@@ -85,9 +85,6 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString (
     [ ]
     ++ lib.optional stdenv.hostPlatform.isLinux "-ltbb"
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
-    ) "-fno-aligned-allocation"
     # Workaround for https://github.com/NixOS/nixpkgs/issues/19098
     ++ lib.optional (stdenv.cc.isClang && stdenv.hostPlatform.isDarwin) "-fno-lto"
   );

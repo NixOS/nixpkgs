@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = "afdko";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-I5GKPkbyQX8QNSZgNB3wPKdWwpx8Xkklesu1M7nhgp8=";
   };
 

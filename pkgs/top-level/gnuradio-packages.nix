@@ -35,6 +35,8 @@ in {
 
   ### Packages
 
+  bladeRF = callPackage ../development/gnuradio-modules/bladeRF/default.nix { };
+
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 
   fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };

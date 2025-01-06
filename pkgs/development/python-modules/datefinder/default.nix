@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "akoumjian";
     repo = "datefinder";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uOSwS+mHgbvEL+rTfs4Ax9NvJnhYemxFVqqDssy2i7g=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = "mail-parser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AXMfb+9POEaosCc+dv1xenhvBbpVkllMjftMoADUPXE=";
   };
 

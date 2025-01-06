@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pkomiske";
     repo = "EnergyFlow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ioyk0IpyxcDdL2+3zkUa6yydavyphoh4do7GCz5nG60=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zoKaeK0b4EoxEQMODfrzDpI7xIKQ/w6Dmot+dw92fuw=";
   };
 

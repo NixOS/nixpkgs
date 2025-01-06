@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "sisyphus-control";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1/trJ/mfiXljNt7ZIBwQ45mIBbqg68e29lvVsPDPzoU=";
   };
 

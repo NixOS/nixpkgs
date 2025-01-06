@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mlange-42";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xYUpLujePO1MS0c25UJX5rRdmPzkaFgF5zJonzQOJqM=";
   };
 

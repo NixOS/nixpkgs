@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "M0r13n";
     repo = "pyais";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LSIytiWqHEczPPGoE3/EX3nCsLOq8zIx4Y2+PGwYgRs=";
   };
 

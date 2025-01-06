@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+/3n+v/8Tpqt7UoOrBi4S84N6Jioay7e2j+SvKJeoLA=";
   };
 

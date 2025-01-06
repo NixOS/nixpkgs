@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   fetchFromGitHub,
   pkg-config,
   testers,
@@ -20,10 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-  ];
-
-  buildInputs = [
-    apple-sdk_11
   ];
 
   installPhase = ''

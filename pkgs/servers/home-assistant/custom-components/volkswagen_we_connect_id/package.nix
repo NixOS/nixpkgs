@@ -14,7 +14,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "volkswagen_we_connect_id";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hok1ICAHMfvfMucBYkgWD68Tsn9E33Z/ouoRwFqHHF4=";
   };
 

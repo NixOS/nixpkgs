@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "chxrlt";
     repo = "lyrebird";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-VIYcOxvSpzRvJMzEv2i5b7t0WMF7aQxB4Y1jfvuZN/Y=";
   };
 

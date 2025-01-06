@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "djangocms-alias";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZOushwfBMjzlnuY6vHtM6Ge/VotBHaosIhFItmVkqkc=";
   };
 

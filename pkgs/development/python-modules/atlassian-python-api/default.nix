@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HhFGM8EPGCT3WqVf6WP6VvwsppvzFvHg+ys7GhUUwW0=";
   };
 

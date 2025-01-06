@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage rec {
       globin
       ma27
       zowoq
+      matthiasbeyer
     ];
     mainProgram = "fd";
   };

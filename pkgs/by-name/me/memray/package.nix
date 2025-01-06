@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-U9JR60rSxPYXbZaKR7vVNhGT78AXnqcoqvVC6/1OW/E=";
+    tag = "v${version}";
+    hash = "sha256-SgkJm+vtIid8RR1Qy98PkpvIQX4LxyAPlS+4UlYlZws=";
   };
 
   build-system = with python3Packages; [
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
       pytest-textual-snapshot
       pytestCheckHook
     ]
-    ++ lib.optionals (pythonOlder "3.12") [ greenlet ];
+    ++ lib.optionals (pythonOlder "3.14") [ greenlet ];
 
   pythonImportsCheck = [ "memray" ];
 
@@ -58,15 +58,6 @@ python3Packages.buildPythonApplication rec {
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
-
-    # snapshot-based tests are too fragile
-    # see https://github.com/bloomberg/memray/issues/654
-    "TestTUILooks"
-    "test_tui_basic"
-    "test_tui_pause"
-    "test_tui_gradient"
-    "test_merge_threads"
-    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "absperf";
     repo = "asyncinotify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RHzjUoVhDxI7kYD5HWkb0f8X6BjjTTCAvSvASPy6FGk=";
   };
 

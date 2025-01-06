@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "musana";
     repo = "mx-takeover";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yDQd2FEVFFsUu3wKxp26VDhGjnuXmAtxpWoKjV6ZrHA=";
   };
 

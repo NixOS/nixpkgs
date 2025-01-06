@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rfverbruggen";
     repo = "rachiopy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PsdEXNy8vUxba/C00ARhLTQU9gMlChy9XdU20r+Maus=";
   };
 

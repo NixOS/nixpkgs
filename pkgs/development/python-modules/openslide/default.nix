@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GokWpRuon8lnxNzxsYGYrQBQDhGPxl8HDaO7fR+2Ldo=";
   };
 

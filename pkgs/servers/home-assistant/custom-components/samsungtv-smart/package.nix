@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "ollo69";
     repo = "ha-samsungtv-smart";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-12wx8HaTEFQZOnxfcuAKFOXPdDpfAl608N1E6gmWqBI=";
   };
 

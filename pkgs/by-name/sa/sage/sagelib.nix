@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   sage-src,
   env-locations,
   python,
@@ -117,6 +119,13 @@ buildPythonPackage rec {
     libpng
     readline
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # code tries to assign a unsigned long to an int in an initialized list
+    # leading to this error.
+    # https://github.com/sagemath/sage/pull/39249
+    NIX_CFLAGS_COMPILE = "-Wno-error=c++11-narrowing-const-reference";
+  };
 
   propagatedBuildInputs = [
     # native dependencies (TODO: determine which ones need to be propagated)

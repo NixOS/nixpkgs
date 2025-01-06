@@ -146,15 +146,6 @@ super: lib.trivial.pipe super [
     meta.maintainers = with lib.maintainers; [ andersk ];
   }))
 
-  (patchExtension "tophat@fflewddur.github.io" (old: {
-    patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
-        gtop_path = "${libgtop}/lib/girepository-1.0";
-      })
-    ];
-  }))
-
   (patchExtension "Vitals@CoreCoding.com" (old: {
     patches = [
       (substituteAll {

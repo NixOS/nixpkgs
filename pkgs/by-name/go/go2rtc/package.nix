@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "go2rtc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pxKocvnFy1XMrjQ57VAmCnavcBgVPuNqWzT0v5+pWMI=";
   };
 

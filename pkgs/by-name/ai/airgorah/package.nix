@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "martin-olivier";
     repo = "airgorah";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cIb40TKkk3gfy4dTP8WyZqQkRGj5nItaQ3NSfexCUOA=";
   };
 

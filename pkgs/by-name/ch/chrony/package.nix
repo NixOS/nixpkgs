@@ -10,8 +10,6 @@
   libseccomp,
   pps-tools,
   nixosTests,
-  apple-sdk_11,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,10 +38,6 @@ stdenv.mkDerivation rec {
       libcap
       libseccomp
       pps-tools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.13")
     ];
 
   configureFlags = [

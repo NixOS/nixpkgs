@@ -37,10 +37,6 @@
   libcxx,
   libtool,
   sigtool,
-  CoreFoundation,
-  CoreServices,
-  Foundation,
-  IOKit,
   # Allow to independently override the jdks used to build and run respectively
   buildJdk,
   runJdk,
@@ -410,10 +406,6 @@ stdenv.mkDerivation rec {
         # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
         export GCOV=${coreutils}/bin/false
 
-        # Framework search paths aren't added by bintools hook
-        # https://github.com/NixOS/nixpkgs/pull/41914
-        export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks -F${IOKit}/Library/Frameworks"
-
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
@@ -564,9 +556,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       cctools
       libcxx
-      Foundation
-      CoreFoundation
-      CoreServices
     ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.

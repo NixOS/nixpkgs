@@ -24,7 +24,7 @@ buildGoModule rec {
     owner = "aquasecurity";
     repo = pname;
     # project has branches and tags of the same name
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OnOayDxisvDd802kDKGctaQc5LyoyFfdfvC+2JpRjHY=";
   };
   vendorHash = "sha256-26sAKTJQ7Rf5KRlu7j5XiZVr6CkAC6fm60Pam7KH0uA=";

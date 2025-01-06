@@ -25,7 +25,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Vyxal";
     repo = "Vyxal";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8hA4u9zz8jm+tlSZ88z69/PUFNYk7+i3jtgUntgDgPE=";
   };
 

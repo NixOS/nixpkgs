@@ -2129,6 +2129,41 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  nvim-java = super.nvim-java.overrideAttrs {
+    dependencies = with self; [
+      lua-async-await
+      mason-nvim
+      nui-nvim
+      nvim-dap
+      nvim-java-core
+      nvim-java-dap
+      nvim-java-refactor
+      nvim-java-test
+      nvim-lspconfig
+    ];
+  };
+
+  nvim-java-core = super.nvim-java-core.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      nvim-lspconfig
+    ];
+  };
+
+  nvim-java-dap = super.nvim-java-dap.overrideAttrs {
+    dependencies = [ self.nvim-java-core ];
+  };
+
+  nvim-java-refactor = super.nvim-java-refactor.overrideAttrs {
+    dependencies = [ self.nvim-java-core ];
+    nvimSkipModule = [
+      # Requires the `java.utils.ui` module which seems to be provided by `nvim-java` (cyclic dependency)
+      # -> Skip to avoid infinite recursion
+      "java-refactor.action"
+      "java-refactor.refactor"
+    ];
+  };
+
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "lsp-file-operations";
@@ -2306,6 +2341,11 @@ in
 
   nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
+  };
+
+  nvim-trevJ-lua = super.nvim-trevJ-lua.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+    nvimRequireCheck = "trevj";
   };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {

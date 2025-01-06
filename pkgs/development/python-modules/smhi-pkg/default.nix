@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joysoftware";
     repo = "pypi_smhi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ygjlUEQpyHjIO1QLB+MrijWQr84v3v+RdlcRwi9H/cs=";
   };
 

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "hfinger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gxwirAqtY4R3KDHyNmDIknABO+SFuoDua9nm1UyXbxA=";
   };
 

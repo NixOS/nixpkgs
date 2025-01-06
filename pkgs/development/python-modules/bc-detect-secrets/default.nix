@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "detect-secrets";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z/mjZcC1ZXebDWXlYvcdxDk+HoZ0gctfJSpQSkIbQmA=";
   };
 

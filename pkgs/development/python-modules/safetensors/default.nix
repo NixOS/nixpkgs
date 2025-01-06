@@ -10,9 +10,6 @@
   rustc,
   setuptools-rust,
 
-  # buildInputs
-  libiconv,
-
   # tests
   h5py,
   numpy,
@@ -22,20 +19,20 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.4.5";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gr4hBbecaGHaoNhRQQXWfLfNB0/wQPKftSiTnGgngog=";
+    tag = "v${version}";
+    hash = "sha256-rs9mYl/2KNdV9e+L/kZr59kLw7ckW9UQPZwkaGyl1Iw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-zDXzEVvmJF1dEVUFGBc3losr9U1q/qJCjNFkdJ/pCd4=";
+    hash = "sha256-bQkLBiuhVm2dzrf6hq+S04+zoXUszA7be8iS0WJSoOU=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -47,8 +44,6 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     setuptools-rust
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     h5py

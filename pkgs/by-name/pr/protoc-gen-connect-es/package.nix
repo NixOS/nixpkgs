@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-es";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cB1OTolnwHOqeXrj8wL5FbFnjok6s03z1jC58ABTW3o=";
 
     postFetch = ''

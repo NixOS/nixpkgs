@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-plmdGVfrkdz7pyyAztzZKlDpUjKxBIRtDVeBXoqaB5s=";
   };
 

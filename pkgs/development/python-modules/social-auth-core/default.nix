@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tFaRvNoO5K7ytqMhL//Ntasc7jb4PYXB1yyjFvFqQH8=";
   };
 

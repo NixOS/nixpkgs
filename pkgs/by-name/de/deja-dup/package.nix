@@ -11,6 +11,7 @@
   itstool,
   desktop-file-utils,
   glib,
+  glib-networking,
   gtk4,
   coreutils,
   libsoup_3,
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsoup_3
     glib
+    glib-networking
     gtk4
     libsecret
     libadwaita

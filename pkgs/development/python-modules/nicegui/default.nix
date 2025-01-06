@@ -48,7 +48,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oT191QVpvE5xszgBFt3o4A2hU50zmzPUywmAQuKZ5OE=";
   };
 

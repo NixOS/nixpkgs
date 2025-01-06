@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     description = "Safe and ergonomic alternative to rm";
     homepage = "https://github.com/MilesCranmer/rip2";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ milescranmer ];
+    maintainers = with lib.maintainers; [
+      milescranmer
+      matthiasbeyer
+    ];
     mainProgram = "rip";
   };
 }

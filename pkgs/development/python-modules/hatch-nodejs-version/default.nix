@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agoose77";
     repo = "hatch-nodejs-version";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hknlb11DCe+b55CfF3Pr62ccWPxVrjQ197ZagSiH/zU=";
   };
 

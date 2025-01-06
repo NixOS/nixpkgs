@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "airgradienthq";
     repo = "python-airgradient";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-al0DLsub3xLU1BWLNn0cMI87O0mcQJ0Y4Boj2Xwk1r0=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timrid";
     repo = "construct-typing";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zXpxu+VUcepEoAPLQnSlMCZkt8fDsMCLS0HBKhaYD20=";
   };
 

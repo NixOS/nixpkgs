@@ -181,7 +181,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
   };
 

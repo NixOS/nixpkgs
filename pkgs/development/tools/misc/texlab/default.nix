@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Lx7vENYuBXaMvGDOZxAPqivGZVaCXYrihaTnBn9eTm4=";
   };
 

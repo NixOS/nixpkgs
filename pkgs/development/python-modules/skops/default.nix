@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2uX5sGVdTnZEbl0VXI8E7h1pQYQVbpQeUKUchCZpgg4=";
   };
 

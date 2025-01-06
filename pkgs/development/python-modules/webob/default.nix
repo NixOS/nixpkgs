@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "webob";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QN0UMLzO0g8Oalnn5GlOulXUxtXOx89jeeEvJV53rVs=";
   };
 

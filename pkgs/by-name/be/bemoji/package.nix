@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "marty-oehme";
     repo = "bemoji";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HXwho0vRI9ZrUuDMicMH4ZNExY+zJfbrne2LMQmmHww=";
   };
 

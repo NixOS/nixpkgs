@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BlackFoundryCom";
     repo = "black-renderer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-b2W0M32Y4HUyxObjvh0yMUBe5gfcSDXnw1GfhW7hoZk=";
   };
 

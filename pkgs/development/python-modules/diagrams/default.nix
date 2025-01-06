@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = "diagrams";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xdc8qHvLKy5QV/1c87o7H/VhitUhpH/+VgqBHn2a8lg=";
   };
 

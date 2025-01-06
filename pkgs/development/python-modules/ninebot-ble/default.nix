@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ownbee";
     repo = "ninebot-ble";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gA3VTs45vVpO0Iy8MbvvDf9j99vsFzrkADaJEslx6y0=";
   };
 

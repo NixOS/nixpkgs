@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "license-expression";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RAgGg0Xekcw5H13YHmkgfL7eybK+4tA8EAvVTuWFRck=";
   };
 

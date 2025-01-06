@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     scikit-build-core
   ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.hostPlatform.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
-
   postBuild = ''
     pushd ../api/python
     ${pyEnv.interpreter} -m build --no-isolation --wheel --skip-dependency-check --config-setting=--parallel=$NIX_BUILD_CORES

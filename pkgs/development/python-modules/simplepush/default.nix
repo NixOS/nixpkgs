@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplepush";
     repo = "simplepush-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DvDPihhx1rzJN6iQP5rHluplJ1AaN0b/glcd+tZCues=";
   };
 

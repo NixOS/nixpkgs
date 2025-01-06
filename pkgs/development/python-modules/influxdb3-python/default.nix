@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-b+AxR6TFHrejSeU6el5beCFscKIsyaonMDC8jZWShRM=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "explorerscript";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cKEceWr7XmZbuomPOmjQ32ptAjz3LZDQBWAgZEFadDY=";
     # Include a pinned antlr4 fork used as a C++ library
     fetchSubmodules = true;

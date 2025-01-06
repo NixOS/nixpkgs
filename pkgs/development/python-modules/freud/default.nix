@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "freud";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jlscEHQ1q4oqxE06NhVWCOlPRcjDcJVrvy4h6iYrkz0=";
     fetchSubmodules = true;
   };

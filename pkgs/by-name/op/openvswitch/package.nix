@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EudcANZ0aUImQ/HWSX1PRklvhP2D5L3ugXaC0GKyF0Q=";
   };
 

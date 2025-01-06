@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   rustPlatform,
-  apple-sdk_11,
   nixosTests,
 }:
 
@@ -39,10 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atuin \
       --bash <($out/bin/atuin gen-completions -s bash) \
@@ -67,11 +62,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=build_aliases"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/atuinsh/atuin";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       sciencentistguy
       _0x4A6F

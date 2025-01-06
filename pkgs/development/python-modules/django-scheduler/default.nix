@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "llazzaro";
     repo = "django-scheduler";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dY2TPo15RRWrv7LheUNJSQl4d/HeptSMM/wQirRSI5w=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hyprspace";
     repo = "hyprspace";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zWajCfHFqPa3Z72DHcxBUq4bmcCu1lpEKUbZZewpYOE=";
   };
 

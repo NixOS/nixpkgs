@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openvideolibs";
     repo = "python-onvif-zeep-async";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z9LtKcgyebmdrChRz0QwiQdnrtcIVeCtKQAvL9gBMY4=";
   };
 

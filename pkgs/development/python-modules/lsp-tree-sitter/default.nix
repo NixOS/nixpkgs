@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "lsp-tree-sitter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nRzyVZFgb08M0I+xmhuX1LDwPsghlBLdZ2Ou8stKzk0=";
   };
 

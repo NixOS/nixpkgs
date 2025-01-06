@@ -75,7 +75,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "argilla-io";
     repo = "argilla";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ndendXlgACFdwnZ/P2W22Tr/Ji8AYw/6jtb8F3/zqSA=";
   };
 

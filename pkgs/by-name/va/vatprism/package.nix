@@ -38,7 +38,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "marvk";
     repo = "vatprism";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ofEwHUCm79roHe2bawmKFw2QHhIonnlkFG5nhE6uN+g=";
   };
 

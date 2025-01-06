@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.2f30.org/noice.git";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "0975j4m93s9a21pazwdzn4gqhkngwq7q6ghp0q8a75r6c4fb7aar";
   };
 

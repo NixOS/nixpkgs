@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "python-jsonconversion";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XmAQXu9YkkMUvpf/QVk4u1p8UyNfRb0NeoLxC1evCT4=";
   };
 

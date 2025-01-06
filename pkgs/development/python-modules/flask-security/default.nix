@@ -60,7 +60,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
   };
 

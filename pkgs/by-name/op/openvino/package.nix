@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-GmbRuFM5L60vQNJLCkva1NzBWWKXK674xjMUpME4o4c=";
   };

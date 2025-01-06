@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vMqDxg2BV9/g5FquejnT/Rsvwjhdh01K2LxiT355p1U=";
   };
 

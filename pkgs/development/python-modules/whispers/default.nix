@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adeptex";
     repo = "whispers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tjDog8+oWTNuK1eK5qUEFspiilB0riUSTX5ugTIiP3M=";
   };
 

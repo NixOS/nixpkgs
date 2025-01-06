@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qbvsYlf3byaT/4b+/BDvCgnaBKthL/J79y0CWh5Yid4=";
   };
 

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Iaphetes";
     repo = "aphorme_launcher";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p1ZIMMDyQWVzoeyHb3sbeV6XQwbIDoQwJU8ynI8hGUI=";
   };
 

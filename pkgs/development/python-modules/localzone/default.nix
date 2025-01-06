@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ags-slc";
     repo = "localzone";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-quAo5w4Oxu9Hu96inu3vuiQ9GZMLpq0M8Vj67IPYcbE=";
   };
 

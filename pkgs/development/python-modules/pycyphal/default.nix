@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XkH0wss8ueh/Wwz0lhvQShOp3a4X9lNdosT/sMe7p4Q=";
     fetchSubmodules = true;
   };

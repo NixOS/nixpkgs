@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tandemdude";
     repo = "hikari-lightbulb";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sxBrOgMgUcPjqtNuuq5+NfyxR5V812dfHnGoO9DhdXU=";
   };
 

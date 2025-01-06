@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = "aiofiles";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uDKDMSNbMIlAaifpEBh1+q2bdZNUia8pPb30IOIgOAE=";
   };
 

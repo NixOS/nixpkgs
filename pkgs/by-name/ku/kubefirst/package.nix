@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "konstructio";
     repo = "kubefirst";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nBYwvOgkkx3NXELK+h9SpapoMjAVauI9leCPhKNZfh0=";
   };
 

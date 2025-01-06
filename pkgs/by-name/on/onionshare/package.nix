@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J8Hdriy8eWpHuMCI87a9a/zCR6xafM3A/Tkyom0Ktko=";
   };
 

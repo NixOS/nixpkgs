@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "MonkeyType";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DQ/3go53+0PQkhZcL2dX8MI/z4Iq7kTYd5EbacMNxT4=";
   };
 

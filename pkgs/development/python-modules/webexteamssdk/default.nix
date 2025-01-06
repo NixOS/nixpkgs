@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CiscoDevNet";
     repo = "webexteamssdk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
   };
 

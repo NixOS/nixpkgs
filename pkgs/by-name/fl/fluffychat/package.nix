@@ -28,7 +28,7 @@ flutter324.buildFlutterApplication (
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-T187GK0hBTRLGgUw23dNSzql6VZssreS84NbgCwf558=";
     };
 

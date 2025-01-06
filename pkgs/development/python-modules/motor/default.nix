@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "motor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fSHb39C4WaQVt7jT714kxwkpUw3mV9jNgkdUyVnD+S4=";
   };
 

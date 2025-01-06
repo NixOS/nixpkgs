@@ -22,7 +22,7 @@ py.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0AyIXSiNsAHELM8Ry/bcm7sd7K+ApeoEguiEm8ecAU0=";
   };
 

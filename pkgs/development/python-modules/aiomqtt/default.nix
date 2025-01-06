@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sbtinstruments";
     repo = "aiomqtt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
   };
 

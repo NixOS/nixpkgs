@@ -4,8 +4,6 @@
   fetchFromGitHub,
   autoAddDriverRunpath,
   installShellFiles,
-  stdenv,
-  apple-sdk_11,
   versionCheckHook,
   nix-update-script,
 }:
@@ -26,10 +24,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     autoAddDriverRunpath
     installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   postInstall = ''

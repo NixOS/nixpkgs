@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "goat-cli";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     repo = "goat";
     owner = "studio-b12";
     rev = "v${version}";
-    hash = "sha256-H7ea3XOBfQ7bIX5SbxPd+fcSlMurSWXGXe+/LsqSc0A=";
+    hash = "sha256-g5iS0XCRv97uX45BMqyFNodjjZ3Q9OeMJXAdsPwLCEg=";
   };
 
-  vendorHash = "sha256-DtEXgGYSkWO876so6LEOkhVwDt/zrflDZdY4O2lz1mw=";
+  vendorHash = "sha256-MOsxM8CSjK5j/guEwRFWHZ4+gdAHa5txVXw67jzwyLQ=";
 
   ldflags = [
     "-s"

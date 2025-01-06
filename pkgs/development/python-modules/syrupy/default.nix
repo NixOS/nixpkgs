@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IifGufCUhjbl8Tqvcjm8XF4QPvOsRacPWxI1yT79eNs=";
   };
 

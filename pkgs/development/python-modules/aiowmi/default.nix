@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cesbit";
     repo = "aiowmi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bKxGIUxGAW1GDa5xlv9NNWr5xLTdpK5dSsym/5y9nGQ=";
   };
 

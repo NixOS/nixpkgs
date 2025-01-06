@@ -36,15 +36,9 @@ buildGoModule rec {
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
-  env =
-    {
-      CYPRESS_INSTALL_BINARY = 0;
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      # Fix error: no member named 'aligned_alloc' in the global namespace.
-      # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
-      NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
-    };
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  };
 
   offlineCache = stdenv.mkDerivation {
     name = "${pname}-${version}-yarn-offline-cache";

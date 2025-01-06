@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,8 +29,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional (stdenv.hostPlatform.system != "x86_64-linux")
       # assumes the target is x86_64-unknown-linux-gnu
       "--skip simple_project::it_checks_okay_project_correctly";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   meta = with lib; {
     description = "Cargo subcommand to check rust documentation for broken links";

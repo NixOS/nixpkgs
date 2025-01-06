@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eSAMTrade";
     repo = "retry";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RxOEekkmMRl2OQW2scFWbMQiFXcH0sbd+k9R8uul0uY=";
   };
 

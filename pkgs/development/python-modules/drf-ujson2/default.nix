@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Amertz08";
     repo = "drf_ujson2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kbpZN1zOXHvRPcn+Sjbelq74cWgvCUeMXZy1eFSa6rA=";
   };
 

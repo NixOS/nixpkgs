@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IBM";
     repo = "python-sdk-core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gNEd79kOtDlFJg3Ji9kO6VGGsy/VGxd6GzC/cuen9M0=";
   };
 

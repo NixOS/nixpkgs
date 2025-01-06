@@ -54,7 +54,7 @@ let
         {
           inherit version;
           src = src.override {
-            rev = "refs/tags/${version}";
+            tag = version;
             hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
           };
 

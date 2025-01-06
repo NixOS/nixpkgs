@@ -5,8 +5,6 @@
   zlib,
   ncurses,
   libiconv,
-  apple-sdk_11,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,8 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     ncurses
     zlib
-    apple-sdk_11
-    (darwinMinVersionHook "11.0")
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

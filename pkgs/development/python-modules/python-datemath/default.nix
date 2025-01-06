@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nickmaccarthy";
     repo = "python-datemath";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VwdY6Gmbmoy7EKZjUlWj56uSiE0OdegPiQv+rmigkq8=";
   };
 

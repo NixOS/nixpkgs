@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = "aioimaplib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TjCPGZGsSb+04kQNzHU3kWBo2vY34ujEqh1GIMIehJc=";
   };
 

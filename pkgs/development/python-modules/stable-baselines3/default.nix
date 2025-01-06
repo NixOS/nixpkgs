@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OFmjAkUS0wrns5CkWjqR7zTjKLVPI/NrpVIKJhLAwYM=";
   };
 

@@ -57,7 +57,7 @@ stdenv'.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     owner = "WerWolv";
     repo = "ImHex";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e7ppx2MdtTPki/Q+1kWswHkFLNRcO0Y8+q9VzpgUoVE=";
   };
 

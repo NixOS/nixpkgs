@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "WithSecureLabs";
     repo = "chainsaw";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ErDIfLhzCiFm3dZzr6ThjYCplfDKbALAqcu8c0gREH4=";
   };
 

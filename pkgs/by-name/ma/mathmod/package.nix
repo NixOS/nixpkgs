@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "parisolab";
     repo = "mathmod";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-h1iI7bheJVfE2+0m6Yk7QNCkl9Vye97tqb/WkQExVcQ=";
   };
 

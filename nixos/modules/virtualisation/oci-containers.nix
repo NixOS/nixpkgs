@@ -14,7 +14,7 @@ let
   defaultBackend = options.virtualisation.oci-containers.backend.default;
 
   containerOptions =
-    { ... }:
+    { name, ... }:
     {
 
       options = {
@@ -57,6 +57,13 @@ let
             the previous image.
           '';
           example = literalExpression "pkgs.dockerTools.streamLayeredImage {...};";
+        };
+
+        serviceName = mkOption {
+          type = types.str;
+          default = "${cfg.backend}-${name}";
+          defaultText = "<backend>-<name>";
+          description = "Systemd service name that manages the container";
         };
 
         login = {
@@ -525,9 +532,7 @@ in
   config = lib.mkIf (cfg.containers != { }) (
     lib.mkMerge [
       {
-        systemd.services = mapAttrs' (
-          n: v: nameValuePair "${cfg.backend}-${n}" (mkService n v)
-        ) cfg.containers;
+        systemd.services = mapAttrs' (n: v: nameValuePair v.serviceName (mkService n v)) cfg.containers;
 
         assertions =
           let

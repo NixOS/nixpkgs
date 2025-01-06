@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/TASEmulators/desmume/commit/24eb5ed95c6cbdaba8b3c63a99e95e899e8a5061.patch";
       hash = "sha256-J3ZRU1tPTl+4/jg0DBo6ro6DTUZkpQCey+QGF2EugCQ=";
     })
+
+    # Fix strdup implicit declaration errors
+    (fetchpatch {
+      url = "https://github.com/TASEmulators/desmume/commit/738298a9e887bf7220fed026cb872a544fd60431.patch?full_index=1";
+      hash = "sha256-JNq++g6olaKsNa1XIs9Zz1YQxAsN3vAuFkykdlrfzaQ=";
+    })
   ];
 
   nativeBuildInputs = [

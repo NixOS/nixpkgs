@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "simple64";
     repo = "simple64";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rvoUyvhpbibXbAreu6twTeeVRTCbhJiJuyKaJz0uT5k=";
   };
 

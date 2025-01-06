@@ -53,8 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
-
   doCheck = true;
 
   strictDeps = true;

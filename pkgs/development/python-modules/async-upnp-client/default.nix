@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xIa7QeflS7JxkPoV8KqFfuLfHPpnrBGLeOFSa17IHyk=";
   };
 

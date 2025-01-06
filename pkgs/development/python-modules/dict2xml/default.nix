@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "delfick";
     repo = "python-dict2xml";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-5GnIVpG2xHKYv27sSjjmm8JsZ1YR9Mvc3SqE4SnE84o=";
   };
 

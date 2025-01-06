@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = "adb-enhanced";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0HxeL6VGM+HTiAxs3NFRcEFbmH9q+0/pJdGyF1hl4hU=";
   };
 

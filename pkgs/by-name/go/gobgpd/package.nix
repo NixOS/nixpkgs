@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DIOii1jFVK3jwDLaLFWBbbQPC9eQnTwLYwI8uC8G8ig=";
   };
 

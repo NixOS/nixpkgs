@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
   };
 

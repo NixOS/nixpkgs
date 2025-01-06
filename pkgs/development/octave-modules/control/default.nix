@@ -15,7 +15,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "pkg-control";
-    rev = "refs/tags/control-${version}";
+    tag = "control-${version}";
     sha256 = "sha256-7beEsdrne50NY4lGCotxGXwwWnMzUR2CKCc20OCjd0g=";
   };
 

@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.10.3";
+  version = "2024.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kLsHJBmNxh+PmJQ9Y9Ve/CACovzsRZyzVjor/VKUmYk=";
+    tag = version;
+    hash = "sha256-JLlmvd6Hgf1a3YU9xfbw8plEbRDNgCzxF3PpveGsrPg=";
   };
 
   postPatch = ''
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     freezegun
     pytest-asyncio
     pytest-cov-stub
@@ -56,13 +58,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioautomower" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
-
   disabledTests = [
     # File is missing
     "test_standard_mower"
     # Call no found
     "test_post_commands"
+    # Timezone mismatches
+    "test_full_planner_event"
+    "test_sinlge_planner_event"
   ];
 
   meta = with lib; {

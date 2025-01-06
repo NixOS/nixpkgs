@@ -236,11 +236,6 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-  env.CXXFLAGS = lib.optionalString (
-    stdenv.hostPlatform.system == "x86_64-darwin"
-  ) "-faligned-allocation";
-
   # workaround for
   # https://github.com/root-project/root/issues/14778
   env.NIX_LDFLAGS = lib.optionalString (

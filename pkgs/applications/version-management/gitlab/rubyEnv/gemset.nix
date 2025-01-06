@@ -5063,15 +5063,15 @@ src:
     version = "0.1.0";
   };
   prometheus-client-mmap = {
-    dependencies = ["rb_sys"];
+    dependencies = ["base64" "rb_sys"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0vg47xx3wgg24snqc6ychb08mbcyrjmvxym9fg69cpa4xvj133fx";
+      sha256 = "1dwvpxqj652c8r61q88s336vzf2h2akcijk9hmjp9jzlnhil44n4";
       type = "gem";
     };
-    version = "1.1.1";
+    version = "1.1.2";
   };
   pry = {
     dependencies = ["coderay" "method_source"];

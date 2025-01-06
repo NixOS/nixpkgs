@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rajlaud";
     repo = "pysqueezebox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8eCf0y8xbnSP+c+QP8fRkamUj5kN4EUQVZpotdo7hbs=";
   };
 

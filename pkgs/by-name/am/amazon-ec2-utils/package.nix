@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
   };
 

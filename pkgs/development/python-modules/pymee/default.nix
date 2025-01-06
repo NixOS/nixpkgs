@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FreshlyBrewedCode";
     repo = "pymee";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VNKIA/1juhkn11nkW52htvE4daXJoySeEyevWbboUek=";
   };
 

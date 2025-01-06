@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1vb8a0ntp5ikWrJ3aI4KsGlraXRoFa7o+sP2sJpFbVc=";
   };
 

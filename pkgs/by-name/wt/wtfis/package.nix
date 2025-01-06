@@ -10,7 +10,7 @@ let
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+BJmAFjmj3z/sKJ/L/y6hTClesulpQTpDL9cUNRi6e8=";
   };
 in

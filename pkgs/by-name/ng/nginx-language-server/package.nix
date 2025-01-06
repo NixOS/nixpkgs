@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = "nginx-language-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AXWrNt4f3jkAbidE1goDgFicu4sSBv08f/Igyh2bRII=";
   };
 

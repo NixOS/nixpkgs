@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-urEHDDBBIdopQiT/QI5WtTbIO45pBk6bTNpfs8q/2hA=";
   };
   format = "other";

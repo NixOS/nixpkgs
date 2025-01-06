@@ -34,7 +34,7 @@ buildPythonPackage rec {
     inherit pname version;
     owner = "conda";
     repo = "conda";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e+C+tSUdSGyotuZzkOuV0e0hOj+MZRuq1fHzsu3LERQ=";
   };
 

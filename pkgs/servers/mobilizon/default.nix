@@ -19,6 +19,11 @@ in
 mixRelease rec {
   inherit (common) pname version src;
 
+  # Version 5.1.1 failed to bump their internal package version,
+  # which causes issues with static file serving in the NixOS module.
+  # See https://github.com/NixOS/nixpkgs/pull/370277
+  patches = [ ./0001-fix-version.patch ];
+
   nativeBuildInputs = [
     git
     cmake

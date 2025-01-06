@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "philipstv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BvQurZls9NjtHhTXLQ9t8fHkAF/QU/c6mmRvNmE0v90=";
   };
 

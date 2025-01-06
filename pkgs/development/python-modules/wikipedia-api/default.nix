@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martin-majlis";
     repo = "Wikipedia-API";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bjmvUZpwDJJrB2k13NMSMHNyiJFXCvo007PPHwBVeq8=";
   };
 

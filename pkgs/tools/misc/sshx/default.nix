@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "ekzhang";
     repo = "sshx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RIQRX4sXlMl73Opi6hK2WD/erdAMNrm40IasHasikuw=";
   };
 

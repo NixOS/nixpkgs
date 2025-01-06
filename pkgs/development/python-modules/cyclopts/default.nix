@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N53obWs924HqxELxO1Ax4Jy+u+e4KT+FSbX4UhR+pJg=";
   };
 

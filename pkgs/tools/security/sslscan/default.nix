@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rbsec";
     repo = "sslscan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XFoTwBtufkT/Ja0a3MEytPHx37eg3ZZ7x15EXHjZey4=";
   };
 

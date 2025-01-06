@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "basnijholt";
     repo = "adaptive-lighting";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Yq8mKk2j2CHyHvwyej0GeFQhuy1MFXwt0o+lDOGwrBU=";
   };
 

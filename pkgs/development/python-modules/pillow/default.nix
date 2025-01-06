@@ -49,7 +49,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vWNqzA2ZfJcWexXw790RgyYtP8WDtahoQIX16otCRnk=";
   };
 

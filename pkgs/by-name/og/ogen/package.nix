@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ogen-go";
     repo = "ogen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SwJY9VQafclAxEQ/cbRJALvMLlnSIItIOz92XzuCoCk=";
   };
 

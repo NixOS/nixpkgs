@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fepegar";
     repo = "torchio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Soew23+Skpc2IpVBMuOnC5LBW0vFL/9LszLijkJgQoQ=";
   };
 

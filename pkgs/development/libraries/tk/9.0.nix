@@ -11,7 +11,7 @@ callPackage ./generic.nix (
 
     src = fetchzip {
       url = "mirror://sourceforge/tcl/tk${tcl.version}-src.tar.gz";
-      sha256 = "sha256-jQ9kZuFx6ikQ+SpY7kSbvXJ5hjw4WB9VgRaNlQLtG0s=";
+      hash = "sha256-eX9HSPnNHeWkCaH0TBhmxQ3keTb4he3KY5rS1w4ubTo=";
     };
 
     patches = [

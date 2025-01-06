@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PpNdbvtDAZDT43yyEkUvnhfUTAMM+mYImb3dVbAVPic=";
   };
 

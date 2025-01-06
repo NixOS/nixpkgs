@@ -69,14 +69,13 @@ runTest (
 
           services.postgresql = {
             enable = true;
-            package = pkgs.postgresql_14;
           };
           systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
             password=$(cat ${config.services.nextcloud.config.dbpassFile})
             ${config.services.postgresql.package}/bin/psql <<EOF
               CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
               CREATE DATABASE nextcloud;
-              GRANT ALL PRIVILEGES ON DATABASE nextcloud TO ${adminuser};
+              ALTER DATABASE nextcloud OWNER to ${adminuser};
             EOF
           '';
 

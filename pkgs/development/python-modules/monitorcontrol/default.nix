@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "monitorcontrol";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fu0Lm7Tcw7TCCBDXTTY20JBAM7oeesyeHQFFILeZxX0=";
   };
 

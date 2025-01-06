@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o76bGItldcLfgZ5KDw2uL0GJvyljQJEwISR0topVR44=";
   };
 

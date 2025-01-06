@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "etal";
     repo = "cnvkit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZdE3EUNZpEXRHTRKwVhuj3BWQWczpdFbg4pVr0+AHiQ=";
   };
 

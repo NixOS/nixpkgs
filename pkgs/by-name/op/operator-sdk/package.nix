@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YCYieXT+3LCpae3V/vub/TAKUG03HjB9FdHEhDVP4uM=";
   };
 

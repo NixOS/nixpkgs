@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lykos153";
     repo = "AnnexRemote";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RShDcqAjG+ujGzWu5S9za24WSsIWctqi3nWQ8EU4DTo=";
   };
 

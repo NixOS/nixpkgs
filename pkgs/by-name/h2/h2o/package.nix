@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "0lwg5sfsr7fw7cfy0hrhadgixm35b5cgcvlhwhbk89j72y1bqi6n";
   };
 

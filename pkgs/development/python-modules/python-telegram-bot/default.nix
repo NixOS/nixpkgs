@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eJC8oH5iAMdCN546LzoRwlNq0gQqu8fZGscQlOzb/aY=";
   };
 

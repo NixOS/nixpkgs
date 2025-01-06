@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiocomelit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1XH2RwdnXDi57FUf1R7HLiFFNxyT3A6MroZ+kk1xIGo=";
   };
 

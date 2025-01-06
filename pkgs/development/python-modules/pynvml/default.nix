@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gpuopenanalytics";
     repo = "pynvml";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8NkYBRpcW3dvxVc6z17TMRPqA0YK/J/CdjuqgdcTdy8=";
   };
 

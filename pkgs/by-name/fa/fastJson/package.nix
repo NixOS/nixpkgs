@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "libfastjson";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WnM6lQjHz0n5BwWWZoDBavURokcaROXJW46RZen9vj4=";
   };
 

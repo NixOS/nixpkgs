@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sammcj";
     repo = "gollama";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-n3GbEPh69mrr5qZ2TVzKv06lkR+zuhH9TtjmusXDHQg=";
   };
 

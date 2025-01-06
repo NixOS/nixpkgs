@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-executor-plugins";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3XdsEnL+kuYhNOeAxkAsjTJ2R6NOtq97zPhQg9kdFkI=";
   };
 

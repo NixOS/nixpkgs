@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     {
       aarch64-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-        hash = "sha256-FwwB9slKOiYQ3eud2tiqov6yGNxmIicIe6nFpsH28Vk=";
+        hash = "sha256-uy+4+pNyz10xrGM0QF9q0y6UpQK1B9PGNqrcK6nENQY=";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-armhf.deb";
-        hash = "sha256-LgeWQcHm5Qq/7MUuidjily0WsOFZAWGWeO52jNHWKMw=";
+        hash = "sha256-lTc12qmoe0kGUhrStlGfDRw+cNJnX7F09/jKKc/1U9g=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "koreader";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-gHn1xqBc7M9wkek1Ja1gry8TKIuUxQP8T45x3z2S4uc=";
+    sha256 = "sha256-EI8UOQuwhJqcAp8QnLYhI0K+uV/7ZqxdHNk8mPkDWA0=";
   };
 
   nativeBuildInputs = [

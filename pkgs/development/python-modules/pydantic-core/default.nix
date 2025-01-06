@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-ikdQAT1y0g+V2gPU0Ohn+UktJrEObnixCW56/J1UsSk=";
     };
 

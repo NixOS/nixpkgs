@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
-    rev = "refs/tags/v.${finalAttrs.version}";
+    tag = "v.${finalAttrs.version}";
     hash = "sha256-Abe7mSbdj06MossUQXCKZPzzfyvJyRVeLfzINYNPv4g=";
   };
 

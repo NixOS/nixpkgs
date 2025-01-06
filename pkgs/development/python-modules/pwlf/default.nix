@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cjekel";
     repo = "piecewise_linear_fit_py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FAH38mSaABdNR8lpxxA/YVo5ec2WYOMEsAQqravbM9k=";
   };
 

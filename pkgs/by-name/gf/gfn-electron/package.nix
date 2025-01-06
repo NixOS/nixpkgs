@@ -16,7 +16,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "hmlendea";
     repo = "gfn-electron";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kTnM4wSDqP2V8hb4mDhbQYpVYouSnUkjuuCfITb/xgY=";
   };
 

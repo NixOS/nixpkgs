@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
   };
 

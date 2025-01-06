@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andylockran";
     repo = "heatmiserV3";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ia0QUMDvuvn2af52lW7ObSQ9MSPNOgWyBuFBnqfYrpM=";
   };
 

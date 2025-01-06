@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4MweCuZbo/XDur9iwM3MT/P75HjEQvMlPI82bDxuol8=";
   };
 

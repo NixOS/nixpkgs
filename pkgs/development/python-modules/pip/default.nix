@@ -36,7 +36,7 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-yojk2T5wuPkS1OKusilj253AT+xyKwXCWKBNUEH2Mgo=";
     };
 

@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LejyuGYgW46++95XROuWc13Q+w0l+AzGAl9ekfmAIEk=";
   };
 

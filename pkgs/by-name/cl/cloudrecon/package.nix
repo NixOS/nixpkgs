@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "CloudRecon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SslHkwoMelvszrQZvNX28EokBgwnPDBbTUBA9jdJPro=";
   };
 

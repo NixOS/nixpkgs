@@ -127,7 +127,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "BentoML";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-98SVW7f/Yn+NMfS6UIicQcoatMSm4XSJzbuJ0S/p3sg=";
   };
 

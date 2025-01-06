@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "redcode-labs";
     repo = "GodSpeed";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-y/mCfNWe5ShdxEz8IUQ8zUzgVkUy/+5lX6rcJ3r6KoI=";
   };
 

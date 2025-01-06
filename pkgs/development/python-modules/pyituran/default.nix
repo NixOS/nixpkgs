@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shmuelzon";
     repo = "pyituran";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rgPW+z70Z9wRzPbPtWUHb80vCccWJlEs18Y6llIeipo=";
   };
 

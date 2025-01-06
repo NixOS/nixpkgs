@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludlows";
     repo = "PESQ";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JuwZ+trFKGMetS3cC3pEQsV+wbj6+klFnC3THOd8bPE=";
   };
 

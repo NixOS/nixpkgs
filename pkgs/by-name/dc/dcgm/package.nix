@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PysxuN5WT7GB0oOvT5ezYeOau6AMVDDWE5HOAcmqw/Y=";
   };
 

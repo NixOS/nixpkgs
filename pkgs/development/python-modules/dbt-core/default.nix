@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BoCp3aNVR7Bvjda5YLwRAwvZub4sqNJLRoEQ+tePP5g=";
   };
 

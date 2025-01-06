@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bartTC";
     repo = "django-markup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dj5Z36W4Stly203SKWpR/DF+Wf7+ejbZnDCmHNRb3c0=";
   };
 

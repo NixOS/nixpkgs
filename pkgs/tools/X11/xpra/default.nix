@@ -76,13 +76,13 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.2.1";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     rev = "v${version}";
-    hash = "sha256-TdRQcl0o9L37JXWxoWkAw9sAH5eWpynWkCwo1tBwa9s=";
+    hash = "sha256-YLz2Ex3gHabicPbGj5BFP1pwU/8K/bu4R7cWi1Fu2oM=";
   };
 
   patches = [

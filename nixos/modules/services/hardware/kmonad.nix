@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -37,6 +38,19 @@ let
             need extra permissions in order to read the keyboard device
             file.  If your keyboard's device file isn't in the input
             group, you'll need to list its group in this option.
+          '';
+        };
+
+        enableHardening = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          example = false;
+          description = ''
+            Whether to enable systemd hardening.
+
+            ::: {.note}
+            If KMonad is used to execute shell commands, hardening may make some of them fail.
+            :::
           '';
         };
 
@@ -118,19 +132,8 @@ let
   # Build a systemd service that starts KMonad:
   mkService =
     keyboard:
-    let
-      cmd =
-        [
-          (lib.getExe cfg.package)
-          "--input"
-          ''device-file "${keyboard.device}"''
-        ]
-        ++ cfg.extraArgs
-        ++ [ "${mkCfg keyboard}" ];
-    in
     lib.nameValuePair (mkName keyboard.name) {
       description = "KMonad for ${keyboard.device}";
-      script = lib.escapeShellArgs cmd;
       unitConfig = {
         # Control rate limiting.
         # Stop the restart logic if we restart more than
@@ -138,22 +141,60 @@ let
         StartLimitIntervalSec = 2;
         StartLimitBurst = 5;
       };
-      serviceConfig = {
-        Restart = "always";
-        # Restart at increasing intervals from 2s to 1m
-        RestartSec = 2;
-        RestartSteps = 30;
-        RestartMaxDelaySec = "1min";
-        Nice = -20;
-        DynamicUser = true;
-        User = "kmonad";
-        Group = "kmonad";
-        SupplementaryGroups = [
-          # These ensure that our dynamic user has access to the device node
-          config.users.groups.input.name
-          config.users.groups.uinput.name
-        ] ++ keyboard.extraGroups;
-      };
+      serviceConfig =
+        {
+          ExecStart = ''
+            ${lib.getExe cfg.package} ${mkCfg keyboard} \
+              ${utils.escapeSystemdExecArgs cfg.extraArgs}
+          '';
+          Restart = "always";
+          # Restart at increasing intervals from 2s to 1m
+          RestartSec = 2;
+          RestartSteps = 30;
+          RestartMaxDelaySec = "1min";
+          Nice = -20;
+          DynamicUser = true;
+          User = "kmonad";
+          Group = "kmonad";
+          SupplementaryGroups = [
+            # These ensure that our dynamic user has access to the device node
+            config.users.groups.input.name
+            config.users.groups.uinput.name
+          ] ++ keyboard.extraGroups;
+        }
+        // lib.optionalAttrs keyboard.enableHardening {
+          DeviceAllow = [
+            "/dev/uinput w"
+            "char-input r"
+          ];
+          CapabilityBoundingSet = [ "" ];
+          DevicePolicy = "closed";
+          IPAddressDeny = [ "any" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateNetwork = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [ "none" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = [ "native" ];
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@resources"
+          ];
+          UMask = "0077";
+        };
       # make sure the new config is used after nixos-rebuild switch
       # stopIfChanged controls[0] how a service is "restarted" during
       # nixos-rebuild switch.  By default, stopIfChanged is true, which stops
@@ -194,6 +235,17 @@ in
 
   config = lib.mkIf cfg.enable {
     hardware.uinput.enable = true;
+
+    services.udev.extraRules =
+      let
+        mkRule = name: ''
+          ACTION=="add", KERNEL=="event*", SUBSYSTEM=="input", ATTRS{name}=="${name}", ATTRS{id/product}=="5679", ATTRS{id/vendor}=="1235", SYMLINK+="input/by-id/${name}"
+        '';
+      in
+      lib.foldlAttrs (
+        rules: _: keyboard:
+        rules + "\n" + mkRule (mkName keyboard.name)
+      ) "" cfg.keyboards;
 
     systemd = {
       paths = lib.mapAttrs' (_: mkPath) cfg.keyboards;

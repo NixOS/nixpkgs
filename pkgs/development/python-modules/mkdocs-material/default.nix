@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uhUatalHcObQbar1xbdR44FnQs/+qS4ad0sdB2jH/OU=";
   };
 

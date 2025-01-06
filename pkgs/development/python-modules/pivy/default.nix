@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wWM8eKTehWCIbRxxWkZ4YrYyeIJuzQaBOUMrW9a5MVo=";
   };
 

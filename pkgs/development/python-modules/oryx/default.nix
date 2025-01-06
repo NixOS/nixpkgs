@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jax-ml";
     repo = "oryx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1n7ogGuFNAeOyXWe0/pAouhg2+aA3MXxlCcsrfqRTdU=";
   };
 

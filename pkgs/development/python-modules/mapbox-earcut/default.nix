@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xR+nO5xdoDUhWZM19DOid3lsEXBood5NofQ0SezJ9OE=";
   };
 

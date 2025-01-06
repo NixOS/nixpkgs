@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WPRTX8yB4oP/L5DjSq9M6WOmHJDpQv0sAbuosp7ZGVw=";
   };
 

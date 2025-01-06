@@ -19,7 +19,6 @@
   cargo,
   rustPlatform,
   rustc,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,9 +56,6 @@ stdenv.mkDerivation rec {
       sqlite
       curl
       libarchive
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      apple-sdk_11
     ]
     ++ lib.optionals (!stdenv.isDarwin) [
       gpm

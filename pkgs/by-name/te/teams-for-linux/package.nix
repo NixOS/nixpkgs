@@ -20,7 +20,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-w2JcNynsbkk29Lx3XiEGSRzSfrA1NbD0NiTDAYvpl+o=";
   };
 

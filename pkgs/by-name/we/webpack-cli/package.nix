@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "webpack";
     repo = "webpack-cli";
-    rev = "refs/tags/webpack-cli@${finalAttrs.version}";
+    tag = "webpack-cli@${finalAttrs.version}";
     hash = "sha256-OjehyUw54n7/CKbDTVFCtcUp88tJCLUlBCJBQRXoyZM=";
   };
 

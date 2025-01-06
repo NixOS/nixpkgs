@@ -5,20 +5,18 @@
   thunar,
   exo,
   libxfce4util,
-  intltool,
   gettext,
 }:
 
 mkXfceDerivation {
   category = "thunar-plugins";
   pname = "thunar-archive-plugin";
-  version = "0.5.2";
+  version = "0.5.3";
   odd-unstable = false;
 
-  sha256 = "sha256-vbuFosj2qxDus7vu9WfRiFpLwnTRnmLVGCDa0tNQecU=";
+  sha256 = "sha256-9EjEQml/Xdj/jCtC4ZuGdmpeNnOqUWJOqoVzLuxzG6s=";
 
   nativeBuildInputs = [
-    intltool
     gettext
   ];
 

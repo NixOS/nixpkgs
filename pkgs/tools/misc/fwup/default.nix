@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-XdWEvIM+gNQVmNPwtcka+lZwmNIWpxAIMGBjY0b9QNM=";
+    sha256 = "sha256-WYolvHAK7l1HJZuBXsPJ+X6uzWFHBlHELx4zvD/S934=";
   };
 
   nativeBuildInputs = [

@@ -12,16 +12,16 @@
 }:
 buildGoModule rec {
   pname = "cunicu";
-  version = "0.6.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "cunicu";
     repo = "cunicu";
     rev = "v${version}";
-    hash = "sha256-bDXZ0a9yQZMHmNrwKRQzLoPtwkthDIDRhBxDAeXN064=";
+    hash = "sha256-rUUJMvT3JkIehoWLOtruUSU8YbKd6mS7Wp2TXwn9aVE=";
   };
 
-  vendorHash = "sha256-g2FA5b/80yRwIbAf3Sot74Eftj/Q/bTBj8lK+tQ2UNg=";
+  vendorHash = "sha256-yFpkYI6ue5LXwRCj4EqWDBaO3TYzZ3Ov/39PRQWMWzk=";
 
   nativeBuildInputs = [
     installShellFiles

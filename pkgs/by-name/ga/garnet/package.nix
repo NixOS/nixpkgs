@@ -13,7 +13,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "garnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L+yML0VgD+rTReRurfH78U4uXZJWOW4mE+dmBQRbb9U=";
   };
 

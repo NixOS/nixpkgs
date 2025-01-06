@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kcp-dev";
     repo = "kcp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vFwZerOW1H3qR428cSl5mnz8KthO20BWk8gUjOq1OfU=";
   };
   vendorHash = "sha256-p0dfkI1YPfQpIeFzRnI+ayge7kbjXT49XuCYP6FPXTQ=";

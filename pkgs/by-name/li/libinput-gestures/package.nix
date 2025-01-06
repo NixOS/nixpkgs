@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bulletmark";
     repo = "libinput-gestures";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-J9+KbaZYDPJzl/AE1gq6KNXIJns+XxoAL1oOSy7UTtY=";
   };
   patches = [

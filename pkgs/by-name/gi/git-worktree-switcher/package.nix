@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mateusauler";
     repo = "git-worktree-switcher";
-    rev = "refs/tags/${finalAttrs.version}-fork";
+    tag = "${finalAttrs.version}-fork";
     hash = "sha256-N+bDsLEUM6FWhyliUav2n5hwMa5EEuVPoIK+Cja0DxA=";
   };
 

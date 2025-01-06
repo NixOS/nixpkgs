@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qqvjLSGZx4F1U80jc0z42D7PuBw3D7EEbL4+GoTJgoE=";
   };
 

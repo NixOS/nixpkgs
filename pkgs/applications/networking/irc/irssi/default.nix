@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
+    perl
     pkg-config
   ];
 
@@ -38,7 +39,6 @@ stdenv.mkDerivation rec {
     libotr
     ncurses
     openssl
-    perl
   ];
 
   configureFlags = [

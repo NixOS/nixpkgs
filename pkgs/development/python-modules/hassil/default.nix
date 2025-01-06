@@ -17,19 +17,17 @@
 
 let
   pname = "hassil";
-  version = "2.0.5";
+  version = "2.1.0";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-e6Y0GGURGKzbX1dniBbYEJB9K3/R84n3UmnMO0HPPPo=";
+    hash = "sha256-CGobMgaDHcruvOzVBIc6xS0tuaMT410t62KD3Hg30EY=";
   };
 
   build-system = [ setuptools ];

@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z+7yeX0ea/6+4aWbA5NYW/HzvVcJiSkewOvo+oXp9bE=";
   };
 

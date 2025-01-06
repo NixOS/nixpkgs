@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NagiosEnterprises";
     repo = "nagioscore";
-    rev = "refs/tags/nagios-${finalAttrs.version}";
+    tag = "nagios-${finalAttrs.version}";
     hash = "sha256-aOHdMZJCrGeJ3XA3+ed3JUb7X1FdfdGiT2ytzBDAT4c=";
   };
 

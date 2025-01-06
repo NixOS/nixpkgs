@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lMn60vtOMPs1Tr+SnAOUZDrNIO7gEXdHpizjXiEkkoM=";
   };
 

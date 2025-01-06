@@ -113,9 +113,6 @@ def parse_components(version: str = "master"):
             specific_integrations=None,
             action="generate",
             requirements=False,
-            core_integrations_path=pathlib.Path(
-                os.path.join(core_path, "homeassistant/components")
-            ),
         )
         integrations = Integration.load_dir(config.core_integrations_path, config)
         for domain in sorted(integrations):

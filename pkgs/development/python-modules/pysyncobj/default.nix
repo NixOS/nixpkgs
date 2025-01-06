@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bakwc";
     repo = "PySyncObj";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZWzvvv13g/iypm+MIl5q0Y8ekqzZEY5upSTPk3MFTPI=";
   };
 

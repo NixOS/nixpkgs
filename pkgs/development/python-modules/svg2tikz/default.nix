@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xyz2tex";
     repo = "svg2tikz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5SOUvrK83ff1x4MTVoJy68OaDmZUfrEwraEWmPMJKTA=";
   };
 

@@ -5,7 +5,6 @@
   libpng,
   libjpeg,
   libwebp,
-  erlang,
   openssl,
   expat,
   libyaml,
@@ -155,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [ erlang ]
+    [ beamPackages.erlang ]
     ++ builtins.attrValues beamDeps
     ++ lib.optional withMysql allBeamDeps.p1_mysql
     ++ lib.optional withPgsql allBeamDeps.p1_pgsql
@@ -169,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "processone";
     repo = "ejabberd";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-9TyIgsinUpUbirwqg61EYnPB/OyE5vhl3MBMRihqAtE=";
   };
 

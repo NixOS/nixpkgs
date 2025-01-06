@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = pname;
     owner = "wagtail-nest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IG7e7YomMM7K2IlJ1Dr1zo+blDPHnu/JeS5csos8ncc=";
   };
 

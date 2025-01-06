@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "ruler";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cEYpK1LB9b65xr6MCMax1vUtSWefjJdXNs4sPgx65d0=";
   };
 

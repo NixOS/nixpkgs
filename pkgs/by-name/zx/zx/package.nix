@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "zx";
-  version = "8.2.4";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
     rev = version;
-    hash = "sha256-P2hQ00Q/k9wj/R09DtnRkTOk3t0vSWK8b2J7a01FN4s=";
+    hash = "sha256-bzsod4kZVffFTVwfU0CvK4L3lYJW9zaP1PUMLTEJflw=";
   };
 
-  npmDepsHash = "sha256-xxq/LfTXW7UX/CzM8aD59/efEDVykVekNGdCifPWLhU=";
+  npmDepsHash = "sha256-lYrMcnix1pTG21NKcXe2fPhsSbXfMt1elqBxgfBtdaI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

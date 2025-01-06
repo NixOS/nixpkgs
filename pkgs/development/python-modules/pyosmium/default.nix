@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "pyosmium";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pW2w/M4P4DtGhnTy72w0wjMtpLtSgvYGaemme/rRrwM=";
   };
 

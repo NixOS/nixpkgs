@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-qldb-driver-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u8wI8ThD/BA+WI62OvNFmYvcqr018wgrh+5J+p2A6hM=";
   };
 

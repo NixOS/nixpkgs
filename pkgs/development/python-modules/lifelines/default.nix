@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rbt0eON8Az5jDvj97RDn3ppWyjbrSa/xumbwhq21g6g=";
   };
 

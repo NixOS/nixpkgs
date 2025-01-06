@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "valayDave";
     repo = "tell-me-your-secrets";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3ZJyL/V1dsW6F+PiEhnWpv/Pz2H9/UKSJWDgw68M/Z8=";
   };
 

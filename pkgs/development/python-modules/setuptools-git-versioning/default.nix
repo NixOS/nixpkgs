@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dolfinus";
     repo = "setuptools-git-versioning";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xugK/JOVA53nCK8bB0gPkhIREmy0+/OthsydfYRCYno=";
   };
 

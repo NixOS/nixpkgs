@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kanboard";
     repo = "kanboard";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/PFE5h4elHFNbbIssoGMDkhGkEIec2uEMz+vU+DN5D0=";
   };
 

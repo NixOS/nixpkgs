@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
-    rev = "refs/tags/blivet-${version}";
+    tag = "blivet-${version}";
     hash = "sha256-X5U6XFmcsTfetpxwH0ONSnTasnwh2USukYtx+8HwVGc=";
   };
 

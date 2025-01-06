@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-watcherclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lDdiZKaeteKZEyfjpBx8KY+0FLFOYAnQXl0pTbqq0Ss=";
   };
 

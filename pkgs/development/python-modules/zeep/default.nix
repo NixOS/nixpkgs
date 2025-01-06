@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bBKNKgS3V/sZ8lZMk2ZwTzOVaVecSR9GhNP2FNkWbw0=";
   };
 

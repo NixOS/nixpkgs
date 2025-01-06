@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       sed -i "
         s,/sbin/modprobe,${kmod}&,;
         s,/lib/udev/,$out/sbin/,;
+        s,__UDEVHELPERDIR__/,$out/lib/udev/,;
       " udev/* # fix-color */
       sed -i "
         s,/lib/firmware,$out&,;

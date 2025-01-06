@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-agent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Sc2mqfOKXjiGtUVvo/pIRvSgDPaFeiK7UoWHhTtucFQ=";
     fetchSubmodules = true;
   };

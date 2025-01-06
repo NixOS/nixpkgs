@@ -8,7 +8,7 @@ let
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tq2pBvGHDdZoi2EMgBIgNgsg3Ovh2PLCvET98oB+7Sw=";
   };
 in

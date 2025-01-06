@@ -432,7 +432,7 @@ buildStdenv.mkDerivation {
   ]
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
-     "--enable-lto=cross" # Cross-Language LTO
+     "--enable-lto=cross,full" # Cross-Language LTO
      "--enable-linker=lld"
   ]
   ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")

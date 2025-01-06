@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ktorio";
     repo = "ktor-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UOO6hoUZazlrP+OJ6WCdY358wnRnAiQHEXrOpN7ZIvU=";
   };
 

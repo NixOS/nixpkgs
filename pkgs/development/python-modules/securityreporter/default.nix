@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fpsvjbPE6iaOmLxykGSkCjkhFTmb8xhXa8pDrWN66KM=";
   };
 

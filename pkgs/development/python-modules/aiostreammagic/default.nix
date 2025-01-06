@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiostreammagic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CFd8/nyE3hLbmzO/MJEnllIe2MvfD/jkGIpNdYxI8N0=";
   };
 

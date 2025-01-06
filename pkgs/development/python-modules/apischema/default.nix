@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wyfo";
     repo = "apischema";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YFJbNxCwDrJb603Bf8PDrvhVt4T53PNWOYs716c0f1I=";
   };
 

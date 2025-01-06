@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tEKmwDZOoGIXfJqxIat6WTbEv4EkiwkJGMpNxfv2Zd0=";
   };
 

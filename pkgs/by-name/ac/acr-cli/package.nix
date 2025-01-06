@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "acr-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h4vRtxAu/ggEu5HuzaiEoLslOyAXP1rMI1/ua9YARug=";
   };
 

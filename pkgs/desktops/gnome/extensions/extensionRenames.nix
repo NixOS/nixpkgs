@@ -23,6 +23,9 @@
   "nepali-date@biplab" = "nepali-calendar";
   "nepali-calendar-gs-extension@subashghimire.info.np" = "nepali-calendar-2";
 
+  "mousefollowsfocus@matthes.biz" = "mouse-follows-focus";
+  "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
+
   "power-profile-indicator@laux.wtf" = "power-profile-indicator";
   "power-profile@fthx" = "power-profile-indicator-2";
 

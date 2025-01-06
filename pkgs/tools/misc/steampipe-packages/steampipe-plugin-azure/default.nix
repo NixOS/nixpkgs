@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe-plugin-azure";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MVLOAD/Ukvg0ox/aFdm1sx/BkS8gmKhexjt0CnUO+s4=";
   };
 

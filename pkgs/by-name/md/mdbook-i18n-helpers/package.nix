@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "google";
     repo = "mdbook-i18n-helpers";
     # TODO fix once upstream uses semver for tags again
-    rev = "refs/tags/mdbook-i18n-helpers-${version}";
+    tag = "mdbook-i18n-helpers-${version}";
     hash = "sha256-FdguzuYpMl6i1dvoPNE1Bk+GTmeTrqLUY/sVRsbETtU=";
   };
 

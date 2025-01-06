@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf-coordinates-schemas";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LuC0m25OqQwivK/Z3OfoCtdhBV87rk16XrkJxUxG07o=";
   };
 

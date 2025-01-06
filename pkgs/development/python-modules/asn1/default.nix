@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrivet";
     repo = "python-asn1";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xdkSJIe7qmz0Zu5IZ3Rl/h4v2j3YFrm1gz7lsNQ0ORs=";
   };
 

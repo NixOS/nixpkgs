@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aoi+in5A8qSdQNY3V4S4wBBfPchR1an7G6GQHDhgxpQ=";
   };
 

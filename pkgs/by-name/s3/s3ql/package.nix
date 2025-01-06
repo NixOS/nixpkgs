@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s3ql";
     repo = "s3ql";
-    rev = "refs/tags/s3ql-${version}";
+    tag = "s3ql-${version}";
     hash = "sha256-hNqKLpJd0vj96Jx4YnqYsPLq/iTbvmtvjyLrYozaxpk=";
   };
 

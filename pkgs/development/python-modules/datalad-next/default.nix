@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad-next";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fqP6nG2ncDRg48kvlsmPjNBOzfQp9+7wTcGvsYVrRzA=";
   };
 

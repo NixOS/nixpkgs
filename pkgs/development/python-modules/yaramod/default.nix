@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "avast";
     repo = "yaramod";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-npEg6eJpxX4ZTS7KFRIBoVVk+JnA6vTqU7aD3zmnxk0=";
   };
 

@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschneier";
     repo = "django-storages";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
   };
 

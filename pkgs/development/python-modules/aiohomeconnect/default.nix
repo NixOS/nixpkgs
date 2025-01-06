@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E+2IQy3O+ccvZfjlORo+eTd+l41FSXk1dIE2Adrn3Ok=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pjanuario";
     repo = "pyecoforest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C8sFq0vsVsq6irWbRd0eq18tfKu0qRRBZHt23CiDTGU=";
   };
 

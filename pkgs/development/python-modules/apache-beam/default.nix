@@ -55,7 +55,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JeVYfXAx/GBGXQKAt6pSpnxH83oyeDylEY12EDzMxnw=";
   };
 

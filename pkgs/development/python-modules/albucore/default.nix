@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bIsJ9o1gPCGJZXrzZbRXzS3ZQURcRaWmGBQZsAdX0eg=";
   };
 

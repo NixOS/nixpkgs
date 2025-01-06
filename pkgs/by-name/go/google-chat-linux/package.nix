@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "squalou";
     repo = "google-chat-linux";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JBjxZUs0HUgAkJJBYhNv2SHjpBtAcP09Ah4ATPwpZsQ=";
   };
 

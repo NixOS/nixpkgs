@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-extract";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Uw9bSVOpiIALkgA77OrqAcDWcEafVSnp4iILa4Jkykc=";
   };
 

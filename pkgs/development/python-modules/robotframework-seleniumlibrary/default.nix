@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ULY0FH1RFQIlhS45LU3vUKi6urZJHiDgi6NdqU5tV2g=";
   };
 

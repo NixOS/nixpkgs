@@ -12,7 +12,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true; # for tests
     hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
   };

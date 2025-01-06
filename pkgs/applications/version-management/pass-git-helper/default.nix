@@ -17,7 +17,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "pass-git-helper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DLH3l4wYfBlrc49swLgyHeZXebJ5JSzU7cHjD7Hmw0g=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zB792ZwDWd74YBYvQ5au0t2RWTIAqrWvNtQ/e+ZEk50=";
   };
 

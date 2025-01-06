@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-JbI/ScCFCvHbK9JZzHuT67uSAL3546et+gtTkwRnCSE=";
   };
 

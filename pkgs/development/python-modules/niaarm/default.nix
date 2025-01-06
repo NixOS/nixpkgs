@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rYFfLtPJgIdSjRIzDIQeHwoQm9NrI6nM3/BF7wAMr1Y=";
   };
 

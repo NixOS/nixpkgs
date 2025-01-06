@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mV5b/J9wX9niiYtlmAUouaAm9mY2zTtDmex7FNWcezQ=";
   };
 

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "The-Compiler";
     repo = "journalwatch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha512-60+ewzOIox2wsQFXMAgD7XN+zvPA1ScPz6V4MB5taVDhqCxUTMVOxodf+4AMhxtNQloXZ3ye7/0bjh1NPDjxQg==";
   };
 

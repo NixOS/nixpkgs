@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "screenly";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iEz6LFPzOZCOvUMx3s6entcwyEsAKirY8CiIoId/Ie0=";
   };
 
