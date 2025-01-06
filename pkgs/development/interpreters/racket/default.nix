@@ -252,5 +252,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "racket";
     platforms = lib.platforms.${if isMinimal then "all" else "unix"};
+    badPlatforms = lib.platforms.darwin;
   };
 })
