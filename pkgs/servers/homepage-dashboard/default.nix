@@ -10,7 +10,6 @@
   nixosTests,
   enableLocalIcons ? false,
   nix-update-script,
-  git,
 }:
 let
   dashboardIcons = fetchFromGitHub {
