@@ -96,7 +96,8 @@ in
               ];
             in
             {
-              ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
+              Type = "notify";
+              ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog up_sdnotify";
               Restart = "always";
               RestartSec = 5;
 
@@ -145,7 +146,7 @@ in
               RuntimeDirectory = "pppd";
               RuntimeDirectoryPreserve = true;
             };
-          wantedBy = mkIf peerCfg.autostart [ "multi-user.target" ];
+          wantedBy = mkIf peerCfg.autostart [ "network.target" ];
         };
       };
 
