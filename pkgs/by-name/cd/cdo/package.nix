@@ -42,12 +42,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enable_all_static "--enable-all-static"
     ++ lib.optional enable_cxx "--enable-cxx";
 
-  # address error: 'TARGET_OS_MACCATALYST' is not defined,
-  # evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
-  # we don't want to appear to be a catalyst build;
-  # we are a TARGET_OS_MAC
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_MACCATALYST=0";
-
   meta = with lib; {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
     mainProgram = "cdo";
