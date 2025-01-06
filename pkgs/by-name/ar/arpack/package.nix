@@ -13,7 +13,7 @@ assert useMpi -> !blas.isILP64;
 assert useAccel -> stdenv.hostPlatform.isDarwin;
 
 stdenv.mkDerivation rec {
-  pname = "arpack";
+  pname = "arpack${lib.optionalString useMpi "-mpi"}";
   version = "3.9.1";
 
   src = fetchFromGitHub {
