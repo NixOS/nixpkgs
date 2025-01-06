@@ -30,6 +30,7 @@ args@{
   # [1]: https://github.com/bazelbuild/rules_cc
 , removeRulesCC ? true
 , removeLocalConfigCc ? true
+, removeLocalConfigSh ? true
 , removeLocal ? true
 
   # Use build --nobuild instead of fetch. This allows fetching the dependencies
@@ -154,9 +155,15 @@ stdenv.mkDerivation (fBuildAttrs // {
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       ${lib.optionalString removeRulesCC "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}"}
+
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
       ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}"}
       ${lib.optionalString removeLocal "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}"}
+
+      # For bazel version >= 6 with bzlmod.
+      ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/*[~+]{local_config_cc,local_config_cc.marker}"}
+      ${lib.optionalString removeLocalConfigSh "rm -rf $bazelOut/external/*[~+]{local_config_sh,local_config_sh.marker}"}
+      ${lib.optionalString removeLocal "rm -rf $bazelOut/external/*[~+]{local_jdk,local_jdk.marker}"}
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
