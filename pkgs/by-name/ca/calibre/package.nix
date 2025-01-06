@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  unrarSupport ? false
+  unrarSupport ? false,
 }:
 
 let
@@ -21,7 +21,10 @@ let
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${version}";
     license = if unrarSupport then licenses.unfreeRedistributable else licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub noghartt ];
+    maintainers = with maintainers; [
+      pSub
+      noghartt
+    ];
     platforms = platforms.unix ++ platforms.darwin;
   };
 in

@@ -4,7 +4,7 @@
   meta,
   stdenv,
   fetchurl,
-  _7zz
+  _7zz,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontFixup = true; # breaks notarization
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = [
+    "unpackPhase"
+    "installPhase"
+  ];
 
   unpackPhase = ''
     7zz x -snld $src
