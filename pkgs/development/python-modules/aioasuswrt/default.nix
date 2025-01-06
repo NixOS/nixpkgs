@@ -3,6 +3,7 @@
   asyncssh,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -24,18 +25,13 @@ buildPythonPackage rec {
     hash = "sha256-RQxIgAU9KsTbcTKc/Zl+aP77lbDSeiYzR48MtIVwacc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov-report html" "" \
-      --replace-fail "--cov-report term-missing" ""
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [ asyncssh ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
