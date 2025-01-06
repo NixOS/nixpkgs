@@ -1017,11 +1017,13 @@ in {
         # systemd clean --what=state is used to delete the account, so long as the user
         # then runs one of the cert services, there won't be any issues.
         accountTargets = lib.mapAttrs' (hash: confs: let
-          leader = "acme-${(builtins.head confs).cert}.service";
-          dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
+          dnsConfs = builtins.filter (conf: cfg.certs.${conf.cert}.dnsProvider != null) confs;
+          leaderConf = if dnsConfs != [ ] then builtins.head dnsConfs else builtins.head confs;
+          leader = "acme-${leaderConf.cert}.service";
+          followers = map (conf: "acme-${conf.cert}.service") (builtins.filter (conf: conf != leaderConf) confs);
         in lib.nameValuePair "acme-account-${hash}" {
-          requiredBy = dependantServices;
-          before = dependantServices;
+          requiredBy = followers;
+          before = followers;
           requires = [ leader ];
           after = [ leader ];
         }) (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));
