@@ -11,15 +11,16 @@
   pkg-config,
   python3,
   stdenv,
+  udev,
   wrapGAppsHook3,
 }:
 
 let
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchzip {
     url = "https://github.com/carrotIndustries/usbkvm/releases/download/v${version}/usbkvm-v${version}.tar.gz";
-    sha256 = "sha256-OuZ7+IjsvK7/PaiTRwssaQFJDFWJ8HX+kqV13CUyTZA=";
+    sha256 = "sha256-ng6YpaN7sKEBPJcJAm0kcYtT++orweWRx6uOZFnOGG8=";
   };
 
   ms-tools-lib = buildGoModule {
@@ -51,6 +52,7 @@ stdenv.mkDerivation {
     ninja
     makeWrapper
     wrapGAppsHook3
+    udev
   ];
 
   buildInputs = [
@@ -71,6 +73,11 @@ stdenv.mkDerivation {
       --replace-fail "@MSLIB_H_PRECOMPILED@" "${ms-tools-lib}/mslib.h"
   '';
 
+  # Install udev rules in this package's out path:
+  mesonFlags = [
+    "-Dudevrulesdir=lib/udev/rules.d"
+  ];
+
   postFixup =
     let
       GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
@@ -82,11 +89,6 @@ stdenv.mkDerivation {
       wrapProgram $out/bin/usbkvm \
         --prefix GST_PLUGIN_PATH : "${GST_PLUGIN_PATH}"
     '';
-
-  postInstall = ''
-    mkdir -p $out/lib/udev/rules.d/
-    cp ../70-usbkvm.rules $out/lib/udev/rules.d/
-  '';
 
   meta = {
     homepage = "https://github.com/carrotIndustries/usbkvm";
