@@ -14565,6 +14565,8 @@ self: super: with self; {
     inherit (pkgs) cmake ninja;
   };
 
+  seisbench = callPackage ../development/python-modules/seisbench { };
+
   selenium = callPackage ../development/python-modules/selenium { };
 
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
