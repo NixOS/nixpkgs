@@ -1679,6 +1679,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  arpack-mpi = arpack.override { useMpi = true; };
+
   inherit (callPackages ../data/fonts/arphic {})
     arphic-ukai arphic-uming;
 
