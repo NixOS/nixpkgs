@@ -103,6 +103,10 @@ buildPythonPackage rec {
       "test_to_yaml_file"
       # Tests expecting pytest-time
       "test_monitor_builds_success"
+      # Temporary fix until new release to support Python 3.13
+      "test_grammar_aware_part_error"
+      "test_grammar_aware_part_error[part2]"
+      "test_grammar_aware_project_error[project0]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
