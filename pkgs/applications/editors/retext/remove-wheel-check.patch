@@ -1,0 +1,28 @@
+From f07d08d3056c46f62674f65eabae0efa2b65d681 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Sat, 15 Oct 2022 16:53:27 +0200
+Subject: [PATCH] disable wheel check
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index a9cae37..e0e1e5b 100755
+--- a/setup.py
++++ b/setup.py
+@@ -101,7 +101,7 @@ def run(self):
+ 
+ 		desktop_file_path = join(self.install_data, 'share', 'applications',
+ 		                         'me.mitya57.ReText.desktop')
+-		if self.root and self.root.endswith('/wheel'):
++		if False and self.root and self.root.endswith('/wheel'):
+ 			# Desktop files don't allow relative paths, and we don't know the
+ 			# absolute path when building a wheel.
+ 			log.info('removing the .desktop file from the wheel')
+-- 
+2.37.3

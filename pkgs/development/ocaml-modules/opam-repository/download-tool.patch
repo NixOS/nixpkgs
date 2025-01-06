@@ -1,0 +1,37 @@
+diff --git a/src/repository/opamRepositoryConfig.ml b/src/repository/opamRepositoryConfig.ml
+index c2954c1d..528fc621 100644
+--- a/src/repository/opamRepositoryConfig.ml
++++ b/src/repository/opamRepositoryConfig.ml
+@@ -27,31 +27,7 @@ type 'a options_fun =
+   'a
+ 
+ let default = {
+-  download_tool = lazy (
+-    let os = OpamStd.Sys.os () in
+-    try
+-      let curl = "curl", `Curl in
+-      let tools =
+-        match os with
+-        | Darwin  -> ["wget", `Default; curl]
+-        | FreeBSD -> ["fetch", `Default ; curl]
+-        | OpenBSD -> ["ftp", `Default; curl]
+-        | _ -> [curl; "wget", `Default]
+-      in
+-      let cmd, kind =
+-        List.find (fun (c,_) -> OpamSystem.resolve_command c <> None) tools
+-      in
+-      [ CIdent cmd, None ], kind
+-    with Not_found ->
+-      OpamConsole.error_and_exit `Configuration_error
+-        "Could not find a suitable download command. Please make sure you \
+-         have %s installed, or specify a custom command through variable \
+-         OPAMFETCH."
+-        (match os with
+-         | FreeBSD -> "fetch"
+-         | OpenBSD -> "ftp"
+-         | _ -> "either \"curl\" or \"wget\"")
+-  );
++  download_tool = lazy ([ CIdent SUBSTITUTE_NIXOS_CURL_PATH, None ], `Curl);
+   validation_hook = None;
+   retries = 3;
+   force_checksums = None;
