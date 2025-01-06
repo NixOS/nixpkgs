@@ -125,11 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_ICON_CACHE=OFF"
     ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    "-DTARGET_OS_IPHONE=0"
-    "-DTARGET_OS_WATCH=0"
-  ]);
-
   dontWrapQtApps = true;
 
   preFixup = ''

@@ -4757,6 +4757,7 @@ with pkgs;
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
+  playwright = playwright-driver;
   playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
@@ -10884,7 +10885,6 @@ with pkgs;
     harfbuzz = harfbuzzFull;
     libsoup = libsoup_2_4;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
-    inherit (darwin) apple_sdk;
   };
 
   webkitgtk_4_1 = webkitgtk_4_0.override {

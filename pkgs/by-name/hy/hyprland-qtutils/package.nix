@@ -13,13 +13,13 @@ let
 in
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-qtutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zp2cQOo1D7WH7ml5nV7mLyto0l19gTaWnbDb6zty1Qs=";
+    hash = "sha256-FxbuGQExtN37ToWYnGmO6weOYN6WPHN/RAqbr7gNPek=";
   };
 
   nativeBuildInputs = [

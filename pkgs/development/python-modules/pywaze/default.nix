@@ -5,6 +5,7 @@
   hatchling,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -24,17 +25,13 @@ buildPythonPackage rec {
     hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report term-missing --cov=src/pywaze " ""
-  '';
-
   build-system = [ hatchling ];
 
   dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
   ];
