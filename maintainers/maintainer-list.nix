@@ -7010,7 +7010,10 @@
     github = "ethancedwards8";
     githubId = 60861925;
     name = "Ethan Carter Edwards";
-    keys = [ { fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458"; } ];
+    keys = [
+      { fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458"; }
+      { fingerprint = "2E51 F618 39D1 FA94 7A73  00C2 34C0 4305 D581 DBFE"; }
+    ];
   };
   ethercrow = {
     email = "ethercrow@gmail.com";
@@ -25184,8 +25187,8 @@
   yuka = {
     email = "yuka@yuka.dev";
     matrix = "@yuka:yuka.dev";
-    github = "yu-re-ka";
-    githubId = 86169957;
+    github = "yuyuyureka";
+    githubId = 193895068;
     name = "Yureka";
   };
   Yumasi = {
