@@ -1944,10 +1944,6 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  authoscope = callPackage ../tools/security/authoscope {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   avahi = callPackage ../development/libraries/avahi { };
 
   avahi-compat = callPackage ../development/libraries/avahi {
