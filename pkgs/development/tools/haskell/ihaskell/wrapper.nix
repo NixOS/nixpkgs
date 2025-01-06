@@ -22,7 +22,7 @@ let
   );
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
-    export GHC_PACKAGE_PATH="$(echo ${ihaskellEnv}/lib/*/package.conf.d| tr ' ' ':'):$GHC_PACKAGE_PATH"
+    export GHC_PACKAGE_PATH="$(${ihaskellEnv}/bin/ghc --print-global-package-db):$GHC_PACKAGE_PATH"
     export PATH="${
       lib.makeBinPath ([
         ihaskellEnv
