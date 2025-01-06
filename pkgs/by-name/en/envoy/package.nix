@@ -38,8 +38,8 @@ let
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-KQ0ZxLC/ZLLcypmb1UlVXvLWErLmxuednjKRFaBgKuQ=";
-      aarch64-linux = "sha256-DkibjmY1YND9Q2aQ41bhNdch0SKM5ghY2mjYSQfV30M=";
+      x86_64-linux = "sha256-qny2l+gIoWCVRZIodd/Tzuj88f/+ajNXeZo/b9XEfVE=";
+      aarch64-linux = "sha256-DkibjmY1YND9Q2aQ41bhNdch0SKM5ghY2mjYSQfV31N=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -73,6 +73,18 @@ buildBazelPackage rec {
       # cherry-pick of https://github.com/envoyproxy/envoy/commit/019f589da2cc8da7673edd077478a100b4d99436
       # drop with v1.33.x
       ./0005-deps-Bump-rules_rust-0.54.1-37056.patch
+
+      # patch gcc flags to work with GCC 14
+      # (silences erroneus -Werror=maybe-uninitialized and others)
+      # cherry-pick of https://github.com/envoyproxy/envoy/commit/448e4e14f4f188687580362a861ae4a0dbb5b1fb
+      # drop with v1.33.x
+      ./0006-gcc-warnings.patch
+
+      # Remove "-Werror" from protobuf build
+      # This is fixed in protobuf v28 and later:
+      # https://github.com/protocolbuffers/protobuf/commit/f5a1b178ad52c3e64da40caceaa4ca9e51045cb4
+      # drop with v1.33.x
+      ./0007-protobuf-remove-Werror.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -206,6 +218,8 @@ buildBazelPackage rec {
       "--noexperimental_strict_action_env"
       "--cxxopt=-Wno-error"
       "--linkopt=-Wl,-z,noexecstack"
+      "--config=gcc"
+      "--verbose_failures"
 
       # Force use of system Java.
       "--extra_toolchains=@local_jdk//:all"
