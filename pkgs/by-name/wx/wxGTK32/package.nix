@@ -25,7 +25,6 @@
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
   webkitgtk_4_0,
-  setfile,
 }:
 let
   catch = fetchFromGitHub {
@@ -78,7 +77,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       expat
-      setfile
     ];
 
   configureFlags =
@@ -113,17 +111,10 @@ stdenv.mkDerivation rec {
     !stdenv.hostPlatform.isDarwin
   ) "${libGLU.out}/lib ${libGL.out}/lib";
 
-  preConfigure =
-    ''
-      cp -r ${catch}/* 3rdparty/catch/
-      cp -r ${nanosvg}/* 3rdparty/nanosvg/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure \
-        --replace 'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' 'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
-      substituteInPlace configure \
-        --replace "-framework System" "-lSystem"
-    '';
+  preConfigure = ''
+    cp -r ${catch}/* 3rdparty/catch/
+    cp -r ${nanosvg}/* 3rdparty/nanosvg/
+  '';
 
   postInstall = "
     pushd $out/include
