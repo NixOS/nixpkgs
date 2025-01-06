@@ -11290,6 +11290,18 @@ final: prev:
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
   };
 
+  rzls-nvim = buildVimPlugin {
+    pname = "rzls.nvim";
+    version = "2024-12-24";
+    src = fetchFromGitHub {
+      owner = "tris203";
+      repo = "rzls.nvim";
+      rev = "494a0a377d84f7424fc95d5f04f57027e24dedd7";
+      sha256 = "0fb8r1csdqiggbb68p22a0q3624ck9752z9ay9iarqkkap0z9z7c";
+    };
+    meta.homepage = "https://github.com/tris203/rzls.nvim/";
+  };
+
   sad-vim = buildVimPlugin {
     pname = "sad.vim";
     version = "2019-02-18";
