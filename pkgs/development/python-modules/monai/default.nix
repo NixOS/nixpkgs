@@ -45,6 +45,8 @@ buildPythonPackage rec {
     torch
   ];
 
+  pythonRelaxDeps = [ "numpy" ]; # supported; see https://github.com/Project-MONAI/MONAI/pull/7857
+
   env.BUILD_MONAI = 1;
 
   doCheck = false; # takes too long; tries to download data
