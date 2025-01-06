@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pynecil";
-  version = "3.0.1";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
     tag = "v${version}";
-    hash = "sha256-Z4QuX562LKDtNbl1rWcnJbB3Qw0ZaQcJskPPy7DWvQs=";
+    hash = "sha256-mIMtmhnBctymjXlp47YEyW4RXqUU8+YDR/vG/oYSmQI=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
