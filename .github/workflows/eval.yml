@@ -295,20 +295,6 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
 
-      - name: Requesting maintainer reviews
-        run: |
-          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
-          # There appears to be no API to request reviews based on GitHub IDs
-          jq -r 'keys[]' comparison/maintainers.json \
-            | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
-
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-          AUTHOR: ${{ github.event.pull_request.user.login }}
-
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
         run: |
@@ -328,3 +314,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           NUMBER: ${{ github.event.number }}
+
+      - name: Requesting maintainer reviews
+        run: |
+          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
+          # There appears to be no API to request reviews based on GitHub IDs
+          jq -r 'keys[]' comparison/maintainers.json \
+            | while read -r id; do gh api /user/"$id" --jq .login; done \
+            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
