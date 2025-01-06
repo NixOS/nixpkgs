@@ -9,13 +9,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "ge25519";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,12 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-VKDPiSdufWwrNcZSRTByFU4YGoJrm48TDm1nt4VyclA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fe25519
     parts
     bitlist
