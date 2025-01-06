@@ -8470,6 +8470,8 @@ self: super: with self; {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
+  mplcursors = callPackage ../development/python-modules/mplcursors { };
+
   mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
 
   mplfinance = callPackage ../development/python-modules/mplfinance { };
