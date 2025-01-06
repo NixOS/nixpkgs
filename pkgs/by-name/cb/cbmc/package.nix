@@ -46,10 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [ cadical ];
-
-  # do not download sources
-  # link existing cadical instead
   patches = [
     (substituteAll {
       src = ./0001-Do-not-download-sources-in-cmake.patch;
@@ -104,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWITH_JBMC=OFF"
     "-Dsat_impl=cadical"
-    "-Dcadical_INCLUDE_DIR=${cadical.dev}/include"
   ];
 
   passthru.tests.version = testers.testVersion {
