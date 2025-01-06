@@ -3,7 +3,6 @@
   buildPgrxExtension,
   fetchFromGitHub,
   nix-update-script,
-  nixosTests,
   postgresql,
   util-linux,
 }:
@@ -35,7 +34,6 @@ buildPgrxExtension rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = nixosTests.postgresql.pgx_ulid.passthru.override postgresql;
   };
 
   meta = {

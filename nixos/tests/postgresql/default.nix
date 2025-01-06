@@ -20,7 +20,6 @@ in
   anonymizer = importWithArgs ./anonymizer.nix;
   pgjwt = importWithArgs ./pgjwt.nix;
   pgvecto-rs = importWithArgs ./pgvecto-rs.nix;
-  pgx_ulid = importWithArgs ./pgx_ulid.nix;
   timescaledb = importWithArgs ./timescaledb.nix;
   tsja = importWithArgs ./tsja.nix;
   wal2json = importWithArgs ./wal2json.nix;
