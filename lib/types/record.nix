@@ -67,9 +67,8 @@ let
             builtins.addErrorContext "while evaluating the field `${fieldName}' of option `${showOption loc}'" (
               (mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (
                 data.${fieldName} or [ ]
-                # FIXME: isn't this handled by `mergeDefinitions` already?
                 ++ optional (fieldOption ? default) {
-                  value = fieldOption.default;
+                  value = lib.mkOptionDefault fieldOption.default;
                   file = "the default value of option ${showOption loc}";
                 }
               )).mergedValue
@@ -77,22 +76,12 @@ let
           ) fields';
           optionalFieldValues = lib.concatMapAttrs (
             fieldName: fieldOption:
+            let
+              opt = mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (data.${fieldName} or [ ]);
+            in
             builtins.addErrorContext
               "while evaluating the optional field `${fieldName}' of option `${showOption loc}'"
-              (
-                let
-                  opt = mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (
-                    data.${fieldName} or [ ]
-                    # TODO: surely defaults make no sense for optional fields?
-                    # And doesn't mergeDefinitions do this internally, anyway?
-                    ++ optional (fieldOption ? default) {
-                      value = fieldOption.default;
-                      file = "the default value of option ${showOption loc}";
-                    }
-                  );
-                in
-                lib.optionalAttrs opt.isDefined { ${fieldName} = opt.mergedValue; }
-              )
+              (lib.optionalAttrs opt.isDefined { ${fieldName} = opt.mergedValue; })
           ) optionalFields';
           extraData = removeAttrs data (attrNames fields' ++ attrNames optionalFields');
         in
