@@ -26,7 +26,7 @@
   # Runtime dependencies
   arrow-cpp,
   babeltrace,
-  boost182, # using the version installed by ceph's `install-deps.sh`
+  boost,
   bzip2,
   cryptsetup,
   cunit,
@@ -289,7 +289,7 @@ let
       };
   };
 
-  boost = boost182.override {
+  boost' = boost.override {
     enablePython = true;
     inherit python;
   };
@@ -358,6 +358,26 @@ rec {
         stripLen = 1;
         extraPrefix = "src/s3select/";
       })
+
+      (fetchpatch2 {
+        name = "ceph-gcc-14.patch";
+        url = "https://github.com/ceph/ceph/commit/0eace4ea9ea42412d4d6a16d24a8660642e41173.patch?full_index=1";
+        hash = "sha256-v+AExf/npe4NgmVl2j6o8860nwF9YuzC/vR0TWxTrIE=";
+      })
+
+      ./boost-1.85.patch
+
+      (fetchpatch2 {
+        name = "ceph-boost-1.86-uuid.patch";
+        url = "https://github.com/ceph/ceph/commit/01306208eac492ee0e67bff143fc32d0551a2a6f.patch?full_index=1";
+        hash = "sha256-OnDrr72inzGXXYxPFQevsRZImSvI0uuqFHqtFU2dPQE=";
+      })
+
+      # See:
+      # * <https://github.com/boostorg/python/issues/394>
+      # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
+      # * <https://github.com/ceph/ceph/pull/60999>
+      ./boost-1.86-PyModule.patch
     ];
 
     nativeBuildInputs = [
@@ -385,7 +405,7 @@ rec {
       ++ [
         arrow-cpp
         babeltrace
-        boost
+        boost'
         bzip2
         # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
         # This is important, otherwise the build system may not find the Python deps and then

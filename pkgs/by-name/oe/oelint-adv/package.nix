@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "6.1.0";
+  version = "6.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-adv";
     tag = version;
-    hash = "sha256-bDttjeHcIK90W7zPrKNAS4B1L9mibaRjQdnUAU2N8as=";
+    hash = "sha256-vScQzj461Pw4m83581FPSgfQIkfeehCSyFioxEgpSDE=";
   };
 
   build-system = with python3Packages; [
@@ -41,7 +41,10 @@ python3Packages.buildPythonApplication rec {
     "TestClassOelintVarsHomepagePing"
   ];
 
-  pythonRelaxDeps = [ "argcomplete" ];
+  pythonRelaxDeps = [
+    "argcomplete"
+    "urllib3"
+  ];
 
   pythonImportsCheck = [ "oelint_adv" ];
 
