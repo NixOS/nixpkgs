@@ -100,13 +100,15 @@ phpPackage.buildComposerProject rec {
       --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
       --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
-    substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
-    substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
-    substituteInPlace $out/snmp-scan.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/LibreNMS/wrapper.py --replace-fail '/usr/bin/env php' '${phpPackage}/bin/php'
+    substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/lnms --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
+
+    php $out/artisan vue-i18n:generate --multi-locales --format=umd
 
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
     ln -s ${logDir} $out/logs
