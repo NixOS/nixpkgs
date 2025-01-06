@@ -1,0 +1,66 @@
+From 9825efc51387fef14fdb184e7061b313a54fcb86 Mon Sep 17 00:00:00 2001
+From: Ronan Barrett <ronan.barrett@voiapp.io>
+Date: Mon, 8 May 2023 15:54:39 +0200
+Subject: [PATCH 1/2] fix next page logic
+
+---
+ ghbackup/fetch.go | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/ghbackup/fetch.go b/ghbackup/fetch.go
+index 93cce1c..bcef8ad 100644
+--- a/ghbackup/fetch.go
++++ b/ghbackup/fetch.go
+@@ -126,11 +126,17 @@ func getNextURL(header http.Header) string {
+ 	if len(parts) == 0 {
+ 		return ""
+ 	}
+-	firstLink := parts[0]
+-	if !strings.Contains(firstLink, "rel=\"next\"") {
++	var nextLink string
++	for _, v := range parts {
++		if strings.Contains(v, "rel=\"next\"") {
++			nextLink = strings.TrimSpace(v)
++		}
++	}
++	if nextLink == "" {
+ 		return ""
+ 	}
+-	parts = strings.Split(firstLink, ";")
++
++	parts = strings.Split(nextLink, ";")
+ 	if len(parts) == 0 {
+ 		return ""
+ 	}
+@@ -140,3 +146,4 @@ func getNextURL(header http.Header) string {
+ 	}
+ 	return urlInBrackets[1 : len(urlInBrackets)-1]
+ }
++
+
+From 5f696939f668cd88c59c05fd8e0d6ad9f236dea5 Mon Sep 17 00:00:00 2001
+From: Ronan Barrett <ronan.barrett@voiapp.io>
+Date: Mon, 8 May 2023 16:44:47 +0200
+Subject: [PATCH 2/2] add break
+
+---
+ ghbackup/fetch.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ghbackup/fetch.go b/ghbackup/fetch.go
+index bcef8ad..b045c38 100644
+--- a/ghbackup/fetch.go
++++ b/ghbackup/fetch.go
+@@ -130,6 +130,7 @@ func getNextURL(header http.Header) string {
+ 	for _, v := range parts {
+ 		if strings.Contains(v, "rel=\"next\"") {
+ 			nextLink = strings.TrimSpace(v)
++			break
+ 		}
+ 	}
+ 	if nextLink == "" {
+@@ -146,4 +147,3 @@ func getNextURL(header http.Header) string {
+ 	}
+ 	return urlInBrackets[1 : len(urlInBrackets)-1]
+ }
+-
