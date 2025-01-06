@@ -13,6 +13,7 @@
   substituteAll,
   cudd,
   nix-update-script,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cudd;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
+    # Fixes build with libc++ >= 19 due to the removal of std::char_traits<unsigned>.
+    # Remove for versions > 6.4.1.
+    (fetchpatch {
+      url = "https://github.com/diffblue/cbmc/commit/684bf4221c8737952e6469304f5a360dc3d5439d.patch";
+      hash = "sha256-3hHu6FcyHjfeFjNxhyhxxk7I/SK98BXT+xy7NgtEt50=";
+    })
   ];
 
   postPatch =
@@ -86,13 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      # Needed with GCC 12 but breaks on darwin (with clang)
-      "-Wno-error=maybe-uninitialized"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
+    lib.optionals stdenv.cc.isClang [
       # fix "argument unused during compilation"
       "-Wno-unused-command-line-argument"
+      # fix "variable 'plus_overflow' set but not used"
+      "-Wno-error=unused-but-set-variable"
+      # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
+      "-Wno-error=c++20-extensions"
     ]
   );
 
