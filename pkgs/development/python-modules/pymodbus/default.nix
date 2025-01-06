@@ -8,6 +8,7 @@
   pygments,
   pyserial,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -32,11 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-WuQddane7NPqGo6EHBPlFAZDmkcksDdWmHKdVSsSf+o=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html " ""
-  '';
-
   build-system = [ setuptools ];
 
   optional-dependencies = {
@@ -52,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     redis
