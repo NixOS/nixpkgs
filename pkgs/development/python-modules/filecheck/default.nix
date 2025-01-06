@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "filecheck" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mull-project/FileCheck.py/releases/tag/v${version}";
     homepage = "https://github.com/mull-project/FileCheck.py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python port of LLVM's FileCheck, flexible pattern matching file verifier";
     mainProgram = "filecheck";
-    maintainers = with maintainers; [ yorickvp ];
+    maintainers = with lib.maintainers; [ yorickvp ];
   };
 }

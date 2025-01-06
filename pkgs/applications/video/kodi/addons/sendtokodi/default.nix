@@ -40,10 +40,10 @@ buildKodiAddon rec {
     pythonPath = with kodi.pythonPackages; makePythonPath [ yt-dlp ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/firsttris/plugin.video.sendtokodi";
     description = "Plays various stream sites on Kodi using yt-dlp";
-    license = licenses.mit;
-    maintainers = teams.kodi.members ++ [ maintainers.pks ];
+    license = lib.licenses.mit;
+    maintainers = lib.teams.kodi.members ++ [ lib.maintainers.pks ];
   };
 }

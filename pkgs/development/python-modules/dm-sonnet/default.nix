@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sonnet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building neural networks in TensorFlow";
     homepage = "https://github.com/deepmind/sonnet";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -35,12 +35,12 @@ python3.pkgs.buildPythonApplication rec {
     "forbidden"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to bypass 4xx HTTP response status code";
     homepage = "https://github.com/ivan-sincek/forbidden";
     changelog = "https://github.com/ivan-sincek/forbidden/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "forbidden";
   };
 }

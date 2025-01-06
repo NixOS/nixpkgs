@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       ln -s ${jre8} $out/libexec/jre
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Mind-mapping software";
     longDescription = ''
       XMind is a mind mapping and brainstorming software. In addition
@@ -102,13 +102,13 @@ stdenv.mkDerivation rec {
       and save to Evernote.
     '';
     homepage = "https://www.xmind.net/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
     mainProgram = "XMind";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ michalrus ];
   };
 }

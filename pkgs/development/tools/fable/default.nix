@@ -17,14 +17,14 @@ buildDotnetGlobalTool (finalAttrs: {
     version = "[37m${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fable is an F# to JavaScript compiler";
     mainProgram = "fable";
     homepage = "https://github.com/fable-compiler/fable";
-    changelog = "https://github.com/fable-compiler/fable/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       anpin
       mdarocha
     ];

@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xi/cplay-ng";
     description = "Simple curses audio player";
     mainProgram = "cplay-ng";
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
       maintained. This is a rewrite that aims to stay true to the original
       design while evolving with a shifting environment.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

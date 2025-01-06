@@ -42,7 +42,7 @@ buildGoModule rec {
     "-X github.com/hyperledger/fabric/common/metadata.CommitSha=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, secure, permissioned blockchain network";
     longDescription = ''
       Hyperledger Fabric is an enterprise-grade permissioned distributed ledger
@@ -52,7 +52,7 @@ buildGoModule rec {
       preserving privacy.
     '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

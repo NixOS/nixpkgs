@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
     mainProgram = "CEmu";
     homepage = "https://ce-programming.github.io/CEmu";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ clevor ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ clevor ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
   };

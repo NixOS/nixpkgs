@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-3bkzBQ950Phg4A9p+IjeUx7Xw7eVmUbeYnQViNjghFk=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line peer-to-peer data transfer tool based on libp2p";
     homepage = "https://github.com/dennis-tra/pcp";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    platforms = lib.platforms.linux;
     mainProgram = "pcp";
   };
 }

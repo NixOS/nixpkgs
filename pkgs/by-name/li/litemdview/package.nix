@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://notabug.org/g0tsu/litemdview";
     description = "Suckless markdown viewer";
     longDescription = ''
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
         - Basic html support (very simple offline documents in html)
         - Syntax highlighting
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ WhiteBlackGoose ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ WhiteBlackGoose ];
+    platforms = lib.platforms.linux;
     mainProgram = "litemdview";
   };
 }

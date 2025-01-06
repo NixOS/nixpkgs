@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://unqlite.org/";
     description = "Self-contained, serverless, zero-conf, transactional NoSQL DB library";
     longDescription = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       freely copy a database between 32-bit and 64-bit systems or between
       big-endian and little-endian architectures.
     '';
-    maintainers = with maintainers; [ AndersonTorres ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = lib.licenses.bsd2;
   };
 }

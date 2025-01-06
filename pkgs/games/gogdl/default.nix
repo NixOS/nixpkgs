@@ -30,12 +30,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "gogdl" ];
 
-  meta = with lib; {
+  meta = {
     description = "GOG Downloading module for Heroic Games Launcher";
     mainProgram = "gogdl";
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ aidalgol ];
+    license = [ lib.licenses.gpl3 ];
+    maintainers = [ lib.maintainers.aidalgol ];
   };
 
   # Upstream no longer create git tags when bumping the version, so we have to

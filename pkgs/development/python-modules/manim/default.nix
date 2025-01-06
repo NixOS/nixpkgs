@@ -266,7 +266,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -275,7 +275,7 @@ buildPythonPackage rec {
       manim.
     '';
     homepage = "https://github.com/ManimCommunity/manim";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

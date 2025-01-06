@@ -63,11 +63,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast and multi-platform Spotify client with native GUI";
     homepage = "https://github.com/jpochyla/psst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbrandl peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbrandl peterhoeg ];
     mainProgram = "psst-gui";
   };
 }

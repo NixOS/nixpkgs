@@ -26,14 +26,14 @@ appimageTools.wrapType2 {
 
   extraPkgs = pkgs: with pkgs; [ zstd ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://davidotek.github.io/protonup-qt/";
     description = "Install and manage Proton-GE and Luxtorpeda for Steam and Wine-GE for Lutris with this graphical user interface";
-    license = licenses.gpl3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "protonup-qt";
     changelog = "https://github.com/DavidoTek/ProtonUp-Qt/releases/tag/v${version}";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michaelBelsanti ];
+    maintainers = with lib.maintainers; [ michaelBelsanti ];
   };
 }

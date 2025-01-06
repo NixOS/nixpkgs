@@ -57,12 +57,12 @@ let
     # - Enable tcmalloc unless darwin?
     # - Enable python bindings?
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/GrammarSoft/cg3";
       description = "Constraint Grammar interpreter, compiler and applicator vislcg3";
-      maintainers = with maintainers; [ unhammer ];
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
+      maintainers = with lib.maintainers; [ unhammer ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
     };
   };
 

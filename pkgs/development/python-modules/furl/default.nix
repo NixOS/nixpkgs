@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "furl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library that makes parsing and manipulating URLs easy";
     homepage = "https://github.com/gruns/furl";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ vanzef ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ vanzef ];
   };
 }

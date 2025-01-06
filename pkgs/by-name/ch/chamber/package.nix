@@ -17,12 +17,12 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
-  meta = with lib; {
+  meta = {
     description =
       "A tool for managing secrets by storing them in AWS SSM Parameter Store";
     homepage = "https://github.com/segmentio/chamber";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalekseev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalekseev ];
     mainProgram = "chamber";
   };
 }

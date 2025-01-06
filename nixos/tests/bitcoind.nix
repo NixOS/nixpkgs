@@ -1,9 +1,9 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "bitcoind";
-    meta = with pkgs.lib; {
-      maintainers = with maintainers; [ _1000101 ];
+    meta = {
+      maintainers = with lib.maintainers; [ _1000101 ];
     };
 
     nodes.machine =

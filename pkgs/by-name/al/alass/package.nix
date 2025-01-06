@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/alass-cli" --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic Language-Agnostic Subtitles Synchronization";
     homepage = "https://github.com/kaegi/alass";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "alass-cli";
   };
 }

@@ -40,11 +40,11 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate and change colorschemes on the fly. A 'wal' rewrite in Python 3";
     mainProgram = "wal";
     homepage = "https://github.com/dylanaraps/pywal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Fresheyeball ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Fresheyeball ];
   };
 }

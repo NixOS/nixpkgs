@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     xorgproto
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DirectFB VNC client";
     homepage = "http://drinkmilk.github.io/directvnc/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

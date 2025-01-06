@@ -17,13 +17,13 @@ buildGo122Module rec {
 
   vendorHash = "sha256-YWx9K04kTMaI0FXebwRQVCt0nxIwZ6xlbtI2lk3qp0M=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate HTTP load and plot the results in real-time";
     homepage = "https://github.com/nakabonne/ali";
     changelog = "https://github.com/nakabonne/ali/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ farcaller ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ farcaller ];
     mainProgram = "ali";
   };
 }

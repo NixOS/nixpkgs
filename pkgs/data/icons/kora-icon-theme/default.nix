@@ -49,11 +49,11 @@ stdenvNoCC.mkDerivation rec  {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
-    license = with licenses; [ gpl3Only ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = [ lib.licenses.gpl3Only ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

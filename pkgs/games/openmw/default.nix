@@ -129,14 +129,14 @@ stdenv.mkDerivation rec {
       "-DOPENMW_OSX_DEPLOYMENT=ON"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial open source engine reimplementation of the game Morrowind";
     homepage = "https://openmw.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       abbradar
       marius851000
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

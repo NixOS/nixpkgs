@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/Ku0W+L2mqVYDSkd2zRqM7UhHueXya4zjewp/xO/XlQ";
 
-  meta = with lib; {
+  meta = {
     description = "Rust-based platform for the Web";
     mainProgram = "swc";
     homepage = "https://github.com/swc-project/swc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       dit7ya
       kashw2
     ];

@@ -43,13 +43,13 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TEMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web interface for beancount";
     mainProgram = "fava";
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bhipple
       sigmanificient
     ];

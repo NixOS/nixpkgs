@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6LfJ5rI7Y+ziEIMxPpKxOS+VSrKuKohEcqIK7xdKhNg=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple relay server for broadcasting a WebM stream";
     longDescription = ''
       Webmetro is a simple relay server for broadcasting a WebM stream
@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage rec {
       (compatibly-encoded) webm files can be chained together without
       clients needing to reconnect.
     '';
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ leenaars ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ leenaars ];
     mainProgram = "webmetro";
   };
 }

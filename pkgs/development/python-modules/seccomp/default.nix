@@ -24,9 +24,9 @@ buildPythonPackage rec {
                 'libraries=["seccomp"]'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for libseccomp";
-    license = with licenses; [ lgpl21 ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = with lib.licenses; [ lgpl21 ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

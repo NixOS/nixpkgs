@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wasmedge.org/";
-    license = with licenses; [ asl20 ];
+    license = with lib.licenses; [ asl20 ];
     description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    platforms = lib.platforms.all;
   };
 })

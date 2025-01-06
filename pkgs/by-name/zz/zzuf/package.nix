@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Transparent application input fuzzer";
     homepage = "http://caca.zoy.org/wiki/zzuf";
-    license = licenses.wtfpl;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lihop ];
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

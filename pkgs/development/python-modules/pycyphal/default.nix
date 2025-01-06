@@ -78,14 +78,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycyphal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = teams.ororatech.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.ororatech.members;
   };
 }

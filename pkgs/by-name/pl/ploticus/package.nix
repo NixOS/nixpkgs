@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Non-interactive software package for producing plots and charts";
     longDescription = ''
       Ploticus is a free, GPL'd, non-interactive
@@ -94,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
       statistical capabilities.  It allows significant user control
       over colors, styles, options and details.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
     homepage = "https://ploticus.sourceforge.net/";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

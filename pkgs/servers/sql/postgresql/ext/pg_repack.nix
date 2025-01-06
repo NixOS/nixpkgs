@@ -31,7 +31,7 @@ buildPostgresqlExtension (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
     longDescription = ''
       pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore
@@ -40,8 +40,8 @@ buildPostgresqlExtension (finalAttrs: {
       with performance comparable to using CLUSTER directly.
     '';
     homepage = "https://github.com/reorg/pg_repack";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danbst ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
     mainProgram = "pg_repack";
   };

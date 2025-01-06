@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
     "--prefix GST_PLUGIN_PATH : ${gstreamerPath}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt pip-mode-like video player for wlroots-based wayland compositors";
     mainProgram = "qt-video-wlr";
     homepage = "https://github.com/xdavidwu/qt-video-wlr";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fionera
       rewine
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

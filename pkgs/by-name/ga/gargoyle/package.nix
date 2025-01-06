@@ -98,13 +98,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://ccxvii.net/gargoyle/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

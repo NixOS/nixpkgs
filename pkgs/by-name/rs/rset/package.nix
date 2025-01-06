@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scriptedconfiguration.org/";
     description = "Configure systems using any scripting language";
     changelog = "https://github.com/eradman/rset/raw/${version}/NEWS";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     # 2023-08-19, fails to compile with glibc-2.38 because of strlcpy.
     # At the time of writing, this was 4 minors behind already and

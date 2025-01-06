@@ -88,18 +88,18 @@ stdenv.mkDerivation rec {
     offlineCache = yarnOfflineCache;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
-    license = licenses.bsl11;
+    license = lib.licenses.bsl11;
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         cab404
         yrd
       ]
-      ++ teams.cyberus.members;
-    platforms = platforms.linux;
+      ++ lib.teams.cyberus.members;
+    platforms = lib.platforms.linux;
   };
 }

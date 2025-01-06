@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     cp -a siesta $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "First-principles materials simulation code using DFT";
     mainProgram = "siesta";
     longDescription = ''
@@ -98,8 +98,8 @@ stdenv.mkDerivation rec {
       and all-electron methods.
     '';
     homepage = "https://siesta-project.org/siesta/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

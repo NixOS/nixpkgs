@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zope.component" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zopefoundation/zope.component";
     description = "Zope Component Architecture";
     changelog = "https://github.com/zopefoundation/zope.component/blob/${version}/CHANGES.rst";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

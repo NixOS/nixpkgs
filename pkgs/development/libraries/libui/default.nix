@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
     install_name_tool -id $out/lib/libui.A.dylib $out/lib/libui.A.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/andlabs/libui";
     description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

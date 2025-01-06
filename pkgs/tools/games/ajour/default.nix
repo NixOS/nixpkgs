@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "World of Warcraft addon manager written in Rust";
     mainProgram = "ajour";
     longDescription = ''
@@ -98,8 +98,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/casperstorm/ajour";
     changelog = "https://github.com/casperstorm/ajour/blob/master/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -42,11 +42,11 @@ mkDerivation rec {
     substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source beer recipe creation tool";
     mainProgram = "brewtarget";
     homepage = "http://www.brewtarget.org/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.mmahut ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.mmahut ];
   };
 }

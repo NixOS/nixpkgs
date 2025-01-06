@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     install -Dm644 bash_completion $out/share/bash-completion/completions/subberthehut
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mus65/subberthehut";
     description = "OpenSubtitles.org downloader";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jqueiroz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jqueiroz ];
     mainProgram = "subberthehut";
   };
 }

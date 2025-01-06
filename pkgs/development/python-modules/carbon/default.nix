@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "carbon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backend data caching and persistence daemon for Graphite";
     homepage = "https://github.com/graphite-project/carbon";
     changelog = "https://github.com/graphite-project/carbon/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       offline
       basvandijk
     ];

@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ktlint --prefix PATH : "${lib.makeBinPath [ jre_headless gnused ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Anti-bikeshedding Kotlin linter with built-in formatter";
     homepage = "https://ktlint.github.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = jre_headless.meta.platforms;
     changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
-    maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ tadfisher SubhrajyotiSen ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "ktlint";
   };
 }

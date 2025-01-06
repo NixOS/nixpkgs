@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-p6W9NtOKzVViyFq5SQvnIsik7S3mqUqxI/05OiC+P+Q=";
 
-  meta = with lib; {
+  meta = {
     description = "Nix Hash Converter";
     mainProgram = "rnix-hashes";
     homepage = "https://github.com/numtide/rnix-hashes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rizary
       SuperSandro2000
     ];

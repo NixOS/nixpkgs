@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";
     changelog = "https://github.com/googleapis/python-grpc-google-iam-v1/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

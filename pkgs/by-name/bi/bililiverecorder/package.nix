@@ -40,13 +40,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convenient free open source bilibili live recording tool";
     homepage = "https://rec.danmuji.org/";
     changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${version}";
     mainProgram = "BililiveRecorder";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zaldnoay ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zaldnoay ];
+    platforms = lib.platforms.unix;
   };
 }

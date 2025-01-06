@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Database Library contains utilities meant for Robot Framework";
     homepage = "https://github.com/MarketSquare/Robotframework-Database-Library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ talkara ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ talkara ];
   };
 }

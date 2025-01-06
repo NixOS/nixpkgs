@@ -62,7 +62,7 @@ nodePkgs."elm-pages".overrideAttrs (old: {
     // {
       description = "Statically typed site generator for Elm";
       homepage = "https://github.com/dillonkearns/elm-pages";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [
         maintainers.turbomack
         maintainers.jali-clarke

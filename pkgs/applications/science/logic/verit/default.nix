@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open, trustable and efficient SMT-solver";
     homepage = "https://verit.loria.fr/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.gebner ];
   };
 }

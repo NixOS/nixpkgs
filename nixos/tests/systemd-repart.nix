@@ -78,7 +78,7 @@ in
 {
   basic = makeTest {
     name = "systemd-repart";
-    meta.maintainers = with maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur ];
 
     nodes.machine =
       { config, pkgs, ... }:
@@ -110,7 +110,7 @@ in
 
   after-initrd = makeTest {
     name = "systemd-repart-after-initrd";
-    meta.maintainers = with maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur ];
 
     nodes.machine =
       { config, pkgs, ... }:
@@ -140,7 +140,7 @@ in
 
   create-root = makeTest {
     name = "systemd-repart-create-root";
-    meta.maintainers = with maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur ];
 
     nodes.machine =
       {

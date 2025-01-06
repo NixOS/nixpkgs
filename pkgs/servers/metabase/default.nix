@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy, open source way for everyone in your company to ask questions and learn from data";
     homepage    = "https://metabase.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license     = licenses.agpl3Only;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license     = lib.licenses.agpl3Only;
+    platforms   = lib.platforms.all;
+    maintainers = with lib.maintainers; [ schneefux thoughtpolice mmahut ];
     mainProgram = "metabase";
   };
   passthru.tests = {

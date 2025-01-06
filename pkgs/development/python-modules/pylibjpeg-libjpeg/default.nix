@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libjpeg" ];
 
-  meta = with lib; {
+  meta = {
     description = "JPEG, JPEG-LS and JPEG XT plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-libjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg-libjpeg/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

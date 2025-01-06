@@ -47,12 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reqif" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for ReqIF format";
     mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yuu ];
   };
 }

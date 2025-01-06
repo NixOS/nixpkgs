@@ -128,13 +128,13 @@ stdenv.mkDerivation (
     meta =
       with lib;
       {
-        sourceProvenance = with sourceTypes; [
+        sourceProvenance = with lib.sourceTypes; [
           fromSource
           binaryBytecode # deps
         ];
-        license = licenses.gpl3Plus;
-        maintainers = with maintainers; [ fgaz ];
-        platforms = platforms.all;
+        license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [ fgaz ];
+        platforms = lib.platforms.all;
         mainProgram = pname;
       }
       // meta;

@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # tests need some patching
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pandoc filter suite providing facilities for cross-referencing in markdown documents";
     mainProgram = "pandoc-xnos";
     homepage = "https://github.com/tomduck/pandoc-xnos";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ppenguin ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ppenguin ];
   };
 }

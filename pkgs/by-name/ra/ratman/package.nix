@@ -99,11 +99,11 @@ rustPlatform.buildRustPackage rec {
     cp -r ${dashboard.dist} ratman/dashboard/dist
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular decentralised peer-to-peer packet router and associated tools";
     homepage = "https://git.irde.st/we/irdest";
-    platforms = platforms.unix;
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ spacekookie ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ spacekookie ];
   };
 }

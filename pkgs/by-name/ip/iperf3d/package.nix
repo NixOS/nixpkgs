@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3mJBn70sSoDL9GNxgEZqA8S4GrY+DjnYY9Cc5Xe1GFQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Iperf3 client and server wrapper for dynamic server ports";
     mainProgram = "iperf3d";
     homepage = "https://github.com/wobcom/iperf3d";
-    license = licenses.mit;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ netali ] ++ lib.teams.wdz.members;
   };
 }

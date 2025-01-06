@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "marge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Merge bot for GitLab";
     homepage = "https://gitlab.com/marge-org/marge-bot";
     changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "marge.app";
   };
 }

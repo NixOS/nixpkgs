@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Support crate for rustc's self-profiling feature";
     homepage = "https://github.com/rust-lang/measureme";
-    license = licenses.asl20;
-    maintainers = [ maintainers.t4ccer ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.t4ccer ];
   };
 }

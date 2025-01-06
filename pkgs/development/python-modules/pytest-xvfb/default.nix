@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyvirtualdisplay ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to run Xvfb for tests";
     homepage = "https://github.com/The-Compiler/pytest-xvfb";
     changelog = "https://github.com/The-Compiler/pytest-xvfb/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

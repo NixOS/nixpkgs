@@ -37,11 +37,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Add any model in your project to the Wagtail admin. Formerly wagtail.contrib.modeladmin";
     homepage = "https://github.com/wagtail-nest/wagtail-modeladmin";
     changelog = "https://github.com/wagtail/wagtail-modeladmin/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

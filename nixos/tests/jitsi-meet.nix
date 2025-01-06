@@ -1,9 +1,9 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "jitsi-meet";
-    meta = with pkgs.lib; {
-      maintainers = teams.jitsi.members;
+    meta = {
+      maintainers = lib.teams.jitsi.members;
     };
 
     nodes = {

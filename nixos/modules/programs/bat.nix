@@ -118,5 +118,5 @@ in
       };
     };
   };
-  meta.maintainers = with maintainers; [ sigmasquadron ];
+  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
 }

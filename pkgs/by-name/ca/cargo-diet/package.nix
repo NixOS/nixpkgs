@@ -17,13 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MASftcn3WmB3M6bvmtnK3nlroE8nq9zdkleSEgzA5lk=";
 
-  meta = with lib; {
+  meta = {
     description = "Help computing optimal include directives for your Cargo.toml manifest";
     mainProgram = "cargo-diet";
     homepage = "https://github.com/the-lean-crate/cargo-diet";
     changelog = "https://github.com/the-lean-crate/cargo-diet/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];

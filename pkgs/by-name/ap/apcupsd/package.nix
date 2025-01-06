@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.smoke = nixosTests.apcupsd;
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for controlling APC UPSes";
     homepage = "http://www.apcupsd.com/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

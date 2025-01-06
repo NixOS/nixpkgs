@@ -18,10 +18,10 @@ mkXfceDerivation {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Frontend to easily manage connections to remote filesystems";
     mainProgram = "gigolo";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

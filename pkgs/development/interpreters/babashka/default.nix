@@ -73,7 +73,7 @@ let
         --file="pkgs/development/interpreters/babashka/clojure-tools.nix"
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Clojure babushka for the grey areas of Bash";
       longDescription = ''
         The main idea behind babashka is to leverage Clojure in places where you
@@ -101,9 +101,9 @@ let
       '';
       homepage = "https://github.com/babashka/babashka";
       changelog = "https://github.com/babashka/babashka/blob/v${version}/CHANGELOG.md";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.epl10;
-      maintainers = with maintainers; [
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.epl10;
+      maintainers = with lib.maintainers; [
         bandresen
         bhougland
         DerGuteMoritz

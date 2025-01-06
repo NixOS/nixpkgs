@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ fgaz ];
+  meta = {
+    maintainers = with lib.maintainers; [ fgaz ];
     description = "2D ascii game engine for the terminal";
     homepage = "https://github.com/lxgr-linux/scrap_engine";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 }

@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-CoPQMEk8eagYU/TfaPAM6ItfSCZbrvzUww8H9ND8VUk=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fully featured and community-driven hacking environment";
     longDescription = ''
       Exegol is a community-driven hacking environment, powerful and yet
@@ -41,9 +41,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "exegol";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _0b11stan
       charB66
     ];

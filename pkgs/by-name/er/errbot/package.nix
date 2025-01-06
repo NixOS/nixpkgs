@@ -58,13 +58,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "errbot" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/errbotio/errbot/blob/${version}/CHANGES.rst";
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = "http://errbot.io/";
     maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     # flaky on darwin, "RuntimeError: can't start new thread"
     mainProgram = "errbot";
   };

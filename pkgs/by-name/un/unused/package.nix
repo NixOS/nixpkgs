@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-hCtkR20+xs1UHZP7oJVpJACVGcMQLQmSS1QE2tmIVhs=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to identify potentially unused code";
     homepage = "https://unused.codes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

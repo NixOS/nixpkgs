@@ -31,11 +31,11 @@ python3.pkgs.buildPythonApplication rec {
     "otsclient"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/opentimestamps-client";
     changelog = "https://github.com/opentimestamps/opentimestamps-client/releases/tag/opentimestamps-client-v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

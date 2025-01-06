@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp squishyball.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to perform sample comparison testing on the command line";
     longDescription = ''
       squishyball is a simple command-line utility for performing
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
       mode of operation.
     '';
     homepage = "https://gitlab.xiph.org/xiph/squishyball";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ michalrus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ michalrus ];
+    platforms = lib.platforms.linux;
     mainProgram = "squishyball";
   };
 }

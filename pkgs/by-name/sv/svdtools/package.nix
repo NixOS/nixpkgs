@@ -15,15 +15,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+YBFjsPY3w+zjLtIB9GQXkuGy1ZHNT86clsQYiXeTJU=";
 
-  meta = with lib; {
+  meta = {
     description = "Tools to handle vendor-supplied, often buggy SVD files";
     mainProgram = "svdtools";
     homepage = "https://github.com/stm32-rs/svdtools";
     changelog = "https://github.com/stm32-rs/svdtools/blob/v${version}/CHANGELOG-rust.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ newam ];
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

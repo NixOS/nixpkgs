@@ -41,11 +41,11 @@ buildGoModule rec {
     version = "${pname}/${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official Twitch CLI to make developing on Twitch easier";
     mainProgram = "twitch-cli";
     homepage = "https://github.com/twitchdev/twitch-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benediktbroich ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benediktbroich ];
   };
 }

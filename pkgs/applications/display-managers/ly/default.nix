@@ -36,12 +36,12 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) ly; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI display manager";
-    license = licenses.wtfpl;
+    license = lib.licenses.wtfpl;
     homepage = "https://github.com/fairyglade/ly";
-    maintainers = [ maintainers.vidister ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.vidister ];
+    platforms = lib.platforms.linux;
     mainProgram = "ly";
   };
 }

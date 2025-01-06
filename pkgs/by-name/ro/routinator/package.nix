@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "RPKI Validator written in Rust";
     homepage = "https://github.com/NLnetLabs/routinator";
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "routinator";
   };
 }

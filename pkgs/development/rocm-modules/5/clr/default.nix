@@ -181,14 +181,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
     homepage = "https://github.com/ROCm/clr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ lovesegfault ] ++ lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

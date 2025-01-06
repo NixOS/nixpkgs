@@ -158,7 +158,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     rsync
   ] ++ oldAttrs.nativeBuildInputs;
 
-  meta = with lib; {
+  meta = {
     description = "An OpenJDK fork to better support Jetbrains's products.";
     longDescription = ''
       JetBrains Runtime is a runtime environment for running IntelliJ Platform
@@ -172,7 +172,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk17.meta) license platforms mainProgram;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with lib.maintainers; [ edwtjo ];
 
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -65,7 +65,7 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage the life cycle and configuration of Podman containers";
     mainProgram = "fetchit";
     longDescription = ''
@@ -79,8 +79,8 @@ buildGoModule rec {
     '';
     homepage = "https://fetchit.readthedocs.io";
     changelog = "https://github.com/containers/fetchit/releases/tag/${src.rev}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.linux;
   };
 }

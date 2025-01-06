@@ -123,12 +123,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sentry_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
     changelog = "https://github.com/getsentry/sentry-python/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       fab
       gebner
     ];

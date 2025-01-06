@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
     cp -r $src/* $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single header audio playback and capture library written in C";
     homepage = "https://github.com/mackron/miniaudio";
     changelog = "https://github.com/mackron/miniaudio/blob/${src.rev}/CHANGES.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit0
     ];
-    maintainers = [ maintainers.jansol ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.jansol ];
+    platforms = lib.platforms.all;
   };
 }

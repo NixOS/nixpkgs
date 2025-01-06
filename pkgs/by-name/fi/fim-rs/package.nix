@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   # There is a failure while the binary is checked
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Host-based file integrity monitoring tool";
     longDescription = ''
       FIM is a File Integrity Monitoring tool that tracks any event over your
@@ -65,8 +65,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/Achiefs/fim";
     changelog = "https://github.com/Achiefs/fim/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fim";
   };
 }

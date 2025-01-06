@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     rrdtool
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ robberer ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ robberer ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -91,7 +91,7 @@ stdenv.mkDerivation {
       --replace "Name=tana" "Name=Tana"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tana is an intelligent all-in-one workspace";
     longDescription = ''
       At its core, Tana is an outline editor which can be extended to
@@ -104,9 +104,9 @@ stdenv.mkDerivation {
     '';
     homepage = "https://tana.inc";
     changelog = "https://tana.inc/releases";
-    license = licenses.unfree;
-    maintainers = [ maintainers.massimogengarelli ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.massimogengarelli ];
+    platforms = lib.platforms.linux;
     mainProgram = "tana";
   };
 }

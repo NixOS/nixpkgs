@@ -114,13 +114,13 @@ rustPlatform.buildRustPackage {
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "veloren-voxygen";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       rnhmjoj
       tomodachi94
     ];

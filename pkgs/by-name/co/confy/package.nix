@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
     description = "Conferences schedule viewer";
     homepage = "https://confy.kirgroup.net/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "confy";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = with lib.maintainers; [ michaelgrahamevans ];
   };
 })

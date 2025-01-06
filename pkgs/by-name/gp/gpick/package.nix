@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     lua
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced color picker written in C++ using GTK+ toolkit";
     homepage = "http://www.gpick.org/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vanilla ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vanilla ];
+    platforms = lib.platforms.linux;
     mainProgram = "gpick";
   };
 }

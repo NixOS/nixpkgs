@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk
@@ -105,8 +105,8 @@ stdenv.mkDerivation rec {
       while preserving the partition contents.
     '';
     homepage = "https://gparted.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gparted";
   };
 }

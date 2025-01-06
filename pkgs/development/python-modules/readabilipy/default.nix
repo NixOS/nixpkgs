@@ -51,12 +51,12 @@ buildPythonPackage rec {
     "tests/test_benchmarking.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML content extractor";
     mainProgram = "readabilipy";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
     changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

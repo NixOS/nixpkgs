@@ -26,12 +26,12 @@ buildGoModule rec {
   # Tests require internet
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal stock ticker with live updates and position tracking";
     homepage = "https://github.com/achannarasappa/ticker";
     changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       siraben
       sarcasticadmin
     ];

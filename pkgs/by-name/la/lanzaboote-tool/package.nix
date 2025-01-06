@@ -48,12 +48,12 @@ rustPlatform.buildRustPackage rec {
     sbsigntool
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems";
     homepage = "https://github.com/nix-community/lanzaboote";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "lzbt";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raitobezarius
       nikstur
     ];

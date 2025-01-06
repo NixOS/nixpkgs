@@ -36,11 +36,11 @@ mkDerivation rec {
   libraryFile = "1lab.agda-lib";
   everythingFile = "_build/all-pages.agda";
 
-  meta = with lib; {
+  meta = {
     description = "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = src.meta.homepage;
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ncfavier ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 }

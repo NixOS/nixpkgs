@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
         --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt image plugin for displaying Mapbox vector tiles";
     longDescription = ''
       QtPBFImagePlugin is a Qt image plugin that enables applications capable of
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       vector tiles without (almost) any application modifications.
     '';
     homepage = "https://github.com/tumic0/QtPBFImagePlugin";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -144,14 +144,14 @@ effectiveStdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     broken = cudaSupport && cudaPackages.cudaOlder "11.4";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "xgboost";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       abbradar
       nviets
     ];

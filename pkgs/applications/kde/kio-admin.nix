@@ -19,11 +19,11 @@ mkDerivation {
     polkit-qt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage files as administrator using the admin:// KIO protocol";
     homepage = "https://invent.kde.org/system/kio-admin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ k900 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ k900 ];
   };
 }

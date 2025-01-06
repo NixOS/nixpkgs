@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
     install -D autopair.zsh $out/share/zsh/${pname}/autopair.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hlissner/zsh-autopair";
     description = "Plugin that auto-closes, deletes and skips over matching delimiters in zsh intelligently";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       _0qq
       DataHearth
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

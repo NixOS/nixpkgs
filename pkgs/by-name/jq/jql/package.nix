@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-BNrCzXqmS9fJfhPbt1fLSgUTL2cgsfcnjEtns2umFMs=";
 
-  meta = with lib; {
+  meta = {
     description = "JSON Query Language CLI tool built with Rust";
     homepage = "https://github.com/yamafaktory/jql";
     changelog = "https://github.com/yamafaktory/jql/releases/tag/${src.rev}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ akshgpt7 figsoda ];
+    license = with lib.licenses; [ asl20 mit ];
+    maintainers = with lib.maintainers; [ akshgpt7 figsoda ];
     mainProgram = "jql";
   };
 }

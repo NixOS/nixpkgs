@@ -73,7 +73,7 @@ let
       inherit doCheck;
       nativeCheckInputs = [ more ];
 
-      meta = with lib; {
+      meta = {
         homepage = "https://sourceforge.net/projects/gawkextlib/";
         description = "Dynamically loaded extension libraries for GNU AWK";
         mainProgram = "xmlgawk";
@@ -85,9 +85,9 @@ let
           database, use the GD graphics library, and perform unlimited
           precision MPFR calculations.
         '';
-        license = licenses.gpl3Plus;
-        platforms = platforms.unix;
-        maintainers = with maintainers; [ tomberek ];
+        license = lib.licenses.gpl3Plus;
+        platforms = lib.platforms.unix;
+        maintainers = with lib.maintainers; [ tomberek ];
       };
     }
   );

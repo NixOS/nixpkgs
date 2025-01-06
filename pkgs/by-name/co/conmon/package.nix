@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/containers/conmon/releases/tag/${src.rev}";
     homepage = "https://github.com/containers/conmon";
     description = "OCI container runtime monitor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.podman.members;
+    platforms = lib.platforms.linux;
     mainProgram = "conmon";
   };
 }

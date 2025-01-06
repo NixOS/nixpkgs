@@ -17,13 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+0eMhOteNK3QTnG0HB3/TYDFmPTztdQ0h3RKBTN0J/o=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to write random bytes to stdout";
     homepage = "https://github.com/Wulfsta/psw";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ wulfsta ];
+    maintainers = with lib.maintainers; [ wulfsta ];
   };
 }

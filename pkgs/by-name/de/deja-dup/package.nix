@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \
@@ -89,9 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
       and uses duplicity as the backend.
     '';
     homepage = "https://apps.gnome.org/DejaDup/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ] ++ lib.teams.gnome-circle.members;
+    platforms = lib.platforms.linux;
     mainProgram = "deja-dup";
   };
 })

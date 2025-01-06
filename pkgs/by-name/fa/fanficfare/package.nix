@@ -32,12 +32,12 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # no tests exist
 
-  meta = with lib; {
+  meta = {
     description = "Tool for making eBooks from fanfiction web sites";
     mainProgram = "fanficfare";
     homepage = "https://github.com/JimmXinu/FanFicFare";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dwarfmaster ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dwarfmaster ];
   };
 }

@@ -134,11 +134,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = licenses.wxWindows;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.wxWindows;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

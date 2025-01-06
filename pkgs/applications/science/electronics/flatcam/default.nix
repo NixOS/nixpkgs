@@ -98,10 +98,10 @@ buildPythonApplication rec {
     mv $out/bin/flatcam{-beta,}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2-D post processing for PCB fabrication on CNC routers";
     homepage = "https://bitbucket.org/jpcgt/flatcam";
-    license = licenses.mit;
-    maintainers = with maintainers; [ trepetti ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ trepetti ];
   };
 }

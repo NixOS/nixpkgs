@@ -81,12 +81,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "virtualenv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create isolated Python environments";
     mainProgram = "virtualenv";
     homepage = "http://www.virtualenv.org";
     changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

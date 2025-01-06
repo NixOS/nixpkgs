@@ -60,11 +60,11 @@ buildPythonPackage rec {
     "test_rewrite_links"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Complete lxml external type annotation";
     homepage = "https://github.com/abelcheung/types-lxml";
     changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

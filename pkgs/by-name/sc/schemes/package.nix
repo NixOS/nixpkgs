@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     libpanel
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Edit GtkSourceView style-schemes for an application or platform";
     mainProgram = "schemes";
     homepage = "https://gitlab.gnome.org/chergert/schemes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ _0xMRTT ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ _0xMRTT ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   doCheck = false; # Circular deps.
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/zopefoundation/zope.interface/blob/${version}/CHANGES.rst";
     description = "Zope.Interface";
     homepage = "https://github.com/zopefoundation/zope.interface";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

@@ -100,11 +100,11 @@ stdenv.mkDerivation (
       make examples_c examples_cxx
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
       description = "Berkeley DB";
       license = license;
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   }
   // drvArgs

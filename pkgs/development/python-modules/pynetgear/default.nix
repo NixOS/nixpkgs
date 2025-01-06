@@ -28,11 +28,11 @@ buildPythonPackage rec {
   # https://github.com/MatMaul/pynetgear/issues/109
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Netgear wireless routers";
     homepage = "https://github.com/MatMaul/pynetgear";
     changelog = "https://github.com/MatMaul/pynetgear/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

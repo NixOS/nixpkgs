@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
     sha256 = "1y6mwsvm75f5jzxsjjk0yhf8xnpmz6y8qvcxfandavx59lc3l57m";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enhanced version of GNU dd";
 
     homepage = "https://dcfldd.sourceforge.net/";
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = platforms.all;
-    maintainers = with maintainers; [ qknight ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ qknight ];
     mainProgram = "dcfldd";
   };
 }

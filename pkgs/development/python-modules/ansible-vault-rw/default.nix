@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "This project aim to R/W an ansible-vault yaml file";
     homepage = "https://github.com/tomoh1r/ansible-vault";
     changelog = "https://github.com/tomoh1r/ansible-vault/blob/master/CHANGES.txt";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ StillerHarpo ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ StillerHarpo ];
   };
 }

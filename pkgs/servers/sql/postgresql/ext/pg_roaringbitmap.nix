@@ -18,11 +18,11 @@ buildPostgresqlExtension (finalAttrs: {
     hash = "sha256-E6vqawnsRsAIajGDgJcTUWV1H8GFFboTjhmVfemUGbs=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "RoaringBitmap extension for PostgreSQL";
     homepage = "https://github.com/ChenHuajun/pg_roaringbitmap";
     changelog = "https://github.com/ChenHuajun/pg_roaringbitmap/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };

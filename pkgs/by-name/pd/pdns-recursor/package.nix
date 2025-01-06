@@ -67,14 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) pdns-recursor ncdns;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       "i686-linux" # a 64-bit time_t is needed
     ];
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 })

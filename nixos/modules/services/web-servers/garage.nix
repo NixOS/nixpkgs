@@ -22,7 +22,7 @@ in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = [ maintainers.mjm ];
+    maintainers = [ lib.maintainers.mjm ];
   };
 
   options.services.garage = {

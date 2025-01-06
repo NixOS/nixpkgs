@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ciscoconfparse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse, audit, query, build, and modify Cisco IOS-style configurations";
     homepage = "https://github.com/mpenning/ciscoconfparse";
     changelog = "https://github.com/mpenning/ciscoconfparse/blob/${version}/CHANGES.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

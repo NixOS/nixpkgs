@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ postgresql ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
     mainProgram = "pgsanity";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
       run it through ecpg and
       let ecpg report on the syntax errors of the SQL.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ nalbyuites ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nalbyuites ];
   };
 }

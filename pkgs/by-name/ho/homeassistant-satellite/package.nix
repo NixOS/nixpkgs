@@ -49,12 +49,12 @@ python3.pkgs.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/synesthesiam/homeassistant-satellite/blob/v${version}/CHANGELOG.md";
     description = "Streaming audio satellite for Home Assistant";
     homepage = "https://github.com/synesthesiam/homeassistant-satellite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "homeassistant-satellite";
   };
 }

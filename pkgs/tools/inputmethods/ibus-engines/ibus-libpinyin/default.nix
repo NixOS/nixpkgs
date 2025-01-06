@@ -61,14 +61,14 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       linsui
       ericsagnes
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

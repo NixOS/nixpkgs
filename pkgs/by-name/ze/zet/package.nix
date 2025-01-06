@@ -31,15 +31,15 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/yarrow/zet/pull/7
   checkType = "debug";
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility to find the union, intersection, set difference, etc of files considered as sets of lines";
     mainProgram = "zet";
     homepage = "https://github.com/yarrow/zet";
     changelog = "https://github.com/yarrow/zet/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

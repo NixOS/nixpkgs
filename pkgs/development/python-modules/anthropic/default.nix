@@ -79,11 +79,11 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
     changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -142,16 +142,16 @@ stdenv.mkDerivation rec {
     cp "$rules" "$out/lib/udev/rules.d/69-mixxx-usb-uaccess.rules"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
     changelog = "https://github.com/mixxxdj/mixxx/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       benley
       bfortz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

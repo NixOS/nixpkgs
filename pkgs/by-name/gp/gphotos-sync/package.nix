@@ -53,11 +53,11 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Google Photos and Albums backup with Google Photos Library API";
     mainProgram = "gphotos-sync";
     homepage = "https://github.com/gilesknap/gphotos-sync";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dnr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

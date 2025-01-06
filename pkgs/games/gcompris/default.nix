@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
   # we need a graphical environment for the tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High quality educational software suite, including a large number of activities for children aged 2 to 10";
     homepage = "https://gcompris.net/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "gcompris-qt";
-    maintainers = with maintainers; [ guibou ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.guibou ];
+    platforms = lib.platforms.linux;
   };
 })

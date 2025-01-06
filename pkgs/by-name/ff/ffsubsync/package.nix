@@ -50,10 +50,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ffsubsync" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/smacke/ffsubsync";
     description = "Automagically synchronize subtitles with video";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ffsubsync";
   };

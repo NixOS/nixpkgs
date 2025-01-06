@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = knot-dns.passthru.tests; # the only consumer so far
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
     description = "Effort to implement RFC9000 QUIC protocol";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vcunat/* for knot-dns */ ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vcunat/* for knot-dns */ ];
   };
 }
 

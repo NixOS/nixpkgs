@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-LS0azaKBFWW86R4XO5BkCHMEG2UwgkVQIwLELxewiu0=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to list listening sockets";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.k900
-      maintainers.jcaesar
+      lib.maintainers.k900
+      lib.maintainers.jcaesar
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/jcaesar/lls";
     mainProgram = "lls";
   };

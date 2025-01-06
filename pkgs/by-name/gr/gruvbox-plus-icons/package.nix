@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontConfigure = true;
 
-  meta = with lib; {
+  meta = {
     description = "Icon pack for Linux desktops based on the Gruvbox color scheme";
     homepage = "https://github.com/SylEleuth/gruvbox-plus-icon-pack";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ eureka-cpu RGBCube ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ eureka-cpu RGBCube ];
   };
 })

@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Znwni7uMnG9cpZbztUMY1j73K+XrDLv5zyNEZDoxWg4=";
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility to get icons for apps on your system or other generic icons by name";
     mainProgram = "geticons";
     homepage = "https://git.sr.ht/~zethra/geticons";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ Madouura ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ Madouura ];
   };
 }

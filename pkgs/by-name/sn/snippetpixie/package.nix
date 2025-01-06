@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Your little expandable text snippet helper";
     longDescription = ''
       Your little expandable text snippet helper.
@@ -83,9 +83,9 @@ stdenv.mkDerivation rec {
       For non-accessible applications such as browsers and Electron apps, there's a shortcut (default is Ctrl+`) for opening a search window that pastes the selected snippet.
     '';
     homepage = "https://www.snippetpixie.com";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.pantheon.members;
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.bytepixie.snippetpixie";
   };
 }

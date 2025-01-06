@@ -152,11 +152,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # fails with "No suitable file for testing purposes"
 
-  meta = with lib; {
+  meta = {
     description = "MIT Kerberos 5";
     homepage = "http://web.mit.edu/kerberos/";
-    license = licenses.mit;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
   passthru = {

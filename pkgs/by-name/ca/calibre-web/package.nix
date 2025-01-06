@@ -81,12 +81,12 @@ python.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pborzenkov ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pborzenkov ];
+    platforms = lib.platforms.all;
     mainProgram = "calibre-web";
   };
 }

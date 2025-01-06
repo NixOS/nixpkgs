@@ -60,7 +60,7 @@ mkYarnPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Moderation tool for Matrix";
     homepage = "https://github.com/matrix-org/mjolnir";
     longDescription = ''
@@ -77,8 +77,8 @@ mkYarnPackage rec {
       A Synapse module is also available to apply the same rulesets the bot
       uses across an entire homeserver.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jojosch ];
     mainProgram = "mjolnir";
   };
 }

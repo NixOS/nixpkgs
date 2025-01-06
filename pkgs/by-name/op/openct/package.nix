@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/OpenSC/openct/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     description = "Drivers for several smart card readers";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

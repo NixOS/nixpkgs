@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     libvterm
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "vwm";
   };
 }

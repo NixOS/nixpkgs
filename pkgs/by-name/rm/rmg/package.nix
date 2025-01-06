@@ -87,16 +87,16 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Rosalie241/RMG";
     description = "Rosalie's Mupen GUI";
     longDescription = ''
       Rosalie's Mupen GUI is a free and open-source mupen64plus front-end
       written in C++. It offers a simple-to-use user interface.
     '';
-    license = if withAngrylionRdpPlus then licenses.unfree else licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = if withAngrylionRdpPlus then lib.licenses.unfree else lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     mainProgram = "RMG";
-    maintainers = with maintainers; [ slam-bert ];
+    maintainers = with lib.maintainers; [ slam-bert ];
   };
 }

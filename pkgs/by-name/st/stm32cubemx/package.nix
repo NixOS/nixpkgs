@@ -73,7 +73,7 @@ let
       cp ${desktopItem}/share/applications/*.desktop $out/share/applications
     '';
 
-    meta = with lib; {
+    meta = {
       description = "A graphical tool for configuring STM32 microcontrollers and microprocessors";
       longDescription = ''
         A graphical tool that allows a very easy configuration of STM32
@@ -83,9 +83,9 @@ let
         step-by-step process.
       '';
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.unfree;
-      maintainers = with maintainers; [
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [
         angaz
         wucke13
       ];

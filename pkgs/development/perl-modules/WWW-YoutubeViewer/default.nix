@@ -35,11 +35,11 @@ buildPerlPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight application for searching and streaming videos from YouTube";
     homepage = "https://github.com/trizen/youtube-viewer";
-    license = with licenses; [ artistic2 ];
-    maintainers = with maintainers; [ woffs ];
+    license = with lib.licenses; [ artistic2 ];
+    maintainers = with lib.maintainers; [ woffs ];
     mainProgram = "youtube-viewer";
   };
 }

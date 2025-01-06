@@ -21,11 +21,11 @@ buildGoModule rec {
     mv $out/bin/ec-lms $out/bin/lk-jwt-service
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal service to provide LiveKit JWTs using Matrix OpenID Connect";
     homepage = "https://github.com/element-hq/lk-jwt-service";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ kilimnik ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ kilimnik ];
     mainProgram = "lk-jwt-service";
   };
 }

@@ -56,12 +56,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/himalaya completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI to manage emails";
     mainProgram = "himalaya";
     homepage = "https://pimalaya.org/himalaya/cli/latest/";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ soywod toastal yanganto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soywod toastal yanganto ];
   };
 }

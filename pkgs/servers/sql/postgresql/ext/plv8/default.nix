@@ -130,7 +130,7 @@ buildPostgresqlExtension (finalAttrs: {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
@@ -139,7 +139,7 @@ buildPostgresqlExtension (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     broken = jitSupport;
   };
 })

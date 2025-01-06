@@ -23,12 +23,12 @@ buildGoModule rec {
 
   subPackages = [ "vt" ];
 
-  meta = with lib; {
+  meta = {
     description = "VirusTotal Command Line Interface";
     homepage = "https://github.com/VirusTotal/vt-cli";
     changelog = "https://github.com/VirusTotal/vt-cli/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "vt";
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

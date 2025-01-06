@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
       ln -s eza $out/bin/exa
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, maintained replacement for ls";
     longDescription = ''
       eza is a modern replacement for ls. It uses colours for information by
@@ -70,13 +70,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/eza-community/eza";
     changelog = "https://github.com/eza-community/eza/releases/tag/v${version}";
-    license = licenses.eupl12;
+    license = lib.licenses.eupl12;
     mainProgram = "eza";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
       _9glenda
       sigmasquadron
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

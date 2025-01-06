@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "nuclear" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://igrek51.github.io/nuclear/";
     description = "Binding glue for CLI Python applications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }

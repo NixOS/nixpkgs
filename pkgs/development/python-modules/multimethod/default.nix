@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multimethod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiple argument dispatching";
     homepage = "https://coady.github.io/multimethod/";
     changelog = "https://github.com/coady/multimethod/tree/v${version}#changes";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

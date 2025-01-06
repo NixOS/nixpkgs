@@ -17,15 +17,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-dJMqaDQVSrvZPwjPFixgqRRzxPJW/f1nO+81kHwGmYU=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to auto-generate documentation for Rhai source code";
     homepage = "https://github.com/rhaiscript/rhai-doc";
     changelog = "https://github.com/rhaiscript/rhai-doc/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "rhai-doc";
   };
 }

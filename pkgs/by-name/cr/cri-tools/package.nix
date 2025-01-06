@@ -44,10 +44,10 @@ buildGoModule rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";
     homepage = "https://github.com/kubernetes-sigs/cri-tools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.podman.members;
   };
 }

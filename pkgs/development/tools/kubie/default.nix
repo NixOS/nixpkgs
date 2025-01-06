@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completion/kubie.bash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shell independent context and namespace switcher for kubectl";
     mainProgram = "kubie";
     homepage = "https://github.com/sbstp/kubie";
-    license = with licenses; [ zlib ];
-    maintainers = with maintainers; [ illiusdope ];
+    license = with lib.licenses; [ zlib ];
+    maintainers = with lib.maintainers; [ illiusdope ];
   };
 }

@@ -38,13 +38,13 @@ let
         (lib.cmakeBool "BUILD_FILTERS" withFilters)
       ];
 
-      meta = with lib; {
+      meta = {
         homepage = "https://h3geo.org/";
         description = "Hexagonal hierarchical geospatial indexing system";
-        license = licenses.asl20;
+        license = lib.licenses.asl20;
         changelog = "https://github.com/uber/h3/raw/v${version}/CHANGELOG.md";
-        platforms = platforms.all;
-        maintainers = with maintainers; [ kalbasit ];
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [ kalbasit ];
       };
     };
 in

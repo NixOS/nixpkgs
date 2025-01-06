@@ -34,11 +34,11 @@ stdenv.mkDerivation {
   # Broken for some reason on this platform.
   doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zeromq/azmq";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     description = "C++ language binding library integrating ZeroMQ with Boost Asio";
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
   };
 }

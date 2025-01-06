@@ -32,14 +32,14 @@ rustPlatform.buildRustPackage rec {
     package = lemurs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Customizable TUI display/login manager written in Rust";
     homepage = "https://github.com/coastalwhite/lemurs";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ jeremiahs ];
+    maintainers = with lib.maintainers; [ jeremiahs ];
     mainProgram = "lemurs";
   };
 }

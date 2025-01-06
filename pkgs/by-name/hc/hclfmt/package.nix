@@ -21,11 +21,11 @@ buildGoModule rec {
   # hclfmt.
   subPackages = [ "cmd/hclfmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Code formatter for the Hashicorp Configuration Language (HCL) format";
     homepage = "https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "hclfmt";
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

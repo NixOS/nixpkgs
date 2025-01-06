@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "collections_extended" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extra Python Collections - bags (multisets), setlists (unique list/indexed set), RangeMap and IndexedDict";
     homepage = "https://github.com/mlenzen/collections-extended";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ exarkun ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ exarkun ];
   };
 }

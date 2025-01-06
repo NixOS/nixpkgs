@@ -25,10 +25,10 @@ buildPythonPackage rec {
     "test_inspect_wrapped_property"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pytoolz/toolz";
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

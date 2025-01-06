@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
     ];
 
-  meta = with lib; {
+  meta = {
     description = "curses based mediawiki browser";
     homepage = "https://github.com/nerdypepper/taizen";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "taizen";
   };
 }

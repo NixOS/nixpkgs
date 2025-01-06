@@ -63,14 +63,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, modern, lightweight, open source and secure password manager";
     homepage = "https://passky.org";
     downloadPage = "https://github.com/Rabbit-Company/Passky-Desktop/releases";
     changelog = "https://github.com/Rabbit-Company/Passky-Desktop/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akkesm ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ akkesm ];
     mainProgram = "passky";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

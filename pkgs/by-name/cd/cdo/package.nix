@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enable_all_static "--enable-all-static"
     ++ lib.optional enable_cxx "--enable-cxx";
 
-  meta = with lib; {
+  meta = {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
     mainProgram = "cdo";
     longDescription = ''
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       There are more than 600 operators available.
     '';
     homepage = "https://code.mpimet.mpg.de/projects/cdo/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ltavard ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ltavard ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

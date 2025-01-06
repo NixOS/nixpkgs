@@ -31,8 +31,8 @@ mkXfceDerivation {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Thunar plugin providing file context menus for archives";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

@@ -26,10 +26,10 @@ buildDunePackage rec {
     iso8601
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Ocaml bindings to Gnuplot";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl21;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl21;
   };
 }

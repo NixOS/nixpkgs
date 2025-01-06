@@ -22,11 +22,11 @@ buildPythonPackage rec {
   # No tests available and no module to import
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generic Driver for Powerful System Tests";
     homepage = "https://github.com/zeek/btest";
     changelog = "https://github.com/zeek/btest/blob/${version}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

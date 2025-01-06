@@ -90,12 +90,12 @@ stdenv.mkDerivation {
     "-DGITBRANCH=${gitBranch}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computer-aided design (CAD) tool from a parallel universe";
     mainProgram = "antimony";
     homepage = "https://github.com/mkeeter/antimony";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 }

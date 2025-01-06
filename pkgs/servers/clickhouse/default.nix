@@ -16,7 +16,6 @@
 
   rustSupport ? true,
 
-  corrosion,
   rustc,
   cargo,
   rustPlatform,
@@ -239,17 +238,17 @@ mkDerivation rec {
 
   passthru.tests.clickhouse = nixosTests.clickhouse;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       orivej
       mbalatsko
     ];
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
-    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (lib.platforms.linux ++ lib.platforms.darwin);
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

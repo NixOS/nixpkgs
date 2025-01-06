@@ -340,13 +340,13 @@ stdenv.mkDerivation (
             most systems with the Linux kernel.
           '';
 
-          license = licenses.lgpl2Plus;
+          license = lib.licenses.lgpl2Plus;
 
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             ma27
             connorbaker
           ];
-          platforms = platforms.linux;
+          platforms = lib.platforms.linux;
         }
         // (args.meta or { });
     }

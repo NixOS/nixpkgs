@@ -21,12 +21,12 @@ stdenv.mkDerivation {
 
   cmakeDir = "server";
 
-  meta = with lib; {
+  meta = {
     description = "Server part of irony";
     mainProgram = "irony-server";
     homepage = "https://melpa.org/#/irony";
-    maintainers = [ maintainers.deepfire ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = [ lib.maintainers.deepfire ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_prostrate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Print and logging utilities";
     longDescription = ''
       Inform is designed to display messages from programs that are typically
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://inform.readthedocs.io";
     changelog = "https://github.com/KenKundert/inform/blob/v${version}/doc/releases.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
 }

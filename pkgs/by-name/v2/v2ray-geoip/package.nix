@@ -22,11 +22,11 @@ let
 
     vendorHash = "sha256-cuKcrYAzjIt6Z4wYg5R6JeL413NDwTub2fZndXEKdTo=";
 
-    meta = with lib; {
+    meta = {
       description = "GeoIP for V2Ray";
       homepage = "https://github.com/v2fly/geoip";
-      license = licenses.cc-by-sa-40;
-      maintainers = with maintainers; [ nickcao ];
+      license = lib.licenses.cc-by-sa-40;
+      maintainers = with lib.maintainers; [ nickcao ];
     };
   };
   input = {

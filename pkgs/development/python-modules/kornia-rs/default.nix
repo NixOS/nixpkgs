@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true; # We only want to use CMake to build some Rust dependencies.
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kornia/kornia-rs";
     description = "Python bindings to Low-level Computer Vision library in Rust";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chpatrick ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chpatrick ];
   };
 }

@@ -28,11 +28,11 @@ let
       git
       pkg-config
     ];
-    meta = with lib; {
+    meta = {
       description = "Helper library used by usbmuxd2";
       homepage = "https://github.com/tihmstar/libgeneral";
-      license = licenses.lgpl21;
-      platforms = platforms.all;
+      license = lib.licenses.lgpl21;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -81,12 +81,12 @@ clangStdenv.mkDerivation rec {
     "sbindir=${placeholder "out"}/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tihmstar/usbmuxd2";
     description = "Socket daemon to multiplex connections from and to iOS devices";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "usbmuxd";
   };
 }

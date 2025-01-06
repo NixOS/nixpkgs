@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version=branch=main" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module for the Nuvoton NCT6687-R chipset found on many B550/B650 motherboards from ASUS and MSI";
-    license = with licenses; [ gpl2Only ];
+    license = with lib.licenses; [ gpl2Only ];
     homepage = "https://github.com/Fred78290/nct6687d/";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ atemu ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ atemu ];
   };
 }

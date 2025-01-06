@@ -121,14 +121,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rpm.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
     description = "RPM Package Manager";
-    maintainers = with maintainers; [ copumpkin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ copumpkin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

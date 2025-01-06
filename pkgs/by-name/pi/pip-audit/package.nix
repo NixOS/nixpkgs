@@ -58,12 +58,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_pyproject_source_duplicate_deps"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for scanning Python environments for known vulnerabilities";
     homepage = "https://github.com/trailofbits/pip-audit";
     changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pip-audit";
   };
 }

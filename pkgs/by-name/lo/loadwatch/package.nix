@@ -19,10 +19,10 @@ stdenv.mkDerivation {
     install loadwatch lw-ctl $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run a program using only idle cycles";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ woffs ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.all;
   };
 }

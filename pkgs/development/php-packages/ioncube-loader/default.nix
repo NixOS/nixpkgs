@@ -48,13 +48,13 @@ stdenv.mkDerivation {
     }_${phpVersion}.so $out/lib/php/extensions/ioncube-loader.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Use ionCube-encoded files on a web server";
     changelog = "https://www.ioncube.com/loaders.php";
     homepage = "https://www.ioncube.com";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ neverbehave ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ neverbehave ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

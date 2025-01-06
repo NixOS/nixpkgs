@@ -34,11 +34,11 @@ buildDunePackage rec {
     github-unix
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocaml-opam/${pname}";
     description = "Tool to ease contributions to opam repositories";
     mainProgram = "opam-publish";
-    license = with licenses; [ lgpl21Only ocamlLgplLinkingException ];
-    maintainers = with maintainers; [ niols ];
+    license = with lib.licenses; [ lgpl21Only ocamlLgplLinkingException ];
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

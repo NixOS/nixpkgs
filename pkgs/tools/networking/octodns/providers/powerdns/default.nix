@@ -42,11 +42,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PowerDNS API provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-powerdns/";
     changelog = "https://github.com/octodns/octodns-powerdns/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

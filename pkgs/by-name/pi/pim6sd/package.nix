@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PIM for IPv6 sparse mode daemon";
     homepage = "https://github.com/troglobit/pim6sd";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/pim6sd.x86_64-darwin
   };
 }

@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Amateur radio logbook software";
     mainProgram = "qlog";
-    license = with licenses; [ gpl3Only ];
+    license = with lib.licenses; [ gpl3Only ];
     homepage = "https://github.com/foldynl/QLog";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       oliver-koss
       mkg20001
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

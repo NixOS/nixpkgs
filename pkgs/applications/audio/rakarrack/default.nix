@@ -21,11 +21,11 @@ stdenv.mkDerivation  rec {
   buildInputs = [ alsa-lib alsa-utils fltk libjack2 libXft libXpm libjpeg
     libpng libsamplerate libsndfile zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-effects processor emulating a guitar effects pedalboard";
     homepage = "https://rakarrack.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

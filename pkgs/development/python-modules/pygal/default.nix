@@ -55,12 +55,12 @@ buildPythonPackage rec {
     export LANG=en_US.UTF-8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for dynamic SVG charting";
     homepage = "http://www.pygal.org";
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "pygal_gen.py";
   };

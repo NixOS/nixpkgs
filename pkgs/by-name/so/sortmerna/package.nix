@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
     sed -e '1i #include <cstdint>' -i include/kseq_load.hpp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";
     mainProgram = "sortmerna";
-    license = licenses.lgpl3;
-    platforms = platforms.x86_64;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.x86_64;
     homepage = "https://bioinfo.lifl.fr/RNA/sortmerna/";
-    maintainers = with maintainers; [ luispedro ];
+    maintainers = with lib.maintainers; [ luispedro ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

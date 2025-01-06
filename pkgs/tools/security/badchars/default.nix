@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   # no tests are available and it can't be imported (it's only a script, not a module)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "HEX badchar generator for different programming languages";
     longDescription = ''
       A HEX bad char generator to instruct encoders such as shikata-ga-nai to
@@ -35,8 +35,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/cytopia/badchars";
     changelog = "https://github.com/cytopia/badchars/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "badchars";
   };
 }

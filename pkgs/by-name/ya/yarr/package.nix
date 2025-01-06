@@ -42,12 +42,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Yet another rss reader";
     mainProgram = "yarr";
     homepage = "https://github.com/nkanaev/yarr";
     changelog = "https://github.com/nkanaev/yarr/blob/v${version}/doc/changelog.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

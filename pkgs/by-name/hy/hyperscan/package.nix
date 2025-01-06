@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.
@@ -86,11 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.hyperscan.io/";
-    maintainers = with maintainers; [ avnik ];
+    maintainers = with lib.maintainers; [ avnik ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 })

@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "bashcompdir=\${out}/share/bash-completion/completions" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://csl.name/jp2a/";
     description = "Small utility that converts JPG images to ASCII";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.FlorianFranzen ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.FlorianFranzen ];
+    platforms = lib.platforms.unix;
     mainProgram = "jp2a";
   };
 }

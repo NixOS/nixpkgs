@@ -69,12 +69,12 @@ stdenvNoCC.mkDerivation {
     runHook postUnpack
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Xen Subproject: Windows PV Drivers";
     homepage = "https://xenproject.org/developers/teams/windows-pv-drivers/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ anthonyroussel ];
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

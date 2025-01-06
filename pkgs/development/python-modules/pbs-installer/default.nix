@@ -35,11 +35,11 @@ buildPythonPackage rec {
   # upstream has no test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Installer for Python Build Standalone";
     homepage = "https://github.com/frostming/pbs-installer";
     changelog = "https://github.com/frostming/pbs-installer/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

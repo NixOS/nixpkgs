@@ -37,12 +37,12 @@ buildGo123Module rec {
     inherit (nixosTests) traefik;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://traefik.io";
     description = "Modern reverse proxy";
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vdemeester ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vdemeester ];
     mainProgram = "traefik";
   };
 }

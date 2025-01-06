@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
   '';
   dontWrapGApps = true;
 
-  meta = with lib; {
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+  meta = {
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     homepage = "https://www.yworks.com/products/yed";
     description = "Powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
     mainProgram = "yed";
   };
 }

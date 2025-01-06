@@ -29,11 +29,11 @@ python3.pkgs.buildPythonApplication rec {
     "certsync"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dump NTDS with golden certificates and UnPAC the hash";
     homepage = "https://github.com/zblurx/certsync";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "certsync";
   };
 }

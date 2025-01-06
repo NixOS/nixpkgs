@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Raw wayland greeter for greetd, to be run under sway or similar";
     mainProgram = "wlgreet";
     homepage = "https://git.sr.ht/~kennylevinsen/wlgreet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -32,12 +32,12 @@ mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${graphicsmagick}/include/GraphicsMagick";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform image editor with a powerful features and a very friendly graphical user interface";
     mainProgram = "photoflare";
     homepage = "https://photoflare.io";
-    maintainers = [ maintainers.omgbebebe ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.omgbebebe ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

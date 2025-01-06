@@ -74,7 +74,7 @@ mkDerivation rec {
     (lib.makeBinPath [ ffmpeg ])
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qstopmotion.org";
     description = "Create stopmotion animation with a (web)camera";
     longDescription = ''
@@ -85,7 +85,7 @@ mkDerivation rec {
     '';
 
     license = lib.licenses.gpl2Plus;
-    maintainers = [ maintainers.leenaars ];
+    maintainers = [ lib.maintainers.leenaars ];
     broken = stdenv.hostPlatform.isAarch64;
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "qstopmotion";

@@ -78,11 +78,11 @@ stdenv.mkDerivation {
     "-Dpython-bindings=on"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libtorrent.org/";
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

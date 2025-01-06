@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8I3mPSJ5aXvQ88nh0SWyuTq9JSTktS2lQPrXlcvD66c=";
 
-  meta = with lib; {
+  meta = {
     description = "Create asciinema videos from a text file";
     homepage = "https://github.com/garbas/asciinema-scenario/";
-    maintainers = with maintainers; [ garbas ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ garbas ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "asciinema-scenario";
   };
 }

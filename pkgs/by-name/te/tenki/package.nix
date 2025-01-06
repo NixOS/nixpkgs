@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3SdOUSSerTnA9VHZEmFt1LiatLwC7Dq4k/MKstE8x80=";
 
-  meta = with lib; {
+  meta = {
     description = "tty-clock with weather effect";
     homepage = "https://github.com/ckaznable/tenki";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iynaix ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "tenki";
   };
 }

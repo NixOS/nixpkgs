@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     openjpeg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "development library for pdf on deepin";
     homepage = "https://github.com/linuxdeepin/deepin-pdfium";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -22,12 +22,12 @@ buildPostgresqlExtension rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with lib; {
+  meta = {
     description = "Async networking for Postgres";
     homepage = "https://github.com/supabase/pg_net";
     changelog = "https://github.com/supabase/pg_net/releases/tag/v${version}";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

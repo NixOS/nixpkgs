@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "hydro";
   version = "0-unstable-2024-03-24";
 
@@ -15,10 +15,10 @@ buildFishPlugin rec {
     hash = "sha256-0MMiM0NRbjZPJLAMDXb+Frgm+du80XpAviPqkwoHjDA=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultra-pure, lag-free prompt with async Git status";
     homepage = "https://github.com/jorgebucaran/hydro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pyrox0 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.pyrox0 ];
   };
 }

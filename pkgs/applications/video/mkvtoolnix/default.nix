@@ -141,15 +141,15 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform tools for Matroska";
     homepage = "https://mkvtoolnix.download/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       rnhmjoj
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

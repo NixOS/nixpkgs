@@ -180,14 +180,14 @@ stdenv.mkDerivation rec {
   pname = "bazel${ lib.optionalString enableNixHacks "-hacks" }";
   inherit version;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode  # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = lib.teams.bazel.members;
     inherit platforms;
   };
@@ -284,7 +284,7 @@ stdenv.mkDerivation rec {
       runCommandCC name ({
         inherit buildInputs;
         preferLocalBuild = true;
-        meta.platforms = platforms;
+        meta.platforms = lib.platforms;
       } // attrs') script;
 
       # bazel wants to extract itself into $install_dir/install every time it runs,

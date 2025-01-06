@@ -75,13 +75,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pyocd/pyOCD/releases/tag/v${version}";
     description = "Python library for programming and debugging Arm Cortex-M microcontrollers";
     downloadPage = "https://github.com/pyocd/pyOCD";
     homepage = "https://pyocd.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

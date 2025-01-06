@@ -154,7 +154,7 @@ python3Packages.buildPythonApplication rec {
     trial --rterrors allmydata
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
     mainProgram = "tahoe";
     longDescription = ''
@@ -165,10 +165,10 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://tahoe-lafs.org/";
     license = [
-      licenses.gpl2Plus # or
+      lib.licenses.gpl2Plus # or
       "TGPPLv1+"
     ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

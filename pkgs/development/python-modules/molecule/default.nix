@@ -66,12 +66,12 @@ buildPythonPackage rec {
         HOME = "$(mktemp -d)";
       });
 
-  meta = with lib; {
+  meta = {
     description = "Molecule aids in the development and testing of Ansible roles";
     homepage = "https://github.com/ansible-community/molecule";
     changelog = "https://github.com/ansible/molecule/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dawidd6 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dawidd6 ];
     mainProgram = "molecule";
   };
 }

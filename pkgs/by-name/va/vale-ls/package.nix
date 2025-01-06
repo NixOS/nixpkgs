@@ -58,12 +58,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LSP implementation for the Vale command-line tool";
     homepage = "https://github.com/errata-ai/vale-ls";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "vale-ls";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       foo-dogsquared
       jansol
     ];

@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     cp bakelite $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/richfelker/bakelite";
     description = "Incremental backup with strong cryptographic confidentality";
     mainProgram = "bakelite";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mvs ];
     # no support for Darwin (yet: https://github.com/richfelker/bakelite/pull/5)
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

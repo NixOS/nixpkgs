@@ -27,10 +27,10 @@ python3Packages.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jaedb/Iris";
     description = "Fully-functional Mopidy web client encompassing Spotify and many other backends";
-    license = licenses.asl20;
-    maintainers = [ maintainers.rvolosatovs ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.rvolosatovs ];
   };
 }

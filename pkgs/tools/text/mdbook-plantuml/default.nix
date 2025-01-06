@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
-  meta = with lib; {
+  meta = {
     description = "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
     mainProgram = "mdbook-plantuml";
     homepage = "https://github.com/sytsereitsma/mdbook-plantuml";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [
       jcouyang
       matthiasbeyer
     ];

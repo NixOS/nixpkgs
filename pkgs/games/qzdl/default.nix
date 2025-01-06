@@ -12,7 +12,7 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qzdl";
   version = "unstable-2023-04-04";
 
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ZDoom WAD Launcher";
     homepage = "https://zdl.vectec.net";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (qtbase.meta) platforms;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ lib.maintainers.azahi ];
     mainProgram = "zdl";
   };
 }

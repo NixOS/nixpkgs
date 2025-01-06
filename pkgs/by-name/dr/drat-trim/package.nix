@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     install -Dt $out/bin drat-trim lrat-check
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proof checker for unSAT proofs";
     longDescription = ''
       DRAT-trim is a satisfiability proof checking and trimming
@@ -42,8 +42,8 @@ stdenv.mkDerivation {
       up the checking process.
     '';
     homepage = "https://www.cs.utexas.edu/~marijn/drat-trim/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kini ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kini ];
+    platforms = lib.platforms.all;
   };
 }

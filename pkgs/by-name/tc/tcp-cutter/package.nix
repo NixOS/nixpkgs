@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     install -D -m 0755 cutter $out/bin/tcp-cutter
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TCP/IP Connection cutting on Linux Firewalls and Routers";
     homepage = "http://www.digitage.co.uk/digitage/software/linux-security/cutter";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.offline ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.offline ];
     mainProgram = "tcp-cutter";
   };
 }

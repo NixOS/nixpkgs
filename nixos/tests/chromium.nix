@@ -45,7 +45,7 @@ mapAttrs (
     name = "chromium-${channel}";
     meta =
       {
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           aszlig
           primeos
         ];

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     sed -re 's%@GUILE@%&/guile%' -i */Makefile.* Makefile.*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools & library for data backup and distributed storage";
 
     longDescription = ''
@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.nongnu.org/libchop/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-aMx4xfWYiiz5TY/CVCogZ3WNR6md77jb8RKhhVwqeto=";
 
-  meta = with lib; {
+  meta = {
     description = "Npm scripts runner written in Rust";
     mainProgram = "dum";
     homepage = "https://github.com/egoist/dum";
     changelog = "https://github.com/egoist/dum/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

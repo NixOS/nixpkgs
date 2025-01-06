@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of electronic mail handling programs";
     homepage = "http://marmaro.de/prog/mmh";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

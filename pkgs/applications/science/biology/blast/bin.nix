@@ -63,7 +63,7 @@ stdenv.mkDerivation {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (blast.meta) description homepage license;
     platforms = [
       "x86_64-linux"
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ natsukium ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

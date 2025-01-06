@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spiflash" ];
 
-  meta = with lib; {
+  meta = {
     description = "SPI data flash device drivers in Python";
     homepage = "https://github.com/eblot/pyspiflash";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

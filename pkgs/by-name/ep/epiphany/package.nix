@@ -103,12 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Epiphany/";
     description = "WebKit based web browser for GNOME";
     mainProgram = "epiphany";
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome.members ++ lib.teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 })

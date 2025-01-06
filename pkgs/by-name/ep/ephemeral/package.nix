@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ xiorcale ] ++ lib.teams.pantheon.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     mainProgram = "com.github.cassidyjames.ephemeral";
   };
 }

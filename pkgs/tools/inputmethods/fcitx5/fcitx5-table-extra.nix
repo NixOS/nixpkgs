@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     fcitx5
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extra table for Fcitx, including Boshiamy, Zhengma, Cangjie, and Quick";
     homepage = "https://github.com/fcitx/fcitx5-table-extra";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

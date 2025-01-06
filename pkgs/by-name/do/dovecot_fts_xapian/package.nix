@@ -41,16 +41,16 @@ stdenv.mkDerivation rec {
     "--with-moduledir=$(out)/lib/dovecot"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/grosjo/fts-xapian";
     description = "Dovecot FTS plugin based on Xapian";
     changelog = "https://github.com/grosjo/fts-xapian/releases";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       julm
       symphorien
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/dovecot_fts_xapian.x86_64-darwin
   };
 }

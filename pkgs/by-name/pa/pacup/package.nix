@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     packaging
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Help maintainers update pacscripts";
     longDescription = ''
       Pacup (Pacscript Updater) is a maintainer helper tool to help maintainers update their pacscripts.
@@ -39,8 +39,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/pacstall/pacup";
     changelog = "https://github.com/pacstall/pacup/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zahrun ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ zahrun ];
     mainProgram = "pacup";
   };
 }

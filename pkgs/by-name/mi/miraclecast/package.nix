@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     "-Dip-binary=${iproute2}/bin/ip"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Connect external monitors via Wi-Fi";
     homepage = "https://github.com/albfan/miraclecast";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

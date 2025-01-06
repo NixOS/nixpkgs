@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dyn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynect dns lib";
     homepage = "https://dyn.readthedocs.org";
     changelog = "https://github.com/dyninc/dyn-python/blob/${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

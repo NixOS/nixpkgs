@@ -32,7 +32,7 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description =
       "A gRPC to JSON proxy generator plugin for Google Protocol Buffers";
     longDescription = ''
@@ -42,7 +42,7 @@ buildGoModule rec {
       the google.api.http annotations in the protobuf service definitions.
     '';
     homepage = "https://github.com/grpc-ecosystem/grpc-gateway";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ happyalu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ happyalu ];
   };
 }

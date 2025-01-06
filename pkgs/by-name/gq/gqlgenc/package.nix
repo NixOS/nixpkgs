@@ -19,11 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-h3ePmfRkGqVXdtjX2cU5y2HnX+VkmTWNwrEkhLAmrlU=";
 
-  meta = with lib; {
+  meta = {
     description = "Go tool for building GraphQL client with gqlgen";
     mainProgram = "gqlgenc";
     homepage = "https://github.com/Yamashou/gqlgenc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wattmto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wattmto ];
   };
 }

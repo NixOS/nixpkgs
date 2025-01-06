@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     "install-misc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ elitak ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ elitak ];
   };
 }

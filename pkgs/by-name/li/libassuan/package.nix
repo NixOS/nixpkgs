@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ignoredVersions = ".*-base";
   };
 
-  meta = with lib; {
+  meta = {
     description = "IPC library used by GnuPG and related software";
     mainProgram = "libassuan-config";
     longDescription = ''
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gnupg.org/software/libassuan/";
     changelog = "https://dev.gnupg.org/source/libassuan/browse/master/NEWS;libassuan-${version}";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

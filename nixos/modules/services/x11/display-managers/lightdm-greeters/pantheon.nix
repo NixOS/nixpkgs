@@ -15,8 +15,8 @@ let
 
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  meta = {
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.pantheon.members;
   };
 
   options = {

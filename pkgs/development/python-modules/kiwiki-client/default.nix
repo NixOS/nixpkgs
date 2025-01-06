@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiwiki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the KIWI.KI API";
     homepage = "https://github.com/c7h/kiwiki_client";
     changelog = "https://github.com/c7h/kiwiki_client/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

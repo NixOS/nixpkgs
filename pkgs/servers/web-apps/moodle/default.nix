@@ -113,12 +113,12 @@ in stdenv.mkDerivation rec {
     inherit (nixosTests) moodle;
   };
 
-  meta = with lib; {
+  meta = {
     description =
       "Free and open-source learning management system (LMS) written in PHP";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://moodle.org/";
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = lib.platforms.all;
   };
 }

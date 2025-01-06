@@ -102,12 +102,12 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, secure, universal email app, capable of managing an unlimited number of mail accounts";
     homepage = "https://bluemail.me";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

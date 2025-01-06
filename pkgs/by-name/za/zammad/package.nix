@@ -150,15 +150,15 @@ stdenvNoCC.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Zammad, a web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       netali
     ];

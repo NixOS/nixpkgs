@@ -64,16 +64,16 @@ stdenv.mkDerivation rec {
       rm $out/lib/*.so*
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
     changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
     description = "Tools for reading hardware sensors";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [ pmy ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pmy ];
+    platforms = lib.platforms.linux;
     mainProgram = "sensors";
   };
 }

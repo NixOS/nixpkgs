@@ -82,9 +82,9 @@ mkCoqDerivation {
     mathcomp.fingroup
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet Another Coq Library on Machine Words";
-    maintainers = [ maintainers.vbgl ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
   };
 }

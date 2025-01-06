@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional libDSKSupport libdsk
     ++ lib.optional motifSupport lesstif;
 
-  meta = with lib; {
+  meta = {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
     homepage = "https://www.xcpc-emulator.net";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xcpc";
   };
 }

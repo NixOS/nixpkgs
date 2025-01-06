@@ -79,5 +79,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ cyntheticfox ];
+  meta.maintainers = with lib.maintainers; [ cyntheticfox ];
 }

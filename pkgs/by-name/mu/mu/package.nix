@@ -89,17 +89,17 @@ stdenv.mkDerivation rec {
   # Tests need a UTF-8 aware locale configured
   env.LANG = "C.UTF-8";
 
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities for indexing and searching Maildirs";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       antono
       chvp
       peterhoeg
     ];
     mainProgram = "mu";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

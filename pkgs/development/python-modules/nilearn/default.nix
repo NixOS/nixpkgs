@@ -47,10 +47,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nilearn.github.io";
     description = "Module for statistical learning on neuroimaging data";
     changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

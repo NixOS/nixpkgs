@@ -57,11 +57,11 @@ buildPythonPackage rec {
     ${python.interpreter} testmanage.py test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translation plugin for Wagtail CMS";
     homepage = "https://github.com/wagtail/wagtail-localize";
     changelog = "https://github.com/wagtail/wagtail-localize/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "justbackoff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple backoff algorithm in Python";
     homepage = "https://github.com/alexferl/justbackoff";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

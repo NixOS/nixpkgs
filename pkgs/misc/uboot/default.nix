@@ -131,11 +131,11 @@ let
 
     dontStrip = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ bartsch dezgeg lopsided98 ];
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ bartsch dezgeg lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
 in {

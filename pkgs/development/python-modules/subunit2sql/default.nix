@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "subunit2sql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command to Read a subunit file or stream and put the data in a SQL DB";
     homepage = "https://opendev.org/opendev/subunit2sql";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
     # version 1.10.0 is incomptaible with oslo-db 14.0.0
     broken = true;
   };

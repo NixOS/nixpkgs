@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_negative_linenumber_increment"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sampling profiler for Python programs";
     mainProgram = "py-spy";
     homepage = "https://github.com/benfred/py-spy";
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lnl7 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
 }

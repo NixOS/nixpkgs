@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     cp -r $src/doc $doc/share/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://snap7.sourceforge.net/";
     description = "Step7 Open Source Ethernet Communication Suite";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = lib.platforms.linux;
   };
 }

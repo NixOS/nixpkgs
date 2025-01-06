@@ -90,11 +90,11 @@ buildPythonPackage rec {
     "test_bad_pins_session"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
     changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

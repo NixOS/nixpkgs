@@ -14,13 +14,13 @@
 
 mkDerivation {
   pname = "libkcddb";
-  meta = with lib; {
-    license = with licenses; [
+  meta = {
+    license = with lib.licenses; [
       gpl2
       lgpl21
       bsd3
     ];
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

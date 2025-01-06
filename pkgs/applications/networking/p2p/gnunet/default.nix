@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     make -k check
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://gnunet.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ pstn ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ pstn ];
+    platforms = lib.platforms.unix;
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };
 }

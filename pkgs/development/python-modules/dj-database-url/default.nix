@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dj_database_url" ];
 
-  meta = with lib; {
+  meta = {
     description = "Use Database URLs in your Django Application";
     homepage = "https://github.com/jazzband/dj-database-url";
     changelog = "https://github.com/jazzband/dj-database-url/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

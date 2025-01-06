@@ -32,12 +32,12 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=nrfconnect'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nordic Semiconductor nRF Connect for Desktop";
     homepage = "https://www.nordicsemi.com/Products/Development-tools/nRF-Connect-for-desktop";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ stargate01 ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ stargate01 ];
     mainProgram = "nrfconnect";
   };
 }

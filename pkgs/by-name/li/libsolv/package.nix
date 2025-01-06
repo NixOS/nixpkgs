@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib xz bzip2 zchunk zstd expat db ]
     ++ lib.optional withRpm rpm;
 
-  meta = with lib; {
+  meta = {
     description = "Free package dependency solver";
     homepage = "https://github.com/openSUSE/libsolv";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ copumpkin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ copumpkin ];
   };
 }

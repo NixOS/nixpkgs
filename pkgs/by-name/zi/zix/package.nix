@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight C99 portability and data structure library";
     homepage = "https://gitlab.com/drobilla/zix";
     changelog = "https://gitlab.com/drobilla/zix/-/blob/${src.rev}/NEWS";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yuu ];
   };
 }

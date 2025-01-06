@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rich text framework for GTK";
     mainProgram = "text-engine-demo";
     homepage = "https://github.com/mjakeman/text-engine";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

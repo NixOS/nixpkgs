@@ -74,11 +74,11 @@ buildDotnetModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert. ${engine.build} version";
     homepage = "https://www.openra.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mdarocha ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.mdarocha ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "openra-ra";
   };

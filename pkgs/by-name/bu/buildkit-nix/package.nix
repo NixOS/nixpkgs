@@ -17,12 +17,12 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  meta = with lib; {
+  meta = {
     description = "Nix frontend for BuildKit";
     homepage = "https://github.com/reproducible-containers/buildkit-nix/";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "buildkit-nix";
   };
 }

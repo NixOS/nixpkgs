@@ -68,11 +68,11 @@ buildPythonPackage rec {
   # Fails to find Console even though it exists on python 3.x
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     maintainers = [ ];
     mainProgram = "cxfreeze";
   };

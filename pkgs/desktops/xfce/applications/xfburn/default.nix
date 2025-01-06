@@ -36,9 +36,9 @@ mkXfceDerivation {
     libxfce4ui
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Disc burner and project creator for Xfce";
     mainProgram = "xfburn";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

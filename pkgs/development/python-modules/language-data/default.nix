@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # No unittests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Supplement module for langcodes";
     homepage = "https://github.com/georgkrause/language_data";
     changelog = "https://github.com/georgkrause/language_data/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -15,11 +15,11 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = with python3Packages; [ requests ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sdushantha/fileinfo";
     description = "File extension metadata lookup tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ h7x4 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "fileinfo";
   };
 }

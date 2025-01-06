@@ -46,13 +46,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scikit-hep/iminuit";
     description = "Python interface for the Minuit2 C++ library";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       lgpl2Only
     ];
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

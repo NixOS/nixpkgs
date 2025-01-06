@@ -148,14 +148,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.imagemagick.org/";
     changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dotlambda rhendric bloxx12 ];
-    license = licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ dotlambda rhendric bloxx12 ];
+    license = lib.licenses.asl20;
     mainProgram = "magick";
   };
 })

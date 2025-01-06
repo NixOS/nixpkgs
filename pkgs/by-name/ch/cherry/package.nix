@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     mkfontdir $out/share/fonts/misc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "cherry font";
     homepage = "https://github.com/turquoise-hexagon/cherry";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

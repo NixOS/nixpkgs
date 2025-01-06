@@ -23,10 +23,10 @@ buildGoModule rec {
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Indexes Git repositories into Elasticsearch for GitLab";
     mainProgram = "gitlab-elasticsearch-indexer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yayayayaka ] ++ teams.cyberus.members;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yayayayaka ] ++ lib.teams.cyberus.members;
   };
 }

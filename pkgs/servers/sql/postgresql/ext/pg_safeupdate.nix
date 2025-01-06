@@ -46,12 +46,12 @@ buildPostgresqlExtension rec {
     inherit sha256;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";
     homepage = "https://github.com/eradman/pg-safeupdate";
     changelog = "https://github.com/eradman/pg-safeupdate/raw/${src.rev}/NEWS";
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ wolfgangwalther ];
-    license = licenses.postgresql;
+    maintainers = with lib.maintainers; [ wolfgangwalther ];
+    license = lib.licenses.postgresql;
   };
 }

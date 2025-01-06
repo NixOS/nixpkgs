@@ -82,13 +82,13 @@ ocamlPackages.buildDunePackage rec {
       $out/share/satysfi/dist/fonts/Junicode.ttf
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gfngfn/SATySFi";
     description = "Statically-typed, functional typesetting system";
     changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.mt-caret ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.mt-caret ];
+    platforms = lib.platforms.all;
     mainProgram = "satysfi";
   };
 }

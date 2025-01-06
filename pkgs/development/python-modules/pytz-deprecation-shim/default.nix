@@ -41,10 +41,10 @@ buildPythonPackage rec {
   # The test suite is just very flaky and breaks all the time
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Shims to make deprecation of pytz easier";
     homepage = "https://github.com/pganssle/pytz-deprecation-shim";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     cp crackxls2003 $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GavinSmith0123/crackxls2003/";
     description = "Used to break the encryption on old Microsoft Excel and Microsoft Word files";
     mainProgram = "crackxls2003";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

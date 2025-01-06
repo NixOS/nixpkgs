@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     ln -s $out/usr/share $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "iotop identifies processes that use high amount of input/output requests on your machine";
     homepage = "https://github.com/Tomas-M/iotop";
-    maintainers = [ maintainers.arezvov ];
+    maintainers = [ lib.maintainers.arezvov ];
     mainProgram = "iotop-c";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

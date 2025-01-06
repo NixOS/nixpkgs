@@ -62,8 +62,8 @@ mkXfceDerivation {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${xfdesktop}/share")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Screensaver for Xfce";
-    maintainers = with maintainers; [ symphorien ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ symphorien ] ++ lib.teams.xfce.members;
   };
 }

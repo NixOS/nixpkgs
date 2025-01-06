@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Klondike Solitaire in your ncurses terminal";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mpereira/tty-solitaire";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     mainProgram = "ttysolitaire";
   };
 }

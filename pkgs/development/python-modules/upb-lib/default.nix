@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "test_create_control_word_all"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with UPB PIM";
     homepage = "https://github.com/gwww/upb-lib";
     changelog = "https://github.com/gwww/upb-lib/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

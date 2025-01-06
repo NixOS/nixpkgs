@@ -19,12 +19,12 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/cmd/jwx";
 
-  meta = with lib; {
+  meta = {
     description = " Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";
     mainProgram = "jwx";
     homepage = "https://github.com/lestrrat-go/jwx";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       arianvp
       flokli
     ];

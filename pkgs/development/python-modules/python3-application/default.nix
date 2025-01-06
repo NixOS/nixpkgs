@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "application" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       chanley
       yureien
     ];

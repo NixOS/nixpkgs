@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   fetchFromGitHub,
   python3Packages,
 }:
@@ -36,11 +36,11 @@ pythonPackages.buildPythonApplication rec {
     install -m644 README.rst "$out/share/doc/nvpy/README"
   '';
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "nvpy";
   };
 }

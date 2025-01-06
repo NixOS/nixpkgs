@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/ToneLib-Jam.desktop --replace /usr/ $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ToneLib Jam – the learning and practice software for guitar players";
     homepage = "https://tonelib.net/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Jam";
   };

@@ -31,11 +31,11 @@ buildNpmPackage rec {
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for Nest applications";
     homepage = "https://nestjs.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nest";
-    maintainers = [ maintainers.ehllie ];
+    maintainers = [ lib.maintainers.ehllie ];
   };
 }

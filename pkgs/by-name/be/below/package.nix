@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
   # needs /sys/fs/cgroup
   doCheck = false;
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+  meta = {
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ globin ];
     description = "Time traveling resource monitor for modern Linux systems";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
     mainProgram = "below";
   };

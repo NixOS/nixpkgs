@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
     inherit lxd-lts;
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       Expose a SQLite database over the network and replicate it across a
       cluster of peers
     '';
     homepage = "https://dqlite.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

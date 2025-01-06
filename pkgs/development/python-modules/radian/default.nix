@@ -77,12 +77,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radian" ];
 
-  meta = with lib; {
+  meta = {
     description = "21 century R console";
     mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
     changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

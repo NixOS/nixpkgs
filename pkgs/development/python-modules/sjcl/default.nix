@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sjcl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Decrypt and encrypt messages compatible to the \"Stanford Javascript Crypto Library (SJCL)\" message format. This is a wrapper around pycrypto";
     homepage = "https://github.com/berlincode/sjcl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ binsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ binsky ];
   };
 }

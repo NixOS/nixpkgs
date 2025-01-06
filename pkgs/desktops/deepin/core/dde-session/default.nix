@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
   # FIXME: dde-wayland always exits abnormally
   passthru.providedSessions = [ "dde-x11" ];
 
-  meta = with lib; {
+  meta = {
     description = "New deepin session based on systemd and existing projects";
     homepage = "https://github.com/linuxdeepin/dde-session";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

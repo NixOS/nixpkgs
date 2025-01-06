@@ -239,13 +239,13 @@ buildBazelPackage rec {
     pomerium = nixosTests.pomerium;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://envoyproxy.io";
     changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
     mainProgram = "envoy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

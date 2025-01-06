@@ -91,7 +91,7 @@ buildPythonPackage rec {
     withAdapters = callPackage ./with-adapters.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enables data analysts and engineers to transform their data using the same practices that software engineers use to build applications";
     longDescription = ''
       The dbt tool needs adapters to data sources in order to work. The available
@@ -111,8 +111,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
     changelog = "https://github.com/dbt-labs/dbt-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mausch
       tjni
     ];

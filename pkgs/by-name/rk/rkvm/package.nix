@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) rkvm;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Virtual KVM switch for Linux machines";
     homepage = "https://github.com/htrefil/rkvm";
     changelog = "https://github.com/htrefil/rkvm/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

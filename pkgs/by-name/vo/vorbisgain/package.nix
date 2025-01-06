@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     configureFlags="--mandir=$out/share/man"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sjeng.org/vorbisgain.html";
     description = "Utility that corrects the volume of an Ogg Vorbis file to a predefined standardized loudness";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "vorbisgain";
   };
 }

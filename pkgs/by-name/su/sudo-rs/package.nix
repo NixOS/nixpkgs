@@ -73,15 +73,15 @@ rustPlatform.buildRustPackage rec {
     tests = nixosTests.sudo-rs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
     changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ nicoo ];
+    platforms = lib.platforms.linux;
   };
 }

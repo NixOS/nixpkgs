@@ -16,12 +16,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/guyfedwards/nom";
     description = "RSS reader for the terminal";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       nadir-ishiguro
       matthiasbeyer
     ];

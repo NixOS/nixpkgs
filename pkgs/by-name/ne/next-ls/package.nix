@@ -34,13 +34,13 @@ beamPackages.mixRelease rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.elixir-tools.dev/next-ls/";
     changelog = "https://github.com/elixir-tools/next-ls/releases/tag/v${version}";
     description = "The language server for Elixir that just works";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nextls";
-    maintainers = [ maintainers.adamcstephens ];
+    maintainers = [ lib.maintainers.adamcstephens ];
     platforms = beamPackages.erlang.meta.platforms;
   };
 }

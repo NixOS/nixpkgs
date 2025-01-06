@@ -140,11 +140,11 @@ else
       "--with-llvm-config=${llvm.dev}/bin/llvm-config"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
       homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
-      license = licenses.mit;
-      maintainers = [ maintainers.maurer ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.maurer ];
       mainProgram = "bap";
     };
   }

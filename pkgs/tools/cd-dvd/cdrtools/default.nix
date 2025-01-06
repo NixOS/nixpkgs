@@ -60,15 +60,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";
-    license = with licenses; [
+    license = with lib.licenses; [
       cddl
       gpl2Plus
       lgpl21
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     # Licensing issues: This package contains code licensed under CDDL, GPL2
     # and LGPL2. There is a debate regarding the legality of distributing this
     # package in binary form.

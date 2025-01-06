@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = ".mdb (MS Access) format tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2
     ];
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     inherit (src.meta) homepage;
   };
 }

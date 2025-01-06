@@ -20,11 +20,11 @@ stdenvNoCC.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deepin GTK Theme";
     homepage = "https://github.com/linuxdeepin/deepin-gtk-theme";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -68,14 +68,14 @@ stdenv.mkDerivation rec {
     update-source-version teamspeak_server "$version" --system=x86_64-linux
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # See distribution-permit.txt for a confirmation that nixpkgs is allowed to distribute TeamSpeak.
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       arobyn
       gerschtli
     ];

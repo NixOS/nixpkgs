@@ -31,12 +31,12 @@ buildGo123Module rec {
   CGO_CFLAGS = "-I ${lm_sensors}/include";
   CGO_LDFLAGS = "-L ${lm_sensors}/lib";
 
-  meta = with lib; {
+  meta = {
     description = "Simple daemon providing dynamic fan speed control based on temperature sensors";
     mainProgram = "fan2go";
     homepage = "https://github.com/markusressel/fan2go";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ mtoohey ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ mtoohey ];
+    platforms = lib.platforms.linux;
   };
 }

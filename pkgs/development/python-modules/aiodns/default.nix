@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple DNS resolver for asyncio";
     homepage = "https://github.com/saghul/aiodns";
     changelog = "https://github.com/saghul/aiodns/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

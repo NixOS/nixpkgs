@@ -131,10 +131,10 @@ lib.makeScope pkgs.newScope (
 
       installTargets = [ "install-admin" ];
 
-      meta = with lib; {
+      meta = {
         description = "Batch Image Manipulation Plugin for GIMP";
         homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
         maintainers = [ ];
       };
     };
@@ -188,17 +188,17 @@ lib.makeScope pkgs.newScope (
         NIX_LDFLAGS = "-lm";
       };
 
-      meta = with lib; {
+      meta = {
         description = "GIMP Animation Package";
         homepage = "https://www.gimp.org";
         # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
         # falls inside "free".
-        license = with licenses; [
+        license = with lib.licenses; [
           gpl3
           free
         ];
         # Depends on linux/soundcard.h
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
       };
     };
 
@@ -256,10 +256,10 @@ lib.makeScope pkgs.newScope (
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
-        license = with licenses; [ gpl3Plus ];
+        license = with lib.licenses; [ gpl3Plus ];
       };
     };
 

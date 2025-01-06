@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gnupg.org";
     description = "Classic (1.4) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free
       implementation of the OpenPGP standard as defined by RFC4880.  GnuPG
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       other applications.  A wealth of frontend applications and libraries are
       available.
     '';
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "gpg";
   };
 }

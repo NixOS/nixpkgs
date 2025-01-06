@@ -62,11 +62,11 @@ mkDerivation rec {
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient image organization and indexing";
     homepage = "https://www.kphotoalbum.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (kconfig.meta) platforms;
   };
 }

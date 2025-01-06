@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh auto-completion/zsh/_googler
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jarun/googler";
     description = "Google Search, Google Site Search, Google News from the terminal";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ koral Br1ght0ne ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ koral Br1ght0ne ];
     platforms = python.meta.platforms;
     mainProgram = "googler";
   };

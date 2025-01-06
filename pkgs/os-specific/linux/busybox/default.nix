@@ -186,12 +186,12 @@ stdenv.mkDerivation rec {
 
   passthru.shellPath = "/bin/ash";
 
-  meta = with lib; {
+  meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ TethysSvensson qyliss ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ TethysSvensson qyliss ];
+    platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

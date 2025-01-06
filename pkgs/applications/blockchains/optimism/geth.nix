@@ -47,10 +47,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "";
     homepage = "https://github.com/ethereum-optimism/op-geth";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

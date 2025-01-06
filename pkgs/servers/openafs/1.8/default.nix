@@ -145,7 +145,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     outputsToInstall = [
       "out"
       "doc"
@@ -153,11 +153,11 @@ stdenv.mkDerivation {
     ];
     description = "Open AFS client";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
-    maintainers = [
-      maintainers.maggesi
-      maintainers.spacefrogg
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      maggesi
+      spacefrogg
     ];
   };
 }

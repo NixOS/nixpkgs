@@ -72,7 +72,7 @@ mkCoqDerivation {
     hierarchy-builder
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of formalized graph theory results in Coq";
     longDescription = ''
       A library of formalized graph theory results, including various
@@ -82,7 +82,7 @@ mkCoqDerivation {
       the study of relation algebra within the ERC CoVeCe project (e.g.,
       soundness and completeness of an axiomatization of graph isomorphism).
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.cecill-b;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.cecill-b;
   };
 }

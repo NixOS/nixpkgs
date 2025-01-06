@@ -42,11 +42,11 @@ buildPythonPackage rec {
   doCheck = false; # tries to download pretrained models
   pythonImportsCheck = [ "peft" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/huggingface/peft";
     description = "State-of-the art parameter-efficient fine tuning";
     changelog = "https://github.com/huggingface/peft/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -69,10 +69,10 @@ buildPythonPackage rec {
     "visions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Type system for data analysis in Python";
     homepage = "https://dylan-profiler.github.io/visions";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

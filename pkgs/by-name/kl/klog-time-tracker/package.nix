@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-QOS+D/zD5IlJBlb7vrOoHpP/7xS9En1/MFNwLSBrXOg=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for time tracking in a human-readable, plain-text file format";
     homepage = "https://klog.jotaen.net";
-    license = licenses.mit;
-    maintainers = [ maintainers.blinry ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.blinry ];
     mainProgram = "klog";
   };
 }

@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
       --replace-fail "__attribute__ ((regparm(n)))" ""
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://aa-project.sourceforge.net/bb";
     description = "AA-lib demo";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rnhmjoj ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rnhmjoj ];
+    platforms = lib.platforms.unix;
     mainProgram = "bb";
   };
 }

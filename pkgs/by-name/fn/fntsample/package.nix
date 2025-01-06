@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eugmes/fntsample";
     description = "PDF and PostScript font samples generator";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 # TODO: factor/package ucd-blocks

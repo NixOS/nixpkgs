@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "gensim/test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
     changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jyp ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }

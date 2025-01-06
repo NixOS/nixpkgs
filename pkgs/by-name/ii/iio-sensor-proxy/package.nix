@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy for sending IIO sensor data to D-Bus";
     mainProgram = "monitor-sensor";
     homepage = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ _999eagle ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ _999eagle ];
+    platforms = lib.platforms.linux;
   };
 }

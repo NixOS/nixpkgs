@@ -135,13 +135,13 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = teams.jitsi.members ++ [ maintainers.tomasajt ];
+    maintainers = lib.teams.jitsi.members ++ [ lib.maintainers.tomasajt ];
     inherit (electron.meta) platforms;
   };
 }

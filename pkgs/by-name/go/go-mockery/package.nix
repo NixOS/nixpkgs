@@ -59,11 +59,11 @@ buildGoModule rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vektra/mockery";
     description = "Mock code autogenerator for Golang";
-    maintainers = with maintainers; [ fbrs ];
+    maintainers = with lib.maintainers; [ fbrs ];
     mainProgram = "mockery";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

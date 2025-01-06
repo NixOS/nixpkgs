@@ -15,11 +15,11 @@ buildKodiBinaryAddon rec {
   extraBuildInputs = [ pkg-config libGL projectm ];
 
   propagatedBuildInputs = [ glm ];
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xbmc/visualization.projectm";
     description = "Projectm visualization for kodi";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = lib.teams.kodi.members;
   };
 }

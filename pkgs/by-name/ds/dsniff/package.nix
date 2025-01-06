@@ -102,15 +102,15 @@ stdenv.mkDerivation rec {
     "--with-openssl=${ssl}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "collection of tools for network auditing and penetration testing";
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.
     '';
     homepage = "https://www.monkey.org/~dugsong/dsniff/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.symphorien ];
     # bsd and solaris should work as well
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

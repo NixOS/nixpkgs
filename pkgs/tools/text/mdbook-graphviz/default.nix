@@ -24,13 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ graphviz ];
 
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for mdbook, rendering Graphviz graphs to HTML at build time";
     mainProgram = "mdbook-graphviz";
     homepage = "https://github.com/dylanowen/mdbook-graphviz";
     changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${version}";
-    license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.mpl20 ];
+    maintainers = with lib.maintainers; [
       lovesegfault
       matthiasbeyer
     ];

@@ -78,7 +78,7 @@ buildPythonPackage rec {
     "test_binary_compatibility"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code generator & library for Protobuf 3 and async gRPC";
     mainProgram = "protoc-gen-python_betterproto";
     longDescription = ''
@@ -88,7 +88,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
     changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

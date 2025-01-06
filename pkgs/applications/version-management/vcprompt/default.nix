@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''
       A little C program that prints a short string with barebones information
       about the current working directory for various version control systems
     '';
     homepage = "http://hg.gerg.ca/vcprompt";
     maintainers = [ ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "vcprompt";
   };
 }

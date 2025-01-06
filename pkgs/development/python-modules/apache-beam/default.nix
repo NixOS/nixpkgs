@@ -204,11 +204,11 @@ buildPythonPackage rec {
     "test_batch_encode_decode"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
     # https://github.com/apache/beam/issues/27221
     broken = lib.versionAtLeast pandas.version "2";
   };

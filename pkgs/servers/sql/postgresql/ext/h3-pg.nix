@@ -53,10 +53,10 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL bindings for H3, a hierarchical hexagonal geospatial indexing system";
     homepage = "https://github.com/zachasme/h3-pg";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };

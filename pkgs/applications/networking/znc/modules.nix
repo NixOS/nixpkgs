@@ -45,10 +45,10 @@ in
       sha256 = "1k7ifpqqzzf2j7w795q4mx1nvmics2higzjqr3mid3lp43sqg5s6";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Request backlog for IRC channels";
       homepage = "https://github.com/fruitiex/znc-backlog/";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
       maintainers = [ ];
     };
   };
@@ -65,11 +65,11 @@ in
       sha256 = "0a3f4j6s5j7p53y42zrgpqyl2zm0jxb69lp24j6mni3licigh254";
     };
 
-    meta = with lib; {
+    meta = {
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
-      license = licenses.asl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
         hrdinka
         szlend
         cybershadow
@@ -89,10 +89,10 @@ in
       sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = with lib; {
+    meta = {
       description = "ZNC clientaway module";
       homepage = "https://github.com/kylef/znc-contrib";
-      license = licenses.gpl2;
+      license = lib.licenses.gpl2;
       maintainers = [ ];
     };
   };
@@ -129,10 +129,10 @@ in
       sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = with lib; {
+    meta = {
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
-      license = licenses.gpl2;
+      license = lib.licenses.gpl2;
       maintainers = [ ];
     };
   };
@@ -149,11 +149,11 @@ in
       hash = "sha256-8W3uF1PrLQiEZm7JaFrpqmJLSFioa4F4qlM1J6Zua8U=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
-      license = licenses.mit;
-      maintainers = with maintainers; [ szlend ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ szlend ];
     };
   };
 
@@ -169,11 +169,11 @@ in
       sha256 = "0mgfajljy035051b2sx70i8xrb51zw9q2z64kf85zw1lynihzyh4";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ hrdinka ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ hrdinka ];
     };
   };
 

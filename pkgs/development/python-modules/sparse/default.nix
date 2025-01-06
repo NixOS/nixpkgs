@@ -52,12 +52,12 @@ buildPythonPackage rec {
     "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sparse n-dimensional arrays computations";
     homepage = "https://sparse.pydata.org/";
     changelog = "https://sparse.pydata.org/en/stable/changelog.html";
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

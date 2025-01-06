@@ -98,11 +98,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for amazon services";
     homepage = "https://github.com/aio-libs/aiobotocore";
     changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

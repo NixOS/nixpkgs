@@ -39,13 +39,13 @@ appimageTools.wrapType2 {
     ignoredVersions = "-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application for SimpleX Chat";
     mainProgram = "simplex-chat-desktop";
     homepage = "https://simplex.chat";
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ terryg ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ terryg ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -92,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library for testing DBus interactions using Qt";
     homepage = "https://launchpad.net/libqtdbustest";
-    license = licenses.lgpl3Only;
-    platforms = platforms.unix;
-    maintainers = teams.lomiri.members;
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.lomiri.members;
     mainProgram = "qdbus-simple-test-runner";
     pkgConfigModules = [
       "libqtdbustest-1"

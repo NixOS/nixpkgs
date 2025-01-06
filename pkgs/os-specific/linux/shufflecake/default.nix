@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 shufflecake $bin/shufflecake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plausible deniability (hidden storage) layer for Linux";
     homepage = "https://shufflecake.net";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ oluceps ];
     outputsToInstall = [ "bin" ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "6.1" || kernel.meta.name == "linux-lqx-6.12.1";
   };
 })

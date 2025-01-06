@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     cp ${arch} $out/bin/bandwidth
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zsmith.co/bandwidth.html";
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
-    license = licenses.gpl2Plus;
-    platforms = platforms.x86 ++ platforms.arm ++ platforms.aarch64;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
+    maintainers = with lib.maintainers; [ r-burns ];
     mainProgram = "bandwidth";
   };
 }

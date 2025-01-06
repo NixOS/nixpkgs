@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mail app designed for elementary OS";
     homepage = "https://github.com/elementary/mail";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ethancedwards8 ] ++ lib.teams.pantheon.members;
     mainProgram = "io.elementary.mail";
   };
 }

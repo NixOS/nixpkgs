@@ -80,13 +80,13 @@ let
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gitkraken.com/git-client";
     description = "Simplifying Git for any OS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       xnwdd
       evanjs
       arkivm

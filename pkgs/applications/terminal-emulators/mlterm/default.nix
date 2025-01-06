@@ -260,16 +260,16 @@ stdenv.mkDerivation (finalAttrs: {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi Lingual TERMinal emulator";
     homepage = "https://mlterm.sourceforge.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       ramkromberg
       atemu
       doronbehar
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = desktopBinary;
   };
 })

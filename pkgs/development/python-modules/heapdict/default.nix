@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   doCheck = !isPy3k;
 
-  meta = with lib; {
+  meta = {
     description = "Heap with decrease-key and increase-key operations";
     homepage = "http://stutzbachenterprises.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

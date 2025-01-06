@@ -107,7 +107,7 @@ in
     '';
   };
 
-  meta = with lib; {
-    maintainers = with maintainers; [ lorenzleutgeb ];
+  meta = {
+    maintainers = [ lib.maintainers.lorenzleutgeb ];
   };
 }

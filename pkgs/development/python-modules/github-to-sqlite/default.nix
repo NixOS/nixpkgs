@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_scrape_dependents" ];
 
-  meta = with lib; {
+  meta = {
     description = "Save data from GitHub to a SQLite database";
     mainProgram = "github-to-sqlite";
     homepage = "https://github.com/dogsheep/github-to-sqlite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 }

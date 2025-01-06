@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath ${opensc}/lib/pkcs11 $lib/lib/libdigidocpp.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating DigiDoc signature files";
     mainProgram = "digidoc-tool";
     homepage = "https://www.id.ee/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.jagajaga ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.jagajaga ];
   };
 }

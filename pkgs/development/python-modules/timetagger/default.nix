@@ -53,12 +53,12 @@ buildPythonPackage rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with TimeTagger";
     mainProgram = "timetagger";
     homepage = "https://github.com/almarklein/timetagger";
     changelog = "https://github.com/almarklein/timetagger/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

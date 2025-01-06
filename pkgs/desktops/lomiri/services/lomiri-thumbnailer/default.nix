@@ -213,17 +213,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus service for out of process thumbnailing";
     mainProgram = "lomiri-thumbnailer-admin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       lgpl3Only
     ];
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-thumbnailer-qt"
     ];

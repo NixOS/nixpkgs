@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     doCheck = true;
   });
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fukuchi.org/works/qrencode/";
     description = "C library for encoding data in a QR Code symbol";
     longDescription = ''
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: rec {
       a kind of 2D symbology that can be scanned by handy terminals
       such as a mobile phone with CCD.
     '';
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "qrencode";
   };
 })

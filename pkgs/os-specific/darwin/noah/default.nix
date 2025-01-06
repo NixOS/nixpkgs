@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ Hypervisor ];
 
-  meta = with lib; {
+  meta = {
     description = "Bash on Ubuntu on macOS";
     homepage = "https://github.com/linux-noah/noah";
     license = [
-      licenses.mit
-      licenses.gpl2Only
+      lib.licenses.mit
+      lib.licenses.gpl2Only
     ];
     maintainers = [ ];
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

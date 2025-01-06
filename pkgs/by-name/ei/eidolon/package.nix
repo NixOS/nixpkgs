@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single TUI-based registry for drm-free, wine and steam games on linux, accessed through a rofi launch menu";
     mainProgram = "eidolon";
     homepage = "https://github.com/nicohman/eidolon";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.linux;
   };
 }

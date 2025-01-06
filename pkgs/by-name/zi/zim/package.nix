@@ -66,12 +66,12 @@ python3Packages.buildPythonApplication rec {
     ${python3Packages.python.interpreter} test.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop wiki";
     homepage = "https://zim-wiki.org/";
     changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "zim";
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };

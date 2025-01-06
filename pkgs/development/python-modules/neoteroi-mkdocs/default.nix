@@ -48,12 +48,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neoteroi.mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Neoteroi/mkdocs-plugins";
     description = "Plugins for MkDocs";
     changelog = "https://github.com/Neoteroi/mkdocs-plugins/releases/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];

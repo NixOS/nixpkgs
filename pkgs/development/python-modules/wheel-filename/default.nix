@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wheel_filename" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse wheel filenames";
     mainProgram = "wheel-filename";
     homepage = "https://github.com/jwodder/wheel-filename";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ayazhafiz ];
   };
 }

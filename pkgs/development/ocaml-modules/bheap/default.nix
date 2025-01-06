@@ -21,10 +21,10 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml binary heap implementation by Jean-Christophe Filliatre";
-    license = licenses.lgpl21Only;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/backtracking/bheap";
   };
 }

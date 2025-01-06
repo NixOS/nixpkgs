@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.keepassxc;
 
-  meta = with lib; {
+  meta = {
     description = "Offline password manager with many features";
     longDescription = ''
       A community fork of KeePassX, which is itself a port of KeePass Password Safe.
@@ -156,12 +156,12 @@ stdenv.mkDerivation rec {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       blankparticle
       sigmasquadron
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

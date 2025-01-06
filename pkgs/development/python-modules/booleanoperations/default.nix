@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
-  meta = with lib; {
+  meta = {
     description = "Boolean operations on paths";
     homepage = "https://github.com/typemytype/booleanOperations";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

@@ -73,12 +73,12 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol (LSP) for Slint UI language";
     mainProgram = "slint-lsp";
     homepage = "https://slint-ui.com/";
     changelog = "https://github.com/slint-ui/slint/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ xgroleau ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ xgroleau ];
   };
 }

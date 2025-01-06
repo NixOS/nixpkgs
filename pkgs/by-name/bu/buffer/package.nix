@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal editing space for all those things that don't need keeping";
     homepage = "https://gitlab.gnome.org/cheywood/buffer";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "buffer";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ michaelgrahamevans ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     url = "git://git.suckless.org/dwm";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dwm.suckless.org/";
     description = "Extremely fast, small, and dynamic window manager for X";
     longDescription = ''
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
       multiple tags. Selecting certain tags displays all windows with these
       tags.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ neonfuz ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ neonfuz ];
+    platforms = lib.platforms.all;
     mainProgram = "dwm";
   };
 }

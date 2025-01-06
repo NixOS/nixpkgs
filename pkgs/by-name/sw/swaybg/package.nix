@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wallpaper tool for Wayland compositors";
     inherit (src.meta) homepage;
     longDescription = ''
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       Wayland compositor which implements the following Wayland protocols:
       wlr-layer-shell, xdg-output, and xdg-shell.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "swaybg";
-    maintainers = with maintainers; [ primeos ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ primeos ];
+    platforms = lib.platforms.linux;
   };
 }

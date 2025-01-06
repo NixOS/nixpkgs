@@ -63,12 +63,12 @@ buildPythonPackage rec {
     "test_quantize_with_pyspark"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically create Faiss knn indices with the most optimal similarity search parameters";
     mainProgram = "autofaiss";
     homepage = "https://github.com/criteo/autofaiss";
     changelog = "https://github.com/criteo/autofaiss/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -16,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "0v1zpfjagjlvdmgv6d502nmb7s996wadvpzg93i651s64rrlwq4s";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Test classes and test cases using decorators, execute test cases by command line, and get clear reports";
     homepage = "https://pypi.python.org/pypi/ptest";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

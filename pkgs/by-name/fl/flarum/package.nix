@@ -18,11 +18,11 @@ php.buildComposerProject (finalAttrs: {
   composerStrictValidation = false;
   vendorHash = "sha256-m+x/4A/DcMv7mMfQjpH1vsVqXuMHhSHeX3sgI43uJLI=";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
     description = "Flarum is a delightfully simple discussion platform for your website";
     homepage = "https://github.com/flarum/flarum";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ fsagbuya jasonodoom ];
+    maintainers = with lib.maintainers; [ fsagbuya jasonodoom ];
   };
 })

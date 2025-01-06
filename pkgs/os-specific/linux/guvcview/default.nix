@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (useGtk) [ "--enable-gtk3" ]
     ++ lib.optionals (useQt) [ "--enable-qt5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple interface for devices supported by the linux UVC driver";
     mainProgram = "guvcview";
     homepage = "https://guvcview.sourceforge.net";
-    maintainers = [ maintainers.coconnor ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.coconnor ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

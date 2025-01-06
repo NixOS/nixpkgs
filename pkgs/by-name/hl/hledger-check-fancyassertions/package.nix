@@ -43,12 +43,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Complex account balance assertions for hledger journals";
     homepage = "https://hledger.org/";
     changelog = "https://github.com/simonmichael/hledger/blob/master/CHANGES.md";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.DamienCassou ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.DamienCassou ];
     platforms = lib.platforms.all; # GHC can cross-compile
     mainProgram = "hledger-check-fancyassertions";
   };

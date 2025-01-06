@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
     "-DFL_USE_FLOAT:BOOL=${if useFloat then "ON" else "OFF"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fuzzy logic control library in C++";
     mainProgram = "fuzzylite";
     homepage = "https://fuzzylite.com";
     changelog = "https://github.com/fuzzylite/fuzzylite/${src.rev}/release/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

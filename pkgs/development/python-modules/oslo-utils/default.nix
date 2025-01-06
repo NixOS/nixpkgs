@@ -86,10 +86,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

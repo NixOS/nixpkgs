@@ -71,12 +71,12 @@ buildPythonPackage rec {
     "tensorboard.util"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

@@ -80,12 +80,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urwid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured console (xterm et al.) user interface library";
     changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

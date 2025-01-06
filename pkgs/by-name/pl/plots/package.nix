@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graph plotting app for GNOME";
     mainProgram = "plots";
     longDescription = ''
@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication rec {
       It can display polar equations, and both implicit and explicit Cartesian equations.
     '';
     homepage = "https://github.com/alexhuntley/Plots";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sund3RRR ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sund3RRR ];
   };
 }

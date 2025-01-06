@@ -33,12 +33,12 @@ buildGoModule (
       cp -r -t $out/share/sql/ schema.sql migrations
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://git.sr.ht/~sircmpwn/pages.sr.ht";
       description = "Web hosting service for the sr.ht network";
       mainProgram = "pages.sr.ht";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [
         eadwu
         christoph-heiss
       ];

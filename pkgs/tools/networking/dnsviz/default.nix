@@ -38,7 +38,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "dnsviz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool suite for analyzing and visualizing DNS and DNSSEC behavior";
     mainProgram = "dnsviz";
     longDescription = ''
@@ -47,7 +47,7 @@ buildPythonApplication rec {
 
       This tool suite powers the Web-based analysis available at https://dnsviz.net/
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

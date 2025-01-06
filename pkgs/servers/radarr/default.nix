@@ -46,12 +46,12 @@ in stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.radarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
     changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ edwtjo purcell ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ edwtjo purcell ];
     mainProgram = "Radarr";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

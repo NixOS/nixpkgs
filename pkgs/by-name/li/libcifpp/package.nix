@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/libcifpp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate mmCIF and PDB files";
     homepage = "https://github.com/PDB-REDO/libcifpp";
     changelog = "https://github.com/PDB-REDO/libcifpp/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -36,11 +36,11 @@ buildPythonPackage {
     chmod +x "$out/${python.sitePackages}/gyp/mac_tool.py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate native build files";
     mainProgram = "gyp";
     homepage = "https://gyp.gsrc.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ codyopel ];
   };
 }

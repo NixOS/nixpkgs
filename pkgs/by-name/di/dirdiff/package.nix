@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical directory tree diff and merge tool";
     mainProgram = "dirdiff";
     longDescription = ''
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       directory trees and for merging changes from one tree into another.
     '';
     homepage = "https://www.samba.org/ftp/paulus/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

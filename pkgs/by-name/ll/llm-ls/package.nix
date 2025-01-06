@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage {
     package = llm-ls;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LSP server leveraging LLMs for code completion (and more?)";
     homepage = "https://github.com/huggingface/llm-ls";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jfvillablanca ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
+    platforms = lib.platforms.all;
     mainProgram = "llm-ls";
   };
 }

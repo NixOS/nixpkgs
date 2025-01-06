@@ -88,12 +88,12 @@ python3.pkgs.buildPythonApplication rec {
     "ReText"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Editor for Markdown and reStructuredText";
     homepage = "https://github.com/retext-project/retext/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ klntsky ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ klntsky ];
+    platforms = lib.platforms.unix;
     mainProgram = "retext";
   };
 }

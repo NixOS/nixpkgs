@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zope.deprecation" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zopefoundation/zope.deprecation";
     description = "Zope Deprecation Infrastructure";
     changelog = "https://github.com/zopefoundation/zope.deprecation/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

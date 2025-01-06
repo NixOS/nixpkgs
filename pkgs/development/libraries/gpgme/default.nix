@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     qt6 = qt6Packages.qgpgme;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gnupg.org/software/gpgme/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";
@@ -113,11 +113,11 @@ stdenv.mkDerivation rec {
       encryption, decryption, signing, signature verification and key
       management.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

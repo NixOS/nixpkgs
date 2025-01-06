@@ -36,11 +36,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Translate TUI (Originally). Now support Apertium, Argos, Bing, ChatGPT, DeepL, Google, Reverso";
     homepage = "https://github.com/eeeXun/gtt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ linuxissuper ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "gtt";
   };
 }

@@ -73,13 +73,13 @@ let
       inherit withPlugins;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         aldoborrero
         mccartykim
       ];

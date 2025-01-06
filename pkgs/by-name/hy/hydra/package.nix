@@ -240,11 +240,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater {};
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nix-based continuous build system";
     homepage = "https://nixos.org/hydra";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi ] ++ teams.helsinki-systems.members;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mindavi ] ++ lib.teams.helsinki-systems.members;
   };
 })

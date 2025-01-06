@@ -40,10 +40,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert qmake .pro files to CMakeLists.txt";
     homepage = "https://wiki.qt.io/Qmake2cmake";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

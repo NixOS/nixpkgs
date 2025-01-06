@@ -42,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
     "donpapi"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for dumping DPAPI credentials remotely";
     homepage = "https://github.com/login-securite/DonPAPI";
     changelog = "https://github.com/login-securite/DonPAPI/releases/tag/V${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "donpapi";
   };
 }

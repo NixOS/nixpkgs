@@ -102,7 +102,7 @@ buildPythonApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     longDescription = ''
@@ -112,7 +112,7 @@ buildPythonApplication rec {
       to prevent needless transcoding of your media files on the server. The player also has
       advanced features, such as bulk subtitle updates and launching commands on events.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       # jellyfin-mpv-shim
       gpl3Only
       mit
@@ -125,7 +125,7 @@ buildPythonApplication rec {
       # Static Grain
       unlicense
     ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [ jojosch ];
     mainProgram = "jellyfin-mpv-shim";
   };
 }

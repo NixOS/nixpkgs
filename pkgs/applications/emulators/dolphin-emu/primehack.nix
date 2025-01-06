@@ -151,12 +151,12 @@ stdenv.mkDerivation rec {
       install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Madouura ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ Madouura ];
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

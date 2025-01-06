@@ -136,14 +136,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language and IDE for electronic arts";
     homepage = "https://processing.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ evan-goode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ evan-goode ];
   };
 }

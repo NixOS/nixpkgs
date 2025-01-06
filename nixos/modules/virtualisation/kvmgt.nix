@@ -99,5 +99,5 @@ in
       };
   };
 
-  meta.maintainers = with maintainers; [ patryk27 ];
+  meta.maintainers = with lib.maintainers; [ patryk27 ];
 }

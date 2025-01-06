@@ -36,12 +36,12 @@ python3Packages.buildPythonApplication rec {
     sed -i "s/collections.Sequence/collections.abc.Sequence/g" "$out"/bin/dstat
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dag.wieers.com/home-made/dstat/";
     description = "Versatile resource statistics tool";
     mainProgram = "dstat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     changelog = "https://github.com/dstat-real/dstat/blob/v${version}/ChangeLog";
   };

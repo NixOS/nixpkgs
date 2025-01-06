@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Debian package related modules";
     homepage = "https://salsa.debian.org/python-debian-team/python-debian";
     changelog = "https://salsa.debian.org/python-debian-team/python-debian/-/blob/master/debian/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

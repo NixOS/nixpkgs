@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
   PKG_CONFIG_PIDGIN_DATADIR = "${placeholder "out"}/share";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hoehermann/libpurple-signald";
     description = "Signal support for Pidgin / libpurple";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hufman ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hufman ];
   };
 }

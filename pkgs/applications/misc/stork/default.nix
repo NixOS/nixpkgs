@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Impossibly fast web search, made for static sites";
     homepage = "https://github.com/jameslittle230/stork";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ chuahou ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ chuahou ];
     mainProgram = "stork";
   };
 }

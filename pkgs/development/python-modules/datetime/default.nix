@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "DateTime" ];
 
-  meta = with lib; {
+  meta = {
     description = "DateTime data type, as known from Zope";
     homepage = "https://github.com/zopefoundation/DateTime";
     changelog = "https://github.com/zopefoundation/DateTime/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ icyrockcom ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ icyrockcom ];
   };
 }

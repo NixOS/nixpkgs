@@ -46,12 +46,12 @@ buildGoModule {
 
   passthru.tests.owncast = nixosTests.owncast;
 
-  meta = with lib; {
+  meta = {
     description = "self-hosted video live streaming solution";
     homepage = "https://owncast.online";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ MayNiklas ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ MayNiklas ];
     mainProgram = "owncast";
   };
 

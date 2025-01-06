@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "GPL reimplementation of libdjb";
     homepage = "https://www.fefe.de/libowfat/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

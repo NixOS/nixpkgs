@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbt.adapters.snowflake" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin enabling dbt to work with Snowflake";
     homepage = "https://github.com/dbt-labs/dbt-snowflake";
     changelog = "https://github.com/dbt-labs/dbt-snowflake/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tjni ];
   };
 }

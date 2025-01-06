@@ -36,12 +36,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EC-Tool adjusted for usage with framework embedded controller";
     homepage = "https://gitlab.howett.net/DHowett/ectool";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.mkg20001 ];
+    platforms = lib.platforms.linux;
     mainProgram = "ectool";
   };
 }

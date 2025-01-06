@@ -33,10 +33,10 @@ buildOctavePackage rec {
     cfitsio
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/fits/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Functions for reading, and writing FITS (Flexible Image Transport System) files using cfitsio";
   };
 }

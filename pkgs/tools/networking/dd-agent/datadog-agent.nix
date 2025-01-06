@@ -110,13 +110,13 @@ in buildGo122Module rec {
     command = "agent version";
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
     homepage    = "https://www.datadoghq.com";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice domenkozar ];
+    license     = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thoughtpolice domenkozar ];
   };
 }

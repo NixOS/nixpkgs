@@ -29,16 +29,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standard for battery reading since 2005";
     longDescription = ''
       With coconutBattery you are always aware of your current battery health.
       It shows you live information about the battery quality in your Mac, iPhone and iPad.
     '';
     homepage = "https://www.coconut-flavour.com/coconutbattery";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ stepbrobd ];
+    license = with lib.licenses; [ unfree ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"

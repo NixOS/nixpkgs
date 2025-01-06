@@ -41,12 +41,12 @@ mkDerivation rec {
     sed -i 's#/usr/share#share#g' CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free software for Hantek and compatible (Voltcraft/Darkwire/Protek/Acetech) USB digital signal oscilloscopes";
     mainProgram = "OpenHantek";
     homepage = "https://github.com/OpenHantek/OpenHantek6022";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ baracoder ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ baracoder ];
     platforms = qtbase.meta.platforms;
   };
 }

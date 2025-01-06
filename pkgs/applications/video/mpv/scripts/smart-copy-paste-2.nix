@@ -24,10 +24,10 @@ buildLua (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Smart copy paste with logging and clipboard support";
     homepage = "https://github.com/Eisa01/mpv-scripts";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ luftmensch-luftmensch ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
   };
 })

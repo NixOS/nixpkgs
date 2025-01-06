@@ -72,12 +72,12 @@ stdenv.mkDerivation {
     backendLibs = lib.optionals lazyLoad backendLibs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform audio library";
     mainProgram = "cubeb-test";
     homepage = "https://github.com/mozilla/cubeb";
-    license = licenses.isc;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

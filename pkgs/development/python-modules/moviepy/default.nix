@@ -89,11 +89,11 @@ buildPythonPackage rec {
     "tests/test_videotools.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
     changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

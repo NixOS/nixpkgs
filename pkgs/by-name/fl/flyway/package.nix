@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
-  meta = with lib; {
+  meta = {
     description =
       "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''
@@ -38,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://flywaydb.org/";
     changelog =
       "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.cmcdragonkai ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
   };
 })

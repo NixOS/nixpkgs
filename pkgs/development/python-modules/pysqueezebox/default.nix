@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "tests/test_integration.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous library to control Logitech Media Server";
     homepage = "https://github.com/rajlaud/pysqueezebox";
     changelog = "https://github.com/rajlaud/pysqueezebox/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

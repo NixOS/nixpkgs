@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, distraction-free writing environment";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       madjar
       kashw2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://gottcode.org/focuswriter/";
     mainProgram = "focuswriter";
   };

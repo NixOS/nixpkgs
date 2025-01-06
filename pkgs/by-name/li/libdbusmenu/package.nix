@@ -85,10 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library for passing menu structures across DBus";
     homepage = "https://launchpad.net/dbusmenu";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl21
       lgpl3
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       "dbusmenu-glib-0.4"
       "dbusmenu-jsonloader-0.4"
     ] ++ lib.optional (gtkVersion == "3") "dbusmenu-gtk${gtkVersion}-0.4";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
 })

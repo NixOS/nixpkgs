@@ -27,12 +27,12 @@ in stdenv.mkDerivation rec {
     cp ${iana-enterprise-numbers} enterprise-numbers
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface to IPMI-enabled devices";
     mainProgram = "ipmitool";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/ipmitool/ipmitool";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

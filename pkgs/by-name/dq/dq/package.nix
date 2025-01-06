@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recursive DNS/DNSCurve server and comandline tool";
     homepage = "https://github.com/janmojzis/dq";
     changelog = "https://github.com/janmojzis/dq/releases/tag/${version}";
-    license = licenses.cc0;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

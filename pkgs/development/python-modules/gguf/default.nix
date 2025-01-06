@@ -27,10 +27,10 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mitchmindtree ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mitchmindtree ];
   };
 }

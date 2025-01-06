@@ -80,10 +80,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "octaviaclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Octavia Command-line Client";
     homepage = "https://opendev.org/openstack/python-octaviaclient/";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

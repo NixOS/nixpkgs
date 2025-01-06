@@ -90,16 +90,16 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flxzt/rnote";
     changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dotlambda
       gepbird
       yrd
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

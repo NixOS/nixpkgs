@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "paho.mqtt" ];
 
-  meta = with lib; {
+  meta = {
     description = "MQTT version 3.1.1 client class";
     homepage = "https://eclipse.org/paho";
-    license = licenses.epl10;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [
       mog
       dotlambda
     ];

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Azure AD tooling framework";
     homepage = "https://github.com/dirkjanm/ROADtools";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

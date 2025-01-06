@@ -53,15 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/ROCm/rocminfo";
-    license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
-    platforms = platforms.linux;
+    license = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovesegfault ] ++ lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
       stdenv.hostPlatform.isAarch64
-      || versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      || lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

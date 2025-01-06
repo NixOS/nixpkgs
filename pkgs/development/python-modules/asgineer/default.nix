@@ -24,10 +24,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Really thin ASGI web framework";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://asgineer.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

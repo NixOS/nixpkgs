@@ -86,12 +86,12 @@ gnuradio.pkgs.mkDerivation rec {
     gnuradio.qt.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SDR transceiver application for analog and digital modes";
     mainProgram = "qradiolink";
     homepage = "http://qradiolink.org/";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
 }

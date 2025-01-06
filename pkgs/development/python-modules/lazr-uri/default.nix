@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Self-contained, easily reusable library for parsing, manipulating";
     homepage = "https://launchpad.net/lazr.uri";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
 }

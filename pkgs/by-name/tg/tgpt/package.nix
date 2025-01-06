@@ -27,12 +27,12 @@ buildGoModule rec {
     rm providers/koboldai/koboldai_test.go
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ChatGPT in terminal without needing API keys";
     homepage = "https://github.com/aandrew-me/tgpt";
     changelog = "https://github.com/aandrew-me/tgpt/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tgpt";
   };
 }

@@ -46,10 +46,10 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cython bindings for PARI";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.sage.members;
     homepage = "https://github.com/defeo/cypari2";
   };
 }

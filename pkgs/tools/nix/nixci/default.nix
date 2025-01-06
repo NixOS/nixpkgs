@@ -57,11 +57,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Vey9n9hIlWiSAZ6CCTpkrL6jt4r2JvT2ik9wa2bjeC0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Define and build CI for Nix projects anywhere";
     homepage = "https://github.com/srid/nixci";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       srid
       shivaraj-bh
       rsrohitsingh682

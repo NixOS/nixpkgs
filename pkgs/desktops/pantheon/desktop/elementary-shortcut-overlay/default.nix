@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native OS-wide shortcut overlay to be launched by Gala";
     homepage = "https://github.com/elementary/shortcut-overlay";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.pantheon.members;
     mainProgram = "io.elementary.shortcut-overlay";
   };
 }

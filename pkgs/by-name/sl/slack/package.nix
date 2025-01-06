@@ -78,13 +78,13 @@ let
     };
   }.${system} or throwSystem;
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     changelog = "https://slack.com/release-notes";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut teutat3s ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ mmahut teutat3s ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     mainProgram = "slack";
   };

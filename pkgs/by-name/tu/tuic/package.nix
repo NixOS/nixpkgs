@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
   # doc test will fail in this version
   checkFlags = [ "--skip=lib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/EAimTY/tuic";
     description = "Delicately-TUICed 0-RTT proxy protocol";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ oluceps ];
   };
 }

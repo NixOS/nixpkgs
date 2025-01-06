@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-6zCkor/fQXKw2JxOKyVjsdsSI6BT7beAs4P0AlSXupE=";
 
-  meta = with lib; {
+  meta = {
     description = "Humane alternative to the Redis-cli and TLS";
     homepage = "https://github.com/IBM-Cloud/redli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tchekda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tchekda ];
     mainProgram = "redli";
   };
 }

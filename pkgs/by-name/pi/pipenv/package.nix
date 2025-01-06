@@ -103,10 +103,10 @@ buildPythonApplication rec {
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Development Workflow for Humans";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ berdario ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ berdario ];
   };
 }

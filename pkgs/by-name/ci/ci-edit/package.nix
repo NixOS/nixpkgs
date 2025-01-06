@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "app" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal text editor with mouse support and ctrl+Q to quit";
     homepage = "https://github.com/google/ci_edit";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ katexochen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "ci_edit";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

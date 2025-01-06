@@ -1,5 +1,5 @@
 import ../make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   let
     pantalaimonInstanceName = "testing";
 
@@ -32,8 +32,8 @@ import ../make-test-python.nix (
   in
   {
     name = "pantalaimon";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      maintainers = lib.teams.matrix.members;
     };
 
     nodes.machine =

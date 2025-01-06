@@ -67,10 +67,10 @@ buildPythonPackage rec {
   # Extra check to make sure we can import it from Python
   pythonImportsCheck = [ "h3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/uber/h3-py";
     description = "Hierarchical hexagonal geospatial indexing system";
-    license = licenses.asl20;
-    maintainers = [ maintainers.kalbasit ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.kalbasit ];
   };
 }

@@ -54,16 +54,16 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       oluceps
       pokon548
       luochen1990
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "dae";
   };
 }

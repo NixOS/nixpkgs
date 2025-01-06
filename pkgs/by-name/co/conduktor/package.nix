@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Apache Kafka Desktop Client";
     longDescription = ''
       Conduktor is a GUI over the Kafka ecosystem, to make the development
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.conduktor.io/";
     changelog = "https://www.conduktor.io/changelog/#${version}";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ trobert ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ trobert ];
+    platforms = lib.platforms.linux;
   };
 }

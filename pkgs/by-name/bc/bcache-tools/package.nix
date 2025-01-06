@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/sbin" "$out/lib/udev/rules.d" "$out/share/man/man8"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-space tools required for bcache (Linux block layer cache)";
     longDescription = ''
       Bcache is a Linux kernel block layer cache. It allows one or more fast
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
       tree.
     '';
     homepage = "https://bcache.evilpiepirate.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

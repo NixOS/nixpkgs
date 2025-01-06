@@ -25,11 +25,11 @@ mkTclDerivation rec {
     cp -r $src/tcl-src/* $out/lib/tcl-fcgi/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mpcjanssen/tcl-fcgi";
     description = "Tcl interface for the FastCGI protocol";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = tclx.meta.platforms;
-    maintainers = with maintainers; [ nat-418 ];
+    maintainers = with lib.maintainers; [ nat-418 ];
   };
 }

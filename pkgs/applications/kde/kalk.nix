@@ -42,11 +42,11 @@ mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Calculator built with kirigami";
     mainProgram = "kalk";
     homepage = "https://invent.kde.org/plasma-mobile/kalk";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

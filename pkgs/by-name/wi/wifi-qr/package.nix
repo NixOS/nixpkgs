@@ -79,12 +79,12 @@ stdenvNoCC.mkDerivation {
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WiFi password sharing via QR codes";
     homepage = "https://github.com/kokoye2007/wifi-qr";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ ambroisie ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "wifi-qr";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

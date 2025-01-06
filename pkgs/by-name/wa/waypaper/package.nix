@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
     mainProgram = "waypaper";
@@ -54,8 +54,8 @@ python3.pkgs.buildPythonApplication rec {
       If wallpaper does not change, make sure that swaybg or swww is installed.
     '';
     homepage = "https://github.com/anufrievroman/waypaper";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ totalchaos ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ totalchaos ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal command line calendar, similar to cal";
     mainProgram = "rusti-cal";
     homepage = "https://github.com/arthurhenrique/rusti-cal";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.detegr ];
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers.detegr ];
   };
 }

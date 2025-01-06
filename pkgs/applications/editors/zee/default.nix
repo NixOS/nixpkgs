@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fBBjtjM7AnyAL6EOFstL4h6yS+UoLgxck6Mc0tJcXaI=";
 
-  meta = with lib; {
+  meta = {
     description = "Modern text editor for the terminal written in Rust";
     homepage = "https://github.com/zee-editor/zee";
-    license = licenses.mit;
-    maintainers = with maintainers; [ booklearner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ booklearner ];
     mainProgram = "zee";
   };
 }

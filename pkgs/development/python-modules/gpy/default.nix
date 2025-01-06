@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "GPy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gaussian process framework in Python";
     homepage = "https://sheffieldml.github.io/GPy";
     changelog = "https://github.com/SheffieldML/GPy/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

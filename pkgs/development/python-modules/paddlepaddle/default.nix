@@ -106,14 +106,14 @@ buildPythonPackage {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PArallel Distributed Deep LEarning: Machine Learning Framework from Industrial Practice （『飞桨』核心框架，深度学习&机器学习高性能单机、分布式训练和跨平台部署";
     homepage = "https://github.com/PaddlePaddle/Paddle";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     platforms =
       [ "x86_64-linux" ]
-      ++ optionals (!cudaSupport) [
+      ++ lib.optionals (!cudaSupport) [
         "x86_64-darwin"
         "aarch64-darwin"
       ];

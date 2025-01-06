@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configshell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for building configuration shells";
     homepage = "https://github.com/open-iscsi/configshell-fb";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

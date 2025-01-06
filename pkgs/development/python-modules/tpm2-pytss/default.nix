@@ -93,11 +93,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tpm2_pytss" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
     changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

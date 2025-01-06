@@ -116,15 +116,15 @@ stdenv.mkDerivation rec {
   };
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
-    maintainers = with maintainers; [ puffnfresh ];
-    sourceProvenance = with sourceTypes; [
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

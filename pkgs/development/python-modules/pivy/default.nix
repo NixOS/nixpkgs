@@ -65,10 +65,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pivy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coin3d/pivy/";
     description = "Python binding for Coin";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

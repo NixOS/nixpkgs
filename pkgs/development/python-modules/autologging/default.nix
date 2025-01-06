@@ -15,10 +15,10 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ninthtest.info/python-autologging/";
     description = "Easier logging and tracing for Python classes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

@@ -49,13 +49,13 @@ mkYarnPackage rec {
 
   doDist = false;
 
-  meta = with lib; {
+  meta = {
     description = "Matrix <--> Slack bridge";
     mainProgram = "matrix-appservice-slack";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       beardhatcode
       chvp
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

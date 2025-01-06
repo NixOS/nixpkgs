@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple web browser based on WebKitGTK";
     mainProgram = "surf";
     longDescription = ''
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
     '';
     homepage = "https://surf.suckless.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = webkitgtk_4_0.meta.platforms;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with lib.maintainers; [ joachifm ];
   };
 }

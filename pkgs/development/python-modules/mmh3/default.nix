@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mmh3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
     homepage = "https://github.com/hajimes/mmh3";
     changelog = "https://github.com/hajimes/mmh3/blob/v${version}/CHANGELOG.md";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     maintainers = [ ];
   };
 }

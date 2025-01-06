@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of code shared between tuxmath and tuxtype";
     homepage = "https://github.com/tux4kids/t4kcommon";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.aanderse ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.aanderse ];
+    platforms = lib.platforms.linux;
   };
 }

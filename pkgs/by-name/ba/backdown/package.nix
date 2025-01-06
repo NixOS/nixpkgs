@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+SxXOpSBuVVdX2HmJ4vF45uf5bvRtPdwaXUb9kq+lK0=";
 
-  meta = with lib; {
+  meta = {
     description = "File deduplicator";
     homepage = "https://github.com/Canop/backdown";
     changelog = "https://github.com/Canop/backdown/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "backdown";
   };
 }

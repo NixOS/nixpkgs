@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper library for evdev devices";
     homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.amorsillo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.amorsillo ];
   };
 }

@@ -57,11 +57,11 @@ stdenv.mkDerivation {
     wrapQtApp "$out/bin/qcachegrind"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Qt GUI to visualize profiling data";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ periklis ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ periklis ];
   };
 }

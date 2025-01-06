@@ -39,11 +39,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "bashate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Style enforcement for bash programs";
     mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
-    license = with licenses; [ asl20 ];
-    maintainers = teams.openstack.members ++ (with maintainers; [ fab ]);
+    license = with lib.licenses; [ asl20 ];
+    maintainers = lib.teams.openstack.members ++ (with lib.maintainers; [ fab ]);
   };
 }

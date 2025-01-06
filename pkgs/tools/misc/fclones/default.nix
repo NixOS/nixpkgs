@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=cache::test::return_none_if_different_transform_was_used"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
     changelog = "https://github.com/pkolaczk/fclones/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cyounkins
       figsoda
     ];

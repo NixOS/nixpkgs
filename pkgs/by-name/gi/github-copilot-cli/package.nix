@@ -21,12 +21,12 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI experience for letting GitHub Copilot help you on the command line";
     homepage = "https://githubnext.com/projects/copilot-cli/";
-    license = licenses.unfree; # upstream has no license
-    maintainers = [ maintainers.malo ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree; # upstream has no license
+    maintainers = [ lib.maintainers.malo ];
+    platforms = lib.platforms.all;
     mainProgram = "github-copilot-cli";
   };
 }

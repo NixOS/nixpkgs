@@ -3528,10 +3528,10 @@ in
       # remove unnecessary duplicated bin wrapper script
       rm -r plugin/vimacs
     '';
-    meta = with lib; {
+    meta = {
       description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
       homepage = "http://algorithm.com.au/code/vimacs";
-      license = licenses.gpl2Plus;
+      license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [ millerjason ];
     };
   };
@@ -3550,7 +3550,7 @@ in
   };
 
   vimsence = super.vimsence.overrideAttrs {
-    meta = with lib; {
+    meta = {
       description = "Discord rich presence for Vim";
       homepage = "https://github.com/hugolgst/vimsence";
       maintainers = with lib.maintainers; [ hugolgst ];
@@ -3641,15 +3641,15 @@ in
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Code-completion engine for Vim";
       homepage = "https://github.com/Valloric/YouCompleteMe";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl3;
+      maintainers = with lib.maintainers; [
         marcweber
         jagajaga
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   };
 

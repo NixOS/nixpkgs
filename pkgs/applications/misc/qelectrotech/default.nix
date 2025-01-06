@@ -68,12 +68,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free software to create electric diagrams";
     mainProgram = "qelectrotech";
     homepage = "https://qelectrotech.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ yvesf ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

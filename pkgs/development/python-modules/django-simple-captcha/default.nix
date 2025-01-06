@@ -34,12 +34,12 @@ buildPythonPackage rec {
     pillow
   ] ++ lib.optional withTTS flite;
 
-  meta = with lib; {
+  meta = {
     description = "Customizable Django application to add captcha images to any Django form";
     homepage = "https://github.com/mbi/django-simple-captcha";
     changelog = "https://github.com/mbi/django-simple-captcha/blob/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mrmebelman
       schmittlauch
     ];

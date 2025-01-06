@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cwlupgrader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to upgrade CWL syntax to a newer version";
     mainProgram = "cwl-upgrader";
     homepage = "https://github.com/common-workflow-language/cwl-upgrader";
     changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

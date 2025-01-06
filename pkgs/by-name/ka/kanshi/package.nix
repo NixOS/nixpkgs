@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sr.ht/~emersion/kanshi";
     description = "Dynamic display configuration tool";
     longDescription = ''
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
       kanshi can be used on Wayland compositors supporting the
       wlr-output-management protocol.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "kanshi";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       balsoft
       danielbarter
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

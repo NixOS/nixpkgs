@@ -47,12 +47,12 @@ buildGoModule rec {
     "TestScript/plugin"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/FiloSottile/age/releases/tag/v${version}";
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "age";
-    maintainers = with maintainers; [ tazjin ];
+    maintainers = with lib.maintainers; [ tazjin ];
   };
 }

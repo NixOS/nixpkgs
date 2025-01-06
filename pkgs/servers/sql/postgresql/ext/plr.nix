@@ -24,12 +24,12 @@ buildPostgresqlExtension rec {
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  meta = with lib; {
+  meta = {
     description = "PL/R - R Procedural Language for PostgreSQL";
     homepage = "https://github.com/postgres-plr/plr";
     changelog = "https://github.com/postgres-plr/plr/blob/${src.rev}/changelog.md";
-    maintainers = with maintainers; [ qoelet ];
+    maintainers = with lib.maintainers; [ qoelet ];
     platforms = postgresql.meta.platforms;
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
   };
 }

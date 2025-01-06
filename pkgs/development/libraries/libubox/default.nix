@@ -46,15 +46,15 @@ stdenv.mkDerivation {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "C utility functions for OpenWrt";
     homepage = "https://git.openwrt.org/?p=project/libubox.git;a=summary";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       fpletz
       mkg20001
     ];
     mainProgram = "jshn";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

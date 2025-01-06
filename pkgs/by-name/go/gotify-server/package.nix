@@ -61,11 +61,11 @@ buildGoModule rec {
     "-X main.Mode=prod"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple server for sending and receiving messages in real-time per WebSocket";
     homepage = "https://gotify.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "server";
   };
 }

@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to easily kill processes running on a specified port";
     homepage = "https://github.com/jkfran/killport";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sno2wman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sno2wman ];
     mainProgram = "killport";
   };
 }

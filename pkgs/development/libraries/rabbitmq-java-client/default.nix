@@ -36,17 +36,17 @@ stdenv.mkDerivation rec {
       --add-flags "-Djava.awt.headless=true -cp $out/share/java/\* com.rabbitmq.examples.PerfTest"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RabbitMQ Java client library which allows Java code to interface to AMQP servers";
     homepage = "https://www.rabbitmq.com/java-client.html";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl11
       gpl2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

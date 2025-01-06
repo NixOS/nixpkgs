@@ -4,8 +4,6 @@
   appstream,
   fetchFromGitHub,
   cmake,
-  gettext,
-  libxslt,
   librsvg,
   itstool,
   qtbase,
@@ -54,11 +52,11 @@ mkDerivation rec {
     "-DMETAINFO_ITS=${appstream}/share/gettext/its/metainfo.its"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

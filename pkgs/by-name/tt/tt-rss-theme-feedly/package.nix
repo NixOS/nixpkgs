@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     cp -ra feedly *.css $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feedly theme for Tiny Tiny RSS";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/levito/tt-rss-feedly-theme";
-    maintainers = with maintainers; [ das_j ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ das_j ];
+    platforms = lib.platforms.all;
   };
 }

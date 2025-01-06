@@ -23,11 +23,11 @@ buildPythonPackage rec {
   # AttributeError: module 'ctypes' has no attribute 'WinDLL'
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Hook and simulate keyboard events on Windows and Linux";
     homepage = "https://github.com/boppreh/keyboard";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

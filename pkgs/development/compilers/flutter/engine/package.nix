@@ -336,8 +336,8 @@ stdenv.mkDerivation (finalAttrs: {
       broken = stdenv.hostPlatform.isDarwin;
       description = "The Flutter engine";
       homepage = "https://flutter.dev";
-      maintainers = with maintainers; [ RossComputerGuy ];
-      license = licenses.bsd3;
+      maintainers = with lib.maintainers; [ RossComputerGuy ];
+      license = lib.licenses.bsd3;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"

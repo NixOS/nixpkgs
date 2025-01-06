@@ -78,10 +78,10 @@ mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Streaming media player for Plex";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ b4dm4n ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ b4dm4n ];
     homepage = "https://plex.tv";
     mainProgram = "plexmediaplayer";
   };

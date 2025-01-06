@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$p:${lib.makeLibraryPath [ binutils-unwrapped ]}" "$p"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for the SCCP channel driver in Asterisk";
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

@@ -140,7 +140,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "wapitiCore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web application vulnerability scanner";
     longDescription = ''
       Wapiti allows you to audit the security of your websites or web applications.
@@ -152,7 +152,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://wapiti-scanner.github.io/";
     changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

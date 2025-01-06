@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gperftools/gperftools";
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vcunat ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vcunat ];
   };
 }

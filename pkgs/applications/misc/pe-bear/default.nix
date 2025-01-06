@@ -28,23 +28,23 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable Executable reversing tool with a friendly GUI";
     mainProgram = "PE-bear";
     homepage = "https://hshrzd.wordpress.com/pe-bear/";
 
-    license = [
+    license = with lib.licenses; [
       # PE-Bear
-      licenses.gpl2Only
+      gpl2Only
 
       # Vendored capstone
-      licenses.bsd3
+      bsd3
 
       # Vendored bearparser
-      licenses.bsd2
+      bsd2
     ];
 
-    maintainers = with maintainers; [ blitz ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ blitz ];
+    platforms = lib.platforms.linux;
   };
 }

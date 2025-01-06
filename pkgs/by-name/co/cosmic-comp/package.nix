@@ -90,15 +90,15 @@ rustPlatform.buildRustPackage rec {
       wrapProgram $out/bin/cosmic-comp "''${wrapProgramArgs[@]}"
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-comp";
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       qyliss
       nyabinary
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

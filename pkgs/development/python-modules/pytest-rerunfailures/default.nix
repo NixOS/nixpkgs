@@ -38,10 +38,10 @@ buildPythonPackage rec {
     "test_exception_match_only_rerun_in_dual_query"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to re-run tests to eliminate flaky failures";
     homepage = "https://github.com/pytest-dev/pytest-rerunfailures";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ das-g ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ das-g ];
   };
 }

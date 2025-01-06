@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hunspell.sourceforge.net";
     description = "Spell checker";
     longDescription = ''
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
             ~/Library/Spelling or /Library/Spelling for spell checking),
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       gpl2
       lgpl21
       mpl11

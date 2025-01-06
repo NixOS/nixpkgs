@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/macchina.{1,7}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, minimal and customizable system information fetcher";
     homepage = "https://github.com/Macchina-CLI/macchina";
     changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ _414owen figsoda ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ _414owen figsoda ];
     mainProgram = "macchina";
   };
 }

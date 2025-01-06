@@ -74,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://groonga.org/";
     description = "Open-source fulltext search engine and column store";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.ericsagnes ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.ericsagnes ];
+    platforms = lib.platforms.all;
     longDescription = ''
       Groonga is an open-source fulltext search engine and column store.
       It lets you write high-performance applications that requires fulltext search.

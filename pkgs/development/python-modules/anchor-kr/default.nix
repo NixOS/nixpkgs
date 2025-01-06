@@ -18,10 +18,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "anchor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for scraping";
     homepage = "https://github.com/justfoolingaround/anchor";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ passivelemon ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ passivelemon ];
   };
 }

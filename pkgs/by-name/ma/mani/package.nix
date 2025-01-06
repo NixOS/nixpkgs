@@ -46,7 +46,7 @@ buildGoModule rec {
   # know how to wrap the dependencies for these integration tests so skip for now.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to help you manage multiple repositories";
     mainProgram = "mani";
     longDescription = ''
@@ -57,6 +57,6 @@ buildGoModule rec {
     '';
     homepage = "https://manicli.com/";
     changelog = "https://github.com/alajmo/mani/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

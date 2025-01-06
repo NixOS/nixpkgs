@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "git" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
     changelog = "https://github.com/gitpython-developers/GitPython/blob/${version}/doc/source/changes.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

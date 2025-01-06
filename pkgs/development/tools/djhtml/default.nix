@@ -20,11 +20,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "djhtml" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rtts/djhtml";
     description = "Django/Jinja template indenter";
     changelog = "https://github.com/rtts/djhtml/releases/tag/${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "djhtml";
   };

@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
-  meta = with lib; {
+  meta = {
     description = "DDE optional clipboard manager componment";
     homepage = "https://github.com/linuxdeepin/dde-clipboard";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -50,14 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = "ln -s source ../../${finalAttrs.pname}";
   pythonImportsCheck = [ "example_robot_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of robot URDFs for benchmarking and developed examples";
     homepage = "https://github.com/Gepetto/example-robot-data";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     libfm-extra
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read freedesktop.org menu files";
     homepage = "https://blog.lxde.org/tag/menu-cache/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

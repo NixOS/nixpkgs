@@ -48,16 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       ryota-ka
       pyrox0
       DimitarNestorov
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "yarn";
   };
 })

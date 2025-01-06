@@ -153,12 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "-android$";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.luanti.org/";
     description = "An open source voxel game engine (formerly Minetest)";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       fpletz
       fgaz
       jk

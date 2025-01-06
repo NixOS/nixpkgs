@@ -96,20 +96,20 @@ backendStdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
     badPlatforms = lib.optionals cudaFlags.isJetsonBuild [ "aarch64-linux" ];
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         mdaiter
         orivej
       ]
-      ++ teams.cuda.members;
+      ++ lib.teams.cuda.members;
   };
 })

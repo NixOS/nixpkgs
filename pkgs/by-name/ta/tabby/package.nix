@@ -199,13 +199,13 @@ rustPlatform.buildRustPackage {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TabbyML/tabby";
     changelog = "https://github.com/TabbyML/tabby/releases/tag/v${version}";
     description = "Self-hosted AI coding assistant";
     mainProgram = "tabby";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ghthor ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ghthor ];
     broken = stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
   };
 }

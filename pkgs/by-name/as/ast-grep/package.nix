@@ -49,13 +49,13 @@ rustPlatform.buildRustPackage rec {
       "--skip=test::test_register_lang"
     ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "sg";
     description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
     homepage = "https://ast-grep.github.io/";
     changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       montchr
       lord-valen
       cafkafk

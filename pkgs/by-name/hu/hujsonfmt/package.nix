@@ -26,8 +26,8 @@ buildGoModule {
   meta = {
     homepage = "https://tailscale.com";
     description = "Automatic formatter for HuJSON / JSON With Comments and trailing Commas (JWCC)";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "hujsonfmt";
-    maintainers = with maintainers; [ dan-theriault ];
+    maintainers = with lib.maintainers; [ dan-theriault ];
   };
 }

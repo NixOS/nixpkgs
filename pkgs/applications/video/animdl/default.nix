@@ -67,12 +67,12 @@ buildPythonApplication {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Highly efficient, powerful and fast anime scraper";
     homepage = "https://github.com/justfoolingaround/animdl";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "animdl";
-    maintainers = with maintainers; [ passivelemon ];
+    maintainers = with lib.maintainers; [ passivelemon ];
     platforms = [ "x86_64-linux" ];
   };
 }

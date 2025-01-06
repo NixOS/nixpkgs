@@ -226,17 +226,17 @@ buildPythonPackage {
     scikit-learn
   ] ++ optional-dependencies.grpc;
 
-  meta = with lib; {
+  meta = {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
     changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       happysalada
       natsukium
     ];
     # AttributeError: 'dict' object has no attribute 'schemas'
     # https://github.com/bentoml/BentoML/issues/4290
-    broken = versionAtLeast cattrs.version "23.2";
+    broken = lib.versionAtLeast cattrs.version "23.2";
   };
 }

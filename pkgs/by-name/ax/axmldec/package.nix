@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stand-alone binary AndroidManifest.xml decoder";
     longDescription = ''
       This tool accepts either a binary or a text XML file and prints the
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/ytsutano/axmldec";
     changelog = "https://github.com/ytsutano/axmldec/releases/tag/${src.rev}";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     mainProgram = "axmldec";
-    maintainers = with maintainers; [ franciscod ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ franciscod ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

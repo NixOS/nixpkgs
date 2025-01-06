@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
   "--skip=test_force_update_snapshots"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for snapshot testing";
     mainProgram = "cargo-insta";
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda oxalica matthiasbeyer ];
   };
 }

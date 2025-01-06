@@ -181,12 +181,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://root.cern.ch/";
     description = "Data analysis framework";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = !stdenv.hostPlatform.isx86_64 || stdenv.cc.isClang or false;
-    maintainers = with maintainers; [ veprbl ];
-    license = licenses.lgpl21;
+    maintainers = with lib.maintainers; [ veprbl ];
+    license = lib.licenses.lgpl21;
   };
 }

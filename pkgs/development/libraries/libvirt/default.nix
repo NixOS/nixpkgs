@@ -386,12 +386,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin lovesegfault ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz globin lovesegfault ];
   };
 }

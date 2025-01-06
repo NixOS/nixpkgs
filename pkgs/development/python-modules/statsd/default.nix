@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "statsd/tests.py" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ domenkozar ];
+  meta = {
+    maintainers = with lib.maintainers; [ domenkozar ];
     description = "Simple statsd client";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
 }

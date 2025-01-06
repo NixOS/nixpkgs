@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_datetime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Datetime type support for click";
     homepage = "https://github.com/click-contrib/click-datetime";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

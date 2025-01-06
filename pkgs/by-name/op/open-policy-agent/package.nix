@@ -84,7 +84,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org";
     changelog = "https://github.com/open-policy-agent/opa/blob/v${version}/CHANGELOG.md";
@@ -95,8 +95,8 @@ buildGoModule rec {
       as code and simple APIs to offload policy decision-making from your software. You can use OPA to enforce policies
       in microservices, Kubernetes, CI/CD pipelines, API gateways, and more.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lewo
       jk
     ];

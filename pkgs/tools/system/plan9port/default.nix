@@ -136,15 +136,15 @@ stdenv.mkDerivation rec {
     ./test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
       from their native Plan 9 environment to Unix-like operating systems.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bbarker
       ehmry
       ftrvxmtrx
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
       ylh
     ];
     mainProgram = "9";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

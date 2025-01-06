@@ -86,11 +86,11 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [ "srht" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       eadwu
       christoph-heiss
     ];

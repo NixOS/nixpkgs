@@ -51,10 +51,10 @@ mkDerivation rec {
     kcalendarcore
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Todo management and time tracking application";
     mainProgram = "ktimetracker";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://userbase.kde.org/KTimeTracker";
     maintainers = [ ];
   };

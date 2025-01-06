@@ -72,13 +72,13 @@ buildPythonPackage rec {
     "test_median_filter_equivalence"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hexa
       MayNiklas
     ];

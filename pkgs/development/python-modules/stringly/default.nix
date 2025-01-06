@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ typing-extensions ];
 
-  meta = with lib; {
+  meta = {
     description = "Stringly: Human Readable Object Serialization";
     homepage = "https://github.com/evalf/stringly";
-    license = licenses.mit;
-    maintainers = [ maintainers.Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.Scriptkiddi ];
   };
 }

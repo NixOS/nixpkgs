@@ -89,12 +89,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manim_slides" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jeertmans/manim-slides/blob/${src.rev}/CHANGELOG.md";
     description = "Tool for live presentations using manim";
     homepage = "https://github.com/jeertmans/manim-slides";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "manim-slides";
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with lib.maintainers; [ soispha ];
   };
 }

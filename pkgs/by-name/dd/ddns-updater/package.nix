@@ -39,11 +39,11 @@ buildGoModule rec {
     mv $out/bin/updater $out/bin/ddns-updater
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Container to update DNS records periodically with WebUI for many DNS providers";
     homepage = "https://github.com/qdm12/ddns-updater";
-    license = licenses.mit;
-    maintainers = with maintainers; [ delliott ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ delliott ];
     mainProgram = "ddns-updater";
   };
 }

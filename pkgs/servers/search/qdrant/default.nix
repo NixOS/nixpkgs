@@ -56,14 +56,14 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vector Search Engine for the next generation of AI applications";
     longDescription = ''
       Expects a config file at config/config.yaml with content similar to
       https://github.com/qdrant/qdrant/blob/master/config/config.yaml
     '';
     homepage = "https://github.com/qdrant/qdrant";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

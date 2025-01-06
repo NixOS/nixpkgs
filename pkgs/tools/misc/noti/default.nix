@@ -38,7 +38,7 @@ buildGoModule rec {
     installManPage docs/man/dist/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monitor a process and trigger a notification";
     longDescription = ''
       Monitor a process and trigger a notification.
@@ -47,8 +47,8 @@ buildGoModule rec {
       you when it's done. You can receive messages on your computer or phone.
     '';
     homepage = "https://github.com/variadico/noti";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stites ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stites ];
     mainProgram = "noti";
   };
 }

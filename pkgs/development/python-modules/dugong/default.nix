@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dugong" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP 1.1 client designed for REST-ful APIs";
     homepage = "https://github.com/python-dugong/python-dugong/";
-    license = with licenses; [
+    license = with lib.licenses; [
       psfl
       asl20
     ];

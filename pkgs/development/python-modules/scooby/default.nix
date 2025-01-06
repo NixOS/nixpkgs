@@ -53,12 +53,12 @@ buildPythonPackage rec {
     "test_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
     description = "Lightweight tool for reporting Python package versions and hardware resources";
     mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

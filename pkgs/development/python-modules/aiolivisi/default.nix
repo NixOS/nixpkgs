@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolivisi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to communicate with LIVISI Smart Home Controller";
     homepage = "https://github.com/StefanIacobLivisi/aiolivisi";
     changelog = "https://github.com/StefanIacobLivisi/aiolivisi/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

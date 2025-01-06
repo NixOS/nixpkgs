@@ -62,11 +62,11 @@ python3Packages.buildPythonApplication rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/git-cola/git-cola";
     description = "Sleek and powerful Git GUI";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.bobvanderlinden ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.bobvanderlinden ];
     mainProgram = "git-cola";
   };
 }

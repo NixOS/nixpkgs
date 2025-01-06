@@ -18,12 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$$out" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily track down the number of inotify watches, instances, and which files are being watched";
     homepage = "https://github.com/mikesart/inotify-info";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "inotify-info";
-    maintainers = with maintainers; [ motiejus ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ motiejus ];
+    platforms = lib.platforms.linux;
   };
 })

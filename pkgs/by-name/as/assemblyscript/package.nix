@@ -17,10 +17,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-rj6tvevoDQQihTH+tYkrvhJRzynglG5roHHL7aZ6j+Y=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AssemblyScript/assemblyscript";
     description = "TypeScript-like language for WebAssembly";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

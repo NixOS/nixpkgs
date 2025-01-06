@@ -1,10 +1,14 @@
 import ./make-test-python.nix (
   { pkgs, ... }:
 
+  let
+    inherit (pkgs) lib;
+  in
+
   {
     name = "retroarch";
-    meta = with pkgs.lib; {
-      maintainers = teams.libretro.members ++ [ maintainers.j0hax ];
+    meta = {
+      maintainers = lib.teams.libretro.members ++ [ lib.maintainers.j0hax ];
     };
 
     nodes.machine =

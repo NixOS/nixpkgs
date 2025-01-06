@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
     dbus
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for working with a stack of patches";
     mainProgram = "gps";
     homepage = "https://git-ps.sh/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alizter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alizter ];
   };
 }

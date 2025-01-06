@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "test_service_port"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Pylons/waitress";
     description = "Waitress WSGI server";
     mainProgram = "waitress-serve";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

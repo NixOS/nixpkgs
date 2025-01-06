@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pgloader.io/";
     description = "Loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
     mainProgram = "pgloader";
-    maintainers = with maintainers; [ mguentner ];
-    license = licenses.postgresql;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mguentner ];
+    license = lib.licenses.postgresql;
+    platforms = lib.platforms.all;
   };
 }

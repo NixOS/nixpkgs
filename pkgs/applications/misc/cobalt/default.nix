@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
-  meta = with lib; {
+  meta = {
     description = "Static site generator written in Rust";
     homepage = "https://github.com/cobalt-org/cobalt.rs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    platforms = lib.platforms.unix;
     mainProgram = "cobalt";
   };
 }

@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://acoustid.org/chromaprint";
     description = "AcoustID audio fingerprinting library";
     mainProgram = "fpcalc";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -52,11 +52,11 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utility for easily assuming AWS IAM roles from the command line";
     homepage = "https://github.com/trek10inc/awsume";
-    license = [ licenses.mit ];
+    license = [ lib.licenses.mit ];
     mainProgram = "awsume";
-    maintainers = [ maintainers.nilp0inter ];
+    maintainers = [ lib.maintainers.nilp0inter ];
   };
 }

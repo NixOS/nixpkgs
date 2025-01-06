@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     ln -s ${wt4}/share/Wt/resources $out/share/fileshelter/docroot/resources
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/epoupon/fileshelter";
     description = "FileShelter is a 'one-click' file sharing web application";
     mainProgram = "fileshelter";
-    maintainers = [ maintainers.willibutz ];
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.willibutz ];
+    license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
   };
 }

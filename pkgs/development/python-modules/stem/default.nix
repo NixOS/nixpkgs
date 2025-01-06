@@ -48,13 +48,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/torproject/stem/blob/${src.rev}/docs/change_log.rst";
     description = "Controller library that allows applications to interact with Tor";
     mainProgram = "tor-prompt";
     downloadPage = "https://github.com/torproject/stem";
     homepage = "https://stem.torproject.org/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -135,16 +135,16 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenCL general matrix multiplication API for ROCm";
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     # They are not making tags or releases, this may break other derivations in the future
     # Use version major instead of minor, 6.0 will HOPEFULLY have a release or tag
     broken =
-      versions.major finalAttrs.version != versions.major stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      lib.versions.major finalAttrs.version != lib.versions.major stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

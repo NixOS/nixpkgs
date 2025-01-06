@@ -34,11 +34,11 @@ appimageTools.wrapType2 rec {
         --replace-fail 'Exec=AppRun' 'Exec=httpie-desktop'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform API testing client for humans. Painlessly test REST, GraphQL, and HTTP APIs";
     homepage = "https://github.com/httpie/desktop";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ luftmensch-luftmensch ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "httpie-desktop";
     platforms = [
       "x86_64-linux"

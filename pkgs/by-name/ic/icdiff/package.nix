@@ -32,10 +32,10 @@ python3Packages.buildPythonApplication rec {
     ./test.sh ${python3Packages.python.interpreter}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.jefftk.com/icdiff";
     description = "Side-by-side highlighted command line diffs";
     maintainers = [ ];
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
   };
 }

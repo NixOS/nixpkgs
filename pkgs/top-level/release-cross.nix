@@ -272,10 +272,10 @@ in
     linuxTools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     freebsdTools = import ../stdenv/freebsd/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     linuxMeta = {
-      maintainers = [ maintainers.dezgeg ];
+      maintainers = [ lib.maintainers.dezgeg ];
     };
     freebsdMeta = {
-      maintainers = [ maintainers.rhelmot ];
+      maintainers = [ lib.maintainers.rhelmot ];
     };
     mkBootstrapToolsJob = meta: drv:
       assert elem drv.system supportedSystems;

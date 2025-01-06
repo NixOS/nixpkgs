@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclass_wizard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of simple, yet elegant wizarding tools for interacting with the Python dataclasses module";
     mainProgram = "wiz";
     homepage = "https://github.com/rnag/dataclass-wizard";
     changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ codifryed ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ codifryed ];
   };
 }

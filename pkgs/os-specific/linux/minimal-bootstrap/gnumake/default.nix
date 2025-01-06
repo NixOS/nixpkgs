@@ -162,13 +162,13 @@ kaem.runCommand "${pname}-${version}"
       gnupatch
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Tool to control the generation of non-source files from sources";
       homepage = "https://www.gnu.org/software/make";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      license = lib.licenses.gpl3Plus;
+      maintainers = lib.teams.minimal-bootstrap.members;
       mainProgram = "make";
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   }
   ''

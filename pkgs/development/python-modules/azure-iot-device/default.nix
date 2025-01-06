@@ -49,10 +49,10 @@ buildPythonPackage rec {
     "azure.iot.device.aio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure IoT Device Library for Python";
     homepage = "https://github.com/Azure/azure-iot-sdk-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mikut ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mikut ];
   };
 }

@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demesdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drawing functions for Demes demographic models";
     mainProgram = "demesdraw";
     homepage = "https://github.com/grahamgower/demesdraw";
-    license = licenses.isc;
-    maintainers = with maintainers; [ alxsimon ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ alxsimon ];
   };
 }

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to generate streamable zip files";
     mainProgram = "zipserver";
     longDescription = ''
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pR0Ps/zipstream-ng";
     changelog = "https://github.com/pR0Ps/zipstream-ng/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

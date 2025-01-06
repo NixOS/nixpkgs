@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
   # otherwise does not find strncpy when compiling
   env.NIX_LDFLAGS = "-lbsd";
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

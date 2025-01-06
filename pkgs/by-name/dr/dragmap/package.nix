@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests are launched by default from makefile
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open Source version of Dragen mapper for genomics";
     mainProgram = "dragen-os";
     longDescription = ''
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       which the Illumina team created to procude the same results as their
       proprietary DRAGEN hardware.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ apraga ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ apraga ];
   };
 })

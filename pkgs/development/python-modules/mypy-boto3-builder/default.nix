@@ -67,12 +67,12 @@ buildPythonPackage rec {
     "TestBotocoreChangelogChangelog"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations builder for boto3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
     changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mypy_boto3_builder";
   };
 }

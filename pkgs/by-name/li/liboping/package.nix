@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (perl == null) "--with-perl-bindings=no";
 
-  meta = with lib; {
+  meta = {
     description = "C library to generate ICMP echo requests (a.k.a. ping packets)";
     longDescription = ''
       liboping is a C library to generate ICMP echo requests, better known as
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       library's abilities.
     '';
     homepage = "http://noping.cc/";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

@@ -36,7 +36,7 @@ buildGo122Module rec {
       libnetfilter_queue
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Man in the middle tool";
     longDescription = ''
       BetterCAP is a powerful, flexible and portable tool created to perform various
@@ -44,8 +44,8 @@ buildGo122Module rec {
       in realtime, sniff for credentials and much more.
     '';
     homepage = "https://www.bettercap.org/";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ y0no ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ y0no ];
     mainProgram = "bettercap";
   };
 }

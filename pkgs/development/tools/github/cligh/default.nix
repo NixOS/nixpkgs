@@ -24,7 +24,7 @@ buildPythonApplication rec {
     pygithub
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://the-brannons.com/software/cligh.html";
     description = "Simple command-line interface to the facilities of Github";
     mainProgram = "cligh";
@@ -35,8 +35,8 @@ buildPythonApplication rec {
       in the early stage of development. It is by no means feature-complete.
       A friend and I consider it useful, but others may not.
     '';
-    platforms = platforms.all;
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

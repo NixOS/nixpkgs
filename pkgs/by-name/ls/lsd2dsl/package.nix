@@ -66,14 +66,14 @@ stdenv.mkDerivation rec {
     install -Dm755 console/lsd2dsl gui/lsd2dsl-qtgui -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rcebits.com/lsd2dsl/";
     description = "Lingvo dictionaries decompiler";
     longDescription = ''
       A decompiler for ABBYY Lingvo’s proprietary dictionaries.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 }

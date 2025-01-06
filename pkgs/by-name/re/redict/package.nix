@@ -104,13 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.redict = nixosTests.redict;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://redict.io";
     description = "Distributed key/value store";
-    license = licenses.lgpl3Only;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.all;
     changelog = "https://codeberg.org/redict/redict/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with lib.maintainers; [ yuka ];
     mainProgram = "redict-cli";
   };
 })

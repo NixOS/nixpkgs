@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-v3Fd08s70YX7pEIWYcgpC2daerfZhtzth4haKfUy0Q8=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple program to view processes' swap usage on Linux";
     mainProgram = "swapview";
     homepage = "https://github.com/lilydjwg/swapview";
-    platforms = platforms.linux;
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ oxalica ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ oxalica ];
   };
 }

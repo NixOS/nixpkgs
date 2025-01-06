@@ -93,11 +93,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) dconf; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/dconf";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.gnome.members;
     mainProgram = "dconf";
   };
 }

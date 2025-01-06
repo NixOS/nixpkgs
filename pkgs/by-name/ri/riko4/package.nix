@@ -29,11 +29,11 @@ let
     ];
     nativeBuildInputs = [ cmake ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/grimfang4/sdl-gpu";
       description = "Library for high-performance, modern 2D graphics with SDL written in C";
-      license = licenses.mit;
-      maintainers = with maintainers; [ CrazedProgrammer ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ CrazedProgrammer ];
     };
   };
 in
@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/riko4
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/incinirate/Riko4";
     description = "Fantasy console for pixel art game development";
     mainProgram = "riko4";
-    license = licenses.mit;
-    maintainers = with maintainers; [ CrazedProgrammer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ CrazedProgrammer ];
   };
 }

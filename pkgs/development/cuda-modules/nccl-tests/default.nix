@@ -71,12 +71,12 @@ backendStdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tests to check both the performance and the correctness of NVIDIA NCCL operations";
     homepage = "https://github.com/NVIDIA/nccl-tests";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     broken = !config.cudaSupport || (mpiSupport && mpi == null);
-    maintainers = with maintainers; [ jmillerpdt ] ++ teams.cuda.members;
+    maintainers = with lib.maintainers; [ jmillerpdt ] ++ lib.teams.cuda.members;
   };
 })

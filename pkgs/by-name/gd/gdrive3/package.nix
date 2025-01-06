@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Drive CLI Client";
     homepage = "https://github.com/glotlabs/gdrive";
     changelog = "https://github.com/glotlabs/gdrive/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "gdrive";
   };
 }

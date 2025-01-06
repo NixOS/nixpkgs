@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ enum34 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jstasiak/enum-compat";
     description = "enum/enum34 compatibility package";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

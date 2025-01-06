@@ -91,13 +91,13 @@ stdenv.mkDerivation rec {
     enabledPlugins = plugins;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
     platforms = jre.meta.platforms;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ngerstle
       talyz
       nickcao

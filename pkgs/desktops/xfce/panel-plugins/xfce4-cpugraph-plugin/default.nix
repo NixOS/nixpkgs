@@ -32,8 +32,8 @@ mkXfceDerivation rec {
     xorgproto
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CPU graph show for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

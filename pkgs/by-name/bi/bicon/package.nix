@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bidirectional console";
     homepage = "https://github.com/behdad/bicon";
-    license = [
-      licenses.lgpl21
-      licenses.psfl
-      licenses.bsd0
+    license = with lib.licenses; [
+      lgpl21
+      psfl
+      bsd0
     ];
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

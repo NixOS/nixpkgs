@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "periodictable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible periodic table of the elements";
     homepage = "https://github.com/pkienzle/periodictable";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ rprospero ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }

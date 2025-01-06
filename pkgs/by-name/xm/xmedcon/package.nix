@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for medical image conversion";
     homepage = "https://xmedcon.sourceforge.net/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ arianvp flokli ];
-    platforms = platforms.darwin ++ platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ arianvp flokli ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

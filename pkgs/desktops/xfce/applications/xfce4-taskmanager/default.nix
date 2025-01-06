@@ -33,9 +33,9 @@ mkXfceDerivation {
     libXmu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use task manager for Xfce";
     mainProgram = "xfce4-taskmanager";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

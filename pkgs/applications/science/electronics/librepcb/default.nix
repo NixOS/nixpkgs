@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ qtbase ];
 
-  meta = with lib; {
+  meta = {
     description = "Free EDA software to develop printed circuit boards";
     homepage = "https://librepcb.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       luz
       thoughtpolice
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

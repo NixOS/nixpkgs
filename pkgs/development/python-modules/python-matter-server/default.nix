@@ -117,12 +117,12 @@ buildPythonPackage rec {
       export PYTHONPATH=${pythonEnv}/${python.sitePackages}
     '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${version}";
     description = "Python server to interact with Matter";
     mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

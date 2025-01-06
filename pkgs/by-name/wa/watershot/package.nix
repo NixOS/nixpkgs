@@ -39,12 +39,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ grim ]}
   '';
 
-  meta = with lib; {
-    platforms = with platforms; linux;
+  meta = {
+    platforms = with lib.platforms; linux;
     description = "Simple wayland native screenshot tool";
     mainProgram = "watershot";
     homepage = "https://github.com/Kirottu/watershot";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lord-valen ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ lord-valen ];
   };
 }

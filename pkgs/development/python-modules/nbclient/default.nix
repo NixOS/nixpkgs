@@ -66,11 +66,11 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/jupyter/nbclient";
       description = "Client library for executing notebooks";
       mainProgram = "jupyter-execute";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [ ];
     };
   };

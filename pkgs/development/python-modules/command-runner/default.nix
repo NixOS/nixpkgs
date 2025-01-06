@@ -31,14 +31,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "command_runner" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/netinvent/command_runner";
     description = ''
       Platform agnostic command execution, timed background jobs with live
       stdout/stderr output capture, and UAC/sudo elevation
     '';
     changelog = "https://github.com/netinvent/command_runner/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = teams.wdz.members;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.wdz.members;
   };
 }

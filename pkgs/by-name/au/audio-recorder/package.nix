@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ])
     ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  meta = with lib; {
+  meta = {
     description = "Audio recorder for GNOME and Unity Desktops";
     mainProgram = "audio-recorder";
     longDescription = ''
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
       formats such as OGG audio, Flac, MP3 and WAV.
     '';
     homepage = "https://launchpad.net/~audio-recorder";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
 }

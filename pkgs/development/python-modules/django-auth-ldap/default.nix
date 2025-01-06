@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_auth_ldap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django authentication backend that authenticates against an LDAP service";
     homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mmai ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mmai ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

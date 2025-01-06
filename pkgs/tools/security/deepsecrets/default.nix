@@ -41,12 +41,12 @@ python3.pkgs.buildPythonApplication rec {
     "deepsecrets"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Secrets scanner that understands code";
     mainProgram = "deepsecrets";
     homepage = "https://github.com/avito-tech/deepsecrets";
     changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

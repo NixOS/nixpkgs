@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     > include/makeinclude/platform_macros.GNU
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.dre.vanderbilt.edu/~schmidt/ACE.html";
     description = "ADAPTIVE Communication Environment";
     mainProgram = "ace_gperf";
-    license = licenses.doc;
-    maintainers = with maintainers; [ nico202 ];
-    platforms = platforms.linux;
+    license = lib.licenses.doc;
+    maintainers = with lib.maintainers; [ nico202 ];
+    platforms = lib.platforms.linux;
   };
 }

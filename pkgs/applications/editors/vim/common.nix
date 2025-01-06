@@ -35,16 +35,16 @@ rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Most popular clone of the VI editor";
     homepage = "http://www.vim.org";
-    license = licenses.vim;
-    maintainers = with maintainers; [
+    license = lib.licenses.vim;
+    maintainers = with lib.maintainers; [
       das_j
       equirosa
       philiptaron
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "vim";
     outputsToInstall = [
       "out"

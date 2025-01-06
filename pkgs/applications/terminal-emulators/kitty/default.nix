@@ -32,8 +32,7 @@
 , autoSignDarwinBinariesHook
 }:
 
-with python3Packages;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "kitty";
   version = "0.38.1";
   format = "other";
@@ -57,7 +56,7 @@ buildPythonApplication rec {
     simde
     lcms2
     librsync
-    matplotlib
+    python3Packages.matplotlib
     openssl.dev
     xxHash
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -80,11 +79,11 @@ buildPythonApplication rec {
     installShellFiles
     ncurses
     pkg-config
-    sphinx
-    furo
-    sphinx-copybutton
-    sphinxext-opengraph
-    sphinx-inline-tabs
+    python3Packages.sphinx
+    python3Packages.furo
+    python3Packages.sphinx-copybutton
+    python3Packages.sphinxext-opengraph
+    python3Packages.sphinx-inline-tabs
     go_1_23
     fontconfig
     makeBinaryWrapper
@@ -147,23 +146,23 @@ buildPythonApplication rec {
     cp "${nerd-fonts.symbols-only}/share/fonts/truetype/NerdFonts/Symbols/SymbolsNerdFontMono-Regular.ttf" ./fonts/
 
     ${if stdenv.hostPlatform.isDarwin then ''
-      ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
       make docs
-      ${python.pythonOnBuildForHost.interpreter} setup.py kitty.app ${darwinOptions}
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
-      ${python.pythonOnBuildForHost.interpreter} setup.py linux-package \
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
       --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
-      ${python.pythonOnBuildForHost.interpreter} setup.py build-launcher
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build-launcher
     ''}
     runHook postBuild
   '';
 
   nativeCheckInputs = [
-    pillow
+    python3Packages.pillow
 
     # Shells needed for shell integration tests
     bashInteractive
@@ -248,16 +247,16 @@ buildPythonApplication rec {
     updateScript = nix-update-script {};
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Modern, hackable, featureful, OpenGL based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
+    maintainers = with lib.maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }

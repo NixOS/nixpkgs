@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "surepy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with the Sure Petcare API";
     mainProgram = "surepy";
     homepage = "https://github.com/benleb/surepy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

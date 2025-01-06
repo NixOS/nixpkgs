@@ -33,13 +33,13 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  meta = with lib; {
+  meta = {
     description = "Local network server with live reload feature for static pages";
     downloadPage = "https://github.com/lomirus/live-server/releases";
     homepage = "https://github.com/lomirus/live-server";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "live-server";
-    maintainers = [ maintainers.philiptaron ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.philiptaron ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -130,6 +130,6 @@ import ../make-test-python.nix (
       thrift.wait_for_open_port(9090)
     '';
 
-    meta.maintainers = with maintainers; [ illustris ];
+    meta.maintainers = with lib.maintainers; [ illustris ];
   }
 )

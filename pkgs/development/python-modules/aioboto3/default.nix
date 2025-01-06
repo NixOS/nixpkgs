@@ -67,11 +67,11 @@ buildPythonPackage rec {
     "test_s3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";
     homepage = "https://github.com/terrycain/aioboto3";
     changelog = "https://github.com/terrycain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

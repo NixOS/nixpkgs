@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Port of Otto Matic, a 2001 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/OttoMatic";
-    license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ lux ];
-    platforms = platforms.linux;
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = with lib.maintainers; [ lux ];
+    platforms = lib.platforms.linux;
     mainProgram = "OttoMatic";
   };
 }

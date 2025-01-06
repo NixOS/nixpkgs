@@ -129,11 +129,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mapnik" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Mapnik";
     maintainers = [ ];
     homepage = "https://mapnik.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     broken = true; # At 2024-11-13, test_raster_warping fails.
   };
 }

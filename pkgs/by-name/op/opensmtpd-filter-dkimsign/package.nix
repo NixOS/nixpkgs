@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     "LOCALBASE="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenSMTPD filter for DKIM signing";
     homepage = "http://imperialat.at/dev/filter-dkimsign/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ malte-v ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ malte-v ];
   };
 }

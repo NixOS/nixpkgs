@@ -33,10 +33,10 @@ let
       with lib;
       {
         homepage = "http://bitscope.com/software/";
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        license = licenses.unfree;
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        license = lib.licenses.unfree;
         platforms = [ "x86_64-linux" ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           vidbina
         ];
       }

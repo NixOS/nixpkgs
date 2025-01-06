@@ -50,9 +50,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_swagger" ];
 
-  meta = with lib; {
+  meta = {
     description = "Swagger API Documentation builder for aiohttp";
     homepage = "https://github.com/cr0hn/aiohttp-swagger";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

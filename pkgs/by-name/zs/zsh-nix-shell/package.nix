@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts
   '';
 
-  meta = with lib; {
+  meta = {
     description = "zsh plugin that lets you use zsh in nix-shell shell";
     homepage = src.meta.homepage;
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aw ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aw ];
   };
 }

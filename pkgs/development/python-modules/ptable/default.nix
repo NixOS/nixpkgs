@@ -23,11 +23,11 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kxxoling/PTable";
     description = "Simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables";
     mainProgram = "ptable";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.mmahut ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.mmahut ];
   };
 }

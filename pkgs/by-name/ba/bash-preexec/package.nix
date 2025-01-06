@@ -42,14 +42,14 @@ stdenvNoCC.mkDerivation {
     install -Dm755 $src/bash-preexec.sh $out/share/bash/bash-preexec.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "preexec and precmd functions for Bash just like Zsh";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/rcaloras/bash-preexec";
-    maintainers = [
-      maintainers.hawkw
-      maintainers.rycee
+    maintainers = with lib.maintainers; [
+      hawkw
+      rycee
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

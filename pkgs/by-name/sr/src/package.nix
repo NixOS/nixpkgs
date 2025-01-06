@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH ":" "${rcs}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.catb.org/esr/src/";
     description = "Simple single-file revision control";
     longDescription = ''
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       anywhere.
     '';
     changelog = "https://gitlab.com/esr/src/-/raw/${finalAttrs.version}/NEWS.adoc";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "src";
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 })

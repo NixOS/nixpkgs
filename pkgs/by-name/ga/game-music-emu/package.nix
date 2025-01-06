@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
     description = "Collection of video game music file emulators";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
   };
 }

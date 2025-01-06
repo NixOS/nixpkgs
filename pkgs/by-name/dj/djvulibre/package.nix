@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     ./CVE-2021-3500+CVE-2021-32490+CVE-2021-32491+CVE-2021-32492+CVE-2021-32493.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = "https://djvu.sourceforge.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Anton-Latukha ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ Anton-Latukha ];
+    platforms = lib.platforms.all;
   };
 }

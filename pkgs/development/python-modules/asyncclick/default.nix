@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncclick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
     changelog = "https://github.com/python-trio/asyncclick/blob/${version}/CHANGES.rst";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

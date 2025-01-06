@@ -43,11 +43,11 @@ flutter.buildFlutterApplication rec {
       --replace "Icon=com.expidusos.calculator" "Icon=$out/share/icons/com.expidusos.calculator.png"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ExpidusOS Calculator";
     homepage = "https://expidusos.com";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ RossComputerGuy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

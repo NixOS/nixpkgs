@@ -29,15 +29,15 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract, defang, resolve names and IPs from text";
     mainProgram = "ipgrep.py";
     longDescription = ''
       ipgrep extracts possibly obfuscated host names and IP addresses
       from text, resolves host names, and prints them, sorted by ASN.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.all;
   };
 }

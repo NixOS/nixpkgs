@@ -177,11 +177,11 @@ stdenv.mkDerivation rec {
   # GLFW requires a working X11 session.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Professional review software for VFX, animation, and film production";
     homepage = "https://darbyjohnston.github.io/DJV/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.blitz ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.blitz ];
+    license = lib.licenses.bsd3;
   };
 }

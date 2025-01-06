@@ -41,11 +41,11 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = spicetify-cli; };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to customize Spotify client";
     homepage = "https://github.com/spicetify/cli";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.mdarocha ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mdarocha ];
     mainProgram = "spicetify";
   };
 }

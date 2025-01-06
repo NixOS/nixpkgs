@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "home_assistant_bluetooth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Basic bluetooth models used by Home Assistant";
     changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/home-assistant-libs/home-assistant-bluetooth";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

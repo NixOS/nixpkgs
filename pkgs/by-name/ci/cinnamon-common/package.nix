@@ -208,11 +208,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "Cinnamon desktop environment";
-    license = [ licenses.gpl2 ];
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = [ lib.licenses.gpl2 ];
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

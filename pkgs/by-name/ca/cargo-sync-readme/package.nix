@@ -17,13 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-DsB2C2ELuvuVSvxG/xztmnY2qfX8+Y7udbXlpRQoL/c=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo plugin that generates a Markdown section in your README based on your Rust documentation";
     mainProgram = "cargo-sync-readme";
     homepage = "https://github.com/phaazon/cargo-sync-readme";
     changelog = "https://github.com/phaazon/cargo-sync-readme/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       b4dm4n
       matthiasbeyer
     ];

@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_fetch_dataset" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ancpbids.readthedocs.io";
     description = "Read/write/validate/query BIDS datasets";
     changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

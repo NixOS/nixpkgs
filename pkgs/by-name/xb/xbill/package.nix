@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm
   '';
 
-  meta = with stdenv; {
+  meta = {
     description = "Protect a computer network from getting infected";
     homepage = "http://www.xbill.org/";
     license = lib.licenses.gpl1Only;

@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8DSfqHerx/V00SJjTSQaG9Rjqx330iG6sGivBDUvQfA=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Belledonne Communications' fork of CUnit test framework. Part of the Linphone project";
     homepage = "https://gitlab.linphone.org/BC/public/bcunit";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       raskin
       jluttine
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Source code linter that can be used to find code that will cause problems with Go's error wrapping scheme";
     homepage = "https://github.com/polyfloyd/go-errorlint";
     changelog = "https://github.com/polyfloyd/go-errorlint/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ meain ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ meain ];
     mainProgram = "go-errorlint";
   };
 }

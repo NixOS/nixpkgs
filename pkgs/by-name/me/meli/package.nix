@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchzip,
-  fetchpatch,
   rustPlatform,
 
   # native build inputs
@@ -76,16 +75,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_cli_subcommands" # panicking due to sandbox
   ];
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
     homepage = "https://meli.delivery";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       _0x4A6F
       matthiasbeyer
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

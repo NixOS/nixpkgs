@@ -28,14 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     filter = ".[0].name | split(\"-\") | .[1]";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for getting the ROCm release version";
     homepage = "https://github.com/ROCm/rocm-core";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

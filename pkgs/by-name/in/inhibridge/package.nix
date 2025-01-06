@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-uKSbxAsGUR2nYfdtiTR/bgPBQunqYLzx3+CmszNilPQ=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/Scrumplex/inhibridge";
     description = "Simple daemon that bridges freedesktop.org ScreenSaver inhibitions to systemd-inhibit";
-    platforms = platforms.linux;
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ Scrumplex ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "inhibridge";
   };
 }

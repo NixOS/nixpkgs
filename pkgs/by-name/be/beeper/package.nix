@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation rec {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
@@ -76,8 +76,8 @@ stdenvNoCC.mkDerivation rec {
       many different chat networks.
     '';
     homepage = "https://beeper.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       jshcmpbll
       mjm
       edmundmiller

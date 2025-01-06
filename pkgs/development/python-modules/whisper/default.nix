@@ -33,13 +33,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whisper" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/graphite-project/whisper";
     description = "Fixed size round-robin style database";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       basvandijk
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

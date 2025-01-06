@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "-DIMTUI_INSTALL_IMGUI_HEADERS:BOOL=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Immediate mode text-based user interface library";
     longDescription = ''
       ImTui is an immediate mode text-based user interface library. Supports 256
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://imtui.ggerganov.com";
     changelog = "https://github.com/ggerganov/imtui/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
   };
 }

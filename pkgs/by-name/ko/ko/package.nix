@@ -60,7 +60,7 @@ buildGoModule rec {
       --zsh <($out/bin/ko completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ko-build/ko";
     changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
     description = "Build and deploy Go applications on Kubernetes";
@@ -71,8 +71,8 @@ buildGoModule rec {
       ko builds images by effectively executing go build on your local machine, and as such doesn't require docker to be installed. This can make it a good fit for lightweight CI/CD use cases.
       ko also includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nickcao
       jk
       vdemeester

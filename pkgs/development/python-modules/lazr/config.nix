@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "lazr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create configuration schemas, and process and validate configurations";
     homepage = "https://launchpad.net/lazr.config";
     changelog = "https://git.launchpad.net/lazr.config/tree/NEWS.rst?h=${version}";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
   };
 }

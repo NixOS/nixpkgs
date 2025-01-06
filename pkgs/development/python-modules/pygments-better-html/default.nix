@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygments_better_html" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Kwpolska/pygments_better_html";
     description = "Improved line numbering for Pygments’ HTML formatter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

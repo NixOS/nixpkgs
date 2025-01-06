@@ -30,10 +30,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/kcc "''${qtWrapperArgs[@]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python app to convert comic/manga files or folders to EPUB, Panel View MOBI or E-Ink optimized CBZ";
     homepage = "https://kcc.iosphe.re";
-    license = licenses.isc;
-    maintainers = with maintainers; [ dawidsowa ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ dawidsowa ];
   };
 }

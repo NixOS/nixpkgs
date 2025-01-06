@@ -287,7 +287,7 @@ self = stdenv.mkDerivation {
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
-  meta = with lib; {
+  meta = {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
       Nix is a powerful package manager for Linux and other Unix systems that
@@ -297,10 +297,10 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     inherit maintainers;
-    platforms = platforms.unix;
-    outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    platforms = lib.platforms.unix;
+    outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
   };
 };

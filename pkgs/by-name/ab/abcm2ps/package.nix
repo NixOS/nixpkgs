@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://moinejf.free.fr/";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     description = "Command line program which converts ABC to music sheet in PostScript or SVG format";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.dotlambda ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.dotlambda ];
     mainProgram = "abcm2ps";
   };
 })

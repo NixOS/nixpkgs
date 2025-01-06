@@ -15,7 +15,7 @@ buildKodiAddon rec {
     sha256 = "sha256-CZtBUqFaKtMmKcpfBQp0Mb8sVvpCTkqcpfdYe41YSJs=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://forum.kodi.tv/showthread.php?tid=67110";
     description = "Watch content from SVT Play";
     longDescription = ''
@@ -24,9 +24,9 @@ buildKodiAddon rec {
       Play website and feeds it to the Kodi video player. HLS (m3u8)
       is the preferred video format by the plugin.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = lib.teams.kodi.members;
 
     broken = true; # no release for kodi 21
   };

@@ -31,12 +31,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";
     description = "Python style guide checker";
     mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

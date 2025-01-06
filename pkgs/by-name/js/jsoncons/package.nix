@@ -13,12 +13,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "C++, header-only library for constructing JSON and JSON-like data formats";
     homepage = "https://danielaparker.github.io/jsoncons/";
     changelog = "https://github.com/danielaparker/jsoncons/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.boost;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.all;
   };
 })

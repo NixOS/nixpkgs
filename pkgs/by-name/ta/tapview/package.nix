@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist pure consumer for TAP (Test Anything Protocol)";
     mainProgram = "tapview";
     homepage = "https://gitlab.com/esr/tapview";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

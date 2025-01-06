@@ -22,16 +22,16 @@ kaem.runCommand "${pname}-${version}"
 
     passthru.guilePath = "${nyacc}/share/${pname}-${version}/module";
 
-    meta = with lib; {
+    meta = {
       description = "Modules for generating parsers and lexical analyzers";
       longDescription = ''
         Not Yet Another Compiler Compiler is a set of guile modules for
         generating computer language parsers and lexical analyzers.
       '';
       homepage = "https://savannah.nongnu.org/projects/nyacc";
-      license = licenses.lgpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.all;
+      license = lib.licenses.lgpl3Plus;
+      maintainers = lib.teams.minimal-bootstrap.members;
+      platforms = lib.platforms.all;
     };
   }
   ''

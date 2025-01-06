@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
     install nzxt-grid3.ko nzxt-kraken2.ko nzxt-kraken3.ko nzxt-smart2.ko -Dm444 -t ${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel hwmon drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidtux";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with lib.maintainers; [ nickhu ];
     broken = lib.versionOlder kernel.version "5.10";
   };
 }

@@ -45,12 +45,12 @@ mkYarnPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/totaldebug/atomic-calendar-revive/releases/tag/v${src.rev}";
     description = "An advanced calendar card for Home Assistant Lovelace";
     homepage = "https://github.com/totaldebug/atomic-calendar-revive";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.all;
   };
 }

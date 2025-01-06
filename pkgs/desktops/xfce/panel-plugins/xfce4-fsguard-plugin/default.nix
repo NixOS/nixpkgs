@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "${pname}-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-fsguard-plugin";
     description = "Filesystem usage monitor plugin for the Xfce panel";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

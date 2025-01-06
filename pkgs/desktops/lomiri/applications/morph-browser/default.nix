@@ -149,16 +149,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight web browser tailored for Ubuntu Touch";
     homepage = "https://gitlab.com/ubports/development/core/morph-browser";
     changelog = "https://gitlab.com/ubports/development/core/morph-browser/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       cc-by-sa-30
     ];
     mainProgram = "morph-browser";
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
   };
 })

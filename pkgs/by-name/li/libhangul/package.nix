@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0ni9b0v70wkm0116na7ghv03pgxsfpfszhgyj3hld3bxamfal1ar";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core algorithm library for Korean input routines";
     mainProgram = "hangul";
     homepage = "https://github.com/choehwanjin/libhangul";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.ianwookim ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.ianwookim ];
+    platforms = lib.platforms.linux;
   };
 }

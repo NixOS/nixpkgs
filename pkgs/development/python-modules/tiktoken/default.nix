@@ -67,10 +67,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tiktoken" ];
 
-  meta = with lib; {
+  meta = {
     description = "tiktoken is a fast BPE tokeniser for use with OpenAI's models";
     homepage = "https://github.com/openai/tiktoken";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

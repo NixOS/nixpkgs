@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "publicsuffixlist/test.py" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ko-zu/psl/blob/v${version}-gha/CHANGES.md";
     description = "Public Suffix List parser implementation";
     homepage = "https://github.com/ko-zu/psl";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "publicsuffixlist-download";
   };
 }

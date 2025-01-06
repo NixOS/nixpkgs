@@ -91,27 +91,27 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://limine-bootloader.org/";
     description = "Limine Bootloader";
     mainProgram = "limine";
     # The platforms on that the Limine binary and helper tools can run, not
     # necessarily the platforms for that bootable images can be created.
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
     # Caution. Some submodules have different licenses.
     license = [
-      licenses.asl20 # cc-runtime
-      licenses.bsd0 # freestanding-toolchain, freestanding-headers
-      licenses.bsd2 # limine, flanterm
-      licenses.mit # limine-efi, stb
-      licenses.zlib # tinf
+      lib.licenses.asl20 # cc-runtime
+      lib.licenses.bsd0 # freestanding-toolchain, freestanding-headers
+      lib.licenses.bsd2 # limine, flanterm
+      lib.licenses.mit # limine-efi, stb
+      lib.licenses.zlib # tinf
     ];
     maintainers = [
-      maintainers._48cf
-      maintainers.phip1611
-      maintainers.sanana
-      maintainers.surfaceflinger
+      lib.maintainers._48cf
+      lib.maintainers.phip1611
+      lib.maintainers.sanana
+      lib.maintainers.surfaceflinger
     ];
   };
 }

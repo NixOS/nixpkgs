@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.IOKit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Least recently used (LRU) eviction of Docker images";
     homepage = "https://github.com/stepchowfun/docuum";
     changelog = "https://github.com/stepchowfun/docuum/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "docuum";
   };
 }

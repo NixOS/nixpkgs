@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     versionPolicy = "odd-unstable";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library supporting deferred execution for GNOME and GTK";
     homepage = "https://gitlab.gnome.org/GNOME/libdex";
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.lgpl21Plus;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
   };
 })

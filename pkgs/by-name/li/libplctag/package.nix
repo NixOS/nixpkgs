@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libplctag/libplctag";
     description = "Library that uses EtherNet/IP or Modbus TCP to read and write tags in PLCs";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       mpl20
     ];
-    maintainers = with maintainers; [ petterstorvik ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ petterstorvik ];
+    platforms = lib.platforms.all;
   };
 }

@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "DEP_CXX:=$(CXX)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Android sparse images to raw images";
     homepage = "https://github.com/anestisb/android-simg2img";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dezgeg arkivm ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dezgeg arkivm ];
   };
 }

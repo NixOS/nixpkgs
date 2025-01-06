@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     command = "env HOME=$TMPDIR ${lib.getExe corrscope} --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";
     longDescription = ''
       Corrscope renders oscilloscope views of WAV files recorded from chiptune (game music from
@@ -90,9 +90,9 @@ python3Packages.buildPythonApplication rec {
       Genesis/FM synthesis) which jump around on other oscilloscope programs.
     '';
     homepage = "https://github.com/corrscope/corrscope";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
     mainProgram = "corr";
   };
 }

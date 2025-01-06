@@ -82,10 +82,10 @@ mkCoqDerivation {
     mathcomp.ssreflect
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Relation algebra library for Coq";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

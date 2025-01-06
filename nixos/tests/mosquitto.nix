@@ -59,8 +59,8 @@ import ./make-test-python.nix (
   in
   {
     name = "mosquitto";
-    meta = with pkgs.lib; {
-      maintainers = with maintainers; [ peterhoeg ];
+    meta = {
+      maintainers = with lib.maintainers; [ peterhoeg ];
     };
 
     nodes =

@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "src/icalendar" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ olcai ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ olcai ];
   };
 }

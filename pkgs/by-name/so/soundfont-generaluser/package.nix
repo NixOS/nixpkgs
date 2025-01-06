@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     install -Dm644 GeneralUser*.sf2 $out/share/soundfonts/GeneralUser-GS.sf2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SoundFont bank featuring 259 instrument presets and 11 drum kits";
     homepage = "https://www.schristiancollins.com/generaluser.php";
-    license = licenses.generaluser;
-    platforms = platforms.all;
+    license = lib.licenses.generaluser;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

@@ -75,12 +75,12 @@ python3.pkgs.buildPythonApplication rec {
     "ansiblelater"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Best practice scanner for Ansible roles and playbooks";
     mainProgram = "ansible-later";
     homepage = "https://github.com/thegeeklab/ansible-later";
     changelog = "https://github.com/thegeeklab/ansible-later/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tboerger ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tboerger ];
   };
 }

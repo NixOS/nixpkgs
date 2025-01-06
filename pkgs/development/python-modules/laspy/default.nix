@@ -35,12 +35,12 @@ buildPythonPackage rec {
     "laszip"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface for reading/modifying/creating .LAS LIDAR files";
     mainProgram = "laspy";
     homepage = "https://github.com/laspy/laspy";
     changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

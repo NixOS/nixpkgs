@@ -43,9 +43,9 @@ mkXfceDerivation {
     "--enable-sound"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple notification daemon for Xfce";
     mainProgram = "xfce4-notifyd-config";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

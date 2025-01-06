@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     install -m444 -D ${src}/share/java/*${pname}-${version}.jar "$out/share/java/${pname}-${version}.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xerial/sqlite-jdbc";
     description = "Library for accessing and creating SQLite database files in Java";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

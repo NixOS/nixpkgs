@@ -80,11 +80,11 @@ buildPythonPackage rec {
     rm tests/TreeGatewayTest.py
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.alexvorobiev ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.alexvorobiev ];
   };
 }

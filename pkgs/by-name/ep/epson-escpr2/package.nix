@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";
     longDescription = ''
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
 
       Refer to the description of epson-escpr for usage.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ma9e
       ma27
       shawn8901
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

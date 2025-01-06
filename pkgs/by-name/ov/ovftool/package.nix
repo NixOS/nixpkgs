@@ -263,12 +263,12 @@ stdenv.mkDerivation {
       $ovftool_with_args --schemaValidate nixos.ovf
     '';
 
-  meta = with lib; {
+  meta = {
     description = "VMware tools for working with OVF, OVA, and VMX images";
     homepage = "https://developer.vmware.com/web/tool/ovf-tool/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       numinit
       thanegill
     ];

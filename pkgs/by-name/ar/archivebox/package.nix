@@ -108,14 +108,14 @@ python.pkgs.buildPythonApplication rec {
         ]
     );
 
-  meta = with lib; {
+  meta = {
     description = "Open source self-hosted web archiving";
     homepage = "https://archivebox.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       siraben
       viraptor
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -88,12 +88,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://getfrog.app/";
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.linux;
   };
 }

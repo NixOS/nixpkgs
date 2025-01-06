@@ -24,8 +24,8 @@ mkXfceDerivation {
     xfce4-panel
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line plugin";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

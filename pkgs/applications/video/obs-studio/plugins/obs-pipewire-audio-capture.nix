@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio device and application capture for OBS Studio using PipeWire";
     homepage = "https://github.com/dimtpap/obs-pipewire-audio-capture";
-    maintainers = with maintainers; [ Elinvention ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ Elinvention ];
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"

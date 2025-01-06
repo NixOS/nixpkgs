@@ -44,15 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
     mainProgram = "rocm-smi";
     homepage = "https://github.com/ROCm/rocm_smi_lib";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ lovesegfault ] ++ lib.teams.rocm.members;
     platforms = [ "x86_64-linux" ];
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

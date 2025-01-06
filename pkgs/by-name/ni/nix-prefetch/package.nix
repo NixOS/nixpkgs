@@ -97,12 +97,12 @@ stdenv.mkDerivation rec {
     cp -r contrib/hello_rs $out/share/doc/${pname}/contrib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Prefetch any fetcher function call, e.g. package sources";
-    license = licenses.mit;
-    maintainers = with maintainers; [ msteen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ msteen ];
     homepage = "https://github.com/msteen/nix-prefetch";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "nix-prefetch";
   };
 }

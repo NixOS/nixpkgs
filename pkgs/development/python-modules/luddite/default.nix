@@ -37,11 +37,11 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks for out-of-date package versions";
     mainProgram = "luddite";
     homepage = "https://github.com/jumptrading/luddite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

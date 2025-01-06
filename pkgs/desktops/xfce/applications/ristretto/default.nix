@@ -44,9 +44,9 @@ mkXfceDerivation {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and lightweight picture-viewer for the Xfce desktop environment";
     mainProgram = "ristretto";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

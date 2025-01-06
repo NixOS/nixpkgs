@@ -112,7 +112,7 @@ in
         --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://quassel-irc.org/";
     description = "Qt/KDE distributed IRC client supporting a remote daemon";
     longDescription = ''
@@ -122,8 +122,8 @@ in
       combination of screen and a text-based IRC client such
       as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ttuegel ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ttuegel ];
     inherit (qtbase.meta) platforms;
   };
 }

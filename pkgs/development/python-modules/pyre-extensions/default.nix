@@ -30,10 +30,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pyre_extensions" ];
 
-  meta = with lib; {
+  meta = {
     description = "This module defines extensions to the standard “typing” module that are supported by the Pyre typechecker";
     homepage = "https://pypi.org/project/pyre-extensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

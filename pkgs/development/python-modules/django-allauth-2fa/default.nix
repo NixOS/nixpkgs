@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allauth_2fa" ];
 
-  meta = with lib; {
+  meta = {
     description = "django-allauth-2fa adds two-factor authentication to django-allauth";
     homepage = "https://github.com/valohai/django-allauth-2fa";
     changelog = "https://github.com/valohai/django-allauth-2fa/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

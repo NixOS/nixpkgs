@@ -29,10 +29,10 @@ buildGoModule rec {
     package = gh-ost;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Triggerless online schema migration solution for MySQL";
     homepage = "https://github.com/github/gh-ost";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gh-ost";
   };
 }

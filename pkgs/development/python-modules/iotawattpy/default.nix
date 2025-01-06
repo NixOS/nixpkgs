@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iotawattpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for the IoTaWatt device";
     homepage = "https://github.com/gtdiehl/iotawattpy";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

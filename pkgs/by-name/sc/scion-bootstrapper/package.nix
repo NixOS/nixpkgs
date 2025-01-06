@@ -28,11 +28,11 @@ buildGoModule rec {
     mv $out/bin/bootstrapper $out/bin/scion-bootstrapper
   '';
 
-  meta = with lib; {
+  meta = {
     description = "bootstrapper for SCION network configuration";
     homepage = "https://github.com/netsec-ethz/bootstrapper";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       sarcasticadmin
     ];

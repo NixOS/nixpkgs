@@ -57,10 +57,10 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
   };
 }

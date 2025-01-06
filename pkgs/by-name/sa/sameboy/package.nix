@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --replace '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sameboy.github.io";
     description = "Game Boy, Game Boy Color, and Super Game Boy emulator";
     mainProgram = "sameboy";
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       an emulator – from save states to scaling filters.
     '';
 
-    license = licenses.mit;
-    maintainers = with maintainers; [ NieDzejkob ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NieDzejkob ];
+    platforms = lib.platforms.linux;
   };
 }

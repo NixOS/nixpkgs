@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 -t $out/share/icons/hicolor/128x128/apps Cute{3,}DSCapture.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "(3)DS capture software for Linux and Mac";
     homepage = "https://github.com/Gotos/CuteCapture";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ raphaelr ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ raphaelr ];
   };
 })

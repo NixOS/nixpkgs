@@ -43,12 +43,12 @@ buildDotnetModule rec {
     inherit (nixosTests) wasabibackend;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
-    sourceProvenance = with sourceTypes; [binaryNativeCode];
-    license = licenses.mit;
-    maintainers = with maintainers; [mmahut];
+    sourceProvenance = with lib.sourceTypes; [binaryNativeCode];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [mmahut];
     platforms = ["x86_64-linux"];
   };
 }

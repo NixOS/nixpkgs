@@ -94,12 +94,12 @@ buildPythonPackage rec {
   # Most tests required network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "OpenAI's Code Interpreter in your terminal, running locally";
     homepage = "https://github.com/KillianLucas/open-interpreter";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/KillianLucas/open-interpreter/releases/tag/v${version}";
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "interpreter";
   };
 }

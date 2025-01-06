@@ -36,12 +36,12 @@ buildRubyGem rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Manage your Ruby application's gem dependencies";
     homepage = "https://bundler.io";
     changelog = "https://github.com/rubygems/rubygems/blob/bundler-v${version}/bundler/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "bundler";
   };
 }

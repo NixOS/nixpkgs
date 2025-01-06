@@ -63,13 +63,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-access datasets and evaluation metrics for natural language processing";
     mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

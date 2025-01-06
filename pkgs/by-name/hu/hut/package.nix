@@ -32,11 +32,11 @@ buildGoModule rec {
     make $makeFlags install
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sr.ht/~xenrox/hut/";
     description = "CLI tool for Sourcehut / sr.ht";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "hut";
   };
 }

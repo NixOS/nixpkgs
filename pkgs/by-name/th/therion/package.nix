@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Therion – cave surveying software";
     homepage = "https://therion.speleo.sk/";
     changelog = "https://github.com/therion/therion/blob/${src.rev}/CHANGES";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

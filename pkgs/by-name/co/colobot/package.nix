@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://colobot.info/";
     description = "Colobot: Gold Edition is a real-time strategy game, where you can program your bots";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = lib.platforms.linux;
   };
 }

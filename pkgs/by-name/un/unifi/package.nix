@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     unifi = nixosTests.unifi;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.ubnt.com/";
     description = "Controller for Ubiquiti UniFi access points";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       globin
       patryk27
     ];

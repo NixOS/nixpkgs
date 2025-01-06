@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "huisbaasje.huisbaasje" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for Huisbaasje";
     homepage = "https://github.com/dennisschroer/huisbaasje-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

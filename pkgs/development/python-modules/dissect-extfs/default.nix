@@ -41,11 +41,11 @@ buildPythonPackage rec {
   # Archive files seems to be corrupt
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the ExtFS file system";
     homepage = "https://github.com/fox-it/dissect.extfs";
     changelog = "https://github.com/fox-it/dissect.extfs/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

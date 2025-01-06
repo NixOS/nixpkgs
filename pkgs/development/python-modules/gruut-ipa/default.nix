@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gruut_ipa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for manipulating pronunciations using the International Phonetic Alphabet (IPA)";
     mainProgram = "gruut-ipa";
     homepage = "https://github.com/rhasspy/gruut-ipa";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.tts.members;
   };
 }

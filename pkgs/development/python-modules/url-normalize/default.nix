@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "url_normalize" ];
 
-  meta = with lib; {
+  meta = {
     description = "URL normalization for Python";
     homepage = "https://github.com/niksite/url-normalize";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -67,11 +67,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/riscv/sail-riscv";
     description = "Formal specification of the RISC-V architecture, written in Sail";
-    maintainers = with maintainers; [ genericnerdyusername ];
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

@@ -14,12 +14,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gZzjx4JWe3CcG8wuQRTYjyEvvhCyUBXHQSw5sYhih9o=";
 
-  meta = with lib; {
+  meta = {
     description = "Print pokemon sprites in your terminal";
     homepage = "https://github.com/yannjor/krabby";
     changelog = "https://github.com/yannjor/krabby/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ruby0b ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ruby0b ];
     mainProgram = "krabby";
   };
 }

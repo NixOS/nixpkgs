@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ionhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of Amazon Ion Hash";
     homepage = "https://github.com/amzn/ion-hash-python";
-    license = licenses.asl20;
-    maintainers = [ maintainers.terlar ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.terlar ];
     broken = true; # last successful build 2023-09-28
   };
 }

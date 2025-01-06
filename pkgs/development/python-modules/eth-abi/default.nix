@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eth_abi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ethereum ABI utilities";
     homepage = "https://github.com/ethereum/eth-abi";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

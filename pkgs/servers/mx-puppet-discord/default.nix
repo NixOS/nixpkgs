@@ -40,12 +40,12 @@ in myNodePackages.package.override {
     chmod +x $out/bin/mx-puppet-discord
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Discord puppeting bridge for matrix";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://gitlab.com/mx-puppet/discord/mx-puppet-discord";
     maintainers = [];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "mx-puppet-discord";

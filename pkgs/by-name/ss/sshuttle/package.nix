@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
       }" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transparent proxy server that works as a poor man's VPN";
     mainProgram = "sshuttle";
     longDescription = ''
@@ -71,8 +71,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/sshuttle/sshuttle";
     changelog = "https://github.com/sshuttle/sshuttle/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       domenkozar
       carlosdagos
     ];

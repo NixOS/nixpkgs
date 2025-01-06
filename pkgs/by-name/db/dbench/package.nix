@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     ln -s dbench/doc/dbench/loadfiles $out/share/loadfiles
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem benchmark tool based on load patterns";
     mainProgram = "dbench";
     homepage = "https://dbench.samba.org/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

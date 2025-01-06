@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     cp color-themes $out/lib/urxvt/perl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "urxvt plugin that allows to switch color themes during runtime";
     homepage = "https://github.com/felixr/urxvt-theme-switch";
     license = "CCBYNC";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
       --replace-fail "flags(flag::has_zenity) ? \"zenity\"" "flags(flag::has_zenity) ? \"${lib.getExe zenity}\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern \"Jedi Engine\" replacement supporting Dark Forces, mods, and in the future, Outlaws";
     mainProgram = "theforceengine";
     homepage = "https://theforceengine.github.io";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ devusb ];
     platforms = [ "x86_64-linux" ];
   };
 }

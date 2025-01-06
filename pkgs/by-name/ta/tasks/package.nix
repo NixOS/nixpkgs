@@ -87,12 +87,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple task management application for the COSMIC desktop";
     homepage = "https://github.com/edfloreshz/tasks";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = lib.platforms.linux;
     mainProgram = "tasks";
   };
 }

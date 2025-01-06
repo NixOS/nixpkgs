@@ -19,12 +19,12 @@ buildGoModule rec {
   vendorHash = "sha256-2feUOWcGj7eQ43rfM6IF55BawYVP4UY5sKA29Y9ozPk=";
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon used to serve static websites for GitLab users";
     mainProgram = "gitlab-pages";
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.gitlab.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.gitlab.members;
   };
 }

@@ -28,13 +28,13 @@ stdenv.mkDerivation {
       --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enjoy the mysteries of the sea from the safety of your own terminal!";
     mainProgram = "asciiquarium";
     homepage = "https://robobunny.com/projects/asciiquarium/html/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       sigmasquadron
       utdemir
     ];

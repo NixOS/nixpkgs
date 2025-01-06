@@ -17,9 +17,9 @@ buildPythonPackage rec {
   };
   propagatedBuildInputs = [ poetry-core ];
   pythonImportsCheck = [ "dbglib" ];
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savioxavier/dbglib/";
-    license = licenses.mit;
-    maintainers = [ maintainers.jetpackjackson ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jetpackjackson ];
   };
 }

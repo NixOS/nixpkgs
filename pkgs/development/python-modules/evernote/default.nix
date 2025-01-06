@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ oauth2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Evernote SDK for Python";
     homepage = "https://dev.evernote.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hbunke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hbunke ];
   };
 }

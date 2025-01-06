@@ -87,12 +87,12 @@ rustPlatform.buildRustPackage rec {
     $out/bin/broot --version | grep "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
-    maintainers = with maintainers; [ dywedir ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ dywedir ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "broot";
   };
 }

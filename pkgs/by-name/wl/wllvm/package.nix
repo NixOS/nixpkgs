@@ -13,11 +13,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-PgV6V18FyezIZpqMQEbyv98MaVM7h7T7/Kvg3yMMwzE=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/travitch/whole-program-llvm";
     description = "Wrapper script to build whole-program LLVM bitcode files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -7,7 +7,7 @@
   sha256,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossfire-maps";
   version = rev;
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     cp -a . "$out/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Map data for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ ToxicFrog ];
+    maintainers = [ lib.maintainers.ToxicFrog ];
   };
 }

@@ -56,13 +56,13 @@ python3Packages.buildPythonApplication rec {
       "test_get_file_mode"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
     changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
     mainProgram = "barman";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Evince/";
     description = "GNOME's document viewer";
 
@@ -148,9 +148,9 @@ stdenv.mkDerivation (finalAttrs: {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "evince";
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    maintainers = lib.teams.gnome.members ++ lib.teams.pantheon.members;
   };
 })

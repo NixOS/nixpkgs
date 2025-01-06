@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "lazr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily write objects that delegate behavior";
     homepage = "https://launchpad.net/lazr.delegates";
     changelog = "https://git.launchpad.net/lazr.delegates/tree/NEWS.rst?h=${version}";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
   };
 }

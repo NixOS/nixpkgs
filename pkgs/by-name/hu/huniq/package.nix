@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pwDaLHJbVpZe7dAtd5/ytyHZkUHjCcNjtw3q7HF1qVQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to remove duplicates from the given input";
     mainProgram = "huniq";
     homepage = "https://github.com/koraa/huniq";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

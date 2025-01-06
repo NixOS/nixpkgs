@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bluez ];
 
-  meta = with lib; {
+  meta = {
     description = "Small proof-of-concept application to find non discoverable bluetooth devices";
     homepage = "https://gitlab.com/kalilinux/packages/redfang";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ moni ];
     mainProgram = "fang";
   };
 }

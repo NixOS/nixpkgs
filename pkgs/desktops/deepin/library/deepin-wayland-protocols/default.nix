@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
   ];
 
-  meta = with lib; {
+  meta = {
     description = "XML files of the non-standard wayland protocols use in deepin";
     homepage = "https://github.com/linuxdeepin/deepin-wayland-protocols";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     SIGNALD_TARGET=aarch64-apple-darwin gradle nixDownloadDeps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial daemon for interacting with Signal";
     longDescription = ''
       Signald is a daemon that facilitates communication over Signal.  It is
@@ -103,11 +103,11 @@ stdenv.mkDerivation {
       clients.
     '';
     homepage = "https://signald.org";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

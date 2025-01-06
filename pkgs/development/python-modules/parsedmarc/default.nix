@@ -101,14 +101,14 @@ buildPythonPackage rec {
     tests = nixosTests.parsedmarc;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
     changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
       lib.replaceStrings [ "." ] [ "" ] version
     }";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ talyz ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
     # https://github.com/domainaware/parsedmarc/issues/464
     broken = lib.versionAtLeast msgraph-core.version "1.0.0";

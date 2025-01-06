@@ -25,11 +25,11 @@ buildPythonPackage rec {
   # no Python tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant/frontend/releases/tag/${version}";
     description = "Frontend for Home Assistant";
     homepage = "https://github.com/home-assistant/frontend";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

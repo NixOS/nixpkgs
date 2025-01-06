@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     tests.samba-wsdd = nixosTests.samba-wsdd;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/christgau/wsdd";
     description = "Web Service Discovery (WSD) host daemon for SMB/Samba";
-    maintainers = with maintainers; [ izorkin ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ izorkin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "wsdd";
   };
 }

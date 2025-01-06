@@ -121,15 +121,15 @@ stdenv.mkDerivation rec {
     supportedFeatures = [ "commit" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Music typesetting system";
     homepage = "http://lilypond.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       marcweber
       yurrriq
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 
   FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {

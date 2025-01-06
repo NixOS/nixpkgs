@@ -130,12 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
     homepage = "https://github.com/ROCm/rdc";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version || versionAtLeast finalAttrs.version "7.0.0";
     broken = true; # Too many errors, unsure how to fix
   };

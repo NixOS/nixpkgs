@@ -47,14 +47,14 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://click.palletsprojects.com/";
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''
       A Python package for creating beautiful command line interfaces in a
       composable way, with as little code as necessary.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

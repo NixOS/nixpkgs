@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "-DSFML_USE_SYSTEM_DEPS=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
       It provides access to windowing, graphics, audio and network.
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
-    license = licenses.zlib;
-    maintainers = [ maintainers.astsmtl ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.astsmtl ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multicodec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compact self-describing codecs";
     homepage = "https://github.com/multiformats/py-multicodec";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

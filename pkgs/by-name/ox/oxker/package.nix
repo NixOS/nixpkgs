@@ -15,12 +15,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SeNrVw1m0B9CV31Pa41YinviWbEdiw50sdcrQpndiCI=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple tui to view & control docker containers";
     homepage = "https://github.com/mrjackwills/oxker";
     changelog = "https://github.com/mrjackwills/oxker/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siph ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siph ];
     mainProgram = "oxker";
   };
 }

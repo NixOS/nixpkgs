@@ -55,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysequoia" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides OpenPGP facilities in Python through the Sequoia PGP library";
     downloadPage = "https://codeberg.org/wiktor/pysequoia";
     homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
     # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
         it easy to run an HTTP server as part of another application.
       '';
 
-      license = licenses.lgpl2Plus;
+      license = lib.licenses.lgpl2Plus;
 
       homepage = "https://www.gnu.org/software/libmicrohttpd/";
 
-      maintainers = with maintainers; [ fpletz ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ fpletz ];
+      platforms = lib.platforms.unix;
     }
     // meta;
 })

@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Activity and idle watchers";
     longDescription = ''
       Awatcher is a window activity and idle watcher with an optional tray and UI for statistics. The goal is to compensate
@@ -38,9 +38,9 @@ rustPlatform.buildRustPackage rec {
     '';
     downloadPage = "https://github.com/2e3s/awatcher/releases";
     homepage = "https://github.com/2e3s/awatcher";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "awatcher";
-    maintainers = [ maintainers.aikooo7 ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.aikooo7 ];
+    platforms = lib.platforms.linux;
   };
 }

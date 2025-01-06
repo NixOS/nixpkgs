@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     cp -r * "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Theme with some soft colors and nice background images loaded from unsplash.com";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-spring";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

@@ -57,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "holidays" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
     changelog = "https://github.com/vacanza/python-holidays/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       jluttine
     ];

@@ -92,16 +92,16 @@ buildPythonPackage {
   # nativeCheckInputs = with pkgs; [ which cudatoolkit ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleOCR";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Multilingual OCR toolkits based on PaddlePaddle";
     longDescription = ''
       PaddleOCR aims to create multilingual, awesome, leading, and practical OCR
       tools that help users train better models and apply them into practice.
     '';
     changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

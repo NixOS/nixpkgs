@@ -30,10 +30,10 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect the log4j vulnerability";
     homepage = "https://github.com/takito1812/log4j-detect";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

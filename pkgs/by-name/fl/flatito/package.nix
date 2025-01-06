@@ -30,12 +30,12 @@ buildRubyGem rec {
   source.sha256 = "sha256-n1qPiZoUwaD+dMuJKI8k3cR71dg6yIrIAj0ZsFbstQ8=";
   propagatedBuildInputs = [ deps ];
 
-  meta = with lib; {
+  meta = {
     description = "It allows you to search for a key and get the value and the line number where it is located in YAML and JSON files";
     homepage = "https://github.com/ceritium/flatito";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rucadi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rucadi ];
+    platforms = lib.platforms.unix;
     mainProgram = "flatito";
   };
 }

@@ -103,16 +103,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCm/rocSOLVER";
-    license = with licenses; [ bsd2 ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "7.0.0";
   };
 })

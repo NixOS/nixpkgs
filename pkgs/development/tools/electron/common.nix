@@ -289,18 +289,18 @@ in
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       yayayayaka
       teutat3s
     ];
     mainProgram = "electron";
     hydraPlatforms =
-      lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version))
+      lib.optionals (!(lib.hasInfix "alpha" info.version) && !(lib.hasInfix "beta" info.version))
         [
           "aarch64-linux"
           "x86_64-linux"

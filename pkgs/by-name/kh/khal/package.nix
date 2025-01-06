@@ -111,11 +111,11 @@ python.pkgs.buildPythonApplication rec {
     "test_event_no_dst"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI calendar application";
     homepage = "http://lostpackets.de/khal/";
     changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

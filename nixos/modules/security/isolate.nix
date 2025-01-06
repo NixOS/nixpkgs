@@ -140,6 +140,6 @@ in
       description = "Isolate Sandbox Slice";
     };
 
-    meta.maintainers = with maintainers; [ virchau13 ];
+    meta.maintainers = with lib.maintainers; [ virchau13 ];
   };
 }

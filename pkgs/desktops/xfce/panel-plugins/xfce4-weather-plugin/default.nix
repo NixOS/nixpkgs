@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "${pname}-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-weather-plugin";
     description = "Weather plugin for the Xfce desktop environment";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

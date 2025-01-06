@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Resource compiler and asset manager for Roblox";
     mainProgram = "tarmac";
     longDescription = ''
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Roblox/tarmac";
     downloadPage = "https://github.com/Roblox/tarmac/releases/tag/v${version}";
     changelog = "https://github.com/Roblox/tarmac/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wackbyte ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wackbyte ];
   };
 }

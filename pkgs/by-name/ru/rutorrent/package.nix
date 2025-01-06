@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     runHook postInstall;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another web front-end for rTorrent";
     homepage = "https://github.com/Novik/ruTorrent";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

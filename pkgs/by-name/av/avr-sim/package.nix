@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AVR assembler simulator for the stepwise execution of assembler source code - with many extras";
     homepage = "http://www.avr-asm-tutorial.net/avr_sim/index_en.html";
-    license = licenses.unfree;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ameer ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ameer ];
   };
 }

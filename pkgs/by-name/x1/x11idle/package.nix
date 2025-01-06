@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gcc -lXss -lX11 $src -o $out/bin/x11idle
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Compute consecutive idle time for current X11 session with millisecond resolution
     '';
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
       Idle time passes when the user does not act, i.e. when the user doesn't move the mouse or use the keyboard.
     '';
     homepage = "https://orgmode.org/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.swflint ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.swflint ];
     mainProgram = "x11idle";
   };
 }

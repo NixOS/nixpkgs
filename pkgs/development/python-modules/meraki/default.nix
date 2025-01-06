@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meraki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides all current Meraki dashboard API calls to interface with the Cisco Meraki cloud-managed platform";
     homepage = "https://github.com/meraki/dashboard-api-python";
     changelog = "https://github.com/meraki/dashboard-api-python/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dylanmtaylor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
   };
 }

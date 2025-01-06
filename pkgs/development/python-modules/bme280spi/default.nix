@@ -23,11 +23,11 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library for BME280 sensor through spidev";
     mainProgram = "bme280spi";
     homepage = "https://github.com/Kuzj/bme280spi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

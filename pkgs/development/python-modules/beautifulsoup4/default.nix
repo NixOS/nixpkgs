@@ -78,11 +78,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";
     description = "HTML and XML parser";
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

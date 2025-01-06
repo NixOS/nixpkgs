@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "latex2mathml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python library for LaTeX to MathML conversion";
     homepage = "https://github.com/roniemartinez/latex2mathml";
     changelog = "https://github.com/roniemartinez/latex2mathml/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "latex2mathml";
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

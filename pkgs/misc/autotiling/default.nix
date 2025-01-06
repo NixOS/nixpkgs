@@ -23,12 +23,12 @@ buildPythonApplication rec {
   ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/autotiling";
     description = "Script for sway and i3 to automatically switch the horizontal / vertical window split orientation";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
     mainProgram = "autotiling";
   };
 }

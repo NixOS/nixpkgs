@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     (if withGtk3 then gtk3 else gtk2)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Standard screen manager of LXDE";
     mainProgram = "lxrandr";
     homepage = "https://lxde.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rawkode ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ rawkode ];
+    platforms = lib.platforms.linux;
   };
 }

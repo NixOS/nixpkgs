@@ -71,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/Hypr --prefix PATH : ${lib.makeBinPath [ xmodmap ]}
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Tiling X11 window manager written in modern C++";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
     inherit (libX11.meta) platforms;
     mainProgram = "Hypr";
   };

@@ -34,15 +34,15 @@ stdenv.mkDerivation {
 
   checkTarget = "tests";
 
-  meta = with lib; {
+  meta = {
     description = "Lisp-flavoured C";
     longDescription = ''
       Dale is a system (no GC) programming language that uses
       S-expressions for syntax and supports syntactic macros.
     '';
     homepage = "https://github.com/tomhrr/dale";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ amiloradovsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ amiloradovsky ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

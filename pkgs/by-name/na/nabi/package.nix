@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     libhangul
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy Hangul XIM";
     mainProgram = "nabi";
     homepage = "https://github.com/choehwanjin/nabi";
     changelog = "https://github.com/libhangul/nabi/blob/nabi-${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ianwookim ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ianwookim ];
+    platforms = lib.platforms.linux;
   };
 }

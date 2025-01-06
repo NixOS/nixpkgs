@@ -47,7 +47,7 @@ buildPythonPackage rec {
     "OSMPythonTools.overpass"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to access OpenStreetMap-related services";
     longDescription = ''
       The python package OSMPythonTools provides easy access to
@@ -55,8 +55,8 @@ buildPythonPackage rec {
       Nominatim, and the OpenStreetMap editing API.
     '';
     homepage = "https://github.com/mocnik-science/osm-python-tools";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${version}/version-history.md";
-    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ das-g ];
   };
 }

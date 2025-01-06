@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the Pango text rendering library";
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an
@@ -64,13 +64,13 @@ stdenv.mkDerivation rec {
       Pango forms the core of text and font handling for GTK.
     '';
     homepage = "https://www.pango.org/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
+      lib.teams.gnome.members
+      ++ (with lib.maintainers; [
         lovek323
         raskin
       ]);
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

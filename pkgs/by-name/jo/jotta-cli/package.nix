@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) jotta-cli; };
 
-  meta = with lib; {
+  meta = {
     description = "Jottacloud CLI";
     homepage = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";
-    maintainers = with maintainers; [ evenbrenden ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ evenbrenden ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
 }

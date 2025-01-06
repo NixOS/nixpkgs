@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     opencl-clhpp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool which profiles OpenCL devices to find their peak capacities";
     homepage = "https://github.com/krrishnarraj/clpeak/";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     maintainers = [ ];
     mainProgram = "clpeak";
   };

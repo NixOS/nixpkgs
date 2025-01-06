@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication rec {
     make install-doc prefix=$out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mnauw/git-remote-hg";
     description = "Semi-official Mercurial bridge from Git project";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

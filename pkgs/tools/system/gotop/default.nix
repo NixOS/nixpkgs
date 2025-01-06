@@ -45,12 +45,12 @@ buildGoModule rec {
     installManPage gotop.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = "https://github.com/xxxserxxx/gotop";
     changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.magnetophon ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
     mainProgram = "gotop";
   };
 }

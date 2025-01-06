@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ccoors/Valeronoi/";
     description = "WiFi mapping companion app for Valetudo";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nova-madeline
       maeve
     ];

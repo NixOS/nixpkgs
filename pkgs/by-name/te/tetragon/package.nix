@@ -62,13 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
     homepage = "https://github.com/cilium/tetragon";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tetragon";
-    maintainers = with maintainers; [ gangaram ];
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [ gangaram ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

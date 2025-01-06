@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     ln -s bitstower-markets $out/bin/markets
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bitstower/markets";
     description = "Stock, currency and cryptocurrency tracker";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

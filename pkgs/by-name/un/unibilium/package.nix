@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Very basic terminfo library";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

@@ -38,14 +38,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=state::tests::import_filter_signature_matches"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
     changelog = "https://github.com/lunatic-solutions/lunatic/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

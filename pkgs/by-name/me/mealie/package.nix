@@ -149,7 +149,7 @@ pythonpkgs.buildPythonApplication rec {
     inherit (nixosTests) mealie;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self hosted recipe manager and meal planner";
     longDescription = ''
       Mealie is a self hosted recipe manager and meal planner with a REST API and a reactive frontend
@@ -159,8 +159,8 @@ pythonpkgs.buildPythonApplication rec {
     '';
     homepage = "https://mealie.io";
     changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi anoa ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ litchipi anoa ];
     mainProgram = "mealie";
   };
 }

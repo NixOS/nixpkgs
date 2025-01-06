@@ -431,5 +431,5 @@ in
       );
     });
 
-  meta.maintainers = with maintainers; [ minijackson mic92 ];
+  meta.maintainers = with lib.maintainers; [ minijackson mic92 ];
 }

@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Image annotation for Elementary OS";
     homepage = "https://github.com/phase1geo/Annotator";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.phase1geo.annotator";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 }

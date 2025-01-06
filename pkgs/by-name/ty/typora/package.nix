@@ -125,11 +125,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Markdown editor, a markdown reader";
     homepage = "https://typora.io/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ npulidomateo ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ npulidomateo ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "typora";
   };

@@ -106,13 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
     python = python3.pkgs.igraph;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
     changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       MostAwesomeDude
       dotlambda
     ];

@@ -42,11 +42,11 @@ mkTclDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://incrtcl.sourceforge.net/";
     description = "Mega-widget toolkit for incr Tk";
-    license = licenses.tcltk;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

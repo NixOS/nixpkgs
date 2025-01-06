@@ -73,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbdime" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jupyter/nbdime";
     changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

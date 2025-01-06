@@ -39,12 +39,12 @@ buildGoModule rec {
     $out/bin/kn version | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Knative client kn is your door to the Knative world. It allows you to create Knative resources interactively from the command line or from within scripts";
     mainProgram = "kn";
     homepage = "https://github.com/knative/client";
     changelog = "https://github.com/knative/client/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bryanasdev000 ];
   };
 }

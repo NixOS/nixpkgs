@@ -9,13 +9,13 @@
 
 mkDerivation {
   pname = "kmag";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/utilities/org.kde.kmag";
     description = "Small Linux utility to magnify a part of the screen";
     mainProgram = "kmag";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

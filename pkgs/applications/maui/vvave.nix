@@ -40,11 +40,11 @@ mkDerivation {
     taglib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform media player";
     mainProgram = "vvave";
     homepage = "https://invent.kde.org/maui/vvave";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

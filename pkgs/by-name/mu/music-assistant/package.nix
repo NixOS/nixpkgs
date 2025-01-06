@@ -123,7 +123,7 @@ python.pkgs.buildPythonApplication rec {
     tests = nixosTests.music-assistant;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
@@ -132,8 +132,8 @@ python.pkgs.buildPythonApplication rec {
       always-on device like a Raspberry Pi, a NAS or an Intel NUC or alike.
     '';
     homepage = "https://github.com/music-assistant/server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "mass";
   };
 }

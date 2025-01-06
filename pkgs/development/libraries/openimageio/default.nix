@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openimageio.org";
     description = "Library and tools for reading and writing images";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

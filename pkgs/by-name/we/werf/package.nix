@@ -90,7 +90,7 @@ buildGoModule rec {
     version = src.rev;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GitOps delivery tool";
     mainProgram = "werf";
     longDescription = ''
@@ -99,7 +99,7 @@ buildGoModule rec {
     '';
     homepage = "https://werf.io";
     changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

@@ -46,11 +46,11 @@ buildPythonPackage rec {
     crt = [ botocore.optional-dependencies.crt ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     changelog = "https://github.com/boto/s3transfer/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

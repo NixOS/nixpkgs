@@ -137,11 +137,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gitsrht" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       eadwu
       christoph-heiss
     ];

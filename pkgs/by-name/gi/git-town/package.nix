@@ -76,11 +76,11 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       allonsy
       blaggacao
       gabyx

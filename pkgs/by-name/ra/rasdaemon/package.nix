@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.rasdaemon;
 
-  meta = with lib; {
+  meta = {
     description = ''
       A Reliability, Availability and Serviceability (RAS) logging tool using EDAC kernel tracing events
     '';
@@ -125,9 +125,9 @@ stdenv.mkDerivation rec {
       drivers for other architectures like arm also exists.
     '';
     homepage = "https://github.com/mchehab/rasdaemon";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     changelog = "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
-    maintainers = with maintainers; [ evils ];
+    maintainers = with lib.maintainers; [ evils ];
   };
 }

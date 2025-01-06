@@ -40,13 +40,13 @@ rustPlatform.buildRustPackage rec {
     cargoSetupPostPatchHook() { true; }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Trim the excess padding found in Nintendo DS(i) ROMs";
     homepage = "https://github.com/Nemris/ndstrim";
     changelog = "https://github.com/Nemris/ndstrim/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thiagokokada ];
     mainProgram = "ndstrim";
   };
 }

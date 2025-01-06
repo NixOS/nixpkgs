@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     cp . $out -R
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shenlanguage.org";
     description = "Source code for the Shen Language";
     changelog = "https://github.com/Shen-Language/shen-sources/raw/shen-${version}/CHANGELOG.md";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bsima ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bsima ];
+    license = lib.licenses.bsd3;
   };
 }

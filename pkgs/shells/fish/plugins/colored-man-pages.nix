@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "colored-man-pages";
   version = "0-unstable-2022-04-30";
 
@@ -15,10 +15,10 @@ buildFishPlugin rec {
     sha256 = "0ifqdbaw09hd1ai0ykhxl8735fcsm0x2fwfzsk7my2z52ds60bwa";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fish shell plugin to colorize man pages";
     homepage = "https://github.com/PatrickF1/colored_man_pages.fish";
-    license = licenses.mit;
-    maintainers = [ maintainers.jocelynthode ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jocelynthode ];
   };
 }

@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Workspace productivity booster";
     homepage = "https://github.com/brocode/fw";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "fw";
   };
 }

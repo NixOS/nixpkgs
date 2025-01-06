@@ -154,9 +154,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Unfucked multimedia layer for Dwarf Fortress";
     homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-    license = licenses.free;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       abbradar
       numinit
     ];

@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     make icon-caches
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elementary icons for Xfce and other GTK desktops like GNOME";
     homepage = "https://github.com/shimmerproject/elementary-xfce";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     # darwin cannot deal with file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

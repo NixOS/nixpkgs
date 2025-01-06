@@ -93,13 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/nnn --prefix PATH : "$binPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small ncurses-based file browser forked from noice";
     homepage = "https://github.com/jarun/nnn";
     changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "nnn";
   };
 })

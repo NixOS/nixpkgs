@@ -110,10 +110,10 @@ stdenv.mkDerivation rec {
     }"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn-based strategy artillery game similar to Worms";
     homepage = "https://hedgewars.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Each player controls a team of several hedgehogs. During the course of
       the game, players take turns with one of their hedgehogs. They then use
@@ -137,11 +137,11 @@ stdenv.mkDerivation rec {
       contact with explosions, to zero (the damage dealt to the attacked
       hedgehog or hedgehogs after a player's or CPU turn is shown only when
       all movement on the battlefield has ceased).'';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kragniz
       fpletz
     ];
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

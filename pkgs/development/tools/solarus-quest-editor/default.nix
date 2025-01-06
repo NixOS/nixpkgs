@@ -53,7 +53,7 @@ mkDerivation rec {
     glm
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Editor for the Zelda-like ARPG game engine, Solarus";
     mainProgram = "solarus-quest-editor";
     longDescription = ''
@@ -62,9 +62,9 @@ mkDerivation rec {
       Games can be created easily using the editor.
     '';
     homepage = "https://www.solarus-games.org";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 
 }

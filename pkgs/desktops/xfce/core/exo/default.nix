@@ -30,8 +30,8 @@ mkXfceDerivation {
     libxfce4util
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application library for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

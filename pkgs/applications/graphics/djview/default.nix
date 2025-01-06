@@ -56,14 +56,14 @@ mkDerivation rec {
     "--disable-nsdejavu" # 2023-11-14: modern browsers have dropped support for NPAPI
   ] ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-mac";
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
     mainProgram = "djview";
     homepage = "https://djvu.sourceforge.net/djview4.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ Anton-Latukha ];
     longDescription = ''
       The portable DjVu viewer (Qt5) and browser (nsdejavu) plugin.
 

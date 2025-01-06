@@ -18,10 +18,10 @@ buildPythonPackage rec {
   buildInputs = [ openssl ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Bindings for scrypt key derivation function library";
     homepage = "https://pypi.python.org/pypi/scrypt";
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

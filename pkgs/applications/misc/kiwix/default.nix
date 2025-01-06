@@ -40,12 +40,12 @@ mkDerivation {
     "--prefix PATH : ${lib.makeBinPath [ aria2 ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Offline reader for Web content";
     mainProgram = "kiwix-desktop";
     homepage = "https://kiwix.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

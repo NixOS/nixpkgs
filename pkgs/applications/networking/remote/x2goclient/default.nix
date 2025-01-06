@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical NoMachine NX3 remote desktop client";
     mainProgram = "x2goclient";
     homepage = "http://x2go.org/";
     maintainers = [ ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

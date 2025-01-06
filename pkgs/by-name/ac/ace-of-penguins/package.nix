@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       "thornq"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.delorie.com/store/ace/";
     description = "Solitaire games in X11";
     longDescription = ''
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       minesweeper, pegged, solitaire, taipei (with editor!), and thornq (by
       Martin Thornquist).
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 }

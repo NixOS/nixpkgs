@@ -34,11 +34,11 @@ buildKodiBinaryAddon rec {
     inputstream-rtmp
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-pvr/pvr.iptvsimple";
     description = "Kodi's IPTV Simple client addon";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.kodi.members;
   };
 }

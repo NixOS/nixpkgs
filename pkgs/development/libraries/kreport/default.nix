@@ -37,10 +37,10 @@ mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for creation and generation of reports in multiple formats";
-    license = licenses.lgpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zraexy ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zraexy ];
   };
 }

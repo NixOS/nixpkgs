@@ -3,14 +3,14 @@
 let base = {
   pname = "firebird";
 
-  meta = with lib; {
+  meta = {
     description = "SQL relational database management system";
     downloadPage = "https://github.com/FirebirdSQL/firebird/";
     homepage = "https://firebirdsql.org/";
     changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
     license = [ "IDPL" "Interbase-1.0" ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.marcweber ];
   };
 
   nativeBuildInputs = [ autoreconfHook271 ];

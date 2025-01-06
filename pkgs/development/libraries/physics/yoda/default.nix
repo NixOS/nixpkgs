@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
 
   installCheckTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
     changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${version}/ChangeLog";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

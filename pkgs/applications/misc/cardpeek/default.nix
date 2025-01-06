@@ -50,12 +50,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/L1L1/cardpeek";
     description = "Tool to read the contents of ISO7816 smart cards";
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ embr ];
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ embr ];
     mainProgram = "cardpeek";
   };
 }

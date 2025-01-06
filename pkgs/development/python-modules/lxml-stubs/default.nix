@@ -34,10 +34,10 @@ buildPythonPackage rec {
     "etree_element_iterchildren"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Type stubs for the lxml package";
     homepage = "https://github.com/lxml/lxml-stubs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

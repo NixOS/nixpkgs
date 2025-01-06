@@ -176,12 +176,12 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AMD's graph optimization engine";
     homepage = "https://github.com/ROCm/AMDMIGraphX";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken = true;
   };
 })

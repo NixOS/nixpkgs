@@ -97,13 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
         runHook postFixup
       '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hmcl.huangyuhui.net";
     description = "A Minecraft Launcher which is multi-functional, cross-platform and popular";
     mainProgram = "hmcl";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ daru-san ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ daru-san ];
     inherit (jre.meta) platforms;
   };
 })

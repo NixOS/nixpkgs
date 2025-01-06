@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ klibc ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon to run x86 code in an emulated environment";
     mainProgram = "v86d";
     homepage = "https://github.com/mjanusz/v86d";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ codyopel ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

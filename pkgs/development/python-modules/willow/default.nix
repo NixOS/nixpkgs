@@ -49,11 +49,11 @@ buildPythonPackage rec {
     wand
   ] ++ optional-dependencies.heif;
 
-  meta = with lib; {
+  meta = {
     description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";
     changelog = "https://github.com/wagtail/Willow/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ desiderius ];
   };
 }

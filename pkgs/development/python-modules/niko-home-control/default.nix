@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nikohomecontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for Niko Home Control";
     homepage = "https://github.com/NoUseFreak/niko-home-control";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

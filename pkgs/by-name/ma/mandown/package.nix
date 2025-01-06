@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eHKivxnbOk3K2JEVIVHhaEds6Gr2TcYUnFuallHRV/0=";
 
-  meta = with lib; {
+  meta = {
     description = "Markdown to groff (man page) converter";
     homepage = "https://gitlab.com/kornelski/mandown";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];

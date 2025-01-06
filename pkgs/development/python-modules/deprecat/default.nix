@@ -35,11 +35,11 @@ buildPythonPackage rec {
     "tests/test_sphinx.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decorator to deprecate old python classes, functions or methods";
     homepage = "https://github.com/mjhajharia/deprecat";
     changelog = "https://github.com/mjhajharia/deprecat/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

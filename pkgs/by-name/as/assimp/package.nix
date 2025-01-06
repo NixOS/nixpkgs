@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Library to import various 3D model formats";
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

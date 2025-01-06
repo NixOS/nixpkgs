@@ -170,12 +170,12 @@ buildPythonPackage rec {
     inherit (nixosTests) chromadb;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chroma";
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };

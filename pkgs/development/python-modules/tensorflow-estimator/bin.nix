@@ -24,10 +24,10 @@ buildPythonPackage rec {
     absl-py
   ];
 
-  meta = with lib; {
+  meta = {
     description = "TensorFlow Estimator is a high-level API that encapsulates model training, evaluation, prediction, and exporting";
     homepage = "http://tensorflow.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jyp ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }

@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     install -m755 -D $src $out/bin/hashi-ui
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jippi/hashi-ui";
     description = "Modern user interface for hashicorp Consul & Nomad";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ numkem ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ numkem ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     mainProgram = "hashi-ui";
   };
 }

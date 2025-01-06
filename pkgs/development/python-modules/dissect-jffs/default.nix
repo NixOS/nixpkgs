@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.jffs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the JFFS2 file system";
     homepage = "https://github.com/fox-it/dissect.jffs";
     changelog = "https://github.com/fox-it/dissect.jffs/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -86,10 +86,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rdflib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

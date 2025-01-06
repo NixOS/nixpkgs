@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ mvs wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ mvs wegank ];
+    platforms = lib.platforms.unix;
     mainProgram = "freedv";
   };
 }

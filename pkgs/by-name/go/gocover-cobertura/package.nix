@@ -18,11 +18,11 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/boumenot/gocover-cobertura";
     description = "This is a simple helper tool for generating XML output in Cobertura format for CIs like Jenkins and others from go tool cover output";
     mainProgram = "gocover-cobertura";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hmajid2301 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hmajid2301 ];
   };
 }

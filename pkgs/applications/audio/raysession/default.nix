@@ -61,11 +61,11 @@ buildPythonApplication rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Houston4444/RaySession";
     description = "Session manager for Linux musical programs";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }

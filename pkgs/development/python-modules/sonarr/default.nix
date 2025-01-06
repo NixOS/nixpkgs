@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sonarr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for the Sonarr API";
     homepage = "https://github.com/ctalkington/python-sonarr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

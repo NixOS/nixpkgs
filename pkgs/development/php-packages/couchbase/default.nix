@@ -35,12 +35,12 @@ buildPecl {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/couchbase/php-couchbase/releases/tag/v${version}";
     description = "Couchbase Server PHP extension";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://docs.couchbase.com/php-sdk/current/project-docs/sdk-release-notes.html";
-    maintainers = teams.php.members;
+    maintainers = lib.teams.php.members;
     broken = lib.versionAtLeast php.version "8.3";
   };
 }

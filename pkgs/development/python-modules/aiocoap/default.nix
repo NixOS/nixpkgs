@@ -85,11 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiocoap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
     changelog = "https://github.com/chrysn/aiocoap/blob/${version}/NEWS";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

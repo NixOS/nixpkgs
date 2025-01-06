@@ -46,14 +46,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nitrokey" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-sdk-py";
     changelog = "https://github.com/Nitrokey/nitrokey-sdk-py/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ panicgh ];
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

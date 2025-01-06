@@ -50,11 +50,11 @@ buildGoModule rec {
       --zsh  <($out/bin/zarf completion --no-log-file zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
     homepage = "https://github.com/defenseunicorns/zarf.git";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ragingpastry ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ragingpastry ];
   };
 }

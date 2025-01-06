@@ -227,14 +227,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "An OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/WiVRn/WiVRn/";
     changelog = "https://github.com/WiVRn/WiVRn/releases/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ passivelemon ];
+    platforms = lib.platforms.linux;
     mainProgram = "wivrn-server";
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

@@ -151,12 +151,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";
-    license = licenses.unfree;
-    platforms = attrNames srcs;
-    maintainers = with maintainers; [ eliandoran ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.attrNames srcs;
+    maintainers = with lib.maintainers; [ eliandoran ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };
 }

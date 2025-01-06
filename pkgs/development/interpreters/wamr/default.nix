@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     in
     "${finalAttrs.src.name}/product-mini/platforms/${platform}";
 
-  meta = with lib; {
+  meta = {
     description = "WebAssembly Micro Runtime";
     homepage = "https://github.com/bytecodealliance/wasm-micro-runtime";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "iwasm";
-    maintainers = with maintainers; [ ereslibre ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ereslibre ];
+    platforms = lib.platforms.unix;
   };
 })

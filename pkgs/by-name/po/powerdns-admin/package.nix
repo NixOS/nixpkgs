@@ -164,12 +164,12 @@ stdenv.mkDerivation {
     tests = nixosTests.powerdns-admin;
   };
 
-  meta = with lib; {
+  meta = {
     description = "PowerDNS web interface with advanced features";
     mainProgram = "powerdns-admin";
     homepage = "https://github.com/PowerDNS-Admin/PowerDNS-Admin";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Flakebi
       zhaofengli
     ];

@@ -73,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/encode/django-rest-framework/releases/tag/3.15.1";
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    maintainers = with maintainers; [ desiderius ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ desiderius ];
+    license = lib.licenses.bsd2;
   };
 }

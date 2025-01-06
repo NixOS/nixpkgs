@@ -46,11 +46,11 @@ buildPythonPackage rec {
     "test_config_incompatible_oauth2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin wrapper around OVH's APIs";
     homepage = "https://github.com/ovh/python-ovh";
     changelog = "https://github.com/ovh/python-ovh/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

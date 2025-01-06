@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anybadge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool for generating badges for your projects";
     homepage = "https://github.com/jongracecox/anybadge";
     changelog = "https://github.com/jongracecox/anybadge/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fabiangd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fabiangd ];
   };
 }

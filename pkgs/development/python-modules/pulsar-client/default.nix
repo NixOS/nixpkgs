@@ -124,10 +124,10 @@ buildPythonPackage {
     Srcs."${pythonVersion}-${stdenv.hostPlatform.system}"
       or (throw "Unsupported '${pythonVersion}-${stdenv.hostPlatform.system}' target");
 
-  meta = with lib; {
+  meta = {
     description = "Client for pulsar";
     homepage = "https://pypi.org/project/pulsar-client/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

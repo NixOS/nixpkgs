@@ -91,12 +91,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonschema" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of JSON Schema validation";
     homepage = "https://github.com/python-jsonschema/jsonschema";
     changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ domenkozar ];
     mainProgram = "jsonschema";
   };
 }

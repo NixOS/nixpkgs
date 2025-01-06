@@ -85,11 +85,11 @@ buildPythonPackage rec {
     "pins/tests/test_rsconnect_api.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to publishes data, models and other Python objects";
     homepage = "https://github.com/rstudio/pins-python";
     changelog = "https://github.com/rstudio/pins-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

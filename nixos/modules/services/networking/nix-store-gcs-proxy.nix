@@ -80,5 +80,5 @@ in
     }
   );
 
-  meta.maintainers = [ maintainers.mrkkrp ];
+  meta.maintainers = [ lib.maintainers.mrkkrp ];
 }

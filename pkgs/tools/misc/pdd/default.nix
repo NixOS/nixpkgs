@@ -22,7 +22,7 @@ buildPythonApplication rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jarun/pdd";
     description = "Tiny date, time diff calculator";
     longDescription = ''
@@ -34,7 +34,7 @@ buildPythonApplication rec {
       timezone.
     '';
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "pdd";
   };
 }

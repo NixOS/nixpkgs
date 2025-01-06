@@ -30,13 +30,13 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line catalog tool for your offline data";
     mainProgram = "catcli";
     homepage = "https://github.com/deadc0de6/catcli";
     changelog = "https://github.com/deadc0de6/catcli/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ petersjt014 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ petersjt014 ];
+    platforms = lib.platforms.all;
   };
 }

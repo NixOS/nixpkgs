@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "pre-commit hook to ensure that files that should be encrypted with sops are";
     homepage = "https://github.com/yuvipanda/pre-commit-hook-ensure-sops";
-    maintainers = with maintainers; [ nialov ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ nialov ];
+    license = lib.licenses.bsd3;
     mainProgram = "pre-commit-hook-ensure-sops";
   };
 }

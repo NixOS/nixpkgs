@@ -31,10 +31,10 @@ buildLua (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Another MPV OSC Script";
     homepage = "https://github.com/maoiscat/mpv-osc-modern";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ Guanran928 ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ Guanran928 ];
   };
 })

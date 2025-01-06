@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Alecaddd/taxi";
     description = "FTP Client that drives you anywhere";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.pantheon.members;
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.alecaddd.taxi";
   };
 }

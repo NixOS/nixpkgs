@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "test_umicroformat"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract embedded metadata from HTML markup";
     mainProgram = "extruct";
     homepage = "https://github.com/scrapinghub/extruct";
     changelog = "https://github.com/scrapinghub/extruct/blob/v${version}/HISTORY.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

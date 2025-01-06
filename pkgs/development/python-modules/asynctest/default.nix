@@ -33,10 +33,10 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enhance the standard unittest package with features for testing asyncio libraries";
     homepage = "https://github.com/Martiusweb/asynctest";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

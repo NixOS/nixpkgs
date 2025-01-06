@@ -74,10 +74,10 @@ mkDerivation rec {
     qtwebengine
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Web browser for Plasma Mobile";
     homepage = "https://invent.kde.org/plasma-mobile/angelfish";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

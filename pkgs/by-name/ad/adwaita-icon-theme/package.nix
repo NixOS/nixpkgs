@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme";
     changelog = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/blob/${version}/NEWS?ref_type=tags";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = teams.gnome.members;
-    license = licenses.cc-by-sa-30;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.cc-by-sa-30;
   };
 }

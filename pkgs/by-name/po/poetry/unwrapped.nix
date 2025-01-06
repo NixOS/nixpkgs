@@ -157,12 +157,12 @@ buildPythonPackage rec {
   # in the Python script, which runs after the wrapper.
   makeWrapperArgs = [ "--unset PYTHONPATH" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jakewaksbaum
       dotlambda
     ];

@@ -65,11 +65,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "syncall" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bi-directional synchronization between services such as Taskwarrior, Google Calendar, Notion, Asana, and more";
     homepage = "https://github.com/bergercookie/syncall";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
     # Upstream issue making it practically unusable:
     # https://github.com/bergercookie/syncall/issues/99
     broken = true;

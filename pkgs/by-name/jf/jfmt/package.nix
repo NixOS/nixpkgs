@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-u/v3P7iPdBJU/0wlSNBq/cjnM3XOnoVfUjrrmo4sTAA=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility to format json files";
     mainProgram = "jfmt";
     homepage = "https://github.com/scruffystuffs/jfmt.rs";
     changelog = "https://github.com/scruffystuffs/jfmt.rs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.psibi ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.psibi ];
   };
 }

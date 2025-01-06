@@ -42,10 +42,10 @@ buildPythonPackage rec {
   # https://github.com/etal/cnvkit/issues/815
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rybern ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rybern ];
   };
 }

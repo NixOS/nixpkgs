@@ -71,12 +71,12 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
     homepage = "https://github.com/dgtlmoon/changedetection.io";
     changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "changedetection.io";
   };
 }

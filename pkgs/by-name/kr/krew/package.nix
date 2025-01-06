@@ -28,11 +28,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for kubectl plugins";
     mainProgram = "krew";
     homepage = "https://github.com/kubernetes-sigs/krew";
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.asl20;
   };
 }

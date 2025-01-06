@@ -128,5 +128,5 @@ in
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.settings.web.port ];
   };
 
-  meta.maintainers = with maintainers; [ pizzapim ];
+  meta.maintainers = with lib.maintainers; [ pizzapim ];
 }

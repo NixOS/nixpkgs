@@ -114,12 +114,12 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       description = "Collection of experiments that investigate core capabilities of a reinforcement learning (RL) agent";
       homepage = "https://github.com/deepmind/bsuite";
       changelog = "https://github.com/google-deepmind/bsuite/releases/tag/${version}";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ onny ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ onny ];
     };
   };
 in

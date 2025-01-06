@@ -8,7 +8,7 @@
   filelock,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "legendary-gl"; # Name in pypi
   version = "0.20.34";
 
@@ -31,11 +31,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "legendary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and open-source Epic Games Launcher alternative";
     homepage = "https://github.com/derrod/legendary";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ equirosa ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.equirosa ];
     mainProgram = "legendary";
   };
 

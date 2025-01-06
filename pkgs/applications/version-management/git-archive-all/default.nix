@@ -51,15 +51,15 @@ buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Archive a repository with all its submodules";
     longDescription = ''
       A python script wrapper for git-archive that archives a git superproject
       and its submodules, if it has any. Takes into account .gitattributes
     '';
     homepage = "https://github.com/Kentzo/git-archive-all";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-archive-all";
   };
 }

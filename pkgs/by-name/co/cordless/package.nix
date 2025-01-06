@@ -19,11 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-XnwTqd19q+hOJZsfnFExiPDbg4pzV1Z9A6cq/jhcVgU=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Bios-Marcel/cordless";
     description = "Discord terminal client";
     mainProgram = "cordless";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }

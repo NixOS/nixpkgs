@@ -100,7 +100,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "build" ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "pyproject-build";
     description = "Simple, correct PEP517 package builder";
     longDescription = ''
@@ -109,7 +109,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = teams.python.members ++ [ maintainers.fab ];
+    license = lib.licenses.mit;
+    maintainers = lib.teams.python.members ++ [ lib.maintainers.fab ];
   };
 }

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "maim";
     inherit (src.meta) homepage;
     description = "Command-line screenshot utility";

@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "array_record" ];
 
-  meta = with lib; {
+  meta = {
     description = "ArrayRecord is a new file format derived from Riegeli, achieving a new frontier of IO efficiency";
     homepage = "https://github.com/google/array_record";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = [ "x86_64-linux" ];
   };
 }

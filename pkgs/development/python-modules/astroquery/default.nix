@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   fetchPypi,
   astropy,
@@ -77,10 +77,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "astroquery" ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.smaret ];
   };
 }

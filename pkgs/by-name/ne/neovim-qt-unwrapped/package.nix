@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Neovim client library and GUI, in Qt5";
     homepage = "https://github.com/equalsraf/neovim-qt";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     mainProgram = "nvim-qt";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (neovim.meta) platforms;
   };
 }

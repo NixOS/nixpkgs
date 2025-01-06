@@ -22,10 +22,10 @@ buildFishPlugin rec {
     cp -R functions/tide $out/share/fish/vendor_functions.d/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate Fish prompt";
     homepage = "https://github.com/IlanCosman/tide";
-    license = licenses.mit;
-    maintainers = [ maintainers.jocelynthode ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jocelynthode ];
   };
 }

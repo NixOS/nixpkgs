@@ -20,12 +20,12 @@ python3Packages.buildPythonApplication rec {
   # no usable tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python based serial dump and timing program";
     mainProgram = "grabserial";
     homepage = "https://github.com/tbird20d/grabserial";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ vmandela ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ vmandela ];
+    platforms = lib.platforms.linux;
   };
 }

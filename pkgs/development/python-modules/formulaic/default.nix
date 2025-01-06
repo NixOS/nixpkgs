@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/transforms/test_poly.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-performance implementation of Wilkinson formulas";
     homepage = "https://matthewwardrop.github.io/formulaic/";
     changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ swflint ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ swflint ];
   };
 }

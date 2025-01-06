@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: rec {
       updateScript = ./update.sh;
     };
 
-  meta = with lib; {
+  meta = {
     description = "Open source server for sharing geospatial data";
     homepage = "https://geoserver.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.geospatial.members;
+    platforms = lib.platforms.all;
   };
 })

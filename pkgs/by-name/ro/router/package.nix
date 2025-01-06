@@ -39,10 +39,10 @@ rustPlatform.buildRustPackage rec {
     "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
-    license = licenses.elastic20;
-    maintainers = [ maintainers.bbigras ];
+    license = lib.licenses.elastic20;
+    maintainers = [ lib.maintainers.bbigras ];
   };
 }

@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "energyflow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for the EnergyFlow suite of tools";
     homepage = "https://energyflow.network/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

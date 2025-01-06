@@ -23,11 +23,11 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easily update multiple Git repositories at once";
     homepage = "https://github.com/earwig/git-repo-updater";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bdesham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bdesham ];
     mainProgram = "gitup";
   };
 }

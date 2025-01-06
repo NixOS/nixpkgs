@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     cp $src/doc/rtorrent.rc $out/etc/rtorrent/rtorrent.rc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach (jesec's fork)";
     homepage = "https://github.com/jesec/rtorrent";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winter ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ winter ];
+    platforms = lib.platforms.linux;
     mainProgram = "rtorrent";
   };
 }

@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nanoleaf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Nanoleaf Aurora lighting";
     homepage = "https://github.com/software-2/nanoleaf";
     changelog = "https://github.com/software-2/nanoleaf/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

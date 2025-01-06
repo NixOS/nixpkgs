@@ -41,10 +41,10 @@ buildPythonPackage rec {
   # 0.4.2
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Publish a MediaPlayer2 MPRIS device to D-Bus";
     homepage = "https://pypi.org/project/mpris-server/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ quadradical ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ quadradical ];
   };
 }

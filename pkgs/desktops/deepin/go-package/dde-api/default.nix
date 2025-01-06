@@ -89,12 +89,12 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dbus interfaces used for screen zone detecting, thumbnail generating, sound playing, etc";
     mainProgram = "dde-open";
     homepage = "https://github.com/linuxdeepin/dde-api";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

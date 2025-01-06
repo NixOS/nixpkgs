@@ -73,13 +73,13 @@ let
       ./plugin-load-env.patch
     ];
 
-    meta = with lib; {
+    meta = {
       description = "D-Bus service which performs user authentication on behalf of its clients";
       mainProgram = "gsignond";
       homepage = "https://gitlab.com/accounts-sso/gsignond";
-      license = licenses.lgpl21Plus;
+      license = lib.licenses.lgpl21Plus;
       maintainers = [ ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 

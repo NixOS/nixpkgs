@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   # Turn on the flag to install after building the library.
   cmakeFlags = [ "-DMARL_INSTALL=ON" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/marl";
     description = "Hybrid thread / fiber task scheduler written in C++ 11";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ breakds ];
   };
 }

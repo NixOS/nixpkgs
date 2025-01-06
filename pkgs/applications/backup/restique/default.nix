@@ -38,15 +38,15 @@ mkDerivation rec {
     (lib.makeBinPath [ restic ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Restic GUI for Desktop/Laptop Backups";
     homepage = "https://git.srcbox.net/stefan/restique";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-sa-40
       cc0
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "restique";
   };
 }

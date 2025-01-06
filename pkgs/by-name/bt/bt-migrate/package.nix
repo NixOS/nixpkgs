@@ -54,12 +54,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Torrent state migration tool";
     homepage = "https://github.com/mikedld/bt-migrate?tab=readme-ov-file";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "BtMigrate";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

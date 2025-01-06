@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/guptarohit/asciigraph";
     description = "Lightweight ASCII line graph ╭┈╯ command line app";
     mainProgram = "asciigraph";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

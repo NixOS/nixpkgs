@@ -51,11 +51,11 @@ stdenv.mkDerivation {
 
   PKG_CONFIG_GSIGNOND_GPLUGINSDIR = "${placeholder "out"}/lib/gsignond/gplugins";
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles the SASL authentication protocol";
     homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-sasl";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

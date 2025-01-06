@@ -28,10 +28,10 @@ appimageTools.wrapType2 {
     cp ${appimageContents}/desktop.png $out/share/pixmaps/firefly-desktop.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IOTA's New Wallet";
     homepage = "https://firefly.iota.org";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "firefly-desktop";

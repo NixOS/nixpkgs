@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
-    maintainers = with maintainers; [ manveru bobby285271 ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ manveru bobby285271 ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

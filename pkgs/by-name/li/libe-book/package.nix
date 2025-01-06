@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  meta = with lib; {
+  meta = {
     description = "Library for import of reflowable e-book formats";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

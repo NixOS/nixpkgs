@@ -36,14 +36,14 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Gpodder.net client library";
     longDescription = ''
       The mygpoclient library allows developers to utilize a Pythonic interface
       to the gpodder.net web services.
     '';
     homepage = "https://github.com/gpodder/mygpoclient";
-    license = with licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3 ];
     maintainers = [ ];
   };
 }

@@ -28,10 +28,10 @@ buildPythonPackage rec {
   doCheck = false; # No tests are available upstream
   pythonImportsCheck = [ "amiibo" ];
 
-  meta = with lib; {
+  meta = {
     description = "API Wrapper for amiiboapi.com";
     homepage = "https://github.com/XiehCanCode/amiibo.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

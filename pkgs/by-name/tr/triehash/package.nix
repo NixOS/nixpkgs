@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/julian-klode/triehash";
     description = "Order-preserving minimal perfect hash function generator";
-    license = with licenses; mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = perlPackages.perl.meta.platforms;
     mainProgram = "triehash";
   };

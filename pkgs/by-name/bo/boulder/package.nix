@@ -307,7 +307,7 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/letsencrypt/boulder";
     description = "ACME-based certificate authority, written in Go";
     longDescription = ''
@@ -317,8 +317,8 @@ buildGoModule rec {
       revoke certificates for their domains. Boulder is the software that runs
       Let's Encrypt.
     '';
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "boulder";
-    maintainers = with maintainers; [ azahi ];
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

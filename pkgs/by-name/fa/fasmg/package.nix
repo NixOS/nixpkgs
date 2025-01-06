@@ -85,15 +85,15 @@ stdenv.mkDerivation rec {
     nix-update fasmg --version "$version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       orivej
       clevor
     ];
-    platforms = with platforms; intersectLists (linux ++ darwin) x86;
+    platforms = with lib.platforms; lib.intersectLists (linux ++ darwin) x86;
   };
 }

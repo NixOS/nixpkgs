@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
       alsa-lib
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform music live coding in terminal";
     homepage = "https://github.com/glicol/glicol-cli";
     changelog = "https://github.com/glicol/glicol-cli/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "glicol-cli";
   };
 }

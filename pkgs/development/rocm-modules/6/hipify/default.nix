@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
+    license = with lib.licenses; [ mit ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
+    broken = lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version || lib.versionAtLeast finalAttrs.version "7.0.0";
   };
 })

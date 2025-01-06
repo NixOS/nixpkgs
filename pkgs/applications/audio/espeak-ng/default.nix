@@ -103,13 +103,13 @@ stdenv.mkDerivation rec {
     inherit mbrolaSupport;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
     homepage = "https://github.com/espeak-ng/espeak-ng";
     changelog = "https://github.com/espeak-ng/espeak-ng/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aske ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aske ];
+    platforms = lib.platforms.all;
     mainProgram = "espeak-ng";
   };
 }

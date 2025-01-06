@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiounittest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

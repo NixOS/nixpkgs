@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Library for OS-independent CD-ROM and CD image access";
     longDescription = ''
       GNU libcdio is a library for OS-independent CD-ROM and
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       programs such as an audio CD player and an extractor.
     '';
     homepage = "https://www.gnu.org/software/libcdio/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

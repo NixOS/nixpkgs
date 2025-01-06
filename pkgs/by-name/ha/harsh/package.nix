@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-hdPkiF1HHuIl6KbilPre6tAqSnYPhYhrxBEj3Ayy2AY=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI habit tracking for geeks";
     homepage = "https://github.com/wakatara/harsh";
     changelog = "https://github.com/wakatara/harsh/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "harsh";
   };

@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_STRICT=NO"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Elliptic curve library supporting Ed448-Goldilocks and Curve25519. Belledonne Communications' fork for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thibaultlemaire ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thibaultlemaire ];
+    platforms = lib.platforms.linux;
   };
 }

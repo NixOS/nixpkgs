@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "imblearn/keras/_generator.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
     changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.rmcgibbo ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.rmcgibbo ];
   };
 }

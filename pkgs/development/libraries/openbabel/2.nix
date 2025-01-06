@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ danielbarter ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ danielbarter ];
+    license = lib.licenses.gpl2Plus;
   };
 }

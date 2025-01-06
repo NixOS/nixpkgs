@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # connects to redis
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/coleifer/huey/blob/${src.rev}/CHANGELOG.md";
     description = "Little task queue for python";
     homepage = "https://github.com/coleifer/huey";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

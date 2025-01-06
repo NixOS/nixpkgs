@@ -49,12 +49,12 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/appdaemon -v | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     mainProgram = "appdaemon";
     homepage = "https://github.com/AppDaemon/appdaemon";
     changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
-    license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

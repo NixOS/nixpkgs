@@ -25,12 +25,12 @@ python3Packages.buildPythonApplication rec {
   # disable tests (too many failures)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for live presentations in the terminal";
     homepage = "https://github.com/sloria/doitlive";
     changelog = "https://github.com/sloria/doitlive/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbode ];
     mainProgram = "doitlive";
   };
 }

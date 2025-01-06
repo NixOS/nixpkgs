@@ -6,7 +6,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "stdpp";
   inherit version;
   domain = "gitlab.mpi-sws.org";
@@ -61,12 +61,12 @@ mkCoqDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extended “Standard Library” for Coq";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [
-      maintainers.vbgl
-      maintainers.ineol
+      lib.maintainers.vbgl
+      lib.maintainers.ineol
     ];
   };
 }

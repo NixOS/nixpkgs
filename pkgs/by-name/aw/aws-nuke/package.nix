@@ -42,12 +42,12 @@ buildGoModule rec {
       --zsh <($out/bin/aws-nuke completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nuke a whole AWS account and delete all its resources";
     homepage = "https://github.com/rebuy-de/aws-nuke";
     changelog = "https://github.com/rebuy-de/aws-nuke/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ grahamc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "aws-nuke";
   };
 }

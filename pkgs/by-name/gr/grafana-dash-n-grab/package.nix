@@ -28,11 +28,11 @@ buildGoModule rec {
   # you don't have grafana running.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Grafana Dash-n-Grab (gdg) -- backup and restore Grafana dashboards, datasources, and other entities";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/esnet/gdg";
-    maintainers = with maintainers; teams.bitnomial.members;
+    maintainers = with lib.maintainers; lib.teams.bitnomial.members;
     mainProgram = "gdg";
     changelog = "https://github.com/esnet/gdg/releases/tag/v${version}";
   };

@@ -67,10 +67,10 @@ let unwrapped = mkXfceDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Xfce file manager";
     mainProgram = "thunar";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 };
 

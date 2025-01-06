@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interface components for OpenPGP";
     mainProgram = "seahorse-daemon";
     homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

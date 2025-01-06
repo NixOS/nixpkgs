@@ -91,12 +91,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     mainProgram = "julia";
     homepage = "https://julialang.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao joshniemela thomasjm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao joshniemela thomasjm ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

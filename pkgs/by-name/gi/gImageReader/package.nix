@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
   # interface type can be where <type> is either gtk, qt5, qt4
   cmakeFlags = [ "-DINTERFACE_TYPE=${variant}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Gtk/Qt front-end to tesseract-ocr";
     mainProgram = "gimagereader-gtk";
     homepage = "https://github.com/manisandro/gImageReader";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [teto];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [teto];
+    platforms = lib.platforms.linux;
   };
 }

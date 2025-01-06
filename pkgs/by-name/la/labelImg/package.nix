@@ -40,12 +40,12 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
-  meta = with lib; {
+  meta = {
     description = "Graphical image annotation tool and label object bounding boxes in images";
     mainProgram = "labelImg";
     homepage = "https://github.com/tzutalin/labelImg";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.cmcdragonkai ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
   };
 }

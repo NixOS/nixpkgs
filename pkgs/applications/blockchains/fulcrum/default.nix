@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";
     homepage = "https://github.com/cculianu/Fulcrum";
-    maintainers = with maintainers; [ prusnak ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ prusnak ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

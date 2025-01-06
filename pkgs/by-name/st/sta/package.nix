@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple statistics from the command line interface (CLI), fast";
     longDescription = ''
       This is a lightweight, fast tool for calculating basic descriptive
@@ -27,11 +27,11 @@ stdenv.mkDerivation {
       in C++, allowing for faster computation of statistics given larger
       non-trivial data sets.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/simonccarter/sta";
     maintainers = [ ];
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin;
+    platforms = lib.platforms.all;
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "sta";
   };
 }

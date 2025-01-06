@@ -68,10 +68,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "coincurve" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform bindings for libsecp256k1";
     homepage = "https://github.com/ofek/coincurve";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];

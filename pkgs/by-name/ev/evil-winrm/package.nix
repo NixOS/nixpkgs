@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     cp evil-winrm.rb $out/bin/evil-winrm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WinRM shell for hacking/pentesting";
     mainProgram = "evil-winrm";
     homepage = "https://github.com/Hackplayers/evil-winrm";
     changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
   };
 }

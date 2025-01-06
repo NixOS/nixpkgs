@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/kbs2 --completions zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Secret manager backed by age";
     mainProgram = "kbs2";
     homepage = "https://github.com/woodruffw/kbs2";
     changelog = "https://github.com/woodruffw/kbs2/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

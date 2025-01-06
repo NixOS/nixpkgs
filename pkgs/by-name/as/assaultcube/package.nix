@@ -100,11 +100,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = "https://assault.cubers.net";
-    platforms = platforms.linux; # should work on darwin with a little effort.
-    license = licenses.unfree;
-    maintainers = with maintainers; [ darkonion0 ];
+    platforms = lib.platforms.linux; # should work on darwin with a little effort.
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ darkonion0 ];
   };
 }

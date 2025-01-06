@@ -61,11 +61,11 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/74716#issuecomment-598546916
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Use temporary postgresql instance in testing";
     homepage = "https://github.com/tk0miya/testing.postgresql";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Control Elgato Stream Deck devices";
     homepage = "https://gitlab.gnome.org/World/boatswain";
     mainProgram = "boatswain";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "test_06AddRemoveGetDnsRecord"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
     changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

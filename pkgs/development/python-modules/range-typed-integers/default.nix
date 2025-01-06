@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Package provides integer types that have a specific range of valid values";
     homepage = "https://github.com/theCapypara/range-typed-integers";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ marius851000 ];
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

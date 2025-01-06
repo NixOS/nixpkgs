@@ -78,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exchangelib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage = "https://github.com/ecederstrand/exchangelib";
     changelog = "https://github.com/ecederstrand/exchangelib/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ catern ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ catern ];
   };
 }

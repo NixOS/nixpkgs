@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem snapshot utility for making backups of local and remote systems";
     homepage = "https://rsnapshot.org/";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

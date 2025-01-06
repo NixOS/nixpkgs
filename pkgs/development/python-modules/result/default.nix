@@ -43,10 +43,10 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
   pythonImportsCheck = [ "result" ];
 
-  meta = with lib; {
+  meta = {
     description = "A simple Result type for Python 3 inspired by Rust, fully type annotated";
     homepage = "https://github.com/rustedpy/result";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emattiza ];
   };
 }

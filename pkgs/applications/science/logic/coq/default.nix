@@ -215,7 +215,7 @@ self = stdenv.mkDerivation {
     ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
@@ -224,10 +224,10 @@ self = stdenv.mkDerivation {
       machine-checked proofs.
     '';
     homepage = "https://coq.inria.fr";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     branch = coq-version;
-    maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
+    platforms = lib.platforms.unix;
     mainProgram = "coqide";
   };
 }; in

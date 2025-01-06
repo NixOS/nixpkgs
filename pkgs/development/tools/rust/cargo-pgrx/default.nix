@@ -43,12 +43,12 @@ let
         "--skip=command::schema::tests::test_parse_managed_postmasters"
       ];
 
-      meta = with lib; {
+      meta = {
         description = "Build Postgres Extensions with Rust";
         homepage = "https://github.com/pgcentralfoundation/pgrx";
         changelog = "https://github.com/pgcentralfoundation/pgrx/releases/tag/v${version}";
-        license = licenses.mit;
-        maintainers = with maintainers; [
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [
           happysalada
           matthiasbeyer
         ];

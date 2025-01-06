@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/ab-av1 print-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AV1 re-encoding using ffmpeg, svt-av1 & vmaf";
     homepage = "https://github.com/alexheretic/ab-av1";
     changelog = "https://github.com/alexheretic/ab-av1/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ab-av1";
   };

@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Slide show presentation tool";
 
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "xsw";
   };

@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     cp -va *.sty *.cfg *.def "$path/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Embed code, results of computations, and plots from Sage into LaTeX documents";
     homepage = "https://github.com/sagemath/sagetex";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexnortung ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ alexnortung ];
+    platforms = lib.platforms.all;
   };
 }

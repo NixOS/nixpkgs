@@ -113,18 +113,18 @@ let
         };
       };
 
-      meta = with lib; {
+      meta = {
         description = "Compiler for GObject type system";
         homepage = "https://vala.dev";
-        license = licenses.lgpl21Plus;
-        platforms = platforms.unix;
+        license = lib.licenses.lgpl21Plus;
+        platforms = lib.platforms.unix;
         maintainers =
-          with maintainers;
+          with lib.maintainers;
           [
             antono
             jtojnar
           ]
-          ++ teams.pantheon.members;
+          ++ lib.teams.pantheon.members;
       };
     }
   );

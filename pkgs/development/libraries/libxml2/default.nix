@@ -133,12 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxml2";
     description = "XML parsing library for C";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jtojnar ];
     pkgConfigModules = [ "libxml-2.0" ];
   };
 })

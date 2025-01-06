@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
       --replace "\''${_IMPORT_PREFIX}" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       costrouc
       markuskowa
       gdinh

@@ -23,13 +23,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy_macos" ];
 
-  meta = with lib; {
+  meta = {
     description = "MacOS Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-macos";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ boltzmannrain ];
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ boltzmannrain ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

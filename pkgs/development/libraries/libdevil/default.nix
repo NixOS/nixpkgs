@@ -81,11 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openil.sourceforge.net/";
     description = "Image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
     mainProgram = "ilur";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
     inherit (libgbm.meta) platforms;
     maintainers = [ ];

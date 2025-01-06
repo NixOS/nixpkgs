@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "TBB_ROOT" "${tbb}")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openimagedenoise.github.io";
     description = "High-Performance Denoising Library for Ray Tracing";
-    license = licenses.asl20;
-    maintainers = [ maintainers.leshainc ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/OpenImageDenoise/oidn/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.leshainc ];
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/OpenImageDenoise/oidn/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
 })

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dharple/detox";
     description = "Utility designed to clean up filenames";
     changelog = "https://github.com/dharple/detox/blob/v${version}/CHANGELOG.md";
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       equivalents. It will also clean up filenames with UTF-8 or Latin-1
       (or CP-1252) characters in them.
     '';
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "detox";
   };

@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymbolic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
     changelog = "https://github.com/inducer/pymbolic/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

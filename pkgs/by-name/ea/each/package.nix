@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sH9rraPNAIlW2KQVaZfYa10c1HHQpDgedY1+9e94RLE=";
 
-  meta = with lib; {
+  meta = {
     description = " A better way of working with structured data on the command line";
     mainProgram = "each";
     homepage = "https://github.com/arraypad/each";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ thiagokokada ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ thiagokokada ];
   };
 }

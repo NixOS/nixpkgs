@@ -52,11 +52,11 @@ buildPythonPackage rec {
     rm -r tree_sitter
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
     changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

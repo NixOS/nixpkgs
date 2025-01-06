@@ -21,10 +21,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-oOjkjVb3OIGMwz3/85KTewXISpBZM3o1BfFG9aysFbo=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for visualization and analysis of profiling data";
     homepage = "https://github.com/google/pprof";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       pprof reads a collection of profiling samples in profile.proto format and
       generates reports to visualize and help analyze the data. It can generate
@@ -46,6 +46,6 @@ buildGoModule rec {
       This is not an official Google product.
     '';
     mainProgram = "pprof";
-    maintainers = with maintainers; [ hzeller ];
+    maintainers = with lib.maintainers; [ hzeller ];
   };
 }

@@ -18,12 +18,12 @@ buildPostgresqlExtension rec {
 
   buildFlags = [ "PG_CFLAGS=-Wno-error=vla" ];
 
-  meta = with lib; {
+  meta = {
     description = "A Postgres extension for exposing system metrics such as CPU, memory and disk information";
     homepage = "https://github.com/EnterpriseDB/system_stats";
     changelog = "https://github.com/EnterpriseDB/system_stats/raw/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ shivaraj-bh ];
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

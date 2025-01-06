@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
     lapack
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xnec2c.org/";
     description = "Graphical antenna simulation";
     mainProgram = "xnec2c";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mvs ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mvs ];
+    platforms = lib.platforms.unix;
 
     # Darwin support likely to be fixed upstream in the next release
     broken = stdenv.hostPlatform.isDarwin;

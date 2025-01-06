@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "tests/test_examples.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for decoding and encoding AIS messages (AIVDM/AIVDO)";
     homepage = "https://github.com/M0r13n/pyais";
     changelog = "https://github.com/M0r13n/pyais/blob/v${version}/CHANGELOG.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

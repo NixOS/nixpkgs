@@ -45,12 +45,12 @@ buildPythonPackage rec {
     "test_win7_local_lnk_dir"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the Shellitem structures";
     homepage = "https://github.com/fox-it/dissect.shellitem";
     changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "parse-lnk";
   };
 }

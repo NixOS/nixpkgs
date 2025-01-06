@@ -27,11 +27,11 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured JSON type with mutation tracking for SQLAlchemy";
     homepage = "https://github.com/edelooff/sqlalchemy-json";
     changelog = "https://github.com/edelooff/sqlalchemy-json/tree/v${version}#changelog";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

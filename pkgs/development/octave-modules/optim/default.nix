@@ -27,14 +27,14 @@ buildOctavePackage rec {
     statistics
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/optim/index.html";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       publicDomain
     ];
     # Modified BSD code seems removed
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Non-linear optimization toolkit";
   };
 }

@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "sigexport";
     homepage = "https://github.com/carderne/signal-export";
     description = "Export your Signal chats to markdown files with attachments";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ phaer picnoir ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phaer picnoir ];
   };
 }

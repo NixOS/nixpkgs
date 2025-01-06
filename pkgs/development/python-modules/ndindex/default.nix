@@ -54,11 +54,11 @@ buildPythonPackage rec {
     sympy
   ] ++ optional-dependencies.arrays;
 
-  meta = with lib; {
+  meta = {
     description = "";
     homepage = "https://github.com/Quansight-Labs/ndindex";
     changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

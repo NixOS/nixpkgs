@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Algebraic number theory library";
     homepage = "https://github.com/flintlib/antic";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ smasher164 ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ smasher164 ];
+    platforms = lib.platforms.unix;
   };
 }

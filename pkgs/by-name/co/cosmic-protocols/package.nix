@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   nativeBuildInputs = [ wayland-scanner ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-protocols";
     description = "Additional wayland-protocols used by the COSMIC desktop environment";
-    license = [
-      licenses.mit
-      licenses.gpl3Only
+    license = with lib.licenses; [
+      mit
+      gpl3Only
     ];
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -14,10 +14,10 @@ buildPythonPackage rec {
     sha256 = "0abf19w37kxypsj6v7dz79jj92y1kivjk2zivnrv7rw6bbxwrxdj";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ordered Set implementation in Cython";
     homepage = "https://pypi.python.org/pypi/orderedset";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     # No support for Python 3.9/3.10
     # https://github.com/simonpercivall/orderedset/issues/36

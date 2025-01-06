@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.qterminal;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/qterminal";
     description = "Lightweight Qt-based terminal emulator";
     mainProgram = "qterminal";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = with maintainers; teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; lib.teams.lxqt.members;
   };
 }

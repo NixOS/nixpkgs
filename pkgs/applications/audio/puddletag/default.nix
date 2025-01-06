@@ -73,15 +73,15 @@ python3.pkgs.buildPythonApplication rec {
 
   dontStrip = true; # we are not generating any binaries
 
-  meta = with lib; {
+  meta = {
     description = "Audio tag editor similar to the Windows program, Mp3tag";
     mainProgram = "puddletag";
     homepage = "https://docs.puddletag.net";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       peterhoeg
       dschrempf
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

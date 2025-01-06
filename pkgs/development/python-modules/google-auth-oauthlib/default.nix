@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google_auth_oauthlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ terlar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ terlar ];
     mainProgram = "google-oauthlib-tool";
   };
 }

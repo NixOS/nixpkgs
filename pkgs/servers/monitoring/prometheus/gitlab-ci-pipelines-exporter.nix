@@ -24,12 +24,12 @@ buildGoModule rec {
   vendorHash = "sha256-DaNLahrmRTkI0QxEDLJH0juDbHXs2Y/t5JNx9ulcK84=";
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus / OpenMetrics exporter for GitLab CI pipelines insights";
     mainProgram = "gitlab-ci-pipelines-exporter";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mmahut
       mvisonneau
     ];

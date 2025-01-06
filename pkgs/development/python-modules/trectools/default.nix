@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trectools" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joaopalotti/trectools";
     description = "Library for assisting Information Retrieval (IR) practitioners with TREC-like campaigns";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ MoritzBoehme ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ MoritzBoehme ];
   };
 }

@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
   # Tests are broken on Darwin (linking issue)
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Detection of CCTag markers made up of concentric circles";
     homepage = "https://cctag.readthedocs.io";
     downloadPage = "https://github.com/alicevision/CCTag";
-    license = licenses.mpl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tmarkus ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

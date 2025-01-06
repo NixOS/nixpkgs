@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
     version = "conceal ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Trash collector written in Rust";
     homepage = "https://github.com/TD-Sky/conceal";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jedsek
       kashw2
     ];

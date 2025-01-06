@@ -77,11 +77,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duckdb_engine" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
     changelog = "https://github.com/Mause/duckdb_engine/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

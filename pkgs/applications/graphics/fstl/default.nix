@@ -28,12 +28,12 @@ mkDerivation rec {
     hash = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fastest STL file viewer";
     mainProgram = "fstl";
     homepage = "https://github.com/fstl-app/fstl";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ tweber ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ tweber ];
   };
 }

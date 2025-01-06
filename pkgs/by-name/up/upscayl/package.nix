@@ -43,12 +43,12 @@ appimageTools.wrapType2 {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source AI Image Upscaler";
     homepage = "https://upscayl.github.io/";
-    maintainers = with maintainers; [ icy-thought ];
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ icy-thought ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "upscayl";
   };
 }

@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSYSTEM_NAME=NixOS" "-DWITH_PYTHON_BINDINGS=false" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://htcondor.org/";
     description =
       "HTCondor is a software system that creates a High-Throughput Computing (HTC) environment";
-    platforms = platforms.linux;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ evey ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ evey ];
     # cannot find -lpthread: No such file or directory
     broken = stdenv.hostPlatform.isAarch64;
   };

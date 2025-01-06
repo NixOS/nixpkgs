@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cronsim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cron expression parser and evaluator";
     homepage = "https://github.com/cuu508/cronsim";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

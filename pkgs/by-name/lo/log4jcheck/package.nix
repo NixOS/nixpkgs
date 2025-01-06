@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check for vulnerable Log4j (CVE-2021-44228) systems";
     homepage = "https://github.com/NorthwaveSecurity/log4jcheck";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "log4jcheck";
   };
 }

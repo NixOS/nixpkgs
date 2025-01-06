@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "test_http_service_mock_random_port"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for adding unittests.mock as view functions";
     mainProgram = "test-bed";
     homepage = "https://github.com/threat9/threat9-test-bed";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

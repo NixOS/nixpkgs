@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
@@ -138,10 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.pango.org/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ] ++ lib.teams.gnome.members;
+    platforms = lib.platforms.unix;
 
     pkgConfigModules = [
       "pango"

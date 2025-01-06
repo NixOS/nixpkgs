@@ -102,11 +102,11 @@ mkDerivationWith buildPythonPackage rec {
     wrapQtApp $out/bin/napari
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
     changelog = "https://github.com/napari/napari/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

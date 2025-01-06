@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rapidly Search and Hunt through Windows Forensic Artefacts";
     homepage = "https://github.com/WithSecureLabs/chainsaw";
     changelog = "https://github.com/WithSecureLabs/chainsaw/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chainsaw";
   };
 }

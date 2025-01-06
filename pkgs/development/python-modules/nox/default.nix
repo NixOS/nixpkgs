@@ -75,12 +75,12 @@ buildPythonPackage rec {
     "tests/test_tox_to_nox.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible test automation for Python";
     homepage = "https://nox.thea.codes/";
     changelog = "https://github.com/wntrblm/nox/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       doronbehar
       fab
     ];

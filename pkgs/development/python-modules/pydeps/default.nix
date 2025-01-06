@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydeps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module dependency visualization";
     homepage = "https://github.com/thebjorn/pydeps";
     changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pydeps";
   };
 }

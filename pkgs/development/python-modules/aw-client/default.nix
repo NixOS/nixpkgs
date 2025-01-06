@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Client library for ActivityWatch";
     mainProgram = "aw-client";
     homepage = "https://github.com/ActivityWatch/aw-client";
-    maintainers = with maintainers; [ huantian ];
-    license = licenses.mpl20;
+    maintainers = with lib.maintainers; [ huantian ];
+    license = lib.licenses.mpl20;
   };
 }

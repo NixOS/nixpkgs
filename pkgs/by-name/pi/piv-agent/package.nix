@@ -35,10 +35,10 @@ buildGoModule rec {
   buildInputs =
     if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH and GPG agent which you can use with your PIV hardware security device (e.g. a Yubikey)";
     homepage = "https://github.com/smlx/piv-agent";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "piv-agent";
   };

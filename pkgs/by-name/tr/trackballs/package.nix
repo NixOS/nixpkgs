@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trackballs.github.io/";
     description = "3D Marble Madness clone";
     mainProgram = "trackballs";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # Music is licensed under Ethymonics Free Music License.
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

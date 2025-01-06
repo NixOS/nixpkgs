@@ -29,12 +29,12 @@ buildGraalvmNativeImage rec {
     $out/bin/ys  -e 'say: (+ 1 2)' | fgrep 3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programming in YAML";
     homepage = "https://github.com/yaml/yamlscript";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
     mainProgram = "ys";
-    maintainers = with maintainers; [ sgo ];
+    maintainers = with lib.maintainers; [ sgo ];
   };
 }

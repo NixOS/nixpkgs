@@ -81,12 +81,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/unnethack
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fork of NetHack";
     mainProgram = "unnethack";
     homepage = "https://unnethack.wordpress.com/";
     license = "nethack";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

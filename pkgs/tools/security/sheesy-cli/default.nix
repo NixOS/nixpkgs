@@ -54,12 +54,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/sy completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "'share-secrets-safely' CLI to interact with GPG/pass-like vaults";
     homepage = "https://share-secrets-safely.github.io/cli/";
     changelog = "https://github.com/share-secrets-safely/cli/releases/tag/${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ devhell ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "sy";
   };
 }

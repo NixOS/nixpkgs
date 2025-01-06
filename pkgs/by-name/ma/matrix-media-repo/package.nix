@@ -60,12 +60,12 @@ buildGoModule {
 
   doCheck = false; # requires docker
 
-  meta = with lib; {
+  meta = {
     description = "Highly configurable multi-domain media repository for Matrix";
     homepage = "https://github.com/t2bot/matrix-media-repo";
     changelog = "https://github.com/t2bot/matrix-media-repo/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "media_repo";
   };
 }

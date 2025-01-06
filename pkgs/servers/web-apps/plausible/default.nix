@@ -154,13 +154,13 @@ beamPackages.mixRelease rec {
     mix do deps.loadpaths --no-deps-check, phx.digest priv/static
   '';
 
-  meta = with lib; {
-    license = licenses.agpl3Plus;
+  meta = {
+    license = lib.licenses.agpl3Plus;
     homepage = "https://plausible.io/";
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     mainProgram = "plausible";
-    maintainers = teams.cyberus.members;
-    platforms = platforms.unix;
+    maintainers = lib.teams.cyberus.members;
+    platforms = lib.platforms.unix;
   };
 }

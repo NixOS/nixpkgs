@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diofant" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python CAS library";
     homepage = "https://diofant.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ suhr ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ suhr ];
   };
 }

@@ -43,11 +43,11 @@ buildPythonApplication rec {
     pytest tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stateless password manager";
     mainProgram = "lesspass";
     homepage = "https://lesspass.com";
-    maintainers = with maintainers; [ jasoncarr ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ jasoncarr ];
+    license = lib.licenses.gpl3;
   };
 }

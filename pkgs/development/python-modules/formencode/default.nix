@@ -43,10 +43,10 @@ buildPythonPackage rec {
     "test_unicode_ascii_subgroup"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FormEncode validates and converts nested structures";
     homepage = "http://formencode.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

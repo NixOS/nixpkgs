@@ -83,10 +83,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) orangefs; };
 
-  meta = with lib; {
+  meta = {
     description = "Scale-out network file system for use on high-end computing systems";
     homepage = "http://www.orangefs.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       gpl2Only
@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
       openldap
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
       --replace "$out/" ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop integration of high performance computing resources";
     mainProgram = "molequeue";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/molequeue";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

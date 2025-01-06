@@ -69,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gcsfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/fsspec/gcsfs";
     changelog = "https://github.com/fsspec/gcsfs/raw/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nbren12 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nbren12 ];
   };
 }

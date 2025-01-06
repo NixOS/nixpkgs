@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "yubihsm-shell and libyubihsm";
     homepage = "https://github.com/Yubico/yubihsm-shell";
-    maintainers = with maintainers; [ matthewcroughan ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

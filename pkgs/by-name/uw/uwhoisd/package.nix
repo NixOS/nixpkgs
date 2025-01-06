@@ -38,11 +38,11 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Universal WHOIS proxy server";
     homepage = "https://github.com/Lookyloo/uwhoisd";
     changelog = "https://github.com/Lookyloo/uwhoisd/blob/${version}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brummer10/GxPlugins.lv2";
     description = "Set of extra lv2 plugins from the guitarix project";
-    maintainers = [ maintainers.magnetophon ];
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    license = lib.licenses.gpl3Plus;
   };
 }

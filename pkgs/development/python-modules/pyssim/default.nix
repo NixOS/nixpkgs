@@ -48,11 +48,11 @@ buildPythonPackage rec {
     $out/bin/pyssim --cw --width 128 --height 128 test-images/test3-orig.jpg test-images/test3-rot.jpg | grep 0.938
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for computing Structured Similarity Image Metric (SSIM) in Python";
     mainProgram = "pyssim";
     homepage = "https://github.com/jterrace/pyssim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

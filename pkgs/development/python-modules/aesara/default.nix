@@ -102,12 +102,12 @@ buildPythonPackage rec {
     "test_ExternalCOp_c_code_cache_version"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     homepage = "https://github.com/aesara-devs/aesara";
     changelog = "https://github.com/aesara-devs/aesara/releases/tag/rel-${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Etjean ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Etjean ];
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

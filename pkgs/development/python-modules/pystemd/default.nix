@@ -35,13 +35,13 @@ buildPythonPackage rec {
 
   checkPhase = "pytest tests";
 
-  meta = with lib; {
+  meta = {
     description = ''
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way
     '';
     homepage = "https://github.com/facebookincubator/pystemd/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

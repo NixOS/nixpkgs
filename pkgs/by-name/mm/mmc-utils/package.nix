@@ -34,12 +34,12 @@ stdenv.mkDerivation {
     url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Configure MMC storage devices from userspace";
     mainProgram = "mmc";
     homepage = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.linux;
   };
 }

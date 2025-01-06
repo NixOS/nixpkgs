@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     inherit prometheus-cpp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

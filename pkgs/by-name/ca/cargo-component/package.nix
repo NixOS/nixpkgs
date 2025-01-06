@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
   # requires the wasm32-wasi target
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for creating WebAssembly components based on the component model proposal";
     homepage = "https://github.com/bytecodealliance/cargo-component";
     changelog = "https://github.com/bytecodealliance/cargo-component/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "cargo-component";
   };
 }

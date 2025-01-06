@@ -81,11 +81,11 @@ buildPythonPackage rec {
     "ignore::pytest.PytestRemovedIn9Warning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
     changelog = "https://github.com/pydicom/pynetdicom/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

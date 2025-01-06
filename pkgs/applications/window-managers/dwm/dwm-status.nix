@@ -58,13 +58,13 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly performant and configurable DWM status service";
     homepage = "https://github.com/Gerschtli/dwm-status";
     changelog = "https://github.com/Gerschtli/dwm-status/blob/master/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ gerschtli ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ gerschtli ];
     mainProgram = "dwm-status";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

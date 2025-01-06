@@ -33,11 +33,11 @@ buildGoModule rec {
 
   passthru.tests.minio = nixosTests.minio;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/minio/mc";
     description = "Replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
-    maintainers = with maintainers; [ bachp ];
+    maintainers = with lib.maintainers; [ bachp ];
     mainProgram = "mc";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -172,12 +172,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withPlugins allPlugins;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open RTL synthesis framework and tools";
     homepage = "https://yosyshq.net/yosys/";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       shell
       thoughtpolice
       Luflosi

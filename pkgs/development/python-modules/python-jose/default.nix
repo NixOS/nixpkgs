@@ -76,11 +76,11 @@ buildPythonPackage rec {
     "TestBackendEcdsaCompatibility"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${version}";
     homepage = "https://github.com/mpdavis/python-jose";
     description = "JOSE implementation in Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

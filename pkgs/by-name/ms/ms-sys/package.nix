@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program for writing Microsoft-compatible boot records";
     homepage = "https://ms-sys.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
     mainProgram = "ms-sys";
   };
 }

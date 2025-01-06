@@ -51,11 +51,11 @@ buildPythonPackage rec {
     "test_parse_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ASN.1 parsing, encoding and decoding";
     homepage = "https://github.com/eerimoq/asn1tools";
     changelog = "https://github.com/eerimoq/asn1tools/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "asn1tools";
   };

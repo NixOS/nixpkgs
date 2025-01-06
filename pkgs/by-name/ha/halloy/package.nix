@@ -113,12 +113,12 @@ rustPlatform.buildRustPackage rec {
     makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab iivusly ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab iivusly ];
     mainProgram = "halloy";
   };
 }

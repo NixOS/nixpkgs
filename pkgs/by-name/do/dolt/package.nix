@@ -17,11 +17,11 @@ buildGoModule rec {
   proxyVendor = true;
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Relational database with version control and CLI a-la Git";
     mainProgram = "dolt";
     homepage = "https://github.com/dolthub/dolt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danbst ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danbst ];
   };
 }

@@ -314,11 +314,11 @@ buildPythonPackage rec {
     examples = [ pins ] ++ pins.optional-dependencies.gcs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
     changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

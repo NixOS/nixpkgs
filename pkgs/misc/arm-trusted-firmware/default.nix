@@ -77,18 +77,18 @@ let
     # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
     enableParallelBuilding = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "Reference implementation of secure world software for ARMv8-A";
-      license = [ licenses.bsd3 ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
-      maintainers = with maintainers; [ lopsided98 ];
+      license = [ lib.licenses.bsd3 ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ lib.licenses.unfreeRedistributable ];
+      maintainers = with lib.maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
 
 in {
   inherit buildArmTrustedFirmware;
 
-  armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+  armTrustedFirmwareTools = buildArmTrustedFirmware {
     # Normally, arm-trusted-firmware builds the build tools for buildPlatform
     # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
     # for the hostPlatform here, we trick it by overriding the HOSTCC setting

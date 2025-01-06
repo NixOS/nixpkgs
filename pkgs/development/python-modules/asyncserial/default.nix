@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncserial" ];
 
-  meta = with lib; {
+  meta = {
     description = "asyncio support for pyserial";
     homepage = "https://github.com/m-labs/asyncserial";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

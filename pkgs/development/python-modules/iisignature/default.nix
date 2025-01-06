@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iisignature" ];
 
-  meta = with lib; {
+  meta = {
     description = "Iterated integral signature calculations";
     homepage = "https://pypi.org/project/iisignature";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Barcode generating tool and library";
     longDescription = ''
       The Zint project aims to provide a complete cross-platform open source
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.zint.org.uk";
     changelog = "https://github.com/zint/zint/blob/${version}/ChangeLog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

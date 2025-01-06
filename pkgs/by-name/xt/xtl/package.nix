@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ doctest ];
   checkTarget = "xtest";
 
-  meta = with lib; {
+  meta = {
     description = "Basic tools (containers, algorithms) used by other quantstack packages";
     homepage = "https://github.com/xtensor-stack/xtl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ cpcloud ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ cpcloud ];
+    platforms = lib.platforms.all;
   };
 }

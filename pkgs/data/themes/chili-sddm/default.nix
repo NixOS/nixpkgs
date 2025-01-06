@@ -48,9 +48,10 @@ stdenv.mkDerivation {
 
     echo ${qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
   '';
-  meta = with lib; {
-    license = licenses.gpl3;
-    maintainers = with lib.maintainers; [ sents ];
+
+  meta = {
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.sents ];
     homepage = "https://github.com/MarianArlt/sddm-chili";
     description = "Chili login theme for SDDM";
     longDescription = ''

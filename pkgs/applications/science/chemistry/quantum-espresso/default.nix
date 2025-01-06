@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       "-DQE_ENABLE_SCALAPACK=ON"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";
     longDescription = ''
       Quantum ESPRESSO is an integrated suite of Open-Source computer codes for
@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
       pseudopotentials.
     '';
     homepage = "https://www.quantum-espresso.org/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

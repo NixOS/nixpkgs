@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elegant, simple, clean dock";
     homepage = "https://github.com/elementary/dock";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ davidak ] ++ lib.teams.pantheon.members;
     mainProgram = "plank";
   };
 }

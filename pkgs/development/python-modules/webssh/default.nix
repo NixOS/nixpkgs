@@ -31,13 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web based SSH client";
     mainProgram = "wssh";
     homepage = "https://github.com/huashengdun/webssh/";
     changelog = "https://github.com/huashengdun/webssh/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ davidtwco ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

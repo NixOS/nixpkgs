@@ -292,7 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Shell of the Lomiri Operating environment";
     longDescription = ''
       Shell of the Lomiri Operating environment optimized for touch based human-machine interaction, but also supporting
@@ -302,9 +302,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://lomiri.com/";
     changelog = "https://gitlab.com/ubports/development/core/lomiri/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri";
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
   };
 })

@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnome.org/";
     description = "Library implementing a terminal emulator widget for GTK";
     longDescription = ''
@@ -179,14 +179,14 @@ stdenv.mkDerivation (finalAttrs: {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         astsmtl
         antono
       ]
-      ++ teams.gnome.members;
-    platforms = platforms.unix;
+      ++ lib.teams.gnome.members;
+    platforms = lib.platforms.unix;
   };
 })

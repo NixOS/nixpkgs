@@ -38,12 +38,12 @@ stdenv.mkDerivation {
     bittorrent-integration = nixosTests.bittorrent;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://erdgeist.org/arts/software/opentracker/";
-    license = licenses.beerware;
-    platforms = platforms.linux;
+    license = lib.licenses.beerware;
+    platforms = lib.platforms.linux;
     description = "Bittorrent tracker project which aims for minimal resource usage and is intended to run at your wlan router";
     mainProgram = "opentracker";
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

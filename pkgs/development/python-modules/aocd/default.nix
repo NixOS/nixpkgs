@@ -101,12 +101,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aocd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get your Advent of Code data with a single import statement";
     homepage = "https://github.com/wimglenn/advent-of-code-data";
     changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aadibajpai ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aadibajpai ];
+    platforms = lib.platforms.unix;
   };
 }

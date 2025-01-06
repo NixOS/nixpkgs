@@ -90,12 +90,12 @@ python.pkgs.buildPythonApplication rec {
     "test_generate_and_upload_keypair__ssh_keygen_not_present"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
 }

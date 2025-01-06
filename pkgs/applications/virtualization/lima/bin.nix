@@ -117,11 +117,11 @@ stdenvNoCC.mkDerivation {
       rm SHA256SUMS
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tricktron ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tricktron ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

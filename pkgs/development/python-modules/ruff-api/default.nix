@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruff_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Python API for Ruff";
     homepage = "https://github.com/amyreese/ruff-api";
     changelog = "https://github.com/amyreese/ruff-api/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

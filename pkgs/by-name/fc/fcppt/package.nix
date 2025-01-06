@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_TEST=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Freundlich's C++ toolkit";
     longDescription = ''
       Freundlich's C++ Toolkit (fcppt) is a collection of libraries focusing on
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       C++11).
     '';
     homepage = "https://fcppt.org";
-    license = licenses.boost;
-    maintainers = with maintainers; [ pmiddend ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ pmiddend ];
     platforms = [
       "x86_64-linux"
       "x86_64-windows"

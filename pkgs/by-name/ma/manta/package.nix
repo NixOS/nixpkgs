@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
 
-  meta = with lib; {
+  meta = {
     description = "Structural variant caller";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/Illumina/manta";
-    maintainers = with maintainers; [ jbedo ];
-    platforms =  platforms.x86_64;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms =  lib.platforms.x86_64;
   };
 }

@@ -36,12 +36,12 @@ mkDerivation rec {
     "-DCONFIG_JACK_SESSION=${toString jackSession}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt application to control the JACK sound server daemon";
     mainProgram = "qjackctl";
     homepage = "https://github.com/rncbc/qjackctl";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

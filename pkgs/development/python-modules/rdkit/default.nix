@@ -143,13 +143,13 @@ buildPythonPackage rec {
     "rdkit.Chem.AllChem"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for cheminformatics";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rmcgibbo
       natsukium
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.rdkit.org";
     changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };

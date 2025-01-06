@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ];
   checkTarget = "tests";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://librsb.sourceforge.net/";
     description = "Shared memory parallel sparse matrix and sparse BLAS library";
     longDescription = ''
@@ -94,9 +94,9 @@ stdenv.mkDerivation rec {
       Contains libraries and header files for developing applications that
       want to make use of librsb.
     '';
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ KarlJoad ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
+    platforms = lib.platforms.all;
     # ./rsb_common.h:56:10: fatal error: 'omp.h' file not found
     broken = stdenv.hostPlatform.isDarwin;
   };

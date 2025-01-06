@@ -27,12 +27,12 @@ buildGoModule rec {
       --zsh <($out/bin/fx --comp zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal JSON viewer";
     mainProgram = "fx";
     homepage = "https://github.com/antonmedv/fx";
     changelog = "https://github.com/antonmedv/fx/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

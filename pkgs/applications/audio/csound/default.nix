@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/CsoundLib64.framework $out/Library/Frameworks
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
     homepage = "https://csound.com/";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

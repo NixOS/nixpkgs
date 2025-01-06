@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp -r bin filters init.php preftab recipes $out/feediron/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Evolution of ttrss_plugin-af_feedmod";
     longDescription = ''
       This is a plugin for Tiny Tiny RSS (tt-rss).
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
       i.e. create a "full feed".
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/feediron/ttrss_plugin-feediron";
-    maintainers = with maintainers; [ milogert ];
+    maintainers = with lib.maintainers; [ milogert ];
     inherit (tt-rss.meta) platforms;
   };
 }

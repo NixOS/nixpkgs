@@ -15,15 +15,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "docker-sync";
 
-  meta = with lib; {
+  meta = {
     description = "Run your application at full speed while syncing your code for development";
     homepage = "http://docker-sync.io";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       manveru
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "docker-sync";
   };
 }

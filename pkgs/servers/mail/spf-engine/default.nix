@@ -34,10 +34,10 @@ buildPythonApplication rec {
     "spf_engine.policyd_spf"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/spf-engine/";
     description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
   };
 }

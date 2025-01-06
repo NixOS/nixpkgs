@@ -92,7 +92,7 @@ python3Packages.buildPythonApplication rec {
     (toString ./.)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
     longDescription = ''
@@ -104,8 +104,8 @@ python3Packages.buildPythonApplication rec {
       you can modify it, redistribute it or use it however you like.
     '';
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       donteatoreo
     ];

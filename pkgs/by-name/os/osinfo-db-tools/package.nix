@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     libsoup_3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for managing the osinfo database";
     homepage = "https://libosinfo.org/";
     changelog = "https://gitlab.com/libosinfo/osinfo-db-tools/-/blob/v${version}/NEWS";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

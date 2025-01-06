@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage = "https://computing.llnl.gov/projects/sundials";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ idontgetoutmuch ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ idontgetoutmuch ];
+    license = lib.licenses.bsd3;
   };
 }

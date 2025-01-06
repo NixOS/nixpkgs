@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     "deeptools/test/test_multiBamSummary.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://deeptools.readthedocs.io/en/develop";
     description = "Tools for exploring deep DNA sequencing data";
     longDescription = ''
@@ -60,10 +60,10 @@ python3.pkgs.buildPythonApplication rec {
       publication-ready visualizations to identify enrichments and for functional
       annotations of the genome.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with lib.maintainers; [ scalavision ];
   };
 }

@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_parquet_metadata_works_with_strings"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "cli for Apache Arrow DataFusion";
     mainProgram = "datafusion-cli";
     homepage = "https://arrow.apache.org/datafusion";
     changelog = "https://github.com/apache/arrow-datafusion/blob/${version}/datafusion/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

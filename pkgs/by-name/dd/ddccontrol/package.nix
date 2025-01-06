@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     intltoolize --force
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pakhfn ];
   };
 }

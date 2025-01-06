@@ -57,15 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
       "CONFIG_RAYER_SPI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       felixsinger
       funkeleinhorn
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "flashprog";
   };
 })

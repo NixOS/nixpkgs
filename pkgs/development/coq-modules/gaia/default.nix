@@ -54,9 +54,9 @@ mkCoqDerivation {
     mathcomp.fingroup
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";
-    maintainers = with maintainers; [ Zimmi48 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
+    license = lib.licenses.mit;
   };
 }

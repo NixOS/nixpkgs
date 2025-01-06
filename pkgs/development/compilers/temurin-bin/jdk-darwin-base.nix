@@ -69,15 +69,15 @@ let
       home = result;
     };
 
-    meta = with lib; {
-      license = licenses.gpl2Classpath;
-      sourceProvenance = with sourceTypes; [
+    meta = {
+      license = lib.licenses.gpl2Classpath;
+      sourceProvenance = with lib.sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
+      maintainers = with lib.maintainers; [ taku0 ] ++ lib.teams.java.members;
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

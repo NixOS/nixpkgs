@@ -18,11 +18,11 @@ buildHomeAssistantComponent rec {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mweinelt/ha-prometheus-sensor/blob/${version}/CHANGELOG.md";
     description = "Import prometheus query results into Home Assistant";
     homepage = "https://github.com/mweinelt/ha-prometheus-sensor";
-    maintainers = with maintainers; [ hexa ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    license = lib.licenses.mit;
   };
 }

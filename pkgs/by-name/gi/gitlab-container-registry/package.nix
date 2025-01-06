@@ -29,10 +29,10 @@ buildGoModule rec {
         'func TestHTTPChecker(t *testing.T) { t.Skip("Test requires network connection")'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yayayayaka ] ++ teams.cyberus.members;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yayayayaka ] ++ lib.teams.cyberus.members;
+    platforms = lib.platforms.unix;
   };
 }

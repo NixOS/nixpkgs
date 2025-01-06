@@ -97,12 +97,12 @@ let
     # The per-script derivations will go ahead and patch the files they actually install.
     dontPatchShebangs = true;
 
-    meta = with lib; {
+    meta = {
       description = "Bash scripts that integrate bat with various command line tools";
       homepage = "https://github.com/eth-p/bat-extras";
-      license = with licenses; [ mit ];
-      maintainers = with maintainers; [ bbigras ];
-      platforms = platforms.all;
+      license = with lib.licenses; [ mit ];
+      maintainers = with lib.maintainers; [ bbigras ];
+      platforms = lib.platforms.all;
     };
   };
   script =

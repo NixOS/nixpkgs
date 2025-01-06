@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # system clock issues
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/lzip/tarlz.html";
     description =
       "Massively parallel combined implementation of the tar archiver and the lzip compressor";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "tarlz";
   };
 }

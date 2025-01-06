@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-agent programmable modeling environment";
     mainProgram = "netlogo";
     longDescription = ''
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
       many tens of thousands of students, teachers and researchers worldwide.
     '';
     homepage = "https://ccl.northwestern.edu/netlogo/index.shtml";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
-    maintainers = [ maintainers.dpaetzel ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.dpaetzel ];
+    platforms = lib.platforms.linux;
   };
 }

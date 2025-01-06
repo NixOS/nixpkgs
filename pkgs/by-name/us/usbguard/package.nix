@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.usbguard;
 
-  meta = with lib; {
+  meta = {
     description = "USBGuard software framework helps to protect your computer against BadUSB";
     longDescription = ''
       USBGuard is a software framework for implementing USB device authorization
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
       it is a USB device whitelisting tool.
     '';
     homepage = "https://usbguard.github.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.tnias ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.tnias ];
   };
 }

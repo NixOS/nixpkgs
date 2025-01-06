@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anytree" ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful and Lightweight Python Tree Data Structure";
     homepage = "https://github.com/c0fec0de/anytree";
     changelog = "https://github.com/c0fec0de/anytree/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maitnainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maitnainers; [ ];
   };
 }

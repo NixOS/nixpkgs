@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 
-  meta = with lib; {
+  meta = {
     description = "Run an ffmpeg command with progress";
     mainProgram = "ffmpeg-progress-yield";
     homepage = "https://github.com/slhck/ffmpeg-progress-yield";
     changelog = "https://github.com/slhck/ffmpeg-progress-yield/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

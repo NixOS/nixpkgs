@@ -29,14 +29,14 @@ rustPlatform.buildRustPackage rec {
     package = gptman;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GPT manager that allows you to copy partitions from one disk to another and more";
     homepage = "https://github.com/rust-disk-partition-management/gptman";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ akshgpt7 ];
+    maintainers = with lib.maintainers; [ akshgpt7 ];
     mainProgram = "gptman";
   };
 }

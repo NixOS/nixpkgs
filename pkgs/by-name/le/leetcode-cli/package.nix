@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage rec {
     version = "leetcode ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "May the code be with you 👻";
     longDescription = "Use leetcode.com in command line";
     homepage = "https://github.com/clearloop/leetcode-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ congee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ congee ];
     mainProgram = "leetcode";
   };
 }

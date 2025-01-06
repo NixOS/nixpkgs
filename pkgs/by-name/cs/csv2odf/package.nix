@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "09l0yfay89grjdzap2h11f0hcyn49np5zizg2yyp2aqgjs8ki57p";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/p/csv2odf/wiki/Main_Page/";
     description = "Convert csv files to OpenDocument Format";
     mainProgram = "csv2odf";
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
       The output format (fonts, number formatting, etc.) is controlled by a
       template file that you can design in your office application of choice.
     '';
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ leenaars ];
   };
 }

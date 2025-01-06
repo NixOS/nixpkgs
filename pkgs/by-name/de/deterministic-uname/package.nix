@@ -40,7 +40,7 @@ substituteAll {
   # is a common thing to do.
   modDirVersion = if modDirVersion != "" then modDirVersion else "unknown";
 
-  meta = with lib; {
+  meta = {
     description = "Print certain system information (hardcoded with lib/system values)";
     mainProgram = "uname";
     longDescription = ''
@@ -52,8 +52,8 @@ substituteAll {
       not intercept these calls, builds made on different kernels will produce
       different results.
     '';
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ artturin ];
-    platforms = platforms.all;
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ artturin ];
+    platforms = lib.platforms.all;
   };
 }

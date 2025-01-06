@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
     libvorbis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolbox for manipulating and creating Ogg video files";
     homepage = "http://www.streamnik.de/oggvideotools.html";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     # Compilation error on Darwin:
     # error: invalid argument '--std=c++0x' not allowed with 'C'

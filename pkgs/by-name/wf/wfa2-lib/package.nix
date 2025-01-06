@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DOPENMP=${if enableOpenMP then "ON" else "OFF"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wavefront alignment algorithm library v2";
     homepage = "https://github.com/smarco/WFA2-lib";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

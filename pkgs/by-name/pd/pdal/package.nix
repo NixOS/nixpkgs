@@ -130,12 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.geospatial.members;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "pdal" ];
   };
 })

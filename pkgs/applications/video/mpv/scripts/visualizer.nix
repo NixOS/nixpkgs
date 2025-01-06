@@ -16,9 +16,9 @@ buildLua {
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "various audio visualization";
     homepage = "https://github.com/mfcc64/mpv-scripts";
-    maintainers = with maintainers; [ kmein ];
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

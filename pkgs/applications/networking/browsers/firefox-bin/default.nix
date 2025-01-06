@@ -114,15 +114,15 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = licenses.mpl20;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mpl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ taku0 lovesegfault ];
+    maintainers = with lib.maintainers; [ taku0 lovesegfault ];
     mainProgram = binaryName;
   };
 }

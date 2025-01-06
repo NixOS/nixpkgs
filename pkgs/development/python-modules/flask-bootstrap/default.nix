@@ -23,10 +23,10 @@ buildPythonPackage rec {
     dominate
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mbr/flask-bootstrap";
     description = "Ready-to-use Twitter-bootstrap for use in Flask";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

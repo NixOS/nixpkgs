@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
     description = "World Coordinate System library for astronomy";
     longDescription = ''
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       and their conversion to image coordinate systems. This is the
       standard library for this purpose in astronomy.
     '';
-    maintainers = with maintainers; [ hjones2199 ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ hjones2199 ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

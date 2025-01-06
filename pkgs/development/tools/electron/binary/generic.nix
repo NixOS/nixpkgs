@@ -33,12 +33,12 @@ version: hashes:
 let
   pname = "electron";
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       yayayayaka
       teutat3s
     ];
@@ -49,11 +49,11 @@ let
         "armv7l-linux"
         "aarch64-linux"
       ]
-      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
-      ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
+      ++ lib.optionals (lib.versionOlder version "19.0.0") [ "i686-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "31.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "31.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =

@@ -22,7 +22,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dxx-rebirth";
   version = "0.60.0-beta2-unstable-2024-12-07";
 
@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Source Port of the Descent 1 and 2 engines";
     homepage = "https://www.dxx-rebirth.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

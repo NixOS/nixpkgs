@@ -98,10 +98,10 @@ buildPythonPackage rec {
     cp -r third_party $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
     homepage = "https://github.com/googlefonts/nototools";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

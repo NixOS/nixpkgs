@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pypi.python.org/pypi/numericalunits";
     description = "Package that lets you define quantities with unit";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

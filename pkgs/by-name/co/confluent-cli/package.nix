@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     cp -r legal $out/share/doc/confluent-cli/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Confluent CLI";
     homepage = "https://docs.confluent.io/confluent-cli/current/overview.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       rguevara84
       autophagy
     ];
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     # files in the S3 bucket:
     #
     #   https://s3-us-west-2.amazonaws.com/confluent.cloud?prefix=confluent-cli/archives/1.25.0/&delimiter=/%27
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

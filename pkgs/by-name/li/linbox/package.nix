@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for exact, high-performance linear algebra";
     mainProgram = "linbox-config";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.unix;
     homepage = "https://linalg.org/";
   };
 }

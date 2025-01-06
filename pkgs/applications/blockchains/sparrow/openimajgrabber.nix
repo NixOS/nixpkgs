@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
     cp hardware/core-video-capture/src-native/linux/OpenIMAJGrabber.so $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of libraries and tools for multimedia (images, text, video, audio, etc.) content analysis and content generation. This package only builds the OpenIMAJGrabber for Linux";
     homepage = "http://www.openimaj.org";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [
       emmanuelrosa
       _1000101
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

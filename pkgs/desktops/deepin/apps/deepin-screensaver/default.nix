@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     "COMPILE_ON_V23=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screensaver service developed by deepin";
     mainProgram = "deepin-screensaver";
     homepage = "https://github.com/linuxdeepin/deepin-screensaver";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

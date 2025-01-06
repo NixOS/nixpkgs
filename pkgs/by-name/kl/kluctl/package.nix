@@ -48,12 +48,12 @@ buildGoModule rec {
         --prefix PATH : '${lib.makeBinPath [ python310 ]}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Missing glue to put together large Kubernetes deployments";
     mainProgram = "kluctl";
     homepage = "https://kluctl.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       sikmir
       netthier
     ];

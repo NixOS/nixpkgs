@@ -59,10 +59,10 @@ buildPythonPackage rec {
     "pyquery.pyquery.PyQuery.serialize_dict"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

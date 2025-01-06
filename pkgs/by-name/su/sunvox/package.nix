@@ -94,12 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
-    license = licenses.unfreeRedistributable;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://www.warmplace.ru/soft/sunvox/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       puffnfresh
       OPNA2608
     ];

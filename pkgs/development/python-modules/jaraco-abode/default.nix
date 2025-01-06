@@ -79,13 +79,13 @@ buildPythonPackage rec {
     "test_camera_capture_no_control_URLs"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
     mainProgram = "abode";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jamiemagee
       dotlambda
     ];

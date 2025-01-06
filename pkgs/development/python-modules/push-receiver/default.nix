@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "push_receiver" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Francesco149/push_receiver";
     description = "Subscribe to GCM/FCM and receive notifications";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

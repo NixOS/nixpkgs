@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "fangfrisch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Update and verify unofficial Clam Anti-Virus signatures";
     homepage = "https://github.com/rseichter/fangfrisch";
     changelog = "https://github.com/rseichter/fangfrisch/blob/${version}/CHANGELOG.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "fangfrisch";
   };
 }

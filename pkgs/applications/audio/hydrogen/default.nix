@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     "-DWANT_DEBUG=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

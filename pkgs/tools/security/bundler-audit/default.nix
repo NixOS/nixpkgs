@@ -15,7 +15,7 @@ bundlerEnv rec {
 
   passthru.updateScript = bundlerUpdateScript "bundler-audit";
 
-  meta = with lib; {
+  meta = {
     description = "Patch-level verification for Bundler";
     longDescription = ''
       Features:
@@ -27,11 +27,11 @@ bundlerEnv rec {
     '';
     homepage = "https://github.com/rubysec/bundler-audit";
     changelog = "https://github.com/rubysec/bundler-audit/blob/v${version}/ChangeLog.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       primeos
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

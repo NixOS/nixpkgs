@@ -87,12 +87,12 @@ buildPythonPackage rec {
     rm -rf $TMP_TURSES
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Twitter client for the console";
     mainProgram = "turses";
     homepage = "https://github.com/louipc/turses";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

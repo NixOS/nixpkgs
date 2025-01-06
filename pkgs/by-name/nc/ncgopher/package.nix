@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gopher and gemini client for the modern internet";
     homepage = "https://github.com/jansc/ncgopher";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.linux;
     mainProgram = "ncgopher";
   };
 }

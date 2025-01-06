@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
   # No tests implemented.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jcupitt/vipsdisp";
     description = "Tiny image viewer with libvips";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "vipsdisp";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.unix;
   };
 }

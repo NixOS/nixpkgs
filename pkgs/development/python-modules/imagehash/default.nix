@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imagehash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Perceptual Image Hashing Module";
     homepage = "https://github.com/JohannesBuchner/imagehash";
     changelog = "https://github.com/JohannesBuchner/imagehash/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ e1mo ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ e1mo ];
     mainProgram = "find_similar_images.py";
   };
 }

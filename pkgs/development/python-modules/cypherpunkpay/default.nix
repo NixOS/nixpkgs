@@ -103,14 +103,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cypherpunkpay" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern self-hosted software for accepting Bitcoin";
     homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
     changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       unlicense
     ];
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
       Kerberos
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Database access library for C++";
     homepage = "https://soci.sourceforge.net/";
-    license = licenses.boost;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

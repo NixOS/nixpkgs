@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Components for building one-time password authentication systems";
     homepage = "https://www.nongnu.org/oath-toolkit/";
-    maintainers = with maintainers; [ schnusch ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ schnusch ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "oathtool";
   };
 }

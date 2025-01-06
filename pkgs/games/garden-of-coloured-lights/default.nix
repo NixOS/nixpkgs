@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
   #     `eclass'; eclass.o:src/eclass.c:21: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = with lib; {
+  meta = {
     description = "Old-school vertical shoot-em-up / bullet hell";
     mainProgram = "garden";
     homepage = "https://garden.sourceforge.net/drupal/";
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 
 }

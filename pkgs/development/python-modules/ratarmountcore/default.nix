@@ -75,11 +75,11 @@ buildPythonPackage rec {
     "test_chimera_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
     changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-v${version}/core/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

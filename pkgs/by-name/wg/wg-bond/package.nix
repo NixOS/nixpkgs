@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/wg-bond --set PATH ${lib.makeBinPath [ wireguard-tools ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wireguard configuration manager";
     homepage = "https://gitlab.com/cab404/wg-bond";
     changelog = "https://gitlab.com/cab404/wg-bond/-/releases#v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ cab404 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ cab404 ];
     mainProgram = "wg-bond";
   };
 }

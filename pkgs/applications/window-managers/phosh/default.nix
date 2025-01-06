@@ -123,13 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ masipcat zhaofengli ];
+    platforms = lib.platforms.linux;
     mainProgram = "phosh-session";
   };
 })

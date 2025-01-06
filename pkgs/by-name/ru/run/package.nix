@@ -18,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easily manage and invoke small scripts and wrappers";
     mainProgram = "run";
     homepage = "https://github.com/TekWizely/run";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rawkode
       Br1ght0ne
     ];

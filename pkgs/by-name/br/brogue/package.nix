@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     "fortify"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Roguelike game";
     mainProgram = "brogue";
     homepage = "https://sites.google.com/site/broguegame/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       AndersonTorres
       fgaz
     ];

@@ -36,12 +36,12 @@ let
   hover = buildGoModule rec {
     inherit pname version;
 
-    meta = with lib; {
+    meta = {
       description = "Build tool to run Flutter applications on desktop";
       homepage = "https://github.com/go-flutter-desktop/hover";
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ ericdallo ];
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ ericdallo ];
     };
 
     subPackages = [ "." ];

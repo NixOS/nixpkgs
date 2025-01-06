@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
   ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with lib.maintainers; [
       arthsmn
     ];
     description = "Desktop Publishing (DTP) and Layout program";
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.scribus.net";
     # There are a lot of licenses...
     # https://github.com/scribusproject/scribus/blob/20508d69ca4fc7030477db8dee79fd1e012b52d2/COPYING#L15-L19
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
       mit

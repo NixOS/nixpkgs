@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     cp ibniz $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual machine designed for extremely compact low-level audiovisual programs";
     homepage = "https://github.com/viznut/IBNIZ";
-    license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.dezgeg ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.dezgeg ];
     mainProgram = "ibniz";
   };
 }

@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     inherit bear tiledb;
   };
 
-  meta = with lib; {
+  meta = {
     description    = "Very fast, header only, C++ logging library";
     homepage       = "https://github.com/gabime/spdlog";
-    license        = licenses.mit;
-    maintainers    = with maintainers; [ obadz ];
-    platforms      = platforms.all;
+    license        = lib.licenses.mit;
+    maintainers    = with lib.maintainers; [ obadz ];
+    platforms      = lib.platforms.all;
   };
 }

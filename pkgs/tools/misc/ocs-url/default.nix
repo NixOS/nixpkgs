@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Collaboration System for use with DE store websites";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SohamG ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ SohamG ];
+    platforms = lib.platforms.linux;
     mainProgram = "ocs-url";
   };
 }

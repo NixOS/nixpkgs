@@ -83,12 +83,12 @@ flutter324.buildFlutterApplication rec {
     libappindicator
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yubico Authenticator for Desktop";
     mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

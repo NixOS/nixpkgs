@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_HELP=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Table Editor And Planner, Or: Teapot";
     longDescription = ''
@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
       spreadsheets still inherit from the days of VisiCalc on ancient CP/M
       systems.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
     mainProgram = "teapot";
   };
 }

@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oca_port" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool helping to port an addon or missing commits of an addon from one branch to another";
     homepage = "https://github.com/OCA/oca-port";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

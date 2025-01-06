@@ -71,12 +71,12 @@ buildPythonPackage rec {
     "TestResNetV2Pretrained"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning framework that provides an Object Oriented layer for JAX";
     homepage = "https://github.com/google/objax";
     changelog = "https://github.com/google/objax/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
     # Tests test_syncbn_{0,1,2}d and other tests from tests/parallel.py fail
     broken = true;
   };

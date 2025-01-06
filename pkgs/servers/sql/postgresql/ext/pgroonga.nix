@@ -34,7 +34,7 @@ buildPostgresqlExtension rec {
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
@@ -44,8 +44,8 @@ buildPostgresqlExtension rec {
     '';
     homepage = "https://pgroonga.github.io/";
     changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ];
+    maintainers = with lib.maintainers; [ DerTim1 ];
   };
 }

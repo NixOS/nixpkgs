@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Accelerate
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to compress image files while maintaining quality";
     homepage = "https://github.com/siiptuo/pio";
     changelog = "https://github.com/siiptuo/pio/blob/${version}/CHANGELOG.md";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ liassica ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ liassica ];
     mainProgram = "pio";
   };
 }

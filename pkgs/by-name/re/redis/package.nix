@@ -111,13 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.redis = nixosTests.redis;
   passthru.serverBin = "redis-server";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://redis.io";
     description = "Open source, advanced key-value store";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       berdario
       globin
     ];

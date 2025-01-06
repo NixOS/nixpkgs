@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "test_get_many_tags"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ORAS Python SDK";
     homepage = "https://github.com/oras-project/oras-py";
     changelog = "https://github.com/oras-project/oras-py/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

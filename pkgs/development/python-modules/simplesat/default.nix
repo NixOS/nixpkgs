@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "simplesat/tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Prototype for SAT-based dependency handling";
     homepage = "https://github.com/enthought/sat-solver";
     changelog = "https://github.com/enthought/sat-solver/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
   };
 }

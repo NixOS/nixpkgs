@@ -87,11 +87,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 data/icons/appicon.png $out/share/pixmaps/urh.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

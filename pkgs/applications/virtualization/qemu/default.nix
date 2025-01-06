@@ -288,12 +288,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.qemu.org/";
     description = "Generic and open source machine emulator and virtualizer";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ] ++ lib.optionals xenSupport xen.meta.maintainers;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ] ++ lib.optionals xenSupport xen.meta.maintainers;
+    platforms = lib.platforms.unix;
   }
   # toolsOnly: Does not have qemu-kvm and there's no main support tool
   # userOnly: There's one qemu-<arch> for every architecture
@@ -302,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
   }
   # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
   // lib.optionalAttrs userOnly {
-    platforms = with platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+    platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
     description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
   };
 })

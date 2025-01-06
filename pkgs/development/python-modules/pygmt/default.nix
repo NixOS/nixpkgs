@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
-    maintainers = with maintainers; teams.geospatial.members;
+    maintainers = with lib.maintainers; lib.teams.geospatial.members;
   };
 }

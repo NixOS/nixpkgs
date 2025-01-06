@@ -62,9 +62,9 @@ mkXfceDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot utility for the Xfce desktop";
     mainProgram = "xfce4-screenshooter";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "SlimIt -  a JavaScript minifier/parser in Python";
     mainProgram = "slimit";
     homepage = "https://github.com/rspivak/slimit";
     changelog = "https://github.com/rspivak/slimit/blob/${src.rev}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -64,12 +64,12 @@ buildPerlPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Perl module for stripping bits of non-deterministic information";
     mainProgram = "strip-nondeterminism";
     homepage = "https://reproducible-builds.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       pSub
       artturin
     ];

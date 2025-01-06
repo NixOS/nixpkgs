@@ -61,10 +61,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osc_lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

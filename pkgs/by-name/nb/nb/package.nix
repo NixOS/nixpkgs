@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line note-taking, bookmarking, archiving, and knowledge base application";
     longDescription = ''
       `nb` creates notes in text-based formats like Markdown, Emacs Org mode,
@@ -77,9 +77,9 @@ stdenv.mkDerivation rec {
       of features. `nb` is flexible.
     '';
     homepage = "https://xwmx.github.io/nb/";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.toonn ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.toonn ];
+    platforms = lib.platforms.all;
     mainProgram = "nb";
   };
 }

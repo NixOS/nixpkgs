@@ -75,11 +75,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyquil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";
     homepage = "https://github.com/rigetti/pyquil";
     changelog = "https://github.com/rigetti/pyquil/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

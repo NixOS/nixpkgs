@@ -13,7 +13,7 @@ let
 in
 {
   meta = {
-    maintainers = teams.pantheon.members;
+    maintainers = lib.teams.pantheon.members;
   };
 
   ###### interface

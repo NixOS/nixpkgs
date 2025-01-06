@@ -46,13 +46,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msmart" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mill1000/midea-msmart/releases/tag/${version}";
     description = "Python library for local control of Midea (and associated brands) smart air conditioners";
     homepage = "https://github.com/mill1000/midea-msmart";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "msmart-ng";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hexa
       emilylange
     ];

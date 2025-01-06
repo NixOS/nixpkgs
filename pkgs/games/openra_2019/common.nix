@@ -95,12 +95,12 @@ in
     dontStrip = true;
 
     meta = {
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         fusion809
         msteen
       ];
-      license = licenses.gpl3;
-      platforms = platforms.linux;
+      license = lib.licenses.gpl3;
+      platforms = lib.platforms.linux;
     };
   };
 }

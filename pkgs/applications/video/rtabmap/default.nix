@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
   # Disable warnings that are irrelevant to us as packagers
   cmakeFlags = [ "-Wno-dev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Real-Time Appearance-Based 3D Mapping";
     homepage = "https://introlab.github.io/rtabmap/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ marius851000 ];
-    platforms = with platforms; linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    platforms = with lib.platforms; linux;
   };
 }

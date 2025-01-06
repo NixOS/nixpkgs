@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     tests.static = pkgsStatic.bash;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/bash/";
     description = "GNU Bourne-Again Shell, the de facto standard shell on Linux" + lib.optionalString interactive " (for interactive use)";
     longDescription = ''
@@ -149,8 +149,8 @@ stdenv.mkDerivation rec {
       interactive use.  In addition, most sh scripts can be run by
       Bash without modification.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     # https://github.com/NixOS/nixpkgs/issues/333338
     badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
     maintainers = [ ];

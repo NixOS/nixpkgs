@@ -75,11 +75,11 @@ buildPythonPackage rec {
     "test_exit_if_not_master "
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for building Elasticsearch client objects";
     homepage = "https://github.com/untergeek/es_client";
     changelog = "https://github.com/untergeek/es_client/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

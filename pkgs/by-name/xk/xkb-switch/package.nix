@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Switch your X keyboard layouts from the command line";
     homepage = "https://github.com/ierton/xkb-switch";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smironov ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ smironov ];
+    platforms = lib.platforms.linux;
     mainProgram = "xkb-switch";
   };
 }

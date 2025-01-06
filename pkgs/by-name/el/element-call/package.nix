@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/element-hq/element-call";
     description = "Group calls powered by Matrix";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kilimnik ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kilimnik ];
     mainProgram = "element-call";
   };
 })

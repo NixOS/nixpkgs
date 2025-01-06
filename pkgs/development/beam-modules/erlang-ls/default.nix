@@ -62,11 +62,11 @@ rebar3Relx {
   # tests seem to be a bit flaky on darwin, skip them for now
   doCheck = !stdenv.hostPlatform.isDarwin;
   installFlags = [ "PREFIX=$(out)" ];
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/erlang-ls/erlang_ls";
     description = "Erlang Language Server";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     mainProgram = "erlang_ls";
   };
   passthru.updateScript = writeScript "update.sh" ''

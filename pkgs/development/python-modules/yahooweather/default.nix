@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Provide an interface to the Yahoo! Weather RSS feed";
     homepage = "https://github.com/pvizeli/yahooweather";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

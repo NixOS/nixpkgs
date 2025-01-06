@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     url = "https://www.alsa-project.org/files/pub/lib/";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alsa-project.org/";
     description = "ALSA Use Case Manager configuration";
 
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.bsd3;
-    maintainers = [ maintainers.roastiek ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.roastiek ];
+    platforms = lib.platforms.linux;
   };
 }

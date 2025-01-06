@@ -39,11 +39,11 @@ buildPythonPackage rec {
       inherit gfal2-util;
     } // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
   };
-  meta = with lib; {
+  meta = {
     description = "Python binding for gfal2";
     homepage = "https://github.com/cern-fts/gfal2-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
     # It currently fails to build against Python 3.12 or later,
     # complaining CMake faililng to find Python include path, library path and site package path.
     broken = pythonAtLeast "3.12";

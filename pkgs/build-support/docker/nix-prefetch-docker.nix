@@ -16,10 +16,10 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Script used to obtain source hashes for dockerTools.pullImage";
     mainProgram = "nix-prefetch-docker";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.offline ];
+    platforms = lib.platforms.unix;
   };
 }

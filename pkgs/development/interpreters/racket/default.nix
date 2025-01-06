@@ -181,7 +181,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Programmable programming language";
     longDescription = ''
       Racket is a full-spectrum programming language. It goes beyond
@@ -194,7 +194,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://racket-lang.org/";
     changelog = "https://github.com/racket/racket/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];

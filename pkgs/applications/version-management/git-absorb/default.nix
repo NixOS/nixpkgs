@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/git-absorb --gen-completions zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
-    license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.bsd3 ];
+    maintainers = with lib.maintainers; [
       tomfitzhenry
       matthiasbeyer
     ];

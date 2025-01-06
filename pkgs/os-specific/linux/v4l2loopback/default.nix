@@ -33,13 +33,13 @@ in stdenv.mkDerivation {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module to create V4L2 loopback devices";
     mainProgram = "v4l2loopback-ctl";
     homepage = "https://github.com/umlaeute/v4l2loopback";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ moni ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ moni ];
+    platforms = lib.platforms.linux;
     outputsToInstall = [ "out" ];
   };
 }

@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beartype" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast runtime type checking for Python";
     homepage = "https://github.com/beartype/beartype";
     changelog = "https://github.com/beartype/beartype/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

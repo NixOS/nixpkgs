@@ -22,11 +22,11 @@ buildPythonPackage {
     ${python.interpreter} test_spec.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/noahmorrison/chevron";
     description = "Python implementation of the mustache templating language";
     mainProgram = "chevron";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dhkl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dhkl ];
   };
 }

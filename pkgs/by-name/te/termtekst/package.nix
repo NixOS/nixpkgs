@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
       --replace "locale.setlocale" "#locale.setlocale"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Console NOS Teletekst viewer in Python";
     mainProgram = "tt";
     longDescription = ''
@@ -38,8 +38,8 @@ python3Packages.buildPythonApplication rec {
       as a workaround the braille set is abused to approximate the
       graphics.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.all;
   };
 }

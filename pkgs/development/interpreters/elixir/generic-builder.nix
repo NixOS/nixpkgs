@@ -108,7 +108,7 @@ stdenv.mkDerivation ({
   '';
 
   pos = builtins.unsafeGetAttrPos "sha256" args;
-  meta = with lib; {
+  meta = {
     homepage = "https://elixir-lang.org/";
     description = "Functional, meta-programming aware language built on top of the Erlang VM";
 
@@ -120,8 +120,8 @@ stdenv.mkDerivation ({
       with hot code upgrades.
     '';
 
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = teams.beam.members;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.beam.members;
   };
 })

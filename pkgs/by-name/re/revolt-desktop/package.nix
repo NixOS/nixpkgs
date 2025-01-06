@@ -7,30 +7,30 @@
   makeWrapper,
   electron,
 }:
-(stdenvNoCC.mkDerivation {
+(stdenvNoCC.mkDerivation ( finalAttrs: {
   pname = "revolt-desktop";
   version = "1.0.6";
   dontConfigure = true;
   dontBuild = true;
-  meta = with lib; {
+  meta = {
     description = "Open source user-first chat platform";
     homepage = "https://revolt.chat/";
-    changelog = "https://github.com/revoltchat/desktop/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/revoltchat/desktop/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       heyimnova
       caralice
     ];
-    platforms = platforms.linux ++ platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "revolt-desktop";
   };
   nativeBuildInputs = [ makeWrapper ];
-}).overrideAttrs
+})).overrideAttrs
   (
     final: prev:
     let
-      inherit (prev) pname version;
+      inherit (prev) version;
     in
     if stdenvNoCC.hostPlatform.isLinux then
       {

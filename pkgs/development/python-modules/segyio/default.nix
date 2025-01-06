@@ -49,10 +49,10 @@ buildPythonPackage rec {
     numpy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast Python library for SEGY files";
     homepage = "https://github.com/equinor/segyio";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

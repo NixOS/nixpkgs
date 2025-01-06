@@ -59,12 +59,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.thregr.org/~wavexx/software/screenkey/";
     description = "Screencast tool to display your keys inspired by Screenflick";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rasendubi ];
     mainProgram = "screenkey";
   };
 }

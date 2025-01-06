@@ -23,12 +23,12 @@ buildGoModule rec {
     cp -r ./static $static
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
     changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rgrunbla erdnaxe ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rgrunbla erdnaxe ];
   };
 }

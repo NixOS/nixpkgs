@@ -69,17 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Raspberry Pi Imaging Utility";
     homepage = "https://github.com/raspberrypi/rpi-imager/";
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "rpi-imager";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ymarkus
       anthonyroussel
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # does not build on darwin
     broken = stdenv.hostPlatform.isDarwin;
   };

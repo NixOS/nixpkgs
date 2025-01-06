@@ -171,19 +171,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
+      lib.teams.gnome.members
+      ++ (with lib.maintainers; [
         lovek323
         artturin
       ]);
     pkgConfigModules = [ "gobject-introspection-1.0" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];

@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ulogd; };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace logging daemon for netfilter/iptables";
     mainProgram = "ulogd";
 
@@ -95,8 +95,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.netfilter.org/projects/ulogd/index.html";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ p-h ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ p-h ];
   };
 }

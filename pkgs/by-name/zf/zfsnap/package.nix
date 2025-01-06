@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     installShellCompletion completion/*.{bash,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable, performant script to make rolling ZFS snapshots easy";
     mainProgram = "zfsnap";
     homepage = "https://github.com/zfsnap/zfsnap";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ woffs ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.linux;
   };
 }

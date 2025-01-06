@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  meta = with lib; {
+  meta = {
     description = "TUI tool to use the SSH config for connections";
     homepage = "https://github.com/julien-r44/fast-ssh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fast-ssh";
   };
 }

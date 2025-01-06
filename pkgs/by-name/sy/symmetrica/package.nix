@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of routines for representation theory and combinatorics";
-    license = licenses.isc;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.unix;
     homepage = "https://gitlab.com/sagemath/symmetrica";
   };
 }

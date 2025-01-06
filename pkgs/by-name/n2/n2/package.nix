@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-jrIo0N3o2fYe3NgNG33shkMd0rJxi5evtidCL9BcfVc=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/evmar/n2";
     description = "Ninja compatible build system";
     mainProgram = "n2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 }

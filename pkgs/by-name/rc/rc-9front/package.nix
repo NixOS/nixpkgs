@@ -44,13 +44,13 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { shallowClone = false; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "9front shell";
     longDescription = "unix port of 9front rc";
     homepage = "http://shithub.us/cinap_lenrek/rc/HEAD/info.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moody ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moody ];
     mainProgram = "rc";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

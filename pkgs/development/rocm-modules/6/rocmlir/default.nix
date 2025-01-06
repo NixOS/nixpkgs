@@ -142,14 +142,14 @@ stdenv.mkDerivation (finalAttrs: {
     filter = ".[1].name | split(\"-\") | .[1]";
   };
 
-  meta = with lib; {
+  meta = {
     description = "MLIR-based convolution and GEMM kernel generator";
     homepage = "https://github.com/ROCm/rocMLIR";
-    license = with licenses; [ asl20 ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ asl20 ];
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "7.0.0";
   };
 })

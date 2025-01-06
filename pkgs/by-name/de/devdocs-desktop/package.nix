@@ -28,15 +28,15 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured desktop app for DevDocs.io";
     longDescription = ''
       DevDocs.io combines multiple API documentations in a fast, organized, and searchable interface. This is an unofficial desktop app for it.
     '';
     homepage = "https://github.com/egoist/devdocs-desktop";
     downloadPage = "https://github.com/egoist/devdocs-desktop/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ymarkus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ymarkus ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "devdocs-desktop";
   };

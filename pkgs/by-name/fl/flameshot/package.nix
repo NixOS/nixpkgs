@@ -121,16 +121,16 @@ stdenv'.mkDerivation {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";
     changelog = "https://github.com/flameshot-org/flameshot/releases";
     mainProgram = "flameshot";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       scode
       oxalica
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

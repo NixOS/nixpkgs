@@ -50,11 +50,11 @@ buildPythonPackage rec {
     "calmjs.parse.walkers"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/calmjs/calmjs.parse/blob/${src.rev}/CHANGES.rst";
     description = "Various parsers for ECMA standards";
     homepage = "https://github.com/calmjs/calmjs.parse";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

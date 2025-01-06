@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast and lightweight application for creating and extracting archives";
     mainProgram = "deepin-compressor";
     homepage = "https://github.com/linuxdeepin/deepin-compressor";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

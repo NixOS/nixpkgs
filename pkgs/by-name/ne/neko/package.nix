@@ -79,23 +79,23 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE
-      licenses.gpl2Plus # nekoc, nekoml
-      licenses.lgpl21Plus # mysql.ndll
-      licenses.bsd3 # regexp.ndll
-      licenses.zlib # zlib.ndll
-      licenses.asl20 # mod_neko, mod_tora, mbedTLS
-      licenses.mit # overall, other libs
+      lib.licenses.gpl2Plus # nekoc, nekoml
+      lib.licenses.lgpl21Plus # mysql.ndll
+      lib.licenses.bsd3 # regexp.ndll
+      lib.licenses.zlib # zlib.ndll
+      lib.licenses.asl20 # mod_neko, mod_tora, mbedTLS
+      lib.licenses.mit # overall, other libs
       "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
     ];
     maintainers = [
-      maintainers.marcweber
-      maintainers.locallycompact
+      lib.maintainers.marcweber
+      lib.maintainers.locallycompact
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

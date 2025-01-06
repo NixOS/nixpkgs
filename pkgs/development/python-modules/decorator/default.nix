@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "src/tests/test.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/micheles/decorator";
     description = "Better living through Python with decorators";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     cp -dr --no-preserve='ownership' dist-white/*  $out/share/icons/Vimix-Cursors-White
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X-cursor theme inspired by Materia design and based on capitaine-cursors";
     homepage = "https://github.com/vinceliuice/Vimix-cursors";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ redxtech ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ redxtech ];
   };
 }

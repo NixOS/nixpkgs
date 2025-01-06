@@ -30,10 +30,10 @@ let hb = mkCoqDerivation {
 
   mlPlugin = true;
 
-  meta = with lib; {
+  meta = {
     description = "High level commands to declare a hierarchy based on packed classes";
-    maintainers = with maintainers; [ cohencyril siraben ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ cohencyril siraben ];
+    license = lib.licenses.mit;
   };
 }; in
 hb.overrideAttrs (o:

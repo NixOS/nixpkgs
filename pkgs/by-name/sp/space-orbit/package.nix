@@ -37,11 +37,11 @@ EOF
     chmod a+x $out/bin/space-orbit
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Space combat simulator";
     mainProgram = "space-orbit";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

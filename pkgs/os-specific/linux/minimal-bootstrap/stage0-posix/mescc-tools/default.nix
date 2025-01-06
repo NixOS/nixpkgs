@@ -106,11 +106,11 @@ derivationWithMeta {
     endianFlag
     ;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Plus;
+    maintainers = lib.teams.minimal-bootstrap.members;
     inherit platforms;
   };
 }

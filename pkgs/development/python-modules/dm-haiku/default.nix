@@ -117,11 +117,11 @@ let
       dontInstall = true;
     });
 
-    meta = with lib; {
+    meta = {
       description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet";
       homepage = "https://github.com/deepmind/dm-haiku";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ ndl ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ ndl ];
     };
   };
 in

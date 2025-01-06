@@ -73,13 +73,13 @@ buildPostgresqlExtension rec {
     '';
   };
 
-  meta = with lib; {
-    broken = !builtins.elem (versions.major postgresql.version) (builtins.attrNames hashes);
+  meta = {
+    broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames hashes);
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

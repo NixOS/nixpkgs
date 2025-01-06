@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "huum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Huum saunas";
     homepage = "https://github.com/frwickst/pyhuum";
     changelog = "https://github.com/frwickst/pyhuum/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

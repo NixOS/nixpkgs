@@ -20,13 +20,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/containers/aardvark-dns/releases/tag/${src.rev}";
     description = "Authoritative dns server for A/AAAA container records";
     homepage = "https://github.com/containers/aardvark-dns";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.podman.members;
+    platforms = lib.platforms.linux;
     mainProgram = "aardvark-dns";
   };
 }

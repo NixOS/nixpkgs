@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "test_application_name_in_env"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_application_name_db_uri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface for PostgreSQL";
     mainProgram = "pgcli";
     longDescription = ''
@@ -67,8 +67,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://pgcli.com";
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       dywedir
       SuperSandro2000
     ];

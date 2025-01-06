@@ -20,16 +20,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulates the falling characters theme from The Matrix movie";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     longDescription = ''
       CMatrix simulates the display from "The Matrix" and is based
       on the screensaver from the movie's website.
     '';
     homepage = "https://github.com/abishekvashok/cmatrix";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     mainProgram = "cmatrix";
   };
 }

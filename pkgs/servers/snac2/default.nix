@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/grunfink/snac2";
     description = "Simple, minimalistic ActivityPub instance (2.x, C)";
     changelog = "https://codeberg.org/grunfink/snac2/src/tag/${version}/RELEASE_NOTES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misuzu ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.misuzu ];
+    platforms = lib.platforms.unix;
     mainProgram = "snac";
   };
 }

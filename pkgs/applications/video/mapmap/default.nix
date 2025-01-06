@@ -69,12 +69,12 @@ mkDerivation rec {
   #   rm -r $NIX_BUILD_TOP/__nix_qt5__
   # '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source video mapping software";
     homepage = "https://github.com/mapmapteam/mapmap";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "mapmap";
   };
 

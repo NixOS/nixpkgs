@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$out ..
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2D physics engine based on Box2D";
-    maintainers = with maintainers; [ qknight ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ qknight ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://google.github.io/liquidfun/";
   };
 }

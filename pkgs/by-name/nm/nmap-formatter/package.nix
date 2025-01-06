@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-PKoe4rpwPy3omfRRhN70iEJJ/sHliIwxPUHGxRJqrf4=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool that allows you to convert nmap output";
     mainProgram = "nmap-formatter";
     homepage = "https://github.com/vdjagilev/nmap-formatter";
     changelog = "https://github.com/vdjagilev/nmap-formatter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

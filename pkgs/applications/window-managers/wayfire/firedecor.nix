@@ -56,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_WAYFIRE_METADATADIR = "${placeholder "out"}/share/wayfire/metadata";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mntmn/Firedecor";
     description = "Advanced window decoration plugin for the Wayfire window manager";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (mate.mate-wayland-session.meta) maintainers;
     inherit (wayfire.meta) platforms;
   };

@@ -74,13 +74,13 @@ kaem.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [ tinycc.compiler ];
 
-    meta = with lib; {
+    meta = {
       description = "GNU Patch, a program to apply differences to files";
       homepage = "https://www.gnu.org/software/patch";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      license = lib.licenses.gpl3Plus;
+      maintainers = lib.teams.minimal-bootstrap.members;
       mainProgram = "patch";
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   }
   ''

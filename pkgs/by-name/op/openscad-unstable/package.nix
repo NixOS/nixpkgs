@@ -136,7 +136,7 @@ clangStdenv.mkDerivation rec {
     # some fontconfig issues cause pdf output to have wrong font
     ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
   '';
-  meta = with lib; {
+  meta = {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''
       OpenSCAD is a software for creating solid 3D CAD objects. It is free

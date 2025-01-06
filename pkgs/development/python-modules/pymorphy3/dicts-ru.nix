@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymorphy3_dicts_ru" ];
 
-  meta = with lib; {
+  meta = {
     description = "Russian dictionaries for pymorphy3";
     homepage = "https://github.com/no-plagiarism/pymorphy3-dicts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }

@@ -31,11 +31,11 @@ buildPythonPackage rec {
   # Tests need an uptime-kuma instance to run
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Uptime Kuma Socket.IO API";
     homepage = "https://github.com/lucasheld/uptime-kuma-api";
     changelog = "https://github.com/lucasheld/uptime-kuma-api/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ julienmalka ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ julienmalka ];
   };
 }

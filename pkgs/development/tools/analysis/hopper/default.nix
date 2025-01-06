@@ -62,13 +62,13 @@ stdenv.mkDerivation rec {
       --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.hopperapp.com/index.html";
     description = "MacOS and Linux Disassembler";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       Enteee
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

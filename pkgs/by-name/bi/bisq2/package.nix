@@ -155,15 +155,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
     mainProgram = "bisq2";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ emmanuelrosa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
     platforms = [ "x86_64-linux" ];
   };
 }

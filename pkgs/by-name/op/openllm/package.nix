@@ -62,12 +62,12 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "openllm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Run any open-source LLMs, such as Llama 3.1, Gemma, as OpenAI compatible API endpoint in the cloud";
     homepage = "https://github.com/bentoml/OpenLLM";
     changelog = "https://github.com/bentoml/OpenLLM/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       happysalada
       natsukium
     ];

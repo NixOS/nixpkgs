@@ -122,10 +122,10 @@ in
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gnuplot.info/";
     description = "Portable command-line driven graphing utility for many platforms";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = {
       # Essentially a BSD license with one modifaction:
       # Permission to modify the software is granted, but not the right to
@@ -135,7 +135,7 @@ in
       # provided you: ...
       url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
     };
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "gnuplot";
   };
 }

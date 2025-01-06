@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lazr.restfulclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Programmable client library that takes advantage of the commonalities among";
     homepage = "https://launchpad.net/lazr.restfulclient";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
 }

@@ -252,5 +252,5 @@ in
       };
     };
   };
-  meta.maintainers = with maintainers; [ passivelemon ];
+  meta.maintainers = with lib.maintainers; [ passivelemon ];
 }

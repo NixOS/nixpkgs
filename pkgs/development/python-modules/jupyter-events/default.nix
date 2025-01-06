@@ -67,12 +67,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_events" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     description = "Configurable event system for Jupyter applications and extensions";
     mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

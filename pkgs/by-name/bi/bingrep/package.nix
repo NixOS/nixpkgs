@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-n49VmAJcD98LdkrUCW6ouihSXmSCsdBDvCe9l96G0ec=";
 
-  meta = with lib; {
+  meta = {
     description = "Greps through binaries from various OSs and architectures, and colors them";
     mainProgram = "bingrep";
     homepage = "https://github.com/m4b/bingrep";
-    license = licenses.mit;
-    maintainers = with maintainers; [ minijackson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 }

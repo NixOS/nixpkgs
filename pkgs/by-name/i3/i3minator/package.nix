@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "i3 project manager similar to tmuxinator";
     mainProgram = "i3minator";
     longDescription = ''
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/carlesso/i3minator";
     license = lib.licenses.wtfpl;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with lib.maintainers; [ domenkozar ];
     platforms = lib.platforms.linux;
   };
 

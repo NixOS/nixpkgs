@@ -22,11 +22,11 @@ stdenv.mkDerivation {
       --replace /usr $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple yet effective way to benchmark disk IO in Linux systems";
     homepage = "https://github.com/camposr/iomelt";
-    maintainers = with maintainers; [ raspher ];
-    license = licenses.artistic2;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raspher ];
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.linux;
   };
 }

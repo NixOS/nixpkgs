@@ -61,16 +61,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mattermost Desktop client";
     mainProgram = "mattermost-desktop";
     homepage = "https://about.mattermost.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.joko ];
+    maintainers = [ lib.maintainers.joko ];
   };
 }

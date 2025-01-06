@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath runtimeDeps}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Audio CD ripper and encoder for Linux";
     mainProgram = "asunder";
     homepage = "http://littlesvr.ca/asunder/index.php";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mudri ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mudri ];
+    platforms = lib.platforms.linux;
 
     longDescription = ''
       Asunder is a graphical Audio CD ripper and encoder for Linux. You can use

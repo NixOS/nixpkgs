@@ -45,12 +45,12 @@ buildPythonPackage rec {
     patchShebangs smartypants
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python with the SmartyPants";
     homepage = "https://github.com/leohemsted/smartypants.py";
     changelog = "https://github.com/leohemsted/smartypants.py/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "smartypants";
   };
 }

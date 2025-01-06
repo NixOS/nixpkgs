@@ -15,14 +15,14 @@ buildPecl rec {
     sha256 = "0wqcqq6sb51wiawa37hbd1h9dbvmyyndzdvz87xqji7lpr9vn8jy";
   };
 
-  meta = with lib; {
+  meta = {
     description = "PHP extension for Pinba";
     longDescription = ''
       Pinba is a MySQL storage engine that acts as a realtime monitoring and
       statistics server for PHP using MySQL as a read-only interface.
     '';
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "http://pinba.org/";
-    maintainers = teams.php.members;
+    maintainers = lib.teams.php.members;
   };
 }

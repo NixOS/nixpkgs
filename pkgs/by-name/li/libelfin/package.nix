@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aclements/libelfin/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "C++11 ELF/DWARF parser";
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

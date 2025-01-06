@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ pulseaudio ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-pulseaudio";
     description = "Bindings to Pulseaudio client library";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

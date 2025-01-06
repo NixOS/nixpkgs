@@ -99,15 +99,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Port of OpenAI's Whisper model in C/C++";
     longDescription = ''
       To download the models as described in the project's readme, you may
       use the `whisper-cpp-download-ggml-model` binary from this package.
     '';
     homepage = "https://github.com/ggerganov/whisper.cpp";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dit7ya hughobrien ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dit7ya hughobrien ];
   };
 })

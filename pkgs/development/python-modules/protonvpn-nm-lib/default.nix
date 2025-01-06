@@ -71,12 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "protonvpn_nm_lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "ProtonVPN NetworkManager Library intended for every ProtonVPN service user";
     mainProgram = "protonvpn_reconnector.py";
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

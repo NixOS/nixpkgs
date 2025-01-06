@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     install -t $out/bin cde cde-exec
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/usnistgov/corr-CDE";
     description = "Packaging tool for building portable packages";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.rlupton20 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.rlupton20 ];
+    platforms = lib.platforms.linux;
     # error: architecture aarch64 is not supported by bundled strace
     badPlatforms = [ "aarch64-linux" ];
   };

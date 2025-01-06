@@ -50,11 +50,11 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer allowing for common interactions with databases and records";
     homepage = "https://github.com/usnistgov/yabadaba";
     changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

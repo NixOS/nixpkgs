@@ -82,13 +82,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mne" ];
 
-  meta = with lib; {
+  meta = {
     description = "Magnetoencephelography and electroencephalography in Python";
     mainProgram = "mne";
     homepage = "https://mne.tools";
     changelog = "https://mne.tools/stable/changes/v${version}.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       bcdarwin
       mbalatsko
     ];

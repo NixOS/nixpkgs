@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "${pname}-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mpc-plugin";
     description = "MPD plugin for Xfce panel";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

@@ -36,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ssdp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
     mainProgram = "ssdp";
     homepage = "https://github.com/codingjoe/ssdp";
     changelog = "https://github.com/codingjoe/ssdp/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

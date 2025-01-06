@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.all;
     mainProgram = "flashrom";
   };
 }

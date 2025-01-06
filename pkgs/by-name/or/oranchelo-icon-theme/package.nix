@@ -43,11 +43,11 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Oranchelo icon theme";
     homepage = "https://github.com/OrancheloTeam/oranchelo-icon-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _414owen ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ _414owen ];
   };
 }

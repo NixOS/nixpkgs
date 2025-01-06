@@ -222,13 +222,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
 
-  meta = with lib; {
+  meta = {
     description = "Server and user space API to deal with multimedia pipelines";
     changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${finalAttrs.version}";
     homepage = "https://pipewire.org/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       kranzes
       k900
     ];

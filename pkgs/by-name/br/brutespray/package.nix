@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cp -r wordlist/ $out/share/brutespray/wordlist
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/x90skysn3k/brutespray";
     description = "Tool to do brute-forcing from Nmap output";
     mainProgram = "brutespray";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       This tool automatically attempts default credentials on found services
       directly from Nmap output.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

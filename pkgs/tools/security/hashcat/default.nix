@@ -101,13 +101,13 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast password cracker";
     mainProgram = "hashcat";
     homepage = "https://hashcat.net/hashcat/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       felixalbrigtsen
       zimbatm
     ];

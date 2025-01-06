@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read and write Paradox files";
     homepage = "https://pxlib.sourceforge.net/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.winpat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.winpat ];
   };
 }

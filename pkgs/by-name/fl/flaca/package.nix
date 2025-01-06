@@ -34,14 +34,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-YYNWCJT5ZT36v4u4P3gtW/osor6eIvR8leqlQHHZYMk=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to losslessly compress JPEG and PNG images";
     longDescription = "A CLI tool for x86-64 Linux machines that simplifies the task of maximally, losslessly compressing JPEG and PNG images for use in production web environments";
     homepage = "https://github.com/Blobfolio/flaca";
     changelog = "https://github.com/Blobfolio/flaca/releases/tag/v${version}";
-    maintainers = with maintainers; [ zzzsy ];
-    platforms = platforms.linux;
-    license = licenses.wtfpl;
+    maintainers = with lib.maintainers; [ zzzsy ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.wtfpl;
     mainProgram = "flaca";
   };
 }

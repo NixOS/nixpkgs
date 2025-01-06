@@ -33,12 +33,12 @@ mkDerivation rec {
     extra-cmake-modules
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fork of breeze theme style that aims to be visually modern and minimalistic";
     mainProgram = "lightly-settings5";
     homepage = "https://github.com/Luwx/Lightly";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pwoelfel ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.pwoelfel ];
+    platforms = lib.platforms.all;
   };
 }

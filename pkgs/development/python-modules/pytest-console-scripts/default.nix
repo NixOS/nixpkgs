@@ -39,14 +39,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_console_scripts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing console scripts";
     longDescription = ''
       Pytest-console-scripts is a pytest plugin for running python scripts from within tests.
       It's quite similar to subprocess.run(), but it also has an in-process mode, where the scripts are executed by the interpreter that's running pytest (using some amount of sandboxing).
     '';
     homepage = "https://github.com/kvas-it/pytest-console-scripts";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

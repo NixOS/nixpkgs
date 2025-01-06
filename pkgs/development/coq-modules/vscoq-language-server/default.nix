@@ -34,10 +34,10 @@ ocamlPackages.buildDunePackage {
       ppx_assert ppx_sexp_conv ppx_deriving ppx_import sexplib
       ppx_yojson_conv lsp sel ppx_optcomp ]);
 
-  meta = with lib; {
+  meta = {
     description = "Language server for the vscoq vscode/codium extension";
     homepage = "https://github.com/coq-community/vscoq";
-    maintainers = with maintainers; [ cohencyril ];
-    license = licenses.mit;
-  } // optionalAttrs (fetched.broken or false) { coqFilter = true; broken = true; };
+    maintainers = with lib.maintainers; [ cohencyril ];
+    license = lib.licenses.mit;
+  } // lib.optionalAttrs (fetched.broken or false) { coqFilter = true; broken = true; };
 }

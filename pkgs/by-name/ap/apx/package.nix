@@ -56,12 +56,12 @@ buildGoModule rec {
       --zsh <($out/bin/apx completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       dit7ya
       chewblacka
     ];

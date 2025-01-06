@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tls_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small library to parse TLS records";
     homepage = "https://github.com/nabla-c0d3/tls_parser";
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

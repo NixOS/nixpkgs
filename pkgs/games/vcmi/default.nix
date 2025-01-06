@@ -97,16 +97,16 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source engine for Heroes of Might and Magic III";
     homepage = "https://vcmi.eu";
     changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.linux;
     mainProgram = "vcmilauncher";
   };
 }

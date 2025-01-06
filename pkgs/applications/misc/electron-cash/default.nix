@@ -78,7 +78,7 @@ python3Packages.buildPythonApplication rec {
     $out/bin/electron-cash help >/dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Cash SPV Wallet";
     mainProgram = "electron-cash";
     longDescription = ''
@@ -88,8 +88,8 @@ python3Packages.buildPythonApplication rec {
       of the blockchain.
     '';
     homepage = "https://www.electroncash.org/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ lassulus nyanloutre oxalica ];
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lassulus nyanloutre oxalica ];
+    license = lib.licenses.mit;
   };
 }

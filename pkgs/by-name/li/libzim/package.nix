@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     "-Dtest_data_dir=none"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
     changelog = "https://github.com/openzim/libzim/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

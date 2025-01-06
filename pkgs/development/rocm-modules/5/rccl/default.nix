@@ -88,17 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm communication collectives library";
     homepage = "https://github.com/ROCm/rccl";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       bsd3
     ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

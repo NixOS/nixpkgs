@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptography_vectors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test vectors for the cryptography package";
     homepage = "https://cryptography.io/en/latest/development/test-vectors/";
     downloadPage = "https://github.com/pyca/cryptography/tree/master/vectors";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -63,10 +63,10 @@ buildPythonPackage rec {
     "torchio.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Medical imaging toolkit for deep learning";
     homepage = "https://torchio.readthedocs.io";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

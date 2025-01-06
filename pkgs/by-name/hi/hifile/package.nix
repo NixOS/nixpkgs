@@ -30,16 +30,16 @@ appimageTools.wrapType2 rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Dual-pane graphical file manager for Windows, macOS and Linux";
     longDescription = ''
       HiFile is the next evolution of file managers. Its mission is to increase your productivity whenever you work with files or folders. It aims to be better in every way - more convenient, more versatile, more efficient, more elegant, more customizable, and more fun.
     '';
     homepage = "https://www.hifile.app/";
     downloadPage = "https://www.hifile.app/download";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ymstnt ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ ymstnt ];
     mainProgram = "hifile";
     platforms = [ "x86_64-linux" ];
   };

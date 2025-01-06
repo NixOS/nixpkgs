@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pueblo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pueblo - a Python toolbox library";
     homepage = "https://pypi.org/project/pueblo/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

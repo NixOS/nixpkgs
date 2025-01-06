@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Structured Configuration Library";
     homepage = "https://github.com/zopefoundation/ZConfig";
     changelog = "https://github.com/zopefoundation/ZConfig/blob/${version}/CHANGES.rst";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

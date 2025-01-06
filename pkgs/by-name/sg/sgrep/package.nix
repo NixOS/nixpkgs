@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     [[ $result = 1 ]]
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.cs.helsinki.fi/u/jjaakkol/sgrep.html";
     description = "Grep for structured text formats such as XML";
     mainProgram = "sgrep";
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
       SGML, XML and HTML files and filtering text streams using
       structural criteria.
     '';
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eigengrau ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ eigengrau ];
   };
 }

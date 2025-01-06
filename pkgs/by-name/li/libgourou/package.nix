@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Adobe's ADEPT protocol for ePub/PDF DRM";
     homepage = "https://indefero.soutade.fr/p/libgourou";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ autumnal ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ autumnal ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

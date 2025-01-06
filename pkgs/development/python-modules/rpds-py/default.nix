@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpds" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to Rust's persistent data structures (rpds";
     homepage = "https://pypi.org/project/rpds-py/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

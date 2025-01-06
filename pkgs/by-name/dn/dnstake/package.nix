@@ -27,11 +27,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-lV6dUl+OMUQfhlgNL38k0Re1Mr3VP9b8SI3vTJ8CP18=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check missing hosted DNS zones";
     homepage = "https://github.com/pwnesia/dnstake";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnstake";
   };
 }

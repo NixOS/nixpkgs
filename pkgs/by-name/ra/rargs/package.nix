@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # `rargs`'s test depends on the deprecated `assert_cli` crate, which in turn is not in Nixpkgs
 
-  meta = with lib; {
+  meta = {
     description = "xargs + awk with pattern matching support";
     homepage = "https://github.com/lolabout/rargs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ pblkt ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ pblkt ];
     mainProgram = "rargs";
   };
 }

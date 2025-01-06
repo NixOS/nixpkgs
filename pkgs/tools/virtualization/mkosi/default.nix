@@ -122,17 +122,17 @@ buildPythonApplication rec {
     mv mkosi/resources/mkosi.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Build legacy-free OS images";
     homepage = "https://github.com/systemd/mkosi";
     changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     mainProgram = "mkosi";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       malt3
       msanft
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # `mkosi qemu` boot fails in the uefi shell, image isn't found.
     broken = withQemu;
   };

@@ -26,10 +26,10 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Telemetry for Jupyter Applications and extensions";
     homepage = "https://jupyter-telemetry.readthedocs.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

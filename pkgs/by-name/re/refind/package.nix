@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     uefiCdrom = nixosTests.boot.uefiCdrom;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
@@ -173,13 +173,13 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ chewblacka ];
+    maintainers = with lib.maintainers; [ chewblacka ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 
 }

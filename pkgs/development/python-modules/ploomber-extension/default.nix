@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ploomber_extension" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ploomber extension";
     homepage = "https://pypi.org/project/ploomber-extension";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

@@ -46,11 +46,11 @@ buildPythonPackage rec {
     responses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the Withings Health API";
     homepage = "https://github.com/vangorra/python_withings_api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kittywitch ];
-    broken = versionAtLeast pydantic.version "2";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kittywitch ];
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

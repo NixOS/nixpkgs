@@ -21,11 +21,11 @@ in appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for Neo4j";
     homepage = "https://neo4j.com/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.bobvanderlinden ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.bobvanderlinden ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "neo4j-desktop";
   };

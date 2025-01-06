@@ -22,13 +22,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool used to brute-force URIs, DNS subdomains, Virtual Host names on target web servers";
     mainProgram = "gobuster";
     homepage = "https://github.com/OJ/gobuster";
     changelog = "https://github.com/OJ/gobuster/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       pamplemousse
     ];

@@ -23,16 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Objective-C runtime for use with GNUstep";
     homepage = "https://gnustep.github.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ashalkhakov
       matthewbauer
       dblsaiko
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

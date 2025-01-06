@@ -167,11 +167,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "LD=$(CC)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast and powerful console music player for Linux and *BSD";
     homepage = "https://cmus.github.io/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.oxij ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.oxij ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -57,11 +57,11 @@ buildGoModule rec {
     command = "aptly version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.aptly.info";
     description = "Debian repository management tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ montag451 ] ++ teams.bitnomial.members;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ montag451 ] ++ lib.teams.bitnomial.members;
     changelog = "https://github.com/aptly-dev/aptly/releases/tag/v${version}";
     mainProgram = "aptly";
   };

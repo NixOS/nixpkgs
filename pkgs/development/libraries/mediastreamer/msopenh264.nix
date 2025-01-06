@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     cp src/libmsopenh264.so $out/lib/mediastreamer/plugins/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "H.264 encoder/decoder plugin for mediastreamer2. Part of the Linphone project";
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

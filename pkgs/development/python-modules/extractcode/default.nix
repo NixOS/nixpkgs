@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "extractcode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
     homepage = "https://github.com/aboutcode-org/extractcode";
     changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "extractcode";
   };

@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "merkletools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";
     homepage = "https://github.com/Tierion/pymerkletools";
     changelog = "https://github.com/Tierion/pymerkletools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Madouura ];
   };
 }

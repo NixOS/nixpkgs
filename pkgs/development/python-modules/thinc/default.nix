@@ -92,11 +92,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thinc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
     changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aborsu ];
   };
 }

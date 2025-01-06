@@ -42,11 +42,11 @@ buildPythonPackage rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactively authenticate to GlobalProtect VPNs that require SAML";
     mainProgram = "gp-saml-gui";
     homepage = "https://github.com/dlenski/gp-saml-gui";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.pallix ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.pallix ];
   };
 }

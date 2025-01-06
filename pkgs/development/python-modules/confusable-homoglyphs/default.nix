@@ -48,7 +48,7 @@ buildPythonPackage rec {
       description = "Detect confusable usage of unicode homoglyphs, prevent homograph attacks";
       homepage = "https://sr.ht/~valhalla/confusable_homoglyphs/";
       changelog = "https://confusable-homoglyphs.readthedocs.io/en/latest/history.html";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ajaxbits ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ ajaxbits ];
     };
 }

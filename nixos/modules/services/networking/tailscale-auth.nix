@@ -111,7 +111,7 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     dan-theriault
     phaer
   ];

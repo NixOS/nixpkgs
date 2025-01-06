@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "polari"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Polari/";
     description = "IRC chat client designed to integrate with the GNOME desktop";
     mainProgram = "polari";
-    maintainers = teams.gnome.members ++ teams.gnome-circle.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome.members ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

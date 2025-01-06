@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    license = licenses.epl20;
+  meta = {
+    license = lib.licenses.epl20;
     homepage = "https://github.com/coin-or/Clp";
     description = "Open-source linear programming solver written in C++";
     mainProgram = "clp";
-    platforms = platforms.darwin ++ platforms.linux;
-    maintainers = [ maintainers.vbgl ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

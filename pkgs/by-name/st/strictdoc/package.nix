@@ -66,12 +66,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "strictdoc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for technical documentation and requirements management";
     homepage = "https://github.com/strictdoc-project/strictdoc";
     changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yuu ];
     mainProgram = "strictdoc";
   };
 }

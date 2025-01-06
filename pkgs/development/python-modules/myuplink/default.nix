@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myuplink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the myUplink API";
     homepage = "https://github.com/pajzo/myuplink";
     changelog = "https://github.com/pajzo/myuplink/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

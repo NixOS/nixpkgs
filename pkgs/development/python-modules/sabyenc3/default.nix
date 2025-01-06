@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sabyenc3" ];
 
-  meta = with lib; {
+  meta = {
     description = "yEnc Decoding for Python 3";
     homepage = "https://github.com/sabnzbd/sabyenc/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

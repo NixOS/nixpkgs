@@ -100,11 +100,11 @@ buildFHSEnv {
 
   dieWithParent = true;
 
-  meta = with lib; {
+  meta = {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ hellwolf ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ hellwolf ];
     homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''

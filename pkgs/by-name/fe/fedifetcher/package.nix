@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for Mastodon that automatically fetches missing replies and posts from other fediverse instances";
     longDescription = ''
       FediFetcher is a tool for Mastodon that automatically fetches missing
@@ -49,8 +49,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://blog.thms.uk/fedifetcher";
     changelog = "https://github.com/nanos/FediFetcher/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.c3d2.members;
     mainProgram = "fedifetcher";
   };
 }

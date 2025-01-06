@@ -34,12 +34,12 @@ buildGoModule rec {
     $out/bin/ddosify -version | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance load testing tool, written in Golang";
     mainProgram = "ddosify";
     homepage = "https://ddosify.com/";
     changelog = "https://github.com/ddosify/ddosify/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ bryanasdev000 ];
   };
 }

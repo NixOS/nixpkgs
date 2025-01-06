@@ -35,11 +35,11 @@ buildPythonPackage rec {
   # Tests require checkout from mono-repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Secrets Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-secrets";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-secrets_${version}/sdk/keyvault/azure-keyvault-secrets";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

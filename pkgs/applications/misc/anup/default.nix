@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Acizza/anup";
     description = "Anime tracker for AniList featuring a TUI";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ natto1784 ];
     mainProgram = "anup";
   };
 }

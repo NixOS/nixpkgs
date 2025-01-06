@@ -28,9 +28,9 @@ let
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
     description = "Mandatory access control system - ${component}";
-    license = with licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ julm thoughtpolice grimmauld ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only lgpl21Only ];
+    maintainers = with lib.maintainers; [ julm thoughtpolice grimmauld ];
+    platforms = lib.platforms.linux;
   };
 
   apparmor-sources = fetchFromGitLab {

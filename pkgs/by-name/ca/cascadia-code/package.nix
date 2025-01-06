@@ -23,12 +23,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal";
     homepage = "https://github.com/microsoft/cascadia-code";
     changelog = "https://github.com/microsoft/cascadia-code/raw/v${version}/FONTLOG.txt";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ ryanccn ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ ryanccn ];
+    platforms = lib.platforms.all;
   };
 }

@@ -12,12 +12,12 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "travis";
 
-  meta = with lib; {
+  meta = {
     description = "CLI and Ruby client library for Travis CI";
     mainProgram = "travis";
     homepage = "https://github.com/travis-ci/travis.rb";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zimbatm
       nicknovitski
     ];

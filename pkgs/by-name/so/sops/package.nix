@@ -41,15 +41,15 @@ buildGo122Module rec {
     installShellCompletion --cmd sops --zsh ${./zsh_autocomplete}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Scrumplex
       mic92
     ];
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
   };
 }

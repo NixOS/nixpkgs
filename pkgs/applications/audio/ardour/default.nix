@@ -197,7 +197,7 @@ stdenv.mkDerivation rec {
 
   LINKFLAGS = "-lpthread";
 
-  meta = with lib; {
+  meta = {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to
@@ -209,9 +209,9 @@ stdenv.mkDerivation rec {
       https://community.ardour.org/donate
     '';
     homepage = "https://ardour.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ardour8";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon mitchmindtree ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon mitchmindtree ];
   };
 }

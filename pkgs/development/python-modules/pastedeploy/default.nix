@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "paste.deploy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "https://github.com/Pylons/pastedeploy";
     changelog = "https://github.com/Pylons/pastedeploy/blob/${version}/docs/news.rst";
-    license = licenses.mit;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.openstack.members;
   };
 }

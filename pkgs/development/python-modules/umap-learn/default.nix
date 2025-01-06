@@ -88,11 +88,11 @@ buildPythonPackage rec {
     "test_save_load"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

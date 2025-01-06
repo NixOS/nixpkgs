@@ -101,8 +101,8 @@ stdenv.mkDerivation rec {
         For the full experience, consider installing "koboredux" instead.
       '';
     homepage = "https://olofson.itch.io/kobo-redux";
-    license = with licenses; if useProprietaryAssets then unfree else gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    license = with lib.licenses; if useProprietaryAssets then unfree else gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

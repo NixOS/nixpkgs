@@ -57,12 +57,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ rustc ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to show information about crates";
     mainProgram = "cargo-info";
     homepage = "https://github.com/hi-rustin/cargo-information";
     changelog = "https://github.com/hi-rustin/cargo-information/blob/v${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eopb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eopb ];
   };
 }

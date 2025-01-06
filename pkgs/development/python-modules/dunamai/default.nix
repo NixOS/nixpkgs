@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dunamai" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic version generation";
     mainProgram = "dunamai";
     homepage = "https://github.com/mtkennerly/dunamai";
     changelog = "https://github.com/mtkennerly/dunamai/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jmgilman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jmgilman ];
   };
 }

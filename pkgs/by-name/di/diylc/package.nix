@@ -76,14 +76,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi platform circuit layout and schematic drawing tool";
     mainProgram = "diylc";
     homepage = "https://bancika.github.io/diy-layout-creator/";
     changelog = "https://github.com/bancika/diy-layout-creator/releases";
-    license = licenses.gpl3Plus;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

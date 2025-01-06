@@ -27,11 +27,11 @@ buildGoModule rec {
   # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for extracting metrics from application logs";
     homepage = "https://github.com/google/mtail";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "mtail";
   };
 }

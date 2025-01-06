@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyqldb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python driver for Amazon QLDB";
     homepage = "https://github.com/awslabs/amazon-qldb-driver-python";
-    license = licenses.asl20;
-    maintainers = [ maintainers.terlar ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.terlar ];
   };
 }

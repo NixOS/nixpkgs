@@ -57,11 +57,11 @@ buildPythonPackage rec {
     "-Wignore::UserWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for an Aesara-based PPL";
     homepage = "https://github.com/aesara-devs/aeppl";
     changelog = "https://github.com/aesara-devs/aeppl/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

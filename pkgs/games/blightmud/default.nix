@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
     in
     builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
-  meta = with lib; {
+  meta = {
     description = "Terminal MUD client written in Rust";
     mainProgram = "blightmud";
     longDescription = ''
@@ -88,8 +88,8 @@ rustPlatform.buildRustPackage rec {
       friendly mode.
     '';
     homepage = "https://github.com/Blightmud/Blightmud";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cpu ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.cpu ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

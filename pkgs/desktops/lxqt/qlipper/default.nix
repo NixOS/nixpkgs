@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform clipboard history applet";
     mainProgram = "qlipper";
     homepage = "https://github.com/pvanek/qlipper";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = lib.teams.lxqt.members;
   };
 }

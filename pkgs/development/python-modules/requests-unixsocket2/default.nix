@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_unixsocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Use requests to talk HTTP via a UNIX domain socket";
     homepage = "https://gitlab.com/thelabnyc/requests-unixsocket2";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ mikut ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ mikut ];
   };
 }

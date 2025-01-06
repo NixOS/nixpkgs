@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       libXrender
     ]);
 
-  meta = with lib; {
+  meta = {
     description = "SUMO traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       tools for scenario creation.
     '';
     homepage = "https://github.com/eclipse/sumo";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ mtreca ];
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ mtreca ];
   };
 }

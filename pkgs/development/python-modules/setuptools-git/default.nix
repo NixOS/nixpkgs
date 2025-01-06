@@ -18,9 +18,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pkgs.git ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools revision control system plugin for Git";
     homepage = "https://pypi.python.org/pypi/setuptools-git";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -30,10 +30,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mutag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Script to change email tags in a mu indexed maildir";
     homepage = "https://github.com/aroig/mutag";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "mutag";
   };

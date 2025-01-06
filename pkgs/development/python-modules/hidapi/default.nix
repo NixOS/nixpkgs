@@ -34,16 +34,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython interface to the hidapi from https://github.com/libusb/hidapi";
     homepage = "https://github.com/trezor/cython-hidapi";
     # license can actually be either bsd3 or gpl3
     # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       np
       prusnak
     ];

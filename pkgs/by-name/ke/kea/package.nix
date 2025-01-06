@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://downloads.isc.org/isc/kea/${version}/Kea-${version}-ReleaseNotes.txt";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
@@ -110,9 +110,9 @@ stdenv.mkDerivation rec {
       use by enterprises and service providers, either as is or with
       extensions and modifications.
     '';
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       fpletz
       hexa
     ];

@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unidecode" ];
 
-  meta = with lib; {
+  meta = {
     description = "ASCII transliterations of Unicode text";
     mainProgram = "unidecode";
     homepage = "https://github.com/avian2/unidecode";
     changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

@@ -39,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xnat" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xnat.readthedocs.io";
     description = "New XNAT client (distinct from pyxnat) that exposes XNAT objects/functions as Python objects/functions";
     changelog = "https://gitlab.com/radiology/infrastructure/xnatpy/-/blob/${version}/CHANGELOG?ref_type=tags";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "xnat";
   };
 }

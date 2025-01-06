@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "test/test*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "XPath for JSON";
     homepage = "https://github.com/json-path/JsonPath";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

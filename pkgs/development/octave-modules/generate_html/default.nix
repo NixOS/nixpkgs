@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-CHJ0+90+SNXmslLrQc+8aetSnHK0m9PqEBipFuFjwHw=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/generate_html/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Provides functions for generating HTML pages that contain the help texts for a set of functions";
     longDescription = ''
       This package provides functions for generating HTML pages that contain

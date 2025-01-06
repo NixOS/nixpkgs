@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "random_user_agent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to get list of user agents based on filters";
     homepage = "https://github.com/Luqman-Ud-Din/random_user_agent";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

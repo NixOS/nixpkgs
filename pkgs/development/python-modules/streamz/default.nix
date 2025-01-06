@@ -77,10 +77,10 @@ buildPythonPackage rec {
     "streamz/tests/test_kafka.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

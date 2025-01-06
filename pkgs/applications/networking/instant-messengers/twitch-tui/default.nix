@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitch chat in the terminal";
     homepage = "https://github.com/Xithrius/twitch-tui";
     changelog = "https://github.com/Xithrius/twitch-tui/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.taha ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.taha ];
     mainProgram = "twt";
   };
 }

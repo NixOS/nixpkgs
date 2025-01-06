@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to help keep track of your Git repositories, written in Rust";
     homepage = "https://github.com/nickgerace/gfold";
-    license = licenses.asl20;
-    maintainers = [ maintainers.sigmanificient ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sigmanificient ];
+    platforms = lib.platforms.unix;
     mainProgram = "gfold";
   };
 }

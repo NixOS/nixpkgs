@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/bin/jiten-gui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Japanese android/cli/web dictionary based on jmdict/kanjidic";
     longDescription = ''
       Jiten is a Japanese dictionary based on JMDict/Kanjidic
@@ -109,11 +109,11 @@ python3.pkgs.buildPythonApplication rec {
       Command-line interface
     '';
     homepage = "https://github.com/obfusk/jiten";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Plus # code
       cc-by-sa-30 # jmdict/kanjidic
       unfreeRedistributable # pitch data & audio are non-commercial
     ];
-    maintainers = [ maintainers.obfusk ];
+    maintainers = [ lib.maintainers.obfusk ];
   };
 }

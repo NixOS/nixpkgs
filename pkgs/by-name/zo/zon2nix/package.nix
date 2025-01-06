@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     "-Dnix=${lib.getExe nix}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert the dependencies in `build.zig.zon` to a Nix expression";
     mainProgram = "zon2nix";
     homepage = "https://github.com/nix-community/zon2nix";
     changelog = "https://github.com/nix-community/zon2nix/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     inherit (zig_0_11.meta) platforms;
   };
 }

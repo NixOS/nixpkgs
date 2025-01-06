@@ -59,12 +59,12 @@ buildPythonPackage rec {
     "test_async_resolve_localhost"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for checking the status of Minecraft servers";
     mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
     changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

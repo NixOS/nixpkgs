@@ -71,7 +71,7 @@ else
 
     inherit (topkg) installPhase;
 
-    meta = with lib; {
+    meta = {
       description = "Declarative 2D vector graphics for OCaml";
       longDescription = ''
         Vg is an OCaml module for declarative 2D vector graphics. In Vg, images
@@ -83,8 +83,8 @@ else
         module. An API allows to implement new renderers.
       '';
       homepage = webpage;
-      license = licenses.isc;
-      maintainers = [ maintainers.jirkamarsik ];
+      license = lib.licenses.isc;
+      maintainers = [ lib.maintainers.jirkamarsik ];
       mainProgram = "vecho";
       inherit (ocaml.meta) platforms;
     };

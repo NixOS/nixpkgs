@@ -34,12 +34,12 @@ buildGoModule rec {
       --zsh <($out/bin/abbreviate completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shorten your strings using common abbreviations";
     mainProgram = "abbreviate";
     homepage = "https://github.com/dnnrly/abbreviate";
     changelog = "https://github.com/dnnrly/abbreviate/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

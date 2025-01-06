@@ -142,12 +142,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reflex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
     changelog = "https://github.com/reflex-dev/reflex/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "reflex";
   };
 }

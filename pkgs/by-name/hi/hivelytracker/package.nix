@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 hvl2wav/hvl2wav $out/bin/hvl2wav
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.hivelytracker.co.uk/";
     downloadPage = "http://www.hivelytracker.co.uk/downl.php";
     description = "Chip music tracker based upon the AHX format";
@@ -63,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
       format, but it also improves on AHX in several ways and therefore has
       its own instrument and module formats.
     '';
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     mainProgram = "hivelytracker";
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [ fgaz ];
     broken = stdenv.hostPlatform.isDarwin; # TODO: try to use xcbuild
   };
 })

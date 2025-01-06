@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "modules" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/louistakepillz/r8125";
     downloadPage = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software";
     description = "Realtek r8125 driver";
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     '';
     # r8125 has been integrated into the kernel as of v5.9.1
     broken = lib.versionAtLeast kernel.version "5.9.1";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ peelz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ peelz ];
   };
 }

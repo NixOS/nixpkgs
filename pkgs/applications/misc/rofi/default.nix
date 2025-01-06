@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bew ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bew ];
+    platforms = with lib.platforms; linux;
     mainProgram = "rofi";
   };
 }

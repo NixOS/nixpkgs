@@ -15,12 +15,12 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-gxDaOb14jFezxe/qHZF3e52o7obVL0WMIKxwIj3j5QY=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking the security hardening options of the Linux kernel";
     homepage = "https://github.com/a13xp0p0v/kernel-hardening-checker";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ erdnaxe ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ erdnaxe ];
     mainProgram = "kernel-hardening-checker";
   };
 }

@@ -28,10 +28,10 @@ buildGo122Module rec {
 
   passthru.tests.peroxide = nixosTests.peroxide;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ljanyst/peroxide";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aidalgol ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aidalgol ];
     description = "Unofficial ProtonMail bridge";
     longDescription = ''
       Peroxide is a fork of the official ProtonMail bridge that aims to be

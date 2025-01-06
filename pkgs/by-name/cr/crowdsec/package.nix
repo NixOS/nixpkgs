@@ -53,7 +53,7 @@ buildGoModule rec {
     $GOPATH/bin/cscli version 2>&1 | grep -q "version: v${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
     description = "CrowdSec is a free, open-source and collaborative IPS";
@@ -68,8 +68,8 @@ buildGoModule rec {
       etc.) while the aggressive IP can be sent to CrowdSec for curation before
       being shared among all users to further improve everyone's security.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       urandom
     ];

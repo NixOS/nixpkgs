@@ -30,7 +30,7 @@ let
     sha256 = "1ckj0dlpp5zsnkbb5qxxfxpkiq76jj2fgj91fyf3ll7n0gbwcgw5";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2023-10-30";
   pname = "openclonk";
 
@@ -88,10 +88,10 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  meta = with lib; {
+  meta = {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
     homepage = "https://www.openclonk.org";
-    license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
+    license = if enableSoundtrack then lib.licenses.unfreeRedistributable else lib.licenses.isc;
     mainProgram = "openclonk";
     maintainers = [ ];
     platforms = [

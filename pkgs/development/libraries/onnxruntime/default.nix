@@ -258,7 +258,7 @@ effectiveStdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, high performance scoring engine for ML models";
     longDescription = ''
       ONNX Runtime is a performance-focused complete scoring engine
@@ -272,8 +272,8 @@ effectiveStdenv.mkDerivation rec {
     homepage = "https://github.com/microsoft/onnxruntime";
     changelog = "https://github.com/microsoft/onnxruntime/releases/tag/v${version}";
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ puffnfresh ck3d cbourjau ];
   };
 }

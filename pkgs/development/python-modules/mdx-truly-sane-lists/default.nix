@@ -27,13 +27,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extension for Python-Markdown that makes lists truly sane";
     longDescription = ''
       Features custom indents for nested lists and fix for messy linebreaks and
       paragraphs between lists.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

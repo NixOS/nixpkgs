@@ -182,14 +182,14 @@ let
         inherit engine;
       };
 
-    meta = with lib; {
+    meta = {
       description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
       longDescription = ''
         Flutter is Google’s UI toolkit for building beautiful,
         natively compiled applications for mobile, web, and desktop from a single codebase.
       '';
       homepage = "https://flutter.dev";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
@@ -197,8 +197,8 @@ let
         "aarch64-darwin"
       ];
       maintainers =
-        teams.flutter.members
-        ++ (with maintainers; [
+        lib.teams.flutter.members
+        ++ (with lib.maintainers; [
           ericdallo
         ]);
     };

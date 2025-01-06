@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Program for quantifying abundances of transcripts from RNA-Seq data";
     mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ arcadio ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ arcadio ];
   };
 }

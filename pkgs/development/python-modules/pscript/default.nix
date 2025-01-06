@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pscript" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python to JavaScript compiler";
     homepage = "https://pscript.readthedocs.io";
     changelog = "https://github.com/flexxui/pscript/blob/v${version}/docs/releasenotes.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

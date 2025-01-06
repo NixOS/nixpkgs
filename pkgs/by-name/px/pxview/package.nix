@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   LDFLAGS = "-lm";
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program to convert Paradox databases";
     mainProgram = "pxview";
     homepage = "https://pxlib.sourceforge.net/pxview/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.winpat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.winpat ];
   };
 }

@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apyosoenergyapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for using the OSO Hotwater API";
     homepage = "https://github.com/osohotwateriot/apyosohotwaterapi";
     changelog = "https://github.com/osohotwateriot/apyosohotwaterapi/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

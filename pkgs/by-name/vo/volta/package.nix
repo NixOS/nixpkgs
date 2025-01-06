@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/volta completions fish) \
       --zsh <($out/bin/volta completions zsh)
   '';
-  meta = with lib; {
+  meta = {
     description = "Hassle-Free JavaScript Tool Manager";
     longDescription = ''
       With Volta, you can select a Node engine once and then stop worrying
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://volta.sh/";
     changelog = "https://github.com/volta-cli/volta/blob/main/RELEASES.md";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fbrs ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fbrs ];
   };
 }

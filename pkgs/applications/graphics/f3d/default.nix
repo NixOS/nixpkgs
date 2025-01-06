@@ -72,13 +72,13 @@ stdenv.mkDerivation rec {
     "-DF3D_BINDINGS_PYTHON=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and minimalist 3D viewer using VTK";
     homepage = "https://f3d-app.github.io/f3d";
     changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin pbsds ];
-    platforms = with platforms; unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin pbsds ];
+    platforms = with lib.platforms; unix;
     mainProgram = "f3d";
     # error: use of undeclared identifier 'NSMenuItem'
     # adding AppKit does not solve it

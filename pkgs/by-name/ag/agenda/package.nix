@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast, no-nonsense to-do (task) list designed for elementary OS";
     homepage = "https://github.com/dahenson/agenda";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ xiorcale ] ++ lib.teams.pantheon.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     mainProgram = "com.github.dahenson.agenda";
   };
 }

@@ -59,11 +59,11 @@ buildPythonPackage rec {
     "test_parse_iso8601"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Datetimes for Humans";
     homepage = "https://github.com/timofurrer/maya";
     changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

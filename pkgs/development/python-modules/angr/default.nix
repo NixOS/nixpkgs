@@ -112,12 +112,12 @@ buildPythonPackage rec {
     "archinfo"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
     # angr is pining unicorn
-    broken = versionAtLeast unicorn.version "2.0.1.post1";
+    broken = lib.versionAtLeast unicorn.version "2.0.1.post1";
   };
 }

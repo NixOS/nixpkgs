@@ -199,18 +199,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit hardeningDisable requiredSystemFeatures;
 
-  meta = with lib; {
+  meta = {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/ROCm/llvm-project";
-    license = with licenses; [ ncsa ] ++ extraLicenses;
+    license = with lib.licenses; [ ncsa ] ++ extraLicenses;
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         acowley
         lovesegfault
       ]
-      ++ teams.rocm.members;
-    platforms = platforms.linux;
-    broken = isBroken || versionAtLeast finalAttrs.version "7.0.0";
+      ++ lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
+    broken = isBroken || lib.versionAtLeast finalAttrs.version "7.0.0";
   };
 })

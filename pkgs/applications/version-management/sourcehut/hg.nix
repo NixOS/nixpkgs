@@ -91,11 +91,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hgsrht" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hg.sr.ht";
     description = "Mercurial repository hosting service for the sr.ht network";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       eadwu
       christoph-heiss
     ];

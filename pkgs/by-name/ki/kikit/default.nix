@@ -79,14 +79,14 @@ buildPythonApplication rec {
     cd test/units
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
     changelog = "https://github.com/yaqwsx/KiKit/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jfly
       matusf
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

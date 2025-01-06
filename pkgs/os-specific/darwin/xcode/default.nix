@@ -41,12 +41,12 @@ let
           rm -rf Xcode.app
         '';
       };
-      meta = with lib; {
+      meta = {
         homepage = "https://developer.apple.com/downloads/";
         description = "Apple's XCode SDK";
-        license = licenses.unfree;
-        platforms = platforms.darwin ++ platforms.linux;
-        sourceProvenance = [ sourceTypes.binaryNativeCode ];
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.darwin ++ lib.platforms.linux;
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
 
     in

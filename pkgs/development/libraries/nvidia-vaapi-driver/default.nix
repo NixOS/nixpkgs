@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     addDriverRunpath "$out/lib/dri/nvidia_drv_video.so"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elFarto/nvidia-vaapi-driver";
     description = "VA-API implemention using NVIDIA's NVDEC";
     changelog = "https://github.com/elFarto/nvidia-vaapi-driver/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

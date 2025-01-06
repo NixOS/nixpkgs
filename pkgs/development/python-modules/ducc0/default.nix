@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   DUCC0_OPTIMIZATION = "portable-strip";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
     description = "Efficient algorithms for Fast Fourier transforms and more";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }

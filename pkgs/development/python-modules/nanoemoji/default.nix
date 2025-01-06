@@ -91,11 +91,11 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";
     changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ _999eagle ];
   };
 }

@@ -82,11 +82,11 @@ buildGoModule rec {
     inherit (nixosTests) victoriametrics;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       yorickvp
       ivan
       leona

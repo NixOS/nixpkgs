@@ -128,13 +128,13 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/*.dll $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for encoding H.265/HEVC video streams";
     mainProgram = "x265";
     homepage = "https://www.x265.org/";
     changelog = "https://x265.readthedocs.io/en/master/releasenotes.html#version-${lib.strings.replaceStrings ["."] ["-"] version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
   };
 }

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # Building tests is broken on Darwin.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = ''
       A single-file header-only version of ISO C++ Guidelines Support Library
       (GSL) for C++98, C++11, and later
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/gsl-lite/gsl-lite";
     changelog = "https://github.com/gsl-lite/gsl-lite/blob/${src.rev}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PyHDI/Pyverilog";
     description = "Python-based Hardware Design Processing Toolkit for Verilog HDL";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ trepetti ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ trepetti ];
   };
 }

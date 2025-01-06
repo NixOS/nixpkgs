@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Improve your security and privacy by blocking ads, tracking and malware domains";
     mainProgram = "hblock";
     homepage = "https://github.com/hectorm/hblock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alanpearce ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alanpearce ];
+    platforms = lib.platforms.unix;
   };
 }

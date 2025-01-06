@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = lazyjj; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI for Jujutsu/jj";
     homepage = "https://github.com/Cretezy/lazyjj";
     mainProgram = "lazyjj";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ colemickens ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ colemickens ];
   };
 }

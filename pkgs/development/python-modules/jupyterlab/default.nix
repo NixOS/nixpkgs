@@ -61,10 +61,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://jupyter.org/";
     maintainers = lib.teams.jupyter.members;
     mainProgram = "jupyter-lab";

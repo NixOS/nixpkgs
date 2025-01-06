@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PAHO_BUILD_SHARED" enableShared)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Eclipse Paho MQTT C++ Client Library";
     homepage = "https://www.eclipse.org/paho/";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 })

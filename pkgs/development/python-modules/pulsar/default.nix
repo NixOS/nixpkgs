@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulsar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Apache Pulsar Python client library";
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-python/";
     changelog = "https://github.com/apache/pulsar-client-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
   };
 }

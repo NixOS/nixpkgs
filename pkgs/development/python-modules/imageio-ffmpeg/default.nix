@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imageio_ffmpeg" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/imageio/imageio-ffmpeg/releases/tag/v${version}";
     description = "FFMPEG wrapper for Python";
     homepage = "https://github.com/imageio/imageio-ffmpeg";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.pmiddend ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.pmiddend ];
   };
 }

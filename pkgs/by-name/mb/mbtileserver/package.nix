@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-yn7LcR/DvHDSRicUnWLrFZKqZti+YQoLSk3mZkDIj10=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple Go-based server for map tiles stored in mbtiles format";
     mainProgram = "mbtileserver";
     homepage = "https://github.com/consbio/mbtileserver";
     changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.isc;
+    maintainers = lib.teams.geospatial.members;
   };
 }

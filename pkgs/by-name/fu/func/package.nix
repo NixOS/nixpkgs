@@ -42,12 +42,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Knative client library and CLI for creating, building, and deploying Knative Functions";
     mainProgram = "func";
     homepage = "https://github.com/knative/func";
     changelog = "https://github.com/knative/func/releases/tag/knative-v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ maxwell-lt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ maxwell-lt ];
   };
 }

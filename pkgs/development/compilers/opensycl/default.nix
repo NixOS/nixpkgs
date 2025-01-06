@@ -75,10 +75,10 @@ stdenv.mkDerivation rec {
     --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OpenSYCL/OpenSYCL";
     description = "Multi-backend implementation of SYCL for CPUs and GPUs";
-    maintainers = with maintainers; [ yboettcher ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ yboettcher ];
+    license = lib.licenses.bsd2;
   };
 }

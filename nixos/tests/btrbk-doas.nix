@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
   let
     privateKey = ''
@@ -16,8 +16,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
   in
   {
     name = "btrbk-doas";
-    meta = with pkgs.lib; {
-      maintainers = with maintainers; [ symphorien tu-maurice ];
+    meta = {
+      maintainers = with lib.maintainers; [ symphorien tu-maurice ];
     };
 
     nodes = {

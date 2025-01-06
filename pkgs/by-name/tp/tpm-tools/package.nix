@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     opencryptoki
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Management tools for TPM hardware";
     longDescription = ''
       tpm-tools is an open-source package designed to enable user and
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       Module (TPM), similar to a smart card environment.
     '';
     homepage = "https://sourceforge.net/projects/trousers/files/tpm-tools/";
-    license = licenses.cpl10;
-    maintainers = [ maintainers.ak ];
-    platforms = platforms.unix;
+    license = lib.licenses.cpl10;
+    maintainers = [ lib.maintainers.ak ];
+    platforms = lib.platforms.unix;
   };
 }

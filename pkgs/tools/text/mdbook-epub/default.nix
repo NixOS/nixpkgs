@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage {
       CoreServices
     ];
 
-  meta = with lib; {
+  meta = {
     description = "mdbook backend for generating an e-book in the EPUB format";
     mainProgram = "mdbook-epub";
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       yuu
       matthiasbeyer
     ];

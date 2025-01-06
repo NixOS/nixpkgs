@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jwt" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON Web Token library for Python 3";
     homepage = "https://github.com/GehirnInc/python-jwt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

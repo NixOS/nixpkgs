@@ -71,12 +71,12 @@ buildDotnetModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Network Forensic Analysis Tool (NFAT)";
     homepage = "https://www.netresec.com/?page=NetworkMiner";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.linux;
     mainProgram = "NetworkMiner";
   };
 }

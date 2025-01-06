@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_authentication_azure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kiota Azure authentication provider";
     homepage = "https://github.com/microsoft/kiota-authentication-azure-python";
     changelog = "https://github.com/microsoft/kiota-authentication-azure-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

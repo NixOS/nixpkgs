@@ -31,11 +31,11 @@ buildGoModule rec {
     package = terraform-inventory;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adammck/terraform-inventory";
     description = "Terraform state to ansible inventory adapter";
     mainProgram = "terraform-inventory";
-    license = licenses.mit;
-    maintainers = with maintainers; [ htr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ htr ];
   };
 }

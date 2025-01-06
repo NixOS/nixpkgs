@@ -31,14 +31,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/snowflakedb/snowflake-sqlalchemy/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake SQLAlchemy Dialect";
     homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
 
     # https://github.com/snowflakedb/snowflake-sqlalchemy/issues/380
-    broken = versionAtLeast sqlalchemy.version "2";
+    broken = lib.versionAtLeast sqlalchemy.version "2";
   };
 }

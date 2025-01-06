@@ -22,12 +22,12 @@ stdenv.mkDerivation {
     install -m 0644 git-stree-completion.bash $out/share/bash-completion/completions/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Better Git subtree helper command";
     homepage = "http://deliciousinsights.github.io/git-stree";
-    license = licenses.mit;
-    maintainers = [ maintainers.benley ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.benley ];
+    platforms = lib.platforms.unix;
     mainProgram = "git-stree";
   };
 }

@@ -26,9 +26,9 @@ buildPythonPackage rec {
     sha256 = "818eae35b61733e5c007c3fcd2cfb75ed1bc8b4173c1f70b56cc4c0802d34755";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pybtex.org/";
     description = "BibTeX-compatible bibliography processor written in Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

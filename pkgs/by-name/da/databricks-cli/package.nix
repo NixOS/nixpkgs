@@ -52,12 +52,12 @@ buildGoModule rec {
     git remote add origin https://github.com/databricks/cli.git
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Databricks CLI";
     mainProgram = "databricks";
     homepage = "https://github.com/databricks/cli";
     changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
-    license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.databricks;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

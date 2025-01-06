@@ -70,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygit2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of Python bindings to the libgit2 shared library";
     homepage = "https://github.com/libgit2/pygit2";
     changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
 }

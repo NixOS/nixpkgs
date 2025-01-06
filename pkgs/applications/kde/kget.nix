@@ -44,11 +44,11 @@ mkDerivation {
     kxmlgui
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/kget/";
     description = "Download manager";
     mainProgram = "kget";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ peterhoeg ];
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

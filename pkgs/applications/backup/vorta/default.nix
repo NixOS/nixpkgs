@@ -89,13 +89,13 @@ python3Packages.buildPythonApplication rec {
       "tests/network_manager/test_darwin.py"
     ];
 
-  meta = with lib; {
-    changelog = "https://github.com/borgbase/vorta/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/borgbase/vorta/releases/tag/${src.rev}";
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.linux;
     mainProgram = "vorta";
   };
 }

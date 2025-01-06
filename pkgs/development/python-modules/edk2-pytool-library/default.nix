@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "edk2toollib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library package that supports UEFI development";
     homepage = "https://github.com/tianocore/edk2-pytool-library";
     changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/v${version}";
-    license = licenses.bsd2Patent;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2Patent;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.linux;
   };
 }

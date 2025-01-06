@@ -11,7 +11,7 @@
 
 let
   version = "20240130-dev";
-  meta = with lib; {
+  meta = {
     description = "Gnu Circuit Analysis Package";
     longDescription = ''
       Gnucap is a modern general purpose circuit simulator with several advantages over Spice derivatives.
@@ -19,10 +19,10 @@ let
     '';
     homepage = "http://www.gnucap.org/";
     changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Relies on LD_LIBRARY_PATH
-    maintainers = [ maintainers.raboof ];
+    maintainers = [ lib.maintainers.raboof ];
     mainProgram = "gnucap";
   };
 in

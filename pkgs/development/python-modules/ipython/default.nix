@@ -117,12 +117,12 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "IPython: Productive Interactive Computing";
     downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ] ++ teams.jupyter.members;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bjornfor ] ++ lib.teams.jupyter.members;
   };
 }

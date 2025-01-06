@@ -123,16 +123,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.alacritty;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "alacritty";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       mic92
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };
 }

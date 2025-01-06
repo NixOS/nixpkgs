@@ -61,11 +61,11 @@ buildPythonPackage rec {
     "google.cloud.bigtable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
     changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

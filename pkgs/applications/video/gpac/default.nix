@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open Source multimedia framework for research and academic purposes";
     longDescription = ''
       GPAC is an Open Source multimedia framework for research and academic purposes.
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
       And some server tools included in MP4Box and MP42TS applications.
     '';
     homepage = "https://gpac.wp.imt.fr";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
       bluescreen303
       mgdelacroix
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

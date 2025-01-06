@@ -35,11 +35,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings=tests.settings
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
     changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ desiderius ];
   };
 }

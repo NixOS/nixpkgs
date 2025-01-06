@@ -43,12 +43,12 @@ mkDerivation rec {
     rm -fr $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dail8859/NotepadNext";
     description = "Cross-platform, reimplementation of Notepad++";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sebtm ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.sebtm ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };

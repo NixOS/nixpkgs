@@ -198,7 +198,7 @@ stdenv.mkDerivation rec {
     update-source-version mame "''${latest_version/mame0/0.}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mamedev.org/";
     description = "Multi-purpose emulation framework";
     longDescription = ''
@@ -216,12 +216,12 @@ stdenv.mkDerivation rec {
       focus.
     '';
     changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
     ];
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mame";
   };

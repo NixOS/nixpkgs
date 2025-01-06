@@ -56,10 +56,10 @@ buildPythonPackage rec {
     "test_t_matmul_matrix"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

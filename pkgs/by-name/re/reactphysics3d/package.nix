@@ -18,12 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source C++ physics engine library";
     homepage = "https://www.reactphysics3d.com";
     changelog = "https://github.com/DanielChappuis/reactphysics3d/releases/tag/${finalAttrs.src.rev}";
-    maintainers = with maintainers; [ rexxDigital ];
-    license = licenses.zlib;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ rexxDigital ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
   };
 })

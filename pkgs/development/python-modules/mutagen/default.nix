@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mutagen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for handling audio metadata";
     longDescription = ''
       Mutagen is a Python module to handle audio metadata. It supports
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_macros_test" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fralau/mkdocs-macros-test";
     description = "Implementation of a (model) pluglet for mkdocs-macros";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tljuniper ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tljuniper ];
   };
 }

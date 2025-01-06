@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     install -Dm644 ${icon} $out/share/pixmaps/ovito.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scientific visualization and analysis software for atomistic and particle simulation data";
     mainProgram = "ovito";
     homepage = "https://ovito.org";
-    license = with licenses;  [ gpl3Only mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses;  [ gpl3Only mit ];
+    maintainers = with lib.maintainers; [
       twhitehead
       chn
     ];

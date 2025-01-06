@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   attrs,
   click,
@@ -50,9 +49,9 @@ buildPythonPackage {
     "test_examples" # assertion error: 0 == 12
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (textx.meta) license maintainers;
     description = "passthru.tests for textx";
-    homepage = textx.homepage + "tree/${version}/" + "tests/";
+    homepage = textx.homepage + "tree/${textx.version}/" + "tests/";
   };
 }

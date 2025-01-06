@@ -65,7 +65,7 @@ mkDerivation rec {
     ln -s $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://munt.sourceforge.net/";
     description = "Synthesizer application built on Qt and libmt32emu";
     mainProgram = "mt32emu-qt";
@@ -74,8 +74,8 @@ mkDerivation rec {
       synthesis and conversion of pre-recorded SMF files to WAVE making use of
       the mt32emu library and the Qt framework.
     '';
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

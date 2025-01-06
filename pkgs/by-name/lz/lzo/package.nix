@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Real-time data (de)compression library";
     longDescription = ''
       LZO is a portable lossless data compression library written in ANSI C.
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://www.oberhumer.com/opensource/lzo";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

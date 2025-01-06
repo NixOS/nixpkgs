@@ -30,11 +30,11 @@ buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Autoqueuing mpd client";
     homepage = "https://kaliko.me/mpd-sima/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
     mainProgram = "mpd-sima";
   };

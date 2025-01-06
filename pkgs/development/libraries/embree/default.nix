@@ -57,14 +57,14 @@ stdenv.mkDerivation rec {
     libpthreadstubs
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hodapp
       gebner
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

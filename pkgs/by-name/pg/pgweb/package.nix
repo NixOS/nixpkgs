@@ -47,7 +47,7 @@ buildGoModule rec {
     command = "pgweb --version";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
     description = "Web-based database browser for PostgreSQL";
     longDescription = ''
@@ -55,9 +55,9 @@ buildGoModule rec {
       run queries and examine tables and indexes.
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pgweb";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       zupo
       luisnquin
     ];

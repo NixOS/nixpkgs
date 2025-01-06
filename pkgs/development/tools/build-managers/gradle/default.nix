@@ -155,7 +155,7 @@ rec {
       };
       passthru.jdk = defaultJava;
 
-      meta = with lib; {
+      meta = {
         inherit platforms;
         description = "Enterprise-grade build system";
         longDescription = ''
@@ -169,12 +169,12 @@ rec {
         homepage = "https://www.gradle.org/";
         changelog = "https://docs.gradle.org/${version}/release-notes.html";
         downloadPage = "https://gradle.org/next-steps/?version=${version}";
-        sourceProvenance = with sourceTypes; [
+        sourceProvenance = with lib.sourceTypes; [
           binaryBytecode
           binaryNativeCode
         ];
-        license = licenses.asl20;
-        maintainers = with maintainers; [ lorenzleutgeb liff ] ++ lib.teams.java.members;
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [ lorenzleutgeb liff ] ++ lib.teams.java.members;
         mainProgram = "gradle";
       } // meta;
     });

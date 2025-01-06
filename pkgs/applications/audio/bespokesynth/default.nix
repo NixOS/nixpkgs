@@ -160,22 +160,18 @@ stdenv.mkDerivation rec {
   }";
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
-  meta = with lib; {
+  meta = {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://www.bespokesynth.com/";
-    license =
-      with licenses;
-      [
-        gpl3Plus
-      ]
-      ++ lib.optional enableVST2 unfree;
-    maintainers = with maintainers; [
+    license = [ lib.licenses.gpl3Plus ]
+      ++ lib.optional enableVST2 lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       astro
       tobiasBora
       OPNA2608
       PowerUser64
     ];
     mainProgram = "BespokeSynth";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -739,5 +739,5 @@ in
     };
 
   meta.doc = ./keycloak.md;
-  meta.maintainers = [ maintainers.talyz ];
+  meta.maintainers = [ lib.maintainers.talyz ];
 }

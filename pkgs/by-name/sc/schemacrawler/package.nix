@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Database schema discovery and comprehension tool";
     mainProgram = "schemacrawler";
     homepage = "https://www.schemacrawler.com/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = with licenses; [ epl10 gpl3Only lgpl3Only ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ elohmeier ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = with lib.licenses; [ epl10 gpl3Only lgpl3Only ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ elohmeier ];
   };
 })

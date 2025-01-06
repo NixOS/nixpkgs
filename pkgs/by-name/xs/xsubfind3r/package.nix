@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility to find subdomains from curated passive online sources";
     homepage = "https://github.com/hueristiq/xsubfind3r";
     changelog = "https://github.com/hueristiq/xsubfind3r/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xsubfind3r";
   };
 }

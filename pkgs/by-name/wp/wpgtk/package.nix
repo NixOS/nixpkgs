@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   # No test exist
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Template based wallpaper/colorscheme generator and manager";
     longDescription = ''
       In short, wpgtk is a colorscheme/wallpaper manager with a template system attached which lets you create templates from any textfile and will replace keywords on it on the fly, allowing for great styling and theming possibilities.
@@ -55,9 +55,9 @@ python3Packages.buildPythonApplication rec {
       INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
     '';
     homepage = "https://github.com/deviantfero/wpgtk";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       melkor333
       cafkafk
     ];

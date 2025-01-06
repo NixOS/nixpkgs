@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     "-Wno-error=address"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Emulate a Cisco-style telnet command-line interface";
     homepage = "http://sites.dparrish.com/libcli";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 }

@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     rev-prefix = "${pname}-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";
     description = "Panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
     mainProgram = "xfce4-sensors";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

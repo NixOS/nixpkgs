@@ -31,11 +31,11 @@ stdenv.mkDerivation {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thefloweringash/rewrite-tbd/";
     description = "Rewrite filepath in .tbd to Nix applicable format";
     mainProgram = "rewrite-tbd";
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

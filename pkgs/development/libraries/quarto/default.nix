@@ -69,7 +69,7 @@ stdenv.mkDerivation (final: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source scientific and technical publishing system built on Pandoc";
     mainProgram = "quarto";
     longDescription = ''
@@ -77,10 +77,10 @@ stdenv.mkDerivation (final: {
         Quarto documents are authored using markdown, an easy to write plain text format.
     '';
     homepage = "https://quarto.org/";
-    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ minijackson mrtarantoga ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
+    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${final.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ minijackson mrtarantoga ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
 })

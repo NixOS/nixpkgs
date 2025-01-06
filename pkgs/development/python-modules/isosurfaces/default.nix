@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isosurfaces" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jared-hughes/isosurfaces";
     description = "Construct isolines/isosurfaces of a 2D/3D scalar field defined by a function";
     longDescription = ''
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       uniform grid, but this uses a quadtree to avoid wasting time sampling
       many far from the implicit surface.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

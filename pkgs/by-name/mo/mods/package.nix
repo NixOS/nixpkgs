@@ -57,11 +57,11 @@ buildGoModule rec {
     installShellCompletion mods.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AI on the command line";
     homepage = "https://github.com/charmbracelet/mods";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dit7ya
       caarlos0
     ];

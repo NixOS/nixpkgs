@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "succulent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collect POST requests";
     homepage = "https://github.com/firefly-cpp/succulent";
     changelog = "https://github.com/firefly-cpp/succulent/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     javaobj-py3
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter";
     description = "WhatsApp database parser";
     changelog = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter/releases/tag/${version}";
@@ -32,8 +32,8 @@ python3Packages.buildPythonApplication rec {
       you the history of your WhatsApp conversations inHTML and JSON. Android
       Backup Crypt12, Crypt14 and Crypt15 supported.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wtsexporter";
-    maintainers = with maintainers; [ bbenno ];
+    maintainers = with lib.maintainers; [ bbenno ];
   };
 }

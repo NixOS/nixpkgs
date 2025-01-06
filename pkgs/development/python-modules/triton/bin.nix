@@ -54,7 +54,7 @@ buildPythonPackage rec {
     ln -s ${cudaPackages.cuda_nvcc}/bin/ptxas $out/${python.sitePackages}/triton/third_party/cuda/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language and compiler for custom Deep Learning operations";
     homepage = "https://github.com/triton-lang/triton/";
     changelog = "https://github.com/triton-lang/triton/releases/tag/v${version}";
@@ -62,12 +62,12 @@ buildPythonPackage rec {
     # https://docs.nvidia.com/cuda/eula/index.html
     # triton's license is MIT.
     # triton-bin includes ptxas binary, therefore unfreeRedistributable is set.
-    license = with licenses; [
+    license = with lib.licenses; [
       unfreeRedistributable
       mit
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

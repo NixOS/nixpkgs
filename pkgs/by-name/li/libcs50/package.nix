@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cs50/libcs50";
     description = "CS50 Library for C";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 })

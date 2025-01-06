@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hoverxref" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for creating tooltips on the cross references of the documentation";
     longDescription = ''
       sphinx-hoverxref is a Sphinx extension to show a floating window
@@ -66,7 +66,7 @@ buildPythonPackage rec {
       in there.
     '';
     homepage = "https://github.com/readthedocs/sphinx-hoverxref";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

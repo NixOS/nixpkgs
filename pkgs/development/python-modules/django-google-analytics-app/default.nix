@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google_analytics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django Google Analytics brings the power of server side/non-js Google Analytics to your Django projects";
     homepage = "https://github.com/praekeltfoundation/django-google-analytics/";
     changelog = "https://github.com/praekeltfoundation/django-google-analytics/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

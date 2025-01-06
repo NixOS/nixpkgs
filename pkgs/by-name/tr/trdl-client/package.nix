@@ -45,7 +45,7 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       The universal solution for delivering your software updates securely from
       a trusted The Update Framework (TUF) repository
@@ -64,8 +64,8 @@ buildGoModule rec {
     '';
     homepage = "https://trdl.dev";
     changelog = "https://github.com/werf/trdl/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "trdl";
   };
 }

@@ -13,11 +13,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-DjNxXvMliM7MPv9gAOblnA5CkVcrXLlpaR8NOiZ65yc=";
 
-  meta = with lib; {
+  meta = {
     description = "Exporter for metrics from devices running JunOS";
     mainProgram = "junos_exporter";
     homepage = "https://github.com/czerwonk/junos_exporter";
-    license = licenses.mit;
-    maintainers = teams.wdz.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.wdz.members;
   };
 }

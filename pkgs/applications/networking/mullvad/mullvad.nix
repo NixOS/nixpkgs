@@ -103,10 +103,10 @@ rustPlatform.buildRustPackage rec {
     inherit openvpn-mullvad;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mullvad VPN command-line client tools";
     homepage = "https://github.com/mullvad/mullvadvpn-app";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ cole-h ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ cole-h ];
   };
 }

@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     zstd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unzip implementation, support for parallel decompression, automatic detection encoding";
     homepage = "https://github.com/quininer/unzrip";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "unzrip";
   };
 }

@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dvdisaster.jcea.es/";
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
@@ -98,8 +98,8 @@ stdenv.mkDerivation rec {
       data which is used to recover unreadable sectors if the disc becomes
       damaged at a later time.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "dvdisaster";
   };

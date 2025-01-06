@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
     gpm
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libviper.sourceforge.net/";
     description = "Simple window creation and management facilities for the console";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

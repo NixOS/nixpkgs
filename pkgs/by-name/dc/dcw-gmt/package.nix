@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rv ./* $out/share/dcw-gmt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.soest.hawaii.edu/pwessel/dcw/";
     description = "Vector basemap of the world, for use with GMT";
     longDescription = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       (https://en.wikipedia.org/wiki/Digital_Chart_of_the_World). This data is
       for use by GMT, the Generic Mapping Tools.
     '';
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ tviti ]);
   };
 

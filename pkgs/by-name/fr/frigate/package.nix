@@ -176,7 +176,7 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/blakeblackshear/frigate/releases/tag/v${version}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
@@ -185,7 +185,7 @@ python.pkgs.buildPythonApplication rec {
       object detection locally for IP cameras.
     '';
     homepage = "https://github.com/blakeblackshear/frigate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

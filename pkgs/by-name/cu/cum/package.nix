@@ -35,12 +35,12 @@ buildPythonApplication rec {
     rm -rf $out/tests $out/LICENSE
   '';
 
-  meta = with lib; {
+  meta = {
     description = "comic updater, mangafied";
     mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

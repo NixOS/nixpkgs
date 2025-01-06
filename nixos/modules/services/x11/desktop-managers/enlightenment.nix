@@ -23,7 +23,7 @@ in
 
 {
   meta = {
-    maintainers = teams.enlightenment.members;
+    maintainers = lib.teams.enlightenment.members;
   };
 
   imports = [

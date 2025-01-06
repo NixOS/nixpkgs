@@ -25,12 +25,12 @@ buildGoModule rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web framework for Go";
     homepage = "https://pushup.adhoc.dev/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/adhocteam/pushup/blob/${src.rev}/CHANGELOG.md";
     mainProgram = "pushup";
-    maintainers = with maintainers; [ paulsmith ];
+    maintainers = with lib.maintainers; [ paulsmith ];
   };
 }

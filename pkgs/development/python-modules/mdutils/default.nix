@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of basic tools that can help to create Markdown files";
     longDescription = ''
       This Python package contains a set of basic tools that can help to create
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/didix21/mdutils";
     changelog = "https://github.com/didix21/mdutils/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

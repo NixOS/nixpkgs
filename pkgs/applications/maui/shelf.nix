@@ -42,11 +42,11 @@ mkDerivation {
     poppler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Document and EBook collection manager";
     mainProgram = "shelf";
     homepage = "https://invent.kde.org/maui/shelf";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

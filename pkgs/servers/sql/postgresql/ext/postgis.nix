@@ -133,12 +133,12 @@ buildPostgresqlExtension (finalAttrs: {
       '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ marcweber ];
     inherit (postgresql.meta) platforms;
   };
 })

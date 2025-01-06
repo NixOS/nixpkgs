@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/COPYING
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Material Design theme for GNOME/GTK based desktop environments";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.fpletz ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.fpletz ];
   };
 }

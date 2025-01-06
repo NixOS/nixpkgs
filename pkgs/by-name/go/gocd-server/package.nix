@@ -16,16 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-//d6izGm1odE25H/PI5pn51FfUL4/6GbLwKUKAqZ3Kw=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       grahamc
       swarren83
     ];

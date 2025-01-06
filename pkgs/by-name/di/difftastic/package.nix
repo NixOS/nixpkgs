@@ -43,12 +43,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 
-  meta = with lib; {
+  meta = {
     description = "Syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
     changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ethancedwards8
       figsoda
       matthiasbeyer

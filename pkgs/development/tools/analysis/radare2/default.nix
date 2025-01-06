@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     xxHash
   ];
 
-  meta = with lib; {
+  meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset";
     longDescription = ''
       r2 is a complete rewrite of radare. It provides a set of libraries, tools
@@ -141,11 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://radare.org";
     changelog = "https://github.com/radareorg/radare2/releases/tag/${finalAttrs.version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       lgpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       azahi
       raskin
       makefu
@@ -153,6 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
       arkivm
     ];
     mainProgram = "radare2";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

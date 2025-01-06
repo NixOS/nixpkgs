@@ -61,12 +61,12 @@ python3Packages.buildPythonApplication rec {
     QT_QPA_PLATFORM=minimal tests/runselftest.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scientific plotting and graphing program with a GUI";
     mainProgram = "veusz";
     homepage = "https://veusz.github.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ laikq ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ laikq ];
   };
 }

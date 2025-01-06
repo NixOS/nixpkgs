@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
   # tests are failing on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Lints and suggestions for the nix programming language";
     homepage = "https://github.com/nerdypepper/statix";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "statix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       nerdypepper
     ];

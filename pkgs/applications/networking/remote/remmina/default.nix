@@ -8,7 +8,6 @@
   wrapGAppsHook3,
   curl,
   fuse3,
-  fetchpatch2,
   desktopToDarwinBundle,
   glib,
   gtk3,
@@ -137,19 +136,19 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
+  meta = {
+    license = lib.licenses.gpl2Plus;
     homepage = "https://gitlab.com/Remmina/Remmina";
     changelog = "https://gitlab.com/Remmina/Remmina/-/blob/master/CHANGELOG.md#${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.rev
     }";
     description = "Remote desktop client written in GTK";
     mainProgram = "remmina";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bbigras
       melsigl
       ryantm
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

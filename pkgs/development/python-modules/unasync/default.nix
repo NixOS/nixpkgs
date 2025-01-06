@@ -38,14 +38,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unasync" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-trio/unasync/releases/tag/v${version}";
     description = "Project that can transform your asynchronous code into synchronous code";
     homepage = "https://github.com/python-trio/unasync";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

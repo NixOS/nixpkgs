@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper $out/share/${pname}/${pname} $out/bin/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Libre cross-platform disassembler";
     longDescription = ''
       Panopticon is a cross platform disassembler for reverse
@@ -56,8 +56,8 @@ rustPlatform.buildRustPackage rec {
       Panopticon comes with Qt GUI for browsing and annotating
       control flow graphs.
     '';
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ leenaars ];
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = with lib.maintainers; [ leenaars ];
     broken = true; # Added 2024-03-16
   };
 }

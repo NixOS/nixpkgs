@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     mainProgram = "lugaru";
     homepage = "https://osslugaru.gitlab.io";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

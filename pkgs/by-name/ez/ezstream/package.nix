@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line source client for Icecast media streaming servers";
     longDescription = ''
       Ezstream is a command line source client for Icecast media
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       very little CPU resources.
     '';
     homepage = "https://icecast.org/ezstream/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.barrucadu ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.barrucadu ];
+    platforms = lib.platforms.all;
   };
 }

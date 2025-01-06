@@ -92,15 +92,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open Virtual Network";
     longDescription = ''
       OVN (Open Virtual Network) is a series of daemons that translates virtual network configuration into OpenFlow, and installs them into Open vSwitch.
     '';
     homepage = "https://github.com/ovn-org/ovn";
     changelog = "https://github.com/ovn-org/ovn/blob/${src.rev}/NEWS";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ adamcstephens ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ adamcstephens ];
+    platforms = lib.platforms.linux;
   };
 }

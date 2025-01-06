@@ -42,12 +42,12 @@ buildGoModule rec {
     patchelf --add-needed libnvidia-ml.so "$out/bin/dcgm-exporter"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NVIDIA GPU metrics exporter for Prometheus leveraging DCGM";
     homepage = "https://github.com/NVIDIA/dcgm-exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.deshaw.members;
     mainProgram = "dcgm-exporter";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

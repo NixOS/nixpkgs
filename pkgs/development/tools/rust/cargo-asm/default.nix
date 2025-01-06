@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
   # LLVM/compiler versions.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Display the assembly or LLVM-IR generated for Rust source code";
     homepage = "https://github.com/gnzlbg/cargo-asm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

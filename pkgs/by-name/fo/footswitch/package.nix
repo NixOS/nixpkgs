@@ -31,11 +31,11 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/lib/udev/rules.d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line utlities for programming PCsensor and Scythe foot switches";
     homepage = "https://github.com/rgerganov/footswitch";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

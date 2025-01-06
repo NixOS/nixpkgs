@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v2pz0l2smagr3j4abjccshg4agaccfz79m5ayvrvqq5d4rlds0s";
   };
   nativeBuildInputs = [ cmake ];
-  meta = with lib; {
+  meta = {
     description = "A Minimal, Header only Modern c++ library for terminal goodies";
     homepage = "https://agauniyal.github.io/rang/";
-    license = licenses.unlicense;
-    maintainers = [ maintainers.HaoZeke ];
+    license = lib.licenses.unlicense;
+    maintainers = [ lib.maintainers.HaoZeke ];
   };
 }

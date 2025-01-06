@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nomad" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
     changelog = "https://github.com/jrxFive/python-nomad/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xbreak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xbreak ];
   };
 }

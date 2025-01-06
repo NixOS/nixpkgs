@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     ./build install man
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

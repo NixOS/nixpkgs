@@ -33,7 +33,7 @@ buildNpmPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run gitlab pipelines locally as shell executor or docker executor";
     mainProgram = "gitlab-ci-local";
     longDescription = ''
@@ -42,8 +42,8 @@ buildNpmPackage rec {
       Get rid of all those dev specific shell scripts and make files.
     '';
     homepage = "https://github.com/firecow/gitlab-ci-local";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pineapplehunter ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pineapplehunter ];
+    platforms = lib.platforms.all;
   };
 }

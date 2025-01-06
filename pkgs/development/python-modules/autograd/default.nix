@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autograd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compute derivatives of NumPy code efficiently";
     homepage = "https://github.com/HIPS/autograd";
     changelog = "https://github.com/HIPS/autograd/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

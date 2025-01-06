@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
       "-DCMAKE_C_FLAGS=-fPIC"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     mainProgram = "vigra-config";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

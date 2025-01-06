@@ -27,10 +27,10 @@ buildPythonPackage rec {
   #   make test
   # '';
 
-  meta = with lib; {
+  meta = {
     description = "Pre-packaged testbenching tools and reusable bus interfaces for cocotb";
     homepage = "https://github.com/cocotb/cocotb-bus";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

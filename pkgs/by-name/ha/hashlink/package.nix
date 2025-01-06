@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual machine for Haxe";
     mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ iblech locallycompact logo ];
+    maintainers = with lib.maintainers; [ iblech locallycompact logo ];
   };
 }

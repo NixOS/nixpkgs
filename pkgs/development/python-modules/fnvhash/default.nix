@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fnvhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python FNV hash implementation";
     homepage = "https://github.com/znerol/py-fnvhash";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

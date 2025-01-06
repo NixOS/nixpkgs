@@ -44,7 +44,7 @@ buildDotnetModule rec {
     ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another mod installer for Beat Saber, heavily inspired by ModAssistant";
     mainProgram = "BeatSaberModManager";
     homepage = "https://github.com/affederaffe/BeatSaberModManager";
@@ -61,8 +61,8 @@ buildDotnetModule rec {
       - Theming support
       - OneClick™ support for BeatSaver, ModelSaber and Playlists
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ atemu ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atemu ];
+    platforms = with lib.platforms; linux;
   };
 }

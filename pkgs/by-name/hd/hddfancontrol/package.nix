@@ -35,11 +35,11 @@ python3Packages.buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) hddfancontrol; };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamically control fan speed according to hard drive temperature on Linux";
     homepage = "https://github.com/desbma/hddfancontrol";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ benley ];
     mainProgram = "hddfancontrol";
   };
 }

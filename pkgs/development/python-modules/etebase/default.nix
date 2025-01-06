@@ -75,11 +75,11 @@ buildPythonPackage rec {
     inherit (nixosTests) etebase-server;
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://www.etebase.com/";
     description = "Python client library for Etebase";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ _3699n ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ _3699n ];
   };
 }

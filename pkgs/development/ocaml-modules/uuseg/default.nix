@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml library for segmenting Unicode text";
     homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "usegtrip";
     inherit (ocaml.meta) platforms;
   };

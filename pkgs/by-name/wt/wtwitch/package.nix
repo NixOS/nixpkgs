@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal user interface for Twitch";
     homepage = "https://github.com/krathalan/wtwitch";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
+    platforms = lib.platforms.all;
     mainProgram = "wtwitch";
   };
 }

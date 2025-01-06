@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     unset LD_LIBRARY_PATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
@@ -146,17 +146,17 @@ stdenv.mkDerivation rec {
       and an implementation of MH message handling system.
     '';
 
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus # libraries
       gpl3Plus # tools
     ];
 
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
 
     homepage = "https://www.gnu.org/software/mailutils/";
     changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = platforms.gnu ++ platforms.unix;
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
 }

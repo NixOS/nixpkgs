@@ -31,11 +31,11 @@ buildGoModule rec {
     install -Dm444 -t $out/share/doc/${pname} *.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ZFS Exporter for the Prometheus monitoring system";
     mainProgram = "zfs_exporter";
     homepage = "https://github.com/pdf/zfs_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

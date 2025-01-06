@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_KCP=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C/c++ network library for developing TCP/UDP/SSL/HTTP/WebSocket/MQTT client/server";
     homepage = "https://github.com/ithewei/libhv";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 })

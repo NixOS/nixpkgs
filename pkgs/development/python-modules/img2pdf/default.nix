@@ -114,13 +114,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "img2pdf" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.rev}/CHANGES.rst";
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     mainProgram = "img2pdf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       veprbl
       dotlambda
     ];

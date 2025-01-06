@@ -69,11 +69,11 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) starship;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       danth
       davidtwco
       Br1ght0ne

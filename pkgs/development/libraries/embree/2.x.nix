@@ -41,11 +41,11 @@ stdenv.mkDerivation {
     libX11
     libpthreadstubs
   ];
-  meta = with lib; {
+  meta = {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -35,12 +35,12 @@ buildPythonPackage rec {
     export HOME=$(pwd)/check-phase
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-bugzilla/python-bugzilla";
     description = "Bugzilla XMLRPC access module";
     mainProgram = "bugzilla";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pierron ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pierron ];
   };
 }

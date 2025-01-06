@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux text console viewer";
     mainProgram = "conspy";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

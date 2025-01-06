@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "auditlog" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jazzband/django-auditlog/blob/v${version}/CHANGELOG.md";
     description = "Django app that keeps a log of changes made to an object";
     downloadPage = "https://github.com/jazzband/django-auditlog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leona ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leona ];
   };
 }

@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Genealogy tool with ncurses interface";
     homepage = "https://lifelines.github.io/lifelines/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ disassembler ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ disassembler ];
+    platforms = lib.platforms.linux;
   };
 }

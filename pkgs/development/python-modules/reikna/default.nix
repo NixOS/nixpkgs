@@ -46,9 +46,9 @@ buildPythonPackage rec {
   # Requires device
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "GPGPU algorithms for PyCUDA and PyOpenCL";
     homepage = "https://github.com/fjarri/reikna";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   versionCheckProgramArg = [ "--version" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
     changelog = "https://github.com/orf/gping/releases/tag/gping-v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "gping";
   };
 }

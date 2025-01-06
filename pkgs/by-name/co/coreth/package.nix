@@ -35,11 +35,11 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/{plugin,evm}";
 
-  meta = with lib; {
+  meta = {
     description = "Code and wrapper to extract Ethereum blockchain functionalities without network/consensus, for building custom blockchain services";
     homepage = "https://github.com/ava-labs/coreth";
     changelog = "https://github.com/ava-labs/coreth/releases/tag/v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

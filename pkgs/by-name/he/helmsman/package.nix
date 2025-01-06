@@ -22,12 +22,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Helm Charts (k8s applications) as Code tool";
     mainProgram = "helmsman";
     homepage = "https://github.com/Praqma/helmsman";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lynty
       sarcasticadmin
     ];

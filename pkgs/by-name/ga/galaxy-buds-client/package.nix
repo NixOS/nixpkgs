@@ -64,12 +64,12 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "GalaxyBudsClient";
     description = "Unofficial Galaxy Buds Manager for Windows and Linux";
     homepage = "https://github.com/ThePBone/GalaxyBudsClient";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.icy-thought ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.icy-thought ];
+    platforms = lib.platforms.linux;
   };
 }

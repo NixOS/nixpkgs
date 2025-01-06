@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Source code spell checker";
     homepage = "https://github.com/tekumara/typos-lsp";
     changelog = "https://github.com/tekumara/typos-lsp/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tarantoj ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tarantoj ];
     mainProgram = "typos-lsp";
   };
 }

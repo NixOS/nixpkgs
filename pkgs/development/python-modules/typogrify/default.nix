@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typogrify.filters" ];
 
-  meta = with lib; {
+  meta = {
     description = "Filters to enhance web typography, including support for Django & Jinja templates";
     homepage = "https://github.com/mintchaos/typogrify";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

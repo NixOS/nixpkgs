@@ -20,17 +20,17 @@
 mkDerivation {
   pname = "rocs";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://edu.kde.org/rocs/";
     description = "Graph theory IDE";
     mainProgram = "rocs";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       fdl12Plus
     ];
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ knairda ];
+    maintainers = with lib.maintainers; [ knairda ];
   };
 
   nativeBuildInputs = [

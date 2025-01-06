@@ -34,12 +34,12 @@ buildNpmPackage rec {
       --add-flags $out/lib/node_modules/uivonim/build/main/main.js
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/smolck/uivonim";
     description = "Cross-platform GUI for neovim based on electron";
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.agpl3Only;
     mainProgram = "uivonim";
   };
 }

@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PLAtform NEutral Transpiler";
     homepage = "https://github.com/oriansj/M2-Planet";
-    license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.minimal-bootstrap.members;
     inherit (m2libc.meta) platforms;
     mainProgram = "M2-Planet";
   };

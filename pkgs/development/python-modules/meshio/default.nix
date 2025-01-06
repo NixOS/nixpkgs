@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meshio" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nschloe/meshio";
     description = "I/O for mesh files";
     mainProgram = "meshio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

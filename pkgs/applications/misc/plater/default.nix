@@ -47,11 +47,11 @@ mkDerivation rec {
     cp $src/gui/img/plater.png $out/share/pixmaps/${pname}.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "3D-printer parts placer and plate generator";
     homepage = "https://github.com/Rhoban/Plater";
-    maintainers = with maintainers; [ lovesegfault ];
-    platforms = platforms.linux;
-    license = licenses.cc-by-nc-30;
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.cc-by-nc-30;
   };
 }

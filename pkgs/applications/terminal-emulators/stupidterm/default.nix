@@ -44,12 +44,12 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.stupidterm;
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper around the VTE terminal emulator widget for GTK";
     homepage = "https://github.com/esmil/stupidterm";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.etu ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.etu ];
+    platforms = lib.platforms.linux;
     mainProgram = "stupidterm";
   };
 }

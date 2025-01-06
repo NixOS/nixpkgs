@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
   qmakeFlags = [ "CONFIG+=release" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple RSS/Atom feed reader with online synchronization";
     mainProgram = "rssguard";
     longDescription = ''
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/martinrotter/rssguard";
     changelog = "https://github.com/martinrotter/rssguard/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

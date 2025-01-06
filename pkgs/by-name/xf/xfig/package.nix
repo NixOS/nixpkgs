@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://sourceforge.net/p/mcj/xfig/ci/${version}/tree/CHANGES";
     description = "Interactive drawing tool for X11";
     mainProgram = "xfig";

@@ -75,11 +75,11 @@ buildPythonPackage rec {
     "test_more_nested_pytree_and_python_node_as_return_with_names"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Workflow management system that facilitates reproducible data analyses";
     homepage = "https://github.com/pytask-dev/pytask";
     changelog = "https://github.com/pytask-dev/pytask/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erooke ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erooke ];
   };
 }

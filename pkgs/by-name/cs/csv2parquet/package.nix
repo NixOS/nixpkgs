@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GoUmr1NArOyGx1A9E9K/Od0xXR2YxZqBcBdYFumgIJU=";
 
-  meta = with lib; {
+  meta = {
     description = "Convert CSV files to Apache Parquet";
     homepage = "https://github.com/domoritz/csv2parquet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ john-shaffer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ john-shaffer ];
     mainProgram = "csv2parquet";
   };
 }

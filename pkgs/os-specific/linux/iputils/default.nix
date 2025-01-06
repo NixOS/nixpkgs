@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/iputils/iputils";
     changelog = "https://github.com/iputils/iputils/releases/tag/${version}";
     description = "Set of small useful utilities for Linux networking";
@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
       - ping: send ICMP ECHO_REQUEST to network hosts
       - tracepath: traces path to a network host discovering MTU along this path
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       bsd3
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

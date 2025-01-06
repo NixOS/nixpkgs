@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceware.org/dwz/";
     description = "DWARF optimization and duplicate removal tool";
     mainProgram = "dwz";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jbcrail ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jbcrail ];
+    platforms = lib.platforms.linux;
   };
 }

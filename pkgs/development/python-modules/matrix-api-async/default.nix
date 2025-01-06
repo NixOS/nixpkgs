@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "matrix_api_async" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio wrapper of matrix_client.api";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Cadair/matrix_api_async";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with lib.maintainers; [ globin ];
   };
 }

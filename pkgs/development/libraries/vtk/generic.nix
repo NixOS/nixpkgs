@@ -135,14 +135,14 @@ stdenv.mkDerivation {
       --subst-var-by VTK_VER "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       tfmoraes
     ];
-    platforms = platforms.unix;
-    badPlatforms = optionals enableEgl platforms.darwin;
+    platforms = lib.platforms.unix;
+    badPlatforms = optionals enableEgl lib.platforms.darwin;
   };
 }

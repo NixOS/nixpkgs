@@ -32,12 +32,12 @@ buildGoModule rec {
     mv $out/bin/{app,reproxy}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple edge server / reverse proxy";
     homepage = "https://reproxy.io/";
     changelog = "https://github.com/umputun/reproxy/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "reproxy";
   };
 }

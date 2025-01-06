@@ -20,11 +20,11 @@ buildDartApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating Dart code";
     mainProgram = "protoc-gen-dart";
     homepage = "https://pub.dev/packages/protoc_plugin";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lelgenio ];
   };
 }

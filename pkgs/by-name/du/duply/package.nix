@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shell front end for the duplicity backup tool";
     mainProgram = "duply";
     longDescription = ''
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       secure backups on non-trusted spaces are no child's play?
     '';
     homepage = "https://duply.net/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.bjornfor ];
     platforms = lib.platforms.unix;
   };
 }

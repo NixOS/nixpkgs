@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manipulating CPC dsk images and files";
     mainProgram = "cpcfs";
     homepage = "https://github.com/derikz/cpcfs/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

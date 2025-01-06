@@ -107,5 +107,5 @@ in
       };
     };
   };
-  meta.maintainers = with maintainers; [ arianvp ];
+  meta.maintainers = with lib.maintainers; [ arianvp ];
 }

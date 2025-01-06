@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $assets/git-ignore.{bash,fish} --zsh $assets/_git-ignore
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
     changelog = "https://github.com/sondr3/git-ignore/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "git-ignore";
   };
 }

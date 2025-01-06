@@ -89,16 +89,16 @@ stdenv.mkDerivation rec {
     ln -s $out/share/ipe/${version}/icons/icon_128x128.png $out/share/icons/hicolor/128x128/apps/ipe.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
-    maintainers = with maintainers; [ ttuegel ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = lib.platforms.linux;
   };
 }

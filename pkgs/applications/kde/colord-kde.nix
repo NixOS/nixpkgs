@@ -48,9 +48,9 @@ mkDerivation {
     qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://projects.kde.org/projects/playground/graphics/colord-kde";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ttuegel ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

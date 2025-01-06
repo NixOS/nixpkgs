@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/dragon $out/bin/xdragon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple drag-and-drop source/sink for X (called dragon in upstream)";
     homepage = "https://github.com/mwh/dragon";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ das_j ];
     mainProgram = "xdragon";
   };
 })

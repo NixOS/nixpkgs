@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Motif-based sequence analysis tools";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ gschwartz ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ gschwartz ];
+    platforms = lib.platforms.linux;
   };
 }

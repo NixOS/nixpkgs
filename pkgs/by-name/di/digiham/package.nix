@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     icu
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jketterl/digiham";
     description = "tools for decoding digital ham communication";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.c3d2.members;
   };
 }

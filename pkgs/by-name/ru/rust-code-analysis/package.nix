@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-axrtFZQOm1/UUBq1CDFkaZCks1mWoLWmfajDfsqSBmY=";
 
-  meta = with lib; {
+  meta = {
     description = "Analyze and collect metrics on source code";
     homepage = "https://github.com/mozilla/rust-code-analysis";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # grammars
       mpl20 # code
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "rust-code-analysis-cli";
   };
 }

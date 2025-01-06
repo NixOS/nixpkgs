@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mate-desktop/mate-sensors-applet";
     description = "MATE panel applet for hardware sensors";
-    license = with licenses; [ gpl2Plus ];
-    platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    license = with lib.licenses; [ gpl2Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.mate.members;
   };
 }

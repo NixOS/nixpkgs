@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ploomber_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core module shared across Ploomber projects";
     homepage = "https://github.com/ploomber/core";
     changelog = "https://github.com/ploomber/core/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

@@ -34,12 +34,12 @@ mkDerivation rec {
     cp -- jack_autoconnect "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kripton/jack_autoconnect";
     description = "Tiny application that reacts on port registrations by clients and connects them";
     mainProgram = "jack_autoconnect";
-    maintainers = with maintainers; [ unclechu ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ unclechu ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

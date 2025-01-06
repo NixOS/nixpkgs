@@ -67,16 +67,16 @@ stdenv.mkDerivation rec {
     $out/bin/qucs-s --version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Spin-off of Qucs that allows custom simulation kernels";
     longDescription = ''
       Spin-off of Qucs that allows custom simulation kernels.
       Default version is installed with ngspice.
     '';
     homepage = "https://ra3xdh.github.io/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "qucs-s";
-    maintainers = with maintainers; [ mazurel kashw2 thomaslepoix ];
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ mazurel kashw2 thomaslepoix ];
+    platforms = with lib.platforms; unix;
   };
 }

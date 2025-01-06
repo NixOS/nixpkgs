@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
     description = "Retro arcade video game";
     mainProgram = "abbayev2";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.marius851000 ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.marius851000 ];
   };
 }

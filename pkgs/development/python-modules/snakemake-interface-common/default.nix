@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common functions and classes for Snakemake and its plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-common";
     changelog = "https://github.com/snakemake/snakemake-interface-common/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

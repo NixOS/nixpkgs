@@ -40,14 +40,14 @@ rustPlatform.buildRustPackage rec {
     mv $out/lib/libobs_livesplit_one.so $out/lib/obs-plugins/obs-livesplit-one.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio plugin for adding LiveSplit One as a source";
     homepage = "https://github.com/LiveSplit/obs-livesplit-one";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = [ maintainers.Bauke ];
+    maintainers = [ lib.maintainers.Bauke ];
     platforms = obs-studio.meta.platforms;
   };
 }

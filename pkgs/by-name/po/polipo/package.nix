@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     "LOCAL_ROOT=$(out)/share/polipo/www"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.pps.jussieu.fr/~jch/software/polipo/";
     description = "Small and fast caching web proxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.all;
     knownVulnerabilities = [
       "Unmaintained upstream: https://github.com/jech/polipo/commit/4d42ca1b5849"
     ];

@@ -43,11 +43,11 @@ stdenv.mkDerivation {
     cp -r ../exs $out/share/examples
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Logic-based programming language";
     mainProgram = "picat";
     homepage = "http://picat-lang.org/";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       earldouglas
       thoughtpolice
     ];

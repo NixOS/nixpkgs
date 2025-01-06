@@ -52,12 +52,12 @@ let
       pytestFlagsArray = [ ];
     });
 
-    meta = with lib; {
+    meta = {
       description = "Python Dynamic Mode Decomposition";
       homepage = "https://pydmd.github.io/PyDMD/";
       changelog = "https://github.com/PyDMD/PyDMD/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ yl3dy ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ yl3dy ];
     };
   };
 in

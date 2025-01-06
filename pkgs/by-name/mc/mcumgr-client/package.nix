@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ udev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for mcumgr commands";
     homepage = "https://github.com/vouch-opensource/mcumgr-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "mcumgr-client";
   };
 }

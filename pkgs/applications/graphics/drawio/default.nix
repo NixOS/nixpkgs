@@ -127,13 +127,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = platforms.darwin ++ platforms.linux;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "drawio";
   };
 }

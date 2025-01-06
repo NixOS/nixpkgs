@@ -8,13 +8,13 @@
 
 mkDerivation {
   pname = "kreversi";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/games/org.kde.kreversi";
     description = "Simple one player strategy game played against the computer";
     mainProgram = "kreversi";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

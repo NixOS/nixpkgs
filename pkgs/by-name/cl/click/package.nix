@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  meta = with lib; {
+  meta = {
     description = ''The "Command Line Interactive Controller for Kubernetes"'';
     homepage = "https://github.com/databricks/click";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.mbode ];
+    license = [ lib.licenses.asl20 ];
+    maintainers = [ lib.maintainers.mbode ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

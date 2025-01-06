@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blurhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python implementation of the blurhash algorithm";
     homepage = "https://github.com/halcy/blurhash-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

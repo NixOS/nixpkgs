@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "scrapy_splash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Scrapy+Splash for JavaScript integration";
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evanjs ];
   };
 }

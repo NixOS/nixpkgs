@@ -11,9 +11,9 @@ rec {
 
   yarnHash = "sha256-lU8QrTkI32XOHefIkj/0fa2UKhuZpQIT1wyweQnzXmQ=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tandoor.dev/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ jvanbruegge ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ jvanbruegge ];
   };
 }

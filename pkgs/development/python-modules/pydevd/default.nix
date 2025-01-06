@@ -81,11 +81,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydevd" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";
     homepage = "https://github.com/fabioz/PyDev.Debugger";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "pydevd";
   };
 }

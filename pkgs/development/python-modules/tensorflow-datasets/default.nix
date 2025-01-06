@@ -171,10 +171,10 @@ buildPythonPackage rec {
     "tensorflow_datasets/text/c4_utils_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       cc-by-40
       cc-by-sa-40
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       gpl3Plus
       wtfpl
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jojosch
       kashw2
     ];

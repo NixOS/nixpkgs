@@ -212,13 +212,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME 2.x-like session for GNOME 3";
     mainProgram = "gnome-flashback";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-flashback";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux;
   };
 })

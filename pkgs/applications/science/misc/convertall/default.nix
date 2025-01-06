@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     makeQtWrapper $out/share/convertall/convertall.py $out/bin/convertall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://convertall.bellz.org/";
     description = "Graphical unit converter";
     mainProgram = "convertall";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = pyqt5.meta.platforms;
   };
 }

@@ -37,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_on_whales" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docker client for Python, designed to be fun and intuitive";
     mainProgram = "python-on-whales";
     homepage = "https://github.com/gabrieldemarmiesse/python-on-whales";
     changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
     "-Dgoogletest_BINARY_DIR=./gtest-build"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Satisfiability modulo theory (SMT) solver";
     mainProgram = "opensmt";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = if enableReadline then licenses.gpl2Plus else licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = if enableReadline then lib.licenses.gpl2Plus else lib.licenses.mit;
     homepage = "https://github.com/usi-verification-and-security/opensmt";
   };
 }

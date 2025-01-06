@@ -26,10 +26,10 @@ buildPythonPackage {
     scipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for calculating and analyzing Voronoi tessellations";
     homepage = "https://tess.readthedocs.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

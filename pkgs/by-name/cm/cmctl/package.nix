@@ -51,7 +51,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for managing cert-manager service on Kubernetes clusters";
     mainProgram = "cmctl";
     longDescription = ''
@@ -65,8 +65,8 @@ buildGoModule rec {
       certificates at an appropriate time before expiry.
     '';
     downloadPage = "https://github.com/cert-manager/cert-manager";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://cert-manager.io/";
-    maintainers = with maintainers; [ joshvanl ];
+    maintainers = with lib.maintainers; [ joshvanl ];
   };
 }

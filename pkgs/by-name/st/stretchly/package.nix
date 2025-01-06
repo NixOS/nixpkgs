@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     categories = [ "Utility" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Break time reminder app";
     longDescription = ''
       stretchly is a cross-platform electron app that reminds you to take
@@ -73,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://hovancik.net/stretchly";
     downloadPage = "https://hovancik.net/stretchly/downloads/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ _1000101 ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ _1000101 ];
+    platforms = lib.platforms.linux;
     mainProgram = "stretchly";
   };
 })

@@ -112,11 +112,11 @@ rec {
       # The package does not build with lua 5.4 or luaJIT
       disabled = luaAtLeast "5.4" || isLuaJIT;
 
-      meta = with lib; {
+      meta = {
         description = "Lua module for PAM authentication";
         homepage = "https://github.com/devurandom/lua-pam";
-        license = licenses.mit;
-        maintainers = with maintainers; [ traxys ];
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ traxys ];
       };
     }
   ) { };
@@ -136,10 +136,10 @@ rec {
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
 
-      meta = with lib; {
+      meta = {
         description = "New FFI-based API for lua-nginx-module";
         homepage = "https://github.com/openresty/lua-resty-core";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         maintainers = [ ];
       };
     }
@@ -158,10 +158,10 @@ rec {
         sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
       };
 
-      meta = with lib; {
+      meta = {
         description = "Lua-land LRU Cache based on LuaJIT FFI";
         homepage = "https://github.com/openresty/lua-resty-lrucache";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         maintainers = [ ];
       };
     }
@@ -200,13 +200,13 @@ rec {
         );
       '';
 
-      meta = with lib; {
+      meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "Lightweight UNIX I/O and POSIX binding for Lua";
         homepage = "https://www.gitano.org.uk/luxio/";
-        license = licenses.mit;
-        maintainers = with maintainers; [ richardipsum ];
-        platforms = platforms.unix;
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ richardipsum ];
+        platforms = lib.platforms.unix;
       };
     }
   ) { };
@@ -237,17 +237,17 @@ rec {
         printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Modular widget library for the awesome window manager";
         homepage = "https://vicious.rtfd.io";
         changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
           makefu
           mic92
           McSinyx
         ];
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
       };
     }
   ) { };

@@ -62,12 +62,12 @@ buildPythonPackage rec {
     "tests/test_silent_global_logs.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to manage the binary drivers for different browsers";
     homepage = "https://github.com/SergeyPirogov/webdriver_manager/";
     changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

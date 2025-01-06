@@ -62,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
     homepage = "https://github.com/minio/minio-py";
     changelog = "https://github.com/minio/minio-py/releases/tag/${version}";
-    maintainers = with maintainers; [ peterromfeldhk ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ peterromfeldhk ];
+    license = lib.licenses.asl20;
   };
 }

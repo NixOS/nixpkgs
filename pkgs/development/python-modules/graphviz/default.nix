@@ -65,11 +65,11 @@ buildPythonPackage rec {
   # Too many failures due to attempting to connect to com.apple.fonts daemon
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python interface for Graphviz";
     homepage = "https://github.com/xflr6/graphviz";
     changelog = "https://github.com/xflr6/graphviz/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

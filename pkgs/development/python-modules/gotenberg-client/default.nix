@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gotenberg_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for interfacing with the Gotenberg API";
     homepage = "https://github.com/stumpylog/gotenberg-client";
     changelog = "https://github.com/stumpylog/gotenberg-client/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ leona ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ leona ];
   };
 }

@@ -28,11 +28,11 @@ buildGoModule {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "IP address lookup service";
     homepage = "https://github.com/mpolden/echoip";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       SuperSandro2000
     ];

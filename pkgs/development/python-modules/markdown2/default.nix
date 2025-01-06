@@ -41,12 +41,12 @@ buildPythonPackage rec {
     all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trentm/python-markdown2/blob/${src.rev}/CHANGES.md";
     description = "Fast and complete Python implementation of Markdown";
     mainProgram = "markdown2";
     homepage = "https://github.com/trentm/python-markdown2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hbunke ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hbunke ];
   };
 }

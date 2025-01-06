@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     cp crumbs-completion.fish $out/share/fish/vendor_completions.d/crumbs.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bookmarks for the command line";
     homepage = "https://github.com/fasseg/crumbs";
-    license = licenses.wtfpl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thesola10 ];
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thesola10 ];
     mainProgram = "crumbs";
   };
 }

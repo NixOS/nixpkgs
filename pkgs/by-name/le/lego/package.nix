@@ -21,11 +21,11 @@ buildGoModule rec {
     "-s" "-w" "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Let's Encrypt client and ACME library written in Go";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://go-acme.github.io/lego/";
-    maintainers = teams.acme.members;
+    maintainers = lib.teams.acme.members;
     mainProgram = "lego";
   };
 

@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.torproject.org/";
     description = "Anonymizing overlay network";
 
@@ -149,16 +149,16 @@ stdenv.mkDerivation rec {
       the TCP protocol.
     '';
 
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl3Only
     ];
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thoughtpolice
       joachifm
       prusnak
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

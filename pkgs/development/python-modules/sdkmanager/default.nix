@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sdkmanager" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/fdroid/sdkmanager";
     description = "Drop-in replacement for sdkmanager from the Android SDK written in Python";
     mainProgram = "sdkmanager";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ linsui ];
   };
 }

@@ -31,11 +31,11 @@ buildGoModule rec {
     installManPage doc/tf.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Finds the fields (or combinations of fields) which appear most often in a stream of records";
     homepage = "https://github.com/timbray/topfew";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "tf";
   };
 }

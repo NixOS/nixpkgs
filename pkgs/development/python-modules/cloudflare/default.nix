@@ -41,11 +41,11 @@ buildPythonPackage rec {
     pytz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Cloudflare v4 API";
     homepage = "https://github.com/cloudflare/python-cloudflare";
     changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "cli4";
     maintainers = [ ];
   };

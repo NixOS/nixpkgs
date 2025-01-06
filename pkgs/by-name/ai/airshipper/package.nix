@@ -114,11 +114,11 @@ rustPlatform.buildRustPackage {
   cargoBuildFlags = [ "--package" "airshipper" ];
   cargoTestFlags = [ "--package" "airshipper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides automatic updates for the voxel RPG Veloren";
     mainProgram = "airshipper";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ yusdacra ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ yusdacra ];
   };
 }

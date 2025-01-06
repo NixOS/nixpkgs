@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Install, upgrade and uninstall Elm dependencies";
     mainProgram = "elm-json";
     homepage = "https://github.com/zwilias/elm-json";
-    license = licenses.mit;
-    maintainers = [ maintainers.turbomack ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.turbomack ];
   };
 }

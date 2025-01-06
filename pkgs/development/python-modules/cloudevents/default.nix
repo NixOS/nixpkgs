@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "samples/http-image-cloudevents/image_sample_test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for CloudEvents";
     homepage = "https://github.com/cloudevents/sdk-python";
     changelog = "https://github.com/cloudevents/sdk-python/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

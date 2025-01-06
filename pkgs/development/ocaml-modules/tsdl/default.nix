@@ -72,10 +72,10 @@ else
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = with lib; {
+    meta = {
       homepage = webpage;
       description = "Thin bindings to the cross-platform SDL library";
-      license = licenses.isc;
+      license = lib.licenses.isc;
       inherit (ocaml.meta) platforms;
     };
   }

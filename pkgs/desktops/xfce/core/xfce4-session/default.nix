@@ -42,8 +42,8 @@ mkXfceDerivation {
 
   passthru.xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
 
-  meta = with lib; {
+  meta = {
     description = "Session manager for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

@@ -39,8 +39,8 @@ mkXfceDerivation {
     wlr-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clipboard manager for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

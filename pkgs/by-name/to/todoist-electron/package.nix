@@ -39,12 +39,12 @@ appimageTools.wrapAppImage {
       --replace 'Exec=AppRun' "Exec=$out/bin/${pname} --"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://todoist.com";
     description = "Official Todoist electron app";
     platforms = [ "x86_64-linux" ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       kylesferrazza
       pokon548
     ];

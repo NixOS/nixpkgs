@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Infinitely transfer between every device over pure HTTP with pipes or browsers";
     homepage = "https://github.com/nwtgck/piping-server-rust";
     changelog = "https://github.com/nwtgck/piping-server-rust/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.figsoda ];
     mainProgram = "piping-server";
   };
 }

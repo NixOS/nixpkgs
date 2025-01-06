@@ -25,17 +25,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-m4" ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable OpenBSD m4 macro processor";
     homepage = "https://github.com/ibara/m4";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       bsd3
       isc
       publicDomain
     ];
     mainProgram = "m4";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

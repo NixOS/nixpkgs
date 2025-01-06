@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nginx_language_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language server for nginx.conf";
     homepage = "https://github.com/pappasam/nginx-language-server";
     changelog = "https://github.com/pappasam/nginx-language-server/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "nginx-language-server";
   };
 }

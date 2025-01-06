@@ -34,15 +34,15 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mdlayher/corerad";
     description = "Extensible and observable IPv6 NDP RA daemon";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mdlayher
       jmbaur
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "corerad";
   };
 }

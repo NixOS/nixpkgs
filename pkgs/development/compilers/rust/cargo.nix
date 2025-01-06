@@ -69,13 +69,13 @@ rustPlatform.buildRustPackage.override {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
     mainProgram = "cargo";
-    maintainers = teams.rust.members;
-    license = [ licenses.mit licenses.asl20 ];
-    platforms = platforms.unix;
+    maintainers = lib.teams.rust.members;
+    license = [ lib.licenses.mit lib.licenses.asl20 ];
+    platforms = lib.platforms.unix;
     # https://github.com/alexcrichton/nghttp2-rs/issues/2
     broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
   };

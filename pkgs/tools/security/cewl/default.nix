@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     mv $out/bin/cewl.rb $out/bin/cewl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Custom wordlist generator";
     mainProgram = "cewl";
     homepage = "https://digi.ninja/projects/cewl.php/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

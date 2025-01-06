@@ -35,12 +35,12 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patcher for IPS and BPS files";
     homepage = "https://github.com/Alcaro/Flips";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "flips";
   };
 }

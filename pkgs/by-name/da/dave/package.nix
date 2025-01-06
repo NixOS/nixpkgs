@@ -38,10 +38,10 @@ buildGoModule rec {
     "-X main.builtBy=nixpkgs"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/micromata/dave";
     description = "Totally simple and very easy to configure stand alone webdav server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lunik1 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lunik1 ];
   };
 }

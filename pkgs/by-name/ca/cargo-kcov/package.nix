@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
         --prefix PATH : ${lib.makeBinPath [ kcov ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to run kcov to get coverage report on Linux";
     mainProgram = "cargo-kcov";
     homepage = "https://github.com/kennytm/cargo-kcov";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       saschagrunert
       matthiasbeyer
     ];

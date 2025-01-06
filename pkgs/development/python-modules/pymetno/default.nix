@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with the met.no API";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     changelog = "https://github.com/Danielhiversen/pyMetno/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flyfloh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

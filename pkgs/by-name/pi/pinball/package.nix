@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://purl.org/rzr/pinball";
     description = "Emilia Pinball simulator";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.linux;
   };
 }

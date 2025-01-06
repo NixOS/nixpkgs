@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Japanese Mincho-typeface TrueType font";
     homepage = "https://fonts.jp/hanazono/";
     longDescription = ''
@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     # Unlimited permission is granted to use, copy, and distribute it, with
     # or without modification, either commercially and noncommercially.
     # THIS FONT IS PROVIDED "AS IS" WITHOUT WARRANTY.
-    license = [
-      licenses.ofl
-      licenses.free
+    license = with lib.licenses; [
+      ofl
+      free
     ];
-    maintainers = with maintainers; [ mathnerd314 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mathnerd314 ];
+    platforms = lib.platforms.all;
   };
 }

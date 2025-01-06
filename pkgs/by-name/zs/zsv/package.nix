@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     "--jq-prefix=${lib.getLib jq}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "World's fastest (simd) CSV parser, with an extensible CLI";
     mainProgram = "zsv";
     homepage = "https://github.com/liquidaty/zsv";
     changelog = "https://github.com/liquidaty/zsv/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

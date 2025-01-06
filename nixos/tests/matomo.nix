@@ -60,7 +60,7 @@ in
   };
   matomo-beta = matomoTest pkgs.matomo-beta // {
     name = "matomo-beta";
-    meta.maintainers = with maintainers; [
+    meta.maintainers = with lib.maintainers; [
       florianjacob
       mmilata
       twey

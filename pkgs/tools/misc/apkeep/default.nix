@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for downloading APK files from various sources";
     homepage = "https://github.com/EFForg/apkeep";
     changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "apkeep";
   };

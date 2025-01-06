@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     url = src.gitRepoUrl;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other
@@ -120,11 +120,11 @@ stdenv.mkDerivation rec {
       username/password combinations that you use.
     '';
     homepage = "https://pwsafe.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       c0bw3b
       pjones
     ];
-    platforms = platforms.unix;
-    license = licenses.artistic2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.artistic2;
   };
 }

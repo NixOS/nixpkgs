@@ -133,14 +133,14 @@ python.pkgs.buildPythonApplication rec {
 
   disabled = python.pythonOlder "3.9";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix; # Darwin and FreeBSD mentioned on homepage
     mainProgram = "borg";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
       globin
     ];

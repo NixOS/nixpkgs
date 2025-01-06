@@ -17,10 +17,10 @@ buildDunePackage rec {
     sha256 = "sha256-NLQkQx3ZgxU1zvaQjOi+38nSeX+zKCXW40zOxVNekZA=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-dtools";
     description = "Library providing various helper functions to make daemons";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "googleapiclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Python client library for Google's discovery based APIs";
     longDescription = ''
       These client libraries are officially supported by Google. However, the
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/google/google-api-python-client";
     changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

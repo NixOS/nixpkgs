@@ -36,11 +36,11 @@ buildPythonPackage rec {
   # Circular dependency: napari
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for writing svg files from napari";
     homepage = "https://github.com/napari/napari-svg";
     changelog = "https://github.com/napari/napari-svg/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

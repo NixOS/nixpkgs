@@ -86,12 +86,12 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     description = "New GNOME web browser";
     mainProgram = "eolie";
     homepage = "https://gitlab.gnome.org/World/eolie";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samdroid-apps ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ samdroid-apps ];
+    platforms = lib.platforms.linux;
   };
 }

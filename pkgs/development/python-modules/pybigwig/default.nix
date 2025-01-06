@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "testNumpyValues"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File access to bigBed files, and read and write access to bigWig files";
     longDescription = ''
       A Python extension, written in C, for quick access to bigBed files
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/deeptools/pyBigWig";
     changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ scalavision ];
   };
 }

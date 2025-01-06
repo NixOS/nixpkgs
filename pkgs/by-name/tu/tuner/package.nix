@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/louis77/tuner";
     description = "App to discover and play internet radio stations";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.louis77.tuner";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       abbe
       aleksana
     ];

@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   checkFeatures = [ "integration_tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Human-readable diff for todo.txt files";
     homepage = "https://github.com/Ekleog/todiff";
-    maintainers = with maintainers; [ ekleog ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ekleog ];
+    license = lib.licenses.mit;
   };
 }

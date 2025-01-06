@@ -16,7 +16,7 @@
   unstableGitUpdater,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "material-kwin-decoration";
   version = "7-unstable-2023-01-15";
 
@@ -56,10 +56,10 @@ mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Material-ish window decoration theme for KWin";
     homepage = "https://github.com/Zren/material-decoration";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.nickcao ];
   };
 }

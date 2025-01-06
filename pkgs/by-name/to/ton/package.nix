@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fully decentralized layer-1 blockchain designed by Telegram";
     homepage = "https://ton.org/";
     changelog = "https://github.com/ton-blockchain/ton/blob/v${version}/Changelog.md";
-    license = licenses.lgpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.lgpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

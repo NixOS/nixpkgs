@@ -33,12 +33,12 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ onnx ];
 
-  meta = with lib; {
+  meta = {
     description = "ONNX Model Exporter for PaddlePaddle";
     homepage = "https://github.com/PaddlePaddle/Paddle2ONNX";
     changelog = "https://github.com/PaddlePaddle/Paddle2ONNX/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

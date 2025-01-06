@@ -132,11 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gimp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

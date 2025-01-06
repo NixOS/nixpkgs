@@ -183,16 +183,16 @@ clangStdenv.mkDerivation {
     substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate Music Player for GNU/Linux";
     mainProgram = "deadbeef";
     homepage = "http://deadbeef.sourceforge.net/";
     downloadPage = "https://github.com/DeaDBeeF-Player/deadbeef";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ lib.maintainers.abbradar ];
   };
 }

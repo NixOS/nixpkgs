@@ -61,9 +61,9 @@
     deriving
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SSProve: A Foundational Framework for Modular Cryptographic Proofs in Coq";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
       {
         name = "Sebastian Ertel";

@@ -66,11 +66,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sshfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH/SFTP implementation for fsspec";
     homepage = "https://github.com/fsspec/sshfs/";
     changelog = "https://github.com/fsspec/sshfs/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melling ];
   };
 }

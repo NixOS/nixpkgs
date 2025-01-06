@@ -61,15 +61,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage and install your easyroam WiFi profiles";
     mainProgram = "easyroam_connect_desktop";
     longDescription = ''
       Using this software you can easily connect your device to eduroam® by simply logging in with your DFN-AAI account.
     '';
     homepage = "https://easyroam.de";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       shadows_withal
       MarchCraft
     ];

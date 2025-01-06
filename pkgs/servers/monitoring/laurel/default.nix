@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
   buildInputs = [ acl ];
 
-  meta = with lib; {
+  meta = {
     description = "Transform Linux Audit logs for SIEM usage";
     homepage = "https://github.com/threathunters-io/laurel";
     changelog = "https://github.com/threathunters-io/laurel/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilylange ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.emilylange ];
+    platforms = lib.platforms.linux;
   };
 }

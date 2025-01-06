@@ -71,12 +71,12 @@ rustPlatform.buildRustPackage rec {
         --replace-fail '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular IPC-based desktop launcher service";
     homepage = "https://github.com/pop-os/launcher";
-    platforms = platforms.linux;
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ samhug ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ samhug ];
     mainProgram = "pop-launcher";
   };
 }

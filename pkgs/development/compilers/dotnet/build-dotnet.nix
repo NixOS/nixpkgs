@@ -218,11 +218,11 @@ mkWrapper type (
         }
       );
 
-    meta = with lib; {
+    meta = {
       description = builtins.getAttr type descriptions;
       homepage = "https://dotnet.github.io/";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         kuznero
         mdarocha
         corngood

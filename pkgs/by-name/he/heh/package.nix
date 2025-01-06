@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rLZgKLL28/ZrXzHVI6m4YeV2mk4E9W58HjTzRl2bMOw=";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform terminal UI used for modifying file data in hex or ASCII";
     homepage = "https://github.com/ndd7xv/heh";
     changelog = "https://github.com/ndd7xv/heh/releases/tag/${src.rev}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ piturnah ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ piturnah ];
     mainProgram = "heh";
   };
 }

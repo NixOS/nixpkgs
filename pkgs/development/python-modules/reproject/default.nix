@@ -70,12 +70,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reproject" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reproject astronomical images";
     downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
     changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

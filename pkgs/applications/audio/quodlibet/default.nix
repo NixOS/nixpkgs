@@ -170,7 +170,7 @@ python3.pkgs.buildPythonApplication {
     gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     longDescription = ''
       Quod Libet is a GTK-based audio player written in Python, using
@@ -186,8 +186,8 @@ python3.pkgs.buildPythonApplication {
       & internet radio, and all major audio formats.
     '';
     homepage = "https://quodlibet.readthedocs.io/en/latest";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       coroa
       pbogdan
     ];

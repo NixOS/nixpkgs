@@ -87,11 +87,11 @@ python3.pkgs.buildPythonApplication rec {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     mainProgram = "glasgow";
   };
 }

@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Qt implementation of the DBusMenu protocol";
     homepage = "https://github.com/lxqt/libdbusmenu-lxqt";
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = lib.teams.lxqt.members;
   };
 }

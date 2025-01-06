@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out"/{share/man,bin}
   '';
-  meta = with lib; {
+  meta = {
     description = "Console implementation of 2048 game";
     mainProgram = "n2048";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "http://www.dettus.net/n2048/";
   };
 }

@@ -177,11 +177,11 @@ stdenv.mkDerivation rec {
       "-DBUILD_EXAMPLE=Off"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Lightweight Peer-to-Peer Communication Library";
-      license = licenses.gpl3Only;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.linsui ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux;
+      maintainers = [ lib.maintainers.linsui ];
     };
   };
 
@@ -298,12 +298,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "stable/"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jami.net/";
     description = "Free and universal communication platform that respects the privacy and freedoms of its users";
     mainProgram = "jami";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.linsui ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.linsui ];
   };
 }

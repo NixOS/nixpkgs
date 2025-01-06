@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     qrencode
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Attest the trustworthiness of a device against a human using time-based one-time passwords";
     homepage = "https://github.com/tpm2-software/tpm2-totp";
     changelog = "https://github.com/tpm2-software/tpm2-totp/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "tpm2-totp";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ raitobezarius ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

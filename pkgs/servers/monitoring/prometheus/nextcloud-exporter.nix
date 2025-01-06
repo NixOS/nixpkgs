@@ -20,11 +20,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nextcloud; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Nextcloud servers";
     homepage = "https://github.com/xperimental/nextcloud-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ willibutz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ willibutz ];
     mainProgram = "nextcloud-exporter";
   };
 }

@@ -26,12 +26,12 @@ buildGoModule rec {
   # Only build gopls, and not the integration tests or documentation generator.
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";
     changelog = "https://github.com/golang/tools/releases/tag/${src.rev}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       mic92
       rski
       SuperSandro2000

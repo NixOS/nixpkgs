@@ -53,12 +53,12 @@ python3.pkgs.buildPythonApplication rec {
     "--suffix PATH : ${lib.makeBinPath [ git ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
     changelog = "https://github.com/copier-org/copier/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ greg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ greg ];
     mainProgram = "copier";
   };
 }

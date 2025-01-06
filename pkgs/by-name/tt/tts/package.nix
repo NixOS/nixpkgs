@@ -188,12 +188,12 @@ python.pkgs.buildPythonApplication rec {
     inherit python;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/idiap/coqui-ai-TTS";
     changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/v${version}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
-    license = licenses.mpl20;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mpl20;
+    maintainers = lib.teams.tts.members;
     broken = false;
   };
 }

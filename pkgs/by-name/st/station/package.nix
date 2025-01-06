@@ -32,10 +32,10 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single place for all of your web applications";
     homepage = "https://getstation.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
     mainProgram = "station";

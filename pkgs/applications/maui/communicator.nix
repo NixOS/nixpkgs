@@ -49,11 +49,11 @@ mkDerivation {
     kcontacts
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Contacts and dialer application";
     mainProgram = "communicator";
     homepage = "https://invent.kde.org/maui/communicator";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

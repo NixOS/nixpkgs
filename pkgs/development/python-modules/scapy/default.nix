@@ -96,7 +96,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "scapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based network packet manipulation program and library";
     mainProgram = "scapy";
     longDescription = ''
@@ -122,9 +122,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://scapy.net/";
     changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       primeos
       bjornfor
     ];

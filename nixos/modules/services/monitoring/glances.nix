@@ -106,5 +106,5 @@ in
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
   };
 
-  meta.maintainers = with maintainers; [ claha ];
+  meta.maintainers = with lib.maintainers; [ claha ];
 }

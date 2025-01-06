@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nostalgia bucklespring keyboard sound";
     mainProgram = "buckle";
     longDescription = ''
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       <code>users.users.alice.extraGroups = [ "input" ];</code>
     '';
     homepage = "https://github.com/zevv/bucklespring";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.evils ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.evils ];
   };
 }

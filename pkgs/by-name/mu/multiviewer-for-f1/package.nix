@@ -93,12 +93,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial desktop client for F1 TV®";
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ babeuh ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ babeuh ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "multiviewer-for-f1";
   };

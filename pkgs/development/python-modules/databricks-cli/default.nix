@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "databricks_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Databricks";
     homepage = "https://github.com/databricks/databricks-cli";
     changelog = "https://github.com/databricks/databricks-cli/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

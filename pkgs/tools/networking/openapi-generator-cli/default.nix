@@ -36,13 +36,13 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
       homepage = "https://github.com/OpenAPITools/openapi-generator";
       changelog = "https://github.com/OpenAPITools/openapi-generator/releases/tag/v${finalAttrs.version}";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.asl20;
-      maintainers = with maintainers; [ shou ];
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ shou ];
       mainProgram = "openapi-generator-cli";
     };
 

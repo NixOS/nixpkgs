@@ -52,11 +52,11 @@ mkYarnPackage rec {
   passthru.entrypoint = "zigbee2mqtt-networkmap.js";
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/azuwis/zigbee2mqtt-networkmap/releases/tag/v${version}";
     description = "Home Assistant Custom Card to show Zigbee2mqtt network map";
     homepage = "https://github.com/azuwis/zigbee2mqtt-networkmap";
-    maintainers = with maintainers; [ azuwis ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
+    license = lib.licenses.mit;
   };
 }

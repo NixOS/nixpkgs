@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "napari_console" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin that adds a console to napari";
     homepage = "https://github.com/napari/napari-console";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

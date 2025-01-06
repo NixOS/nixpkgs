@@ -103,11 +103,11 @@ buildPythonPackage rec {
     "test/writer/test_elasticsearch_writer.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
     changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
   };
 }

@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     cp inxi.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and
@@ -98,8 +98,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://smxi.org/docs/inxi.htm";
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "inxi";
   };

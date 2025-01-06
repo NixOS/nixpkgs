@@ -47,12 +47,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 snap/gui/fclones-gui.png -t $out/share/pixmaps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive duplicate file remover";
     mainProgram = "fclones-gui";
     homepage = "https://github.com/pkolaczk/fclones-gui";
     changelog = "https://github.com/pkolaczk/fclones-gui/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

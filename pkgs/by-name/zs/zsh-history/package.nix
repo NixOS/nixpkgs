@@ -33,10 +33,10 @@ buildGoModule rec {
     zsh-history-shell-integration = nixosTests.zsh-history;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI to provide enhanced history for your ZSH shell";
     homepage = "https://github.com/b4b4r07/history";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "history";
   };

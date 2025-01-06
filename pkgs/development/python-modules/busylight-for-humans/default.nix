@@ -53,12 +53,12 @@ buildPythonPackage rec {
     $out/bin/busylight udev-rules -o $out/lib/udev/rules.d/99-busylight.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
     changelog = "https://github.com/JnyJny/busylight/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = teams.helsinki-systems.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.helsinki-systems.members;
     mainProgram = "busylight";
   };
 }

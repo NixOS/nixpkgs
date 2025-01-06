@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.bitcoind;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-peer electronic cash system";
     longDescription = ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is
@@ -139,11 +139,11 @@ stdenv.mkDerivation rec {
     homepage = "https://bitcoin.org/en/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       prusnak
       roconnor
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

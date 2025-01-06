@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
     cp -R share $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
-    license = [ licenses.asl20 licenses.mit ];
+    license = [ lib.licenses.asl20 lib.licenses.mit ];
     mainProgram = "tiny-dfr";
-    maintainers = [ maintainers.qyliss ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.qyliss ];
+    platforms = lib.platforms.linux;
   };
 }

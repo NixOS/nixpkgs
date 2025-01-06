@@ -67,11 +67,11 @@ stdenv.mkDerivation {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Jetbrains Toolbox";
     homepage = "https://jetbrains.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ AnatolyPopov ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ AnatolyPopov ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "jetbrains-toolbox";
   };

@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.flyn.org/projects/libdmapsharing/";
     description = "Library that implements the DMAP family of protocols";
-    maintainers = teams.gnome.members;
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

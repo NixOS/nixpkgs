@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     qtwayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI Firewall Management Application";
     longDescription = ''
       Firewall Builder is a GUI firewall management application for iptables,
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       managed from a single UI.
     '';
     homepage = "https://github.com/fwbuilder/fwbuilder";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.elatov ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.elatov ];
   };
 }

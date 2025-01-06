@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://github.com/amazonlinux/amazon-ec2-utils/releases/tag/v${version}";
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = lib.licenses.mit;

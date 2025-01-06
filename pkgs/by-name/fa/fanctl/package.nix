@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-tj00DXQEqC/8+3uzTMWcph+1fNTTVZLSJbV/5lLFkFs=";
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for fancontrol with more fine-grained control interface in its config file";
     mainProgram = "fanctl";
     homepage = "https://gitlab.com/mcoffin/fanctl";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ icewind1991 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ icewind1991 ];
+    platforms = lib.platforms.linux;
   };
 }

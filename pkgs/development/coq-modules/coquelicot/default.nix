@@ -54,10 +54,10 @@ mkCoqDerivation {
   propagatedBuildInputs = [ ssreflect ];
   useMelquiondRemake.logpath = "Coquelicot";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://coquelicot.saclay.inria.fr/";
     description = "Coq library for Reals";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

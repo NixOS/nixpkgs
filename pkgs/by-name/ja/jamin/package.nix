@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jamin --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jamin.sourceforge.net";
     description = "JACK Audio Mastering interface";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.nico202 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.nico202 ];
+    platforms = lib.platforms.linux;
   };
 }

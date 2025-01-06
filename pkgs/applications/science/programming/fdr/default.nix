@@ -69,12 +69,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cocotec.io/fdr/";
     description = "CSP refinement checker";
-    license = licenses.unfreeRedistributable;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

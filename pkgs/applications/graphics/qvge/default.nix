@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = if stdenv.hostPlatform.isDarwin then [ qtsvg ] else [ qtx11extras ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt Visual Graph Editor";
     mainProgram = "qvgeapp";
     homepage = "https://github.com/ArsMasiuk/qvge";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 }

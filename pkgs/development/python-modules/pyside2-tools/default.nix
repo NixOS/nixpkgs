@@ -60,10 +60,10 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PySide2 development tools";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

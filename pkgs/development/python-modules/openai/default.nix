@@ -109,12 +109,12 @@ buildPythonPackage rec {
     "tests/api_resources"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ malo ];
     mainProgram = "openai";
   };
 }

@@ -20,14 +20,14 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "hpilo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to access the HP iLO XML interface";
     mainProgram = "hpilo_cli";
     homepage = "https://seveas.github.io/python-hpilo/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl3Plus
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -34,8 +34,8 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
-  meta = with lib; {
-    license = [ licenses.gpl2Only ];
+  meta = {
+    license = [ lib.licenses.gpl2Only ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

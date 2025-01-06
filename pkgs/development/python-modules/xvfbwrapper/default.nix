@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ mock ];
 
-  meta = with lib; {
+  meta = {
     description = "Run headless display inside X virtual framebuffer (Xvfb)";
     homepage = "https://github.com/cgoldberg/xvfbwrapper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

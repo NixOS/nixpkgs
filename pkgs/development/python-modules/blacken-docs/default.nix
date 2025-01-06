@@ -31,12 +31,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adamchainz/blacken-docs";
     changelog = "https://github.com/adamchainz/blacken-docs/blob/${src.rev}/CHANGELOG.rst";
     description = "Run Black on Python code blocks in documentation files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ l0b0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "blacken-docs";
   };
 }

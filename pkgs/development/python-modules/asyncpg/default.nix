@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncpg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
     changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${version}";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       implementation of PostgreSQL server binary protocol for use with Python's
       asyncio framework.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

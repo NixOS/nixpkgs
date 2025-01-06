@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     cp 49-micronucleus.rules $out/lib/udev
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Upload tool for micronucleus";
     mainProgram = "micronucleus";
     homepage = "https://github.com/micronucleus/micronucleus";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.cab404 ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.cab404 ];
   };
 }

@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./remove-malloc-declaration.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to resize BDF fonts";
     homepage = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ malte-v ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ malte-v ];
     mainProgram = "bdfresize";
   };
 }

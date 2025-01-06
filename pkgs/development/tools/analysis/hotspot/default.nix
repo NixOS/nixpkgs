@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       $out/libexec/hotspot-perfparser
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for Linux perf";
     mainProgram = "hotspot";
     longDescription = ''
@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/KDAB/hotspot";
     changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
-    license = with licenses; [ gpl2Only gpl3Only ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nh2 ];
+    license = with lib.licenses; [ gpl2Only gpl3Only ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
 }

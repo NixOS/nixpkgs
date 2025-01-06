@@ -127,12 +127,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "optuna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
     changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";
   };
 }

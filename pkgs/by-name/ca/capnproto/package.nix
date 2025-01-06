@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://capnproto.org/";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
       capability-based RPC system. Think JSON, except binary. Or think Protocol
       Buffers, except faster.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

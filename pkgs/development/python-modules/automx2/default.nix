@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "automx2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Email client configuration made easy";
     homepage = "https://rseichter.github.io/automx2/";
     changelog = "https://github.com/rseichter/automx2/blob/${version}/CHANGELOG";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

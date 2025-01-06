@@ -42,11 +42,11 @@ buildPythonPackage rec {
       "test_invalid_def_stmt"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to generate PEG parsers";
     homepage = "https://github.com/we-like-parsers/pegen";
     changelog = "https://github.com/we-like-parsers/pegen/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

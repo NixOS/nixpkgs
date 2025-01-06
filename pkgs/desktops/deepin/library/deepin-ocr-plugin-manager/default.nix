@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin manager of optical character recognition for DDE";
     homepage = "https://github.com/linuxdeepin/deepin-ocr-plugin-manager";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

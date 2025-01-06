@@ -46,12 +46,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requirements_detector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
     changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "detect-requirements";
+    # https://github.com/landscapeio/requirements-detector/issues/48
+    broken = lib.versionAtLeast astroid.version "3";
   };
 }

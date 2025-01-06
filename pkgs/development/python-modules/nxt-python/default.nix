@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nxt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
     homepage = "https://github.com/schodet/nxt-python";
     changelog = "https://github.com/schodet/nxt-python/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ibizaman ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ibizaman ];
   };
 }

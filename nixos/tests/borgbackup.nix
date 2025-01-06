@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   passphrase = "supersecret";
@@ -40,8 +40,8 @@ let
 
 in {
   name = "borgbackup";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ dotlambda ];
+  meta = {
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 
   nodes = {

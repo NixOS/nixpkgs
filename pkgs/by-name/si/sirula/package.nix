@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     gtk-layer-shell
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple app launcher for wayland written in rust";
     homepage = "https://github.com/DorianRudolph/sirula";
-    license = with licenses; [ gpl3Plus ];
+    license = with lib.licenses; [ gpl3Plus ];
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

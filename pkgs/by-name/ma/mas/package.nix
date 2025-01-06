@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       steinybot
       zachcoyle
     ];

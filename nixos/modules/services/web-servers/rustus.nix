@@ -9,7 +9,7 @@ let
   cfg = config.services.rustus;
 in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  meta.maintainers = with lib.maintainers; [ happysalada ];
 
   options.services.rustus = {
 

@@ -266,9 +266,9 @@ stdenv.mkDerivation (
             tolerance.
           '';
 
-          platforms = platforms.unix;
-          maintainers = teams.beam.members;
-          license = licenses.asl20;
+          platforms = lib.platforms.unix;
+          maintainers = lib.teams.beam.members;
+          license = lib.licenses.asl20;
         }
         // meta
       );

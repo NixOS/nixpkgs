@@ -54,11 +54,11 @@ python3.pkgs.buildPythonApplication rec {
     "rich_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface to Rich";
     homepage = "https://github.com/Textualize/rich-cli";
     changelog = "https://github.com/Textualize/rich-cli/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rich";
   };

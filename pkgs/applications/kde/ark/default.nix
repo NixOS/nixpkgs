@@ -78,17 +78,17 @@ mkDerivation {
     (lib.makeBinPath extraTools)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/ark/";
     description = "Graphical file compression/decompression utility";
     mainProgram = "ark";
     license =
-      with licenses;
+      with lib.licenses;
       [
         gpl2
         lgpl3
       ]
-      ++ optional unfreeEnableUnrar unfree;
-    maintainers = [ maintainers.ttuegel ];
+      ++ lib.optional unfreeEnableUnrar unfree;
+    maintainers = [ lib.maintainers.ttuegel ];
   };
 }

@@ -57,12 +57,12 @@ mkDerivation rec {
     "--set-default LEOCAD_LIB ${parts}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CAD program for creating virtual LEGO models";
     mainProgram = "leocad";
     homepage = "https://www.leocad.org/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

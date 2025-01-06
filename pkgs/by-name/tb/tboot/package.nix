@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pre-kernel/VMM module that uses Intel(R) TXT to perform a measured and verified launch of an OS kernel/VMM";
     homepage = "https://sourceforge.net/projects/tboot/";
     changelog = "https://sourceforge.net/p/tboot/code/ci/v${version}/tree/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ak ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ak ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

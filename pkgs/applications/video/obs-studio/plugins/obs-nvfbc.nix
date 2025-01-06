@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio source plugin for NVIDIA FBC API";
     homepage = "https://gitlab.com/fzwoch/obs-nvfbc";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ babbaj ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reactivex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for composing asynchronous and event-based programs";
     homepage = "https://github.com/ReactiveX/RxPY";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

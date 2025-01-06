@@ -38,10 +38,10 @@ mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clock app for plasma mobile";
     homepage = "https://invent.kde.org/plasma-mobile/kclock";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

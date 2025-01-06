@@ -83,10 +83,10 @@ mkDerivation {
     kipi-plugins
     libkipi
   ];
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/spectacle/";
     description = "Screenshot capture utility";
     mainProgram = "spectacle";
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

@@ -76,10 +76,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python loader for many binary formats";
     homepage = "https://github.com/angr/cle";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

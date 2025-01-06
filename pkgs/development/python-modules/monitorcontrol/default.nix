@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ pname ];
 
-  meta = with lib; {
+  meta = {
     description = "Python monitor controls using DDC-CI";
     mainProgram = "monitorcontrol";
     homepage = "https://github.com/newAM/monitorcontrol";
     changelog = "https://github.com/newAM/monitorcontrol/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ newam ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

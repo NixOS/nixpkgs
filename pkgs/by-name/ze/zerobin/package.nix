@@ -59,11 +59,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zerobin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client side encrypted pastebin";
     homepage = "https://0bin.net/";
-    license = licenses.wtfpl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ julm ];
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ julm ];
   };
 }

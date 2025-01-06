@@ -65,11 +65,11 @@ buildGoModule rec {
     export CI=0
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GitLab Runner the continuous integration executor of GitLab";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://docs.gitlab.com/runner/";
-    platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ zimbatm ] ++ teams.gitlab.members;
+    platforms = lib.platforms.unix ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ zimbatm ] ++ lib.teams.gitlab.members;
   };
 }

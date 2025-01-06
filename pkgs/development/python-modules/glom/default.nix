@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Restructuring data, the Python way";
     mainProgram = "glom";
     longDescription = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mahmoud/glom";
     changelog = "https://github.com/mahmoud/glom/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

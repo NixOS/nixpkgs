@@ -26,15 +26,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_project"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help projects ensure that third-party Rust dependencies have been audited by a trusted source";
     mainProgram = "cargo-vet";
     homepage = "https://mozilla.github.io/cargo-vet";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       jk
       matthiasbeyer

@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
         --replace-fail ",--version-script=@0@'.format(spice_client_glib_syms_path)" "'"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK 3 SPICE widget";
     longDescription = ''
       spice-gtk is a GTK 3 SPICE widget. It features glib-based
@@ -184,8 +184,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.spice-space.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.xeji ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.xeji ];
+    platforms = lib.platforms.unix;
   };
 }

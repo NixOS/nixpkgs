@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     " $out/bin/extra-container
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run declarative containers without full system rebuilds";
     homepage = "https://github.com/erikarvstedt/extra-container";
     changelog = "https://github.com/erikarvstedt/extra-container/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.erikarvstedt ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.erikarvstedt ];
     mainProgram = "extra-container";
   };
 }

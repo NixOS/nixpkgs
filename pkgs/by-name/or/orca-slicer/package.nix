@@ -36,17 +36,17 @@ bambu-studio.overrideAttrs (
       mv $out/LICENSE.txt $out/share/OrcaSlicer/LICENSE.txt
     '';
 
-    meta = with lib; {
+    meta = {
       description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
       homepage = "https://github.com/SoftFever/OrcaSlicer";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [
         zhaofengli
         ovlach
         pinpox
       ];
       mainProgram = "orca-slicer";
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   }
 )

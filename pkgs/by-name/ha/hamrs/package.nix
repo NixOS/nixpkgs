@@ -40,17 +40,17 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/usr/share/icons $out/share
     '';
 
-  meta = with lib; {
+  meta = {
     description = "A simple, portable logger tailored for activities like Parks on the Air, Field Day, and more.";
     homepage = "https://hamrs.app/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.jhollowe ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.jhollowe ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "i686-linux"
     ];
     mainProgram = "hamrs";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

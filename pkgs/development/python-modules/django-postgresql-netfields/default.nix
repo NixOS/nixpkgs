@@ -50,11 +50,11 @@ buildPythonPackage rec {
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
   env.DJANGO_SETTINGS_MODULE = "testsettings";
 
-  meta = with lib; {
+  meta = {
     description = "Django PostgreSQL netfields implementation";
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
     changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${version}/CHANGELOG";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

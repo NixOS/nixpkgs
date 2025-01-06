@@ -45,11 +45,11 @@ buildGoModule rec {
       --fish <($out/bin/k3sup completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alexellis/k3sup";
     description = "Bootstrap Kubernetes with k3s over SSH";
     mainProgram = "k3sup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ welteki qjoly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ welteki qjoly ];
   };
 }

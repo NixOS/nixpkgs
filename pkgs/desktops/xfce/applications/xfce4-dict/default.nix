@@ -23,9 +23,9 @@ mkXfceDerivation {
     xfce4-panel
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dictionary Client for the Xfce desktop environment";
     mainProgram = "xfce4-dict";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

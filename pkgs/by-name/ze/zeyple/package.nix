@@ -22,11 +22,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 $src/zeyple/zeyple.py $out/bin/zeyple
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility program to automatically encrypt outgoing emails with GPG";
     homepage = "https://infertux.com/labs/zeyple/";
-    maintainers = with maintainers; [ ettom ];
-    license = licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ ettom ];
+    license = lib.licenses.agpl3Plus;
     mainProgram = "zeyple";
   };
 }

@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Tedee locks";
     homepage = "https://github.com/zweckj/pytedee_async";
     changelog = "https://github.com/zweckj/pytedee_async/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

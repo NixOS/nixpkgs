@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     vte
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical note taking application";
     mainProgram = "cherrytree";
     longDescription = ''
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.giuspen.com/cherrytree";
     changelog = "https://raw.githubusercontent.com/giuspen/cherrytree/${version}/changelog.txt";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

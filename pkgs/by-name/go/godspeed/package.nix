@@ -25,12 +25,12 @@ buildGoModule rec {
     mv $out/bin/GodSpeed $out/bin/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manager for reverse shells";
     homepage = "https://github.com/redcode-labs/GodSpeed";
     changelog = "https://github.com/redcode-labs/GodSpeed/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ] ++ lib.teams.redcodelabs.members;
     mainProgram = "godspeed";
     broken = stdenv.hostPlatform.isDarwin;
   };

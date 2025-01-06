@@ -67,11 +67,11 @@ stdenv.mkDerivation {
     url = "https://github.com/sirjuddington/SLADE.git";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
-    license = licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ertes ];
+    license = lib.licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ertes ];
   };
 }

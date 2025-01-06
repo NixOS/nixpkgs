@@ -165,11 +165,11 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
   doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libjxl/libjxl";
     description = "JPEG XL image format reference implementation";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nh2 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nh2 ];
+    platforms = lib.platforms.all;
   };
 }

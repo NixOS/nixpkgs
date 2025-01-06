@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
         done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tools to interact with Polar watches";
     longDescription = ''
       A set of command line tools written in Ruby to interact with Polar watches
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
         services.udev.packages = [ pkgs.polar ]
     '';
     homepage = "https://github.com/cmaion/polar";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jluttine ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jluttine ];
+    platforms = lib.platforms.linux;
   };
 }

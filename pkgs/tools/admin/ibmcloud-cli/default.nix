@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for IBM Cloud";
     homepage = "https://cloud.ibm.com/docs/cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "powerpc64le-linux" "s390x-linux" ] ++ platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "powerpc64le-linux" "s390x-linux" ] ++ lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "ibmcloud";
   };
 })

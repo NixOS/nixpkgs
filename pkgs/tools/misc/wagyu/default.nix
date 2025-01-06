@@ -23,14 +23,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  meta = with lib; {
+  meta = {
     description = "Rust library for generating cryptocurrency wallets";
     homepage = "https://github.com/AleoHQ/wagyu";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = [ maintainers.offline ];
+    maintainers = [ lib.maintainers.offline ];
     mainProgram = "wagyu";
   };
 }

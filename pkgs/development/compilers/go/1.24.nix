@@ -189,13 +189,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
     description = "Go Programming language";
     homepage = "https://go.dev/";
-    license = licenses.bsd3;
-    maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.golang.members;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.wasi ++ lib.platforms.freebsd;
     mainProgram = "go";
   };
 })

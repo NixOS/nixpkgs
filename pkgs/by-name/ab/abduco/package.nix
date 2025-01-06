@@ -53,12 +53,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://brain-dump.org/projects/abduco";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     description = "Allows programs to be run independently from its controlling terminal";
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
     mainProgram = "abduco";
   };
 }

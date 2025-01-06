@@ -58,13 +58,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pubnub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
     changelog = "https://github.com/pubnub/python/releases/tag/v${version}";
     # PubNub Software Development Kit License Agreement
     # https://github.com/pubnub/python/blob/master/LICENSE
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

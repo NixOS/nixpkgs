@@ -36,14 +36,14 @@ buildDunePackage rec {
       ocaml-freestanding
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/mirage-crypto";
     description = "Simple symmetric cryptography for the modern age";
     license = [
-      licenses.isc # default license
-      licenses.bsd2 # mirage-crypto-rng-mirage
-      licenses.mit # mirage-crypto-ec
+      lib.licenses.isc # default license
+      lib.licenses.bsd2 # mirage-crypto-rng-mirage
+      lib.licenses.mit # mirage-crypto-ec
     ];
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

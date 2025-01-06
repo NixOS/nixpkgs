@@ -24,7 +24,7 @@ let
       meta = a.meta // {
         platforms = graylog-5_1.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       };
     });
 in {
@@ -83,7 +83,7 @@ in {
     meta = {
       homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
       description = "Integrations are tools that help Graylog work with external systems (unfree enterprise integrations)";
-      license = licenses.unfree;
+      license = lib.licenses.unfree;
     };
   };
   filter-messagesize = glPlugin rec {
@@ -232,7 +232,7 @@ in {
     meta = {
       homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
       description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog";
-      license = licenses.gpl3Only;
+      license = lib.licenses.gpl3Only;
     };
   };
   snmp = glPlugin rec {
@@ -272,7 +272,7 @@ in {
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
       description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP";
-      license = licenses.gpl3Only;
+      license = lib.licenses.gpl3Only;
     };
   };
   twiliosms = glPlugin rec {

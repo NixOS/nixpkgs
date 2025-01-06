@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulumi_hcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulumi python hetzner web services provider";
     homepage = "https://github.com/pulumi/pulumi-hcloud";
     changelog = "https://github.com/pulumi/pulumi-hcloud/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ albertodvp ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ albertodvp ];
   };
 }

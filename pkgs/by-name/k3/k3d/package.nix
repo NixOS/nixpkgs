@@ -58,7 +58,7 @@ buildGoModule rec {
 
   env.GOWORK = "off";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/k3d-io/k3d/";
     changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";
     description = "Helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
@@ -69,8 +69,8 @@ buildGoModule rec {
       k3d creates containerized k3s clusters. This means, that you can spin up a
       multi-node k3s cluster on a single machine using docker.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -33,10 +33,10 @@ buildDunePackage rec {
     fmt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Basic utilities for interacting with terminals";
     homepage = "https://github.com/CraigFe/progress";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

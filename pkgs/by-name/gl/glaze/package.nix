@@ -20,10 +20,10 @@ stdenv.mkDerivation (final: {
   nativeBuildInputs = [ cmake ];
   cmakeFlags = [ (lib.cmakeBool "glaze_ENABLE_AVX2" enableAvx2) ];
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast, in memory, JSON and interface library for modern C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.mit;
   };
 })

@@ -99,11 +99,11 @@ buildPythonPackage rec {
     inherit (nixosTests) graphite;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise scalable realtime graphing";
     homepage = "http://graphiteapp.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       offline
       basvandijk
     ];

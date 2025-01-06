@@ -70,15 +70,15 @@ rustPlatform.buildRustPackage rec {
     rm $out/bin/halp-{completions,mangen,test}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to get help with CLI tools";
     homepage = "https://github.com/orhun/halp";
     changelog = "https://github.com/orhun/halp/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "halp";
   };
 }

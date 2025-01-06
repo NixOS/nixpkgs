@@ -111,9 +111,9 @@ stdenv.mkDerivation rec {
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
     maintainers = with lib.maintainers; [ aucub ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
+    license = [
+      lib.licenses.gpl2Plus
+      lib.licenses.openssl
     ];
     platforms = lib.platforms.linux;
     knownVulnerabilities = [

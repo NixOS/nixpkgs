@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
   # 1 passed; 44 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal disk space navigator";
     homepage = "https://github.com/imsnif/diskonaut";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       evanjs
       figsoda
     ];

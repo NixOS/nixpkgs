@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nampa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the FLIRT technology";
     homepage = "https://github.com/thebabush/nampa";
     changelog = "https://github.com/thebabush/nampa/releases/tag/${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

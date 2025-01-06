@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel as a library";
     longDescription = ''
       LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as
@@ -113,9 +113,9 @@ stdenv.mkDerivation rec {
       overhead
     '';
     homepage = "https://github.com/lkl/linux/";
-    platforms = platforms.linux; # Darwin probably works too but I haven't tested it
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux; # Darwin probably works too but I haven't tested it
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       copumpkin
       raitobezarius
     ];

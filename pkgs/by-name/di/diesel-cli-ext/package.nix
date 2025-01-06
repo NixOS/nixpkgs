@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ya7RL3TuQjKkEkggK/ANChtVZRuTaooM+lE3KBZnvYU=";
 
-  meta = with lib; {
+  meta = {
     description = "Provides different tools for projects using the diesel_cli";
     homepage = "https://crates.io/crates/diesel_cli_ext";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     mainProgram = "diesel_ext";
-    maintainers = with maintainers; [ siph ];
+    maintainers = with lib.maintainers; [ siph ];
   };
 }

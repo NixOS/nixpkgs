@@ -19,9 +19,9 @@ buildDunePackage {
 
   doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder ocaml.version "5.0";
 
-  meta = with lib; {
+  meta = {
     description = "Simple Profiling Library for OCaml";
-    maintainers = [ maintainers.kenran ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.kenran ];
+    license = lib.licenses.mit;
   };
 }

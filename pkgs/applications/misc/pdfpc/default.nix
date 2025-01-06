@@ -75,13 +75,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "MOVIES" false);
 
-  meta = with lib; {
+  meta = {
     description = "Presenter console with multi-monitor support for PDF files";
     mainProgram = "pdfpc";
     homepage = "https://pdfpc.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
   };
 
 }

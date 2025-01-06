@@ -17,11 +17,11 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ icalendar ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dmedvinsky/mutt-ics";
     description = "Tool to show calendar event details in Mutt";
     mainProgram = "mutt-ics";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mh182 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mh182 ];
   };
 }

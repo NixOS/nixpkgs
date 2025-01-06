@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SELinux policy core utilities written in Python";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://selinuxproject.org";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

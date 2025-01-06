@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rs2EWcvTxLVeJ0t+jLM75s+K72t+hqKzwy3oAdCZ8BE=";
 
-  meta = with lib; {
+  meta = {
     description = "Demangle Rust symbol names using rustc-demangle";
     homepage = "https://github.com/luser/rustfilt";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ wykurz ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ wykurz ];
     mainProgram = "rustfilt";
   };
 }

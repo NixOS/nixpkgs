@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm and tool";
     longDescription = ''
@@ -71,13 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
       in the following internet draft:
       http://www.ietf.org/id/draft-alakuijala-brotli
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ freezeboy ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "brotli";
   };
 })

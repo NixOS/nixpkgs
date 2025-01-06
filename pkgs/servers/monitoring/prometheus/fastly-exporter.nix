@@ -22,11 +22,11 @@ buildGoModule rec {
     inherit (nixosTests.prometheus-exporters) fastly;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for the Fastly Real-time Analytics API";
     homepage = "https://github.com/fastly/fastly-exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.deshaw.members;
     mainProgram = "fastly-exporter";
   };
 }

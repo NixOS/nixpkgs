@@ -28,12 +28,12 @@ buildDotnetModule rec {
     mv $out/bin/{BTCPayServer,btcpayserver} || :
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
     changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
-    maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ kcalvinalvin erikarvstedt ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

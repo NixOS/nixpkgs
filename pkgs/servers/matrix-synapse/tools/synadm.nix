@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Command line admin tool for Synapse";
     mainProgram = "synadm";
     longDescription = ''
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/JOJ0/synadm/releases/tag/v${version}";
     homepage = "https://github.com/JOJ0/synadm";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datauri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
     changelog = "https://github.com/fcurella/python-datauri/releases/tag/v${version}";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ yuu ];
   };
 }

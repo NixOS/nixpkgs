@@ -33,11 +33,11 @@ buildGoModule rec {
     package = faraday;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LND Channel Management Tools";
     homepage = "https://github.com/lightninglabs/faraday";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       proofofkeags
       prusnak
     ];

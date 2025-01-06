@@ -22,11 +22,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # Really weird test failures (`nix-build-python2.css not found`)
 
-  meta = with lib; {
+  meta = {
     description = "Python LESS Compiler";
     mainProgram = "lesscpy";
     homepage = "https://github.com/lesscpy/lesscpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

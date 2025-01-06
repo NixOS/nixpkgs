@@ -59,11 +59,11 @@ buildPythonPackage rec {
     "zeroconf.asyncio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
     changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

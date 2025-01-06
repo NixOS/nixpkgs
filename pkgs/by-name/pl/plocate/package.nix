@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
     "-Ddbpath=locatedb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       SuperSandro2000
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

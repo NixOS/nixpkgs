@@ -32,12 +32,12 @@ buildGoModule rec {
   # Don't run Go tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Server to network boot and provision Fedora CoreOS and Flatcar Linux clusters";
     homepage = "https://matchbox.psdn.io/";
     changelog = "https://github.com/poseidon/matchbox/blob/main/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dghubble ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dghubble ];
     mainProgram = "matchbox";
   };
 }

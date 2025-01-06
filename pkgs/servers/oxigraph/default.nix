@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
   # requires packaging of the associated python modules
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/oxigraph/oxigraph";
     description = "SPARQL graph database";
     platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
-    maintainers = with maintainers; [ astro ];
-    license = with licenses; [ asl20 mit ];
+    maintainers = [ lib.maintainers.astro ];
+    license = with lib.licenses; [ asl20 mit ];
     mainProgram = "oxigraph_server";
   };
 }

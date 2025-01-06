@@ -112,10 +112,10 @@ stdenv.mkDerivation rec {
     inherit mpiSupport;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://petsc.org/release/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ cburstedde ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ cburstedde ];
   };
 }

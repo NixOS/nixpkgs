@@ -58,17 +58,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { url = "git://git.suckless.org/dmenu"; };
 
-  meta = with lib; {
+  meta = {
     description = "Generic, highly customizable, and efficient menu for the X Window System";
     homepage = "https://tools.suckless.org/dmenu";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pSub
       globin
       qusic
       _0david0mp
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "dmenu";
   };
 }

@@ -76,12 +76,12 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
     homepage = "https://github.com/vivictorg/vivictpp";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tilpner ];
     mainProgram = "vivictpp";
   };
 }

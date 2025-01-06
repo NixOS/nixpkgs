@@ -87,9 +87,9 @@ stdenv.mkDerivation rec {
       and HDR mode and can read various image formats. Run `astcenc
       -help` to see all the options.
     '';
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dasisdormax ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dasisdormax ];
     broken = !stdenv.hostPlatform.is64bit;
   };
 }

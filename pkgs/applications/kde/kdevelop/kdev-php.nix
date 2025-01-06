@@ -25,11 +25,11 @@ mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
-    maintainers = [ maintainers.aanderse ];
-    platforms = platforms.linux;
+  meta = {
+    maintainers = [ lib.maintainers.aanderse ];
+    platforms = lib.platforms.linux;
     description = "PHP support for KDevelop";
     homepage = "https://www.kdevelop.org";
-    license = [ licenses.gpl2 ];
+    license = [ lib.licenses.gpl2 ];
   };
 }

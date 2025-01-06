@@ -48,16 +48,16 @@ let
       doCheck = true;
     });
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/pypa/packaging/blob/${version}/CHANGELOG.rst";
       description = "Core utilities for Python packages";
       downloadPage = "https://github.com/pypa/packaging";
       homepage = "https://packaging.pypa.io/";
-      license = with licenses; [
+      license = with lib.licenses; [
         bsd2
         asl20
       ];
-      maintainers = teams.python.members ++ (with maintainers; [ bennofs ]);
+      maintainers = lib.teams.python.members ++ (with lib.maintainers; [ bennofs ]);
     };
   };
 in

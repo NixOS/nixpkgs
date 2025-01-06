@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     stdenv.hostPlatform != stdenv.buildPlatform
   ) "-DMSGPACK_BUILD_EXAMPLES=OFF";
 
-  meta = with lib; {
+  meta = {
     description = "MessagePack implementation for C and C++";
     homepage = "https://msgpack.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ redbaron ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ redbaron ];
+    platforms = lib.platforms.all;
   };
 }

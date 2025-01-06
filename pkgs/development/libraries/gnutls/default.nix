@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
     static = pkgsStatic.gnutls;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU Transport Layer Security Library";
 
     longDescription = ''
@@ -189,8 +189,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://gnutls.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ vcunat ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ vcunat ];
+    platforms = lib.platforms.all;
   };
 }

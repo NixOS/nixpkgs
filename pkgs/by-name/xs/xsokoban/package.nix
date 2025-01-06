@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share $out/man/man1 $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X sokoban";
     mainProgram = "xsokoban";
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

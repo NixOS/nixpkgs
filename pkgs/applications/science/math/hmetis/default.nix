@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     mv libhmetis.a $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = "http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"

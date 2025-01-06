@@ -27,10 +27,10 @@ python3.pkgs.buildPythonApplication {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Bisect nix builds";
     homepage = "https://github.com/timokau/nix-bisect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

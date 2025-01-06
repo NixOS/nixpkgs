@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NanoVNA-Saver/nanovna-saver";
     description =
       "A tool for reading, displaying and saving data from the NanoVNA";
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
       frequency spans in segments to gain more than 101 data points, and
       generally display and analyze the resulting data.
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zaninime tmarkus ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zaninime tmarkus ];
   };
 }

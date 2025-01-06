@@ -44,12 +44,12 @@ in
 
     passthru.tests.redmine = nixosTests.redmine;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.redmine.org/";
       changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
-      license = licenses.gpl2;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ aanderse felixsinger megheaiulian ];
+      license = lib.licenses.gpl2;
       knownVulnerabilities = [ "CVE-2024-54133" "GHSA-r95h-9x8f-r3f7" ];
     };
   }

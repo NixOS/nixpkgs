@@ -96,14 +96,14 @@ stdenv.mkDerivation rec {
     bootstrap = startFPC;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free Pascal Compiler from a source distribution";
     homepage = "https://www.freepascal.org";
-    maintainers = [ maintainers.raskin ];
-    license = with licenses; [
+    maintainers = [ lib.maintainers.raskin ];
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

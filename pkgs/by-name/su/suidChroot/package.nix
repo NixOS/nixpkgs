@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     sed -i -e '/chmod u+s/d' Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Setuid-safe wrapper for chroot";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
   };
 }

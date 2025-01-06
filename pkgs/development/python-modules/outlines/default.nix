@@ -61,10 +61,10 @@ buildPythonPackage rec {
     python3 -c 'import outlines'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Structured text generation";
     homepage = "https://github.com/outlines-dev/outlines";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lach ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lach ];
   };
 }

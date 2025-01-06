@@ -41,11 +41,11 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  meta = with lib; {
+  meta = {
     description = "An MkDocs plugin that simplifies configuring page titles and their order";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin";
     changelog = "https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

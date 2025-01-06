@@ -57,10 +57,10 @@
 
   propagatedBuildInputs = [ ssreflect ];
 
-  meta = with lib; {
+  meta = {
     description = "Finite data structures with extensional reasoning";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 
 }).overrideAttrs

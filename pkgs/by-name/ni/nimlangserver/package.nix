@@ -26,9 +26,9 @@ buildNimPackage (
       // (with lib; {
         description = "Nim language server implementation (based on nimsuggest)";
         homepage = "https://github.com/nim-lang/langserver";
-        license = licenses.mit;
+        license = lib.licenses.mit;
         mainProgram = "nimlangserver";
-        maintainers = with maintainers; [ daylinmorgan ];
+        maintainers = with lib.maintainers; [ daylinmorgan ];
       });
   }
 )

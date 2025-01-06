@@ -414,7 +414,7 @@ let
         maintainers = lib.teams.linux-kernel.members ++ [
           maintainers.thoughtpolice
         ];
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
         badPlatforms =
           lib.optionals (lib.versionOlder version "4.15") [ "riscv32-linux" "riscv64-linux" ] ++
           lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";

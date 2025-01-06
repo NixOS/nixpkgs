@@ -59,12 +59,12 @@ buildPostgresqlExtension {
 
   enableUpdateScript = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open Source PostgreSQL Audit Logging";
     homepage = "https://github.com/pgaudit/pgaudit";
     changelog = "https://github.com/pgaudit/pgaudit/releases/tag/${source.version}";
-    maintainers = with maintainers; [ idontgetoutmuch ];
+    maintainers = with lib.maintainers; [ idontgetoutmuch ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

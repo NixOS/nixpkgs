@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-regexp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     homepage = "https://www.liblognorm.com/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     mainProgram = "lognormalizer";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

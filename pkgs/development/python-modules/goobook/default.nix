@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goobook" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access your Google contacts from the command line";
     mainProgram = "goobook";
     longDescription = ''
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://pypi.org/project/goobook/";
     changelog = "https://gitlab.com/goobook/goobook/-/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

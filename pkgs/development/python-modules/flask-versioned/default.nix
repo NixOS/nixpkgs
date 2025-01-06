@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
-  meta = with lib; {
+  meta = {
     description = "Flask plugin to rewrite file paths to add version info";
     homepage = "https://github.com/pilt/flask-versioned";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

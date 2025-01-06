@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   # Do not use pythonImportsCheck because this will also initialize mpi which requires a network interface
 
-  meta = with lib; {
+  meta = {
     description = "Python language bindings for preCICE";
     homepage = "https://github.com/precice/python-bindings";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

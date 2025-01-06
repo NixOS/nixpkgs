@@ -50,11 +50,11 @@ buildPythonPackage rec {
     "pysiaalarm.aio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
     changelog = "https://github.com/eavanvalkenburg/pysiaalarm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

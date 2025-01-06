@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stravalib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with Strava v3 REST API";
     homepage = "https://github.com/stravalib/stravalib";
     changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

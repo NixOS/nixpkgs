@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_views" ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds CreateView and DropView constructs to SQLAlchemy";
     homepage = "https://github.com/jklukas/sqlalchemy-views";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

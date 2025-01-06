@@ -67,7 +67,7 @@ buildPythonPackage rec {
     "TestJson.test_datetime"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
     longDescription = "
       Monty implements supplementary useful functions for Python that are not part of the
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
     changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

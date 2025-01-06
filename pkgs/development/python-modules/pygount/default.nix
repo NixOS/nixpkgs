@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygount" ];
 
-  meta = with lib; {
+  meta = {
     description = "Count lines of code for hundreds of languages using pygments";
     mainProgram = "pygount";
     homepage = "https://github.com/roskakori/pygount";
     changelog = "https://github.com/roskakori/pygount/blob/${src.rev}/CHANGES.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ nickcao ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

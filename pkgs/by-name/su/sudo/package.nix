@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) sudo; };
 
-  meta = with lib; {
+  meta = {
     description = "Command to run commands as root";
     longDescription = ''
       Sudo (su "do") allows a system administrator to delegate
@@ -85,14 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
-    license = with licenses; [
+    license = with lib.licenses; [
       sudo
       bsd2
       bsd3
       zlib
     ];
-    maintainers = with maintainers; [ rhendric ];
-    platforms = platforms.linux ++ platforms.freebsd;
+    maintainers = with lib.maintainers; [ rhendric ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "sudo";
   };
 })

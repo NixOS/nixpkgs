@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-O1kkfrwv7xiOh3wCV/ce6cqpkMPRRzcXOFESYMAhiKA=";
 
-  meta = with lib; {
+  meta = {
     description = "Duration conversion between units";
     homepage = "https://codeberg.org/annaaurora/didu";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "didu";
   };
 }

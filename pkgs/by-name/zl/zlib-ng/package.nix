@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     "-DINSTALL_UTILS=ON"
   ] ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "zlib data compression library for the next generation systems";
     homepage = "https://github.com/zlib-ng/zlib-ng";
-    license = licenses.zlib;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

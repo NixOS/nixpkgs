@@ -158,12 +158,12 @@ in stdenv.mkDerivation rec {
     vivaldi-ffmpeg-codecs
   ] ++ buildInputs;
 
-  meta = with lib; {
+  meta = {
     description = "Yandex Web Browser";
     homepage = "https://browser.yandex.ru/";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
 
     knownVulnerabilities = [

@@ -67,13 +67,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shazamio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
     changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     # https://github.com/shazamio/ShazamIO/issues/80
-    broken = versionAtLeast pydantic.version "2";
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

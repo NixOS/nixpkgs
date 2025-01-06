@@ -143,7 +143,7 @@ in
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     aanderse
     aidalgol
   ];

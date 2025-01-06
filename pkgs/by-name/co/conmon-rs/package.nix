@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoVendorDir = ".cargo-vendor";
 
-  meta = with lib; {
+  meta = {
     description = "OCI container runtime monitor written in Rust";
     homepage = "https://github.com/containers/conmon-rs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.podman.members;
+    platforms = lib.platforms.linux;
   };
 }

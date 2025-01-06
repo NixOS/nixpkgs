@@ -219,11 +219,11 @@ beamPackages.mixRelease rec {
     elixirPackage = beamPackages.elixir;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mvs ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mvs ];
+    platforms = lib.platforms.unix;
   };
 }

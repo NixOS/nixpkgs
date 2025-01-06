@@ -222,12 +222,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = "nethack";
-    platforms = if x11Mode then platforms.linux else platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = if x11Mode then lib.platforms.linux else lib.platforms.unix;
+    maintainers = [ lib.maintainers.abbradar ];
     mainProgram = "nethack";
   };
 }

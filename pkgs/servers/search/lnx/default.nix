@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage {
     DiskArbitration
     Foundation
   ];
-  meta = with lib; {
+  meta = {
     description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants.";
     mainProgram = "lnx";
     homepage = "https://lnx.rs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
   };
 }

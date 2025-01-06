@@ -58,11 +58,11 @@ buildPythonPackage rec {
     git
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/clld/clldutils/blob/${src.rev}/CHANGES.md";
     description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
     homepage = "https://github.com/clld/clldutils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melling ];
   };
 }

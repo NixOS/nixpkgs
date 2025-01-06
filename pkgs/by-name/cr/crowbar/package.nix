@@ -34,11 +34,11 @@ python3Packages.buildPythonApplication rec {
     $out/bin/crowbar --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/galkan/crowbar";
     description = "Brute forcing tool that can be used during penetration tests";
     mainProgram = "crowbar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

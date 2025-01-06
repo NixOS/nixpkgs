@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
       --replace "$out/bin" "$bin/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://opencolorio.org";
     description = "Color management framework for visual effects and animation";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

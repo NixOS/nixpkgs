@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fast_histogram" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/astrofrog/fast-histogram";
     description = "Fast 1D and 2D histogram functions in Python";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

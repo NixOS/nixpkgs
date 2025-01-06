@@ -68,11 +68,11 @@ mkDerivation rec {
     "CONFIG+=disable_mapnik" # Disable the optional mapnik backend
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Maps server providing tiles, geocoder, and router";
     homepage = "https://github.com/rinigus/osmscout-server";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.Thra11 ];
+    platforms = lib.platforms.linux;
   };
 }

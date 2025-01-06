@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "TestInheritance::test_invariant_ok_and_typeguard_fails"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
     changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

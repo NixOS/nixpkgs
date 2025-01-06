@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Download torrents in style with this speedy, minimalist torrent client for elementary OS";
     homepage = "https://github.com/davidmhewitt/torrential";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ xiorcale ] ++ lib.teams.pantheon.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "com.github.davidmhewitt.torrential";
   };
 }

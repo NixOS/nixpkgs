@@ -17,11 +17,11 @@ import ./versions.nix (
       hash = sha256;
     };
 
-    meta = with lib; {
+    meta = {
       description = "provides a simple CRUD interface for dealing with per-dataset markers on honeycomb.io";
       homepage = "https://honeycomb.io/";
-      license = licenses.asl20;
-      maintainers = [ maintainers.iand675 ];
+      license = lib.licenses.asl20;
+      maintainers = [ lib.maintainers.iand675 ];
     };
   }
 )

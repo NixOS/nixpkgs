@@ -90,10 +90,10 @@ buildPythonPackage rec {
     "distrax/_src/utils/hmm_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Probability distributions in JAX";
     homepage = "https://github.com/deepmind/distrax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

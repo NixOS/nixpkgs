@@ -27,10 +27,10 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C parser in Python";
     homepage = "https://github.com/eliben/pycparser";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
      --prefix PATH : $out/bin:${lib.makeBinPath [ sharutils ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AES encrypting or decrypting pipe";
     homepage = "https://loop-aes.sourceforge.net/aespipe.README";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

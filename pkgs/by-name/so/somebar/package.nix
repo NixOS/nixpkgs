@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     cp ${configFile} src/config.hpp
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~raphi/somebar";
     description = "dwm-like bar for dwl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ magnouvean ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ magnouvean ];
+    platforms = lib.platforms.linux;
     mainProgram = "somebar";
   };
 }

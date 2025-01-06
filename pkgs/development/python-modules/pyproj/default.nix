@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   substituteAll,
@@ -104,15 +103,15 @@ buildPythonPackage rec {
     "pyproj.exceptions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to PROJ library";
     mainProgram = "pyproj";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers =
-      with maintainers;
-      teams.geospatial.members
+      with lib.maintainers;
+      lib.teams.geospatial.members
       ++ [
         lsix
         dotlambda

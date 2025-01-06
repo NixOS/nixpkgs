@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "waterfurnace" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to waterfurnace geothermal systems";
     mainProgram = "waterfurnace-debug";
     homepage = "https://github.com/sdague/waterfurnace";
     changelog = "https://github.com/sdague/waterfurnace/blob/v${version}/HISTORY.rst";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

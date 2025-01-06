@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "instaloader" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://instaloader.github.io/";
     description = "Download pictures (or videos) along with their captions and other metadata from Instagram";
-    maintainers = with maintainers; [ creator54 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ creator54 ];
+    license = lib.licenses.mit;
     mainProgram = "instaloader";
   };
 }

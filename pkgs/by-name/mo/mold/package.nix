@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster drop-in replacement for existing Unix linkers (unwrapped)";
     longDescription = ''
       mold is a faster drop-in replacement for existing Unix linkers. It is
@@ -107,9 +107,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "mold";
-    maintainers = with maintainers; [ azahi paveloom ];
+    maintainers = with lib.maintainers; [ azahi paveloom ];
   };
 }

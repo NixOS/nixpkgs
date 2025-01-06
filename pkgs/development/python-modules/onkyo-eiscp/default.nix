@@ -21,11 +21,11 @@ buildPythonPackage rec {
     netifaces
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Control Onkyo receivers over ethernet";
     mainProgram = "onkyo";
     homepage = "https://github.com/miracle2k/onkyo-eiscp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

@@ -74,15 +74,15 @@ mkDerivation rec {
     curl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI frontend to v2ray";
     homepage = "https://github.com/Qv2ray/Qv2ray";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       poscat
       rewine
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "qv2ray";

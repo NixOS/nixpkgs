@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
   # tests require a serial port
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automate testing of serial communication with any serial port device";
     homepage = "https://github.com/markatk/serial-unit-testing";
     changelog = "https://github.com/markatk/serial-unit-testing/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rudolfvesely ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rudolfvesely ];
     mainProgram = "sut";
   };
 }

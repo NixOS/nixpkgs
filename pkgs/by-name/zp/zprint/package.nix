@@ -30,7 +30,7 @@ buildGraalvmNativeImage rec {
     command = "zprint --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Clojure/EDN source code formatter and pretty printer";
     longDescription = ''
       Library and command line tool providing a variety of pretty printing capabilities
@@ -38,8 +38,8 @@ buildGraalvmNativeImage rec {
       As such, it supports a number of major source code formatting approaches
     '';
     homepage = "https://github.com/kkinnear/zprint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stelcodes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stelcodes ];
     mainProgram = "zprint";
   };
 }

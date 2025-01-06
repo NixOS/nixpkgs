@@ -81,11 +81,11 @@ buildPythonPackage rec {
     "test_seek_from_start"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/v${version}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }

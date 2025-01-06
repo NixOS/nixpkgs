@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   LMDB_FORCE_SYSTEM = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Universal Python binding for the LMDB 'Lightning' Database";
     homepage = "https://github.com/dw/py-lmdb";
     changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${version}/ChangeLog";
-    license = licenses.openldap;
-    maintainers = with maintainers; [
+    license = lib.licenses.openldap;
+    maintainers = with lib.maintainers; [
       copumpkin
       ivan
     ];

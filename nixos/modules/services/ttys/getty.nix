@@ -182,5 +182,5 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ RossComputerGuy ];
+  meta.maintainers = with lib.maintainers; [ RossComputerGuy ];
 }

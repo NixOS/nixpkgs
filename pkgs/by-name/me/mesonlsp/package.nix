@@ -159,14 +159,14 @@ stdenv'.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "An unofficial, unendorsed language server for Meson written in C++";
     homepage = "https://github.com/JCWasmx86/mesonlsp";
     changelog = "https://github.com/JCWasmx86/mesonlsp/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "mesonlsp";
-    maintainers = with maintainers; [ paveloom ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ paveloom ];
+    platforms = lib.platforms.unix;
     # ../src/liblog/log.cpp:41:7: error: call to 'format' is ambiguous
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };

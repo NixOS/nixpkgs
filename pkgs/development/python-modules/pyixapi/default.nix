@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyixapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API client library for IX-API";
     homepage = "https://github.com/peering-manager/pyixapi/";
     changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = teams.wdz.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.wdz.members;
   };
 }

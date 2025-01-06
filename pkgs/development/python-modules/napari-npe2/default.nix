@@ -54,11 +54,11 @@ buildPythonPackage rec {
     inherit napari;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Plugin system for napari (the image visualizer)";
     homepage = "https://github.com/napari/npe2";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
     mainProgram = "npe2";
   };
 }

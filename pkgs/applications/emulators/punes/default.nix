@@ -74,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
     mainProgram = "punes";
     homepage = "https://github.com/punesemu/puNES";
     changelog = "https://github.com/punesemu/puNES/blob/v${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; linux ++ freebsd ++ openbsd ++ windows;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; linux ++ freebsd ++ openbsd ++ windows;
   };
 })

@@ -41,9 +41,9 @@ buildPythonPackage rec {
   # Cyclic dependency: keras-preprocessing's tests require Keras, which requires keras-preprocessing
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easy data preprocessing and data augmentation for deep learning models";
     homepage = "https://github.com/keras-team/keras-preprocessing";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

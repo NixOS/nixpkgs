@@ -20,11 +20,11 @@ python3Packages.buildPythonApplication rec {
     discid
   ];
 
-  meta = with lib; {
+  meta = {
     # drutil is required on Darwin, which does not seem to be available in nixpkgs
     broken = true; # 2022-11-16
     description = "Script to submit ISRCs from disc to MusicBrainz";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "http://jonnyjd.github.io/musicbrainz-isrcsubmit/";
     maintainers = [ ];
   };

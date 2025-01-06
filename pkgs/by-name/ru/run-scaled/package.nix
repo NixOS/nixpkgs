@@ -34,12 +34,12 @@ stdenv.mkDerivation {
       ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run an X application scaled via xpra";
     homepage = "https://github.com/kaueraal/run_scaled";
-    maintainers = [ maintainers.snaar ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.snaar ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     mainProgram = "run_scaled";
   };
 }

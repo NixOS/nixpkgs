@@ -89,10 +89,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = "https://eid.belgium.be/en";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
       Also requires a running pcscd service and compatible card reader.
@@ -115,8 +115,8 @@ stdenv.mkDerivation rec {
 
           firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bfortz
       chvp
     ];

@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textual_dev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Development tools for Textual";
     homepage = "https://github.com/Textualize/textual-dev";
     changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yannip ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yannip ];
     mainProgram = "textual";
   };
 }

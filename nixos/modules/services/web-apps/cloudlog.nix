@@ -518,5 +518,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ melling ];
+  meta.maintainers = with lib.maintainers; [ melling ];
 }

@@ -66,11 +66,11 @@ buildPythonPackage rec {
     "test_xvfb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
     changelog = "https://github.com/pytest-dev/pytest-services/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

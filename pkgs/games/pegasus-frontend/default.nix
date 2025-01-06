@@ -14,7 +14,7 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pegasus-frontend";
   version = "0-unstable-2024-11-11";
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform, customizable graphical frontend for launching emulators and managing your game collection";
     mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tengkuizdihar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.tengkuizdihar ];
+    platforms = lib.platforms.linux;
   };
 }

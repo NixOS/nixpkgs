@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage rec {
     IOKit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "freshfetch";
   };
 }

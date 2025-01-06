@@ -10,12 +10,12 @@ let
     version = "0-unstable-2024-07-29";
     nativeBuildInputs = [ unzip ];
     dontBuild = true;
-    meta = with lib; {
+    meta = {
       description = "NLTK Data";
       homepage = "https://github.com/nltk/nltk_data";
-      license = licenses.asl20;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ happysalada ];
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ happysalada ];
     };
   };
   makeNltkDataPackage =

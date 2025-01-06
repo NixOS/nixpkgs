@@ -43,10 +43,10 @@ buildPythonPackage rec {
     pysha3 = [ safe-pysha3 ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

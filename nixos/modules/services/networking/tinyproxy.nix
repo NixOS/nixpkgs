@@ -100,5 +100,5 @@ in
     };
     users.groups.tinyproxy = {};
   };
-  meta.maintainers = with maintainers; [ tcheronneau ];
+  meta.maintainers = with lib.maintainers; [ tcheronneau ];
 }

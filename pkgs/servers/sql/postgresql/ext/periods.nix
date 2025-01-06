@@ -17,11 +17,11 @@ buildPostgresqlExtension rec {
     sha256 = "sha256-97v6+WNDcYb/KivlE/JBlRIZ3gYHj68AlK0fylp1cPo=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension implementing SQL standard functionality for PERIODs and SYSTEM VERSIONING";
     homepage = "https://github.com/xocolatl/periods";
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with lib.maintainers; [ ivan ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

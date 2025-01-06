@@ -59,10 +59,10 @@ buildPythonPackage rec {
     "test_delete_key"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github3py.readthedocs.org/en/master/";
     description = "Wrapper for the GitHub API written in python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

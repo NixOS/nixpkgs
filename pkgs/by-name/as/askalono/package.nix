@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7yFdoXK9Nyg1uT0mtiXs6evOu1U1quxL7iMMMyxqxqk=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect open source licenses from texts";
     homepage = "https://github.com/jpeddicord/askalono";
     changelog = "https://github.com/jpeddicord/askalono/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "askalono";
   };
 }

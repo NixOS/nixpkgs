@@ -15,11 +15,11 @@ htop.overrideAttrs (oldAttrs: rec {
     hash = "sha256-ZfdBAlnjoy8g6xwrR/i2+dGldMOfLlX6DRlNqB8pkGM=";
   };
 
-  meta = with lib; {
+  meta = {
     inherit (oldAttrs.meta) platforms license;
     description = "Interactive process viewer for Linux, with vim-style keybindings";
     homepage = "https://github.com/KoffeinFlummi/htop-vim";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with lib.maintainers; [ thiagokokada ];
     mainProgram = "htop";
   };
 })

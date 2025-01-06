@@ -50,13 +50,13 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
-    license = [ licenses.mit ];
+    license = [ lib.licenses.mit ];
     mainProgram = "cook";
-    maintainers = [ maintainers.emilioziniades ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.emilioziniades ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

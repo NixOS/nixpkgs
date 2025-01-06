@@ -79,11 +79,11 @@ buildPythonPackage rec {
     "test_context"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Text analysis with networks";
     homepage = "https://textnets.readthedocs.io";
     changelog = "https://github.com/jboynyc/textnets/blob/v${version}/HISTORY.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }

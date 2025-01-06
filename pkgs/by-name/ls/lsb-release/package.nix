@@ -9,12 +9,12 @@
 
 runCommand "lsb_release"
   {
-    meta = with lib; {
+    meta = {
       description = "Prints certain LSB (Linux Standard Base) and Distribution information";
       mainProgram = "lsb_release";
-      license = [ licenses.mit ];
-      maintainers = with maintainers; [ primeos ];
-      platforms = platforms.linux;
+      license = [ lib.licenses.mit ];
+      maintainers = with lib.maintainers; [ primeos ];
+      platforms = lib.platforms.linux;
     };
   }
   ''

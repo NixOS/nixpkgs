@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "test/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
     changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

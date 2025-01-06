@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_textual_snapshot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snapshot testing for Textual applications";
     homepage = "https://github.com/Textualize/pytest-textual-snapshot";
     changelog = "https://github.com/Textualize/pytest-textual-snapshot/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

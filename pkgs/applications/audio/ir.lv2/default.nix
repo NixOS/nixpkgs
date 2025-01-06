@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     install -Dm755 convert4chan "$out/bin/convert4chan"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://factorial.hu/plugins/lv2/ir";
     description = "Zero-latency, realtime, high performance signal convolver especially for creating reverb effects";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "convert4chan";
   };
 }

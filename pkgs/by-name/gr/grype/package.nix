@@ -115,7 +115,7 @@ buildGoModule rec {
       --zsh <($out/bin/grype completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability scanner for container images and filesystems";
     homepage = "https://github.com/anchore/grype";
     changelog = "https://github.com/anchore/grype/releases/tag/v${version}";
@@ -123,8 +123,8 @@ buildGoModule rec {
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       fab
       jk
       kashw2

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KTX (Khronos Texture) Library and Tools";
     longDescription = ''
       KTX (Khronos Texture) is a lightweight container for textures for OpenGL®,
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
           formats and Zstd supercompression.
     '';
     homepage = "https://github.com/KhronosGroup/KTX-Software";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bonsairobo ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bonsairobo ];
+    platforms = lib.platforms.linux;
   };
 }

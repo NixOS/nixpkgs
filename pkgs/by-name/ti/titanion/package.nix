@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r sounds images $out/share/games/titanion/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/ttn_e.html";
     description = "Strike down super high-velocity swooping insects";
     mainProgram = "titanion";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

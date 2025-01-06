@@ -61,11 +61,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Youtube client in terminal for music";
     homepage = "https://github.com/sudipghimire533/ytui-music";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "ytui_music";
   };
 }

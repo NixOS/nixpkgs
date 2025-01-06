@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5JKM+GnigkpuX4qeGQAjDz/X48ZxXtCfYVwGco13YRM=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line/WM bar tool to display the moon phase at a certain date";
     homepage = "https://github.com/mirrorwitch/moon-phases";
-    license = licenses.acsl14;
-    maintainers = with maintainers; [ mirrorwitch ];
+    license = lib.licenses.acsl14;
+    maintainers = with lib.maintainers; [ mirrorwitch ];
     mainProgram = "moon-phases";
   };
 }

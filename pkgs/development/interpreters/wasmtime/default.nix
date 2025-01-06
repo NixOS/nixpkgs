@@ -51,14 +51,14 @@ rustPlatform.buildRustPackage rec {
       $dev/lib/libwasmtime.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "wasmtime";
-    maintainers = with maintainers; [ ereslibre matthewbauer ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ereslibre matthewbauer ];
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${version}/RELEASES.md";
   };
 }

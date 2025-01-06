@@ -26,11 +26,11 @@ stdenv.mkDerivation {
 
   postPatch = "sed -i '/depmod -A/d' Makefile";
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel module for Thrustmaster T300RS, T248 and TX(experimental)";
     homepage = "https://github.com/Kimplul/hid-tmff2";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rayslash ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rayslash ];
+    platforms = lib.platforms.linux;
   };
 }

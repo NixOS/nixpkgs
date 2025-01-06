@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wiffi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interface with STALL WIFFI devices";
     homepage = "https://github.com/mampfes/python-wiffi";
     changelog = "https://github.com/mampfes/python-wiffi/blob/${version}/HISTORY.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

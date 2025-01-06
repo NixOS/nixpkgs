@@ -321,7 +321,7 @@ backendStdenv.mkDerivation (finalAttrs: {
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license = licenses.unfree;
-    maintainers = teams.cuda.members;
+    license = lib.licenses.unfree;
+    maintainers = lib.teams.cuda.members;
   };
 })

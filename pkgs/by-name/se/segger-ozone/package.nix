@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "J-Link Debugger and Performance Analyzer";
     longDescription = ''
       Ozone is a cross-platform debugger and performance analyzer for J-Link
@@ -86,9 +86,9 @@ stdenv.mkDerivation rec {
       not guaranteed to be.
     '';
     homepage = "https://www.segger.com/products/development-tools/ozone-j-link-debugger";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.bmilanov ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.bmilanov ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

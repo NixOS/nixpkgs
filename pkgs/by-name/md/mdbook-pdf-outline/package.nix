@@ -23,10 +23,10 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pypdf
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/HollowMan6/mdbook-pdf";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nix-julia ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nix-julia ];
 
   };
 }

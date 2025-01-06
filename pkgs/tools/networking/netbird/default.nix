@@ -105,12 +105,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://netbird.io";
     changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vrifox saturn745 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vrifox saturn745 ];
     mainProgram = "netbird";
   };
 }

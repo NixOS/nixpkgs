@@ -102,7 +102,7 @@ with pkgs.lib;
     makeTest {
       name = "non-default-filesystems-erofs";
 
-      meta.maintainers = with maintainers; [ nikstur ];
+      meta.maintainers = with lib.maintainers; [ nikstur ];
 
       nodes.machine = _: {
         virtualisation.qemu.drives = [
@@ -148,7 +148,7 @@ with pkgs.lib;
     makeTest {
       name = "non-default-filesystems-squashfs";
 
-      meta.maintainers = with maintainers; [ nikstur ];
+      meta.maintainers = with lib.maintainers; [ nikstur ];
 
       nodes.machine = {
         virtualisation.qemu.drives = [

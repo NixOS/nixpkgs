@@ -13,10 +13,10 @@ buildPythonPackage rec {
     hash = "sha256-gdmIEwRvyGzEE242mP7mKKMoL5wyDbGGWMIXSSNfzoA=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Event publishing system";
     homepage = "https://pypi.org/project/zope.event/";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

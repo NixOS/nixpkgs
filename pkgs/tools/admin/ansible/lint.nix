@@ -88,12 +88,12 @@ python3.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Best practices checker for Ansible";
     mainProgram = "ansible-lint";
     homepage = "https://github.com/ansible/ansible-lint";
     changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sengaya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sengaya ];
   };
 }

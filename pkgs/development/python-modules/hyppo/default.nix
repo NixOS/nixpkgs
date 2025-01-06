@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "hyppo"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/neurodata/hyppo";
     description = "Python package for multivariate hypothesis testing";
     changelog = "https://github.com/neurodata/hyppo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

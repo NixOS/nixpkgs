@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   postgresql,
   protobufc,
   buildPostgresqlExtension,
 }:
 
-buildPostgresqlExtension rec {
+buildPostgresqlExtension {
   pname = "cstore_fdw";
   version = "1.7.0-unstable-2021-03-08";
 
@@ -20,12 +19,12 @@ buildPostgresqlExtension rec {
     sha256 = "sha256-02wcCqs8A5ZOZX080fgcNJTQrYQctnlwnA8+YPaRTZc=";
   };
 
-  meta = with lib; {
-    broken = versionAtLeast postgresql.version "14";
+  meta = {
+    broken = lib.versionAtLeast postgresql.version "14";
     description = "Columnar storage for PostgreSQL";
     homepage = "https://github.com/citusdata/cstore_fdw";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

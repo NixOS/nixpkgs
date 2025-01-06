@@ -42,10 +42,10 @@ rustPlatform.buildRustPackage rec {
   # Tests requires access to httpin.org
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Scriptable network authentication cracker";
     homepage = "https://github.com/kpcyrd/authoscope";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

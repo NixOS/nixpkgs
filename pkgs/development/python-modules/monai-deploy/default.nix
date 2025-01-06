@@ -64,12 +64,12 @@ buildPythonPackage rec {
     # like highdicom and pydicom
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework and tools to design, develop and verify AI applications in healthcare imaging";
     mainProgram = "monai-deploy";
     homepage = "https://monai.io/deploy.html";
     changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/v${version}.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

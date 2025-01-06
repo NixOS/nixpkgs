@@ -75,9 +75,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gssapi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.python.org/pypi/gssapi";
     description = "Python GSSAPI Wrapper";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

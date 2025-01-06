@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     ln -s '${lib.getExe' uutils-coreutils "uutils-coreutils"}' "$coreutils_dir/coreutils"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform CLI interface to interact with Apple code signing";
     mainProgram = "rcodesign";
     longDescription = ''
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
       For more information, refer to the [documentation](https://gregoryszorc.com/docs/apple-codesign/stable/apple_codesign_rcodesign.html).
     '';
     homepage = "https://github.com/indygreg/apple-platform-rs";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ euank ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ euank ];
   };
 }

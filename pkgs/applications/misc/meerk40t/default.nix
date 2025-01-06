@@ -76,12 +76,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${version}";
     description = "MeerK40t LaserCutter Software";
     mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

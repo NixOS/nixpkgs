@@ -26,11 +26,11 @@ appimageTools.wrapType1 rec {
         curl -L "https://www.pureref.com/files/build.php?build=LINUX64.Appimage&version=${version}&downloadKey=$key" --output $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Reference Image Viewer";
     homepage = "https://www.pureref.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       elnudev
       husjon
     ];

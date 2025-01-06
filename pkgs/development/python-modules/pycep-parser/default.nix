@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
     changelog = "https://github.com/gruebel/pycep/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

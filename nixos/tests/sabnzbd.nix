@@ -1,9 +1,12 @@
 import ./make-test-python.nix (
   { pkgs, lib, ... }:
+  let
+    inherit (pkgs) lib;
+  in
   {
     name = "sabnzbd";
-    meta = with pkgs.lib; {
-      maintainers = with maintainers; [ jojosch ];
+    meta = {
+      maintainers = with lib.maintainers; [ jojosch ];
     };
 
     nodes.machine =

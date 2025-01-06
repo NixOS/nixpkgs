@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python script for USB monitoring using eBPF";
     homepage = "https://github.com/francisrstokes/ebpf-usb";
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ mevatron ];
+    maintainers = with lib.maintainers; [ mevatron ];
     mainProgram = "ebpf-usb";
   };
 }

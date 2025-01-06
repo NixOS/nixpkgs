@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     install -Dm444 ../udev/99-picotool.rules -t $out/etc/udev/rules.d
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/picotool";
     description = "Tool for interacting with RP2040/RP2350 device(s) in BOOTSEL mode, or with an RP2040/RP2350 binary";
     mainProgram = "picotool";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ muscaln ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ muscaln ];
+    platforms = lib.platforms.unix;
   };
 }

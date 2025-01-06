@@ -49,5 +49,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ McSinyx ];
+  meta.maintainers = with lib.maintainers; [ McSinyx ];
 }

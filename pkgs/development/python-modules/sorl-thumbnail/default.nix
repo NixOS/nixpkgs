@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sorl.thumbnail" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sorl-thumbnail.readthedocs.org/en/latest/";
     description = "Thumbnails for Django";
     changelog = "https://github.com/jazzband/sorl-thumbnail/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

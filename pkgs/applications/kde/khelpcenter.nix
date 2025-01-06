@@ -40,10 +40,10 @@ mkDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/help/";
     description = "Help center";
     mainProgram = "khelpcenter";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

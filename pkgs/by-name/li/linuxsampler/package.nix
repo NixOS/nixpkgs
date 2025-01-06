@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.linuxsampler.org";
     description = "Sampler backend";
     longDescription = ''
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       have questions on the subject, that are not yet covered by the
       FAQ, please contact us.
     '';
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

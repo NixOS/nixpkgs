@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
       'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/debug"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Log file highlighter";
     homepage = "https://github.com/bensadeh/tailspin";
     changelog = "https://github.com/bensadeh/tailspin/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "tspin";
   };
 }

@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qt_material" ];
 
-  meta = with lib; {
+  meta = {
     description = "Material inspired stylesheet for PySide2, PySide6, PyQt5 and PyQt6";
     homepage = "https://github.com/UN-GCPDS/qt-material";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ _999eagle ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ _999eagle ];
   };
 }

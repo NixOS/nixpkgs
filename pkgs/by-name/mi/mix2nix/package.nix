@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   buildPhase = "mix escript.build";
   installPhase = "install -Dt $out/bin mix2nix";
 
-  meta = with lib; {
+  meta = {
     description = "Generate nix expressions from mix.lock file";
     mainProgram = "mix2nix";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ydlr ] ++ teams.beam.members;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ydlr ] ++ lib.teams.beam.members;
   };
 }

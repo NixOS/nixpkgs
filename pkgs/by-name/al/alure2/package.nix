@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     libsndfile
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility library for OpenAL, providing a C++ API and managing common tasks that include file loading, caching, and streaming";
     homepage = "https://github.com/kcat/alure";
-    license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ McSinyx ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ McSinyx ];
   };
 }

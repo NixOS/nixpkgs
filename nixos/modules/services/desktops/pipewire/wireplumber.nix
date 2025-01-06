@@ -37,7 +37,7 @@ let
       scripts;
 in
 {
-  meta.maintainers = [ maintainers.k900 ];
+  meta.maintainers = [ lib.maintainers.k900 ];
 
   options = {
     services.pipewire.wireplumber = {

@@ -1599,7 +1599,7 @@ in
   meta = {
     buildDocsInSandbox = false;
     doc = ./synapse.md;
-    maintainers = teams.matrix.members;
+    maintainers = lib.teams.matrix.members;
   };
 
 }

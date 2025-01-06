@@ -82,12 +82,12 @@ buildPythonPackage rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
     mainProgram = "woob";
     homepage = "https://woob.tech";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ DamienCassou ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ DamienCassou ];
   };
 }

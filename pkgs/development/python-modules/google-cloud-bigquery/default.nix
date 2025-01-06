@@ -131,11 +131,11 @@ buildPythonPackage rec {
     "google.cloud.bigquery_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

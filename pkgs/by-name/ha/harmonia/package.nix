@@ -40,11 +40,11 @@ rustPlatform.buildRustPackage rec {
     tests = { inherit (nixosTests) harmonia; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nix binary cache";
     homepage = "https://github.com/nix-community/harmonia";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "harmonia";
   };
 }

@@ -28,10 +28,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "slob" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/itkach/slob/";
     description = "Reference implementation of the slob (sorted list of blobs) format";
     mainProgram = "slob";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 }

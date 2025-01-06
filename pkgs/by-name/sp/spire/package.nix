@@ -38,11 +38,11 @@ buildGoModule rec {
     ln -vs $server/bin/spire-server $out/bin/spire-server
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SPIFFE Runtime Environment";
     homepage = "https://github.com/spiffe/spire";
     changelog = "https://github.com/spiffe/spire/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fkautz ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fkautz ];
   };
 }

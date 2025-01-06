@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
     touch $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XML Security Library in C based on libxml2";
     homepage = "https://www.aleksey.com/xmlsec/";
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "xmlsec1";
     maintainers = [ ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
 )

@@ -73,10 +73,10 @@ mkDerivation rec {
     ++ lib.optionals withGtk2 [ "UI=gtk2" ]
     ++ lib.optionals withGtk3 [ "UI=gtk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Folding text editor, designed to hierarchically structure any kind of text file and especially source code";
     homepage = "https://tibleiz.net/code-browser/";
-    license = licenses.gpl2;
-    platforms = platforms.x86_64;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.x86_64;
   };
 }

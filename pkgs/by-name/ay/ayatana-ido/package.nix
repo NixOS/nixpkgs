@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Display Indicator Objects";
     homepage = "https://github.com/AyatanaIndicators/ayatana-ido";
     changelog = "https://github.com/AyatanaIndicators/ayatana-ido/blob/${version}/ChangeLog";
-    license = [
-      licenses.lgpl3Plus
-      licenses.lgpl21Plus
+    license = with lib.licenses; [
+      lgpl3Plus
+      lgpl21Plus
     ];
-    maintainers = [ maintainers.nickhu ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.nickhu ];
+    platforms = lib.platforms.linux;
   };
 }

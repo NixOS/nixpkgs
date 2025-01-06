@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json_repair" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to repair invalid JSON, commonly used to parse the output of LLMs";
     homepage = "https://github.com/mangiucugna/json_repair/";
     changelog = "https://github.com/mangiucugna/json_repair/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ greg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ greg ];
   };
 }

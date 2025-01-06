@@ -34,11 +34,11 @@
     # No tests
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot UI";
-      maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      maintainers = lib.teams.buildbot.members;
+      license = lib.licenses.gpl2;
     };
   };
 
@@ -56,11 +56,11 @@
     # No tests
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
-      maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      maintainers = lib.teams.buildbot.members;
+      license = lib.licenses.gpl2;
     };
   };
 
@@ -78,11 +78,11 @@
     # No tests
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
-      maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      maintainers = lib.teams.buildbot.members;
+      license = lib.licenses.gpl2;
     };
   };
 
@@ -100,11 +100,11 @@
     # No tests
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
-      maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      maintainers = lib.teams.buildbot.members;
+      license = lib.licenses.gpl2;
     };
   };
 
@@ -122,11 +122,11 @@
     # No tests
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      maintainers = lib.teams.buildbot.members;
+      license = lib.licenses.gpl2;
     };
   };
 
@@ -149,11 +149,11 @@
     # No tests
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Badges Plugin";
-      maintainers = teams.buildbot.members ++ [ maintainers.julienmalka ];
-      license = licenses.gpl2;
+      maintainers = lib.teams.buildbot.members ++ [ lib.maintainers.julienmalka ];
+      license = lib.licenses.gpl2;
     };
   };
 

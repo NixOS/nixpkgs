@@ -55,5 +55,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.appsforartists ];
+  meta.maintainers = [ lib.maintainers.appsforartists ];
 }

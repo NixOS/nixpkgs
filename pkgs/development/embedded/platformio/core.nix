@@ -208,13 +208,13 @@ buildPythonApplication rec {
     python = python3Packages.python;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
     description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mog
       makefu
     ];

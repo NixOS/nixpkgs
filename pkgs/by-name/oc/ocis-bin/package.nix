@@ -57,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.py;
 
-  meta = with lib; {
+  meta = {
     description = "ownCloud Infinite Scale Stack";
     homepage = "https://owncloud.dev/ocis/";
     changelog = "https://github.com/owncloud/ocis/releases/tag/v${finalAttrs.version}";
     # oCIS is licensed under non-free EULA which can be found here :
     # https://github.com/owncloud/ocis/releases/download/v5.0.1/End-User-License-Agreement-for-ownCloud-Infinite-Scale.pdf
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       ramblurr
       bhankas
       danth
@@ -72,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     platforms =
-      (lib.intersectLists platforms.linux (
+      (lib.intersectLists lib.platforms.linux (
         lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.x86
       ))
-      ++ (lib.intersectLists platforms.darwin (lib.platforms.aarch64 ++ lib.platforms.x86_64));
+      ++ (lib.intersectLists lib.platforms.darwin (lib.platforms.aarch64 ++ lib.platforms.x86_64));
 
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "ocis";
   };
 })

@@ -58,11 +58,11 @@ buildPythonPackage rec {
       ln -st $out/bin ${pyEnv}/bin/octodns-*
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for managing DNS across multiple providers";
     homepage = "https://github.com/octodns/octodns";
     changelog = "https://github.com/octodns/octodns/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.anthonyroussel ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.anthonyroussel ];
   };
 }

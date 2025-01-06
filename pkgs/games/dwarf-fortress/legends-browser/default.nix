@@ -26,12 +26,12 @@ buildEnv {
   inherit name;
   paths = [ script ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform, open source, java-based legends viewer for dwarf fortress";
-    maintainers = with maintainers; [ Baughn ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ Baughn ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     homepage = "https://github.com/robertjanetzko/LegendsBrowser";
   };
 }

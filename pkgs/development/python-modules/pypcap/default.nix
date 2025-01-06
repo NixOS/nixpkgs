@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcap" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pynetwork/pypcap";
     description = "Simplified object-oriented Python wrapper for libpcap";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

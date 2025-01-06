@@ -26,12 +26,12 @@ buildNpmPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating Connect-ecompatiblenabled ECMAScript code";
     homepage = "https://github.com/connectrpc/connect-es";
     changelog = "https://github.com/connectrpc/connect-es/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       felschr
       jtszalay
     ];

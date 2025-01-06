@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
     homepage = "https://github.com/sigoden/aichat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mwdomino ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mwdomino ];
     mainProgram = "aichat";
   };
 }

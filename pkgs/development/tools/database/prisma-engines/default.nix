@@ -66,13 +66,13 @@ rustPlatform.buildRustPackage rec {
   # Tests are long to compile
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "prisma";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pimeys
       tomhoule
       aqrln

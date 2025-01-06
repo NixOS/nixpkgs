@@ -48,16 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional selinuxSupport "--with-selinux"
     ++ lib.optional lzmaSupport "--enable-lzma";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";
     description = "Userspace utilities for linux-erofs file system";
-    changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${version}";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       ehmry
       nikstur
       jmbaur
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

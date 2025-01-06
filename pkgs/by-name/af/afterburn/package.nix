@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     DEFAULT_INSTANCE=root PREFIX= DESTDIR=$out make install-units
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coreos/ignition";
     description = "One-shot cloud provider agent";
-    license = licenses.asl20;
-    maintainers = [ maintainers.arianvp ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.arianvp ];
+    platforms = lib.platforms.linux;
     mainProgram = "afterburn";
   };
 }

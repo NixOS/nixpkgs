@@ -26,11 +26,11 @@ buildHomeAssistantComponent rec {
   # Makefile only used for bumping the version
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/astrandb/miele/releases/tag/v${version}";
     description = "Modern integration for Miele devices in Home Assistant";
     homepage = "https://github.com/astrandb/miele";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
   };
 }

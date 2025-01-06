@@ -38,10 +38,10 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest tests/test_timer.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brouberol/contexttimer";
     description = "Timer as a context manager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

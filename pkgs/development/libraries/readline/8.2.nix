@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interactive line editing";
 
     longDescription = ''
@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
 
     homepage = "https://savannah.gnu.org/projects/readline/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with lib.maintainers; [ dtzWill ];
 
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     branch = "8.2";
   };
 }

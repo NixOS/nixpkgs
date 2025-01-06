@@ -192,16 +192,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://exim.org/";
     description = "Mail transfer agent (MTA)";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       bsd3
     ];
     mainProgram = "exim";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tv ] ++ lib.teams.helsinki-systems.members;
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man/man8"
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Interactive memory/page monitor for Linux";
     mainProgram = "pagemon";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       pages of memory belonging data, code, heap, stack, anonymous mappings
       or even swapped-out pages.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

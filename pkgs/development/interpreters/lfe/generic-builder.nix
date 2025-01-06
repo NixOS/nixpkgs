@@ -108,7 +108,7 @@ buildRebar3 {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Best of Erlang and of Lisp; at the same time!";
     longDescription = ''
       LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
@@ -119,8 +119,8 @@ buildRebar3 {
     homepage = "https://lfe.io";
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
-    license = licenses.asl20;
-    maintainers = teams.beam.members;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.beam.members;
+    platforms = lib.platforms.unix;
   };
 }

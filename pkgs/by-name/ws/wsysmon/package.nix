@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Windows task manager clone for Linux";
     homepage = "https://github.com/SlyFabi/WSysMon";
-    license = [ licenses.mit ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ totoroot ];
+    license = [ lib.licenses.mit ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "WSysMon";
   };
 }

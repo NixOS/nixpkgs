@@ -93,12 +93,12 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Plugin for Dwarf Fortress / DFHack that improves various aspects of the game interface";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Baughn
       numinit
     ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/mifki/df-twbt";
   };
 }

@@ -166,11 +166,11 @@ stdenv.mkDerivation (finalAttrs: {
     nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Validating, recursive, and caching DNS resolver";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
     maintainers = [ ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

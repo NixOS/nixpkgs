@@ -131,14 +131,14 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Profiling with perf-counters and derived metrics";
     homepage = "https://github.com/ROCm/rocprofiler";
-    license = with licenses; [ mit ]; # mitx11
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ]; # mitx11
+    maintainers = lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor clr.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor clr.version
+      || lib.versionAtLeast finalAttrs.version "7.0.0";
   };
 })

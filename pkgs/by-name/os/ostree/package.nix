@@ -138,11 +138,11 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git for operating system binaries";
     homepage = "https://ostreedev.github.io/ostree/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ copumpkin ];
   };
 }

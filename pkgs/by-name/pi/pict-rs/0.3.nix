@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) pict-rs; };
 
-  meta = with lib; {
+  meta = {
     description = "Simple image hosting service";
     mainProgram = "pict-rs";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

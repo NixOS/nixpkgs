@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLOCATION_CONFIG=share/config" ];
 
-  meta = with lib; {
+  meta = {
     description = "Little krunner plugin (Plasma 5) to retrieve unicode symbols, or any other string, based on a corresponding keyword";
     homepage = "https://github.com/domschrei/krunner-symbols";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hqurve ];
+    platforms = lib.platforms.linux;
   };
 }

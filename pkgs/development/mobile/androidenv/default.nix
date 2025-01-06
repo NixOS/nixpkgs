@@ -5,6 +5,10 @@
     config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
 }:
 
+let
+  inherit (pkgs) lib;
+in
+
 rec {
   composeAndroidPackages = pkgs.callPackage ./compose-android-packages.nix {
     inherit licenseAccepted;
@@ -36,10 +40,10 @@ rec {
 
   test-suite = pkgs.callPackage ./test-suite.nix { };
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Android SDK & sdkmanager";
     homepage = "https://developer.android.com/tools/sdkmanager";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       numinit
       hadilq
     ];

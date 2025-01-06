@@ -32,13 +32,13 @@ mkDerivation rec {
     syndication
   ];
 
-  meta = with lib; {
+  meta = {
     description = "RSS reader made with kirigami";
     mainProgram = "alligator";
     homepage = "https://invent.kde.org/plasma-mobile/alligator";
     # https://invent.kde.org/plasma-mobile/alligator/-/commit/db30f159c4700244532b17a260deb95551045b7a
     #  * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl3Only
     ];

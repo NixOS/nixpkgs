@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "test_head"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for performing REST calls to configurable data curation system (CDCS) databases";
     homepage = "https://github.com/usnistgov/pycdcs";
     changelog = "https://github.com/usnistgov/pycdcs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

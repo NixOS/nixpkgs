@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Event notification library";
     mainProgram = "event_rpcgen.py";
     longDescription = ''
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       the event loop.
     '';
     homepage = "https://libevent.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

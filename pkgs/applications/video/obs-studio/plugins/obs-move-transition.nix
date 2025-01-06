@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for OBS Studio to move source to a new position during scene transition";
     homepage = "https://github.com/exeldro/obs-move-transition";
-    maintainers = with maintainers; [ starcraft66 ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ starcraft66 ];
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"

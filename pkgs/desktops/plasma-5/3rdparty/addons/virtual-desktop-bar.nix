@@ -33,11 +33,11 @@ mkDerivation rec {
     "-Wno-dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage virtual desktops dynamically in a convenient way";
     homepage = "https://github.com/wsdfhjxc/virtual-desktop-bar";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

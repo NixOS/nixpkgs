@@ -59,12 +59,12 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "i3status-rs";
-    maintainers = with maintainers; [ backuitist globin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ backuitist globin ];
+    platforms = lib.platforms.linux;
   };
 }

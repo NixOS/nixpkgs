@@ -124,13 +124,13 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update-vivaldi.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
-    license     = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license     = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "vivaldi";
-    maintainers = with maintainers; [ otwieracz badmutex ];
+    maintainers = with lib.maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

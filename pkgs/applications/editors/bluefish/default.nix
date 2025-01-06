@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful editor targeted towards programmers and webdevelopers";
     homepage = "https://bluefish.openoffice.nl/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vbgl ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.all;
     mainProgram = "bluefish";
   };
 }

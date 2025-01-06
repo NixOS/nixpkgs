@@ -37,12 +37,12 @@ let
 
     passthru.tests.connectivity = nixosTests.mumble;
 
-    meta = with lib; {
+    meta = {
       description = "Low-latency, high quality voice chat software";
       homepage = "https://mumble.info";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ felixsinger lilacious ];
-      platforms = platforms.linux;
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ felixsinger lilacious ];
+      platforms = lib.platforms.linux;
     };
   });
 

@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rGmQihmVGKOXgX2oEQiIagdyUwzOteJfh5jxfoeD5bs=";
 
-  meta = with lib; {
+  meta = {
     description = "Helper to make sway behave more like awesomewm";
     homepage = "https://gitlab.com/hyask/swaysome";
-    license = licenses.mit;
-    maintainers = with maintainers; [ esclear ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ esclear ];
+    platforms = lib.platforms.linux;
     mainProgram = "swaysome";
   };
 }

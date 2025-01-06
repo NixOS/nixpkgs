@@ -29,13 +29,13 @@ buildPythonPackage rec {
   # when running the tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/originell/jpype/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python to Java bridge";
   };
 }

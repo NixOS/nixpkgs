@@ -54,14 +54,14 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for displaying and adding C2PA manifests";
     homepage = "https://github.com/contentauth/c2patool";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ ok-nick ];
+    maintainers = with lib.maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };
 }

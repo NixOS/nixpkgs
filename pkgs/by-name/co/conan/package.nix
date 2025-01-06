@@ -113,12 +113,12 @@ python3.pkgs.buildPythonApplication rec {
     "test/unittests/tools/env/test_env_files.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized and portable C/C++ package manager";
     mainProgram = "conan";
     homepage = "https://conan.io";
     changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ HaoZeke ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ HaoZeke ];
   };
 }

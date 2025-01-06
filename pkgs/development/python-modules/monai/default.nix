@@ -65,11 +65,11 @@ buildPythonPackage rec {
     "monai.visualize"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
     changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

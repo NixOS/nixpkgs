@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "questionary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
     changelog = "https://github.com/tmbo/questionary/blob/${src.rev}/docs/pages/changelog.rst";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

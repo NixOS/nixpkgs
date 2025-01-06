@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
       patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
     '';
 
-  meta = with lib; {
+  meta = {
     description = "InterViews graphical library for Neuron";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://www.neuron.yale.edu/neuron";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

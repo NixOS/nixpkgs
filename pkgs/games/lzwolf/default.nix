@@ -16,7 +16,7 @@
   SDL2_mixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lzwolf";
   # Fix-Me: Remember to remove SDL2_mixer pin (at top-level) on next lzwolf upgrade.
   version = "unstable-2022-12-26";
@@ -81,12 +81,12 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/lzwolf/lzwolf $out/bin/lzwolf
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bitbucket.org/linuxwolf6/lzwolf";
     description = "Enhanced fork of ECWolf, a Wolfenstein 3D source port";
     mainProgram = "lzwolf";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tgunnoe ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.tgunnoe ];
   };
 }

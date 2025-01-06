@@ -63,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
     changelog = "https://github.com/rq/rq/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

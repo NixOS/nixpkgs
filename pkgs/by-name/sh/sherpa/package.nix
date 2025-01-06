@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     "--enable-pythia"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://gitlab.com/sherpa-team/sherpa";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

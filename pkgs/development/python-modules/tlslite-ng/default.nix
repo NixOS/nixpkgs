@@ -35,11 +35,11 @@ buildPythonPackage {
     "tlslite/integration/tlsasyncdispatchermixin.py"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/tlsfuzzer/tlslite-ng/releases/tag/v${version}";
+  meta = {
+    # changelog = "https://github.com/tlsfuzzer/tlslite-ng/releases/tag/v${version}";
     description = "Pure python implementation of SSL and TLS";
     homepage = "https://github.com/tlsfuzzer/tlslite-ng";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

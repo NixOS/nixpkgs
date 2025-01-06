@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU EFI development toolchain";
     homepage = "https://sourceforge.net/projects/gnu-efi/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

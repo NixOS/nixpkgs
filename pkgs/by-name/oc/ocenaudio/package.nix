@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/libbz2.so.1.0
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, easy to use, fast and functional audio editor";
     homepage = "https://www.ocenaudio.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ onny ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -138,11 +138,11 @@ stdenv.mkDerivation rec {
     kerberosWithLdap = nixosTests.kerberos.ldap;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openldap.org/";
     description = "Open source implementation of the Lightweight Directory Access Protocol";
-    license = licenses.openldap;
-    maintainers = with maintainers; [ hexa ] ++ teams.helsinki-systems.members;
-    platforms = platforms.unix;
+    license = lib.licenses.openldap;
+    maintainers = with lib.maintainers; [ hexa ] ++ lib.teams.helsinki-systems.members;
+    platforms = lib.platforms.unix;
   };
 }

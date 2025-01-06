@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     qtsvg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-purpose serial data visualization & processing program";
     mainProgram = "serial-studio";
     homepage = "https://serial-studio.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
 }

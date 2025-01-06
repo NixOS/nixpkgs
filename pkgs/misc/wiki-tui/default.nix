@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fLA7dF91mEgjTnbhujTKaHX+qmpzYaqzL8cc/x+mrUk=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lom
       builditluc
       matthiasbeyer

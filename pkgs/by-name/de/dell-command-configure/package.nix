@@ -104,11 +104,11 @@ stdenv.mkDerivation {
       $out/lib/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configure BIOS settings on Dell laptops";
     homepage = "https://www.dell.com/support/article/us/en/19/sln311302/dell-command-configure";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ryangibb ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ ryangibb ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

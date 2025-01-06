@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";
     mainProgram = "lxappearance";
     homepage = "https://lxde.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

@@ -100,12 +100,12 @@ stdenv.mkDerivation rec {
     mv au/${mainProgram}.component $out/Library/Audio/Plug-Ins/Components/
   '';
 
-  meta = with lib; {
+  meta = {
     inherit mainProgram;
     description = "${chip} FM Chip Synthesizer";
     homepage = src.meta.homepage;
-    license = licenses.boost;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.OPNA2608 ];
   };
 }

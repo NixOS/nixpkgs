@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     inherit curlHTTP3;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ngtcp2/nghttp3";
     description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

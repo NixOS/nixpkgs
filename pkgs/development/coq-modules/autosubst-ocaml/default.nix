@@ -37,11 +37,11 @@ mkCoqDerivation {
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An OCaml reimplementation of the Autosubst 2 code generator";
     homepage = "https://github.com/uds-psl/autosubst-ocaml";
     mainProgram = "autosubst";
-    maintainers = with maintainers; [ chen ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ chen ];
+    license = lib.licenses.mit;
   };
 }

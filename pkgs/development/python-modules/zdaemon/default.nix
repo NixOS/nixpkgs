@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zdaemon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon process control library and tools for Unix-based systems";
     mainProgram = "zdaemon";
     homepage = "https://pypi.python.org/pypi/zdaemon";
     changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

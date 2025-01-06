@@ -70,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Apache Druid: a high performance real-time analytics database";
     homepage = "https://github.com/apache/druid";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vsharathchandra ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vsharathchandra ];
     mainProgram = "druid";
   };
 

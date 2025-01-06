@@ -21,11 +21,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   dontUseSetuptoolsCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Constraint Solving Problem resolver for Python";
     homepage = "https://labix.org/doc/constraint/";
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

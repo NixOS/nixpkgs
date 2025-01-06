@@ -36,14 +36,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "extractcode_7z" ];
 
-  meta = with lib; {
+  meta = {
     description = "ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/nexB/scancode-plugins/tree/main/builtins/extractcode_7z-linux";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       lgpl21
     ];
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

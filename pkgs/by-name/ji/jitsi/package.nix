@@ -81,16 +81,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://desktop.jitsi.org/";
     description = "Open Source Video Calls and Chat";
     mainProgram = "jitsi";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.jitsi.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.jitsi.members;
   };
 }

@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv Libsystem ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne sciencentistguy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Br1ght0ne sciencentistguy ];
     mainProgram = "procs";
   };
 }

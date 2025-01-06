@@ -43,12 +43,12 @@ rustPlatform.buildRustPackage rec {
       --replace "/usr/bin/chown" "${coreutils}/bin/chown"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control various aspects of Microsoft Surface devices on Linux from the Command-Line";
     homepage = "https://github.com/linux-surface/surface-control";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "surface";
   };
 }

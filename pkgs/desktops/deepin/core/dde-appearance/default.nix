@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Program used to set the theme and appearance of deepin desktop";
     homepage = "https://github.com/linuxdeepin/dde-appearance";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

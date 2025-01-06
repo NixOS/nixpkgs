@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${finalAttrs.pname} $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clarkwang/passh";
     description = "Sshpass alternative for non-interactive ssh auth";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.lovesegfault ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.lovesegfault ];
     mainProgram = finalAttrs.pname;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

@@ -26,12 +26,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fsevents" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thread-based interface to file system observation primitives";
     homepage = "https://github.com/malthe/macfsevents";
     changelog = "https://github.com/malthe/macfsevents/blob/${version}/CHANGES.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

@@ -31,11 +31,11 @@ buildGoModule rec {
     installShellCompletion --zsh contrib/zsh-completion/_packer
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for creating identical machine images for multiple platforms from a single source configuration";
     homepage = "https://www.packer.io";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       zimbatm
       ma27
       techknowlogick

@@ -9,7 +9,7 @@
 
 mkDerivation {
   pname = "bovo";
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/bovo/";
     description = "Five in a row application";
     mainProgram = "bovo";
@@ -18,9 +18,9 @@ mkDerivation {
       where the opponents alternate in placing their respective pictogram on the game board.
       (Also known as: Connect Five, Five in a row, X and O, Naughts and Crosses)
     '';
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

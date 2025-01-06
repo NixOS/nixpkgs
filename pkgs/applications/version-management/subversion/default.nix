@@ -176,13 +176,13 @@ let
         nativeCheckInputs = [ python3 ];
         doCheck = false; # fails 10 out of ~2300 tests
 
-        meta = with lib; {
+        meta = {
           description = "Version control system intended to be a compelling replacement for CVS in the open source community";
-          license = licenses.asl20;
+          license = lib.licenses.asl20;
           homepage = "https://subversion.apache.org/";
           mainProgram = "svn";
-          maintainers = with maintainers; [ lovek323 ];
-          platforms = platforms.linux ++ platforms.darwin;
+          maintainers = with lib.maintainers; [ lovek323 ];
+          platforms = lib.platforms.linux ++ lib.platforms.darwin;
         };
 
       }

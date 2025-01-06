@@ -38,9 +38,9 @@ php.buildComposerProject (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Federated image sharing platform";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
     maintainers = [ ];
     platforms = php.meta.platforms;

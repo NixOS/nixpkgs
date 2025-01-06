@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) upnp;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Client that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = with platforms; linux ++ freebsd ++ darwin;
-    license = licenses.bsd3;
+    platforms = with lib.platforms; linux ++ freebsd ++ darwin;
+    license = lib.licenses.bsd3;
     mainProgram = "upnpc";
   };
 }

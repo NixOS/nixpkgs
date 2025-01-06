@@ -1,6 +1,7 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
   requests,
   six,
 }:
@@ -10,7 +11,7 @@ buildPythonPackage {
   version = "2016-01-04";
   format = "setuptools";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "Wiredcraft";
     repo = "dopy";
     rev = "cb443214166a4e91b17c925f40009ac883336dc3";
@@ -26,10 +27,10 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "dopy" ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Digital Ocean API python wrapper";
     homepage = "https://github.com/Wiredcraft/dopy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

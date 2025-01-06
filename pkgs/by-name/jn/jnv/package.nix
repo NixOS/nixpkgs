@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Interactive JSON filter using jq";
     mainProgram = "jnv";
     homepage = "https://github.com/ynqa/jnv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       nealfennimore
       nshalman
     ];

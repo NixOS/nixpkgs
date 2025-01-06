@@ -52,12 +52,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU Core Utilities";
       homepage = "https://www.gnu.org/software/coreutils";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      maintainers = lib.teams.minimal-bootstrap.members;
+      platforms = lib.platforms.unix;
     };
   }
   ''

@@ -19,11 +19,11 @@ stdenv.mkDerivation {
     sourceRoot=$(echo */zinnia)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Online hand recognition system with machine learning";
     homepage = "http://taku910.github.io/zinnia/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.gebner ];
   };
 }

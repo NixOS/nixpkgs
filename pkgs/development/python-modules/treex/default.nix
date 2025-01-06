@@ -68,10 +68,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "treex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytree Module system for Deep Learning in JAX";
     homepage = "https://github.com/cgarciae/treex";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

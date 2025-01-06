@@ -27,10 +27,10 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun --no-sandbox %U' 'Exec=badlion-client'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
     homepage = "https://client.badlion.net";
-    license = with licenses; [ unfree ];
+    license = with lib.licenses; [ unfree ];
     maintainers = [ ];
     mainProgram = "badlion-client";
     platforms = [ "x86_64-linux" ];

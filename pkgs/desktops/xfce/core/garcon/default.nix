@@ -11,9 +11,9 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util ];
 
-  meta = with lib; {
+  meta = {
     description = "Xfce menu support library";
-    license = with licenses; [ lgpl2Only fdl11Only ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = with lib.licenses; [ lgpl2Only fdl11Only ];
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/deepin-desktop-ts-convert --set PERL5LIB $PERL5LIB
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translation file processing utils for DDE development";
     homepage = "https://github.com/linuxdeepin/deepin-gettext-tools";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libuuid ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.crosswire.org/BibleSync";
     description = "Multicast protocol to Bible software shared conavigation";
     longDescription = ''
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       support mode setting, setup for packet reception, transmit on local
       navigation, and handling of incoming packets.
     '';
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 }

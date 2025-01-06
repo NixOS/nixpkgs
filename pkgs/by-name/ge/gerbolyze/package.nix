@@ -36,13 +36,13 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "svg-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
-      license = with licenses; [ agpl3Plus ];
-      maintainers = with maintainers; [ wulfsta ];
+      license = with lib.licenses; [ agpl3Plus ];
+      maintainers = with lib.maintainers; [ wulfsta ];
       mainProgram = "svg-flatten";
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 in
@@ -92,12 +92,12 @@ python3Packages.buildPythonApplication rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Directly render SVG overlays into Gerber and Excellon files";
     homepage = "https://github.com/jaseg/gerbolyze";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ wulfsta ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ wulfsta ];
     mainProgram = "gerbolyze";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

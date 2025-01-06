@@ -61,7 +61,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "bikeshed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for anyone writing specifications that converts source files into actual specs";
     mainProgram = "bikeshed";
     longDescription = ''
@@ -72,7 +72,7 @@ buildPythonApplication rec {
       and many other W3C working groups, WHATWG, the C++ standards committee, and elsewhere!
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     maintainers = [ ];
   };
 }

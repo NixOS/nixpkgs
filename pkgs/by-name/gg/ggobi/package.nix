@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Visualization program for exploring high-dimensional data";
     homepage = "http://www.ggobi.org/";
-    license = licenses.cpl10;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.michelk ];
+    license = lib.licenses.cpl10;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.michelk ];
     mainProgram = "ggobi";
   };
 }

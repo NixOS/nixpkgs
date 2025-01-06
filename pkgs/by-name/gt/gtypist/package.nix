@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${fortune}/bin" \
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/gtypist";
     description = "Universal typing tutor";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

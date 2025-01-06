@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cBDDK2Qllo7NfuxD2J8sbGdElPc7Isjnxm2t8hwjG/8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tests the compatibility of so-called 'VT100-compatible' terminals";
     homepage = "https://invisible-island.net/vttest/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "vttest";
   };
 }

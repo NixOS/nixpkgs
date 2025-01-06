@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build build/choose-tests-locale.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
 
@@ -76,14 +76,14 @@ stdenv.mkDerivation rec {
       This module contains JavaScript bindings based on gobject-introspection.
     '';
 
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
       mit
       mpl11
     ];
 
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

@@ -34,10 +34,10 @@ buildGoModule rec {
   # Tests are in a different subPackage which fails trying to access the network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, distributed relational database built on SQLite";
     homepage = "https://github.com/rqlite/rqlite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

@@ -96,16 +96,16 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit onigurumaSupport; };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raskin
       artturin
       ncfavier
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     downloadPage = "https://jqlang.github.io/jq/download/";
     mainProgram = "jq";
   };

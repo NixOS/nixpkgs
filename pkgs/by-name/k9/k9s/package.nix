@@ -53,12 +53,12 @@ buildGoModule rec {
       --zsh <($out/bin/k9s completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
     changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "k9s";
-    maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
+    maintainers = with lib.maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
   };
 }

@@ -29,13 +29,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based UNIX user and group browser";
     homepage = "https://github.com/ariasmn/ugm";
     changelog = "https://github.com/ariasmn/ugm/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ugm";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ oosquare ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ oosquare ];
   };
 }

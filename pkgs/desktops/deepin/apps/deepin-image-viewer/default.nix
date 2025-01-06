@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Image viewing tool with fashion interface and smooth performance";
     homepage = "https://github.com/linuxdeepin/deepin-image-viewer";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -72,15 +72,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-JISIS8k/veBAqZ0DlxVBrc+25IVM6BpY4eE5uxsjo+Y=";
 
-  meta = with lib; {
+  meta = {
     description = "A third-party Discord client designed for a smooth, native experience (formerly gtkcord4)";
     homepage = "https://github.com/diamondburned/dissent";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc0
     ];
     mainProgram = "dissent";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hmenke
       urandom
       aleksana

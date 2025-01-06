@@ -56,7 +56,7 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JSON Stream Editor (command line utility)";
     longDescription = ''
       JJ is a command line utility that provides a fast and simple way to retrieve
@@ -66,8 +66,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/tidwall/jj";
     changelog = "https://github.com/tidwall/jj/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "jj";
-    maintainers = with maintainers; [ katexochen ];
+    maintainers = with lib.maintainers; [ katexochen ];
   };
 }

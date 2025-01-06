@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
         ]
     );
 
-  meta = with lib; {
+  meta = {
     description = "Roc is a toolkit for real-time audio streaming over the network";
     homepage = "https://github.com/roc-streaming/roc-toolkit";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ bgamari ];
+    platforms = lib.platforms.unix;
   };
 }

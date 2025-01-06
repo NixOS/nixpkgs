@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataproperty" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for extracting properties from data";
     homepage = "https://github.com/thombashi/dataproperty";
     changelog = "https://github.com/thombashi/DataProperty/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
   };
 }

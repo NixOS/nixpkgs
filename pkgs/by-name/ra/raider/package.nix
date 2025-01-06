@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Permanently delete your files (also named File Shredder)";
     longDescription = ''
       Raider is a shredding program built for the GNOME
@@ -63,14 +63,14 @@ stdenv.mkDerivation rec {
       money and patience required to extract it effectively.
     '';
     homepage = "https://apps.gnome.org/Raider";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "raider";
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         benediktbroich
       ]
       ++ lib.teams.gnome-circle.members;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

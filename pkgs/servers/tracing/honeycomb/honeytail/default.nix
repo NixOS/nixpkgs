@@ -17,11 +17,11 @@ import ./versions.nix (
       hash = sha256;
     };
 
-    meta = with lib; {
+    meta = {
       description = "agent for ingesting log file data into honeycomb.io and making it available for exploration";
       homepage = "https://honeycomb.io/";
-      license = licenses.asl20;
-      maintainers = [ maintainers.iand675 ];
+      license = lib.licenses.asl20;
+      maintainers = [ lib.maintainers.iand675 ];
     };
   }
 )

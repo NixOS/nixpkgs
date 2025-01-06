@@ -58,12 +58,12 @@ buildPythonPackage rec {
       });
   };
 
-  meta = with lib; {
+  meta = {
     description = "LISP dialect embedded in Python";
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mazurel
       nixy
     ];

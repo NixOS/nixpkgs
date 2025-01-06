@@ -124,13 +124,13 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     mainProgram = "Cypress";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = lib.attrNames availableBinaries;
-    maintainers = with maintainers; [ tweber mmahut Crafter ];
+    maintainers = with lib.maintainers; [ tweber mmahut Crafter ];
   };
 }

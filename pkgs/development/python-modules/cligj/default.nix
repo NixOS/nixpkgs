@@ -30,10 +30,10 @@ buildPythonPackage rec {
     LC_ALL=en_US.utf-8 pytest tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Click params for command line interfaces to GeoJSON";
     homepage = "https://github.com/mapbox/cligj";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }

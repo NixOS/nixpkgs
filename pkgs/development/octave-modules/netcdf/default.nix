@@ -17,10 +17,10 @@ buildOctavePackage rec {
     netcdf
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/netcdf/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "NetCDF interface for Octave";
   };
 }

@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nickel-lang.org/";
     description = "Better configuration for less";
     longDescription = ''
@@ -62,8 +62,8 @@ rustPlatform.buildRustPackage rec {
       well-understood core: it is in essence JSON with functions.
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       felschr
       matthiasbeyer
     ];

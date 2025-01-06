@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ binutils-unwrapped ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Locally checks for signs of a rootkit";
     homepage = "https://www.chkrootkit.org/";
-    license = licenses.bsd2;
-    platforms = with platforms; linux;
+    license = lib.licenses.bsd2;
+    platforms = with lib.platforms; linux;
   };
 }

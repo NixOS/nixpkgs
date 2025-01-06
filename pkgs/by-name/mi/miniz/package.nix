@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheck = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Single C source file zlib-replacement library";
     homepage = "https://github.com/richgel999/miniz";
-    license = licenses.mit;
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "miniz" ];
   };
 })

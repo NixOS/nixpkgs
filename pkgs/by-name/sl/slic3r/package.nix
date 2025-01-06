@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     cp "$desktopItem"/share/applications/* "$out/share/applications/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "G-code generator for 3D printers";
     mainProgram = "slic3r";
     longDescription = ''
@@ -129,8 +129,8 @@ stdenv.mkDerivation rec {
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
     homepage = "https://slic3r.org/";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

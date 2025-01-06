@@ -56,16 +56,16 @@ buildPythonPackage rec {
     "test_semver_version"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing version ranges and expressions";
     homepage = "https://github.com/aboutcode-org/univers";
     changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       armijnhemel
       sbruder
     ];

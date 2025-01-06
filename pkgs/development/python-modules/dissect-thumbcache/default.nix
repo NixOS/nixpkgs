@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "test_index_type"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the Windows thumbcache";
     homepage = "https://github.com/fox-it/dissect.thumbcache";
     changelog = "https://github.com/fox-it/dissect.thumbcache/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

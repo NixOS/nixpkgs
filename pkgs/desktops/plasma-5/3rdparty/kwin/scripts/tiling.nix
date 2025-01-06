@@ -44,10 +44,10 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiling script for kwin";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

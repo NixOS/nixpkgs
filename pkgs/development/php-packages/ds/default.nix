@@ -22,11 +22,11 @@ buildPecl {
 
   buildInputs = [ pcre2 ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/php-ds/ext-ds/releases/tag/v${version}";
     description = "Extension providing efficient data structures for PHP";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/php-ds/ext-ds";
-    maintainers = teams.php.members;
+    maintainers = lib.teams.php.members;
   };
 }

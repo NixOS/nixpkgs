@@ -42,15 +42,15 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "General-purpose data compression software, successor of LZMA";
       homepage = "https://tukaani.org/xz";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl2Plus
         lgpl21Plus
       ];
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      maintainers = lib.teams.minimal-bootstrap.members;
+      platforms = lib.platforms.unix;
     };
   }
   ''

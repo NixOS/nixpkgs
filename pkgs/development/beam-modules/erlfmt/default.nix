@@ -14,12 +14,12 @@ rebar3Relx rec {
     sha256 = "sha256-TtOHcXiXl13KSGarMBdvvDjv1YQJjDVFtDLC0LDz9Bc=";
     rev = "v${version}";
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/WhatsApp/erlfmt";
     description = "Automated code formatter for Erlang";
     mainProgram = "erlfmt";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dlesl ];
   };
 }

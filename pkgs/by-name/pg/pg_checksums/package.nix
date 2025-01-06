@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/man/man1 doc/man1/pg_checksums_ext.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Activate/deactivate/verify checksums in offline PostgreSQL clusters";
     homepage = "https://github.com/credativ/pg_checksums";
     maintainers = [ ];
     mainProgram = "pg_checksums_ext";
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ninebot_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ninebot scooter BLE client";
     mainProgram = "ninebot-ble";
     homepage = "https://github.com/ownbee/ninebot-ble";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

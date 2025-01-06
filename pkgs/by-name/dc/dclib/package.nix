@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-Peer file sharing client";
     homepage = "http://dcgui.berlios.de";
-    platforms = platforms.linux;
-    license = [
-      licenses.openssl
-      licenses.gpl2
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      openssl
+      gpl2
     ];
   };
 }

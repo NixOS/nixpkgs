@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     extraArgs = [ "--version=skip" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nushell dataframe plugin commands based on polars";
     mainProgram = "nu_plugin_polars";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_polars";
-    license = licenses.mit;
-    maintainers = with maintainers; [ joaquintrinanes ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ joaquintrinanes ];
+    platforms = lib.platforms.all;
   };
 }

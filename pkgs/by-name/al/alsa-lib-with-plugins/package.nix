@@ -10,11 +10,11 @@ let
   merged = symlinkJoin { name = "alsa-plugins-merged"; paths = plugins; };
 in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}" {
-  meta = with lib; {
+  meta = {
     description = "wrapper to ease access to ALSA plugins";
     mainProgram = "aserver";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gm6k ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gm6k ];
   };
   outputs = alsa-lib.outputs;
 } (

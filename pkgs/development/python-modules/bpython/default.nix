@@ -57,11 +57,11 @@ buildPythonPackage rec {
     "test_syntaxerror"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       flokli
       dotlambda
     ];

@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sleepyq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for SleepIQ API";
     homepage = "https://github.com/technicalpickles/sleepyq";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

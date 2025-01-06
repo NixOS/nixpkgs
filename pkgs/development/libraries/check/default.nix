@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
-  meta = with lib; {
+  meta = {
     description = "Unit testing framework for C";
 
     longDescription = ''
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://libcheck.github.io/check/";
 
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     mainProgram = "checkmk";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

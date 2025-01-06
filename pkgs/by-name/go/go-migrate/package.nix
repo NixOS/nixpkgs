@@ -46,11 +46,11 @@ buildGoModule rec {
     "yugabytedb"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
-    maintainers = with maintainers; [ offline ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ offline ];
+    license = lib.licenses.mit;
     mainProgram = "migrate";
   };
 }

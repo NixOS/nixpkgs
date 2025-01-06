@@ -126,10 +126,10 @@ stdenv.mkDerivation rec {
     ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Debian package maintenance scripts";
-    license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

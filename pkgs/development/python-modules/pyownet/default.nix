@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyownet.protocol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python OWFS client library (owserver protocol)";
     homepage = "https://github.com/miccoli/pyownet";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

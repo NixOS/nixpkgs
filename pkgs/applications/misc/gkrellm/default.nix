@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Themeable process stack of system monitors";
     longDescription = ''
       GKrellM is a single process stack of system monitors which
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://gkrellm.srcbox.net";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

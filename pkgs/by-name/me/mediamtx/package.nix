@@ -50,11 +50,11 @@ buildGoModule rec {
     inherit (nixosTests) mediamtx;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SRT, WebRTC, RTSP, RTMP, LL-HLS media server and media proxy";
     inherit (src.meta) homepage;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "mediamtx";
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

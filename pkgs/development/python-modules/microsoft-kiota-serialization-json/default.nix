@@ -45,11 +45,11 @@ buildPythonPackage rec {
     "test_parse_union_type_complex_property1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON serialization implementation for Kiota clients in Python";
     homepage = "https://github.com/microsoft/kiota-serialization-json-python";
     changelog = "https://github.com/microsoft/kiota-serialization-json-python/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

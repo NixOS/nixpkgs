@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pawelzny/dotty_dict";
     description = "Dictionary wrapper for quick access to deeply nested keys";
     longDescription = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       dotty-dict published to pypi has non-ASCII characters that breaks with
       some non-UTF8 locale settings.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

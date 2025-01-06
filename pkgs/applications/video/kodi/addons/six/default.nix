@@ -20,10 +20,10 @@ buildKodiAddon rec {
     attrPath = "kodi.packages.six";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/six/";
     description = "Python 2 and 3 compatibility utilities";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.kodi.members;
   };
 }

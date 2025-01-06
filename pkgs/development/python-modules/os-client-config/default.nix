@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "os_client_config" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://opendev.org/openstack/os-client-config";
     description = "Collect client configuration for using OpenStack in consistent and comprehensive manner";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

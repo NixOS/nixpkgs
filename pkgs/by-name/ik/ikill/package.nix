@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-zKa2FP0lBS2XjgPWfyPZ60aHyeAe0uNIFbmuX4Uo1rA=";
 
-  meta = with lib; {
+  meta = {
     description = "Interactively kill running processes";
     homepage = "https://github.com/pjmp/ikill";
-    maintainers = with maintainers; [ zendo ];
-    license = [ licenses.mit ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
+    license = [ lib.licenses.mit ];
+    platforms = lib.platforms.linux;
     mainProgram = "ikill";
   };
 }

@@ -112,11 +112,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "benedict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
     changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

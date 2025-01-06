@@ -43,14 +43,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.rosenpass = nixosTests.rosenpass;
 
-  meta = with lib; {
+  meta = {
     description = "Build post-quantum-secure VPNs with WireGuard";
     homepage = "https://rosenpass.eu/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with lib.maintainers; [ wucke13 ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"

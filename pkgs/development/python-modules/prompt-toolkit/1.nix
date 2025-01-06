@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_pathcompleter_can_expanduser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for building powerful interactive command lines";
     longDescription = ''
       prompt_toolkit could be a replacement for readline, but it can be
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

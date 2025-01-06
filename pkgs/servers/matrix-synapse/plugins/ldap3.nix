@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ldap_auth_provider" ];
 
-  meta = with lib; {
+  meta = {
     description = "LDAP3 auth provider for Synapse";
     homepage = "https://github.com/matrix-org/matrix-synapse-ldap3";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.c3d2.members;
   };
 }

@@ -31,12 +31,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     downloadPage = "https://github.com/simpx/simpy";
     homepage = "https://simpy.readthedocs.io/en/${version}/";
     description = "Process-based discrete-event simulation framework based on standard Python";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [
       dmrauh
       shlevy
     ];

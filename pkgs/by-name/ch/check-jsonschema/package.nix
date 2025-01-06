@@ -43,12 +43,12 @@ buildPythonApplication rec {
     "test_schemaloader_yaml_data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jsonschema CLI and pre-commit hook";
     mainProgram = "check-jsonschema";
     homepage = "https://github.com/python-jsonschema/check-jsonschema";
     changelog = "https://github.com/python-jsonschema/check-jsonschema/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sudosubin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sudosubin ];
   };
 }

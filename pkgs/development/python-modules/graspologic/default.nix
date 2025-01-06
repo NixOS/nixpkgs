@@ -86,11 +86,11 @@ buildPythonPackage rec {
     "tests/test_plot_matrix.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for graph statistical algorithms";
     homepage = "https://graspologic-org.github.io/graspologic";
     changelog = "https://github.com/graspologic-org/graspologic/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nix" ];
 
-  meta = with lib; {
+  meta = {
     description = ''
       Eval nix code from python.
     '';
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

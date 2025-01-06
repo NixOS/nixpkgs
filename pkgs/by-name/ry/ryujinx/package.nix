@@ -103,7 +103,7 @@ buildDotnetModule rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ryujinx.org/";
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
     description = "Experimental Nintendo Switch Emulator written in C#";
@@ -114,8 +114,8 @@ buildDotnetModule rec {
       written from scratch and development on the project began in September
       2017.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ jk artemist ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jk artemist ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "Ryujinx";
   };

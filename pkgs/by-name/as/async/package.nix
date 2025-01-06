@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jIL7ZFzRMQuGLmMatGegkYRYctlsl3RRUfChgaIhWHg=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to parallelize shell commands";
     mainProgram = "async";
     longDescription = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       retains state between commands by running a server in the background.
     '';
     homepage = "https://github.com/ctbur/async";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ minijackson ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 }

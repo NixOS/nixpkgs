@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-k 'not auth'" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trinodb/trino-python-client/blob/${version}/CHANGES.md";
     description = "Client for the Trino distributed SQL Engine";
     homepage = "https://github.com/trinodb/trino-python-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

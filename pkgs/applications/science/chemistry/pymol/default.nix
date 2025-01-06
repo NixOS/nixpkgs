@@ -134,12 +134,12 @@ python3Packages.buildPythonApplication rec {
     wrapQtApp "$out/bin/pymol"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit description;
     mainProgram = "pymol";
     homepage = "https://www.pymol.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       samlich
     ];

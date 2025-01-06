@@ -26,11 +26,11 @@ buildPythonPackage rec {
   # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/simplegeo/python-oauth2";
     description = "Library for OAuth version 1.0";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

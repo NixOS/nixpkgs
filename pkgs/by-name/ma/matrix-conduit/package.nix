@@ -64,11 +64,11 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) matrix-conduit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       pstn
       pimeys
     ];

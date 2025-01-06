@@ -43,12 +43,12 @@ buildGoModule rec {
     $out/bin/metal --version | grep ${version}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Equinix Metal CLI";
     homepage = "https://github.com/equinix/metal-cli/";
     changelog = "https://github.com/equinix/metal-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       nshalman
       teutat3s

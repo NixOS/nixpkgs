@@ -78,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Keruspe/GPaste";
     changelog = "https://github.com/Keruspe/GPaste/blob/v${finalAttrs.version}/NEWS";
     description = "Clipboard management system with GNOME integration";
     mainProgram = "gpaste-client";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.gnome.members;
   };
 })

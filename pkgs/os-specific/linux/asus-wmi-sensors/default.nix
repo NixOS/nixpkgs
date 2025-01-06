@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     "MODDESTDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux HWMON (lmsensors) sensors driver for various ASUS Ryzen and Threadripper motherboards";
     homepage = "https://github.com/electrified/asus-wmi-sensors";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ Frostman ];
-    broken = versionOlder kernel.version "4.12";
+    maintainers = with lib.maintainers; [ Frostman ];
+    broken = lib.versionOlder kernel.version "4.12";
   };
 }

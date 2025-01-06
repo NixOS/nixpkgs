@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     description = "Efficient dynamic menu for wayland (wlroots)";
     homepage = "https://github.com/nyyManni/dmenu-wayland";
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ rewine ];
     mainProgram = "dmenu-wl";
   };
 }

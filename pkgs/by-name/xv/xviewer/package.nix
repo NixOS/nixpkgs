@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tu-maurice ] ++ lib.teams.cinnamon.members;
   };
 }

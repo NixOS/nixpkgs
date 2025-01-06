@@ -91,16 +91,16 @@ stdenv.mkDerivation rec {
 
   passthru.tests = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Translator of declarative Datalog programs into the C++ language";
     homepage = "https://souffle-lang.github.io/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       copumpkin
       wchresta
       markusscherer
     ];
-    license = licenses.upl;
+    license = lib.licenses.upl;
   };
 }

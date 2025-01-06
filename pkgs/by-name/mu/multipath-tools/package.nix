@@ -83,10 +83,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for the Linux multipathing storage driver";
     homepage = "http://christophe.varoqui.free.fr/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

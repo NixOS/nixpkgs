@@ -56,14 +56,14 @@ stdenv.mkDerivation rec {
     cp -r examples/* $out/share/${pname}-${version}/examples
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multipole-accelerated inductance analysis program";
     longDescription = ''
       Fasthenry is an inductance extraction program based on a
       multipole-accelerated algorithm.'';
     homepage = "https://www.fastfieldsolvers.com/fasthenry2.htm";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = intersectLists (platforms.linux) (platforms.x86_64 ++ platforms.x86);
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.intersectLists (lib.platforms.linux) (lib.platforms.x86_64 ++ lib.platforms.x86);
   };
 }

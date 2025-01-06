@@ -20,7 +20,7 @@ buildGoModule rec {
   # Tests want to download a vulnerable Terraform project
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Detect compliance and security violations across Infrastructure";
     mainProgram = "terrascan";
     longDescription = ''
@@ -30,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/accurics/terrascan";
     changelog = "https://github.com/tenable/terrascan/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

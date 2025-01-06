@@ -64,12 +64,12 @@ python3.pkgs.buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
-    license = licenses.gpl3Only;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.c3d2.members;
     mainProgram = "ledfx";
   };
 }

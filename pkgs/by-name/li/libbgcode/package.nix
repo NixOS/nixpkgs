@@ -32,12 +32,12 @@ stdenv.mkDerivation {
     catch2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/prusa3d/libbgcode";
     description = "Prusa Block & Binary G-code reader / writer / converter";
     mainProgram = "bgcode";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ lach ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ lach ];
+    platforms = lib.platforms.unix;
   };
 }

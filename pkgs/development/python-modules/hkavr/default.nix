@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hkavr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with Harman Kardon AVR controllers";
     homepage = "https://github.com/Devqon/hkavr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

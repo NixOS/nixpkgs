@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   # to make, so we need to disable parallelism:
   enableParallelInstalling = false;
 
-  meta = with lib; {
+  meta = {
     description = "Clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       EGA/VGA-bold for 8x14 and 8x16.
     '';
     homepage = "https://terminus-font.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ astsmtl ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ astsmtl ];
   };
 }

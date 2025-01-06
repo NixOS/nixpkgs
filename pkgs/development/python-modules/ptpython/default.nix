@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ptpython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced Python REPL";
     homepage = "https://github.com/prompt-toolkit/ptpython";
     changelog = "https://github.com/prompt-toolkit/ptpython/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mlieberman85 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

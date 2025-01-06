@@ -144,11 +144,11 @@ stdenv.mkDerivation rec {
   # before we could run tests, so we make turn checkPhase into installCheckPhase
   installCheckTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

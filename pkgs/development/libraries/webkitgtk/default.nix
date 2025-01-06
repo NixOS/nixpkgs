@@ -1,8 +1,6 @@
 {
   lib,
   clangStdenv,
-  buildPackages,
-  runCommand,
   fetchurl,
   perl,
   python3,
@@ -248,18 +246,18 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     pkgConfigModules = [
       "javascriptcoregtk-4.0"
       "webkit2gtk-4.0"
       "webkit2gtk-web-extension-4.0"
     ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = lib.teams.gnome.members;
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

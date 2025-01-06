@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       --subst-var-by version "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ID3 tag manipulation library";
     homepage = "https://mad.sourceforge.net/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

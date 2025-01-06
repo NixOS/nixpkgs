@@ -21,10 +21,10 @@ let mkPrefetchScript = tool: src: deps:
 
     preferLocalBuild = true;
 
-    meta = with lib; {
+    meta = {
       description = "Script used to obtain source hashes for fetch${tool}";
-      maintainers = with maintainers; [ bennofs ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ bennofs ];
+      platforms = lib.platforms.unix;
     };
   };
 in rec {
@@ -39,10 +39,10 @@ in rec {
 
     paths = [ nix-prefetch-bzr nix-prefetch-cvs nix-prefetch-git nix-prefetch-hg nix-prefetch-svn ];
 
-    meta = with lib; {
+    meta = {
       description = "Collection of all the nix-prefetch-* scripts which may be used to obtain source hashes";
-      maintainers = with maintainers; [ bennofs ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ bennofs ];
+      platforms = lib.platforms.unix;
     };
   };
 }

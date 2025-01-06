@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
     wrapGApp $out/share/ibus-uniemoji/uniemoji.py
   '';
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Input method (ibus) for entering unicode symbols and emoji by name";
     homepage = "https://github.com/salty-horse/ibus-uniemoji";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aske ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aske ];
   };
 }

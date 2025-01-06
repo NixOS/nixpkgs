@@ -21,11 +21,11 @@ stdenv.mkDerivation {
     cp pic/libiberty.a $out/lib*/libiberty.a
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gcc.gnu.org/";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
-    maintainers = with maintainers; [ abbradar ericson2314 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ abbradar ericson2314 ];
+    platforms = lib.platforms.unix;
   };
 }

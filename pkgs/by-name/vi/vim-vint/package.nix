@@ -35,12 +35,12 @@ buildPythonApplication rec {
     sed -i 's/mock == 1.0.1/mock/g' setup.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and Highly Extensible Vim script Language Lint implemented by Python";
     homepage = "https://github.com/Kuniwak/vint";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "vint";
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blocksatcli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
     changelog = "https://github.com/Blockstream/satellite/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "blocksat-cli";
   };
 }

@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
     } dependencies/.cache/cmocka
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compressed bitset library for C and C++";
     homepage = "https://roaringbitmap.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = [ maintainers.orivej ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.orivej ];
+    platforms = lib.platforms.all;
   };
 }

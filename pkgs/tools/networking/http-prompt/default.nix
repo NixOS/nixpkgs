@@ -30,12 +30,12 @@ python3Packages.buildPythonApplication rec {
     $out/bin/${pname} --version | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     mainProgram = "http-prompt";
     homepage = "https://github.com/eliangcs/http-prompt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

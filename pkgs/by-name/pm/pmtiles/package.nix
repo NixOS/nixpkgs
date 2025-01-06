@@ -27,11 +27,11 @@ buildGoModule rec {
     mv $out/bin/go-pmtiles $out/bin/pmtiles
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single-file utility for creating and working with PMTiles archives";
     homepage = "https://github.com/protomaps/go-pmtiles";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members ++ (with maintainers; [ theaninova ]);
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ theaninova ]);
     mainProgram = "pmtiles";
   };
 }

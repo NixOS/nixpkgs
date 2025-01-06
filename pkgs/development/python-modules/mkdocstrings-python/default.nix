@@ -51,11 +51,11 @@ buildPythonPackage rec {
     "test_format_code"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python handler for mkdocstrings";
     homepage = "https://github.com/mkdocstrings/python";
     changelog = "https://github.com/mkdocstrings/python/blob/${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

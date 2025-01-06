@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_awair" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Awair API";
     homepage = "https://github.com/ahayworth/python_awair";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

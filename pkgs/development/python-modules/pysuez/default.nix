@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysuez" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to get water consumption data from Suez";
     mainProgram = "pysuez";
     homepage = "https://github.com/jb101010-2/pySuez";
     changelog = "https://github.com/jb101010-2/pySuez/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

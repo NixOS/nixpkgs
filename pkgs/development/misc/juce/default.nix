@@ -81,16 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ fontconfig ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform C++ application framework";
     mainProgram = "juceaide";
     longDescription = "Open-source cross-platform C++ application framework for creating desktop and mobile applications, including VST, VST3, AU, AUv3, AAX and LV2 audio plug-ins";
     homepage = "https://juce.com/";
     changelog = "https://github.com/juce-framework/JUCE/blob/${finalAttrs.version}/CHANGE_LIST.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only # Or alternatively the JUCE license, but that would not be included in nixpkgs then
     ];
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.all;
   };
 })

@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     install -Dm444 $src/dist-res/in-formant.png -t $out/share/icons/hicolor/512x512/apps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time pitch and formant tracking software";
     mainProgram = "in-formant";
     homepage = "https://github.com/in-formant/in-formant";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     # currently broken on i686-linux and aarch64-linux due to other nixpkgs dependencies
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];

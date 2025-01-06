@@ -31,11 +31,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Modern web frontend making aria2 easier to use";
     homepage = "http://ariang.mayswind.net/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stunkymonkey ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stunkymonkey ];
+    platforms = lib.platforms.unix;
   };
 }

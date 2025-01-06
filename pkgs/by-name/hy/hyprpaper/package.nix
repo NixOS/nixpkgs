@@ -88,11 +88,11 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
       --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       fufexan
       khaneliman
       wozeparrot

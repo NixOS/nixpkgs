@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serve an archive or a compressed file as a read-only FUSE file system";
     homepage = "https://github.com/google/fuse-archive";
     changelog = "https://github.com/google/fuse-archive/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ icyrockcom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ icyrockcom ];
     mainProgram = "fuse-archive";
   };
 

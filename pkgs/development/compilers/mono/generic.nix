@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   inherit enableParallelBuilding;
 
-  meta = with lib; {
+  meta = {
     # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129
     broken =
       stdenv.hostPlatform.isDarwin
@@ -136,12 +136,12 @@ stdenv.mkDerivation rec {
       && lib.versionOlder version "6.12.0.129";
     homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
-    platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; darwin ++ linux;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       obadz
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       # runtime, compilers, tools and most class libraries licensed
       mit
       # runtime includes some code licensed

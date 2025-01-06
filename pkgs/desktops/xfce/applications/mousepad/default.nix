@@ -38,9 +38,9 @@ mkXfceDerivation {
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple text editor for Xfce";
     mainProgram = "mousepad";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

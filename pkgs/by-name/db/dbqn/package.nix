@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dzaima/BQN";
     description =
       "BQN implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       AndersonTorres
       sternenseemann
     ];

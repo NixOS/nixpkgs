@@ -63,12 +63,12 @@ buildPythonPackage rec {
     "test_console"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ charlesbaynham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ charlesbaynham ];
     mainProgram = "pipdeptree";
   };
 }

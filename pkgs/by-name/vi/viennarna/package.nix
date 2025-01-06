@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "--with-kinwalker"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prediction and comparison of RNA secondary structures";
     homepage = "https://www.tbi.univie.ac.at/RNA/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.unix;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.unix;
   };
 }

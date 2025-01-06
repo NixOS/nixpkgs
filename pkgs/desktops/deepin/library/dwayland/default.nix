@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     mkdir $out/include/KF5
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt-style API to interact with the wayland-client and wayland-server";
     homepage = "https://github.com/linuxdeepin/dwayland";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

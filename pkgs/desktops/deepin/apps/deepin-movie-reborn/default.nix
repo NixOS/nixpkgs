@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured video player supporting playing local and streaming media in multiple video formats";
     mainProgram = "deepin-movie";
     homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
     broken = true; # Crash when playing any video
   };
 }

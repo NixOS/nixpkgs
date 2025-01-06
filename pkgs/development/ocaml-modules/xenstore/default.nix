@@ -22,10 +22,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ ounit2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Xenstore protocol in pure OCaml";
-    license = licenses.lgpl21Only;
-    maintainers = teams.xen.members ++ [ maintainers.sternenseemann ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = lib.teams.xen.members ++ [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/ocaml-xenstore";
   };
 }

@@ -77,7 +77,7 @@ buildPythonPackage rec {
     "trytond.tests"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
@@ -89,9 +89,9 @@ buildPythonPackage rec {
     '';
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       udono
       johbo
     ];

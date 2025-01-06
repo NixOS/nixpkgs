@@ -71,15 +71,15 @@ buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath wrapper_paths} --add-flags "${wrapper_flags}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rofi frontend for Bitwarden";
     homepage = "https://github.com/fdw/rofi-rbw";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       equirosa
       dit7ya
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "rofi-rbw";
   };
 }

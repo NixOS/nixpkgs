@@ -7,18 +7,18 @@
 let
   pname = "postman";
   version = "11.1.0";
-  meta = with lib; {
+  meta = {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.postman;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.postman;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johnrichardrinehart
       evanjs
       tricktron

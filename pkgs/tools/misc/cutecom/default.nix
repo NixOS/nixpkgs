@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
         cp cutecom.1 "$out/share/man/man1"
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical serial terminal";
     homepage = "https://gitlab.com/cutecom/cutecom/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bennofs ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bennofs ];
+    platforms = lib.platforms.unix;
     mainProgram = "cutecom";
   };
 }

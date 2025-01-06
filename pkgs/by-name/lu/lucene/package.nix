@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     cp -r . $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java full-text search engine";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

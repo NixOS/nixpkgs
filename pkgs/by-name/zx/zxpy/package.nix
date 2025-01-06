@@ -44,12 +44,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shell scripts made simple";
     homepage = "https://github.com/tusharsadhwani/zxpy";
     changelog = "https://github.com/tusharsadhwani/zxpy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "zxpy";
   };
 }

@@ -1,5 +1,5 @@
 import ../make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   let
     homeserverUrl = "http://homeserver:8008";
 
@@ -9,8 +9,8 @@ import ../make-test-python.nix (
   in
   {
     name = "dendrite";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      maintainers = lib.teams.matrix.members;
     };
 
     nodes = {

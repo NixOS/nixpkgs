@@ -148,11 +148,11 @@ stdenv.mkDerivation rec {
     lvm2 = nixosTests.lvm2;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = platforms.linux;
-    license = with licenses; [ gpl2Only bsd2 lgpl21 ];
-    maintainers = with maintainers; [ raskin ajs124 ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ gpl2Only bsd2 lgpl21 ];
+    maintainers = with lib.maintainers; [ raskin ajs124 ];
   };
 }

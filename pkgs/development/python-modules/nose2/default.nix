@@ -40,12 +40,12 @@ buildPythonPackage rec {
     unittestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
     description = "Test runner for Python";
     mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

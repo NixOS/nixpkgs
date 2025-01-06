@@ -76,16 +76,16 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
-  meta = with lib; {
+  meta = {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [
       ehmry
       kampfschlaefer
       ivan
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

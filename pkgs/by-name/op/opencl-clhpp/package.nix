@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenCL Host API C++ bindings";
     homepage = "http://github.khronos.org/OpenCL-CLHPP/";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

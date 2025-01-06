@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~novakane/rivercarro";
     description = "Layout generator for river Wayland compositor, fork of rivertile";
     longDescription = ''
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
       - Limit the width of the usable area of the screen.
     '';
     changelog = "https://git.sr.ht/~novakane/rivercarro/refs/v${finalAttrs.version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kraem ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kraem ];
     inherit (zig_0_12.meta) platforms;
     mainProgram = "rivercarro";
   };

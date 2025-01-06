@@ -20,12 +20,12 @@ rustPlatform.buildRustPackage rec {
   # tests require mask to be installed
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI task runner defined by a simple markdown file";
     mainProgram = "mask";
     homepage = "https://github.com/jacobdeichert/mask";
     changelog = "https://github.com/jacobdeichert/mask/blob/mask/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

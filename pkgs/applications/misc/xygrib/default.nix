@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
           --replace 'Exec=XyGrib' 'Exec=xygrib'
       '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
     mainProgram = "xygrib";
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
       It interacts with OpenGribs's Grib server providing a choice
       of global and large area atmospheric and wave models.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ j03 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ j03 ];
   };
 }

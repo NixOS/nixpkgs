@@ -24,10 +24,10 @@ buildPythonPackage rec {
     cd src/zope/filerepresentation && python -m unittest
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zopefilerepresentation.readthedocs.io/";
     description = "File-system Representation Interfaces";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

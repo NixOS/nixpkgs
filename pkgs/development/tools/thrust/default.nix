@@ -84,13 +84,13 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/thrust/thrust_shell $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chromium-based cross-platform / cross-language application framework";
     mainProgram = "thrust_shell";
     homepage = "https://github.com/breach/thrust";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = [ maintainers.osener ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.osener ];
     platforms = [ "x86_64-linux" ];
   };
 }

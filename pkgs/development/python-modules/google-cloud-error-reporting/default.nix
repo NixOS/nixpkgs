@@ -61,11 +61,11 @@ buildPythonPackage rec {
     "google.cloud.errorreporting_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
     changelog = "https://github.com/googleapis/python-error-reporting/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

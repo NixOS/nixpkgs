@@ -79,12 +79,12 @@ mkDerivation rec {
         -i CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distribution-independent installer framework";
     homepage = "https://calamares.io/";
-    license = with licenses; [ gpl3Plus bsd2 cc0 ];
-    maintainers = with maintainers; [ manveru vlinkz ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Plus bsd2 cc0 ];
+    maintainers = with lib.maintainers; [ manveru vlinkz ];
+    platforms = lib.platforms.linux;
     mainProgram = "calamares";
   };
 }

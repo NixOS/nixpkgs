@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-pcre" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/mp3splt/";
     description = "Utility to split mp3, ogg vorbis and FLAC files without decoding";
-    maintainers = with maintainers; [ bosu ];
-    platforms = platforms.unix;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ bosu ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

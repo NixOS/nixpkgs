@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       || { echo 'C++ bindings were not generated; check configure output'; false; }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Core library of the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       vifino
     ];

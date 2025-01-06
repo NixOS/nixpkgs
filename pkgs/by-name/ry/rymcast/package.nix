@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
       --set PATH "${lib.makeBinPath [ zenity ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Player for Mega Drive/Genesis VGM files";
     homepage = "https://www.inphonik.com/products/rymcast-genesis-vgm-player/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with lib.maintainers; [ astsmtl ];
   };
 }

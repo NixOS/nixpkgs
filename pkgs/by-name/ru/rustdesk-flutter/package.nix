@@ -241,12 +241,12 @@ flutter319.buildFlutterApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative";
     homepage = "https://rustdesk.com";
-    license = licenses.agpl3Only;
-    maintainers = teams.helsinki-systems.members;
+    license = lib.licenses.agpl3Only;
+    maintainers = lib.teams.helsinki-systems.members;
     mainProgram = "rustdesk";
-    platforms = platforms.linux; # should work on darwin as well but I have no machine to test with
+    platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };
 }

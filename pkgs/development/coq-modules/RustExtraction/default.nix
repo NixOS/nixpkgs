@@ -51,7 +51,7 @@ mkCoqDerivation {
 
   meta = {
     description = "A framework for extracting Coq programs to Rust";
-    maintainers = with maintainers; [ _4ever2 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _4ever2 ];
+    license = lib.licenses.mit;
   };
 }

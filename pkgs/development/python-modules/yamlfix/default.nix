@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";
     changelog = "https://github.com/lyz-code/yamlfix/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ koozz ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ koozz ];
   };
 }

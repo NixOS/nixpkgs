@@ -110,12 +110,12 @@ buildPythonPackage rec {
     "test/aaa_profiling"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }";
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

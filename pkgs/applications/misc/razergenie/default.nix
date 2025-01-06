@@ -44,15 +44,15 @@ stdenv.mkDerivation {
     "-Dinclude_matrix_discovery=${lib.boolToString includeMatrixDiscovery}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/z3ntu/RazerGenie";
     description = "Qt application for configuring your Razer devices under GNU/Linux";
     mainProgram = "razergenie";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       f4814n
       Mogria
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

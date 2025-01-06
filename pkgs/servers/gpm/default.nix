@@ -14,7 +14,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpm";
   version = "unstable-2020-06-17";
 
@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.static = pkgsStatic.gpm;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "Daemon that provides mouse support on the Linux console";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.cygwin;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.cygwin;
     maintainers = [ ];
   };
 }

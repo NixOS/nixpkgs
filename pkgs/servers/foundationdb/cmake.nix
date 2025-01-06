@@ -129,13 +129,13 @@ let
 
         outputs = [ "out" "dev" "lib" "pythonsrc" ];
 
-        meta = with lib; {
+        meta = {
           description = "Open source, distributed, transactional key-value store";
           homepage    = "https://www.foundationdb.org";
-          license     = licenses.asl20;
+          license     = lib.licenses.asl20;
           platforms   = [ "x86_64-linux" ]
             ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
-          maintainers = with maintainers; [ thoughtpolice lostnet ];
+          maintainers = with lib.maintainers; [ thoughtpolice lostnet ];
        };
     };
 in makeFdb

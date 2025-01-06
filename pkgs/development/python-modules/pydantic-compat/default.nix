@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydantic_compat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compatibility layer for pydantic v1/v2";
     homepage = "https://github.com/pyapp-kit/pydantic-compat";
     changelog = "https://github.com/pyapp-kit/pydantic-compat/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

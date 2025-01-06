@@ -24,10 +24,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "aiodocker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docker API client for asyncio";
     homepage = "https://github.com/aio-libs/aiodocker";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

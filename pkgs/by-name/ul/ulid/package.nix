@@ -27,12 +27,12 @@ buildGoModule rec {
     "-skip=TestMonotonicSafe"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Universally Unique Lexicographically Sortable Identifier (ULID) in Go";
     homepage = "https://github.com/oklog/ulid";
     changelog = "https://github.com/oklog/ulid/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "ulid";
   };
 }

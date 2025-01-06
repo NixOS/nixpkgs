@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     install -D -t $out/bin uARMSolver
   '';
 
-  meta = with lib; {
+  meta = {
     description = "universal Association Rule Mining Solver";
     mainProgram = "uARMSolver";
     homepage = "https://github.com/firefly-cpp/uARMSolver";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

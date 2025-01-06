@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fixpoint reasoning system that unifies Datalog and equality saturation";
     mainProgram = "egglog";
     homepage = "https://github.com/egraphs-good/egglog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

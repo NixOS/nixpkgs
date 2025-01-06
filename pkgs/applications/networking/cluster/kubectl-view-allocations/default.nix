@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     description = "kubectl plugin to list allocations (cpu, memory, gpu,... X utilization, requested, limit, allocatable,...)";
     homepage = "https://github.com/davidB/kubectl-view-allocations";
-    license = licenses.cc0;
-    maintainers = [ maintainers.mrene ];
-    platforms = platforms.unix;
+    license = lib.licenses.cc0;
+    maintainers = [ lib.maintainers.mrene ];
+    platforms = lib.platforms.unix;
   };
 }

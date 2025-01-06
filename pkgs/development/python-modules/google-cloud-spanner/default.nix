@@ -91,11 +91,11 @@ buildPythonPackage rec {
     "google.cloud.spanner_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
     changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

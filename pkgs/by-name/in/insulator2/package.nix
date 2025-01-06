@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
     webkitgtk_4_0
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client UI to inspect Kafka topics, consume, produce and much more";
     homepage = "https://github.com/andrewinci/insulator2";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tc-kaluza ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tc-kaluza ];
     mainProgram = "insulator-2";
   };
 }

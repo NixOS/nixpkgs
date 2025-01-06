@@ -60,15 +60,15 @@ stdenv.mkDerivation {
       "-DBUILD_UNIT_TESTS=OFF"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
     homepage = "http://bulletphysics.org";
-    license = licenses.zlib;
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
     # /tmp/nix-build-bullet-2019-03-27.drv-0/source/src/Bullet3Common/b3Vector3.h:297:7: error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]
     #                 y = b3_splat_ps(y, 0x80);
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);

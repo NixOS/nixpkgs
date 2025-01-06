@@ -99,12 +99,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small GTK application to allow to keep a diary of your life";
     mainProgram = "almanah";
     homepage = "https://gitlab.gnome.org/GNOME/almanah";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.gnome.members;
   };
 }

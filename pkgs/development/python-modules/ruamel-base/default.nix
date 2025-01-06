@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "ruamel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common routines for ruamel packages";
     homepage = "https://sourceforge.net/projects/ruamel-base/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

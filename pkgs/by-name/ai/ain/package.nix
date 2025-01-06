@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X=main.gitSha=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP API client for the terminal";
     homepage = "https://github.com/jonaslu/ain";
     changelog = "https://github.com/jonaslu/ain/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "ain";
   };
 }

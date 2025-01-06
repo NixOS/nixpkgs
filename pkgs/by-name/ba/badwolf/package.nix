@@ -39,16 +39,16 @@ stdenv.mkDerivation rec {
     glib-networking
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist and privacy-oriented WebKitGTK+ browser";
     mainProgram = "badwolf";
     homepage = "https://hacktivis.me/projects/badwolf";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       cc-by-sa-40
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       laalsaas
       aleksana
     ];

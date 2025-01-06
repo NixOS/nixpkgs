@@ -153,9 +153,9 @@ rustPlatform.buildRustPackage rec {
       changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
       description = "Simple, secure and fast identity management platform";
       homepage = "https://github.com/kanidm/kanidm";
-      license = licenses.mpl20;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
+      license = lib.licenses.mpl20;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
         adamcstephens
         Flakebi
       ];

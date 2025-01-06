@@ -21,12 +21,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Custom-designed typeface explicitly created for the developer community";
     homepage = "https://kodemono.com/";
     changelog = "https://github.com/isaozler/kode-mono/blob/main/CHANGELOG.md";
-    license = licenses.ofl;
-    maintainers = [ maintainers.isaozler ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.isaozler ];
+    platforms = lib.platforms.all;
   };
 })

@@ -333,13 +333,13 @@ let
         tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Smart and user-friendly command line shell";
       homepage = "https://fishshell.com/";
       changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${version}";
-      license = licenses.gpl2Only;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
         adamcstephens
         cole-h
         winter

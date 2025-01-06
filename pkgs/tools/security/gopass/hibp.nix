@@ -35,12 +35,12 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gopass haveibeenpwnd.com integration";
     homepage = "https://github.com/gopasspw/gopass-hibp";
     changelog = "https://github.com/gopasspw/gopass-hibp/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "gopass-hibp";
   };
 }

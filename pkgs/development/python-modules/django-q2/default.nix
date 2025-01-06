@@ -89,11 +89,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-vv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiprocessing distributed task queue for Django based on Django-Q";
     homepage = "https://github.com/django-q2/django-q2";
     changelog = "https://github.com/django-q2/django-q2/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

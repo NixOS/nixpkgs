@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ksnip/ksnip";
     description = "Cross-platform screenshot tool with many annotation features";
     longDescription = ''
@@ -80,9 +80,9 @@ stdenv.mkDerivation rec {
       - User-defined actions for taking screenshot and post-processing.
       - Many configuration options.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ x3ro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ x3ro ];
+    platforms = lib.platforms.linux;
     mainProgram = "ksnip";
   };
 }

@@ -136,11 +136,11 @@ buildPythonPackage rec {
     "test_SimpleDirectoryReader"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
     changelog = "https://github.com/run-llama/llama_index/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

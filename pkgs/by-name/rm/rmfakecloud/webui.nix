@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     cp -r ui/build/* $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Only the webui files for rmfakecloud";
     homepage = "https://ddvk.github.io/rmfakecloud/";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
   };
 }

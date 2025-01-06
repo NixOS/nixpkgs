@@ -92,13 +92,13 @@ python.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
     changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
     mainProgram = "nxc";
-    maintainers = with maintainers; [ vncsb ];
+    maintainers = with lib.maintainers; [ vncsb ];
     # FIXME: failing fixupPhase:
     # $ Rewriting #!/nix/store/<hash>-python3-3.11.7/bin/python3.11 to #!/nix/store/<hash>-python3-3.11.7
     # $ /nix/store/<hash>-wrap-python-hook/nix-support/setup-hook: line 65: 47758 Killed: 9               sed -i "$f" -e "1 s^#!/nix/store/<hash>-python3-3.11.7^#!/nix/store/<hash>-python3-3.11.7^"

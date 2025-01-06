@@ -23,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "requests" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/RemixDev/deezer-py";
     description = "Wrapper for all Deezer's APIs";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ natto1784 ];
   };
 }

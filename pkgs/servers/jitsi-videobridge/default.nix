@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "WebRTC compatible video router";
     longDescription = ''
       Jitsi Videobridge is an XMPP server component that allows for multiuser video communication.
@@ -62,9 +62,9 @@ stdenv.mkDerivation {
       CPU horsepower is not that critical for performance.
     '';
     homepage = "https://github.com/jitsi/jitsi-videobridge";
-    license = licenses.asl20;
-    maintainers = teams.jitsi.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.jitsi.members;
+    platforms = lib.platforms.linux;
     mainProgram = "jitsi-videobridge";
   };
 }

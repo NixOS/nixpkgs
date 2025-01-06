@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://blog.lxde.org/category/pcmanfm/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     description = "Glib-based library for file management";
-    maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

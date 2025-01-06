@@ -65,12 +65,12 @@ python3Packages.buildPythonApplication rec {
     "tests/integration/test_main.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
     changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -27,11 +27,11 @@ buildPythonPackage {
     packaging
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool to support lazy imports";
     homepage = "https://github.com/telekom/lazy-imports";
     changelog = "https://github.com/telekom/lazy-imports/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

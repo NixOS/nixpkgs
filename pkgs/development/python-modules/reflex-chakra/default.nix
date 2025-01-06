@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Chakra Implementation in Reflex";
     homepage = "https://github.com/reflex-dev/reflex-chakra";
     changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

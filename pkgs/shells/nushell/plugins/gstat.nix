@@ -27,15 +27,15 @@ rustPlatform.buildRustPackage rec {
     extraArgs = [ "--version=skip" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git status plugin for Nushell";
     mainProgram = "nu_plugin_gstat";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_gstat";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mrkkrp
       aidalgol
     ];
-    platforms = with platforms; all;
+    platforms = lib.platforms.all;
   };
 }

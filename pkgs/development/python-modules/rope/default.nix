@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "test_get_modname_folder"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
     changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

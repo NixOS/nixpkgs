@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.question_gen.openai" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Question Gen Integration for Openai Generator";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/question_gen/llama-index-question-gen-openai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

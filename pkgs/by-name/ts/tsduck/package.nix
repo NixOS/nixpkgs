@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     "install-devel"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MPEG Transport Stream Toolkit";
     homepage = "https://github.com/tsduck/tsduck";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ siriobalmelli ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

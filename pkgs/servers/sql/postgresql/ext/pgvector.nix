@@ -17,11 +17,11 @@ buildPostgresqlExtension rec {
     hash = "sha256-JsZV+I4eRMypXTjGmjCtMBXDVpqTIPHQa28ogXncE/Q=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source vector similarity search for PostgreSQL";
     homepage = "https://github.com/pgvector/pgvector";
     changelog = "https://github.com/pgvector/pgvector/raw/v${version}/CHANGELOG.md";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = [ ];
   };

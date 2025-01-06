@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny color picker for X11";
     homepage = "https://github.com/blblapco/xmcp";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.linux;
     mainProgram = "xmcp";
   };
 }

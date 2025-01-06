@@ -29,12 +29,12 @@ in appimageTools.wrapType2 {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "anytype";
-    maintainers = with maintainers; [ running-grass ];
+    maintainers = with lib.maintainers; [ running-grass ];
     platforms = [ "x86_64-linux" ];
   };
 }

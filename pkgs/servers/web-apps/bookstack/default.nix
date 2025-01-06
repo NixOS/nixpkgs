@@ -36,15 +36,15 @@ package.override rec {
     sha256 = "sha256-uuek56256NCIhvvLYTHgbRBea66SUg+9xnfcOsK5Bo0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Platform to create documentation/wiki content built with PHP & Laravel";
     longDescription = ''
       A platform for storing and organising information and documentation.
       Details for BookStack can be found on the official website at https://www.bookstackapp.com/.
     '';
     homepage = "https://www.bookstackapp.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ymarkus ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ymarkus ];
+    platforms = lib.platforms.linux;
   };
 }

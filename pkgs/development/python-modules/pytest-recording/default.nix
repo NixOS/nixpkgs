@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_recording" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin that allows you recording of network interactions via VCR.py";
     homepage = "https://github.com/kiwicom/pytest-recording";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

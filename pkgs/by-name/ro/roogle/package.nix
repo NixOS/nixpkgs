@@ -22,14 +22,14 @@ rustPlatform.buildRustPackage rec {
     cp -r assets $out/share/roogle
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rust API search engine which allows you to search functions by names and type signatures";
     mainProgram = "roogle";
     homepage = "https://github.com/hkmatsumoto/roogle";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

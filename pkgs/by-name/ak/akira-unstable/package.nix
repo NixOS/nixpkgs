@@ -64,18 +64,18 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         Br1ght0ne
         neonfuz
       ]
-      ++ teams.pantheon.members;
-    platforms = platforms.linux;
+      ++ lib.teams.pantheon.members;
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.akiraux.akira";
   };
 }

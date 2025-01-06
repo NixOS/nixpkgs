@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     "--skip test_package_update_readme::case_5"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rust-secure-code/cargo-geiger";
     changelog = "https://github.com/rust-secure-code/cargo-geiger/blob/cargo-geiger-${version}/CHANGELOG.md";
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
@@ -81,11 +81,11 @@ rustPlatform.buildRustPackage rec {
       dependency selection but it can not help you decide when and why unsafe
       code is appropriate.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       evanjs
       gepbird
       jk

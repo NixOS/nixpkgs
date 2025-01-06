@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=${placeholder "out"}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt6 Configuration Tool";
     homepage = "https://github.com/trialuser02/qt6ct";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       Flakebi
       Scrumplex
     ];

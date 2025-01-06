@@ -75,18 +75,18 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/domoticz --set LD_LIBRARY_PATH ${python3}/lib;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Home automation system";
     longDescription = ''
       Domoticz is a home automation system that lets you monitor and configure
       various devices like: lights, switches, various sensors/meters like
       temperature, rain, wind, UV, electra, gas, water and much more
     '';
-    maintainers = with maintainers; [ edcragg ];
+    maintainers = with lib.maintainers; [ edcragg ];
     homepage = "https://www.domoticz.com/";
     changelog = "https://github.com/domoticz/domoticz/blob/${version}/History.txt";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
     mainProgram = "domoticz";
   };

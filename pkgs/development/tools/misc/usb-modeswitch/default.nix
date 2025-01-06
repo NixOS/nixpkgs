@@ -62,14 +62,14 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mode switching tool for controlling 'multi-mode' USB devices";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       marcweber
       peterhoeg
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "usb_modeswitch";
   };
 }

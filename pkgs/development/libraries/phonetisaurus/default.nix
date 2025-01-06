@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     openfst
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for Grapheme-to-phoneme models for speech recognition using the OpenFst framework";
     inherit (src.meta) homepage;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.unix;
   };
 }

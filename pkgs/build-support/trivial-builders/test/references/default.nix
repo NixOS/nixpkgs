@@ -3,7 +3,6 @@
   stdenvNoCC,
   testers,
   callPackage,
-  writeText,
   # nativeBuildInputs
   shellcheck-minimal,
   # Samples
@@ -92,7 +91,7 @@ let
         ;
     };
 
-    meta = with lib; {
+    meta = {
       mainProgram = "references-test";
     };
   });

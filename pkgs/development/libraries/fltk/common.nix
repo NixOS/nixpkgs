@@ -209,12 +209,12 @@ stdenv.mkDerivation rec {
       --replace "/$out/" "/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ cross-platform lightweight GUI library";
     homepage = "https://www.fltk.org";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # LGPL2 with static linking exception
     # https://www.fltk.org/COPYING.php
-    license = licenses.lgpl2Only;
+    license = lib.licenses.lgpl2Only;
   };
 }

@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make all opt";
 
-  meta = with lib; {
+  meta = {
     description = "OCaml Bindings to curses/ncurses";
     homepage = "https://github.com/mbacarella/curses";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
     maintainers = [ ];
     inherit (ocaml.meta) platforms;

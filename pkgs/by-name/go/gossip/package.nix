@@ -130,13 +130,13 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for nostr, an open social media protocol";
     downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${version}";
     homepage = "https://github.com/mikedilger/gossip";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gossip";
-    maintainers = with maintainers; [ msanft ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ msanft ];
+    platforms = lib.platforms.unix;
   };
 }

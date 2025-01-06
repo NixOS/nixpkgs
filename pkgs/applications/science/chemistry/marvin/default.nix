@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     )}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
-    maintainers = with maintainers; [ fusion809 ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ fusion809 ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
   };
 }

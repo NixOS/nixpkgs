@@ -89,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland compositor for mobile phones like the Librem 5";
     mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ masipcat zhaofengli ];
+    platforms = lib.platforms.linux;
   };
 })

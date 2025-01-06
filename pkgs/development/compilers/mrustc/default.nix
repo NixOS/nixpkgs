@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mutabah's Rust Compiler";
     mainProgram = "mrustc";
     longDescription = ''
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       but not yet suitable for everyday use.
     '';
     inherit (src.meta) homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       progval
       r-burns
     ];

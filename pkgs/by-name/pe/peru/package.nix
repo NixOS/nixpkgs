@@ -25,11 +25,11 @@ python3Packages.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/buildinspace/peru";
     description = "Tool for including other people's code in your projects";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "peru";
   };
 

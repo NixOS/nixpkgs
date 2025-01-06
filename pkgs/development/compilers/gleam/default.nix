@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Statically typed language for the Erlang VM";
     mainProgram = "gleam";
     homepage = "https://gleam.run/";
     changelog = "https://github.com/gleam-lang/gleam/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = teams.beam.members ++ [ lib.maintainers.philtaken ];
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.beam.members ++ [ lib.maintainers.philtaken ];
   };
 }

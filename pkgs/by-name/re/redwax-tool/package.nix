@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config txt2man which ];
   buildInputs = [ openssl apr aprutil ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://redwax.eu/rt/";
     description = "Universal certificate conversion tool";
     mainProgram = "redwax-tool";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       certificates and keys you're interested in, write those
       certificates and keys to the destinations of your choice.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

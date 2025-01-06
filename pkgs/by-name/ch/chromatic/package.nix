@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fine-tune your instruments";
     longDescription = ''
       Fine-tune your instruments with Chromatic. Chromatic
@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
       Requires PulseAudio or PipeWire.
     '';
     homepage = "https://github.com/nate-xyz/chromatic";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "chromatic";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -44,17 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Radeon open compute thunk interface";
     homepage = "https://github.com/ROCm/ROCT-Thunk-Interface";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       mit
     ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lovesegfault ] ++ lib.teams.rocm.members;
+    platforms = lib.platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "6.0.0";
+      lib.versions.minor finalAttrs.version != lib.versions.minor stdenv.cc.version
+      || lib.versionAtLeast finalAttrs.version "6.0.0";
   };
 })

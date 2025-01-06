@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) collectd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

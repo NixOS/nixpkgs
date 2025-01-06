@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shtab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for shell tab completion of Python CLI applications";
     mainProgram = "shtab";
     homepage = "https://docs.iterative.ai/shtab/";
     changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

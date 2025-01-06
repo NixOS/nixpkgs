@@ -54,13 +54,13 @@ buildGoModule rec {
     command = "oras version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://oras.land/";
     changelog = "https://github.com/oras-project/oras/releases/tag/v${version}";
     description = "ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
     mainProgram = "oras";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       developer-guy
     ];

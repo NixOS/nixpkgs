@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     substituteAll ${./networking_ts.pc.in} $out/lib/pkgconfig/networking_ts.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Experimental implementation of the C++ Networking Technical Specification";
     homepage = "https://github.com/chriskohlhoff/networking-ts-impl";
-    license = licenses.boost;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

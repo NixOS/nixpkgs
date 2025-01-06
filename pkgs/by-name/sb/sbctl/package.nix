@@ -57,17 +57,17 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Secure Boot key manager";
     mainProgram = "sbctl";
     homepage = "https://github.com/Foxboron/sbctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raitobezarius
       Scrumplex
     ];
     # go-uefi do not support darwin at the moment:
     # see upstream on https://github.com/Foxboron/go-uefi/issues/13
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

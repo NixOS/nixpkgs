@@ -51,12 +51,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mechanicalsoup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
     changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jgillich
       fab
     ];

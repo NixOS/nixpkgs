@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
     version = testers.testVersion { package = quick-lint-js; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Find bugs in Javascript programs";
     mainProgram = "quick-lint-js";
     homepage = "https://quick-lint-js.com";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ratsclub ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ratsclub ];
+    platforms = lib.platforms.all;
   };
 
   # Expose quick-lint-js-build-tools to nix repl as quick-lint-js.build-tools.

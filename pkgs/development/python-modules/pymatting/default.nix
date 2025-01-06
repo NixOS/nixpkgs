@@ -53,11 +53,11 @@ buildPythonPackage rec {
     "test_lkm"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";
     changelog = "https://github.com/pymatting/pymatting/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ blaggacao ];
   };
 }

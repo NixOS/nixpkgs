@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   fetchPypi,
   azure-core,
@@ -32,10 +32,10 @@ buildPythonPackage rec {
     "azure.core"
   ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Microsoft Azure Management Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

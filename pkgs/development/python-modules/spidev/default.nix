@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spidev" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/doceme/py-spidev";
     description = "Python bindings for Linux SPI access through spidev";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -388,13 +388,13 @@ let
             inherit ztsSupport;
           };
 
-          meta = with lib; {
+          meta = {
             description = "HTML-embedded scripting language";
             homepage = "https://www.php.net/";
-            license = licenses.php301;
+            license = lib.licenses.php301;
             mainProgram = "php";
-            maintainers = teams.php.members;
-            platforms = platforms.all;
+            maintainers = lib.teams.php.members;
+            platforms = lib.platforms.all;
             outputsToInstall = [
               "out"
               "dev"

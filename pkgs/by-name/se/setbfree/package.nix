@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "DSP tonewheel organ emulator";
     homepage = "https://setbfree.org";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "x86_64-linux"
       "i686-linux"

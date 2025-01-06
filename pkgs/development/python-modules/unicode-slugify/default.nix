@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "slugify/tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generates unicode slugs";
     homepage = "https://pypi.org/project/unicode-slugify/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

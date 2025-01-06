@@ -64,13 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/file-roller";
     changelog = "https://gitlab.gnome.org/GNOME/file-roller/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Archive manager for the GNOME desktop environment";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.gnome.members ++ lib.teams.pantheon.members;
     mainProgram = "file-roller";
   };
 })

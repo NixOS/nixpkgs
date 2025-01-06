@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aubio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/run
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications";
     homepage = "https://github.com/rhboot/pesign";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
     # efivar is currently Linux-only.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

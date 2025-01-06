@@ -29,10 +29,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast dictionary-based language detector for short texts";
     homepage = "https://github.com/LibreTranslate/LexiLang";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

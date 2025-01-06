@@ -409,13 +409,13 @@ stdenv.mkDerivation (finalAttrs: {
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
+    maintainers = with lib.maintainers; [ havvy ] ++ lib.teams.rust.members;
     license = [
-      licenses.mit
-      licenses.asl20
+      lib.licenses.mit
+      lib.licenses.asl20
     ];
     platforms = rustc.tier1TargetPlatforms;
     # If rustc can't target a platform, we also can't build rustc for

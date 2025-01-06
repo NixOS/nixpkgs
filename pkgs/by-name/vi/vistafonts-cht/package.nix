@@ -31,15 +31,15 @@ stdenvNoCC.mkDerivation {
       --subst-var-by fontname "Microsoft JhengHei"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TrueType fonts from Microsoft Windows Vista For Traditional Chinese (Microsoft JhengHei)";
     homepage = "https://www.microsoft.com/typography/fonts/family.aspx";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ atkinschang ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ atkinschang ];
 
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

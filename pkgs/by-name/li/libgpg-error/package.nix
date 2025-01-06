@@ -68,7 +68,7 @@ in stdenv.mkDerivation (rec {
 
   doCheck = true; # not cross
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
     description = "Small library that defines common error values for all GnuPG components";
@@ -81,8 +81,8 @@ in stdenv.mkDerivation (rec {
       Daemon and possibly more in the future.
     '';
 
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 } // genPosixLockObjOnlyAttrs)

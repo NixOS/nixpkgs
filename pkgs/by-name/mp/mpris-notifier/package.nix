@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dependency-light, highly-customizable, XDG desktop notification generator for MPRIS status changes";
     homepage = "https://github.com/l1na-forever/mpris-notifier";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leixb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leixb ];
     mainProgram = "mpris-notifier";
   };
 }

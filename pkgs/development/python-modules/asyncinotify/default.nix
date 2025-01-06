@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
     changelog = "https://github.com/absperf/asyncinotify/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ cynerd ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

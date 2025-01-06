@@ -85,13 +85,13 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "tectonic";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lluchs
       doronbehar
       bryango

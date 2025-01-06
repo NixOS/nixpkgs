@@ -10,8 +10,8 @@ mkXfceDerivation {
   nativeBuildInputs = [ exo ];
   buildInputs = [ garcon gtk3 libxfce4ui libxfce4util xfconf ];
 
-  meta = with lib; {
+  meta = {
     description = "Appfinder for the Xfce4 Desktop Environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

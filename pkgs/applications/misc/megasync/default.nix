@@ -126,10 +126,10 @@ mkDerivation rec {
     qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xorg.xrdb ]})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"

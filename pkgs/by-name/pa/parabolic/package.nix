@@ -66,12 +66,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Download web video and audio";
     homepage = "https://github.com/NickvisionApps/Parabolic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ewuuwe ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ewuuwe ];
     mainProgram = "NickvisionTubeConverter.GNOME";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

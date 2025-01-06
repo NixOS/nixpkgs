@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TX/Xi57fn85GjHc74icxhsQ6n7FwqzGIr3Qoc2o681E=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple, extendable and embeddable scripting language";
     homepage = "https://github.com/sagiegurari/duckscript";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "duck";
   };
 }

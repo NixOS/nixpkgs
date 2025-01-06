@@ -4,7 +4,7 @@
 
 assert lib.versionAtLeast ocaml.version "4.08.0";
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opam";
   version = "2.3.0";
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
-    changelog = "https://github.com/ocaml/opam/raw/${version}/CHANGES";
+    changelog = "https://github.com/ocaml/opam/raw/${finalAttrs.version}/CHANGES";
     maintainers = [ ];
-    license = licenses.lgpl21Only;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.all;
   };
-}
+})

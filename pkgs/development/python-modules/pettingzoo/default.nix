@@ -122,11 +122,11 @@ buildPythonPackage rec {
       "test_multi_episode_parallel_env_wrapper"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
     homepage = "https://github.com/Farama-Foundation/PettingZoo";
     changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

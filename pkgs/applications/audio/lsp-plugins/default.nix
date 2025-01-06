@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of open-source audio plugins";
     longDescription = ''
       Compatible with the following formats:
@@ -123,11 +123,11 @@ stdenv.mkDerivation rec {
       - Trigger
     '';
     homepage = "https://lsp-plug.in";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       magnetophon
       PowerUser64
     ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

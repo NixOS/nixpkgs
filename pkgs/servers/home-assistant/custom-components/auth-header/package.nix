@@ -16,11 +16,11 @@ buildHomeAssistantComponent rec {
     hash = "sha256-N2jEFyb/OWsO48rAuQBDHtQ5yKfIrGTcwlEb2P3LyVc=";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/BeryJu/hass-auth-header/releases/tag/v${version}";
     description = "Home Assistant custom component which allows you to delegate authentication to a reverse proxy";
     homepage = "https://github.com/BeryJu/hass-auth-header";
-    maintainers = with maintainers; [ mjm ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ mjm ];
+    license = lib.licenses.gpl3;
   };
 }

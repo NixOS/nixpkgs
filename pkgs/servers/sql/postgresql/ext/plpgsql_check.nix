@@ -23,12 +23,12 @@ buildPostgresqlExtension (finalAttrs: {
     sql = "CREATE EXTENSION plpgsql_check;";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linter tool for language PL/pgSQL";
     homepage = "https://github.com/okbob/plpgsql_check";
     changelog = "https://github.com/okbob/plpgsql_check/releases/tag/v${finalAttrs.version}";
     platforms = postgresql.meta.platforms;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

@@ -13,11 +13,11 @@ buildPecl rec {
   buildInputs = [ libssh2 ];
   configureFlags = [ "--with-ssh2=${libssh2.dev}" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://pecl.php.net/package-info.php?package=ssh2&version=${version}";
     description = "PHP bindings for the libssh2 library";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://github.com/php/pecl-networking-ssh2";
-    maintainers = teams.php.members ++ [ maintainers.ostrolucky ];
+    maintainers = lib.teams.php.members ++ [ lib.maintainers.ostrolucky ];
   };
 }

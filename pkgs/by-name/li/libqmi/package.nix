@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
       build-aux/qmi-codegen/qmi-codegen
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/libqmi/";
     description = "Modem protocol helper library";
-    maintainers = teams.freedesktop.members;
-    platforms = platforms.linux;
-    license = with licenses; [
+    maintainers = lib.teams.freedesktop.members;
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       # Library
       lgpl2Plus
       # Tools

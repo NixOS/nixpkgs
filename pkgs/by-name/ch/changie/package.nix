@@ -35,13 +35,13 @@ buildGoModule rec {
       --zsh <($out/bin/changie completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automated changelog tool for preparing releases with lots of customization options";
     mainProgram = "changie";
     homepage = "https://changie.dev";
     changelog = "https://github.com/miniscruff/changie/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];

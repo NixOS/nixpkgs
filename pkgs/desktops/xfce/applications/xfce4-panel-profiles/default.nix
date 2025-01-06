@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "xfce4-panel-profiles-"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/apps/xfce4-panel-profiles/start";
     description = "Simple application to manage Xfce panel layouts";
     mainProgram = "xfce4-panel-profiles";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
+    platforms = lib.platforms.linux;
   };
 })

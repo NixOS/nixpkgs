@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage rec {
 
   VERGEN_GIT_SEMVER = "v${version}";
 
-  meta = with lib; {
+  meta = {
     description = "Key and secret workflow (validation, invalidation, etc.) tool";
     mainProgram = "keyscope";
     homepage = "https://github.com/spectralops/keyscope";
     changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

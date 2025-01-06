@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Allows you to perform imports names that will only be resolved when used in the code";
     homepage = "https://github.com/zopefoundation/zope.deferredimport";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
   };
 }

@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Levenshtein" ];
 
-  meta = with lib; {
+  meta = {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
     changelog = "https://github.com/maxbachmann/Levenshtein/blob/${src.rev}/HISTORY.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -30,9 +30,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkuseg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for multi-domain Chinese word segmentation";
     homepage = "https://github.com/lancopku/pkuseg-python";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

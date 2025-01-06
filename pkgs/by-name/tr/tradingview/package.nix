@@ -82,13 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Charting platform for traders and investors";
     homepage = "https://www.tradingview.com/desktop/";
     changelog = "https://www.tradingview.com/support/solutions/43000673888/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ prominentretail ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ prominentretail ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };

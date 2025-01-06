@@ -25,11 +25,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "guestfs" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libguestfs.org/guestfs-python.3.html";
     description = "Use libguestfs from Python";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ grahamc ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ grahamc ];
     inherit (libguestfs.meta) platforms;
   };
 }

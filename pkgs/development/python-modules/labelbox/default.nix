@@ -97,11 +97,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "labelbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
     changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

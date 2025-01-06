@@ -29,15 +29,15 @@ python3Packages.buildPythonApplication rec {
   # Tests do not run with python3: https://github.com/lilydjwg/pssh/issues/126
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Parallel SSH Tools";
     longDescription = ''
       PSSH provides parallel versions of OpenSSH and related tools,
       including pssh, pscp, prsync, pnuke and pslurp.
     '';
     inherit (src.meta) homepage;
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ chris-martin ];
   };
 }

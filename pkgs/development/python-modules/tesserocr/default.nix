@@ -55,12 +55,12 @@ buildPythonPackage rec {
     rm -rf tesserocr
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";
     description = "Simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
     homepage = "https://github.com/sirfz/tesserocr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mtrsk ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mtrsk ];
+    platforms = lib.platforms.linux;
   };
 }

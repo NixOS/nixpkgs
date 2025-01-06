@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     sed -i '/AutodetectHostArchitecture()/d' print_target_architecture.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
     homepage = "https://github.com/VcDevel/Vc";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbradar ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken =
       (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)

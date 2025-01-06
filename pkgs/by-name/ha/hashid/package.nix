@@ -15,11 +15,11 @@ python3Packages.buildPythonApplication {
     hash = "sha256-R2r/UYRcHbpfOz/XqtSUIpd826eT1Erfo7frAiArT34=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software to identify the different types of hashes";
     homepage = "https://github.com/psypanda/hashID";
     mainProgram = "hashid";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ d3vil0p3r ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
   };
 }

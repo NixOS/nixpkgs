@@ -32,14 +32,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  meta = with lib; {
+  meta = {
     description = "Vector tile server specialized on publishing MVT tiles";
     homepage = "https://t-rex.tileserver.ch/";
     changelog = "https://github.com/t-rex-tileserver/t-rex/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.geospatial.members;
     mainProgram = "t_rex";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = true; # see https://github.com/t-rex-tileserver/t-rex/issues/320
   };
 }

@@ -23,11 +23,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "percol" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mooz/percol";
     description = "Adds flavor of interactive filtering to the traditional pipe concept of shell";
     mainProgram = "percol";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

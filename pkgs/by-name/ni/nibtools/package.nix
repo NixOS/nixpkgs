@@ -41,11 +41,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "disk transfer utility for imaging and converting commodore 64 disk images";
     homepage = "https://github.com/OpenCBM/nibtools/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    platforms = lib.platforms.all;
   };
 }

@@ -64,13 +64,13 @@ buildGoModule rec {
       --zsh <($out/bin/argocd completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Declarative continuous deployment for Kubernetes";
     mainProgram = "argocd";
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       shahrukh330
       bryanasdev000
       qjoly

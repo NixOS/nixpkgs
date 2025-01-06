@@ -57,13 +57,13 @@ buildDotnetModule rec {
     install -Dm644 Assets/PabloDraw-64.png $out/share/icons/hicolor/64x64/apps/pablodraw.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ansi/Ascii text and RIPscrip vector graphic art editor/viewer with multi-user capabilities";
     homepage = "https://picoe.ca/products/pablodraw";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "PabloDraw";
-    maintainers = with maintainers; [ aleksana kip93 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ aleksana kip93 ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Eto.Platform.Mac64 not found in nugetSource
   };
 }

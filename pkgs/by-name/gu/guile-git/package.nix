@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     sed -i -e '94i (test-skip 1)' ./tests/proxy.scm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bindings to Libgit2 for GNU Guile";
     homepage = "https://gitlab.com/guile-git/guile-git";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = guile.meta.platforms;
   };
 }

@@ -79,16 +79,16 @@ stdenv.mkDerivation {
     update-source-version fstar "$version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       gebner
       pnmadelaine
     ];
     mainProgram = "fstar.exe";
-    platforms = with platforms; darwin ++ linux;
+    platforms = with lib.platforms; darwin ++ linux;
   };
 }

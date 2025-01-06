@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://etherape.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ symphorien ];
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ symphorien ];
   };
 }

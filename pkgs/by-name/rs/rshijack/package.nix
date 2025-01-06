@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3rDPk+lPRrDrE2iqHAOi7zhyc+xYPXkM9P4Bu0JUL40=";
 
-  meta = with lib; {
+  meta = {
     description = "TCP connection hijacker";
     homepage = "https://github.com/kpcyrd/rshijack";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ xrelkd ];
+    platforms = lib.platforms.unix;
     mainProgram = "rshijack";
   };
 }

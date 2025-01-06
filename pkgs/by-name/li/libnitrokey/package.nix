@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ hidapi ];
 
-  meta = with lib; {
+  meta = {
     description = "Communicate with Nitrokey devices in a clean and easy manner";
     homepage = "https://github.com/Nitrokey/libnitrokey";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       panicgh
       raitobezarius
     ];

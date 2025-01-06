@@ -85,11 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libretranslate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
     changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

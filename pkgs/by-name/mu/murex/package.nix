@@ -19,12 +19,12 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Bash-like shell and scripting environment with advanced features designed for safety and productivity";
     mainProgram = "murex";
     homepage = "https://murex.rocks";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       dit7ya
       kashw2
     ];

@@ -76,12 +76,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_generate_files_from_paths"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";
     homepage = "https://github.com/GitGuardian/ggshield";
     changelog = "https://github.com/GitGuardian/ggshield/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ggshield";
   };
 }

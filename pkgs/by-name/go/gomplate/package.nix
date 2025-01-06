@@ -37,13 +37,13 @@ buildGoModule rec {
     rm $out/bin/gen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flexible commandline tool for template rendering";
     mainProgram = "gomplate";
     homepage = "https://gomplate.ca/";
     changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ris
       jlesquembre
     ];

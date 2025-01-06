@@ -228,7 +228,7 @@ stdenv.mkDerivation rec {
     "-framework AudioToolbox"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Remote Desktop Protocol Client";
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
@@ -236,8 +236,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.freerdp.com/";
     changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

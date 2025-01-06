@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     install -Dm755 veikk.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/veikk
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux driver for VEIKK-brand digitizers";
     homepage = "https://github.com/jlam55555/veikk-linux-driver/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nicbk ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nicbk ];
     broken = kernel.kernelOlder "4.19";
   };
 }

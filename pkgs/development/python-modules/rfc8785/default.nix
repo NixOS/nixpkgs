@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rfc8785" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for RFC8785 (JSON Canonicalization Scheme)";
     homepage = "https://github.com/trailofbits/rfc8785.py";
     changelog = "https://github.com/trailofbits/rfc8785.py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

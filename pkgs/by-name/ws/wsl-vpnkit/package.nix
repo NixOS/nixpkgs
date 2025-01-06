@@ -75,12 +75,12 @@ resholve.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Provides network connectivity to Windows Subsystem for Linux (WSL) when blocked by VPN";
     homepage = "https://github.com/sakai135/wsl-vpnkit";
     changelog = "https://github.com/sakai135/wsl-vpnkit/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ terlar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ terlar ];
     mainProgram = "wsl-vpnkit";
   };
 }

@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     rm -rf "$out/obs-plugins" "$out/data"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive blur plugin for OBS that provides several different blur algorithms, and proper compositing";
     homepage = "https://github.com/FiniteSingularity/obs-composite-blur";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "obs-composite-blur";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

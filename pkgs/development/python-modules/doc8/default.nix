@@ -47,12 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "doc8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Style checker for Sphinx (or other) RST documentation";
     mainProgram = "doc8";
     homepage = "https://github.com/pycqa/doc8";
     changelog = "https://github.com/PyCQA/doc8/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

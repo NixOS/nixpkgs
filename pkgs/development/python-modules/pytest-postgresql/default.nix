@@ -65,11 +65,11 @@ buildPythonPackage rec {
     "pytest_postgresql.executor"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.python.org/pypi/pytest-postgresql";
     description = "Pytest plugin that enables you to test code on a temporary PostgreSQL database";
     changelog = "https://github.com/ClearcodeHQ/pytest-postgresql/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

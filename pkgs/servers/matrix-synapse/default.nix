@@ -177,11 +177,11 @@ python3.pkgs.buildPythonApplication rec {
     python = python3;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://matrix.org";
     changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
-    license = licenses.agpl3Plus;
-    maintainers = teams.matrix.members;
+    license = lib.licenses.agpl3Plus;
+    maintainers = lib.teams.matrix.members;
   };
 }

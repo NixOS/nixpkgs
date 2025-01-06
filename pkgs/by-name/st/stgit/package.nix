@@ -93,12 +93,12 @@ rustPlatform.buildRustPackage rec {
       --zsh completion/stgit.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patch manager implemented on top of Git";
     homepage = "https://stacked-git.github.io/";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jshholland ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jshholland ];
     mainProgram = "stg";
   };
 }

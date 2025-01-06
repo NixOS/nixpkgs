@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhap" ];
 
-  meta = with lib; {
+  meta = {
     description = "HomeKit Accessory Protocol implementation";
     homepage = "https://github.com/ikalchev/HAP-python";
     changelog = "https://github.com/ikalchev/HAP-python/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oro ];
   };
 }

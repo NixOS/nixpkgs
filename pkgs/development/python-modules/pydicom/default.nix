@@ -90,12 +90,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydicom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for working with DICOM files";
     mainProgram = "pydicom";
     homepage = "https://pydicom.github.io";
     changelog = "https://github.com/pydicom/pydicom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

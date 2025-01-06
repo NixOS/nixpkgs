@@ -80,7 +80,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/varietywalls/variety";
     description = "Wallpaper manager for Linux systems";
     mainProgram = "variety";
@@ -96,8 +96,8 @@ python3.pkgs.buildPythonApplication rec {
       Variety also includes a range of image effects, such as oil painting and
       blur, as well as options to layer quotes and a clock onto the background.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       p3psi
       zfnmxt
     ];

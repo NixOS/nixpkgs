@@ -28,11 +28,11 @@ buildGoModule rec {
     $out/bin/atlantis version | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/runatlantis/atlantis";
     description = "Terraform Pull Request Automation";
     mainProgram = "atlantis";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpotier ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpotier ];
   };
 }

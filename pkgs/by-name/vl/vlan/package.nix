@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     cp vconfig.8 $out/share/man/man8/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User mode programs to enable VLANs on Ethernet devices";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "vconfig";
   };
 }

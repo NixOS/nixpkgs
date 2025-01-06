@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString ([ "-Wno-error=deprecated-declarations" ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-error");
 
-  meta = with lib; {
+  meta = {
     description = "Distributed memory object caching system";
     homepage = "http://memcached.org/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.coconnor ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.coconnor ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "memcached";
   };
   passthru.tests = {

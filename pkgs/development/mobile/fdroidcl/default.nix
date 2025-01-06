@@ -28,11 +28,11 @@ buildGoModule rec {
   # TestScript/search attempts to connect to fdroid
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "F-Droid command line interface written in Go";
     mainProgram = "fdroidcl";
     homepage = "https://github.com/mvdan/fdroidcl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ aleksana ];
   };
 }

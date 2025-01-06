@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "intents/tests"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant/intents/releases/tag/${version}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/home-assistant/intents";
-    license = licenses.cc-by-40;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.cc-by-40;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

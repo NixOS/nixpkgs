@@ -55,12 +55,12 @@ mkDerivation rec {
        ''${qtWrapperArgs[@]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open source, multi-platform ebook (ePub) editor";
     homepage = "https://github.com/Sigil-Ebook/Sigil/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # currently unmaintained
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "sigil";
   };
 }

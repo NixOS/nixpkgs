@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-PohfLmUoK+2a7Glnje4Rbym2rvzydUJAYW+edOj7qeo=";
 
-  meta = with lib; {
+  meta = {
     description = "Execute a program when a Wayland compositor reports being N seconds idle";
     homepage = "https://git.sr.ht/~whynothugo/wayidle";
-    license = licenses.isc;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ tomfitzhenry ];
     mainProgram = "wayidle";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

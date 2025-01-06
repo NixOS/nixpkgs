@@ -45,14 +45,14 @@ buildGoModule rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix-based app VMs";
     homepage = "https://code.dumpstack.io/tools/${pname}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dump_stack
       cab404
       onny
     ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

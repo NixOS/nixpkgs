@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/yrp604/rappel";
     description = "Pretty janky assembly REPL";
     mainProgram = "rappel";
-    license = licenses.bsdOriginal;
-    maintainers = [ maintainers.pamplemousse ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ lib.maintainers.pamplemousse ];
+    platforms = lib.platforms.linux;
   };
 }

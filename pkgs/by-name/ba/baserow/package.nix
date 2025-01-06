@@ -152,11 +152,11 @@ buildPythonApplication rec {
 
   DJANGO_SETTINGS_MODULE = "baserow.config.settings.test";
 
-  meta = with lib; {
+  meta = {
     description = "No-code database and Airtable alternative";
     homepage = "https://baserow.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "baserow";
   };
 }

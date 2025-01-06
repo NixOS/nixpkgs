@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Calculate the most likely secondary structure assignment given the 3D structure of a protein";
     mainProgram = "mkdssp";
     homepage = "https://github.com/PDB-REDO/dssp";
     changelog = "https://github.com/PDB-REDO/dssp/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

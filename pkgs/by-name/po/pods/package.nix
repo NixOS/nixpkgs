@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
     vte-gtk4
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
     changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
+    platforms = lib.platforms.linux;
     mainProgram = "pods";
   };
 }

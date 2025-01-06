@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "FUSE file system for ZIP archives";
     homepage = "https://github.com/google/mount-zip";
     longDescription = ''
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       This project is a fork of fuse-zip.
     '';
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ arti5an ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ arti5an ];
+    platforms = lib.platforms.linux;
     mainProgram = "mount-zip";
   };
 })

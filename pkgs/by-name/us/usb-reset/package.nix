@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
     "prefix="
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Perform a bus reset on a USB device using its vendor and product ID";
     homepage = "https://github.com/ralight/usb-reset";
     changelog = "https://github.com/ralight/usb-reset/blob/master/ChangeLog.txt";
-    license = licenses.mit;
-    maintainers = [ maintainers.evils ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.evils ];
+    platforms = lib.platforms.all;
     mainProgram = "usb-reset";
   };
 }

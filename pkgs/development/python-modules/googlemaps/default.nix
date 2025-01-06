@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "googlemaps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Google Maps API Web Services";
     homepage = "https://github.com/googlemaps/google-maps-services-python";
     changelog = "https://github.com/googlemaps/google-maps-services-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

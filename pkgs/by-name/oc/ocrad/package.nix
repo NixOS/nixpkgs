@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Optical character recognition (OCR) program & library";
     longDescription = ''
       GNU Ocrad is an OCR (Optical Character Recognition) program based on
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       backend to other programs.
     '';
 
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
     mainProgram = "ocrad";
   };
 }

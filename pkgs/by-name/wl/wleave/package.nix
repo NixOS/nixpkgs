@@ -61,12 +61,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <(cat completions/_wleave)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wayland-native logout script written in GTK3";
     homepage = "https://github.com/AMNatty/wleave";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wleave";
-    maintainers = with maintainers; [ ludovicopiero ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
+    platforms = lib.platforms.linux;
   };
 }

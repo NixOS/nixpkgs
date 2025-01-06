@@ -221,12 +221,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ tweber tmarkus ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ tweber tmarkus ];
+    platforms = lib.platforms.unix;
   } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     mainProgram = "PrusaSlicer";
   };

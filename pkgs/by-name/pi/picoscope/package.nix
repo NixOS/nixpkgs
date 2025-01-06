@@ -172,6 +172,6 @@ stdenv.mkDerivation rec {
         PicoScope for Linux, PicoScope for macOS and PicoScope for Windows
         users, or exported in text, CSV and MathWorks MATLAB 4 formats.
       '';
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     };
 }

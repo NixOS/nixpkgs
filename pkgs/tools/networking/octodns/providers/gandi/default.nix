@@ -40,11 +40,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gandi v5 API provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-gandi";
     changelog = "https://github.com/octodns/octodns-gandi/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

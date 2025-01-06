@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/termbook completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Runner for `mdbooks` to keep your documentation tested";
     mainProgram = "termbook";
     homepage = "https://github.com/Byron/termbook/";
     changelog = "https://github.com/Byron/termbook/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

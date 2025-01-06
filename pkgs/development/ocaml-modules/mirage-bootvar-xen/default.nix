@@ -26,10 +26,10 @@ buildDunePackage rec {
     parse-argv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Handle boot-time arguments for Xen platform";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/mirage-bootvar-xen";
   };
 }

@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "buienradar.constants"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and CLI tools for interacting with buienradar";
     mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

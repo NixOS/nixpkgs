@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ncclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for NETCONF clients";
     homepage = "https://github.com/ncclient/ncclient";
     changelog = "https://github.com/ncclient/ncclient/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xnaveira ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xnaveira ];
   };
 }

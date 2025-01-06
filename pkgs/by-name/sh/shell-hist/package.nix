@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-V/smviEa7b+2vyY2dn9MpbITnXw0HpOtPF/RPYB2TKw=";
 
-  meta = with lib; {
+  meta = {
     description = "Inspect your shell history";
     homepage = "https://github.com/jamesmunns/shell-hist";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = [ maintainers.spacekookie ];
+    maintainers = [ lib.maintainers.spacekookie ];
     mainProgram = "shell-hist";
   };
 }

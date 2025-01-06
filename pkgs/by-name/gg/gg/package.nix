@@ -31,13 +31,13 @@ buildGoModule rec {
     --zsh completion/zsh/_gg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mzz2017/gg";
     changelog = "https://github.com/mzz2017/gg/releases/tag/${src.rev}";
     description = "Command-line tool for one-click proxy in your research and development";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "gg";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
   };
 }

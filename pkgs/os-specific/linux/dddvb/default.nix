@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DigitalDevices/dddvb";
     description = "ddbridge linux driver";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = lib.versionAtLeast kernel.version "6.2";
   };
 }

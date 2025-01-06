@@ -57,13 +57,13 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Pixel perfect icon theme for Linux";
     homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       romildo
       moni
     ];

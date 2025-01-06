@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "InfinityEngine Modding Engine";
     homepage = "https://weidu.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     # should work fine on both Darwin and Windows
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

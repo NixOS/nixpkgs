@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       "wknopddir = $out/etc/fwknop"
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "Single Packet Authorization (and Port Knocking) server/client";
     longDescription = ''
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       authorization scheme called Single Packet Authorization (SPA).
     '';
     homepage = "https://www.cipherdyne.org/fwknop/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

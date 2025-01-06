@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fortran Package Manager (fpm)";
     homepage = "https://fpm.fortran-lang.org";
-    maintainers = [ maintainers.proofconstruction ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.proofconstruction ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "fortran-fpm";
   };
 }

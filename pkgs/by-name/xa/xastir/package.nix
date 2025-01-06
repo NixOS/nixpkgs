@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with lib; {
+  meta = {
     description = "Graphical APRS client";
     homepage = "https://xastir.org";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.ehmry ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.ehmry ];
+    platforms = lib.platforms.linux;
   };
 }

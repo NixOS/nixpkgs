@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-install.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Secure file wiping utility";
     mainProgram = "wipe";
     homepage = "https://wipe.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.abbradar ];
   };
 }

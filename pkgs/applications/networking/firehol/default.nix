@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
     "--disable-update-ipsets"
   ] ++ lib.optionals onlyQOS [ "--disable-firehol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Firewall for humans";
     longDescription = ''
       FireHOL, an iptables stateful packet filtering firewall for humans!
       FireQOS, a TC based bandwidth shaper for humans!
     '';
     homepage = "https://firehol.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ oxzi ];
+    platforms = lib.platforms.linux;
   };
 }

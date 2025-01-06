@@ -53,11 +53,11 @@ tcl.mkTclDerivation {
     "--libdir=\${prefix}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Widget library for Tcl/Tk";
     homepage = "https://tix.sourceforge.net/";
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       bsd2 # tix
       gpl2 # patches from portage
     ];

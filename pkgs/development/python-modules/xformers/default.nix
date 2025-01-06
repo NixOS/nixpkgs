@@ -117,11 +117,11 @@ buildPythonPackage {
     # flash-attn
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of composable Transformer building blocks";
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

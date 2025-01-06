@@ -68,15 +68,15 @@ rustPlatform.buildRustPackage {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tenant Nix Binary Cache";
     homepage = "https://github.com/zhaofengli/attic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       zhaofengli
       aciceri
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "attic";
   };
 }

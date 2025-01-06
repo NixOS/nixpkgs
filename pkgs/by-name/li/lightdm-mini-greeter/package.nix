@@ -53,16 +53,16 @@ stdenv.mkDerivation rec {
     }
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal, configurable, single-user GTK3 LightDM greeter";
     mainProgram = "lightdm-mini-greeter";
     homepage = "https://github.com/prikhi/lightdm-mini-greeter";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       mnacamura
       prikhi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     changelog = "https://github.com/prikhi/lightdm-mini-greeter/blob/master/CHANGELOG.md";
   };
 }

@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cmictig.cs.ucl.ac.uk/research/software/software-nifty/niftyseg";
     description = "Software for medical image segmentation, bias field correction, and cortical thickness calculation";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 
 }

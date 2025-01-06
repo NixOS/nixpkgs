@@ -1,9 +1,9 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "geth";
-    meta = with pkgs.lib; {
-      maintainers = with maintainers; [ bachp ];
+    meta = {
+      maintainers = with lib.maintainers; [ bachp ];
     };
 
     nodes.machine =

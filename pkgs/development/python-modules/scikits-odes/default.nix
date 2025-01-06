@@ -45,11 +45,11 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
     homepage = "https://github.com/bmcage/odes";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ idontgetoutmuch ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ idontgetoutmuch ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

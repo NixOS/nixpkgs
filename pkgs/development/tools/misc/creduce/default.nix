@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C program reducer";
     mainProgram = "creduce";
     homepage = "https://embed.cs.utah.edu/creduce";
     # Officially, the license is: https://github.com/csmith-project/creduce/blob/master/COPYING
-    license = licenses.ncsa;
+    license = lib.licenses.ncsa;
     longDescription = ''
       C-Reduce is a tool that takes a large C or C++ program that has a
       property of interest (such as triggering a compiler bug) and
@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
       bugs in compilers and other tools that process C/C++ code.
     '';
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

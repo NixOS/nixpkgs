@@ -55,11 +55,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decky plugin to add versioned save-game snapshots to Steam-cloud enabled games";
     mainProgram = "steamback";
     homepage = "https://github.com/geeksville/steamback";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ AngryAnt ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ AngryAnt ];
   };
 }

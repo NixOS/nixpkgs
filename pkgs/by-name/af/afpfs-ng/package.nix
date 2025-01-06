@@ -32,12 +32,12 @@ stdenv.mkDerivation {
     gmp
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/simonvetter/afpfs-ng";
     description = "Client implementation of the Apple Filing Protocol";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 
 }

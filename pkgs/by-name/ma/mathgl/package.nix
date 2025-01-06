@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for scientific data visualization";
     homepage = "https://mathgl.sourceforge.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl3
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.GabrielDougherty ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.GabrielDougherty ];
   };
 }

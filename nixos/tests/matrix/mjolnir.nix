@@ -1,5 +1,5 @@
 import ../make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   let
     # Set up SSL certs for Synapse to be happy.
     runWithOpenSSL =
@@ -30,8 +30,8 @@ import ../make-test-python.nix (
   in
   {
     name = "mjolnir";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      maintainers = lib.teams.matrix.members;
     };
 
     nodes = {

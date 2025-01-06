@@ -87,9 +87,9 @@ buildPythonPackage rec {
     "tests/test_dumpscript.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

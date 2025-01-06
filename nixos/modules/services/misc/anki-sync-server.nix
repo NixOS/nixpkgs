@@ -144,7 +144,7 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [telotortium];
+    maintainers = with lib.maintainers; [telotortium];
     doc = ./anki-sync-server.md;
   };
 }

@@ -43,15 +43,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = gbl; };
 
-  meta = with lib; {
+  meta = {
     description = "GBL Firmware file manipulation";
     longDescription = ''
       Utility to read, create and manipulate `.gbl` firmware update
       files targeting the Silicon Labs Gecko Bootloader.
     '';
     homepage = "https://github.com/jonas-schievink/gbl";
-    license = licenses.mit;
-    maintainers = [ maintainers.raboof ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raboof ];
     mainProgram = "gbl";
   };
 }

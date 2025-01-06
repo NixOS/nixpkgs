@@ -33,10 +33,10 @@ buildOctavePackage rec {
     zeromq
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/zeromq/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "ZeroMQ bindings for GNU Octave";
   };
 }

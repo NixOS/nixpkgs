@@ -49,12 +49,12 @@ pythonPackages.buildPythonApplication rec {
     rm -r $out/${pythonPackages.python.sitePackages}/PyGitUp/tests
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/msiemens/PyGitUp";
     description = "Git pull replacement that rebases all local branches when pulling";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
     mainProgram = "git-up";
   };
 }

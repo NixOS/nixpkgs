@@ -38,15 +38,15 @@ stdenv.mkDerivation {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Server-side application that allows regular SIP clients to join Jitsi Meet conferences";
     mainProgram = "jigasi";
     longDescription = ''
       Jitsi Gateway to SIP: a server-side application that allows regular SIP clients to join Jitsi Meet conferences hosted by Jitsi Videobridge.
     '';
     homepage = "https://github.com/jitsi/jigasi";
-    license = licenses.asl20;
-    maintainers = teams.jitsi.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.jitsi.members;
+    platforms = lib.platforms.linux;
   };
 }

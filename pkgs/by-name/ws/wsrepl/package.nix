@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "wsrepl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket REPL";
     homepage = "https://github.com/doyensec/wsrepl";
     changelog = "https://github.com/doyensec/wsrepl/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wsrepl";
   };
 }

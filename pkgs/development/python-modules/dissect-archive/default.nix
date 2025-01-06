@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.archive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing parsers for various archive and backup formats";
     homepage = "https://github.com/fox-it/dissect.archive";
     changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

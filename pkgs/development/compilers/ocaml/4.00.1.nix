@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     nativeCompilers = useNativeCompilers;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://caml.inria.fr/ocaml";
     branch = "4.00";
-    license = with licenses; [
+    license = with lib.licenses; [
       qpl # compiler
       lgpl2 # library
     ];
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       and a documentation generator (ocamldoc).
     '';
 
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 
 }

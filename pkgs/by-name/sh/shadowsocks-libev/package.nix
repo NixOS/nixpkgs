@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
     cp lib/* $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight secured SOCKS5 proxy";
     longDescription = ''
       Shadowsocks-libev is a lightweight secured SOCKS5 proxy for embedded devices and low-end boxes.
       It is a port of Shadowsocks created by @clowwindy, which is maintained by @madeye and @linusyang.
     '';
     homepage = "https://github.com/shadowsocks/shadowsocks-libev";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -53,13 +53,13 @@ buildPostgresqlExtension rec {
 
   passthru.tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
 
-  meta = with lib; {
+  meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
     changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
-    maintainers = [ maintainers.kirillrdy ];
+    maintainers = [ lib.maintainers.kirillrdy ];
     platforms = postgresql.meta.platforms;
-    license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "14";
+    license = with lib.licenses; if enableUnfree then tsl else asl20;
+    broken = lib.versionOlder postgresql.version "14";
   };
 }

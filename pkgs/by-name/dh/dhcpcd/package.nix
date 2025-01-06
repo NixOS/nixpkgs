@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = "https://roy.marples.name/projects/dhcpcd";
-    platforms = platforms.linux ++ platforms.freebsd;
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "dhcpcd";
   };

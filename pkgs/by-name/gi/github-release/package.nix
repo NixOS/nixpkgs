@@ -26,7 +26,7 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Commandline app to create and edit releases on Github (and upload artifacts)";
     mainProgram = "github-release";
     longDescription = ''
@@ -35,12 +35,12 @@ buildGoModule rec {
       In addition it allows you to attach files to those releases.
     '';
 
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/github-release/github-release";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ardumont
       j03
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

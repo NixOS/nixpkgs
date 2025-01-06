@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-AJrfHMNjuGO8LbuP4cAVClKWHkqkG+nPzQw+B+nRpxM=";
 
-  meta = with lib; {
+  meta = {
     description = "Public-key signature system for NATS";
     homepage = "https://github.com/nats-io/nkeys";
     changelog = "https://github.com/nats-io/nkeys/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nk";
   };
 }

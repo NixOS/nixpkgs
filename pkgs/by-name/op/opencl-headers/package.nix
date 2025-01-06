@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Khronos OpenCL headers version ${finalAttrs.version}";
     homepage = "https://www.khronos.org/registry/cl/";
-    license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
   };
 })

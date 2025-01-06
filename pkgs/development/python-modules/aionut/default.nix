@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aionut" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio Network UPS Tools";
     homepage = "https://github.com/bdraco/aionut";
     changelog = "https://github.com/bdraco/aionut/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

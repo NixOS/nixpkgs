@@ -118,12 +118,12 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     # Build failures when linking mxnet_unit_tests: https://gist.github.com/6d17447ee3557967ec52c50d93b17a1d
     broken = cudaSupport;
   };

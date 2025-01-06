@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kajiki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module provides fast well-formed XML templates";
     mainProgram = "kajiki";
     homepage = "https://github.com/nandoflorestan/kajiki";
     changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

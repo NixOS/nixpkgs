@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/beancount/beancount";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
@@ -57,8 +57,8 @@ buildPythonPackage rec {
       financial transaction records in a text file, read them in memory,
       generate a variety of reports from them, and provides a web interface.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       sharzy
       polarmutex
     ];

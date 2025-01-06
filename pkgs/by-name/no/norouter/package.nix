@@ -27,14 +27,14 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     # Doesn't build with Go >=1.21
     # https://github.com/norouter/norouter/issues/165
     broken = true;
     description = "Tool to handle unprivileged networking by using multiple loopback addresses";
     homepage = "https://github.com/norouter/norouter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ blaggacao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ blaggacao ];
     mainProgram = "norouter";
   };
 }

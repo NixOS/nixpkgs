@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r manager $out/bin/manager
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.unifiedremote.com/";
     description = "One-and-only remote for your computer";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ sfrijters ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ sfrijters ];
     platforms = [ "x86_64-linux" ];
   };
 })

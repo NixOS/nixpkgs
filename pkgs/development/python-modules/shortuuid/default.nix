@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shortuuid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to generate concise, unambiguous and URL-safe UUIDs";
     mainProgram = "shortuuid";
     homepage = "https://github.com/stochastic-technologies/shortuuid/";
     changelog = "https://github.com/skorokithakis/shortuuid/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zagy ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zagy ];
   };
 }

@@ -36,7 +36,7 @@ in
 with lib;
 {
 
-  meta.maintainers = with maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   options = with types; {
     services.hardware.lcd = {

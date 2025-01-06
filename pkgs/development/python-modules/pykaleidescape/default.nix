@@ -50,11 +50,11 @@ buildPythonPackage rec {
       "test_concurrency"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for controlling Kaleidescape devices";
     homepage = "https://github.com/SteveEasley/pykaleidescape";
     changelog = "https://github.com/SteveEasley/pykaleidescape/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

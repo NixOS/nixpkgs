@@ -16,11 +16,11 @@ buildPythonPackage rec {
   # Tests run fine in a normal source checkout, but not when being built by nix.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Configurable HTML Minifier with safety features";
     mainProgram = "htmlmin";
     homepage = "https://pypi.python.org/pypi/htmlmin";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

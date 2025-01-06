@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";
     description = "General-purpose data compression software, successor of LZMA";
     homepage = "https://tukaani.org/xz/";
@@ -89,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
       create 30 % smaller output than gzip and 15 % smaller output than
       bzip2.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ sander ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "liblzma" ];
   };
 })

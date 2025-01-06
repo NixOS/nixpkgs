@@ -94,16 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client for Amazon WorkSpaces, a managed, secure Desktop-as-a-Service (DaaS) solution";
     homepage = "https://clients.amazonworkspaces.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "workspacesclient";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mausch
       dylanmtaylor
     ];
     platforms = [ "x86_64-linux" ]; # TODO Mac support
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

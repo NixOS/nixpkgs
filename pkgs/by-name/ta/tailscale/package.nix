@@ -103,13 +103,13 @@ buildGo123Module {
     inherit tailscale-nginx-auth;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tailscale.com";
     description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
     changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mbaillie
       jk
       mfrw

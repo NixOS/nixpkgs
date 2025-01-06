@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ical2org-py/ical2org.py/blob/${src.rev}/CHANGELOG.rst";
     description = "Converting ICAL file into org-mode format";
     homepage = "https://github.com/ical2org-py/ical2org.py";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ StillerHarpo ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ StillerHarpo ];
     mainProgram = "ical2orgpy";
   };
 

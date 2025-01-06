@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   meta = {
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = finalAttrs.src.meta.homepage;
     description = "Multilingual input method framework";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

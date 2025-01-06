@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/${pname}/resources/app.asar
   '';
 
-  meta = with lib; {
+  meta = {
     description = "To Do List / Time Tracker with Jira Integration";
     homepage = "https://super-productivity.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ offline ];
     mainProgram = "super-productivity";
   };
 }

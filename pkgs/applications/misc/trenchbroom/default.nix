@@ -162,12 +162,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trenchbroom.github.io/";
     changelog = "https://github.com/TrenchBroom/TrenchBroom/releases/tag/v${version}";
     description = "Level editor for Quake-engine based games";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [ "x86_64-linux" ];
   };
 }

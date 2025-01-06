@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Personnal accounting application";
     mainProgram = "grisbi";
     longDescription = ''
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       associations.
     '';
     homepage = "https://grisbi.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ layus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ layus ];
+    platforms = lib.platforms.linux;
   };
 }

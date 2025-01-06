@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ crertel ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ crertel ];
     mainProgram = "bemenu";
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 })

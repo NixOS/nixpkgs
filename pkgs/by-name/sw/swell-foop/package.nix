@@ -54,13 +54,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "swell-foop"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/swell-foop";
     changelog = "https://gitlab.gnome.org/GNOME/swell-foop/-/tree/${version}?ref_type=tags";
     description = "Puzzle game, previously known as Same GNOME";
     mainProgram = "swell-foop";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

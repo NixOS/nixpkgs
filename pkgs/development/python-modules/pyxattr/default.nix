@@ -20,9 +20,9 @@ buildPythonPackage rec {
 
   buildInputs = with pkgs; [ attr ];
 
-  meta = with lib; {
+  meta = {
     description = "Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     inherit (pkgs.attr.meta) platforms;
   };
 }

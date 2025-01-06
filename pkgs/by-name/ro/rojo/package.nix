@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   # tests flaky on darwin on hydra
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Project management tool for Roblox";
     mainProgram = "rojo";
     longDescription = ''
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rojo.space";
     downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${version}";
     changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ wackbyte ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ wackbyte ];
   };
 }

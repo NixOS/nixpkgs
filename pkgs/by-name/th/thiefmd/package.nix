@@ -60,13 +60,13 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Markdown & Fountain editor that helps with organization and management";
     homepage = "https://thiefmd.com";
     downloadPage = "https://github.com/kmwallio/ThiefMD";
     mainProgram = "com.github.kmwallio.thiefmd";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
   };
 }

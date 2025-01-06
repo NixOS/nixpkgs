@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) vsftpd; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Very secure FTP daemon";
     mainProgram = "vsftpd";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

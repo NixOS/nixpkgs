@@ -50,7 +50,7 @@ buildDotnetModule rec {
     $out/bin/boogie ${./install-check-file.bpl}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Intermediate verification language";
     homepage = "https://github.com/boogie-org/boogie";
     longDescription = ''
@@ -59,8 +59,8 @@ buildDotnetModule rec {
 
       This derivation may be used as a vim plugin to provide syntax highlighting.
     '';
-    license = licenses.mspl;
-    maintainers = [ maintainers.taktoa ];
-    platforms = with platforms; (linux ++ darwin);
+    license = lib.licenses.mspl;
+    maintainers = [ lib.maintainers.taktoa ];
+    platforms = with lib.platforms; (linux ++ darwin);
   };
 }

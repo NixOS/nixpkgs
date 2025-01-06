@@ -55,10 +55,10 @@ symlinkJoin {
 
   passthru = srcs;
 
-  meta = with lib; {
+  meta = {
     description = "Unicode Emoji Data Files";
     homepage = "https://home.unicode.org/emoji/";
-    license = licenses.unicode-dfs-2016;
-    platforms = platforms.all;
+    license = lib.licenses.unicode-dfs-2016;
+    platforms = lib.platforms.all;
   };
 }

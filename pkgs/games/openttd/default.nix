@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     mainProgram = "openttd";
     longDescription = ''
@@ -151,9 +151,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.openttd.org/";
     changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       jcumming
       fpletz
     ];

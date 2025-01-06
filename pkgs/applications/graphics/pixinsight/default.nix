@@ -180,13 +180,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/opt/PixInsight/bin/PixInsight ${builtins.toString finalAttrs.qtWrapperArgs}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scientific image processing program for astrophotography";
     homepage = "https://pixinsight.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
     hydraPlatforms = [ ];
     mainProgram = "PixInsight";
   };

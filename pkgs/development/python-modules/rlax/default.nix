@@ -73,10 +73,10 @@ buildPythonPackage rec {
     "test_unnormalize_linear"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of reinforcement learning building blocks in JAX";
     homepage = "https://github.com/deepmind/rlax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tstack/lnav";
     description = "Logfile Navigator";
     longDescription = ''
@@ -87,13 +87,13 @@ stdenv.mkDerivation rec {
       will allow the user to quickly and efficiently zero in on problems.
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       dochang
       symphorien
       pcasaretto
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "lnav";
   };
 

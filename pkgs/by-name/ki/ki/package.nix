@@ -62,10 +62,10 @@ python3Packages.buildPythonApplication rec {
   # CMake needs to be run by pyproject rather than by its hook
   dontConfigure = true;
 
-  meta = with lib; {
+  meta = {
     description = "Version control for Anki collections";
     homepage = "https://github.com/langfield/ki";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eljamm ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 }

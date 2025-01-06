@@ -77,13 +77,13 @@ buildPythonPackage rec {
     lapack
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ml-explore/mlx";
     description = "Array framework for Apple silicon";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       viraptor
       Gabriella439
     ];

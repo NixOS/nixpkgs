@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "pyrogram.types"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Telegram MTProto API Client Library and Framework for Python";
     homepage = "https://github.com/pyrogram/pyrogram";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

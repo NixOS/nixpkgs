@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ollama" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ollama Python library";
     homepage = "https://github.com/ollama/ollama-python";
     changelog = "https://github.com/ollama/ollama-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

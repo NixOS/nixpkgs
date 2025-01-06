@@ -55,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ufmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safe, atomic formatting with black and usort";
     homepage = "https://github.com/omnilib/ufmt";
     changelog = "https://github.com/omnilib/ufmt/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ufmt";
   };
 }

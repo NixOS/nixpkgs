@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-babel/flask-babel/releases/tag/v${version}";
     description = "Adds i18n/l10n support to Flask applications";
     longDescription = ''
@@ -66,8 +66,8 @@ buildPythonPackage rec {
       This is based on the Python babel module as well as pytz both of which are
       installed automatically for you if you install this library.
     '';
-    license = licenses.bsd2;
-    maintainers = teams.sage.members ++ (with maintainers; [ matejc ]);
+    license = lib.licenses.bsd2;
+    maintainers = lib.teams.sage.members ++ (with lib.maintainers; [ matejc ]);
     homepage = "https://github.com/python-babel/flask-babel";
   };
 }

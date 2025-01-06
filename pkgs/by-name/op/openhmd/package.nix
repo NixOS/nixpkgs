@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     install -D examples/opengl/openglexample $out/bin/openhmd-example-opengl
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.openhmd.net"; # https does not work
     description = "Library API and drivers immersive technology";
     longDescription = ''
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
       Head-mounted Displays (HMDs), controllers and trackers like
       Oculus Rift, HTC Vive, Windows Mixed Reality, and etc.
     '';
-    license = licenses.boost;
-    maintainers = with maintainers; [ oxij ];
-    platforms = platforms.unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ oxij ];
+    platforms = lib.platforms.unix;
   };
 }

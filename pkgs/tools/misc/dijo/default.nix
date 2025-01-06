@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-o3+KcE7ozu6eUgwsOSr9DOoIo+/BZ3bJZe+WYQLXHpY=";
 
-  meta = with lib; {
+  meta = {
     description = "Scriptable, curses-based, digital habit tracker";
     homepage = "https://github.com/NerdyPepper/dijo";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dijo";
   };

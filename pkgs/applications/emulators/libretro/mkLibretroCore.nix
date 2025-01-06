@@ -94,7 +94,7 @@ stdenv.mkDerivation (
         inherit mainProgram;
         inherit (retroarch-bare.meta) platforms;
         homepage = "https://www.libretro.com/";
-        maintainers = with maintainers; teams.libretro.members;
+        maintainers = with lib.maintainers; lib.teams.libretro.members;
       }
       // (args.meta or { });
   }

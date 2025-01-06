@@ -55,13 +55,13 @@ mkDerivation rec {
       install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
     '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://www.glassechidna.com.au/products/heimdall/";
     description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "heimdall";
   };
 }

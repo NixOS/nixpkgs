@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
   # timeouts in sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
     changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -37,11 +37,11 @@ buildPythonPackage rec {
     coverage run --source hcl -m pytest tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HCL is a configuration language. pyhcl is a python parser for it";
     mainProgram = "hcltool";
     homepage = "https://github.com/virtuald/pyhcl";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

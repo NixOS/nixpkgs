@@ -53,11 +53,11 @@ mkDerivation rec {
     "-DCMAKE_POLICY_DEFAULT_CMP0012=NEW"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Integrates krunner with pass the unix standard password manager (https://www.passwordstore.org/)";
     homepage = "https://github.com/akermu/krunner-pass";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ysndr ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ysndr ];
+    platforms = lib.platforms.unix;
   };
 }

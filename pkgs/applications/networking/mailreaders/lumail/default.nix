@@ -98,12 +98,12 @@ stdenv.mkDerivation {
     "LUMAIL_LIBS=$(out)/etc/lumail2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Console-based email client";
     mainProgram = "lumail2";
     homepage = "https://lumail.org/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

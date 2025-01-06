@@ -45,10 +45,10 @@ in
       done
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "http://abcde.einval.com/wiki/";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ gebner ];
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ gebner ];
       description = "Command-line audio CD ripper";
       longDescription = ''
         abcde is a front-end command-line utility (actually, a shell
@@ -56,6 +56,6 @@ in
         Ogg/Vorbis, MP3, FLAC, Ogg/Speex and/or MPP/MP+ (Musepack)
         format, and tags them, all in one go.
       '';
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   }

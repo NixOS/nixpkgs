@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_get_commit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
     changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -100,13 +100,13 @@ stdenv.mkDerivation (final: {
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 
-  meta = with lib; {
+  meta = {
     description = "Modern C++ Terminal Emulator";
     homepage = "https://github.com/contour-terminal/contour";
-    changelog = "https://github.com/contour-terminal/contour/raw/v${version}/Changelog.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ moni ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/contour-terminal/contour/raw/v${final.version}/Changelog.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moni ];
+    platforms = lib.platforms.unix;
     mainProgram = "contour";
   };
 })

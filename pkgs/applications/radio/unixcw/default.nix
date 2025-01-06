@@ -26,7 +26,7 @@ mkDerivation rec {
   ];
   CFLAGS = "-lasound -lpulse-simple";
 
-  meta = with lib; {
+  meta = {
     description = "sound characters as Morse code on the soundcard or console speaker";
     longDescription = ''
       unixcw is a project providing libcw library and a set of programs
@@ -44,8 +44,8 @@ mkDerivation rec {
       cw reports any errors in  embedded  commands
     '';
     homepage = "https://unixcw.sourceforge.net";
-    maintainers = [ maintainers.mafo ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.mafo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

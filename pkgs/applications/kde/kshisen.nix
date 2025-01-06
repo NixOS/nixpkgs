@@ -11,13 +11,13 @@
 
 mkDerivation {
   pname = "kshisen";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/games/org.kde.kshisen";
     description = "Solitaire-like game played using the standard set of Mahjong tiles";
     mainProgram = "kshisen";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

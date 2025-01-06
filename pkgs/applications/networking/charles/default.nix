@@ -71,16 +71,16 @@ let
         cp -r icon $out/share/icons/hicolor
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           kalbasit
           kashw2
         ];
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        license = licenses.unfree;
-        platforms = platforms.unix;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.unix;
       };
     };
 

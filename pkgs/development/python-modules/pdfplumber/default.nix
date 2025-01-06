@@ -70,12 +70,12 @@ buildPythonPackage rec {
     "tests/test_issues.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
     changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

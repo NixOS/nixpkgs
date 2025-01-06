@@ -895,7 +895,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
     changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
@@ -906,7 +906,7 @@ stdenv.mkDerivation (finalAttrs: {
       No matter if they were designed by some standards committee, the community or
       a corporation.
     '';
-    license = with licenses; [ lgpl21Plus ]
+    license = with lib.licenses; [ lgpl21Plus ]
       ++ optional withGPL gpl2Plus
       ++ optional withVersion3 lgpl3Plus
       ++ optional withGPLv3 gpl3Plus
@@ -922,10 +922,10 @@ stdenv.mkDerivation (finalAttrs: {
       ++ optional buildPostproc "libpostproc"
       ++ optional buildSwresample "libswresample"
       ++ optional buildSwscale "libswscale";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu jopejoe1 emily ];
+    maintainers = with lib.maintainers; [ atemu jopejoe1 emily ];
     mainProgram = "ffmpeg";
   };
 } // lib.optionalAttrs withCudaLLVM {

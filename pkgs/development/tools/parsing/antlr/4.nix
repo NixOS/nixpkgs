@@ -61,7 +61,7 @@ let
         jarLocation = antlr.src;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Powerful parser generator";
         longDescription = ''
           ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -71,9 +71,9 @@ let
           walk parse trees.
         '';
         homepage = "https://www.antlr.org/";
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        license = licenses.bsd3;
-        platforms = platforms.unix;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+        license = lib.licenses.bsd3;
+        platforms = lib.platforms.unix;
       };
     };
 
@@ -96,11 +96,11 @@ let
 
         cmakeFlags = extraCppCmakeFlags;
 
-        meta = with lib; {
+        meta = {
           description = "C++ target for ANTLR 4";
           homepage = "https://www.antlr.org/";
-          license = licenses.bsd3;
-          platforms = platforms.unix;
+          license = lib.licenses.bsd3;
+          platforms = lib.platforms.unix;
         };
       };
     };

@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_rdump_fieldtype_path_json" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
     changelog = "https://github.com/fox-it/flow.record/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

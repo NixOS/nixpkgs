@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-backgrounds"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Default wallpaper set for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-backgrounds";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-backgrounds/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.cc-by-sa-30;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.cc-by-sa-30;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.gnome.members;
   };
 }

@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_repeat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for repeating tests";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     changelog = "https://github.com/pytest-dev/pytest-repeat/blob/v${version}/CHANGES.rst";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

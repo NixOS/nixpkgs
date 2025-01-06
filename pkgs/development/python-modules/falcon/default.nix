@@ -90,11 +90,11 @@ buildPythonPackage rec {
       "tests/asgi/test_cythonized_asgi.py"
     ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";
     description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ desiderius ];
   };
 }

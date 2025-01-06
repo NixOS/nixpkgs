@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     install -m755 -D bin/sbcl/shen $out/bin/shen-sbcl
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shenlanguage.org";
     description = "Port of Shen running on Steel Bank Common Lisp";
     changelog = "https://github.com/Shen-Language/shen-cl/raw/v${version}/CHANGELOG.md";
     platforms = sbcl.meta.platforms;
-    maintainers = with maintainers; [ bsima ];
+    maintainers = with lib.maintainers; [ bsima ];
     broken = true;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

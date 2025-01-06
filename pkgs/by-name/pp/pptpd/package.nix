@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     substituteInPlace plugins/Makefile --replace "install -o root" "install"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://poptop.sourceforge.net/dox/";
     description = "PPTP Server for Linux";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ obadz ];
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ obadz ];
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -43,13 +43,13 @@ buildDotnetModule rec {
 
   passthru.tests = { inherit (nixosTests) jackett; };
 
-  meta = with lib; {
+  meta = {
     description = "API Support for your favorite torrent trackers";
     mainProgram = "jackett";
     homepage = "https://github.com/Jackett/Jackett/";
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       edwtjo
       nyanloutre
       purcell

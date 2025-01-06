@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "criticality_score" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool for computing the Open Source Project Criticality Score";
     mainProgram = "criticality_score";
     homepage = "https://github.com/ossf/criticality_score";
     changelog = "https://github.com/ossf/criticality_score/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wamserma ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     test -f $mandir/kmalloc.9
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kernel.org/";
     description = "Linux kernel API manual pages";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mvs ];
   };
 }

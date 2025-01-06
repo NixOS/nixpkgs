@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dns" ];
 
-  meta = with lib; {
+  meta = {
     description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
     changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ gador ];
+    license = with lib.licenses; [ isc ];
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

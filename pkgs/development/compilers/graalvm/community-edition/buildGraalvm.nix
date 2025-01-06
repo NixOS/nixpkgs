@@ -256,14 +256,14 @@ let
           {
             homepage = "https://www.graalvm.org/";
             description = "High-Performance Polyglot VM";
-            license = with licenses; [
+            license = with lib.licenses; [
               upl
               gpl2Classpath
               bsd3
             ];
-            sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+            sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
-            maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
+            maintainers = with lib.maintainers; lib.teams.graalvm-ce.members ++ [ ];
           }
           // (args.meta or { })
         );

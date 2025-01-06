@@ -219,7 +219,7 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free incremental compiler of IDL";
     longDescription = ''
       GDL (GNU Data Language) is a free/libre/open source incremental compiler
@@ -227,9 +227,9 @@ stdenv.mkDerivation rec {
       GDL is aimed as a drop-in replacement for IDL.
     '';
     homepage = "https://github.com/gnudatalanguage/gdl";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ShamrockLee ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
+    platforms = lib.platforms.all;
     mainProgram = "gdl";
   };
 }

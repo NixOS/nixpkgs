@@ -77,11 +77,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to use HTTPSEverywhere in desktop applications";
     homepage = "https://gitlab.gnome.org/GNOME/libhttpseverywhere";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sternenseemann ] ++ teams.gnome.members;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sternenseemann ] ++ lib.teams.gnome.members;
   };
 }

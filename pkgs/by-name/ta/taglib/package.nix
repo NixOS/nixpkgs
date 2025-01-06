@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://taglib.org/";
     description = "Library for reading and editing audio file metadata";
     mainProgram = "taglib-config";
@@ -42,11 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
       files, Ogg Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC,
       Speex, WavPack, TrueAudio, WAV, AIFF, MP4 and ASF files.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3
       mpl11
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
     pkgConfigModules = [
       "taglib"
       "taglib_c"

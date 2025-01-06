@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = opentelemetry-api.updateScript;
 
-  meta = with lib; {
+  meta = {
     description = "Instrumentation Tools & Auto Instrumentation for OpenTelemetry Python";
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";
     changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.deshaw.members ++ [ lib.maintainers.natsukium ];
   };
 }

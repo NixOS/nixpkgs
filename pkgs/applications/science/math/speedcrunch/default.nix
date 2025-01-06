@@ -30,9 +30,9 @@ mkDerivation rec {
     cd src
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://speedcrunch.org";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Fast power user calculator";
     mainProgram = "speedcrunch";
     longDescription = ''
@@ -41,7 +41,7 @@ mkDerivation rec {
       precisions, unlimited variable storage, intelligent automatic completion
       full keyboard-friendly and more than 15 built-in math function.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       gebner
       j0hax
     ];

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editdistance_s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast implementation of the edit distance (Levenshtein distance)";
     homepage = "https://github.com/asottile/editdistance-s";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ austinbutler ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
 }

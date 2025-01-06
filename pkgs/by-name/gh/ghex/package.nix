@@ -81,13 +81,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
     changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.gnome.members;
   };
 }

@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
     SDL2_ttf
   ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
-  meta = with lib; {
+  meta = {
     description = "Free/Libre Action Roleplaying Engine";
     homepage = "https://github.com/flareteam/flare-engine";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       McSinyx
     ];
-    license = [ licenses.gpl3 ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.gpl3 ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Code generator for executing Python snippets in source files";
     homepage = "https://nedbatchelder.com/code/cog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

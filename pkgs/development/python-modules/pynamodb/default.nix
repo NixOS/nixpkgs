@@ -59,7 +59,7 @@ buildPythonPackage rec {
     "test_create_table__incompatible_indexes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface for Amazon’s DynamoDB";
     longDescription = ''
       DynamoDB is a great NoSQL service provided by Amazon, but the API is
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     '';
     homepage = "http://jlafon.io/pynamodb.html";
     changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

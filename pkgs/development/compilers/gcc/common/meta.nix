@@ -11,7 +11,7 @@ let
 in
 {
   homepage = "https://gcc.gnu.org/";
-  license = licenses.gpl3Plus; # runtime support libraries are typically LGPLv3+
+  license = lib.licenses.gpl3Plus; # runtime support libraries are typically LGPLv3+
   description = "GNU Compiler Collection, version ${version}";
   longDescription = ''
     The GNU Compiler Collection includes compiler front ends for C, C++,
@@ -22,7 +22,7 @@ in
     compiler used in the GNU system including the GNU/Linux variant.
   '';
 
-  platforms = platforms.unix;
-  maintainers = teams.gcc.members;
+  platforms = lib.platforms.unix;
+  maintainers = lib.teams.gcc.members;
 
 }

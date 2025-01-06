@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  meta = with lib; {
+  meta = {
     description = "Check the health of your Nix setup";
     homepage = "https://github.com/juspay/nix-health";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       srid
       shivaraj-bh
     ];

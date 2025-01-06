@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pecan" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://pecan.readthedocs.io/en/latest/changes.html";
     description = "WSGI object-dispatching web framework";
     homepage = "https://www.pecanpy.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ applePrincess ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ applePrincess ];
   };
 }

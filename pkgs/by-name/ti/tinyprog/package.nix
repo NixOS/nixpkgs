@@ -32,11 +32,11 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";
     description = "Programmer for FPGA boards using the TinyFPGA USB Bootloader";
     mainProgram = "tinyprog";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

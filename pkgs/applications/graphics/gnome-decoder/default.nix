@@ -85,12 +85,12 @@ clangStdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scan and Generate QR Codes";
     homepage = "https://gitlab.gnome.org/World/decoder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "decoder";
-    maintainers = with maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     sed -i 's/^SET.*$//' cmake/CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libwbxml/libwbxml";
     description = "WBXML Library (aka libwbxml) contains a library and its associated tools to Parse, Encode and Handle WBXML documents";
-    maintainers = with maintainers; [ mh ];
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ mh ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
 }

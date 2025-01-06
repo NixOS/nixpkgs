@@ -10,7 +10,7 @@ let
   inherit (lib) maintainers mkOption types;
 in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  meta.maintainers = with lib.maintainers; [ happysalada ];
   meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {

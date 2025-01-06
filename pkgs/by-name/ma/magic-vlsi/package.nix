@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
-  meta = with lib; {
+  meta = {
     description = "VLSI layout tool written in Tcl";
     homepage    = "http://opencircuitdesign.com/magic/";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license     = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

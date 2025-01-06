@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     "-DWITH_SETCAP=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Anonymous, decentralized and IP based overlay network for the internet";
     homepage = "https://lokinet.org/";
     changelog = "https://github.com/oxen-io/lokinet/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wyndon ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wyndon ];
   };
 }

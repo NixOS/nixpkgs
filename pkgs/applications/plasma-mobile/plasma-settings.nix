@@ -48,12 +48,12 @@ mkDerivation rec {
     util-linux
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Settings application for Plasma Mobile";
     mainProgram = "plasma-settings";
     homepage = "https://invent.kde.org/plasma-mobile/plasma-settings";
     # https://invent.kde.org/plasma-mobile/plasma-settings/-/commit/a59007f383308503e59498b3036e1483bca26e35
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

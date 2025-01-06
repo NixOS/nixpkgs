@@ -1,9 +1,9 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "jibri";
-    meta = with pkgs.lib; {
-      maintainers = teams.jitsi.members;
+    meta = {
+      maintainers = lib.teams.jitsi.members;
     };
 
     nodes.machine =

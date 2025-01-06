@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     skipBulkUpdate = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

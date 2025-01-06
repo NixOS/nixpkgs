@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "xfce4-windowck-plugin-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Xfce panel plugin for displaying window title and buttons";
     homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-windowck-plugin";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
   };
 }

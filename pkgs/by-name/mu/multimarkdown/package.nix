@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fletcher.github.io/MultiMarkdown-6/introduction.html";
     description = "Derivative of Markdown that adds new syntax features";
     longDescription = ''
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
       - glossary entries (LaTeX only)
       - document metadata (e.g. title, author, date, etc.)
     '';
-    license = with licenses; [ mit ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

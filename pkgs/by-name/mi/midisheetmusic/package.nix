@@ -69,12 +69,12 @@ stdenv.mkDerivation {
       --add-flags $out/bin/.MidiSheetMusic.exe
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert MIDI Files to Piano Sheet Music for two hands";
     mainProgram = "midisheetmusic.mono.exe";
     homepage = "http://midisheetmusic.com";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

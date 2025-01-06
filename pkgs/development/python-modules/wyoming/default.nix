@@ -42,11 +42,11 @@ buildPythonPackage rec {
     inherit wyoming-faster-whisper wyoming-openwakeword wyoming-piper;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rhasspy/wyoming/releases/tag/${version}";
     description = "Protocol for Rhasspy Voice Assistant";
     homepage = "https://github.com/rhasspy/wyoming";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

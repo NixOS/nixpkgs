@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = ["--with-mdds=2.1"];
 
-  meta = with lib; {
+  meta = {
     description = "Library and a set of tools for reading and converting Apple iWork documents (Keynote, Pages and Numbers)";
     homepage = "https://github.com/LibreOffice/libetonyek";
     changelog = "https://github.com/LibreOffice/libetonyek/blob/${src.rev}/NEWS";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

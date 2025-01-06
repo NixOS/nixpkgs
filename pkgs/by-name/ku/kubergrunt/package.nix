@@ -26,11 +26,11 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/kubergrunt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of commands to fill in the gaps between Terraform, Helm, and Kubectl";
     mainProgram = "kubergrunt";
     homepage = "https://github.com/gruntwork-io/kubergrunt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ psibi ];
   };
 }

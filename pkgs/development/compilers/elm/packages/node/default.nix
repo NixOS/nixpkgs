@@ -27,11 +27,11 @@ with self; with elmLib; {
   elm-verify-examples =
     let
       patched = patchBinwrap [ elmi-to-json ] nodePkgs.elm-verify-examples // {
-        meta = with lib; nodePkgs.elm-verify-examples.meta // {
+        meta = nodePkgs.elm-verify-examples.meta // {
           description = "Verify examples in your docs";
           homepage = "https://github.com/stoeffel/elm-verify-examples";
-          license = licenses.bsd3;
-          maintainers = [ maintainers.turbomack ];
+          license = lib.licenses.bsd3;
+          maintainers = [ lib.maintainers.turbomack ];
         };
       };
     in
@@ -64,49 +64,49 @@ with self; with elmLib; {
         mkdir -p unpacked_bin
         ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
       '';
-      meta = with lib; nodePkgs.elm-coverage.meta // {
+      meta = nodePkgs.elm-coverage.meta // {
         description = "Work in progress - Code coverage tooling for Elm";
         homepage = "https://github.com/zwilias/elm-coverage";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.turbomack ];
+        license = lib.licenses.bsd3;
+        maintainers = [ lib.maintainers.turbomack ];
       };
     });
 
   create-elm-app = patchNpmElm
     nodePkgs.create-elm-app // {
-    meta = with lib; nodePkgs.create-elm-app.meta // {
+    meta = nodePkgs.create-elm-app.meta // {
       description = "Create Elm apps with no build configuration";
       homepage = "https://github.com/halfzebra/create-elm-app";
-      license = licenses.mit;
-      maintainers = [ maintainers.turbomack ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.turbomack ];
     };
   };
 
   elm-graphql =
     nodePkgs."@dillonkearns/elm-graphql" // {
-      meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
+      meta = nodePkgs."@dillonkearns/elm-graphql".meta // {
         description = " Autogenerate type-safe GraphQL queries in Elm";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.pedrohlc ];
+        license = lib.licenses.bsd3;
+        maintainers = [ lib.maintainers.pedrohlc ];
       };
     };
 
   elm-review =
     nodePkgs.elm-review // {
-      meta = with lib; nodePkgs.elm-review.meta // {
+      meta = nodePkgs.elm-review.meta // {
         description = "Analyzes Elm projects, to help find mistakes before your users find them";
         homepage = "https://package.elm-lang.org/packages/jfmengels/elm-review/${nodePkgs.elm-review.version}";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.turbomack ];
+        license = lib.licenses.bsd3;
+        maintainers = [ lib.maintainers.turbomack ];
       };
     };
 
   elm-language-server = nodePkgs."@elm-tooling/elm-language-server" // {
-    meta = with lib; nodePkgs."@elm-tooling/elm-language-server".meta // {
+    meta = nodePkgs."@elm-tooling/elm-language-server".meta // {
       description = "Language server implementation for Elm";
       homepage = "https://github.com/elm-tooling/elm-language-server";
-      license = licenses.mit;
-      maintainers = [ maintainers.turbomack ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.turbomack ];
     };
   };
 
@@ -114,21 +114,21 @@ with self; with elmLib; {
     old: {
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
 
-      meta = with lib; nodePkgs."elm-spa".meta // {
+      meta = nodePkgs."elm-spa".meta // {
         description = "Tool for building single page apps in Elm";
         homepage = "https://www.elm-spa.dev/";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.ilyakooo0 ];
+        license = lib.licenses.bsd3;
+        maintainers = [ lib.maintainers.ilyakooo0 ];
       };
     }
   );
 
   elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
-    meta = with lib; nodePkgs."elm-optimize-level-2".meta // {
+    meta = nodePkgs."elm-optimize-level-2".meta // {
       description = "Second level of optimization for the Javascript that the Elm Compiler produces";
       homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
-      license = licenses.bsd3;
-      maintainers = [ maintainers.turbomack ];
+      license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.turbomack ];
     };
   };
 
@@ -140,11 +140,11 @@ with self; with elmLib; {
     in
     patched.override (old: {
       inherit ESBUILD_BINARY_PATH;
-      meta = with lib; nodePkgs."elm-land".meta // {
+      meta = nodePkgs."elm-land".meta // {
         description = "Production-ready framework for building Elm applications";
         homepage = "https://elm.land/";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.zupo ];
+        license = lib.licenses.bsd3;
+        maintainers = [ lib.maintainers.zupo ];
       };
     }
     );

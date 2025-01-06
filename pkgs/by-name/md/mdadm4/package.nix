@@ -75,12 +75,12 @@ stdenv.mkDerivation rec {
     grep -r $out $out/bin && false || true
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programs for managing RAID arrays under Linux";
     homepage = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mdadm";
-    maintainers = with maintainers; [ ekleog ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ekleog ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,9 +1,9 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "trezord";
-    meta = with pkgs.lib; {
-      maintainers = with maintainers; [
+    meta = {
+      maintainers = with lib.maintainers; [
         mmahut
         _1000101
       ];

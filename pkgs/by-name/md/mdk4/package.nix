@@ -37,11 +37,11 @@ stdenv.mkDerivation {
     "SBINDIR=$(PREFIX)/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that injects data into wireless networks";
     homepage = "https://github.com/aircrack-ng/mdk4";
-    maintainers = with maintainers; [ moni ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mdk4";
   };
 }

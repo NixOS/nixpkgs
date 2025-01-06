@@ -31,11 +31,11 @@ buildPecl {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/krakjoe/pcov/releases/tag/v${version}";
     description = "Self contained php-code-coverage compatible driver for PHP";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://github.com/krakjoe/pcov";
-    maintainers = teams.php.members;
+    maintainers = lib.teams.php.members;
   };
 }

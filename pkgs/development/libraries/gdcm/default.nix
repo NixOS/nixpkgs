@@ -92,15 +92,15 @@ stdenv.mkDerivation rec {
   # note that when the test data is available to the build via `fetchSubmodules = true`,
   # a number of additional but much slower tests are enabled
 
-  meta = with lib; {
+  meta = {
     description = "Grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.
     '';
     homepage = "https://gdcm.sourceforge.net/";
-    license = with licenses; [ bsd3 asl20 ];
-    maintainers = with maintainers; [ tfmoraes ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ bsd3 asl20 ];
+    maintainers = with lib.maintainers; [ tfmoraes ];
+    platforms = lib.platforms.all;
   };
 }

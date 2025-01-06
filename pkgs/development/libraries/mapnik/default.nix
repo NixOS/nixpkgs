@@ -122,17 +122,17 @@ stdenv.mkDerivation rec {
     cp ../utils/mapnik-config/mapnik-config $out/bin/mapnik-config
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
     maintainers =
-      with maintainers;
-      teams.geospatial.members
+      with lib.maintainers;
+      lib.teams.geospatial.members
       ++ [
         hrdinka
         hummeltech
       ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 }

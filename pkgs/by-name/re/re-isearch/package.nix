@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     cp ../lib/*.so $out/lib/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Novel multimodal search and retrieval engine";
     homepage = "https://github.com/re-Isearch/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.astro ];
   };
 }

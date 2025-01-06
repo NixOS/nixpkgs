@@ -133,12 +133,12 @@ stdenv.mkDerivation rec {
     ln -s $out/usr/bin/opera $out/bin/opera
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.opera.com";
     description = "Faster, safer and smarter web browser";
     platforms = [ "x86_64-linux" ];
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ kindrowboat ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ kindrowboat ];
   };
 }

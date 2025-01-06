@@ -61,15 +61,15 @@ stdenv'.mkDerivation rec {
     autoAddDriverRunpath
   ];
 
-  meta = with lib; {
+  meta = {
     description = "COLMAP - Structure-From-Motion and Multi-View Stereo pipeline";
     longDescription = ''
        COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
        with a graphical and command-line interface.
     '';
     homepage = "https://colmap.github.io/index.html";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lebastr ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lebastr ];
   };
 }

@@ -25,7 +25,7 @@ tcl.mkTclDerivation {
     install -Dm 755 $src/nagelfar.tcl $out/bin/nagelfar
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nagelfar.sourceforge.net/";
     description = "Static syntax checker (linter) for Tcl";
     longDescription = ''
@@ -33,8 +33,8 @@ tcl.mkTclDerivation {
       and is very extendable through its syntax database and plugins.
     '';
     mainProgram = "nagelfar";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.nat-418 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.nat-418 ];
   };
 }

@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "tempora.utc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Objects and routines pertaining to date and time";
     mainProgram = "calc-prorate";
     homepage = "https://github.com/jaraco/tempora";
     changelog = "https://github.com/jaraco/tempora/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp "$out/lib/noson/noson-gui"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SONOS controller for Linux (and macOS)";
     homepage = "https://janbar.github.io/noson-app/";
     mainProgram = "noson-app";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = [ licenses.gpl3Only ];
-    maintainers = with maintainers; [ callahad ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = [ lib.licenses.gpl3Only ];
+    maintainers = with lib.maintainers; [ callahad ];
   };
 })

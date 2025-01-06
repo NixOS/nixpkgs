@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "JackAss is a VST plugin that provides JACK-MIDI support for VST hosts";
     longDescription = ''
       Simply load the plugin in your favourite host to get a JACK-MIDI port.
@@ -67,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
       applications. Set enableJackAssWine64 to true to enable this output.
     '';
     homepage = "https://github.com/falkTX/JackAss";
-    maintainers = with maintainers; [ PowerUser64 ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ PowerUser64 ];
+    license = with lib.licenses; [
       mit
       unfree
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

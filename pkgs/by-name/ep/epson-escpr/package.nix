@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     autoconf
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R Driver (generic driver)";
     longDescription = ''
@@ -85,8 +85,8 @@ stdenv.mkDerivation {
           enable = true;
           nssmdns4 = true;
         };'';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artuuge ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ artuuge ];
+    platforms = lib.platforms.linux;
   };
 }

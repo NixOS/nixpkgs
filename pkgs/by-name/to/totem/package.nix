@@ -107,12 +107,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Totem/";
     changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${version}/NEWS?ref_type=tags";
     description = "Movie player for the GNOME desktop based on GStreamer";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
+    platforms = lib.platforms.linux;
   };
 }

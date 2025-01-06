@@ -82,16 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./tzdata-setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     changelog = "https://github.com/eggert/tz/blob/${finalAttrs.version}/NEWS";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3 # tzcode
       publicDomain # tzdata
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ajs124
       fpletz
     ];

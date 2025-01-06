@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyRdfa" ];
 
-  meta = with lib; {
+  meta = {
     description = "RDFa 1.1 distiller/parser library";
     homepage = "https://github.com/prrvchr/pyrdfa3/";
     changelog = "https://github.com/prrvchr/pyrdfa3/releases/tag/v${version}";
-    license = licenses.w3c;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.w3c;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

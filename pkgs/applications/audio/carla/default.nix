@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kx.studio/Applications:Carla";
     description = "Audio plugin host";
     longDescription = ''
@@ -118,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
       It uses JACK as the default and preferred audio driver but also
       supports native drivers like ALSA, DirectSound or CoreAudio.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.minijackson ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.minijackson ];
+    platforms = lib.platforms.linux;
   };
 })

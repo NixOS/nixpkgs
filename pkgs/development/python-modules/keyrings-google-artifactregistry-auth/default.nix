@@ -41,11 +41,11 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/GoogleCloudPlatform/artifact-registry-python-tools/blob/main/HISTORY.md";
     description = "Python package which allows you to configure keyring to interact with Python repositories stored in Artifact Registry";
     homepage = "https://pypi.org/project/keyrings.google-artifactregistry-auth";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

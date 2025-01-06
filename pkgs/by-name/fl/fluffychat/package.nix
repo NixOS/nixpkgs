@@ -41,12 +41,12 @@ flutter324.buildFlutterApplication (
 
     inherit targetFlutterPlatform;
 
-    meta = with lib; {
+    meta = {
       description = "Chat with your friends (matrix client)";
       homepage = "https://fluffychat.im/";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       mainProgram = "fluffychat";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         mkg20001
         gilice
       ];
@@ -54,7 +54,7 @@ flutter324.buildFlutterApplication (
         "x86_64-linux"
         "aarch64-linux"
       ];
-      sourceProvenance = [ sourceTypes.fromSource ];
+      sourceProvenance = [ lib.sourceTypes.fromSource ];
       inherit (olm.meta) knownVulnerabilities;
     };
   }

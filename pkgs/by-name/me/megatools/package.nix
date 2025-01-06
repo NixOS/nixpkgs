@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for Mega.co.nz";
     homepage = "https://megatools.megous.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ viric ];
+    platforms = lib.platforms.unix;
   };
 }

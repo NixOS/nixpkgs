@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/async-profiler --prefix PATH : ${lib.makeBinPath [ jdk ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low overhead sampling profiler for Java that does not suffer from Safepoint bias problem";
     homepage = "https://github.com/jvm-profiling-tools/async-profiler";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mschuwalow ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mschuwalow ];
+    platforms = lib.platforms.all;
     mainProgram = "async-profiler";
   };
 }

@@ -20,10 +20,10 @@ buildPythonPackage {
 
   nativeBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of library stubs for Python, with static types";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     makeWrapper $out/ape.exe $out/bin/ape --add-flags ace
   '';
 
-  meta = with lib; {
+  meta = {
     description = description;
     license = license;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yrashk ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yrashk ];
     mainProgram = "ape";
   };
 }

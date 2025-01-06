@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Enumeration tool for publicly exposed Azure Storage blobs";
     mainProgram = "goblob";
     homepage = "https://github.com/Macmod/goblob";
     changelog = "https://github.com/Macmod/goblob/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

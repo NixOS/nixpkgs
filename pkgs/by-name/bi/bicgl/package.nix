@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     "-DBICPL_DIR=${bicpl}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/${owner}/${pname}";
     description = "Brain Imaging Centre graphics library";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.hpndUc;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.hpndUc;
   };
 }

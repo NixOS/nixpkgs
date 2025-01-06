@@ -40,11 +40,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nethsm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client-side Python SDK for NetHSM";
     homepage = "https://github.com/Nitrokey/nethsm-sdk-py";
     changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ frogamic ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ frogamic ];
   };
 }

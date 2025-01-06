@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Network A/V plugin for OBS Studio";
     homepage = "https://github.com/Palakis/obs-ndi";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jshcmpbll ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ jshcmpbll ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = ndi.meta.hydraPlatforms;
   };
 }

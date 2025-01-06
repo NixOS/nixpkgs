@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Logitech force feedback module for Linux";
     homepage = "https://github.com/berarma/new-lg4ff";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthiasbenaets ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ matthiasbenaets ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

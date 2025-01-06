@@ -106,10 +106,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyglet" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.pyglet.org/";
     description = "Cross-platform windowing and multimedia library";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     inherit (mesa.meta) platforms;
   };
 }

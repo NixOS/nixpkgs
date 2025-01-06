@@ -43,11 +43,11 @@ buildPythonPackage rec {
       "test_autorefresh"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Enlighten Progress Bar for Python Console Apps";
     homepage = "https://github.com/Rockhopper-Technologies/enlighten";
     changelog = "https://github.com/Rockhopper-Technologies/enlighten/releases/tag/${version}";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -312,13 +312,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.samba.org";
     description = "Standard Windows interoperability suite of programs for Linux and Unix";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     broken = enableGlusterFS;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with lib.maintainers; [ aneeshusa ];
     pkgConfigModules = [
       "dcerpc_samr"
       "dcerpc"

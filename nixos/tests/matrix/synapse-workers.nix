@@ -1,9 +1,9 @@
 import ../make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "matrix-synapse-workers";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      maintainers = lib.teams.matrix.members;
     };
 
     nodes = {

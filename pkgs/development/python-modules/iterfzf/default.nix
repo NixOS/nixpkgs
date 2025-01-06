@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iterfzf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic interface to fzf, a CLI fuzzy finder";
     homepage = "https://github.com/dahlia/iterfzf";
     changelog = "https://github.com/dahlia/iterfzf/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

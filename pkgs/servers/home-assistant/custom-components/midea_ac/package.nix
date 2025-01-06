@@ -19,11 +19,11 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ msmart-ng ];
 
-  meta = with lib; {
+  meta = {
     description = "Home Assistant custom integration to control Midea (and associated brands) air conditioners via LAN";
     homepage = "https://github.com/mill1000/midea-ac-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hexa
       emilylange
     ];

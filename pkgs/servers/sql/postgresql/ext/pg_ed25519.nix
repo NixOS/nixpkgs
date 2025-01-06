@@ -16,12 +16,12 @@ buildPostgresqlExtension rec {
     sha256 = "16w3qx3wj81bzfhydl2pjhn8b1jak6h7ja9wq1kc626g0siggqi0";
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension for signing and verifying ed25519 signatures";
     homepage = "https://gitlab.com/dwagin/pg_ed25519";
-    maintainers = [ maintainers.renzo ];
+    maintainers = [ lib.maintainers.renzo ];
     platforms = postgresql.meta.platforms;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     # Broken on darwin and linux (JIT) with no upstream fix available.
     broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
   };

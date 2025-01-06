@@ -95,12 +95,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Production-Grade Container Scheduling and Management";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://kubernetes.io";
-    maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.kubernetes.members;
+    platforms = lib.platforms.linux;
   };
 
   passthru.tests = nixosTests.kubernetes // {

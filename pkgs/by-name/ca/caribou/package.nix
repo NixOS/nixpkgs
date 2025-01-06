@@ -102,12 +102,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "caribou"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Input assistive technology intended for switch and pointer users";
     mainProgram = "caribou-preferences";
     homepage = "https://gitlab.gnome.org/Archive/caribou";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

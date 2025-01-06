@@ -30,11 +30,11 @@ buildGoModule rec {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, secure, and feature-rich Discord terminal client";
     homepage = "https://github.com/ayn2op/discordo";
-    license = licenses.mit;
-    maintainers = [ maintainers.arian-d ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.arian-d ];
     mainProgram = "discordo";
   };
 }

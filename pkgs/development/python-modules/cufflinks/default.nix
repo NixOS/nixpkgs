@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Productivity Tools for Plotly + Pandas";
     homepage = "https://github.com/santosjorge/cufflinks";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

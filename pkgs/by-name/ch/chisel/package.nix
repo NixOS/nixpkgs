@@ -26,7 +26,7 @@ buildGoModule rec {
   # Tests require access to the network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "TCP/UDP tunnel over HTTP";
     longDescription = ''
       Chisel is a fast TCP/UDP tunnel, transported over HTTP, secured via
@@ -36,7 +36,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jpillora/chisel";
     changelog = "https://github.com/jpillora/chisel/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

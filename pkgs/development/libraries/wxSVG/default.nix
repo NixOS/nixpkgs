@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wxsvg.sourceforge.net/";
     description = "SVG manipulation library built with wxWidgets";
     mainProgram = "svgview";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       wxSVG is C++ library to create, manipulate and render Scalable Vector
       Graphics (SVG) files with the wxWidgets toolkit.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     inherit (wxGTK.meta) platforms;
   };

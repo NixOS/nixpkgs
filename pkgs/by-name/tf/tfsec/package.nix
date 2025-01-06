@@ -31,12 +31,12 @@ buildGoModule rec {
     "cmd/tfsec-checkgen"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Static analysis powered security scanner for terraform code";
     homepage = "https://github.com/aquasecurity/tfsec";
     changelog = "https://github.com/aquasecurity/tfsec/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       peterromfeldhk
     ];

@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modelcluster" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
     homepage = "https://github.com/torchbox/django-modelcluster/";
     changelog = "https://github.com/wagtail/django-modelcluster/blob/v${version}/CHANGELOG.txt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ desiderius ];
   };
 }

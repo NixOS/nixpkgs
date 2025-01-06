@@ -63,10 +63,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "translate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

@@ -52,7 +52,7 @@ buildPythonPackage rec {
       ! grep -q "Error" $out
     '';
 
-  meta = with lib; {
+  meta = {
     description = "PlantUML plugin for Python-Markdown";
     longDescription = ''
       This plugin implements a block extension which can be used to specify a PlantUML
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mikitex70/plantuml-markdown";
     changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

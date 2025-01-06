@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-WDq08flKiMCN4SS9xHH3B0nCX6us6huX8SF9BPuNzoo=";
 
-  meta = with lib; {
+  meta = {
     description = "Intranet comprehensive scanning tool";
     homepage = "https://github.com/shadow1ng/fscan";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Misaka13514 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Misaka13514 ];
     mainProgram = "fscan";
   };
 }

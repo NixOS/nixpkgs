@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyjson5" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON5 serializer and parser library";
     homepage = "https://github.com/Kijewski/pyjson5";
     changelog = "https://github.com/Kijewski/pyjson5/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

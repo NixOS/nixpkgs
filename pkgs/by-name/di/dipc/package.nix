@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-XQ85T64K1NLdSOtAFr0XluvFNTaHzoWKxoQtBQ+uSKQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Convert your favorite images and wallpapers with your favorite color palettes/themes";
     homepage = "https://github.com/doprz/dipc";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ ByteSudoer ];
+    maintainers = with lib.maintainers; [ ByteSudoer ];
     mainProgram = "dipc";
   };
 }

@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
         -e 's/^libdir=.*/libdir=@CMAKE_INSTALL_LIBDIR@/' -e "$failNoMatches"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://podofo.sourceforge.net";
     description = "Library to work with the PDF file format";
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];

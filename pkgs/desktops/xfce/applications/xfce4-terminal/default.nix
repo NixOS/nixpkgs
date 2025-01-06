@@ -42,9 +42,9 @@ mkXfceDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.xfce4-terminal;
 
-  meta = with lib; {
+  meta = {
     description = "Modern terminal emulator";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.xfce.members;
     mainProgram = "xfce4-terminal";
   };
 }

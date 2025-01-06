@@ -21,10 +21,10 @@ buildPythonPackage rec {
   # no tests in github or pypi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Subprocesses for Humans 2.0";
     homepage = "https://github.com/amitt001/delegator.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

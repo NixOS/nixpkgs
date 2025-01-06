@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
       | grep -q 'John Doe'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Super fast CLI tool to decode and encode JWTs";
     homepage = "https://github.com/mike-engel/jwt-cli";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ rycee ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ rycee ];
     mainProgram = "jwt";
   };
 }

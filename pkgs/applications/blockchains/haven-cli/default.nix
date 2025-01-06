@@ -97,13 +97,13 @@ stdenv.mkDerivation rec {
     "source"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Haven Protocol is the world's only network of private stable asset";
     homepage = "https://havenprotocol.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
-    maintainers = with maintainers; [ kim0 ];
+    maintainers = with lib.maintainers; [ kim0 ];
     mainProgram = "haven-wallet-cli";
   };
 }

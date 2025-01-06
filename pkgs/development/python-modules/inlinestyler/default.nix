@@ -52,11 +52,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple CSS inliner for generating HTML email messages";
     homepage = "https://github.com/dlanger/inlinestyler";
     changelog = "https://github.com/dlanger/inlinestyler/blob/${src.rev}/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

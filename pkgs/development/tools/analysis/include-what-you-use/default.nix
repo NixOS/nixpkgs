@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/include-what-you-use
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analyze #includes in C/C++ source files with clang";
     longDescription = ''
       For every symbol (type, function variable, or macro) that you use in
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       replacing #includes with forward-declares when possible.
     '';
     homepage = "https://include-what-you-use.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

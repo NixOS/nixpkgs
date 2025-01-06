@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     qt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/graphics/kseexpr";
     description = "Embeddable expression evaluation engine";
-    maintainers = with maintainers; [ nek0 ];
-    license = licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ nek0 ];
+    license = lib.licenses.lgpl3Plus;
   };
 }

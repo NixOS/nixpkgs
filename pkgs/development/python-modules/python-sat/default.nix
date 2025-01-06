@@ -39,10 +39,10 @@ buildPythonPackage rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
     homepage = "https://github.com/pysathq/pysat";
-    license = licenses.mit;
-    maintainers = [ maintainers.marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marius851000 ];
   };
 }

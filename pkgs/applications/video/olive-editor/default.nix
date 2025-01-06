@@ -85,13 +85,13 @@ stdenv.mkDerivation {
     qttools
   ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
 
-  meta = with lib; {
+  meta = {
     description = "Professional open-source NLE video editor";
     homepage = "https://www.olivevideoeditor.org/";
     downloadPage = "https://www.olivevideoeditor.org/download.php";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.balsoft ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.balsoft ];
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "olive-editor";

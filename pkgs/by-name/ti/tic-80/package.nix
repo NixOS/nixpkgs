@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "$(patchelf --print-rpath $out/bin/tic80):${rpath}" "$out/bin/tic80"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "A free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
@@ -147,9 +147,9 @@ stdenv.mkDerivation rec {
       channel sound and etc.
     '';
     homepage = "https://github.com/nesbox/TIC-80";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "tic80";
-    maintainers = with maintainers; [ blinry ];
+    maintainers = with lib.maintainers; [ blinry ];
   };
 }

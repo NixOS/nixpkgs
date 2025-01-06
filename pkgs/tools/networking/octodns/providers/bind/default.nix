@@ -40,11 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = " RFC compliant (Bind9) provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-bind";
     changelog = "https://github.com/octodns/octodns-bind/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

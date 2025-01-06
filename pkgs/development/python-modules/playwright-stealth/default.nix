@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "playwright_stealth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Playwright stealth";
     homepage = "https://github.com/AtuboDad/playwright_stealth";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

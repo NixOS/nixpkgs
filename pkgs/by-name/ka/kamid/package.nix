@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "AR:=$(AR)" ];
 
-  meta = with lib; {
+  meta = {
     description = "FREE, easy-to-use and portable implementation of a 9p file server daemon for UNIX-like systems";
     homepage = "https://kamid.omarpolo.com";
-    license = licenses.isc;
-    maintainers = with maintainers; [ heph2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ heph2 ];
+    platforms = lib.platforms.linux;
   };
 }

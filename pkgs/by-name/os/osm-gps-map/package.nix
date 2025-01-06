@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     libsoup_2_4
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK widget for displaying OpenStreetMap tiles";
     homepage = "https://nzjrs.github.io/osm-gps-map";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ hrdinka ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

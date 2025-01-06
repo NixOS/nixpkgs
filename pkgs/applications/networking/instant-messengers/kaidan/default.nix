@@ -60,7 +60,7 @@ mkDerivation rec {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly and modern chat app, using XMPP";
     mainProgram = "kaidan";
     longDescription = ''
@@ -73,13 +73,13 @@ mkDerivation rec {
       messages, and file sharing.
     '';
     homepage = "https://www.kaidan.im";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
       asl20
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ astro ];
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = with lib.platforms; linux;
   };
 }

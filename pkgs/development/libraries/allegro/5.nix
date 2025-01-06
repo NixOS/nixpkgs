@@ -97,11 +97,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "Game programming library";
     homepage = "https://liballeg.org/";
-    license = licenses.zlib;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast and flexible C++ library for working with OpenStreetMap data";
     homepage = "https://osmcode.org/libosmium/";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     changelog = [
       "https://github.com/osmcode/libosmium/releases/tag/v${version}"
       "https://github.com/osmcode/libosmium/blob/v${version}/CHANGELOG.md"
     ];
-    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ das-g ];
   };
 }

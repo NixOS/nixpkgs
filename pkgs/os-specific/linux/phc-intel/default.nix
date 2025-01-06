@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Undervolting kernel driver for Intel processors";
     longDescription = ''
       PHC is a Linux kernel patch to undervolt processors. This can divide the
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       Intel architectures.
     '';
     homepage = "https://github.com/danielw86dev/phc-intel-dkms";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"

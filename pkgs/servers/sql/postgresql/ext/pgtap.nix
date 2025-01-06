@@ -55,7 +55,7 @@ buildPostgresqlExtension (finalAttrs: {
     installPhase = "touch $out";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unit testing framework for PostgreSQL";
     longDescription = ''
       pgTAP is a unit testing framework for PostgreSQL written in PL/pgSQL and PL/SQL.
@@ -63,9 +63,9 @@ buildPostgresqlExtension (finalAttrs: {
       as well as the ability to integrate with other TAP-emitting test frameworks.
       It can also be used in the xUnit testing style.
     '';
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with lib.maintainers; [ willibutz ];
     homepage = "https://pgtap.org";
     inherit (postgresql.meta) platforms;
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 })

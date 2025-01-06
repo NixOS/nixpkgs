@@ -110,12 +110,12 @@ stdenv.mkDerivation {
   # for gcc5; c11 inline semantics breaks the build
   env.NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  meta = with lib; {
+  meta = {
     description = "Io programming language";
     homepage = "https://iolanguage.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       maggesi
     ];

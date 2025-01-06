@@ -81,10 +81,10 @@ stdenv.mkDerivation rec {
       --replace "$dev/$dev/" "$dev/"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Collection of tools, libraries and tests for shader compilation";
-    platforms = platforms.all;
-    license = [ licenses.asl20 ];
+    platforms = lib.platforms.all;
+    license = [ lib.licenses.asl20 ];
   };
 }

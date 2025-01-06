@@ -96,12 +96,12 @@ stdenv.mkDerivation rec {
     update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
     homepage = "https://fractalsoftworks.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       bbigras
       rafaelrc
     ];

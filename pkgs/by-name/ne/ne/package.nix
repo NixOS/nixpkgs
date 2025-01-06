@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Nice editor";
     homepage = "https://ne.di.unimi.it/";
     longDescription = ''
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
       but powerful and fully configurable for the wizard, and most sparing in its
       resource usage.  See the manual for some highlights of ne's features.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ geri1701 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ geri1701 ];
     mainProgram = "ne";
   };
 }

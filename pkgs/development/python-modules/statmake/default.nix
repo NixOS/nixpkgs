@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "test_load_stylespace_broken_range"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Applies STAT information from a Stylespace to a variable font";
     mainProgram = "statmake";
     homepage = "https://github.com/daltonmaag/statmake";
     changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

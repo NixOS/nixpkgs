@@ -17,16 +17,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-srwbrMBUJz/Xi+Hk2GY9oo4rcTfKl/r146YWSSx6dew=";
 
-  meta = with lib; {
+  meta = {
     description = "Basic interface to PipeWire volume controls";
     homepage = "https://github.com/smasher164/pw-volume";
     changelog = "https://github.com/smasher164/pw-volume/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       astro
       figsoda
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "pw-volume";
   };
 }

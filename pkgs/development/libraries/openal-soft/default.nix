@@ -73,11 +73,11 @@ stdenv.mkDerivation rec {
     remove-references-to -t ${pipewire.dev} $(readlink -f $out/lib/*.so)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenAL alternative";
     homepage = "https://openal-soft.org/";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ ftrvxmtrx ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    platforms = lib.platforms.unix;
   };
 }

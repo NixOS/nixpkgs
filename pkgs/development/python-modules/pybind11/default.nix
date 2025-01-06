@@ -123,7 +123,7 @@ buildPythonPackage rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pybind/pybind11";
     changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
@@ -133,8 +133,8 @@ buildPythonPackage rec {
       C++ types in Python and vice versa, mainly to create Python
       bindings of existing C++ code.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       yuriaisaka
       dotlambda
     ];

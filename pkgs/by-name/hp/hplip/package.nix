@@ -334,15 +334,15 @@ python311Packages.buildPythonApplication {
     "lib/sane"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license =
       if withPlugin then
-        licenses.unfree
+        lib.licenses.unfree
       else
-        with licenses;
+        with lib.licenses;
         [
           mit
           bsd2
@@ -355,6 +355,6 @@ python311Packages.buildPythonApplication {
       "armv7l-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

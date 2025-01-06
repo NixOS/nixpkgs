@@ -39,12 +39,12 @@ buildGoModule rec {
     --zsh <($out/bin/timoni completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://timoni.sh";
     changelog = "https://github.com/stefanprodan/timoni/releases/tag/${src.rev}";
     description = "Package manager for Kubernetes, powered by CUE and inspired by Helm";
     mainProgram = "timoni";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ votava ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ votava ];
   };
 }

@@ -34,11 +34,11 @@ mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin trading client";
     mainProgram = "QtBitcoinTrader";
     homepage = "https://centrabit.com/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = qt5.qtbase.meta.platforms;
   };
 }

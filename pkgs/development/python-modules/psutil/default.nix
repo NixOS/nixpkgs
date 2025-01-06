@@ -67,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
     changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

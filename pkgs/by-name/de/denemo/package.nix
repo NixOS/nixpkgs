@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Music notation and composition software used with lilypond";
     homepage = "http://denemo.org";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.olynch ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.olynch ];
   };
 }

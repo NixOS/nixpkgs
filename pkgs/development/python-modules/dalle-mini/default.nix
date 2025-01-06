@@ -51,10 +51,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dalle_mini" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate images from a text prompt";
     homepage = "https://github.com/borisdayma/dalle-mini";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

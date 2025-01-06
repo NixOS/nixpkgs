@@ -143,17 +143,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Official Unity3D app to download and manage Unity Projects and installations";
     homepage = "https://unity.com/";
     downloadPage = "https://unity.com/unity-hub";
     changelog = "https://unity.com/unity-hub/release-notes";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       tesq0
       huantian
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

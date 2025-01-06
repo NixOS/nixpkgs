@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "install-desktop-file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GPS photo correlation tool, to add EXIF geotags";
 
     longDescription = ''
@@ -74,10 +74,10 @@ stdenv.mkDerivation rec {
       one takes the GPS data in a different format.
     '';
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://dfandrich.github.io/gpscorrelate/";
     changelog = "https://github.com/dfandrich/gpscorrelate/releases/tag/${src.rev}";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

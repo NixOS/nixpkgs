@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crate help in terminal: A tool for looking up details about rust crates without going to crates.io";
     mainProgram = "chit";
     longDescription = ''
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
       * How mature is it?
     '';
     homepage = "https://github.com/peterheesterman/chit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

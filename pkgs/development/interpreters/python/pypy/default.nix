@@ -196,13 +196,13 @@ in with passthru; stdenv.mkDerivation rec {
   inherit passthru;
   enableParallelBuilding = true;  # almost no parallelization without STM
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     mainProgram = "pypy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     broken = optimizationLevel == "0"; # generates invalid code
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with lib.maintainers; [ andersk ];
   };
 }

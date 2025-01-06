@@ -92,10 +92,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weasyprint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts web documents to PDF";
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

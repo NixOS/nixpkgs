@@ -63,9 +63,9 @@ php.buildComposerProject (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) grocy; };
 
-  meta = with lib; {
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+  meta = {
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

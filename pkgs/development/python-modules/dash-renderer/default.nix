@@ -16,10 +16,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Renderer for the Dash framework";
     homepage = "https://dash.plot.ly/";
-    license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.antoinerg ];
   };
 }

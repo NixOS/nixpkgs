@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fullwidth scalable monospace font designed specifically to support pseudographics, semigraphics, and private use characters";
     homepage = "https://www.kreativekorp.com/software/fonts/ksquare.shtml";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.linus ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.linus ];
   };
 }

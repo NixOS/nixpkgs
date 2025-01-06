@@ -26,17 +26,17 @@ stdenv.mkDerivation rec {
     tests.adguardhome = nixosTests.adguardhome;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = builtins.attrNames sources;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       numkem
       iagoq
       rhoriguchi
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "adguardhome";
   };
 }

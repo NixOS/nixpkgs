@@ -21,12 +21,12 @@ listToAttrs (
       rev = v.version;
       sha256 = v.sha256;
       meta = {
-        platforms = platforms.all;
+        platforms = lib.platforms.all;
         maintainers = [
           maintainers.matthewbauer
           maintainers.shazow
         ];
-        license = licenses.unfree;
+        license = lib.licenses.unfree;
       };
     };
   }) (importJSON ./themes.json)

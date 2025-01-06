@@ -37,11 +37,11 @@ buildPythonPackage rec {
     "test_set_default_nodehandler"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AST evaluator of Python expression using ast module";
     homepage = "https://github.com/lmfit/asteval";
     changelog = "https://github.com/lmfit/asteval/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

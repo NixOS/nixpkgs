@@ -49,12 +49,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openbao.org/";
     description = "Open source, community-driven fork of Vault managed by the Linux Foundation";
     changelog = "https://github.com/openbao/openbao/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "bao";
-    maintainers = with maintainers; [ brianmay ];
+    maintainers = with lib.maintainers; [ brianmay ];
   };
 }

@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stand-alone panel";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     mainProgram = "fbpanel";
   };
 

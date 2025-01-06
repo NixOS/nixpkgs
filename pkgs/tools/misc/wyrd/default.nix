@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://pessimization.com/software/wyrd/";
     downloadPage = "http://pessimization.com/software/wyrd/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.prikhi ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.prikhi ];
+    platforms = lib.platforms.unix;
     mainProgram = "wyrd";
   };
 }

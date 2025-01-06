@@ -70,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "compressor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";
     homepage = "https://django-compressor.readthedocs.org/";
     changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ desiderius ];
   };
 }

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "babelfish" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Diaoul/babelfish";
     description = "Module to work with countries and languages";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

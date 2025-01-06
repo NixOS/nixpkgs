@@ -109,16 +109,16 @@ python3Packages.buildPythonApplication rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Ericsson/codechecker";
     changelog = "https://github.com/Ericsson/codechecker/releases/tag/v${version}";
     description = "Analyzer tooling, defect database and viewer extension for the Clang Static Analyzer and Clang Tidy";
-    license = licenses.asl20-llvm;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20-llvm;
+    maintainers = with lib.maintainers; [
       zebreus
       felixsinger
     ];
     mainProgram = "CodeChecker";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

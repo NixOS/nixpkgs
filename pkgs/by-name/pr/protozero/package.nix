@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic protocol buffer decoder and encoder in C++";
     homepage = "https://github.com/mapbox/protozero";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       asl20
     ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
       "https://github.com/mapbox/protozero/releases/tag/v${version}"
       "https://github.com/mapbox/protozero/blob/v${version}/CHANGELOG.md"
     ];
-    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ das-g ];
   };
 }

@@ -20,12 +20,12 @@ mkDerivation {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KDE App Code Template Generator";
     mainProgram = "kapptemplate";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://kde.org/applications/en/development/org.kde.kapptemplate";
-    maintainers = [ maintainers.shamilton ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.shamilton ];
+    platforms = lib.platforms.linux;
   };
 }

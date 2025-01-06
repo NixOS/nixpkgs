@@ -116,11 +116,11 @@ buildPythonPackage rec {
     "Tests/ttx/ttx_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
     changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

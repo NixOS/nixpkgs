@@ -19,11 +19,11 @@ let
 
     pythonImportsCheck = [ "js8py" "test" ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/jketterl/js8py";
       description = "Library to decode the output of the js8 binary of JS8Call";
-      license = licenses.gpl3Only;
-      maintainers = teams.c3d2.members;
+      license = lib.licenses.gpl3Only;
+      maintainers = lib.teams.c3d2.members;
     };
   };
 
@@ -50,12 +50,12 @@ let
       soapysdr-with-plugins
     ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/jketterl/owrx_connector";
       description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = teams.c3d2.members;
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = lib.teams.c3d2.members;
     };
   };
 
@@ -91,11 +91,11 @@ buildPythonApplication rec {
     inherit js8py owrx_connector;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jketterl/openwebrx";
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     mainProgram = "openwebrx";
-    license = licenses.gpl3Only;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.c3d2.members;
   };
 }

@@ -38,12 +38,12 @@ buildGoModule {
     "-X main.version=${version} -X main.commit=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
     changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = [ maintainers.kachick ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.kachick ];
     mainProgram = "pinact";
   };
 }

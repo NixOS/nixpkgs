@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "tests/test_ogcapi_connectedsystems_osh.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
     changelog = "https://github.com/geopython/OWSLib/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.geospatial.members;
   };
 }

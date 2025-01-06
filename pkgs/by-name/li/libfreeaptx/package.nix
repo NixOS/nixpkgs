@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     install_name_tool -id $out/lib/libfreeaptx.dylib.0 $out/lib/libfreeaptx.dylib.0
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free Implementation of Audio Processing Technology codec (aptX)";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     homepage = "https://github.com/iamthehorker/libfreeaptx";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kranzes ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

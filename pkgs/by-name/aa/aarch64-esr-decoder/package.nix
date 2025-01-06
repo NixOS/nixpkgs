@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-BdxRvvU3AovlT7QloZ/LlkjRTVCWEsPUj4NkP4gBPsY=";
 
-  meta = with lib; {
+  meta = {
     description = "Utility for decoding aarch64 ESR register values";
     homepage = "https://github.com/google/aarch64-esr-decoder";
     changelog = "https://github.com/google/aarch64-esr-decoder/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jmbaur ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jmbaur ];
     mainProgram = "aarch64-esr-decoder";
   };
 }

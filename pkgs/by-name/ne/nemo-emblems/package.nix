@@ -29,15 +29,15 @@ python3.pkgs.buildPythonApplication rec {
       --replace "/usr/share/locale" "${cinnamon-translations}/share/locale"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-emblems";
     description = "Change a folder or file emblem in Nemo";
     longDescription = ''
       Nemo extension that allows you to change folder or file emblems.
       When adding this to nemo-with-extensions you also need to add nemo-python.
     '';
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

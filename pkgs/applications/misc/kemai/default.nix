@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kimai desktop client written in QT6";
     homepage = "https://github.com/AlexandrePTJ/kemai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ poelzi ];
-    platforms   = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ poelzi ];
+    platforms   = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "Kemai";
   };

@@ -64,16 +64,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A community-developed version of the original Marble Marcher - a fractal physics game";
     mainProgram = "marble-marcher-ce";
     homepage = "https://michaelmoroz.itch.io/mmce";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus # Code
       cc-by-30 # Assets
       ofl # Fonts
     ];
-    maintainers = with maintainers; [ rampoina ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ rampoina ];
+    platforms = lib.platforms.linux;
   };
 }

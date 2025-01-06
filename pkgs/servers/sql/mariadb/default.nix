@@ -211,12 +211,12 @@ let
             mysql-replication = nixosTests.mysql-replication.${testVersion};
           };
 
-        meta = with lib; {
+        meta = {
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
-          license = licenses.gpl2Plus;
-          maintainers = with maintainers; [ thoughtpolice ] ++ teams.helsinki-systems.members;
-          platforms = platforms.all;
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [ thoughtpolice ] ++ lib.teams.helsinki-systems.members;
+          platforms = lib.platforms.all;
         };
       };
 

@@ -223,8 +223,8 @@ stdenv.mkDerivation (finalAttrs: {
       description = "Implementation of the SSH protocol${extraDesc}";
       homepage = "https://www.openssh.com/";
       changelog = "https://www.openssh.com/releasenotes.html";
-      license = licenses.bsd2;
-      platforms = platforms.unix ++ platforms.windows;
+      license = lib.licenses.bsd2;
+      platforms = lib.platforms.unix ++ platforms.windows;
       maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ aneeshusa ]);
       mainProgram = "ssh";
     }

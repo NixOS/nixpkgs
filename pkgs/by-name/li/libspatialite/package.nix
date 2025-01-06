@@ -73,16 +73,16 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$(pwd)/src/.libs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible spatial index library in C++";
     homepage = "https://www.gaia-gis.it/fossil/libspatialite";
     # They allow any of these
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       mpl11
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ dotlambda ];
   };
 }

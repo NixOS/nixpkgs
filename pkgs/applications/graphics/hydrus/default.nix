@@ -137,10 +137,10 @@ python3Packages.buildPythonPackage rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc ]})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Danbooru-like image tagging and searching system for the desktop";
-    license = licenses.wtfpl;
+    license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    maintainers = with maintainers; [ dandellion evanjs ];
+    maintainers = with lib.maintainers; [ dandellion evanjs ];
   };
 }

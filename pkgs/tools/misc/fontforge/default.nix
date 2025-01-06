@@ -77,11 +77,11 @@ stdenv.mkDerivation rec {
       rm -r "$out/share/fontforge/python"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.erictapen ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.erictapen ];
   };
 }

@@ -154,8 +154,8 @@ in
     with lib;
     (super.nvim-treesitter.meta or { })
     // {
-      license = licenses.asl20;
-      maintainers = with maintainers; [ figsoda ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ figsoda ];
     };
   nvimRequireCheck = "nvim-treesitter";
 }

@@ -81,16 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "GTK4 camera application that knows how to deal with the media request api";
     homepage = "https://gitlab.com/megapixels-org/Megapixels";
     changelog = "https://gitlab.com/megapixels-org/Megapixels/-/tags/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
       Luflosi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "megapixels";
   };
 })

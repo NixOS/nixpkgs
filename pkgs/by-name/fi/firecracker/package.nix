@@ -69,14 +69,14 @@ useRustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
     changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
     mainProgram = "firecracker";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       usertam
       thoughtpolice
       qjoly

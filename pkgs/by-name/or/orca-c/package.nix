@@ -36,12 +36,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Esoteric programming language designed to quickly create procedural sequencers";
     homepage = "https://git.sr.ht/~rabbits/orca";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ netcrns ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ netcrns ];
     mainProgram = "orca";
   };
 }

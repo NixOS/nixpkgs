@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonconversion" ];
 
-  meta = with lib; {
+  meta = {
     description = "This python module helps converting arbitrary Python objects into JSON strings and back";
     homepage = "https://github.com/DLR-RM/python-jsonconversion";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.terlar ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.terlar ];
   };
 }
