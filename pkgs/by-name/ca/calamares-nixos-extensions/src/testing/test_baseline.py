@@ -17,6 +17,9 @@ BASELINE_CFG = """# Edit this configuration file to define what should be instal
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Use latest kernel.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -85,6 +88,7 @@ def test_baseline(
     mock_libcalamares,
     mock_getoutput,
     mock_check_output,
+    mock_open_ngcconf,
     mock_open_hwconf,
     mock_Popen,
 ):
@@ -98,6 +102,8 @@ def test_baseline(
 
     # libcalamares.job.setprogress(0.1)
     assert mock_libcalamares.job.setprogress.mock_calls[0] == mocker.call(0.1)
+
+    
 
     # libcalamares.job.setprogress(0.18)
     assert mock_libcalamares.job.setprogress.mock_calls[1] == mocker.call(0.18)
@@ -117,6 +123,10 @@ def test_baseline(
     assert mock_check_output.mock_calls[0] == mocker.call(
         ["pkexec", "nixos-generate-config", "--root", "/mnt/root"],
         stderr=subprocess.STDOUT,
+    )
+
+    mock_open_ngcconf.assert_called_once_with(
+        "/etc/nixos-generate-config.conf"
     )
 
     # hf = open(root_mount_point + "/etc/nixos/hardware-configuration.nix", "r")
