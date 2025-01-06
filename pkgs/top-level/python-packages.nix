@@ -1583,6 +1583,8 @@ self: super: with self; {
 
   beancount-plugin-utils = callPackage ../development/python-modules/beancount-plugin-utils { };
 
+  beangulp = callPackage ../development/python-modules/beangulp { };
+
   beanhub-cli = callPackage ../development/python-modules/beanhub-cli { };
 
   beanhub-extract = callPackage ../development/python-modules/beanhub-extract { };
