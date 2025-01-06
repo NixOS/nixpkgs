@@ -1,0 +1,10 @@
+--- old/src/mac/codesign.rkt
++++ new/src/mac/codesign.rkt
+@@ -18,6 +18,6 @@
+    file))
+ 
+ (void
+- (if remove?
++ (begin
+      (remove-signature file)
+      (add-ad-hoc-signature file)))

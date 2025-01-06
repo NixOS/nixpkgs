@@ -1,0 +1,47 @@
+diff --git a/go.mod b/go.mod
+index a482585..5c836dd 100644
+--- a/go.mod
++++ b/go.mod
+@@ -1,10 +1,19 @@
+ module mvdan.cc/fdroidcl
+ 
+-go 1.16
++go 1.18
+ 
+ require (
+ 	github.com/kr/pretty v0.3.0
+ 	github.com/rogpeppe/go-internal v1.9.0
+ 	github.com/schollz/progressbar/v3 v3.13.0
+-	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
++)
++
++require (
++	github.com/kr/text v0.2.0 // indirect
++	github.com/mattn/go-runewidth v0.0.14 // indirect
++	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
++	github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e // indirect
++	github.com/rivo/uniseg v0.4.3 // indirect
++	golang.org/x/sys v0.4.0 // indirect
++	golang.org/x/term v0.4.0 // indirect
+ )
+diff --git a/go.sum b/go.sum
+index 7befc16..d8523cb 100644
+--- a/go.sum
++++ b/go.sum
+@@ -23,8 +23,6 @@ github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJ
+ github.com/rivo/uniseg v0.4.3 h1:utMvzDsuh3suAEnhH0RdHmoPbU648o6CvXxTx4SBMOw=
+ github.com/rivo/uniseg v0.4.3/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
+ github.com/rogpeppe/go-internal v1.6.1/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
+-github.com/rogpeppe/go-internal v1.8.1 h1:geMPLpDpQOgVyCg5z5GoRwLHepNdb71NXb67XFkP+Eg=
+-github.com/rogpeppe/go-internal v1.8.1/go.mod h1:JeRgkft04UBgHMgCIwADu4Pn6Mtm5d4nPKWu0nJ5d+o=
+ github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
+ github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
+ github.com/schollz/progressbar/v3 v3.13.0 h1:9TeeWRcjW2qd05I8Kf9knPkW4vLM/hYoa6z9ABvxje8=
+@@ -38,7 +36,4 @@ golang.org/x/sys v0.4.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+ golang.org/x/term v0.4.0 h1:O7UWfv5+A2qiuulQk30kVinPoMtoIPeVaKLEgLpVkvg=
+ golang.org/x/term v0.4.0/go.mod h1:9P2UbLfCdcvo3p/nzKvsmas4TnlujnuoV9hGgYzW1lQ=
+ gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+-gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 h1:YR8cESwS4TdDjEe65xsg0ogRM/Nc3DYOhEAlW+xobZo=
+-gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+-gopkg.in/errgo.v2 v2.1.0 h1:0vLT13EuvQ0hNvakwLuFZ/jYrLp5F3kcWHXdRggjCE8=
+ gopkg.in/errgo.v2 v2.1.0/go.mod h1:hNsd1EY+bozCKY1Ytp96fpM3vjJbqLJn88ws8XvfDNI=
