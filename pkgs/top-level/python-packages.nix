@@ -18185,6 +18185,8 @@ self: super: with self; {
 
   xiaomi-ble = callPackage ../development/python-modules/xiaomi-ble { };
 
+  xinterp = callPackage ../development/python-modules/xinterp { };
+
   xkbcommon = callPackage ../development/python-modules/xkbcommon { };
 
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
