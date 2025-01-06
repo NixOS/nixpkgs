@@ -1,0 +1,20 @@
+diff -ru -x '*~' RAppArmor_orig/configure RAppArmor/configure
+--- RAppArmor_orig/configure	2013-12-17 11:23:00.000000000 +0900
++++ RAppArmor/configure	2014-10-18 22:22:39.641341244 +0900
+@@ -1,15 +1,2 @@
+-if [ ! -e /usr/include/sys/apparmor.h ]
+-then
+-  echo "sys/apparmor.h not found. Make sure libapparmor-dev is installed."
+-  exit 1
+-fi
+-
+-LIBFILE=$(/sbin/ldconfig -p | egrep -oh " [-_a-zA-Z0-9/]*/libapparmor.so(.1)?$")
+-
+-if [ -z "$LIBFILE" ]
+-then
+-  echo "libapparmor.so not found. Make sure libapparmor-dev is installed."
+-  exit 1
+-fi 
+-
++LIBFILE="$LIBAPPARMOR_HOME/lib/libapparmor.so.1"
+ echo "PKG_LIBS="$LIBFILE > src/Makevars

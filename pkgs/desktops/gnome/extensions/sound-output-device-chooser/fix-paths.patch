@@ -1,0 +1,26 @@
+diff --git a/sound-output-device-chooser@kgshank.net/convenience.js b/sound-output-device-chooser@kgshank.net/convenience.js
+index 54ad06f..0860531 100644
+--- a/sound-output-device-chooser@kgshank.net/convenience.js
++++ b/sound-output-device-chooser@kgshank.net/convenience.js
+@@ -142,7 +142,7 @@ function refreshCards() {
+     if (newProfLogic) {
+         _log("New logic");
+         let pyLocation = Me.dir.get_child("utils/pa_helper.py").get_path();
+-        let pythonExec = ["python", "python3", "python2"].find(cmd => isCmdFound(cmd));
++        let pythonExec = '@python@';
+         if (!pythonExec) {
+             _log("ERROR: Python not found. fallback to default mode");
+             _settings.set_boolean(Prefs.NEW_PROFILE_ID, false);
+diff --git a/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py b/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
+index c4d2484..262608d 100644
+--- a/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
++++ b/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
+@@ -82,7 +82,7 @@ else:
+ 
+ _libraries = {}
+ 
+-libpulse_library_name = find_library('pulse')
++libpulse_library_name = '@libpulse@'
+ if libpulse_library_name is None:
+     raise Exception('No libpulse.so library found!')
+ 
