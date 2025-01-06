@@ -95,6 +95,11 @@ def mock_libcalamares(mocker, globalstorage):
 
 
 @pytest.fixture
+def mock_open_ngcconf(mocker):
+    return mocker.Mock('open("nixos-generate-config.conf")')
+
+
+@pytest.fixture
 def mock_open_hwconf(mocker):
     return mocker.Mock('open("hardware-configuration.nix")')
 
@@ -105,8 +110,12 @@ def mock_open_kbdmodelmap(mocker):
 
 
 @pytest.fixture
-def mock_open(mocker, mock_open_hwconf, mock_open_kbdmodelmap):
+def mock_open(mocker, mock_open_ngcconf, mock_open_hwconf, mock_open_kbdmodelmap):
     testing_dir = os.path.dirname(__file__)
+
+    ngcconf_txt = ""
+    with open(os.path.join(testing_dir, "nixos-generate-config.conf"), "r") as ngcconf:
+        ngcconf_txt = ngcconf.read()
 
     hwconf_txt = ""
     with open(os.path.join(testing_dir, "hardware-configuration.nix"), "r") as hwconf:
@@ -118,12 +127,13 @@ def mock_open(mocker, mock_open_hwconf, mock_open_kbdmodelmap):
 
     mock_open = mocker.Mock("open")
 
-    def fake_open(*args):
-        file, mode, *_ = args
+    def fake_open(*args, **kwargs):
+        file, *mode = args
+        assert len(mode) == 0 or mode[0] == "r", "open() called with non-'r' mode"
 
-        assert mode == "r", "open() called without the 'r' mode"
-
-        if file.endswith("hardware-configuration.nix"):
+        if file.endswith("nixos-generate-config.conf"):
+            return mocker.mock_open(mock=mock_open_ngcconf, read_data=ngcconf_txt)(*args)
+        elif file.endswith("hardware-configuration.nix"):
             return mocker.mock_open(mock=mock_open_hwconf, read_data=hwconf_txt)(*args)
         elif file.endswith("kbd-model-map"):
             return mocker.mock_open(

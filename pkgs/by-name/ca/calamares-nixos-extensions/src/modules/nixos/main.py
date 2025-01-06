@@ -8,6 +8,7 @@
 #   Calamares is Free Software: see the License-Identifier above.
 #
 
+import configparser
 import libcalamares
 import os
 import subprocess
@@ -336,6 +337,11 @@ cfgtail = """  # Some programs need SUID wrappers, can be configured further or 
 
 }
 """
+
+cfglatestkernel = """  # Use latest kernel.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+"""
 def env_is_set(name):
     envValue = os.environ.get(name)
     return not (envValue is None or envValue == "")
@@ -387,6 +393,10 @@ def run():
     status = _("Configuring NixOS")
     libcalamares.job.setprogress(0.1)
 
+    ngc_cfg = configparser.ConfigParser()
+    ngc_cfg["Defaults"] = { "Kernel": "lts" }
+    ngc_cfg.read("/etc/nixos-generate-config.conf")
+
     # Create initial config file
     cfg = cfghead
     gs = libcalamares.globalstorage
@@ -412,6 +422,9 @@ def run():
         catenate(variables, "bootdev", bootdev)
     else:
         cfg += cfgbootnone
+
+    if ngc_cfg["Defaults"]["Kernel"] == "latest":
+        cfg += cfglatestkernel
 
     # Setup encrypted swap devices. nixos-generate-config doesn't seem to notice them.
     for part in gs.value("partitions"):
