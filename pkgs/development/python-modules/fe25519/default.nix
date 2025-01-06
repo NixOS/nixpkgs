@@ -5,6 +5,7 @@
   fetchPypi,
   fountains,
   parts,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -30,12 +31,10 @@ buildPythonPackage rec {
     parts
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--doctest-modules --ignore=docs --cov=fe25519 --cov-report term-missing" ""
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "fe25519" ];
 
