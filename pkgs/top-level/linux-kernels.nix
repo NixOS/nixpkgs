@@ -322,6 +322,8 @@ in {
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    ajantv2 = callPackage ../os-specific/linux/ajantv2 { };
+
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
     amneziawg = callPackage ../os-specific/linux/amneziawg { };

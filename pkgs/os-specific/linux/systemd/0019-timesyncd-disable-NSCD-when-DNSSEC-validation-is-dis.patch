@@ -13,10 +13,10 @@ directly.
  1 file changed, 11 insertions(+)
 
 diff --git a/src/timesync/timesyncd.c b/src/timesync/timesyncd.c
-index 5c308a04bc..81aa3d3334 100644
+index d002501d29..9b835dc031 100644
 --- a/src/timesync/timesyncd.c
 +++ b/src/timesync/timesyncd.c
-@@ -21,6 +21,11 @@
+@@ -23,6 +23,11 @@
  #include "timesyncd-conf.h"
  #include "timesyncd-manager.h"
  #include "user-util.h"
@@ -26,9 +26,9 @@ index 5c308a04bc..81aa3d3334 100644
 +extern void __nss_disable_nscd(void (*)(size_t, struct traced_file *));
 +static void register_traced_file(size_t dbidx, struct traced_file *finfo) {}
  
- static int advance_tstamp(int fd, const struct stat *st) {
-         assert_se(fd >= 0);
-@@ -198,6 +203,12 @@ static int run(int argc, char *argv[]) {
+ static int advance_tstamp(int fd, usec_t epoch) {
+         assert(fd >= 0);
+@@ -201,6 +206,12 @@ static int run(int argc, char *argv[]) {
          if (r < 0)
                  return log_error_errno(r, "Failed to parse fallback server strings: %m");
  

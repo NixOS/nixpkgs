@@ -24,7 +24,7 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
-    local update
+    local update=false
 
     while [[ $# -gt 0 ]]; do
         case "$1" in

@@ -5019,8 +5019,9 @@ with self; {
       hash = "sha256-LbHrtYN7TLIAUcDuW3M7RFPjE33wqSMGA0yGdiHt1+c=";
     };
     patches = [
-      # add extra definitions in header to please -Werror=implicit-function-declaration
-      ../development/perl-modules/CryptDES-gcc14.patch
+      # Fix build error with gcc14. See https://rt.cpan.org/Public/Bug/Display.html?id=133363.
+      # Source: https://rt.cpan.org/Public/Ticket/Attachment/1912753/1024508/0001-_des.h-expose-perl_des_expand_key-and-perl_des_crypt.patch
+      ../development/perl-modules/CryptDES-expose-perl_des_expand_key-and-perl_des_crypt.patch
     ];
     meta = {
       description = "Perl DES encryption module";
@@ -29159,10 +29160,10 @@ with self; {
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.44";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.44.tar.gz";
-      hash = "sha256-ohrnkiGSfvwR2J2MnbMt9swgsxacX2kuGSEUriNNdhI=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.46.tar.gz";
+      hash = "sha256-ZaJyapEAeUma1LuDxBeAWdpDMGrpLIc0yPoXwC8ioB0=";
     };
     buildInputs = [ ExtUtilsCChecker Test2Suite ];
     propagatedBuildInputs = [ FileShareDir ];

@@ -12,16 +12,18 @@
 
 let
   cfg = config.programs.command-not-found;
-  commandNotFound = pkgs.substituteAll {
+  commandNotFound = pkgs.replaceVarsWith {
     name = "command-not-found";
     dir = "bin";
     src = ./command-not-found.pl;
     isExecutable = true;
-    inherit (cfg) dbPath;
-    perl = pkgs.perl.withPackages (p: [
-      p.DBDSQLite
-      p.StringShellQuote
-    ]);
+    replacements = {
+      inherit (cfg) dbPath;
+      perl = pkgs.perl.withPackages (p: [
+        p.DBDSQLite
+        p.StringShellQuote
+      ]);
+    };
   };
 
 in

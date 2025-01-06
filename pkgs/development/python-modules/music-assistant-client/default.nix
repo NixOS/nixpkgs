@@ -25,7 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-QE2PQeXCAq7+iMomCZK+UmrPUApJxwKi/pzCaLJVS/4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${version}"
+  '';
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "music-assistant-models" ];
 
   dependencies = [
     aiohttp

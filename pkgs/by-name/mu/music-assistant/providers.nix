@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.3.2";
+  version = "2.3.4";
   providers = {
     airplay = ps: [
     ];
@@ -103,6 +103,6 @@
       ps: with ps; [
         yt-dlp
         ytmusicapi
-      ]; # missing yt-dlp-youtube-accesstoken
+      ];
   };
 }

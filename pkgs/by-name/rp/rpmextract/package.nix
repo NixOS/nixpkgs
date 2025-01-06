@@ -3,7 +3,7 @@
   stdenv,
   rpm,
   cpio,
-  substituteAll,
+  replaceVarsWith,
 }:
 
 stdenv.mkDerivation {
@@ -13,11 +13,13 @@ stdenv.mkDerivation {
     install -Dm755 $script $out/bin/rpmextract
   '';
 
-  script = substituteAll {
+  script = replaceVarsWith {
     src = ./rpmextract.sh;
     isExecutable = true;
-    inherit rpm cpio;
-    inherit (stdenv) shell;
+    replacements = {
+      inherit rpm cpio;
+      inherit (stdenv) shell;
+    };
   };
 
   meta = with lib; {

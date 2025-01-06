@@ -6,7 +6,7 @@
   autoreconfHook,
   makeWrapper,
   pkg-config,
-  substituteAll,
+  replaceVarsWith,
   curl,
   gtk3,
   libassuan,
@@ -70,10 +70,12 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      eid-nssdb-in = substituteAll {
-        inherit (stdenv) shell;
+      eid-nssdb-in = replaceVarsWith {
         isExecutable = true;
         src = ./eid-nssdb.in;
+        replacements = {
+          inherit (stdenv) shell;
+        };
       };
     in
     ''

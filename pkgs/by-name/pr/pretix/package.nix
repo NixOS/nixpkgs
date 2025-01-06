@@ -103,6 +103,7 @@ python.pkgs.buildPythonApplication rec {
     "requests"
     "sentry-sdk"
     "ua-parser"
+    "webauthn"
   ];
 
   pythonRemoveDeps = [

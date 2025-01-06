@@ -32,6 +32,9 @@ let
         "/".device = rootFsDevice;
       };
 
+      # Needed for installing bootloader
+      system.switch.enable = true;
+
       system.build.diskImage = import ../lib/make-disk-image.nix {
         inherit config lib pkgs;
         label = rootFslabel;

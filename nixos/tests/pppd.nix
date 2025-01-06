@@ -5,8 +5,13 @@ import ./make-test-python.nix (
       mode = "0640";
     };
   in
+  { pkgs, ... }:
   {
     name = "pppd";
+
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ stv0g ];
+    };
 
     nodes = {
       server =

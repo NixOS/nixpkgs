@@ -23,7 +23,7 @@ let
   singleBinary = cmd: providers: let
       provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
-      manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
+      manDir = "${getOutput "man" provider}/share/man";
     in runCommand "${cmd}-${provider.name}" {
       meta = {
         mainProgram = cmd;
@@ -43,9 +43,12 @@ let
       mkdir -p $out/bin
       ln -s ${bin} $out/bin/${cmd}
 
-      if [ -f ${manpage} ]; then
-        mkdir -p $out/share/man/man1
-        ln -s ${manpage} $out/share/man/man1/${cmd}.1.gz
+      if [ -d ${manDir} ]; then
+        manpages=($(cd ${manDir} ; find . -name '${cmd}*'))
+        for manpage in "''${manpages[@]}"; do
+          mkdir -p $out/share/man/$(dirname $manpage)
+          ln -s ${manDir}/$manpage $out/share/man/$manpage
+        done
       fi
     '';
 

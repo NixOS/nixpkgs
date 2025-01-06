@@ -1,24 +1,47 @@
-{ stdenv, fetchFromGitHub, lib, fetchpatch
-, cmake, uthash, pkg-config
-, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
-, readline, woff2, zeromq
-, withSpiro ? false, libspiro
-, withGTK ? false, gtk3
-, withGUI ? withGTK
-, withPython ? true
-, withExtras ? true
-, Carbon, Cocoa
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  fetchpatch,
+  replaceVars,
+  cmake,
+  uthash,
+  pkg-config,
+  python3,
+  freetype,
+  zlib,
+  glib,
+  giflib,
+  libpng,
+  libjpeg,
+  libtiff,
+  libxml2,
+  cairo,
+  pango,
+  readline,
+  woff2,
+  zeromq,
+  withSpiro ? false,
+  libspiro,
+  withGTK ? false,
+  gtk3,
+  withGUI ? withGTK,
+  withPython ? true,
+  withExtras ? true,
 }:
 
 assert withGTK -> withGUI;
 
+let
+  py = python3.withPackages (ps: with ps; [ setuptools ]);
+in
 stdenv.mkDerivation rec {
   pname = "fontforge";
   version = "20230101";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fontforge";
+    repo = "fontforge";
     rev = version;
     sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
@@ -29,14 +52,31 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
       hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
     })
-    # Fixes translation compatibility with gettext 0.22
+
+    # Replace distutils use in the build script
     (fetchpatch {
-      url = "https://github.com/fontforge/fontforge/commit/55d58f87ab1440f628f2071a6f6cc7ef9626c641.patch";
-      hash = "sha256-rkYnKPXA8Ztvh9g0zjG2yTUCPd3lE1uqwvBuEd8+Oyw=";
+      name = "replace-distutils.patch";
+      url = "https://github.com/fontforge/fontforge/commit/8c75293e924602ed09a9481b0eeb67ba6c623a81.patch";
+      includes = [ "pyhook/CMakeLists.txt" ];
+      hash = "sha256-3CEwC8vygmCztKRmeD45aZIqyoj8yk5CLwxX2SGP7z4=";
     })
 
-    # https://github.com/fontforge/fontforge/pull/5423
-    ./replace-distutils.patch
+    # Fixes translation compatibility with gettext 0.22
+    (fetchpatch {
+      name = "update-translation-compatibility.patch";
+      url = "https://github.com/fontforge/fontforge/commit/642d8a3db6d4bc0e70b429622fdf01ecb09c4c10.patch";
+      hash = "sha256-uO9uEhB64hkVa6O2tJKE8BLFR96m27d8NEN9UikNcvg=";
+    })
+
+    # Updates to new Python initialization API
+    (fetchpatch {
+      name = "modern-python-initialization-api.patch";
+      url = "https://github.com/fontforge/fontforge/commit/2f2ba54c15c5565acbde04eb6608868cbc871e01.patch";
+      hash = "sha256-qF4DqFpiZDbULi9+POPM73HF6pEot8BAFSVaVCNQrMU=";
+    })
+
+    # Provide a Nix-controlled location for the initial `sys.path` entry.
+    (replaceVars ./set-python-sys-path.patch { python = "${py}/${py.sitePackages}"; })
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
@@ -51,19 +91,41 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [
-    readline uthash woff2 zeromq
-    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
-  ]
-    ++ lib.optionals withSpiro [ libspiro ]
-    ++ lib.optionals withGUI [ gtk3 cairo pango ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
+  buildInputs =
+    [
+      readline
+      uthash
+      woff2
+      zeromq
+      py
+      freetype
+      zlib
+      glib
+      giflib
+      libpng
+      libjpeg
+      libtiff
+      libxml2
+    ]
+    ++ lib.optionals withPython [ py ]
+    ++ lib.optionals withSpiro [ libspiro ]
+    ++ lib.optionals withGUI [
+      gtk3
+      cairo
+      pango
+    ];
+
+  cmakeFlags =
+    [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
     ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
     ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
+    ++ lib.optional (!withPython) "-DENABLE_PYTHON_SCRIPTING=OFF"
     ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
   preConfigure = ''
@@ -71,17 +133,14 @@ stdenv.mkDerivation rec {
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
   '';
 
-  postInstall =
-    # get rid of the runtime dependency on python
-    lib.optionalString (!withPython) ''
-      rm -r "$out/share/fontforge/python"
-    '';
-
-  meta = with lib; {
+  meta = {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.erictapen ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      philiptaron
+      ulysseszhan
+    ];
   };
 }

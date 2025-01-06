@@ -64,7 +64,14 @@ lib.recurseIntoAttrs {
       } ''
       mkdir fake-root
       export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out
-      fakechroot fakeroot chroot $PWD/fake-root bash -c 'source $stdenv/setup; eval "$fakeRootCommands"'
+      if [ -e "$NIX_ATTRS_SH_FILE" ]; then
+        export FAKECHROOT_EXCLUDE_PATH=$FAKECHROOT_EXCLUDE_PATH:$NIX_ATTRS_SH_FILE
+      fi
+      fakechroot fakeroot chroot $PWD/fake-root bash -e -c '
+        if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
+        source $stdenv/setup
+        eval "$fakeRootCommands"
+      '
     '';
 
 }

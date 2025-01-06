@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Pj37lJSa1spjC/xrf+yu/ecFCuajb8ingszp6ib2WC8=";
   };
 
+  # https://github.com/zapping-vbi/zvbi/pull/54
+  patches = [ ./musl-x86_64.patch ];
+
   nativeBuildInputs = [
     autoreconfHook
     validatePkgConfig

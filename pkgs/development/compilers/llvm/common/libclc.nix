@@ -63,23 +63,23 @@ stdenv.mkDerivation rec {
   postPatch =
     lib.optionalString (lib.versionOlder release_version "19") ''
       substituteInPlace CMakeLists.txt \
-        --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_CLANG clang PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_CLANG clang PATHS "${buildLlvmTools.clang.cc}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_AS llvm-as PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_AS llvm-as PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_AS llvm-as PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_LINK llvm-link PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_LINK llvm-link PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_LINK llvm-link PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_OPT opt PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_OPT opt PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_OPT opt PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
     ''
     + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
       if (lib.versionOlder release_version "19") then
         ''
           substituteInPlace CMakeLists.txt \
-            --replace 'COMMAND prepare_builtins' \
-                      'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
+            --replace-fail 'COMMAND prepare_builtins' \
+                           'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
         ''
       else
         ''

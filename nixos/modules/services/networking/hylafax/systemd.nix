@@ -49,27 +49,31 @@ let
       preferLocalBuild = true;
     } ''mkdir --parents "$out/" ${concatStringsSep "\n" (mapModems mkLine)}'';
 
-  setupSpoolScript = pkgs.substituteAll {
+  setupSpoolScript = pkgs.replaceVarsWith {
     name = "hylafax-setup-spool.sh";
     src = ./spool.sh;
     isExecutable = true;
-    faxuser = "uucp";
-    faxgroup = "uucp";
-    lockPath = "/var/lock";
-    inherit globalConfigPath modemConfigPath;
-    inherit (cfg) sendmailPath spoolAreaPath userAccessFile;
-    inherit (pkgs) hylafaxplus runtimeShell;
+    replacements = {
+      faxuser = "uucp";
+      faxgroup = "uucp";
+      lockPath = "/var/lock";
+      inherit globalConfigPath modemConfigPath;
+      inherit (cfg) spoolAreaPath userAccessFile;
+      inherit (pkgs) hylafaxplus runtimeShell;
+    };
   };
 
-  waitFaxqScript = pkgs.substituteAll {
+  waitFaxqScript = pkgs.replaceVarsWith {
     # This script checks the modems status files
     # and waits until all modems report readiness.
     name = "hylafax-faxq-wait-start.sh";
     src = ./faxq-wait.sh;
     isExecutable = true;
-    timeoutSec = toString 10;
-    inherit (cfg) spoolAreaPath;
-    inherit (pkgs) runtimeShell;
+    replacements = {
+      timeoutSec = toString 10;
+      inherit (cfg) spoolAreaPath;
+      inherit (pkgs) runtimeShell;
+    };
   };
 
   sockets.hylafax-hfaxd = {

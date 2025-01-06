@@ -14,7 +14,7 @@ glibPreInstallPhase() {
 }
 appendToVar preInstallPhases glibPreInstallPhase
 
-glibPreFixupPhase() {
+glibPostInstallHook() {
     # Move gschemas in case the install flag didn't help
     if [ -d "$prefix/share/glib-2.0/schemas" ]; then
         mkdir -p "${!outputLib}/share/gsettings-schemas/$name/glib-2.0"
@@ -25,10 +25,7 @@ glibPreFixupPhase() {
 }
 
 # gappsWrapperArgsHook expects GSETTINGS_SCHEMAS_PATH variable to be set by this.
-# Until we have dependency mechanism in generic builder, we need to use this ugly hack.
-if [[ " ${preFixupPhases:-} " =~ " gappsWrapperArgsHook " ]]; then
-    preFixupPhases+=" "
-    preFixupPhases="${preFixupPhases/ gappsWrapperArgsHook / glibPreFixupPhase gappsWrapperArgsHook }"
-else
-    preFixupPhases+=" glibPreFixupPhase"
-fi
+# Until we have dependency mechanism in generic builder, we need to use this hack.
+# This relies on the fact that postInstallHooks are run *after* postInstall passed to
+# mkDerivation.
+postInstallHooks+=(glibPostInstallHook)

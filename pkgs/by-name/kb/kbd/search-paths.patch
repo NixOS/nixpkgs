@@ -41,7 +41,7 @@ Without this patch, kbd will only look inside
  };
 @@ -55,5 +58,6 @@ static const char *const unisuffixes[] = {
  /* hide partial fonts a bit - loading a single one is a bad idea */
- const char *const partfontdirpath[]  = {
+ static const char *const partfontdirpath[]  = {
 +	"/etc/kbd/" FONTDIR "/" PARTIALDIR "/",
  	DATADIR "/" FONTDIR "/" PARTIALDIR "/",
  	NULL
@@ -68,13 +68,14 @@ Without this patch, kbd will only look inside
 --- a/src/setfont.c
 +++ b/src/setfont.c
 @@ -48,8 +48,8 @@ usage(void)
- 	                    "    -v         Be verbose.\n"
- 	                    "    -C <cons>  Indicate console device to be used.\n"
- 	                    "    -V         Print version and exit.\n"
--	                    "Files are loaded from the current directory or %s/*/.\n"),
--	        DATADIR);
-+	                    "Files are loaded from the current directory or %s/*/ or %s/*/.\n"),
-+	        DATADIR, "/etc/kbd");
- 	exit(EX_USAGE);
+ 		  "\n"
+-		  "Files are loaded from the %s/*/.\n"),
+-		DATADIR);
++		  "Files are loaded from the %s/*/ or %s/*/.\n"),
++		DATADIR, "/etc/kbd");
+ 
+ 	print_report_bugs();
+ 
+ 	exit(retcode);
  }
  

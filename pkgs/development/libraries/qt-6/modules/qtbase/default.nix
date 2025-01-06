@@ -228,6 +228,11 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
+
+    # Qt treats linker flags without known suffix as libraries since 6.7.2 (see qt/qtbase commit ea0f00d).
+    # Don't do this for absolute paths (like `/nix/store/…/QtMultimedia.framework/Versions/A/QtMultimedia`).
+    # Upcoming upstream fix: https://codereview.qt-project.org/c/qt/qtbase/+/613683.
+    ./dont-treat-abspaths-without-suffix-as-libraries.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
