@@ -22,7 +22,6 @@
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? stdenv.hostPlatform.isDarwin,
   webkitgtk_4_0,
-  setfile,
   libpng,
 }:
 
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withMesa libGLU
     ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      setfile
       libpng
     ];
 
@@ -93,22 +91,14 @@ stdenv.mkDerivation rec {
     !stdenv.hostPlatform.isDarwin
   ) "${libGLU.out}/lib ${libGL.out}/lib ";
 
-  preConfigure =
-    ''
-      substituteInPlace configure --replace \
-        'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
-      substituteInPlace configure --replace \
-        'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
-      substituteInPlace configure --replace \
-        /usr /no-such-path
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace \
-        'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
-        'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
-      substituteInPlace configure --replace \
-        "-framework System" "-lSystem"
-    '';
+  preConfigure = ''
+    substituteInPlace configure --replace \
+      'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
+    substituteInPlace configure --replace \
+      'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
+    substituteInPlace configure --replace \
+      /usr /no-such-path
+  '';
 
   postInstall = "
     pushd $out/include
