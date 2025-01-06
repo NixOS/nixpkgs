@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
-  version = "2.4.2";
+  version = "2.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/NXAyEv4RR12/aoSodKiexKlC83GB1YQVAii8vf6U8c=";
+    tag = "v${version}";
+    hash = "sha256-johTs1AGvC6mGasK87ijhBNbHb1m36Ep9TR8XPG35d0=";
   };
 
   postPatch = ''

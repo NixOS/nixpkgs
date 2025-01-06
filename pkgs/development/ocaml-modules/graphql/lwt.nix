@@ -1,4 +1,9 @@
-{ buildDunePackage, alcotest, graphql, ocaml_lwt }:
+{
+  buildDunePackage,
+  alcotest,
+  graphql,
+  ocaml_lwt,
+}:
 
 buildDunePackage rec {
   pname = "graphql-lwt";
@@ -7,7 +12,10 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ graphql ocaml_lwt ];
+  propagatedBuildInputs = [
+    graphql
+    ocaml_lwt
+  ];
 
   checkInputs = [ alcotest ];
 
@@ -18,4 +26,3 @@ buildDunePackage rec {
   };
 
 }
-

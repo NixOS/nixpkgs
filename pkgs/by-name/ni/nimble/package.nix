@@ -10,16 +10,15 @@
 buildNimPackage (
   final: prev: {
     pname = "nimble";
-    version = "0-unstable-2024-05-14";
+    version = "0.16.4";
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
-      rev = "f8bd7b5fa6ea7a583b411b5959b06e6b5eb23667";
-      hash = "sha256-aRDaucD6wOUPtXLIrahvK0vBfurdgFrk+swzqzMA09w=";
+      rev = "v${final.version}";
+      hash = "sha256-ASodRov4rO/IhjQRRdqVnLWMG1voXWM9F6R6VJd9qkM=";
+      fetchSubmodules = true;
     };
-
-    lockFile = ./lock.json;
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ openssl ];

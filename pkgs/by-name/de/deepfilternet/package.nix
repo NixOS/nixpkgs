@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +15,11 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-5bYbfO1kmduNm9YV5niaaPvRIDRmPt4QOX7eKpK+sWY=";
   };
+
+  cargoPatches = [
+    # Fix compilation with Rust 1.80 (https://github.com/NixOS/nixpkgs/issues/332957)
+    ./cargo-lock-bump-time.patch
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -34,7 +40,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Noise supression using deep filtering";
     homepage = "https://github.com/Rikorose/DeepFilterNet";
-    license = with lib.licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ ralismark ];
     changelog = "https://github.com/Rikorose/DeepFilterNet/releases/tag/${src.rev}";
   };

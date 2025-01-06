@@ -1,6 +1,7 @@
-{}:
-{ buildInputs ? [ ]
-, ...
+{ }:
+{
+  buildInputs ? [ ],
+  ...
 }:
 {
   postPatch = ''

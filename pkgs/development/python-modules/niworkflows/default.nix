@@ -36,20 +36,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-29ZxLuKrvgCIOMMCUpi0HHhlNlgqUrUrSCiikwecmKw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace '"traits < 6.4"' '"traits"'
-  '';
+  pythonRelaxDeps = [ "traits" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     importlib-resources
     jinja2

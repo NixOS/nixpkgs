@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.13.0";
+  version = "2.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,26 +29,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8fsZCmzjM6JlX3HoRGt7zsezYIXnv411kkHG8rJqMuY=";
+    tag = version;
+    hash = "sha256-kPSkvvXBBwnWrdf0jmDNiTG6T1qpm5pNcPDHpnMFdmc=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
   # the pinning used to match some `extras_require` we're not using.
-  postPatch = ''
-    sed -i "s/'botocore>=.*'/'botocore'/" setup.py
-  '';
+  pythonRelaxDeps = [ "botocore" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aioitertools
     botocore
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     awscli = [ awscli ];
     boto3 = [ boto3 ];
   };

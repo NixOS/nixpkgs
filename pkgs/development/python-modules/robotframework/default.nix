@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "7.0.1";
+  version = "7.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "robotframework";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pr7x40ja1DwMPffmXQ2W53g1wuD0p63f+6ATfXhqGvE=";
+    tag = "v${version}";
+    hash = "sha256-AJMJb8FN+KynxJXI7s7PwyM/+UpXCtWTcRK/fhCg+io=";
   };
 
   nativeBuildInputs = [ setuptools ];

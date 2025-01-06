@@ -1,4 +1,12 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit, nixosTests }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  libobjc,
+  IOKit,
+  nixosTests,
+}:
 
 let
   # A list of binaries to put into separate outputs
@@ -7,19 +15,20 @@ let
     "clef"
   ];
 
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.14.6";
+  version = "1.14.12";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X9XwVZpRnkp7oVKwyvQbs8ZaWwLkuLEEHNfV5BvfVvI=";
+    hash = "sha256-s1BSFTjqro3gFyKphU8FdpjViKyyZc0bt1m+lzkAcBU=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-UP+bQM8ydfbILlVhuNPVIKLyXZFTzGmHizn2hYgNE4Y=";
+  vendorHash = "sha256-IEwy3XRyj+5GjAWRjPsd5qzwEMpI/pZIwPjKdeATgkE=";
 
   doCheck = false;
 
@@ -27,7 +36,10 @@ in buildGoModule rec {
 
   # Move binaries to separate outputs and symlink them back to $out
   postInstall = lib.concatStringsSep "\n" (
-    builtins.map (bin: "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/") bins
+    builtins.map (
+      bin:
+      "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/"
+    ) bins
   );
 
   subPackages = [
@@ -41,7 +53,6 @@ in buildGoModule rec {
     "cmd/ethkey"
     "cmd/evm"
     "cmd/geth"
-    "cmd/p2psim"
     "cmd/rlpdump"
     "cmd/utils"
   ];
@@ -50,15 +61,20 @@ in buildGoModule rec {
   tags = [ "urfave_cli_no_docs" ];
 
   # Fix for usb-related segmentation faults on darwin
-  propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libobjc
+    IOKit
+  ];
 
   passthru.tests = { inherit (nixosTests) geth; };
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
-    license = with licenses; [ lgpl3Plus gpl3Plus ];
+    license = with licenses; [
+      lgpl3Plus
+      gpl3Plus
+    ];
     maintainers = with maintainers; [ RaghavSood ];
     mainProgram = "geth";
   };

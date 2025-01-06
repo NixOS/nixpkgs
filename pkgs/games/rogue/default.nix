@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, ncurses}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rogue";
@@ -21,6 +26,6 @@ stdenv.mkDerivation rec {
     mainProgram = "rogue";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

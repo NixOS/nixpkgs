@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sse-starlette";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/aL0IkMdHNt7Ms1Et+xf00B9FGI31FuHAiJbxVMm3w0=";
+    tag = "v${version}";
+    hash = "sha256-cnUx3wYawyqt/m/FB6abxknMbc64k09a1kAJoA4yN6w=";
   };
 
   build-system = [ pdm-backend ];

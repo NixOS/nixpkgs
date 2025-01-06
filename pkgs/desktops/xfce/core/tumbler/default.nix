@@ -6,8 +6,11 @@
 , freetype
 , libgepub
 , libgsf
+, libjxl
+, librsvg
 , poppler
 , gst_all_1
+, webp-pixbuf-loader
 , libxfce4util
 }:
 
@@ -16,9 +19,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "4.18.2";
+  version = "4.20.0";
 
-  sha256 = "sha256-thioE0q2qnV4weJFPz8OWoHIRuUcXnQEviwBtCWsSV4=";
+  sha256 = "sha256-GmEMdG8Ikd4Tq/1ntCHiN0S7ehUXqzMX7OtXsycLd6E=";
 
   buildInputs = [
     libxfce4util
@@ -31,6 +34,13 @@ mkXfceDerivation {
     libgsf
     poppler # technically the glib binding
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ libjxl librsvg webp-pixbuf-loader ]}"
+    )
+  '';
 
   # WrapGAppsHook won't touch this binary automatically, so we wrap manually.
   postFixup = ''

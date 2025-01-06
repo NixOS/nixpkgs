@@ -2,60 +2,58 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
-  langchain,
-  langchain-core,
-  pymongo,
-  lark,
-  pandas,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  langchain-core,
+  numpy,
+  pymongo,
+
+  freezegun,
+  httpx,
+  langchain,
   pytest-asyncio,
-  pytest-mock,
-  pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  requests-mock,
-  responses,
+  pytest-mock,
   syrupy,
-  toml,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.1.6";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-mongodb==${version}";
-    hash = "sha256-p/cdWFPc2Oi5aRmjj1oAixM6aDKw0TbyzMdP4h2acG4=";
+    tag = "langchain-mongodb==${version}";
+    hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "numpy"
+  ];
+
   dependencies = [
     langchain-core
+    numpy
     pymongo
   ];
 
   nativeCheckInputs = [
     freezegun
+    httpx
     langchain
-    lark
-    pandas
     pytest-asyncio
-    pytest-mock
-    pytest-socket
     pytestCheckHook
-    requests-mock
-    responses
+    pytest-mock
     syrupy
-    toml
   ];
 
   pytestFlagsArray = [ "tests/unit_tests" ];
@@ -63,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_mongodb" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    inherit (langchain-core) updateScript;
   };
 
   meta = {
@@ -71,6 +69,9 @@ buildPythonPackage rec {
     description = "Integration package connecting MongoDB and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mongodb";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

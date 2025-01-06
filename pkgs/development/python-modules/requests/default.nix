@@ -30,6 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-VTZUF3NOsYJVWQqf+euX6eHaho1MzWQCOZ6vaK8gp2A=";
   };
 
+  patches = [
+    # https://github.com/psf/requests/issues/6730
+    # https://github.com/psf/requests/pull/6731
+    ./ca-load-regression.patch
+  ];
+
   dependencies = [
     brotlicffi
     certifi
@@ -66,13 +72,13 @@ buildPythonPackage rec {
       "TestRequests"
       "TestTimeout"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Fatal Python error: Aborted
       "test_basic_response"
       "test_text_response"
     ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Aborted
     "tests/test_lowlevel.py"
   ];

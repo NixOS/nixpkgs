@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   glib,
+  gtk3,
   meson,
   ninja,
   nix-update-script,
@@ -11,30 +12,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-media-player-applet";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-E4aD7/SJNvWe6B3iX8fUZeZj14+uxjn0s+30BhU0dxE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wmtO4Djs1xXBjimAEV6pvPo7zxDM+XQIOi/WOPRieQ8=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    glib # glib-compile-schemas
+    glib # for `glib-compile-schemas`
+    gtk3 # for `gtk-update-icon-theme`
     meson
     ninja
     python3Packages.wrapPython
   ];
 
   pythonPath = with python3Packages; [
-    pillow
     requests
   ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "/usr" "$out"
-    substituteInPlace meson_post_install.py --replace-fail '"/", "usr"' "\"$out\""
   '';
 
   postFixup = ''

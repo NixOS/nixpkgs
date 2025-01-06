@@ -4,12 +4,13 @@
   buildPythonPackage,
   pythonOlder,
   pytestCheckHook,
+  typing-extensions,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "4.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -17,13 +18,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-typing";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JT/2bCPYFSRNt3V7QnHSAJR7HrZ1JpRKdU7gQpoYIn0=";
+    tag = "v${version}";
+    hash = "sha256-WFTx5u85Gp+jQPWS3BTk1Pky07C2fVAzwrG/c3hSRzM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  dependencies = [ typing-extensions ];
 
   pythonImportsCheck = [ "eth_typing" ];
 
@@ -32,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/eth-typing";
     changelog = "https://github.com/ethereum/eth-typing/blob/v${version}/docs/release_notes.rst";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ siraben ];
   };
 }

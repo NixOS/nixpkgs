@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "tarlz";
-  version = "0.25";
+  version = "0.26";
   outputs = [ "out" "man" "info" ];
 
   nativeBuildInputs = [ lzip texinfo ];
   buildInputs = [ lzlib ];
 
   src = fetchurl {
-    url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.lz";
-    sha256 = "7d0bbe9c3a137bb93a10be56988fcf7362e4dbc65490639edc4255b704105fce";
+    url = "mirror://savannah/lzip/tarlz/tarlz-${version}.tar.lz";
+    hash = "sha256-U/4FXvcDSFcJddIgzq1WNvkXXwwHu+yORQuv8YuZmOQ=";
   };
 
   enableParallelBuilding = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # system clock issues
 
   meta = with lib; {
-    homepage = "https://www.nongnu.org/lzip/${pname}.html";
+    homepage = "https://www.nongnu.org/lzip/tarlz.html";
     description =
       "Massively parallel combined implementation of the tar archiver and the lzip compressor";
     license = licenses.gpl2Plus;

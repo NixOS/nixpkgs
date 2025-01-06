@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5/Qk6HZlfeKkfSqnVA8aADjJ99SUiurYCqSIUBPFIzc=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Pandas support for pint";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";

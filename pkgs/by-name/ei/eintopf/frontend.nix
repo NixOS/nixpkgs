@@ -1,11 +1,12 @@
-{ stdenv
-, fetchYarnDeps
-, fixup-yarn-lock
-, yarn
-, src
-, version
-, nodejs
-, eintopf
+{
+  stdenv,
+  fetchYarnDeps,
+  src,
+  version,
+  nodejs,
+  eintopf,
+  yarnConfigHook,
+  yarnBuildHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,35 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/backstage";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-Z/Pkk/qCWwr99g11DjEgnisPfxOhfD8+OCn6otxJtfI=";
+    yarnLock = "${finalAttrs.src}/backstage/yarn.lock";
+    hash = "sha256-3TPBrQxvTfmBfhAavHy8eDcZwRZMwu0dCovnE1fcuTE=";
   };
 
   nativeBuildInputs = [
-    fixup-yarn-lock
+    yarnConfigHook
+    yarnBuildHook
+    # Needed for executing package.json scripts
     nodejs
-    yarn
   ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
-    patchShebangs node_modules
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline build
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -57,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    inherit (eintopf.meta) homepage description license maintainers;
+    inherit (eintopf.meta)
+      homepage
+      description
+      license
+      maintainers
+      ;
   };
 })

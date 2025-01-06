@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.12.3";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,26 +27,28 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qrIYcGumOHu3/gG9MOyKngAhOkeZEmCgXIDDcghoYn0=";
+    tag = "v${version}";
+    hash = "sha256-6ApwGB6VvG+XiE8U85gg/EWnYniMb+1fqmNwtHGcf/I=";
   };
-
-  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "timeout = 20" "timeout = 300" \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "timeout = 20" "timeout = 300" \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     coloredlogs
     jsonschema
     voluptuous
     zigpy
   ];
+
+  doCheck = false; # tests are not compatible with zigpy 0.65.3
 
   nativeCheckInputs = [
     pytest-asyncio

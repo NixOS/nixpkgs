@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "fireflyalgorithm";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "FireflyAlgorithm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xsTgSHBtN4gGw+9YvprcLubnCXSNRdn4abcz391cMEE=";
+    tag = version;
+    hash = "sha256-dJnjeJN9NI8G/haYeOiMtAl56cExqMk0iTWpaybl4nE=";
   };
 
   nativeBuildInputs = [ poetry-core ];

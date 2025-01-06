@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarnConfigHook, npmHooks, nodejs, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnInstallHook,
+  nodejs,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codefresh";
@@ -17,11 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = [
     yarnConfigHook
-    npmHooks.npmInstallHook
+    yarnInstallHook
     nodejs
   ];
-  # Tries to fetch stuff from the internet
-  dontNpmPrune = true;
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

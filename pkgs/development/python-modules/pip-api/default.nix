@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pip-api";
-  version = "0.0.33";
+  version = "0.0.34";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "di";
     repo = "pip-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bDM31YpVB0pZMqeGTCbnINSmJc03N0HuU8hcc8nnHgw=";
+    tag = version;
+    hash = "sha256-nmCP4hp+BsD80OBjerOu+QTBBExGHvn/v19od4V3ncI=";
   };
 
   nativeBuildInputs = [ setuptools ];

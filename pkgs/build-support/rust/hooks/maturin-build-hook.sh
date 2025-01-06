@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 maturinBuildHook() {
     echo "Executing maturinBuildHook"
 
@@ -6,24 +8,26 @@ maturinBuildHook() {
     # Put the wheel to dist/ so that regular Python tooling can find it.
     local dist="$PWD/dist"
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    if [ -n "${buildAndTestSubdir-}" ]; then
         pushd "${buildAndTestSubdir}"
     fi
 
-    (
-    set -x
-    @setEnv@ maturin build \
-        --jobs=$NIX_BUILD_CORES \
-        --offline \
-        --target @rustTargetPlatformSpec@ \
-        --manylinux off \
-        --strip \
-        --release \
-        --out "$dist" \
-        ${maturinBuildFlags-}
+    local flagsArray=(
+        "--jobs=$NIX_BUILD_CORES"
+        "--offline"
+        "--target" "@rustTargetPlatformSpec@"
+        "--manylinux" "off"
+        "--strip"
+        "--release"
+        "--out" "$dist"
     )
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    concatTo flagsArray maturinBuildFlags
+
+    echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"
+    @setEnv@ maturin build "${flagsArray[@]}"
+
+    if [ -n "${buildAndTestSubdir-}" ]; then
         popd
     fi
 

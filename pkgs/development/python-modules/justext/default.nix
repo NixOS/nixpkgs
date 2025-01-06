@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   lxml,
   lxml-html-clean,
 }:
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miso-belica";
     repo = "jusText";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9i7hzCK/ijh8xw9l2ZbVhVj5IBf0WD/49/R1tSWgqrQ=";
   };
 
@@ -24,13 +25,10 @@ buildPythonPackage rec {
     lxml-html-clean
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  # patch out coverage report
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=justext --cov-report=term-missing --no-cov-on-fail" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "justext" ];
 

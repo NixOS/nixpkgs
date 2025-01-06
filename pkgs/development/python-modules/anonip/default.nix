@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     sha256 = "0cssdcridadjzichz1vv1ng7jwphqkn8ihh83hpz9mcjmxyb94qc";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=anonip --cov-report=term-missing --no-cov-on-fail" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pytestFlagsArray = [ "tests.py" ];
 

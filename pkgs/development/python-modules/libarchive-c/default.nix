@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   libarchive,
   glibcLocales,
   mock,
@@ -17,9 +18,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Changaco";
     repo = "python-${pname}";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-CO9llPIbVTuE74AeohrMAu5ICkuT/MorRlYEEFne6Uk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-tests-with-recent-libarchive.patch";
+      url = "https://github.com/Changaco/python-libarchive-c/commit/a56e9402c76c2fb9631651de7bae07b5fbb0b624.patch";
+      hash = "sha256-OLwJQurEFAmwZJbQfhkibrR7Rcnc9vpWwBuhKxgmT7g=";
+    })
+  ];
 
   LC_ALL = "en_US.UTF-8";
 

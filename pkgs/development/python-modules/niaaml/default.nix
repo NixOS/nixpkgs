@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  loguru,
   niapy,
   numpy,
   pandas,
@@ -10,6 +11,7 @@
   pythonOlder,
   scikit-learn,
   toml-adapt,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VMZLEirE01Q9eyQIhV18PepGWmBcxLIwNeuVf7EuSWE=";
   };
 
@@ -34,10 +36,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    loguru
     niapy
     numpy
     pandas
     scikit-learn
+    typer
   ];
 
   # create scikit-learn and niapy deps version consistent

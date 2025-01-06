@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, boost
-, cmake
-, pkg-config
-, installShellFiles
-, nix
+{
+  lib,
+  stdenv,
+  boost,
+  meson,
+  ninja,
+  pkg-config,
+  installShellFiles,
+  nix,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
   name = "nixos-option";
 
-  src = ./src;
+  src = ./.;
 
   postInstall = ''
-    installManPage ${./nixos-option.8}
+    installManPage ../nixos-option.8
   '';
 
   strictDeps = true;
+
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
     pkg-config
     installShellFiles
   ];
@@ -26,9 +31,8 @@ stdenv.mkDerivation {
     boost
     nix
   ];
-  cmakeFlags = [
-    "-DNIX_DEV_INCLUDEPATH=${nix.dev}/include/nix"
-  ];
+
+  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
 
   meta = with lib; {
     license = licenses.lgpl2Plus;

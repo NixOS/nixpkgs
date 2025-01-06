@@ -13,15 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "1.1.5";
+  version = "1.1.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pkg_about";
+    inherit version;
     extension = "zip";
-    hash = "sha256-B5u+iJuqHtv4BlGhdWqYxBfS89/S01OXmLyDOQraHfo=";
+    hash = "sha256-GVV3l0rU8gkxedOiMVVAt0bEqCtyO+1LSHxIKjBlbPk=";
   };
 
   # tox is listed in build requirements but not actually used to build

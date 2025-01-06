@@ -1,5 +1,6 @@
-{ callPackage
-, ...
+{
+  callPackage,
+  ...
 }:
 
 {
@@ -10,4 +11,6 @@
   reluctant-stripe = callPackage ./reluctant-stripe.nix { };
 
   stretchgoals = callPackage ./stretchgoals.nix { };
+
+  zugferd = callPackage ./zugferd.nix { };
 }

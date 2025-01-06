@@ -5,13 +5,16 @@
   pythonOlder,
   setuptools,
   requests,
+  polling,
+  deprecated,
   pytestCheckHook,
   mock,
+  httpretty,
 }:
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.16.0";
+  version = "5.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,17 +23,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-B90BfuAqyncJPIvcni7bthiwSfmeL9CqeTYT1/y5TNY=";
+    tag = "v${version}";
+    hash = "sha256-rEBMZft4o7R2e0N7x1ZEaCisRmhKggMbZWdtDvraoD0=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+    polling
+    deprecated
+  ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
+    mock
+    httpretty
+  ];
+
+  disabledTestPaths = [
+    # needs api token
+    "test/integration"
   ];
 
   pythonImportsCheck = [ "linode_api4" ];

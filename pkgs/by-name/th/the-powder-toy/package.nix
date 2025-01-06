@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S2aUa25EnUfX6ShW6D+wHrsTLxTcCFcZ/uLE9EWGu4Q=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-  ] ++ lib.optional stdenv.isLinux copyDesktopItems;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     bzip2
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     luajit
     SDL2
     zlib
-  ] ++ lib.optional stdenv.isDarwin Cocoa;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 

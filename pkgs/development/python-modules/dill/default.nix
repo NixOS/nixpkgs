@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.8";
+  version = "0.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-r65JgQH+5raiRX8NYELUB9B0zLy4z606EkFJaNpapNc=";
+    tag = version;
+    hash = "sha256-p+W0ppNMfSgplKsQjaTnTrMvQ5poF/E/xSzsiLf9h58=";
   };
 
   nativeBuildInputs = [ setuptools ];

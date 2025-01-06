@@ -1,14 +1,16 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ffmpeg-headless
-, nixosTests
-, substituteAll
-, providers ? [ ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ffmpeg-headless,
+  nixosTests,
+  substituteAll,
+  providers ? [ ],
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       music-assistant-frontend = self.callPackage ./frontend.nix { };
     };
@@ -16,21 +18,23 @@ let
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
-  providerDependencies = lib.concatMap (provider: (providerPackages.${provider} python.pkgs)) providers;
+  providerDependencies = lib.concatMap (
+    provider: (providerPackages.${provider} python.pkgs)
+  ) providers;
 
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.0.7";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = version;
-    hash = "sha256-JtdlZ3hH4fRU5TjmMUlrdSSCnLrIGCuSwSSrnLgjYEs=";
+    tag = version;
+    hash = "sha256-q71LczFsJAvZaWCQg4Lgzg2XX4XDFvA3x255Re00D9Q=";
   };
 
   patches = [
@@ -39,11 +43,12 @@ python.pkgs.buildPythonApplication rec {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
+
+    # Disable interactive dependency resolution, which clashes with the immutable Python environment
+    ./dont-install-deps.patch
   ];
 
   postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
   '';
@@ -52,11 +57,14 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = with python.pkgs; [
-    aiohttp
-    mashumaro
-    orjson
-  ] ++ optional-dependencies.server;
+  dependencies =
+    with python.pkgs;
+    [
+      aiohttp
+      mashumaro
+      orjson
+    ]
+    ++ optional-dependencies.server;
 
   optional-dependencies = with python.pkgs; {
     server = [
@@ -70,6 +78,7 @@ python.pkgs.buildPythonApplication rec {
       certifi
       colorlog
       cryptography
+      eyed3
       faust-cchardet
       ifaddr
       mashumaro
@@ -85,11 +94,22 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = with python.pkgs; [
-    ffmpeg-headless
-    pytest-aiohttp
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      aiojellyfin
+      pytest-aiohttp
+      pytest-cov-stub
+      pytestCheckHook
+      syrupy
+      pytest-timeout
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    # blocks in setup
+    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+  ];
 
   pythonImportsCheck = [ "music_assistant" ];
 
@@ -99,7 +119,7 @@ python.pkgs.buildPythonApplication rec {
       pythonPath
       providerPackages
       providerNames
-    ;
+      ;
     tests = nixosTests.music-assistant;
   };
 

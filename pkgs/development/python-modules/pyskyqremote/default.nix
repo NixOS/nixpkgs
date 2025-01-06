@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
     repo = "skyq_remote";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aMgUwgKHgR+NQvRxiUV7GaXehjDIlJJJHwSmHDmzK08=";
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Toblerity";
     repo = "rtree";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yuSPRb8SRz+FRmwFCKDx+gtp9IWaneQ84jDuZP7TX0A=";
   };
 
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Toblerity/rtree";
     changelog = "https://github.com/Toblerity/rtree/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ bgamari ];
   };
 }

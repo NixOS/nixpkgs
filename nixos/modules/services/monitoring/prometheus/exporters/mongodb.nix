@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.mongodb;
@@ -25,7 +31,10 @@ in
     collStats = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      example = [ "db1.coll1" "db2" ];
+      example = [
+        "db1.coll1"
+        "db2"
+      ];
       description = ''
         List of comma separared databases.collections to get $collStats
       '';
@@ -33,7 +42,10 @@ in
     indexStats = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      example = [ "db1.coll1" "db2" ];
+      example = [
+        "db1.coll1"
+        "db2"
+      ];
       description = ''
         List of comma separared databases.collections to get $indexStats
       '';
@@ -41,7 +53,16 @@ in
     collector = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      example = [ "diagnosticdata" "replicasetstatus" "dbstats" "topmetrics" "currentopmetrics" "indexstats" "dbstats" "profile" ];
+      example = [
+        "diagnosticdata"
+        "replicasetstatus"
+        "dbstats"
+        "topmetrics"
+        "currentopmetrics"
+        "indexstats"
+        "dbstats"
+        "profile"
+      ];
       description = "Enabled collectors";
     };
     collectAll = mkOption {
@@ -64,9 +85,22 @@ in
       ExecStart = ''
         ${getExe pkgs.prometheus-mongodb-exporter} \
           --mongodb.uri="${cfg.uri}" \
-          ${if cfg.collectAll then "--collect-all" else concatMapStringsSep " " (x: "--collect.${x}") cfg.collector} \
-          ${optionalString (length cfg.collStats > 0) "--mongodb.collstats-colls=${concatStringsSep "," cfg.collStats}"} \
-          ${optionalString (length cfg.indexStats > 0) "--mongodb.indexstats-colls=${concatStringsSep "," cfg.indexStats}"} \
+          ${
+            if cfg.collectAll then
+              "--collect-all"
+            else
+              concatMapStringsSep " " (x: "--collect.${x}") cfg.collector
+          } \
+          ${
+            optionalString (
+              length cfg.collStats > 0
+            ) "--mongodb.collstats-colls=${concatStringsSep "," cfg.collStats}"
+          } \
+          ${
+            optionalString (
+              length cfg.indexStats > 0
+            ) "--mongodb.indexstats-colls=${concatStringsSep "," cfg.indexStats}"
+          } \
           --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \
           --web.telemetry-path="${cfg.telemetryPath}" \
           ${escapeShellArgs cfg.extraFlags}

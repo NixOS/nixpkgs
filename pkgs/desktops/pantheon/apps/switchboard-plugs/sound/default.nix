@@ -1,32 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libhandy
-, granite
-, gtk3
-, pulseaudio
-, libcanberra-gtk3
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libcanberra,
+  libgee,
+  glib,
+  granite7,
+  gtk4,
+  pulseaudio,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.3.3";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JXt/S+vNzuRaRC0DMX13Lxv+OoAPRQmSLv9fsvnkWY4=";
+    sha256 = "sha256-GLeQxdrrjz4MurN8Ia5Q68y6gHuyxiMVNneft1AXKvs=";
   };
 
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
@@ -34,14 +37,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
-    libcanberra-gtk3
+    granite7
+    gtk4
+    libadwaita
+    libcanberra
     libgee
-    libhandy
     pulseaudio
     switchboard
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = nix-update-script { };

@@ -10,25 +10,20 @@
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
   version = "1.0.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "briis";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l1V3HgzqnnoY6sWHwfgBtcIR782RwKhekY2qOLrUMNY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ aiohttp ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=pyweatherflowrest --cov-append" ""
-  '';
+  dependencies = [ aiohttp ];
 
   # Module has no tests. test.py is a demo script
   doCheck = false;

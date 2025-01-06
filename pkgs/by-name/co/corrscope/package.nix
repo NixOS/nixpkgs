@@ -1,40 +1,52 @@
-{ stdenv
-, lib
-, python3Packages
-, fetchFromGitHub
-, ffmpeg
-, libsForQt5
-, testers
-, corrscope
+{
+  stdenv,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  ffmpeg,
+  libsForQt5,
+  testers,
+  corrscope,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.9.1";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
-    rev = "refs/tags/${version}";
-    hash = "sha256-SKsPe68CNaoUzGjMZn4azGFM3SbBipHK8gJcrm4+T+I=";
+    tag = version;
+    hash = "sha256-WSv65jEu/w6iNrL/f5PN147FBjmR0j30H1D39dd+KN8=";
   };
 
-  pythonRelaxDeps = [ "attrs" "ruamel.yaml" ];
+  pythonRelaxDeps = [
+    "attrs"
+    "ruamel.yaml"
+  ];
 
-  nativeBuildInputs = (with libsForQt5; [
-    wrapQtAppsHook
-  ]) ++ (with python3Packages; [
-    poetry-core
-  ]);
+  nativeBuildInputs =
+    (with libsForQt5; [
+      wrapQtAppsHook
+    ])
+    ++ (with python3Packages; [
+      poetry-core
+    ]);
 
-  buildInputs = [
-    ffmpeg
-  ] ++ (with libsForQt5; [
-    qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ]);
+  buildInputs =
+    [
+      ffmpeg
+    ]
+    ++ (
+      with libsForQt5;
+      [
+        qtbase
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        qtwayland
+      ]
+    );
 
   propagatedBuildInputs = with python3Packages; [
     appdirs

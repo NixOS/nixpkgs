@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testers
-, files-cli
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  files-cli,
 }:
 
 buildGoModule rec {
   pname = "files-cli";
-  version = "2.13.96";
+  version = "2.13.213";
 
   src = fetchFromGitHub {
     repo = "files-cli";
     owner = "files-com";
     rev = "v${version}";
-    hash = "sha256-TGaOTHtStmKHG/W/a/qWhZVt2IGcEdWD5mtZ2x4ozjI=";
+    hash = "sha256-KMCOdEdBxgHb7j95v9LQWOuxzTeaW2uAWJBwELfZkC0=";
   };
 
-  vendorHash = "sha256-jeVEWicv2jYqhJt3aZAxx4fWmJXIVIryiS+ahqpdxsY=";
+  vendorHash = "sha256-IbFfPRsbxGlZvBTOD2mOcUiEL1ZEn/5hrCXHwcj00Jc=";
 
   ldflags = [
     "-s"

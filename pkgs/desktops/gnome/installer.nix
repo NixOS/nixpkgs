@@ -7,7 +7,7 @@ let
 
   config = (import ../../../../nixos/lib/eval-config.nix {
     inherit system;
-    modules = [ module { isoImage.isoBaseName = isoBaseName; } ] ++ extraModules;
+    modules = [ module { image.baseName = isoBaseName; } ] ++ extraModules;
   }).config;
 
 in

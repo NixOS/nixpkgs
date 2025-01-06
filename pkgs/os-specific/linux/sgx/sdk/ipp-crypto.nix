@@ -1,10 +1,11 @@
-{ gcc11Stdenv
-, fetchFromGitHub
-, cmake
-, nasm
-, openssl
-, python3
-, extraCmakeFlags ? [ ]
+{
+  gcc11Stdenv,
+  fetchFromGitHub,
+  cmake,
+  nasm,
+  openssl,
+  python3,
+  extraCmakeFlags ? [ ],
 }:
 gcc11Stdenv.mkDerivation rec {
   pname = "ipp-crypto";

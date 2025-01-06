@@ -26,10 +26,12 @@ stdenv.mkDerivation rec {
     mod_ca
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=int-conversion"
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=int-conversion"
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   inherit (mod_ca) configureFlags installFlags;
 

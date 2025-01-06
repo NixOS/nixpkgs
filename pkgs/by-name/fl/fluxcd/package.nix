@@ -8,29 +8,28 @@
 }:
 
 let
-  version = "2.3.0";
-  sha256 = "sha256-ZQs1rWI31qDo/BgjrmiNnEdR2OL8bUHVz+j5VceEp2k=";
-  manifestsSha256 = "sha256-PdhR+UDquIJWtpSymtT6V7qO5fVJOkFz6RGzAx7xeb4=";
+  version = "2.4.0";
+  srcHash = "sha256-b4mu/iijfALBm+7OIdKgZs55fR6xWfPgL6OMOgIOi3w=";
+  vendorHash = "sha256-rVyirt6+D1qedbTvPZjLog16sMAq+zyFUmbjnJIieRg=";
+  manifestsHash = "sha256-85Ykc6B+DP9PVqwGbvqsQCUHpx/IzIP9TgOt3id7P5g=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    hash = manifestsSha256;
+    hash = manifestsHash;
     stripRoot = false;
   };
 in
 
 buildGoModule rec {
   pname = "fluxcd";
-  inherit version;
+  inherit vendorHash version;
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    hash = sha256;
+    hash = srcHash;
   };
-
-  vendorHash = "sha256-0YH3pgFrsnh5jIsZpj/sIgfiOCTtIlPltMS5mdGz1eM=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
@@ -81,7 +80,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       bryanasdev000
       jlesquembre
-      superherointj
     ];
     mainProgram = "flux";
   };

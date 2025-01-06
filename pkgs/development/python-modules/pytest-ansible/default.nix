@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "24.7.0";
+  version = "24.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,23 +24,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yrdfVWXcTB6WKDUnm4wDdKZGWq9F7oOT0RP42xyASRw=";
+    tag = "v${version}";
+    hash = "sha256-Z0pgWptr/bDGZCMi0l8J+q39d3zwBHfawNeJtELHo0E=";
   };
 
   postPatch = ''
-    substituteInPlace tests/conftest.py inventory \
-      --replace '/usr/bin/env' '${coreutils}/bin/env'
+    substituteInPlace inventory \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     ansible-compat
     packaging
@@ -62,7 +62,7 @@ buildPythonPackage rec {
       "test_connection_failure_v2"
       "test_connection_failure_extra_inventory_v2"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # These tests fail in the Darwin sandbox
       "test_ansible_facts"
       "test_func"
@@ -74,7 +74,7 @@ buildPythonPackage rec {
       # Test want s to execute pytest in a subprocess
       "tests/integration/test_molecule.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # These tests fail in the Darwin sandbox
       "tests/test_adhoc.py"
       "tests/test_adhoc_result.py"

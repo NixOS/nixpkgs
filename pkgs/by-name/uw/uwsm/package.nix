@@ -13,14 +13,11 @@
   libnotify,
   newt,
   python3Packages,
+  systemd,
   util-linux,
-  hyprland,
-  sway,
   fumonSupport ? true,
   uuctlSupport ? true,
   uwsmAppSupport ? true,
-  hyprlandSupport ? false,
-  swaySupport ? false,
 }:
 let
   python = python3Packages.python.withPackages (ps: [
@@ -31,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.17.2";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-7RPz0VOUJ4fFhxNq+/s+/YEvy03XXgssggPn/JtOZI4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RHxA0X3cqHtp4NZl7qlqBYkqOJay8IPoaj12bdouVkc=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     newt # whiptail
     libnotify # notify
     bash # sh
+    systemd
     python
   ] ++ (lib.optionals uuctlSupport [ dmenu ]);
 
@@ -64,23 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
       "uuctl" = uuctlSupport;
       "man-pages" = true;
     })
+    (lib.mesonOption "python-bin" python.interpreter)
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   postInstall =
     let
       wrapperArgs = ''
-        --prefix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}" \
-        --suffix PATH : "${
-          lib.makeBinPath (
-            # uwsm as of 0.17.2 can load WMs like sway and hyprland by path
-            # but this is still needed as a fallback
-            lib.optionals hyprlandSupport [ hyprland ] ++ lib.optionals swaySupport [ sway ]
-          )
-        }"
+        --suffix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
       '';
     in
     ''
@@ -96,9 +84,19 @@ stdenv.mkDerivation (finalAttrs: {
       ''}
     '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Universal wayland session manager";
     homepage = "https://github.com/Vladimir-csp/uwsm";
+    changelog = "https://github.com/Vladimir-csp/uwsm/releases/tag/v${finalAttrs.version}";
     mainProgram = "uwsm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

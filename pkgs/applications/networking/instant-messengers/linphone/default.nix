@@ -1,19 +1,20 @@
-{ bctoolbox
-, belcard
-, belle-sip
-, belr
-, cmake
-, fetchFromGitLab
-, lib
-, liblinphone
-, mediastreamer
-, mediastreamer-openh264
-, minizip-ng
-, mkDerivation
-, qtgraphicaleffects
-, qtmultimedia
-, qtquickcontrols2
-, qttools
+{
+  bctoolbox,
+  belcard,
+  belle-sip,
+  belr,
+  cmake,
+  fetchFromGitLab,
+  lib,
+  liblinphone,
+  mediastreamer,
+  mediastreamer-openh264,
+  minizip-ng,
+  mkDerivation,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtquickcontrols2,
+  qttools,
 }:
 
 # How to update Linphone? (The Qt desktop app)

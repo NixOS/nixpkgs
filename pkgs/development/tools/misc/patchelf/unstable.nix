@@ -1,14 +1,14 @@
 { lib, stdenv, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "patchelf";
-  version = "0.18.0-unstable-2024-06-15";
+  version = "0.18.0-unstable-2024-11-18";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "a0f54334df36770b335c051e540ba40afcbf8378";
-    sha256 = "sha256-FSoxTcRZMGHNJh8dNtKOkcUtjhmhU6yQXcZZfUPLhQM=";
+    rev = "769337c227799aa60911562b6940530f4a86eb3c";
+    sha256 = "sha256-eOHQ7pD8OfSLIIFfF6daCnntzHKqpraAGFfFqSlPtbY=";
   };
 
   # Drop test that fails on musl (?)
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = unstableGitUpdater {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
     mainProgram = "patchelf";
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -1,33 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libgamemode32
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, dbus
-, inih
-, systemd
-, appstream
-, findutils
-, gawk
-, procps
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libgamemode32,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  dbus,
+  inih,
+  systemd,
+  appstream,
+  findutils,
+  gawk,
+  procps,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamemode";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "FeralInteractive";
     repo = "gamemode";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-kusb58nGxYA3U9GbZdW3hLjA3NmHc+af0VT4iGRewBw=";
+    tag = finalAttrs.version;
+    hash = "sha256-JkDFhFLUHlgD6RKxlxMjrSF2zQ4AWmRUQMLbWYwIZmg=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the PRELOAD library
@@ -36,12 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace data/gamemoderun \
-      --subst-var-by libraryPath ${lib.makeLibraryPath ([
-        (placeholder "lib")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-        # Support wrapping 32bit applications on a 64bit linux system
-        libgamemode32
-      ])}
+      --subst-var-by libraryPath ${
+        lib.makeLibraryPath (
+          [
+            (placeholder "lib")
+          ]
+          ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+            # Support wrapping 32bit applications on a 64bit linux system
+            libgamemode32
+          ]
+        )
+      }
   '';
 
   nativeBuildInputs = [
@@ -69,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--libexecdir=libexec"
   ];
 
-  doCheck = false; # https://github.com/FeralInteractive/gamemode/issues/468
+  doCheck = true;
   nativeCheckInputs = [
     appstream
   ];
@@ -83,18 +94,20 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     wrapProgram "$out/bin/gamemodelist" \
-      --prefix PATH : ${lib.makeBinPath [
-        findutils
-        gawk
-        procps
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          findutils
+          gawk
+          procps
+        ]
+      }
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Optimise Linux system performance on demand";
-    homepage = "https://github.com/FeralInteractive/gamemode";
+    homepage = "https://feralinteractive.github.io/gamemode";
     changelog = "https://github.com/FeralInteractive/gamemode/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kira-bruneau ];

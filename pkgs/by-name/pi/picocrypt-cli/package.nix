@@ -5,24 +5,24 @@
 
 buildGoModule rec {
   pname = "picocrypt-cli";
-  version = "2.04";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "CLI";
     rev = version;
-    hash = "sha256-LWU/u+5AJgBS9IAA3fq5jQLlst+kpEqtRZvjkBSMG2E=";
+    hash = "sha256-a9fRbI3yv+K44/TIMqZMgZXRKN/Rh2AJyeTDhJynr4M=";
   };
 
   sourceRoot = "${src.name}/picocrypt";
-  vendorHash = "sha256-5bdiXy/c4FYu544lyL/ac3KF/1zWIPG/bmrpdZa9YV8=";
+  vendorHash = "sha256-F+t/VL9IzBfz8cfpaw+aEPxTPGUq3SbWbyqPWeLrh6E=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   meta = {
     description = "Command-line interface for Picocrypt";

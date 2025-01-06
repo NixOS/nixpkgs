@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pycookiecheat";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "n8henrie";
     repo = "pycookiecheat";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-x568e4M7fz93hq0y06Grz9GlrjGV38GxWd+PhNiAyBY=";
+    tag = "v${version}";
+    hash = "sha256-jOyTfh2ZhKW/pMU7T5tfxaM0l/g59N+mirnbc0FLPbQ=";
   };
 
   pythonRelaxDeps = [
@@ -35,7 +35,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
 
   dependencies = [
     cryptography
@@ -62,7 +61,7 @@ buildPythonPackage rec {
     "test_load_firefox_cookie_db"
     "test_no_cookies"
     "test_warns_for_string_browser"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_slack_config" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_slack_config" ];
 
   meta = with lib; {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";

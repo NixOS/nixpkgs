@@ -10,22 +10,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "live-server";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lomirus";
     repo = "live-server";
     rev = "v${version}";
-    hash = "sha256-BSAsD9nRlHaTDbBpLBxN9OOQ9SekRwQeYUWV1CZO4oY=";
+    hash = "sha256-0XZ7ABR2xSVbixXbjdKiUTcQ7TqAZGyVpWqzMx5kR2g=";
   };
 
-  cargoHash = "sha256-RwueYpa/CMriSOWwGZhkps6jHmqOdRuz+ECRq/ThPs0=";
+  cargoHash = "sha256-lMRj+8D5jigCNXld4QfXy3QpRQo4ecCByqoDGC8no1w=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         CoreServices

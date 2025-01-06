@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
-, packagekit
-, polkit
-, gtk3
-, systemd
-, wrapGAppsHook3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnome,
+  packagekit,
+  polkit,
+  gtk3,
+  systemd,
+  wrapGAppsHook3,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-packagekit/${lib.versions.major version}/gnome-packagekit-${version}.tar.xz";
-    sha256 = "zaRVplKpI7LqL3Axa9D92Clve2Lu8/r9nOUMjmbF8ZU=";
+    hash = "sha256-zaRVplKpI7LqL3Axa9D92Clve2Lu8/r9nOUMjmbF8ZU=";
   };
 
   nativeBuildInputs = [

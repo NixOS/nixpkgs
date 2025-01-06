@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   hatchling,
   hatch-vcs,
   numpy,
   packaging,
   importlib-resources,
+  typing-extensions,
   pydicom,
   pillow,
   h5py,
@@ -22,27 +22,30 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "5.2.1";
+  version = "5.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tsgLLnKOS8K2XxFC2bjSKHqRAqi/hHfhFe8NgzRVmXU=";
+    hash = "sha256-C9ymUDsceEtEbHRaRUI2fed1bPug1yFDuR+f+3i+Vps=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  dependencies =
+    [
+      numpy
+      packaging
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     all = dicom ++ dicomfs ++ minc2 ++ spm ++ zstd;
     dicom = [ pydicom ];
     dicomfs = [ pillow ] ++ dicom;
@@ -59,16 +62,11 @@ buildPythonPackage rec {
     pytest-httpserver
     pytest-xdist
     pytest7CheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
-
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
-    # uses distutils
-    "nisext/tests/test_sexts.py"
-  ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";

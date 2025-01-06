@@ -1,11 +1,13 @@
-{ lib, fetchFromGitHub
-, libiconv
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  fetchFromGitHub,
+  libiconv,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +24,13 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    SystemConfiguration
-    libiconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+      libiconv
+    ];
 
   cargoHash = "sha256-eTAEf2nRrJ7i2Dw5BBZlLLu8mK2G/wUk40ivtfxk1pI=";
 
@@ -35,7 +39,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/siedentop/git-quickfix";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [
+      cafkafk
+      matthiasbeyer
+    ];
     mainProgram = "git-quickfix";
   };
 }

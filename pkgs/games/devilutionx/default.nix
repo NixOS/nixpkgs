@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, bzip2
-, cmake
-, pkg-config
-, gettext
-, libsodium
-, SDL2
-, SDL2_image
-, SDL_audiolib
-, flac
-, fmt
-, libpng
-, smpq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  bzip2,
+  cmake,
+  pkg-config,
+  gettext,
+  libsodium,
+  SDL2,
+  SDL2_image,
+  SDL_audiolib,
+  flac,
+  fmt,
+  libpng,
+  smpq,
 }:
 
 let
@@ -21,8 +22,8 @@ let
 
   # fork with patches, far behind upstream
   asio = fetchurl {
-    url = "https://github.com/diasurgical/asio/archive/bd1c839ef741b14365e77964bdd5a78994c05934.tar.gz";
-    sha256 = "sha256-ePcdyvOfO5tyPVP+8t3+cS/XeEp47lfaE8gERRVoJSM=";
+    url = "https://github.com/diasurgical/asio/archive/4bcf552fcea3e1ae555dde2ab33bc9fa6770da4d.tar.gz";
+    sha256 = "sha256-AFBy5OFsAzxZsiI4DirIHh+VjFkdalEhN9OGqhC0Cvc=";
   };
 
   # fork with patches, upstream seems to be dead
@@ -67,13 +68,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
     rev = version;
-    sha256 = "sha256-XILPpIYSC0+CbhyVXCNvAknAhqU7VW1dWZCh2BapQjs=";
+    sha256 = "sha256-4cA2OHTc51U8XIk3iS16En7JJExkcn4a4VdtjNkZfH8=";
   };
 
   postPatch = ''
@@ -103,33 +104,44 @@ stdenv.mkDerivation rec {
     SDL_audiolib'
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv devilutionx.app $out/Applications
-  '' else ''
-    install -Dm755 -t $out/bin devilutionx
-    install -Dm755 -t $out/bin devilutionx.mpq
-    install -Dm755 -t $out/share/diasurgical/devilutionx devilutionx.mpq
-    install -Dm755 -t $out/share/applications ../Packaging/nix/devilutionx-hellfire.desktop ../Packaging/nix/devilutionx.desktop
-    install -Dm755 ../Packaging/resources/icon.png $out/share/icons/hicolor/512x512/apps/devilutionx.png
-    install -Dm755 ../Packaging/resources/hellfire.png $out/share/icons/hicolor/512x512/apps/devilutionx-hellfire.png
-    install -Dm755 ../Packaging/resources/icon_32.png $out/share/icons/hicolor/32x32/apps/devilutionx.png
-    install -Dm755 ../Packaging/resources/hellfire_32.png $out/share/icons/hicolor/32x32/apps/devilutionx-hellfire.png
-  '') + ''
+    ''
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/Applications
+          mv devilutionx.app $out/Applications
+        ''
+      else
+        ''
+          install -Dm755 -t $out/bin devilutionx
+          install -Dm755 -t $out/bin devilutionx.mpq
+          install -Dm755 -t $out/share/diasurgical/devilutionx devilutionx.mpq
+          install -Dm755 -t $out/share/applications ../Packaging/nix/devilutionx-hellfire.desktop ../Packaging/nix/devilutionx.desktop
+          install -Dm755 ../Packaging/resources/icon.png $out/share/icons/hicolor/512x512/apps/devilutionx.png
+          install -Dm755 ../Packaging/resources/hellfire.png $out/share/icons/hicolor/512x512/apps/devilutionx-hellfire.png
+          install -Dm755 ../Packaging/resources/icon_32.png $out/share/icons/hicolor/32x32/apps/devilutionx.png
+          install -Dm755 ../Packaging/resources/hellfire_32.png $out/share/icons/hicolor/32x32/apps/devilutionx-hellfire.png
+        ''
+    )
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/diasurgical/devilutionX";
     description = "Diablo build for modern operating systems";
     mainProgram = "devilutionx";
     longDescription = "In order to play this game a copy of diabdat.mpq is required. Place a copy of diabdat.mpq in ~/.local/share/diasurgical/devilution before executing the game.";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ karolchmist aanderse ];
+    license = licenses.sustainableUse;
+    maintainers = with maintainers; [
+      karolchmist
+      aanderse
+    ];
     platforms = platforms.linux ++ platforms.windows;
   };
 }

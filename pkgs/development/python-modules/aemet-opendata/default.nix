@@ -5,15 +5,12 @@
   fetchFromGitHub,
   geopy,
   pythonOlder,
-  requests,
   setuptools,
-  urllib3,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.5.3";
+  version = "0.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,20 +18,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "AEMET-OpenData";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KsmH7QJGVf+bZ5XoT+NeScwvvyrXSTZcAwdc12nJLHI=";
+    tag = version;
+    hash = "sha256-xxpB5JFPkTwd7dxba9pXRvcont/i3wXBdJh5NfLnZTM=";
   };
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     geopy
-    requests
-    urllib3
   ];
 
   # no tests implemented

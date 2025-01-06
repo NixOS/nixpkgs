@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pretalx-media-ccc-de";
-  version = "1.2.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-media-ccc-de";
     rev = "v${version}";
-    hash = "sha256-QCnZZpYjHxj92Dl2nRd4lXapufcqRmlVH6LEq0rzQ2U=";
+    hash = "sha256-U+26hit4xXUzN8JT3WL+iGohqomX1ENb+ihM9IT1XWQ=";
   };
 
   build-system = [ setuptools ];

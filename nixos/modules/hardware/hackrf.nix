@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.hardware.hackrf;
@@ -12,6 +17,7 @@ in
       description = ''
         Enables hackrf udev rules and ensures 'plugdev' group exists.
         This is a prerequisite to using HackRF devices without being root, since HackRF USB descriptors will be owned by plugdev through udev.
+        Ensure your user is a member of the 'plugdev' group after enabling.
       '';
     };
   };

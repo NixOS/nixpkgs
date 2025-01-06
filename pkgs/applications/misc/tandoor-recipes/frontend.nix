@@ -1,4 +1,11 @@
-{ stdenv, fetchYarnDeps, fixup-yarn-lock, callPackage, nodejs }:
+{
+  stdenv,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  callPackage,
+  nodejs_20,
+  yarn,
+}:
 let
   common = callPackage ./common.nix { };
 in
@@ -15,8 +22,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs
-    nodejs.pkgs.yarn
+    nodejs_20
+    (yarn.override { nodejs = nodejs_20; })
   ];
 
   configurePhase = ''

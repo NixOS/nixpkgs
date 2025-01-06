@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.9.4";
+  version = "0.9.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-B9agBmSrD3ZhqpGclZdMQNRSLSkepR6iduP1yrYz9tU=";
+    tag = version;
+    hash = "sha256-ZbTCbbASs7+ChmgcDePXSbiHOst6/eCkq9SiKgYhFyM=";
   };
 
   nativeCheckInputs = [
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GhostofGoes/getmac";
     changelog = "https://github.com/GhostofGoes/getmac/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ ];
   };
 }

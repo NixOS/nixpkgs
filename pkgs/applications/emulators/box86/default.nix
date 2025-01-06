@@ -1,8 +1,8 @@
 {
+  buildPackages,
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
   cmake,
   python3,
   withDynarec ? stdenv.hostPlatform.isAarch32,
@@ -15,13 +15,13 @@ assert withDynarec -> stdenv.hostPlatform.isAarch32;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box86";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box86";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ywsf+q7tWcAbrwbE/KvM6AJFNMJvqHKWD6tuANxrUt8=";
+    hash = "sha256-/xeyb4NK5ZzPevlAjjSnc6JAmsmqnx3slaMfPLL9dYI=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    # gitUpdater for local system, otherwise we're cross-compiling gitUpdater
+    updateScript = buildPackages.gitUpdater { rev-prefix = "v"; };
     tests.hello =
       runCommand "box86-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
         # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to

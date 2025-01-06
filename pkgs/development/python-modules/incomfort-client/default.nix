@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "incomfort-client";
-  version = "0.6.3";
+  version = "0.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GD5NsVvmuCuEXw8KvojSj5b67/i0skvhYW8ko+9iysU=";
+    tag = "v${version}";
+    hash = "sha256-6n6uvUJm6y0AynAZMQG+NKNIIaeMSpOJqWDdpPdGy4Q=";
   };
 
   build-system = [ setuptools ];

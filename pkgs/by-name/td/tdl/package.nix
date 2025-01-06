@@ -1,25 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "tdl";
-  version = "0.17.1";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
     rev = "v${version}";
-    hash = "sha256-qyoZqd6VLiq8L4p4ubKIM6HWJdn7SaQDQN9kIArbnls=";
+    hash = "sha256-/aZ85FLGlNVfHG/LyfbvxBdZlne/s3ktw7RNmKeNSeI=";
   };
 
-  vendorHash = "sha256-Xfd98qce/xThwF+dssNznny8FgrORGsAhDALfW9bWEQ=";
+  vendorHash = "sha256-o1GVra4kbjkLtFkoqK+8We/Ov+JHsEI+4jJYX5tPimM=";
 
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/iyear/tdl/pkg/consts.Version=${version}"
   ];
+
+  # Filter out the main executable
+  subPackages = [ "." ];
 
   # Requires network access
   doCheck = false;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-openjpeg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cCDnARElNn+uY+HQ39OnGJRz2vTz0I8s0Oe+qGvqM1o=";
   };
 
@@ -71,6 +71,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ bcdarwin ];
     # x86-linux: test_encode.py::TestEncodeBuffer failures
     # darwin: numerous test failures, seemingly due to issues setting up test data
-    broken = (stdenv.isAarch64 && stdenv.isLinux) || stdenv.isDarwin;
+    broken =
+      (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   };
 }

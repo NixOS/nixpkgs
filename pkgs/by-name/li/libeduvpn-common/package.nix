@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchurl
+{
+  lib,
+  buildGoModule,
+  fetchurl,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,13 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    go build -o ${pname}-${version}.so -buildmode=c-shared -tags=release ./exports
+    go build -o libeduvpn-common-${version}.so -buildmode=c-shared -tags=release ./exports
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/lib ${pname}-${version}.so
+    install -Dt $out/lib libeduvpn-common-${version}.so
     runHook postInstall
   '';
 
@@ -30,7 +31,10 @@ buildGoModule rec {
     changelog = "https://raw.githubusercontent.com/eduvpn/eduvpn-common/${version}/CHANGES.md";
     description = "Code to be shared between eduVPN clients";
     homepage = "https://github.com/eduvpn/eduvpn-common";
-    maintainers = with maintainers; [ benneti jwijenbergh ];
+    maintainers = with maintainers; [
+      benneti
+      jwijenbergh
+    ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

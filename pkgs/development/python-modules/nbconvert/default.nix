@@ -86,6 +86,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Attempts network access (Failed to establish a new connection: [Errno -3] Temporary failure in name resolution)
     "test_export"

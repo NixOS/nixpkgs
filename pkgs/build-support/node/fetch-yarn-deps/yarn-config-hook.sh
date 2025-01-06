@@ -1,10 +1,8 @@
-yarnConfigHook(){
-    runHook preConfigure
+yarnConfigHook() {
     echo "Executing yarnConfigHook"
 
     # Use a constant HOME directory
-    mkdir -p /tmp/home
-    export HOME=/tmp/home
+    export HOME=$(mktemp -d)
     if [[ -n "$yarnOfflineCache" ]]; then
         offlineCache="$yarnOfflineCache"
     fi
@@ -29,9 +27,8 @@ yarnConfigHook(){
     patchShebangs node_modules
 
     echo "finished yarnConfigHook"
-    runHook postConfigure
 }
 
-if [[ -z "${dontYarnInstallDeps-}" && -z "${configurePhase-}" ]]; then
-    configurePhase=yarnConfigHook
+if [[ -z "${dontYarnInstallDeps-}" ]]; then
+    postConfigureHooks+=(yarnConfigHook)
 fi

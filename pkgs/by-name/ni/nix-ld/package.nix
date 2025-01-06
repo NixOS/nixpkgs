@@ -1,35 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, nixosTests
+{
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  rustPlatform,
+  lib,
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "nix-ld";
-  version = "1.2.3";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-h+odOVyiGmEERMECoFOj5P7FPiMR8IPRzroFA4sKivg=";
+    hash = "sha256-NRkLjdMtVfC6dD1gEbYZWFEtbmC2xfD6ft1IP7l76Vw=";
   };
 
-  doCheck = true;
+  patches = [ ./rust-1.83.patch ];
 
-  nativeBuildInputs = [ meson ninja ];
+  cargoHash = "sha256-GOngDGRzWVuzGTX5xNb/nv5dJ6is6cH8K6kHTX3OoXE=";
 
-  mesonFlags = [
-    "-Dnix-system=${stdenv.system}"
-  ];
+  hardeningDisable = [ "stackprotector" ];
 
-  hardeningDisable = [
-    "stackprotector"
-  ];
+  NIX_SYSTEM = stdenv.system;
+  RUSTC_BOOTSTRAP = "1";
+
+  preCheck = ''
+    export NIX_LD=${stdenv.cc.bintools.dynamicLinker}
+  '';
 
   postInstall = ''
+    mkdir -p $out/libexec
+    ln -s $out/bin/nix-ld $out/libexec/nix-ld
+
     mkdir -p $out/nix-support
 
     ldpath=/${stdenv.hostPlatform.libDir}/$(basename ${stdenv.cc.bintools.dynamicLinker})

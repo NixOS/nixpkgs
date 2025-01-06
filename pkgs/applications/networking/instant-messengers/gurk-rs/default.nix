@@ -1,45 +1,63 @@
-{ stdenv
-, lib
-, protobuf
-, rustPlatform
-, fetchFromGitHub
-, Cocoa
-, pkgsBuildHost
+{
+  stdenv,
+  lib,
+  protobuf,
+  rustPlatform,
+  fetchFromGitHub,
+  Cocoa,
+  pkgsBuildHost,
+  openssl,
+  pkg-config,
+  versionCheckHook,
+  nix-update-script,
+  gurk-rs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.4.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "boxdot";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MPYqWgwh5PKH3GsCDx6aa4ryorWZ96YK8KOYZ5PILkk=";
+    repo = "gurk-rs";
+    tag = "v${version}";
+    hash = "sha256-FPbEtk2A7qs/85VsmfV1uPsVZ7V5WKhMKeWrzUt5L4w=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libsignal-protocol-0.1.0" = "sha256-p4YzrtJaQhuMBTtquvS1m9llszfyTeDfl7+IXzRUFSE=";
-      "libsignal-service-0.1.0" = "sha256-p0umCPtBg9s4G6RHcwK/tU+RtQE2fFLRHOYt2GmBCtQ=";
-      "curve25519-dalek-4.1.1" = "sha256-p9Vx0lAaYILypsI4/RVsHZLOqZKaa4Wvf7DanLA38pc=";
-      "presage-0.6.1" = "sha256-MsVSUI4ht+ftO2UC1IIeCtomkzg4ug95kKsc41PDVNg=";
-      "qr2term-0.3.1" = "sha256-U8YLouVZTtDwsvzZiO6YB4Pe75RXGkZXOxHCQcCOyT8=";
-    };
-  };
+  useFetchCargoVendor = true;
 
-  nativeBuildInputs = [ protobuf ];
+  cargoHash = "sha256-yLZKat6NNZkbyTpAVpOvDAbbNajh4Vaebc7fmK0I3Mc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [
+    protobuf
+    pkg-config
+  ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "-framework"
+    "AppKit"
+  ];
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
+
+  OPENSSL_NO_VENDOR = true;
+
+  useNextest = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";

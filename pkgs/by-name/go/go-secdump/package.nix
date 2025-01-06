@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-secdump";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jfjallid";
     repo = "go-secdump";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RdbrxnyP9QKkrWRLxnWljlwjJHbK++f/U0WdyB9XDc0=";
+    tag = version;
+    hash = "sha256-HZAt/lSe13OjCjpJMNCvWoenhCMc2YGoys0S1eiLeKo=";
   };
 
-  vendorHash = "sha256-RvbK0ps/5Jg/IAk71WGYEcjM6LrbCSkUueSOUFeELis=";
+  vendorHash = "sha256-hqbLfhUJSSWCdt+f1Z9Pn4TYEWytqAZxwWpqxlrlN9o=";
 
   ldflags = [
     "-s"
@@ -29,5 +29,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "go-secdump";
+    platforms = lib.platforms.linux;
   };
 }

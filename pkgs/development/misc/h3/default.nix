@@ -1,12 +1,14 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, withFilters ? false
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  withFilters ? false,
 }:
 
 let
-  generic = { version, hash }:
+  generic =
+    { version, hash }:
     stdenv.mkDerivation rec {
       inherit version;
       pname = "h3";
@@ -18,7 +20,10 @@ let
         inherit hash;
       };
 
-      outputs = [ "out" "dev" ];
+      outputs = [
+        "out"
+        "dev"
+      ];
 
       nativeBuildInputs = [ cmake ];
 

@@ -2,33 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   setuptools-scm,
   packaging,
   requests,
-  six,
   pytestCheckHook,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "7.3.4";
-  format = "setuptools";
+  version = "7.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ie309I19BhzASrmc3Ws1zV/BySc49AhFPNrNKQhTD0U=";
+    repo = "pynetbox";
+    tag = "v${version}";
+    hash = "sha256-pP4DEHf4Dj3sQ7qx7tU0B0PaMCuzUM9R2pIYRI1Fpso=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     requests
-    six
   ];
+
+  pythonImportsCheck = [ "pynetbox" ];
 
   nativeCheckInputs = [
     pytestCheckHook

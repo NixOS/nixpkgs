@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchurl, tcl, tk, libX11, glibc, which, bison, flex, imake, xorgproto, gccmakedep }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tcl,
+  tk,
+  libX11,
+  glibc,
+  which,
+  bison,
+  flex,
+  imake,
+  xorgproto,
+  gccmakedep,
+}:
 
 let
-  libiconvInc = lib.optionalString stdenv.isLinux "${glibc.dev}/include";
-  libiconvLib = lib.optionalString stdenv.isLinux "${glibc.out}/lib";
+  libiconvInc = lib.optionalString stdenv.hostPlatform.isLinux "${glibc.dev}/include";
+  libiconvLib = lib.optionalString stdenv.hostPlatform.isLinux "${glibc.out}/lib";
 in
 stdenv.mkDerivation rec {
   pname = "tkgate";
@@ -13,8 +27,19 @@ stdenv.mkDerivation rec {
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
-  nativeBuildInputs = [ which bison flex imake gccmakedep ];
-  buildInputs = [ tcl tk libX11 xorgproto ];
+  nativeBuildInputs = [
+    which
+    bison
+    flex
+    imake
+    gccmakedep
+  ];
+  buildInputs = [
+    tcl
+    tk
+    libX11
+    xorgproto
+  ];
   dontUseImakeConfigure = true;
 
   patchPhase = ''

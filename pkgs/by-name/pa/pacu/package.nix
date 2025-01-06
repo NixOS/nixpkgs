@@ -7,6 +7,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
   };
 in
@@ -18,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
   };
 
@@ -27,11 +28,11 @@ python.pkgs.buildPythonApplication rec {
     "sqlalchemy-utils"
     "sqlalchemy"
     "pycognito"
+    "qrcode"
     "urllib3"
   ];
 
   build-system = with python.pkgs; [ poetry-core ];
-
 
   dependencies =
     [ awscli ]

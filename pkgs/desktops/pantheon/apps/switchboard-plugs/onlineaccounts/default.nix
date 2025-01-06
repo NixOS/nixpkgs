@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, evolution-data-server
-, glib
-, granite
-, gtk3
-, libhandy
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  evolution-data-server-gtk4,
+  glib,
+  granite7,
+  gtk4,
+  libadwaita,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.5.3";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qERXF7aymI2xbyqrD6rwUBiFNRnIiVllavSPgW0F8yk=";
+    sha256 = "sha256-E4UAhrs+YQ47VEHMFY8PbSFvBqhqrTf4aPezeqEjdLo=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
-    granite
-    gtk3
-    libhandy
+    granite7
+    gtk4
+    libadwaita
     switchboard
   ];
 

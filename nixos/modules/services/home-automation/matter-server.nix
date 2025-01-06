@@ -1,11 +1,9 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
-
-with lib;
-
 let
   cfg = config.services.matter-server;
   storageDir = "matter-server";
@@ -16,26 +14,32 @@ in
 {
   meta.maintainers = with lib.maintainers; [ leonm1 ];
 
-  options.services.matter-server = with types; {
-    enable = mkEnableOption "Matter-server";
+  options.services.matter-server = with lib.types; {
+    enable = lib.mkEnableOption "Matter-server";
 
-    package = mkPackageOption pkgs "python-matter-server" { };
+    package = lib.mkPackageOption pkgs "python-matter-server" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5580;
       description = "Port to expose the matter-server service on.";
     };
 
-    logLevel = mkOption {
-      type = types.enum [ "critical" "error" "warning" "info" "debug" ];
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
+        "critical"
+        "error"
+        "warning"
+        "info"
+        "debug"
+      ];
       default = "info";
       description = "Verbosity of logs from the matter-server";
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra arguments to pass to the matter-server executable.
         See https://github.com/home-assistant-libs/python-matter-server?tab=readme-ov-file#running-the-development-server for options.
@@ -43,7 +47,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.matter-server = {
       after = [ "network-online.target" ];
       before = [ "home-assistant.service" ];
@@ -52,14 +56,20 @@ in
       description = "Matter Server";
       environment.HOME = storagePath;
       serviceConfig = {
-        ExecStart = (concatStringsSep " " [
-          "${cfg.package}/bin/matter-server"
-          "--port" (toString cfg.port)
-          "--vendorid" vendorId
-          "--storage-path" storagePath
-          "--log-level" "${cfg.logLevel}"
-          "${escapeShellArgs cfg.extraArgs}"
-        ]);
+        ExecStart = (
+          lib.concatStringsSep " " [
+            "${cfg.package}/bin/matter-server"
+            "--port"
+            (toString cfg.port)
+            "--vendorid"
+            vendorId
+            "--storage-path"
+            storagePath
+            "--log-level"
+            "${cfg.logLevel}"
+            "${lib.escapeShellArgs cfg.extraArgs}"
+          ]
+        );
         # Start with a clean root filesystem, and allowlist what the container
         # is permitted to access.
         TemporaryFileSystem = "/";
@@ -99,11 +109,12 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SystemCallFilter = concatStringsSep " " [
+        SystemCallFilter = lib.concatStringsSep " " [
           "~" # Blocklist
           "@clock"
           "@cpu-emulation"
@@ -122,4 +133,3 @@ in
     };
   };
 }
-

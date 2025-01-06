@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = pname;
     owner = "trinodb";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Hl88Keavyp1QBw67AFbevy/btzNs7UlsKQ93K02YgLM=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = lib.fix (self: {
+  optional-dependencies = lib.fix (self: {
     kerberos = [ requests-kerberos ];
     sqlalchemy = [ sqlalchemy ];
     external-authentication-token-cache = [ keyring ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "trino" ];
 

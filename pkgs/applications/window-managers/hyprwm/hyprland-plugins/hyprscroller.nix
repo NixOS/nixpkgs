@@ -4,18 +4,18 @@
   hyprland,
   cmake,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 mkHyprlandPlugin hyprland {
   pluginName = "hyprscroller";
-  version = "0-unstable-2024-07-04";
+  version = "0-unstable-2024-12-17";
 
   src = fetchFromGitHub {
     owner = "dawsers";
     repo = "hyprscroller";
-    rev = "bef840b3f0fd3d37b5c1c9f2704b2efb60173184";
-    hash = "sha256-vkpGSseA7n0/Y+83snbEe7Z++2akdDbvv7eZzM9V3wI=";
+    rev = "9dc46c3c98e875a8f3b2a118ef3859a3c714c887";
+    hash = "sha256-CifZc4Ev+CG4qHHOH6e6NLBLQNbFVn4gZEFNCX8e0QQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ mkHyprlandPlugin hyprland {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     homepage = "https://github.com/dawsers/hyprscroller";

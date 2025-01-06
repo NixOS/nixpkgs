@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wttrbar";
-  version = "0.10.5";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
     rev = version;
-    hash = "sha256-u+JrmpXDH+9tsjATs6xLjjQmuBWCuE9daPlJUWfcm+A=";
+    hash = "sha256-+M0s6v9ULf+D2pPOE8KlHoyV+jBMbPsAXpYxGjms5DY=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Security SystemConfiguration ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk_11_0.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
 
-  cargoHash = "sha256-UUIDiTXGWezbPVjz5OqFivnmLaIJ/yZYBgob4CAt43s=";
+  cargoHash = "sha256-UwDaf4osH9Kj1cF2BYbyuv9HmmPGxTB/ynNBAuwa5fs=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, autoreconfHook
-, wrapGAppsHook3
-, gtkmm3
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  autoreconfHook,
+  wrapGAppsHook3,
+  gtkmm3,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ aleksana ];
     mainProgram = "gmetronome";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

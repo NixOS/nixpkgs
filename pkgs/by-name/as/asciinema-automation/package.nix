@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, asciinema
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  asciinema,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     pexpect
   ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     dev = [
       mypy
       pytest

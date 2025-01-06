@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   multiStdenv,
   fetchFromGitHub,
@@ -10,7 +11,7 @@
   wrapQtAppsHook,
   file,
   libX11,
-  qt5
+  qt5,
 }:
 
 let
@@ -107,6 +108,6 @@ multiStdenv.mkDerivation {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

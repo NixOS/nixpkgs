@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kidentitymanagement";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

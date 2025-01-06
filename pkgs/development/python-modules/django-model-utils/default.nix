@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-model-utils";
-  version = "4.5.1";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-model-utils";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GaBTCrEwEkJyVeY5YVptPioYcmivyQtBKjs+TgC9IqA=";
+    tag = version;
+    hash = "sha256-iRtTYXsgD8NYG3k9ZWAr2Nwazo3HUa6RgdbMeDxc7NI=";
   };
 
   build-system = [ setuptools-scm ];

@@ -1,7 +1,14 @@
 {
-  stdenv, lib, fetchurl, pkg-config, autoreconfHook
-, freetype, harfbuzz, libiconv, qtbase
-, enableGUI ? true
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  freetype,
+  harfbuzz,
+  libiconv,
+  qtbase,
+  enableGUI ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
   pname = "ttfautohint";
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/freetype/ttfautohint-${version}.tar.gz";
     sha256 = "0zpqgihn3yh3v51ynxwr8asqrijvs4gv686clwv7bm8sawr4kfw7";
   };
 
@@ -17,9 +24,16 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace "macx-g++" "macx-clang"
   '';
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  buildInputs = [ freetype harfbuzz libiconv ] ++ lib.optional enableGUI qtbase;
+  buildInputs = [
+    freetype
+    harfbuzz
+    libiconv
+  ] ++ lib.optional enableGUI qtbase;
 
   configureFlags = [ ''--with-qt=${if enableGUI then "${qtbase}/lib" else "no"}'' ];
 

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-VT+JjQPqCIdtaLeSnRiZ3rES0KgDJR7j5Byxr+d6oRg=";
   };
 
@@ -137,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      eclairevoyant
       ricarch97
     ];
     platforms = lib.platforms.linux;

@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "nocaselist";
-  version = "2.0.2";
-  format = "setuptools";
+  version = "2.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MnCLcAoaUxM+a7XMUzMsl3Wwx8lZpflyV5MXH9L0yKU=";
+    hash = "sha256-VXFNqEM/tIQ855dASXfkOF1ePfnkqgD33emD/YdBD+8=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
+  dependencies = [ six ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nocaselist" ];
 

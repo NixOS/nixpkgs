@@ -2,51 +2,50 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
-  qt5,
 
   cmake,
+  ninja,
+  qt6,
 
   cairo,
   ffmpeg,
-  freetype,
   ghostscript,
   glfw,
-  libjpeg,
   libtiff,
   qhull,
+  xercesc,
   xorg,
   zeromq,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.73.6";
+  version = "0.73.10";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-XzOII13XwxkPZhtL4USkmUmJTL7dZImx4yVYJmhcn08=";
+    hash = "sha256-vCcXWgoaWcaNRgIk9CrXp8eTII/CBOHR1iDncC/Cd4k=";
   };
-
-  patches = [ ./use-the-module-mode-to-search-for-the-LibXml2-package.patch ];
 
   nativeBuildInputs = [
     cmake
-    qt5.wrapQtAppsHook
+    ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     cairo
     ffmpeg
-    freetype
     ghostscript
     glfw
-    libjpeg
     libtiff
     qhull
-    qt5.qtbase
+    qt6.qtbase
+    xercesc
     xorg.libX11
     xorg.libXft
     xorg.libXt

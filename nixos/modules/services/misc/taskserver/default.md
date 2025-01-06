@@ -1,10 +1,18 @@
 # Taskserver {#module-services-taskserver}
 
-Taskserver is the server component of
+Taskserver is the server component of the now deprecated version 2 of
 [Taskwarrior](https://taskwarrior.org/), a free and
 open source todo list application.
 
-*Upstream documentation:* <https://taskwarrior.org/docs/#taskd>
+[Taskwarrior 3.0.0 was released in March
+2024](https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/v3.0.0),
+and the sync functionality was rewritten entirely. With it, a NixOS module
+named
+[`taskchampion-sync-server`](options.html#opt-services.taskchampion-sync-server.enable)
+was added to Nixpkgs. Many people still want to use the old [Taskwarrior
+2.6.x](https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/v2.6.2),
+and Taskserver along with it. Hence this module and this documentation will
+stay here for the near future.
 
 ## Configuration {#module-services-taskserver-configuration}
 
@@ -23,7 +31,7 @@ entity.
 
 With {command}`nixos-taskserver` the client certificate is created
 along with the UUID of the user, so it handles all of the credentials needed
-in order to setup the Taskwarrior client to work with a Taskserver.
+in order to setup the Taskwarrior 2 client to work with a Taskserver.
 
 ## The nixos-taskserver tool {#module-services-taskserver-nixos-taskserver-tool}
 
@@ -49,7 +57,7 @@ command, documentation for each subcommand can be shown by using the
 ## Declarative/automatic CA management {#module-services-taskserver-declarative-ca-management}
 
 Everything is done according to what you specify in the module options,
-however in order to set up a Taskwarrior client for synchronisation with a
+however in order to set up a Taskwarrior 2 client for synchronisation with a
 Taskserver instance, you have to transfer the keys and certificates to the
 client machine.
 

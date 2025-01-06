@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchbzr, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{
+  lib,
+  stdenv,
+  fetchbzr,
+  cmake,
+  pkg-config,
+  gettext,
+  libXpm,
+  libGL,
+  fltk,
+  hicolor-icon-theme,
+  glib,
+  gnome2,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jwm-settings-manager";

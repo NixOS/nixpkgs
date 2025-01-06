@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rocmUpdateScript
-, runCommand
-, pkg-config
-, cmake
-, rocm-cmake
-, rocblas
-, rocmlir
-, clr
-, clang-tools-extra
-, clang-ocl
-, miopengemm
-, composable_kernel
-, frugally-deep
-, rocm-docs-core
-, half
-, boost
-, sqlite
-, bzip2
-, lbzip2
-, nlohmann_json
-, texliveSmall
-, doxygen
-, sphinx
-, zlib
-, gtest
-, rocm-comgr
-, python3Packages
-, buildDocs ? false # Needs internet because of rocm-docs-core
-, buildTests ? false
-, useOpenCL ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rocmUpdateScript,
+  runCommand,
+  pkg-config,
+  cmake,
+  rocm-cmake,
+  rocblas,
+  rocmlir,
+  clr,
+  clang-tools-extra,
+  clang-ocl,
+  miopengemm,
+  composable_kernel,
+  frugally-deep,
+  rocm-docs-core,
+  half,
+  boost,
+  sqlite,
+  bzip2,
+  lbzip2,
+  nlohmann_json,
+  texliveSmall,
+  doxygen,
+  sphinx,
+  zlib,
+  gtest,
+  rocm-comgr,
+  python3Packages,
+  buildDocs ? false, # Needs internet because of rocm-docs-core
+  buildTests ? false,
+  useOpenCL ? false,
 }:
 
 let
@@ -71,18 +72,22 @@ let
     '';
   };
 
-  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
-    latexmk
-    tex-gyre
-    fncychap
-    wrapfig
-    capt-of
-    framed
-    needspace
-    tabulary
-    varwidth
-    titlesec
-  ]));
+  latex = lib.optionalAttrs buildDocs (
+    texliveSmall.withPackages (
+      ps: with ps; [
+        latexmk
+        tex-gyre
+        fncychap
+        wrapfig
+        capt-of
+        framed
+        needspace
+        tabulary
+        varwidth
+        titlesec
+      ]
+    )
+  );
 
   gfx900 = runCommand "miopen-gfx900.kdb" { preferLocalBuild = true; } ''
     ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx900.kdb.bz2 > $out
@@ -103,7 +108,8 @@ let
   gfx1030 = runCommand "miopen-gfx1030.kdb" { preferLocalBuild = true; } ''
     ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx1030.kdb.bz2 > $out
   '';
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   inherit version src;
   pname = "miopen";
 
@@ -119,13 +125,16 @@ in stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildDocs [
-    "doc"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals buildDocs [
+      "doc"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ];
 
   nativeBuildInputs = [
     pkg-config
@@ -135,50 +144,57 @@ in stdenv.mkDerivation (finalAttrs: {
     clang-tools-extra
   ];
 
-  buildInputs = [
-    rocblas
-    rocmlir
-    clang-ocl
-    miopengemm
-    composable_kernel
-    half
-    boost
-    sqlite
-    bzip2
-    nlohmann_json
-    frugally-deep
-  ] ++ lib.optionals buildDocs [
-    latex
-    doxygen
-    sphinx
-    rocm-docs-core
-    python3Packages.sphinx-rtd-theme
-    python3Packages.breathe
-    python3Packages.myst-parser
-  ] ++ lib.optionals buildTests [
-    gtest
-    zlib
-  ];
+  buildInputs =
+    [
+      rocblas
+      rocmlir
+      clang-ocl
+      miopengemm
+      composable_kernel
+      half
+      boost
+      sqlite
+      bzip2
+      nlohmann_json
+      frugally-deep
+    ]
+    ++ lib.optionals buildDocs [
+      latex
+      doxygen
+      sphinx
+      rocm-docs-core
+      python3Packages.sphinx-rtd-theme
+      python3Packages.breathe
+      python3Packages.myst-parser
+    ]
+    ++ lib.optionals buildTests [
+      gtest
+      zlib
+    ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-Wno-#warnings" # <half> -> <half/half.hpp>
-    "-DMIOPEN_USE_MIOPENGEMM=ON"
-    "-DUNZIPPER=${bzip2}/bin/bunzip2"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (!useOpenCL) [
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DMIOPEN_BACKEND=HIP"
-  ] ++ lib.optionals useOpenCL [
-    "-DMIOPEN_BACKEND=OpenCL"
-  ] ++ lib.optionals buildTests [
-    "-DBUILD_TESTS=ON"
-    "-DMIOPEN_TEST_ALL=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_CXX_FLAGS=-Wno-#warnings" # <half> -> <half/half.hpp>
+      "-DMIOPEN_USE_MIOPENGEMM=ON"
+      "-DUNZIPPER=${bzip2}/bin/bunzip2"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (!useOpenCL) [
+      "-DCMAKE_C_COMPILER=hipcc"
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DMIOPEN_BACKEND=HIP"
+    ]
+    ++ lib.optionals useOpenCL [
+      "-DMIOPEN_BACKEND=OpenCL"
+    ]
+    ++ lib.optionals buildTests [
+      "-DBUILD_TESTS=ON"
+      "-DMIOPEN_TEST_ALL=ON"
+    ];
 
   postPatch = ''
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
@@ -202,27 +218,39 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Unfortunately, it seems like we have to call make on these manually
-  postBuild = lib.optionalString buildDocs ''
-    python -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
-  '' + lib.optionalString buildTests ''
-    make -j$NIX_BUILD_CORES check
-  '';
+  postBuild =
+    lib.optionalString buildDocs ''
+      python -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
+    ''
+    + lib.optionalString buildTests ''
+      make -j$NIX_BUILD_CORES check
+    '';
 
-  postInstall = ''
-    rm $out/bin/install_precompiled_kernels.sh
-    ln -sf ${gfx900} $out/share/miopen/db/gfx900.kdb
-    ln -sf ${gfx906} $out/share/miopen/db/gfx906.kdb
-    ln -sf ${gfx908} $out/share/miopen/db/gfx908.kdb
-    ln -sf ${gfx90a} $out/share/miopen/db/gfx90a.kdb
-    ln -sf ${gfx1030} $out/share/miopen/db/gfx1030.kdb
-  '' + lib.optionalString buildDocs ''
-    mv ../doc/html $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
-  '' + lib.optionalString buildTests ''
-    mkdir -p $test/bin
-    mv bin/test_* $test/bin
-    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++
-      [ clr rocm-comgr ])} $test/bin/*
-  '';
+  postInstall =
+    ''
+      rm $out/bin/install_precompiled_kernels.sh
+      ln -sf ${gfx900} $out/share/miopen/db/gfx900.kdb
+      ln -sf ${gfx906} $out/share/miopen/db/gfx906.kdb
+      ln -sf ${gfx908} $out/share/miopen/db/gfx908.kdb
+      ln -sf ${gfx90a} $out/share/miopen/db/gfx90a.kdb
+      ln -sf ${gfx1030} $out/share/miopen/db/gfx1030.kdb
+    ''
+    + lib.optionalString buildDocs ''
+      mv ../doc/html $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
+    ''
+    + lib.optionalString buildTests ''
+      mkdir -p $test/bin
+      mv bin/test_* $test/bin
+      patchelf --set-rpath $out/lib:${
+        lib.makeLibraryPath (
+          finalAttrs.buildInputs
+          ++ [
+            clr
+            rocm-comgr
+          ]
+        )
+      } $test/bin/*
+    '';
 
   requiredSystemFeatures = [ "big-parallel" ];
 
@@ -238,6 +266,8 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

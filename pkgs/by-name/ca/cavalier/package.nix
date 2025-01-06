@@ -21,7 +21,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Cavalier";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SFhEKtYrlnkbLMnxU4Uf4jnFsw0MJHstgZgLLnGC2d8=";
   };
 
@@ -29,7 +29,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionCavalier.GNOME/NickvisionCavalier.GNOME.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "NickvisionCavalier.GNOME";
 
   nativeBuildInputs = [

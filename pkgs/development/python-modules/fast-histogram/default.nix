@@ -10,7 +10,7 @@
   numpy,
   wheel,
   hypothesis,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];

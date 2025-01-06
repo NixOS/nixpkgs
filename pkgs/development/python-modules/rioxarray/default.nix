@@ -3,6 +3,8 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
+
   # build-system
   setuptools,
   # dependencies
@@ -20,16 +22,24 @@
 
 buildPythonPackage rec {
   pname = "rioxarray";
-  version = "0.17.0";
+  version = "0.18.1";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
-    rev = "refs/tags/${version}";
-    hash = "sha256-mOXyfkreQ55vWmPCG2U/ijcKZqzHoQQLfKArSh2fDmA=";
+    tag = version;
+    hash = "sha256-0YsGu8JuYrb6lWuC3RQ4jCkulxxFpnd0eaRajCwtFHo=";
   };
+
+  patches = [
+    # https://github.com/corteva/rioxarray/issues/836
+    (fetchpatch {
+      url = "https://github.com/corteva/rioxarray/commit/6294b7468587b8c243ee4f561a90ca8de90ea0f1.patch";
+      hash = "sha256-0IvDAr17ymMN1J2vC1U3z/2N1Np1RaRjCAODZthQz8g=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -49,11 +59,13 @@ buildPythonPackage rec {
 
   disabledTests =
     [ "test_clip_geojson__no_drop" ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # numerical errors
-      "test_clip_geojson"
-      "test_open_rasterio_mask_chunk_clip"
-    ];
+    ++ lib.optionals
+      (stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin")
+      [
+        # numerical errors
+        "test_clip_geojson"
+        "test_open_rasterio_mask_chunk_clip"
+      ];
 
   pythonImportsCheck = [ "rioxarray" ];
 

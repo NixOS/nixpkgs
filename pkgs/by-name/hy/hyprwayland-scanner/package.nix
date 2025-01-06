@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pugixml
-, nix-update-script
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pugixml,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwayland-scanner";
-  version = "0.4.0";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwayland-scanner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JPdL+Qul+jEueAn8CARfcWP83eJgwkhMejQYfDvrgvU=";
+    hash = "sha256-fktzv4NaqKm94VAkAoVqO/nqQlw+X0/tJJNAeCSfzK4=";
   };
 
   nativeBuildInputs = [

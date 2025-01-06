@@ -1,7 +1,14 @@
-{ config, options, lib, pkgs, utils, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
 
   cfg = config.services.discourse;
   opt = options.services.discourse;
@@ -9,19 +16,15 @@ let
   # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
 
-  postgresqlPackage = if config.services.postgresql.enable then
-                        config.services.postgresql.package
-                      else
-                        pkgs.postgresql;
+  postgresqlPackage =
+    if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
 
   postgresqlVersion = lib.getVersion postgresqlPackage;
 
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
-  tlsEnabled = cfg.enableACME
-                || cfg.sslCertificate != null
-                || cfg.sslCertificateKey != null;
+  tlsEnabled = cfg.enableACME || cfg.sslCertificate != null || cfg.sslCertificateKey != null;
 in
 {
   options = {
@@ -31,9 +34,11 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.discourse;
-        apply = p: p.override {
-          plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
-        };
+        apply =
+          p:
+          p.override {
+            plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
+          };
         defaultText = lib.literalExpression "pkgs.discourse";
         description = ''
           The discourse package to use.
@@ -108,8 +113,17 @@ in
       };
 
       backendSettings = lib.mkOption {
-        type = with lib.types; attrsOf (nullOr (oneOf [ str int bool float ]));
-        default = {};
+        type =
+          with lib.types;
+          attrsOf (
+            nullOr (oneOf [
+              str
+              int
+              bool
+              float
+            ])
+          );
+        default = { };
         example = lib.literalExpression ''
           {
             max_reqs_per_ip_per_minute = 300;
@@ -133,7 +147,7 @@ in
 
       siteSettings = lib.mkOption {
         type = json.type;
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           {
             required = {
@@ -404,7 +418,13 @@ in
           };
 
           authentication = lib.mkOption {
-            type = with lib.types; nullOr (enum ["plain" "login" "cram_md5"]);
+            type =
+              with lib.types;
+              nullOr (enum [
+                "plain"
+                "login"
+                "cram_md5"
+              ]);
             default = null;
             description = ''
               Authentication type to use, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
@@ -483,7 +503,7 @@ in
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           with config.services.discourse.package.plugins; [
             discourse-canned-replies
@@ -527,13 +547,15 @@ in
         message = "Could not automatically determine hostname, set service.discourse.hostname manually.";
       }
       {
-        assertion = cfg.database.ignorePostgresqlVersion || (databaseActuallyCreateLocally -> upstreamPostgresqlVersion == postgresqlVersion);
-        message = "The PostgreSQL version recommended for use with Discourse is ${upstreamPostgresqlVersion}, you're using ${postgresqlVersion}. "
-                  + "Either update your PostgreSQL package to the correct version or set services.discourse.database.ignorePostgresqlVersion. "
-                  + "See https://nixos.org/manual/nixos/stable/index.html#module-postgresql for details on how to upgrade PostgreSQL.";
+        assertion =
+          cfg.database.ignorePostgresqlVersion
+          || (databaseActuallyCreateLocally -> upstreamPostgresqlVersion == postgresqlVersion);
+        message =
+          "The PostgreSQL version recommended for use with Discourse is ${upstreamPostgresqlVersion}, you're using ${postgresqlVersion}. "
+          + "Either update your PostgreSQL package to the correct version or set services.discourse.database.ignorePostgresqlVersion. "
+          + "See https://nixos.org/manual/nixos/stable/index.html#module-postgresql for details on how to upgrade PostgreSQL.";
       }
     ];
-
 
     # Default config values are from `config/discourse_defaults.conf`
     # upstream.
@@ -657,15 +679,20 @@ in
     };
 
     services.redis.servers.discourse =
-      lib.mkIf (lib.elem cfg.redis.host [ "localhost" "127.0.0.1" ]) {
-        enable = true;
-        bind = cfg.redis.host;
-        port = cfg.backendSettings.redis_port;
-      };
+      lib.mkIf
+        (lib.elem cfg.redis.host [
+          "localhost"
+          "127.0.0.1"
+        ])
+        {
+          enable = true;
+          bind = cfg.redis.host;
+          port = cfg.backendSettings.redis_port;
+        };
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
-      ensureUsers = [{ name = "discourse"; }];
+      ensureUsers = [ { name = "discourse"; } ];
     };
 
     # The postgresql module doesn't currently support concepts like
@@ -675,29 +702,29 @@ in
       let
         pgsql = config.services.postgresql;
       in
-        lib.mkIf databaseActuallyCreateLocally {
-          after = [ "postgresql.service" ];
-          bindsTo = [ "postgresql.service" ];
-          wantedBy = [ "discourse.service" ];
-          partOf = [ "discourse.service" ];
-          path = [
-            pgsql.package
-          ];
-          script = ''
-            set -o errexit -o pipefail -o nounset -o errtrace
-            shopt -s inherit_errexit
+      lib.mkIf databaseActuallyCreateLocally {
+        after = [ "postgresql.service" ];
+        bindsTo = [ "postgresql.service" ];
+        wantedBy = [ "discourse.service" ];
+        partOf = [ "discourse.service" ];
+        path = [
+          pgsql.package
+        ];
+        script = ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
 
-            psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'discourse'" | grep -q 1 || psql -tAc 'CREATE DATABASE "discourse" OWNER "discourse"'
-            psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
-            psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
-          '';
+          psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'discourse'" | grep -q 1 || psql -tAc 'CREATE DATABASE "discourse" OWNER "discourse"'
+          psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+          psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
+        '';
 
-          serviceConfig = {
-            User = pgsql.superUser;
-            Type = "oneshot";
-            RemainAfterExit = true;
-          };
+        serviceConfig = {
+          User = pgsql.superUser;
+          Type = "oneshot";
+          RemainAfterExit = true;
         };
+      };
 
     systemd.services.discourse = {
       wantedBy = [ "multi-user.target" ];
@@ -706,12 +733,14 @@ in
         "postgresql.service"
         "discourse-postgresql.service"
       ];
-      bindsTo = [
-        "redis-discourse.service"
-      ] ++ lib.optionals (cfg.database.host == null) [
-        "postgresql.service"
-        "discourse-postgresql.service"
-      ];
+      bindsTo =
+        [
+          "redis-discourse.service"
+        ]
+        ++ lib.optionals (cfg.database.host == null) [
+          "postgresql.service"
+          "discourse-postgresql.service"
+        ];
       path = cfg.package.runtimeDeps ++ [
         postgresqlPackage
         pkgs.replace-secret
@@ -727,20 +756,30 @@ in
         let
           discourseKeyValue = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " = " {
-              mkValueString = v: with builtins;
-                if isInt           v then toString v
-                else if isString   v then ''"${v}"''
-                else if true  ==   v then "true"
-                else if false ==   v then "false"
-                else if null  ==   v then ""
-                else if isFloat    v then lib.strings.floatToString v
-                else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+              mkValueString =
+                v:
+                with builtins;
+                if isInt v then
+                  toString v
+                else if isString v then
+                  ''"${v}"''
+                else if true == v then
+                  "true"
+                else if false == v then
+                  "false"
+                else if null == v then
+                  ""
+                else if isFloat v then
+                  lib.strings.floatToString v
+                else
+                  throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
             };
           };
 
           discourseConf = pkgs.writeText "discourse.conf" (discourseKeyValue cfg.backendSettings);
 
-          mkSecretReplacement = file:
+          mkSecretReplacement =
+            file:
             lib.optionalString (file != null) ''
               replace-secret '${file}' '${file}' /run/discourse/config/discourse.conf
             '';
@@ -754,7 +793,8 @@ in
             discourse-rake admin:create_noninteractively
           '';
 
-        in ''
+        in
+        ''
           set -o errexit -o pipefail -o nounset -o errtrace
           shopt -s inherit_errexit
 
@@ -770,10 +810,7 @@ in
           (
               umask u=rwx,g=,o=
 
-              ${utils.genJqSecretsReplacementSnippet
-                  cfg.siteSettings
-                  "/run/discourse/config/nixos_site_settings.json"
-              }
+              ${utils.genJqSecretsReplacementSnippet cfg.siteSettings "/run/discourse/config/nixos_site_settings.json"}
               install -T -m 0600 -o discourse ${discourseConf} /run/discourse/config/discourse.conf
               ${mkSecretReplacement cfg.database.passwordFile}
               ${mkSecretReplacement cfg.mail.outgoing.passwordFile}
@@ -834,7 +871,7 @@ in
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
-      upstreams.discourse.servers."unix:/run/discourse/sockets/unicorn.sock" = {};
+      upstreams.discourse.servers."unix:/run/discourse/sockets/unicorn.sock" = { };
 
       appendHttpConfig = ''
         # inactive means we keep stuff around for 1440m minutes regardless of last access (1 week)
@@ -854,12 +891,18 @@ in
 
         locations =
           let
-            proxy = { extraConfig ? "" }: {
-              proxyPass = "http://discourse";
-              extraConfig = extraConfig + ''
-                proxy_set_header X-Request-Start "t=''${msec}";
-              '';
-            };
+            proxy =
+              {
+                extraConfig ? "",
+              }:
+              {
+                proxyPass = "http://discourse";
+                extraConfig =
+                  extraConfig
+                  + ''
+                    proxy_set_header X-Request-Start "t=''${msec}";
+                  '';
+              };
             cache = time: ''
               expires ${time};
               add_header Cache-Control public,immutable;
@@ -867,40 +910,46 @@ in
             cache_1y = cache "1y";
             cache_1d = cache "1d";
           in
-            {
-              "/".tryFiles = "$uri @discourse";
-              "@discourse" = proxy {};
-              "^~ /backups/".extraConfig = ''
-                internal;
+          {
+            "/".tryFiles = "$uri @discourse";
+            "@discourse" = proxy { };
+            "^~ /backups/".extraConfig = ''
+              internal;
+            '';
+            "/favicon.ico" = {
+              return = "204";
+              extraConfig = ''
+                access_log off;
+                log_not_found off;
               '';
-              "/favicon.ico" = {
-                return = "204";
-                extraConfig = ''
-                  access_log off;
-                  log_not_found off;
-                '';
-              };
-              "~ ^/uploads/short-url/" = proxy {};
-              "~ ^/secure-media-uploads/" = proxy {};
-              "~* (fonts|assets|plugins|uploads)/.*\.(eot|ttf|woff|woff2|ico|otf)$".extraConfig = cache_1y + ''
+            };
+            "~ ^/uploads/short-url/" = proxy { };
+            "~ ^/secure-media-uploads/" = proxy { };
+            "~* (fonts|assets|plugins|uploads)/.*\.(eot|ttf|woff|woff2|ico|otf)$".extraConfig =
+              cache_1y
+              + ''
                 add_header Access-Control-Allow-Origin *;
               '';
-              "/srv/status" = proxy {
-                extraConfig = ''
-                  access_log off;
-                  log_not_found off;
-                '';
-              };
-              "~ ^/javascripts/".extraConfig = cache_1d;
-              "~ ^/assets/(?<asset_path>.+)$".extraConfig = cache_1y + ''
+            "/srv/status" = proxy {
+              extraConfig = ''
+                access_log off;
+                log_not_found off;
+              '';
+            };
+            "~ ^/javascripts/".extraConfig = cache_1d;
+            "~ ^/assets/(?<asset_path>.+)$".extraConfig =
+              cache_1y
+              + ''
                 # asset pipeline enables this
                 brotli_static on;
                 gzip_static on;
               '';
-              "~ ^/plugins/".extraConfig = cache_1y;
-              "~ /images/emoji/".extraConfig = cache_1y;
-              "~ ^/uploads/" = proxy {
-                extraConfig = cache_1y + ''
+            "~ ^/plugins/".extraConfig = cache_1y;
+            "~ /images/emoji/".extraConfig = cache_1y;
+            "~ ^/uploads/" = proxy {
+              extraConfig =
+                cache_1y
+                + ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
                   proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
 
@@ -920,14 +969,15 @@ in
                       try_files $uri =404;
                   }
                 '';
-              };
-              "~ ^/admin/backups/" = proxy {
-                extraConfig = ''
-                  proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
-                '';
-              };
-              "~ ^/(svg-sprite/|letter_avatar/|letter_avatar_proxy/|user_avatar|highlight-js|stylesheets|theme-javascripts|favicon/proxied|service-worker)" = proxy {
+            };
+            "~ ^/admin/backups/" = proxy {
+              extraConfig = ''
+                proxy_set_header X-Sendfile-Type X-Accel-Redirect;
+                proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
+              '';
+            };
+            "~ ^/(svg-sprite/|letter_avatar/|letter_avatar_proxy/|user_avatar|highlight-js|stylesheets|theme-javascripts|favicon/proxied|service-worker)" =
+              proxy {
                 extraConfig = ''
                   # if Set-Cookie is in the response nothing gets cached
                   # this is double bad cause we are not passing last modified in
@@ -942,17 +992,17 @@ in
                   proxy_cache_valid 200 301 302 7d;
                 '';
               };
-              "/message-bus/" = proxy {
-                extraConfig = ''
-                  proxy_http_version 1.1;
-                  proxy_buffering off;
-                '';
-              };
-              "/downloads/".extraConfig = ''
-                internal;
-                alias ${cfg.package}/share/discourse/public/;
+            "/message-bus/" = proxy {
+              extraConfig = ''
+                proxy_http_version 1.1;
+                proxy_buffering off;
               '';
             };
+            "/downloads/".extraConfig = ''
+              internal;
+              alias ${cfg.package}/share/discourse/public/;
+            '';
+          };
       };
     };
 
@@ -966,52 +1016,54 @@ in
         };
         mail-receiver-json = json.generate "mail-receiver.json" mail-receiver-environment;
       in
-        {
-          before = [ "postfix.service" ];
-          after = [ "discourse.service" ];
-          wantedBy = [ "discourse.service" ];
-          partOf = [ "discourse.service" ];
-          path = [
-            cfg.package.rake
-            pkgs.jq
-          ];
-          preStart = lib.optionalString (cfg.mail.incoming.apiKeyFile == null) ''
+      {
+        before = [ "postfix.service" ];
+        after = [ "discourse.service" ];
+        wantedBy = [ "discourse.service" ];
+        partOf = [ "discourse.service" ];
+        path = [
+          cfg.package.rake
+          pkgs.jq
+        ];
+        preStart = lib.optionalString (cfg.mail.incoming.apiKeyFile == null) ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          if [[ ! -e /var/lib/discourse-mail-receiver/api_key ]]; then
+              discourse-rake api_key:create_master[email-receiver] >/var/lib/discourse-mail-receiver/api_key
+          fi
+        '';
+        script =
+          let
+            apiKeyPath =
+              if cfg.mail.incoming.apiKeyFile == null then
+                "/var/lib/discourse-mail-receiver/api_key"
+              else
+                cfg.mail.incoming.apiKeyFile;
+          in
+          ''
             set -o errexit -o pipefail -o nounset -o errtrace
             shopt -s inherit_errexit
 
-            if [[ ! -e /var/lib/discourse-mail-receiver/api_key ]]; then
-                discourse-rake api_key:create_master[email-receiver] >/var/lib/discourse-mail-receiver/api_key
-            fi
+            api_key=$(<'${apiKeyPath}')
+            export api_key
+
+            jq <${mail-receiver-json} \
+               '.DISCOURSE_API_KEY = $ENV.api_key' \
+               >'/run/discourse-mail-receiver/mail-receiver-environment.json'
           '';
-          script =
-            let
-              apiKeyPath =
-                if cfg.mail.incoming.apiKeyFile == null then
-                  "/var/lib/discourse-mail-receiver/api_key"
-                else
-                  cfg.mail.incoming.apiKeyFile;
-            in ''
-              set -o errexit -o pipefail -o nounset -o errtrace
-              shopt -s inherit_errexit
 
-              api_key=$(<'${apiKeyPath}')
-              export api_key
-
-              jq <${mail-receiver-json} \
-                 '.DISCOURSE_API_KEY = $ENV.api_key' \
-                 >'/run/discourse-mail-receiver/mail-receiver-environment.json'
-            '';
-
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            RuntimeDirectory = "discourse-mail-receiver";
-            RuntimeDirectoryMode = "0700";
-            StateDirectory = "discourse-mail-receiver";
-            User = "discourse";
-            Group = "discourse";
-          };
-        });
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          RuntimeDirectory = "discourse-mail-receiver";
+          RuntimeDirectoryMode = "0700";
+          StateDirectory = "discourse-mail-receiver";
+          User = "discourse";
+          Group = "discourse";
+        };
+      }
+    );
 
     services.discourse.siteSettings = {
       required = {
@@ -1070,17 +1122,19 @@ in
       };
     };
 
-    users.users = {
-      discourse = {
-        group = "discourse";
-        isSystemUser = true;
-      };
-    } // (lib.optionalAttrs cfg.nginx.enable {
-      ${config.services.nginx.user}.extraGroups = [ "discourse" ];
-    });
+    users.users =
+      {
+        discourse = {
+          group = "discourse";
+          isSystemUser = true;
+        };
+      }
+      // (lib.optionalAttrs cfg.nginx.enable {
+        ${config.services.nginx.user}.extraGroups = [ "discourse" ];
+      });
 
     users.groups = {
-      discourse = {};
+      discourse = { };
     };
 
     environment.systemPackages = [

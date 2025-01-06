@@ -1,4 +1,12 @@
-{ lib, version, hash, stdenv, fetchurl, nixosTests, writeScript }:
+{
+  lib,
+  version,
+  hash,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  writeScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";

@@ -1,17 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtw88";
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "unstable-2023-07-23";
+  version = "0-unstable-2024-08-22";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "9b6fe04a741a6b0a1edc5ca134927784bff033a5";
-    hash = "sha256-OzaIy+WTrljwAhC73wEIRUXrkz1NrGNJAS3zofQyV6E=";
+    rev = "764a1ee307d7e5720a93b8139c94d76737eced91";
+    hash = "sha256-xHo9Qww3w36/UFhMhoLjSzZKpC2VKywJZlCPL30XirA=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -32,8 +37,14 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
     homepage = "https://github.com/lwfinger/rtw88";
-    license = with licenses; [ bsd3 gpl2Only ];
-    maintainers = with maintainers; [ tvorog atila ];
+    license = with licenses; [
+      bsd3
+      gpl2Only
+    ];
+    maintainers = with maintainers; [
+      tvorog
+      atila
+    ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "4.20";
     priority = -1;

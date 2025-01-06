@@ -1,4 +1,11 @@
-{ bash, stdenv, lib, runCommand, writeText, fetchFromGitHub }:
+{
+  bash,
+  stdenv,
+  lib,
+  runCommand,
+  writeText,
+  fetchFromGitHub,
+}:
 let
   version = "1.0.0";
 
@@ -10,7 +17,7 @@ let
       owner = "zimbatm";
       repo = "shab";
       rev = "v${version}";
-      sha256 = "02lf1s6plhhcfyj9xha44wij9jbphb1x5q55xj3b5bx2ji2jsvji";
+      hash = "sha256-UW4tRZSir7KG7KXg0sOCd8kkIydEwZ6kdwxCeo0Ojgo=";
     };
 
     postPatch = ''
@@ -53,12 +60,15 @@ let
      shabScript:       a path or filename to use as a template
      parameters.name:  the name to use as part of the store path
      parameters:       variables to expose to the template
-   */
-  render = shabScript: parameters:
-    let extraParams = {
-          inherit shabScript;
-        };
-    in runCommand "out" (parameters // extraParams) ''
+  */
+  render =
+    shabScript: parameters:
+    let
+      extraParams = {
+        inherit shabScript;
+      };
+    in
+    runCommand "out" (parameters // extraParams) ''
       ${shab}/bin/shab "$shabScript" >$out
     '';
 
@@ -66,9 +76,8 @@ let
      shabScriptText:   a string to use as a template
      parameters.name:  the name to use as part of the store path
      parameters:       variables to expose to the template
-   */
-  renderText = shabScriptText: parameters:
-    render (writeText "template" shabScriptText) parameters;
+  */
+  renderText = shabScriptText: parameters: render (writeText "template" shabScriptText) parameters;
 
 in
-  shab
+shab

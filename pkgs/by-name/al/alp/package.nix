@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runCommand
-, alp
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runCommand,
+  alp,
 }:
 
 buildGoModule rec {
@@ -33,13 +34,13 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    go build -o $GOPATH/bin/${pname} main.go
+    go build -o $GOPATH/bin/alp main.go
 
     runHook postBuild
   '';
 
   passthru.tests = {
-    test-version = runCommand "${pname}-test" {} ''
+    test-version = runCommand "${pname}-test" { } ''
       ${alp}/bin/alp version > $out
       cat $out | grep '${version}'
     '';

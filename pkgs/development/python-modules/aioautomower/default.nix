@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
@@ -9,14 +10,16 @@
   poetry-core,
   pyjwt,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.6.4";
+  version = "2024.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,15 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    rev = "refs/tags/${version}";
-    hash = "sha256-v+wg/2JRBJ0VgRYOey92WGwVzHmxU9h/ev2oICefaMg=";
+    tag = version;
+    hash = "sha256-JLlmvd6Hgf1a3YU9xfbw8plEbRDNgCzxF3PpveGsrPg=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -42,22 +44,28 @@ buildPythonPackage rec {
     ical
     mashumaro
     pyjwt
+    tzlocal
   ];
 
   nativeCheckInputs = [
+    aioresponses
     freezegun
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
   pythonImportsCheck = [ "aioautomower" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
-
   disabledTests = [
     # File is missing
     "test_standard_mower"
+    # Call no found
+    "test_post_commands"
+    # Timezone mismatches
+    "test_full_planner_event"
+    "test_sinlge_planner_event"
   ];
 
   meta = with lib; {

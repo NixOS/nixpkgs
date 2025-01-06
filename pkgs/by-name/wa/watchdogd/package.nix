@@ -1,11 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, libite
-, libuev
-, libconfuse
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libite,
+  libuev,
+  libconfuse,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "watchdogd";
@@ -18,8 +20,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-JNJj0CJGJXuIRpob2RXYqDRrU4Cn20PRxOjQ6TFsVYQ=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ libite libuev libconfuse ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    libite
+    libuev
+    libconfuse
+  ];
+
+  passthru.tests = { inherit (nixosTests) watchdogd; };
 
   meta = with lib; {
     description = "Advanced system & process supervisor for Linux";

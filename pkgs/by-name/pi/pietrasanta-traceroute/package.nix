@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, unstableGitUpdater
-, stdenv
-, openssl
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  stdenv,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pietrasanta-traceroute";
-  version = "0.0.5-unstable-2024-06-11";
+  version = "0.0.5-unstable-2024-09-06";
 
   src = fetchFromGitHub {
     owner = "catchpoint";
     repo = "Networking.traceroute";
-    rev = "5b9f9cd2cbd5b8d90442d4ddb71ab788297e2153";
-    hash = "sha256-/WsBh42brVCRP31LnCPS34kRaQKMvP+XEENyD5MjCfw=";
+    rev = "e4a5cf94dccd646e03b9b75a762e9b014e3a3128";
+    hash = "sha256-5FbuITewgSh6UFUU1vttkokk8uZ2IrzkDwsCuWJPKlM=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
@@ -32,10 +33,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/catchpoint/Networking.traceroute/";
     changelog = "https://github.com/catchpoint/Networking.traceroute/blob/${src.rev}/ChangeLog";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     mainProgram = "traceroute";
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

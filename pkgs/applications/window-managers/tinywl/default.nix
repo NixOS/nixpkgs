@@ -1,15 +1,43 @@
-{ lib, stdenv, wlroots, pkg-config, wayland-scanner
-, libxkbcommon, pixman, udev, wayland, wayland-protocols
+{
+  lib,
+  stdenv,
+  wlroots,
+  pkg-config,
+  wayland-scanner,
+  libxkbcommon,
+  pixman,
+  udev,
+  wayland,
+  wayland-protocols,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
   pname = "tinywl";
-  inherit (wlroots) version src patches postPatch;
+  inherit (wlroots)
+    version
+    src
+    patches
+    postPatch
+    ;
 
-  nativeBuildInputs = [ pkg-config wayland-scanner ];
-  buildInputs = [ libxkbcommon pixman udev wayland wayland-protocols wlroots ];
+  nativeBuildInputs = [
+    pkg-config
+    wayland-scanner
+  ];
+  buildInputs = [
+    libxkbcommon
+    pixman
+    udev
+    wayland
+    wayland-protocols
+    wlroots
+  ];
 
-  makeFlags = [ "-C" "tinywl" ];
+  makeFlags = [
+    "-C"
+    "tinywl"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -17,6 +45,8 @@ stdenv.mkDerivation {
     cp tinywl/tinywl $out/bin
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) tinywl; };
 
   meta = {
     homepage = "https://gitlab.freedesktop.org/wlroots/wlroots/tree/master/tinywl";

@@ -9,7 +9,7 @@
 
 maven.buildMavenPackage rec {
   pname = "h2";
-  version = "2.3.230";
+  version = "2.3.232";
 
   outputs = [
     "out"
@@ -19,8 +19,8 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "h2database";
     repo = "h2database";
-    rev = "refs/tags/version-${version}";
-    hash = "sha256-zF33xqsTIXSdOSqBeX/uuEdi36btn6gS/fmbxcgsSpg=";
+    tag = "version-${version}";
+    hash = "sha256-voqQ4JqYkHRxVdxMGsHmKirQXMP7s44rTXeasWWW2Jw=";
   };
 
   mvnParameters = "-f h2/pom.xml";

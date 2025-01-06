@@ -14,9 +14,10 @@
   alsa-lib,
   makeWrapper,
   docutils,
+  wayland-scanner,
 }:
 let
-  version = "1.0_beta15";
+  version = "1.0_beta16";
 in
 stdenv.mkDerivation {
   pname = "sfwbar";
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
     owner = "LBCrion";
     repo = "sfwbar";
     rev = "v${version}";
-    hash = "sha256-nNtnHOM/ArbYx5ZGlnxgMB33YaGAOigxgW4SAywg66Q=";
+    hash = "sha256-jMEbw3Xla2cod/oKFQ4bD3sTHi7DZ0deG0H0Yt0Y7ck=";
   };
 
   buildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     makeWrapper
+    wayland-scanner
   ];
 
   postFixup = ''

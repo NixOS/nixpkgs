@@ -4,10 +4,8 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  gssapi,
   httpcore,
   httpx,
-  krb5,
   psrpcore,
   psutil,
   pyspnego,
@@ -30,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Pwfc9e39sYPdcHN1cZtxxGEglEYzPp4yOYLD5/4SSiU=";
   };
 
@@ -50,13 +48,9 @@ buildPythonPackage rec {
     xmldiff
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     credssp = [ requests-credssp ];
-    kerberos = [
-      # pyspnego[kerberos] will have those two dependencies
-      gssapi
-      krb5
-    ];
+    kerberos = pyspnego.optional-dependencies.kerberos;
     named_pipe = [ psutil ];
     ssh = [ asyncssh ];
   };

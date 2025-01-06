@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, ncurses
-, withGui ? false, qtbase }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  withGui ? false,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "i7z";
@@ -33,11 +40,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postBuild = lib.optionalString withGui ''
-      cd GUI
-      qmake
-      make clean
-      make
-      cd ..
+    cd GUI
+    qmake
+    make clean
+    make
+    cd ..
   '';
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

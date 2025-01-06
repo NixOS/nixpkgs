@@ -2,16 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
-  gnome,
   adwaita-icon-theme,
   glib,
   gtk3,
   gsettings-desktop-schemas,
   gnome-desktop,
+  gnome-settings-daemon,
   dbus,
   json-glib,
   libICE,
@@ -46,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gsettings = lib.getExe' glib "gsettings";
       dbusLaunch = lib.getExe' dbus "dbus-launch";
       bash = lib.getExe bash;
@@ -76,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     xorg.xtrans
     adwaita-icon-theme
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
     libepoxy
@@ -94,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/libexec/budgie-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
+      --suffix XDG_CONFIG_DIRS : "${gnome-settings-daemon}/etc/xdg"
   '';
 
   separateDebugInfo = true;

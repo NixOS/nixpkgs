@@ -1,32 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, pkg-config
-, openssl
-, scdoc
-, Security
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  scdoc,
+  Security,
+  which,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "phetch";
   version = "1.2.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xvxx";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J+ka7/B37WzVPPE2Krkd/TIiVwuKfI2QYWmT0JHgBGQ=";
   };
 
   cargoHash = "sha256-y3Y5PnZ51Zc3LmVTijUGnb0KaGm28sWOSYxjuM3A1Zk=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config scdoc which ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    scdoc
+    which
+  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     make manual

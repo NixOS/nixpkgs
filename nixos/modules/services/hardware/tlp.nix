@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.tlp;
   enableRDW = config.networking.networkmanager.enable;
   tlp = pkgs.tlp.override { inherit enableRDW; };
   # TODO: Use this for having proper parameters in the future
-  mkTlpConfig = tlpConfig: generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {
+  mkTlpConfig = tlpConfig: lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
       mkValueString = val:
-        if isList val then "\"" + (toString val) + "\""
+        if lib.isList val then "\"" + (toString val) + "\""
         else toString val;
     } "=";
   } tlpConfig;
@@ -17,13 +16,13 @@ in
   ###### interface
   options = {
     services.tlp = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the TLP power management daemon.";
       };
 
-      settings = mkOption {type = with types; attrsOf (oneOf [bool int float str (listOf str)]);
+      settings = lib.mkOption {type = with lib.types; attrsOf (oneOf [bool int float str (listOf str)]);
         default = {};
         example = {
           SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
@@ -34,8 +33,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Verbatim additional configuration variables for TLP.
@@ -46,10 +45,10 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     hardware.cpu.x86.msr.enable = true;
 
-    warnings = optional (cfg.extraConfig != "") ''
+    warnings = lib.optional (cfg.extraConfig != "") ''
       Using config.services.tlp.extraConfig is deprecated and will become unsupported in a future release. Use config.services.tlp.settings instead.
     '';
 
@@ -63,7 +62,7 @@ in
 
     environment.etc = {
       "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
-    } // optionalAttrs enableRDW {
+    } // lib.optionalAttrs enableRDW {
       "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
         "${tlp}/usr/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
     };

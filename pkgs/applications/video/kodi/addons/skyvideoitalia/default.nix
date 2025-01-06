@@ -1,4 +1,13 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, inputstreamhelper, simplecache }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+  inputstreamhelper,
+  simplecache,
+}:
 
 buildKodiAddon rec {
   pname = "skyvideoitalia";

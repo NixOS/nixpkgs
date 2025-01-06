@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.rsyslogd;
@@ -36,8 +38,8 @@ in
 
     services.rsyslogd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable syslogd.  Note that systemd also logs
@@ -45,8 +47,8 @@ in
         '';
       };
 
-      defaultConfig = mkOption {
-        type = types.lines;
+      defaultConfig = lib.mkOption {
+        type = lib.types.lines;
         default = defaultConf;
         description = ''
           The default {file}`syslog.conf` file configures a
@@ -55,8 +57,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "news.* -/var/log/news";
         description = ''
@@ -65,8 +67,8 @@ in
         '';
       };
 
-      extraParams = mkOption {
-        type = types.listOf types.str;
+      extraParams = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-m 0" ];
         description = ''
@@ -78,27 +80,26 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.rsyslog ];
 
-    systemd.services.syslog =
-      { description = "Syslog Daemon";
+    systemd.services.syslog = {
+      description = "Syslog Daemon";
 
-        requires = [ "syslog.socket" ];
+      requires = [ "syslog.socket" ];
 
-        wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
-            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
-            # Prevent syslogd output looping back through journald.
-            StandardOutput = "null";
-          };
+      serviceConfig = {
+        ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
+        # Prevent syslogd output looping back through journald.
+        StandardOutput = "null";
       };
+    };
 
   };
 

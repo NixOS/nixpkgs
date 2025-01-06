@@ -27,10 +27,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
-
-    # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
+    "-p no:cacheprovider"
+    # https://github.com/certbot/certbot/issues/9988
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CfSlF6DWkYxxVNTNBkr0+KVeKpqxEEqkz4VBenqo+l0=";
   };
 
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

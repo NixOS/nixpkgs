@@ -5,11 +5,8 @@
   cudaPackages,
   buildPythonPackage,
   fetchurl,
-  isPy38,
-  isPy39,
-  isPy310,
-  isPy311,
   python,
+  pythonOlder,
   autoPatchelfHook,
   filelock,
   lit,
@@ -18,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.1.0";
+  version = "3.1.0";
   format = "wheel";
 
   src =
@@ -29,7 +26,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = !(isPy38 || isPy39 || isPy310 || isPy311);
+  disabled = pythonOlder "3.8";
 
   pythonRemoveDeps = [
     "cmake"
@@ -52,31 +49,10 @@ buildPythonPackage rec {
   dontStrip = true;
 
   # If this breaks, consider replacing with "${cuda_nvcc}/bin/ptxas"
-  postFixup =
-    ''
-      chmod +x "$out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas"
-    ''
-    + (
-      let
-        # Bash was getting weird without linting,
-        # but basically upstream contains [cc, ..., "-lcuda", ...]
-        # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
-        old = [ "-lcuda" ];
-        new = [
-          "-lcuda"
-          "-L${addDriverRunpath.driverLink}"
-          "-L${cudaPackages.cuda_cudart}/lib/stubs/"
-        ];
-
-        quote = x: ''"${x}"'';
-        oldStr = lib.concatMapStringsSep ", " quote old;
-        newStr = lib.concatMapStringsSep ", " quote new;
-      in
-      ''
-        substituteInPlace $out/${python.sitePackages}/triton/common/build.py \
-          --replace '${oldStr}' '${newStr}'
-      ''
-    );
+  postFixup = ''
+    mkdir -p $out/${python.sitePackages}/triton/third_party/cuda/bin/
+    ln -s ${cudaPackages.cuda_nvcc}/bin/ptxas $out/${python.sitePackages}/triton/third_party/cuda/bin/
+  '';
 
   meta = with lib; {
     description = "Language and compiler for custom Deep Learning operations";

@@ -1,4 +1,9 @@
-{ pkgs, lib, stdenvNoCC, themeConfig ? null }:
+{
+  pkgs,
+  lib,
+  stdenvNoCC,
+  themeConfig ? null,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "sddm-astronaut";
   version = "1.0";
@@ -11,7 +16,10 @@ stdenvNoCC.mkDerivation rec {
   };
 
   dontWrapQtApps = true;
-  propagatedBuildInputs = with pkgs.kdePackages; [ qt5compat qtsvg ];
+  propagatedBuildInputs = with pkgs.kdePackages; [
+    qt5compat
+    qtsvg
+  ];
 
   installPhase =
     let
@@ -23,13 +31,14 @@ stdenvNoCC.mkDerivation rec {
     ''
       mkdir -p ${basePath}
       cp -r $src/* ${basePath}
-    '' + lib.optionalString (themeConfig != null) ''
+    ''
+    + lib.optionalString (themeConfig != null) ''
       ln -sf ${configFile} ${basePath}/theme.conf.user
     '';
 
   meta = {
     description = "Modern looking qt6 sddm theme";
-    homepage = "https://github.com/${src.owner}/${pname}";
+    homepage = "https://github.com/${src.owner}/${src.repo}";
     license = lib.licenses.gpl3;
 
     platforms = lib.platforms.linux;

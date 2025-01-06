@@ -1,5 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl
-, flint, pplite
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  perl,
+  gmp,
+  mpfr,
+  ppl,
+  ocaml,
+  findlib,
+  camlidl,
+  mlgmpidl,
+  flint,
+  pplite,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,15 +24,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-gHLCurydxX1pS66DTAWUJGl9Yqu9RWRjkZh6lXzM7YY=";
   };
 
-  nativeBuildInputs = [ ocaml findlib perl ];
-  buildInputs = [ gmp mpfr ppl camlidl flint pplite ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    perl
+  ];
+  buildInputs = [
+    gmp
+    mpfr
+    ppl
+    camlidl
+    flint
+    pplite
+  ];
   propagatedBuildInputs = [ mlgmpidl ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configurePhase = ''
     runHook preConfigure
-    ./configure -prefix $out ${lib.optionalString stdenv.isDarwin "--no-strip"}
+    ./configure -prefix $out ${lib.optionalString stdenv.hostPlatform.isDarwin "--no-strip"}
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
     runHook postConfigure
   '';

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -16,21 +15,19 @@
   # checks
   distributed,
   pytestCheckHook,
-  xarray
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.9";
+  version = "1.1.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-expr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DfXGQ5/aOIWcM9qcALMr3T6qi/l9gMF9HLaQwbzPdE4=";
+    tag = "v${version}";
+    hash = "sha256-t1vPlTxV5JYArg/a7CzPP13NHbstEoCgHRmd8Y9mDfA=";
   };
 
   postPatch = ''

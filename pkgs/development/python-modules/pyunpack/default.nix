@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ponty";
     repo = "pyunpack";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1MAdiX6+u35f6S8a0ZcIIebZE8bbxTy+0TnMohJ7J6s=";
   };
 

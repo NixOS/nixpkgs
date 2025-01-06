@@ -15,7 +15,7 @@
   libXmu,
   opencascade-occt,
   rapidjson,
-  swig4,
+  swig,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    swig4
+    swig
   ];
   buildInputs = [
     python
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libXi
     fontconfig
     rapidjson
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   cmakeFlags = [
     "-Wno-dev"

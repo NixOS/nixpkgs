@@ -33,12 +33,11 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
+      "first-boot-complete.target"
     ] ++ optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
-    ] ++ optionals cfg.package.withTpm2Tss [
-      "tpm2.target"
     ] ++ [
       "sigpwr.target"
       "timers.target"
@@ -53,7 +52,6 @@ let
       "debug-shell.service"
 
       # Udev.
-      "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
@@ -106,10 +104,6 @@ let
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
-
-      # Boot counting
-      "boot-complete.target"
-    ] ++ lib.optional config.boot.loader.systemd-boot.bootCounting.enable "systemd-bless-boot.service" ++ [
 
       # Hibernate / suspend.
       "hibernate.target"
@@ -166,6 +160,7 @@ let
 
       # Misc.
       "systemd-sysctl.service"
+      "systemd-machine-id-commit.service"
     ] ++ optionals cfg.package.withTimedated [
       "dbus-org.freedesktop.timedate1.service"
       "systemd-timedated.service"
@@ -202,6 +197,8 @@ in
   options.systemd = {
 
     package = mkPackageOption pkgs "systemd" {};
+
+    enableStrictShellChecks = mkEnableOption "" // { description = "Whether to run shellcheck on the generated scripts for systemd units."; };
 
     units = mkOption {
       description = "Definition of systemd units; see {manpage}`systemd.unit(5)`.";
@@ -338,14 +335,6 @@ in
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting; see {manpage}`cgroups(7)`.
-      '';
-    };
-
-    enableUnifiedCgroupHierarchy = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable the unified cgroup hierarchy (cgroupsv2); see {manpage}`cgroups(7)`.
       '';
     };
 
@@ -583,6 +572,15 @@ in
       "systemd/user-generators" = { source = hooks "user-generators" cfg.user.generators; };
       "systemd/system-generators" = { source = hooks "system-generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "system-shutdown" cfg.shutdown; };
+
+      # Ignore all other preset files so systemd doesn't try to enable/disable
+      # units during runtime.
+      "systemd/system-preset/00-nixos.preset".text = ''
+        ignore *
+      '';
+      "systemd/user-preset/00-nixos.preset".text = ''
+        ignore *
+      '';
     });
 
     services.dbus.enable = true;
@@ -677,7 +675,6 @@ in
     systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 
@@ -692,13 +689,7 @@ in
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226
-    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
-
-    boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
-
-    # Avoid potentially degraded system state due to
-    # "Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)."
-    systemd.oomd.enable = mkIf (!cfg.enableUnifiedCgroupHierarchy) false;
+    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
 
     services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {
@@ -723,5 +714,10 @@ in
       (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
       (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
       (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
+      (mkRemovedOptionModule ["systemd" "enableUnifiedCgroupHierarchy"] ''
+          In 256 support for cgroup v1 ('legacy' and 'hybrid' hierarchies) is now considered obsolete and systemd by default will refuse to boot under it.
+          To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierachy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
+          NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
+      '')
     ];
 }

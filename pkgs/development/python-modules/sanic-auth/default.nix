@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   sanic,
   sanic-testing,
   pytestCheckHook,
@@ -10,15 +11,17 @@
 buildPythonPackage rec {
   pname = "sanic-auth";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Sanic-Auth";
     inherit version;
-    sha256 = "0dc24ynqjraqwgvyk0g9bj87zgpq4xnssl24hnsn7l5vlkmk8198";
+    hash = "sha256-KAU066S70GO1hURQrW0n+L5/kFzpgen341hlia0ngjU=";
   };
 
-  propagatedBuildInputs = [ sanic ];
+  build-system = [ setuptools ];
+
+  dependencies = [ sanic ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -33,7 +36,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Support for httpx>=0.20.0
     substituteInPlace tests/test_auth.py \
-      --replace "allow_redirects=False" "follow_redirects=False"
+      --replace-fail "allow_redirects=False" "follow_redirects=False"
   '';
 
   pythonImportsCheck = [ "sanic_auth" ];

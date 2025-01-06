@@ -23,7 +23,7 @@ _addToTclLibPath() {
     if [[ -z "${TCLLIBPATH-}" ]]; then
         export TCLLIBPATH="$tclPkg"
     else
-        if [[ "$TCLLIBPATH" != *"$tclPkg "* && "$TCLLIBPATH" != *"$tclPkg" ]]; then
+        if [[ "$TCLLIBPATH " != *"$tclPkg "* ]]; then
             export TCLLIBPATH="${TCLLIBPATH} $tclPkg"
         fi
     fi

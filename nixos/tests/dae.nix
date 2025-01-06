@@ -1,33 +1,38 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
+  {
 
-  name = "dae";
+    name = "dae";
 
-  meta = {
-    maintainers = with lib.maintainers; [ oluceps ];
-  };
-
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.curl ];
-    services.nginx = {
-      enable = true;
-      statusPage = true;
+    meta = {
+      maintainers = with lib.maintainers; [ oluceps ];
     };
-    services.dae = {
-      enable = true;
-      config = ''
-        global{}
-        routing{}
-      '';
-    };
-  };
 
-  testScript = ''
-    machine.wait_for_unit("nginx.service")
-    machine.wait_for_unit("dae.service")
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.curl ];
+        services.nginx = {
+          enable = true;
+          statusPage = true;
+        };
+        services.dae = {
+          enable = true;
+          config = ''
+            global { disable_waiting_network: true }
+            routing{}
+          '';
+        };
+      };
 
-    machine.wait_for_open_port(80)
+    testScript = ''
+      machine.wait_for_unit("nginx.service")
+      machine.wait_for_unit("dae.service")
 
-    machine.succeed("curl --fail --max-time 10 http://localhost")
-  '';
+      machine.wait_for_open_port(80)
 
-})
+      machine.succeed("curl --fail --max-time 10 http://localhost")
+    '';
+
+  }
+)

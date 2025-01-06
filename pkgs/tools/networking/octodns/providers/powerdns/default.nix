@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, octodns
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  octodns,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "octodns-powerdns";
-  version = "0.0.5";
+  version = "0.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,15 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-powerdns";
-    rev = "v${version}";
-    hash = "sha256-jt0+JnpCgvsoqMcC9mANX7uq2WPTiI2JQjwQi7LGWj0=";
+    tag = "v${version}";
+    hash = "sha256-wa/SHyTfj+iHnTq8t+3yzyGn+YULOdI88Aii16qPwPM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     octodns
     requests
   ];

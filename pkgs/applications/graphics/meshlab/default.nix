@@ -1,30 +1,31 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, libGLU
-, qtbase
-, qtscript
-, qtxmlpatterns
-, lib3ds
-, bzip2
-, muparser
-, eigen
-, glew
-, gmp
-, levmar
-, qhull
-, cmake
-, cgal
-, boost
-, mpfr
-, xercesc
-, tbb
-, embree
-, vcg
-, libigl
-, corto
-, openctm
-, structuresynth
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  libGLU,
+  qtbase,
+  qtscript,
+  qtxmlpatterns,
+  lib3ds,
+  bzip2,
+  muparser,
+  eigen,
+  glew,
+  gmp,
+  levmar,
+  qhull,
+  cmake,
+  cgal,
+  boost,
+  mpfr,
+  xercesc,
+  tbb,
+  embree,
+  vcg,
+  libigl,
+  corto,
+  openctm,
+  structuresynth,
 }:
 
 mkDerivation rec {
@@ -89,6 +90,12 @@ mkDerivation rec {
   postFixup = ''
     patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
   '';
+
+  # display a black screen on wayland, so force XWayland for now.
+  # Might be fixed when upstream will be ready for Qt6.
+  qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM xcb"
+  ];
 
   meta = {
     description = "System for processing and editing 3D triangular meshes";

@@ -1,27 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, python3
-, ghostscript
-, pdftk
-, poppler_utils
-, makeBinaryWrapper
+  python3,
+  ghostscript,
+  qpdf,
+  poppler_utils,
+  makeBinaryWrapper,
 }:
 
 let
   python = python3.withPackages (ps: with ps; [ tkinter ]);
-  binPath = lib.makeBinPath [ ghostscript pdftk poppler_utils ];
+
+  binPath = lib.makeBinPath [
+    ghostscript
+    qpdf
+    poppler_utils
+  ];
 in
 stdenv.mkDerivation {
   pname = "pdf-sign";
-  version = "0-unstable-2023-08-08";
+  version = "0-unstable-2024-07-16";
 
   src = fetchFromGitHub {
     owner = "svenssonaxel";
     repo = "pdf-sign";
-    rev = "98742c6b12ebe2ca3ba375c695f43b52fe38b362";
-    hash = "sha256-5GRk0T1iLqmvWI8zvZE3OWEHPS0/zN/Ie9brjZiFpqc=";
+    rev = "6c373e3df2ac53af74ea84c3b5f299b13d7dae9c";
+    hash = "sha256-yx1ff1JMTydCd5sCIoiT30zRwxNEwFbgEM9++nkJKY4=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -31,9 +37,13 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 pdf-sign pdf-create-empty -t $out/bin
-    wrapProgram $out/bin/pdf-sign --prefix PATH : ${binPath}
-    wrapProgram $out/bin/pdf-create-empty --prefix PATH : ${binPath}
+    for exe in "pdf-sign" "pdf-create-empty" "pdf-from-text"; do
+      # Install wrapped programs into $out/lib so that they are not renamed.
+      # Renaming them, like wrapProgram does, would produce the wrong output
+      # from `--help`.
+      install -Dm755 $exe -t $out/lib
+      makeWrapper $out/lib/$exe $out/bin/$exe --prefix PATH : ${binPath}
+    done
 
     runHook postInstall
   '';
@@ -47,4 +57,3 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
   };
 }
-

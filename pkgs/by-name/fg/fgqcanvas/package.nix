@@ -1,9 +1,10 @@
-{ fetchgit
-, pkg-config
-, stdenv
-, lib
-# Package dependencies
-, qt5
+{
+  fetchgit,
+  pkg-config,
+  stdenv,
+  lib,
+  # Package dependencies
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.code.sf.net/p/flightgear/flightgear";
     rev = "3168828949d6b42959ccee6c202b8895493edb2b";
-    sha256 = "sha256-QiIMkrzaB/ljVf6c+RJNFWKLZa84cIjYPO5nxEFDqjg=";
+    hash = "sha256-QiIMkrzaB/ljVf6c+RJNFWKLZa84cIjYPO5nxEFDqjg=";
   };
 
   nativeBuildInputs = [

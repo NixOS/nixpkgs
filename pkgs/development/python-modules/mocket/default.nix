@@ -26,6 +26,7 @@
   httpx,
   psutil,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   redis,
   redis-server,
@@ -36,12 +37,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.12.8";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-++zGXLtQ01srmF0EqUFqaxh+mnNzW8IzYG1RzNGTXkw=";
+    hash = "sha256-GFzIDSE+09L4RC5w4h3fqgq9lkyOVjq5JN++ZNbHWc8=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pook = [ pook ];
     speedups = [ xxhash ];
   };
@@ -66,20 +67,21 @@ buildPythonPackage rec {
       httpx
       psutil
       pytest-asyncio
+      pytest-cov-stub
       pytestCheckHook
       redis
       requests
       sure
     ]
     ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     ${redis-server}/bin/redis-server &
     REDIS_PID=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     kill $REDIS_PID
   '';
 
@@ -91,13 +93,14 @@ buildPythonPackage rec {
   disabledTests = [
     # tests that require network access (like DNS lookups)
     "test_truesendall_with_dump_from_recording"
+    "test_aiohttp"
     "test_asyncio_record_replay"
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/main/test_redis.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/main/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 

@@ -6,6 +6,7 @@
   cffi,
   pkg-config,
   wayland,
+  wayland-scanner,
   pytestCheckHook,
 }:
 
@@ -19,7 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-WYreAng6rQWjKPZjtRtpTFq2i9XR4JJsDaPFISxWZTM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ wayland-scanner ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];

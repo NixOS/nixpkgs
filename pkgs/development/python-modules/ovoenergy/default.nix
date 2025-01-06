@@ -20,11 +20,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "ovoenergy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZcTSf7UejEUqQo0qEXP3fWjZYRx0a3ZBNVkwS2dL3Yk=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
+
+  build-system = [
+    incremental
+    setuptools
+  ];
 
   nativeBuildInputs = [ incremental ];
 

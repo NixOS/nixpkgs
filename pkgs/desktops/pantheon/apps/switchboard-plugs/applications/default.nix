@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libhandy
-, granite
-, gtk3
-, switchboard
-, flatpak
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  granite7,
+  gtk4,
+  switchboard,
+  flatpak,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "7.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-r2JKiTewsLQSZPriC0w72CFevRQXytrFcO2VfA9BKHA=";
+    sha256 = "sha256-jdSdzOHu1u/8N/eN6D9MjR/9K7n+rfmuBpyRSweb6lA=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +35,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatpak
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
     switchboard
   ];
 

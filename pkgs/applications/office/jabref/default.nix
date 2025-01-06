@@ -1,17 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, makeDesktopItem
-, copyDesktopItems
-, unzip
-, xdg-utils
-, gtk3
-, jdk
-, gradle
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  xdg-utils,
+  gtk3,
+  jdk,
+  gradle_8,
+  python3,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation rec {
   version = "5.13";
   pname = "jabref";
@@ -131,7 +135,13 @@ stdenv.mkDerivation rec {
       binaryNativeCode # source bundles dependencies as jars
     ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ gebner linsui ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      gebner
+      linsui
+    ];
   };
 }

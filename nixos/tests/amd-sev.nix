@@ -1,29 +1,36 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   name = "amd-sev";
   meta = {
-    maintainers = with lib.maintainers; [ trundle veehaitch ];
+    maintainers = with lib.maintainers; [
+      trundle
+      veehaitch
+    ];
   };
 
-  nodes.machine = { lib, ... }: {
-    hardware.cpu.amd.sev.enable = true;
-    hardware.cpu.amd.sevGuest.enable = true;
+  nodes.machine =
+    { lib, ... }:
+    {
+      hardware.cpu.amd.sev.enable = true;
+      hardware.cpu.amd.sevGuest.enable = true;
 
-    specialisation.sevCustomUserGroup.configuration = {
-      users.groups.sevtest = { };
+      specialisation.sevCustomUserGroup.configuration = {
+        users.groups.sevtest = { };
 
-      hardware.cpu.amd.sev = {
-        enable = true;
-        group = "root";
-        mode = "0600";
-      };
-      hardware.cpu.amd.sevGuest = {
-        enable = true;
-        group = "sevtest";
+        hardware.cpu.amd.sev = {
+          enable = true;
+          group = "root";
+          mode = "0600";
+        };
+        hardware.cpu.amd.sevGuest = {
+          enable = true;
+          group = "sevtest";
+        };
       };
     };
-  };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       specialisations = "${nodes.machine.system.build.toplevel}/specialisation";
     in

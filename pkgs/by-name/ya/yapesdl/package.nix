@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   strictDeps = true;
 
@@ -47,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "yapesdl";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

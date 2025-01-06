@@ -1,4 +1,11 @@
-{ fetchFromGitHub, buildGoModule, jq, buildNpmPackage, lib, makeWrapper }:
+{
+  fetchFromGitHub,
+  buildGoModule,
+  jq,
+  buildNpmPackage,
+  lib,
+  makeWrapper,
+}:
 
 let
   version = "0.13.2";

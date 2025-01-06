@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpuinfo";
-  version = "0-unstable-2024-07-10";
+  version = "0-unstable-2024-12-09";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "cpuinfo";
-    rev = "ca678952a9a8eaa6de112d154e8e104b22f9ab3f";
-    hash = "sha256-UKy9TIiO/UJ5w+qLRlMd085CX2qtdVH2W3rtxB5r6MY=";
+    rev = "ca156f7bc9109c552973414a63d310f76ef0cbf8";
+    hash = "sha256-hIGizsl1NSGySXPI9Xx69xCfQLAMpYviYhBXX201N4o=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_LIBS" true)
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = {
     description = "Tools and library to detect essential for performance optimization information about host CPU";

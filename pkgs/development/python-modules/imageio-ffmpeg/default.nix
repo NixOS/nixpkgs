@@ -22,21 +22,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio-ffmpeg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i9DBEhRyW5shgnhpaqpPLTI50q+SATJnxur8PAauYX4=";
   };
 
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      ffmpeg = "${ffmpeg}/bin/ffmpeg";
+      ffmpeg = lib.getExe ffmpeg;
     })
   ];
-
-  # https://github.com/imageio/imageio-ffmpeg/issues/59
-  postPatch = ''
-    sed -i '/setup_requires=\["pip>19"\]/d' setup.py
-  '';
 
   build-system = [ setuptools ];
 

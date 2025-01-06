@@ -105,6 +105,7 @@ let
 in with pkgs; {
   kafka_3_6 = makeKafkaTest "kafka_3_6" { kafkaPackage = apacheKafka_3_6; };
   kafka_3_7 = makeKafkaTest "kafka_3_7" { kafkaPackage = apacheKafka_3_7; };
+  kafka_3_8 = makeKafkaTest "kafka_3_8" { kafkaPackage = apacheKafka_3_8; };
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
   kafka_kraft = makeKafkaTest "kafka_kraft" { kafkaPackage = apacheKafka; mode = "kraft"; };
 }

@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchurl, ocaml, cmdliner, ptime }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  cmdliner,
+  ptime,
+}:
 
 buildDunePackage rec {
 
@@ -16,7 +23,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ptime ];
 
-  outputs = [ "lib" "bin" "out" ];
+  outputs = [
+    "lib"
+    "bin"
+    "out"
+  ];
 
   installPhase = ''
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib/

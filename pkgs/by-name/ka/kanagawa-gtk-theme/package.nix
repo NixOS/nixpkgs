@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, gtk-engine-murrine
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  gtk-engine-murrine,
 }:
 stdenvNoCC.mkDerivation {
   pname = "kanagawa-gtk-theme";

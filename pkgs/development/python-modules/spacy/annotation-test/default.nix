@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "spacy-annotation-test";
 
   src = lib.fileset.toSource {
-    root  = ./.;
+    root = ./.;
     fileset = lib.fileset.unions [
       ./annotate.py
     ];
@@ -17,7 +17,6 @@ stdenv.mkDerivation {
 
   dontConfigure = true;
   dontBuild = true;
-  doCheck = true;
 
   nativeCheckInputs = [
     pytest

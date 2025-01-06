@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   fetchYarnDeps,
   yarnConfigHook,
@@ -10,13 +10,13 @@
 }:
 let
 
-  version = "1.10.3";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "screego";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-X8KZAUh1cO8qNYH6nc9zZ+mnfItgef8N948ErJLlZII=";
+    hash = "sha256-wFLoReqzLx6PEW/u9oz7VIYKtJkmwGTneeB6Ysgse7Q=";
   };
 
   ui = stdenv.mkDerivation {
@@ -27,7 +27,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      hash = "sha256-ye8UDkal10k/5uCd0VrZsG2FJGB727q+luExFTUmB/M=";
+      hash = "sha256-yjHxyKEqXMxYsm+KroPB9KulfqYSOU/7ghbKnlSFrd0=";
     };
 
     nativeBuildInputs = [
@@ -35,6 +35,10 @@ let
       yarnBuildHook
       nodejs
     ];
+
+    preConfigure = ''
+      export HOME=$(mktemp -d)
+    '';
 
     installPhase = ''
       cp -r build $out
@@ -44,12 +48,12 @@ let
 
 in
 
-buildGoModule rec {
+buildGo123Module rec {
   inherit src version;
 
   pname = "screego-server";
 
-  vendorHash = "sha256-ry8LO+KmNU9MKL8/buk9qriDe/zq+2uIsws6wVZmoo4=";
+  vendorHash = "sha256-zMb8MLS0KhwYNpfVeNMD9huEcpyyrZD0QAPmBNxMcQU=";
 
   ldflags = [
     "-s"
@@ -60,13 +64,15 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    mkdir -p ./ui/build
+    mkdir -p ./ui
     cp -r "${ui}" ./ui/build
   '';
 
   postInstall = ''
     mv $out/bin/server $out/bin/screego
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Screen sharing for developers";

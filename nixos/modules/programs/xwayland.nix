@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.xwayland;
@@ -12,8 +17,7 @@ in
 
     defaultFontPath = lib.mkOption {
       type = lib.types.str;
-      default = lib.optionalString config.fonts.fontDir.enable
-        "/run/current-system/sw/share/X11/fonts";
+      default = lib.optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts";
       defaultText = lib.literalExpression ''
         optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
       '';

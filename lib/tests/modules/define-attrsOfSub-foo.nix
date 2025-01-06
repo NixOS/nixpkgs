@@ -1,3 +1,3 @@
 {
-  attrsOfSub.foo = {};
+  attrsOfSub.foo = { };
 }

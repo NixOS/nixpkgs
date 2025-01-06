@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, fetchurl
-, qmake
-, qtbase
-, qttools
-, qtsvg
-, pkg-config
-, poppler
-, djvulibre
-, libspectre
-, cups
-, file
-, ghostscript
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  qmake,
+  qtbase,
+  qttools,
+  qtsvg,
+  pkg-config,
+  poppler,
+  djvulibre,
+  libspectre,
+  cups,
+  file,
+  ghostscript,
 }:
 
 mkDerivation rec {
@@ -39,6 +40,9 @@ mkDerivation rec {
     file
     ghostscript
   ];
+
+  # needed for qmakeFlags+=( below
+  __structuredAttrs = true;
 
   preConfigure = ''
     lrelease qpdfview.pro

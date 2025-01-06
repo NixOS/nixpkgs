@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, lib, file
-, pkg-config, autoconf
-, glib, dbus-glib, json-glib
-, gtk2, libindicator-gtk2, libdbusmenu-gtk2, libappindicator-gtk2 }:
+{
+  stdenv,
+  fetchurl,
+  lib,
+  file,
+  pkg-config,
+  autoconf,
+  glib,
+  dbus-glib,
+  json-glib,
+  gtk2,
+  libindicator-gtk2,
+  libdbusmenu-gtk2,
+  libappindicator-gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "indicator-application-gtk2";
@@ -12,11 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "1xqsb6c1pwawabw854f7aybjrgyhc2r1316i9lyjspci51zk5m7v";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+  ];
 
   buildInputs = [
-    glib dbus-glib json-glib
-    gtk2 libindicator-gtk2 libdbusmenu-gtk2 libappindicator-gtk2
+    glib
+    dbus-glib
+    json-glib
+    gtk2
+    libindicator-gtk2
+    libdbusmenu-gtk2
+    libappindicator-gtk2
   ];
 
   postPatch = ''

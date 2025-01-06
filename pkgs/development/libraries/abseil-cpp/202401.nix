@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , gtest
 , static ? stdenv.hostPlatform.isStatic
@@ -18,6 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eA2/dZpNOlex1O5PNa3XSZhpMB3AmaIoHzVDI9TD/cg=";
   };
 
+  patches = [
+    # Fixes: clang++: error: unsupported option '-msse4.1' for target 'aarch64-apple-darwin'
+    # https://github.com/abseil/abseil-cpp/pull/1707
+    (fetchpatch {
+      name = "fix-compile-breakage-on-darwin";
+      url = "https://github.com/abseil/abseil-cpp/commit/6dee153242d7becebe026a9bed52f4114441719d.patch";
+      hash = "sha256-r6QnHPnwPwOE/hv4kLNA3FqNq2vU/QGmwAc5q0/q1cs=";
+    })
+  ];
+
   cmakeFlags = [
     "-DABSL_BUILD_TEST_HELPERS=ON"
     "-DABSL_USE_EXTERNAL_GOOGLETEST=ON"
@@ -32,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtest ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.GaetanLepage ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
 })

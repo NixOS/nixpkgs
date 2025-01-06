@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxml2.dev libxcrypt
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gettext
   ] ++ lib.optionals pythonSupport [
     libxml2.py
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 })

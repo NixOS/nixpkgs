@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, re }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  re,
+}:
 
 buildDunePackage rec {
   pname = "duppy";

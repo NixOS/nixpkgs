@@ -1,4 +1,8 @@
-{ lib, fetchurl, perlPackages }:
+{
+  lib,
+  fetchurl,
+  perlPackages,
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "pflogsumm";
@@ -9,7 +13,10 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0hkim9s5f1yg5sfs5048jydhy3sbxafls496wcjk0cggxb113py4";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   buildInputs = [ perlPackages.DateCalc ];
 
   preConfigure = ''

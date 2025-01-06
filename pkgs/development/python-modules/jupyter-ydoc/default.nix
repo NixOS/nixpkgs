@@ -2,35 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+
+  # build-system
   hatch-nodejs-version,
   hatchling,
-  importlib-metadata,
+
+  # dependencies
   pycrdt,
   pytestCheckHook,
+
+  # tests
   websockets,
   ypy-websocket,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "2.1.1";
+  version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-HcvxOGGzZ4AA1pr07zi0njoS+AgbqFHGgDk8Lhi8S4Q=";
+    hash = "sha256-1fHVvD7JV55YdGlJbNM9bypp4Y50Mp4TDCMUELocMdA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-nodejs-version
     hatchling
   ];
 
-  propagatedBuildInputs = [ pycrdt ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [ pycrdt ];
 
   pythonImportsCheck = [ "jupyter_ydoc" ];
 

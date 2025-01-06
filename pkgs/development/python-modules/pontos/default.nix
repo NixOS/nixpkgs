@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "24.3.2";
+  version = "24.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,13 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DXZDXipYBClqSdlTJsaPWaKr3qTiJ3osm3hHPp/MPow=";
+    tag = "v${version}";
+    hash = "sha256-Ri5MtUfIHE0s3Csaf08RZjGvl5HYxZJSn/JwNkkXvRA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorful
     httpx
     lxml

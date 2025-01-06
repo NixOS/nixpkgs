@@ -5,23 +5,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.11.8";
-  format = "setuptools";
+  version = "0.12.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BSrnUhe6SFtalUGldC24eJTqJAF5FdUWo3rwWNT1uCw=";
+    tag = "012.2"; # https://github.com/Danielhiversen/pymill/issues/87
+    hash = "sha256-tR6MZIgCazGcXRIaSXyDYIEp+kD6xyrpOXORbi8LV7E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];

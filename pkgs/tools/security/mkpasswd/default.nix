@@ -1,10 +1,20 @@
-{ lib, stdenv, whois, libxcrypt, perl, pkg-config }:
+{
+  lib,
+  stdenv,
+  whois,
+  libxcrypt,
+  perl,
+  pkg-config,
+}:
 
 stdenv.mkDerivation {
   pname = "mkpasswd";
   inherit (whois) version src patches;
 
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
   buildInputs = [ libxcrypt ];
 
   inherit (whois) preConfigure;

@@ -99,7 +99,11 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else (mkDerivationSuper args).overrideAttrs (args: {
+      else (mkDerivationSuper args).overrideAttrs (args: if args ? env.NIX_CFLAGS_LINK then {
+        env = args.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK + " -static";
+        };
+      } else {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
@@ -126,30 +130,27 @@ rec {
           "--disable-shared"
         ];
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        mesonFlags = (args.mesonFlags or []) ++ [
+          "-Ddefault_library=static"
+          "-Ddefault_both_libraries=static"
+        ];
       });
     });
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv.override (old: {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs (prevAttrs: {
-      NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
-        + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [])
-        ++ lib.optionals stdenv.hasCC [
-          (pkgs.buildPackages.makeSetupHook {
-            name = "darwin-portable-libSystem-hook";
-            substitutions = {
-              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-              targetPrefix = stdenv.cc.bintools.targetPrefix;
-            };
-          } ./darwin/portable-libsystem.sh)
-        ];
-    }));
+    (mkDerivationSuper args).overrideAttrs (prevAttrs:
+      if prevAttrs ? env.NIX_CFLAGS_LINK then {
+        env = prevAttrs.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK
+            + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+        };
+      } else {
+        NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
+          + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+      }));
   });
 
   # Puts all the other ones together
@@ -257,25 +258,27 @@ rec {
     in
     overrideCC targetStdenv cc;
 
-  useMoldLinker = stdenv: let
-    bintools = stdenv.cc.bintools.override {
-      extraBuildCommands = ''
-        wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-        wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-      '';
-    };
-  in stdenv.override (old: {
-    allowedRequisites = null;
-    cc = stdenv.cc.override { inherit bintools; };
-    # gcc >12.1.0 supports '-fuse-ld=mold'
-    # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
-    # https://github.com/rui314/mold#how-to-use
-    } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
-    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
-    });
-  });
-
+  useMoldLinker = stdenv:
+    if stdenv.targetPlatform.isDarwin
+    then throw "Mold can't be used to emit Mach-O (Darwin) binaries"
+    else let
+      bintools = stdenv.cc.bintools.override {
+        extraBuildCommands = ''
+          wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+          wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        '';
+      };
+    in stdenv.override (old: {
+      allowedRequisites = null;
+      cc = stdenv.cc.override { inherit bintools; };
+      # gcc >12.1.0 supports '-fuse-ld=mold'
+      # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
+      # https://github.com/rui314/mold#how-to-use
+      } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
+        mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+          NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+        });
+      });
 
   /* Modify a stdenv so that it builds binaries optimized specifically
      for the machine they are built on.
@@ -321,17 +324,9 @@ rec {
   # `sdkVersion` can be any of the following:
   # * A version string indicating the requested SDK version; or
   # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
-  overrideSDK = import ./darwin/override-sdk.nix {
-    inherit lib extendMkDerivationArgs;
-    inherit (pkgs)
-      stdenvNoCC
-      pkgsBuildBuild
-      pkgsBuildHost
-      pkgsBuildTarget
-      pkgsHostHost
-      pkgsHostTarget
-      pkgsTargetTarget;
-  };
+  #
+  # Note: `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
+  overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
 
   withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
     bintools = let

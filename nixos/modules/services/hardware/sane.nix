@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   pkg = config.hardware.sane.backends-package.override {
@@ -32,8 +34,17 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  backends =
+    [
+      pkg
+      netConf
+    ]
+    ++ lib.optional config.services.saned.enable sanedConf
+    ++ config.hardware.sane.extraBackends;
+  saneConfig = pkgs.mkSaneConfig {
+    paths = backends;
+    inherit (config.hardware.sane) disabledDefaultBackends;
+  };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -45,8 +56,8 @@ in
 
   options = {
 
-    hardware.sane.enable = mkOption {
-      type = types.bool;
+    hardware.sane.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable support for SANE scanners.
@@ -57,22 +68,22 @@ in
       '';
     };
 
-    hardware.sane.backends-package = mkOption {
-      type = types.package;
+    hardware.sane.backends-package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.sane-backends;
-      defaultText = literalExpression "pkgs.sane-backends";
+      defaultText = lib.literalExpression "pkgs.sane-backends";
       description = "Backends driver package to use.";
     };
 
-    hardware.sane.snapshot = mkOption {
-      type = types.bool;
+    hardware.sane.snapshot = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Use a development snapshot of SANE scanner drivers.";
     };
 
-    hardware.sane.extraBackends = mkOption {
-      type = types.listOf types.path;
-      default = [];
+    hardware.sane.extraBackends = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
       description = ''
         Packages providing extra SANE backends to enable.
 
@@ -82,12 +93,12 @@ in
         vendors/devices).
         :::
       '';
-      example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
+      example = lib.literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
     };
 
-    hardware.sane.disabledDefaultBackends = mkOption {
-      type = types.listOf types.str;
-      default = [];
+    hardware.sane.disabledDefaultBackends = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.
@@ -95,14 +106,14 @@ in
       '';
     };
 
-    hardware.sane.configDir = mkOption {
-      type = types.str;
+    hardware.sane.configDir = lib.mkOption {
+      type = lib.types.str;
       internal = true;
       description = "The value of SANE_CONFIG_DIR.";
     };
 
-    hardware.sane.netConf = mkOption {
-      type = types.lines;
+    hardware.sane.netConf = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "192.168.0.16";
       description = ''
@@ -110,8 +121,8 @@ in
       '';
     };
 
-    hardware.sane.drivers.scanSnap.enable = mkOption {
-      type = types.bool;
+    hardware.sane.drivers.scanSnap.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       example = true;
       description = ''
@@ -121,7 +132,7 @@ in
       '';
     };
 
-    hardware.sane.drivers.scanSnap.package = mkPackageOption pkgs [ "sane-drivers" "epjitsu" ] {
+    hardware.sane.drivers.scanSnap.package = lib.mkPackageOption pkgs [ "sane-drivers" "epjitsu" ] {
       extraDescription = ''
         Useful if you want to extract the driver files yourself.
 
@@ -130,8 +141,8 @@ in
       '';
     };
 
-    hardware.sane.openFirewall = mkOption {
-      type = types.bool;
+    hardware.sane.openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Open ports needed for discovery of scanners on the local network, e.g.
@@ -139,8 +150,8 @@ in
       '';
     };
 
-    services.saned.enable = mkOption {
-      type = types.bool;
+    services.saned.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable saned network daemon for remote connection to scanners.
@@ -151,8 +162,8 @@ in
       '';
     };
 
-    services.saned.extraConfig = mkOption {
-      type = types.lines;
+    services.saned.extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "192.168.0.0/24";
       description = ''
@@ -162,33 +173,38 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkMerge [
-    (mkIf enabled {
-      hardware.sane.configDir = mkDefault "${saneConfig}/etc/sane.d";
+  config = lib.mkMerge [
+    (lib.mkIf enabled {
+      hardware.sane.configDir = lib.mkDefault "${saneConfig}/etc/sane.d";
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
       environment.etc."sane-config".source = config.hardware.sane.configDir;
       environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
+      # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
+      # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
+      # does not have a real logind seat, so `uaccess` is not enough.
+      services.udev.extraRules = ''
+        ENV{DEVNAME}!="", ENV{libsane_matched}=="yes", RUN+="${pkgs.acl}/bin/setfacl -m g:scanner:rw $env{DEVNAME}"
+      '';
 
       users.groups.scanner.gid = config.ids.gids.scanner;
-      networking.firewall.allowedUDPPorts = mkIf config.hardware.sane.openFirewall [ 8612 ];
+      networking.firewall.allowedUDPPorts = lib.mkIf config.hardware.sane.openFirewall [ 8612 ];
 
       systemd.tmpfiles.rules = [
         "d /var/lock/sane 0770 root scanner - -"
       ];
     })
 
-    (mkIf config.services.saned.enable {
+    (lib.mkIf config.services.saned.enable {
       networking.firewall.connectionTrackingModules = [ "sane" ];
 
       systemd.services."saned@" = {
         description = "Scanner Service";
-        environment = mapAttrs (name: val: toString val) env;
+        environment = lib.mapAttrs (name: val: toString val) env;
         serviceConfig = {
           User = "scanner";
           Group = "scanner";
@@ -199,7 +215,10 @@ in
       systemd.sockets.saned = {
         description = "saned incoming socket";
         wantedBy = [ "sockets.target" ];
-        listenStreams = [ "0.0.0.0:6566" "[::]:6566" ];
+        listenStreams = [
+          "0.0.0.0:6566"
+          "[::]:6566"
+        ];
         socketConfig = {
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
@@ -211,7 +230,7 @@ in
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
-        extraGroups = [ "lp" ] ++ optionals config.services.avahi.enable [ "avahi" ];
+        extraGroups = [ "lp" ] ++ lib.optionals config.services.avahi.enable [ "avahi" ];
       };
     })
   ];

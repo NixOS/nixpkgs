@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, bash
-, tinycc
-, gnumake
-, gnupatch
-, heirloom-devtools
-, heirloom
+{
+  lib,
+  fetchurl,
+  bash,
+  tinycc,
+  gnumake,
+  gnupatch,
+  heirloom-devtools,
+  heirloom,
 }:
 let
   pname = "heirloom";
@@ -70,61 +71,63 @@ let
     "LWCHAR='-L../libwchar -lwchar'"
   ];
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    gnumake
-    gnupatch
-    heirloom-devtools
-  ];
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnumake
+      gnupatch
+      heirloom-devtools
+    ];
 
-  passthru.sed =
-    bash.runCommand "${pname}-sed-${version}" {} ''
+    passthru.sed = bash.runCommand "${pname}-sed-${version}" { } ''
       install -D ${heirloom}/bin/sed $out/bin/sed
     '';
 
-  passthru.tests.get-version = result:
-    bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/banner Hello Heirloom
-      mkdir $out
-    '';
+    passthru.tests.get-version =
+      result:
+      bash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/banner Hello Heirloom
+        mkdir $out
+      '';
 
-  meta = with lib; {
-    description = "Heirloom Toolchest is a collection of standard Unix utilities";
-    homepage = "https://heirloom.sourceforge.net/tools.html";
-    license = with licenses; [
-      # All licenses according to LICENSE/
-      zlib
-      caldera
-      bsdOriginalUC
-      cddl
-      bsd3
-      gpl2Plus
-      lgpl21Plus
-      lpl-102
-      info-zip
-    ];
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  unbz2 --file ${src} --output heirloom.tar
-  untar --file heirloom.tar
-  rm heirloom.tar
-  cd heirloom-${version}
+    meta = with lib; {
+      description = "Heirloom Toolchest is a collection of standard Unix utilities";
+      homepage = "https://heirloom.sourceforge.net/tools.html";
+      license = with licenses; [
+        # All licenses according to LICENSE/
+        zlib
+        caldera
+        bsdOriginalUC
+        cddl
+        bsd3
+        gpl2Plus
+        lgpl21Plus
+        lpl-102
+        info-zip
+      ];
+      maintainers = teams.minimal-bootstrap.members;
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    unbz2 --file ${src} --output heirloom.tar
+    untar --file heirloom.tar
+    rm heirloom.tar
+    cd heirloom-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
-  cp ${./proctab.c} nawk/proctab.c
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+    cp ${./proctab.c} nawk/proctab.c
 
-  # Build
-  # These tools are required during later build steps
-  export PATH="$PATH:$PWD/ed:$PWD/nawk:$PWD/sed"
-  make ${lib.concatStringsSep " " makeFlags}
+    # Build
+    # These tools are required during later build steps
+    export PATH="$PATH:$PWD/ed:$PWD/nawk:$PWD/sed"
+    make ${lib.concatStringsSep " " makeFlags}
 
-  # Install
-  make install ROOT=$out ${lib.concatStringsSep " " makeFlags}
-''
+    # Install
+    make install ROOT=$out ${lib.concatStringsSep " " makeFlags}
+  ''

@@ -1,14 +1,15 @@
-{ lib
-, coreutils
-, curl
-, fetchFromGitHub
-, gawk
-, gnutar
-, stdenv
-, unixtools
-, writeShellApplication
-, nix-update-script
-, displays ? { }
+{
+  lib,
+  coreutils,
+  curl,
+  fetchFromGitHub,
+  gawk,
+  gnutar,
+  stdenv,
+  unixtools,
+  writeShellApplication,
+  nix-update-script,
+  displays ? { },
 }:
 
 # Usage:
@@ -31,7 +32,13 @@ stdenv.mkDerivation rec {
 
   fetch = lib.getExe (writeShellApplication {
     name = "linuxhw-edid-fetch";
-    runtimeInputs = [ gawk coreutils unixtools.xxd curl gnutar ];
+    runtimeInputs = [
+      gawk
+      coreutils
+      unixtools.xxd
+      curl
+      gnutar
+    ];
     text = ''
       repo="''${repo:-"${src}"}"
       ${builtins.readFile ./linuxhw-edid-fetch.sh}
@@ -39,9 +46,11 @@ stdenv.mkDerivation rec {
   });
 
   configurePhase = lib.pipe displays [
-    (lib.mapAttrsToList (name: patterns: ''
-      "$fetch" ${lib.escapeShellArgs patterns} > "${name}.bin"
-    ''))
+    (lib.mapAttrsToList (
+      name: patterns: ''
+        "$fetch" ${lib.escapeShellArgs patterns} > "${name}.bin"
+      ''
+    ))
     (builtins.concatStringsSep "\n")
   ];
 

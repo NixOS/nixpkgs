@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, clp
-, coin-utils
-, osi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  clp,
+  coin-utils,
+  osi,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgl";
-  version = "0.60.8";
+  version = "0.60.9";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Cgl";
     rev = "releases/${finalAttrs.version}";
-    hash = "sha256-nyqrHC6UOKp1wn6Yvk+53oBn60wUqSWEPUrcNTuPN04=";
+    hash = "sha256-E84yCrgpRMjt7owPLPk1ATW+aeHNw8V24DHgkb6boIE=";
   };
 
   nativeBuildInputs = [

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "gpuctypes";
     owner = "tinygrad";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xUMvMBK1UhZaMZfik0Ia6+siyZGpCkBV+LTnQvzt/rw=";
   };
 

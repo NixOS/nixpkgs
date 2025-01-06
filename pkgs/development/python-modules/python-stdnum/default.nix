@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     SOAP = [ zeep ];
   };
 

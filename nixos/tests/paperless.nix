@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, ... }: {
   name = "paperless";
-  meta.maintainers = with lib.maintainers; [ erikarvstedt Flakebi ];
+  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt ];
 
   nodes = let self = {
     simple = { pkgs, ... }: {
@@ -12,17 +12,8 @@ import ./make-test-python.nix ({ lib, ... }: {
     };
     postgres = { config, pkgs, ... }: {
       imports = [ self.simple ];
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = [ "paperless" ];
-        ensureUsers = [
-          { name = config.services.paperless.user;
-            ensureDBOwnership = true;
-          }
-        ];
-      };
+      services.paperless.database.createLocally = true;
       services.paperless.settings = {
-        PAPERLESS_DBHOST = "/run/postgresql";
         PAPERLESS_OCR_LANGUAGE = "deu";
       };
     };

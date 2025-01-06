@@ -1,7 +1,10 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
+  lib,
   extra-cmake-modules,
-  ki18n, kwidgetsaddons, kxmlgui
+  ki18n,
+  kwidgetsaddons,
+  kxmlgui,
 }:
 
 mkDerivation {
@@ -14,5 +17,9 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ ki18n kwidgetsaddons kxmlgui ];
+  buildInputs = [
+    ki18n
+    kwidgetsaddons
+    kxmlgui
+  ];
 }

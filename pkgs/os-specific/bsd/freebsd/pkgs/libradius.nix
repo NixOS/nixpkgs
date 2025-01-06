@@ -1,12 +1,10 @@
 {
   mkDerivation,
   openssl,
-  libmd,
 }:
 mkDerivation {
   path = "lib/libradius";
   buildInputs = [
-    libmd
     openssl
   ];
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     pytestCheckHook

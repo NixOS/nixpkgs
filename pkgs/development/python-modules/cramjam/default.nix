@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "pyrus-cramjam";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeCheckInputs = [
     hypothesis

@@ -1,22 +1,18 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, bash
-, coreutils
-, gitea
-, gzip
-, openssh
-, pam
-, sqliteSupport ? true
-, pamSupport ? stdenv.hostPlatform.isLinux
-, runCommand
-, brotli
-, xorg
-, nixosTests
-, buildNpmPackage
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bash,
+  coreutils,
+  compressDrvWeb,
+  gitea,
+  gzip,
+  openssh,
+  sqliteSupport ? true,
+  nixosTests,
+  buildNpmPackage,
 }:
 
 let
@@ -24,7 +20,7 @@ let
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-gXBBiDIIS0aW6qK37HcF0AuJOliblinznRVXoo6DV1s=";
+    npmDepsHash = "sha256-7kYGFJffP7Mu4+tWlcLTb7eBibgpwEis2zQYMWCI7dw=";
 
     # use webpack directly instead of 'make frontend' as the packages are already installed
     buildPhase = ''
@@ -36,20 +32,26 @@ let
       cp -R public $out/
     '';
   };
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "gitea";
-  version = "1.22.1";
+  version = "1.22.6";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${gitea.version}";
-    hash = "sha256-s7su3gMdXv2sT1uYYtx29n7QDvmPU9QB3QR6ctOlE58=";
+    hash = "sha256-WQ8RAx4yW2dl1a/NXHF9fqAG6y62mXmB2lH8DFCg+nA=";
   };
 
-  vendorHash = "sha256-nzhjIfQMzSf1nuBMTIe0xn+NMDFbDZ9jRHu8Nwzmp4w=";
+  proxyVendor = true;
 
-  outputs = [ "out" "data" ];
+  vendorHash = "sha256-BR5PDhag557F4nLRoNJuwz+dlSjYgxzoKx/DIsXBPto=";
+
+  outputs = [
+    "out"
+    "data"
+  ];
 
   patches = [ ./static-root-path.patch ];
 
@@ -66,10 +68,10 @@ in buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = lib.optional pamSupport pam;
-
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [
+    "sqlite"
+    "sqlite_unlock_notify"
+  ];
 
   ldflags = [
     "-s"
@@ -86,23 +88,21 @@ in buildGoModule rec {
     cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          coreutils
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   passthru = {
-    data-compressed = runCommand "gitea-data-compressed" {
-      nativeBuildInputs = [ brotli xorg.lndir ];
-    } ''
-      mkdir -p $out/{options,public,templates}
-      lndir ${frontend}/public $out/public
-      lndir ${gitea.data}/options $out/options
-      lndir ${gitea.data}/templates $out/templates
-
-      # Create static gzip and brotli files
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
-        -exec gzip --best --keep --force {} ';' \
-        -exec brotli --best --keep --no-copy-stat {} ';'
-    '';
+    data-compressed =
+      lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"."
+        (compressDrvWeb gitea.data { });
 
     tests = nixosTests.gitea;
   };
@@ -111,7 +111,10 @@ in buildGoModule rec {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
+    maintainers = with maintainers; [
+      techknowlogick
+      SuperSandro2000
+    ];
     mainProgram = "gitea";
   };
 }

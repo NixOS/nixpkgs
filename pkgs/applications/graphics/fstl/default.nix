@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mkDerivation,
+  cmake,
+}:
 
 mkDerivation rec {
   pname = "fstl";
@@ -6,7 +12,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
 
     mkdir -p $out/Applications

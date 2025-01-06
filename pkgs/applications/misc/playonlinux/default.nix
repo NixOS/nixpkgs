@@ -3,10 +3,10 @@
 , fetchurl
 , cabextract
 , gettext
-, glxinfo
 , gnupg
 , icoutils
 , imagemagick
+, mesa-demos
 , netcat-gnu
 , p7zip
 , python3
@@ -37,10 +37,10 @@ let
     cabextract
     python
     gettext
-    glxinfo
     gnupg
     icoutils
     imagemagick
+    mesa-demos
     netcat-gnu
     p7zip
     unzip
@@ -64,6 +64,7 @@ let
     wxpython
     setuptools
     natsort
+    pyasyncore
   ]);
 
 in stdenv.mkDerivation {

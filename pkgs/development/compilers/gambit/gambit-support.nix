@@ -18,25 +18,29 @@ rec {
       grep -i ' version=\|echo..#define ___STAMP_VERSION' include/makefile.in # XXX DEBUG -- REMOVE ME
     '';
     modules = true;
-    extraOptions = ["CFLAGS=-foptimize-sibling-calls"];
+    extraOptions = [ "CFLAGS=-foptimize-sibling-calls" ];
   };
 
   unstable-params = stable-params // {
     stable = false;
-    extraOptions = []; # "CFLAGS=-foptimize-sibling-calls" not necessary in latest unstable
+    extraOptions = [ ]; # "CFLAGS=-foptimize-sibling-calls" not necessary in latest unstable
   };
 
-  export-gambopt = params : "export GAMBOPT=${params.buildRuntimeOptions} ;";
+  export-gambopt = params: "export GAMBOPT=${params.buildRuntimeOptions} ;";
 
-  gambit-bootstrap = import ./bootstrap.nix ( pkgs );
+  gambit-bootstrap = import ./bootstrap.nix (pkgs);
 
   meta = with lib; {
     description = "Optimizing Scheme to C compiler";
-    homepage    = "http://gambitscheme.org";
-    license     = licenses.lgpl21Only; # dual, also asl20
+    homepage = "http://gambitscheme.org";
+    license = licenses.lgpl21Only; # dual, also asl20
     # NB regarding platforms: continuously tested on Linux x86_64 and regularly tested on macOS x86_64.
     # *should* work everywhere.
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice raskin fare ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      thoughtpolice
+      raskin
+      fare
+    ];
   };
 }

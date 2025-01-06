@@ -4,7 +4,7 @@
   fetchurl,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       written in plain C and can be used in C++ code.
     '';
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

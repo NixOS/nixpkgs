@@ -1,26 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, protobuf
-, bzip2
-, oniguruma
-, sqlite
-, xz
-, zlib
-, zstd
-, stdenv
-, apple_sdk
-, buildNpmPackage
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  protobuf,
+  bzip2,
+  oniguruma,
+  sqlite,
+  xz,
+  zlib,
+  zstd,
+  stdenv,
+  apple_sdk,
+  buildNpmPackage,
 }:
 
 let
-  version = "0.10.1";
+  version = "0.11.0";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     rev = "v${version}";
-    hash = "sha256-68fJYk/R1F7FHm4F+pyyA9BRVdV8S8p5uEM1hVbuArg=";
+    hash = "sha256-VRkAOUtF/eOxE7/Xjxi/WEfeSseGEJ9IROCFbgeFUkI=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -28,7 +29,7 @@ let
 
     sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-7l1tdgR/R7qaYBbBm9OnKDBETPkaIN8AUgc9WdYQuwI=";
+    npmDepsHash = "sha256-2beTB6BHHshQkgbqVc195j2/0hBEn/fFz8+0ViSG5Gc=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -66,7 +67,7 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "chromiumoxide-0.5.7" = "sha256-GHrm5u8FtXRUjSRGMU4PNU6AJZ5W2KcgfZY1c/CBVYA=";
-      "enrichment-0.1.0" = "sha256-FDPSCBkx+DPeWwTBz9+ORcbbiSBC2a8tJaay9Pxwz4w=";
+      "enrichment-0.1.0" = "sha256-Ui4rsvmemOF00E4yBRFRS2gw9qliDrNEVQu5fvIpahA=";
     };
   };
 
@@ -75,20 +76,25 @@ rustPlatform.buildRustPackage {
     protobuf
   ];
 
-  buildInputs = [
-    bzip2
-    oniguruma
-    sqlite
-    xz
-    zlib
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin (with apple_sdk.frameworks; [
-    CoreFoundation
-    CoreServices
-    IOKit
-    Security
-    SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      bzip2
+      oniguruma
+      sqlite
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with apple_sdk.frameworks;
+      [
+        CoreFoundation
+        CoreServices
+        IOKit
+        Security
+        SystemConfiguration
+      ]
+    );
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
@@ -105,6 +111,7 @@ rustPlatform.buildRustPackage {
   # requires network access or filesystem mutations
   checkFlags = [
     "--skip handler::http::auth::tests::test_validate"
+    "--skip handler::http::router::tests::test_get_proxy_routes"
     "--skip handler::http::router::ui::tests::test_index_not_ok"
     "--skip handler::http::router::ui::tests::test_index_ok"
     "--skip handler::http::request::search::saved_view::tests::test_create_view_post"
@@ -120,6 +127,7 @@ rustPlatform.buildRustPackage {
     "--skip service::db::compact::files::tests::test_compact_files"
     "--skip service::db::user::tests::test_user"
     "--skip service::ingestion::grpc::tests::test_get_val"
+    "--skip service::metadata::trace_list_index::tests::test_write"
     "--skip service::organization::tests::test_organization"
     "--skip service::search::sql::tests::test_sql_full"
     "--skip service::triggers::tests::test_triggers"

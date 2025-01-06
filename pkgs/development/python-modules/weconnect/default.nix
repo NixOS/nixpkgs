@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.60.3";
+  version = "0.60.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eIGzcuSKzcpE6UPQKmv0kcFcIFizWOunfOJDHfcw7Yk=";
+    tag = "v${version}";
+    hash = "sha256-5mn1FDhaRoPEBEqumzu8fIHB8uKSG9aVO/shigBs4ag=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     Images = [
       ascii-magic
       pillow

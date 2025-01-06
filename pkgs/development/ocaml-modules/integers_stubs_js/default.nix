@@ -1,6 +1,8 @@
 {
-  lib, fetchFromGitHub, buildDunePackage
-, zarith_stubs_js ? null
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  zarith_stubs_js ? null,
 }:
 
 buildDunePackage rec {

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, gtk3
-, libxml2
-, libxslt
-, libatasmart
-, libnotify
-, lm_sensors
-, mate-panel
-, hicolor-icon-theme
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtk3,
+  libxml2,
+  libxslt,
+  libatasmart,
+  libnotify,
+  lm_sensors,
+  mate-panel,
+  hicolor-icon-theme,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

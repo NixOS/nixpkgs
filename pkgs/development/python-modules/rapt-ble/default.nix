@@ -6,6 +6,7 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -14,32 +15,30 @@
 buildPythonPackage rec {
   pname = "rapt-ble";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sairon";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "rapt-ble";
+    tag = "v${version}";
     hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=rapt_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "rapt_ble" ];
 
@@ -47,7 +46,7 @@ buildPythonPackage rec {
     description = "Library for RAPT Pill hydrometer BLE devices";
     homepage = "https://github.com/sairon/rapt-ble";
     changelog = "https://github.com/sairon/rapt-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

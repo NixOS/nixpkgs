@@ -4,7 +4,7 @@
   fetchPypi,
   flexmock,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   six,
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flexmock
     pytest
-    pytest-cov
+    pytest-cov-stub
     six
   ];
 

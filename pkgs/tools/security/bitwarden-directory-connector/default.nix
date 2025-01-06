@@ -11,53 +11,63 @@
 }:
 
 let
-  common = { name, npmBuildScript, installPhase }: buildNpmPackage rec {
-    pname = name;
-    version = "2024.3.2";
-    nodejs = nodejs_18;
+  common =
+    {
+      name,
+      npmBuildScript,
+      installPhase,
+    }:
+    buildNpmPackage rec {
+      pname = name;
+      version = "2024.10.0";
+      nodejs = nodejs_18;
 
-    src = fetchFromGitHub {
-      owner = "bitwarden";
-      repo = "directory-connector";
-      rev = "v${version}";
-      hash = "sha256-CB5HrT+p63zANg1SEoynk6hPPW5DcC9Qfo2+QDy2iwc=";
+      src = fetchFromGitHub {
+        owner = "bitwarden";
+        repo = "directory-connector";
+        rev = "v${version}";
+        hash = "sha256-jisMEuIpTWCy+N1QeERf+05tsugY0f+H2ntcRcFKkgo=";
+      };
+
+      postPatch = ''
+        ${lib.getExe buildPackages.jq} 'del(.scripts.preinstall)' package.json > package.json.tmp
+        mv -f package.json{.tmp,}
+
+        substituteInPlace electron-builder.json \
+          --replace-fail '"afterSign": "scripts/notarize.js",' "" \
+          --replace-fail "AppImage" "dir"
+      '';
+
+      npmDepsHash = "sha256-Zi7EHzQSSrZ6XGGV1DOASuddYA4svXQc1eGmchcLFBc=";
+
+      env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+      makeCacheWritable = true;
+      inherit npmBuildScript installPhase;
+
+      buildInputs = [
+        libsecret
+      ];
+
+      nativeBuildInputs = [
+        (python3.withPackages (ps: with ps; [ setuptools ]))
+        pkg-config
+      ];
+
+      meta = with lib; {
+        description = "LDAP connector for Bitwarden";
+        homepage = "https://github.com/bitwarden/directory-connector";
+        license = licenses.gpl3Only;
+        maintainers = with maintainers; [
+          Silver-Golden
+          SuperSandro2000
+        ];
+        platforms = platforms.linux;
+        mainProgram = name;
+      };
     };
-
-    postPatch = ''
-      ${lib.getExe buildPackages.jq} 'del(.scripts.preinstall)' package.json > package.json.tmp
-      mv -f package.json{.tmp,}
-
-      substituteInPlace electron-builder.json \
-        --replace-fail '"afterSign": "scripts/notarize.js",' "" \
-        --replace-fail "AppImage" "dir"
-    '';
-
-    npmDepsHash = "sha256-6WYNaF6z8OwWmi/Mv091LsuTUEUhWd8cDD11QKE8A5U=";
-
-    env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-    makeCacheWritable = true;
-    inherit npmBuildScript installPhase;
-
-    buildInputs = [
-      libsecret
-    ];
-
-    nativeBuildInputs = [
-      python3
-      pkg-config
-    ];
-
-    meta = with lib; {
-      description = "LDAP connector for Bitwarden";
-      homepage = "https://github.com/bitwarden/directory-connector";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [ Silver-Golden SuperSandro2000 ];
-      platforms = platforms.linux;
-      mainProgram = name;
-    };
-  };
-in {
+in
+{
   bitwarden-directory-connector = common {
     name = "bitwarden-directory-connector";
     npmBuildScript = "build:dist";
@@ -66,7 +76,7 @@ in {
 
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version} \
         -c.npmRebuild=false
 
@@ -75,7 +85,7 @@ in {
 
       makeWrapper ${lib.getExe electron} $out/bin/bitwarden-directory-connector \
         --add-flags $out/share/bitwarden-directory-connector/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set-default ELECTRON_IS_DEV 0 \
         --inherit-argv0
 

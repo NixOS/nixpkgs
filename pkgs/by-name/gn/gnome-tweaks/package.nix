@@ -1,24 +1,29 @@
-{ lib
-, meson
-, ninja
-, fetchurl
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, gnome
-, gnome-desktop
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk4
-, itstool
-, libadwaita
-, libgudev
-, libnotify
-, libxml2
-, pkg-config
-, python3Packages
-, wrapGAppsHook4
+{
+  lib,
+  meson,
+  ninja,
+  fetchurl,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gnome,
+  gnome-desktop,
+  gnome-settings-daemon,
+  gnome-shell,
+  gnome-shell-extensions,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk4,
+  itstool,
+  libadwaita,
+  libgudev,
+  libnotify,
+  libxml2,
+  mutter,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook4,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -47,11 +52,11 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     glib
     gnome-desktop
-    gnome.gnome-settings-daemon
-    gnome.gnome-shell
+    gnome-settings-daemon
+    gnome-shell
     # Makes it possible to select user themes through the `user-theme` extension
-    gnome.gnome-shell-extensions
-    gnome.mutter
+    gnome-shell-extensions
+    mutter
     gsettings-desktop-schemas
     gtk4
     libadwaita

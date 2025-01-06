@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rkbin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rkbin,
 }:
 
 stdenv.mkDerivation {
@@ -18,6 +19,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     mv bin doc $out/
+    cp LICENSE $out/doc/LICENSE
   '';
 
   passthru = {
@@ -29,7 +31,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Rockchip proprietary bootloader blobs";
     homepage = "https://github.com/rockchip-linux/rkbin";
-    license = licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ thefossguy ];
     platforms = lib.platforms.all;
   };

@@ -714,10 +714,6 @@ in {
           ExecStart = updateConfig;
         };
       };
-
-      syncthing-resume = {
-        wantedBy = [ "suspend.target" ];
-      };
     };
   };
 }

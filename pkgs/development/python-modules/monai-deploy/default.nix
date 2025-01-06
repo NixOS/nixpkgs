@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "monai-deploy-app-sdk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-a5WtU+1XjsYsXB/uZS8ufE0fOOWDf+Wy7mOX2xPEQEg=";
   };
 
@@ -31,15 +31,15 @@ buildPythonPackage rec {
     # Asked in https://github.com/Project-MONAI/monai-deploy-app-sdk/issues/450
     # if this patch can be incorporated upstream.
     substituteInPlace pyproject.toml \
-      --replace 'versioneer-518' 'versioneer'
+      --replace-fail 'versioneer-518' 'versioneer'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     versioneer
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     networkx
     colorama

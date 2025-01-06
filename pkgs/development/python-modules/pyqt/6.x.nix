@@ -2,17 +2,17 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchurl,
+  fetchPypi,
   pkg-config,
   dbus,
   lndir,
-  setuptools,
   dbus-python,
   sip,
   pyqt6-sip,
   pyqt-builder,
   qt6Packages,
   pythonOlder,
+  mesa,
   withMultimedia ? true,
   withWebSockets ? true,
   withLocation ? true,
@@ -24,17 +24,15 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.7.0.dev2404081550";
-  format = "pyproject";
+  version = "6.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchurl {
-    urls = [
-      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-      "http://web.archive.org/web/20240411124842if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-    ];
-    hash = "sha256-H5qZ/rnruGh+UVSXLZyTSvjagmmli/iYq+7BaIzl1YQ=";
+  src = fetchPypi {
+    pname = "PyQt6";
+    inherit version;
+    hash = "sha256-bYYo3kwqBQ8LdEYuTJy5f4Ob9v+rvKkXEXIv+ygVcNk=";
   };
 
   patches = [
@@ -44,6 +42,16 @@ buildPythonPackage rec {
     # ./pyqt5-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+  ];
+
+  build-system = [
+    sip
+    pyqt-builder
+  ];
+
+  dependencies = [
+    pyqt6-sip
+    dbus-python
   ];
 
   # be more verbose
@@ -81,7 +89,6 @@ buildPythonPackage rec {
     [
       pkg-config
       lndir
-      sip
       qtbase
       qtsvg
       qtdeclarative
@@ -102,7 +109,6 @@ buildPythonPackage rec {
       qtbase
       qtsvg
       qtdeclarative
-      pyqt-builder
       qtquick3d
       qtquicktimeline
     ]
@@ -111,13 +117,8 @@ buildPythonPackage rec {
     ++ lib.optional withLocation qtlocation;
 
   propagatedBuildInputs =
-    [
-      dbus-python
-      pyqt6-sip
-      setuptools
-    ]
     # ld: library not found for -lcups
-    ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [ cups ];
+    lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
@@ -128,7 +129,6 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   # Checked using pythonImportsCheck, has no tests
-  doCheck = true;
 
   pythonImportsCheck =
     [
@@ -144,13 +144,13 @@ buildPythonPackage rec {
     # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
     ++ lib.optional withLocation "PyQt6.QtPositioning";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ LunNova ];
   };
 }

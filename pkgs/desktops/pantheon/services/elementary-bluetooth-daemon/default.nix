@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-bluetooth-daemon";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "bluetooth-daemon";
     rev = finalAttrs.version;
-    hash = "sha256-09udSmd51l7zPe83RBg+AihpwsELclEF+Jn+5DKdJUI=";
+    hash = "sha256-XRskwLtQKlG96fpIxNZKWG7kn3HR0ngjAUwyn7fnxdY=";
   };
 
   nativeBuildInputs = [

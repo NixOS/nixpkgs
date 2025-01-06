@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, cups, perl, ghostscript, which, makeWrapper}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  perl,
+  ghostscript,
+  which,
+  makeWrapper,
+}:
 
 /*
     [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
@@ -28,9 +37,9 @@
 */
 
 let
-  myPatchElf = file: with lib; ''
+  myPatchElf = file: ''
     patchelf --set-interpreter \
-      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${lib.optionalString stdenv.hostPlatform.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 in
@@ -49,7 +58,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups perl stdenv.cc.libc ghostscript which ];
+  buildInputs = [
+    cups
+    perl
+    stdenv.cc.libc
+    ghostscript
+    which
+  ];
 
   dontBuild = true;
 
@@ -82,7 +97,6 @@ stdenv.mkDerivation rec {
   '';
 
   dontPatchELF = true;
-
 
   meta = {
     description = "Brother BrGenML1 LPR driver";

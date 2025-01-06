@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoreconfHook
-, glib
-, libticonv
-, libtifiles2
-, libticables2
-, xz
-, bzip2
-, acl
-, libobjc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  glib,
+  libticonv,
+  libtifiles2,
+  libticables2,
+  xz,
+  bzip2,
+  acl,
+  libobjc,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,25 +27,31 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-    libticonv
-    libtifiles2
-    libticables2
-    xz
-    bzip2
-  ] ++ lib.optionals stdenv.isLinux [
-    acl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
-  ];
+  buildInputs =
+    [
+      glib
+      libticonv
+      libtifiles2
+      libticables2
+      xz
+      bzip2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      acl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libobjc
+    ];
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben luc65r ];
+    maintainers = with maintainers; [
+      siraben
+      clevor
+    ];
     platforms = with platforms; linux ++ darwin;
   };
 }

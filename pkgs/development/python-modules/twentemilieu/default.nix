@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0rs+nBJfyXRj/3n/G2JzUDXaiIYZmWsoIcgLoWKhlV4=";
+    tag = "v${version}";
+    hash = "sha256-N6XSf212orMf3vqIjBzu+4fpKX7kFinH180lCWXtjzc=";
   };
 
   postPatch = ''
@@ -31,9 +31,9 @@ buildPythonPackage rec {
       --replace '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     description = "Python client for Twente Milieu";
     homepage = "https://github.com/frenck/python-twentemilieu";
     changelog = "https://github.com/frenck/python-twentemilieu/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -12,10 +12,10 @@
 , pkg-config
 , boost
 , libtool
-, perlPackages
 , pythonBindings ? true
 , tclBindings ? true
-, perlBindings ? true
+, perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform
+, buildPackages
 }:
 let
   python3 = python311; # needs distutils and imp
@@ -29,11 +29,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YByJ8y7SJelSet49ZNDQXSMgLAWuIf+nflnXDuRZf80=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     swig
     pkg-config
     libtool
-  ];
+  ] ++ lib.optionals pythonBindings [ python3 ]
+    ++ lib.optionals tclBindings [ tcl ]
+    ++ lib.optionals perlBindings [ perl ];
 
   buildInputs = [
     gd
@@ -41,10 +45,12 @@ stdenv.mkDerivation rec {
     libusb-compat-0_1
     boost
   ] ++ lib.optionals pythonBindings [ python3 ncurses ]
-    ++ lib.optionals tclBindings [ tcl ]
-    ++ lib.optionals perlBindings [ perl perlPackages.ExtUtilsMakeMaker ];
+    ++ lib.optionals tclBindings [ tcl ];
 
-  configureFlags = lib.optionals perlBindings [ "--with-perl-binding" ]
+
+  configureFlags = [
+    "CC_FOR_BUILD=${stdenv.cc.targetPrefix}cc"
+  ] ++ lib.optionals perlBindings [ "--with-perl-binding" ]
     ++ lib.optionals tclBindings [ "--with-tcl-binding" "--with-tcl=${tcl}/lib/" ]
     ++ lib.optionals pythonBindings [ "--with-python-binding" ];
 

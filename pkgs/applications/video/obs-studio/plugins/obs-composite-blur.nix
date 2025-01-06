@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, obs-studio
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {

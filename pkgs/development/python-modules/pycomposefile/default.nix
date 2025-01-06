@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pycomposefile";
-  version = "0.0.31";
+  version = "0.0.32";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SYul81giQLUM1FdgfabKJyrbSu4xdoaWblcE87ZbBwg=";
+    hash = "sha256-o1XVFcTE/5LuWhZZDeizZ6O+SCcEZZLQhw+MtqxKbjQ=";
   };
 
   build-system = [ setuptools ];

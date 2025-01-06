@@ -399,13 +399,6 @@ rec {
 
   literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
-  /* Transition marker for documentation that's already migrated to markdown
-     syntax. Has been a no-op for some while and been removed from nixpkgs.
-     Kept here to alert downstream users who may not be aware of the migration's
-     completion that it should be removed from modules.
-  */
-  mdDoc = lib.warn "lib.mdDoc will be removed from nixpkgs in 24.11. Option descriptions are now in Markdown by default; you can remove any remaining uses of lib.mdDoc.";
-
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when
      a `literalExpression` would be too hard to read.
@@ -427,20 +420,17 @@ rec {
      Placeholders will not be quoted as they are not actual values:
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+       (showOption ["foo" "<myPlaceholder>" "bar"]) == "foo.<myPlaceholder>.bar"
   */
   showOption = parts: let
+    # If the part is a named placeholder of the form "<...>" don't escape it.
+    # It may cause misleading escaping if somebody uses literally "<...>" in their option names.
+    # This is the trade-off to allow for placeholders in option names.
+    isNamedPlaceholder = builtins.match "\<(.*)\>";
     escapeOptionPart = part:
-      let
-        # We assume that these are "special values" and not real configuration data.
-        # If it is real configuration data, it is rendered incorrectly.
-        specialIdentifiers = [
-          "<name>"          # attrsOf (submodule {})
-          "*"               # listOf (submodule {})
-          "<function body>" # functionTo
-        ];
-      in if builtins.elem part specialIdentifiers
-         then part
-         else lib.strings.escapeNixIdentifier part;
+      if part == "*" || isNamedPlaceholder part != null
+        then part
+        else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 

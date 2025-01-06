@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, elementary-settings-daemon
-, libgee
-, granite
-, gsettings-desktop-schemas
-, gala
-, gtk3
-, glib
-, polkit
-, zeitgeist
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  elementary-settings-daemon,
+  libgee,
+  granite7,
+  gsettings-desktop-schemas,
+  gala,
+  gtk4,
+  glib,
+  polkit,
+  zeitgeist,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "7.1.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2eQ89FpEMF85UmqVu9FJUvSlaVGmsrRBnhAW7oUiUqg=";
+    sha256 = "sha256-k6dSiiBqqbhH7rmhpBu83LX8at/qJ4gkrg4Xc+VbkIE=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
     elementary-settings-daemon # settings schema
     gala
     glib
-    granite
+    granite7
     gsettings-desktop-schemas
-    gtk3
+    gtk4
     libgee
     polkit
     switchboard

@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, nix-update-script
-, gnome-power-manager
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, bamf
-, libgtop
-, libnotify
-, udev
-, wingpanel
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  nix-update-script,
+  gnome-power-manager,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  elementary-settings-daemon,
+  gtk3,
+  granite,
+  libgtop,
+  libnotify,
+  udev,
+  wingpanel,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "6.2.1";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EEY32O7GeXBHSjZQ3XGogT1sUzIKGX+CzcGx8buGLq4=";
+    sha256 = "sha256-zMvw96uRr9hrgXck+OhMiPku9qu8/zUtusiaJLUcuys=";
   };
 
   patches = [
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
+    elementary-settings-daemon
     granite
     gtk3
     libgee

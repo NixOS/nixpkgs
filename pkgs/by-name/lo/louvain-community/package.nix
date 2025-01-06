@@ -1,8 +1,9 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, lib
-, unstableGitUpdater
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lib,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Louvain Community Detection Library";

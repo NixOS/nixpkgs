@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, sassc
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, librsvg
-, gtk3
-, python3
-, fetchFromGitHub
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  sassc,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  librsvg,
+  gtk3,
+  python3,
+  fetchFromGitHub,
+  wrapGAppsHook3,
 }:
 
 let

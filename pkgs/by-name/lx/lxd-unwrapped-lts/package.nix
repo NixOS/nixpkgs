@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd";
-    rev = "refs/tags/lxd-${version}";
+    tag = "lxd-${version}";
     hash = "sha256-3C5pLvO7oABWFhFiWtBr5ohFFWm20Gg36WBfVVJgKdc=";
   };
 
@@ -108,7 +108,7 @@ buildGoModule rec {
       asl20
       agpl3Plus
     ];
-    maintainers = teams.lxc.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

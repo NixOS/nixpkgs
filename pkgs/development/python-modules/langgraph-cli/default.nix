@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.1.49";
+  version = "0.1.52";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/cli==${version}";
-    hash = "sha256-yphXboJA/TLGIPggb2Cvsxn1+WUSYMzC0wPHft3TGvo=";
+    tag = "cli==${version}";
+    hash = "sha256-zTBeDJB1Xu/rWsvEC/L4BRzxyh04lPYV7HQNHoJcskk=";
   };
 
   sourceRoot = "${src.name}/libs/cli";

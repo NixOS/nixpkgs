@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, sysprof
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  sysprof,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
     "-Dtools=false"
     "-Dtests=false"
     "-Dexamples=false"
+    "-Dpolkit-agent=disabled" # only useful for sysprof-cli
   ];
 
   meta = sysprof.meta // {

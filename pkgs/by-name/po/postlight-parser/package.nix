@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, npmHooks
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  yarnInstallHook,
+  nodejs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
+    yarnInstallHook
     nodejs
-    npmHooks.npmInstallHook
   ];
   # Upstream doesn't include a script in package.json that only builds without
   # testing, and tests fail because they need to access online websites. Hence
@@ -39,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = ''
     yarn --offline run rollup -c
   '';
-  # Tries to download stuff from the internet in this phase.
-  dontNpmPrune = true;
 
   meta = {
     changelog = "https://github.com/postlight/parser/blob/${finalAttrs.src.rev}/CHANGELOG.md";

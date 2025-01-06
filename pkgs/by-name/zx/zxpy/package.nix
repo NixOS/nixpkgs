@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, deterministic-uname
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  deterministic-uname,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -46,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Shell scripts made simple";
     homepage = "https://github.com/tusharsadhwani/zxpy";
+    changelog = "https://github.com/tusharsadhwani/zxpy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "zxpy";

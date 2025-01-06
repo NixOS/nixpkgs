@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -11,16 +12,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zephyris";
     repo = "openttd-ttf";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Nr3oLiCEdpUhB/IczCEoLM8kb1hGDH/d6WYWRbjgOi8=";
   };
 
   nativeBuildInputs = [
-    (python3.withPackages (pp: with pp; [
-      fontforge
-      pillow
-      setuptools
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        fontforge
+        pillow
+        setuptools
+      ]
+    ))
   ];
 
   postPatch = ''

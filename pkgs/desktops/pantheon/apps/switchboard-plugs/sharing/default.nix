@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  elementary-bluetooth-daemon,
+  libgee,
+  granite7,
+  gtk4,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "2.1.6";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-izo30JjPkZtR6A/bfvZNmIE4Hq5hofWmxdUwBJYoSm8=";
+    sha256 = "sha256-BWlQrM13gI6FXoqfOKoeqtE1+HVBUB09NDatGraTYtY=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    elementary-bluetooth-daemon
+    granite7
+    gtk4
     libgee
     switchboard
   ];

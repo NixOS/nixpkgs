@@ -18,16 +18,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nazarewk";
     repo = "keyring_pass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EsM+RUhYtelslRpxR5NQbqpOt8KaeCsFqkqZ1ZFx0I0=";
   };
 
   postPatch = ''
     substituteInPlace keyring_pass/__init__.py \
-      --replace 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
+      --replace-fail 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     keyring

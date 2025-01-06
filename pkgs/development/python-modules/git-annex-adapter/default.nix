@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alpernebbi";
     repo = "git-annex-adapter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vb0vxnwAs0/yOjpyyoGWvX6Tu+cuziGNdnXbdzXexhg=";
   };
 
@@ -65,9 +65,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # KeyError and AssertionError
+    "test_annex_keys"
+    "test_batchjson_metadata"
+    "test_file_tree"
     "test_jsonprocess_annex_metadata_batch"
     "test_process_annex_metadata_batch"
-    "test_batchjson_metadata"
   ];
 
   meta = with lib; {

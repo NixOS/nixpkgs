@@ -38,14 +38,14 @@
 assert withCustomConfigH -> (configH != null);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dwl";
     repo = "dwl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fygUzEi4bgopesvHByfpatkLFYI98qozJOUBNM2t9Mg=";
+    hash = "sha256-7SoCITrbMrlfL4Z4hVyPpjB9RrrjLXHP9C5t1DVXBBA=";
   };
 
   nativeBuildInputs = [
@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/dwl/dwl";
+    changelog = "https://codeberg.org/dwl/dwl/src/branch/${finalAttrs.version}/CHANGELOG.md";
     description = "Dynamic window manager for Wayland";
     longDescription = ''
       dwl is a compact, hackable compositor for Wayland based on wlroots. It is

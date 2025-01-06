@@ -181,6 +181,31 @@ Example of an error which this fixes.
 
 `[Errno 8] Exec format error: './gdk3-scan'`
 
+#### Using `-static` outside a `isStatic` platform. {#cross-static-on-non-static-platform}
+
+Add `stdenv.cc.libc.static` (static output of glibc) to `buildInputs` conditionally on if `hostPlatform` uses `glibc`.
+
+
+e.g.
+
+```nix
+{
+  buildInputs = lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+}
+```
+
+Examples of errors which this fixes.
+
+`cannot find -lm: No such file or directory`
+
+`cannot find -lc: No such file or directory`
+
+::: {.note}
+At the time of writing it is assumed the issue only happens on `glibc` because it splits the static libraries in to a different output.
+
+::: {.note}
+You may want to look in to using `stdenvAdapters.makeStatic` or `pkgsStatic` or a `isStatic = true` platform.
+
 ## Cross-building packages {#sec-cross-usage}
 
 Nixpkgs can be instantiated with `localSystem` alone, in which case there is no cross-compiling and everything is built by and for that system, or also with `crossSystem`, in which case packages run on the latter, but all building happens on the former. Both parameters take the same schema as the 3 (build, host, and target) platforms defined in the previous section. As mentioned above, `lib.systems.examples` has some platforms which are used as arguments for these parameters in practice. You can use them programmatically, or on the command line:

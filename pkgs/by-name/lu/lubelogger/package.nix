@@ -6,17 +6,17 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.3.5";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-Og7yDZn6PBkoihApCy/dWxWt/DoBwQDXVAio8nwcI9A=";
+    hash = "sha256-Ee9jwbZNc5M9edGkPvbO7xaraYXVMbVazVOU6DV6nFc=";
   };
 
   projectFile = "CarCareTracker.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  nugetDeps = ./deps.json; # File generated with `nix-build -A lubelogger.passthru.fetch-deps`.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -37,7 +37,7 @@ buildDotnetModule rec {
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ samasaur ];
+    maintainers = with maintainers; [ lyndeno ];
     mainProgram = "CarCareTracker";
     platforms = platforms.all;
   };

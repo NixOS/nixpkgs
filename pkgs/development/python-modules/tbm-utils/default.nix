@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebigmunch";
     repo = "tbm-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AEKawsAxDSDNkIaXEFFgdEBOY2PpASDrhlDrsnM5eyA=";
   };
 
@@ -51,7 +51,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   propagatedBuildInputs = [
     attrs
     pendulum
@@ -61,14 +60,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip on macOS because /etc/localtime is accessed through the pendulum
     # library, which is not allowed in a sandboxed build.
     "test_create_parser_filter_dates"
     "test_parse_args"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip on macOS because /etc/localtime is accessed through the pendulum
     # library, which is not allowed in a sandboxed build.
     "tests/test_datetime.py"

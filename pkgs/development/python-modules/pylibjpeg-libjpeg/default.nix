@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-libjpeg";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iU40QdAY5931YM3h3P+WCbiBfX88iVi2QdUvZLptsFs=";
+    tag = "v${version}";
+    hash = "sha256-g4dGIGHo0J+F0KTVA6yjgfwiYVn6iU69jgHhvEQGwOc=";
     fetchSubmodules = true;
   };
 

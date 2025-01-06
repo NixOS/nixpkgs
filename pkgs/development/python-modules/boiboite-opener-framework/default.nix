@@ -19,14 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "bof";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-atKqHRX24UjF/9Dy0aYXAN+80nBJKCd07FmaR5Vl1q4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "scapy==2.5.0rc1" "scapy"
-  '';
+  pythonRelaxDeps = [ "scapy" ];
 
   build-system = [ setuptools ];
 
@@ -37,7 +34,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "bof" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Race condition, https://github.com/secdev/scapy/pull/4558
+  # pythonImportsCheck = [ "bof" ];
 
   disabledTests = [
     # Tests are using netcat and cat to do UDP connections

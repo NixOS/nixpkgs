@@ -1,7 +1,7 @@
-{ lib
-, mpv-unwrapped
-, ocl-icd
-, ...
+{
+  lib,
+  mpv-unwrapped,
+  ocl-icd,
 }:
 
 mpv-unwrapped.wrapper {

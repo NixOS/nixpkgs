@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  bison,
+  flex,
+  libmaa,
+  zlib,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dictd";
@@ -9,9 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5PGmfRaJTYSUVp19yUQsFcw4wBHyuWMcfxzGInZlKhs=";
   };
 
-  buildInputs = [ libmaa zlib ];
+  buildInputs = [
+    libmaa
+    zlib
+  ];
 
-  nativeBuildInputs = [ bison flex libtool which ];
+  nativeBuildInputs = [
+    bison
+    flex
+    libtool
+    which
+  ];
 
   # In earlier versions, parallel building was not supported but it's OK with 1.13
   enableParallelBuilding = true;
@@ -23,9 +41,11 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} NEWS README

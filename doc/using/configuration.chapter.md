@@ -154,11 +154,13 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     The `allowInsecurePredicate` option is a function which accepts a package and returns a boolean, much like `allowUnfreePredicate`.
 
-    The following configuration example only allows insecure packages with very short names:
+    The following configuration example allows any version of the `ovftool` package:
 
     ```nix
     {
-      allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) <= 5;
+      allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "ovftool"
+      ];
     }
     ```
 

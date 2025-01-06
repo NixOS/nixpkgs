@@ -9,7 +9,6 @@
   setuptools,
   textwrap3,
 }:
-
 buildPythonPackage rec {
   pname = "ansiwrap";
   version = "0.8.4";
@@ -47,5 +46,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/jonathaneunice/ansiwrap/blob/master/CHANGES.yml";
     license = licenses.asl20;
     maintainers = [ ];
+
+    broken = true;
   };
 }

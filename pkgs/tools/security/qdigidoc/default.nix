@@ -1,50 +1,49 @@
-{ lib
-, mkDerivation
-, fetchurl
-, fetchpatch
-, cmake
-, flatbuffers
-, gettext
-, pkg-config
-, libdigidocpp
-, opensc
-, openldap
-, openssl
-, pcsclite
-, qtbase
-, qtsvg
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  flatbuffers,
+  gettext,
+  pkg-config,
+  libdigidocpp,
+  opensc,
+  openldap,
+  openssl,
+  pcsclite,
+  qtbase,
+  qtsvg,
+  qttools,
 }:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchurl {
-    url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-grhSuexp5yd/s8h5AdmdSLBmQY85l9HKZ15oTTvC6PI=";
-  };
-
-  tsl = fetchurl {
-    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
-    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
+    url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    hash = "sha256-szFLY9PpZMMYhfV5joueShfu92YDVmcCC3MOWIOAKVg=";
   };
 
   patches = [
-    # https://github.com/open-eid/DigiDoc4-Client/pull/1251
     (fetchpatch {
-      url = "https://github.com/open-eid/DigiDoc4-Client/commit/30281d14c5fb5582832eafbc254b56f8d685227d.patch";
-      hash = "sha256-nv23NbPUogOhS8No3SMIrAcPChl+d1HkxnePpCKIoUw=";
+      url = "https://github.com/open-eid/DigiDoc4-Client/commit/bb324d18f0452c2ab1b360ff6c42bb7f11ea60d7.patch";
+      hash = "sha256-JpaU9inupSDsZKhHk+sp5g+oUynVFxR7lshjTXoFIbU=";
     })
+
+    # Regularly update this with what's on https://src.fedoraproject.org/rpms/qdigidoc/blob/rawhide/f/sandbox.patch
+    # This prevents attempts to download TSL lists inside the build sandbox.
+    # The list files are regularly updated (get new signatures), though this also happens at application runtime.
+    ./sandbox.patch
   ];
 
-  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
-
-  postPatch = ''
-    substituteInPlace client/CMakeLists.txt \
-      --replace $\{TSL_URL} file://${tsl}
-  '';
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    qttools
+  ];
 
   buildInputs = [
     flatbuffers
@@ -73,6 +72,9 @@ mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli mmahut ];
+    maintainers = with maintainers; [
+      flokli
+      mmahut
+    ];
   };
 }

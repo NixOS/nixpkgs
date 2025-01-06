@@ -11,24 +11,26 @@
 
 buildPythonPackage rec {
   pname = "pyrdfa3";
-  version = "3.6.2";
+  version = "3.6.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit version;
-    pname = "pyRdfa3";
-    hash = "sha256-c2gdq5V/YJAWlnZziLlWpXaccwvEUdpv+y8ONvGDFMI=";
+    inherit pname version;
+    hash = "sha256-ZHEtGkvyGCllKzlxW62m58A7zxnLSfliwZCjj0YXIkM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     rdflib
     html5lib
     requests
   ];
+
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "pyRdfa" ];
 

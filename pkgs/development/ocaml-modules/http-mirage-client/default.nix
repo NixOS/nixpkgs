@@ -1,28 +1,29 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, h2
-, httpaf
-, mimic-happy-eyeballs
-, mirage-clock
-, paf
-, tcpip
-, x509
-, alcotest-lwt
-, mirage-clock-unix
-, mirage-crypto-rng
-, mirage-time-unix
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  h2,
+  httpaf,
+  mimic-happy-eyeballs,
+  mirage-clock,
+  paf,
+  tcpip,
+  x509,
+  alcotest-lwt,
+  mirage-clock-unix,
+  mirage-crypto-rng,
+  mirage-time-unix,
 }:
 
 buildDunePackage rec {
   pname = "http-mirage-client";
-  version = "0.0.5";
+  version = "0.0.8";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/roburio/http-mirage-client/releases/download/v${version}/http-mirage-client-${version}.tbz";
-    hash = "sha256-w/dMv5QvgglTFj9V4wRoDqK+36YeE0xWLxcAVS0oHz0=";
+    hash = "sha256-/1eguh2dYLDVNW+XWNKcwm5IgQWfEFUuQRYS205Ox+c=";
   };
 
   propagatedBuildInputs = [

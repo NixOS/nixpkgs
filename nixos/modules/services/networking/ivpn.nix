@@ -1,12 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ivpn;
 in
-with lib;
 {
   options.services.ivpn = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         This option enables iVPN daemon.
@@ -15,10 +19,13 @@ with lib;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
-    environment.systemPackages = with pkgs; [ ivpn ivpn-service ];
+    environment.systemPackages = with pkgs; [
+      ivpn
+      ivpn-service
+    ];
 
     # iVPN writes to /etc/iproute2/rt_tables
     networking.iproute2.enable = true;
@@ -27,7 +34,10 @@ with lib;
     systemd.services.ivpn-service = {
       description = "iVPN daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" "network-online.target" ];
+      wants = [
+        "network.target"
+        "network-online.target"
+      ];
       after = [
         "network-online.target"
         "NetworkManager.service"
@@ -47,5 +57,5 @@ with lib;
     };
   };
 
-  meta.maintainers = with maintainers; [ ataraxiasjel ];
+  meta.maintainers = with lib.maintainers; [ ataraxiasjel ];
 }

@@ -1,7 +1,12 @@
-{ fetchzip
+{
+  fetchzip,
 }:
 let
-  fetchzip' = args: (fetchzip args).overrideAttrs (old: { UNZIP = "-j -P iagreetotheeula"; });
+  fetchzip' =
+    args:
+    (fetchzip args).overrideAttrs (old: {
+      UNZIP = "-j -P iagreetotheeula";
+    });
 in
 {
   minigames = fetchzip {

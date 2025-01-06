@@ -3,31 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyosf";
   version = "1.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "psychopy";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Yhb6HSnLdFzWouse/RKZ8SIbMia/hhD8TAovdqmvd7o=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner', " ""
+      --replace-fail "'pytest-runner', " ""
   '';
 
   preBuild = "export HOME=$TMP";
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Tests require network access
   doCheck = false;

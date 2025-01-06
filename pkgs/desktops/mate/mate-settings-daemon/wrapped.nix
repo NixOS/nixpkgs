@@ -1,7 +1,8 @@
-{ stdenv
-, mate
-, glib
-, wrapGAppsHook3
+{
+  stdenv,
+  mate,
+  glib,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
@@ -34,5 +35,7 @@ stdenv.mkDerivation {
       --replace "${mate.mate-settings-daemon}/libexec/mate-settings-daemon" "$out/libexec/mate-settings-daemon"
   '';
 
-  meta = mate.mate-settings-daemon.meta // { priority = -10; };
+  meta = mate.mate-settings-daemon.meta // {
+    priority = -10;
+  };
 }

@@ -1,42 +1,48 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, boost
-, cmake
-, discord-rpc
-, freetype
-, hidapi
-, libpng
-, libsamplerate
-, minizip
-, nasm
-, pkg-config
-, qt6Packages
-, SDL2
-, speexdsp
-, vulkan-headers
-, vulkan-loader
-, which
-, xdg-user-dirs
-, zlib
-, withWayland ? false
-# Affects final license
-, withAngrylionRdpPlus ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  boost,
+  cmake,
+  discord-rpc,
+  freetype,
+  hidapi,
+  libpng,
+  libsamplerate,
+  minizip,
+  nasm,
+  pkg-config,
+  qt6Packages,
+  SDL2,
+  speexdsp,
+  vulkan-headers,
+  vulkan-loader,
+  which,
+  xdg-user-dirs,
+  zlib,
+  withWayland ? false,
+  # Affects final license
+  withAngrylionRdpPlus ? false,
 }:
 
 let
-  inherit (qt6Packages) qtbase qtsvg qtwayland wrapQtAppsHook;
+  inherit (qt6Packages)
+    qtbase
+    qtsvg
+    qtwayland
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation rec {
   pname = "rmg";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     rev = "v${version}";
-    hash = "sha256-mgb9Ed11fBQVnhhU5w1958a19dbTOL0ADczUOxKAnqA=";
+    hash = "sha256-4tL8x3Mb48VhzQpubSiETbkyas2+a0RL1SDNsEO7iJk=";
   };
 
   nativeBuildInputs = [
@@ -73,9 +79,11 @@ stdenv.mkDerivation rec {
     "-DUSE_ANGRYLION=${lib.boolToString withAngrylionRdpPlus}"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-  ] ++ lib.optional withWayland "--set RMG_WAYLAND 1";
+  qtWrapperArgs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+    ]
+    ++ lib.optional withWayland "--set RMG_WAYLAND 1";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

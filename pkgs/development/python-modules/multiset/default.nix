@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "multiset";
-  version = "3.1.0";
-  format = "pyproject";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jpPlhvaI0uKwD6WEPiqC9p6XHhrHrT14+dKkdgjem6Y=";
+    hash = "sha256-fFmnhihLnDOd9PIZ3LtM5fRNOsGyD5ImNsTXieic97U=";
   };
 
   postPatch = ''
@@ -22,18 +22,19 @@ buildPythonPackage rec {
     sed -i '/python_requires/d' setup.cfg
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  pythonImportsCheck = [ "multiset" ];
-
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "multiset" ];
 
   meta = with lib; {
     description = "Implementation of a multiset";
     homepage = "https://github.com/wheerd/multiset";
+    changelog = "https://github.com/wheerd/multiset/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ ];
   };

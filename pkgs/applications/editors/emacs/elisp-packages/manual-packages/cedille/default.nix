@@ -1,6 +1,7 @@
-{ stdenv
-, cedille
-, emacs
+{
+  stdenv,
+  cedille,
+  emacs,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +28,11 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (cedille.meta)
-      homepage license maintainers platforms;
+      homepage
+      license
+      maintainers
+      platforms
+      ;
     description = "Emacs major mode for Cedille";
   };
 }

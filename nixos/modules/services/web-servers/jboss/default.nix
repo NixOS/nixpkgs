@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,7 +15,15 @@ let
     name = "jboss-server";
     builder = ./builder.sh;
     inherit (pkgs) jboss su;
-    inherit (cfg) tempDir logDir libUrl deployDir serverDir user useJK;
+    inherit (cfg)
+      tempDir
+      logDir
+      libUrl
+      deployDir
+      serverDir
+      user
+      useJK
+      ;
   };
 
 in
@@ -74,7 +87,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

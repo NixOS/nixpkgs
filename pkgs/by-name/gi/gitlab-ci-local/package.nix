@@ -1,21 +1,24 @@
-{ buildNpmPackage
-, fetchFromGitHub
-, lib
-, nix-update-script
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  gitlab-ci-local,
+  testers,
 }:
 
 buildNpmPackage rec {
   pname = "gitlab-ci-local";
-  version = "4.52.1";
+  version = "4.56.2";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-yNOlcb1I8BiR9rbqxeE7PEshEAudw62M77QBgTCBETg=";
+    hash = "sha256-rmJM+RRZY0pG0B7HYGU7L2iXdQyTTRhKsPjfh53a5m4=";
   };
 
-  npmDepsHash = "sha256-8Fxkd3JPyspcZeENpvvuguPNXbnWL1WrcYL9c77+Gok=";
+  npmDepsHash = "sha256-EbgU147by5IwTmSEeC0FvzUqV0XYbMeT6K998UcR3Hg=";
 
   postPatch = ''
     # remove cleanup which runs git commands
@@ -23,9 +26,14 @@ buildNpmPackage rec {
       --replace-fail "npm run cleanup" "true"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = gitlab-ci-local;
+    };
+  };
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Run gitlab pipelines locally as shell executor or docker executor";
     mainProgram = "gitlab-ci-local";
     longDescription = ''

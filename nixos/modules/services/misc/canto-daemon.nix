@@ -1,20 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
-cfg = config.services.canto-daemon;
+  cfg = config.services.canto-daemon;
 
-in {
+in
+{
 
-##### interface
+  ##### interface
 
   options = {
 
     services.canto-daemon = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the canto RSS daemon.";
       };
@@ -22,9 +25,9 @@ in {
 
   };
 
-##### implementation
+  ##### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.user.services.canto-daemon = {
       description = "Canto RSS Daemon";

@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, seq }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  seq,
+}:
 
 buildDunePackage rec {
   pname = "lwd";
@@ -8,8 +13,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url =
-      "https://github.com/let-def/lwd/releases/download/v${version}/lwd-${version}.tbz";
+    url = "https://github.com/let-def/lwd/releases/download/v${version}/lwd-${version}.tbz";
     sha256 = "sha256-H/vyW2tn2OBuWwcmPs8NcINXgFe93MSxRd8dzeoXARI=";
   };
 

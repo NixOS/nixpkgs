@@ -10,9 +10,14 @@ makeInstalledTest {
       extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
       config.common.default = "gtk";
     };
-    environment.systemPackages = with pkgs; [ flatpak-builder ] ++ flatpak-builder.installedTestsDependencies;
+    environment.systemPackages =
+      with pkgs;
+      [ flatpak-builder ] ++ flatpak-builder.installedTestsDependencies;
     virtualisation.diskSize = 2048;
   };
 
-  testRunnerFlags = [ "--timeout" "3600" ];
+  testRunnerFlags = [
+    "--timeout"
+    "3600"
+  ];
 }

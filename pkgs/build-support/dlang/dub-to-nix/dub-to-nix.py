@@ -13,7 +13,7 @@ def eprint(text: str):
 
 if not os.path.exists("dub.selections.json"):
     eprint("The file `dub.selections.json` does not exist in the current working directory")
-    eprint("run `dub upgrade --annotate` to generate it")
+    eprint("run `dub upgrade` to generate it")
     sys.exit(1)
 
 with open("dub.selections.json") as f:

@@ -1,61 +1,58 @@
-{ lib
-, stdenv
+{
+  lib,
+  stdenv,
 
-, buildEnv
-, cargo
-, fetchFromGitHub
-, fetchYarnDeps
-, installShellFiles
-, lame
-, mpv-unwrapped
-, ninja
-, nixosTests
-, nodejs
-, nodejs-slim
-, fixup-yarn-lock
-, protobuf
-, python3
-, qt6
-, rsync
-, rustPlatform
-, writeShellScriptBin
-, yarn
+  buildEnv,
+  cargo,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  installShellFiles,
+  lame,
+  mpv-unwrapped,
+  ninja,
+  nixosTests,
+  nodejs,
+  nodejs-slim,
+  fixup-yarn-lock,
+  protobuf,
+  python3,
+  qt6,
+  rsync,
+  rustPlatform,
+  writeShellScriptBin,
+  yarn,
 
-, AVKit
-, CoreAudio
-, swift
+  AVKit,
+  CoreAudio,
+  swift,
+
+  mesa,
 }:
 
 let
   pname = "anki";
-  version = "24.04";
-  rev = "429bc9e14cefb597646a0e1beac6ef140f226b6f";
+  version = "24.11";
+  rev = "87ccd24efd0ea635558b1679614b6763e4f514eb";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-H/Y6ZEJ7meprk4SWIPkoABs6AV1CzbK2l22jEnMSvyk=";
+    hash = "sha256-pAQBl5KbTu7LD3gKBaiyn4QiWeGYoGmxD3sDJfCZVdA=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
-      "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-4V75+jS250XfUH6B4VBxtL2t308nyKzhDoq86kq6rp4=";
   };
-  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-7yBN6si1Q+xvyosP7YnOw9ZfGcLZdy5ukXXFvvI20Js=";
+    hash = "sha256-4KQKWwlr+FuUmomKO3TEoDoSStjnyLutDxCfqGr6jzk=";
   };
 
-  anki-build-python = python3.withPackages (ps: with ps; [
-    mypy-protobuf
-  ]);
+  anki-build-python = python3.withPackages (ps: with ps; [ mypy-protobuf ]);
 
   # anki shells out to git to check its revision, and also to update submodules
   # We don't actually need the submodules, so we stub that out
@@ -122,7 +119,11 @@ in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   inherit src;
 
@@ -145,74 +146,87 @@ python3.pkgs.buildPythonApplication {
     qt6.wrapQtAppsHook
     rsync
     rustPlatform.cargoSetupHook
-  ] ++ lib.optional stdenv.isDarwin swift;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    # This rather long list came from running:
-    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
-    #      sort | uniq | grep -v "^#$"
-    # in their repo at the git tag for this version
-    # There's probably a more elegant way, but the above extracted all the
-    # names, without version numbers, of their python dependencies. The hope is
-    # that nixpkgs versions are "close enough"
-    # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
-    attrs
-    beautifulsoup4
-    blinker
-    build
-    certifi
-    charset-normalizer
-    click
-    colorama
-    decorator
-    flask
-    flask-cors
-    google-api-python-client
-    idna
-    importlib-metadata
-    itsdangerous
-    jinja2
-    jsonschema
-    markdown
-    markupsafe
-    orjson
-    packaging
-    pip
-    pip-system-certs
-    pip-tools
-    protobuf
-    pyproject-hooks
-    pyqt6
-    pyqt6-sip
-    pyqt6-webengine
-    pyrsistent
-    pysocks
-    requests
-    send2trash
-    setuptools
-    soupsieve
-    tomli
-    urllib3
-    waitress
-    werkzeug
-    wheel
-    wrapt
-    zipp
-  ] ++ lib.optionals stdenv.isDarwin [
-    AVKit
-    CoreAudio
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      # This rather long list came from running:
+      #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
+      #      sort | uniq | grep -v "^#$"
+      # in their repo at the git tag for this version
+      # There's probably a more elegant way, but the above extracted all the
+      # names, without version numbers, of their python dependencies. The hope is
+      # that nixpkgs versions are "close enough"
+      # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+      attrs
+      beautifulsoup4
+      blinker
+      build
+      certifi
+      charset-normalizer
+      click
+      colorama
+      decorator
+      flask
+      flask-cors
+      google-api-python-client
+      idna
+      importlib-metadata
+      itsdangerous
+      jinja2
+      jsonschema
+      markdown
+      markupsafe
+      orjson
+      packaging
+      pip
+      pip-system-certs
+      pip-tools
+      protobuf
+      pyproject-hooks
+      pyqt6
+      pyqt6-sip
+      pyqt6-webengine
+      pyrsistent
+      pysocks
+      requests
+      send2trash
+      setuptools
+      soupsieve
+      tomli
+      urllib3
+      waitress
+      werkzeug
+      wheel
+      wrapt
+      zipp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AVKit
+      CoreAudio
+    ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytest
+    mock
+    astroid
   ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytest mock astroid ];
-
-  # tests fail with to many open files
+  # tests fail with too many open files
   # TODO: verify if this is still true (I can't, no mac)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  checkFlags = [
+    # this test is flaky, see https://github.com/ankitects/anki/issues/3619
+    # also remove from anki-sync-server when removing this
+    "--skip=deckconfig::update::test::should_keep_at_least_one_remaining_relearning_step"
+  ];
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
@@ -250,25 +264,29 @@ python3.pkgs.buildPythonApplication {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
-  checkPhase = let
-    disabledTestsString = lib.pipe [
-      # assumes / is not writeable, somehow fails on nix-portable brwap
-      "test_create_open"
-    ] [
-      (lib.map (test: "not ${test}"))
-      (lib.concatStringsSep " and ")
-      lib.escapeShellArg
-    ];
+  checkPhase =
+    let
+      disabledTestsString =
+        lib.pipe
+          [
+            # assumes / is not writeable, somehow fails on nix-portable brwap
+            "test_create_open"
+          ]
+          [
+            (lib.map (test: "not ${test}"))
+            (lib.concatStringsSep " and ")
+            lib.escapeShellArg
+          ];
 
-  in ''
-    runHook preCheck
-    HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
-      pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
-    HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-      pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
-    runHook postCheck
-  '';
-
+    in
+    ''
+      runHook preCheck
+      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
+        pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
+      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
+        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+      runHook postCheck
+    '';
 
   preInstall = ''
     mkdir dist
@@ -291,8 +309,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   passthru = {
-    # cargoLock is reused in anki-sync-server
-    inherit cargoLock;
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
@@ -313,9 +329,12 @@ python3.pkgs.buildPythonApplication {
     '';
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
-    platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ euank oxij ];
+    inherit (mesa.meta) platforms;
+    maintainers = with maintainers; [
+      euank
+      oxij
+    ];
     # Reported to crash at launch on darwin (as of 2.1.65)
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

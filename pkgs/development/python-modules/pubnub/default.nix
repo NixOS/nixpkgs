@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "8.0.0";
+  version = "9.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GKJv/GJ/h/LVbEa8Wz7iXc8J38UTTlNa0/08+p5sYCA=";
+    tag = "v${version}";
+    hash = "sha256-aVnhCRTm6lqwec4TRbvHFF4l/XvbBTbclJLxf7oyUak=";
   };
 
   build-system = [ setuptools ];
@@ -62,7 +62,9 @@ buildPythonPackage rec {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
     changelog = "https://github.com/pubnub/python/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    # PubNub Software Development Kit License Agreement
+    # https://github.com/pubnub/python/blob/master/LICENSE
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ fab ];
   };
 }

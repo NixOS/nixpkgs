@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, pkg-config
-, oniguruma
-, darwin
-, installShellFiles
-, tpnote
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  oniguruma,
+  darwin,
+  installShellFiles,
+  tpnote,
+  testers,
 }:
-
 
 rustPlatform.buildRustPackage rec {
   pname = "tpnote";
-  version = "1.24.7";
+  version = "1.24.12";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     rev = "v${version}";
-    hash = "sha256-BSq+9qjBdJZvx65mumyPbjhbBHpHXgWeGqdx/xevL50=";
+    hash = "sha256-1Y7Sw9wiUno4A6i0lYDJpqfIT/HV5rxXfuJnJ+FJTBU=";
   };
 
-  cargoHash = "sha256-jwG68aAG4D+ulsQa+UEyJu5fVwbrHeeW9bJNQfcpg4o=";
+  cargoHash = "sha256-ZOE2D8GXrJ7BQK7iMoUnqyrj4zc+ODJxZ1jgH7xYMI0=";
 
   nativeBuildInputs = [
     cmake
@@ -31,13 +31,18 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    oniguruma
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-     AppKit
-     CoreServices
-     SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      oniguruma
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AppKit
+        CoreServices
+        SystemConfiguration
+      ]
+    );
 
   postInstall = ''
     installManPage docs/build/man/man1/tpnote.1

@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ sqlite ]
-    ++ lib.optional stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

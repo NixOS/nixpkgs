@@ -13,7 +13,7 @@
 
   # for tests
   pytestCheckHook,
-  symbiyosys,
+  sby,
   yices,
   yosys,
 }:
@@ -21,20 +21,25 @@
 buildPythonPackage rec {
   pname = "amaranth";
   format = "pyproject";
-  version = "0.5.1";
+  version = "0.5.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-76wuxWz6RikFFJH+5kte57GcVhusJKtcMo5M/2U+Cl8=";
+    tag = "v${version}";
+    hash = "sha256-e4htbNq6OCy8ZTS1UnucbU987reukP4J1CbWhT39K6E=";
   };
 
-  nativeBuildInputs = [
-    git
-    pdm-backend
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "pdm-backend~=2.3.0" \
+        "pdm-backend>=2.3.0"
+  '';
+
+  nativeBuildInputs = [ git ];
+  build-system = [ pdm-backend ];
 
   dependencies =
     [
@@ -47,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    symbiyosys
+    sby
     yices
     yosys
   ];

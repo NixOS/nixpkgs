@@ -11,7 +11,7 @@ index 5de21c69d0..3995c19e3c 100644
  	if err != nil {
  		return trace.Wrap(err)
  	}
-+	cf.executablePath = path.Dir(tempBinaryPath) + "/tsh"
++	cf.executablePath = filepath.Dir(tempBinaryPath) + "/tsh"
  
  	// configs
  	setEnvFlags(&cf)

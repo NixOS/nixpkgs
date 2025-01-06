@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hypothesis,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "3.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-67Z+k+PBIGP2oGb/52dMtsapUsHufvFcX+wWiMj5Jsg=";
+    tag = "v${version}";
+    hash = "sha256-1GuxlgNvzVv6hEQY1Mkv7NxAoOik9gpIS90a6flfC+k=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     aiosmtpd

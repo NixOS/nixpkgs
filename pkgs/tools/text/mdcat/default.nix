@@ -1,32 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, asciidoctor
-, openssl
-, Security
-, SystemConfiguration
-, ansi2html
-, installShellFiles
+{
+  lib,
+  curl,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  asciidoctor,
+  openssl,
+  Security,
+  SystemConfiguration,
+  ansi2html,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.1.2";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-qdNORp9THxHWR95uVcYtCy59OQqdop1012thZN5i64w=";
+    hash = "sha256-j6BFXx5cyjE3+fo1gGKlqpsxrm3i9HfQ9tJGNNjjLwo=";
   };
 
-  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    installShellFiles
+  ];
+  buildInputs =
+    [
+      curl
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
-  cargoHash = "sha256-/avxRvT35LxCBWkTYJDCtdd95VC67epZIPCMv994uBo=";
+  cargoHash = "sha256-TvGGu9mSKT5y4b2JuoUUxsK8J7W/bMa9MOe1y0Idy7g=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -41,17 +54,19 @@ rustPlatform.buildRustPackage rec {
     "--skip iterm2_tests_render_md_samples_images_md"
   ];
 
-  postInstall = ''
-    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    ln -sr $out/bin/{mdcat,mdless}
-
-    for bin in mdcat mdless; do
-      installShellCompletion \
-        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
-        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
-        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
-    done
-  '';
+  postInstall =
+    ''
+      installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+      ln -sr $out/bin/{mdcat,mdless}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      for bin in mdcat mdless; do
+        installShellCompletion --cmd $bin \
+          --bash <($out/bin/$bin --completions bash) \
+          --fish <($out/bin/$bin --completions fish) \
+          --zsh <($out/bin/$bin --completions zsh)
+      done
+    '';
 
   meta = with lib; {
     description = "cat for markdown";

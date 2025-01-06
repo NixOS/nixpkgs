@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchurl, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchurl,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "okapi";
@@ -12,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoVendorDir = "vendor";
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     cp -r include $out

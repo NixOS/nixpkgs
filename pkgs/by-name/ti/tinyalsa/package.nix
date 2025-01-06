@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tinyalsa/tinyalsa";
     description = "Tiny library to interface with ALSA in the Linux kernel";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

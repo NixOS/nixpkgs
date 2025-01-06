@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  python,
   fetchFromGitHub,
   lib,
   requests,
@@ -25,8 +26,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     # fix hardcoded absolute paths
-    substituteInPlace **/*.* \
-      --replace /Users/ces/Desktop/code/naked /build/source
+    substituteInPlace tests/test_SYSTEM*.py \
+      --replace-fail /Users/ces/Desktop/code/naked/tests/ "$PWD"/tests/
+    substituteInPlace lib/Naked/toolshed/c/*.c \
+      --replace-fail /Users/ces/Desktop/code/naked/lib/ $out/${python.sitePackages}/
   '';
 
   nativeBuildInputs = [

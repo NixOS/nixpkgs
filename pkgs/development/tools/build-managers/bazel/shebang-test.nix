@@ -1,11 +1,11 @@
 {
-  bazel
-, bazelTest
-, extracted
-, ripgrep
-, runLocal
-, unzip
-, ...
+  bazel,
+  bazelTest,
+  extracted,
+  ripgrep,
+  runLocal,
+  unzip,
+  ...
 }:
 
 # Tests that all shebangs are patched appropriately.
@@ -14,7 +14,7 @@
 
 let
 
-  workspaceDir = runLocal "our_workspace" {} "mkdir $out";
+  workspaceDir = runLocal "our_workspace" { } "mkdir $out";
 
   testBazel = bazelTest {
     name = "bazel-test-shebangs";
@@ -52,7 +52,11 @@ let
         exit 1
       fi
     '';
-    buildInputs = [ unzip ripgrep ];
+    buildInputs = [
+      unzip
+      ripgrep
+    ];
   };
 
-in testBazel
+in
+testBazel

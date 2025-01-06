@@ -1,9 +1,10 @@
-{ rustPlatform
-, lib
-, fetchFromSourcehut
-, pam
-, scdoc
-, installShellFiles
+{
+  rustPlatform,
+  lib,
+  fetchFromSourcehut,
+  pam,
+  scdoc,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

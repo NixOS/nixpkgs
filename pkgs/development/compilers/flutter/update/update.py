@@ -86,21 +86,22 @@ def nix_build_to_fail(code):
     return stderr
 
 
-def get_engine_hashes(engine_version):
+def get_engine_hashes(engine_version, flutter_version):
     code = load_code("get-engine-hashes.nix",
                      nixpkgs_root=NIXPKGS_ROOT,
+                     flutter_version=flutter_version,
                      engine_version=engine_version)
 
     stderr = nix_build_to_fail(code)
 
     pattern = re.compile(
-        r"/nix/store/.*-flutter-engine-source-(.+?)-(.+?).drv':\n\s+specified: .*\n\s+got:\s+(.+?)\n")
+        rf"/nix/store/.*-flutter-engine-source-{engine_version}-(.+?-.+?)-(.+?-.+?).drv':\n\s+specified: .*\n\s+got:\s+(.+?)\n")
     matches = pattern.findall(stderr)
     result_dict = {}
 
     for match in matches:
-        _, system, got = match
-        result_dict[system] = got
+        flutter_platform, architecture, got = match
+        result_dict.setdefault(flutter_platform, {})[architecture] = got
 
     def sort_dict_recursive(d):
         return {
@@ -405,7 +406,7 @@ def main():
         engine_swiftshader_rev='0',
         **common_data_args)
 
-    engine_hashes = get_engine_hashes(engine_hash)
+    engine_hashes = get_engine_hashes(engine_hash, flutter_version)
 
     write_data(
         pubspec_lock=pubspec_lock,

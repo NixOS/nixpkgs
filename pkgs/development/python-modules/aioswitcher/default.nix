@@ -1,13 +1,15 @@
 {
   lib,
+  aiohttp,
   assertpy,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   poetry-core,
+  pycryptodome,
   pytest-asyncio,
   pytest-mockservers,
   pytest-resource-path,
-  pytest-sugar,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -16,21 +18,28 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "3.4.3";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-yKHSExtnO9m8Tc3BmCqV8tJs59ynKOqUmekaOatGRTc=";
+    repo = "aioswitcher";
+    tag = version;
+    hash = "sha256-nf4PEitfM9uYOlmm/cfILnFo/xx8g7rjYn2nkf3gjMg=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "aiohttp" ];
+
+  dependencies = [
+    aiohttp
+    pycryptodome
+  ];
 
   preCheck = ''
     export TZ=Asia/Jerusalem
@@ -38,10 +47,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     assertpy
+    freezegun
     pytest-asyncio
     pytest-mockservers
     pytest-resource-path
-    pytest-sugar
     pytestCheckHook
     time-machine
   ];
@@ -66,7 +75,7 @@ buildPythonPackage rec {
     description = "Python module to interact with Switcher water heater";
     homepage = "https://github.com/TomerFi/aioswitcher";
     changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

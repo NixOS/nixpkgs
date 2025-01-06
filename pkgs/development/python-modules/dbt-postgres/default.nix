@@ -13,19 +13,17 @@
 
 buildPythonPackage rec {
   pname = "dbt-postgres";
-  version = "1.8.2";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-postgres";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E7Y2lY8aCiAZx5sLWwpOBLTrdOsCQAdWWJTvR2jGOaA=";
+    tag = "v${version}";
+    hash = "sha256-lywWf78rluX17D5bcfehHd7X18tAdw3HZ65v440jETc=";
   };
-
-  env.DBT_PSYCOPG2_NAME = "psycopg2";
 
   build-system = [ hatchling ];
 

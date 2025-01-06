@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "graphite-exporter";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "graphite_exporter";
     rev = "v${version}";
-    hash = "sha256-KBqLPKd8XP7PbjHJu1DIQ2ir+Lyk7LEBaNjJCr91LP8=";
+    hash = "sha256-Dr7I4+gQXZYKUMnf/P9DgLYRb4SRaDnvqvDwHfMpAn0=";
   };
 
-  vendorHash = "sha256-he2bmcTNkuKRsNGkn1IkhtOe+Eo/5RLWLYlNFWLo/As=";
+  vendorHash = "sha256-f/ZJi3C11O+xAfXo544tlJcAt0MnTknuRmw01JXj82k=";
 
   checkFlags =
     let

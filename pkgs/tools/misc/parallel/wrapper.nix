@@ -1,14 +1,33 @@
-{ lib, symlinkJoin, makeWrapper, parallel, perlPackages
-, extraPerlPackages ? with perlPackages; [ DBI DBDPg DBDSQLite DBDCSV TextCSV ]
-, willCite ? false }:
+{
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  parallel,
+  perlPackages,
+  extraPerlPackages ? with perlPackages; [
+    DBI
+    DBDPg
+    DBDSQLite
+    DBDCSV
+    TextCSV
+  ],
+  willCite ? false,
+}:
 
 symlinkJoin {
   name = "parallel-full-${parallel.version}";
-  inherit (parallel) pname version meta outputs;
+  inherit (parallel)
+    pname
+    version
+    meta
+    outputs
+    ;
   nativeBuildInputs = [ makeWrapper ];
   paths = [ parallel ];
   postBuild = ''
-    ${lib.concatMapStringsSep "\n" (output: "ln -s --no-target-directory ${parallel.${output}} \$${output}") (lib.remove "out" parallel.outputs)}
+    ${lib.concatMapStringsSep "\n" (
+      output: "ln -s --no-target-directory ${parallel.${output}} \$${output}"
+    ) (lib.remove "out" parallel.outputs)}
 
     rm $out/bin/parallel
     makeWrapper ${parallel}/bin/parallel $out/bin/parallel \

@@ -1,7 +1,36 @@
-{ stdenv, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
-, qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
-, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
-, libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  qmake,
+  qtbase,
+  qtxmlpatterns,
+  qttools,
+  qtwebengine,
+  libGL,
+  fontconfig,
+  openssl,
+  poppler,
+  wrapQtAppsHook,
+  ffmpeg,
+  libva,
+  alsa-lib,
+  SDL,
+  x264,
+  libvpx,
+  libvorbis,
+  libtheora,
+  libogg,
+  libopus,
+  lame,
+  fdk_aac,
+  libass,
+  quazip,
+  libXext,
+  libXfixes,
+}:
 
 let
   importer = stdenv.mkDerivation {
@@ -23,25 +52,35 @@ let
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.0";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
+    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
   };
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
-      --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+      --replace-fail '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace-fail '-lquazip5' '-lquazip1-qt5' \
+      --replace-fail '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+
+    substituteInPlace resources/etc/OpenBoard.config \
+      --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'EnableSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'HideCheckForSoftwareUpdate=false' 'HideCheckForSoftwareUpdate=true'
   '';
 
-  nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    copyDesktopItems
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     qtbase
@@ -111,8 +150,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Interactive whiteboard application";
+    homepage = "https://openboard.ch/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fufexan ];
+    maintainers = with maintainers; [
+      atinba
+      fufexan
+    ];
     platforms = platforms.linux;
     mainProgram = "OpenBoard";
   };

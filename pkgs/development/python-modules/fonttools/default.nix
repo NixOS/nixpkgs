@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.53.0";
+  version = "4.54.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-eWN5QcdiQIDfjn7Hrqk0f5jMaADpqNa/kExncjcWXFw=";
+    owner = "fonttools";
+    repo = "fonttools";
+    tag = version;
+    hash = "sha256-iYd3EiziaLR7zS0UQAje0QfShNfnhHPdH2+noCQ2yto=";
   };
 
   build-system = [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
         ];
         plot = [ matplotlib ];
         symfont = [ sympy ];
-        type1 = lib.optional stdenv.isDarwin xattr;
+        type1 = lib.optional stdenv.hostPlatform.isDarwin xattr;
         pathops = [ skia-pathops ];
         repacker = [ uharfbuzz ];
       };

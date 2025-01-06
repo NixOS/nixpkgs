@@ -14,13 +14,13 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
   exit 0
 fi
 
-sed -i "s/version = \".*\"/version = \"${latestVersion}\"/" "$ROOT/default.nix"
+sed -i "s/version = \".*\"/version = \"${latestVersion}\"/" "$ROOT/package.nix"
 
 DARWIN_x64_URL="https://github.com/localsend/localsend/releases/download/v${latestVersion}/LocalSend-${latestVersion}.dmg"
 DARWIN_X64_SHA=$(nix hash to-sri --type sha256 $(nix-prefetch-url ${DARWIN_x64_URL}))
-sed -i "/darwin/,/hash/{s|hash = \".*\"|hash = \"${DARWIN_X64_SHA}\"|}" "$ROOT/default.nix"
+sed -i "/darwin/,/hash/{s|hash = \".*\"|hash = \"${DARWIN_X64_SHA}\"|}" "$ROOT/package.nix"
 
 GIT_SRC_URL="https://github.com/localsend/localsend/archive/refs/tags/v${latestVersion}.tar.gz"
 GIT_SRC_SHA=$(nix hash to-sri --type sha256 $(nix-prefetch-url --unpack ${GIT_SRC_URL}))
-sed -i "/linux/,/hash/{s|hash = \".*\"|hash = \"${GIT_SRC_SHA}\"|}" "$ROOT/default.nix"
+sed -i "/linux/,/hash/{s|hash = \".*\"|hash = \"${GIT_SRC_SHA}\"|}" "$ROOT/package.nix"
 curl https://raw.githubusercontent.com/localsend/localsend/v${latestVersion}/app/pubspec.lock | yq . > $ROOT/pubspec.lock.json

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-splunk";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PRJmFXVjcvXVHITwp6ESSoizmJOSiLTl1mj67rNhSNw=";
+    tag = "v${version}";
+    hash = "sha256-6L+o+XM+im8qJFyd3h+b1ZxY1QSEdoXDop5en33fECI=";
   };
 
   nativeBuildInputs = [ poetry-core ];

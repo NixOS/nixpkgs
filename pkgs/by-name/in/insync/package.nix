@@ -8,6 +8,8 @@
   dpkg,
   nss,
   alsa-lib,
+  lz4,
+  libgcrypt,
   xkeyboard_config,
   libthai,
   libsForQt5,
@@ -16,7 +18,8 @@
 let
   pname = "insync";
   # Find a binary from https://www.insynchq.com/downloads/linux
-  version = "3.9.1.60010";
+  version = "3.9.4.60020";
+  web-archive-id = "20241208213703"; # upload via https://web.archive.org/save/
   ubuntu-dist = "trixie_amd64";
   insync-pkg = stdenvNoCC.mkDerivation {
     pname = "${pname}-pkg";
@@ -25,9 +28,9 @@ let
     src = fetchurl rec {
       urls = [
         "https://cdn.insynchq.com/builds/linux/${version}/insync_${version}-${ubuntu-dist}.deb"
-        "https://web.archive.org/web/20240622110117/${builtins.elemAt urls 0}"
+        "https://web.archive.org/web/${web-archive-id}/${builtins.elemAt urls 0}"
       ];
-      hash = "sha256-8gT2xLZa/zrM3X3AXTOvHelO0tF2w/3/qOyw2wB98uY=";
+      hash = "sha256-QauUzvtWQu8h41+wWIPhEZ3VVzXJwAh2bzj0gDYWnIw=";
     };
 
     nativeBuildInputs = [
@@ -39,16 +42,10 @@ let
     buildInputs = [
       alsa-lib
       nss
+      lz4
+      libgcrypt
       libthai
     ] ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-permissions --no-same-owner
-
-      runHook postUnpack
-    '';
 
     installPhase = ''
       runHook preInstall

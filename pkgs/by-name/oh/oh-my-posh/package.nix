@@ -1,23 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  gitUpdater,
 }:
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "21.17.2";
+  version = "24.11.4";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9+gzjDxkDMOy7r3M6MVepNJ44HJszyzYs5LrM8x3m6Q=";
+    tag = "v${version}";
+    hash = "sha256-hb5XgwBg9llX/PDX8A8hL5fJbG03nTjrvEd252k2Il0=";
   };
 
-  vendorHash = "sha256-yArae/1TxiQkNCkElFOHdujWzLCfltSV72I8tQKDyw8=";
+  vendorHash = "sha256-bOjIwBPxu/BfRaAcZTXf4xCGvVXnumb2++JZTx7ZG1s=";
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "source/src";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,25 +40,30 @@ buildGoModule rec {
 
   postPatch = ''
     # these tests requires internet access
-    rm engine/image_test.go engine/migrate_glyphs_test.go
+    rm image/image_test.go config/migrate_glyphs_test.go upgrade/notice_test.go
   '';
 
   postInstall = ''
     mv $out/bin/{src,oh-my-posh}
     mkdir -p $out/share/oh-my-posh
-    cp -r ${src}/themes $out/share/oh-my-posh/
+    cp -r $src/themes $out/share/oh-my-posh/
     installShellCompletion --cmd oh-my-posh \
       --bash <($out/bin/oh-my-posh completion bash) \
       --fish <($out/bin/oh-my-posh completion fish) \
       --zsh <($out/bin/oh-my-posh completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
     description = "Prompt theme engine for any shell";
     mainProgram = "oh-my-posh";
     homepage = "https://ohmyposh.dev";
     changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      lucperkins
+      urandom
+    ];
   };
 }

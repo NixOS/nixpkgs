@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A mov-cli plugin that let's you test mov-cli's capabilities by watching free films and animations in the creative commons";
     homepage = "https://github.com/mov-cli/mov-cli-test";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ roshaen ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
   };
 }

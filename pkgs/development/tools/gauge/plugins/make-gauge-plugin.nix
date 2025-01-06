@@ -1,21 +1,40 @@
-{ stdenvNoCC
-, fetchzip
-, lib
-, writeScript
+{
+  stdenvNoCC,
+  fetchzip,
+  lib,
+  writeScript,
+  autoPatchelfHook,
+  testGaugePlugins,
 }:
 
-{ pname
-, data
-, repo
-, releasePrefix
-, isCrossArch ? false
-, meta
-, ...
-} @ args:
+{
+  pname,
+  data,
+  repo,
+  releasePrefix,
+  isCrossArch ? false,
+  meta,
+  ...
+}@args:
 let
-  otherArgs = lib.attrsets.removeAttrs args [ "pname" "data" "repo" "releasePrefix" "isMultiArch" ];
+  otherArgs = lib.attrsets.removeAttrs args [
+    "pname"
+    "data"
+    "repo"
+    "releasePrefix"
+    "isMultiArch"
+  ];
   inherit (stdenvNoCC.hostPlatform) system;
-  inherit (if isCrossArch then data else data.${system}) url hash;
+  inherit
+    (
+      if isCrossArch then
+        data
+      else
+        data.${system} or (throw "gaugePlugins.${pname}: No source for system: ${system}")
+    )
+    url
+    hash
+    ;
   # Upstream uses a different naming scheme for platforms
   systemMap = {
     "x86_64-darwin" = "darwin.x86_64";
@@ -24,71 +43,84 @@ let
     "x86_64-linux" = "linux.x86_64";
   };
 in
-stdenvNoCC.mkDerivation (finalAttrs: (lib.recursiveUpdate {
-  pname = "gauge-plugin-${pname}";
-  inherit (data) version;
+stdenvNoCC.mkDerivation (
+  finalAttrs:
+  (lib.recursiveUpdate {
+    pname = "gauge-plugin-${pname}";
+    inherit (data) version;
 
-  src = fetchzip {
-    inherit url hash;
-    stripRoot = false;
-  };
+    src = fetchzip {
+      inherit url hash;
+      stripRoot = false;
+    };
 
-  installPhase = ''
-    mkdir -p "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
-    cp -r . "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
-  '';
+    nativeBuildInputs = lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
-  passthru.updateScript = writeScript "update-${finalAttrs.pname}" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl nix-prefetch yq-go
+    installPhase = ''
+      mkdir -p "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
+      cp -r . "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
+    '';
 
-    set -e
+    passthru = {
+      tests.loadPlugin = testGaugePlugins { plugins = [ finalAttrs.finalPackage ]; };
+      updateScript = writeScript "update-${finalAttrs.pname}" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl nix-prefetch yq-go
 
-    dirname="pkgs/development/tools/gauge/plugins/${pname}"
+        set -e
 
-    currentVersion=$(nix eval --raw -f default.nix gaugePlugins.${pname}.version)
+        dirname="pkgs/development/tools/gauge/plugins/${pname}"
 
-    latestTag=$(curl -s ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/${repo}/releases/latest | yq ".tag_name")
-    latestVersion="$(expr $latestTag : 'v\(.*\)')"
+        currentVersion=$(nix eval --raw -f default.nix gaugePlugins.${pname}.version)
 
-    tempfile=$(mktemp)
+        latestTag=$(curl -s ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/${repo}/releases/latest | yq ".tag_name")
+        latestVersion="$(expr $latestTag : 'v\(.*\)')"
 
-    if [[ "$FORCE_UPDATE" != "true" && "$currentVersion" == "$latestVersion" ]]; then
-        echo "gauge-${pname} is up-to-date: ''${currentVersion}"
-        exit 0
-    fi
+        tempfile=$(mktemp)
 
-    yq -iPoj "{ \"version\": \"$latestVersion\" }" "$tempfile"
+        if [[ "$FORCE_UPDATE" != "true" && "$currentVersion" == "$latestVersion" ]]; then
+            echo "gauge-${pname} is up-to-date: ''${currentVersion}"
+            exit 0
+        fi
 
-    updateSystem() {
-        system=$1
-        url=$2
+        yq -iPoj "{ \"version\": \"$latestVersion\" }" "$tempfile"
 
-        echo "Fetching hash for $system"
-        hash=$(nix-prefetch-url --type sha256 $url --unpack)
-        sriHash="$(nix hash to-sri --type sha256 $hash)"
+        updateSystem() {
+            system=$1
+            url=$2
 
-        yq -iPoj '. + { "$system": { "url": "$url", "hash": "$sriHash" } }' "$tempfile"
-    }
+            echo "Fetching hash for $system"
+            hash=$(nix-prefetch-url --type sha256 $url --unpack)
+            sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-    updateSingle() {
-        url=$1
+            yq -iPoj ". + { \"$system\": { \"url\": \"$url\", \"hash\": \"$sriHash\" } }" "$tempfile"
+        }
 
-        echo "Fetching hash"
-        hash=$(nix-prefetch-url --type sha256 $url --unpack)
-        sriHash="$(nix hash to-sri --type sha256 $hash)"
+        updateSingle() {
+            url=$1
 
-        yq -iPoj '. + { "url": "$url", "hash": "$sriHash" }' "$tempfile"
-    }
+            echo "Fetching hash"
+            hash=$(nix-prefetch-url --type sha256 $url --unpack)
+            sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-    baseUrl="https://github.com/${repo}/releases/download/$latestTag/${releasePrefix}$latestVersion"
+            yq -iPoj ". + { \"url\": \"$url\", \"hash\": \"$sriHash\" }" "$tempfile"
+        }
 
-    ${if isCrossArch then
-        "updateSingle \${baseUrl}.zip"
-      else
-        lib.concatStringsSep "\n" (map (platform: ''updateSystem "${platform}" "''${baseUrl}-${systemMap.${platform}}.zip"'') meta.platforms)
-    }
+        baseUrl="https://github.com/${repo}/releases/download/$latestTag/${releasePrefix}$latestVersion"
 
-    mv "$tempfile" "$dirname/data.json"
-  '';
-} otherArgs))
+        ${
+          if isCrossArch then
+            "updateSingle \${baseUrl}.zip"
+          else
+            lib.concatStringsSep "\n" (
+              map (
+                platform: ''updateSystem "${platform}" "''${baseUrl}-${systemMap.${platform}}.zip"''
+              ) meta.platforms
+            )
+        }
+
+        mv "$tempfile" "$dirname/data.json"
+      '';
+    };
+  } otherArgs)
+)
