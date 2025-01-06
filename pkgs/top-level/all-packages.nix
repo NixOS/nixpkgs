@@ -16052,6 +16052,7 @@ with pkgs;
   samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
+  beancount3 = with python3.pkgs; toPythonApplication beancount3;
 
   beancount-black = with python3.pkgs; toPythonApplication beancount-black;
 
