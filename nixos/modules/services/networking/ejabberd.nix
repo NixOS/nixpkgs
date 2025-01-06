@@ -36,7 +36,20 @@ in
         description = "Whether to enable ejabberd server";
       };
 
-      package = lib.mkPackageOption pkgs "ejabberd" { };
+      package = lib.mkPackageOption pkgs "ejabberd" {
+        example = ''
+          pkgs.ejabberd.override {
+            withImageMagick = true;
+            withLua = true;
+            withMySQL = true;
+            withPostgreSQL = true;
+            withRedis = true;
+            withSIP = true;
+            withSQLite = true;
+            withZlib = false;
+          }
+        '';
+      };
 
       user = lib.mkOption {
         type = lib.types.str;
