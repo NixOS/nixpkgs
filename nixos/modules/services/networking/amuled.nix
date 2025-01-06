@@ -63,9 +63,10 @@ in
         gid = config.ids.gids.amule;
       } ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-amuled".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.amuled = {
       description = "AMule daemon";
