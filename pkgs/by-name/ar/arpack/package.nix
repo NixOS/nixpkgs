@@ -31,10 +31,17 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optional useMpi mpi;
 
   nativeCheckInputs = lib.optional useMpi openssh;
+  checkInputs =
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    # which occurs due to an mpi test linking with `-flat_namespace`
+    # can remove once `-flat_namespace` is removed or
+    # https://github.com/NixOS/nixpkgs/pull/370526 is merged
+    lib.optional (useMpi && stdenv.hostPlatform.isDarwin) gfortran.cc;
 
   # a couple tests fail when run in parallel
   doCheck = true;
   enableParallelChecking = false;
+  __darwinAllowLocalNetworking = true;
 
   env = lib.optionalAttrs useAccel {
     # Without these flags some tests will fail / segfault when using Accelerate
@@ -46,10 +53,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
     (lib.cmakeBool "EIGEN" true)
-    (lib.cmakeBool "EXAMPLES" true)
+    (lib.cmakeBool "EXAMPLES" doCheck)
     (lib.cmakeBool "ICB" true)
     (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
     (lib.cmakeBool "MPI" useMpi)
+    (lib.cmakeBool "TESTS" doCheck)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
   ];
