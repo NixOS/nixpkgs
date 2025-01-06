@@ -11764,6 +11764,12 @@
     githubId = 1730718;
     name = "Hideaki Kawai";
   };
+  kaylorben = {
+    email = "blkaylor22@gmail.com";
+    github = "kaylorben";
+    githubId = 41012641;
+    name = "Benjamin Kaylor";
+  };
   kazcw = {
     email = "kaz@lambdaverse.org";
     github = "kazcw";
