@@ -24,7 +24,12 @@
   testBuildFailure = drv: drv.overrideAttrs (orig: {
     builder = buildPackages.bash;
     args = [
-      (replaceVars ./expect-failure.sh { coreutils = buildPackages.coreutils; })
+      (replaceVars ./expect-failure.sh {
+        coreutils = buildPackages.coreutils;
+        vars = lib.toShellVars {
+          outputNames = (orig.outputs or [ "out" ]);
+        };
+      })
       orig.realBuilder or stdenv.shell
     ] ++ orig.args or ["-e" (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });
