@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.unix;
   };
 }
