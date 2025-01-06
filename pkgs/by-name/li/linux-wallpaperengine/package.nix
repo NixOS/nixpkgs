@@ -111,8 +111,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r . $out
-      chmod -R +w $out
+      cp --recursive --no-preserve=mode . $out
       patchelf $out/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
       patchelf $out/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
       patchelf $out/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
