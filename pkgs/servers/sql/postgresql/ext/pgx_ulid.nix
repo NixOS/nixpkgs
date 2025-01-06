@@ -26,7 +26,7 @@ buildPgrxExtension rec {
     # https://github.com/pksunkara/pgx_ulid/blob/084778c3e2af08d16ec5ec3ef4e8f345ba0daa33/.github/workflows/release.yml#L81
     # Upgrade scripts should be added later, so we also rename them with wildcard
     # https://github.com/pksunkara/pgx_ulid/issues/49
-    ${util-linux}/bin/rename ${pname} ulid $out/share/postgresql/extension/${pname}*
+    ${util-linux}/bin/rename pgx_ulid ulid $out/share/postgresql/extension/pgx_ulid*
   '';
 
   # pgrx tests try to install the extension into postgresql nix store
