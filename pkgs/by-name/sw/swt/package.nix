@@ -63,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   AWT_LIB_PATH = "${jdk}/lib/openjdk/lib";
   # Used by the makefile which is responsible for the shared objects only
   OUTPUT_DIR = "${placeholder "out"}/lib";
-  # GTK4 is not supported yet. Waiting for:
-  # https://github.com/eclipse-platform/eclipse.platform.swt/pull/1482
+  # GTK4 is not supported yet. See:
+  # https://github.com/eclipse-platform/eclipse.platform.swt/issues/652
   makeFlags = "gtk3";
   preBuild = ''
     cd library
