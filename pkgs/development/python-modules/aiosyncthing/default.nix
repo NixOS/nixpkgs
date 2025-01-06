@@ -6,6 +6,7 @@
   fetchFromGitHub,
   expects,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   yarl,
@@ -32,16 +33,12 @@ buildPythonPackage rec {
     aioresponses
     expects
     pytestCheckHook
+    pytest-cov-stub
     pytest-asyncio
     pytest-mock
   ];
 
   pytestFlagsArray = [ "--asyncio-mode=auto" ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiosyncthing --cov-report=html" ""
-  '';
 
   pythonImportsCheck = [ "aiosyncthing" ];
 
