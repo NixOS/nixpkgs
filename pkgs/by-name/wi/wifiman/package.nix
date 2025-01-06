@@ -7,7 +7,9 @@
   libayatana-appindicator,
   webkitgtk_4_0,
   iw,
-  nettools
+  nettools,
+  openresolv,
+  gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    openresolv
   ];
 
   # Depends: net-tools, iw, resolvconf, libayatana-appindicator3-1, libwebkit2gtk-4.0-37, libgtk-3-0
@@ -32,6 +35,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_0
     iw
     nettools
+    gtk3
   ];
 
   installPhase = ''
