@@ -9,6 +9,7 @@
   hyprgraphics,
   hyprlang,
   hyprutils,
+  hyprwayland-scanner,
   pam,
   sdbus-cpp_2,
   systemdLibs,
@@ -27,20 +28,19 @@
 
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-41/fFxlGCf1q+WJwdzSidr9+xJ7+td91XQ1+kzrZ+ts=";
+    hash = "sha256-lT6f/5NB73xj9cVesi2SNsL5jVciwZJp8QRohiv+3Hk=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    hyprwayland-scanner
     wayland-scanner
   ];
 

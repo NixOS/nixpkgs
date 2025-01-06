@@ -146,7 +146,7 @@ in
               ayatana-indicator-power
             ]
             ++ lib.optionals config.hardware.bluetooth.enable [ ayatana-indicator-bluetooth ]
-            ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
+            ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
               ayatana-indicator-sound
             ]
           )

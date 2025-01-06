@@ -290,6 +290,9 @@ buildStdenv.mkDerivation {
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
     # https://phabricator.services.mozilla.com/D231480
     ./mozbz-1935621-attachment-9442305.patch
+    # Fix for missing vector header on macOS
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1939405
+    ./firefox-mac-missing-vector-header.patch
   ]
   ++ extraPatches;
 
@@ -429,7 +432,7 @@ buildStdenv.mkDerivation {
   ]
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
-     "--enable-lto=cross" # Cross-Language LTO
+     "--enable-lto=cross,full" # Cross-Language LTO
      "--enable-linker=lld"
   ]
   ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")

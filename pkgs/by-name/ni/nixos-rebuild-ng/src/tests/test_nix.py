@@ -21,7 +21,9 @@ from .helpers import get_qualified_name
 )
 def test_build(mock_run: Any, monkeypatch: Any) -> None:
     assert n.build(
-        "config.system.build.attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag="foo"
+        "config.system.build.attr",
+        m.BuildAttr("<nixpkgs/nixos>", None),
+        {"nix_flag": "foo"},
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
@@ -55,8 +57,7 @@ def test_build_flake(mock_run: Any) -> None:
     assert n.build_flake(
         "config.system.build.toplevel",
         flake,
-        no_link=True,
-        nix_flag="foo",
+        {"no_link": True, "nix_flag": "foo"},
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
@@ -76,7 +77,7 @@ def test_build_flake(mock_run: Any) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 @patch(get_qualified_name(n.uuid4, n), autospec=True)
-def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
@@ -97,7 +98,7 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     mock_run.side_effect = run_wrapper_side_effect
     mock_uuid4.side_effect = [uuid.UUID(int=1), uuid.UUID(int=2)]
 
-    assert n.remote_build(
+    assert n.build_remote(
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
         build_host,
@@ -164,18 +165,18 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
     flake = m.Flake.parse(".#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
-    assert n.remote_build_flake(
+    assert n.build_remote_flake(
         "config.system.build.toplevel",
         flake,
         build_host,
-        flake_build_flags={"flake": True},
+        eval_flags={"flake": True},
         copy_flags={"copy": True},
-        build_flags={"build": True},
+        flake_build_flags={"build": True},
     ) == Path("/path/to/file")
     mock_run.assert_has_calls(
         [
@@ -237,9 +238,9 @@ def test_copy_closure(monkeypatch: Any) -> None:
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.copy_closure(closure, None, build_host)
+        n.copy_closure(closure, None, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
-            ["nix-copy-closure", "--from", "user@build.host", closure],
+            ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
             extra_env={
                 "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
             },
@@ -251,11 +252,12 @@ def test_copy_closure(monkeypatch: Any) -> None:
         "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
     }
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.copy_closure(closure, target_host, build_host)
+        n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
             [
                 "nix",
                 "copy",
+                "--copy-flag",
                 "--from",
                 "ssh://user@build.host",
                 "--to",
@@ -286,7 +288,7 @@ def test_copy_closure(monkeypatch: Any) -> None:
 def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
     # Flake
     flake = m.Flake.parse(".#attr")
-    n.edit(flake, commit_lock_file=True)
+    n.edit(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
             "nix",
@@ -471,7 +473,7 @@ def test_list_generations(mock_get_generations: Any, tmp_path: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl(mock_run: Any) -> None:
-    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag=True)
+    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
     mock_run.assert_called_with(
         ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
     )
@@ -482,7 +484,7 @@ def test_repl(mock_run: Any) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl_flake(mock_run: Any) -> None:
-    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), nix_flag=True)
+    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
     assert mock_run.call_count == 1

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "viperML";
     repo = "nh";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k8rz5RF1qi7RXzQYWGbw5pJRNRFIdX85SIYN+IHiVL4=";
   };
 

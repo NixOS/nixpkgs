@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   bc,
   check,
   curl,
@@ -26,6 +27,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "configure-big_sur.diff";
+      url = "https://github.com/Homebrew/formula-patches/raw/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff";
+      hash = "sha256-NazWrrwZhD8aKzpj6IC6zrD1J4qxrOZh5XpQLZ14yTw=";
+    })
+  ];
+
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
   configureFlags = lib.optionals withBashBuiltins [
@@ -46,6 +55,16 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withBashBuiltins [
       bash.dev
     ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-function-declaration"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+    ]
+  );
 
   nativeCheckInputs = [
     bc

@@ -5,13 +5,13 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "go-spatial";
     repo = "tegola";
-    rev = "v${version}";
-    hash = "sha256-Jlpw3JaU5+DO7Z5qruEMoLRf95cPGd9Z+MeDGSgbMjc=";
+    tag = "v${version}";
+    hash = "sha256-EXCh+5t2+7j/huIKUWOqG7u+Lo4eziyvPkDGpw3xaO8=";
   };
 
   frontend = buildNpmPackage {
@@ -47,11 +47,11 @@ buildGoModule {
     go generate ./server
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     mainProgram = "tegola";
-    maintainers = with maintainers; teams.geospatial.members ++ [ ingenieroariel ];
-    license = licenses.mit;
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ ingenieroariel ]);
+    license = lib.licenses.mit;
   };
 }

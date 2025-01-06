@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   nssModulesPath = config.system.nssModules.path;
@@ -22,8 +19,8 @@ in
 
     services.nscd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the Name Service Cache Daemon.
@@ -32,8 +29,8 @@ in
         '';
       };
 
-      enableNsncd = mkOption {
-        type = types.bool;
+      enableNsncd = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to use nsncd instead of nscd from glibc.
@@ -42,24 +39,24 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nscd";
         description = ''
           User account under which nscd runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nscd";
         description = ''
           User group under which nscd runs.
         '';
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = builtins.readFile ./nscd.conf;
         description = ''
           Configuration to use for Name Service Cache Daemon.
@@ -67,8 +64,8 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default =
           if pkgs.stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.bin else pkgs.glibc.bin;
         defaultText = lib.literalExpression ''
@@ -88,7 +85,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."nscd.conf".text = cfg.config;
 
     users.users.${cfg.user} = {
@@ -125,7 +122,7 @@ in
           config.environment.etc."nsswitch.conf".source
           config.environment.etc."nscd.conf".source
         ]
-        ++ optionals config.users.mysql.enable [
+        ++ lib.optionals config.users.mysql.enable [
           config.environment.etc."libnss-mysql.cfg".source
           config.environment.etc."libnss-mysql-root.cfg".source
         ]

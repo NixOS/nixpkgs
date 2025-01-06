@@ -4,6 +4,7 @@
   chromium,
   nodejs,
   python3,
+  fetchpatch,
   fetchYarnDeps,
   fetchNpmDeps,
   fixup-yarn-lock,
@@ -59,7 +60,40 @@ in
 
   src = null;
 
-  patches = base.patches;
+  patches =
+    base.patches
+    ++ lib.optionals (lib.versionOlder info.version "32") [
+      # Backport a few fixes for -Wmissing-template-arg-list-after-template-kw
+      # which only effects the soon-to-be-EOLed electron 31 (chromium M126).
+      # https://issues.chromium.org/issues/344680447
+
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5604664
+      (fetchpatch {
+        url = "https://github.com/chromium/chromium/commit/b0088fa60970412160535c367e2ff53b25b8538e.patch";
+        hash = "sha256-eEYO+IN1062iCqVr6eO3UZlGLN376lMXc6UQunJGpdQ=";
+      })
+
+      # https://android-review.googlesource.com/c/platform/external/perfetto/+/3114454
+      (fetchpatch {
+        name = "perfetto-e2f661907a717551235563389977b7468da6d45e.patch";
+        url = "https://android.googlesource.com/platform/external/perfetto/+/e2f661907a717551235563389977b7468da6d45e^!?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "third_party/perfetto/";
+        hash = "sha256-5zSAZZI1tR7O4Aui22T/6uyk0RpuIy7XqDD0nwlDySQ=";
+      })
+
+      ./electron-31-perfetto-missing-template-arg-list.patch
+
+      # And a finally fix for -Winvalid-constexpr that is happening within the electron patchset.
+      # https://github.com/electron/electron/pull/42413/commits/394a26f94a3fbce91e15e80e8e73b9a3ec1f04d1
+      (fetchpatch {
+        url = "https://github.com/electron/electron/commit/394a26f94a3fbce91e15e80e8e73b9a3ec1f04d1.patch";
+        stripLen = 1;
+        extraPrefix = "electron/";
+        hash = "sha256-lllUUDm1thnC+rH8hBtPBVLRx6Pis5TPEUeQli9z1Mk=";
+      })
+    ];
 
   unpackPhase =
     ''

@@ -6,15 +6,24 @@
   cmake,
   libuuid,
   expat,
-  sqlite,
-  libidn,
   libiconv,
   botan2,
   systemd,
   pkg-config,
-  udns,
   python3Packages,
+  withIDN ? true,
+  libidn,
+  withPostgreSQL ? false,
+  postgresql,
+  withSQLite ? true,
+  sqlite,
+  withUDNS ? true,
+  udns,
 }:
+
+assert lib.assertMsg (
+  withPostgreSQL || withSQLite
+) "At least one Biboumi database provider required";
 
 let
   louiz_catch = fetchgit {
@@ -39,16 +48,18 @@ stdenv.mkDerivation rec {
     pkg-config
     python3Packages.sphinx
   ];
-  buildInputs = [
-    libuuid
-    expat
-    sqlite
-    libiconv
-    libidn
-    botan2
-    systemd
-    udns
-  ];
+  buildInputs =
+    [
+      libuuid
+      expat
+      libiconv
+      systemd
+      botan2
+    ]
+    ++ lib.optional withIDN libidn
+    ++ lib.optional withPostgreSQL postgresql
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withUDNS udns;
 
   buildFlags = [
     "all"

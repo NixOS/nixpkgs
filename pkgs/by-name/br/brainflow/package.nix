@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "brainflow-dev";
     repo = "brainflow";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-NBdSVYW2xWY5jgXeaeW0yBzIzvSWt5Qp2A9zIn7+0Yw=";
   };
 

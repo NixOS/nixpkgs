@@ -19,17 +19,17 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.148.7";
+    version = "1.152.1";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
-      rev = "v${version}";
-      hash = "sha256-mTNWSR4ea972tIOvg6RClEc44mKXoHDEWoLZXio8O4k=";
+      tag = "v${version}";
+      hash = "sha256-ty2pZWMZ5ZFwwpLm22ChxVAf2cqmIimk8BWvMBqzmks=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "deltachat-core-rust";
       inherit version src;
-      hash = "sha256-eDj8DIvvWWj+tfHuzR35WXlKY5klGxW+MixdN++vugk=";
+      hash = "sha256-wbk4/yhhIRPD3x8ghAwJ0lQy0k8GQopTBBT1a021FRo=";
     };
   };
   electron = electron_32;
@@ -37,18 +37,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.48.0";
+  version = "1.50.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BgB12pHySJIMtBCph5UkBjioMhEYQq9i7htkrWQNlps=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G/qBGyx+vxkJvwmBYG5kpx01OO0C9dPji0Cafna9pyw=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-YBfHVZB6TScIKbWQrN1KJYSUZytR81UwKZ87GaxGlZ8=";
+    hash = "sha256-UwfblmCkJOuy2Et5Rjm8ONWLbDmLppazqIk2+rV2RJU=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    VERSION_INFO_GIT_REF = finalAttrs.src.rev;
+    VERSION_INFO_GIT_REF = finalAttrs.src.tag;
   };
 
   buildPhase = ''
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Email-based instant messaging for Desktop";
     homepage = "https://github.com/deltachat/deltachat-desktop";
-    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     mainProgram = "deltachat";
     maintainers = with lib.maintainers; [ dotlambda ];

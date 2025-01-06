@@ -2,7 +2,6 @@
   cacert,
   cargo,
   copyDesktopItems,
-  electron_33,
   fetchFromGitHub,
   fetchurl,
   findutils,
@@ -10,14 +9,15 @@
   lib,
   makeDesktopItem,
   makeWrapper,
-  nodejs_20,
   rsync,
   rustPlatform,
   rustc,
   stdenv,
   stdenvNoCC,
-  yarn,
+  yarn-berry,
   zip,
+  electron_33,
+  nodejs_20,
   buildType ? "stable",
   commandLineArgs ? "",
 }:
@@ -32,6 +32,8 @@ let
     .${hostPlatform.parsed.cpu.name}
       or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
   electron = electron_33;
+  nodejs = nodejs_20;
+  yarn = yarn-berry.override { inherit nodejs; };
 in
 stdenv.mkDerivation (
   finalAttrs:
@@ -121,7 +123,7 @@ stdenv.mkDerivation (
       };
       nativeBuildInputs =
         [
-          nodejs_20
+          nodejs
           yarn
           cargo
           rustc

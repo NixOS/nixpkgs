@@ -21,7 +21,7 @@ buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgbadger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-an/BOkQsMkTXS0HywV1JWerS16HRbO1MHVleYhVqmBM=";
   };
 

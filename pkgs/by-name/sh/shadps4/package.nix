@@ -17,7 +17,7 @@
   libunwind,
   libusb1,
   magic-enum,
-  libgbm,
+  mesa,
   pkg-config,
   pugixml,
   qt6,
@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.4.0-unstable-2024-12-08";
+  version = "0.5.0-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "4fb2247196d4626bab8f2c28710b0c34cad053fe";
-    hash = "sha256-bRURBUhIVQLrBxJFaJirw3n1n7xviRoAZGLZ+rV/UeM=";
+    rev = "596f4cdf0e66a97c9d2d4272091d8c0167a5b8e1";
+    hash = "sha256-apwAl8TCzSKchqYGHV0UsMSGErF4GgiwhlwmOPWpeLs=";
     fetchSubmodules = true;
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     xorg.libXext
     magic-enum
-    libgbm
+    mesa
     pugixml
     qt6.qtbase
     qt6.qtdeclarative
@@ -113,15 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    patchelf --add-rpath ${
-      lib.makeLibraryPath [
-        vulkan-loader
-        xorg.libXi
-      ]
-    } \
-      $out/bin/shadps4
-  '';
+  runtimeDependencies = [
+    vulkan-loader
+    xorg.libXi
+  ];
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
@@ -135,7 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Early in development PS4 emulator";
     homepage = "https://github.com/shadps4-emu/shadPS4";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ryand56 ];
+    maintainers = with lib.maintainers; [
+      ryand56
+      liberodark
+    ];
     mainProgram = "shadps4";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };

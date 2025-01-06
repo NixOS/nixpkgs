@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "trustymail";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zkw+NfeVtIArrBxR1qR9bAQe5yd7mAtNiT0x5Mqr3Ic=";
   };
 

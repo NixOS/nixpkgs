@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   glib,
   intltool,
   libfm,
@@ -28,6 +29,14 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/pcmanfm/pcmanfm-${version}.tar.xz";
     sha256 = "sha256-FMt7JHSTxMzmX7tZAmEeOtAKeocPvB5QrcUEKMUUDPc=";
   };
+
+  patches = [
+    # Fix build with gcc14 -Werror=incompatible-pointer-types
+    (fetchpatch {
+      url = "https://github.com/lxde/pcmanfm/commit/12abd7e179adb9e31d999824048a5f40f90218fd.patch";
+      hash = "sha256-iuNejg211VOiaIVSNkIV64VIrs6oOp+qwjqz3JFxOTI=";
+    })
+  ];
 
   buildInputs = [
     glib

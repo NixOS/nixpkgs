@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-h5bOZPaYu5DlN4trwf+iMafzfcyXemNdssTYpM6NCZY=";
   };
 

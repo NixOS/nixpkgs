@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-platforms";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-P7GC+t/rs49/a85Bxy6x4cRyCEaHG4b7SIb85sMj7Yk=";
   };
 

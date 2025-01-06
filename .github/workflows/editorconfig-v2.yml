@@ -16,7 +16,7 @@ jobs:
 
   tests:
     name: editorconfig-check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: get-merge-commit
     if: "needs.get-merge-commit.outputs.mergedSha && github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:

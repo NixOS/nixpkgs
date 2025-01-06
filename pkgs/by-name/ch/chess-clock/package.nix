@@ -8,6 +8,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   stdenv,
@@ -45,6 +46,10 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Time games of over-the-board chess";

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FbnwUfAwCwwBKqEUtb2ZBxHehFwJdr9YkuWKox018BY=";
   };
 

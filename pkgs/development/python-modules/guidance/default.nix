@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
   };
 
@@ -100,7 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

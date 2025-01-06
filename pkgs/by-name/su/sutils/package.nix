@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Small command-line utilities";
     homepage = "https://github.com/baskerville/sutils";
     maintainers = [ lib.maintainers.meisternu ];
-    license = "Custom";
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
   };
 }

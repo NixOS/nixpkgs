@@ -43,19 +43,19 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
-    flake_build_flags = argparse.ArgumentParser(add_help=False)
-    flake_build_flags.add_argument("--accept-flake-config", action="store_true")
-    flake_build_flags.add_argument("--refresh", action="store_true")
-    flake_build_flags.add_argument("--impure", action="store_true")
-    flake_build_flags.add_argument("--offline", action="store_true")
-    flake_build_flags.add_argument("--no-net", action="store_true")
-    flake_build_flags.add_argument("--recreate-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-update-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-write-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-registries", action="store_true")
-    flake_build_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_build_flags.add_argument("--update-input")
-    flake_build_flags.add_argument("--override-input", nargs=2)
+    flake_common_flags = argparse.ArgumentParser(add_help=False)
+    flake_common_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_common_flags.add_argument("--refresh", action="store_true")
+    flake_common_flags.add_argument("--impure", action="store_true")
+    flake_common_flags.add_argument("--offline", action="store_true")
+    flake_common_flags.add_argument("--no-net", action="store_true")
+    flake_common_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-registries", action="store_true")
+    flake_common_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_common_flags.add_argument("--update-input")
+    flake_common_flags.add_argument("--override-input", nargs=2)
 
     classic_build_flags = argparse.ArgumentParser(add_help=False)
     classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
@@ -74,7 +74,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     sub_parsers = {
         "common_flags": common_flags,
         "common_build_flags": common_build_flags,
-        "flake_build_flags": flake_build_flags,
+        "flake_common_flags": flake_common_flags,
         "classic_build_flags": classic_build_flags,
         "copy_flags": copy_flags,
     }
@@ -262,8 +262,8 @@ def parse_args(
 def reexec(
     argv: list[str],
     args: argparse.Namespace,
-    build_flags: dict[str, Args],
-    flake_build_flags: dict[str, Args],
+    build_flags: Args,
+    flake_build_flags: Args,
 ) -> None:
     drv = None
     attr = "config.system.build.nixos-rebuild"
@@ -271,10 +271,18 @@ def reexec(
         # Parsing the args here but ignore ask_sudo_password since it is not
         # needed and we would end up asking sudo password twice
         if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
-            drv = nix.build_flake(attr, flake, **flake_build_flags, no_link=True)
+            drv = nix.build_flake(
+                attr,
+                flake,
+                flake_build_flags | {"no_link": True},
+            )
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
-            drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
+            drv = nix.build(
+                attr,
+                build_attr,
+                build_flags | {"no_out_link": True},
+            )
     except CalledProcessError:
         logger.warning(
             "could not build a newer version of nixos-rebuild, "
@@ -319,7 +327,8 @@ def execute(argv: list[str]) -> None:
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])
     build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
-    flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
+    flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+    flake_build_flags = common_build_flags | flake_common_flags
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
     if args.upgrade or args.upgrade_all:
@@ -350,7 +359,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
-        nixpkgs_path = nix.find_file("nixpkgs", **build_flags)
+        nixpkgs_path = nix.find_file("nixpkgs", build_flags)
         rev = nix.get_nixpkgs_rev(nixpkgs_path)
         if nixpkgs_path and rev:
             (nixpkgs_path / ".version-suffix").write_text(rev)
@@ -370,7 +379,10 @@ def execute(argv: list[str]) -> None:
 
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
+            build_flags |= {"no_out_link": no_link, "dry_run": dry_run}
+            flake_build_flags |= {"no_link": no_link, "dry_run": dry_run}
             rollback = bool(args.rollback)
+
             match action:
                 case Action.BUILD_VM:
                     attr = "config.system.build.vm"
@@ -395,24 +407,22 @@ def execute(argv: list[str]) -> None:
                 case (_, True, _, _):
                     raise NRError(f"--rollback is incompatible with '{action}'")
                 case (_, False, Remote(_), Flake(_)):
-                    path_to_config = nix.remote_build_flake(
+                    path_to_config = nix.build_remote_flake(
                         attr,
                         flake,
                         build_host,
+                        eval_flags=flake_common_flags,
                         flake_build_flags=flake_build_flags,
                         copy_flags=copy_flags,
-                        build_flags=build_flags,
                     )
                 case (_, False, None, Flake(_)):
                     path_to_config = nix.build_flake(
                         attr,
                         flake,
-                        no_link=no_link,
-                        dry_run=dry_run,
-                        **flake_build_flags,
+                        flake_build_flags=flake_build_flags,
                     )
                 case (_, False, Remote(_), None):
-                    path_to_config = nix.remote_build(
+                    path_to_config = nix.build_remote(
                         attr,
                         build_attr,
                         build_host,
@@ -424,9 +434,7 @@ def execute(argv: list[str]) -> None:
                     path_to_config = nix.build(
                         attr,
                         build_attr,
-                        no_out_link=no_link,
-                        dry_run=dry_run,
-                        **build_flags,
+                        build_flags=build_flags,
                     )
                 case never:
                     # should never happen, but mypy is not smart enough to
@@ -442,7 +450,7 @@ def execute(argv: list[str]) -> None:
                     path_to_config,
                     to_host=target_host,
                     from_host=build_host,
-                    **copy_flags,
+                    copy_flags=copy_flags,
                 )
                 if action in (Action.SWITCH, Action.BOOT):
                     nix.set_profile(
@@ -468,7 +476,7 @@ def execute(argv: list[str]) -> None:
                     f"Done. The virtual machine can be started by running '{vm_path}'"
                 )
         case Action.EDIT:
-            nix.edit(flake, **flake_build_flags)
+            nix.edit(flake, flake_build_flags)
         case Action.DRY_RUN:
             assert False, "DRY_RUN should be a DRY_BUILD alias"
         case Action.LIST_GENERATIONS:
@@ -488,9 +496,9 @@ def execute(argv: list[str]) -> None:
                 print(tabulate(generations, headers=headers))
         case Action.REPL:
             if flake:
-                nix.repl_flake("toplevel", flake, **flake_build_flags)
+                nix.repl_flake("toplevel", flake, flake_build_flags)
             else:
-                nix.repl("system", build_attr, **build_flags)
+                nix.repl("system", build_attr, build_flags)
         case _:
             assert_never(action)
 

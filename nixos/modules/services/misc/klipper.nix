@@ -227,9 +227,11 @@ in
       };
 
     environment.systemPackages =
-      with pkgs;
       let
         default = a: b: if a != null then a else b;
+        genconf = pkgs.klipper-genconf.override {
+          klipper = cfg.package;
+        };
         firmwares = lib.filterAttrs (n: v: v != null) (
           lib.mapAttrs (
             mcu:
@@ -241,6 +243,7 @@ in
             }:
             if enable then
               pkgs.klipper-firmware.override {
+                klipper = cfg.package;
                 mcu = lib.strings.sanitizeDerivationName mcu;
                 firmwareConfig = configFile;
               }
@@ -251,14 +254,15 @@ in
         firmwareFlasher = lib.mapAttrsToList (
           mcu: firmware:
           pkgs.klipper-flash.override {
-            mcu = lib.strings.sanitizeDerivationName mcu;
+            klipper = cfg.package;
             klipper-firmware = firmware;
+            mcu = lib.strings.sanitizeDerivationName mcu;
             flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
             firmwareConfig = cfg.firmwares."${mcu}".configFile;
           }
         ) (lib.filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) firmwares);
       in
-      [ klipper-genconf ] ++ firmwareFlasher ++ lib.attrValues firmwares;
+      [ genconf ] ++ firmwareFlasher ++ lib.attrValues firmwares;
   };
   meta.maintainers = [
     lib.maintainers.cab404

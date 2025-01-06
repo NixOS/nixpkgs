@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-m7RLDOMuRNLacnIudptBGjhcTlMk8+v/onz6Amqxb90=";
   };
 

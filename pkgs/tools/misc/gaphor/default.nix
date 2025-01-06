@@ -25,6 +25,7 @@
   librsvg,
   makeDesktopItem,
   python,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
@@ -92,6 +93,10 @@ buildPythonApplication rec {
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple modeling tool written in Python";

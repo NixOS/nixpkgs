@@ -2,27 +2,36 @@
   lib,
   stdenv,
   fetchurl,
+  flex,
   ncurses,
   readline,
-  flex,
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgdb";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://cgdb.me/files/${pname}-${version}.tar.gz";
+    url = "https://cgdb.me/files/cgdb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
   };
+
+  patches = [
+    ./gcc14.patch
+  ];
 
   buildInputs = [
     ncurses
     readline
+  ];
+
+  nativeBuildInputs = [
     flex
     texinfo
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Curses interface to gdb";
@@ -35,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ cygwin;
     maintainers = [ ];
   };
-}
+})

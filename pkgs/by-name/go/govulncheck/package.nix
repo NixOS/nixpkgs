@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ydJ8AeoCnLls6dXxjI05+THEqPPdJqtAsKTriTIK9Uc=";
   };
 

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -27,30 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.3.7";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-31S7Mfz3LIOAmDUl6jbr3kSP2BdLaM0M4xMZ8FHhLH0=";
+    hash = "sha256-IuYRgQm3DM6ZgsfRt37GCXC3hb1vGIrqw7WxYN+Bets=";
   };
-
-  patches = [
-    # Remove when version > 0.3.7
-    (fetchpatch {
-      name = "0001-miracle-wm-Dont-override-PKG_CONFIG_PATH.patch";
-      url = "https://github.com/miracle-wm-org/miracle-wm/commit/0a8809d4362e1d3abbea6e29fd1234c8fa981bfb.patch";
-      hash = "sha256-Fy/fDmV1uXRt4omxccpFkZb0vE8iHYSS9A7E+PEFBOM=";
-    })
-
-    # Remove when version > 0.3.7
-    (fetchpatch {
-      name = "0002-miracle-wm-Fix-mir-2.19-support.patch";
-      url = "https://github.com/miracle-wm-org/miracle-wm/commit/a9db8b539a5396e9df6f6f009cbabcbb053f2b05.patch";
-      hash = "sha256-VxUVpwBSHuLzs0yEQ7gStpMnHRJJtZ/Shmjb2un3qI0=";
-    })
-  ];
 
   postPatch =
     ''
@@ -108,19 +91,20 @@ stdenv.mkDerivation (finalAttrs: {
     tests.vm = nixosTests.miracle-wm;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiling Wayland compositor based on Mir";
     longDescription = ''
       miracle-wm is a Wayland compositor based on Mir. It features a tiling window manager at its core, very much in
       the style of i3 and sway. The intention is to build a compositor that is flashier and more feature-rich than
       either of those compositors, like swayfx.
 
-      See the user guide for info on how to use miracle-wm: https://github.com/mattkae/miracle-wm/blob/v${finalAttrs.version}/USERGUIDE.md
+      See the user guide for info on how to use miracle-wm: https://wiki.miracle-wm.org/v${finalAttrs.version}/
     '';
     homepage = "https://github.com/mattkae/miracle-wm";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

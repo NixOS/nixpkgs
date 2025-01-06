@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZmrQa/2vPwYgSvY3ZUvilg4RizVXpu5hvJJBQVXkK8E=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "django-cte";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OCENg94xHBeeE4A2838Cu3q2am2im2X4SkFSjc6DuhE=";
   };
 

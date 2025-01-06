@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
   };
 

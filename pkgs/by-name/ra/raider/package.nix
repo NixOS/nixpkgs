@@ -9,6 +9,7 @@
   meson,
   mesonEmulatorHook,
   ninja,
+  nix-update-script,
   pkg-config,
   stdenv,
   wrapGAppsHook4,
@@ -43,6 +44,10 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Permanently delete your files (also named File Shredder)";

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "ReadabiliPy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XrmdQjLFYdadWeO5DoKAQeEdta+6T6BqfvGlDkzLMyM=";
   };
 

@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "stac-validator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e3v8WvVbZcxN91w+YNUmSILZ1nZ9Vy1UbEpCQkTMQpQ=";
   };
 

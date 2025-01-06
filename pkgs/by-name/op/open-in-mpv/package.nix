@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "open-in-mpv";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Baldomo";
     repo = "open-in-mpv";
     rev = "v${version}";
-    hash = "sha256-EkWz28X+pPfSjinYEMP2y1YiZ46HdnjRGjXRDwO28PY=";
+    hash = "sha256-5Hu/BXUMI8CSOvE09I0YXfQ6BuIRA37yLlSTqWrrqy0=";
   };
 
   vendorHash = "sha256-G6GZO2+CfEAYcf7zBcqDa808A0eJjM8dq7+4VGZ+P4c=";

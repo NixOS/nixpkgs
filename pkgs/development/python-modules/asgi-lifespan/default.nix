@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "asgi-lifespan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Jgmd/4c1lxHM/qi3MJNN1aSSUJrI7CRNwwHrFwwcCkc=";
   };
 

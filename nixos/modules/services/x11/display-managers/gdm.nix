@@ -196,7 +196,7 @@ in
       [
         "d /run/gdm/.config 0711 gdm gdm"
       ]
-      ++ lib.optionals config.hardware.pulseaudio.enable [
+      ++ lib.optionals config.services.pulseaudio.enable [
         "d /run/gdm/.config/pulse 0711 gdm gdm"
         "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
       ]

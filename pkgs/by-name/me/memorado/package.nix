@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wbernard";
     repo = "Memorado";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yWu2+VAa5FkpLs/KLI0lcNzFLGN/kiq6frtW8SHN+W4=";
   };
 

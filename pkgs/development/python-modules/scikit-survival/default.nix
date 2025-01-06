@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6902chXALa73/kTJ5UwV4CrB7/7wn+QXKpp2ej/Dnk8=";
   };
 

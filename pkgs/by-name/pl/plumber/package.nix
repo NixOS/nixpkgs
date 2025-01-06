@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "plumber";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "streamdal";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-38tLlFeQtXIiHuQa9c/IfIYbyf+GrOsERAdWQnHSeck=";
+    hash = "sha256-0pyeCTkmS7gG51Xm4Gc62p+I5DRUA2F9tPHaZjO+/WE=";
   };
 
   vendorHash = null;

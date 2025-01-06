@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  gitUpdater,
 }:
 
 buildGoModule rec {
@@ -12,13 +13,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hb5XgwBg9llX/PDX8A8hL5fJbG03nTjrvEd252k2Il0=";
   };
 
   vendorHash = "sha256-bOjIwBPxu/BfRaAcZTXf4xCGvVXnumb2++JZTx7ZG1s=";
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "source/src";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,20 +46,22 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/{src,oh-my-posh}
     mkdir -p $out/share/oh-my-posh
-    cp -r ${src}/themes $out/share/oh-my-posh/
+    cp -r $src/themes $out/share/oh-my-posh/
     installShellCompletion --cmd oh-my-posh \
       --bash <($out/bin/oh-my-posh completion bash) \
       --fish <($out/bin/oh-my-posh completion fish) \
       --zsh <($out/bin/oh-my-posh completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
     description = "Prompt theme engine for any shell";
     mainProgram = "oh-my-posh";
     homepage = "https://ohmyposh.dev";
     changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lucperkins
       urandom
     ];

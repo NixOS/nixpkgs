@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jonkgrimes";
     repo = "nbtscanner";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lnTTutOc829COwfNhBkSK8UpiNnGsm7Da53b+eSBt1Q=";
   };
 

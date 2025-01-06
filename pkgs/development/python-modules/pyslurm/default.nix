@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EJTzaoHBidnaHxFLw8FrjJITUxioRGEhl1yvm/QDpXc=";
   };
 

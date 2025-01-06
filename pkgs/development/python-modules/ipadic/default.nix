@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polm";
     repo = "ipadic-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ybC8G1AOIZWkS3uQSErXctIJKq9Y7xBjRbBrO8/yAj4=";
   };
 

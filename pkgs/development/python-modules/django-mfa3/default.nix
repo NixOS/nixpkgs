@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xi";
     repo = "django-mfa3";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-O8po7VevqyHlP2isnNnLbpgfs1p4sFezxIZKMTgnwuY=";
   };
 

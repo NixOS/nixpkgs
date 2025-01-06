@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ./hardening-format.patch ]
+    [
+      ./hardening-format.patch
+      ./fix-dmevent_tool.patch
+    ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [
       (fetchpatch {
         url = "https://raw.githubusercontent.com/void-linux/void-packages/fceed4b8e96b3c1da07babf6f67b6ed1588a28b2/srcpkgs/dmraid/patches/006-musl-libc.patch";

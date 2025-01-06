@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
-    rev = "refs/tags/v${version}"; # When updating: Replace with long commit hash of new version
+    tag = "v${version}"; # When updating: Replace with long commit hash of new version
     hash = "sha256-ejMqTMGLbVr/Aaqw8U0ojV43N6t0GeWdYIcP0guAsO0="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "lox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Iv3ZdfsvFLU6lhlH1n+eQ+KIrXESsnC1S2lVFnKFV08=";
   };
 

@@ -14,6 +14,7 @@
   libadwaita,
   libxml2,
   darwin,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +62,10 @@ stdenv.mkDerivation rec {
       "-Wno-error=incompatible-function-pointer-types"
     ]
   );
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Generate project icons and avatars from a symbolic icon";

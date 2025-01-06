@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8aps8aNgXw+XbDgtCvWw+Ij1Cm1N0G+wcL35ySkofOk=";
   };
 

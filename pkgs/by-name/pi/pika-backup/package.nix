@@ -18,6 +18,7 @@
   gtk4,
   libadwaita,
   libsecret,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +68,10 @@ stdenv.mkDerivation rec {
     libadwaita
     libsecret
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple backups based on borg";

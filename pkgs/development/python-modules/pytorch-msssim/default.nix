@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VainF";
     repo = "pytorch-msssim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bghglwQhgByC7BqbDvImSvt6edKF55NLYEPjqmmSFH8=";
   };
 

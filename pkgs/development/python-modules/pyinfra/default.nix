@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NHQpYOXlqFU4BtiwiESGV8pM0O8kqCz2TpXOGz8T4zQ=";
   };
 

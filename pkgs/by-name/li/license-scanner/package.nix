@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "license-scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2KUaVDAZxMwZ3AAMEUmRiuvenPSFliUp6rZCZrVTDps=";
   };
 

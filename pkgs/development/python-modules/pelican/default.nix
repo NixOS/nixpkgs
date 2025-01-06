@@ -45,7 +45,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RWzOMp3H0QbZyGsXd8cakeRqZhVH7d6ftxZHBA4cPSA=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.

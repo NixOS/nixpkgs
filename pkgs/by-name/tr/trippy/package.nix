@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trippy";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "fujiapple852";
     repo = "trippy";
     rev = version;
-    hash = "sha256-0JV8Lvl8j1PWvhVnAs8YXwV5b0LWpHPKQpeGL/NetnQ=";
+    hash = "sha256-Kn694KUCl2fYl8BkYUgRPxNx9LW/IVOsmA5mE9cS/nQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  cargoHash = "sha256-0+Vq6I9m4YWfrdtWBlbhCwxsLnavDsNpMHVIide6aPY=";
+  cargoHash = "sha256-+lvh2HHW2yAI8rT07yCz4hL+ESXnjKXsskbgTvFPJZQ=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/trip"

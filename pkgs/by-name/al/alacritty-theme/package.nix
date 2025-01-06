@@ -14,7 +14,8 @@ stdenvNoCC.mkDerivation (self: {
     owner = "alacritty";
     repo = "alacritty-theme";
     rev = "95a7d695605863ede5b7430eb80d9e80f5f504bc";
-    hash = "sha256-D37MQtNS20ESny5UhW1u6ELo9czP4l+q0S8neH7Wdbc=";
+    hash = "sha256-IsUIfoacXJYilTPQBKXnDEuyQCt9ofBMJ8UZ1McFwXM=";
+    sparseCheckout = [ "themes" ];
   };
 
   dontConfigure = true;

@@ -4,7 +4,7 @@
   fetchYarnDeps,
   fetchFromGitHub,
   fixup-yarn-lock,
-  nodejs,
+  nodejs_20,
   python3,
   makeBinaryWrapper,
   git,
@@ -12,15 +12,19 @@
   yarn,
   docker-compose,
 }:
+
+let
+  nodejs = nodejs_20; # does not build with 22
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.71.0";
+  version = "0.72.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-plIDK5nOvLKFlRVlPHgpjHPhIh0NAWHmbaKsnYCU/7k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3rSWD6uxwcMQdHBSmmAQ0aevqevVXINigCj06jjEcRc=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

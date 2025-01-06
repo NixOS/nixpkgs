@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wg9n7x7KDqFecZZVmJwpE1kP0eKt1Gmld6XEcavcyU0=";
   };
 

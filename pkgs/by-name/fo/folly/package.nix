@@ -21,8 +21,6 @@
   zstd,
   libiberty,
   libunwind,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   boost,
   fmt_11,
@@ -52,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CX4YzNs64yeq/nDDaYfD5y8GKrxBueW4y275edPoS0c=";
   };
 
@@ -64,26 +62,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
-  buildInputs =
-    [
-      boost
-      double-conversion
-      fast-float
-      gflags
-      glog
-      libevent
-      zlib
-      openssl
-      xz
-      lz4
-      zstd
-      libiberty
-      libunwind
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    boost
+    double-conversion
+    fast-float
+    gflags
+    glog
+    libevent
+    zlib
+    openssl
+    xz
+    lz4
+    zstd
+    libiberty
+    libunwind
+  ];
 
   propagatedBuildInputs =
     [
@@ -122,7 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = true;
+  # Temporary fix until next `staging` cycle.
+  doCheck = !stdenv.cc.isClang;
 
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''

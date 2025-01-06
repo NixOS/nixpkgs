@@ -57,6 +57,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/0ba7f05cba7feaf2ae2c220596aead5dfc676675.patch";
       sha256 = "5uvHTPzQloEq8SVt3EnZ+8mziBdXsDmu/e92/RtyFzE=";
     })
+
+    # Add missing GtkSourceView include
+    # https://gitlab.gnome.org/GNOME/almanah/-/merge_requests/23
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/533f30c7e60437cbea7ca5ae901e768922c1a710.patch";
+      hash = "sha256-Ekhn4nRMC+fXLn4kqNwyCAg2cZru5QUcdzR1yJbcZGc=";
+    })
   ];
 
   nativeBuildInputs = [

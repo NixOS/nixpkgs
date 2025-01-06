@@ -44,6 +44,19 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  android = {
+    members = [
+      numinit
+      hadilq
+      RossComputerGuy
+      adrian-gierakowski
+    ];
+    scope = "Maintain Android-related tooling in nixpkgs.";
+    githubTeams = [ "android" ];
+    shortName = "Android";
+    enableFeatureFreezePing = true;
+  };
+
   bazel = {
     members = [
       mboes
@@ -184,6 +197,7 @@ with lib.maintainers;
       siraben
       vbgl
       alizter
+      stepbrobd
     ];
     scope = "Maintain the Coq theorem prover and related packages.";
     shortName = "Coq";

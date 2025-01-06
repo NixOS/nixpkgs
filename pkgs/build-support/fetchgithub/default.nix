@@ -59,12 +59,14 @@ let
 
   gitRepoUrl = "${baseUrl}.git";
 
+  revWithTag = if tag != null then "refs/tags/${tag}" else rev;
+
   fetcherArgs = (if useFetchGit
     then {
       inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
-      url = "${baseUrl}/archive/${if tag != null then "refs/tags/${tag}" else rev}.tar.gz";
+      url = "${baseUrl}/archive/${revWithTag}.tar.gz";
 
       passthru = {
         inherit gitRepoUrl;
@@ -73,5 +75,5 @@ let
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo tag; }
+fetcher fetcherArgs // { meta = newMeta; inherit owner repo tag; rev = revWithTag; }
 )

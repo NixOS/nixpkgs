@@ -342,17 +342,7 @@ buildPythonPackage rec {
     # until https://github.com/pytorch/pytorch/issues/76082 is addressed
     + lib.optionalString cudaSupport ''
       rm cmake/Modules/FindCUDAToolkit.cmake
-    ''
-    # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
-    # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0")
-        ''
-          substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace-fail '#if (__cplusplus >= 201703L) && (!defined(__MINGW32__)) && (!defined(_MSC_VER))
-          inline void *aligned_alloc(size_t align, size_t size)' '#if 0
-          inline void *aligned_alloc(size_t align, size_t size)'
-        '';
+    '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
   # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
@@ -454,59 +444,11 @@ buildPythonPackage rec {
 
   env =
     {
-      # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
-      # (upstream seems to have fixed this in the wrong place?)
-      # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
-      # https://github.com/pytorch/pytorch/issues/22346
-      #
+      # disable warnings as errors as they break the build on every compiler
+      # bump, among other things.
       # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
       # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-      NIX_CFLAGS_COMPILE = toString (
-        (
-          lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
-          # Suppress gcc regression: avx512 math function raises uninitialized variable warning
-          # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
-          # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
-          ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12.0.0") [
-            "-Wno-error=maybe-uninitialized"
-            "-Wno-error=uninitialized"
-          ]
-          # Since pytorch 2.0:
-          # gcc-12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:33: error: ‘void operator delete(void*, std::size_t)’
-          # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
-          ++ lib.optionals (stdenv.cc.isGNU && lib.versions.major stdenv.cc.version == "12") [
-            "-Wno-error=free-nonheap-object"
-          ]
-          # .../source/torch/csrc/autograd/generated/python_functions_0.cpp:85:3:
-          # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-          ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16") [
-            "-Wno-error=cast-function-type-strict"
-            # Suppresses the most spammy warnings.
-            # This is mainly to fix https://github.com/NixOS/nixpkgs/issues/266895.
-          ]
-          ++ lib.optionals rocmSupport [
-            "-Wno-#warnings"
-            "-Wno-cpp"
-            "-Wno-unknown-warning-option"
-            "-Wno-ignored-attributes"
-            "-Wno-deprecated-declarations"
-            "-Wno-defaulted-function-deleted"
-            "-Wno-pass-failed"
-          ]
-          ++ [
-            "-Wno-unused-command-line-argument"
-            "-Wno-uninitialized"
-            "-Wno-array-bounds"
-            "-Wno-free-nonheap-object"
-            "-Wno-unused-result"
-          ]
-          ++ lib.optionals stdenv.cc.isGNU [
-            "-Wno-maybe-uninitialized"
-            "-Wno-stringop-overflow"
-          ]
-        )
-      );
-
+      NIX_CFLAGS_COMPILE = "-Wno-error";
       USE_VULKAN = setBool vulkanSupport;
     }
     // lib.optionalAttrs vulkanSupport {
