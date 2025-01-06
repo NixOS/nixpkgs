@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SW1dRo1Wr14eHzYPg7Wm4QypFpNGXeaFlreEVWWyWgs=";
   };
 
+  patches = [
+    ./glog-0.7.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
