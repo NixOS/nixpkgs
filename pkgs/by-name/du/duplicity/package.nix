@@ -49,9 +49,6 @@ let
           --replace-fail /var/log /test/log
         substituteInPlace testing/unit/test_selection.py \
           --replace-fail /usr/bin /dev
-        # don't use /tmp/ in tests
-        substituteInPlace duplicity/backends/_testbackend.py \
-          --replace-fail '"/tmp/' 'os.environ.get("TMPDIR")+"/'
       '';
 
     disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
