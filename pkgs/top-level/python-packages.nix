@@ -18161,6 +18161,8 @@ self: super: with self; {
 
   xcffib = callPackage ../development/python-modules/xcffib { };
 
+  xdas = callPackage ../development/python-modules/xdas { };
+
   xdg = callPackage ../development/python-modules/xdg { };
 
   xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
