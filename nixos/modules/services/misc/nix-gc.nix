@@ -19,14 +19,14 @@ in
       };
 
       dates = lib.mkOption {
-        type = lib.types.singleLineStr;
+        type = with lib.types; either singleLineStr (listOf singleLineStr);
         default = "03:15";
         example = "weekly";
         description = ''
           How often or when garbage collection is performed. For most desktop and server systems
           a sufficient garbage collection is once a week.
 
-          This value must be a calendar event in the format specified by
+          This value must be a calendar event or a list of calendar events in the format specified by
           {manpage}`systemd.time(7)`.
         '';
       };
@@ -86,7 +86,9 @@ in
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       serviceConfig.Type = "oneshot";
-      startAt = lib.optional cfg.automatic cfg.dates;
+      startAt = lib.optionals cfg.automatic (
+        if builtins.isString cfg.dates then [ cfg.dates ] else cfg.dates
+      );
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {
