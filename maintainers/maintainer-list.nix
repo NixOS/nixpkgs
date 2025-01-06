@@ -20376,6 +20376,12 @@
     githubId = 5104601;
     name = "schnusch";
   };
+  schradert = {
+    email = "t0rdos@pm.me";
+    name = "Tristan Schrader";
+    github = "schradert";
+    githubId = 9901294;
+  };
   schrobingus = {
     email = "brent.monning.jr@gmail.com";
     name = "Brent Monning";
