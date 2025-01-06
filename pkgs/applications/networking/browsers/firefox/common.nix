@@ -268,6 +268,12 @@ buildStdenv.mkDerivation {
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
   ]
+  ++ lib.optionals ((lib.versionAtLeast version "129" && lib.versionOlder version "134") || lib.versionOlder version "128.6.0") [
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
+  ]
   ++ [
     # LLVM 19 turned on WASM reference types by default, exposing a bug
     # that broke the Mozilla WASI build. Supposedly, it has been fixed
@@ -286,10 +292,6 @@ buildStdenv.mkDerivation {
       url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
       hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
     })
-    # Python 3.12.8 compat
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
-    # https://phabricator.services.mozilla.com/D231480
-    ./mozbz-1935621-attachment-9442305.patch
     # Fix for missing vector header on macOS
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1939405
     ./firefox-mac-missing-vector-header.patch
