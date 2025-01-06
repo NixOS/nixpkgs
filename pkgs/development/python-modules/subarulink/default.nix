@@ -7,24 +7,27 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   stdiomask,
 }:
 
 buildPythonPackage rec {
   pname = "subarulink";
   version = "0.7.13";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "G-Two";
-    repo = pname;
+    repo = "subarulink";
     tag = "v${version}";
     hash = "sha256-R6d9BaQDFSobiIsbI1I/eUaJt0VUU2ELdWU9xDyhuFc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     stdiomask
   ];
@@ -50,10 +53,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for interacting with STARLINK-enabled vehicle";
-    mainProgram = "subarulink";
     homepage = "https://github.com/G-Two/subarulink";
     changelog = "https://github.com/G-Two/subarulink/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "subarulink";
   };
 }
