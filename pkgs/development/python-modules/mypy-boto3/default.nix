@@ -750,8 +750,8 @@ rec {
       "sha256-sR1ZRhrSVR5vka4snBaoMu7vCrux/2jI8IN1rdZSP40=";
 
   mypy-boto3-kinesisanalytics =
-    buildMypyBoto3Package "kinesisanalytics" "1.35.0"
-      "sha256-aKdkj9FTE3yDnyWySWx1xXAzzPypaGZ2IYg+6AwHHKQ=";
+    buildMypyBoto3Package "kinesisanalytics" "1.35.93"
+      "sha256-jKiNeL0ACrDyJ5UsveTG+xZFs4jUE1HCCp/xCecBqNU=";
 
   mypy-boto3-kinesisanalyticsv2 =
     buildMypyBoto3Package "kinesisanalyticsv2" "1.35.13"
