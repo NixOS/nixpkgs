@@ -10,7 +10,7 @@ in
 
 {
   meta = {
-    maintainers = teams.lxqt.members;
+    maintainers = lib.teams.lxqt.members;
   };
 
   options = {

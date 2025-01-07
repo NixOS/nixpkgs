@@ -91,5 +91,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ wietsedv ];
+  meta.maintainers = with lib.maintainers; [ wietsedv ];
 }

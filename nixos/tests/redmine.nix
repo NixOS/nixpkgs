@@ -42,7 +42,7 @@ let
       '';
     }
     // {
-      meta.maintainers = [ maintainers.aanderse ];
+      meta.maintainers = [ lib.maintainers.aanderse ];
     };
 in
 {

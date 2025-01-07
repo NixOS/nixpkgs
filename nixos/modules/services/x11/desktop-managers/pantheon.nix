@@ -19,7 +19,7 @@ in
 
   meta = {
     doc = ./pantheon.md;
-    maintainers = teams.pantheon.members;
+    maintainers = lib.teams.pantheon.members;
   };
 
   options = {

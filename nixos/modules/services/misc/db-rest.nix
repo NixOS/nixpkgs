@@ -201,5 +201,5 @@ in
 
     services.redis.servers.db-rest.enable = cfg.redis.enable && cfg.redis.createLocally;
   };
-  meta.maintainers = with maintainers; [ marie ];
+  meta.maintainers = with lib.maintainers; [ marie ];
 }

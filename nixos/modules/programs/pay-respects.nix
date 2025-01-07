@@ -53,5 +53,5 @@ in
       zsh.interactiveShellInit = optionalString config.programs.zsh.enable (initScript "zsh");
     };
   };
-  meta.maintainers = with maintainers; [ sigmasquadron ];
+  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
 }

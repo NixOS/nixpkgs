@@ -1554,7 +1554,7 @@ in
   ];
 
   meta.doc = ./default.md;
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     tomberek
     nessdoor
     christoph-heiss

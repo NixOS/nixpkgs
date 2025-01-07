@@ -156,5 +156,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ma27 ];
 }

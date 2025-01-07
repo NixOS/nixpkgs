@@ -146,6 +146,6 @@ in
     '')
   ];
 
-  meta.maintainers = with maintainers; [ netixx ];
+  meta.maintainers = with lib.maintainers; [ netixx ];
 
 }

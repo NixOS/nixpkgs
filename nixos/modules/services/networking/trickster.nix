@@ -113,6 +113,6 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ _1000101 ];
+  meta.maintainers = with lib.maintainers; [ _1000101 ];
 
 }

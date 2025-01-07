@@ -26,7 +26,7 @@ in
   ];
 
   meta = {
-    maintainers = [ maintainers.kjeremy ];
+    maintainers = [ lib.maintainers.kjeremy ];
   };
 
   options.virtualisation.vmware.guest = {

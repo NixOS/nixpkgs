@@ -248,6 +248,6 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ xlambein ];
+    maintainers = with lib.maintainers; [ xlambein ];
   };
 }

@@ -335,5 +335,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ Silver-Golden ];
+  meta.maintainers = with lib.maintainers; [ Silver-Golden ];
 }

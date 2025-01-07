@@ -133,5 +133,5 @@ with lib;
     ] "Zeronet will log by default in /var/lib/zeronet")
   ];
 
-  meta.maintainers = with maintainers; [ Madouura ];
+  meta.maintainers = with lib.maintainers; [ Madouura ];
 }

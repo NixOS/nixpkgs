@@ -111,7 +111,7 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [ jlesquembre ];
   };
 
 }

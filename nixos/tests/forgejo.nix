@@ -54,7 +54,7 @@ let
     type:
     nameValuePair type (makeTest {
       name = "forgejo-${type}";
-      meta.maintainers = with maintainers; [
+      meta.maintainers = with lib.maintainers; [
         bendlas
         emilylange
       ];

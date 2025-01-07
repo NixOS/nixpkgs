@@ -107,7 +107,7 @@ in
       '';
     };
   };
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     arianvp
     eamsden
   ];

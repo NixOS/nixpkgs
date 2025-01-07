@@ -11,7 +11,7 @@ let
   settingsFormat = pkgs.formats.json { };
 in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  meta.maintainers = with lib.maintainers; [ happysalada ];
   meta.doc = ./lemmy.md;
 
   imports = [

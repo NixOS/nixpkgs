@@ -44,5 +44,5 @@ in
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with maintainers; [ j0hax ];
+  meta.maintainers = with lib.maintainers; [ j0hax ];
 }

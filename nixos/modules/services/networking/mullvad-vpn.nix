@@ -65,5 +65,5 @@ with lib;
     };
   };
 
-  meta.maintainers = with maintainers; [ arcuru ymarkus ];
+  meta.maintainers = with lib.maintainers; [ arcuru ymarkus ];
 }

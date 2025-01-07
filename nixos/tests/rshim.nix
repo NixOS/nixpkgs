@@ -10,7 +10,7 @@ with pkgs.lib;
 {
   basic = makeTest {
     name = "rshim";
-    meta.maintainers = with maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur ];
 
     nodes.machine =
       { config, pkgs, ... }:

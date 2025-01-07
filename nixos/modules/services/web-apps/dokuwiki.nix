@@ -514,7 +514,7 @@ in
 
   ]);
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     _1000101
     onny
     dandellion

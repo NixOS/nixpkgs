@@ -107,7 +107,7 @@ let
 
   runtimeConfigFiles = mapAttrsToList (radio: _: "/run/hostapd/${radio}.hostapd.conf") cfg.radios;
 in {
-  meta.maintainers = with maintainers; [ oddlama ];
+  meta.maintainers = with lib.maintainers; [ oddlama ];
 
   options = {
     services.hostapd = {

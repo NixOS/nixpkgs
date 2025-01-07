@@ -3,7 +3,7 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "cri-o";
-    meta.maintainers = with pkgs.lib; teams.podman.members;
+    meta.maintainers = with pkgs.lib; lib.teams.podman.members;
 
     nodes = {
       crio = {

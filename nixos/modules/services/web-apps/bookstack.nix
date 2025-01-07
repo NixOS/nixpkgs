@@ -448,5 +448,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ ymarkus ];
+  meta.maintainers = with lib.maintainers; [ ymarkus ];
 }

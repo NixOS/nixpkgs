@@ -26,7 +26,7 @@ let
       "--address ${cfg.address} --port ${toString cfg.port}";
 in
 {
-  meta.maintainers = with maintainers; [ oddlama ];
+  meta.maintainers = with lib.maintainers; [ oddlama ];
 
   options.services.esphome = {
     enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";

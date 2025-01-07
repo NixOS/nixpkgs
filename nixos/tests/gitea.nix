@@ -33,7 +33,7 @@ let
     type:
     nameValuePair type (makeTest {
       name = "${giteaPackage.pname}-${type}";
-      meta.maintainers = with maintainers; [
+      meta.maintainers = with lib.maintainers; [
         aanderse
         kolaente
       ];

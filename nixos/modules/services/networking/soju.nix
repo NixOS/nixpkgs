@@ -141,5 +141,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ malte-v ];
+  meta.maintainers = with lib.maintainers; [ malte-v ];
 }

@@ -200,7 +200,7 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     minijackson
     fsnkty
   ];

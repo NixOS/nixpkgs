@@ -511,5 +511,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ yayayayaka ];
+  meta.maintainers = with lib.maintainers; [ yayayayaka ];
 }

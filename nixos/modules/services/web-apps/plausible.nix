@@ -335,6 +335,6 @@ in
     ];
   };
 
-  meta.maintainers = teams.cyberus.members;
+  meta.maintainers = lib.teams.cyberus.members;
   meta.doc = ./plausible.md;
 }

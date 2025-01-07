@@ -17,7 +17,7 @@ let
   };
 in
 {
-  meta.maintainers = teams.helsinki-systems.members;
+  meta.maintainers = lib.teams.helsinki-systems.members;
 
   options.services.icingaweb2 = with types; {
     enable = mkEnableOption "the icingaweb2 web interface";

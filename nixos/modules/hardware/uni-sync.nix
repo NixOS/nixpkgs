@@ -9,7 +9,7 @@ let
   cfg = config.hardware.uni-sync;
 in
 {
-  meta.maintainers = with maintainers; [ yunfachi ];
+  meta.maintainers = with lib.maintainers; [ yunfachi ];
 
   options.hardware.uni-sync = {
     enable = mkEnableOption "udev rules and software for Lian Li Uni Controllers";

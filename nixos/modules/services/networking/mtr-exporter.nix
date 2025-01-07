@@ -152,5 +152,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ jakubgs ];
+  meta.maintainers = with lib.maintainers; [ jakubgs ];
 }

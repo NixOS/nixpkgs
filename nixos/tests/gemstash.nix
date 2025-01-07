@@ -9,7 +9,7 @@ with pkgs.lib;
 
 let
   common_meta = {
-    maintainers = [ maintainers.viraptor ];
+    maintainers = [ lib.maintainers.viraptor ];
   };
 in
 {

@@ -50,5 +50,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ gin66 ];
+  meta.maintainers = with lib.maintainers; [ gin66 ];
 }

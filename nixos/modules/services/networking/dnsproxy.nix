@@ -115,6 +115,6 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ diogotcorreia ];
+  meta.maintainers = with lib.maintainers; [ diogotcorreia ];
 
 }

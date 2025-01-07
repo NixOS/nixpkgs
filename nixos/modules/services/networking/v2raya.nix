@@ -68,5 +68,5 @@ in
       };
   };
 
-  meta.maintainers = with maintainers; [ elliot ];
+  meta.maintainers = with lib.maintainers; [ elliot ];
 }

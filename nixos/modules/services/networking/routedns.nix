@@ -75,5 +75,5 @@ in
       };
     };
   };
-  meta.maintainers = with maintainers; [ jsimonetti ];
+  meta.maintainers = with lib.maintainers; [ jsimonetti ];
 }

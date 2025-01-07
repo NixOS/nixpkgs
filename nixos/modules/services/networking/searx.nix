@@ -268,5 +268,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ rnhmjoj _999eagle ];
+  meta.maintainers = with lib.maintainers; [ rnhmjoj _999eagle ];
 }

@@ -188,6 +188,6 @@ with lib;
 
     }
   ];
-  meta.maintainers = with maintainers; [ arianvp eamsden ];
+  meta.maintainers = with lib.maintainers; [ arianvp eamsden ];
 }
 

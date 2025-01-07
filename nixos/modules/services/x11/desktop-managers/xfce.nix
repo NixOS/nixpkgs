@@ -9,7 +9,7 @@ let
 in
 {
   meta = {
-    maintainers = teams.xfce.members;
+    maintainers = lib.teams.xfce.members;
   };
 
   imports = [

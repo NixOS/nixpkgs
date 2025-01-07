@@ -223,5 +223,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ figboy9 ];
+  meta.maintainers = with lib.maintainers; [ figboy9 ];
 }

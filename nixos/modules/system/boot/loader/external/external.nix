@@ -12,7 +12,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cole-h
       grahamc
       raitobezarius
