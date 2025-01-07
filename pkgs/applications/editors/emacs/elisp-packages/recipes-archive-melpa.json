@@ -51982,14 +51982,14 @@
   "repo": "chmouel/gotest-ts.el",
   "unstable": {
    "version": [
-    20241209,
-    1346
+    20250107,
+    1017
    ],
    "deps": [
     "gotest"
    ],
-   "commit": "673f4907ff9f095a62e41701d0f297b5ad05d5b0",
-   "sha256": "1k4q80q5xa55v6qir5vljrcr03yrxx6apl45adcnd0wd5rlqwy32"
+   "commit": "ede3685388e76ed379b184cc62275bcdf819f104",
+   "sha256": "1lpy33d65cdxk6sqpsirijmyng7h5v4a397q11h16br14vpx47i8"
   }
  },
  {
