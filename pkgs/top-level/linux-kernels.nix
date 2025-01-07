@@ -324,6 +324,8 @@ in {
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
+    amdgpui2c = callPackage ../os-specific/linux/amdgpu-i2c { };
+
     amneziawg = callPackage ../os-specific/linux/amneziawg { };
 
     apfs = callPackage ../os-specific/linux/apfs { };
