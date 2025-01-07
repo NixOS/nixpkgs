@@ -854,8 +854,8 @@ rec {
       "sha256-mYcdZgr3tuawy6c0g7HTwFp7pglW3Nfe2X7YzYCbEMc=";
 
   mypy-boto3-marketplacecommerceanalytics =
-    buildMypyBoto3Package "marketplacecommerceanalytics" "1.35.0"
-      "sha256-POYl0YUu3WsZ9lfseKTNuT6PaOVDfvKbqtKM064Ksak=";
+    buildMypyBoto3Package "marketplacecommerceanalytics" "1.35.93"
+      "sha256-0c3CH8kjbKy1XBLuQsdH4Wy/RX1BjbTuiG01WoG6MwA=";
 
   mypy-boto3-mediaconnect =
     buildMypyBoto3Package "mediaconnect" "1.35.91"
