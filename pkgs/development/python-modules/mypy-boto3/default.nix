@@ -982,8 +982,8 @@ rec {
       "sha256-knw8p9+CsyXZxXA1RDK1h+Yjj7DuatUFUKFGETLFQmY=";
 
   mypy-boto3-opsworkscm =
-    buildMypyBoto3Package "opsworkscm" "1.35.0"
-      "sha256-qyUZN9Gz8Q6TBDg1LW+M58TLwDlmqJ9aCr4021LbSL0=";
+    buildMypyBoto3Package "opsworkscm" "1.35.93"
+      "sha256-ZXsNfHBwFZccRF9/l+v/zvJYzHa7DyVe6EcGGOkBgds=";
 
   mypy-boto3-organizations =
     buildMypyBoto3Package "organizations" "1.35.91"
