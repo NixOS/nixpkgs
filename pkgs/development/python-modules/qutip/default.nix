@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -78,6 +79,11 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "qutip" ];
+
+  pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Aborted
+    "--deselect=../tests/core/test_metrics.py::Test_hellinger_dist::test_monotonicity[25]"
+  ];
 
   optional-dependencies = {
     graphics = [ matplotlib ];
