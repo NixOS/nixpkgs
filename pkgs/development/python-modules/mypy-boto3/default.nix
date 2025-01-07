@@ -538,8 +538,8 @@ rec {
       "sha256-qIz0jMQYpQ0N0EcjDOGRzD0bqPeLVaJq0dzT7/xH9jA=";
 
   mypy-boto3-fis =
-    buildMypyBoto3Package "fis" "1.35.59"
-      "sha256-Wha+Y0/PXM87u4t2fXD36pe+SrEomr7V9TaxyED6jyA=";
+    buildMypyBoto3Package "fis" "1.35.93"
+      "sha256-jBVQYYUjnU8wbXW3XFSFCb/gnDOqkTgiAx8NCHN82tM=";
 
   mypy-boto3-fms =
     buildMypyBoto3Package "fms" "1.35.45"
