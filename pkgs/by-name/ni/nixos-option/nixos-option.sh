@@ -8,6 +8,34 @@ positional_args=()
 nix_args=(--arg nixos "import <nixpkgs/nixos> { }")
 flake=""
 
+
+discover_git() {
+  if [[ $# -ne 1 ]]; then
+    echo "$0 directory"
+    return 1
+  fi
+  local previous=
+  local current=$1
+
+  while [[ -d "$current" && "$current" != "$previous" ]]; do
+    # .git can be a file for worktrees otherwise it's a directory
+    if [[ -d "$current/.git" ]]; then
+      echo "$current"
+      return
+    elif [[ -f "$current/.git" ]]; then
+      # resolve worktree
+      dotgit=$(<"$current/.git")
+      if [[ ${dotgit[0]} =~ gitdir:\ (.*) ]]; then
+        echo "${BASH_REMATCH[1]}"
+        return
+      fi
+    else
+      previous=$current
+      current=$(dirname "$current")
+    fi
+  done
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --help)
@@ -66,18 +94,17 @@ if [[ -z "$flake" ]] && [[ -e /etc/nixos/flake.nix ]] && [[ "$no_flake" == "fals
 fi
 
 if [[ -n "$flake" ]]; then
-  echo >&2 "[WARN] Flake support in nixos-option is experimental and has known issues."
-
   if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
     flake="${BASH_REMATCH[1]}"
     flakeAttr="${BASH_REMATCH[2]}"
   fi
   # Unlike nix cli, builtins.getFlake infer path:// when a path is given
   # See https://github.com/NixOS/nix/issues/5836
-  # Using `git rev-parse --show-toplevel` since we can't assume the flake dir
-  # itself is a git repo, because the flake could be in a sub directory
-  if [[ -d "$flake" ]] && git -C "$flake" rev-parse --show-toplevel &>/dev/null; then
-    flake="git+file://$(realpath "$flake")"
+  if [[ -d "$flake" ]]; then
+      repo=$(discover_git "$(realpath "$flake")")
+    if [[ -n "$repo" ]]; then
+      flake="git+file://$repo"
+    fi
   fi
   if [[ -z "${flakeAttr:-}" ]]; then
     hostname=$(< /proc/sys/kernel/hostname)
