@@ -35,11 +35,11 @@ let
     };
     propagatedBuildInputs = [ stdlib ];
     preBuild = "cd coq-menhirlib/src";
-    meta = with lib; {
+    meta = {
       homepage = "https://gitlab.inria.fr/fpottier/menhir/-/tree/master/coq-menhirlib";
       description = "A support library for verified Coq parsers produced by Menhir";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ ];
+      license = lib.licenses.lgpl3Plus;
+      maintainers = with lib.maintainers; [ damhiya ];
     };
   };
 in
