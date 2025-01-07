@@ -15,13 +15,13 @@
 , bzip2
 , expat
 , libffi
-, libxcrypt
 , mpdecimal
 , ncurses
 , openssl
 , sqlite
 , xz
 , zlib
+, libxcrypt
 
 # platform-specific dependencies
 , bash
@@ -120,7 +120,7 @@ let
   ;
 
   # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
-  libxcrypt = if stdenv.hostPlatform.isFreeBSD then null else inputs.libxcrypt;
+  libxcrypt' = if stdenv.hostPlatform.isFreeBSD then null else libxcrypt;
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
@@ -166,7 +166,7 @@ let
     bzip2
     expat
     libffi
-    libxcrypt
+    libxcrypt'
     mpdecimal
     ncurses
     openssl
@@ -229,7 +229,7 @@ let
   in "${machdep}-${cpu}";
 
   execSuffix = stdenv.hostPlatform.extensions.executable;
-in with passthru; stdenv.mkDerivation (finalAttrs: {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "python3";
   inherit src version;
 
@@ -240,7 +240,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   prePatch = optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
-  '' + optionalString (pythonOlder "3.9" && stdenv.hostPlatform.isDarwin && x11Support) ''
+  '' + optionalString (passthru.pythonOlder "3.9" && stdenv.hostPlatform.isDarwin && x11Support) ''
     # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace-fail /Library/Frameworks /no-such-path
   '';
@@ -257,28 +257,28 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # configurations. If you're reading this and it's been a long time
     # since this diff, consider submitting this patch upstream!
     ./freebsd-cross.patch
-  ] ++ optionals (pythonOlder "3.13") [
+  ] ++ optionals (passthru.pythonOlder "3.13") [
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
     ./virtualenv-permissions.patch
-  ] ++ optionals (pythonAtLeast "3.13") [
+  ] ++ optionals (passthru.pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
+  ] ++ optionals (passthru.pythonAtLeast "3.9" && passthru.pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
-  ] ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
+  ] ++ optionals (hasDistutilsCxxPatch && passthru.pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (
-      if pythonAtLeast "3.7" && pythonOlder "3.11" then
+      if passthru.pythonAtLeast "3.7" && passthru.pythonOlder "3.11" then
         ./3.7/python-3.x-distutils-C++.patch
-      else if pythonAtLeast "3.11" then
+      else if passthru.pythonAtLeast "3.11" then
         ./3.11/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -286,17 +286,17 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
-  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.12") [
+  ] ++ optionals (passthru.pythonAtLeast "3.7" && passthru.pythonOlder "3.12") [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
     ./3.7/fix-finding-headers-when-cross-compiling.patch
-  ] ++ optionals (pythonOlder "3.12") [
+  ] ++ optionals (passthru.pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
-  ] ++ optionals (pythonAtLeast "3.12") [
+  ] ++ optionals (passthru.pythonAtLeast "3.12") [
     ./3.12/CVE-2024-12254.patch
-  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
+  ] ++ optionals (passthru.pythonAtLeast "3.11" && passthru.pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
   ] ++ optionals (stdenv.hostPlatform.isMinGW) (let
@@ -333,7 +333,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
-  '' + optionalString (pythonOlder "3.13" && x11Support && ((tclPackages.tix or null) != null)) ''
+  '' + optionalString (passthru.pythonOlder "3.13" && x11Support && ((tclPackages.tix or null) != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
       "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
@@ -368,15 +368,15 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "--enable-shared"
   ] ++ optionals enableFramework [
     "--enable-framework=${placeholder "out"}/Library/Frameworks"
-  ] ++ optionals (pythonAtLeast "3.13") [
+  ] ++ optionals (passthru.pythonAtLeast "3.13") [
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (libxcrypt != null) [
-    "CFLAGS=-I${libxcrypt}/include"
-    "LIBS=-L${libxcrypt}/lib"
+  ] ++ optionals (libxcrypt' != null) [
+    "CFLAGS=-I${libxcrypt'}/include"
+    "LIBS=-L${libxcrypt'}/lib"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -399,7 +399,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
     "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
     "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && passthru.pythonAtLeast "3.11") [
     "--with-build-python=${pythonOnBuildForHostInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
     # Never even try to use lchmod on linux,
@@ -417,7 +417,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Attempt to purify some of the host info collection
     sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
     sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
-  '' + optionalString (pythonOlder "3.12") ''
+  '' + optionalString (passthru.pythonOlder "3.12") ''
     # Improve purity
     for path in /usr /sw /opt /pkg; do
       substituteInPlace ./setup.py --replace-warn $path /no-such-path
@@ -427,11 +427,11 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}
     # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
     sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
-  '' + optionalString (pythonAtLeast "3.11") ''
+  '' + optionalString (passthru.pythonAtLeast "3.11") ''
     # Also override the auto-detection in `configure`.
     substituteInPlace configure \
       --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}'
-  '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
+  '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && passthru.pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
   '' + optionalString stdenv.hostPlatform.isMusl ''
@@ -449,13 +449,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     export CFLAGS_NODIST="-fno-semantic-interposition"
   '';
 
-  setupHook = python-setup-hook sitePackages;
+  setupHook = python-setup-hook passthru.sitePackages;
 
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
       (placeholder "out")
-    ] ++ lib.optional (libxcrypt != null) libxcrypt
+    ] ++ lib.optional (libxcrypt' != null) libxcrypt'
       ++ lib.optional tzdataSupport tzdata
     );
   in lib.optionalString enableFramework ''
@@ -465,7 +465,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
-    for item in $out/lib/${libPrefix}/test/*; do
+    for item in $out/lib/${passthru.libPrefix}/test/*; do
       if [[ "$item" != */test_support.py*
          && "$item" != */test/support
          && "$item" != */test/libregrtest
@@ -475,7 +475,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
         echo $item
       fi
     done
-    touch $out/lib/${libPrefix}/test/__init__.py
+    touch $out/lib/${passthru.libPrefix}/test/__init__.py
 
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.
@@ -492,7 +492,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Get rid of retained dependencies on -dev packages, and remove
     # some $TMPDIR references to improve binary reproducibility.
     # Note that the .pyc file of _sysconfigdata.py should be regenerated!
-    for i in $out/lib/${libPrefix}/_sysconfigdata*.py $out/lib/${libPrefix}/config-${sourceVersion.major}${sourceVersion.minor}*/Makefile; do
+    for i in $out/lib/${passthru.libPrefix}/_sysconfigdata*.py $out/lib/${passthru.libPrefix}/config-${sourceVersion.major}${sourceVersion.minor}*/Makefile; do
        sed -i $i -e "s|$TMPDIR|/no-such-path|g"
     done
 
@@ -502,8 +502,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
     # Make the sysconfigdata module accessible on PYTHONPATH
     # This allows build Python to import host Python's sysconfigdata
-    mkdir -p "$out/${sitePackages}"
-    ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    mkdir -p "$out/${passthru.sitePackages}"
+    ln -s "$out/lib/${passthru.libPrefix}/"_sysconfigdata*.py "$out/${passthru.sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -516,7 +516,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
     '' + optionalString includeSiteCustomize ''
     # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    cp ${../sitecustomize.py} $out/${passthru.sitePackages}/sitecustomize.py
     '' + optionalString stripBytecode ''
     # Determinism: deterministic bytecode
     # First we delete all old bytecode.
@@ -541,7 +541,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
 
     # Disable system-wide pip installation. See https://peps.python.org/pep-0668/.
-    cat <<'EXTERNALLY_MANAGED' > $out/lib/${libPrefix}/EXTERNALLY-MANAGED
+    cat <<'EXTERNALLY_MANAGED' > $out/lib/${passthru.libPrefix}/EXTERNALLY-MANAGED
     [externally-managed]
     Error=This command has been disabled as it tries to modify the immutable
      `/nix/store` filesystem.
@@ -610,9 +610,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   passthru = passthru // {
     doc = stdenv.mkDerivation {
       inherit src;
-      name = "python${pythonVersion}-${version}-doc";
+      name = "python${passthru.pythonVersion}-${version}-doc";
 
-      patches = optionals (pythonAtLeast "3.9" && pythonOlder "3.10") [
+      patches = optionals (passthru.pythonAtLeast "3.9" && passthru.pythonOlder "3.10") [
         # https://github.com/python/cpython/issues/98366
         (fetchpatch {
           url = "https://github.com/python/cpython/commit/5612471501b05518287ed61c1abcb9ed38c03942.patch";
@@ -627,7 +627,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
       sphinxRoot = "Doc";
 
       postInstallSphinx = ''
-        mv $out/share/doc/* $out/share/doc/python${pythonVersion}-${version}
+        mv $out/share/doc/* $out/share/doc/python${passthru.pythonVersion}-${version}
       '';
 
       nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python-docs-theme ];
@@ -640,10 +640,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.python.org";
     changelog = let
-      majorMinor = versions.majorMinor version;
+      majorMinor = lib.versions.majorMinor version;
       dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
     in
       if sourceVersion.suffix == "" then
@@ -660,10 +660,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
-    mainProgram = executable;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
+    mainProgram = passthru.executable;
     maintainers = lib.teams.python.members;
   };
 })
