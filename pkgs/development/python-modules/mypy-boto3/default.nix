@@ -1286,8 +1286,8 @@ rec {
       "sha256-LNDqr4uQ/rwxGb33B39stWYq6ZKPXCRmifvUW0ReCjk=";
 
   mypy-boto3-sns =
-    buildMypyBoto3Package "sns" "1.35.68"
-      "sha256-Wn3vcHrCmMMS4LcTQhzctYPg2ZPSF7SBgQSz44bJyGo=";
+    buildMypyBoto3Package "sns" "1.35.93"
+      "sha256-/RfOxBC8R3CWZSQx0ySIH00zuJ+rfEyFfzNHRCNU/6E=";
 
   mypy-boto3-sqs =
     buildMypyBoto3Package "sqs" "1.35.91"
