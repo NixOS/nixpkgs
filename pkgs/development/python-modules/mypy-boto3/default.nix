@@ -650,8 +650,8 @@ rec {
       "sha256-fwfuhSitYIJW5QswYdZ8ZpNL3AEg6MXhJitbbU48STs=";
 
   mypy-boto3-iot1click-projects =
-    buildMypyBoto3Package "iot1click-projects" "1.35.0"
-      "sha256-eVH+EYKSz5rZcetDp378EyswOgPqhmOcIuApwiOlOZw=";
+    buildMypyBoto3Package "iot1click-projects" "1.35.93"
+      "sha256-LFuz5/nCZGpSfgqyswxn80VzxXsqzZlBFqPtPJ8bzgo=";
 
   mypy-boto3-iotanalytics =
     buildMypyBoto3Package "iotanalytics" "1.35.0"
