@@ -22847,6 +22847,12 @@
     githubId = 678511;
     name = "Thomas Mader";
   };
+  thornoar = {
+    email = "r.a.maksimovich@gmail.com";
+    github = "thornoar";
+    githubId = 84677666;
+    name = "Roman Maksimovich";
+  };
   thornycrackers = {
     email = "codyfh@gmail.com";
     github = "thornycrackers";
