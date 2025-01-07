@@ -290,8 +290,8 @@ rec {
       "sha256-TAdgFTQw55CxcMYp7SRfa8w7cLcsvqiFNGnxlWXTz7M=";
 
   mypy-boto3-codeguruprofiler =
-    buildMypyBoto3Package "codeguruprofiler" "1.35.0"
-      "sha256-UJmPVW20ofQmmer9/IYwaFIU2+xhXcT+0s2aUxFDGZY=";
+    buildMypyBoto3Package "codeguruprofiler" "1.35.93"
+      "sha256-kAxqqTRfbZQeymVZSwwySYlwRKRzM7JisnCb6fDRagA=";
 
   mypy-boto3-codepipeline =
     buildMypyBoto3Package "codepipeline" "1.35.83"
