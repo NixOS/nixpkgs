@@ -90,8 +90,8 @@ rec {
       "sha256-irD2ZVO1bR1YCOTKFgL0iMXko+qPvA5O3ScwXN3JY4Y=";
 
   mypy-boto3-appconfig =
-    buildMypyBoto3Package "appconfig" "1.35.64"
-      "sha256-fHGX/Rn7APJqCNKp/Yy5gK3n4/6p3RWBTFjcJg8nouI=";
+    buildMypyBoto3Package "appconfig" "1.35.93"
+      "sha256-Y42Rv/W7d3P9snGi2RlHFBshG4rXKcDdfd6aT+Hh5BI=";
 
   mypy-boto3-appconfigdata =
     buildMypyBoto3Package "appconfigdata" "1.35.0"
