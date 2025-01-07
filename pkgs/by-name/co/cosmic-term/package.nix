@@ -1,63 +1,48 @@
 {
-  lib,
-  cosmic-icons,
   fetchFromGitHub,
   fontconfig,
   freetype,
   just,
-  libglvnd,
+  lib,
+  libcosmicAppHook,
   libinput,
-  libxkbcommon,
-  makeBinaryWrapper,
   pkg-config,
   rustPlatform,
   stdenv,
-  vulkan-loader,
-  wayland,
-  xorg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-term";
-  version = "1.0.0-alpha.3";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
-    rev = "epoch-${version}";
-    hash = "sha256-4++wCyRVIodWdlrvK2vMcHGoY4BctnrkopWC6dZvhMk=";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
+    hash = "sha256-DK60/eZscSnLet+UPB+Gv/KMB10URntnLlAn4z81Ijs=";
   };
+  # Match this to the git commit SHA matching the `src.rev`
+  env.VERGEN_GIT_SHA = "77be96e1c20039511e29da4ba5b8ce457e098f3b";
+  # Match this to the commit date of `src.rev` in the format 'YYYY-MM-DD'
+  env.VERGEN_GIT_COMMIT_DATE = "2024-12-04";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0KXo1wtbbnK3Kk+EGZo7eEecM4PChLpwawWWI0Bp/Yw=";
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-09-24";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-cybLKkScLN4ElTSAf2pODb9wEQxBCdS0qeyZjs/rdCM=";
 
   nativeBuildInputs = [
     just
+    libcosmicAppHook
     pkg-config
-    makeBinaryWrapper
   ];
 
   buildInputs = [
     fontconfig
     freetype
-    libglvnd
     libinput
-    libxkbcommon
-    vulkan-loader
-    wayland
-    xorg.libX11
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -68,40 +53,17 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
-
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-term" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libxkbcommon
-          vulkan-loader
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-        ]
-      }
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    mainProgram = "cosmic-term";
+
     maintainers = with maintainers; [
       ahoneybun
       nyabinary
+      thefossguy
     ];
-    platforms = platforms.linux;
-    mainProgram = "cosmic-term";
   };
 }

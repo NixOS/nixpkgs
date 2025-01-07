@@ -1,4 +1,5 @@
 {
+  bash,
   fetchFromGitHub,
   just,
   lib,
@@ -8,18 +9,18 @@
 }:
 
 rustPlatform.buildRustPackage {
-  pname = "cosmic-launcher";
+  pname = "cosmic-idle";
   version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-launcher";
+    repo = "cosmic-idle";
     rev = "refs/tags/epoch-1.0.0-alpha.4";
-    hash = "sha256-rx2FrRSiW5UQLEUtNbQ5JEoTR9djQEtY3eOxR2IqkU4=";
+    hash = "sha256-+BOzbFDEoIaYkXs48RJtfomv8qdzIFiEpDpN/zDDgFM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-gvrqomChaMv3u1pVUoGUkXw66Gr2wjkxNQIbrcbJrdY=";
+  cargoHash = "sha256-v5ClhxWtzgo4nerz8AxOnboRJRbe6U06cDlLtBe2kr8=";
 
   nativeBuildInputs = [
     just
@@ -35,20 +36,21 @@ rustPlatform.buildRustPackage {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-idle"
   ];
 
-  env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
+  postPatch = ''
+    substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe bash}"'
+  '';
 
   meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-launcher";
-    description = "Launcher for the COSMIC Desktop Environment";
+    homepage = "https://github.com/pop-os/cosmic-idle";
+    description = "Idle daemon for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    mainProgram = "cosmic-launcher";
+    mainProgram = "cosmic-idle";
 
     maintainers = with maintainers; [
-      nyabinary
       thefossguy
     ];
   };

@@ -1,52 +1,35 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  rustPlatform,
   just,
+  lib,
+  libcosmicAppHook,
+  rustPlatform,
+  stdenv,
   which,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
-  appstream-glib,
-  desktop-file-utils,
-  intltool,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-notifications";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-notifications";
-    rev = "epoch-${version}";
-    hash = "sha256-tCizZePze94tbJbR91N9rfUhrLFTAMW2oL9ByKOeDAU=";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
+    hash = "sha256-bc2CqdAEnYXbLofKLO3g9DsK8OzolK2pwhaIDaXKjSY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-36M7hDt8kd2Q94AR3IJhC2lKDLW2wRWWeqh3rEaRPTo=";
-
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-KQWGJlyONZDsY8DMkmQ3X2kggLw1WcIAc8wzYTwmCnU=";
 
   nativeBuildInputs = [
     just
+    libcosmicAppHook
     which
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
-    appstream-glib
-    desktop-file-utils
-    intltool
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -57,17 +40,16 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-notifications"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-notifications \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-notifications";
     description = "Notifications for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-notifications";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
+    mainProgram = "cosmic-notifications";
+
+    maintainers = with maintainers; [
+      nyabinary
+      thefossguy
+    ];
   };
 }

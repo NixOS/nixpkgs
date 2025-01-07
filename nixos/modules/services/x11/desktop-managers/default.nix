@@ -21,6 +21,7 @@ in
     ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
     ./cinnamon.nix ./budgie.nix ./deepin.nix ../../desktop-managers/lomiri.nix
+    ../../desktop-managers/cosmic.nix
   ];
 
   options = {

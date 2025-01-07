@@ -1,64 +1,52 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
-  libglvnd,
-  libxkbcommon,
-  libinput,
   fontconfig,
   freetype,
-  libgbm,
-  wayland,
-  xorg,
-  vulkan-loader,
+  glib,
+  gtk3,
+  just,
+  lib,
+  libcosmicAppHook,
+  libinput,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-edit";
   version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
-    rev = "epoch-${version}";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
     hash = "sha256-IAIO5TggPGzZyfET2zBKpde/aePXR4FsSg/Da1y3saA=";
   };
+  # Match this to the git commit SHA matching the `src.rev`
+  env.VERGEN_GIT_SHA = "86bcadb9e7502642ecaa0cd8d50313eff632f843";
+  # Match this to the commit date of `src.rev` in the format 'YYYY-MM-DD'
+  env.VERGEN_GIT_COMMIT_DATE = "2024-12-04";
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-pRp6Bi9CcHg2tMAC86CZybpfGL2BTxzst3G31tXJA5A=";
 
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-10-31";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
   nativeBuildInputs = [
     just
+    libcosmicAppHook
     pkg-config
-    makeBinaryWrapper
   ];
+
   buildInputs = [
-    libxkbcommon
-    xorg.libX11
-    libinput
-    libglvnd
     fontconfig
     freetype
-    libgbm
-    wayland
-    vulkan-loader
+    glib
+    gtk3
+    libinput
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -69,41 +57,17 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-edit"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
-
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-edit" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-          vulkan-loader
-          libxkbcommon
-          wayland
-        ]
-      }
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    mainProgram = "cosmic-edit";
+
     maintainers = with maintainers; [
       ahoneybun
       nyabinary
+      thefossguy
     ];
-    platforms = platforms.linux;
   };
 }
