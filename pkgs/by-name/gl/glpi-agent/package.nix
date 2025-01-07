@@ -28,9 +28,9 @@ perlPackages.buildPerlPackage rec {
     patchShebangs bin
 
     substituteInPlace lib/GLPI/Agent/Tools/Linux.pm \
-      --replace-fail "/sbin/ip" $"{iproute2}/sbin/ip"
+      --replace-fail "/sbin/ip" "${lib.getExe' iproute2 "ip"}"
     substituteInPlace lib/GLPI/Agent/Task/Inventory/Linux/Networks.pm \
-      --replace-fail "/sbin/ip" "${iproute2}/sbin/ip"
+      --replace-fail "/sbin/ip" "${lib.getExe' iproute2 "ip"}"
   '';
 
   nativeBuildInputs = [ makeWrapper ];
