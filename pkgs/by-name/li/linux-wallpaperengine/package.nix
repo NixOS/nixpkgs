@@ -54,7 +54,6 @@
   systemd,
   libdecor,
   autoPatchelfHook,
-  makeWrapper,
 }:
 let
   rpath = lib.makeLibraryPath [
@@ -112,8 +111,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r . $out
-      chmod +w -R $out
+      cp --recursive --no-preserve=mode . $out
       patchelf $out/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
       patchelf $out/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
       patchelf $out/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
@@ -131,6 +129,7 @@ let
         "x86_64-linux"
         "aarch64-linux"
       ];
+      hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
     };
   };
 in
@@ -149,7 +148,6 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     autoPatchelfHook
-    makeWrapper
   ];
 
   buildInputs = [
@@ -180,14 +178,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${buildType}"
     "-DCEF_ROOT=${cef-bin}"
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/linux-wallpaperengine"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
   ];
 
   preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/linux-wallpaperengine/linux-wallpaperengine
-    chmod 755 $out/linux-wallpaperengine/linux-wallpaperengine
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/app/linux-wallpaperengine/linux-wallpaperengine
+    chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
-    makeWrapper $out/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
+    ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
   '';
 
   meta = {
@@ -200,5 +198,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
   };
 }
