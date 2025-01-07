@@ -5794,6 +5794,8 @@ self: super: with self; {
 
   hass-splunk = callPackage ../development/python-modules/hass-splunk { };
 
+  hass-web-proxy-lib = callPackage ../development/python-modules/hass-web-proxy-lib { };
+
   hassil = callPackage ../development/python-modules/hassil { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
