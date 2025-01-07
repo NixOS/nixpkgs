@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     install -D qc71_laptop.ko -t $out/lib/modules/${kernel.modDirVersion}/extra
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     description = "Linux driver for QC71 laptop";
