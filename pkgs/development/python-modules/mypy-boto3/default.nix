@@ -1130,8 +1130,8 @@ rec {
       "sha256-9L+JrNOLXXtzxu5LhtMXd8XqTjSoq3qI0/FSg/CMKus=";
 
   mypy-boto3-rolesanywhere =
-    buildMypyBoto3Package "rolesanywhere" "1.35.0"
-      "sha256-Ss85x4OJ+RtOmP7LzIIMcikxjMvMyi3VUT9WLvxODSM=";
+    buildMypyBoto3Package "rolesanywhere" "1.35.93"
+      "sha256-Bv1Z2cVGXepn2/VjnoLHozMZvfdfniR+pTzv9FAoXV8=";
 
   mypy-boto3-route53 =
     buildMypyBoto3Package "route53" "1.35.52"
