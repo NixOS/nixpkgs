@@ -962,8 +962,8 @@ rec {
       "sha256-gs9eGyRaZN7Fsl0D5fSqtTiYZ+Exp0s8QW/X8ZR7guA=";
 
   mypy-boto3-oam =
-    buildMypyBoto3Package "oam" "1.35.0"
-      "sha256-jHEgFpoHJmep4Lv+ge3DSDthO6d9zt23lWBp0MztcHQ=";
+    buildMypyBoto3Package "oam" "1.35.93"
+      "sha256-t0JW1y9tCN+UwXPLtEuvt8DH2Ce1Hq7FPzIUKA2qSM4=";
 
   mypy-boto3-omics =
     buildMypyBoto3Package "omics" "1.35.68"
