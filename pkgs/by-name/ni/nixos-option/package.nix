@@ -1,7 +1,6 @@
 {
   lib,
   coreutils,
-  git,
   installShellFiles,
   jq,
   makeWrapper,
@@ -57,7 +56,6 @@ stdenvNoCC.mkDerivation {
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
-          git
           jq
           man-db
           nix
