@@ -5,7 +5,6 @@
 }:
 
 mkDerivation2 (finalAttrs: {
-  name = "${finalAttrs.pname}-${finalAttrs.version}"; # TODO: construct automatically
   pname = "keypunch";
   version = "5.1";
 

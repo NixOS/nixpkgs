@@ -1,39 +1,17 @@
 { lib, ... }@defaultPkgs:
 
-# opinion:
-# stdenv.*Platform should probably not be part of stdenv, but part of pkgs
-# perhaps something like pkgs.platforms.{build,host,target}
-
 let
-  # Based on lib.makeExtensible, with modifications:
-  mkBaseDerivationExtensible =
-    rattrs:
+  # pass argsForRealDrv to derivation, but remove non-essential attrNames, and overlay the extraAttrs attrset instead
+  mkBaseDerivationSimple =
+    argsForRealDrv: extraAttrs:
     let
-      overrideAttrs = f0: mkBaseDerivationExtensible (lib.extends (lib.toExtension f0) rattrs);
-
-      helperAttrs = {
-        inherit finalPackage;
-        __pkgs = defaultPkgs;
-      };
-
-      # NOTE: The following is a hint that will be printed by the Nix cli when
-      # encountering an infinite recursion. It must not be formatted into
-      # separate lines, because Nix would only show the last line of the comment.
-
-      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // helperAttrs);
-      #              ^^^^
-      # TODO: should overrideAttrs come before or after args?
-      finalPackage = mkBaseDerivationSimple ({ inherit overrideAttrs; } // args);
+      drv = derivation argsForRealDrv; # TODO: maybe pass drv in instead of just the args
     in
-    finalPackage;
 
-  # removes the non-essential attributes from all outputs of a plain derivation and overlays the extraAttrs attrset instead
-  populatePlainDerivation =
-    drv: extraAttrs:
     let
-      stripDrv = drv: {
-        inherit (drv)
+
+      stripDrv = drvOutput: {
+        inherit (drvOutput)
           name
           outputs
           system
@@ -72,40 +50,29 @@ let
       outputSpecified = false; # unneeded, but maybe keep
     };
 
-  mkBaseDerivationSimple =
-    inputAttrs':
-
+  # Based on lib.makeExtensible, with modifications:
+  mkBaseDerivationExtensible =
+    mkArgsForRealDrv: rattrs:
     let
-      inputAttrs =
-        assert true; # TODO: assert envVars only contains string, bool, number or derivation
-        inputAttrs';
+      overrideAttrs =
+        f0: mkBaseDerivationExtensible mkArgsForRealDrv (lib.extends (lib.toExtension f0) rattrs);
 
-      mkAttrsForPlainDrv =
-        {
-          name,
-          outputs,
-          shellVars,
-          envVars,
-          stdenv,
-          realBuilder,
-          args,
-          ...
-        }:
+      helperAttrs = {
+        inherit finalPackage overrideAttrs;
+        __pkgs = defaultPkgs;
+      };
 
-        ## TODO: don't allow special values in shellVars or envVars
-        {
-          __structuredAttrs = false; # TODO
-          inherit name outputs;
-          inherit (stdenv.buildPlatform) system; # don't get from stdenv
-          builder = realBuilder;
-          inherit args;
-        }
-        // shellVars # whould we filter name ?
-        // envVars # TODO: __structuredAttrs
-      ;
+      # NOTE: The following is a hint that will be printed by the Nix cli when
+      # encountering an infinite recursion. It must not be formatted into
+      # separate lines, because Nix would only show the last line of the comment.
 
-      plainDrv = derivation (mkAttrsForPlainDrv inputAttrs);
+      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
+      args = (rattrs args) // helperAttrs;
+      #              ^^^^
+
+      # TODO: the infrec marker above is no longer near the front of the error stack
+      finalPackage = mkBaseDerivationSimple (mkArgsForRealDrv args) args;
     in
-    populatePlainDerivation plainDrv inputAttrs;
+    finalPackage;
 in
 mkBaseDerivationExtensible
