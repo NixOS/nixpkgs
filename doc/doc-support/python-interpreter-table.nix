@@ -15,7 +15,9 @@ let
       - `python3Minimal` contains python packages, left behind conservatively.
       - `rustpython` lacks `pythonVersion` and `implementation`.
     */
-    (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
+    ((lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null)
+    # Throw-alias after upstream discontinuation
+    && (name != "pypy39");
 
   interpreterName =
     pname:
