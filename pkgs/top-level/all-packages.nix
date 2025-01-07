@@ -4966,7 +4966,7 @@ with pkgs;
   };
 
   inherit (callPackage ../development/tools/pnpm { })
-    pnpm_8 pnpm_9;
+    pnpm_8 pnpm_9 pnpm_10;
   pnpm = pnpm_9;
 
   po4a = perlPackages.Po4a;
