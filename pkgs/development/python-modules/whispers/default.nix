@@ -16,6 +16,7 @@
   wrapt,
   semgrep,
   setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,12 @@ buildPythonPackage rec {
   '';
 
   pythonRelaxDeps = [
+    "jellyfish"
     "lxml"
     "pyyaml"
     "semgrep"
+    "six"
+    "wrapt"
   ];
 
   build-system = [ setuptools ];
@@ -54,8 +58,9 @@ buildPythonPackage rec {
     luhn
     lxml
     pyyaml
-    wrapt
     semgrep
+    six
+    wrapt
   ];
 
   nativeCheckInputs = [
