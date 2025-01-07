@@ -90,10 +90,20 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "version_${finalAttrs.version}";
   };
 
+  # required for GCC 14
+  # (not applicable to super-slicer fork)
+  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
+    substituteInPlace src/libslic3r/Arrange/Core/DataStoreTraits.hpp \
+      --replace-fail \
+      "WritableDataStoreTraits<ArrItem>::template set" \
+      "WritableDataStoreTraits<ArrItem>::set"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapGAppsHook3
+    wxGTK-override'
   ];
 
   buildInputs = [
@@ -131,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
+
+  strictDeps = true;
 
   separateDebugInfo = true;
 

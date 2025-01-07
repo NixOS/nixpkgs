@@ -303,6 +303,18 @@ in
         /run/current-system/systemd/bin/systemctl reload dhcpcd.service
       '';
 
+    security.polkit.extraConfig = lib.mkIf config.services.resolved.enable ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == 'org.freedesktop.resolve1.revert' ||
+              action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
+              action.id == 'org.freedesktop.resolve1.set-domains') {
+              if (subject.user == '${config.systemd.services.dhcpcd.serviceConfig.User}') {
+                  return polkit.Result.YES;
+              }
+          }
+      });
+    '';
+
   };
 
 }
