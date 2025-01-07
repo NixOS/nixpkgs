@@ -103,6 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "src/arrow/buffer_test.cc" ];
       hash = "sha256-ZHkznOilypi1J22d56PhLlw/hbz8RqwsOGDMqI1NsMs=";
     })
+    # https://github.com/apache/arrow/pull/45057 remove on update
+    (fetchpatch {
+      name = "boost-187.patch";
+      url = "https://github.com/apache/arrow/commit/5ec8b64668896ff06a86b6a41e700145324e1e34.patch";
+      relative = "cpp";
+      hash = "sha256-GkB7u4YnnaCApOMQPYFJuLdY7R2LtLzKccMEpKCO9ic=";
+    })
   ];
 
   # versions are all taken from
