@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
 }:
 
@@ -24,6 +25,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dominate" ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    # Tests are failing, https://github.com/Knio/dominate/issues/213
+    "tests/test_svg.py"
+  ];
 
   meta = with lib; {
     description = "Library for creating and manipulating HTML documents using an elegant DOM API";
