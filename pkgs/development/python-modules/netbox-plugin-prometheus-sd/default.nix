@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
+  django,
   fetchFromGitHub,
+  netaddr,
   netbox,
   poetry-core,
   pythonOlder,
@@ -24,9 +26,16 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+    substituteInPlace netbox_prometheus_sd/__init__.py \
+      --replace-fail "from extras.plugins import PluginConfig" "from netbox.plugins import PluginConfig"
   '';
-  
+
   build-system = [ poetry-core ];
+
+  dependencies = [
+    django
+    netaddr
+  ];
 
   nativeCheckInputs = [ netbox ];
 
