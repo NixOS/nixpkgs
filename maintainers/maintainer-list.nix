@@ -20349,6 +20349,11 @@
     githubId = 3958212;
     name = "Tom Sorlie";
   };
+  scd31 = {
+    name = "scd31";
+    github = "scd31";
+    githubId = 57571338;
+  };
   schinmai-akamai = {
     email = "schinmai@akamai.com";
     github = "tchinmai7";
