@@ -1,0 +1,389 @@
+diff -Naurd x/tensorflow/c/experimental/stream_executor/stream_executor.cc y/tensorflow/c/experimental/stream_executor/stream_executor.cc
+--- x/tensorflow/c/experimental/stream_executor/stream_executor.cc	2023-10-19 14:25:48.648646416 +0000
++++ y/tensorflow/c/experimental/stream_executor/stream_executor.cc	2023-10-19 14:29:11.700743574 +0000
+@@ -23,6 +23,7 @@
+ 
+ #include <string>
+ #include <utility>
++#include <optional>
+ 
+ #include "absl/functional/any_invocable.h"
+ #include "tensorflow/c/c_api_macros.h"
+@@ -275,17 +276,17 @@
+     stream_executor_->unified_memory_deallocate(&device_, mem);
+   }
+ 
+-  absl::optional<AllocatorStats> GetAllocatorStats() override {
++  std::optional<AllocatorStats> GetAllocatorStats() override {
+     SP_AllocatorStats c_stats{SP_ALLOCATORSTATS_STRUCT_SIZE};
+     TF_Bool has_stats =
+         stream_executor_->get_allocator_stats(&device_, &c_stats);
+     if (!has_stats) {
+-      return absl::nullopt;
++      return std::nullopt;
+     }
+     tsl::Status status = ValidateSPAllocatorStats(c_stats);
+     if (!status.ok()) {
+       LOG(ERROR) << status.message();
+-      return absl::nullopt;
++      return std::nullopt;
+     }
+     ::stream_executor::AllocatorStats stats;
+     stats.num_allocs = c_stats.num_allocs;
+diff -Naurd x/tensorflow/c/experimental/stream_executor/stream_executor_test.cc y/tensorflow/c/experimental/stream_executor/stream_executor_test.cc
+--- x/tensorflow/c/experimental/stream_executor/stream_executor_test.cc	2023-10-19 14:25:48.648646416 +0000
++++ y/tensorflow/c/experimental/stream_executor/stream_executor_test.cc	2023-10-19 14:29:11.700743574 +0000
+@@ -15,6 +15,7 @@
+ #include "tensorflow/c/experimental/stream_executor/stream_executor.h"
+ 
+ #include <utility>
++#include <optional>
+ 
+ #include "tensorflow/c/experimental/stream_executor/stream_executor_internal.h"
+ #include "tensorflow/c/experimental/stream_executor/stream_executor_test_util.h"
+@@ -239,7 +240,7 @@
+   };
+ 
+   StreamExecutor* executor = GetExecutor(0);
+-  absl::optional<AllocatorStats> optional_stats = executor->GetAllocatorStats();
++  std::optional<AllocatorStats> optional_stats = executor->GetAllocatorStats();
+   ASSERT_TRUE(optional_stats.has_value());
+   AllocatorStats stats = optional_stats.value();
+   ASSERT_EQ(stats.bytes_in_use, 123);
+diff -Naurd x/tensorflow/compiler/xla/stream_executor/allocator_stats.h y/tensorflow/compiler/xla/stream_executor/allocator_stats.h
+--- x/tensorflow/compiler/xla/stream_executor/allocator_stats.h	2023-10-19 14:25:55.064649379 +0000
++++ y/tensorflow/compiler/xla/stream_executor/allocator_stats.h	2023-10-19 14:29:11.700743574 +0000
+@@ -17,6 +17,7 @@
+ #define TENSORFLOW_COMPILER_XLA_STREAM_EXECUTOR_ALLOCATOR_STATS_H_
+ 
+ #include <string>
++#include <optional>
+ 
+ #include "absl/types/optional.h"
+ #include "tensorflow/compiler/xla/stream_executor/platform/port.h"
+diff -Naurd x/tensorflow/core/common_runtime/mkl_cpu_allocator.h y/tensorflow/core/common_runtime/mkl_cpu_allocator.h
+--- x/tensorflow/core/common_runtime/mkl_cpu_allocator.h	2023-10-19 14:25:58.996651199 +0000
++++ y/tensorflow/core/common_runtime/mkl_cpu_allocator.h	2023-10-19 14:29:11.700743574 +0000
+@@ -22,6 +22,7 @@
+ #ifdef INTEL_MKL
+ 
+ #include <cstdlib>
++#include <optional>
+ 
+ #include "tensorflow/core/common_runtime/bfc_allocator.h"
+ #include "tensorflow/core/common_runtime/pool_allocator.h"
+@@ -80,7 +81,7 @@
+     port::AlignedFree(ptr);
+   }
+ 
+-  absl::optional<AllocatorStats> GetStats() override {
++  std::optional<AllocatorStats> GetStats() override {
+     mutex_lock l(mutex_);
+     return stats_;
+   }
+@@ -242,7 +243,7 @@
+       large_size_allocator_->DeallocateRaw(ptr);
+     }
+   }
+-  absl::optional<AllocatorStats> GetStats() override {
++  std::optional<AllocatorStats> GetStats() override {
+     auto s_stats = small_size_allocator_->GetStats();
+     auto l_stats = large_size_allocator_->GetStats();
+ 
+diff -Naurd x/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.cc y/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.cc
+--- x/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.cc	2023-10-19 14:25:59.236651310 +0000
++++ y/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.cc	2023-10-19 14:29:11.700743574 +0000
+@@ -32,7 +32,7 @@
+   return sub_allocator_->Free(ptr, 0);
+ }
+ 
+-absl::optional<AllocatorStats> PluggableDeviceSimpleAllocator::GetStats() {
++std::optional<AllocatorStats> PluggableDeviceSimpleAllocator::GetStats() {
+   AllocatorStats stats_;
+   stats_.num_allocs = 0;
+   stats_.peak_bytes_in_use = 0;
+diff -Naurd x/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.h y/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.h
+--- x/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.h	2023-10-19 14:25:59.236651310 +0000
++++ y/tensorflow/core/common_runtime/pluggable_device/pluggable_device_simple_allocator.h	2023-10-19 14:29:11.700743574 +0000
+@@ -19,6 +19,7 @@
+ #include <string>
+ #include <unordered_map>
+ #include <vector>
++#include <optional>
+ 
+ #include "tensorflow/core/common_runtime/device/device_mem_allocator.h"
+ #include "tensorflow/core/platform/thread_annotations.h"
+@@ -37,7 +38,7 @@
+ 
+   bool TracksAllocationSizes() const override { return false; }
+   string Name() override { return "Simple allocator"; }
+-  absl::optional<AllocatorStats> GetStats() override;
++  std::optional<AllocatorStats> GetStats() override;
+ 
+   AllocatorMemoryType GetMemoryType() const override {
+     return sub_allocator_->GetMemoryType();
+diff -Naurd x/tensorflow/core/common_runtime/process_state.h y/tensorflow/core/common_runtime/process_state.h
+--- x/tensorflow/core/common_runtime/process_state.h	2023-10-19 14:25:59.076651236 +0000
++++ y/tensorflow/core/common_runtime/process_state.h	2023-10-19 14:29:11.704743576 +0000
+@@ -20,6 +20,7 @@
+ #include <map>
+ #include <unordered_map>
+ #include <vector>
++#include <optional>
+ 
+ #include "tensorflow/core/framework/allocator.h"
+ #include "tensorflow/core/framework/allocator_registry.h"
+@@ -144,7 +145,7 @@
+   size_t AllocatedSize(const void* p) const override {
+     return a_->AllocatedSize(p);
+   }
+-  absl::optional<AllocatorStats> GetStats() override { return a_->GetStats(); }
++  std::optional<AllocatorStats> GetStats() override { return a_->GetStats(); }
+   bool ClearStats() override { return a_->ClearStats(); }
+ 
+   AllocatorMemoryType GetMemoryType() const override {
+diff -Naurd x/tensorflow/core/common_runtime/step_stats_collector.cc y/tensorflow/core/common_runtime/step_stats_collector.cc
+--- x/tensorflow/core/common_runtime/step_stats_collector.cc	2023-10-19 14:25:59.112651253 +0000
++++ y/tensorflow/core/common_runtime/step_stats_collector.cc	2023-10-19 14:29:11.704743576 +0000
+@@ -15,6 +15,7 @@
+ #include "tensorflow/core/common_runtime/step_stats_collector.h"
+ 
+ #include <memory>
++#include <optional>
+ 
+ #include "tensorflow/core/common_runtime/costmodel_manager.h"
+ #include "tensorflow/core/framework/allocation_description.pb.h"
+@@ -175,7 +176,7 @@
+   memory->set_peak_bytes(std::get<1>(sizes));
+   memory->set_live_bytes(std::get<2>(sizes));
+ 
+-  absl::optional<AllocatorStats> stats = allocator->GetStats();
++  std::optional<AllocatorStats> stats = allocator->GetStats();
+   if (stats) {
+     memory->set_allocator_bytes_in_use(stats->bytes_in_use);
+   }
+diff -Naurd x/tensorflow/core/framework/allocator_test.cc y/tensorflow/core/framework/allocator_test.cc
+--- x/tensorflow/core/framework/allocator_test.cc	2023-10-19 14:25:59.524651443 +0000
++++ y/tensorflow/core/framework/allocator_test.cc	2023-10-19 14:29:11.704743576 +0000
+@@ -17,6 +17,7 @@
+ 
+ #include <algorithm>
+ #include <vector>
++#include <optional>
+ 
+ #include "tensorflow/core/framework/typed_allocator.h"
+ #include "tensorflow/core/platform/logging.h"
+@@ -33,7 +34,7 @@
+ 
+ static void CheckStats(Allocator* a, int64_t num_allocs, int64_t bytes_in_use,
+                        int64_t peak_bytes_in_use, int64_t largest_alloc_size) {
+-  absl::optional<AllocatorStats> stats = a->GetStats();
++  std::optional<AllocatorStats> stats = a->GetStats();
+   EXPECT_TRUE(stats);
+   if (!stats) {
+     return;
+@@ -255,7 +256,7 @@
+   EXPECT_EQ(e0.Name(), "MemoryAllocation")
+       << "XSpace: " << xspace.DebugString();
+   {
+-    absl::optional<std::string> bytes_allocated, peak_bytes_in_use,
++    std::optional<std::string> bytes_allocated, peak_bytes_in_use,
+         requested_bytes, allocation_bytes;
+     e0.ForEachStat([&](const ::tensorflow::profiler::XStatVisitor& stat) {
+       LOG(ERROR) << "STAT " << stat.Name() << ": " << stat.ToString();
+@@ -282,7 +283,7 @@
+   EXPECT_EQ(e1.Name(), "MemoryDeallocation")
+       << "XSpace: " << xspace.DebugString();
+   {
+-    absl::optional<std::string> bytes_allocated, peak_bytes_in_use,
++    std::optional<std::string> bytes_allocated, peak_bytes_in_use,
+         allocation_bytes;
+     e1.ForEachStat([&](const ::tensorflow::profiler::XStatVisitor& stat) {
+       if (stat.Name() == "bytes_allocated") {
+diff -Naurd x/tensorflow/core/framework/tracking_allocator_test.cc y/tensorflow/core/framework/tracking_allocator_test.cc
+--- x/tensorflow/core/framework/tracking_allocator_test.cc	2023-10-19 14:25:59.700651525 +0000
++++ y/tensorflow/core/framework/tracking_allocator_test.cc	2023-10-19 14:29:11.704743576 +0000
+@@ -16,6 +16,7 @@
+ #include "tensorflow/core/framework/tracking_allocator.h"
+ 
+ #include <unordered_map>
++#include <optional>
+ 
+ #include "tensorflow/core/framework/allocator.h"
+ #include "tensorflow/core/platform/logging.h"
+@@ -44,7 +45,7 @@
+     EXPECT_NE(size_map_.end(), iter);
+     return iter->second;
+   }
+-  absl::optional<AllocatorStats> GetStats() override { return absl::nullopt; }
++  std::optional<AllocatorStats> GetStats() override { return std::nullopt; }
+ 
+  private:
+   std::unordered_map<const void*, size_t> size_map_;
+@@ -58,7 +59,7 @@
+   }
+   void DeallocateRaw(void* ptr) override {}
+   bool TracksAllocationSizes() const override { return true; }
+-  absl::optional<AllocatorStats> GetStats() override { return absl::nullopt; }
++  std::optional<AllocatorStats> GetStats() override { return std::nullopt; }
+ };
+ 
+ TEST(TrackingAllocatorTest, SimpleNoTracking) {
+diff -Naurd x/tensorflow/core/grappler/clusters/single_machine.cc y/tensorflow/core/grappler/clusters/single_machine.cc
+--- x/tensorflow/core/grappler/clusters/single_machine.cc	2023-10-19 14:25:59.964651648 +0000
++++ y/tensorflow/core/grappler/clusters/single_machine.cc	2023-10-19 14:29:11.704743576 +0000
+@@ -17,6 +17,7 @@
+ 
+ #include <atomic>
+ #include <memory>
++#include <optional>
+ 
+ #include "tensorflow/cc/training/queue_runner.h"
+ #include "tensorflow/core/common_runtime/device.h"
+@@ -230,7 +231,7 @@
+       return Status(absl::StatusCode::kInvalidArgument,
+                     "Tracking allocation is not enabled.");
+     }
+-    absl::optional<AllocatorStats> stats = allocator->GetStats();
++    std::optional<AllocatorStats> stats = allocator->GetStats();
+     (*device_peak_memory)[device->name()] =
+         (stats ? stats->peak_bytes_in_use : 0);
+   }
+diff -Naurd x/tensorflow/core/kernels/stack.cc y/tensorflow/core/kernels/stack.cc
+--- x/tensorflow/core/kernels/stack.cc	2023-10-19 14:26:01.668652437 +0000
++++ y/tensorflow/core/kernels/stack.cc	2023-10-19 14:29:11.704743576 +0000
+@@ -18,6 +18,7 @@
+ #include <limits.h>
+ #include <atomic>
+ #include <vector>
++#include <optional>
+ 
+ #include "tensorflow/core/common_runtime/device.h"
+ #include "tensorflow/core/framework/device_base.h"
+@@ -245,7 +246,7 @@
+     DeviceContext* device_ctxt = ctx->op_device_context();
+     auto device = static_cast<tensorflow::Device*>(ctx->device());
+     Allocator* allocator = device->GetAllocator(alloc_attrs);
+-    absl::optional<AllocatorStats> stats = allocator->GetStats();
++    std::optional<AllocatorStats> stats = allocator->GetStats();
+     if (stats && *stats->bytes_limit &&
+         stats->bytes_in_use > (*stats->bytes_limit * kOccupancy)) {
+       // Asynchronously copy the tensor from GPU to CPU memory.
+diff -Naurd x/tensorflow/python/tfe_wrapper.cc y/tensorflow/python/tfe_wrapper.cc
+--- x/tensorflow/python/tfe_wrapper.cc	2023-10-19 14:26:10.716656639 +0000
++++ y/tensorflow/python/tfe_wrapper.cc	2023-10-19 14:29:11.708743578 +0000
+@@ -14,6 +14,7 @@
+ ==============================================================================*/
+ 
+ #include <memory>
++#include <optional>
+ 
+ #include "Python.h"
+ #include "absl/strings/match.h"
+@@ -691,7 +692,7 @@
+     tensorflow::AllocatorAttributes attrs;
+     tensorflow::Allocator* allocator = matched_device->GetAllocator(attrs);
+ 
+-    if (absl::optional<tensorflow::AllocatorStats> stats =
++    if (std::optional<tensorflow::AllocatorStats> stats =
+             allocator->GetStats()) {
+       return std::map<std::string, int64_t>{{"current", stats->bytes_in_use},
+                                             {"peak", stats->peak_bytes_in_use}};
+diff -Naurd x/tensorflow/tsl/framework/allocator.h y/tensorflow/tsl/framework/allocator.h
+--- x/tensorflow/tsl/framework/allocator.h	2023-10-19 14:26:15.884659044 +0000
++++ y/tensorflow/tsl/framework/allocator.h	2023-10-19 14:29:11.708743578 +0000
+@@ -216,7 +216,7 @@
+   }
+ 
+   // Fills in 'stats' with statistics collected by this allocator.
+-  virtual absl::optional<AllocatorStats> GetStats() { return absl::nullopt; }
++  virtual std::optional<AllocatorStats> GetStats() { return std::nullopt; }
+ 
+   // If implemented, clears the internal stats except for the `in_use` fields
+   // and sets the `peak_bytes_in_use` to be equal to the `bytes_in_use`. Returns
+diff -Naurd x/tensorflow/tsl/framework/bfc_allocator.cc y/tensorflow/tsl/framework/bfc_allocator.cc
+--- x/tensorflow/tsl/framework/bfc_allocator.cc	2023-10-19 14:26:15.900659052 +0000
++++ y/tensorflow/tsl/framework/bfc_allocator.cc	2023-10-19 14:29:11.708743578 +0000
+@@ -1205,7 +1205,7 @@
+   return md;
+ }
+ 
+-absl::optional<AllocatorStats> BFCAllocator::GetStats() {
++std::optional<AllocatorStats> BFCAllocator::GetStats() {
+   mutex_lock l(lock_);
+   return stats_;
+ }
+diff -Naurd x/tensorflow/tsl/framework/bfc_allocator.h y/tensorflow/tsl/framework/bfc_allocator.h
+--- x/tensorflow/tsl/framework/bfc_allocator.h	2023-10-19 14:26:15.900659052 +0000
++++ y/tensorflow/tsl/framework/bfc_allocator.h	2023-10-19 14:29:11.708743578 +0000
+@@ -22,6 +22,7 @@
+ #include <string>
+ #include <unordered_map>
+ #include <vector>
++#include <optional>
+ 
+ #include "absl/container/flat_hash_set.h"
+ #include "tensorflow/tsl/framework/allocator.h"
+@@ -93,7 +94,7 @@
+ 
+   int64_t AllocationId(const void* ptr) const override;
+ 
+-  absl::optional<AllocatorStats> GetStats() override;
++  std::optional<AllocatorStats> GetStats() override;
+ 
+   bool ClearStats() override;
+ 
+diff -Naurd x/tensorflow/tsl/framework/cpu_allocator_impl.cc y/tensorflow/tsl/framework/cpu_allocator_impl.cc
+--- x/tensorflow/tsl/framework/cpu_allocator_impl.cc	2023-10-19 14:26:15.928659065 +0000
++++ y/tensorflow/tsl/framework/cpu_allocator_impl.cc	2023-10-19 14:29:11.708743578 +0000
+@@ -15,6 +15,7 @@
+ 
+ #include <algorithm>
+ #include <atomic>
++#include <optional>
+ 
+ #include "tensorflow/tsl/framework/allocator.h"
+ #include "tensorflow/tsl/framework/allocator_registry.h"
+@@ -145,8 +146,8 @@
+         /*level=*/tsl::profiler::TraceMeLevel::kInfo);
+   }
+ 
+-  absl::optional<AllocatorStats> GetStats() override {
+-    if (!cpu_allocator_collect_stats) return absl::nullopt;
++  std::optional<AllocatorStats> GetStats() override {
++    if (!cpu_allocator_collect_stats) return std::nullopt;
+     mutex_lock l(mu_);
+     return stats_;
+   }
+diff -Naurd x/tensorflow/tsl/framework/tracking_allocator.cc y/tensorflow/tsl/framework/tracking_allocator.cc
+--- x/tensorflow/tsl/framework/tracking_allocator.cc	2023-10-19 14:26:15.968659084 +0000
++++ y/tensorflow/tsl/framework/tracking_allocator.cc	2023-10-19 14:29:11.708743578 +0000
+@@ -152,7 +152,7 @@
+   }
+ }
+ 
+-absl::optional<AllocatorStats> TrackingAllocator::GetStats() {
++std::optional<AllocatorStats> TrackingAllocator::GetStats() {
+   return allocator_->GetStats();
+ }
+ 
+diff -Naurd x/tensorflow/tsl/framework/tracking_allocator.h y/tensorflow/tsl/framework/tracking_allocator.h
+--- x/tensorflow/tsl/framework/tracking_allocator.h	2023-10-19 14:26:15.968659084 +0000
++++ y/tensorflow/tsl/framework/tracking_allocator.h	2023-10-19 14:29:11.712743580 +0000
+@@ -17,6 +17,7 @@
+ #define TENSORFLOW_TSL_FRAMEWORK_TRACKING_ALLOCATOR_H_
+ 
+ #include <unordered_map>
++#include <optional>
+ 
+ #include "tensorflow/tsl/framework/allocator.h"
+ #include "tensorflow/tsl/lib/gtl/inlined_vector.h"
+@@ -66,7 +67,7 @@
+   size_t RequestedSize(const void* ptr) const override;
+   size_t AllocatedSize(const void* ptr) const override;
+   int64_t AllocationId(const void* ptr) const override;
+-  absl::optional<AllocatorStats> GetStats() override;
++  std::optional<AllocatorStats> GetStats() override;
+   bool ClearStats() override;
+ 
+   AllocatorMemoryType GetMemoryType() const override {
