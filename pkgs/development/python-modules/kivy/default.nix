@@ -26,13 +26,13 @@
 
 buildPythonPackage rec {
   pname = "kivy";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "kivy";
-    rev = version;
-    hash = "sha256-QJ490vjpEj/JSE9OzSvDpkCruaTFdlThUHIEAMm0BZ4=";
+    tag = version;
+    hash = "sha256-q8BoF/pUTW2GMKBhNsqWDBto5+nASanWifS9AcNRc8Q=";
   };
 
   nativeBuildInputs = [
