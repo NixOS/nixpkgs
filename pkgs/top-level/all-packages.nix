@@ -11062,10 +11062,6 @@ with pkgs;
     saxon_11-he
     saxon_12-he;
 
-  swt_jdk8 = callPackage ../by-name/sw/swt/package.nix {
-    jdk = jdk8;
-  };
-
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
