@@ -1390,8 +1390,8 @@ rec {
       "sha256-UDmaLRzKgC/HcF/F/LgVSHhJnJbHINWWObGZCYL3leE=";
 
   mypy-boto3-waf =
-    buildMypyBoto3Package "waf" "1.35.0"
-      "sha256-KeoPZIXTGHoS69QR5y4y3N4AVlscQ6Cqlbg+6H3MIu4=";
+    buildMypyBoto3Package "waf" "1.35.93"
+      "sha256-lHkEYsRyG5GwsMYPuymL6Ltt1R+Ujy+IgqNdLAzC9PU=";
 
   mypy-boto3-waf-regional =
     buildMypyBoto3Package "waf-regional" "1.35.0"
