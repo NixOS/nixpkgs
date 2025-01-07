@@ -206,8 +206,8 @@ rec {
       "sha256-DT59Q7d0uRKwBr0Ye0kDYNNsP1XeQ57utrh0Jkism8I=";
 
   mypy-boto3-chime-sdk-voice =
-    buildMypyBoto3Package "chime-sdk-voice" "1.35.72"
-      "sha256-KWtXvo/mX4FbAg3WG0g4SAsGaGb2VT8ENeREzap5BMY=";
+    buildMypyBoto3Package "chime-sdk-voice" "1.35.93"
+      "sha256-iGB1ZJxGJzknDUuTgq9MKTjmx/w54SfffTAJH+9Su8E=";
 
   mypy-boto3-cleanrooms =
     buildMypyBoto3Package "cleanrooms" "1.35.72"
