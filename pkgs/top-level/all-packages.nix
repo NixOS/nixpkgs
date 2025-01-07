@@ -1679,6 +1679,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  arpack-mpi = arpack.override { useMpi = true; };
+
   inherit (callPackages ../data/fonts/arphic {})
     arphic-ukai arphic-uming;
 
@@ -17057,8 +17059,6 @@ with pkgs;
     jre = temurin-bin-21;
     openjfx = openjfx21;
   };
-
-  manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
 
   mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;
