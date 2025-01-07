@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "obsidian-export";
-  version = "23.12.0";
+  version = "24.11.0";
 
   src = fetchFromGitHub {
     owner = "zoni";
     repo = "obsidian-export";
     rev = "v${version}";
-    hash = "sha256-r5G2XVV2F/Bt29gxuTZKX+KxH6RFa1hJNH3gSTi7yCU=";
+    hash = "sha256-XIIrJpkDV5TIGGZ7L/TN5bYXV8ra1XOFPb08WSiojPI=";
   };
 
-  cargoHash = "sha256-lkqoMFasHpfhmVd3dlYd/TKIBIDzqMbsxfigpeJq0w8=";
+  cargoHash = "sha256-NZyBYMLEIElOvp0RgYvI5tXk0bvPbmIhuIhls2/+BpQ=";
 
   meta = {
     changelog = "https://github.com/zoni/obsidian-export/blob/${src.rev}/CHANGELOG.md";
