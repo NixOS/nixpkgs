@@ -1430,8 +1430,8 @@ rec {
       "sha256-lGKzDHP59Czm/+e4SPzIa6zkvm728OpT6JtauNktvek=";
 
   mypy-boto3-workspaces-web =
-    buildMypyBoto3Package "workspaces-web" "1.35.66"
-      "sha256-36tsFJx1Q5vVGfdkHflOfd6r2rTqSmQzN+O1JBtJ1iI=";
+    buildMypyBoto3Package "workspaces-web" "1.35.93"
+      "sha256-Uk3/3CmIhlonNmnTkV8TBsvWDosRvXdFJRR3CpowTJc=";
 
   mypy-boto3-xray =
     buildMypyBoto3Package "xray" "1.35.67"
