@@ -742,8 +742,8 @@ rec {
       "sha256-+g6VfYlaiV/bFXdn79rQ5j9f+ijg+dvwFz0Gg2F6taQ=";
 
   mypy-boto3-kinesis-video-signaling =
-    buildMypyBoto3Package "kinesis-video-signaling" "1.35.0"
-      "sha256-5dPgAwcPymYdrKT+YhyRkFOhfDj71xfA/P50KdurMXI=";
+    buildMypyBoto3Package "kinesis-video-signaling" "1.35.93"
+      "sha256-DWWQfygar1pwQUYol3ZvBHr5nbBIeFJQM384CBHnfP0=";
 
   mypy-boto3-kinesis-video-webrtc-storage =
     buildMypyBoto3Package "kinesis-video-webrtc-storage" "1.35.0"
