@@ -2398,7 +2398,7 @@ rec {
     if isStringLike x then
       let str = toString x; in
       substring 0 1 str == "/"
-      && dirOf str == storeDir
+      && (dirOf str == storeDir || builtins.match "^/[A-Za-z0-9]{52}" str != null)
     else
       false;
 
