@@ -152,61 +152,107 @@ in
         example = "DEBUG";
       };
 
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
-    services.nginx = {
-      enable = true;
-      virtualHosts = builtins.listToAttrs (
-        map (domain: {
-          name = "autoconfig.${domain}";
-          value = {
-            enableACME = true;
-            forceSSL = true;
-            serverAliases = [ "autodiscover.${domain}" ];
-            locations = {
-              "/".proxyPass = "http://127.0.0.1:${toString cfg.port}/";
-              "/initdb".extraConfig = ''
-                # Limit access to clients connecting from localhost
-                allow 127.0.0.1;
-                deny all;
-              '';
-            };
-          };
-        }) cfg.domains
-      );
-    };
-
-    systemd.services.automx2 = {
-      after = [ "network.target" ];
-      postStart = "${lib.getExe pkgs.curl} -X POST --json @${format.generate "automx2.json" cfg.settings} http://127.0.0.1:${toString cfg.port}/initdb/";
-      serviceConfig = {
-        Environment = [
-          "AUTOMX2_CONF=${pkgs.writeText "automx2-conf" ''
-            [automx2]
-            loglevel = ${cfg.logLevel}
-            db_uri = sqlite:///:memory:
-            proxy_count = 1
-          ''}"
-          "FLASK_APP=automx2.server:app"
-          "FLASK_CONFIG=production"
+      webserver = lib.mkOption {
+        type = lib.types.enum [
+          "nginx"
+          "caddy"
         ];
-        ExecStart = "${
-          pkgs.python3.buildEnv.override { extraLibs = [ cfg.package ]; }
-        }/bin/flask run --host=127.0.0.1 --port=${toString cfg.port}";
-        Restart = "always";
-        DynamicUser = true;
-        User = "automx2";
-        Type = "notify";
+        default = "nginx";
+        description = ''
+          Whether to use nginx or caddy for virtual host management.
+
+          Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
+
+          Further caddy configuration can be done by adapting `services.caddy.virtualHosts.<name>`.
+          See [](#opt-services.caddy.virtualHosts) for further information.
+        '';
       };
-      unitConfig = {
-        Description = "Service to automatically configure mail clients";
-        Documentation = "https://rseichter.github.io/automx2/";
-      };
-      wantedBy = [ "multi-user.target" ];
+
     };
   };
+
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        systemd.services.automx2 = {
+          after = [ "network.target" ];
+          postStart = "${lib.getExe pkgs.curl} -X POST --json @${format.generate "automx2.json" cfg.settings} http://127.0.0.1:${toString cfg.port}/initdb/";
+          serviceConfig = {
+            Environment = [
+              "AUTOMX2_CONF=${pkgs.writeText "automx2-conf" ''
+                [automx2]
+                loglevel = ${cfg.logLevel}
+                db_uri = sqlite:///:memory:
+                proxy_count = 1
+              ''}"
+              "FLASK_APP=automx2.server:app"
+              "FLASK_CONFIG=production"
+            ];
+            ExecStart = "${
+              pkgs.python3.buildEnv.override { extraLibs = [ cfg.package ]; }
+            }/bin/flask run --host=127.0.0.1 --port=${toString cfg.port}";
+            Restart = "always";
+            DynamicUser = true;
+            User = "automx2";
+            Type = "notify";
+          };
+          unitConfig = {
+            Description = "Service to automatically configure mail clients";
+            Documentation = "https://rseichter.github.io/automx2/";
+          };
+          wantedBy = [ "multi-user.target" ];
+        };
+      }
+      (lib.mkIf (cfg.webserver == "nginx") {
+        services.nginx = {
+          enable = true;
+          virtualHosts = builtins.listToAttrs (
+            map (domain: {
+              name = "autoconfig.${domain}";
+              value = {
+                enableACME = true;
+                forceSSL = true;
+                serverAliases = [ "autodiscover.${domain}" ];
+                locations = {
+                  "/".proxyPass = "http://127.0.0.1:${toString cfg.port}/";
+                  "/initdb".extraConfig = ''
+                    # Limit access to clients connecting from localhost
+                    allow 127.0.0.1;
+                    deny all;
+                  '';
+                };
+              };
+            }) cfg.domains
+          );
+        };
+      })
+      (lib.mkIf (cfg.webserver == "caddy") {
+        services.caddy = {
+          enable = true;
+          virtualHosts = builtins.listToAttrs (
+            map (domain: {
+              name = "autoconfig.${domain}";
+              value = {
+                serverAliases = [ "autodiscover.${domain}" ];
+                extraConfig = ''
+                  route /initdb* {
+                    respond 403 {
+                      body "Access Denied"
+                    }
+                  }
+
+                  route * {
+                    reverse_proxy http://127.0.0.1:${toString cfg.port}
+                  }
+                '';
+              };
+            }) cfg.domains
+          );
+        };
+      })
+    ]
+  );
 
   imports = [
     (lib.mkChangedOptionModule [ "services" "automx2" "domain" ] [ "services" "automx2" "domains" ]
