@@ -109,6 +109,7 @@ with pkgs;
 
   tests = callPackages ../test { };
 
+  mkBaseDerivation = import ../poc/mk-base-derivation.nix pkgs;
   mkDerivation2 = import ../poc/mk-derivation-2.nix pkgs;
 
   poc-foo = import ../poc/foo/package.nix pkgs;
