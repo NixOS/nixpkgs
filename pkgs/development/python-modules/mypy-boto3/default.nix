@@ -706,8 +706,8 @@ rec {
       "sha256-6vqX+gkajl6N4EPusz9DwDCHDfswMH4/f13afD33x2A=";
 
   mypy-boto3-ivschat =
-    buildMypyBoto3Package "ivschat" "1.35.19"
-      "sha256-Eb2polqqaboA93F86ZpJ9IzZRY5FRRceq+wLp/V2/2U=";
+    buildMypyBoto3Package "ivschat" "1.35.93"
+      "sha256-z09uzdTF4r8hPciAJ7gTyMaJ60CFqfMD+JajtNwP1yc=";
 
   mypy-boto3-kafka =
     buildMypyBoto3Package "kafka" "1.35.15"
