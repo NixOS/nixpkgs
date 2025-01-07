@@ -24056,6 +24056,12 @@
     githubId = 7444430;
     name = "Radik Islamov";
   };
+  vji = {
+    email = "mail@viktor.im";
+    github = "v-ji";
+    githubId = 1476338;
+    name = "Viktor Illmer";
+  };
   vklquevs = {
     email = "vklquevs@gmail.com";
     github = "vklquevs";
