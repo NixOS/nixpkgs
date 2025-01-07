@@ -3,7 +3,6 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  openssl,
   testers,
   zizmor,
 }:
@@ -20,8 +19,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-imq7ElZcC9E4nDkHaaFiBf8r1VuMtw5zOn9O7EzIPkQ=";
-
-  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
