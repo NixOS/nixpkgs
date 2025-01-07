@@ -28,23 +28,23 @@ let
 
   version =
     let
-      x86_64-darwin = "3.35.4861";
+      x86_64-darwin = "3.37.5164";
     in
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "3.36.3462";
+      x86_64-linux = "3.37.3607";
     }
     .${system} or throwSystem;
 
   hash =
     let
-      x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
+      x86_64-darwin = "sha256-xQ6EaZFE6qdpgFj1Lom37wT8URd5FsRwG89YeM/+U7k=";
     in
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
+      x86_64-linux = "sha256-mckFxxrWnxeVGgJ//efPTdtHt5nVII1lXu/BT61TKxE=";
     }
     .${system} or throwSystem;
 
@@ -64,7 +64,6 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = [ "CVE-2024-6775" ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
