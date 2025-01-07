@@ -14,17 +14,18 @@ buildDartApplication rec {
     rev = "protobuf-v${version}";
     sha256 = "sha256-2QnLS6GHhDHMCnAY+2c1wMyPY3EKtlijWHQC+9AVt0k=";
   };
+
   sourceRoot = "${src.name}/protoc_plugin";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating Dart code";
     mainProgram = "protoc-gen-dart";
     homepage = "https://pub.dev/packages/protoc_plugin";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lelgenio ];
   };
 }
