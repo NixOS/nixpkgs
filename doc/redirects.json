@@ -71,6 +71,9 @@
   "sec-nixpkgs-release-25.05-lib-breaking": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
   ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
   ],

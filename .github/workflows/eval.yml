@@ -85,6 +85,13 @@ jobs:
       matrix:
         system: ${{ fromJSON(needs.attrs.outputs.systems) }}
     steps:
+      - name: Enable swap
+        run: |
+          sudo fallocate -l 10G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+
       - name: Download the list of all attributes
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
@@ -227,7 +234,7 @@ jobs:
     steps:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
+      - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}

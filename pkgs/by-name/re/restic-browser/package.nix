@@ -25,12 +25,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-magf19hA5PVAZafRcQXFaAD50qGofztpiluVc2aCeOk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fix-path-env-0.0.0" = "sha256-kSpWO2qMotpsYKJokqUWCUzGGmNOazaREDLjke4/CtE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5wSxa8jgto+v+tJHbenc2nvGlLaOBYyRrCqFyCPnncc=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-npm-deps-${version}";

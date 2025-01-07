@@ -1,0 +1,12 @@
+{
+  "x86_64-darwin": {
+    "version": "4.2.0",
+    "url": "https://desktop-release.notion-static.com/Notion-4.2.0.zip",
+    "hash": "sha512-FLptPNEtS9fTevSeGC00hDtpgSks+8JtEKRTtWlYPtI0vpA1KqixBdv2OaNSK1W7Krlsl25RpTOl8cJdQxcv4Q=="
+  },
+  "aarch64-darwin": {
+    "version": "4.2.0",
+    "url": "https://desktop-release.notion-static.com/Notion-arm64-4.2.0.zip",
+    "hash": "sha512-cxfO3Bm7ZzAQMi0Pdwd3nvQlRPjn4w7j0ojYUCcn660YsBtoVkpNhiuqg9pbWzY0Umh+/8Zig9CGXKjjP94Iww=="
+  }
+}
