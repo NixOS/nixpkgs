@@ -1,37 +1,28 @@
-{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qt6, boost, openssl, libsecret }:
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
-stdenv.mkDerivation rec {
+(callPackage ./common.nix { }).overrideAttrs (finalAttrs: _: {
   pname = "chatterino2";
-  version = "2.5.1";
+  version = "2.5.2";
+
   src = fetchFromGitHub {
     owner = "Chatterino";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
+    repo = "chatterino2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nrw4dQ7QjPPMbZXMC+p3VgUQKwc1ih6qS13D9+9oNuw=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
-  buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg
-    qt6.qtimageformats
-    qt6.qttools
-    qt6.qt5compat
-    boost
-    openssl
-    libsecret
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt6.qtwayland
-  ];
-  cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out/Applications"
-    mv bin/chatterino.app "$out/Applications/"
-  '' + ''
-    mkdir -p $out/share/icons/hicolor/256x256/apps
-    cp $src/resources/icon.png $out/share/icons/hicolor/256x256/apps/chatterino.png
-  '';
-  meta = with lib; {
+
+  passthru = {
+    buildChatterino = args: callPackage ./common.nix args;
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Chat client for Twitch chat";
     mainProgram = "chatterino";
     longDescription = ''
@@ -41,9 +32,13 @@ stdenv.mkDerivation rec {
       "Chatterino".
     '';
     homepage = "https://github.com/Chatterino/chatterino2";
-    changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim supa ];
+    changelog = "https://github.com/Chatterino/chatterino2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      rexim
+      supa
+      marie
+    ];
   };
-}
+})

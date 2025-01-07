@@ -10447,6 +10447,18 @@ final: prev:
     meta.homepage = "https://github.com/NLKNguyen/papercolor-theme/";
   };
 
+  papis-nvim = buildNeovimPlugin {
+    pname = "papis.nvim";
+    version = "2024-10-30";
+    src = fetchFromGitHub {
+      owner = "jghauser";
+      repo = "papis.nvim";
+      rev = "11dff5ac579616b8835f3d53fae8978bf4374617";
+      sha256 = "12911b7xfc8rimqyggnrz267fpf0syyjrrb2xspqnp65snwbl93q";
+    };
+    meta.homepage = "https://github.com/jghauser/papis.nvim/";
+  };
+
   parpar-nvim = buildVimPlugin {
     pname = "parpar.nvim";
     version = "2023-09-12";

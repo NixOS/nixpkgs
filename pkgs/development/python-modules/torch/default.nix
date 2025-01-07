@@ -275,14 +275,6 @@ buildPythonPackage rec {
 
   patches =
     lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # pthreadpool added support for Grand Central Dispatch in April
-      # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
-      # that is available starting with macOS 10.13. However, our current
-      # base is 10.12. Until we upgrade, we can fall back on the older
-      # pthread support.
-      ./pthreadpool-disable-gcd.diff
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
@@ -342,17 +334,7 @@ buildPythonPackage rec {
     # until https://github.com/pytorch/pytorch/issues/76082 is addressed
     + lib.optionalString cudaSupport ''
       rm cmake/Modules/FindCUDAToolkit.cmake
-    ''
-    # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
-    # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0")
-        ''
-          substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace-fail '#if (__cplusplus >= 201703L) && (!defined(__MINGW32__)) && (!defined(_MSC_VER))
-          inline void *aligned_alloc(size_t align, size_t size)' '#if 0
-          inline void *aligned_alloc(size_t align, size_t size)'
-        '';
+    '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
   # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time

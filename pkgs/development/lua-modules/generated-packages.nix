@@ -2930,6 +2930,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+papis-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nui-nvim, pathlib-nvim, sqlite }:
+buildLuarocksPackage {
+  pname = "papis.nvim";
+  version = "0.7.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/papis.nvim-0.7.0-1.rockspec";
+    sha256 = "1bza3blszq1kz224zx7k0mn636lnj5rcx5s7q6l3ng8rzddw4isa";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/jghauser/papis.nvim/archive/16983a7aac24ea787d9b9ac5dce3c35d0077b990.zip";
+    sha256 = "0virafyw0d46iwscbs1f1y7ks9jafhq214m17wqdz25srb7hmrxd";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nui-nvim pathlib-nvim sqlite ];
+
+  meta = {
+    homepage = "https://github.com/jghauser/papis.nvim";
+    description = "Manage your bibliography from within your favourite editor";
+    license.fullName = "GPL-3.0";
+  };
+}) {};
+
 penlight = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luafilesystem }:
 buildLuarocksPackage {
   pname = "penlight";

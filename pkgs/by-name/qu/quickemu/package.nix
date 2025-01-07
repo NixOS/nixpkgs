@@ -13,7 +13,7 @@
   pciutils,
   procps,
   python3,
-  qemu_full,
+  qemu,
   socat,
   spice-gtk,
   swtpm,
@@ -40,7 +40,7 @@ let
       pciutils
       procps
       python3
-      qemu_full
+      (qemu.override { smbdSupport = true; })
       socat
       swtpm
       util-linux

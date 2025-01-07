@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
     tag = "v${version}";
-    hash = "sha256-eMZXXOGe9jKf9bXEinIIu6w3i4SOkLnDWnxmT5G0RWA=";
+    hash = "sha256-6i0a2jEJy7aL6W801Xki7jmHhO5kkFL8rJI+y+MhWVo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "lxml"
     "pillow"
     "typer"
   ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
 
   withLibei ? true,
@@ -63,6 +64,14 @@ stdenv.mkDerivation rec {
       libei
       libportal
     ];
+
+  patches = [
+    (fetchpatch2 {
+      # Upstream fix for crash on qt6.8 https://github.com/input-leap/input-leap/issues/2067
+      url = "https://github.com/input-leap/input-leap/commit/2641bc502e16b1fb7372b43e94d4b894cbc71279.patch?full_index=1";
+      hash = "sha256-LV09ITcE0ihKMByM5wiRetGwKbPrJbVY6HjZLqa8Dcs=";
+    })
+  ];
 
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
