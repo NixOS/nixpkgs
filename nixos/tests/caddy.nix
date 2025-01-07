@@ -70,7 +70,7 @@ import ./make-test-python.nix (
             services.caddy = {
               package = pkgs.caddy.withPlugins {
                 plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20241211194404-3865845790a7" ];
-                hash = "sha256-zgMdtOJbmtRSfTlrrg8njr11in2C7OAXLB+34V23jek=";
+                hash = "sha256-BorJJWICgAWU7DrpDZJWifMnIYtGWldt/4S1VELwGJI=";
               };
               configFile = pkgs.writeText "Caddyfile" ''
                 {
