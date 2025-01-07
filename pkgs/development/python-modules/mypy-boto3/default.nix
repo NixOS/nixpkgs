@@ -286,8 +286,8 @@ rec {
       "sha256-nV12aRUnJ2Ot41DJXDzr8MKgL01/MW5vt4dBtb80PGI=";
 
   mypy-boto3-codeguru-security =
-    buildMypyBoto3Package "codeguru-security" "1.35.0"
-      "sha256-6YRFmSjoVc+wEoYAElh0xeJ+V+TK2WCQuxW0i2yh7s0=";
+    buildMypyBoto3Package "codeguru-security" "1.35.93"
+      "sha256-TAdgFTQw55CxcMYp7SRfa8w7cLcsvqiFNGnxlWXTz7M=";
 
   mypy-boto3-codeguruprofiler =
     buildMypyBoto3Package "codeguruprofiler" "1.35.0"
