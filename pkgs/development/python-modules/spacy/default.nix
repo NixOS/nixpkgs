@@ -49,7 +49,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/numpy/d" pyproject.toml
+    # unpin numpy, cannot use pythonRelaxDeps because it's in build-system
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail ",<2.1.0" ""
   '';
 
   build-system = [
