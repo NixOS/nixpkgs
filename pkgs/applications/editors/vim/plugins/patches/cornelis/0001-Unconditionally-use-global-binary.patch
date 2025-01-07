@@ -1,0 +1,31 @@
+From f8e993846551bda77a34a77aad7ad6dcc45b66a7 Mon Sep 17 00:00:00 2001
+From: Philipp Joram <nixpgks@phijor.me>
+Date: Tue, 16 Apr 2024 12:48:42 +0300
+Subject: [PATCH] Unconditionally use global binary
+
+---
+ ftplugin/agda.vim | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/ftplugin/agda.vim b/ftplugin/agda.vim
+index c7dd9d0..6b4aba3 100644
+--- a/ftplugin/agda.vim
++++ b/ftplugin/agda.vim
+@@ -11,13 +11,7 @@ if exists("b:cornelis_ftplugin")
+ endif
+ let b:cornelis_ftplugin = 1
+ 
+-if exists("g:cornelis_use_global_binary")
+-  call remote#host#Register('cornelis', '*', rpcstart('cornelis', []))
+-else
+-  call nvimhs#start(expand('<sfile>:p:h:h'), 'cornelis', ['-v', 'DEBUG', '-l', '/tmp/cornelis.log'])
+-endif
+-
+-nnoremap <F5> :call nvimhs#compileAndRestart('cornelis')<CR>
++call remote#host#Register('cornelis', '*', rpcstart('@CORNELIS@', []))
+ 
+ runtime agda-input.vim
+ runtime agda-matchpairs.vim
+-- 
+2.44.0
+

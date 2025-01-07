@@ -1,0 +1,91 @@
+From b120f82f9809b98231188daacb94f22a9e69187a Mon Sep 17 00:00:00 2001
+From: Gregor Riepl <onitake@gmail.com>
+Date: Thu, 8 Aug 2024 23:56:16 +0200
+Subject: [PATCH] Replace deprecated APIs when compiling against newer FFmpeg
+
+---
+ module/ffmedia.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/module/ffmedia.c b/module/ffmedia.c
+index d4bb346ac35740711b8393e66d0bfc28c849ff0e..0f57e311f277359fad731e348531becbadbb06d4 100644
+--- a/module/ffmedia.c
++++ b/module/ffmedia.c
+@@ -71,7 +71,11 @@ static int rwops_read(void *opaque, uint8_t *buf, int buf_size) {
+ 
+ }
+ 
++#if (LIBAVFORMAT_VERSION_MAJOR < 61)
+ static int rwops_write(void *opaque, uint8_t *buf, int buf_size) {
++#else
++static int rwops_write(void *opaque, const uint8_t *buf, int buf_size) {
++#endif
+     printf("Writing to an SDL_rwops is a really bad idea.\n");
+     return -1;
+ }
+@@ -690,9 +694,14 @@ static void decode_audio(MediaState *ms) {
+ 			}
+ 
+             converted_frame->sample_rate = audio_sample_rate;
++#if (LIBAVUTIL_VERSION_MAJOR < 59)
+             converted_frame->channel_layout = AV_CH_LAYOUT_STEREO;
++#else
++            converted_frame->ch_layout = (AVChannelLayout) AV_CHANNEL_LAYOUT_STEREO;
++#endif
+             converted_frame->format = AV_SAMPLE_FMT_S16;
+ 
++#if (LIBAVUTIL_VERSION_MAJOR < 59)
+ 			if (!ms->audio_decode_frame->channel_layout) {
+ 				ms->audio_decode_frame->channel_layout = av_get_default_channel_layout(ms->audio_decode_frame->channels);
+ 
+@@ -711,6 +720,26 @@ static void decode_audio(MediaState *ms) {
+ 				    swr_set_matrix(ms->swr, stereo_matrix, 1);
+ 				}
+ 			}
++#else
++			if (ms->audio_decode_frame->ch_layout.order == AV_CHANNEL_ORDER_UNSPEC) {
++				av_channel_layout_default(&ms->audio_decode_frame->ch_layout, ms->audio_decode_frame->ch_layout.nb_channels);
++
++				if (audio_equal_mono && (ms->audio_decode_frame->ch_layout.nb_channels == 1)) {
++				    swr_alloc_set_opts2(
++                        &ms->swr,
++                        &converted_frame->ch_layout,
++                        converted_frame->format,
++                        converted_frame->sample_rate,
++                        &ms->audio_decode_frame->ch_layout,
++                        ms->audio_decode_frame->format,
++                        ms->audio_decode_frame->sample_rate,
++                        0,
++                        NULL);
++
++				    swr_set_matrix(ms->swr, stereo_matrix, 1);
++				}
++			}
++#endif
+ 
+ 			if(swr_convert_frame(ms->swr, converted_frame, ms->audio_decode_frame)) {
+ 				av_frame_free(&converted_frame);
+@@ -1159,7 +1188,11 @@ static int decode_thread(void *arg) {
+ 
+ 	// Compute the number of samples we need to play back.
+ 	if (ms->audio_duration < 0) {
++#if (LIBAVFORMAT_VERSION_MAJOR < 62)
+ 		if (av_fmt_ctx_get_duration_estimation_method(ctx) != AVFMT_DURATION_FROM_BITRATE) {
++#else
++		if (ctx->duration_estimation_method != AVFMT_DURATION_FROM_BITRATE) {
++#endif
+ 
+ 			long long duration = ((long long) ctx->duration) * audio_sample_rate;
+ 			ms->audio_duration = (unsigned int) (duration /  AV_TIME_BASE);
+@@ -1319,7 +1352,11 @@ static int decode_sync_start(void *arg) {
+ 
+ 	// Compute the number of samples we need to play back.
+ 	if (ms->audio_duration < 0) {
++#if (LIBAVFORMAT_VERSION_MAJOR < 62)
+ 		if (av_fmt_ctx_get_duration_estimation_method(ctx) != AVFMT_DURATION_FROM_BITRATE) {
++#else
++		if (ctx->duration_estimation_method != AVFMT_DURATION_FROM_BITRATE) {
++#endif
+ 
+ 			long long duration = ((long long) ctx->duration) * audio_sample_rate;
+ 			ms->audio_duration = (unsigned int) (duration /  AV_TIME_BASE);
