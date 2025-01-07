@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.23.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-R6uTuU+U9fAUx7JP2QD+mTaoSipuaOlqPiiPdXqgfhw=";
+    hash = "sha256-bMEJJk3tTcIQsu5CpXC71Rs6bvwCG8HI64YHpUAfzM4=";
   };
 
-  cargoHash = "sha256-Hx3xo4PVObtSk68pUIqCbploKN7AxbRD36uOl/QaVkM=";
+  cargoHash = "sha256-lVYYmKAMiecu7U3JmBQoQbDT1OmlisMjDC5vG9CrM9g=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   # remove tests that require internet access
   postPatch = ''
-    rm cargo-dist/tests/integration-tests.rs
+    rm cargo-dist/tests/cli-tests.rs cargo-dist/tests/integration-tests.rs
   '';
 
   passthru.updateScript = nix-update-script { };
