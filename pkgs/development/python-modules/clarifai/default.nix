@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.11.1";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     tag = version;
-    hash = "sha256-dXsEYHkt4Z2YldqbCorNPG7rVSLfU8shYdk6lzFBz/M=";
+    hash = "sha256-TJXgcoa8s22fEyXER1C+MxFrvDt5DzY/k5T5fKE4Rec=";
   };
 
   pythonRelaxDeps = [
