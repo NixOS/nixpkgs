@@ -10,14 +10,13 @@
   nixosTests,
   enableLocalIcons ? false,
   nix-update-script,
-  git,
 }:
 let
   dashboardIcons = fetchFromGitHub {
-    owner = "walkxcode";
+    owner = "homarr-labs";
     repo = "dashboard-icons";
-    rev = "be82e22c418f5980ee2a13064d50f1483df39c8c"; # Until 2024-07-21
-    hash = "sha256-z69DKzKhCVNnNHjRM3dX/DD+WJOL9wm1Im1nImhBc9Y=";
+    rev = "51a2ae7b101c520bcfb5b44e5ddc99e658bc1e21"; # Until 2025-01-06
+    hash = "sha256-rKXeMAhHV0Ax7mVFyn6hIZXm5RFkbGakjugU0DG0jLM=";
   };
 
   installLocalIcons = ''
@@ -29,13 +28,13 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.10.8";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-eFRWkwPSXQFhyKORpOTe9ifCX25ZeyVG7iezRmMxPvA=";
+    hash = "sha256-q8+uoikHMQVuTrVSH8tPsoI5655ZStMc/7tmoAfoZIY=";
   };
 
   npmDepsHash = "sha256-N39gwct2U4UxlIL5ceDzzU7HpA6xh2WksrZNxGz04PU=";

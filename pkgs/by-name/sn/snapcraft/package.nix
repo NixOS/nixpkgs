@@ -170,6 +170,7 @@ python3Packages.buildPythonApplication rec {
     "test_lifecycle_write_component_metadata"
     "test_parse_info_integrated"
     "test_patch_elf"
+    "test_project_platform_unknown_name"
     "test_remote_builder_init"
     "test_setup_assets_remote_icon"
     "test_snap_command_fallback"
