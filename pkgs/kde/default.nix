@@ -41,7 +41,10 @@ let
       ) allUrls;
     in
     (
-      qt6Packages
+      # This removes reference to deprecated `qt6Packages.stdenv`
+      # so when a KDE package asks for a stdenv, it won't trigger
+      # an eval warning
+      (lib.removeAttrs qt6Packages [ "stdenv" ])
       // frameworks
       // gear
       // plasma
@@ -65,10 +68,6 @@ let
 
         # Alias because it's just data
         plasma-wayland-protocols = libsForQt5.plasma-wayland-protocols;
-
-        # Alias because `self.callPackage` would give deprecated
-        # `qt6Packages.stdenv` when asked for `stdenv`
-        inherit stdenv;
 
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
