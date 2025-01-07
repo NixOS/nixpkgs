@@ -382,8 +382,8 @@ rec {
       "sha256-6UJ4trMNIQkmR7YL5x6npJzIJsLAv3mxjCB0ckdBSiM=";
 
   mypy-boto3-datasync =
-    buildMypyBoto3Package "datasync" "1.35.84"
-      "sha256-gtvxajlt1WNz/WachWzzqgFbI60Q4kkUAQ7RYa+drJQ=";
+    buildMypyBoto3Package "datasync" "1.35.93"
+      "sha256-IeDITSDfFXJYBR5arDQ+qsV6UDZICqwTpSozKiUrP8o=";
 
   mypy-boto3-dax =
     buildMypyBoto3Package "dax" "1.35.0"
