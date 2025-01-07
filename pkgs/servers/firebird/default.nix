@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook271, zlib, unzip, libtommath, libtomcrypt, icu, superServer ? false }:
+{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook271, zlib, unzip, libtommath, libtomcrypt, icu73, superServer ? false }:
 
 let base = {
   pname = "firebird";
@@ -15,9 +15,9 @@ let base = {
 
   nativeBuildInputs = [ autoreconfHook271 ];
 
-  buildInputs = [ libedit icu ];
+  buildInputs = [ libedit icu73 ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ icu ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
 
   configureFlags = [
     "--with-system-editline"
@@ -55,13 +55,13 @@ let base = {
   });
 
   firebird_3 = stdenv.mkDerivation (base // rec {
-    version = "3.0.10";
+    version = "3.0.12";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-PT2b3989n/7xLGNREWinEey9SGnAXShITdum+yiFlHY=";
+      hash = "sha256-po8tMrOahfwayVXa7Eadr9+ZEmZizHlCmxi094cOJSY=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib libtommath ];
