@@ -15,6 +15,7 @@
   runScript ? "bash",
   nativeBuildInputs ? [ ],
   extraInstallCommands ? "",
+  executableName ? args.pname or args.name,
   meta ? { },
   passthru ? { },
   extraPreBwrapCmds ? "",
@@ -49,7 +50,6 @@ let
   inherit (pkgsHostTarget) pkgsi686Linux;
 
   name = args.name or "${args.pname}-${args.version}";
-  executableName = args.pname or args.name;
   # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
   nameAttrs = lib.filterAttrs (
     key: value:
