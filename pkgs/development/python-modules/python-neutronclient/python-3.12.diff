@@ -1,0 +1,23 @@
+--- a/setup.cfg	2024-12-25 04:00:53.429397282 +0100
++++ b/setup.cfg	2024-12-25 04:03:48.308447471 +0100
+@@ -6,7 +6,7 @@
+ author = OpenStack Networking Project
+ author_email = openstack-discuss@lists.openstack.org
+ home_page = https://docs.openstack.org/python-neutronclient/latest/
+-python_requires = >=3.8
++python_requires = >=3.9
+ classifier = 
+ 	Environment :: OpenStack
+ 	Intended Audience :: Developers
+@@ -18,8 +18,10 @@
+ 	Programming Language :: Python :: Implementation :: CPython
+ 	Programming Language :: Python :: 3 :: Only
+ 	Programming Language :: Python :: 3
+-	Programming Language :: Python :: 3.8
+ 	Programming Language :: Python :: 3.9
++	Programming Language :: Python :: 3.10
++	Programming Language :: Python :: 3.11
++	Programming Language :: Python :: 3.12
+ 
+ [files]
+ packages = 
