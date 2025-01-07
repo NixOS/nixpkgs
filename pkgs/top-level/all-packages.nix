@@ -109,11 +109,11 @@ with pkgs;
 
   tests = callPackages ../test { };
 
-  mkDerivation2 = import ../../poc/mk-derivation-2.nix pkgs;
+  mkDerivation2 = import ../poc/mk-derivation-2.nix pkgs;
 
-  poc-foo = import ../../poc/foo/package.nix pkgs;
-  poc-foo-ext = import ../../poc/foo-ext/package.nix pkgs;
-  poc-keypunch = import ../../poc/keypunch/package.nix pkgs;
+  poc-foo = import ../poc/foo/package.nix pkgs;
+  poc-foo-ext = import ../poc/foo-ext/package.nix pkgs;
+  poc-keypunch = import ../poc/keypunch/package.nix pkgs;
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.

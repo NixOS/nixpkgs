@@ -112,7 +112,7 @@ let
           args =
             attrs.args or [
               "-e"
-              (attrs.builder or ../pkgs/stdenv/generic/default-builder.sh)
+              (attrs.builder or ../stdenv/generic/default-builder.sh)
             ];
         }
         // shellVars

@@ -57,6 +57,8 @@ lib.fix (
       touch $out
     '';
 
+    asd = libffi;
+
     meta = {
       changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
       description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
