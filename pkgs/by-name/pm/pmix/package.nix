@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmix";
-  version = "5.0.5";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iyvD6uR+kHAs5uLD3NPBVSQUslAsH40dwtszhAsJvqw=";
+    hash = "sha256-uzsUqf4ZmXmz3vTtD01RkILPxrtCiQ5RMyZ57KAKG1U=";
     fetchSubmodules = true;
   };
 
