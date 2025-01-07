@@ -2066,6 +2066,12 @@
     githubId = 869771;
     name = "Kirill Boltaev";
   };
+  aspauldingcode = {
+    email = "aspauldingcode@gmail.com";
+    github = "aspauldingcode";
+    githubId = 10196826;
+    name = "Alex Spaulding";
+  };
   asppsa = {
     email = "asppsa@gmail.com";
     github = "asppsa";
