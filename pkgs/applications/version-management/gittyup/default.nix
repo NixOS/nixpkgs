@@ -12,9 +12,7 @@
   ninja,
   openssl,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs =
@@ -57,8 +55,8 @@ stdenv.mkDerivation rec {
       libssh2
       lua5_4
       openssl
-      qtbase
-      qttools
+      qt5.qtbase
+      qt5.qttools
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
@@ -77,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "Graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
     license = with licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lilacious ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
