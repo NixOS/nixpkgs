@@ -14553,6 +14553,8 @@ with pkgs;
     x11Support = true;
   };
 
+  rquickshare-legacy = rquickshare.override { app-type = "legacy"; };
+
   seamly2d = libsForQt5.callPackage ../applications/graphics/seamly2d { };
 
   # a somewhat more maintained fork of ympd
