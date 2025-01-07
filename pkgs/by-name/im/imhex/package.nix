@@ -2,7 +2,7 @@
   lib,
   stdenv,
   cmake,
-  llvmPackages_17,
+  llvm,
   fetchFromGitHub,
   mbedtls,
   gtk3,
@@ -24,20 +24,11 @@
   nix-update-script,
   autoPatchelfHook,
   makeWrapper,
-  overrideSDK,
 }:
 
 let
   version = "1.36.2";
   patterns_version = "1.36.2";
-
-  llvmPackages = llvmPackages_17;
-
-  stdenv' =
-    let
-      baseStdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    in
-    if stdenv.hostPlatform.isDarwin then overrideSDK baseStdenv "11.0" else baseStdenv;
 
   patterns_src = fetchFromGitHub {
     name = "ImHex-Patterns-source-${patterns_version}";
@@ -48,7 +39,7 @@ let
   };
 
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imhex";
   inherit version;
 
@@ -65,7 +56,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm
+    llvm
     python3
     perl
     pkg-config
