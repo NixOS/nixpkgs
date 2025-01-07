@@ -350,8 +350,8 @@ rec {
       "sha256-skf84YWmj9M3EF5dr517QOVEIrBid2ofGQSQ89qkUVw=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.35.0"
-      "sha256-lq4OWLz7+cycAuSr5dAoQ8aCbggAdLRv/dc7aUa/N7Y=";
+    buildMypyBoto3Package "connectcases" "1.35.93"
+      "sha256-M7WZ6bqF3NFL2se8gtcLX76HMbNp5SmyXUQ5nrgq4qs=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.35.84"
