@@ -1270,8 +1270,8 @@ rec {
       "sha256-i22F+tgnVc+sV3fU1KqDtxzAzXJKYQneCEXXqL9mxmM=";
 
   mypy-boto3-sms =
-    buildMypyBoto3Package "sms" "1.35.0"
-      "sha256-ZNICMrB+oc/gPikX2R9WNKAOoiywMTzkRvlRh/P4bQA=";
+    buildMypyBoto3Package "sms" "1.35.93"
+      "sha256-ImW9UPfUaxI7fX3GrQxveOcXBUDrtFtHt+OSe4V3Vac=";
 
   mypy-boto3-sms-voice =
     buildMypyBoto3Package "sms-voice" "1.35.0"
