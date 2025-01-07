@@ -14535,6 +14535,12 @@
     githubId = 15693688;
     name = "Lucas Eduardo Wendt";
   };
+  lucasfa = {
+    name = "Lucas Fehlau Arbulu";
+    githubId = 23667494;
+    github = "LucasFA";
+    matrix = "@lucasfa:matrix.org";
+  };
   lucastso10 = {
     email = "lucastso10@gmail.com";
     github = "lucastso10";
