@@ -598,8 +598,8 @@ rec {
       "sha256-ogD3HW2MDtzMhhVLG12EVZp/F/b9JrEGJqBrTLGSTAE=";
 
   mypy-boto3-health =
-    buildMypyBoto3Package "health" "1.35.67"
-      "sha256-KHRzG6fMBQ1sXwQ9T3jJ/x6mdxixf72P0QscymUV7P0=";
+    buildMypyBoto3Package "health" "1.35.93"
+      "sha256-OL5BSCSNNdu0l572Ql1Ayn5jASHurvhVnQUjIS5DTXQ=";
 
   mypy-boto3-healthlake =
     buildMypyBoto3Package "healthlake" "1.35.0"
