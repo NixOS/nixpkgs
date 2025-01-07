@@ -142,8 +142,8 @@ rec {
       "sha256-A8uKdItOhZlXkw3wO3ezuyRs2U6XNRd1UZMp2DdLLI8=";
 
   mypy-boto3-athena =
-    buildMypyBoto3Package "athena" "1.35.74"
-      "sha256-SWeOTAay7+inOejWohrQPD5ALm1kjMPizsR5yp/I95c=";
+    buildMypyBoto3Package "athena" "1.35.93"
+      "sha256-+S13phyeCBsvIprneQUiafj88P6w0/QaEWgvGjv/O0w=";
 
   mypy-boto3-auditmanager =
     buildMypyBoto3Package "auditmanager" "1.35.0"
