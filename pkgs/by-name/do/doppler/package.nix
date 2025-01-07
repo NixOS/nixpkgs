@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "doppler";
-  version = "3.71.0";
+  version = "3.71.1";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
     rev = version;
-    hash = "sha256-yN+nMHBjXM78ie7DJn7x5litpYOwSaFse2Ewy1ssjDI=";
+    hash = "sha256-qseFEyIQeD1glNi5lDB5XJAWtC9EMFJbGuSJk+Q5qok=";
   };
 
-  vendorHash = "sha256-NUHWKPszQH/pvnA+j65+bJ6t+C0FDRRbTviqkYztpE4=";
+  vendorHash = "sha256-K98cb1AF82jXm5soILO3MQy2LwOGREt8OwGySK299hA=";
 
   ldflags = [
     "-s -w"
