@@ -232,7 +232,8 @@ in
       ])) config.environment.pantheon.excludePackages;
 
       # Settings from elementary-default-settings
-      environment.etc."gtk-4.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-4.0/settings.ini";
+      # GTK4 will try both $XDG_CONFIG_DIRS/gtk-4.0 and ${gtk4}/etc/gtk-4.0, but not /etc/gtk-4.0.
+      environment.etc."xdg/gtk-4.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-4.0/settings.ini";
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
