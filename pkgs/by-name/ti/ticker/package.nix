@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-7yAmwyKIO0bMqNgTcdWcgBXPV/T7753z/x2KAB8W070=";
+    hash = "sha256-L7vqZVfj7Ns8xCFU0ruhosReM4RMhIbIHXrMbQ8YI6I=";
   };
 
-  vendorHash = "sha256-XrZdv6QpR1HGN2o/Itbw+7hOkgVjzvx3jwlHeaJ2m0U=";
+  vendorHash = "sha256-o3hVRHyrJpmYgephoZ2JlVLGSqZtRQAp48OzoIMY3do=";
 
   ldflags = [
     "-s"
