@@ -616,7 +616,7 @@ let
       "d '${cfg.root}/cache/upload' 0755 ${cfg.user} tt_rss - -"
       "d '${cfg.root}/cache/images' 0755 ${cfg.user} tt_rss - -"
       "d '${cfg.root}/cache/export' 0755 ${cfg.user} tt_rss - -"
-      "d '${cfg.root}/feed-icons' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/feed-icons' 0755 ${cfg.user} tt_rss - -"
       "L+ '${cfg.root}/www' - - - - ${servedRoot}"
     ];
 
