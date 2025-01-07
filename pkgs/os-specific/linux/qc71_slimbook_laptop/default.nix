@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=slimbook" ];
+  };
+
   meta = with lib; {
     description = "Linux driver for QC71 laptop, with Slimbook patches";
     homepage = "https://github.com/Slimbook-Team/qc71_laptop/";
