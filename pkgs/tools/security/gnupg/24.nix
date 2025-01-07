@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     texinfo
+    libgpg-error
   ];
   buildInputs =
     [
