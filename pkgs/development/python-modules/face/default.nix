@@ -5,12 +5,13 @@
   boltons,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "face";
   version = "22.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-1daS+QvI9Zh7Y25H42OEubvaSZqvCneqCwu+g0x2kj0=";
   };
 
-  propagatedBuildInputs = [ boltons ];
+  build-system = [ setuptools ];
+
+  dependencies = [ boltons ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
