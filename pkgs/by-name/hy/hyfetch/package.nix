@@ -3,11 +3,17 @@
   fetchFromGitHub,
   python3Packages,
   pciutils,
+  installShellFiles,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "hyfetch";
   version = "1.99.0";
   pyproject = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
@@ -24,12 +30,25 @@ python3Packages.buildPythonApplication rec {
     python3Packages.typing-extensions
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   # No test available
   doCheck = false;
 
   pythonImportsCheck = [
     "hyfetch"
   ];
+
+  # NOTE: The HyFetch project maintains an updated version of neofetch renamed
+  # to "neowofetch" which is included in this package. However, the man page
+  # included is still named "neofetch", so to prevent conflicts and confusion
+  # we rename the file to "neowofetch" before installing it:
+  postInstall = ''
+    mv ./docs/neofetch.1 ./docs/neowofetch.1
+    installManPage ./docs/hyfetch.1 ./docs/neowofetch.1
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/neowofetch \
@@ -53,6 +72,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       yisuidenghua
       isabelroses
+      nullcube
     ];
   };
 }
