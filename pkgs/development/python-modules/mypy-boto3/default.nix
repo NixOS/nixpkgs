@@ -690,8 +690,8 @@ rec {
       "sha256-pDRu3al9uBr5wkEcMmOVRr3Ops7pPs6XN7rmy2ZCcxQ=";
 
   mypy-boto3-iottwinmaker =
-    buildMypyBoto3Package "iottwinmaker" "1.35.0"
-      "sha256-6w4Q6vynF47uBeTNBqus4hM9Fy5Bs3C0Qh/Ig3sPBhw=";
+    buildMypyBoto3Package "iottwinmaker" "1.35.93"
+      "sha256-IwnLmn0a+hofj7tf1Dhv4ybtwa7IerTmrEV9iu6qNmM=";
 
   mypy-boto3-iotwireless =
     buildMypyBoto3Package "iotwireless" "1.35.61"
