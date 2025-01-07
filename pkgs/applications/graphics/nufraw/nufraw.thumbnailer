@@ -1,0 +1,4 @@
+[Thumbnailer Entry]
+TryExec=@out@/bin/nufraw-batch
+Exec=@out@/bin/nufraw-batch --silent --size %s --out-type=png --noexif --output=%o --embedded-image %i
+MimeType=image/x-canon-cr2;image/x-canon-crw;image/x-minolta-mrw;image/x-nikon-nef;image/x-pentax-pef;image/x-panasonic-rw2;image/x-panasonic-raw2;image/x-samsung-srw;image/x-olympus-orf;image/x-sony-arw

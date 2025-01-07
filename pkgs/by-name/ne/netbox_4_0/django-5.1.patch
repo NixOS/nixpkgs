@@ -1,0 +1,81 @@
+diff --git a/netbox/extras/forms/bulk_import.py b/netbox/extras/forms/bulk_import.py
+index f2cf0b721..a17b6712d 100644
+--- a/netbox/extras/forms/bulk_import.py
++++ b/netbox/extras/forms/bulk_import.py
+@@ -194,7 +194,7 @@ class Meta:
+         model = EventRule
+         fields = (
+             'name', 'description', 'enabled', 'conditions', 'object_types', 'type_create', 'type_update',
+-            'type_delete', 'type_job_start', 'type_job_end', 'action_type', 'action_object', 'comments', 'tags'
++            'type_delete', 'type_job_start', 'type_job_end', 'action_type', 'comments', 'tags'
+         )
+ 
+     def clean(self):
+diff --git a/netbox/extras/migrations/0002_squashed_0059.py b/netbox/extras/migrations/0002_squashed_0059.py
+index 98bed255a..a403a0e19 100644
+--- a/netbox/extras/migrations/0002_squashed_0059.py
++++ b/netbox/extras/migrations/0002_squashed_0059.py
+@@ -131,10 +131,6 @@ class Migration(migrations.Migration):
+             name='webhook',
+             unique_together={('payload_url', 'type_create', 'type_update', 'type_delete')},
+         ),
+-        migrations.AlterIndexTogether(
+-            name='taggeditem',
+-            index_together={('content_type', 'object_id')},
+-        ),
+         migrations.AlterUniqueTogether(
+             name='exporttemplate',
+             unique_together={('content_type', 'name')},
+diff --git a/netbox/extras/migrations/0087_squashed_0098.py b/netbox/extras/migrations/0087_squashed_0098.py
+index 55f276ecd..bbe7f79f5 100644
+--- a/netbox/extras/migrations/0087_squashed_0098.py
++++ b/netbox/extras/migrations/0087_squashed_0098.py
+@@ -98,10 +98,9 @@ class Migration(migrations.Migration):
+             name='object_types',
+             field=models.ManyToManyField(blank=True, related_name='+', to='contenttypes.contenttype'),
+         ),
+-        migrations.RenameIndex(
++        migrations.AddIndex(
+             model_name='taggeditem',
+-            new_name='extras_tagg_content_717743_idx',
+-            old_fields=('content_type', 'object_id'),
++            index=models.Index(fields=['content_type', 'object_id'], name='extras_tagg_content_717743_idx'),
+         ),
+         migrations.CreateModel(
+             name='Bookmark',
+diff --git a/netbox/ipam/forms/model_forms.py b/netbox/ipam/forms/model_forms.py
+index f5e3bca30..4f96bac71 100644
+--- a/netbox/ipam/forms/model_forms.py
++++ b/netbox/ipam/forms/model_forms.py
+@@ -588,7 +588,7 @@ class VLANGroupForm(NetBoxModelForm):
+     class Meta:
+         model = VLANGroup
+         fields = [
+-            'name', 'slug', 'description', 'min_vid', 'max_vid', 'scope_type', 'scope', 'tags',
++            'name', 'slug', 'description', 'min_vid', 'max_vid', 'scope_type', 'tags',
+         ]
+ 
+     def __init__(self, *args, **kwargs):
+diff --git a/netbox/vpn/forms/model_forms.py b/netbox/vpn/forms/model_forms.py
+index a17ca9a5e..dee98afd3 100644
+--- a/netbox/vpn/forms/model_forms.py
++++ b/netbox/vpn/forms/model_forms.py
+@@ -258,7 +258,7 @@ class TunnelTerminationForm(NetBoxModelForm):
+     class Meta:
+         model = TunnelTermination
+         fields = [
+-            'tunnel', 'role', 'termination', 'outside_ip', 'tags',
++            'tunnel', 'role', 'outside_ip', 'tags',
+         ]
+ 
+     def __init__(self, *args, initial=None, **kwargs):
+diff --git a/requirements.txt b/requirements.txt
+index 09f23871c..57f167dae 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+-Django==5.0.9
++Django==5.1.2
+ django-cors-headers==4.4.0
+ django-debug-toolbar==4.4.6
+ django-filter==24.2
