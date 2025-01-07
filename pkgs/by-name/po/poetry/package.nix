@@ -17,14 +17,27 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.9.1";
+        version = "2.0.0";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
-          rev = "refs/tags/${version}";
-          hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
+          tag = version;
+          hash = "sha256-3dmvFn2rxtR0SK8oiEHIVJhpJpX4Mm/6kZnIYNSDv90=";
         };
         patches = [ ];
+        nativeCheckInputs =
+          old.nativeCheckInputs
+          ++ (with self; [
+            trove-classifiers
+          ]);
+        disabledTests = old.disabledTests ++ [
+          # relies on git
+          "test_package_with_include"
+          # Nix changes timestamp
+          "test_dist_info_date_time_default_value"
+          "test_sdist_members_mtime_default"
+          "test_sdist_mtime_zero"
+        ];
       });
     }
     // (plugins self);
@@ -41,6 +54,7 @@ let
       poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
       poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
       poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
+      poetry-plugin-shell = callPackage ./plugins/poetry-plugin-shell.nix { };
     };
 
   # selector is a function mapping pythonPackages to a list of plugins
