@@ -10,6 +10,7 @@
   rustc,
   nixosTests,
   callPackage,
+  fetchpatch2,
 }:
 
 let
@@ -33,6 +34,15 @@ python3.pkgs.buildPythonApplication rec {
     name = "${pname}-${version}";
     hash = "sha256-LGFuz3NtNqH+XumJOirvflH0fyfTtqz5qgYlJx2fmAU=";
   };
+
+  patches = [
+    # Fixes test compat with twisted 24.11.0.
+    # Can be removed in next release.
+    (fetchpatch2 {
+      url = "https://github.com/element-hq/synapse/commit/3eb92369ca14012a07da2fbf9250e66f66afb710.patch";
+      sha256 = "sha256-VDn3kQy23+QC2WKhWfe0FrUOnLuI1YwH5GxdTTVWt+A=";
+    })
+  ];
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
