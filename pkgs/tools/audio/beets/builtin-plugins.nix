@@ -14,15 +14,27 @@
     deprecated = true;
     testPaths = [ ];
   };
-
-  acousticbrainz.propagatedBuildInputs = [ python3Packages.requests ];
+  advancedrewrite = {
+    testPaths = [ ];
+  };
+  acousticbrainz = {
+    deprecated = true;
+    propagatedBuildInputs = [ python3Packages.requests ];
+  };
   albumtypes = { };
   aura = {
     propagatedBuildInputs = with python3Packages; [
       flask
+      flask-cors
       pillow
     ];
-    testPaths = [ ];
+  };
+  autobpm = {
+    propagatedBuildInputs = with python3Packages; [
+      librosa
+      # An optional dependency of librosa, needed for beets' autobpm
+      resampy
+    ];
   };
   badfiles = {
     testPaths = [ ];
@@ -61,8 +73,10 @@
   export = { };
   fetchart = {
     propagatedBuildInputs = with python3Packages; [
-      requests
+      beautifulsoup4
+      langdetect
       pillow
+      requests
     ];
     wrapperBins = [ imagemagick ];
   };
@@ -90,11 +104,19 @@
     propagatedBuildInputs = [ python3Packages.pylast ];
     testPaths = [ ];
   };
+  limit = { };
+  listenbrainz = {
+    testPaths = [ ];
+  };
   loadext = {
     propagatedBuildInputs = [ python3Packages.requests ];
     testPaths = [ ];
   };
-  lyrics.propagatedBuildInputs = [ python3Packages.beautifulsoup4 ];
+  lyrics.propagatedBuildInputs = with python3Packages; [
+    beautifulsoup4
+    langdetect
+    requests
+  ];
   mbcollection.testPaths = [ ];
   mbsubmit = { };
   mbsync = { };
@@ -129,6 +151,9 @@
     testPaths = [ ];
   };
   subsonicupdate.propagatedBuildInputs = [ python3Packages.requests ];
+  substitute = {
+    testPaths = [ ];
+  };
   the = { };
   thumbnails = {
     propagatedBuildInputs = with python3Packages; [
@@ -139,24 +164,9 @@
   };
   types.testPaths = [ "test/plugins/test_types_plugin.py" ];
   unimported.testPaths = [ ];
-  web.propagatedBuildInputs = [ python3Packages.flask ];
+  web.propagatedBuildInputs = with python3Packages; [
+    flask
+    flask-cors
+  ];
   zero = { };
-  limit = { };
-  substitute = {
-    testPaths = [ ];
-  };
-  advancedrewrite = {
-    testPaths = [ ];
-  };
-  autobpm = {
-    propagatedBuildInputs = with python3Packages; [
-      librosa
-      # An optional dependency of librosa, needed for beets' autobpm
-      resampy
-    ];
-    testPaths = [ ];
-  };
-  listenbrainz = {
-    testPaths = [ ];
-  };
 }
