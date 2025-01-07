@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   netbox,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -14,17 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UtvSkqs2PN3uxCB78hJjh0lZ1WbZGjDpwlKyeAGpiEM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    netbox
-  ];
+  nativeCheckInputs = [ netbox ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH
