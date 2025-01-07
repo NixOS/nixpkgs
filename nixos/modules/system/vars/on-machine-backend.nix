@@ -32,12 +32,12 @@ let
       OUT_DIR=''${OUT_DIR:-${cfg.fileLocation}}
 
       # check if all files are present or all files are missing
-      # if not, they are in an incosistent state and we bail out
+      # if not, they are in an inconsistent state and we bail out
       ${lib.concatMapStringsSep "\n" (gen: ''
         all_files_missing=true
         all_files_present=true
         ${lib.concatMapStringsSep "\n" (file: ''
-          if test -e ${file.path} ; then
+          if test -e ${lib.escapeShellArg file.path} ; then
             all_files_missing=false
           else
             all_files_present=false
@@ -45,7 +45,7 @@ let
         '') (lib.attrValues gen.files)}
 
         if [ $all_files_missing = false ] && [ $all_files_present = false ] ; then
-          echo "Inconsistent state for generator ${gen.name}"
+          echo "Inconsistent state for generator: {gen.name}"
           exit 1
         fi
         if [ $all_files_present = true ] ; then
@@ -108,7 +108,7 @@ let
           ${lib.concatMapStringsSep "\n" (file: ''
             OUT_FILE="$OUT_DIR"/${if file.secret then "secret" else "public"}/${file.generator}/${file.name}
             mkdir -p "$(dirname "$OUT_FILE")"
-            mv "$out"/'${file.name}' "$OUT_FILE"
+            mv "$out"/${file.name} "$OUT_FILE"
           '') (lib.attrValues gen.files)}
           rm -rf "$out"
         fi

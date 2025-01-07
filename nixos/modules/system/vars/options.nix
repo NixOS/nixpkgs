@@ -14,7 +14,7 @@
           A module to be imported in every vars.files.<name> submodule.
           Used by backends to define the `path` attribute.
 
-          Takes the file as an arument and returns maybe an attrset with should at least contain the `path` attribute.
+          Takes the file as an argument and returns maybe an attrset which should at least contain the `path` attribute.
           Can be used to set other file attributes as well, like `value`.
         '';
         default = { };
@@ -31,7 +31,7 @@
         lib.types.submodule (generator: {
           options = {
             name = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
               description = ''
                 The name of the generator.
                 This name will be used to refer to the generator in other generators.
@@ -63,9 +63,9 @@
                   ];
                   options = {
                     name = lib.mkOption {
-                      type = lib.types.str;
+                      type = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
                       description = ''
-                        name of the public fact
+                        name of the generated file
                       '';
                       readOnly = true;
                       default = file.config._module.args.name;
@@ -76,7 +76,7 @@
                         The generator that produces the file.
                         This is the name of another generator.
                       '';
-                      type = lib.types.str;
+                      type = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
                       readOnly = true;
                       internal = true;
                       default = generator.config.name;
@@ -86,7 +86,7 @@
                       description = ''
                         Whether the file should be deployed to the target machine.
 
-                        Enable this if the generated file is only used as an input to other generators.
+                        Disable this if the generated file is only used as an input to other generators.
                       '';
                       type = lib.types.bool;
                       default = true;
@@ -103,7 +103,8 @@
                         The path to the file containing the content of the generated value.
                         This will be set automatically
                       '';
-                      type = lib.types.str;
+                      type = lib.types.nullOr lib.types.str;
+                      default = null;
                     };
                   };
                 })
@@ -124,7 +125,7 @@
                         The name of the prompt.
                         This name will be used to refer to the prompt in the generator script.
                       '';
-                      type = lib.types.str;
+                      type = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
                       default = prompt.config._module.args.name;
                       defaultText = "Name of the prompt";
                     };

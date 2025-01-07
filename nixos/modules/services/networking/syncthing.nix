@@ -621,6 +621,24 @@ in {
 
   config = mkIf cfg.enable {
 
+    vars.generators.syncthing = {
+      files."cert.pem" = {};
+      files."key.pem" = {};
+      files."syncthing.pub".secret = false;
+      runtimeInputs = [
+        pkgs.coreutils
+        pkgs.gnugrep
+        pkgs.syncthing
+      ];
+      script = ''
+        syncthing generate --config "$out"
+        < "$out"/config.xml grep -oP '(?<=<device id=")[^"]+' | uniq > "$out"/syncthing.pub
+      '';
+    };
+
+    config.syncthing.cert = lib.mkIf (config.vars.generators.syncthing.files."cert.pem".path != null) config.vars.generators.syncthing.files."cert.pem".path;
+    config.syncthing.key = lib.mkIf (config.vars.generators.syncthing.files."key.pem".path != null) config.vars.generators.syncthing.files."key.pem".path;
+
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];
       allowedUDPPorts = [ 21027 22000 ];
