@@ -1114,8 +1114,8 @@ rec {
       "sha256-/1NJ/jj9tBKKXDdFuPEpnQ37+Go1jTlqDqUheoZ47hM=";
 
   mypy-boto3-resource-explorer-2 =
-    buildMypyBoto3Package "resource-explorer-2" "1.35.56"
-      "sha256-b6H2qsCgpX9j7yWWtPTV2CcPbtXit4HLaCH8YwAJH1A=";
+    buildMypyBoto3Package "resource-explorer-2" "1.35.93"
+      "sha256-bHtNXkrVMsL7dAuG+cVYTHVQB/qGf+fSMAAFlFmfakg=";
 
   mypy-boto3-resource-groups =
     buildMypyBoto3Package "resource-groups" "1.35.30"
