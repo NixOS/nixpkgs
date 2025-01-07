@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, writeShellScript
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, npmHooks
-, withPostgresql ? true, postgresql
-, prisma
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  writeShellScript,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  npmHooks,
+  withPostgresql ? true,
+  postgresql,
+  prisma,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,14 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     export DATABASE_URL="postgres://umami:umami@$NIX_BUILD_TOP"
   '';
 
-  postInstall = let
-    run-script = writeShellScript "run" ''
-      npm run start-docker
-    '';
-  in
+  postInstall =
+    let
+      run-script = writeShellScript "run" ''
+        npm run start-docker
+      '';
+    in
     ''
-    makeWrapper ${run-script} $out/run-umami --set NODE_ENV production
-  '';
+      makeWrapper ${run-script} $out/run-umami --set NODE_ENV production
+    '';
 
   meta = with lib; {
     description = "simple, easy to use, self-hosted web analytics solution";
@@ -83,5 +86,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-}
-)
+})
