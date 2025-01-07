@@ -5884,7 +5884,6 @@ with pkgs;
   semeru-bin = semeru-bin-21;
   semeru-jre-bin = semeru-jre-bin-21;
 
-  adaptivecpp = darwin.apple_sdk_11_0.callPackage ../development/compilers/adaptivecpp { };
   adaptivecppWithRocm = adaptivecpp.override { rocmSupport = true; };
 
   adoptopenjdk-icedtea-web = callPackage ../development/compilers/adoptopenjdk-icedtea-web {
