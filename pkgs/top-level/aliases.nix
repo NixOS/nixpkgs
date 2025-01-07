@@ -1282,6 +1282,7 @@ mapAliases {
   swig4 = swig; # Added 2024-09-12
   swigWithJava = throw "swigWithJava has been removed as the main swig package has supported Java since 2009"; # Added 2024-09-12
   swtpm-tpm2 = throw "'swtpm-tpm2' has been renamed to/replaced by 'swtpm'"; # Converted to throw 2024-10-17
+  swt_jdk8 = throw "'swt_jdk8' has been removed due to being unused and broken for a long time"; # Added 2025-01-07
   Sylk = sylk; # Added 2024-06-12
   symbiyosys = sby; # Added 2024-08-18
   sync = taler-sync; # Added 2024-09-04
