@@ -418,8 +418,8 @@ rec {
       "sha256-vCQ26WL9DZ+T7N9ijybR0ICLWkjbUuEFU7LySaqeyoE=";
 
   mypy-boto3-docdb =
-    buildMypyBoto3Package "docdb" "1.35.86"
-      "sha256-h2ixn1rY/xsHJ7XhX5rH8pJKwQf7NOREI7ojaxzT4y8=";
+    buildMypyBoto3Package "docdb" "1.35.93"
+      "sha256-r1ZwXIZwU3QRQQGVXGKBukgjeuNko/IaAVR6lJEBD28=";
 
   mypy-boto3-docdb-elastic =
     buildMypyBoto3Package "docdb-elastic" "1.35.54"
