@@ -890,8 +890,8 @@ rec {
       "sha256-X1ut0sz01EtToXCQ2/5s+eOLmZxqIH26VuknPWtAWGc=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.35.0"
-      "sha256-mECUsZiuYN9O4WvUdu5Ge/WsFLEKhxLnD9WBpxZvKTc=";
+    buildMypyBoto3Package "mediatailor" "1.35.93"
+      "sha256-YCUjEIfBMZObiihr/UeXuuINaKLtqKgEDKTUTeFUXfI=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.35.0"
