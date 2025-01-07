@@ -17634,8 +17634,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  vector = callPackage ../tools/misc/vector { };
-
   hjson = with python3Packages; toPythonApplication hjson;
 
   epkowa = callPackage ../misc/drivers/epkowa { };
