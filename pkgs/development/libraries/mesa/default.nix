@@ -95,6 +95,7 @@
 }:
 
 let
+  haveDozen = (lib.elem "d3d12" galliumDrivers) || (lib.elem "microsoft-experimental" vulkanDrivers);
   rustDeps = [
     {
       pname = "paste";
@@ -159,6 +160,7 @@ in stdenv.mkDerivation {
 
   outputs = [
     "out" "dev" "drivers" "driversdev" "opencl" "teflon" "osmesa"
+  ] ++ lib.optionals haveDozen [
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
     # case anything wants to use it at some point
