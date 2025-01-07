@@ -514,8 +514,8 @@ rec {
       "sha256-EyjVSjrqmuOFigajarcB/+Ys12rfkaiG0weAVeBwXzk=";
 
   mypy-boto3-es =
-    buildMypyBoto3Package "es" "1.35.0"
-      "sha256-ad5PQgRxRqEQ4QOjM0wPGe/4JXPNqlB5exRHacx7YKw=";
+    buildMypyBoto3Package "es" "1.35.93"
+      "sha256-IbkdLlg/P31VLEO4Btd331MCHqrMAnfoISiCj96isbQ=";
 
   mypy-boto3-events =
     buildMypyBoto3Package "events" "1.35.72"
