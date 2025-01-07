@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     "--CC=mpicc"
     "--with-cxx=mpicxx"
     "--with-fc=mpif90"
+    "--with-mpiexec=${mpi}/bin/mpiexec"
   ] ++ lib.optionals (mpiSupport && withParmetis) [
     "--with-metis=1"
     "--with-metis-dir=${metis}"
