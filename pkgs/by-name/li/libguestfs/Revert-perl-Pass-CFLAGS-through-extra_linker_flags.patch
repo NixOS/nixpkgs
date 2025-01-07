@@ -1,0 +1,17 @@
+Subject: [PATCH] Revert "perl: Pass @CFLAGS@ through extra_linker_flags"
+
+This reverts commit be06cb048b595200bf7d1cec9684ab7958188b97.
+---
+--- a/perl/Build.PL.in
++++ b/perl/Build.PL.in
+@@ -65,8 +65,6 @@ my $build = Module::Build->new (
+         '@top_srcdir@/include',
+     ],
+     extra_linker_flags => [
+-        '-DGUESTFS_PRIVATE=1',
+-        split (' ', '@CFLAGS@'),
+         '-L@top_builddir@/lib/.libs',
+         '-lguestfs',
+     ],
+-- 
+2.44.1
