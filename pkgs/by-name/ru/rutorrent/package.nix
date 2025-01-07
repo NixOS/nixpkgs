@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/Novik/ruTorrent/releases/tag/v${finalAttrs.version}";
     description = "Yet another web front-end for rTorrent";
     homepage = "https://github.com/Novik/ruTorrent";
     license = lib.licenses.gpl3Plus;
