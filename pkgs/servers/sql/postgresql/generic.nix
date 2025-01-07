@@ -384,9 +384,15 @@ let
       # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
       # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
       doCheck = false;
-      # Tests just get stuck on macOS 14.x for v13 and v14
       doInstallCheck =
-        !(stdenv'.hostPlatform.isDarwin && olderThan "15") && !(stdenv'.hostPlatform.isStatic);
+        !(stdenv'.hostPlatform.isStatic)
+        &&
+          # Tests just get stuck on macOS 14.x for v13 and v14
+          !(stdenv'.hostPlatform.isDarwin && olderThan "15")
+        &&
+          # Likely due to rosetta emulation:
+          #   FATAL:  could not create shared memory segment: Cannot allocate memory
+          !(stdenv'.hostPlatform.isDarwin && stdenv'.hostPlatform.isx86_64);
       installCheckTarget = "check-world";
 
       passthru =
