@@ -318,8 +318,8 @@ rec {
       "sha256-pBthYf0gWMd6vIx8wC/O08yUvanrlpnMqh0iIbixv+c=";
 
   mypy-boto3-cognito-sync =
-    buildMypyBoto3Package "cognito-sync" "1.35.0"
-      "sha256-eKmSJqNDB4rLeaiwors2mvDteM5qNQGsGz3Xq8VqUzU=";
+    buildMypyBoto3Package "cognito-sync" "1.35.93"
+      "sha256-rlEDXCfukOfvOC2vKXi0OQdg1le8SCqVaMsbQVr/lBw=";
 
   mypy-boto3-comprehend =
     buildMypyBoto3Package "comprehend" "1.35.0"
