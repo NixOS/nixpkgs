@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "youtube-music %u";
       icon = "youtube-music";
       desktopName = "YouTube Music";
-      startupWMClass = "YouTube Music";
+      startupWMClass = "com.github.th_ch.youtube_music";
       categories = [ "AudioVideo" ];
     })
   ];
