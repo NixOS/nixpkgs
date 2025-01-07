@@ -1398,7 +1398,7 @@ let
         org-gtd = ignoreCompilationError super.org-gtd; # elisp error
 
         # needs newer org than the Eamcs 29.4 builtin one
-        org-link-beautify = addPackageRequires super.org-link-beautify [ self.org ];
+        org-link-beautify = addPackageRequires super.org-link-beautify [ self.org self.qrencode ];
 
         # TODO report to upstream
         org-kindle = addPackageRequires super.org-kindle [ self.dash ];
