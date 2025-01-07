@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "cerberus";
   version = "1.3.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-puQcU8USYtylW5XN0VQzG/dizQR24s7+YgrOxIwaDKQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
     poetry-core
     setuptools
   ];
