@@ -11,7 +11,7 @@
   coreutils,
   util-linux,
   gnugrep,
-  gnupg1,
+  gnupg,
   gnutar,
   gnused,
   gzip,
@@ -32,7 +32,7 @@ let
     dpkg
     gawk
     gnugrep
-    gnupg1
+    gnupg
     gnused
     gnutar
     gzip
