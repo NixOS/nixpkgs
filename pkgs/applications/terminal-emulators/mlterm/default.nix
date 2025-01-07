@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoconf,
   makeDesktopItem,
@@ -109,6 +110,25 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "mlterm-configure-implicit-function-declaration.patch";
+      url = "https://github.com/arakiken/mlterm/commit/1a9ee97e4574c5892bf12090b812b0538dcdf8f2.patch";
+      hash = "sha256-Kk+x5LAq+beZWE8yj5WfdS82ConLSgxNquzQd5mvOA4=";
+    })
+
+    (fetchpatch {
+      name = "mlterm-wayland-implicit-function-declaration.patch";
+      url = "https://github.com/arakiken/mlterm/commit/20ab931d5055dc5835154a75ca672fade478549f.patch";
+      hash = "sha256-rDmQ0e3dQD7UAGTX4ljOrDqTTddBqvnnRFnqDjRLAss=";
+    })
+
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/mlterm/-/raw/d9b1555e9220985e0c89a6ff5a0d58f7b18cc123/debian/patches/fix-incompat-pointer-types.patch";
+      hash = "sha256-EcI15FjQfcN8pcE1MqsBfaHQ4j+gyoeesN/WoHb7WnU=";
+    })
+  ];
 
   nativeBuildInputs =
     [

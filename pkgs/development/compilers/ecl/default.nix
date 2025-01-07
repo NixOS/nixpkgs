@@ -13,11 +13,15 @@
   makeWrapper,
   noUnicode ? false,
   gcc,
+  clang,
   threadSupport ? true,
   useBoehmgc ? false,
   boehmgc,
 }:
 
+let
+  cc = if stdenv.cc.isClang then clang else gcc;
+in
 stdenv.mkDerivation rec {
   pname = "ecl";
   version = "24.5.10";
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
       libffi
       gmp
       mpfr
-      gcc
+      cc
       # replaces ecl's own gc which other packages can depend on, thus propagated
     ]
     ++ lib.optionals useBoehmgc [
@@ -80,8 +84,8 @@ stdenv.mkDerivation rec {
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
       lib.makeBinPath [
-        gcc # for the C compiler
-        gcc.bintools.bintools # for ar
+        cc # for the C compiler
+        cc.bintools.bintools # for ar
       ]
     }"
   '';
