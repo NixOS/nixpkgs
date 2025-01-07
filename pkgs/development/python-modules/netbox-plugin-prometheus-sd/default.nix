@@ -4,12 +4,15 @@
   fetchFromGitHub,
   netbox,
   poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "netbox-plugin-prometheus-sd";
   version = "1.1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "FlxPeters";
@@ -30,7 +33,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery";
-    homepage = "https://pypi.org/project/netbox-plugin-prometheus-sd/";
+    homepage = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd";
+    changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ xanderio ];
   };
