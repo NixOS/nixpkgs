@@ -1302,8 +1302,8 @@ rec {
       "sha256-l9THTO4MuUJ2xHfwNJI7ZNJzFoML/FQcXFNPv7b52lU=";
 
   mypy-boto3-ssm-incidents =
-    buildMypyBoto3Package "ssm-incidents" "1.35.0"
-      "sha256-sMJnd2csYnc0MxS36LdvHuvmYax+zEKWLiSRMNMzV8o=";
+    buildMypyBoto3Package "ssm-incidents" "1.35.93"
+      "sha256-2XKhNEnaewx9jnmO1BOoLcB7uL5oYuFS7sFUZSuXpBY=";
 
   mypy-boto3-ssm-sap =
     buildMypyBoto3Package "ssm-sap" "1.35.85"
