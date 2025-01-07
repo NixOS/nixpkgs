@@ -518,8 +518,8 @@ rec {
       "sha256-IbkdLlg/P31VLEO4Btd331MCHqrMAnfoISiCj96isbQ=";
 
   mypy-boto3-events =
-    buildMypyBoto3Package "events" "1.35.72"
-      "sha256-hm9IcgtcrJLJ4wq5BFTOQHzCkWp0I8Isbi7X7gQrnOY=";
+    buildMypyBoto3Package "events" "1.35.93"
+      "sha256-3pA8DNLLbqcYe9gtR+8epkgd1hv0gMYOZ8qggEEyTpM=";
 
   mypy-boto3-evidently =
     buildMypyBoto3Package "evidently" "1.35.0"
