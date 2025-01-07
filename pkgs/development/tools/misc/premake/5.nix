@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "premake5";
-  version = "5.0.0-beta2";
+  version = "5.0.0-beta4";
 
   src = fetchFromGitHub {
     owner = "premake";
     repo = "premake-core";
     rev = "v${version}";
-    sha256 = "sha256-2R5gq4jaQsp8Ny1oGuIYkef0kn2UG9jMf20vq0714oY=";
+    sha256 = "sha256-sNLCyIHWDW/8jIrMFCZAqtWsh4SRugqtPR4HaoW/Vzk=";
   };
 
   buildInputs =
