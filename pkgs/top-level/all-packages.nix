@@ -6454,6 +6454,10 @@ with pkgs;
   julia-stable-bin = julia_111-bin;
   julia-bin = julia-stable-bin;
 
+  # Check kind-lang.cabal. GHC2024 >= ghc910.
+  kind-lang = haskell.lib.compose.justStaticExecutables (haskell.packages.ghc910.callPackage ../by-name/ki/kind-lang/package.nix {
+    haskellPackages = haskell.packages.ghc910;
+  });
   kind2 = darwin.apple_sdk_11_0.callPackage ../development/compilers/kind2 { };
 
   koka = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../development/compilers/koka { });
