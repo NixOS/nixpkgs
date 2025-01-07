@@ -6,6 +6,7 @@
   gperf,
   openssl,
   zlib,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -29,6 +30,11 @@ stdenv.mkDerivation {
     openssl
     zlib
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Telegram Bot API server";
