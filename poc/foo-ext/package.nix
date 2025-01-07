@@ -1,7 +1,11 @@
 { poc-foo, ... }:
 
 poc-foo.overrideAttrs (
-  finalAttrs: prevAttrs: {
+  finalAttrs:
+  let
+    inherit (finalAttrs.__pkgs) pkgsBuildHost pkgsHostTarget;
+  in
+  prevAttrs: {
     installPhase = ''
       ${prevAttrs.installPhase or ""}
       echo hello world $someVal
@@ -9,10 +13,10 @@ poc-foo.overrideAttrs (
 
     someVal = "123";
 
-    sayer = finalAttrs.__pkgs.buildPackages.kittysay;
+    sayer = pkgsBuildHost.kittysay;
 
     depsInPath = prevAttrs.depsInPath // {
-      jdk = finalAttrs.__pkgs.jdk17;
+      jdk = pkgsHostTarget.jdk17;
     };
 
     shellVars = prevAttrs.shellVars or { } // {
