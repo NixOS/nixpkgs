@@ -678,8 +678,8 @@ rec {
       "sha256-LFhzVLxycvIbGPCIMvD18XAL8KkA1rnE+3LkFty4Q8s=";
 
   mypy-boto3-iotsecuretunneling =
-    buildMypyBoto3Package "iotsecuretunneling" "1.35.0"
-      "sha256-A1sYvlnpbfKZyxZvFCzBfD/Jbzd1PwlQwgj+fvcybGU=";
+    buildMypyBoto3Package "iotsecuretunneling" "1.35.93"
+      "sha256-HBXnSdkTqLdcwSQl42FfFZhQVDiErGfJShaGgt0I7bU=";
 
   mypy-boto3-iotsitewise =
     buildMypyBoto3Package "iotsitewise" "1.35.64"
