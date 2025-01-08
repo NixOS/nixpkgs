@@ -10,6 +10,7 @@
   ninja,
   vala,
   elementary-settings-daemon,
+  gettext,
   gtk3,
   granite,
   libgtop,
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
