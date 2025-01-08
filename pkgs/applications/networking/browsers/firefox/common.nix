@@ -62,8 +62,8 @@ in
 , glib
 , gnum4
 , gtk3
-, icu72
 , icu73
+, icu74
 , libGL
 , libGLU
 , libevent
@@ -253,6 +253,12 @@ buildStdenv.mkDerivation {
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
+  ]
+  ++ lib.optionals ((lib.versionAtLeast version "129" && lib.versionOlder version "134") || lib.versionOlder version "128.6.0") [
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
   ]
   ++ extraPatches;
 
@@ -469,11 +475,9 @@ buildStdenv.mkDerivation {
     zip
     zlib
   ]
-  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
   # icu74 fails to build on 127 and older
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
-  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
+  ++ [ (if (lib.versionAtLeast version "134") then icu74 else icu73) ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
