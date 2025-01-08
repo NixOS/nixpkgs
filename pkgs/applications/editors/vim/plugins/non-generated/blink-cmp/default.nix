@@ -9,12 +9,12 @@
   replaceVars,
 }:
 let
-  version = "0.9.2";
+  version = "0.9.3";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-uvMB3oU6uxERfkXiweeFS0cCIOgO/ogy7GoYAlXUPDs=";
+    hash = "sha256-j6hBURbIZbvNE69l4AyCtCwfeOi3oNxVtooFK7/WUuA=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {

@@ -97,5 +97,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
+    # Does not support pyopenssl above 24.3.0 due to use of a deprecated API,
+    # see https://github.com/IdentityPython/pysaml2/issues/975
+    broken = true;
   };
 }

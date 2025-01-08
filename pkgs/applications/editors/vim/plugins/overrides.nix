@@ -2656,6 +2656,10 @@ in
     dependencies = [ self.nvim-lspconfig ];
   };
 
+  rzls-nvim = super.rzls-nvim.overrideAttrs {
+    dependencies = [ self.roslyn-nvim ];
+  };
+
   samodostal-image-nvim = super.samodostal-image-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };

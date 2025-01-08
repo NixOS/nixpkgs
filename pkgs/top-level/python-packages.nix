@@ -10338,6 +10338,8 @@ self: super: with self; {
 
   pick = callPackage ../development/python-modules/pick { };
 
+  pickpack = callPackage ../development/python-modules/pickpack { };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
   picobox = callPackage ../development/python-modules/picobox { };
@@ -14321,7 +14323,9 @@ self: super: with self; {
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
-  ruff = callPackage ../development/python-modules/ruff { };
+  ruff = callPackage ../development/python-modules/ruff {
+    inherit (pkgs) ruff;
+  };
 
   ruff-api = callPackage ../development/python-modules/ruff-api { };
 
@@ -15378,6 +15382,10 @@ self: super: with self; {
   sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
 
   sqlbag = callPackage ../development/python-modules/sqlbag { };
+
+  sqlcipher3 = callPackage ../development/python-modules/sqlcipher3 {};
+  sqlcipher3-binary = callPackage ../development/python-modules/sqlcipher3-binary {};
+  sqlcipher3-wheels = callPackage ../development/python-modules/sqlcipher3-wheels {};
 
   sqlfmt = callPackage ../development/python-modules/sqlfmt { };
 

@@ -1115,10 +1115,12 @@ mapAliases {
   pyo3-pack = maturin;
   pypi2nix = throw "pypi2nix has been removed due to being unmaintained";
   pypolicyd-spf = spf-engine; # Added 2022-10-09
+  pypy39Packages = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-07
   python = python2; # Added 2022-01-11
   python-swiftclient = throw "'python-swiftclient' has been renamed to/replaced by 'swiftclient'"; # Converted to throw 2024-10-17
   pythonFull = python2Full; # Added 2022-01-11
   pythonPackages = python.pkgs; # Added 2022-01-11
+  pypy39 = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-03
 
   ### Q ###
 
@@ -1214,6 +1216,7 @@ mapAliases {
   sky = throw "'sky' has been removed because its upstream website disappeared"; # Added 2024-07-21
   SkypeExport = skypeexport; # Added 2024-06-12
   slack-dark = throw "'slack-dark' has been renamed to/replaced by 'slack'"; # Converted to throw 2024-10-17
+  slimerjs = throw "slimerjs does not work with any version of Firefox newer than 59; upstream ended the project in 2021. <https://slimerjs.org/faq.html#end-of-development>"; # added 2025-01-06
   slurm-llnl = slurm; # renamed July 2017
   sm64ex-coop = throw "'sm64ex-coop' was removed as it was archived upstream. Consider migrating to 'sm64coopdx'"; # added 2024-11-23
   snapTools = throw "snapTools was removed because makeSnap produced broken snaps and it was the only function in snapTools. See https://github.com/NixOS/nixpkgs/issues/100618 for more details."; # 2024-03-04;
@@ -1282,6 +1285,7 @@ mapAliases {
   swig4 = swig; # Added 2024-09-12
   swigWithJava = throw "swigWithJava has been removed as the main swig package has supported Java since 2009"; # Added 2024-09-12
   swtpm-tpm2 = throw "'swtpm-tpm2' has been renamed to/replaced by 'swtpm'"; # Converted to throw 2024-10-17
+  swt_jdk8 = throw "'swt_jdk8' has been removed due to being unused and broken for a long time"; # Added 2025-01-07
   Sylk = sylk; # Added 2024-06-12
   symbiyosys = sby; # Added 2024-08-18
   sync = taler-sync; # Added 2024-09-04

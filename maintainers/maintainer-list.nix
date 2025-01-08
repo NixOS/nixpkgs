@@ -2129,6 +2129,7 @@
     github = "asymmetric";
     githubId = 101816;
     name = "Lorenzo Manacorda";
+    matrix = "@asymmetric:matrix.dapp.org.uk";
   };
   aszlig = {
     email = "aszlig@nix.build";
@@ -3313,6 +3314,13 @@
     name = "Brendan Reis";
     github = "brendanreis";
     githubId = 10686906;
+  };
+  bretek = {
+    email = "josephmadden999@gmail.com";
+    github = "bretek";
+    githubId = 79257746;
+    name = "Joseph Madden";
+    keys = [ { fingerprint = "3CF8 E983 2219 AB4B 0E19  158E 6112 1921 C9F8 117C"; } ];
   };
   brettlyons = {
     email = "blyons@fastmail.com";
@@ -7359,7 +7367,7 @@
     github = "FedX-sudo";
     githubId = 66258975;
     name = "Fedx sudo";
-    matrix = "fedx:matrix.org";
+    matrix = "@fedx:matrix.org";
   };
   fee1-dead = {
     email = "ent3rm4n@gmail.com";
@@ -12803,7 +12811,7 @@
   };
   lenny = {
     name = "Lenny.";
-    matrix = "lenny@flipdot.org";
+    matrix = "@lenny:flipdot.org";
     keys = [ { fingerprint = "6D63 2D4D 0CFE 8D53 F5FD  C7ED 738F C800 6E9E A634"; } ];
   };
   leo248 = {

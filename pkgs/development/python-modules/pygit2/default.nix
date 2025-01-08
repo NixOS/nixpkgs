@@ -33,6 +33,11 @@ buildPythonPackage rec {
       url = "https://github.com/libgit2/pygit2/commit/eba710e45bb40e18641c6531394bb46631e7f295.patch";
       hash = "sha256-GFFzGVd/9+AcwicwOtBghhonijMp08svXTUZ/4/LmtI=";
     })
+    # temp fix for Python 3.13 until next release after 1.16.0
+    (fetchpatch {
+      url = "https://github.com/libgit2/pygit2/commit/7f143e1c5beec01ec3429aa4db12435ac02977d3.patch";
+      hash = "sha256-2SiFFPWVVo9urKRu64AejjTZMoXo2r+v1OwEIF+AzNo=";
+    })
   ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
