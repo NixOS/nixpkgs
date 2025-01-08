@@ -17,9 +17,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./isatty.patch
+    ./fprintf.patch
   ];
-
-  hardeningDisable = [ "format" ];
 
   buildInputs = [
     libogg
