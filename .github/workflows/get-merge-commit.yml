@@ -7,7 +7,6 @@ on:
         description: "The merge commit SHA"
         value: ${{ jobs.resolve-merge-commit.outputs.mergedSha }}
 
-# We need a token to query the API, but it doesn't need any special permissions
 permissions: {}
 
 jobs:
