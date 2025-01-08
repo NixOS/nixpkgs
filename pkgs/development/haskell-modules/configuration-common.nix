@@ -2651,6 +2651,9 @@ self: super: {
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
+  # Overly strict bounds on tasty-quickcheck (test suite)
+  hashable = doJailbreak super.hashable;
+
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
 
