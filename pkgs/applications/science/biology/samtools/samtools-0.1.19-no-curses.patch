@@ -1,0 +1,22 @@
+diff --git a/Makefile b/Makefile
+index 2f51bfc..395d6f1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ CC=			gcc
+ CFLAGS=		-g -Wall -O2
+ #LDFLAGS=		-Wl,-rpath,\$$ORIGIN/../lib
+-DFLAGS=		-D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_USE_KNETFILE -D_CURSES_LIB=1
++DFLAGS=		-D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_USE_KNETFILE # -D_CURSES_LIB=1
+ KNETFILE_O=	knetfile.o
+ LOBJS=		bgzf.o kstring.o bam_aux.o bam.o bam_import.o sam.o bam_index.o	\
+ 			bam_pileup.o bam_lpileup.o bam_md.o razf.o faidx.o bedidx.o \
+@@ -15,7 +15,7 @@ PROG=		samtools
+ INCLUDES=	-I.
+ SUBDIRS=	. bcftools misc
+ LIBPATH=
+-LIBCURSES=	-lcurses # -lXCurses
++LIBCURSES=	# -lcurses # -lXCurses
+ 
+ .SUFFIXES:.c .o
+ .PHONY: all lib

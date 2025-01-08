@@ -1,0 +1,22 @@
+diff --git a/scriptbin/dyalogscript b/scriptbin/dyalogscript
+index c99912738ec2..adeda1fe964e 100755
+--- a/scriptbin/dyalogscript
++++ b/scriptbin/dyalogscript
+@@ -2,7 +2,7 @@
+ #set -x
+ ## DO NOT CHANGE THIS FILE
+ 
+-INSTALLDIR="/opt/mdyalog/19.0/64/unicode"
++INSTALLDIR="@installdir@"
+ EXE="dyalog"
+ 
+ ARGS=""
+@@ -46,7 +46,7 @@ fi
+ #	OPTS="$OPTS RIDE_INIT=$RIDE_INIT"
+ #fi
+ 
+-: ${SCRIPTDIR:=$INSTALLDIR}
++SCRIPTDIR="@scriptdir@"
+ export LD_LIBRARY_PATH=${SCRIPTDIR}:${LD_LIBRARY_PATH}					
+ 
+ eval "${SCRIPTDIR}/${EXE}" APLKEYS=\"$INSTALLDIR/aplkeys\" APLTRANS=\"$INSTALLDIR/apltrans\" ${APLT} ${APLK} $OPTS -script \"$SCRIPT\" "$ARGS"

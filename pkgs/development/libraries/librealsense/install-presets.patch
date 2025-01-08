@@ -1,0 +1,13 @@
+diff --git a/tools/realsense-viewer/CMakeLists.txt b/tools/realsense-viewer/CMakeLists.txt
+index 44be6278f..1a4531dff 100644
+--- a/tools/realsense-viewer/CMakeLists.txt
++++ b/tools/realsense-viewer/CMakeLists.txt
+@@ -253,7 +253,7 @@ install(
+ )
+ #https://cmake.org/cmake/help/latest/command/install.html
+ install(DIRECTORY presets/
+-    DESTINATION $ENV{HOME}/Documents/librealsense2/presets
++    DESTINATION $ENV{out}/share/librealsense2/presets
+     FILES_MATCHING PATTERN "*.preset"
+ )
+ endif()
