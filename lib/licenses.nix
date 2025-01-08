@@ -97,6 +97,14 @@ lib.mapAttrs mkLicense ({
     fullName = "Academy of Motion Picture Arts and Sciences BSD";
   };
 
+  amulet = {
+    fullName = "Amulet Team License 1.0.0";
+    url = "https://github.com/Amulet-Team/Amulet-NBT/blob/4.0/LICENSE";
+    free = false;
+    # Amulet Team License is based on Polyform Shield which allows non-competitive distribution
+    redistributable = true;
+  };
+
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
