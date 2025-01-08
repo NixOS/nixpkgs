@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +17,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gytnUta/sNa8vJMvVS/DMwRc4R/8rmOnEfBKEjRpfGs=";
   };
   cargoHash = "sha256-rlKFS1ppUoyZ1X2PeG8tEB44Ysqi7kCLqR+ECVIdPjs=";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   nativeBuildInputs = [ installShellFiles ];
 
