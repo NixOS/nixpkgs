@@ -15,6 +15,14 @@ let
     isAttrs
     ;
 
+  inherit (lib.options)
+    showDefs
+    ;
+
+  inherit (lib.strings)
+    escapeNixIdentifier
+    ;
+
   record =
     {
       fields ? { },
@@ -24,7 +32,9 @@ let
       checkField =
         name: field:
         if field._type or null != "field" then
-          throw "Record field `${lib.escapeNixIdentifier name}` must be declared with `mkField`."
+          throw "Record field `${escapeNixIdentifier name}` must be declared with `mkField`."
+        else if (field.optional or false) && (field ? default) then
+          throw "Record field `${escapeNixIdentifier name}` is optional, but a `default` is provided."
         else
           field;
 
@@ -59,17 +69,18 @@ let
           fieldValues = concatMapAttrs (
             fieldName: field:
             let
-              fieldOption = mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (
+              mergedOption = mergeDefinitions (loc ++ [ fieldName ]) field.type (
                 data.${fieldName} or [ ]
                 ++ optional (field ? default) {
-                  value = lib.mkOptionDefault fieldOption.default;
+                  value = lib.mkOptionDefault field.default;
                   file = "the default value of field ${showOption loc}";
                 }
               );
+              isRequired = !field.optional or false;
             in
             builtins.addErrorContext "while evaluating the field `${fieldName}' of option `${showOption loc}'" (
-              optionalAttrs (!field.optional || fieldOption.isDefined) {
-                ${fieldName} = fieldOption.mergedValue;
+              optionalAttrs (isRequired || mergedOption.isDefined) {
+                ${fieldName} = mergedOption.mergedValue;
               }
             )
           ) checkedFields;
@@ -86,7 +97,7 @@ let
             else
               throw ''
                 A definition for option `${showOption loc}' has an unknown fields:
-                ${lib.concatMapAttrsStringSep "\n" (name: defs: "`${name}'${lib.showDefs defs}") extraData}'';
+                ${lib.concatMapAttrsStringSep "\n" (name: defs: "`${name}'${showDefs defs}") extraData}'';
         in
         if freeformType == null then checkedExtraDefs else fieldValues // extraValues;
       nestedTypes = lib.optionalAttrs (freeformType != null) {

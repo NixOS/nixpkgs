@@ -1,14 +1,14 @@
 { lib, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkField mkOption types;
 
   person = types.record {
     fields = {
-      nixerSince = mkOption { type = types.int; };
-      name = mkOption { type = types.str; };
+      nixerSince = mkField { type = types.int; };
+      name = mkField { type = types.str; };
     };
-    wildcard = mkOption { type = types.bool; };
+    freeformType = types.bool;
   };
 
 in
