@@ -73,6 +73,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # jax.errors.UnexpectedTracerError: Encountered an unexpected tracer
+    "test_haiku_state_dropout_smoke"
+    "test_flax_state_dropout_smoke"
+
     # AssertionError due to tolerance issues
     "test_beta_binomial_log_prob"
     "test_collapse_beta"

@@ -29,6 +29,7 @@
   enableParallelBuilding ? true,
   srcArchiveSuffix ? "tar.bz2",
   extraPatches ? [ ],
+  env ? { },
 }:
 
 let
@@ -36,7 +37,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mono";
-  inherit version;
+  inherit version env;
 
   src = fetchurl {
     inherit sha256;
