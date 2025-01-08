@@ -16,5 +16,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Crossword-generating library and CLI tool";
     homepage = "https://ingrid.cx";
+    mainProgram = "ingrid_core";
+    maintainers = with maintainers; [nulladmin1];
+    license = licenses.mit;
   };
 }
