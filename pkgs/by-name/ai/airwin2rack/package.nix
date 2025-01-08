@@ -42,11 +42,12 @@ let
   };
 
   vcvRackSdk = if enableVCVRack then (srcOnly pkgs.vcv-rack) else null;
-
-in
-stdenv.mkDerivation rec {
   pname = "airwin2rack";
   version = "2.13.0";
+in
+stdenv.mkDerivation {
+  inherit pname;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "baconpaul";
