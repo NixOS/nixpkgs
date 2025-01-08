@@ -30,7 +30,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin drat-trim lrat-check
+
+    runHook postInstall
   '';
 
   meta = with lib; {
