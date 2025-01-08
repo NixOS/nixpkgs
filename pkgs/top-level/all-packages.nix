@@ -3884,8 +3884,6 @@ with pkgs;
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
-  kphotoalbum = libsForQt5.callPackage ../applications/graphics/kphotoalbum { };
-
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
