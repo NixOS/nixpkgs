@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.networking.tcpcrypt;
@@ -14,8 +11,8 @@ in
 
   options = {
 
-    networking.tcpcrypt.enable = mkOption {
-      type = types.bool;
+    networking.tcpcrypt.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable opportunistic TCP encryption. If the other end
@@ -28,7 +25,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.tcpcryptd = {
       uid = config.ids.uids.tcpcryptd;
