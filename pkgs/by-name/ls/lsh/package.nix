@@ -17,7 +17,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command-Line Interface for Latitude.sh";
     homepage = "https://github.com/latitudesh/lsh";
-    # likely it is free, but with next release https://github.com/latitudesh/lsh/issues/48
-    license = licenses.unfree;
+    license = licenses.mit;
+    changelog = "https://github.com/latitudesh/lsh/releases/tag/v${version}";
   };
 }
