@@ -1,0 +1,29 @@
+From 977332e9e45477b1b41a5af7a2484f92b340413b Mon Sep 17 00:00:00 2001
+From: Hugh McMaster <hugh.mcmaster@outlook.com>
+Date: Thu, 1 Sep 2022 14:44:17 +1000
+Subject: [PATCH] src/scan.c: Only call av_register_all() if using libavformat
+ < 58.9.100
+
+This function is deprecated.
+
+Thanks to Leigh Scott for suggesting this patch.
+---
+ src/scan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/scan.c b/src/scan.c
+index 85b36b3..ee72cf8 100644
+--- a/src/scan.c
++++ b/src/scan.c
+@@ -69,9 +69,9 @@ int scan_init(unsigned nb_files) {
+ 	 * It is now useless
+ 	 * https://github.com/FFmpeg/FFmpeg/blob/70d25268c21cbee5f08304da95be1f647c630c15/doc/APIchanges#L86
+ 	 */
+-  if (avformat_version() < AV_VERSION_INT(58,9,100))
++#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58,9,100)
+     av_register_all();
+-
++#endif
+ 	av_log_set_callback(scan_av_log);
+ 
+ 	scan_nb_files = nb_files;
