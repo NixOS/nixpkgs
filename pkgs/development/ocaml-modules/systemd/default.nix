@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, systemdLibs, }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  systemdLibs,
+}:
 buildDunePackage {
   pname = "systemd";
   version = "1.3";
