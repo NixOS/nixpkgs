@@ -11,18 +11,10 @@ in
 
 {
   options.services.tts =
-    let
-      inherit (lib)
-        literalExpression
-        lib.mkOption
-        mkEnableOption
-        types
-        ;
-    in
     {
       servers = lib.mkOption {
         type = lib.types.attrsOf (
-          types.submodule (
+          lib.types.submodule (
             { ... }:
             {
               options = {
@@ -93,20 +85,10 @@ in
     };
 
   config =
-    let
-      inherit (lib)
-        mkIf
-        mapAttrs'
-        nameValuePair
-        lib.optionalString
-        concatMapStringsSep
-        escapeShellArgs
-        ;
-    in
-    mkIf (cfg.servers != { }) {
-      systemd.services = mapAttrs' (
+    lib.mkIf (cfg.servers != { }) {
+      systemd.services = lib.mapAttrs' (
         server: options:
-        nameValuePair "tts-${server}" {
+        lib.nameValuePair "tts-${server}" {
           description = "Coqui TTS server instance ${server}";
           after = [
             "network-online.target"
@@ -126,7 +108,7 @@ in
               "${pkgs.tts}/bin/tts-server --port ${toString options.port} "
               + lib.optionalString (options.model != null) "--model_name ${options.model} "
               + lib.optionalString (options.useCuda) "--use_cuda "
-              + (escapeShellArgs options.extraArgs);
+              + (lib.escapeShellArgs options.extraArgs);
             CapabilityBoundingSet = "";
             DeviceAllow =
               if options.useCuda then

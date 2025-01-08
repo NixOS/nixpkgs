@@ -1,50 +1,23 @@
 { config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, specialArgs, ... }:
 
 let
-  inherit (lib)
-    cleanSourceFilter
-    concatMapStringsSep
-    evalModules
-    filter
-    functionArgs
-    hasSuffix
-    isAttrs
-    isDerivation
-    isFunction
-    isPath
-    literalExpression
-    mapAttrs
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    lib.optional
-    lib.optionalAttrs
-    lib.optionals
-    partition
-    removePrefix
-    types
-    warn
-    ;
-
   cfg = config.documentation;
   allOpts = options;
 
   canCacheDocs = m:
     let
       f = import m;
-      instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
+      instance = f (lib.mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (lib.functionArgs f));
     in
       cfg.nixos.options.splitBuild
-        && isPath m
-        && isFunction f
+        && lib.isPath m
+        && lib.isFunction f
         && instance ? options
         && instance.meta.buildDocsInSandbox or true;
 
   docModules =
     let
-      p = partition canCacheDocs (baseModules ++ cfg.nixos.extraModules);
+      p = lib.partition canCacheDocs (baseModules ++ cfg.nixos.extraModules);
     in
       {
         lazy = p.right;
@@ -58,7 +31,7 @@ let
     extraSources = cfg.nixos.extraModuleSources;
     options =
       let
-        scrubbedEval = evalModules {
+        scrubbedEval = lib.evalModules {
           modules = [ {
             _module.check = false;
           } ] ++ docModules.eager;
@@ -71,14 +44,14 @@ let
             inherit modulesPath utils;
           };
         };
-        scrubDerivations = namePrefix: pkgSet: mapAttrs
+        scrubDerivations = namePrefix: pkgSet: lib.mapAttrs
           (name: value:
             let
               wholeName = "${namePrefix}.${name}";
-              guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
-            in if isAttrs value then
+              guard = lib.warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+            in if lib.isAttrs value then
               scrubDerivations wholeName value
-              // lib.optionalAttrs (isDerivation value) {
+              // lib.optionalAttrs (lib.isDerivation value) {
                 outPath = guard "\${${wholeName}}";
                 drvPath = guard value.drvPath;
               }
@@ -92,9 +65,9 @@ let
         filter =
           builtins.filterSource
             (n: t:
-              cleanSourceFilter n t
+              lib.cleanSourceFilter n t
               && (t == "directory" -> baseNameOf n != "tests")
-              && (t == "file" -> hasSuffix ".nix" n)
+              && (t == "file" -> lib.hasSuffix ".nix" n)
             );
       in
         pkgs.runCommand "lazy-options.json" {
@@ -104,7 +77,7 @@ let
           NIX_ABORT_ON_WARN = warningsAreErrors;
           modules =
             "[ "
-            + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
+            + lib.concatMapStringsSep " " (p: ''"${lib.removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
             + " ]";
           passAsFile = [ "modules" ];
         } ''
@@ -279,7 +252,7 @@ in
       };
 
       nixos.extraModules = lib.mkOption {
-        type = lib.types.listOf types.raw;
+        type = lib.types.listOf lib.types.raw;
         default = [];
         description = ''
           Modules for which to show options even when not imported.
@@ -317,7 +290,7 @@ in
       };
 
       nixos.extraModuleSources = lib.mkOption {
-        type = lib.types.listOf (types.either types.path types.str);
+        type = lib.types.listOf (lib.types.either lib.types.path lib.types.str);
         default = [ ];
         description = ''
           Which extra NixOS module paths the generated NixOS's documentation should strip
@@ -333,7 +306,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       assertions = [
         {

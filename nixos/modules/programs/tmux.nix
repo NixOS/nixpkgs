@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    lib.mkOption
-    mkIf
-    types
-    lib.optionalString
-    ;
-
   cfg = config.programs.tmux;
 
   defaultKeyMode = "emacs";

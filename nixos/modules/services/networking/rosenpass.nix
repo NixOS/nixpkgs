@@ -6,73 +6,47 @@
   ...
 }:
 let
-  inherit (lib)
-    attrValues
-    concatLines
-    concatMap
-    filter
-    filterAttrsRecursive
-    flatten
-    getExe
-    mkIf
-    lib.optional
-    ;
-
   cfg = config.services.rosenpass;
   opt = options.services.rosenpass;
   settingsFormat = pkgs.formats.toml { };
 in
 {
   options.services.rosenpass =
-    let
-      inherit (lib)
-        literalExpression
-        lib.mkOption
-        ;
-      inherit (lib.types)
-        enum
-        listOf
-        nullOr
-        path
-        str
-        submodule
-        ;
-    in
     {
       enable = lib.mkEnableOption "Rosenpass";
 
       package = lib.mkPackageOption pkgs "rosenpass" { };
 
       defaultDevice = lib.mkOption {
-        type = nullOr str;
+        type = lib.types.nullOr lib.types.str;
         description = "Name of the network interface to use for all peers by default.";
         example = "wg0";
       };
 
       settings = lib.mkOption {
-        type = submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
             public_key = lib.mkOption {
-              type = path;
+              type = lib.types.path;
               description = "Path to a file containing the public key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
             };
 
             secret_key = lib.mkOption {
-              type = path;
+              type = lib.types.path;
               description = "Path to a file containing the secret key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
             };
 
             listen = lib.mkOption {
-              type = listOf str;
+              type = lib.types.listOf lib.types.str;
               description = "List of local endpoints to listen for connections.";
               default = [ ];
               example = lib.literalExpression "[ \"0.0.0.0:10000\" ]";
             };
 
             verbosity = lib.mkOption {
-              type = enum [
+              type = lib.types.enum [
                 "Verbose"
                 "Quiet"
               ];
@@ -82,37 +56,37 @@ in
 
             peers =
               let
-                peer = submodule {
+                peer = lib.types.submodule {
                   freeformType = settingsFormat.type;
 
                   options = {
                     public_key = lib.mkOption {
-                      type = path;
+                      type = lib.types.path;
                       description = "Path to a file containing the public key of the remote Rosenpass peer.";
                     };
 
                     endpoint = lib.mkOption {
-                      type = nullOr str;
+                      type = lib.types.nullOr lib.types.str;
                       default = null;
                       description = "Endpoint of the remote Rosenpass peer.";
                     };
 
                     device = lib.mkOption {
-                      type = str;
+                      type = lib.types.str;
                       default = cfg.defaultDevice;
                       defaultText = lib.literalExpression "config.${opt.defaultDevice}";
                       description = "Name of the local WireGuard interface to use for this peer.";
                     };
 
                     peer = lib.mkOption {
-                      type = str;
+                      type = lib.types.str;
                       description = "WireGuard public key corresponding to the remote Rosenpass peer.";
                     };
                   };
                 };
               in
               lib.mkOption {
-                type = listOf peer;
+                type = lib.types.listOf peer;
                 description = "List of peers to exchange keys with.";
                 default = [ ];
               };
@@ -152,7 +126,7 @@ in
             description = "${options.networking.wg-quick.interfaces}.\"<name>\".peers.*.publicKey";
           }
         ];
-        relevantExtractions = filter (x: x.relevant) extractions;
+        relevantExtractions = lib.filter (x: x.relevant) extractions;
         extract =
           {
             root,
@@ -160,17 +134,17 @@ in
             key,
             ...
           }:
-          filter (x: x != null) (flatten (concatMap (x: (map key (peer x))) (lib.attrValues root)));
-        configuredKeys = flatten (map extract relevantExtractions);
-        itemize = xs: concatLines (map (x: " - ${x}") xs);
+          lib.filter (x: x != null) (lib.flatten (lib.concatMap (x: (map key (peer x))) (lib.attrValues root)));
+        configuredKeys = lib.flatten (map extract relevantExtractions);
+        itemize = xs: lib.concatLines (map (x: " - ${x}") xs);
         descriptions = map (x: "`${x.description}`");
-        missingKeys = filter (key: !builtins.elem key configuredKeys) (map (x: x.peer) cfg.settings.peers);
+        missingKeys = lib.filter (key: !builtins.elem key configuredKeys) (map (x: x.peer) cfg.settings.peers);
         unusual = ''
           While this may work as expected, e.g. you want to manually configure WireGuard,
           such a scenario is unusual. Please double-check your configuration.
         '';
       in
-      (optional (relevantExtractions != [ ] && missingKeys != [ ]) ''
+      (lib.optional (relevantExtractions != [ ] && missingKeys != [ ]) ''
         You have configured Rosenpass peers with the WireGuard public keys:
         ${itemize missingKeys}
         But there is no corresponding active Wireguard peer configuration in any of:
@@ -190,7 +164,7 @@ in
 
     systemd.services.rosenpass =
       let
-        filterNonNull = filterAttrsRecursive (_: v: v != null);
+        filterNonNull = lib.filterAttrsRecursive (_: v: v != null);
         config = settingsFormat.generate "config.toml" (
           filterNonNull (
             cfg.settings
@@ -241,7 +215,7 @@ in
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
 
         script = ''
-          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
+          ${lib.getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
           rosenpass exchange-config "$CONFIG"
         '';
       };

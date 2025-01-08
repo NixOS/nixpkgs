@@ -1,14 +1,6 @@
 { config, lib, ... }:
 
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optionalAttrs
-    ;
-
   inherit (lib.types) str;
 
   cfg = config.services.netbird.server;
@@ -31,7 +23,7 @@ in
   options.services.netbird.server = {
     enable = lib.mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
+    enableNginx = lib.mkEnableOption "Nginx reverse-proxy for the netbird server services";
 
     domain = lib.mkOption {
       type = str;
@@ -55,7 +47,7 @@ in
           enable = lib.mkDefault cfg.enable;
           enableNginx = lib.mkDefault cfg.enableNginx;
         }
-        // (optionalAttrs cfg.coturn.enable rec {
+        // (lib.optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
           turnPort = config.services.coturn.tls-listening-port;
           # We cannot merge a list of attrsets so we have to redefine the whole list

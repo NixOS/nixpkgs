@@ -9,7 +9,7 @@ let
   register = cfg.register;
 
   bool = b: if b != null && b then "1" else "0";
-  lib.optionalSetting = s: setting: lib.optionalString (s != null) "${setting} ${s}";
+  optionalSetting = s: setting: lib.optionalString (s != null) "${setting} ${s}";
   lookup =
     attrs: key: default:
     if attrs ? key then attrs."${key}" else default;

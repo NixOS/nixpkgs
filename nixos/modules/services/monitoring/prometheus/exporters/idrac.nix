@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.idrac;
-  inherit (lib) lib.mkOption types;
 
   configFile =
     if cfg.configurationPath != null then

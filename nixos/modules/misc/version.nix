@@ -10,24 +10,11 @@ let
   cfg = config.system.nixos;
   opt = options.system.nixos;
 
-  inherit (lib)
-    concatStringsSep
-    mapAttrsToList
-    toLower
-    lib.optionalString
-    literalExpression
-    mkRenamedOptionModule
-    mkDefault
-    lib.mkOption
-    trivial
-    types
-    ;
-
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
   escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText =
     attrs:
-    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
     + "\n";
 
   osReleaseContents =
@@ -40,7 +27,7 @@ let
       ID_LIKE = lib.optionalString (!isNixos) "nixos";
       VENDOR_NAME = cfg.vendorName;
       VERSION = "${cfg.release} (${cfg.codeName})";
-      VERSION_CODENAME = toLower cfg.codeName;
+      VERSION_CODENAME = lib.toLower cfg.codeName;
       VERSION_ID = cfg.release;
       BUILD_ID = cfg.version;
       PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
@@ -92,28 +79,28 @@ in
       release = lib.mkOption {
         readOnly = true;
         type = lib.types.str;
-        default = trivial.release;
+        default = lib.trivial.release;
         description = "The NixOS release (e.g. `16.03`).";
       };
 
       versionSuffix = lib.mkOption {
         internal = true;
         type = lib.types.str;
-        default = trivial.versionSuffix;
+        default = lib.trivial.versionSuffix;
         description = "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
       };
 
       revision = lib.mkOption {
         internal = true;
         type = lib.types.nullOr lib.types.str;
-        default = trivial.revisionWithDefault null;
+        default = lib.trivial.revisionWithDefault null;
         description = "The Git revision from which this NixOS configuration was built.";
       };
 
       codeName = lib.mkOption {
         readOnly = true;
         type = lib.types.str;
-        default = trivial.codeName;
+        default = lib.trivial.codeName;
         description = "The NixOS release code name (e.g. `Emu`).";
       };
 
@@ -132,7 +119,7 @@ in
       };
 
       variant_id = lib.mkOption {
-        type = lib.types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        type = lib.types.nullOr (lib.types.strMatching "^[a-z0-9._-]+$");
         default = null;
         description = "A lower-case string identifying a specific variant or edition of the operating system";
         example = "installer";
@@ -278,7 +265,7 @@ in
           LSB_VERSION = "${cfg.release} (${cfg.codeName})";
           DISTRIB_ID = "${cfg.distroId}";
           DISTRIB_RELEASE = cfg.release;
-          DISTRIB_CODENAME = toLower cfg.codeName;
+          DISTRIB_CODENAME = lib.toLower cfg.codeName;
           DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
         }
         // cfg.extraLSBReleaseArgs

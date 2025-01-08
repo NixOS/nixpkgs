@@ -9,12 +9,6 @@ let
 
   cfg = config.services.ttyd;
 
-  inherit (lib)
-    lib.optionals
-    types
-    lib.mkOption
-    ;
-
   # Command line arguments for the ttyd daemon
   args =
     [

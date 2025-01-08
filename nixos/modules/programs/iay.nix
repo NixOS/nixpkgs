@@ -7,14 +7,6 @@
 
 let
   cfg = config.programs.iay;
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionalString
-    types
-    ;
 in
 {
   options.programs.iay = {

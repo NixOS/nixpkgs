@@ -6,14 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    escapeShellArgs
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.loki;
 
   prettyJSON =

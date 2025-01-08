@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.nats;
-  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 7777;

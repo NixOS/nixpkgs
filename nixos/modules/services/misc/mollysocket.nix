@@ -6,19 +6,11 @@
 }:
 
 let
-  inherit (lib)
-    getExe
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    types
-    ;
-
   cfg = config.services.mollysocket;
   configuration = format.generate "mollysocket.conf" cfg.settings;
   format = pkgs.formats.toml { };
   package = pkgs.writeShellScriptBin "mollysocket" ''
-    MOLLY_CONF=${configuration} exec ${getExe pkgs.mollysocket} "$@"
+    MOLLY_CONF=${configuration} exec ${lib.getExe pkgs.mollysocket} "$@"
   '';
 in
 {
@@ -99,7 +91,7 @@ in
       environment.RUST_LOG = cfg.logLevel;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFile;
-        ExecStart = "${getExe package} server";
+        ExecStart = "${lib.getExe package} server";
         KillSignal = "SIGINT";
         Restart = "on-failure";
         StateDirectory = "mollysocket";

@@ -8,13 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.json;
-  inherit (lib)
-    lib.mkOption
-    types
-    escapeShellArg
-    concatStringsSep
-    mkRemovedOptionModule
-    ;
 in
 {
   port = 7979;

@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.pihole;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkRemovedOptionModule
-    lib.optionalString
-    ;
 in
 {
   imports = [

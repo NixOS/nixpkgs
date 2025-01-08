@@ -6,14 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optionalString
-    types
-    ;
-
   dataDir = "/var/lib/squeezelite";
   cfg = config.services.squeezelite;
   pkg = if cfg.pulseAudio then pkgs.squeezelite-pulse else pkgs.squeezelite;
@@ -27,7 +19,7 @@ in
   options.services.squeezelite = {
     enable = lib.mkEnableOption "Squeezelite, a software Squeezebox emulator";
 
-    pulseAudio = mkEnableOption "pulseaudio support";
+    pulseAudio = lib.mkEnableOption "pulseaudio support";
 
     extraArguments = lib.mkOption {
       default = "";

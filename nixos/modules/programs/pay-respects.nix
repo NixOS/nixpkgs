@@ -5,27 +5,17 @@
   ...
 }:
 let
-  inherit (lib)
-    getExe
-    maintainers
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optionalString
-    types
-    ;
-  inherit (types) str;
   cfg = config.programs.pay-respects;
 
   initScript =
     shell:
     if (shell != "fish") then
       ''
-        eval $(${getExe pkgs.pay-respects} ${shell} --alias ${cfg.alias})
+        eval $(${lib.getExe pkgs.pay-respects} ${shell} --alias ${cfg.alias})
       ''
     else
       ''
-        ${getExe pkgs.pay-respects} ${shell} --alias ${cfg.alias} | source
+        ${lib.getExe pkgs.pay-respects} ${shell} --alias ${cfg.alias} | source
       '';
 in
 {
@@ -35,7 +25,7 @@ in
 
       alias = lib.mkOption {
         default = "f";
-        type = str;
+        type = lib.types.str;
         description = ''
           `pay-respects` needs an alias to be configured.
           The default value is `f`, but you can use anything else as well.

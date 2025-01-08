@@ -7,16 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    attrValues
-    literalExpression
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.filebeat;
 
   json = pkgs.formats.json { };
@@ -50,7 +40,7 @@ in
         '';
         default = { };
         type = lib.types.attrsOf (
-          types.submodule (
+          lib.types.submodule (
             { name, ... }:
             {
               freeformType = json.type;
@@ -105,7 +95,7 @@ in
         '';
         default = { };
         type = lib.types.attrsOf (
-          types.submodule (
+          lib.types.submodule (
             { name, ... }:
             {
               freeformType = json.type;
@@ -232,8 +222,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.filebeat.settings.filebeat.inputs = attrValues cfg.inputs;
-    services.filebeat.settings.filebeat.modules = attrValues cfg.modules;
+    services.filebeat.settings.filebeat.inputs = lib.attrValues cfg.inputs;
+    services.filebeat.settings.filebeat.modules = lib.attrValues cfg.modules;
 
     systemd.services.filebeat = {
       description = "Filebeat log shipper";

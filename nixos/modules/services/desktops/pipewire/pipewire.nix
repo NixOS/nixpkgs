@@ -7,41 +7,17 @@
 }:
 
 let
-  inherit (builtins) attrNames concatMap length;
-  inherit (lib) maintainers teams;
-  inherit (lib.attrsets)
-    attrByPath
-    attrsToList
-    concatMapAttrs
-    filterAttrs
-    ;
-  inherit (lib.lists) flatten lib.optional lib.optionals;
-  inherit (lib.modules) mkIf mkRemovedOptionModule;
-  inherit (lib.options)
-    literalExpression
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    ;
-  inherit (lib.strings) concatMapStringsSep hasPrefix lib.optionalString;
-  inherit (lib.types)
-    attrsOf
-    bool
-    listOf
-    package
-    ;
-
   json = pkgs.formats.json { };
   mapToFiles =
     location: config:
-    concatMapAttrs (name: value: {
+    lib.concatMapAttrs (name: value: {
       "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value;
     }) config;
   extraConfigPkgFromFiles =
     locations: filesSet:
     pkgs.runCommand "pipewire-extra-config" { } ''
-      mkdir -p ${concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
-      ${concatMapStringsSep ";" ({ name, value }: "ln -s ${value} $out/${name}") (attrsToList filesSet)}
+      mkdir -p ${lib.concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
+      ${lib.concatMapStringsSep ";" ({ name, value }: "ln -s ${value} $out/${name}") (lib.attrsToList filesSet)}
     '';
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins =
@@ -77,8 +53,8 @@ let
     pathsToLink = [ "/share/pipewire" ];
   };
 
-  requiredLv2Packages = flatten (
-    concatMap (p: attrByPath [ "passthru" "requiredLv2Packages" ] [ ] p) configPackages
+  requiredLv2Packages = lib.flatten (
+    lib.concatMap (p: lib.attrByPath [ "passthru" "requiredLv2Packages" ] [ ] p) configPackages
   );
 
   lv2Plugins = pkgs.buildEnv {
@@ -88,7 +64,7 @@ let
   };
 in
 {
-  meta.maintainers = lib.teams.freedesktop.members ++ [ maintainers.k900 ];
+  meta.maintainers = lib.teams.freedesktop.members ++ [ lib.maintainers.k900 ];
 
   ###### interface
   options = {
@@ -99,7 +75,7 @@ in
 
       socketActivation = lib.mkOption {
         default = true;
-        type = bool;
+        type = lib.types.bool;
         description = ''
           Automatically run PipeWire when connections are made to the PipeWire socket.
         '';
@@ -107,7 +83,7 @@ in
 
       audio = {
         enable = lib.mkOption {
-          type = bool;
+          type = lib.types.bool;
           # this is for backwards compatibility
           default = cfg.alsa.enable || cfg.jack.enable || cfg.pulse.enable;
           defaultText = lib.literalExpression "config.services.pipewire.alsa.enable || config.services.pipewire.jack.enable || config.services.pipewire.pulse.enable";
@@ -117,7 +93,7 @@ in
 
       alsa = {
         enable = lib.mkEnableOption "ALSA support";
-        support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
+        support32Bit = lib.mkEnableOption "32-bit ALSA support on 64-bit systems";
       };
 
       jack = {
@@ -125,7 +101,7 @@ in
       };
 
       raopOpenFirewall = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Opens UDP/6001-6002, required by RAOP/Airplay for timing and control data.
@@ -137,7 +113,7 @@ in
       };
 
       systemWide = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           If true, a system-wide PipeWire service and socket is enabled
@@ -153,7 +129,7 @@ in
 
       extraConfig = {
         pipewire = lib.mkOption {
-          type = attrsOf json.type;
+          type = lib.types.attrsOf json.type;
           default = { };
           example = {
             "10-clock-rate" = {
@@ -186,7 +162,7 @@ in
           '';
         };
         client = lib.mkOption {
-          type = attrsOf json.type;
+          type = lib.types.attrsOf json.type;
           default = { };
           example = {
             "10-no-resample" = {
@@ -206,7 +182,7 @@ in
           '';
         };
         client-rt = lib.mkOption {
-          type = attrsOf json.type;
+          type = lib.types.attrsOf json.type;
           default = { };
           example = {
             "10-alsa-linear-volume" = {
@@ -227,7 +203,7 @@ in
           '';
         };
         jack = lib.mkOption {
-          type = attrsOf json.type;
+          type = lib.types.attrsOf json.type;
           default = { };
           example = {
             "20-hide-midi" = {
@@ -247,7 +223,7 @@ in
           '';
         };
         pipewire-pulse = lib.mkOption {
-          type = attrsOf json.type;
+          type = lib.types.attrsOf json.type;
           default = { };
           example = {
             "15-force-s16-info" = {
@@ -280,7 +256,7 @@ in
       };
 
       configPackages = lib.mkOption {
-        type = listOf package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         example = lib.literalExpression ''
           [
@@ -315,7 +291,7 @@ in
       };
 
       extraLv2Packages = lib.mkOption {
-        type = listOf package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         example = lib.literalExpression "[ pkgs.lsp-plugins ]";
         description = ''
@@ -361,9 +337,9 @@ in
       }
       {
         assertion =
-          length (
-            attrNames (
-              filterAttrs (name: value: hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
+          lib.length (
+            lib.attrNames (
+              lib.filterAttrs (name: value: lib.hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
             )
           ) == 1;
         message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";

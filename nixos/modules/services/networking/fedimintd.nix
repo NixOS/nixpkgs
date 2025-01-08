@@ -5,21 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    concatLists
-    filterAttrs
-    mapAttrs'
-    mapAttrsToList
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkOverride
-    mkPackageOption
-    nameValuePair
-    recursiveUpdate
-    types
-    ;
-
   fedimintdOpts =
     {
       config,
@@ -167,7 +152,7 @@ let
           };
           config = lib.mkOption {
             type = lib.types.submodule (
-              recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
+              lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
                 inherit config lib;
               }) { }
             );
@@ -181,7 +166,7 @@ in
 {
   options = {
     services.fedimintd = lib.mkOption {
-      type = lib.types.attrsOf (types.submodule fedimintdOpts);
+      type = lib.types.attrsOf (lib.types.submodule fedimintdOpts);
       default = { };
       description = "Specification of one or more fedimintd instances.";
     };
@@ -189,21 +174,21 @@ in
 
   config =
     let
-      eachFedimintd = filterAttrs (fedimintdName: cfg: cfg.enable) config.services.fedimintd;
-      eachFedimintdNginx = filterAttrs (fedimintdName: cfg: cfg.nginx.enable) eachFedimintd;
+      eachFedimintd = lib.filterAttrs (fedimintdName: cfg: cfg.enable) config.services.fedimintd;
+      eachFedimintdNginx = lib.filterAttrs (fedimintdName: cfg: cfg.nginx.enable) eachFedimintd;
     in
-    mkIf (eachFedimintd != { }) {
+    lib.mkIf (eachFedimintd != { }) {
 
-      networking.firewall.allowedTCPPorts = concatLists (
-        mapAttrsToList (
+      networking.firewall.allowedTCPPorts = lib.concatLists (
+        lib.mapAttrsToList (
           fedimintdName: cfg:
           (lib.optional cfg.api.openFirewall cfg.api.port ++ lib.optional cfg.p2p.openFirewall cfg.p2p.port)
         ) eachFedimintd
       );
 
-      systemd.services = mapAttrs' (
+      systemd.services = lib.mapAttrs' (
         fedimintdName: cfg:
-        (nameValuePair "fedimintd-${fedimintdName}" (
+        (lib.nameValuePair "fedimintd-${fedimintdName}" (
           let
             startScript = pkgs.writeShellScript "fedimintd-start" (
               (
@@ -281,17 +266,17 @@ in
         ))
       ) eachFedimintd;
 
-      services.nginx.virtualHosts = mapAttrs' (
+      services.nginx.virtualHosts = lib.mapAttrs' (
         fedimintdName: cfg:
-        (nameValuePair cfg.nginx.fqdn (
+        (lib.nameValuePair cfg.nginx.fqdn (
           lib.mkMerge [
             cfg.nginx.config
 
             {
               # Note: we want by default to enable OpenSSL, but it seems anything 100 and above is
               # overriden by default value from vhost-options.nix
-              enableACME = mkOverride 99 true;
-              forceSSL = mkOverride 99 true;
+              enableACME = lib.mkOverride 99 true;
+              forceSSL = lib.mkOverride 99 true;
               locations.${cfg.nginx.path} = {
                 proxyPass = "http://127.0.0.1:${toString cfg.api.port}/";
                 proxyWebsockets = true;

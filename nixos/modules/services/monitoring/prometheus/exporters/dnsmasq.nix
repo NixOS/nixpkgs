@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.dnsmasq;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    escapeShellArg
-    ;
 in
 {
   port = 9153;

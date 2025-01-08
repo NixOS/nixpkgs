@@ -19,25 +19,8 @@ let
 
   iniFmt = pkgs.formats.ini { };
 
-  inherit (lib)
-    concatMapStrings
-    concatStringsSep
-    getExe
-    attrNames
-    getAttr
-    lib.optionalAttrs
-    lib.optionalString
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
-    ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
+    ${lib.concatMapStrings (n: "export ${n}=\"${lib.getAttr n xEnv}\"\n") (lib.attrNames xEnv)}
     exec systemd-cat -t xserver-wrapper ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} "$@"
   '';
 
@@ -83,7 +66,7 @@ let
 
       Users = {
         MaximumUid = config.ids.uids.nixbld;
-        HideUsers = concatStringsSep "," dmcfg.hiddenUsers;
+        HideUsers = lib.concatStringsSep "," dmcfg.hiddenUsers;
         HideShells = "/run/current-system/sw/bin/nologin";
       };
 
@@ -120,7 +103,7 @@ let
   autoLoginSessionName = "${dmcfg.sessionData.autologinSession}.desktop";
 
   compositorCmds = {
-    kwin = concatStringsSep " " [
+    kwin = lib.concatStringsSep " " [
       "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland"
       "--no-global-shortcuts"
       "--no-kactivities"
@@ -144,7 +127,7 @@ let
           };
         };
       in
-      "${getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
+      "${lib.getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
   };
 
 in

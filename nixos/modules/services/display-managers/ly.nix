@@ -16,20 +16,10 @@ let
 
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
-  inherit (lib)
-    concatMapStrings
-    attrNames
-    getAttr
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    ;
-
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
-    ${concatMapStrings (n: ''
-      export ${n}="${getAttr n xEnv}"
-    '') (attrNames xEnv)}
+    ${lib.concatMapStrings (n: ''
+      export ${n}="${lib.getAttr n xEnv}"
+    '') (lib.attrNames xEnv)}
     exec systemd-cat -t xserver-wrapper ${xdmcfg.xserverBin} ${toString xdmcfg.xserverArgs} "$@"
   '';
 

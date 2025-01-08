@@ -7,7 +7,6 @@
 
 let
   cfg = config.services.seatd;
-  inherit (lib) mkEnableOption lib.mkOption types;
 in
 {
   meta.maintainers = with lib.maintainers; [ sinanmohd ];

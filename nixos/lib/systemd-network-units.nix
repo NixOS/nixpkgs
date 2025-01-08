@@ -1,13 +1,6 @@
 { lib, systemdUtils }:
 
 let
-  inherit (lib)
-    concatMapStrings
-    concatStringsSep
-    flip
-    lib.optionalString
-    ;
-
   attrsToSection = systemdUtils.lib.attrsToSection;
   commonMatchText =
     def:
@@ -81,7 +74,7 @@ in
       [L2TP]
       ${attrsToSection def.l2tpConfig}
     ''
-    + flip concatMapStrings def.l2tpSessions (x: ''
+    + lib.flip lib.concatMapStrings def.l2tpSessions (x: ''
       [L2TPSession]
       ${attrsToSection x}
     '')
@@ -89,7 +82,7 @@ in
       [WireGuard]
       ${attrsToSection def.wireguardConfig}
     ''
-    + flip concatMapStrings def.wireguardPeers (x: ''
+    + lib.flip lib.concatMapStrings def.wireguardPeers (x: ''
       [WireGuardPeer]
       ${attrsToSection x}
     '')
@@ -166,15 +159,15 @@ in
       ${lib.concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
     ''
     + "\n"
-    + flip concatMapStrings def.addresses (x: ''
+    + lib.flip lib.concatMapStrings def.addresses (x: ''
       [Address]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.routingPolicyRules (x: ''
+    + lib.flip lib.concatMapStrings def.routingPolicyRules (x: ''
       [RoutingPolicyRule]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.routes (x: ''
+    + lib.flip lib.concatMapStrings def.routes (x: ''
       [Route]
       ${attrsToSection x}
     '')
@@ -202,19 +195,19 @@ in
       [IPv6SendRA]
       ${attrsToSection def.ipv6SendRAConfig}
     ''
-    + flip concatMapStrings def.ipv6PREF64Prefixes (x: ''
+    + lib.flip lib.concatMapStrings def.ipv6PREF64Prefixes (x: ''
       [IPv6PREF64Prefix]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.ipv6Prefixes (x: ''
+    + lib.flip lib.concatMapStrings def.ipv6Prefixes (x: ''
       [IPv6Prefix]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
+    + lib.flip lib.concatMapStrings def.ipv6RoutePrefixes (x: ''
       [IPv6RoutePrefix]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
+    + lib.flip lib.concatMapStrings def.dhcpServerStaticLeases (x: ''
       [DHCPServerStaticLease]
       ${attrsToSection x}
     '')
@@ -222,11 +215,11 @@ in
       [Bridge]
       ${attrsToSection def.bridgeConfig}
     ''
-    + flip concatMapStrings def.bridgeFDBs (x: ''
+    + lib.flip lib.concatMapStrings def.bridgeFDBs (x: ''
       [BridgeFDB]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.bridgeMDBs (x: ''
+    + lib.flip lib.concatMapStrings def.bridgeMDBs (x: ''
       [BridgeMDB]
       ${attrsToSection x}
     '')
@@ -342,7 +335,7 @@ in
       [QuickFairQueueingClass]
       ${attrsToSection def.quickFairQueueingConfigClass}
     ''
-    + flip concatMapStrings def.bridgeVLANs (x: ''
+    + lib.flip lib.concatMapStrings def.bridgeVLANs (x: ''
       [BridgeVLAN]
       ${attrsToSection x}
     '')

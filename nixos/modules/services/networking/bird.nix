@@ -6,14 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optionalString
-    types
-    ;
-
   cfg = config.services.bird2;
   caps = [
     "CAP_NET_ADMIN"

@@ -13,8 +13,6 @@
 
 let
   cfg = config.nixpkgs;
-  inherit (lib) lib.mkOption types;
-
 in
 {
   disabledModules = [
@@ -28,14 +26,14 @@ in
       };
       config = lib.mkOption {
         internal = true;
-        type = lib.types.unique { message = "nixpkgs.config is set to read-only"; } types.anything;
+        type = lib.types.unique { message = "nixpkgs.config is set to read-only"; } lib.types.anything;
         description = ''
           The Nixpkgs `config` that `pkgs` was initialized with.
         '';
       };
       overlays = lib.mkOption {
         internal = true;
-        type = lib.types.unique { message = "nixpkgs.overlays is set to read-only"; } types.anything;
+        type = lib.types.unique { message = "nixpkgs.overlays is set to read-only"; } lib.types.anything;
         description = ''
           The Nixpkgs overlays that `pkgs` was initialized with.
         '';

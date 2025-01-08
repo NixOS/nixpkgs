@@ -2,12 +2,6 @@
 
 let
 
-  inherit (lib.attrsets) hasAttr;
-  inherit (lib.meta) getExe';
-  inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) mkEnableOption lib.mkOption;
-  inherit (lib.types) nonEmptyStr nullOr;
-
   options.services.tsmBackup = {
     enable = lib.mkEnableOption ''
       automatic backups with the
@@ -16,7 +10,7 @@ let
       {option}`programs.tsmClient.enable`
     '';
     command = lib.mkOption {
-      type = nonEmptyStr;
+      type = lib.types.nonEmptyStr;
       default = "backup";
       example = "incr";
       description = ''
@@ -25,7 +19,7 @@ let
       '';
     };
     servername = lib.mkOption {
-      type = nonEmptyStr;
+      type = lib.types.nonEmptyStr;
       example = "mainTsmServer";
       description = ''
         Create a systemd system service
@@ -42,7 +36,7 @@ let
       '';
     };
     autoTime = lib.mkOption {
-      type = nullOr nonEmptyStr;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
       example = "12:00";
       description = ''
@@ -61,7 +55,7 @@ let
 
   assertions = [
     {
-      assertion = hasAttr cfg.servername cfgPrg.servers;
+      assertion = lib.types.hasAttr cfg.servername cfgPrg.servers;
       message = "TSM service servername not found in list of servers";
     }
     {
@@ -93,7 +87,7 @@ in
         SuccessExitStatus = "4 8";
         # The `-se` option must come after the command.
         # The `-optfile` option suppresses a `dsm.opt`-not-found warning.
-        ExecStart = "${getExe' cfgPrg.wrappedPackage "dsmc"} ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
+        ExecStart = "${lib.types.getExe' cfgPrg.wrappedPackage "dsmc"} ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
         LogsDirectory = "tsm-backup";
         StateDirectory = "tsm-backup";
         StateDirectoryMode = "0750";

@@ -8,18 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.restic;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    mkIf
-    mapAttrs'
-    splitString
-    toUpper
-    lib.optional
-    lib.optionalAttrs
-    nameValuePair
-    ;
 in
 {
   port = 9753;
@@ -147,9 +135,9 @@ in
     };
     environment =
       let
-        rcloneRemoteName = builtins.elemAt (splitString ":" cfg.repository) 1;
-        rcloneAttrToOpt = v: "RCLONE_" + toUpper (builtins.replaceStrings [ "-" ] [ "_" ] v);
-        rcloneAttrToConf = v: "RCLONE_CONFIG_" + toUpper (rcloneRemoteName + "_" + v);
+        rcloneRemoteName = builtins.elemAt (lib.splitString ":" cfg.repository) 1;
+        rcloneAttrToOpt = v: "RCLONE_" + lib.toUpper (builtins.replaceStrings [ "-" ] [ "_" ] v);
+        rcloneAttrToConf = v: "RCLONE_CONFIG_" + lib.toUpper (rcloneRemoteName + "_" + v);
         toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
       in
       {
@@ -157,14 +145,14 @@ in
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
       }
-      // (mapAttrs' (
-        name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+      // (lib.mapAttrs' (
+        name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
       ) cfg.rcloneOptions)
       // lib.optionalAttrs (cfg.rcloneConfigFile != null) {
         RCLONE_CONFIG = cfg.rcloneConfigFile;
       }
-      // (mapAttrs' (
-        name: value: nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+      // (lib.mapAttrs' (
+        name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
       ) cfg.rcloneConfig);
   };
 }

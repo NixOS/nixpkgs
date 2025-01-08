@@ -7,12 +7,6 @@
 
 let
   cfg = config.services.prometheus.exporters.frr;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    concatMapStringsSep
-    ;
 in
 {
   port = 9342;
@@ -40,8 +34,8 @@ in
       RuntimeDirectory = "prometheus-frr-exporter";
       ExecStart = ''
         ${lib.getExe pkgs.prometheus-frr-exporter} \
-          ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
-          ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
+          ${lib.concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
+          ${lib.concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${lib.concatStringsSep " " cfg.extraFlags}
       '';
     };

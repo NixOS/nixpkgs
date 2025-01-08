@@ -5,16 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    getOutput
-    maintainers
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
   cfg = config.networking.stevenblack;
 in
 {
@@ -25,7 +15,7 @@ in
 
     block = lib.mkOption {
       type = lib.types.listOf (
-        types.enum [
+        lib.types.enum [
           "fakenews"
           "gambling"
           "porn"
@@ -38,7 +28,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    networking.hostFiles = map (x: "${getOutput x cfg.package}/hosts") ([ "ads" ] ++ cfg.block);
+    networking.hostFiles = map (x: "${lib.getOutput x cfg.package}/hosts") ([ "ads" ] ++ cfg.block);
   };
 
   meta.maintainers = with lib.maintainers; [

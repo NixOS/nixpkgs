@@ -1,11 +1,5 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) maintainers;
-  inherit (lib.meta) getExe;
-  inherit (lib.modules) mkIf mkMerge;
-  inherit (lib.options) literalExpression mkEnableOption lib.mkOption mkPackageOption;
-  inherit (lib.types) bool enum nullOr port str submodule;
-
   cfg = config.services.scrutiny;
   # Define the settings format used for this program
   settingsFormat = pkgs.formats.yaml { };
@@ -17,10 +11,10 @@ in
 
       package = lib.mkPackageOption pkgs "scrutiny" { };
 
-      openFirewall = mkEnableOption "opening the default ports in the firewall for Scrutiny";
+      openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Scrutiny";
 
       influxdb.enable = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = true;
         description = ''
           Enables InfluxDB on the host system using the `services.influxdb2` NixOS module
@@ -38,23 +32,23 @@ in
           See https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml.
         '';
         default = { };
-        type = submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options.web.listen.port = lib.mkOption {
-            type = port;
+            type = lib.types.port;
             default = 8080;
             description = "Port for web application to listen on.";
           };
 
           options.web.listen.host = lib.mkOption {
-            type = str;
+            type = lib.types.str;
             default = "0.0.0.0";
             description = "Interface address for web application to bind to.";
           };
 
           options.web.listen.basepath = lib.mkOption {
-            type = str;
+            type = lib.types.str;
             default = "";
             example = "/scrutiny";
             description = ''
@@ -64,45 +58,45 @@ in
           };
 
           options.log.level = lib.mkOption {
-            type = enum [ "INFO" "DEBUG" ];
+            type = lib.types.enum [ "INFO" "DEBUG" ];
             default = "INFO";
             description = "Log level for Scrutiny.";
           };
 
           options.web.influxdb.scheme = lib.mkOption {
-            type = str;
+            type = lib.types.str;
             default = "http";
             description = "URL scheme to use when connecting to InfluxDB.";
           };
 
           options.web.influxdb.host = lib.mkOption {
-            type = str;
+            type = lib.types.str;
             default = "0.0.0.0";
             description = "IP or hostname of the InfluxDB instance.";
           };
 
           options.web.influxdb.port = lib.mkOption {
-            type = port;
+            type = lib.types.port;
             default = 8086;
             description = "The port of the InfluxDB instance.";
           };
 
-          options.web.influxdb.tls.insecure_skip_verify = mkEnableOption "skipping TLS verification when connecting to InfluxDB";
+          options.web.influxdb.tls.insecure_skip_verify = lib.mkEnableOption "skipping TLS verification when connecting to InfluxDB";
 
           options.web.influxdb.token = lib.mkOption {
-            type = nullOr str;
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = "Authentication token for connecting to InfluxDB.";
           };
 
           options.web.influxdb.org = lib.mkOption {
-            type = nullOr str;
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = "InfluxDB organisation under which to store data.";
           };
 
           options.web.influxdb.bucket = lib.mkOption {
-            type = nullOr str;
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = "InfluxDB bucket in which to store data.";
           };
@@ -118,7 +112,7 @@ in
         package = lib.mkPackageOption pkgs "scrutiny-collector" { };
 
         schedule = lib.mkOption {
-          type = str;
+          type = lib.types.str;
           default = "*:0/15";
           description = ''
             How often to run the collector in systemd calendar format.
@@ -132,24 +126,24 @@ in
             See https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml.
           '';
           default = { };
-          type = submodule {
+          type = lib.types.submodule {
             freeformType = settingsFormat.type;
 
             options.host.id = lib.mkOption {
-              type = nullOr str;
+              type = lib.types.nullOr lib.types.str;
               default = null;
               description = "Host ID for identifying/labelling groups of disks";
             };
 
             options.api.endpoint = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}";
               defaultText = lib.literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
             options.log.level = lib.mkOption {
-              type = enum [ "INFO" "DEBUG" ];
+              type = lib.types.enum [ "INFO" "DEBUG" ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
             };
@@ -191,7 +185,7 @@ in
         '';
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
+          ExecStart = "${lib.getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
           Restart = "always";
           StateDirectory = "scrutiny";
           StateDirectoryMode = "0750";
@@ -218,7 +212,7 @@ in
           };
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
+            ExecStart = "${lib.getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
           };
           startAt = cfg.collector.schedule;
         };

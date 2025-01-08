@@ -7,12 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    types
-    ;
   cfg = config.services.prometheus.exporters.mqtt;
   toConfigBoolean = x: if x then "True" else "False";
   toConfigList = builtins.concatStringsSep ",";
@@ -21,7 +15,7 @@ in
   # https://github.com/kpetremann/mqtt-exporter/tree/master?tab=readme-ov-file#configuration
   port = 9000;
   extraOpts = {
-    keepFullTopic = mkEnableOption "Keep entire topic instead of the first two elements only. Usecase: Shelly 3EM";
+    keepFullTopic = lib.mkEnableOption "Keep entire topic instead of the first two elements only. Usecase: Shelly 3EM";
     logLevel = lib.mkOption {
       type = lib.types.enum [
         "CRITICAL"
@@ -34,7 +28,7 @@ in
       example = "DEBUG";
       description = "Logging level";
     };
-    logMqttMessage = mkEnableOption "Log MQTT original message, only if `LOG_LEVEL` is set to DEBUG.";
+    logMqttMessage = lib.mkEnableOption "Log MQTT original message, only if `LOG_LEVEL` is set to DEBUG.";
     mqttIgnoredTopics = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -67,13 +61,13 @@ in
       example = "mqttexporter";
       description = "Username which should be used to authenticate against the MQTT broker.";
     };
-    mqttV5Protocol = mkEnableOption "Force to use MQTT protocol v5 instead of 3.1.1.";
+    mqttV5Protocol = lib.mkEnableOption "Force to use MQTT protocol v5 instead of 3.1.1.";
     mqttClientId = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Set client ID manually for MQTT connection";
     };
-    mqttExposeClientId = mkEnableOption "Expose the client ID as a label in Prometheus metrics.";
+    mqttExposeClientId = lib.mkEnableOption "Expose the client ID as a label in Prometheus metrics.";
     prometheusPrefix = lib.mkOption {
       type = lib.types.str;
       default = "mqtt_";
@@ -84,7 +78,7 @@ in
       default = "topic";
       description = "Define the Prometheus label for the topic.";
     };
-    zigbee2MqttAvailability = mkEnableOption "Normalize sensor name for device availability metric added by Zigbee2MQTT.";
+    zigbee2MqttAvailability = lib.mkEnableOption "Normalize sensor name for device availability metric added by Zigbee2MQTT.";
     zwaveTopicPrefix = lib.mkOption {
       type = lib.types.str;
       default = "zwave/";

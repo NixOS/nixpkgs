@@ -6,15 +6,6 @@
 }:
 let
   cfg = config.services.vdr;
-
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    mkIf
-    lib.optional
-    ;
 in
 {
   options = {
@@ -38,7 +29,7 @@ in
         description = "Additional command line arguments to pass to VDR.";
       };
 
-      enableLirc = mkEnableOption "LIRC";
+      enableLirc = lib.mkEnableOption "LIRC";
 
       user = lib.mkOption {
         type = lib.types.str;

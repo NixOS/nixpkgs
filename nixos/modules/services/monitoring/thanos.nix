@@ -1,30 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    collect
-    concatLists
-    concatStringsSep
-    flip
-    getAttrFromPath
-    hasPrefix
-    isList
-    length
-    literalExpression
-    literalMD
-    mapAttrsRecursiveCond
-    mapAttrsToList
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkPackageOption
-    lib.optional
-    lib.optionalAttrs
-    lib.optionalString
-    types
-    ;
-
   cfg = config.services.thanos;
 
   nullOpt = type: description: lib.mkOption {
@@ -36,7 +12,7 @@ let
   optionToArgs = opt: v  : lib.optional (v != null)  ''--${opt}="${toString v}"'';
   flagToArgs   = opt: v  : lib.optional v            "--${opt}";
   listToArgs   = opt: vs : map               (v: ''--${opt}="${v}"'') vs;
-  attrsToArgs  = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
+  attrsToArgs  = opt: kvs: lib.mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
 
   mkParamDef = type: default: description: mkParam type (description + ''
 
@@ -93,19 +69,19 @@ let
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
     (let args = cfg.${cmd}.arguments;
-     in lib.optionalString (length args != 0) (" \\\n  " +
-         concatStringsSep " \\\n  " args));
+     in lib.optionalString (lib.length args != 0) (" \\\n  " +
+         lib.concatStringsSep " \\\n  " args));
 
-  argumentsOf = cmd: concatLists (collect isList
-    (flip mapParamsRecursive params.${cmd} (path: param:
-      let opt = concatStringsSep "." path;
-          v = getAttrFromPath path cfg.${cmd};
+  argumentsOf = cmd: lib.concatLists (lib.collect lib.isList
+    (lib.flip mapParamsRecursive params.${cmd} (path: param:
+      let opt = lib.concatStringsSep "." path;
+          v = lib.getAttrFromPath path cfg.${cmd};
       in param.toArgs opt v)));
 
   mkArgumentsOption = cmd: lib.mkOption {
     type = lib.types.listOf lib.types.str;
     default = argumentsOf cmd;
-    defaultText = literalMD ''
+    defaultText = lib.literalMD ''
       calculated from `config.services.thanos.${cmd}`
     '';
     description = ''
@@ -121,7 +97,7 @@ let
 
   mapParamsRecursive =
     let noParam = attr: !(attr ? toArgs && attr ? option);
-    in mapAttrsRecursiveCond noParam;
+    in lib.mapAttrsRecursiveCond noParam;
 
   paramsToOptions = mapParamsRecursive (_path: param: param.option);
 
@@ -129,11 +105,11 @@ let
 
     log = {
 
-      log.level = mkParamDef (types.enum ["debug" "info" "warn" "error" "fatal"]) "info" ''
+      log.level = mkParamDef (lib.types.enum ["debug" "info" "warn" "error" "fatal"]) "info" ''
         Log filtering level.
       '';
 
-      log.format = mkParam types.str ''
+      log.format = mkParam lib.types.str ''
         Log format to use.
       '';
     };
@@ -160,7 +136,7 @@ let
       tracing.config =
         {
           toArgs = _opt: _attrs: [];
-          option = nullOpt types.attrs ''
+          option = nullOpt lib.types.attrs ''
             Tracing configuration.
 
             When not `null` the attribute set gets converted to
@@ -176,25 +152,25 @@ let
 
     common = cfg: params.log // params.tracing cfg // {
 
-      http-address = mkParamDef types.str "0.0.0.0:10902" ''
+      http-address = mkParamDef lib.types.str "0.0.0.0:10902" ''
         Listen `host:port` for HTTP endpoints.
       '';
 
-      grpc-address = mkParamDef types.str "0.0.0.0:10901" ''
+      grpc-address = mkParamDef lib.types.str "0.0.0.0:10901" ''
         Listen `ip:port` address for gRPC endpoints (StoreAPI).
 
         Make sure this address is routable from other components.
       '';
 
-      grpc-server-tls-cert = mkParam types.str ''
+      grpc-server-tls-cert = mkParam lib.types.str ''
         TLS Certificate for gRPC server, leave blank to disable TLS
       '';
 
-      grpc-server-tls-key = mkParam types.str ''
+      grpc-server-tls-key = mkParam lib.types.str ''
         TLS Key for the gRPC server, leave blank to disable TLS
       '';
 
-      grpc-server-tls-client-ca = mkParam types.str ''
+      grpc-server-tls-client-ca = mkParam lib.types.str ''
         TLS CA to verify clients against.
 
         If no client CA is specified, there is no client verification on server side.
@@ -225,7 +201,7 @@ let
       objstore.config =
         {
           toArgs = _opt: _attrs: [];
-          option = nullOpt types.attrs ''
+          option = nullOpt lib.types.attrs ''
             Object store configuration.
 
             When not `null` the attribute set gets converted to
@@ -241,7 +217,7 @@ let
 
     sidecar = params.common cfg.sidecar // params.objstore cfg.sidecar // {
 
-      prometheus.url = mkParamDef types.str "http://localhost:9090" ''
+      prometheus.url = mkParamDef lib.types.str "http://localhost:9090" ''
         URL at which to reach Prometheus's API.
 
         For better performance use local network.
@@ -259,11 +235,11 @@ let
         };
       };
 
-      reloader.config-file = mkParam types.str ''
+      reloader.config-file = mkParam lib.types.str ''
         Config file watched by the reloader.
       '';
 
-      reloader.config-envsubst-file = mkParam types.str ''
+      reloader.config-envsubst-file = mkParam lib.types.str ''
         Output file for environment variable substituted config file.
       '';
 
@@ -280,15 +256,15 @@ let
         in which to cache remote blocks.
       '';
 
-      index-cache-size = mkParamDef types.str "250MB" ''
+      index-cache-size = mkParamDef lib.types.str "250MB" ''
         Maximum size of items held in the index cache.
       '';
 
-      chunk-pool-size = mkParamDef types.str "2GB" ''
+      chunk-pool-size = mkParamDef lib.types.str "2GB" ''
         Maximum size of concurrently allocatable bytes for chunks.
       '';
 
-      store.limits.request-samples = mkParamDef types.int 0 ''
+      store.limits.request-samples = mkParamDef lib.types.int 0 ''
         The maximum samples allowed for a single Series request.
         The Series call fails if this limit is exceeded.
 
@@ -298,19 +274,19 @@ let
         considering each chunk contains a maximum of 120 samples.
       '';
 
-      store.grpc.series-max-concurrency = mkParamDef types.int 20 ''
+      store.grpc.series-max-concurrency = mkParamDef lib.types.int 20 ''
         Maximum number of concurrent Series calls.
       '';
 
-      sync-block-duration = mkParamDef types.str "3m" ''
+      sync-block-duration = mkParamDef lib.types.str "3m" ''
         Repeat interval for syncing the blocks between local and remote view.
       '';
 
-      block-sync-concurrency = mkParamDef types.int 20 ''
+      block-sync-concurrency = mkParamDef lib.types.int 20 ''
         Number of goroutines to use when syncing blocks from object storage.
       '';
 
-      min-time = mkParamDef types.str "0000-01-01T00:00:00Z" ''
+      min-time = mkParamDef lib.types.str "0000-01-01T00:00:00Z" ''
         Start of time range limit to serve.
 
         Thanos Store serves only metrics, which happened later than this
@@ -319,7 +295,7 @@ let
         ms, s, m, h, d, w, y.
       '';
 
-      max-time = mkParamDef types.str "9999-12-31T23:59:59Z" ''
+      max-time = mkParamDef lib.types.str "9999-12-31T23:59:59Z" ''
         End of time range limit to serve.
 
         Thanos Store serves only blocks, which happened earlier than this
@@ -335,35 +311,35 @@ let
         Use TLS when talking to the gRPC server
       '';
 
-      grpc-client-tls-cert = mkParam types.str ''
+      grpc-client-tls-cert = mkParam lib.types.str ''
         TLS Certificates to use to identify this client to the server
       '';
 
-      grpc-client-tls-key = mkParam types.str ''
+      grpc-client-tls-key = mkParam lib.types.str ''
         TLS Key for the client's certificate
       '';
 
-      grpc-client-tls-ca = mkParam types.str ''
+      grpc-client-tls-ca = mkParam lib.types.str ''
         TLS CA Certificates to use to verify gRPC servers
       '';
 
-      grpc-client-server-name = mkParam types.str ''
+      grpc-client-server-name = mkParam lib.types.str ''
         Server name to verify the hostname on the returned gRPC certificates.
         See <https://tools.ietf.org/html/rfc4366#section-3.1>
       '';
 
-      grpc-compression = mkParam types.str ''
+      grpc-compression = mkParam lib.types.str ''
         Compression algorithm to use for gRPC requests to other clients.
       '';
 
-      web.route-prefix = mkParam types.str ''
+      web.route-prefix = mkParam lib.types.str ''
         Prefix for API and UI endpoints.
 
         This allows thanos UI to be served on a sub-path. This option is
         analogous to {option}`web.route-prefix` of Promethus.
       '';
 
-      web.external-prefix = mkParam types.str ''
+      web.external-prefix = mkParam lib.types.str ''
         Static prefix for all HTML links and redirect URLs in the UI query web
         interface.
 
@@ -372,7 +348,7 @@ let
         behind a reverse proxy that strips a URL sub-path.
       '';
 
-      web.prefix-header = mkParam types.str ''
+      web.prefix-header = mkParam lib.types.str ''
         Name of HTTP request header used for dynamic prefixing of UI links and
         redirects.
 
@@ -389,11 +365,11 @@ let
         header. This allows thanos UI to be served on a sub-path.
       '';
 
-      query.timeout = mkParamDef types.str "2m" ''
+      query.timeout = mkParamDef lib.types.str "2m" ''
         Maximum time to process query by query node.
       '';
 
-      query.max-concurrent = mkParamDef types.int 20 ''
+      query.max-concurrent = mkParamDef lib.types.int 20 ''
         Maximum number of queries processed concurrently by query node.
       '';
 
@@ -422,15 +398,15 @@ let
         can be a glob pattern.
       '';
 
-      store.sd-interval = mkParamDef types.str "5m" ''
+      store.sd-interval = mkParamDef lib.types.str "5m" ''
         Refresh interval to re-read file SD files. It is used as a resync fallback.
       '';
 
-      store.sd-dns-interval = mkParamDef types.str "30s" ''
+      store.sd-dns-interval = mkParamDef lib.types.str "30s" ''
         Interval between DNS resolutions.
       '';
 
-      store.unhealthy-timeout = mkParamDef types.str "5m" ''
+      store.unhealthy-timeout = mkParamDef lib.types.str "5m" ''
         Timeout before an unhealthy store is cleaned from the store UI page.
       '';
 
@@ -445,11 +421,11 @@ let
         `partial_response` param is specified.
       '';
 
-      query.default-evaluation-interval = mkParamDef types.str "1m" ''
+      query.default-evaluation-interval = mkParamDef lib.types.str "1m" ''
         Set default evaluation interval for sub queries.
       '';
 
-      store.response-timeout = mkParamDef types.str "0ms" ''
+      store.response-timeout = mkParamDef lib.types.str "0ms" ''
         If a Store doesn't send any data in this specified duration then a
         Store will be ignored and partial data will be returned if it's
         enabled. `0` disables timeout.
@@ -457,7 +433,7 @@ let
     };
 
     query-frontend = params.common cfg.query-frontend // {
-      query-frontend.downstream-url = mkParamDef types.str "http://localhost:9090" ''
+      query-frontend.downstream-url = mkParamDef lib.types.str "http://localhost:9090" ''
         URL of downstream Prometheus Query compatible API.
       '';
     };
@@ -479,15 +455,15 @@ let
         Rule files that should be used by rule manager. Can be in glob format.
       '';
 
-      eval-interval = mkParamDef types.str "1m" ''
+      eval-interval = mkParamDef lib.types.str "1m" ''
         The default evaluation interval to use.
       '';
 
-      tsdb.block-duration = mkParamDef types.str "2h" ''
+      tsdb.block-duration = mkParamDef lib.types.str "2h" ''
         Block duration for TSDB block.
       '';
 
-      tsdb.retention = mkParamDef types.str "48h" ''
+      tsdb.retention = mkParamDef lib.types.str "48h" ''
         Block retention time on local disk.
       '';
 
@@ -502,11 +478,11 @@ let
         used as a prefix for the regular Alertmanager API path.
       '';
 
-      alertmanagers.send-timeout = mkParamDef types.str "10s" ''
+      alertmanagers.send-timeout = mkParamDef lib.types.str "10s" ''
         Timeout for sending alerts to alertmanager.
       '';
 
-      alert.query-url = mkParam types.str ''
+      alert.query-url = mkParam lib.types.str ''
         The external Thanos Query URL that would be set in all alerts 'Source' field.
       '';
 
@@ -518,7 +494,7 @@ let
         Similar Prometheus alert relabelling
       '';
 
-      web.route-prefix = mkParam types.str ''
+      web.route-prefix = mkParam lib.types.str ''
         Prefix for API and UI endpoints.
 
         This allows thanos UI to be served on a sub-path.
@@ -526,7 +502,7 @@ let
         This option is analogous to `--web.route-prefix` of Promethus.
       '';
 
-      web.external-prefix = mkParam types.str ''
+      web.external-prefix = mkParam lib.types.str ''
         Static prefix for all HTML links and redirect URLs in the UI query web
         interface.
 
@@ -535,7 +511,7 @@ let
         behind a reverse proxy that strips a URL sub-path.
       '';
 
-      web.prefix-header = mkParam types.str ''
+      web.prefix-header = mkParam lib.types.str ''
         Name of HTTP request header used for dynamic prefixing of UI links and
         redirects.
 
@@ -565,18 +541,18 @@ let
         The path can be a glob pattern.
       '';
 
-      query.sd-interval = mkParamDef types.str "5m" ''
+      query.sd-interval = mkParamDef lib.types.str "5m" ''
         Refresh interval to re-read file SD files. (used as a fallback)
       '';
 
-      query.sd-dns-interval = mkParamDef types.str "30s" ''
+      query.sd-dns-interval = mkParamDef lib.types.str "30s" ''
         Interval between DNS resolutions.
       '';
     };
 
     compact = params.log // params.tracing cfg.compact // params.objstore cfg.compact // {
 
-      http-address = mkParamDef types.str "0.0.0.0:10902" ''
+      http-address = mkParamDef lib.types.str "0.0.0.0:10902" ''
         Listen `host:port` for HTTP endpoints.
       '';
 
@@ -585,25 +561,25 @@ let
         in which to cache blocks and process compactions.
       '';
 
-      consistency-delay = mkParamDef types.str "30m" ''
+      consistency-delay = mkParamDef lib.types.str "30m" ''
         Minimum age of fresh (non-compacted) blocks before they are being
         processed. Malformed blocks older than the maximum of consistency-delay
         and 30m0s will be removed.
       '';
 
-      retention.resolution-raw = mkParamDef types.str "0d" ''
+      retention.resolution-raw = mkParamDef lib.types.str "0d" ''
         How long to retain raw samples in bucket.
 
         `0d` - disables this retention
       '';
 
-      retention.resolution-5m = mkParamDef types.str "0d" ''
+      retention.resolution-5m = mkParamDef lib.types.str "0d" ''
         How long to retain samples of resolution 1 (5 minutes) in bucket.
 
         `0d` - disables this retention
       '';
 
-      retention.resolution-1h = mkParamDef types.str "0d" ''
+      retention.resolution-1h = mkParamDef lib.types.str "0d" ''
         How long to retain samples of resolution 2 (1 hour) in bucket.
 
         `0d` - disables this retention
@@ -611,7 +587,7 @@ let
 
       startAt = {
         toArgs = _opt: startAt: flagToArgs "wait" (startAt == null);
-        option = nullOpt types.str ''
+        option = nullOpt lib.types.str ''
           When this option is set to a `systemd.time`
           specification the Thanos compactor will run at the specified period.
 
@@ -629,7 +605,7 @@ let
         to render all samples for a human eye anyway
       '';
 
-      compact.concurrency = mkParamDef types.int 1 ''
+      compact.concurrency = mkParamDef lib.types.int 1 ''
         Number of goroutines to use when compacting groups.
       '';
     };
@@ -645,11 +621,11 @@ let
 
     receive = params.common cfg.receive // params.objstore cfg.receive // {
 
-      receive.grpc-compression = mkParam types.str ''
+      receive.grpc-compression = mkParam lib.types.str ''
         Compression algorithm to use for gRPC requests to other receivers.
       '';
 
-      remote-write.address = mkParamDef types.str "0.0.0.0:19291" ''
+      remote-write.address = mkParamDef lib.types.str "0.0.0.0:19291" ''
         Address to listen on for remote write requests.
       '';
 
@@ -664,7 +640,7 @@ let
         instances is added.
       '';
 
-      tsdb.retention = mkParamDef types.str "15d" ''
+      tsdb.retention = mkParamDef lib.types.str "15d" ''
         How long to retain raw samples on local storage.
 
         `0d` - disables this retention
@@ -676,7 +652,7 @@ let
   assertRelativeStateDir = cmd: {
     assertions = [
       {
-        assertion = !hasPrefix "/" cfg.${cmd}.stateDir;
+        assertion = !lib.hasPrefix "/" cfg.${cmd}.stateDir;
         message =
           "The option services.thanos.${cmd}.stateDir should not be an absolute directory." +
           " It should be a directory relative to /var/lib.";
@@ -764,7 +740,7 @@ in {
       };
     })
 
-    (lib.mkIf cfg.store.enable (mkMerge [
+    (lib.mkIf cfg.store.enable (lib.mkMerge [
       (assertRelativeStateDir "store")
       {
         systemd.services.thanos-store = {
@@ -807,7 +783,7 @@ in {
       };
     })
 
-    (lib.mkIf cfg.rule.enable (mkMerge [
+    (lib.mkIf cfg.rule.enable (lib.mkMerge [
       (assertRelativeStateDir "rule")
       {
         systemd.services.thanos-rule = {
@@ -824,7 +800,7 @@ in {
       }
     ]))
 
-    (lib.mkIf cfg.compact.enable (mkMerge [
+    (lib.mkIf cfg.compact.enable (lib.mkMerge [
       (assertRelativeStateDir "compact")
       {
         systemd.services.thanos-compact =
@@ -843,7 +819,7 @@ in {
       }
     ]))
 
-    (lib.mkIf cfg.downsample.enable (mkMerge [
+    (lib.mkIf cfg.downsample.enable (lib.mkMerge [
       (assertRelativeStateDir "downsample")
       {
         systemd.services.thanos-downsample = {
@@ -860,7 +836,7 @@ in {
       }
     ]))
 
-    (lib.mkIf cfg.receive.enable (mkMerge [
+    (lib.mkIf cfg.receive.enable (lib.mkMerge [
       (assertRelativeStateDir "receive")
       {
         systemd.services.thanos-receive = {

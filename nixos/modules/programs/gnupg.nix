@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkRemovedOptionModule
-    lib.mkOption
-    mkPackageOption
-    types
-    mkIf
-    lib.optionalString
-    ;
-
   cfg = config.programs.gnupg;
 
   agentSettingsFormat = pkgs.formats.keyValue {
@@ -69,7 +60,7 @@ in
     };
 
     agent.pinentryPackage = lib.mkOption {
-      type = lib.types.nullOr types.package;
+      type = lib.types.nullOr lib.types.package;
       example = lib.literalMD "pkgs.pinentry-gnome3";
       default = pkgs.pinentry-curses;
       defaultText = lib.literalMD "matching the configured desktop environment or `pkgs.pinentry-curses`";

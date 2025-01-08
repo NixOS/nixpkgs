@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    lib.optionalString
-    lib.mkOption
-    types
-    mkIf
-    mkDefault
-    ;
 
   cfg = config.environment.stub-ld;
 
@@ -65,7 +58,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.ldso = lib.mkDefault stub-ld;
-    environment.ldso32 = lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 (mkDefault stub-ld32);
+    environment.ldso32 = lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 (lib.mkDefault stub-ld32);
   };
 
   meta.maintainers = with lib.maintainers; [ tejing ];

@@ -24,16 +24,6 @@ let
     ++ lib.optional cfg.chromium.disableRoutes "--chromium-disable-routes"
     ++ lib.optional cfg.libreoffice.autoStart "--libreoffice-auto-start"
     ++ lib.optional cfg.libreoffice.disableRoutes "--libreoffice-disable-routes";
-
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    mkIf
-    lib.optional
-    lib.optionalAttrs
-    ;
 in
 {
   options = {
@@ -138,7 +128,7 @@ in
 
       pdfEngines = lib.mkOption {
         type = lib.types.listOf (
-          types.enum [
+          lib.types.enum [
             "pdftk"
             "qpdf"
             "libreoffice-pdfengine"

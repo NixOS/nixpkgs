@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (lib) mkIf lib.mkOption types;
   cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
 in

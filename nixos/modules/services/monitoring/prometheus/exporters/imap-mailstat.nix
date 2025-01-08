@@ -24,26 +24,17 @@ let
               "XXX ${toString value}"
           )
       );
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStrings
-    concatStringsSep
-    attrValues
-    mapAttrs
-    lib.optionalString
-    ;
   createConfigFile =
     accounts:
     # unfortunately on toTOML yet
     # https://github.com/NixOS/nix/issues/3929
     pkgs.writeText "imap-mailstat-exporter.conf" ''
-      ${concatStrings (
-        attrValues (
-          mapAttrs (
+      ${lib.concatStrings (
+        lib.attrValues (
+          lib.mapAttrs (
             name: config:
             "[[Accounts]]\nname = \"${name}\"\n${
-              concatStrings (lib.attrValues (mapAttrs (k: v: "${k} = ${valueToString v}\n") config))
+              lib.concatStrings (lib.attrValues (lib.mapAttrs (k: v: "${k} = ${valueToString v}\n") config))
             }"
           ) accounts
         )
@@ -61,8 +52,8 @@ let
     username = mkOpt lib.types.str "If empty string mailaddress value is used";
     password = mkOpt lib.types.str "";
     serveraddress = mkOpt lib.types.str "mailserver name or address";
-    serverport = mkOpt types.int "imap port number (at the moment only tls connection is supported)";
-    starttls = mkOpt types.bool "set to true for using STARTTLS to start a TLS connection";
+    serverport = mkOpt lib.types.int "imap port number (at the moment only tls connection is supported)";
+    starttls = mkOpt lib.types.bool "set to true for using STARTTLS to start a TLS connection";
   };
 in
 {
@@ -76,7 +67,7 @@ in
       '';
     };
     accounts = lib.mkOption {
-      type = lib.types.attrsOf (types.submodule accountOptions);
+      type = lib.types.attrsOf (lib.types.submodule accountOptions);
       default = { };
       description = ''
         Accounts to monitor

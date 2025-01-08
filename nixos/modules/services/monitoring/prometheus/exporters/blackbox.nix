@@ -9,12 +9,6 @@
 let
   logPrefix = "services.prometheus.exporter.blackbox";
   cfg = config.services.prometheus.exporters.blackbox;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    escapeShellArg
-    ;
 
   # This ensures that we can deal with string paths, path types and
   # store-path strings with context.

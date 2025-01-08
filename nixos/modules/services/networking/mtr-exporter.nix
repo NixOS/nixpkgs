@@ -6,26 +6,10 @@
 }:
 
 let
-  inherit (lib)
-    maintainers
-    types
-    literalExpression
-    escapeShellArg
-    escapeShellArgs
-    mkEnableOption
-    lib.mkOption
-    mkRemovedOptionModule
-    mkIf
-    mkPackageOption
-    lib.optionalString
-    concatMapStrings
-    concatStringsSep
-    ;
-
   cfg = config.services.mtr-exporter;
 
   jobsConfig = pkgs.writeText "mtr-exporter.conf" (
-    concatMapStrings (job: ''
+    lib.concatMapStrings (job: ''
       ${job.name} -- ${job.schedule} -- ${lib.concatStringsSep " " job.flags} ${job.address}
     '') cfg.jobs
   );
@@ -72,12 +56,12 @@ in
 
         package = lib.mkPackageOption pkgs "mtr-exporter" { };
 
-        mtrPackage = mkPackageOption pkgs "mtr" { };
+        mtrPackage = lib.mkPackageOption pkgs "mtr" { };
 
         jobs = lib.mkOption {
           description = "List of MTR jobs. Will be added to /etc/mtr-exporter.conf";
           type = lib.types.nonEmptyListOf (
-            types.submodule {
+            lib.types.submodule {
               options = {
                 name = lib.mkOption {
                   type = lib.types.str;

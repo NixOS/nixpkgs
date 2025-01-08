@@ -7,34 +7,13 @@
 let
   cfg = config.services.cyrus-imap;
   cyrus-imapdPkg = pkgs.cyrus-imapd;
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optionalAttrs
-    lib.optionalString
-    generators
-    mapAttrsToList
-    ;
-  inherit (lib.strings) concatStringsSep;
-  inherit (lib.types)
-    attrsOf
-    submodule
-    listOf
-    oneOf
-    str
-    int
-    bool
-    nullOr
-    path
-    ;
 
   mkCyrusConfig =
     settings:
     let
       mkCyrusOptionsList =
         v:
-        mapAttrsToList (
+        lib.mapAttrsToList (
           p: q:
           if (q != null) then
             if builtins.isInt q then
@@ -44,9 +23,9 @@ let
           else
             ""
         ) v;
-      mkCyrusOptionsString = v: concatStringsSep " " (mkCyrusOptionsList v);
+      mkCyrusOptionsString = v: lib.concatStringsSep " " (mkCyrusOptionsList v);
     in
-    concatStringsSep "\n  " (mapAttrsToList (n: v: n + " " + (mkCyrusOptionsString v)) settings);
+    lib.concatStringsSep "\n  " (lib.mapAttrsToList (n: v: n + " " + (mkCyrusOptionsString v)) settings);
 
   cyrusConfig = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (n: v: ''
@@ -57,27 +36,26 @@ let
   );
 
   imapdConfig =
-    with generators;
-    toKeyValue {
-      mkKeyValue = mkKeyValueDefault {
+    lib.generators.toKeyValue {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
         mkValueString =
           v:
           if builtins.isBool v then
             if v then "yes" else "no"
           else if builtins.isList v then
-            concatStringsSep " " v
+            lib.concatStringsSep " " v
           else
-            mkValueStringDefault { } v;
+            lib.generators.mkValueStringDefault { } v;
       } ": ";
     } cfg.imapdSettings;
 in
 {
   options.services.cyrus-imap = {
     enable = lib.mkEnableOption "Cyrus IMAP, an email, contacts and calendar server";
-    debug = mkEnableOption "debugging messages for the Cyrus master process";
+    debug = lib.mkEnableOption "debugging messages for the Cyrus master process";
 
     listenQueue = lib.mkOption {
-      type = int;
+      type = lib.types.int;
       default = 32;
       description = ''
         Socket listen queue backlog size. See listen(2) for more information about a backlog.
@@ -85,7 +63,7 @@ in
       '';
     };
     tmpDBDir = lib.mkOption {
-      type = path;
+      type = lib.types.path;
       default = "/run/cyrus/db";
       description = ''
         Location where DB files are stored.
@@ -93,12 +71,12 @@ in
       '';
     };
     cyrusSettings = lib.mkOption {
-      type = submodule {
-        freeformType = attrsOf (
-          attrsOf (oneOf [
-            bool
-            int
-            (listOf str)
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf (
+          lib.types.attrsOf (lib.types.oneOf [
+            lib.types.bool
+            lib.types.int
+            (lib.types.listOf lib.types.str)
           ])
         );
         options = {
@@ -202,37 +180,37 @@ in
       description = "Cyrus configuration settings. See [cyrus.conf(5)](https://www.cyrusimap.org/imap/reference/manpages/configs/cyrus.conf.html)";
     };
     imapdSettings = lib.mkOption {
-      type = submodule {
-        freeformType = attrsOf (oneOf [
-          str
-          int
-          bool
-          (listOf str)
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf (lib.types.oneOf [
+          lib.types.str
+          lib.types.int
+          lib.types.bool
+          (lib.types.listOf lib.types.str)
         ]);
         options = {
           configdirectory = lib.mkOption {
-            type = path;
+            type = lib.types.path;
             default = "/var/lib/cyrus";
             description = ''
               The pathname of the IMAP configuration directory.
             '';
           };
           lmtpsocket = lib.mkOption {
-            type = path;
+            type = lib.types.path;
             default = "/run/cyrus/lmtp";
             description = ''
               Unix socket that lmtpd listens on, used by deliver(8). This should match the path specified in cyrus.conf(5).
             '';
           };
           idlesocket = lib.mkOption {
-            type = path;
+            type = lib.types.path;
             default = "/run/cyrus/idle";
             description = ''
               Unix socket that idled listens on.
             '';
           };
           notifysocket = lib.mkOption {
-            type = path;
+            type = lib.types.path;
             default = "/run/cyrus/notify";
             description = ''
               Unix domain socket that the mail notification daemon listens on.
@@ -270,45 +248,45 @@ in
     };
 
     user = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Cyrus IMAP user name. If this is not set, a user named `cyrus` will be created.";
     };
 
     group = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Cyrus IMAP group name. If this is not set, a group named `cyrus` will be created.";
     };
 
     imapdConfigFile = lib.mkOption {
-      type = nullOr path;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "Path to the configuration file used for cyrus-imap.";
       apply = v: if v != null then v else pkgs.writeText "imapd.conf" imapdConfig;
     };
 
     cyrusConfigFile = lib.mkOption {
-      type = nullOr path;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "Path to the configuration file used for Cyrus.";
       apply = v: if v != null then v else pkgs.writeText "cyrus.conf" cyrusConfig;
     };
 
     sslCACert = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "File path which containing one or more CA certificates to use.";
     };
 
     sslServerCert = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "File containing the global certificate used for all services (IMAP, POP3, LMTP, Sieve)";
     };
 
     sslServerKey = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "File containing the private key belonging to the global server certificate.";
     };

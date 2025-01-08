@@ -1,11 +1,6 @@
 # Not a module
 { pkgs, lib }:
 let
-  inherit (lib)
-    types
-    literalExpression
-    lib.mkOption
-    ;
 
   format = pkgs.formats.toml { };
 
@@ -54,7 +49,7 @@ let
             because each split of resources causes inefficiencies; particularly with regards
             to build latency because of extra downloads.
           '';
-          type = lib.types.either types.ints.positive (types.enum [ "auto" ]);
+          type = lib.types.either lib.types.ints.positive (lib.types.enum [ "auto" ]);
           default = "auto";
           defaultText = lib.literalMD ''
             `"auto"`, meaning equal to the number of CPU cores.

@@ -5,7 +5,6 @@
   ...
 }:
 let
-  inherit (lib) lib.mkOption types;
   cfg = config.services.send;
 in
 {

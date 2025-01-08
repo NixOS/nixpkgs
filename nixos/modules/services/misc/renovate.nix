@@ -5,13 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    mkIf
-    ;
   json = pkgs.formats.json { };
   cfg = config.services.renovate;
   generateValidatedConfig =

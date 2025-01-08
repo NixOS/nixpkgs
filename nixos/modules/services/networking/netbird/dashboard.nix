@@ -6,19 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    boolToString
-    concatStringsSep
-    hasAttr
-    isBool
-    mapAttrs
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    ;
-
   inherit (lib.types)
     attrsOf
     bool
@@ -28,7 +15,7 @@ let
     submodule
     ;
 
-  toStringEnv = value: if isBool value then boolToString value else toString value;
+  toStringEnv = value: if lib.isBool value then lib.boolToString value else toString value;
 
   cfg = config.services.netbird.server.dashboard;
 in
@@ -39,7 +26,7 @@ in
 
     package = lib.mkPackageOption pkgs "netbird-dashboard" { };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy to serve the dashboard";
+    enableNginx = lib.mkEnableOption "Nginx reverse-proxy to serve the dashboard";
 
     domain = lib.mkOption {
       type = str;
@@ -86,7 +73,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = hasAttr "AUTH_AUTHORITY" cfg.settings;
+        assertion = lib.hasAttr "AUTH_AUTHORITY" cfg.settings;
         message = "The setting AUTH_AUTHORITY is required for the dasboard to function.";
       }
     ];
@@ -111,7 +98,7 @@ in
           NETBIRD_MGMT_API_ENDPOINT = cfg.managementServer;
           NETBIRD_MGMT_GRPC_API_ENDPOINT = cfg.managementServer;
         }
-        // (mapAttrs (_: mkDefault) {
+        // (lib.mapAttrs (_: lib.mkDefault) {
           # Those values have to be easily overridable
           AUTH_AUDIENCE = "netbird"; # must be set for your devices to be able to log in
           AUTH_CLIENT_ID = "netbird";
@@ -126,7 +113,7 @@ in
           {
             nativeBuildInputs = [ pkgs.gettext ];
             env = {
-              ENV_STR = concatStringsSep " " [
+              ENV_STR = lib.concatStringsSep " " [
                 "$AUTH_AUDIENCE"
                 "$AUTH_AUTHORITY"
                 "$AUTH_CLIENT_ID"
@@ -142,7 +129,7 @@ in
                 "$NETBIRD_TOKEN_SOURCE"
                 "$USE_AUTH0"
               ];
-            } // (mapAttrs (_: toStringEnv) cfg.settings);
+            } // (lib.mapAttrs (_: toStringEnv) cfg.settings);
           }
           ''
             cp -R ${cfg.package} build

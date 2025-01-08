@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption types;
   cfg = config.services.nar-serve;
 in
 {

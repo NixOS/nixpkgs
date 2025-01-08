@@ -8,24 +8,6 @@ let
   cfg = config.hardware.bluetooth;
   package = cfg.package;
 
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRenamedOptionModule
-    mkRemovedOptionModule
-    concatStringsSep
-    escapeShellArgs
-    literalExpression
-    lib.optional
-    lib.optionals
-    lib.optionalAttrs
-    recursiveUpdate
-    types
-    ;
-
   cfgFmt = pkgs.formats.ini { };
 
   defaults = {
@@ -124,7 +106,7 @@ in
     environment.etc."bluetooth/input.conf".source = cfgFmt.generate "input.conf" cfg.input;
     environment.etc."bluetooth/network.conf".source = cfgFmt.generate "network.conf" cfg.network;
     environment.etc."bluetooth/main.conf".source = cfgFmt.generate "main.conf" (
-      recursiveUpdate defaults cfg.settings
+      lib.recursiveUpdate defaults cfg.settings
     );
     services.udev.packages = [ package ];
     services.dbus.packages = [ package ] ++ lib.optional cfg.hsphfpd.enable pkgs.hsphfpd;
@@ -154,7 +136,7 @@ in
             unitConfig.X-RestartIfChanged = false;
           };
       }
-      // (optionalAttrs cfg.hsphfpd.enable {
+      // (lib.optionalAttrs cfg.hsphfpd.enable {
         hsphfpd = {
           after = [ "bluetooth.service" ];
           requires = [ "bluetooth.service" ];

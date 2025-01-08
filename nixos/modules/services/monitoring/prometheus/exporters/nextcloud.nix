@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.nextcloud;
-  inherit (lib)
-    lib.mkOption
-    types
-    escapeShellArg
-    concatStringsSep
-    ;
 in
 {
   port = 9205;

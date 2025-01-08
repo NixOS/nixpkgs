@@ -6,14 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    mkIf
-    lib.mkOption
-    singleton
-    types
-    mkPackageOption
-    ;
   inherit (pkgs) coreutils;
   cfg = config.services.exim;
 in

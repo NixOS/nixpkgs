@@ -7,33 +7,20 @@
 
 let
   inherit (config.services.mailpit) instances;
-  inherit (lib)
-    cli
-    concatStringsSep
-    const
-    filterAttrs
-    getExe
-    mapAttrs'
-    mkIf
-    lib.mkOption
-    nameValuePair
-    types
-    ;
-
   isNonNull = v: v != null;
   genCliFlags =
-    settings: concatStringsSep " " (cli.toGNUCommandLine { } (lib.filterAttrs (const isNonNull) settings));
+    settings: lib.concatStringsSep " " (lib.cli.toGNUCommandLine { } (lib.filterAttrs (lib.const isNonNull) settings));
 in
 {
   options.services.mailpit.instances = lib.mkOption {
     default = { };
     type = lib.types.attrsOf (
-      types.submodule {
-        freeformType = types.attrsOf (
-          types.oneOf [
-            types.str
-            types.int
-            types.bool
+      lib.types.submodule {
+        freeformType = lib.types.attrsOf (
+          lib.types.oneOf [
+            lib.types.str
+            lib.types.int
+            lib.types.bool
           ]
         );
         options = {
@@ -85,9 +72,9 @@ in
   };
 
   config = lib.mkIf (instances != { }) {
-    systemd.services = mapAttrs' (
+    systemd.services = lib.mapAttrs' (
       name: cfg:
-      nameValuePair "mailpit-${name}" {
+      lib.nameValuePair "mailpit-${name}" {
         wantedBy = [ "multi-user.target" ];
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
@@ -95,7 +82,7 @@ in
           DynamicUser = true;
           StateDirectory = "mailpit";
           WorkingDirectory = "%S/mailpit";
-          ExecStart = "${getExe pkgs.mailpit} ${genCliFlags cfg}";
+          ExecStart = "${lib.getExe pkgs.mailpit} ${genCliFlags cfg}";
           Restart = "on-failure";
         };
       }

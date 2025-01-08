@@ -4,13 +4,10 @@
   lib,
   ...
 }:
-let
-  inherit (lib) types lib.mkOption;
-in
 {
   options = {
     passthru = lib.mkOption {
-      type = lib.types.lazyAttrsOf types.raw;
+      type = lib.types.lazyAttrsOf lib.types.raw;
       description = ''
         Attributes to add to the returned derivations,
         which are not necessarily part of the build.

@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.kea;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkRenamedOptionModule
-    literalExpression
-    ;
 in
 {
   imports = [

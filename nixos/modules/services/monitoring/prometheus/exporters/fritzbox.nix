@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.fritzbox;
-  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9133;

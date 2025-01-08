@@ -7,16 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    lib.mkOption
-    mkEnableOption
-    types
-    mkIf
-    mkMerge
-    lib.optional
-    versionOlder
-    ;
   cfg = config.hardware.system76;
   opt = options.hardware.system76;
 
@@ -24,7 +14,7 @@ let
   modules = [
     "system76"
     "system76-io"
-  ] ++ (optional (versionOlder kpkgs.kernel.version "5.5") "system76-acpi");
+  ] ++ (lib.optional (lib.versionOlder kpkgs.kernel.version "5.5") "system76-acpi");
   modulePackages = map (m: kpkgs.${m}) modules;
   moduleConfig = lib.mkIf cfg.kernel-modules.enable {
     boot.extraModulePackages = modulePackages;
@@ -76,7 +66,7 @@ in
 {
   options = {
     hardware.system76 = {
-      enableAll = mkEnableOption "all recommended configuration for system76 systems";
+      enableAll = lib.mkEnableOption "all recommended configuration for system76 systems";
 
       firmware-daemon.enable = lib.mkOption {
         default = cfg.enableAll;

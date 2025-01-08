@@ -5,28 +5,13 @@
   ...
 }:
 let
-  inherit (lib)
-    mapAttrs'
-    nameValuePair
-    filterAttrs
-    types
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    literalExpression
-    mkIf
-    flatten
-    maintainers
-    attrValues
-    ;
-
   cfg = config.services.autosuspend;
 
   settingsFormat = pkgs.formats.ini { };
 
-  checks = mapAttrs' (n: v: nameValuePair "check.${n}" (lib.filterAttrs (_: v: v != null) v)) cfg.checks;
-  wakeups = mapAttrs' (
-    n: v: nameValuePair "wakeup.${n}" (lib.filterAttrs (_: v: v != null) v)
+  checks = lib.mapAttrs' (n: v: lib.nameValuePair "check.${n}" (lib.filterAttrs (_: v: v != null) v)) cfg.checks;
+  wakeups = lib.mapAttrs' (
+    n: v: lib.nameValuePair "wakeup.${n}" (lib.filterAttrs (_: v: v != null) v)
   ) cfg.wakeups;
 
   # Whether the given check is enabled
@@ -50,10 +35,10 @@ let
 
   autosuspend = cfg.package;
 
-  checkType = types.submodule {
+  checkType = lib.types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption "this activity check" // {
+    options.enabled = lib.mkEnableOption "this activity check" // {
       default = true;
     };
 
@@ -87,10 +72,10 @@ let
     };
   };
 
-  wakeupType = types.submodule {
+  wakeupType = lib.types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption "this wake-up check" // {
+    options.enabled = lib.mkEnableOption "this wake-up check" // {
       default = true;
     };
 
@@ -230,7 +215,7 @@ in
       documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = flatten (lib.attrValues (lib.filterAttrs (n: _: hasCheck n) dependenciesForChecks));
+      path = lib.flatten (lib.attrValues (lib.filterAttrs (n: _: hasCheck n) dependenciesForChecks));
       serviceConfig = {
         ExecStart = ''${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon'';
       };

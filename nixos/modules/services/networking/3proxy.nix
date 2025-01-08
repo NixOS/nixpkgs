@@ -371,7 +371,7 @@ in
         ${lib.concatMapStringsSep "\n" (service: ''
           auth ${lib.concatStringsSep " " service.auth}
 
-          ${lib.optionalString (cfg.denyPrivate) "deny * * ${optionalList cfg.privateRanges}"}
+          ${lib.optionalString (cfg.denyPrivate) "deny * * ${lib.optionalList cfg.privateRanges}"}
 
           ${lib.concatMapStringsSep "\n" (
             acl:

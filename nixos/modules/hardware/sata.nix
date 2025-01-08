@@ -5,13 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.hardware.sata.timeout;
 
   buildRule =
@@ -63,7 +56,7 @@ in
     drives = lib.mkOption {
       description = "List of drives for which to configure the timeout.";
       type = lib.types.listOf (
-        types.submodule {
+        lib.types.submodule {
           options = {
             name = lib.mkOption {
               description = "Drive name without the full path.";

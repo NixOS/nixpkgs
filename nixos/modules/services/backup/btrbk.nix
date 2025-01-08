@@ -5,26 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    concatLists
-    concatMap
-    concatMapStringsSep
-    concatStringsSep
-    filterAttrs
-    flatten
-    getAttr
-    isAttrs
-    literalExpression
-    mapAttrs'
-    mapAttrsToList
-    mkIf
-    lib.mkOption
-    lib.optional
-    lib.optionalString
-    sortOn
-    types
-    ;
-
   # The priority of an option or section.
   # The configurations format are order-sensitive. Pairs are added as children of
   # the last sections if possible, otherwise, they start a new section.
@@ -35,7 +15,7 @@ let
   # 4. Etc.
   prioOf =
     { name, value }:
-    if !isAttrs value then
+    if !lib.isAttrs value then
       0 # Leaf options.
     else
       {
@@ -45,23 +25,23 @@ let
       }
       .${name} or (throw "Unknow section '${name}'");
 
-  genConfig' = set: concatStringsSep "\n" (genConfig set);
+  genConfig' = set: lib.concatStringsSep "\n" (genConfig set);
   genConfig =
     set:
     let
-      pairs = mapAttrsToList (name: value: { inherit name value; }) set;
-      sortedPairs = sortOn prioOf pairs;
+      pairs = lib.mapAttrsToList (name: value: { inherit name value; }) set;
+      sortedPairs = lib.sortOn prioOf pairs;
     in
-    concatMap genPair sortedPairs;
+    lib.concatMap genPair sortedPairs;
   genSection =
     sec: secName: value:
     [ "${sec} ${secName}" ] ++ map (x: " " + x) (genConfig value);
   genPair =
     { name, value }:
-    if !isAttrs value then
+    if !lib.isAttrs value then
       [ "${name} ${value}" ]
     else
-      concatLists (mapAttrsToList (genSection name) value);
+      lib.concatLists (lib.mapAttrsToList (genSection name) value);
 
   sudoRule = {
     users = [ "btrbk" ];
@@ -174,8 +154,7 @@ in
       instances = lib.mkOption {
         description = "Set of btrbk instances. The instance named `btrbk` is the default one.";
         type =
-          with lib.types;
-          attrsOf (submodule {
+          lib.types.attrsOf (lib.types.submodule {
             options = {
               onCalendar = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
@@ -200,8 +179,8 @@ in
                 type = lib.types.submodule {
                   freeformType =
                     let
-                      t = types.attrsOf (
-                        types.either types.str (t // { description = "instances of this type recursively"; })
+                      t = lib.types.types.attrsOf (
+                        lib.types.types.either lib.types.types.str (t // { description = "instances of this type recursively"; })
                       );
                     in
                     t;
@@ -252,15 +231,14 @@ in
       sshAccess = lib.mkOption {
         description = "SSH keys that should be able to make or push snapshots on this system remotely with btrbk";
         type =
-          with lib.types;
-          listOf (submodule {
+          lib.types.listOf (lib.types.submodule {
             options = {
               key = lib.mkOption {
-                type = str;
+                type = lib.types.str;
                 description = "SSH public key allowed to login as user `btrbk` to run remote backups.";
               };
               roles = lib.mkOption {
-                type = listOf (enum [
+                type = lib.types.listOf (lib.types.enum [
                   "info"
                   "source"
                   "target"
@@ -324,7 +302,7 @@ in
       openssh.authorizedKeys.keys = map (
         v:
         let
-          options = concatMapStringsSep " " (x: "--" + x) v.roles;
+          options = lib.concatMapStringsSep " " (x: "--" + x) v.roles;
           ioniceClass =
             {
               "idle" = 3;
@@ -345,11 +323,11 @@ in
       "d /var/lib/btrbk/.ssh 0700 btrbk btrbk"
       "f /var/lib/btrbk/.ssh/config 0700 btrbk btrbk - StrictHostKeyChecking=accept-new"
     ];
-    environment.etc = mapAttrs' (name: instance: {
+    environment.etc = lib.mapAttrs' (name: instance: {
       name = "btrbk/${name}.conf";
       value.source = mkConfigFile name instance.settings;
     }) cfg.instances;
-    systemd.services = mapAttrs' (name: instance: {
+    systemd.services = lib.mapAttrs' (name: instance: {
       name = "btrbk-${name}";
       value = {
         description = "Takes BTRFS snapshots and maintains retention policies.";
@@ -358,7 +336,7 @@ in
           [ "/run/wrappers" ]
           ++ cfg.extraPackages
           ++ lib.optional (instance.settings.stream_compress != "no") (
-            getAttr instance.settings.stream_compress streamCompressMap
+            lib.getAttr instance.settings.stream_compress streamCompressMap
           );
         serviceConfig = {
           User = "btrbk";
@@ -374,7 +352,7 @@ in
       };
     }) cfg.instances;
 
-    systemd.timers = mapAttrs' (name: instance: {
+    systemd.timers = lib.mapAttrs' (name: instance: {
       name = "btrbk-${name}";
       value = {
         description = "Timer to take BTRFS snapshots and maintain retention policies.";

@@ -8,14 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.wireguard;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkRenamedOptionModule
-    mkEnableOption
-    lib.optionalString
-    escapeShellArg
-    ;
 in
 {
   port = 9586;
@@ -27,7 +19,7 @@ in
     })
   ];
   extraOpts = {
-    verbose = mkEnableOption "verbose logging mode for prometheus-wireguard-exporter";
+    verbose = lib.mkEnableOption "verbose logging mode for prometheus-wireguard-exporter";
 
     wireguardConfig = lib.mkOption {
       type = with lib.types; nullOr (either path str);

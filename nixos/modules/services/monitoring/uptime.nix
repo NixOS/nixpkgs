@@ -6,15 +6,6 @@
   ...
 }:
 let
-  inherit (lib)
-    literalExpression
-    lib.mkOption
-    mkEnableOption
-    mkIf
-    mkMerge
-    types
-    lib.optional
-    ;
 
   cfg = config.services.uptime;
   opt = options.services.uptime;
@@ -70,9 +61,9 @@ in
       type = lib.types.bool;
     };
 
-    enableWebService = mkEnableOption "the uptime monitoring program web service";
+    enableWebService = lib.mkEnableOption "the uptime monitoring program web service";
 
-    enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service" // {
+    enableSeparateMonitoringService = lib.mkEnableOption "the uptime monitoring service" // {
       default = cfg.enableWebService;
       defaultText = lib.literalExpression "config.${opt.enableWebService}";
     };

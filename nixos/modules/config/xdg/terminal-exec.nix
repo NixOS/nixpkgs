@@ -7,13 +7,6 @@
 
 let
   cfg = config.xdg.terminal-exec;
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
 in
 {
   meta.maintainers = with lib.maintainers; [ Cryolitia ];

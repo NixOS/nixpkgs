@@ -7,12 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    getExe
-    lib.mkOption
-    types
-    ;
-
   inherit (utils) escapeSystemdExecArgs;
 
   cfg = config.services.prometheus.exporters.rasdaemon;
@@ -51,7 +45,7 @@ in
     serviceConfig = {
       ExecStart = escapeSystemdExecArgs (
         [
-          (getExe pkgs.prometheus-rasdaemon-exporter)
+          (lib.getExe pkgs.prometheus-rasdaemon-exporter)
           "--address"
           cfg.listenAddress
           "--port"

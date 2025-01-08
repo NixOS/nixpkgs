@@ -9,8 +9,6 @@
 let
   cfg = config.services.prometheus.exporters.smartctl;
 
-  inherit (lib) lib.mkOption types literalExpression;
-
   args = lib.escapeShellArgs (
     [
       "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"

@@ -8,16 +8,9 @@
 
 let
   cfg = config.services.prometheus.exporters.junos-czerwonk;
-  inherit (lib)
-    lib.mkOption
-    types
-    escapeShellArg
-    mkIf
-    concatStringsSep
-    ;
 
   configFile =
-    if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configurationFile);
+    if cfg.configuration != null then configurationFile else (lib.escapeShellArg cfg.configurationFile);
 
   configurationFile = pkgs.writeText "prometheus-junos-czerwonk-exporter.conf" (
     builtins.toJSON (cfg.configuration)

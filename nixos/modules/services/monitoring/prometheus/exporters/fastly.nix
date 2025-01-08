@@ -7,13 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    getExe
-    lib.mkOption
-    lib.optionals
-    types
-    ;
-
   inherit (utils) escapeSystemdExecArgs;
 
   cfg = config.services.prometheus.exporters.fastly;
@@ -44,7 +37,7 @@ in
       EnvironmentFile = cfg.environmentFile;
       ExecStart = escapeSystemdExecArgs (
         [
-          (getExe pkgs.prometheus-fastly-exporter)
+          (lib.getExe pkgs.prometheus-fastly-exporter)
           "-listen"
           "${cfg.listenAddress}:${toString cfg.port}"
         ]

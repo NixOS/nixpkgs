@@ -1,7 +1,5 @@
 { lib, ... }:
-let
-  inherit (lib) lib.mkOption types;
-in
+
 {
   options.name = lib.mkOption {
     description = ''

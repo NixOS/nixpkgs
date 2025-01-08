@@ -7,8 +7,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption types mkIf;
-
   opt = options.services.quicktun;
   cfg = config.services.quicktun;
 in
@@ -22,7 +20,7 @@ in
         See <http://wiki.ucis.nl/QuickTun> for more information about available options.
       '';
       type = lib.types.attrsOf (
-        types.submodule (
+        lib.types.submodule (
           { name, ... }:
           let
             qtcfg = cfg.${name};

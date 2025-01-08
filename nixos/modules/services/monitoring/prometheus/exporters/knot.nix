@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.knot;
-  inherit (lib)
-    lib.mkOption
-    types
-    literalExpression
-    concatStringsSep
-    ;
 in
 {
   port = 9433;

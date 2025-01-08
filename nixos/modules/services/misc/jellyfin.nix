@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkIf
-    getExe
-    maintainers
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    ;
-  inherit (lib.types) str path bool;
   cfg = config.services.jellyfin;
 in
 {
@@ -25,19 +16,19 @@ in
       package = lib.mkPackageOption pkgs "jellyfin" { };
 
       user = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "jellyfin";
         description = "User account under which Jellyfin runs.";
       };
 
       group = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "jellyfin";
         description = "Group under which jellyfin runs.";
       };
 
       dataDir = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "/var/lib/jellyfin";
         description = ''
           Base data directory,
@@ -46,7 +37,7 @@ in
       };
 
       configDir = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "${cfg.dataDir}/config";
         defaultText = "\${cfg.dataDir}/config";
         description = ''
@@ -56,7 +47,7 @@ in
       };
 
       cacheDir = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "/var/cache/jellyfin";
         description = ''
           Directory containing the jellyfin server cache,
@@ -65,7 +56,7 @@ in
       };
 
       logDir = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "${cfg.dataDir}/log";
         defaultText = "\${cfg.dataDir}/log";
         description = ''
@@ -75,7 +66,7 @@ in
       };
 
       openFirewall = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the default ports in the firewall for the media server. The
@@ -120,7 +111,7 @@ in
           Group = cfg.group;
           UMask = "0077";
           WorkingDirectory = cfg.dataDir;
-          ExecStart = "${getExe cfg.package} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
+          ExecStart = "${lib.getExe cfg.package} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
           Restart = "on-failure";
           TimeoutSec = 15;
           SuccessExitStatus = [

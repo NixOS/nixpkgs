@@ -8,15 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.rspamd;
-  inherit (lib)
-    lib.mkOption
-    types
-    replaceStrings
-    mkRemovedOptionModule
-    recursiveUpdate
-    concatStringsSep
-    literalExpression
-    ;
 
   mkFile = conf: pkgs.writeText "rspamd-exporter-config.yml" (builtins.toJSON conf);
 
@@ -24,7 +15,7 @@ let
     modules.default.metrics =
       (map
         (path: {
-          name = "rspamd_${replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ] path}";
+          name = "rspamd_${lib.replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ] path}";
           path = "{ .${path} }";
           labels = extraLabels;
         })
@@ -57,7 +48,7 @@ let
           name = "rspamd_statfiles";
           type = "object";
           path = "{.statfiles[*]}";
-          labels = recursiveUpdate {
+          labels = lib.recursiveUpdate {
             symbol = "{.symbol}";
             type = "{.type}";
           } extraLabels;

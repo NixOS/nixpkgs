@@ -8,15 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.nginx;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkMerge
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    mkIf
-    concatStringsSep
-    ;
 in
 {
   port = 9113;
@@ -58,7 +49,7 @@ in
   serviceOpts = lib.mkMerge (
     [
       {
-        environment.CONST_LABELS = concatStringsSep "," cfg.constLabels;
+        environment.CONST_LABELS = lib.concatStringsSep "," cfg.constLabels;
         serviceConfig = {
           ExecStart = ''
             ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \

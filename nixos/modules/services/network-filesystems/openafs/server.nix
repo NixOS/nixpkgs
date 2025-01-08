@@ -6,51 +6,40 @@
 }:
 
 # openafsBin, openafsSrv, mkCellServDB
-with import ./lib.nix { inherit config lib pkgs; };
 
 let
-  inherit (lib)
-    concatStringsSep
-    literalExpression
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    lib.optionalString
-    types
-    ;
-
+  openafsLib = import ./lib.nix { inherit config lib pkgs; };
   bosConfig = pkgs.writeText "BosConfig" (
     ''
       restrictmode 1
       restarttime 16 0 0 0 0
       checkbintime 3 0 5 0 0
     ''
-    + (optionalString cfg.roles.database.enable ''
+    + (lib.optionalString cfg.roles.database.enable ''
       bnode simple vlserver 1
-      parm ${openafsSrv}/libexec/openafs/vlserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.vlserverArgs}
+      parm ${openafsLib.openafsSrv}/libexec/openafs/vlserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.vlserverArgs}
       end
       bnode simple ptserver 1
-      parm ${openafsSrv}/libexec/openafs/ptserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.ptserverArgs}
+      parm ${openafsLib.openafsSrv}/libexec/openafs/ptserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.ptserverArgs}
       end
     '')
-    + (optionalString cfg.roles.fileserver.enable ''
+    + (lib.optionalString cfg.roles.fileserver.enable ''
       bnode dafs dafs 1
-      parm ${openafsSrv}/libexec/openafs/dafileserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.fileserverArgs}
-      parm ${openafsSrv}/libexec/openafs/davolserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.volserverArgs}
-      parm ${openafsSrv}/libexec/openafs/salvageserver ${cfg.roles.fileserver.salvageserverArgs}
-      parm ${openafsSrv}/libexec/openafs/dasalvager ${cfg.roles.fileserver.salvagerArgs}
+      parm ${openafsLib.openafsSrv}/libexec/openafs/dafileserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.fileserverArgs}
+      parm ${openafsLib.openafsSrv}/libexec/openafs/davolserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.volserverArgs}
+      parm ${openafsLib.openafsSrv}/libexec/openafs/salvageserver ${cfg.roles.fileserver.salvageserverArgs}
+      parm ${openafsLib.openafsSrv}/libexec/openafs/dasalvager ${cfg.roles.fileserver.salvagerArgs}
       end
     '')
-    + (optionalString
+    + (lib.optionalString
       (cfg.roles.database.enable && cfg.roles.backup.enable && (!cfg.roles.backup.enableFabs))
       ''
         bnode simple buserver 1
-        parm ${openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${lib.optionalString useBuCellServDB "-cellservdb /etc/openafs/backup/"}
+        parm ${openafsLib.openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${lib.optionalString useBuCellServDB "-cellservdb /etc/openafs/backup/"}
         end
       ''
     )
-    + (optionalString
+    + (lib.optionalString
       (cfg.roles.database.enable && cfg.roles.backup.enable && cfg.roles.backup.enableFabs)
       ''
         bnode simple buserver 1
@@ -67,7 +56,7 @@ let
       null;
 
   buCellServDB = pkgs.writeText "backup-cellServDB-${cfg.cellName}" (
-    mkCellServDB cfg.cellName cfg.roles.backup.cellServDB
+    openafsLib.mkCellServDB cfg.cellName cfg.roles.backup.cellServDB
   );
 
   useBuCellServDB = (cfg.roles.backup.cellServDB != [ ]) && (!cfg.roles.backup.enableFabs);
@@ -213,7 +202,7 @@ in
             {option}`enableFabs`
           '';
 
-          enableFabs = mkEnableOption ''
+          enableFabs = lib.mkEnableOption ''
             FABS, the flexible AFS backup system. It stores volumes as dump files, relying on other
             pre-existing backup solutions for handling them
           '';
@@ -299,7 +288,7 @@ in
       }
     ];
 
-    environment.systemPackages = [ openafsBin ];
+    environment.systemPackages = [ openafsLib.openafsBin ];
 
     environment.etc = {
       bosConfig = {
@@ -308,7 +297,7 @@ in
         mode = "0644";
       };
       cellServDB = {
-        text = mkCellServDB cfg.cellName cfg.cellServDB;
+        text = openafsLib.mkCellServDB cfg.cellName cfg.cellServDB;
         target = "openafs/server/CellServDB";
         mode = "0644";
       };
@@ -319,7 +308,7 @@ in
       };
       buCellServDB = {
         enable = useBuCellServDB;
-        text = mkCellServDB cfg.cellName cfg.roles.backup.cellServDB;
+        text = openafsLib.mkCellServDB cfg.cellName cfg.roles.backup.cellServDB;
         target = "openafs/backup/CellServDB";
       };
     };
@@ -339,8 +328,8 @@ in
           ${lib.optionalString useBuCellServDB "cp ${buCellServDB}"}
         '';
         serviceConfig = {
-          ExecStart = "${openafsBin}/bin/bosserver -nofork";
-          ExecStop = "${openafsBin}/bin/bos shutdown localhost -wait -localauth";
+          ExecStart = "${openafsLib.openafsBin}/bin/bosserver -nofork";
+          ExecStop = "${openafsLib.openafsBin}/bin/bos shutdown localhost -wait -localauth";
         };
       };
     };

@@ -1,10 +1,6 @@
 { config, pkgs, lib, options, utils, ... }:
 
 let
-  inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
-    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge lib.mkOption
-    lib.optional types lib.mkOptionDefault flip attrNames xor;
-
   cfg = config.services.prometheus.exporters;
 
   # each attribute in `exporterOpts` is expected to have specified:
@@ -20,7 +16,7 @@ let
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
-  exporterOpts = (genAttrs [
+  exporterOpts = (lib.genAttrs [
     "apcupsd"
     "artifactory"
     "bind"
@@ -102,7 +98,7 @@ let
   ]
     (name:
       import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options utils; }
-    )) // (mapAttrs
+    )) // (lib.mapAttrs
     (name: params:
       import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options utils; type = params.type ; })
     {
@@ -176,7 +172,7 @@ let
       '';
     };
     firewallRules = lib.mkOption {
-      type = lib.types.nullOr types.lines;
+      type = lib.types.nullOr lib.types.lines;
       default = null;
       example = lib.literalExpression ''
         iifname "eth0" tcp dport ${toString port} counter accept
@@ -209,7 +205,7 @@ let
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
-      } ({ config, ... }: mkIf config.openFirewall {
+      } ({ config, ... }: lib.mkIf config.openFirewall {
         firewallFilter = lib.mkDefault "-p tcp -m tcp --dport ${toString config.port}";
         firewallRules = lib.mkDefault ''tcp dport ${toString config.port} accept comment "${name}-exporter"'';
       })];
@@ -218,8 +214,8 @@ let
     };
   };
 
-  mkSubModules = (foldl' (a: b: a//b) {}
-    (mapAttrsToList (name: opts: mkSubModule {
+  mkSubModules = (lib.foldl' (a: b: a//b) {}
+    (lib.mapAttrsToList (name: opts: mkSubModule {
       inherit name;
       inherit (opts) port;
       extraOpts = opts.extraOpts or {};
@@ -232,7 +228,7 @@ let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
       nftables = config.networking.nftables.enable;
     in
-    mkIf conf.enable {
+    lib.mkIf conf.enable {
       warnings = conf.warnings or [];
       assertions = conf.assertions or [];
       users.users."${name}-exporter" = (lib.mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
@@ -251,7 +247,7 @@ let
       services.udev.extraRules = lib.mkIf (name == "smartctl") ''
         ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
       '';
-      networking.firewall.extraCommands = lib.mkIf (conf.openFirewall && !nftables) (concatStrings [
+      networking.firewall.extraCommands = lib.mkIf (conf.openFirewall && !nftables) (lib.concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
@@ -423,13 +419,13 @@ in
       '';
     } {
       assertion = cfg.pgbouncer.enable -> (
-        xor (cfg.pgbouncer.connectionEnvFile == null) (cfg.pgbouncer.connectionString == null)
+        lib.xor (cfg.pgbouncer.connectionEnvFile == null) (cfg.pgbouncer.connectionString == null)
       );
       message = ''
         Options `services.prometheus.exporters.pgbouncer.connectionEnvFile` and
         `services.prometheus.exporters.pgbouncer.connectionString` are mutually exclusive!
       '';
-    }] ++ (flip map (attrNames exporterOpts) (exporter: {
+    }] ++ (lib.flip map (lib.attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
         The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
@@ -455,7 +451,7 @@ in
       echo "DELUGE_PASSWORD=$(cat ${config.services.prometheus.exporters.deluge.delugePasswordFile})" > /etc/deluge-exporter/password
       '';
     };
-  })] ++ (mapAttrsToList (name: conf:
+  })] ++ (lib.mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;
       inherit (conf) serviceOpts;

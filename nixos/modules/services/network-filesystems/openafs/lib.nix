@@ -1,14 +1,5 @@
 { config, lib, ... }:
 
-let
-  inherit (lib)
-    concatStringsSep
-    lib.mkOption
-    types
-    lib.optionalString
-    ;
-
-in
 {
 
   mkCellServDB =

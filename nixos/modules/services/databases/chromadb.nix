@@ -7,13 +7,6 @@
 
 let
   cfg = config.services.chromadb;
-  inherit (lib)
-    mkEnableOption
-    lib.mkOption
-    mkIf
-    types
-    literalExpression
-    ;
 in
 {
 

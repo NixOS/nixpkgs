@@ -3,9 +3,6 @@
 let
   cfg = config.services.metabase;
 
-  inherit (lib) mkEnableOption mkIf lib.mkOption;
-  inherit (lib) lib.optional lib.optionalAttrs types;
-
   dataDir = "/var/lib/metabase";
 
 in {

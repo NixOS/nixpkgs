@@ -8,24 +8,6 @@ let
   cfg = config.services.gatus;
 
   settingsFormat = pkgs.formats.yaml { };
-
-  inherit (lib)
-    getExe
-    literalExpression
-    maintainers
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    ;
-
-  inherit (lib.types)
-    bool
-    int
-    nullOr
-    path
-    submodule
-    ;
 in
 {
   options.services.gatus = {
@@ -34,7 +16,7 @@ in
     package = lib.mkPackageOption pkgs "gatus" { };
 
     configFile = lib.mkOption {
-      type = path;
+      type = lib.types.path;
       default = settingsFormat.generate "gatus.yaml" cfg.settings;
       defaultText = lib.literalExpression ''
         let settingsFormat = pkgs.formats.yaml { }; in settingsFormat.generate "gatus.yaml" cfg.settings;
@@ -46,7 +28,7 @@ in
     };
 
     environmentFile = lib.mkOption {
-      type = nullOr path;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         File to load as environment file.
@@ -56,11 +38,11 @@ in
     };
 
     settings = lib.mkOption {
-      type = submodule {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
           web.port = lib.mkOption {
-            type = int;
+            type = lib.types.int;
             default = 8080;
             description = ''
               The TCP port to serve the Gatus service at.
@@ -94,7 +76,7 @@ in
     };
 
     openFirewall = lib.mkOption {
-      type = bool;
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to open the firewall for the Gatus web interface.
@@ -114,7 +96,7 @@ in
         Group = "gatus";
         Type = "simple";
         Restart = "on-failure";
-        ExecStart = getExe cfg.package;
+        ExecStart = lib.getExe cfg.package;
         StateDirectory = "gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;

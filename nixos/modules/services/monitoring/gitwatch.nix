@@ -5,18 +5,9 @@
   ...
 }:
 let
-  inherit (lib)
-    maintainers
-    mapAttrs'
-    mkEnableOption
-    lib.mkOption
-    nameValuePair
-    lib.optionalString
-    types
-    ;
   mkSystemdService =
     name: cfg:
-    nameValuePair "gitwatch-${name}" (
+    lib.nameValuePair "gitwatch-${name}" (
       let
         getvar = flag: var: lib.optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
         branch = getvar "-b" "branch";
@@ -66,32 +57,31 @@ in
       };
     };
     type =
-      with lib.types;
-      attrsOf (submodule {
+      lib.types.attrsOf (lib.types.submodule {
         options = {
           enable = lib.mkEnableOption "watching for repo";
           path = lib.mkOption {
             description = "The path to repo in local machine";
-            type = str;
+            type = lib.types.str;
           };
           user = lib.mkOption {
             description = "The name of services's user";
-            type = str;
+            type = lib.types.str;
             default = "root";
           };
           remote = lib.mkOption {
             description = "Optional url of remote repository";
-            type = nullOr str;
+            type = lib.types.nullOr lib.types.str;
             default = null;
           };
           branch = lib.mkOption {
             description = "Optional branch in remote repository";
-            type = nullOr str;
+            type = lib.types.nullOr lib.types.str;
             default = null;
           };
         };
       });
   };
-  config.systemd.services = mapAttrs' mkSystemdService config.services.gitwatch;
+  config.systemd.services = lib.mapAttrs' mkSystemdService config.services.gitwatch;
   meta.maintainers = with lib.maintainers; [ shved ];
 }

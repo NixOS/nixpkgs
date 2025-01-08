@@ -6,36 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    any
-    attrValues
-    concatMapStrings
-    concatStringsSep
-    const
-    elem
-    escapeShellArgs
-    filterAttrs
-    getName
-    isString
-    literalExpression
-    mapAttrs
-    mapAttrsToList
-    mkAfter
-    mkBefore
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    lib.optionalString
-    types
-    versionAtLeast
-    warn
-    ;
-
   cfg = config.services.postgresql;
 
   # ensure that
@@ -54,15 +24,15 @@ let
       "yes"
     else if false == value then
       "no"
-    else if isString value then
+    else if lib.isString value then
       "'${lib.replaceStrings [ "'" ] [ "''" ] value}'"
     else
       builtins.toString value;
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeTextDir "postgresql.conf" (
-    concatStringsSep "\n" (
-      mapAttrsToList (n: v: "${n} = ${toStr v}") (lib.filterAttrs (const (x: x != null)) cfg.settings)
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (n: v: "${n} = ${toStr v}") (lib.filterAttrs (lib.const (x: x != null)) cfg.settings)
     )
   );
 
@@ -71,10 +41,10 @@ let
     touch $out
   '';
 
-  groupAccessAvailable = versionAtLeast cfg.finalPackage.version "11.0";
+  groupAccessAvailable = lib.versionAtLeast cfg.finalPackage.version "11.0";
 
-  extensionNames = map getName postgresql.installedExtensions;
-  extensionInstalled = extension: elem extension extensionNames;
+  extensionNames = map lib.getName postgresql.installedExtensions;
+  extensionInstalled = extension: lib.elem extension extensionNames;
 in
 
 {
@@ -107,7 +77,7 @@ in
 
       enable = lib.mkEnableOption "PostgreSQL Server";
 
-      enableJIT = mkEnableOption "JIT support";
+      enableJIT = lib.mkEnableOption "JIT support";
 
       package = lib.mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
@@ -215,7 +185,7 @@ in
 
       ensureUsers = lib.mkOption {
         type = lib.types.listOf (
-          types.submodule {
+          lib.types.submodule {
             options = {
               name = lib.mkOption {
                 type = lib.types.str;
@@ -490,7 +460,7 @@ in
       };
 
       recoveryConfig = lib.mkOption {
-        type = lib.types.nullOr types.lines;
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Contents of the {file}`recovery.conf` file.
@@ -518,7 +488,7 @@ in
     assertions = map (
       { name, ensureDBOwnership, ... }:
       {
-        assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
+        assertion = ensureDBOwnership -> lib.elem name cfg.ensureDatabases;
         message = ''
           For each database user defined with `services.postgresql.ensureUsers` and
           `ensureDBOwnership = true;`, a database with the same name must be defined
@@ -542,7 +512,7 @@ in
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
         mkWarn =
           ver:
-          warn ''
+          lib.warn ''
             The postgresql package is not pinned and selected automatically by
             `system.stateVersion`. Right now this is `pkgs.postgresql_${ver}`, the
             oldest postgresql version available and thus the next that will be
@@ -551,17 +521,17 @@ in
             See also https://endoflife.date/postgresql
           '';
         base =
-          if versionAtLeast config.system.stateVersion "24.11" then
+          if lib.versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
-          else if versionAtLeast config.system.stateVersion "23.11" then
+          else if lib.versionAtLeast config.system.stateVersion "23.11" then
             pkgs.postgresql_15
-          else if versionAtLeast config.system.stateVersion "22.05" then
+          else if lib.versionAtLeast config.system.stateVersion "22.05" then
             pkgs.postgresql_14
-          else if versionAtLeast config.system.stateVersion "21.11" then
+          else if lib.versionAtLeast config.system.stateVersion "21.11" then
             mkWarn "13" pkgs.postgresql_13
-          else if versionAtLeast config.system.stateVersion "20.03" then
+          else if lib.versionAtLeast config.system.stateVersion "20.03" then
             mkThrow "11"
-          else if versionAtLeast config.system.stateVersion "17.09" then
+          else if lib.versionAtLeast config.system.stateVersion "17.09" then
             mkThrow "9_6"
           else
             mkThrow "9_5";
@@ -569,13 +539,13 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if cfg.enableJIT then base.withJIT else base);
+      lib.mkDefault (if cfg.enableJIT then base.withJIT else base);
 
     services.postgresql.dataDir = lib.mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
     services.postgresql.authentication = lib.mkMerge [
-      (mkBefore "# Generated file; do not edit!")
-      (mkAfter ''
+      (lib.mkBefore "# Generated file; do not edit!")
+      (lib.mkAfter ''
         # default value of services.postgresql.authentication
         local all all              peer
         host  all all 127.0.0.1/32 md5
@@ -651,19 +621,19 @@ in
           fi
         ''
         + lib.optionalString (cfg.ensureDatabases != [ ]) ''
-          ${concatMapStrings (database: ''
+          ${lib.concatMapStrings (database: ''
             $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
           '') cfg.ensureDatabases}
         ''
         + ''
-          ${concatMapStrings (
+          ${lib.concatMapStrings (
             user:
             let
               dbOwnershipStmt = lib.optionalString user.ensureDBOwnership ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
 
-              filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
+              filteredClauses = lib.filterAttrs (name: value: value != null) user.ensureClauses;
 
-              clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
+              clauseSqlStatements = lib.attrValues (lib.mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
 
               userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${lib.concatStringsSep " " clauseSqlStatements}' '';
             in
@@ -682,7 +652,7 @@ in
           User = "postgres";
           Group = "postgres";
           RuntimeDirectory = "postgresql";
-          Type = if versionAtLeast cfg.package.version "9.6" then "notify" else "simple";
+          Type = if lib.versionAtLeast cfg.package.version "9.6" then "notify" else "simple";
 
           # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
           # https://www.postgresql.org/docs/current/server-shutdown.html
@@ -702,7 +672,7 @@ in
           ProtectHome = true;
           ProtectSystem = "strict";
           MemoryDenyWriteExecute = lib.mkDefault (
-            cfg.settings.jit == "off" && (!any extensionInstalled [ "plv8" ])
+            cfg.settings.jit == "off" && (!lib.any extensionInstalled [ "plv8" ])
           );
           NoNewPrivileges = true;
           LockPersonality = true;
@@ -730,7 +700,7 @@ in
           SystemCallFilter = [
             "@system-service"
             "~@privileged @resources"
-          ] ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
+          ] ++ lib.optionals (lib.any extensionInstalled [ "plv8" ]) [ "@pkey" ];
           UMask = if groupAccessAvailable then "0027" else "0077";
         }
         (lib.mkIf (cfg.dataDir != "/var/lib/postgresql") {

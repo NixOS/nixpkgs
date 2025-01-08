@@ -7,15 +7,6 @@
 
 let
   cfg = config.services.prometheus.exporters.klipper;
-  inherit (lib)
-    lib.mkOption
-    mkMerge
-    mkIf
-    types
-    concatStringsSep
-    any
-    lib.optionalString
-    ;
   moonraker = config.services.moonraker;
 in
 {
@@ -36,9 +27,9 @@ in
     [
       {
         serviceConfig = {
-          ExecStart = concatStringsSep " " [
+          ExecStart = lib.concatStringsSep " " [
             "${cfg.package}/bin/prometheus-klipper-exporter"
-            (optionalString (cfg.moonrakerApiKey != "") "--moonraker.apikey ${cfg.moonrakerApiKey}")
+            (lib.optionalString (cfg.moonrakerApiKey != "") "--moonraker.apikey ${cfg.moonrakerApiKey}")
             "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
             "${lib.concatStringsSep " " cfg.extraFlags}"
           ];

@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    concatStringsSep
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
   cfg = config.services.openarena;
 in
 {

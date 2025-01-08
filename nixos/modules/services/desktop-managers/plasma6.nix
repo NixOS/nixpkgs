@@ -9,14 +9,6 @@ let
   cfg = config.services.desktopManager.plasma6;
 
   inherit (pkgs) kdePackages;
-  inherit (lib)
-    literalExpression
-    mkDefault
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
 
   activationScript = ''
     # will be rebuilt automatically
@@ -38,7 +30,7 @@ in
         description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
-      notoPackage = mkPackageOption pkgs "Noto fonts - used for UI by default" {
+      notoPackage = lib.mkPackageOption pkgs "Noto fonts - used for UI by default" {
         default = [ "noto-fonts" ];
         example = "noto-fonts-lgc-plus";
       };
@@ -264,7 +256,7 @@ in
     systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
 
     services.power-profiles-daemon.enable = lib.mkDefault true;
-    services.system-config-printer.enable = lib.mkIf config.services.printing.enable (mkDefault true);
+    services.system-config-printer.enable = lib.mkIf config.services.printing.enable (lib.mkDefault true);
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = lib.mkDefault true;

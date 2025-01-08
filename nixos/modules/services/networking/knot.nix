@@ -7,35 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    attrNames
-    concatMapStrings
-    concatMapStringsSep
-    concatStrings
-    concatStringsSep
-    elem
-    filter
-    flip
-    hasAttr
-    hasPrefix
-    isAttrs
-    isBool
-    isDerivation
-    isList
-    mapAttrsToList
-    mkChangedOptionModule
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionals
-    types
-    ;
-
-  inherit (utils)
-    escapeSystemdExecArgs
-    ;
-
   cfg = config.services.knot;
 
   yamlConfig =
@@ -46,8 +17,8 @@ let
 
       secAllow =
         n:
-        hasPrefix "mod-" n
-        || elem n [
+        lib.hasPrefix "mod-" n
+        || lib.elem n [
           "module"
           "server"
           "xdp"
@@ -68,7 +39,7 @@ let
         ];
       secsCheck =
         let
-          secsBad = filter (n: !secAllow n) (attrNames cfg.settings);
+          secsBad = lib.filter (n: !secAllow n) (lib.attrNames cfg.settings);
         in
         if secsBad == [ ] then
           true
@@ -77,7 +48,7 @@ let
 
       nix2yaml =
         nix_def:
-        concatStrings (
+        lib.concatStrings (
           # We output the config section in the upstream-mandated order.
           # Ordering is important due to forward-references not being allowed.
           # See definition of conf_export and 'const yp_item_t conf_schema'
@@ -105,7 +76,7 @@ let
           ]
 
           # Export module sections before the template section.
-          ++ map (sec_list_fa "id" nix_def) (filter (hasPrefix "mod-") (attrNames nix_def))
+          ++ map (sec_list_fa "id" nix_def) (lib.filter (lib.hasPrefix "mod-") (lib.attrNames nix_def))
 
           ++ [ (sec_list_fa "id" nix_def "template") ]
           ++ [ (sec_list_fa "domain" nix_def "zone") ]
@@ -116,7 +87,7 @@ let
       # A plain section contains directly attributes (we don't really check that ATM).
       sec_plain =
         nix_def: sec_name:
-        if !hasAttr sec_name nix_def then "" else n2y "" { ${sec_name} = nix_def.${sec_name}; };
+        if !lib.hasAttr sec_name nix_def then "" else n2y "" { ${sec_name} = nix_def.${sec_name}; };
 
       # This section contains a list of attribute sets.  In each of the sets
       # there's an attribute (`fa_name`, typically "id") that must exist and come first.
@@ -125,7 +96,7 @@ let
       # +template = { default = {       /* those attributes */ };  foo = { };      }
       sec_list_fa =
         fa_name: nix_def: sec_name:
-        if !hasAttr sec_name nix_def then
+        if !lib.hasAttr sec_name nix_def then
           ""
         else
           let
@@ -137,10 +108,10 @@ let
           sec_name
           + ":\n"
           + (
-            if isList sec then
-              flip concatMapStrings sec (elem: elem2yaml elem.${fa_name} (removeAttrs elem [ fa_name ]))
+            if lib.isList sec then
+              lib.flip lib.concatMapStrings sec (elem: elem2yaml elem.${fa_name} (removeAttrs elem [ fa_name ]))
             else
-              concatStrings (mapAttrsToList elem2yaml sec)
+              lib.concatStrings (lib.mapAttrsToList elem2yaml sec)
           );
 
       # This convertor doesn't care about ordering of attributes.
@@ -149,8 +120,8 @@ let
       n2y =
         indent: val:
         if doRecurse val then
-          concatStringsSep "\n${indent}" (
-            mapAttrsToList
+          lib.concatStringsSep "\n${indent}" (
+            lib.mapAttrsToList
               # This is a bit wacky - set directly under a set would start on bad indent,
               # so we start those on a new line, but not other types of attribute values.
               (
@@ -168,10 +139,10 @@ let
             else
         */
         if
-          isList val # and long indent
+          lib.isList val # and long indent
         then
-          "[ " + concatMapStringsSep ", " quoteString val + " ]"
-        else if isBool val then
+          "[ " + lib.concatMapStringsSep ", " quoteString val + " ]"
+        else if lib.isBool val then
           (if val then "on" else "off")
         else
           quoteString val;
@@ -179,7 +150,7 @@ let
       # We don't want paths like ./my-zone.txt be converted to plain strings.
       quoteString = s: ''"${if builtins.typeOf s == "path" then s else toString s}"'';
       # We don't want to walk the insides of derivation attributes.
-      doRecurse = val: isAttrs val && !isDerivation val;
+      doRecurse = val: lib.isAttrs val && !lib.isDerivation val;
 
     in
     result;
@@ -196,7 +167,7 @@ let
     configString:
     pkgs.writeTextFile {
       name = "knot.conf";
-      text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + configString;
+      text = (lib.concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + configString;
       checkPhase = lib.optionalString cfg.checkConfig ''
         ${cfg.package}/bin/knotc --config=$out conf-check
       '';
@@ -309,7 +280,7 @@ in
   };
   imports = [
     # Compatibility with NixOS 23.05.
-    (mkChangedOptionModule [ "services" "knot" "extraConfig" ] [ "services" "knot" "settingsFile" ] (
+    (lib.mkChangedOptionModule [ "services" "knot" "extraConfig" ] [ "services" "knot" "settingsFile" ] (
       config: mkConfigFile config.services.knot.extraConfig
     ))
   ];
@@ -347,7 +318,7 @@ in
         in
         {
           Type = "notify";
-          ExecStart = escapeSystemdExecArgs (
+          ExecStart = utils.escapeSystemdExecArgs (
             [
               (lib.getExe cfg.package)
               "--config=${configFile}"
@@ -355,7 +326,7 @@ in
             ]
             ++ cfg.extraArgs
           );
-          ExecReload = escapeSystemdExecArgs [
+          ExecReload = utils.escapeSystemdExecArgs [
             "${knot-cli-wrappers}/bin/knotc"
             "reload"
           ];

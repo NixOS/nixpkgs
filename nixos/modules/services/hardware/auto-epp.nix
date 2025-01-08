@@ -8,8 +8,6 @@
 let
   cfg = config.services.auto-epp;
   format = pkgs.formats.ini { };
-
-  inherit (lib) lib.mkOption types;
 in
 {
   options = {

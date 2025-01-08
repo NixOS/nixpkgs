@@ -5,19 +5,13 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.optional
-    lib.optionalString
-    ;
   cfg = config.programs.skim;
 in
 {
   options = {
     programs.skim = {
-      fuzzyCompletion = mkEnableOption "fuzzy completion with skim";
-      keybindings = mkEnableOption "skim keybindings";
+      fuzzyCompletion = lib.mkEnableOption "fuzzy completion with skim";
+      keybindings = lib.mkEnableOption "skim keybindings";
       package = lib.mkPackageOption pkgs "skim" { };
     };
   };

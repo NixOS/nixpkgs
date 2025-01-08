@@ -5,20 +5,11 @@
   ...
 }:
 
-# openafsMod, openafsBin, mkCellServDB
-with import ./lib.nix { inherit config lib pkgs; };
+
 
 let
-  inherit (lib)
-    getBin
-    literalExpression
-    lib.mkOption
-    mkIf
-    lib.optionalString
-    singleton
-    types
-    ;
-
+  # openafsMod, openafsBin, mkCellServDB
+  openafsLib = import ./lib.nix { inherit config lib pkgs; };
   cfg = config.services.openafsClient;
 
   cellServDB = pkgs.fetchurl {
@@ -27,7 +18,7 @@ let
   };
 
   clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (
-    mkCellServDB cfg.cellName cfg.cellServDB
+    openafsLib.mkCellServDB cfg.cellName cfg.cellServDB
   );
 
   afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
@@ -67,9 +58,8 @@ in
       cellServDB = lib.mkOption {
         default = [ ];
         type =
-          with lib.types;
-          listOf (submodule {
-            options = cellServDBConfig;
+          lib.types.listOf (lib.types.submodule {
+            options = openafsLib.cellServDBConfig;
           });
         description = ''
           This cell's database server records, added to the global
@@ -178,7 +168,7 @@ in
           description = "OpenAFS kernel module package. MUST match the userland package!";
         };
         programs = lib.mkOption {
-          default = getBin pkgs.openafs;
+          default = lib.getBin pkgs.openafs;
           defaultText = lib.literalExpression "getBin pkgs.openafs";
           type = lib.types.package;
           description = "OpenAFS programs package. MUST match the kernel module package!";
@@ -219,7 +209,7 @@ in
       }
     ];
 
-    environment.systemPackages = [ openafsBin ];
+    environment.systemPackages = [ openafsLib.openafsBin ];
 
     environment.etc = {
       clientCellServDB = {
@@ -242,7 +232,7 @@ in
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
       wants = lib.optional (!cfg.startDisconnected) "network-online.target";
-      after = singleton (if cfg.startDisconnected then "network.target" else "network-online.target");
+      after = lib.singleton (if cfg.startDisconnected then "network.target" else "network-online.target");
       serviceConfig = {
         RemainAfterExit = true;
       };
@@ -251,8 +241,8 @@ in
       preStart = ''
         mkdir -p -m 0755 ${cfg.mountPoint}
         mkdir -m 0700 -p ${cfg.cache.directory}
-        ${pkgs.kmod}/bin/insmod ${openafsMod}/lib/modules/*/extra/openafs/libafs.ko.xz
-        ${openafsBin}/sbin/afsd \
+        ${pkgs.kmod}/bin/insmod ${openafsLib.openafsMod}/lib/modules/*/extra/openafs/libafs.ko.xz
+        ${openafsLib.openafsBin}/sbin/afsd \
           -mountdir ${cfg.mountPoint} \
           -confdir ${afsConfig} \
           ${lib.optionalString (!cfg.cache.diskless) "-cachedir ${cfg.cache.directory}"} \
@@ -263,8 +253,8 @@ in
           ${if cfg.fakestat then "-fakestat-all" else "-fakestat"} \
           ${if cfg.sparse then "-dynroot-sparse" else "-dynroot"} \
           ${lib.optionalString cfg.afsdb "-afsdb"}
-        ${openafsBin}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
-        ${lib.optionalString cfg.startDisconnected "${openafsBin}/bin/fs discon offline"}
+        ${openafsLib.openafsBin}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
+        ${lib.optionalString cfg.startDisconnected "${openafsLib.openafsBin}/bin/fs discon offline"}
       '';
 
       # Doing this in preStop, because after these commands AFS is basically
@@ -273,7 +263,7 @@ in
       # stopped simply by sending signals to processes.
       preStop = ''
         ${pkgs.util-linux}/bin/umount ${cfg.mountPoint}
-        ${openafsBin}/sbin/afsd -shutdown
+        ${openafsLib.openafsBin}/sbin/afsd -shutdown
         ${pkgs.kmod}/sbin/rmmod libafs
       '';
     };

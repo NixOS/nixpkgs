@@ -7,13 +7,6 @@
 }:
 let
   cfg = config.services.prometheus.exporters.sql;
-  inherit (lib)
-    lib.mkOption
-    types
-    mapAttrs
-    mapAttrsToList
-    concatStringsSep
-    ;
   cfgOptions = {
     options = with lib.types; {
       jobs = lib.mkOption {
@@ -75,11 +68,11 @@ let
       cfg.configFile
     else
       let
-        nameInline = mapAttrsToList (k: v: v // { name = k; });
+        nameInline = lib.mapAttrsToList (k: v: v // { name = k; });
         renameStartupSql = j: removeAttrs (j // { startup_sql = j.startupSql; }) [ "startupSql" ];
         configuration = {
           jobs = map renameStartupSql (
-            nameInline (mapAttrs (k: v: (v // { queries = nameInline v.queries; })) cfg.configuration.jobs)
+            nameInline (lib.mapAttrs (k: v: (v // { queries = nameInline v.queries; })) cfg.configuration.jobs)
           );
         };
       in

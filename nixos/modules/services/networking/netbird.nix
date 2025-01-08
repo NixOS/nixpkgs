@@ -6,30 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    attrNames
-    getExe
-    literalExpression
-    maintainers
-    mapAttrs'
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkPackageOption
-    nameValuePair
-    lib.optional
-    versionOlder
-    ;
-
-  inherit (lib.types)
-    attrsOf
-    port
-    str
-    submodule
-    ;
-
   kernel = config.boot.kernelPackages;
 
   cfg = config.services.netbird;
@@ -43,13 +19,13 @@ in
     package = lib.mkPackageOption pkgs "netbird" { };
 
     tunnels = lib.mkOption {
-      type = attrsOf (
-        submodule (
+      type = lib.types.attrsOf (
+        lib.types.submodule (
           { name, config, ... }:
           {
             options = {
               port = lib.mkOption {
-                type = port;
+                type = lib.types.port;
                 default = 51820;
                 description = ''
                   Port for the ${name} netbird interface.
@@ -57,7 +33,7 @@ in
               };
 
               environment = lib.mkOption {
-                type = attrsOf str;
+                type = lib.types.attrsOf lib.types.str;
                 defaultText = lib.literalExpression ''
                   {
                     NB_CONFIG = "/var/lib/''${stateDir}/config.json";
@@ -73,7 +49,7 @@ in
               };
 
               stateDir = lib.mkOption {
-                type = str;
+                type = lib.types.str;
                 default = "netbird-${name}";
                 description = ''
                   Directory storing the netbird configuration.
@@ -81,7 +57,7 @@ in
               };
             };
 
-            config.environment = builtins.mapAttrs (_: mkDefault) {
+            config.environment = builtins.mapAttrs (_: lib.mkDefault) {
               NB_CONFIG = "/var/lib/${config.stateDir}/config.json";
               NB_LOG_FILE = "console";
               NB_WIREGUARD_PORT = builtins.toString config.port;
@@ -105,16 +81,16 @@ in
     })
 
     (lib.mkIf (cfg.tunnels != { }) {
-      boot.extraModulePackages = lib.optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+      boot.extraModulePackages = lib.optional (lib.versionOlder kernel.kernel.version "5.6") kernel.wireguard;
 
       environment.systemPackages = [ cfg.package ];
 
-      networking.dhcpcd.denyInterfaces = attrNames cfg.tunnels;
+      networking.dhcpcd.denyInterfaces = lib.attrNames cfg.tunnels;
 
       systemd.network.networks = lib.mkIf config.networking.useNetworkd (
-        mapAttrs' (
+        lib.mapAttrs' (
           name: _:
-          nameValuePair "50-netbird-${name}" {
+          lib.nameValuePair "50-netbird-${name}" {
             matchConfig = {
               Name = name;
             };
@@ -126,10 +102,10 @@ in
         ) cfg.tunnels
       );
 
-      systemd.services = mapAttrs' (
+      systemd.services = lib.mapAttrs' (
         name:
         { environment, stateDir, ... }:
-        nameValuePair "netbird-${name}" {
+        lib.nameValuePair "netbird-${name}" {
           description = "A WireGuard-based mesh network that connects your devices into a single private network";
 
           documentation = [ "https://netbird.io/docs/" ];
@@ -142,7 +118,7 @@ in
           inherit environment;
 
           serviceConfig = {
-            ExecStart = "${getExe cfg.package} service run";
+            ExecStart = "${lib.getExe cfg.package} service run";
             Restart = "always";
             RuntimeDirectory = stateDir;
             StateDirectory = stateDir;

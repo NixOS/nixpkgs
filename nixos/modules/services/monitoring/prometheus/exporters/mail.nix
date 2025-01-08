@@ -8,39 +8,27 @@
 
 let
   cfg = config.services.prometheus.exporters.mail;
-  inherit (lib)
-    lib.mkOption
-    types
-    mapAttrs'
-    nameValuePair
-    toLower
-    filterAttrs
-    escapeShellArg
-    literalExpression
-    mkIf
-    concatStringsSep
-    ;
 
   configFile =
-    if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile);
+    if cfg.configuration != null then configurationFile else (lib.escapeShellArg cfg.configFile);
 
   configurationFile = pkgs.writeText "prometheus-mail-exporter.conf" (
     builtins.toJSON (
       # removes the _module attribute, null values and converts attrNames to lowercase
-      mapAttrs' (
+      lib.mapAttrs' (
         name: value:
         if name == "servers" then
-          nameValuePair (toLower name) (
+          lib.nameValuePair (lib.toLower name) (
             (map (
               srv:
-              (mapAttrs' (n: v: nameValuePair (toLower n) v) (
-                filterAttrs (n: v: !(n == "_module" || v == null)) srv
+              (lib.mapAttrs' (n: v: lib.nameValuePair (lib.toLower n) v) (
+                lib.filterAttrs (n: v: !(n == "_module" || v == null)) srv
               ))
             ))
               value
           )
         else
-          nameValuePair (toLower name) value
+          lib.nameValuePair (lib.toLower name) value
       ) (lib.filterAttrs (n: _: !(n == "_module")) cfg.configuration)
     )
   );
@@ -126,7 +114,7 @@ let
       '';
     };
     servers = lib.mkOption {
-      type = lib.types.listOf (types.submodule serverOptions);
+      type = lib.types.listOf (lib.types.submodule serverOptions);
       default = [ ];
       example = lib.literalExpression ''
         [ {
@@ -179,7 +167,7 @@ in
       '';
     };
     configuration = lib.mkOption {
-      type = lib.types.nullOr (types.submodule exporterOptions);
+      type = lib.types.nullOr (lib.types.submodule exporterOptions);
       default = null;
       description = ''
         Specify the mailexporter configuration file to use.

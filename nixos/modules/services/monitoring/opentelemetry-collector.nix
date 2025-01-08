@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    getExe
-    ;
-
   cfg = config.services.opentelemetry-collector;
   opentelemetry-collector = cfg.package;
 
@@ -70,7 +61,7 @@ in
               cfg.configFile;
         in
         {
-          ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";
+          ExecStart = "${lib.getExe opentelemetry-collector} --config=file:${conf}";
           DynamicUser = true;
           Restart = "always";
           ProtectSystem = "full";

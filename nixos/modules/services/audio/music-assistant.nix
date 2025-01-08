@@ -7,20 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
-  inherit (types)
-    listOf
-    enum
-    str
-    ;
-
   cfg = config.services.music-assistant;
 
   finalPackage = cfg.package.override {
@@ -37,7 +23,7 @@ in
     package = lib.mkPackageOption pkgs "music-assistant" { };
 
     extraOptions = lib.mkOption {
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       default = [
         "--config"
         "/var/lib/music-assistant"
@@ -52,7 +38,7 @@ in
     };
 
     providers = lib.mkOption {
-      type = listOf (enum cfg.package.providerNames);
+      type = lib.types.listOf (lib.types.enum cfg.package.providerNames);
       default = [ ];
       example = [
         "opensubsonic"

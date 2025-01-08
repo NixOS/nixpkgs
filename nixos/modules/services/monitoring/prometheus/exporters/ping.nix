@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.ping;
-  inherit (lib) lib.mkOption types concatStringsSep;
 
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yml" cfg.settings;

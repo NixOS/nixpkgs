@@ -5,15 +5,9 @@
   ...
 }:
 let
-  inherit (lib)
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    ;
   inherit (lib.types) bool;
 
-  mkRemovedOptionModule' = name: reason: mkRemovedOptionModule [ "krb5" name ] reason;
+  mkRemovedOptionModule' = name: reason: lib.mkRemovedOptionModule [ "krb5" name ] reason;
   mkRemovedOptionModuleCfg =
     name:
     mkRemovedOptionModule' name ''

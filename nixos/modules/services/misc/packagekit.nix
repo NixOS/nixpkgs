@@ -8,21 +8,11 @@
 let
   cfg = config.services.packagekit;
 
-  inherit (lib)
-    mkEnableOption
-    lib.mkOption
-    mkIf
-    mkRemovedOptionModule
-    types
-    listToAttrs
-    recursiveUpdate
-    ;
-
   iniFmt = pkgs.formats.ini { };
 
   confFiles = [
     (iniFmt.generate "PackageKit.conf" (
-      recursiveUpdate {
+      lib.recursiveUpdate {
         Daemon = {
           DefaultBackend = "test_nop";
           KeepCache = false;
@@ -31,7 +21,7 @@ let
     ))
 
     (iniFmt.generate "Vendor.conf" (
-      recursiveUpdate {
+      lib.recursiveUpdate {
         PackagesNotFound = rec {
           DefaultUrl = "https://github.com/NixOS/nixpkgs";
           CodecUrl = DefaultUrl;
@@ -81,7 +71,7 @@ in
 
     systemd.packages = with pkgs; [ packagekit ];
 
-    environment.etc = listToAttrs (
+    environment.etc = lib.listToAttrs (
       map (e: lib.nameValuePair "PackageKit/${e.name}" { source = e; }) confFiles
     );
   };

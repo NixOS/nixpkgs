@@ -7,22 +7,6 @@
 
 let
   cfg = config.services.zabbixAgent;
-
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    ;
-  inherit (lib)
-    attrValues
-    concatMapStringsSep
-    literalExpression
-    lib.optionalString
-    types
-    ;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix-agent";
@@ -30,7 +14,7 @@ let
 
   moduleEnv = pkgs.symlinkJoin {
     name = "zabbix-agent-module-env";
-    paths = attrValues cfg.modules;
+    paths = lib.attrValues cfg.modules;
   };
 
   configFile = pkgs.writeText "zabbix_agent.conf" (
@@ -69,7 +53,7 @@ in
       };
 
       modules = lib.mkOption {
-        type = lib.types.attrsOf types.package;
+        type = lib.types.attrsOf lib.types.package;
         description = "A set of modules to load.";
         default = { };
         example = lib.literalExpression ''

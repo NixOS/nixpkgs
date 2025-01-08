@@ -8,16 +8,8 @@
 
 let
   cfg = config.services.prometheus.exporters.node;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    concatMapStringsSep
-    any
-    lib.optionals
-    ;
-  collectorIsEnabled = final: any (collector: (final == collector)) cfg.enabledCollectors;
-  collectorIsDisabled = final: any (collector: (final == collector)) cfg.disabledCollectors;
+  collectorIsEnabled = final: lib.any (collector: (final == collector)) cfg.enabledCollectors;
+  collectorIsDisabled = final: lib.any (collector: (final == collector)) cfg.disabledCollectors;
 in
 {
   port = 9100;
@@ -45,8 +37,8 @@ in
       RuntimeDirectory = "prometheus-node-exporter";
       ExecStart = ''
         ${pkgs.prometheus-node-exporter}/bin/node_exporter \
-          ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
-          ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
+          ${lib.concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
+          ${lib.concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${lib.concatStringsSep " " cfg.extraFlags}
       '';
       RestrictAddressFamilies =

@@ -8,13 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.mikrotik;
-  inherit (lib)
-    lib.mkOption
-    types
-    literalExpression
-    concatStringsSep
-    escapeShellArg
-    ;
 in
 {
   port = 9436;

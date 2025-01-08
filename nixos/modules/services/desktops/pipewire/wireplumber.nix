@@ -1,16 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (builtins) concatMap;
-  inherit (lib) maintainers;
-  inherit (lib.attrsets) attrByPath mapAttrsToList;
-  inherit (lib.lists) flatten lib.optional;
-  inherit (lib.modules) mkIf;
-  inherit (lib.options) literalExpression lib.mkOption;
-  inherit (lib.strings) concatStringsSep makeSearchPath;
-  inherit (lib.types) bool listOf attrsOf package lines;
-  inherit (lib.path) subpath;
-
   pwCfg = config.services.pipewire;
   cfg = pwCfg.wireplumber;
   pwUsedForAudio = pwCfg.audio.enable;
@@ -21,19 +11,19 @@ let
     pkgs.writeTextDir
       path
       (lib.concatStringsSep "\n" (
-        mapAttrsToList
+        lib.mapAttrsToList
           (section: content: "${section} = " + (builtins.toJSON content))
           value
       ));
 
   mapConfigToFiles = config:
-    mapAttrsToList
+    lib.mapAttrsToList
       (name: value: configSectionsToConfFile "share/wireplumber/wireplumber.conf.d/${name}.conf" value)
       config;
 
   mapScriptsToFiles = scripts:
-    mapAttrsToList
-      (relativePath: value: pkgs.writeTextDir (subpath.join ["share/wireplumber/scripts" relativePath]) value)
+    lib.mapAttrsToList
+      (relativePath: value: pkgs.writeTextDir (lib.subpath.join ["share/wireplumber/scripts" relativePath]) value)
       scripts;
 in
 {
@@ -42,14 +32,14 @@ in
   options = {
     services.pipewire.wireplumber = {
       enable = lib.mkOption {
-        type = bool;
+        type = lib.bool;
         default = pwCfg.enable;
         defaultText = lib.literalExpression "config.services.pipewire.enable";
         description = "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
       };
 
       package = lib.mkOption {
-        type = package;
+        type = lib.package;
         default = pkgs.wireplumber;
         defaultText = lib.literalExpression "pkgs.wireplumber";
         description = "The WirePlumber derivation to use.";
@@ -59,7 +49,7 @@ in
         # Two layer attrset is necessary before using JSON, because of the whole
         # config file not being a JSON object, but a concatenation of JSON objects
         # in sections.
-        type = attrsOf (attrsOf json.type);
+        type = lib.attrsOf (lib.attrsOf json.type);
         default = { };
         example = lib.literalExpression ''{
           "log-level-debug" = {
@@ -113,7 +103,7 @@ in
       };
 
       extraScripts = lib.mkOption {
-        type = attrsOf lines;
+        type = lib.types.attrsOf lib.types.lines;
         default = { };
         example = {
           "test/hello-world.lua" = ''
@@ -164,7 +154,7 @@ in
       };
 
       configPackages = lib.mkOption {
-        type = listOf package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         example = lib.literalExpression ''[
           (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez.conf" '''
@@ -186,7 +176,7 @@ in
       };
 
       extraLv2Packages = lib.mkOption {
-        type = listOf package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         example = lib.literalExpression "[ pkgs.lsp-plugins ]";
         description = ''
@@ -237,11 +227,11 @@ in
         pathsToLink = [ "/share/wireplumber" ];
       };
 
-      requiredLv2Packages = flatten
+      requiredLv2Packages = lib.flatten
         (
-          concatMap
+          lib.concatMap
             (p:
-              attrByPath [ "passthru" "requiredLv2Packages" ] [ ] p
+              lib.attrByPath [ "passthru" "requiredLv2Packages" ] [ ] p
             )
             configPackages
         );
@@ -276,12 +266,12 @@ in
 
         # Make WirePlumber find our config/script files and lv2 plugins required by those
         # (but also the configs/scripts shipped with WirePlumber)
-        XDG_DATA_DIRS = makeSearchPath "share" [ configs cfg.package ];
+        XDG_DATA_DIRS = lib.makeSearchPath "share" [ configs cfg.package ];
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
 
       systemd.user.services.wireplumber.environment = lib.mkIf (!pwCfg.systemWide) {
-        XDG_DATA_DIRS = makeSearchPath "share" [ configs cfg.package ];
+        XDG_DATA_DIRS = lib.makeSearchPath "share" [ configs cfg.package ];
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
     };

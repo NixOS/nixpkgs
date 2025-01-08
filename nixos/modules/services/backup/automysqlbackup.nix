@@ -7,25 +7,6 @@
 
 let
 
-  inherit (lib)
-    concatMapStringsSep
-    concatStringsSep
-    isInt
-    isList
-    literalExpression
-    ;
-  inherit (lib)
-    mapAttrs
-    mapAttrsToList
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkRenamedOptionModule
-    lib.optional
-    types
-    ;
-
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
   user = "automysqlbackup";
@@ -33,9 +14,9 @@ let
 
   toStr =
     val:
-    if isList val then
-      "( ${concatMapStringsSep " " (val: "'${val}'") val} )"
-    else if isInt val then
+    if lib.isList val then
+      "( ${lib.concatMapStringsSep " " (val: "'${val}'") val} )"
+    else if lib.isInt val then
       toString val
     else if true == val then
       "'yes'"
@@ -48,7 +29,7 @@ let
     #version=${pkg.version}
     # DONT'T REMOVE THE PREVIOUS VERSION LINE!
     #
-    ${lib.concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
   '';
 
 in
@@ -112,7 +93,7 @@ in
       }
     ];
 
-    services.automysqlbackup.config = mapAttrs (name: mkDefault) {
+    services.automysqlbackup.config = lib.mapAttrs (name: lib.mkDefault) {
       mysql_dump_username = user;
       mysql_dump_host = "localhost";
       mysql_dump_socket = "/run/mysqld/mysqld.sock";

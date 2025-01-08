@@ -9,13 +9,6 @@
 let
   logPrefix = "services.prometheus.exporter.ipmi";
   cfg = config.services.prometheus.exporters.ipmi;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    lib.optionals
-    escapeShellArg
-    ;
 in
 {
   port = 9290;
@@ -40,11 +33,10 @@ in
 
   serviceOpts.serviceConfig = {
     ExecStart =
-      with cfg;
-      concatStringsSep " " (
+      lib.concatStringsSep " " (
         [
           "${pkgs.prometheus-ipmi-exporter}/bin/ipmi_exporter"
-          "--web.listen-address ${listenAddress}:${toString port}"
+          "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
         ]
         ++ lib.optionals (cfg.webConfigFile != null) [
           "--web.config.file ${lib.escapeShellArg cfg.webConfigFile}"
@@ -52,7 +44,7 @@ in
         ++ lib.optionals (cfg.configFile != null) [
           "--config.file ${lib.escapeShellArg cfg.configFile}"
         ]
-        ++ extraFlags
+        ++ cfg.extraFlags
       );
 
     ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

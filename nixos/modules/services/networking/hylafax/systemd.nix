@@ -7,9 +7,6 @@
 
 let
 
-  inherit (lib) mkIf mkMerge;
-  inherit (lib) concatStringsSep lib.optionalString;
-
   cfg = config.services.hylafax;
   mapModems = lib.forEach (lib.attrValues cfg.modems);
 
@@ -188,7 +185,7 @@ let
     requires = [ "hylafax-spool.service" ];
     wantedBy = lib.mkIf cfg.faxcron.enable.spoolInit requires;
     startAt = lib.mkIf (cfg.faxcron.enable.frequency != null) cfg.faxcron.enable.frequency;
-    serviceConfig.ExecStart = concatStringsSep " " [
+    serviceConfig.ExecStart = lib.concatStringsSep " " [
       "${pkgs.hylafaxplus}/spool/bin/faxcron"
       ''-q "${cfg.spoolAreaPath}"''
       ''-info ${toString cfg.faxcron.infoDays}''
@@ -204,12 +201,12 @@ let
     requires = [ "hylafax-spool.service" ];
     wantedBy = lib.mkIf cfg.faxqclean.enable.spoolInit requires;
     startAt = lib.mkIf (cfg.faxqclean.enable.frequency != null) cfg.faxqclean.enable.frequency;
-    serviceConfig.ExecStart = concatStringsSep " " [
+    serviceConfig.ExecStart = lib.concatStringsSep " " [
       "${pkgs.hylafaxplus}/spool/bin/faxqclean"
       ''-q "${cfg.spoolAreaPath}"''
       "-v"
-      (optionalString (cfg.faxqclean.archiving != "never") "-a")
-      (optionalString (cfg.faxqclean.archiving == "always") "-A")
+      (lib.optionalString (cfg.faxqclean.archiving != "never") "-a")
+      (lib.optionalString (cfg.faxqclean.archiving == "always") "-A")
       ''-j ${toString (cfg.faxqclean.doneqMinutes * 60)}''
       ''-d ${toString (cfg.faxqclean.docqMinutes * 60)}''
     ];

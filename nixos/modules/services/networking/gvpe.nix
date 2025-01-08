@@ -8,8 +8,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption mkIf types;
-
   cfg = config.services.gvpe;
 
   finalConfig =
@@ -60,7 +58,7 @@ in
       };
       configText = lib.mkOption {
         default = null;
-        type = lib.types.nullOr types.lines;
+        type = lib.types.nullOr lib.types.lines;
         example = ''
           tcp-port = 655
           udp-port = 655

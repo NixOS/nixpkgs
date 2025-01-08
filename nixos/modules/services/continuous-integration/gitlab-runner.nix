@@ -6,43 +6,6 @@
 }:
 
 let
-  inherit (builtins)
-    hashString
-    map
-    substring
-    toJSON
-    toString
-    unsafeDiscardStringContext
-    ;
-
-  inherit (lib)
-    any
-    assertMsg
-    attrValues
-    concatStringsSep
-    escapeShellArg
-    filterAttrs
-    hasPrefix
-    isStorePath
-    literalExpression
-    mapAttrs'
-    mapAttrsToList
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    nameValuePair
-    lib.optional
-    lib.optionalAttrs
-    lib.optionals
-    teams
-    toShellVar
-    types
-    ;
-
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
   hasPodman = config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable;
@@ -55,15 +18,15 @@ let
   genRunnerName =
     name: service:
     let
-      hash = substring 0 12 (hashString "md5" (unsafeDiscardStringContext (toJSON service)));
+      hash = lib.substring 0 12 (lib.hashString "md5" (lib.unsafeDiscardStringContext (lib.toJSON service)));
     in
     if service ? description && service.description != null then
       "${hash} ${service.description}"
     else
       "${name}_${config.networking.hostName}_${hash}";
 
-  hashedServices = mapAttrs' (
-    name: service: nameValuePair (genRunnerName name service) service
+  hashedServices = lib.mapAttrs' (
+    name: service: lib.nameValuePair (genRunnerName name service) service
   ) cfg.services;
   configPath = ''"$HOME"/.gitlab-runner/config.toml'';
   configureScript = pkgs.writeShellApplication {
@@ -97,14 +60,14 @@ let
           # update global options
           remarshal --if toml --of json --stringify ${configPath} \
             | jq -cM 'with_entries(select([.key] | inside(["runners"])))' \
-            | jq -scM '.[0] + .[1]' - <(echo ${lib.escapeShellArg (toJSON cfg.settings)}) \
+            | jq -scM '.[0] + .[1]' - <(echo ${lib.escapeShellArg (lib.toJSON cfg.settings)}) \
             | remarshal --if json --of toml \
             | sponge ${configPath}
 
           # remove no longer existing services
           gitlab-runner verify --delete
 
-          ${toShellVar "NEEDED_SERVICES" (lib.mapAttrs (name: value: 1) hashedServices)}
+          ${lib.toShellVar "NEEDED_SERVICES" (lib.mapAttrs (name: value: 1) hashedServices)}
 
           declare -A REGISTERED_SERVICES
 
@@ -134,12 +97,12 @@ let
 
           # register new services
           ${lib.concatStringsSep "\n" (
-            mapAttrsToList (name: service: ''
+            lib.mapAttrsToList (name: service: ''
               # TODO so here we should mention NEW_SERVICES
               if [ -v 'NEW_SERVICES["${name}"]' ] ; then
                 bash -c ${
-                  escapeShellArg (
-                    concatStringsSep " \\\n " (
+                  lib.escapeShellArg (
+                    lib.concatStringsSep " \\\n " (
                       [
                         "set -a && source ${
                           if service.registrationConfigFile != null then
@@ -177,11 +140,11 @@ let
                       ) "--access-level ref_protected"
                       ++ lib.optional service.debugTraceDisabled "--debug-trace-disabled"
                       ++ map (e: "--env ${lib.escapeShellArg e}") (
-                        mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables
+                        lib.mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables
                       )
-                      ++ lib.optionals (hasPrefix "docker" service.executor) (
+                      ++ lib.optionals (lib.hasPrefix "docker" service.executor) (
                         assert (
-                          assertMsg (
+                          lib.assertMsg (
                             service.dockerImage != null
                           ) "dockerImage option is required for ${service.executor} executor (${name})"
                         );
@@ -363,7 +326,7 @@ in
         }
       '';
       type = lib.types.attrsOf (
-        types.submodule {
+        lib.types.submodule {
           options = {
             authenticationTokenConfigFile = lib.mkOption {
               type = with lib.types; nullOr path;
@@ -539,21 +502,21 @@ in
               '';
             };
             preGetSourcesScript = lib.mkOption {
-              type = lib.types.nullOr (types.either types.str types.path);
+              type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
               default = null;
               description = ''
                 Runner-specific command script executed before code is pulled.
               '';
             };
             postGetSourcesScript = lib.mkOption {
-              type = lib.types.nullOr (types.either types.str types.path);
+              type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
               default = null;
               description = ''
                 Runner-specific command script executed after code is pulled.
               '';
             };
             preBuildScript = lib.mkOption {
-              type = lib.types.nullOr (types.either types.str types.path);
+              type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
               default = null;
               description = ''
                 Runner-specific command script executed after code is pulled,
@@ -561,7 +524,7 @@ in
               '';
             };
             postBuildScript = lib.mkOption {
-              type = lib.types.nullOr (types.either types.str types.path);
+              type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
               default = null;
               description = ''
                 Runner-specific command script executed after code is pulled
@@ -677,81 +640,81 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    assertions = mapAttrsToList (name: serviceConfig: {
+    assertions = lib.mapAttrsToList (name: serviceConfig: {
       assertion =
         serviceConfig.registrationConfigFile == null || serviceConfig.authenticationTokenConfigFile == null;
       message = "`services.gitlab-runner.${name}.registrationConfigFile` and `services.gitlab-runner.services.${name}.authenticationTokenConfigFile` are mutually exclusive.";
     }) cfg.services;
 
     warnings =
-      mapAttrsToList (
+      lib.mapAttrsToList (
         name: serviceConfig:
         "services.gitlab-runner.services.${name}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this."
-      ) (lib.filterAttrs (name: serviceConfig: isStorePath serviceConfig.registrationConfigFile) cfg.services)
+      ) (lib.filterAttrs (name: serviceConfig: lib.isStorePath serviceConfig.registrationConfigFile) cfg.services)
       ++
-        mapAttrsToList
+        lib.mapAttrsToList
           (
             name: serviceConfig:
             "services.gitlab-runner.services.${name}.`authenticationTokenConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this."
           )
           (
-            filterAttrs (
-              name: serviceConfig: isStorePath serviceConfig.authenticationTokenConfigFile
+            lib.filterAttrs (
+              name: serviceConfig: lib.isStorePath serviceConfig.authenticationTokenConfigFile
             ) cfg.services
           )
       ++
-        mapAttrsToList
+        lib.mapAttrsToList
           (name: serviceConfig: ''
             Runner registration tokens have been deprecated and disabled by default in GitLab >= 17.0.
             Consider migrating to runner authentication tokens by setting `services.gitlab-runner.services.${name}.authenticationTokenConfigFile`.
             https://docs.gitlab.com/17.0/ee/ci/runners/new_creation_workflow.html'')
           (
-            filterAttrs (name: serviceConfig: serviceConfig.authenticationTokenConfigFile == null) cfg.services
+            lib.filterAttrs (name: serviceConfig: serviceConfig.authenticationTokenConfigFile == null) cfg.services
           )
       ++
-        mapAttrsToList
+        lib.mapAttrsToList
           (
             name: serviceConfig:
             ''`services.gitlab-runner.services.${name}.protected` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
           )
           (
-            filterAttrs (
+            lib.filterAttrs (
               name: serviceConfig:
               serviceConfig.authenticationTokenConfigFile != null && serviceConfig.protected == true
             ) cfg.services
           )
       ++
-        mapAttrsToList
+        lib.mapAttrsToList
           (
             name: serviceConfig:
             ''`services.gitlab-runner.services.${name}.runUntagged` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
           )
           (
-            filterAttrs (
+            lib.filterAttrs (
               name: serviceConfig:
               serviceConfig.authenticationTokenConfigFile != null && serviceConfig.runUntagged == true
             ) cfg.services
           )
       ++
-        mapAttrsToList
+        lib.mapAttrsToList
           (
             name: v:
             ''`services.gitlab-runner.services.${name}.maximumTimeout` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
           )
           (
-            filterAttrs (
+            lib.filterAttrs (
               name: serviceConfig:
               serviceConfig.authenticationTokenConfigFile != null && serviceConfig.maximumTimeout != 0
             ) cfg.services
           )
       ++
-        mapAttrsToList
+        lib.mapAttrsToList
           (
             name: v:
             ''`services.gitlab-runner.services.${name}.tagList` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
           )
           (
-            filterAttrs (
+            lib.filterAttrs (
               serviceName: serviceConfig:
               serviceConfig.authenticationTokenConfigFile != null && serviceConfig.tagList != [ ]
             ) cfg.services
@@ -804,7 +767,7 @@ in
     };
     # Enable periodic clear-docker-cache script
     systemd.services.gitlab-runner-clear-docker-cache =
-      mkIf (cfg.clear-docker-cache.enable && (any (s: s.executor == "docker") (lib.attrValues cfg.services)))
+      lib.mkIf (cfg.clear-docker-cache.enable && (lib.any (s: s.executor == "docker") (lib.attrValues cfg.services)))
         {
           description = "Prune gitlab-runner docker resources";
           restartIfChanged = false;
@@ -824,8 +787,8 @@ in
           startAt = cfg.clear-docker-cache.dates;
         };
     # Enable docker if `docker` executor is used in any service
-    virtualisation.docker.enable = lib.mkIf (any (s: s.executor == "docker") (lib.attrValues cfg.services)) (
-      mkDefault true
+    virtualisation.docker.enable = lib.mkIf (lib.any (s: s.executor == "docker") (lib.attrValues cfg.services)) (
+      lib.mkDefault true
     );
   };
   imports = [

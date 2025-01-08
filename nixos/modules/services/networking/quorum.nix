@@ -7,15 +7,6 @@
 }:
 let
 
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    literalExpression
-    types
-    lib.optionalString
-    ;
-
   cfg = config.services.quorum;
   opt = options.services.quorum;
   dataDir = "/var/lib/quorum";

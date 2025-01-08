@@ -6,21 +6,9 @@
 }:
 
 let
-  inherit (lib)
-    concatStringsSep
-    isBool
-    mapAttrs
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRenamedOptionModule
-    types
-    ;
-
   cfg = config.services.redlib;
 
-  args = concatStringsSep " " ([
+  args = lib.concatStringsSep " " ([
     "--port ${toString cfg.port}"
     "--address ${cfg.address}"
   ]);
@@ -92,7 +80,7 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services.redlib = {
       wantedBy = [ "default.target" ];
-      environment = mapAttrs (_: v: if isBool v then boolToString' v else toString v) cfg.settings;
+      environment = lib.mapAttrs (_: v: if lib.isBool v then boolToString' v else toString v) cfg.settings;
       serviceConfig =
         {
           ExecStart = [

@@ -7,7 +7,6 @@
   ...
 }:
 let
-  inherit (lib) lib.mkOption types;
   copyChannel = true;
   cfg = config.openstackImage;
   imageBootMode = if config.openstack.efi then "uefi" else "legacy-bios";

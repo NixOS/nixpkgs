@@ -8,15 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.unbound;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkRemovedOptionModule
-    lib.optionalAttrs
-    lib.optionalString
-    mkMerge
-    mkIf
-    ;
 in
 {
   imports = [

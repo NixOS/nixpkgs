@@ -5,7 +5,6 @@
 }:
 
 let
-  inherit (lib) mkEnableOption lib.mkOption mkIf types;
   format = pkgs.formats.toml { };
   cfg = config.services.hebbot;
   settingsFile = format.generate "config.toml" cfg.settings;

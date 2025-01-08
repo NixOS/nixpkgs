@@ -6,16 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkRenamedOptionModule
-    mkRemovedOptionModule
-    teams
-    types
-    ;
-
   associationOptions =
     with lib.types;
     attrsOf (coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str);
@@ -37,7 +27,7 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)''
+      lib.mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)''
       // {
         default = false;
       };

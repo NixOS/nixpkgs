@@ -6,20 +6,6 @@
 }:
 let
   inherit (builtins) isList elem;
-  inherit (lib)
-    getExe
-    literalExpression
-    maintainers
-    mapAttrs'
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    nameValuePair
-    lib.optionalString
-    types
-    ;
-  inherit (types) listOf package;
 
   cfg = config.programs.bat;
 
@@ -34,11 +20,11 @@ let
     }:
     if (shell != "fish") then
       ''
-        eval "$(${getExe program} ${toString flags})"
+        eval "$(${lib.getExe program} ${toString flags})"
       ''
     else
       ''
-        ${getExe program} ${toString flags} | source
+        ${lib.getExe program} ${toString flags} | source
       '';
 
   shellInit =
@@ -71,7 +57,7 @@ in
       description = ''
         Extra `bat` scripts to be added to the system configuration.
       '';
-      type = listOf package;
+      type = lib.types.listOf lib.types.package;
     };
 
     settings = lib.mkOption {
@@ -97,9 +83,9 @@ in
     environment = {
       systemPackages = [ cfg.package ] ++ cfg.extraPackages;
       etc."bat/config".source = generate "bat-config" (
-        mapAttrs' (
+        lib.mapAttrs' (
           name: value:
-          nameValuePair ("--" + name) (
+          lib.nameValuePair ("--" + name) (
             if (isList value) then map (str: "\"${str}\"") value else "\"${value}\""
           )
         ) cfg.settings

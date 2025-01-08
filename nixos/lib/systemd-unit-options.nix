@@ -3,29 +3,9 @@
 let
   inherit (systemdUtils.lib)
     assertValueOneOf
-    automountConfig
     checkUnitConfig
     makeJobScript
-    mountConfig
-    serviceConfig
-    unitConfig
     unitNameType
-    ;
-
-  inherit (lib)
-    any
-    concatMap
-    filterOverrides
-    isList
-    literalExpression
-    mergeEqualOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    lib.mkOptionType
-    singleton
-    toList
-    types
     ;
 
   checkService = checkUnitConfig "Service" [
@@ -43,11 +23,11 @@ in rec {
     name = "systemd option";
     merge = loc: defs:
       let
-        defs' = filterOverrides defs;
+        defs' = lib.filterOverrides defs;
       in
-        if any (def: isList def.value) defs'
-        then concatMap (def: toList def.value) defs'
-        else mergeEqualOption loc defs';
+        if lib.any (def: lib.isList def.value) defs'
+        then lib.concatMap (def: lib.toList def.value) defs'
+        else lib.mergeEqualOption loc defs';
   };
 
   sharedOptions = {
@@ -302,7 +282,7 @@ in rec {
     options = {
       restartTriggers = lib.mkOption {
         default = [];
-        type = lib.types.listOf types.unspecified;
+        type = lib.types.listOf lib.types.unspecified;
         description = ''
           An arbitrary list of items such as derivations.  If any item
           in the list changes between reconfigurations, the service will
@@ -350,7 +330,7 @@ in rec {
         example =
           { RestartSec = 5;
           };
-        type = lib.types.addCheck (types.attrsOf unitOption) checkService;
+        type = lib.types.addCheck (lib.types.attrsOf unitOption) checkService;
         description = ''
           Each attribute in this set specifies an option in the
           `[Service]` section of the unit.  See
@@ -558,7 +538,7 @@ in rec {
           to adding a corresponding timer unit with
           {option}`OnCalendar` set to the value given here.
         '';
-        apply = v: if isList v then v else [ v ];
+        apply = v: if lib.isList v then v else [ v ];
       };
     };
   };

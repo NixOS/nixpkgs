@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.dovecot;
-  inherit (lib)
-    lib.mkOption
-    types
-    escapeShellArg
-    concatStringsSep
-    ;
 in
 {
   port = 9166;

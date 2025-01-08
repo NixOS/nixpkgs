@@ -8,24 +8,11 @@
 let
   cfg = config.programs.captive-browser;
 
-  inherit (lib)
-    concatStringsSep
-    escapeShellArgs
-    lib.optionalString
-    literalExpression
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    lib.mkOptionDefault
-    types
-    ;
-
   requiresSetcapWrapper = config.boot.kernelPackages.kernelOlder "5.7" && cfg.bindInterface;
 
   browserDefault =
     chromium:
-    concatStringsSep " " [
+    lib.concatStringsSep " " [
       ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
       ''${chromium}/bin/chromium''
       ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
@@ -132,7 +119,7 @@ in
     programs.captive-browser.dhcp-dns =
       let
         iface =
-          prefixes: lib.optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
+          prefixes: lib.optionalString cfg.bindInterface (lib.escapeShellArgs (prefixes ++ [ cfg.interface ]));
       in
       lib.mkOptionDefault (
         if config.networking.networkmanager.enable then

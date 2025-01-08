@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    escapeShellArgs
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.mimir;
 
   settingsFormat = pkgs.formats.yaml { };

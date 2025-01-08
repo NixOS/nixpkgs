@@ -8,15 +8,6 @@
 let
   cfg = config.services.glances;
 
-  inherit (lib)
-    getExe
-    maintainers
-    mkEnableOption
-    lib.mkOption
-    mkIf
-    mkPackageOption
-    ;
-
   inherit (lib.types)
     bool
     listOf
@@ -74,7 +65,7 @@ in
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
-        ExecStart = "${getExe cfg.package} --port ${toString cfg.port} ${escapeSystemdExecArgs cfg.extraArgs}";
+        ExecStart = "${lib.getExe cfg.package} --port ${toString cfg.port} ${escapeSystemdExecArgs cfg.extraArgs}";
         Restart = "on-failure";
 
         NoNewPrivileges = true;

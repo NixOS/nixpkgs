@@ -6,31 +6,16 @@
 }:
 
 let
-  inherit (lib)
-    concatStringsSep
-    flip
-    literalMD
-    literalExpression
-    lib.optionalAttrs
-    lib.optionals
-    recursiveUpdate
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    versionAtLeast
-    ;
 
   cfg = config.services.cassandra;
 
-  atLeast3 = versionAtLeast cfg.package.version "3";
-  atLeast3_11 = versionAtLeast cfg.package.version "3.11";
-  atLeast4 = versionAtLeast cfg.package.version "4";
+  atLeast3 = lib.versionAtLeast cfg.package.version "3";
+  atLeast3_11 = lib.versionAtLeast cfg.package.version "3.11";
+  atLeast4 = lib.versionAtLeast cfg.package.version "4";
 
   defaultUser = "cassandra";
 
-  cassandraConfig = flip recursiveUpdate cfg.extraConfig (
+  cassandraConfig = lib.flip lib.recursiveUpdate cfg.extraConfig (
     {
       commitlog_sync = "batch";
       commitlog_sync_batch_window_in_ms = 2;
@@ -46,7 +31,7 @@ let
       seed_provider = [
         {
           class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-          parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
+          parameters = [ { seeds = lib.concatStringsSep "," cfg.seedAddresses; } ];
         }
       ];
     }
@@ -445,7 +430,7 @@ in
         it's world readable.
       '';
       type = lib.types.listOf (
-        types.submodule {
+        lib.types.submodule {
           options = {
             username = lib.mkOption {
               type = lib.types.str;
@@ -463,7 +448,7 @@ in
     jmxRolesFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = if atLeast3_11 then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile else null;
-      defaultText = literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
+      defaultText = lib.literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
       example = "/var/lib/cassandra/jmx.password";
       description = ''
         Specify your own jmx roles file.
@@ -536,7 +521,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = concatStringsSep " " (
+        ExecStart = lib.concatStringsSep " " (
           [
             "${cfg.package}/bin/nodetool"
             "repair"
@@ -565,7 +550,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = concatStringsSep " " (
+        ExecStart = lib.concatStringsSep " " (
           [
             "${cfg.package}/bin/nodetool"
             "repair"

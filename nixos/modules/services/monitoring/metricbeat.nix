@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    attrValues
-    literalExpression
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    ;
   cfg = config.services.metricbeat;
 
   settingsFormat = pkgs.formats.yaml { };
@@ -46,7 +37,7 @@ in
         '';
         default = { };
         type = lib.types.attrsOf (
-          types.submodule (
+          lib.types.submodule (
             { name, ... }:
             {
               freeformType = settingsFormat.type;
@@ -143,7 +134,7 @@ in
       }
     ];
 
-    services.metricbeat.settings.metricbeat.modules = attrValues cfg.modules;
+    services.metricbeat.settings.metricbeat.modules = lib.attrValues cfg.modules;
 
     systemd.services.metricbeat = {
       description = "metricbeat metrics shipper";

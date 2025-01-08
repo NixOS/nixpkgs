@@ -6,19 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkBefore
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    mkRemovedOptionModule
-    types
-    ;
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList;
-  inherit (lib) lib.optional lib.optionalAttrs lib.optionalString;
-
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
   bundle = "${cfg.package}/share/redmine/bin/bundle";
@@ -163,7 +150,7 @@ in
       };
 
       themes = lib.mkOption {
-        type = lib.types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Set of themes.";
         example = lib.literalExpression ''
@@ -177,7 +164,7 @@ in
       };
 
       plugins = lib.mkOption {
-        type = lib.types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Set of plugins.";
         example = lib.literalExpression ''
@@ -356,7 +343,7 @@ in
       };
     };
 
-    services.redmine.extraEnv = mkBefore ''
+    services.redmine.extraEnv = lib.mkBefore ''
       config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
       config.logger.level = Logger::INFO
     '';
@@ -451,7 +438,7 @@ in
 
 
         # link in all user specified themes
-        for theme in ${lib.concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
+        for theme in ${lib.concatStringsSep " " (lib.mapAttrsToList unpackTheme cfg.themes)}; do
           ln -fs $theme/* "${cfg.stateDir}/public/themes"
         done
 
@@ -460,7 +447,7 @@ in
 
 
         # link in all user specified plugins
-        for plugin in ${lib.concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
+        for plugin in ${lib.concatStringsSep " " (lib.mapAttrsToList unpackPlugin cfg.plugins)}; do
           ln -fs $plugin/* "${cfg.stateDir}/plugins/''${plugin##*-redmine-plugin-}"
         done
 

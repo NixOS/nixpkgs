@@ -6,18 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    maintainers
-    ;
-  inherit (lib.types)
-    bool
-    port
-    str
-    submodule
-    ;
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
 in
@@ -30,26 +18,26 @@ in
       package = lib.mkPackageOption pkgs "navidrome" { };
 
       settings = lib.mkOption {
-        type = submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
             Address = lib.mkOption {
               default = "127.0.0.1";
               description = "Address to run Navidrome on.";
-              type = str;
+              type = lib.types.str;
             };
 
             Port = lib.mkOption {
               default = 4533;
               description = "Port to run Navidrome on.";
-              type = port;
+              type = lib.types.port;
             };
 
             EnableInsightsCollector = lib.mkOption {
               default = false;
               description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
-              type = bool;
+              type = lib.types.bool;
             };
           };
         };
@@ -61,19 +49,19 @@ in
       };
 
       user = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "navidrome";
         description = "User under which Navidrome runs.";
       };
 
       group = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "navidrome";
         description = "Group under which Navidrome runs.";
       };
 
       openFirewall = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = false;
         description = "Whether to open the TCP port in the firewall";
       };
@@ -82,7 +70,6 @@ in
 
   config =
     let
-      inherit (lib) mkIf lib.optional getExe;
       WorkingDirectory = "/var/lib/navidrome";
     in
     lib.mkIf cfg.enable {
@@ -103,7 +90,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = ''
-              ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+              ${lib.getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
             '';
             User = cfg.user;
             Group = cfg.group;

@@ -6,15 +6,6 @@
 }:
 let
 
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optional
-    types
-    ;
-
   cfg = config.hardware.ipu6;
 
 in
@@ -69,7 +60,7 @@ in
 
       input = {
         pipeline = "icamerasrc";
-        format = lib.mkIf (cfg.platform != "ipu6") (mkDefault "NV12");
+        format = lib.mkIf (cfg.platform != "ipu6") (lib.mkDefault "NV12");
       };
     };
   };

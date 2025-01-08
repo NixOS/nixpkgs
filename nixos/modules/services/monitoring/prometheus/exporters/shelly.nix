@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.shelly;
-  inherit (lib) lib.mkOption types;
 in
 {
   port = 9784;

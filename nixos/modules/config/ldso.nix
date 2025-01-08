@@ -6,17 +6,9 @@
 }:
 
 let
-  inherit (lib)
-    last
-    splitString
-    lib.mkOption
-    types
-    lib.optionals
-    ;
-
   libDir = pkgs.stdenv.hostPlatform.libDir;
   ldsoBasename = builtins.unsafeDiscardStringContext (
-    last (splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker)
+    lib.last (lib.splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker)
   );
 
   # Hard-code to avoid creating another instance of nixpkgs. Also avoids eval errors in some cases.

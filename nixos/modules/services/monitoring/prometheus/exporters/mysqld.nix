@@ -7,16 +7,6 @@
 }:
 let
   cfg = config.services.prometheus.exporters.mysqld;
-  inherit (lib)
-    types
-    lib.mkOption
-    mkIf
-    mkForce
-    cli
-    concatStringsSep
-    lib.optionalString
-    escapeShellArgs
-    ;
 in
 {
   port = 9104;
@@ -57,14 +47,14 @@ in
   serviceOpts = {
     serviceConfig = {
       DynamicUser = !cfg.runAsLocalSuperUser;
-      User = lib.mkIf cfg.runAsLocalSuperUser (mkForce config.services.mysql.user);
-      LoadCredential = lib.mkIf (cfg.configFile != null) (mkForce ("config:" + cfg.configFile));
-      ExecStart = concatStringsSep " " [
+      User = lib.mkIf cfg.runAsLocalSuperUser (lib.mkForce config.services.mysql.user);
+      LoadCredential = lib.mkIf (cfg.configFile != null) (lib.mkForce ("config:" + cfg.configFile));
+      ExecStart = lib.concatStringsSep " " [
         "${pkgs.prometheus-mysqld-exporter}/bin/mysqld_exporter"
         "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
         "--web.telemetry-path=${cfg.telemetryPath}"
-        (optionalString (cfg.configFile != null) ''--config.my-cnf=''${CREDENTIALS_DIRECTORY}/config'')
-        (escapeShellArgs cfg.extraFlags)
+        (lib.optionalString (cfg.configFile != null) ''--config.my-cnf=''${CREDENTIALS_DIRECTORY}/config'')
+        (lib.escapeShellArgs cfg.extraFlags)
       ];
       RestrictAddressFamilies = [
         # The exporter can be configured to talk to a local mysql server via a unix socket.

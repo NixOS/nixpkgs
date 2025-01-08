@@ -1,7 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 
 let
-  inherit (lib) mkIf lib.mkOption types;
 
   randomEncryptionCoerce = enable: { inherit enable; };
 
@@ -133,7 +132,7 @@ let
           cipher = "serpent-xts-plain64";
           source = "/dev/random";
         };
-        type = lib.types.coercedTo types.bool randomEncryptionCoerce (types.submodule randomEncryptionOpts);
+        type = lib.types.coercedTo lib.types.bool randomEncryptionCoerce (lib.types.submodule randomEncryptionOpts);
         description = ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
@@ -152,7 +151,7 @@ let
       discardPolicy = lib.mkOption {
         default = null;
         example = "once";
-        type = lib.types.nullOr (types.enum ["once" "pages" "both" ]);
+        type = lib.types.nullOr (lib.types.enum ["once" "pages" "both" ]);
         description = ''
           Specify the discard policy for the swap device. If "once", then the
           whole swap space is discarded at swapon invocation. If "pages",
@@ -165,7 +164,7 @@ let
       options = lib.mkOption {
         default = [ "defaults" ];
         example = [ "nofail" ];
-        type = lib.types.listOf types.nonEmptyStr;
+        type = lib.types.listOf lib.types.nonEmptyStr;
         description = ''
           Options used to mount the swap.
         '';
@@ -217,7 +216,7 @@ in
         recommended.
       '';
 
-      type = lib.types.listOf (types.submodule swapCfg);
+      type = lib.types.listOf (lib.types.submodule swapCfg);
     };
 
   };

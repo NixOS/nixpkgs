@@ -10,41 +10,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    concatStringsSep
-    boolToString
-    escape
-    filterAttrs
-    floatToString
-    getVersion
-    hasPrefix
-    isBool
-    isDerivation
-    isFloat
-    isInt
-    isList
-    isString
-    literalExpression
-    mapAttrsToList
-    mkAfter
-    mkDefault
-    mkIf
-    lib.mkOption
-    mkRenamedOptionModuleWith
-    lib.optionalString
-    lib.optionals
-    strings
-    systems
-    toPretty
-    types
-    versionAtLeast
-    ;
 
   cfg = config.nix;
 
   nixPackage = cfg.package.out;
 
-  isNixAtLeast = versionAtLeast (getVersion nixPackage);
+  isNixAtLeast = lib.versionAtLeast (lib.getVersion nixPackage);
 
   legacyConfMappings = {
     useSandbox = "sandbox";
@@ -83,21 +54,21 @@ let
 
       mkValueString = v:
         if v == null then ""
-        else if isInt v then toString v
-        else if isBool v then boolToString v
-        else if isFloat v then floatToString v
-        else if isList v then toString v
-        else if isDerivation v then toString v
+        else if lib.isInt v then lib.toString v
+        else if lib.isBool v then lib.boolToString v
+        else if lib.isFloat v then lib.floatToString v
+        else if lib.isList v then lib.toString v
+        else if lib.isDerivation v then toString v
         else if builtins.isPath v then toString v
-        else if isString v then v
-        else if strings.isConvertibleWithToString v then toString v
-        else abort "The nix conf value: ${toPretty {} v} can not be encoded";
+        else if lib.isString v then v
+        else if lib.strings.isConvertibleWithToString v then toString v
+        else abort "The nix conf value: ${lib.toPretty {} v} can not be encoded";
 
-      mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
+      mkKeyValue = k: v: "${lib.escape [ "=" ] k} = ${mkValueString v}";
 
-      mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
+      mkKeyValuePairs = attrs: lib.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValue attrs);
 
-      isExtra = key: hasPrefix "extra-" key;
+      isExtra = key: lib.hasPrefix "extra-" key;
 
     in
     pkgs.writeTextFile {
@@ -140,9 +111,9 @@ in
     (lib.mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
     (lib.mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
   ] ++
-    mapAttrsToList
+    lib.mapAttrsToList
       (oldConf: newConf:
-        mkRenamedOptionModuleWith {
+        lib.mkRenamedOptionModuleWith {
           sinceRelease = 2205;
           from = [ "nix" oldConf ];
           to = [ "nix" "settings" newConf ];
@@ -183,7 +154,7 @@ in
 
           options = {
             max-jobs = lib.mkOption {
-              type = lib.types.either types.int (types.enum [ "auto" ]);
+              type = lib.types.either lib.types.int (lib.types.enum [ "auto" ]);
               default = "auto";
               example = 64;
               description = ''
@@ -222,7 +193,7 @@ in
             };
 
             sandbox = lib.mkOption {
-              type = lib.types.either types.bool (types.enum [ "relaxed" ]);
+              type = lib.types.either lib.types.bool (lib.types.enum [ "relaxed" ]);
               default = true;
               description = ''
                 If set, Nix will perform builds in a sandboxed environment that it
@@ -376,13 +347,13 @@ in
     nix.settings = {
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
       trusted-users = [ "root" ];
-      substituters = mkAfter [ "https://cache.nixos.org/" ];
+      substituters = lib.mkAfter [ "https://cache.nixos.org/" ];
       system-features = lib.mkDefault (
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
         lib.optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
           # a builder can run code for `gcc.arch` and inferior architectures
           [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
-          map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
+          map (x: "gccarch-${x}") (lib.lib.systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
         )
       );
     };

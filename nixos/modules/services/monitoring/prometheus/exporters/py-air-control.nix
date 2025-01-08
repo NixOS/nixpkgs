@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.py-air-control;
-  inherit (lib) lib.mkOption types;
 
   workingDir = "/var/lib/${cfg.stateDir}";
 

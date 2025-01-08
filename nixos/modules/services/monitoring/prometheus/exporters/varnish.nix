@@ -8,14 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.varnish;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkDefault
-    lib.optional
-    escapeShellArg
-    concatStringsSep
-    ;
 in
 {
   port = 9131;

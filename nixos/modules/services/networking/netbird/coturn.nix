@@ -6,27 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    getExe
-    literalExpression
-    mkAfter
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    lib.optionalAttrs
-    lib.optionalString
-    ;
-
-  inherit (lib.types)
-    bool
-    listOf
-    nullOr
-    path
-    port
-    str
-    ;
-
   cfg = config.services.netbird.server.coturn;
 in
 
@@ -35,7 +14,7 @@ in
     enable = lib.mkEnableOption "a Coturn server for Netbird, will also open the firewall on the configured range";
 
     useAcmeCertificates = lib.mkOption {
-      type = bool;
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to use ACME certificates corresponding to the given domain for the server.
@@ -43,12 +22,12 @@ in
     };
 
     domain = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       description = "The domain under which the coturn server runs.";
     };
 
     user = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       default = "netbird";
       description = ''
         The username used by netbird to connect to the coturn server.
@@ -56,7 +35,7 @@ in
     };
 
     password = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The password of the user used by netbird to connect to the coturn server.
@@ -65,7 +44,7 @@ in
     };
 
     passwordFile = lib.mkOption {
-      type = nullOr path;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         The path to a file containing the password of the user used by netbird to connect to the coturn server.
@@ -73,7 +52,7 @@ in
     };
 
     openPorts = lib.mkOption {
-      type = listOf port;
+      type = lib.types.listOf lib.types.port;
       default = with config.services.coturn; [
         listening-port
         alt-listening-port
@@ -95,7 +74,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       assertions = [
         {
@@ -118,7 +97,7 @@ in
             no-software-attribute
           '';
         }
-        // (optionalAttrs cfg.useAcmeCertificates {
+        // (lib.optionalAttrs cfg.useAcmeCertificates {
           cert = "@cert@";
           pkey = "@pkey@";
         });
@@ -127,16 +106,16 @@ in
         let
           dir = config.security.acme.certs.${cfg.domain}.directory;
           preStart' =
-            (optionalString (cfg.passwordFile != null) ''
-              ${getExe pkgs.replace-secret} @password@ ${cfg.passwordFile} /run/coturn/turnserver.cfg
+            (lib.optionalString (cfg.passwordFile != null) ''
+              ${lib.getExe pkgs.replace-secret} @password@ ${cfg.passwordFile} /run/coturn/turnserver.cfg
             '')
-            + (optionalString cfg.useAcmeCertificates ''
-              ${getExe pkgs.replace-secret} @cert@ <(echo -n "$CREDENTIALS_DIRECTORY/cert.pem") /run/coturn/turnserver.cfg
-              ${getExe pkgs.replace-secret} @pkey@ <(echo -n "$CREDENTIALS_DIRECTORY/pkey.pem") /run/coturn/turnserver.cfg
+            + (lib.optionalString cfg.useAcmeCertificates ''
+              ${lib.getExe pkgs.replace-secret} @cert@ <(echo -n "$CREDENTIALS_DIRECTORY/cert.pem") /run/coturn/turnserver.cfg
+              ${lib.getExe pkgs.replace-secret} @pkey@ <(echo -n "$CREDENTIALS_DIRECTORY/pkey.pem") /run/coturn/turnserver.cfg
             '');
         in
-        (optionalAttrs (preStart' != "") { preStart = mkAfter preStart'; })
-        // (optionalAttrs cfg.useAcmeCertificates {
+        (lib.optionalAttrs (preStart' != "") { preStart = lib.mkAfter preStart'; })
+        // (lib.optionalAttrs cfg.useAcmeCertificates {
           serviceConfig.LoadCredential = [
             "cert.pem:${dir}/fullchain.pem"
             "pkey.pem:${dir}/key.pem"

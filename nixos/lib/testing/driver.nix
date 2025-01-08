@@ -1,6 +1,5 @@
 { config, lib, hostPkgs, ... }:
 let
-  inherit (lib) lib.mkOption types literalMD;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -106,7 +105,7 @@ in
     driver = lib.mkOption {
       description = "Package containing a script that runs the test.";
       type = lib.types.package;
-      defaultText = literalMD "set by the test framework";
+      defaultText = lib.literalMD "set by the test framework";
     };
 
     hostPkgs = lib.mkOption {
@@ -154,7 +153,7 @@ in
       example = lib.literalExpression ''
         p: [ p.numpy ]
       '';
-      type = lib.types.functionTo (types.listOf types.package);
+      type = lib.types.functionTo (lib.types.listOf lib.types.package);
       default = ps: [ ];
     };
 

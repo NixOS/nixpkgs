@@ -5,7 +5,6 @@
   ...
 }:
 let
-  inherit (lib) lib.mkOption types mkIf;
   cfg = config.services.atuin;
 in
 {

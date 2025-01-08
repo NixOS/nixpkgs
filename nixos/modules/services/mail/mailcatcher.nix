@@ -7,14 +7,6 @@
 
 let
   cfg = config.services.mailcatcher;
-
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    lib.optionalString
-    ;
 in
 {
   # interface

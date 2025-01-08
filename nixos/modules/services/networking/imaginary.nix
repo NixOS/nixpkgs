@@ -7,13 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.imaginary;
 in
 {

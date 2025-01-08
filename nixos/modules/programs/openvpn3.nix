@@ -9,16 +9,6 @@ let
   json = pkgs.formats.json { };
   cfg = config.programs.openvpn3;
 
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    literalExpression
-    max
-    options
-    lists
-    ;
-  inherit (lib.types) bool submodule ints;
 in
 {
   options.programs.openvpn3 = {
@@ -27,16 +17,16 @@ in
     netcfg = lib.mkOption {
       description = "Network configuration";
       default = { };
-      type = submodule {
+      type = lib.types.submodule {
         options = {
           settings = lib.mkOption {
             description = "Options stored in {file}`/etc/openvpn3/netcfg.json` configuration file";
             default = { };
-            type = submodule {
+            type = lib.types.submodule {
               freeformType = json.type;
               options = {
                 systemd_resolved = lib.mkOption {
-                  type = bool;
+                  type = lib.types.bool;
                   description = "Whether to use systemd-resolved integration";
                   default = config.services.resolved.enable;
                   defaultText = lib.literalExpression "config.services.resolved.enable";
@@ -51,37 +41,37 @@ in
     log-service = lib.mkOption {
       description = "Log service configuration";
       default = { };
-      type = submodule {
+      type = lib.types.submodule {
         options = {
           settings = lib.mkOption {
             description = "Options stored in {file}`/etc/openvpn3/log-service.json` configuration file";
             default = { };
-            type = submodule {
+            type = lib.types.submodule {
               freeformType = json.type;
               options = {
                 journald = lib.mkOption {
                   description = "Use systemd-journald";
-                  type = bool;
+                  type = lib.types.bool;
                   default = true;
                   example = false;
                 };
                 log_dbus_details = lib.mkOption {
                   description = "Add D-Bus details in log file/syslog";
-                  type = bool;
+                  type = lib.types.bool;
                   default = true;
                   example = false;
                 };
                 log_level = lib.mkOption {
                   description = "How verbose should the logging be";
-                  type = (ints.between 0 7) // {
-                    merge = _loc: defs: lists.foldl max 0 (options.getValues defs);
+                  type = (lib.types.ints.between 0 7) // {
+                    merge = _loc: defs: lib.lists.foldl lib.max 0 (lib.options.getValues defs);
                   };
                   default = 3;
                   example = 6;
                 };
                 timestamp = lib.mkOption {
                   description = "Add timestamp log file";
-                  type = bool;
+                  type = lib.types.bool;
                   default = false;
                   example = true;
                 };

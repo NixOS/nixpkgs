@@ -6,7 +6,6 @@
   ...
 }:
 let
-  inherit (lib) lib.mkOption types;
   cfg = config.services.prometheus.exporters.fritz;
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "fritz-exporter.yaml" cfg.settings;
@@ -52,8 +51,7 @@ in
             default = [ ];
             description = "Fritz!-devices to monitor using the exporter.";
             type =
-              with lib.types;
-              listOf (submodule {
+              lib.types.listOf (lib.types.submodule {
                 freeformType = yaml.type;
 
                 options = {

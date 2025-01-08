@@ -10,19 +10,7 @@
 }:
 
 let
-  inherit (pkgs) buildPackages runCommand docbook_xsl_ns;
-
-  inherit (pkgs.lib)
-    hasPrefix
-    removePrefix
-    flip
-    foldr
-    types
-    lib.mkOption
-    escapeShellArg
-    concatMapStringsSep
-    sourceFilesBySuffices
-    ;
+  inherit (pkgs) buildPackages runCommand docbook_xsl_ns lib;
 
   common = import ./common.nix;
 
@@ -35,7 +23,7 @@ let
   # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
   # you'd need to include `extraSources = [ pkgs.customModules ]`
   prefixesToStrip = map (p: "${toString p}/") ([ prefix ] ++ extraSources);
-  stripAnyPrefixes = flip (foldr removePrefix) prefixesToStrip;
+  stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
     inherit options revision baseOptionsJSON warningsAreErrors;
@@ -61,9 +49,9 @@ let
         declarations =
           map
             (decl:
-              if hasPrefix (toString ../../..) (toString decl)
+              if lib.hasPrefix (toString ../../..) (toString decl)
               then
-                let subpath = removePrefix "/" (removePrefix (toString ../../..) (toString decl));
+                let subpath = lib.removePrefix "/" (lib.removePrefix (toString ../../..) (toString decl));
                 in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
               else decl)
             opt.declarations;
@@ -86,7 +74,7 @@ let
     substituteInPlace ./configuration/configuration.md \
       --replace-fail \
           '@MODULE_CHAPTERS@' \
-          ${lib.escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
     substituteInPlace ./nixos-options.md \
       --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
@@ -105,7 +93,7 @@ in rec {
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
     { nativeBuildInputs = [ buildPackages.nixos-render-docs ];
-      inputs = sourceFilesBySuffices ./. [ ".md" ];
+      inputs = lib.sourceFilesBySuffices ./. [ ".md" ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }

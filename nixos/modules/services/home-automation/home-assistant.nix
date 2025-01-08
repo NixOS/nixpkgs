@@ -1,37 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 
 let
-  inherit (lib)
-    any
-    attrByPath
-    attrValues
-    concatMap
-    converge
-    elem
-    escapeShellArg
-    escapeShellArgs
-    filter
-    filterAttrsRecursive
-    hasAttrByPath
-    isAttrs
-    isDerivation
-    isList
-    literalExpression
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    lib.optionals
-    lib.optionalString
-    recursiveUpdate
-    singleton
-    splitString
-    types
-    unique
-  ;
-
   inherit (utils)
     escapeSystemdExecArgs
   ;
@@ -52,7 +21,7 @@ let
 
   # Filter null values from the configuration, so that we can still advertise
   # lib.optional options in the config attribute.
-  filteredConfig = converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ null ])) (lib.recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
 
   lovelaceConfigFile = renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig;
@@ -62,7 +31,7 @@ let
 
   # Components that were added by overriding the package
   explicitComponents = cfg.package.extraComponents;
-  useExplicitComponent = component: elem component explicitComponents;
+  useExplicitComponent = component: lib.elem component explicitComponents;
 
   # Given a component "platform", looks up whether it is used in the config
   # as `platform = "platform";`.
@@ -74,27 +43,27 @@ let
   # } ];
   usedPlatforms = config:
     # don't recurse into derivations possibly creating an infinite recursion
-    if isDerivation config then
+    if lib.isDerivation config then
       [ ]
-    else if isAttrs config then
+    else if lib.isAttrs config then
       lib.optionals (config ? platform) [ config.platform ]
-      ++ concatMap usedPlatforms (lib.attrValues config)
-    else if isList config then
-      concatMap usedPlatforms config
+      ++ lib.concatMap usedPlatforms (lib.attrValues config)
+    else if lib.isList config then
+      lib.concatMap usedPlatforms config
     else [ ];
 
-  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
+  useComponentPlatform = component: lib.elem component (usedPlatforms cfg.config);
 
   # Returns whether component is used in config, explicitly passed into package or
   # configured in the module.
   useComponent = component:
-    hasAttrByPath (splitString "." component) cfg.config
+    lib.hasAttrByPath (lib.splitString "." component) cfg.config
     || useComponentPlatform component
     || useExplicitComponent component
     || builtins.elem component (cfg.extraComponents ++ cfg.defaultIntegrations);
 
   # Final list of components passed into the package to include required dependencies
-  extraComponents = filter useComponent availableComponents;
+  extraComponents = lib.filter useComponent availableComponents;
 
   package = (cfg.package.override (oldArgs: {
     # Respect overrides that already exist in the passed package and
@@ -102,7 +71,7 @@ let
     extraComponents = oldArgs.extraComponents or [] ++ extraComponents;
     extraPackages = ps: (oldArgs.extraPackages or (_: []) ps)
       ++ (cfg.extraPackages ps)
-      ++ (concatMap (component: component.propagatedBuildInputs or []) cfg.customComponents);
+      ++ (lib.concatMap (component: component.propagatedBuildInputs or []) cfg.customComponents);
   }));
 
   # Create a directory that holds all lovelace modules
@@ -152,7 +121,7 @@ in {
     };
 
     defaultIntegrations = lib.mkOption {
-      type = lib.types.listOf (types.enum availableComponents);
+      type = lib.types.listOf (lib.types.enum availableComponents);
       # https://github.com/home-assistant/core/blob/dev/homeassistant/bootstrap.py#L109
       default = [
         "application_credentials"
@@ -191,7 +160,7 @@ in {
     };
 
     extraComponents = lib.mkOption {
-      type = lib.types.listOf (types.enum availableComponents);
+      type = lib.types.listOf (lib.types.enum availableComponents);
       default = [
         # List of components required to complete the onboarding
         "default_config"
@@ -220,7 +189,7 @@ in {
     };
 
     extraPackages = lib.mkOption {
-      type = lib.types.functionTo (types.listOf types.package);
+      type = lib.types.functionTo (lib.types.listOf lib.types.package);
       default = _: [];
       defaultText = lib.literalExpression ''
         python3Packages: with python3Packages; [];
@@ -241,7 +210,7 @@ in {
 
     customComponents = lib.mkOption {
       type = lib.types.listOf (
-        types.addCheck types.package (p: p.isHomeAssistantComponent or false) // {
+        lib.types.addCheck lib.types.package (p: p.isHomeAssistantComponent or false) // {
           name = "home-assistant-component";
           description = "package that is a Home Assistant component";
         }
@@ -299,7 +268,7 @@ in {
             };
 
             latitude = lib.mkOption {
-              type = lib.types.nullOr (types.either types.float types.str);
+              type = lib.types.nullOr (lib.types.either lib.types.float lib.types.str);
               default = null;
               example = 52.3;
               description = ''
@@ -308,7 +277,7 @@ in {
             };
 
             longitude = lib.mkOption {
-              type = lib.types.nullOr (types.either types.float types.str);
+              type = lib.types.nullOr (lib.types.either lib.types.float lib.types.str);
               default = null;
               example = 4.9;
               description = ''
@@ -317,7 +286,7 @@ in {
             };
 
             unit_system = lib.mkOption {
-              type = lib.types.nullOr (types.enum [ "metric" "imperial" ]);
+              type = lib.types.nullOr (lib.types.enum [ "metric" "imperial" ]);
               default = null;
               example = "metric";
               description = ''
@@ -326,7 +295,7 @@ in {
             };
 
             temperature_unit = lib.mkOption {
-              type = lib.types.nullOr (types.enum [ "C" "F" ]);
+              type = lib.types.nullOr (lib.types.enum [ "C" "F" ]);
               default = null;
               example = "C";
               description = ''
@@ -350,7 +319,7 @@ in {
           http = {
             # https://www.home-assistant.io/integrations/http/
             server_host = lib.mkOption {
-              type = lib.types.either types.str (types.listOf types.str);
+              type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
               default = [
                 "0.0.0.0"
                 "::"
@@ -577,19 +546,19 @@ in {
           done
         '';
       in
-        (optionalString (cfg.config != null) copyConfig) +
-        (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
+        (lib.optionalString (cfg.config != null) copyConfig) +
+        (lib.optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
         copyCustomLovelaceModules +
         copyCustomComponents
       ;
       environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
-        capabilities = unique ([
+        capabilities = lib.unique ([
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ lib.optionals (any useComponent componentsUsingBluetooth) [
+        ] ++ lib.optionals (lib.any useComponent componentsUsingBluetooth) [
           # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
@@ -732,7 +701,7 @@ in {
         # Hardening
         AmbientCapabilities = capabilities;
         CapabilityBoundingSet = capabilities;
-        DeviceAllow = (optionals (any useComponent componentsUsingSerialDevices) [
+        DeviceAllow = (lib.optionals (lib.any useComponent componentsUsingSerialDevices) [
           "char-ttyACM rw"
           "char-ttyAMA rw"
           "char-ttyUSB rw"
@@ -757,28 +726,28 @@ in {
         ReadWritePaths = let
           # Allow rw access to explicitly configured paths
           cfgPath = [ "config" "homeassistant" "allowlist_external_dirs" ];
-          value = attrByPath cfgPath [] cfg;
-          allowPaths = if isList value then value else singleton value;
+          value = lib.attrByPath cfgPath [] cfg;
+          allowPaths = if lib.isList value then value else lib.singleton value;
         in [ "${cfg.configDir}" ] ++ allowPaths;
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
           "AF_UNIX"
-        ] ++ lib.optionals (any useComponent componentsUsingBluetooth) [
+        ] ++ lib.optionals (lib.any useComponent componentsUsingBluetooth) [
           "AF_BLUETOOTH"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SupplementaryGroups = lib.optionals (any useComponent componentsUsingSerialDevices) [
+        SupplementaryGroups = lib.optionals (lib.any useComponent componentsUsingSerialDevices) [
           "dialout"
         ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optionals (any useComponent componentsUsingPing) [
+        ] ++ lib.optionals (lib.any useComponent componentsUsingPing) [
           "capset"
           "setuid"
         ];

@@ -6,19 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkIf
-    lib.mkOption
-    types
-    lib.optionalAttrs
-    ;
-  inherit (lib.types)
-    nullOr
-    listOf
-    str
-    attrsOf
-    submodule
-    ;
   cfg = config.services.nbd;
   iniFields =
     with lib.types;
@@ -40,7 +27,7 @@ let
         group = "root";
         port = cfg.server.listenPort;
       }
-      // (optionalAttrs (cfg.server.listenAddress != null) {
+      // (lib.optionalAttrs (cfg.server.listenAddress != null) {
         listenaddr = cfg.server.listenAddress;
       })
     );
@@ -56,7 +43,7 @@ let
     // {
       exportname = path;
     }
-    // (optionalAttrs (allowAddresses != null) {
+    // (lib.optionalAttrs (allowAddresses != null) {
       authfile = pkgs.writeText "authfile" (lib.concatStringsSep "\n" allowAddresses);
     })
   ) cfg.server.exports;
@@ -96,16 +83,16 @@ in
         exports = lib.mkOption {
           description = "Files or block devices to make available over the network.";
           default = { };
-          type = attrsOf (submodule {
+          type = lib.types.attrsOf (lib.types.submodule {
             options = {
               path = lib.mkOption {
-                type = str;
+                type = lib.types.str;
                 description = "File or block device to export.";
                 example = "/dev/sdb1";
               };
 
               allowAddresses = lib.mkOption {
-                type = nullOr (listOf str);
+                type = lib.types.nullOr (lib.types.listOf lib.types.str);
                 default = null;
                 example = [
                   "10.10.0.0/24"
@@ -130,7 +117,7 @@ in
         };
 
         listenAddress = lib.mkOption {
-          type = nullOr str;
+          type = lib.types.nullOr lib.types.str;
           description = "Address to listen on. If not specified, the server will listen on all interfaces.";
           default = null;
           example = "10.10.0.1";

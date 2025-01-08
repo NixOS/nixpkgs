@@ -9,23 +9,13 @@
 # TODO: support sqlite3 (it's deprecate?) and mysql
 
 let
-  inherit (lib)
-    concatStringsSep
-    literalExpression
-    mapAttrsToList
-    mkIf
-    lib.mkOption
-    lib.optional
-    lib.optionalString
-    types
-    ;
   libDir = "/var/lib/bacula";
 
   yes_no = bool: if bool then "yes" else "no";
   tls_conf =
     tls_cfg:
     lib.optionalString tls_cfg.enable (
-      concatStringsSep "\n" (
+      lib.concatStringsSep "\n" (
         [ "TLS Enable = yes;" ]
         ++ lib.optional (tls_cfg.require != null) "TLS Require = ${yes_no tls_cfg.require};"
         ++ lib.optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
@@ -52,7 +42,7 @@ let
     }
 
     ${lib.concatStringsSep "\n" (
-      mapAttrsToList (name: value: ''
+      lib.mapAttrsToList (name: value: ''
         Director {
           Name = "${name}";
           Password = ${value.password};
@@ -81,7 +71,7 @@ let
     }
 
     ${lib.concatStringsSep "\n" (
-      mapAttrsToList (name: value: ''
+      lib.mapAttrsToList (name: value: ''
         Autochanger {
           Name = "${name}";
           Device = ${lib.concatStringsSep ", " (map (a: "\"${a}\"") value.devices)};
@@ -93,7 +83,7 @@ let
     )}
 
     ${lib.concatStringsSep "\n" (
-      mapAttrsToList (name: value: ''
+      lib.mapAttrsToList (name: value: ''
         Device {
           Name = "${name}";
           Archive Device = ${value.archiveDevice};
@@ -104,7 +94,7 @@ let
     )}
 
     ${lib.concatStringsSep "\n" (
-      mapAttrsToList (name: value: ''
+      lib.mapAttrsToList (name: value: ''
         Director {
           Name = "${name}";
           Password = ${value.password};
@@ -473,7 +463,7 @@ in
         description = ''
           This option defines director resources in Bacula File Daemon.
         '';
-        type = lib.types.attrsOf (types.submodule (directorOptions "services.bacula-fd"));
+        type = lib.types.attrsOf (lib.types.submodule (directorOptions "services.bacula-fd"));
       };
 
       tls = lib.mkOption {
@@ -541,7 +531,7 @@ in
         description = ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
-        type = lib.types.attrsOf (types.submodule (directorOptions "services.bacula-sd"));
+        type = lib.types.attrsOf (lib.types.submodule (directorOptions "services.bacula-sd"));
       };
 
       device = lib.mkOption {
@@ -549,7 +539,7 @@ in
         description = ''
           This option defines Device resources in Bacula Storage Daemon.
         '';
-        type = lib.types.attrsOf (types.submodule deviceOptions);
+        type = lib.types.attrsOf (lib.types.submodule deviceOptions);
       };
 
       autochanger = lib.mkOption {
@@ -557,7 +547,7 @@ in
         description = ''
           This option defines Autochanger resources in Bacula Storage Daemon.
         '';
-        type = lib.types.attrsOf (types.submodule autochangerOptions);
+        type = lib.types.attrsOf (lib.types.submodule autochangerOptions);
       };
 
       extraStorageConfig = lib.mkOption {

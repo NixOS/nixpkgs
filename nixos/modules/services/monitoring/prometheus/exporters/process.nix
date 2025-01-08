@@ -8,19 +8,13 @@
 
 let
   cfg = config.services.prometheus.exporters.process;
-  inherit (lib)
-    lib.mkOption
-    types
-    literalExpression
-    concatStringsSep
-    ;
   configFile = pkgs.writeText "process-exporter.yaml" (builtins.toJSON cfg.settings);
 in
 {
   port = 9256;
   extraOpts = {
     settings.process_names = lib.mkOption {
-      type = lib.types.listOf types.anything;
+      type = lib.types.listOf lib.types.anything;
       default = [ ];
       example = lib.literalExpression ''
         [

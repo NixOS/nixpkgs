@@ -8,28 +8,14 @@
 { config, lib, ... }:
 
 let
-  inherit (lib)
-    any
-    concatMapStrings
-    concatStringsSep
-    filter
-    getVersion
-    mkIf
-    mkMerge
-    lib.mkOption
-    lib.optional
-    lib.optionalString
-    types
-    versionAtLeast
-    ;
 
   cfg = config.nix;
 
   nixPackage = cfg.package.out;
 
-  isNixAtLeast = versionAtLeast (getVersion nixPackage);
+  isNixAtLeast = lib.versionAtLeast (lib.getVersion nixPackage);
 
-  buildMachinesText = concatMapStrings (
+  buildMachinesText = lib.concatMapStrings (
     machine:
     (lib.concatStringsSep " " (
       [
@@ -40,7 +26,7 @@ let
           if machine.system != null then
             machine.system
           else if machine.systems != [ ] then
-            concatStringsSep "," machine.systems
+            lib.concatStringsSep "," machine.systems
           else
             "-"
         )
@@ -73,7 +59,7 @@ in
     nix = {
       buildMachines = lib.mkOption {
         type = lib.types.listOf (
-          types.submodule {
+          lib.types.submodule {
             options = {
               hostName = lib.mkOption {
                 type = lib.types.str;
@@ -234,7 +220,7 @@ in
       in
       [
         {
-          assertion = !(any badMachine cfg.buildMachines);
+          assertion = !(lib.any badMachine cfg.buildMachines);
           message =
             ''
               At least one system type (via <varname>system</varname> or
@@ -242,7 +228,7 @@ in
                 Invalid machine specifications:
             ''
             + "      "
-            + (lib.concatStringsSep "\n      " (map (m: m.hostName) (filter (badMachine) cfg.buildMachines)));
+            + (lib.concatStringsSep "\n      " (map (m: m.hostName) (lib.filter (badMachine) cfg.buildMachines)));
         }
       ];
 

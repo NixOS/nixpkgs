@@ -6,25 +6,12 @@
 }:
 
 let
-  inherit (lib)
-    escapeShellArgs
-    getExe
-    lists
-    literalExpression
-    maintainers
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
   cfg = config.services.dnsproxy;
 
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "config.yaml" cfg.settings;
 
-  finalFlags = (lists.optional (cfg.settings != { }) "--config-path=${configFile}") ++ cfg.flags;
+  finalFlags = (lib.lists.optional (cfg.settings != { }) "--config-path=${configFile}") ++ cfg.flags;
 in
 {
 
@@ -84,7 +71,7 @@ in
       ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} ${lib.escapeShellArgs finalFlags}";
+        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs finalFlags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;

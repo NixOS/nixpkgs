@@ -8,14 +8,6 @@
 let
   cfg = config.services.wyoming.piper;
 
-  inherit (lib)
-    escapeShellArgs
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    types
-    ;
-
   inherit (builtins)
     toString
     ;
@@ -25,7 +17,7 @@ in
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.wyoming.piper = with lib.types; {
+  options.services.wyoming.piper = {
     package = lib.mkPackageOption pkgs "wyoming-piper" { };
 
     servers = lib.mkOption {
@@ -34,16 +26,16 @@ in
         Attribute set of piper instances to spawn.
       '';
       type = lib.types.attrsOf (
-        types.submodule (
+        lib.types.submodule (
           { ... }:
           {
             options = {
               enable = lib.mkEnableOption "Wyoming Piper server";
 
-              piper = mkPackageOption pkgs "piper-tts" { };
+              piper = lib.mkPackageOption pkgs "piper-tts" { };
 
               voice = lib.mkOption {
-                type = str;
+                type = lib.types.str;
                 example = "en-us-ryan-medium";
                 description = ''
                   Name of the voice model to use. See the following website for samples:
@@ -52,7 +44,7 @@ in
               };
 
               uri = lib.mkOption {
-                type = strMatching "^(tcp|unix)://.*$";
+                type = lib.types.strMatching "^(tcp|unix)://.*$";
                 example = "tcp://0.0.0.0:10200";
                 description = ''
                   URI to bind the wyoming server to.
@@ -60,7 +52,7 @@ in
               };
 
               speaker = lib.mkOption {
-                type = ints.unsigned;
+                type = lib.types.ints.unsigned;
                 default = 0;
                 description = ''
                   ID of a specific speaker in a multi-speaker model.
@@ -69,7 +61,7 @@ in
               };
 
               noiseScale = lib.mkOption {
-                type = float;
+                type = lib.types.float;
                 default = 0.667;
                 description = ''
                   Generator noise value.
@@ -78,7 +70,7 @@ in
               };
 
               noiseWidth = lib.mkOption {
-                type = float;
+                type = lib.types.float;
                 default = 0.333;
                 description = ''
                   Phoneme width noise value.
@@ -87,7 +79,7 @@ in
               };
 
               lengthScale = lib.mkOption {
-                type = float;
+                type = lib.types.float;
                 default = 1.0;
                 description = ''
                   Phoneme length value.
@@ -96,12 +88,12 @@ in
               };
 
               extraArgs = lib.mkOption {
-                type = listOf str;
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 description = ''
                   Extra arguments to pass to the server commandline.
                 '';
-                apply = escapeShellArgs;
+                apply = lib.escapeShellArgs;
               };
             };
           }
@@ -111,17 +103,10 @@ in
   };
 
   config =
-    let
-      inherit (lib)
-        mapAttrs'
-        mkIf
-        nameValuePair
-        ;
-    in
-    mkIf (cfg.servers != { }) {
-      systemd.services = mapAttrs' (
+    lib.mkIf (cfg.servers != { }) {
+      systemd.services = lib.mapAttrs' (
         server: options:
-        nameValuePair "wyoming-piper-${server}" {
+        lib.nameValuePair "wyoming-piper-${server}" {
           inherit (options) enable;
           description = "Wyoming Piper server instance ${server}";
           wants = [

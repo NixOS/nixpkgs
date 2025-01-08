@@ -6,46 +6,20 @@
 }:
 
 let
-  inherit (lib)
-    attrValues
-    concatMapStringsSep
-    concatStrings
-    concatStringsSep
-    flatten
-    imap1
-    literalExpression
-    mapAttrsToList
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkRemovedOptionModule
-    lib.optional
-    lib.optionalAttrs
-    lib.optionalString
-    singleton
-    types
-    mkRenamedOptionModule
-    nameValuePair
-    mapAttrs'
-    listToAttrs
-    filter
-    ;
-  inherit (lib.strings) match;
-
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  sieveScriptSettings = mapAttrs' (
-    to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
+  sieveScriptSettings = lib.mapAttrs' (
+    to: _: lib.nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
   ) cfg.sieve.scripts;
-  imapSieveMailboxSettings = listToAttrs (
-    flatten (
-      imap1 (
+  imapSieveMailboxSettings = lib.listToAttrs (
+    lib.flatten (
+      lib.imap1 (
         idx: el:
-        singleton {
+        lib.singleton {
           name = "imapsieve_mailbox${toString idx}_name";
           value = el.name;
         }
@@ -55,7 +29,7 @@ let
         }
         ++ lib.optional (el.causes != [ ]) {
           name = "imapsieve_mailbox${toString idx}_causes";
-          value = concatStringsSep "," el.causes;
+          value = lib.concatStringsSep "," el.causes;
         }
         ++ lib.optional (el.before != null) {
           name = "imapsieve_mailbox${toString idx}_before";
@@ -93,10 +67,10 @@ let
   # The idea is to match everything that looks like `$term =`
   # but not `# $term something something`
   # or `# $term = some value` because those are comments.
-  configContainsSetting = lines: term: (match "^[^#]*\b${term}\b.*=" lines) != null;
+  configContainsSetting = lines: term: (lib.match "^[^#]*\b${term}\b.*=" lines) != null;
 
   warnAboutExtraConfigCollisions = map mkExtraConfigCollisionWarning (
-    filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings
+    lib.filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings
   );
 
   sievePipeBinScriptDirectory = pkgs.linkFarm "sieve-pipe-bins" (
@@ -106,7 +80,7 @@ let
     }) cfg.sieve.pipeBins
   );
 
-  dovecotConf = concatStrings [
+  dovecotConf = lib.concatStrings [
     ''
       base_dir = ${baseDir}
       protocols = ${lib.concatStringsSep " " cfg.protocols}
@@ -116,7 +90,7 @@ let
     ''
 
     (lib.concatStringsSep "\n" (
-      mapAttrsToList (protocol: plugins: ''
+      lib.mapAttrsToList (protocol: plugins: ''
         protocol ${protocol} {
           mail_plugins = $mail_plugins ${lib.concatStringsSep " " plugins.enable}
         }
@@ -157,7 +131,7 @@ let
       }
     ''
 
-    (optionalString cfg.enablePAM ''
+    (lib.optionalString cfg.enablePAM ''
       userdb {
         driver = passwd
       }
@@ -168,14 +142,14 @@ let
       }
     '')
 
-    (optionalString (cfg.mailboxes != { }) ''
+    (lib.optionalString (cfg.mailboxes != { }) ''
       namespace inbox {
         inbox=yes
         ${lib.concatStringsSep "\n" (map mailboxConfig (lib.attrValues cfg.mailboxes))}
       }
     '')
 
-    (optionalString cfg.enableQuota ''
+    (lib.optionalString cfg.enableQuota ''
       service quota-status {
         executable = ${dovecotPkg}/libexec/dovecot/quota-status -p postfix
         inet_listener {
@@ -200,7 +174,7 @@ let
     # the control flow.
     ''
       plugin {
-        ${lib.concatStringsSep "\n" (mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
       }
     ''
 
@@ -251,7 +225,7 @@ let
         };
         specialUse = lib.mkOption {
           type = lib.types.nullOr (
-            types.enum [
+            lib.types.enum [
               "All"
               "Archive"
               "Drafts"
@@ -289,13 +263,13 @@ in
   options.services.dovecot2 = {
     enable = lib.mkEnableOption "the dovecot 2.x POP3/IMAP server";
 
-    enablePop3 = mkEnableOption "starting the POP3 listener (when Dovecot is enabled)";
+    enablePop3 = lib.mkEnableOption "starting the POP3 listener (when Dovecot is enabled)";
 
-    enableImap = mkEnableOption "starting the IMAP listener (when Dovecot is enabled)" // {
+    enableImap = lib.mkEnableOption "starting the IMAP listener (when Dovecot is enabled)" // {
       default = true;
     };
 
-    enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
+    enableLmtp = lib.mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
 
     protocols = lib.mkOption {
       type = lib.types.listOf lib.types.str;
@@ -326,7 +300,7 @@ in
       let
         plugins =
           hint:
-          types.submodule {
+          lib.types.submodule {
             options = {
               enable = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
@@ -338,8 +312,7 @@ in
       in
       lib.mkOption {
         type =
-          with lib.types;
-          submodule {
+          lib.types.submodule {
             options = {
               globally = lib.mkOption {
                 description = "Additional entries to add to the mail_plugins variable for all protocols";
@@ -353,7 +326,7 @@ in
               };
               perProtocol = lib.mkOption {
                 description = "Additional entries to add to the mail_plugins variable, per protocol";
-                type = attrsOf (plugins "corresponding per-protocol");
+                type = lib.types.attrsOf (plugins "corresponding per-protocol");
                 default = { };
                 example = {
                   imap = [ "imap_acl" ];
@@ -401,7 +374,7 @@ in
     };
 
     createMailUser =
-      mkEnableOption ''
+      lib.mkEnableOption ''
         automatically creating the user
               given in {option}`services.dovecot.user` and the group
               given in {option}`services.dovecot.group`''
@@ -438,28 +411,27 @@ in
       description = "Path to the server's private key.";
     };
 
-    enablePAM = mkEnableOption "creating a own Dovecot PAM service and configure PAM user logins" // {
+    enablePAM = lib.mkEnableOption "creating a own Dovecot PAM service and configure PAM user logins" // {
       default = true;
     };
 
-    enableDHE = mkEnableOption "ssl_dh and generation of primes for the key exchange" // {
+    enableDHE = lib.mkEnableOption "ssl_dh and generation of primes for the key exchange" // {
       default = true;
     };
 
-    showPAMFailure = mkEnableOption "showing the PAM failure message on authentication error (useful for OTPW)";
+    showPAMFailure = lib.mkEnableOption "showing the PAM failure message on authentication error (useful for OTPW)";
 
     mailboxes = lib.mkOption {
       type =
-        with lib.types;
-        coercedTo (listOf unspecified) (
+        lib.types.coercedTo (lib.types.listOf lib.types.unspecified) (
           list:
-          listToAttrs (
+          lib.listToAttrs (
             map (entry: {
               name = entry.name;
               value = removeAttrs entry [ "name" ];
             }) list
           )
-        ) (attrsOf (submodule mailboxes));
+        ) (lib.attrsOf (lib.submodule mailboxes));
       default = { };
       example = lib.literalExpression ''
         {
@@ -469,7 +441,7 @@ in
       description = "Configure mailboxes and auto create or subscribe them.";
     };
 
-    enableQuota = mkEnableOption "the dovecot quota service";
+    enableQuota = lib.mkEnableOption "the dovecot quota service";
 
     quotaPort = lib.mkOption {
       type = lib.types.str;
@@ -489,9 +461,9 @@ in
     pluginSettings = lib.mkOption {
       # types.str does not coerce from packages, like `sievePipeBinScriptDirectory`.
       type = lib.types.attrsOf (
-        types.oneOf [
-          types.str
-          types.package
+        lib.types.oneOf [
+          lib.types.str
+          lib.types.package
         ]
       );
       default = { };
@@ -514,7 +486,7 @@ in
       default = [ ];
       description = "Configure Sieve filtering rules on IMAP actions";
       type = lib.types.listOf (
-        types.submodule (
+        lib.types.submodule (
           { config, ... }:
           {
             options = {
@@ -553,7 +525,7 @@ in
                   "APPEND"
                 ];
                 type = lib.types.listOf (
-                  types.enum [
+                  lib.types.enum [
                     "APPEND"
                     "COPY"
                     "FLAG"
@@ -615,7 +587,7 @@ in
       };
 
       scripts = lib.mkOption {
-        type = lib.types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
       };
@@ -659,9 +631,9 @@ in
 
       pluginSettings = lib.mapAttrs (n: lib.mkDefault) (
         {
-          sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
-          sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
-          sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
+          sieve_plugins = lib.concatStringsSep " " cfg.sieve.plugins;
+          sieve_extensions = lib.concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
+          sieve_global_extensions = lib.concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
           sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
         }
         // sieveScriptSettings
@@ -735,7 +707,7 @@ in
         + lib.optionalString (cfg.sieve.scripts != { }) ''
           mkdir -p ${stateDir}/sieve
           ${lib.concatStringsSep "\n" (
-            mapAttrsToList (to: from: ''
+            lib.mapAttrsToList (to: from: ''
               if [ -d '${from}' ]; then
                 mkdir '${stateDir}/sieve/${to}'
                 cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
@@ -750,7 +722,7 @@ in
         + lib.optionalString (cfg.imapsieve.mailbox != [ ]) ''
           mkdir -p ${stateDir}/imapsieve/{before,after}
 
-          ${concatMapStringsSep "\n" (
+          ${lib.concatMapStringsSep "\n" (
             el:
             lib.optionalString (el.before != null) ''
               cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}

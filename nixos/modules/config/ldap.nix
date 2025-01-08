@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkRenamedOptionModule
-    types
-    ;
-
   cfg = config.users.ldap;
 
   # Careful: OpenLDAP seems to be very picky about the indentation of

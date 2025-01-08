@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    singleton
-    types
-    ;
   inherit (pkgs) coreutils charybdis;
   cfg = config.services.charybdis;
 
@@ -63,7 +56,7 @@ in
       };
 
       motd = lib.mkOption {
-        type = lib.types.nullOr types.lines;
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Charybdis MOTD text.

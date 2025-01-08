@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.jitsi;
-  inherit (lib)
-    lib.mkOption
-    types
-    escapeShellArg
-    concatStringsSep
-    ;
 in
 {
   port = 9700;

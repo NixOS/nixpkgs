@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.script;
-  inherit (lib)
-    lib.mkOption
-    types
-    literalExpression
-    concatStringsSep
-    ;
   configFile = pkgs.writeText "script-exporter.yaml" (builtins.toJSON cfg.settings);
 in
 {
@@ -21,21 +15,20 @@ in
   extraOpts = {
     settings.scripts = lib.mkOption {
       type =
-        with lib.types;
-        listOf (submodule {
+        lib.types.listOf (lib.types.submodule {
           options = {
             name = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               example = "sleep";
               description = "Name of the script.";
             };
             script = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               example = "sleep 5";
               description = "Shell script to execute when metrics are requested.";
             };
             timeout = lib.mkOption {
-              type = nullOr int;
+              type = lib.types.nullOr lib.types.int;
               default = null;
               example = 60;
               description = "Optional timeout for the script in seconds.";

@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkIf
-    lib.mkOption
-    mkDefault
-    mkEnableOption
-    types
-    lib.optional
-    lib.optionals
-    ;
   inherit (lib.types)
     nullOr
     bool
@@ -32,12 +23,12 @@ let
   boolOpt = k: v: k + " = " + lib.boolToString v;
   intOpt = k: v: k + " = " + toString v;
   lstOpt = k: xs: k + " = " + lib.concatStringsSep "," xs;
-  lib.optionalNullString = o: s: lib.optional (s != null) (strOpt o s);
-  lib.optionalNullBool = o: b: lib.optional (b != null) (boolOpt o b);
-  lib.optionalNullInt = o: i: lib.optional (i != null) (intOpt o i);
-  lib.optionalEmptyList = o: l: lib.optional ([ ] != l) (lstOpt o l);
+  optionalNullString = o: s: lib.optional (s != null) (strOpt o s);
+  optionalNullBool = o: b: lib.optional (b != null) (boolOpt o b);
+  optionalNullInt = o: i: lib.optional (i != null) (intOpt o i);
+  optionalEmptyList = o: l: lib.optional ([ ] != l) (lstOpt o l);
 
-  mkEnableTrueOption = name: mkEnableOption name // { default = true; };
+  mkEnableTrueOption = name: lib.mkEnableOption name // { default = true; };
 
   mkEndpointOpt = name: addr: port: {
     enable = lib.mkEnableOption name;
@@ -204,15 +195,15 @@ let
                 (strOpt "address" proto.address)
                 (intOpt "port" proto.port)
               ]
-              ++ (optionals (proto ? keys) (optionalNullString "keys" proto.keys))
-              ++ (optionals (proto ? auth) (optionalNullBool "auth" proto.auth))
-              ++ (optionals (proto ? user) (optionalNullString "user" proto.user))
-              ++ (optionals (proto ? pass) (optionalNullString "pass" proto.pass))
-              ++ (optionals (proto ? strictHeaders) (optionalNullBool "strictheaders" proto.strictHeaders))
-              ++ (optionals (proto ? hostname) (optionalNullString "hostname" proto.hostname))
-              ++ (optionals (proto ? outproxy) (optionalNullString "outproxy" proto.outproxy))
-              ++ (optionals (proto ? outproxyPort) (optionalNullInt "outproxyport" proto.outproxyPort))
-              ++ (optionals (proto ? outproxyEnable) (optionalNullBool "outproxy.enabled" proto.outproxyEnable));
+              ++ (lib.optionals (proto ? keys) (optionalNullString "keys" proto.keys))
+              ++ (lib.optionals (proto ? auth) (optionalNullBool "auth" proto.auth))
+              ++ (lib.optionals (proto ? user) (optionalNullString "user" proto.user))
+              ++ (lib.optionals (proto ? pass) (optionalNullString "pass" proto.pass))
+              ++ (lib.optionals (proto ? strictHeaders) (optionalNullBool "strictheaders" proto.strictHeaders))
+              ++ (lib.optionals (proto ? hostname) (optionalNullString "hostname" proto.hostname))
+              ++ (lib.optionals (proto ? outproxy) (optionalNullString "outproxy" proto.outproxy))
+              ++ (lib.optionals (proto ? outproxyPort) (optionalNullInt "outproxyport" proto.outproxyPort))
+              ++ (lib.optionals (proto ? outproxyEnable) (optionalNullBool "outproxy.enabled" proto.outproxyEnable));
           in
           (lib.concatStringsSep "\n" protoOpts)
         ));
@@ -231,14 +222,14 @@ let
               (intOpt "port" tun.port)
               (strOpt "destination" tun.destination)
             ]
-            ++ (optionals (tun ? destinationPort) (optionalNullInt "destinationport" tun.destinationPort))
-            ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
-            ++ (optionals (tun ? address) (optionalNullString "address" tun.address))
-            ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
-            ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
-            ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
-            ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
-            ++ (optionals (tun ? crypto.tagsToSend) (
+            ++ (lib.optionals (tun ? destinationPort) (optionalNullInt "destinationport" tun.destinationPort))
+            ++ (lib.optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+            ++ (lib.optionals (tun ? address) (optionalNullString "address" tun.address))
+            ++ (lib.optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+            ++ (lib.optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+            ++ (lib.optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+            ++ (lib.optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+            ++ (lib.optionals (tun ? crypto.tagsToSend) (
               lib.optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend
             ));
         in
@@ -254,10 +245,10 @@ let
               (intOpt "port" tun.port)
               (strOpt "host" tun.address)
             ]
-            ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
-            ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
-            ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
-            ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
+            ++ (lib.optionals (tun ? destination) (optionalNullString "destination" tun.destination))
+            ++ (lib.optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+            ++ (lib.optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
+            ++ (lib.optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
         in
         lib.concatStringsSep "\n" inTunOpts;
 
@@ -318,7 +309,7 @@ in
         '';
       };
 
-      logCLFTime = mkEnableOption "full CLF-formatted date and time to log";
+      logCLFTime = lib.mkEnableOption "full CLF-formatted date and time to log";
 
       address = lib.mkOption {
         type = nullOr str;
@@ -387,13 +378,13 @@ in
       ntcp = mkEnableTrueOption "ntcp";
       ssu = mkEnableTrueOption "ssu";
 
-      notransit = mkEnableOption "notransit" // {
+      notransit = lib.mkEnableOption "notransit" // {
         description = ''
           Tells the router to not accept transit tunnels during startup.
         '';
       };
 
-      floodfill = mkEnableOption "floodfill" // {
+      floodfill = lib.mkEnableOption "floodfill" // {
         description = ''
           If the router is declared to be unreachable and needs introduction nodes.
         '';
@@ -425,7 +416,7 @@ in
       };
 
       enableIPv4 = mkEnableTrueOption "IPv4 connectivity";
-      enableIPv6 = mkEnableOption "IPv6 connectivity";
+      enableIPv6 = lib.mkEnableOption "IPv6 connectivity";
       nat = mkEnableTrueOption "NAT bypass";
 
       upnp.enable = lib.mkEnableOption "UPnP service discovery";
@@ -448,7 +439,7 @@ in
         '';
       };
 
-      reseed.verify = mkEnableOption "SU3 signature verification";
+      reseed.verify = lib.mkEnableOption "SU3 signature verification";
 
       reseed.file = lib.mkOption {
         type = nullOr str;
@@ -527,7 +518,7 @@ in
         '';
       };
 
-      trust.hidden = mkEnableOption "router concealment";
+      trust.hidden = lib.mkEnableOption "router concealment";
 
       websocket = mkEndpointOpt "websockets" "127.0.0.1" 7666;
 
@@ -535,7 +526,7 @@ in
       exploratory.outbound = i2cpOpts "exploratory";
 
       ntcp2.enable = mkEnableTrueOption "NTCP2";
-      ntcp2.published = mkEnableOption "NTCP2 publication";
+      ntcp2.published = lib.mkEnableOption "NTCP2 publication";
       ntcp2.port = lib.mkOption {
         type = lib.types.port;
         default = 0;
@@ -605,7 +596,7 @@ in
 
       proto.http = (mkEndpointOpt "http" "127.0.0.1" 7070) // {
 
-        auth = mkEnableOption "webconsole authentication";
+        auth = lib.mkEnableOption "webconsole authentication";
 
         user = lib.mkOption {
           type = lib.types.str;
@@ -648,7 +639,7 @@ in
         };
       };
       proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "socksproxy-keys.dat") // {
-        outproxyEnable = mkEnableOption "SOCKS outproxy";
+        outproxyEnable = lib.mkEnableOption "SOCKS outproxy";
         outproxy = lib.mkOption {
           type = lib.types.str;
           default = "127.0.0.1";

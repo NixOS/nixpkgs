@@ -6,32 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    any
-    attrNames
-    attrValues
-    count
-    escapeShellArg
-    filterAttrs
-    flatten
-    flip
-    getExe
-    hasAttr
-    hasInfix
-    listToAttrs
-    literalExpression
-    mapAttrsToList
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    nameValuePair
-    lib.optional
-    subtractLists
-    types
-    unique
-    ;
-
   format = pkgs.formats.json { };
   cfg = config.services.influxdb2;
   configFile = format.generate "config.json" cfg.settings;
@@ -62,8 +36,8 @@ let
   ];
 
   # Determines whether at least one active api token is defined
-  anyAuthDefined = flip any (lib.attrValues cfg.provision.organizations) (
-    o: o.present && flip any (lib.attrValues o.auths) (a: a.present && a.tokenFile != null)
+  anyAuthDefined = lib.flip lib.any (lib.attrValues cfg.provision.organizations) (
+    o: o.present && lib.flip lib.any (lib.attrValues o.auths) (a: a.present && a.tokenFile != null)
   );
 
   provisionState = pkgs.writeText "provision_state.json" (
@@ -73,9 +47,9 @@ let
   );
 
   influxHost = "http://${
-    escapeShellArg (
+    lib.escapeShellArg (
       if
-        !hasAttr "http-bind-address" cfg.settings || hasInfix "0.0.0.0" cfg.settings.http-bind-address
+        !lib.hasAttr "http-bind-address" cfg.settings || lib.hasInfix "0.0.0.0" cfg.settings.http-bind-address
       then
         "localhost:8086"
       else
@@ -123,7 +97,7 @@ let
       rm -f "$STATE_DIRECTORY/.first_startup"
     fi
 
-    provision_result=$(${getExe pkgs.influxdb2-provision} ${provisionState} "$INFLUX_HOST" "$(< "$CREDENTIALS_DIRECTORY/admin-token")")
+    provision_result=$(${lib.getExe pkgs.influxdb2-provision} ${provisionState} "$INFLUX_HOST" "$(< "$CREDENTIALS_DIRECTORY/admin-token")")
     if [[ "$(jq '[.auths[] | select(.action == "created")] | length' <<< "$provision_result")" -gt 0 ]]; then
       echo "Created at least one new token, queueing service restart so we can manipulate secrets"
       touch "$STATE_DIRECTORY/.needs_restart"
@@ -138,7 +112,7 @@ let
     fi
   '';
 
-  organizationSubmodule = types.submodule (
+  organizationSubmodule = lib.types.submodule (
     organizationSubmod:
     let
       org = organizationSubmod.config._module.args.name;
@@ -161,7 +135,7 @@ let
           description = "Buckets to provision in this organization.";
           default = { };
           type = lib.types.attrsOf (
-            types.submodule (
+            lib.types.submodule (
               bucketSubmod:
               let
                 bucket = bucketSubmod.config._module.args.name;
@@ -195,7 +169,7 @@ let
           description = "API tokens to provision for the user in this organization.";
           default = { };
           type = lib.types.attrsOf (
-            types.submodule (
+            lib.types.submodule (
               authSubmod:
               let
                 auth = authSubmod.config._module.args.name;
@@ -261,7 +235,7 @@ let
                       more granular access permissions.
                     '';
                     default = [ ];
-                    type = lib.types.listOf (types.enum validPermissions);
+                    type = lib.types.listOf (lib.types.enum validPermissions);
                   };
 
                   writePermissions = lib.mkOption {
@@ -280,7 +254,7 @@ let
                       more granular access permissions.
                     '';
                     default = [ ];
-                    type = lib.types.listOf (types.enum validPermissions);
+                    type = lib.types.listOf (lib.types.enum validPermissions);
                   };
 
                   readBuckets = lib.mkOption {
@@ -386,7 +360,7 @@ in
             }
           '';
           type = lib.types.attrsOf (
-            types.submodule (
+            lib.types.submodule (
               userSubmod:
               let
                 user = userSubmod.config._module.args.name;
@@ -418,18 +392,18 @@ in
     assertions =
       [
         {
-          assertion = !(hasAttr "bolt-path" cfg.settings) && !(hasAttr "engine-path" cfg.settings);
+          assertion = !(lib.hasAttr "bolt-path" cfg.settings) && !(lib.hasAttr "engine-path" cfg.settings);
           message = "services.influxdb2.config: bolt-path and engine-path should not be set as they are managed by systemd";
         }
       ]
-      ++ flatten (
-        flip mapAttrsToList cfg.provision.organizations (
+      ++ lib.flatten (
+        lib.flip lib.mapAttrsToList cfg.provision.organizations (
           orgName: org:
-          flip mapAttrsToList org.auths (
+          lib.flip lib.mapAttrsToList org.auths (
             authName: auth: [
               {
                 assertion =
-                  1 == count (x: x) [
+                  1 == lib.count (x: x) [
                     auth.operator
                     auth.allAccess
                     (
@@ -443,7 +417,7 @@ in
               }
               (
                 let
-                  unknownBuckets = subtractLists (attrNames org.buckets) auth.readBuckets;
+                  unknownBuckets = lib.subtractLists (lib.attrNames org.buckets) auth.readBuckets;
                 in
                 {
                   assertion = unknownBuckets == [ ];
@@ -452,7 +426,7 @@ in
               )
               (
                 let
-                  unknownBuckets = subtractLists (attrNames org.buckets) auth.writeBuckets;
+                  unknownBuckets = lib.subtractLists (lib.attrNames org.buckets) auth.writeBuckets;
                 in
                 {
                   assertion = unknownBuckets == [ ];
@@ -521,28 +495,28 @@ in
       # Also extract any token secret mappings and apply them if this isn't the first start.
       preStart =
         let
-          tokenPaths = listToAttrs (
-            flatten
+          tokenPaths = lib.listToAttrs (
+            lib.flatten
               # For all organizations
               (
-                flip mapAttrsToList cfg.provision.organizations
+                lib.flip lib.mapAttrsToList cfg.provision.organizations
                   # For each contained token that has a token file
                   (
                     _: org:
-                    flip mapAttrsToList (lib.filterAttrs (_: x: x.tokenFile != null) org.auths)
+                    lib.flip lib.mapAttrsToList (lib.filterAttrs (_: x: x.tokenFile != null) org.auths)
                       # Collect id -> tokenFile for the mapping
-                      (_: auth: nameValuePair auth.id auth.tokenFile)
+                      (_: auth: lib.nameValuePair auth.id auth.tokenFile)
                   )
               )
           );
           tokenMappings = pkgs.writeText "token_mappings.json" (builtins.toJSON tokenPaths);
         in
-        mkIf cfg.provision.enable ''
+        lib.mkIf cfg.provision.enable ''
           if ! test -e "$STATE_DIRECTORY/influxd.bolt"; then
             touch "$STATE_DIRECTORY/.first_startup"
           else
             # Manipulate provisioned api tokens if necessary
-            ${getExe pkgs.influxdb2-token-manipulator} "$STATE_DIRECTORY/influxd.bolt" ${tokenMappings}
+            ${lib.getExe pkgs.influxdb2-token-manipulator} "$STATE_DIRECTORY/influxd.bolt" ${tokenMappings}
           fi
         '';
     };

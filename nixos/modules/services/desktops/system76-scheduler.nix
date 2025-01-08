@@ -8,35 +8,9 @@
 let
   cfg = config.services.system76-scheduler;
 
-  inherit (builtins)
-    concatStringsSep
-    map
-    toString
-    attrNames
-    ;
-  inherit (lib)
-    boolToString
-    types
-    lib.mkOption
-    literalExpression
-    lib.optional
-    mkIf
-    mkMerge
-    ;
-  inherit (types)
-    nullOr
-    listOf
-    bool
-    int
-    ints
-    float
-    str
-    enum
-    ;
-
   withDefaults =
     optionSpecs: defaults:
-    lib.genAttrs (attrNames optionSpecs) (
+    lib.genAttrs (lib.attrNames optionSpecs) (
       name:
       lib.mkOption (
         optionSpecs.${name}
@@ -48,23 +22,23 @@ let
 
   latencyProfile = withDefaults {
     latency = {
-      type = int;
+      type = lib.types.int;
       description = "`sched_latency_ns`.";
     };
     nr-latency = {
-      type = int;
+      type = lib.types.int;
       description = "`sched_nr_latency`.";
     };
     wakeup-granularity = {
-      type = float;
+      type = lib.types.float;
       description = "`sched_wakeup_granularity_ns`.";
     };
     bandwidth-size = {
-      type = int;
+      type = lib.types.int;
       description = "`sched_cfs_bandwidth_slice_us`.";
     };
     preempt = {
-      type = enum [
+      type = lib.types.enum [
         "none"
         "voluntary"
         "full"
@@ -74,11 +48,11 @@ let
   };
   schedulerProfile = withDefaults {
     nice = {
-      type = nullOr (ints.between (-20) 19);
+      type = lib.types.nullOr (lib.types.ints.between (-20) 19);
       description = "Niceness.";
     };
     class = {
-      type = nullOr (enum [
+      type = lib.types.nullOr (lib.types.enum [
         "idle"
         "batch"
         "other"
@@ -89,12 +63,12 @@ let
       description = "CPU scheduler class.";
     };
     prio = {
-      type = nullOr (ints.between 1 99);
+      type = lib.types.nullOr (lib.types.ints.between 1 99);
       example = lib.literalExpression "49";
       description = "CPU scheduler priority.";
     };
     ioClass = {
-      type = nullOr (enum [
+      type = lib.types.nullOr (lib.types.enum [
         "idle"
         "best-effort"
         "realtime"
@@ -103,12 +77,12 @@ let
       description = "IO scheduler class.";
     };
     ioPrio = {
-      type = nullOr (ints.between 0 7);
+      type = lib.types.nullOr (lib.types.ints.between 0 7);
       example = lib.literalExpression "4";
       description = "IO scheduler priority.";
     };
     matchers = {
-      type = nullOr (listOf str);
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = [ ];
       example = lib.literalExpression ''
         [
@@ -131,12 +105,12 @@ let
 
   schedulerProfileToString =
     name: a: indent:
-    concatStringsSep " " (
+    lib.concatStringsSep " " (
       [ "${indent}${name}" ]
-      ++ (optional (a.nice != null) "nice=${toString a.nice}")
-      ++ (optional (a.class != null) "sched=${prioToString a.class a.prio}")
-      ++ (optional (a.ioClass != null) "io=${prioToString a.ioClass a.ioPrio}")
-      ++ (optional ((builtins.length a.matchers) != 0) (
+      ++ (lib.optional (a.nice != null) "nice=${toString a.nice}")
+      ++ (lib.optional (a.class != null) "sched=${prioToString a.class a.prio}")
+      ++ (lib.optional (a.ioClass != null) "io=${prioToString a.ioClass a.ioPrio}")
+      ++ (lib.optional ((builtins.length a.matchers) != 0) (
         "{\n${lib.concatStringsSep "\n" (map (m: "  ${indent}${m}") a.matchers)}\n${indent}}"
       ))
     );
@@ -155,7 +129,7 @@ in
       };
 
       useStockConfig = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = true;
         description = ''
           Use the (reasonable and featureful) stock configuration.
@@ -168,7 +142,7 @@ in
       settings = {
         cfsProfiles = {
           enable = lib.mkOption {
-            type = bool;
+            type = lib.types.bool;
             default = true;
             description = "Tweak CFS latency parameters when going on/off battery";
           };
@@ -191,26 +165,26 @@ in
 
         processScheduler = {
           enable = lib.mkOption {
-            type = bool;
+            type = lib.types.bool;
             default = true;
             description = "Tweak scheduling of individual processes in real time.";
           };
 
           useExecsnoop = lib.mkOption {
-            type = bool;
+            type = lib.types.bool;
             default = true;
             description = "Use execsnoop (otherwise poll the precess list periodically).";
           };
 
           refreshInterval = lib.mkOption {
-            type = int;
+            type = lib.types.int;
             default = 60;
             description = "Process list poll interval, in seconds";
           };
 
           foregroundBoost = {
             enable = lib.mkOption {
-              type = bool;
+              type = lib.types.bool;
               default = true;
               description = ''
                 Boost foreground process priorities.
@@ -233,7 +207,7 @@ in
 
           pipewireBoost = {
             enable = lib.mkOption {
-              type = bool;
+              type = lib.types.bool;
               default = true;
               description = "Boost Pipewire client priorities.";
             };
@@ -248,7 +222,7 @@ in
 
       assignments = lib.mkOption {
         type = lib.types.attrsOf (
-          types.submodule {
+          lib.types.types.submodule {
             options = schedulerProfile { };
           }
         );
@@ -269,7 +243,7 @@ in
       };
 
       exceptions = lib.mkOption {
-        type = lib.types.listOf str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = lib.literalExpression ''
           [
@@ -318,16 +292,16 @@ in
           cfsp = settings.cfsProfiles;
           ps = settings.processScheduler;
         in
-        mkIf (!cfg.useStockConfig) {
+        lib.mkIf (!cfg.useStockConfig) {
           "system76-scheduler/config.kdl".text = ''
             version "2.0"
             autogroup-enabled false
-            cfs-profiles enable=${boolToString cfsp.enable} {
+            cfs-profiles enable=${lib.boolToString cfsp.enable} {
               ${cfsProfileToString "default"}
               ${cfsProfileToString "responsive"}
             }
-            process-scheduler enable=${boolToString ps.enable} {
-              execsnoop ${boolToString ps.useExecsnoop}
+            process-scheduler enable=${lib.boolToString ps.enable} {
+              execsnoop ${lib.boolToString ps.useExecsnoop}
               refresh-rate ${toString ps.refreshInterval}
               assignments {
                 ${
@@ -359,7 +333,7 @@ in
           "exceptions {\n${lib.concatStringsSep "\n" (map (e: "  ${e}") cfg.exceptions)}\n}\n"
           + "assignments {\n"
           + (lib.concatStringsSep "\n" (
-            map (name: schedulerProfileToString name cfg.assignments.${name} "  ") (attrNames cfg.assignments)
+            map (name: schedulerProfileToString name cfg.assignments.${name} "  ") (lib.attrNames cfg.assignments)
           ))
           + "\n}\n";
       }

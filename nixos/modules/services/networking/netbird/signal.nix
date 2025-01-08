@@ -7,23 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    getExe'
-    mkEnableOption
-    mkIf
-    mkPackageOption
-    lib.mkOption
-    ;
-
-  inherit (lib.types)
-    listOf
-    enum
-    port
-    str
-    ;
-
-  inherit (utils) escapeSystemdExecArgs;
-
   cfg = config.services.netbird.server.signal;
 in
 
@@ -33,27 +16,27 @@ in
 
     package = lib.mkPackageOption pkgs "netbird" { };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
+    enableNginx = lib.mkEnableOption "Nginx reverse-proxy for the netbird signal service";
 
     domain = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       description = "The domain name for the signal service.";
     };
 
     port = lib.mkOption {
-      type = port;
+      type = lib.types.port;
       default = 8012;
       description = "Internal port of the signal server.";
     };
 
     metricsPort = lib.mkOption {
-      type = port;
+      type = lib.types.port;
       default = 9091;
       description = "Internal port of the metrics server.";
     };
 
     extraOptions = lib.mkOption {
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Additional options given to netbird-signal as commandline arguments.
@@ -61,7 +44,7 @@ in
     };
 
     logLevel = lib.mkOption {
-      type = enum [
+      type = lib.types.enum [
         "ERROR"
         "WARN"
         "INFO"
@@ -86,9 +69,9 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeSystemdExecArgs (
+        ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe' cfg.package "netbird-signal")
+            (lib.getExe' cfg.package "netbird-signal")
             "run"
             # Port to listen on
             "--port"

@@ -1,7 +1,5 @@
 { lib, ... }:
-let
-  inherit (lib) types lib.mkOption;
-in
+
 {
   options = {
     meta = lib.mkOption {
@@ -14,7 +12,7 @@ in
       type = lib.types.submodule {
         options = {
           maintainers = lib.mkOption {
-            type = lib.types.listOf types.raw;
+            type = lib.types.listOf lib.types.raw;
             default = [ ];
             description = ''
               The [list of maintainers](https://nixos.org/manual/nixpkgs/stable/#var-meta-maintainers) for this test.
@@ -35,7 +33,7 @@ in
             '';
           };
           platforms = lib.mkOption {
-            type = lib.types.listOf types.raw;
+            type = lib.types.listOf lib.types.raw;
             default = lib.platforms.linux ++ lib.platforms.darwin;
             description = ''
               Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.

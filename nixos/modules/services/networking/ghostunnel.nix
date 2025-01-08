@@ -5,22 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    attrValues
-    concatMap
-    concatStringsSep
-    escapeShellArg
-    literalExpression
-    mapAttrs'
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    nameValuePair
-    lib.optional
-    types
-    ;
 
   mainCfg = config.services.ghostunnel;
 
@@ -156,7 +140,7 @@ let
       # Clients should not be authenticated with the public root certificates
       # (afaict, it doesn't make sense), so we only provide that default when
       # client cert auth is disabled.
-      config.cacert = lib.mkIf config.disableAuthentication (mkDefault null);
+      config.cacert = lib.mkIf config.disableAuthentication (lib.mkDefault null);
 
       config.atRoot = {
         assertions = [
@@ -195,7 +179,7 @@ let
               ++ lib.optional (config.key != null) "key:${config.key}"
               ++ lib.optional (config.cacert != null) "cacert:${config.cacert}";
           };
-          script = concatStringsSep " " (
+          script = lib.concatStringsSep " " (
             [ "${mainCfg.package}/bin/ghostunnel" ]
             ++ lib.optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
             ++ lib.optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
@@ -231,7 +215,7 @@ in
       description = ''
         Server mode ghostunnels (TLS listener -> plain TCP/UNIX target)
       '';
-      type = lib.types.attrsOf (types.submodule module);
+      type = lib.types.attrsOf (lib.types.submodule module);
       default = { };
     };
   };

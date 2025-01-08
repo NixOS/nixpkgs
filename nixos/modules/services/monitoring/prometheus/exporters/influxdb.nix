@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.influxdb;
-  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9122;

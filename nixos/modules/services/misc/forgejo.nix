@@ -31,23 +31,6 @@ let
         string: lib.replaceStrings [ "." "-" ] [ "_0X2E_" "_0X2D_" ] (lib.strings.toUpper string);
     in
     lib.flatten (lib.mapAttrsToList mkSecret cfg.secrets);
-
-  inherit (lib)
-    literalExpression
-    mkChangedOptionModule
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    lib.optionalAttrs
-    lib.optionals
-    lib.optionalString
-    types
-    ;
 in
 {
   imports = [
@@ -107,7 +90,7 @@ in
       [ "services" "forgejo" "staticRootPath" ]
       [ "services" "forgejo" "settings" "server" "STATIC_ROOT_PATH" ]
     )
-    (mkChangedOptionModule
+    (lib.mkChangedOptionModule
       [ "services" "forgejo" "enableUnixSocket" ]
       [ "services" "forgejo" "settings" "server" "PROTOCOL" ]
       (config: if config.services.forgejo.enableUnixSocket then "http+unix" else "http")
@@ -374,7 +357,7 @@ in
               };
 
               HTTP_ADDR = lib.mkOption {
-                type = lib.types.either types.str types.path;
+                type = lib.types.either lib.types.str lib.types.path;
                 default =
                   if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then
                     "/run/forgejo/forgejo.sock"
@@ -404,7 +387,7 @@ in
               };
 
               STATIC_ROOT_PATH = lib.mkOption {
-                type = lib.types.either types.str types.path;
+                type = lib.types.either lib.types.str lib.types.path;
                 default = cfg.package.data;
                 defaultText = lib.literalExpression "config.${opt.package}.data";
                 example = "/var/lib/forgejo/data";

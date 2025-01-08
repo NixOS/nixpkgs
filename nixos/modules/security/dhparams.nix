@@ -7,11 +7,10 @@
 }:
 
 let
-  inherit (lib) literalExpression lib.mkOption types;
   cfg = config.security.dhparams;
   opt = options.security.dhparams;
 
-  bitType = types.addCheck types.int (b: b >= 16) // {
+  bitType = lib.types.addCheck lib.types.int (b: b >= 16) // {
     name = "bits";
     description = "integer of at least 16 bits";
   };

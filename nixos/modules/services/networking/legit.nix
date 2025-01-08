@@ -6,17 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionalAttrs
-    lib.optional
-    types
-    ;
-
   cfg = config.services.legit;
 
   yaml = pkgs.formats.yaml { };

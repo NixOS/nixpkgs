@@ -7,15 +7,6 @@
 */
 { config, lib, ... }:
 let
-  inherit (lib)
-    filterAttrs
-    literalExpression
-    mapAttrsToList
-    mkDefault
-    mkIf
-    lib.mkOption
-    types
-    ;
 
   cfg = config.nix;
 
@@ -25,7 +16,7 @@ in
     nix = {
       registry = lib.mkOption {
         type = lib.types.attrsOf (
-          types.submodule (
+          lib.types.submodule (
             let
               referenceAttrs =
                 with lib.types;
@@ -81,12 +72,12 @@ in
                   id = name;
                 };
                 to = lib.mkIf (config.flake != null) (
-                  mkDefault (
+                  lib.mkDefault (
                     {
                       type = "path";
                       path = config.flake.outPath;
                     }
-                    // filterAttrs (n: _: n == "lastModified" || n == "rev" || n == "narHash") config.flake
+                    // lib.filterAttrs (n: _: n == "lastModified" || n == "rev" || n == "narHash") config.flake
                   )
                 );
               };
@@ -104,7 +95,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.etc."nix/registry.json".text = builtins.toJSON {
       version = 2;
-      flakes = mapAttrsToList (n: v: { inherit (v) from to exact; }) cfg.registry;
+      flakes = lib.mapAttrsToList (n: v: { inherit (v) from to exact; }) cfg.registry;
     };
   };
 }

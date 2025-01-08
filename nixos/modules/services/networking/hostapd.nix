@@ -6,61 +6,25 @@
 # to make informed decisions you will probably need to look
 # at hostapd's code. You have been warned, proceed with care.
 let
-  inherit
-    (lib)
-    attrNames
-    attrValues
-    concatLists
-    concatMapStrings
-    concatStringsSep
-    count
-    escapeShellArg
-    filter
-    flip
-    generators
-    getAttr
-    hasPrefix
-    imap0
-    isInt
-    isString
-    length
-    literalExpression
-    maintainers
-    mapAttrsToList
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    lib.optionalAttrs
-    lib.optionalString
-    lib.optionals
-    stringLength
-    toLower
-    types
-    unique
-    ;
-
   cfg = config.services.hostapd;
 
   extraSettingsFormat = {
     type = let
-      singleAtom = types.oneOf [ types.bool types.int types.str ];
-      atom = types.either singleAtom (types.listOf singleAtom) // {
+      singleAtom = lib.types.oneOf [ lib.types.bool lib.types.int lib.types.str ];
+      atom = lib.types.either singleAtom (lib.types.listOf singleAtom) // {
         description = "atom (bool, int or string) or a list of them for duplicate keys";
       };
-    in types.attrsOf atom;
+    in lib.types.attrsOf atom;
 
-    generate = name: value: pkgs.writeText name (generators.toKeyValue {
+    generate = name: value: pkgs.writeText name (lib.generators.toKeyValue {
       listsAsDuplicateKeys = true;
-      mkKeyValue = generators.mkKeyValueDefault {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
         mkValueString = v:
-          if      isInt    v then toString v
-          else if isString v then v
+          if      lib.isInt    v then toString v
+          else if lib.isString v then v
           else if true  == v then "1"
           else if false == v then "0"
-          else throw "unsupported type ${builtins.typeOf v}: ${(generators.toPretty {}) v}";
+          else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
       } "=";
     } value);
   };
@@ -86,10 +50,10 @@ let
       EOF
 
       cat ${lib.escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-extra.conf" radioCfg.settings)} >> "$hostapd_config_file"
-      ${concatMapStrings (script: "${script} \"$hostapd_config_file\"\n") (lib.attrValues radioCfg.dynamicConfigScripts)}
+      ${lib.concatMapStrings (script: "${script} \"$hostapd_config_file\"\n") (lib.attrValues radioCfg.dynamicConfigScripts)}
     ''
-    + concatMapStrings (x: "${x}\n") (imap0 (i: f: f i)
-      (mapAttrsToList (bss: bssCfg: bssIdx: ''
+    + lib.concatMapStrings (x: "${x}\n") (lib.imap0 (i: f: f i)
+      (lib.mapAttrsToList (bss: bssCfg: bssIdx: ''
         ''\n# BSS configuration: ${bss}
 
         mac_allow_file=/run/hostapd/${lib.escapeShellArg bss}.mac.allow
@@ -102,10 +66,10 @@ let
 
         cat ${writeBssHeader radio bss bssIdx} >> "$hostapd_config_file"
         cat ${lib.escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
-        ${concatMapStrings (script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n") (lib.attrValues bssCfg.dynamicConfigScripts)}
+        ${lib.concatMapStrings (script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n") (lib.attrValues bssCfg.dynamicConfigScripts)}
       '') radioCfg.networks)));
 
-  runtimeConfigFiles = mapAttrsToList (radio: _: "/run/hostapd/${radio}.hostapd.conf") cfg.radios;
+  runtimeConfigFiles = lib.mapAttrsToList (radio: _: "/run/hostapd/${radio}.hostapd.conf") cfg.radios;
 in {
   meta.maintainers = with lib.maintainers; [ oddlama ];
 
@@ -176,7 +140,7 @@ in {
           and supports configuring multiple APs (Refer to valid interface combinations in
           {command}`iw list`).
         '';
-        type = lib.types.attrsOf (types.submodule (radioSubmod: {
+        type = lib.types.attrsOf (lib.types.submodule (radioSubmod: {
           options = {
             driver = lib.mkOption {
               default = "nl80211";
@@ -260,7 +224,7 @@ in {
 
             dynamicConfigScripts = lib.mkOption {
               default = {};
-              type = lib.types.attrsOf types.path;
+              type = lib.types.attrsOf lib.types.path;
               example = lib.literalExpression ''
                 {
                   exampleDynamicConfig = pkgs.writeShellScript "dynamic-config" '''
@@ -345,7 +309,7 @@ in {
                 default = "20or40";
                 type = lib.types.enum ["20or40" "80" "160" "80+80"];
                 apply = x:
-                  getAttr x {
+                  lib.getAttr x {
                     "20or40" = 0;
                     "80" = 1;
                     "160" = 2;
@@ -399,7 +363,7 @@ in {
                 default = "20or40";
                 type = lib.types.enum ["20or40" "80" "160" "80+80"];
                 apply = x:
-                  getAttr x {
+                  lib.getAttr x {
                     "20or40" = 0;
                     "80" = 1;
                     "160" = 2;
@@ -450,7 +414,7 @@ in {
                 default = "20or40";
                 type = lib.types.enum ["20or40" "80" "160" "80+80"];
                 apply = x:
-                  getAttr x {
+                  lib.getAttr x {
                     "20or40" = 0;
                     "80" = 1;
                     "160" = 2;
@@ -487,7 +451,7 @@ in {
                 This defines a BSS, colloquially known as a WiFi network.
                 You have to specify at least one.
               '';
-              type = lib.types.attrsOf (types.submodule (bssSubmod: {
+              type = lib.types.attrsOf (lib.types.submodule (bssSubmod: {
                 options = {
                   logLevel = lib.mkOption {
                     default = 2;
@@ -541,7 +505,7 @@ in {
                     default = "deny";
                     type = lib.types.enum ["deny" "allow" "radius"];
                     apply = x:
-                      getAttr x {
+                      lib.getAttr x {
                         "deny" = 0;
                         "allow" = 1;
                         "radius" = 2;
@@ -607,7 +571,7 @@ in {
                     default = "disabled";
                     type = lib.types.enum ["disabled" "empty" "clear"];
                     apply = x:
-                      getAttr x {
+                      lib.getAttr x {
                         "disabled" = 0;
                         "empty" = 1;
                         "clear" = 2;
@@ -654,7 +618,7 @@ in {
 
                   dynamicConfigScripts = lib.mkOption {
                     default = {};
-                    type = lib.types.attrsOf types.path;
+                    type = lib.types.attrsOf lib.types.path;
                     example = lib.literalExpression ''
                       {
                         exampleDynamicConfig = pkgs.writeShellScript "dynamic-config" '''
@@ -903,7 +867,7 @@ in {
                 config = let
                   bssCfg = bssSubmod.config;
                   pairwiseCiphers =
-                    concatStringsSep " " (unique (bssCfg.authentication.pairwiseCiphers
+                    lib.concatStringsSep " " (lib.unique (bssCfg.authentication.pairwiseCiphers
                       ++ lib.optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "GCMP" "GCMP-256"]));
                 in {
                   settings = {
@@ -932,7 +896,7 @@ in {
                     wmm_enabled = lib.mkDefault true;
                     ap_isolate = bssCfg.apIsolate;
 
-                    sae_password = flip map bssCfg.authentication.saePasswords (
+                    sae_password = lib.flip map bssCfg.authentication.saePasswords (
                       entry:
                         entry.password
                         + lib.optionalString (entry.mac != null) "|mac=${entry.mac}"
@@ -976,7 +940,7 @@ in {
 
                   dynamicConfigScripts = let
                     # All MAC addresses from SAE entries that aren't the wildcard address
-                    saeMacs = filter (mac: mac != null && (toLower mac) != "ff:ff:ff:ff:ff:ff") (map (x: x.mac) bssCfg.authentication.saePasswords);
+                    saeMacs = lib.filter (mac: mac != null && (lib.toLower mac) != "ff:ff:ff:ff:ff:ff") (map (x: x.mac) bssCfg.authentication.saePasswords);
                   in {
                     "20-addMacAllow" = lib.mkIf (bssCfg.macAllow != []) (pkgs.writeShellScript "add-mac-allow" ''
                       MAC_ALLOW_FILE=$2
@@ -1054,13 +1018,13 @@ in {
             # IEEE 802.11n (WiFi 4) related configuration
             ieee80211n = true;
             require_ht = radioCfg.wifi4.require;
-            ht_capab = concatMapStrings (x: "[${x}]") radioCfg.wifi4.capabilities;
+            ht_capab = lib.concatMapStrings (x: "[${x}]") radioCfg.wifi4.capabilities;
           } // lib.optionalAttrs radioCfg.wifi5.enable {
             # IEEE 802.11ac (WiFi 5) related configuration
             ieee80211ac = true;
             require_vht = radioCfg.wifi5.require;
             vht_oper_chwidth = radioCfg.wifi5.operatingChannelWidth;
-            vht_capab = concatMapStrings (x: "[${x}]") radioCfg.wifi5.capabilities;
+            vht_capab = lib.concatMapStrings (x: "[${x}]") radioCfg.wifi5.capabilities;
           } // lib.optionalAttrs radioCfg.wifi6.enable {
             # IEEE 802.11ax (WiFi 6) related configuration
             ieee80211ax = true;
@@ -1133,7 +1097,7 @@ in {
         }
       ]
       # Radio warnings
-      ++ (concatLists (mapAttrsToList (
+      ++ (lib.concatLists (lib.mapAttrsToList (
           radio: radioCfg:
             [
               {
@@ -1143,7 +1107,7 @@ in {
               # XXX: There could be many more useful assertions about (band == xy) -> ensure other required settings.
               # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
               {
-                assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
+                assertion = lib.length (lib.filter (bss: bss == radio) (lib.attrNames radioCfg.networks)) == 1;
                 message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
               }
               {
@@ -1152,20 +1116,20 @@ in {
               }
             ]
             # BSS warnings
-            ++ (concatLists (mapAttrsToList (bss: bssCfg: let
+            ++ (lib.concatLists (lib.mapAttrsToList (bss: bssCfg: let
                 auth = bssCfg.authentication;
-                countWpaPasswordDefinitions = count (x: x != null) [
+                countWpaPasswordDefinitions = lib.count (x: x != null) [
                   auth.wpaPassword
                   auth.wpaPasswordFile
                   auth.wpaPskFile
                 ];
               in [
                 {
-                  assertion = hasPrefix radio bss;
+                  assertion = lib.hasPrefix radio bss;
                   message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
                 }
                 {
-                  assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
+                  assertion = (lib.length (lib.attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
                   message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
                 }
                 {
@@ -1173,7 +1137,7 @@ in {
                   message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
                 }
                 {
-                  assertion = auth.wpaPassword != null -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
+                  assertion = auth.wpaPassword != null -> (lib.stringLength auth.wpaPassword >= 8 && lib.stringLength auth.wpaPassword <= 63);
                   message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
                 }
                 {
@@ -1203,12 +1167,12 @@ in {
       description = "IEEE 802.11 Host Access-Point Daemon";
 
       path = [cfg.package];
-      after = map (radio: "sys-subsystem-net-devices-${utils.escapeSystemdPath radio}.device") (attrNames cfg.radios);
-      bindsTo = map (radio: "sys-subsystem-net-devices-${utils.escapeSystemdPath radio}.device") (attrNames cfg.radios);
+      after = map (radio: "sys-subsystem-net-devices-${utils.escapeSystemdPath radio}.device") (lib.attrNames cfg.radios);
+      bindsTo = map (radio: "sys-subsystem-net-devices-${utils.escapeSystemdPath radio}.device") (lib.attrNames cfg.radios);
       wantedBy = ["multi-user.target"];
 
       # Create merged configuration and acl files for each radio (and their bss's) prior to starting
-      preStart = concatStringsSep "\n" (mapAttrsToList makeRadioRuntimeFiles cfg.radios);
+      preStart = lib.concatStringsSep "\n" (lib.mapAttrsToList makeRadioRuntimeFiles cfg.radios);
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/hostapd ${lib.concatStringsSep " " runtimeConfigFiles}";

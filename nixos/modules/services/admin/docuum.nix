@@ -8,15 +8,6 @@
 
 let
   cfg = config.services.docuum;
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    getExe
-    types
-    lib.optionals
-    concatMap
-    ;
 in
 {
   options.services.docuum = {
@@ -72,17 +63,17 @@ in
         SupplementaryGroups = [ "docker" ];
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe pkgs.docuum)
+            (lib.getExe pkgs.docuum)
             "--threshold"
             cfg.threshold
             "--deletion-chunk-size"
             cfg.deletionChunkSize
           ]
-          ++ (concatMap (keep: [
+          ++ (lib.concatMap (keep: [
             "--keep"
             keep
           ]) cfg.keep)
-          ++ (optionals (cfg.minAge != null) [
+          ++ (lib.optionals (cfg.minAge != null) [
             "--min-age"
             cfg.minAge
           ])

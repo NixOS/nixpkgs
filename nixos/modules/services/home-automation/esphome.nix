@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    maintainers
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.esphome;
 
   stateDir = "/var/lib/esphome";

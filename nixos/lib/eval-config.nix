@@ -56,8 +56,6 @@ evalConfigArgs@
 }:
 
 let
-  inherit (lib) lib.optional;
-
   evalModulesMinimal = (import ./default.nix {
     inherit lib;
     # Implicit use of feature is noted in implementation.
@@ -68,7 +66,7 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = lib.mkMerge (
-      (optional (system != null) {
+      (lib.optional (system != null) {
         # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
         # this.  Since the latter defaults to the former, the former should
         # default to the argument. That way this new default could propagate all
@@ -76,7 +74,7 @@ let
         nixpkgs.system = lib.mkDefault system;
       })
       ++
-      (optional (pkgs != null) {
+      (lib.optional (pkgs != null) {
         # This should be default priority, so it conflicts with any user-defined pkgs.
         nixpkgs.pkgs = pkgs;
       })

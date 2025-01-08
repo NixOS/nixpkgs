@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    mkIf
-    maintainers
-    ;
-
   cfg = config.security.isolate;
   configFile = pkgs.writeText "isolate-config.cf" ''
     box_root=${cfg.boxRoot}

@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.bitcoin;
-  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9332;

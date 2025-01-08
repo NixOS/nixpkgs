@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.dmarc;
-  inherit (lib) lib.mkOption types lib.optionalString;
 
   json = builtins.toJSON {
     inherit (cfg) folders port;

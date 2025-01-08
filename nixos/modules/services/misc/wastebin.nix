@@ -7,18 +7,6 @@
 
 let
   cfg = config.services.wastebin;
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    mapAttrs
-    isBool
-    getExe
-    boolToString
-    lib.optionalAttrs
-    ;
 in
 {
 
@@ -142,12 +130,12 @@ in
     systemd.services.wastebin = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
+      environment = lib.mapAttrs (_: v: if lib.isBool v then lib.boolToString v else toString v) cfg.settings;
       serviceConfig =
         {
           DevicePolicy = "closed";
           DynamicUser = true;
-          ExecStart = "${getExe cfg.package}";
+          ExecStart = "${lib.getExe cfg.package}";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           PrivateDevices = true;

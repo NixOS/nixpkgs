@@ -10,15 +10,6 @@ let
   cfg = config.services.ergo;
   opt = options.services.ergo;
 
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    lib.optionalString
-    types
-    ;
-
   configFile = pkgs.writeText "ergo.conf" (
     ''
       ergo {

@@ -10,70 +10,26 @@ let
 in
 
 let
-
-  inherit (lib.attrsets)
-    attrNames
-    attrValues
-    mapAttrsToList
-    removeAttrs
-    ;
-  inherit (lib.lists)
-    all
-    allUnique
-    concatLists
-    concatMap
-    elem
-    isList
-    map
-    ;
-  inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) mkEnableOption lib.mkOption mkPackageOption;
-  inherit (lib.strings)
-    concatLines
-    match
-    lib.optionalString
-    toLower
-    ;
-  inherit (lib.trivial) isInt;
-  inherit (lib.types)
-    addCheck
-    attrsOf
-    coercedTo
-    either
-    enum
-    int
-    lines
-    listOf
-    nonEmptyStr
-    nullOr
-    oneOf
-    path
-    port
-    singleLineStr
-    strMatching
-    submodule
-    ;
-
   scalarType =
     # see the option's description below for the
     # handling/transformation of each possible type
-    oneOf [
-      (enum [
+    lib.types.oneOf [
+      (lib.types.enum [
         true
         null
       ])
-      int
-      path
-      singleLineStr
+      lib.types.int
+      lib.types.path
+      lib.types.singleLineStr
     ];
 
   # TSM rejects servername strings longer than 64 chars.
-  servernameType = strMatching "[^[:space:]]{1,64}";
+  servernameType = lib.strMatching "[^[:space:]]{1,64}";
 
   serverOptions =
     { name, config, ... }:
     {
-      freeformType = attrsOf (either scalarType (listOf scalarType));
+      freeformType = lib.attrsOf (lib.either scalarType (lib.listOf scalarType));
       # Client system-options file directives are explained here:
       # https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=commands-processing-options
       options.servername = lib.mkOption {
@@ -86,14 +42,14 @@ let
         '';
       };
       options.tcpserveraddress = lib.mkOption {
-        type = nonEmptyStr;
+        type = lib.types.nonEmptyStr;
         example = "tsmserver.company.com";
         description = ''
           Host/domain name or IP address of the IBM TSM server.
         '';
       };
       options.tcpport = lib.mkOption {
-        type = addCheck port (p: p <= 32767);
+        type = lib.types.addCheck lib.types.port (p: p <= 32767);
         default = 1500; # official default
         description = ''
           TCP port of the IBM TSM server.
@@ -101,13 +57,13 @@ let
         '';
       };
       options.nodename = lib.mkOption {
-        type = nonEmptyStr;
+        type = lib.types.nonEmptyStr;
         example = "MY-TSM-NODE";
         description = ''
           Target node name on the IBM TSM server.
         '';
       };
-      options.genPasswd = mkEnableOption ''
+      options.genPasswd = lib.mkEnableOption ''
         automatic client password generation.
         This option does *not* cause a line in
         {file}`dsm.sys` by itself, but generates a
@@ -120,14 +76,14 @@ let
         a random password will be generated and stored
       '';
       options.passwordaccess = lib.mkOption {
-        type = enum [
+        type = lib.types.enum [
           "generate"
           "prompt"
         ];
         visible = false;
       };
       options.passworddir = lib.mkOption {
-        type = nullOr path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/home/alice/tsm-password";
         description = ''
@@ -136,7 +92,7 @@ let
         '';
       };
       options.inclexcl = lib.mkOption {
-        type = coercedTo lines (pkgs.writeText "inclexcl.dsm.sys") (nullOr path);
+        type = lib.types.coercedTo lib.types.lines (pkgs.writeText "inclexcl.dsm.sys") (lib.types.nullOr lib.types.path);
         default = null;
         example = ''
           exclude.dir     /nix/store
@@ -154,9 +110,6 @@ let
       options.warnings = optionsGlobal.warnings;
       options.assertions = optionsGlobal.assertions;
       imports =
-        let
-          inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule;
-        in
         [
           (lib.mkRemovedOptionModule [ "extraConfig" ]
             "Please just add options directly to the server attribute set, cf. the description of `programs.tsmClient.servers`."
@@ -180,7 +133,7 @@ let
       client system-options file "dsm.sys"
     '';
     servers = lib.mkOption {
-      type = attrsOf (submodule serverOptions);
+      type = lib.types.attrsOf (lib.types.submodule serverOptions);
       default = { };
       example.mainTsmServer = {
         tcpserveraddress = "tsmserver.company.com";
@@ -204,7 +157,7 @@ let
       '';
     };
     defaultServername = lib.mkOption {
-      type = nullOr servernameType;
+      type = lib.types.nullOr servernameType;
       default = null;
       example = "mainTsmServer";
       description = ''
@@ -218,7 +171,7 @@ let
       '';
     };
     dsmSysText = lib.mkOption {
-      type = lines;
+      type = lib.types.lines;
       readOnly = true;
       description = ''
         This configuration key contains the effective text
@@ -236,7 +189,7 @@ let
       '';
     };
     wrappedPackage =
-      mkPackageOption pkgs "tsm-client" {
+      lib.mkPackageOption pkgs "tsm-client" {
         default = null;
         extraDescription = ''
           This option is to provide the effective derivation,
@@ -257,7 +210,7 @@ let
   assertions =
     [
       {
-        assertion = allUnique (map toLower servernames);
+        assertion = lib.allUnique (map lib.toLower servernames);
         message = ''
           TSM server names
           (option `programs.tsmClient.servers`)
@@ -266,7 +219,7 @@ let
         '';
       }
       {
-        assertion = (cfg.defaultServername != null) -> (elem cfg.defaultServername servernames);
+        assertion = (cfg.defaultServername != null) -> (lib.elem cfg.defaultServername servernames);
         message = ''
           TSM default server name
           `programs.tsmClient.defaultServername="${cfg.defaultServername}"`
@@ -275,16 +228,16 @@ let
         '';
       }
     ]
-    ++ (mapAttrsToList (name: serverCfg: {
-      assertion = all (key: null != match "[^[:space:]]+" key) (attrNames serverCfg);
+    ++ (lib.mapAttrsToList (name: serverCfg: {
+      assertion = lib.all (key: null != lib.match "[^[:space:]]+" key) (lib.attrNames serverCfg);
       message = ''
         TSM server setting names in
         `programs.tsmClient.servers.${name}.*`
         contain spaces, but that's not allowed.
       '';
     }) cfg.servers)
-    ++ (mapAttrsToList (name: serverCfg: {
-      assertion = allUnique (map toLower (attrNames serverCfg));
+    ++ (lib.mapAttrsToList (name: serverCfg: {
+      assertion = lib.allUnique (map lib.toLower (lib.attrNames serverCfg));
       message = ''
         TSM server setting names in
         `programs.tsmClient.servers.${name}.*`
@@ -307,8 +260,8 @@ let
     # Turn a key-value pair from the server options attrset
     # into zero (value==null), one (scalar value) or
     # more (value is list) configuration stanza lines.
-    if isList value then
-      concatMap (makeDsmSysLines key) value
+    if lib.isList value then
+      lib.concatMap (makeDsmSysLines key) value
     # recurse into list
     else if value == null then
       [ ]
@@ -320,12 +273,12 @@ let
               if value == true then
                 ""
               # just output key if value is `true`
-              else if isInt value then
+              else if lib.isInt value then
                 "  ${builtins.toString value}"
-              else if path.check value then
+              else if lib.path.check value then
                 "  \"${value}\""
               # enclose path in ".."
-              else if singleLineStr.check value then
+              else if lib.singleLineStr.check value then
                 "  ${value}"
               else
                 throw "assertion failed: cannot convert type" # should never happen
@@ -355,7 +308,7 @@ let
     in
     ''
       servername  ${servername}
-      ${concatLines (concatLists (mapAttrsToList makeDsmSysLines attrs))}
+      ${lib.concatLines (lib.concatLists (lib.mapAttrsToList makeDsmSysLines attrs))}
     '';
 
   dsmSysText = ''
@@ -366,14 +319,14 @@ let
 
     ${lib.optionalString (cfg.defaultServername != null) "defaultserver  ${cfg.defaultServername}"}
 
-    ${concatLines (map makeDsmSysStanza (lib.attrValues cfg.servers))}
+    ${lib.concatLines (map makeDsmSysStanza (lib.attrValues cfg.servers))}
   '';
 
   # XXX migration code for freeform settings, this can be removed in 2025:
   enrichMigrationInfos =
     what: how:
-    concatLists (
-      mapAttrsToList (
+    lib.concatLists (
+      lib.mapAttrsToList (
         name: serverCfg:
         map (how (text: "In `programs.tsmClient.servers.${name}`: ${text}")) serverCfg."${what}"
       ) cfg.servers

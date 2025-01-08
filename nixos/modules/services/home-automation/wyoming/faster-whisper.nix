@@ -8,14 +8,6 @@
 let
   cfg = config.services.wyoming.faster-whisper;
 
-  inherit (lib)
-    escapeShellArgs
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    types
-    ;
-
   inherit (builtins)
     toString
     ;
@@ -23,7 +15,7 @@ let
 in
 
 {
-  options.services.wyoming.faster-whisper = with lib.types; {
+  options.services.wyoming.faster-whisper = {
     package = lib.mkPackageOption pkgs "wyoming-faster-whisper" { };
 
     servers = lib.mkOption {
@@ -32,14 +24,14 @@ in
         Attribute set of faster-whisper instances to spawn.
       '';
       type = lib.types.attrsOf (
-        types.submodule (
+        lib.types.submodule (
           { ... }:
           {
             options = {
               enable = lib.mkEnableOption "Wyoming faster-whisper server";
 
               model = lib.mkOption {
-                type = str;
+                type = lib.types.str;
                 default = "tiny-int8";
                 example = "Systran/faster-distil-whisper-small.en";
                 description = ''
@@ -50,7 +42,7 @@ in
               };
 
               uri = lib.mkOption {
-                type = strMatching "^(tcp|unix)://.*$";
+                type = lib.types.strMatching "^(tcp|unix)://.*$";
                 example = "tcp://0.0.0.0:10300";
                 description = ''
                   URI to bind the wyoming server to.
@@ -71,7 +63,7 @@ in
               };
 
               language = lib.mkOption {
-                type = enum [
+                type = lib.types.enum [
                   # https://github.com/home-assistant/addons/blob/master/whisper/config.yaml#L20
                   "auto"
                   "af"
@@ -181,7 +173,7 @@ in
               };
 
               beamSize = lib.mkOption {
-                type = ints.unsigned;
+                type = lib.types.ints.unsigned;
                 default = 1;
                 example = 5;
                 description = ''
@@ -191,12 +183,12 @@ in
               };
 
               extraArgs = lib.mkOption {
-                type = listOf str;
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 description = ''
                   Extra arguments to pass to the server commandline.
                 '';
-                apply = escapeShellArgs;
+                apply = lib.escapeShellArgs;
               };
             };
           }
@@ -206,17 +198,10 @@ in
   };
 
   config =
-    let
-      inherit (lib)
-        mapAttrs'
-        mkIf
-        nameValuePair
-        ;
-    in
-    mkIf (cfg.servers != { }) {
-      systemd.services = mapAttrs' (
+    lib.mkIf (cfg.servers != { }) {
+      systemd.services = lib.mapAttrs' (
         server: options:
-        nameValuePair "wyoming-faster-whisper-${server}" {
+        lib.nameValuePair "wyoming-faster-whisper-${server}" {
           inherit (options) enable;
           description = "Wyoming faster-whisper server instance ${server}";
           wants = [
@@ -248,7 +233,7 @@ in
             CapabilityBoundingSet = "";
             DeviceAllow =
               if
-                builtins.elem options.device [
+                lib.elem options.device [
                   "cuda"
                   "auto"
                 ]

@@ -5,15 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
   cfg = config.services.monado;
 
   runtimeManifest = "${cfg.package}/share/openxr/1/openxr_monado.json";
@@ -50,7 +41,7 @@ in
     };
 
     highPriority =
-      mkEnableOption "high priority capability for monado-service"
+      lib.mkEnableOption "high priority capability for monado-service"
       // lib.mkOption { default = true; };
   };
 

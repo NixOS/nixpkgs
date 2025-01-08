@@ -8,16 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.mongodb;
-  inherit (lib)
-    lib.mkOption
-    types
-    lib.optionalString
-    getExe
-    length
-    concatStringsSep
-    concatMapStringsSep
-    escapeShellArgs
-    ;
 in
 {
   port = 9216;
@@ -83,22 +73,22 @@ in
     serviceConfig = {
       RuntimeDirectory = "prometheus-mongodb-exporter";
       ExecStart = ''
-        ${getExe pkgs.prometheus-mongodb-exporter} \
+        ${lib.getExe pkgs.prometheus-mongodb-exporter} \
           --mongodb.uri="${cfg.uri}" \
           ${
             if cfg.collectAll then
               "--collect-all"
             else
-              concatMapStringsSep " " (x: "--collect.${x}") cfg.collector
+              lib.concatMapStringsSep " " (x: "--collect.${x}") cfg.collector
           } \
           ${
             lib.optionalString (
-              length cfg.collStats > 0
+              lib.length cfg.collStats > 0
             ) "--mongodb.collstats-colls=${lib.concatStringsSep "," cfg.collStats}"
           } \
           ${
             lib.optionalString (
-              length cfg.indexStats > 0
+              lib.length cfg.indexStats > 0
             ) "--mongodb.indexstats-colls=${lib.concatStringsSep "," cfg.indexStats}"
           } \
           --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \

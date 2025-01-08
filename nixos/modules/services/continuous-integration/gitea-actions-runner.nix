@@ -7,25 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    any
-    attrValues
-    concatStringsSep
-    escapeShellArg
-    hasInfix
-    hasSuffix
-    lib.optionalAttrs
-    lib.optionals
-    literalExpression
-    mapAttrs'
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    mkIf
-    nameValuePair
-    types
-    ;
-
   inherit (utils)
     escapeSystemdPath
     ;
@@ -38,10 +19,10 @@ let
   # Empty label strings result in the upstream defined defaultLabels, which require docker
   # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
   hasDockerScheme =
-    instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
-  wantsContainerRuntime = any hasDockerScheme (lib.attrValues cfg.instances);
+    instance: instance.labels == [ ] || lib.any (label: lib.hasInfix ":docker:" label) instance.labels;
+  wantsContainerRuntime = lib.any hasDockerScheme (lib.attrValues cfg.instances);
 
-  hasHostScheme = instance: any (label: hasSuffix ":host" label) instance.labels;
+  hasHostScheme = instance: lib.any (label: lib.hasSuffix ":host" label) instance.labels;
 
   # provide shorthands for whether container runtimes are enabled
   hasDocker = config.virtualisation.docker.enable;
@@ -57,7 +38,7 @@ in
     hexa
   ];
 
-  options.services.gitea-actions-runner = with lib.types; {
+  options.services.gitea-actions-runner = {
     package = lib.mkPackageOption pkgs "gitea-actions-runner" { };
 
     instances = lib.mkOption {
@@ -65,12 +46,12 @@ in
       description = ''
         Gitea Actions Runner instances.
       '';
-      type = attrsOf (submodule {
+      type = lib.types.attrsOf (lib.types.submodule {
         options = {
           enable = lib.mkEnableOption "Gitea Actions Runner instance";
 
           name = lib.mkOption {
-            type = str;
+            type = lib.types.str;
             example = lib.literalExpression "config.networking.hostName";
             description = ''
               The name identifying the runner instance towards the Gitea/Forgejo instance.
@@ -78,7 +59,7 @@ in
           };
 
           url = lib.mkOption {
-            type = str;
+            type = lib.types.str;
             example = "https://forge.example.com";
             description = ''
               Base URL of your Gitea/Forgejo instance.
@@ -86,7 +67,7 @@ in
           };
 
           token = lib.mkOption {
-            type = nullOr str;
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               Plain token to register at the configured Gitea/Forgejo instance.
@@ -94,7 +75,7 @@ in
           };
 
           tokenFile = lib.mkOption {
-            type = nullOr (either str path);
+            type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
             default = null;
             description = ''
               Path to an environment file, containing the `TOKEN` environment
@@ -104,7 +85,7 @@ in
           };
 
           labels = lib.mkOption {
-            type = listOf str;
+            type = lib.types.listOf lib.types.str;
             example = lib.literalExpression ''
               [
                 # provide a debian base with nodejs for actions
@@ -137,7 +118,7 @@ in
           };
 
           hostPackages = lib.mkOption {
-            type = listOf package;
+            type = lib.types.listOf lib.types.package;
             default = with pkgs; [
               bash
               coreutils
@@ -173,7 +154,7 @@ in
   config = lib.mkIf (cfg.instances != { }) {
     assertions = [
       {
-        assertion = any tokenXorTokenFile (lib.attrValues cfg.instances);
+        assertion = lib.any tokenXorTokenFile (lib.attrValues cfg.instances);
         message = "Instances of gitea-actions-runner can have `token` or `tokenFile`, not both.";
       }
       {
@@ -193,7 +174,7 @@ in
             wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
             configFile = settingsFormat.generate "config.yaml" instance.settings;
           in
-          nameValuePair "gitea-runner-${escapeSystemdPath name}" {
+          lib.nameValuePair "gitea-runner-${escapeSystemdPath name}" {
             inherit (instance) enable;
             description = "Gitea Actions Runner";
             wants = [ "network-online.target" ];
@@ -280,6 +261,6 @@ in
               };
           };
       in
-      mapAttrs' mkRunnerService cfg.instances;
+      lib.mapAttrs' mkRunnerService cfg.instances;
   };
 }

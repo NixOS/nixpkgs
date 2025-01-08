@@ -7,19 +7,6 @@ testModuleArgs@{
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    literalMD
-    mapAttrs
-    mkDefault
-    mkIf
-    lib.mkOption
-    mkForce
-    lib.optional
-    lib.optionalAttrs
-    types
-    ;
-
   inherit (hostPkgs.stdenv) hostPlatform;
 
   guestSystem =
@@ -61,7 +48,7 @@ let
         {
           key = "nodes.nix-pkgs";
           config = lib.optionalAttrs (!config.node.pkgsReadOnly) (
-            mkIf (!options.nixpkgs.pkgs.isDefined) {
+            lib.mkIf (!options.nixpkgs.pkgs.isDefined) {
               # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
               nixpkgs.system = guestSystem;
             }
@@ -119,9 +106,9 @@ in
 
         Setting this will make the `nixpkgs.*` options read-only, to avoid mistakenly testing with a Nixpkgs configuration that diverges from regular use.
       '';
-      type = lib.types.nullOr types.pkgs;
+      type = lib.types.nullOr lib.types.pkgs;
       default = null;
-      defaultText = literalMD ''
+      defaultText = lib.literalMD ''
         `null`, so construct `pkgs` according to the `nixpkgs.*` options as usual.
       '';
     };
@@ -138,7 +125,7 @@ in
     };
 
     node.specialArgs = lib.mkOption {
-      type = lib.types.lazyAttrsOf types.raw;
+      type = lib.types.lazyAttrsOf lib.types.raw;
       default = { };
       description = ''
         An attribute set of arbitrary values that will be made available as module arguments during the resolution of module `imports`.
@@ -159,7 +146,7 @@ in
 
   config = {
     _module.args.nodes = config.nodesCompat;
-    nodesCompat = mapAttrs (
+    nodesCompat = lib.mapAttrs (
       name: config:
       config
       // {

@@ -5,16 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    lib.mkOption
-    types
-    mkIf
-    mkMerge
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    maintainers
-    ;
   cfg = config.services.db-rest;
 in
 {

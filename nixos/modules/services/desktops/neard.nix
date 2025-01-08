@@ -6,12 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
   cfg = config.services.neard;
   format = pkgs.formats.ini { };
   configFile = format.generate "neard.conf" cfg.settings;

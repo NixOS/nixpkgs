@@ -12,24 +12,6 @@ let
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
-  inherit (lib)
-    mkAfter
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    ;
-  inherit (lib)
-    attrValues
-    concatMapStringsSep
-    getName
-    literalExpression
-    lib.optional
-    lib.optionalAttrs
-    lib.optionalString
-    types
-    ;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
@@ -40,7 +22,7 @@ let
 
   moduleEnv = pkgs.symlinkJoin {
     name = "zabbix-server-module-env";
-    paths = attrValues cfg.modules;
+    paths = lib.attrValues cfg.modules;
   };
 
   configFile = pkgs.writeText "zabbix_server.conf" (
@@ -100,7 +82,7 @@ in
       };
 
       modules = lib.mkOption {
-        type = lib.types.attrsOf types.package;
+        type = lib.types.attrsOf lib.types.package;
         description = "A set of modules to load.";
         default = { };
         example = lib.literalExpression ''
@@ -280,11 +262,11 @@ in
       package = lib.mkDefault pkgs.mariadb;
     };
 
-    systemd.services.mysql.postStart = mkAfter (
+    systemd.services.mysql.postStart = lib.mkAfter (
       lib.optionalString mysqlLocal ''
         ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
           echo "CREATE USER IF NOT EXISTS '${cfg.database.user}'@'localhost' IDENTIFIED WITH ${
-            if (getName config.services.mysql.package == getName pkgs.mariadb) then
+            if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then
               "unix_socket"
             else
               "auth_socket"

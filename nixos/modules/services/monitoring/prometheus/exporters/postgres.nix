@@ -8,13 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.postgres;
-  inherit (lib)
-    lib.mkOption
-    types
-    mkIf
-    mkForce
-    concatStringsSep
-    ;
 in
 {
   port = 9187;
@@ -80,7 +73,7 @@ in
     environment.DATA_SOURCE_NAME = cfg.dataSourceName;
     serviceConfig = {
       DynamicUser = false;
-      User = lib.mkIf cfg.runAsLocalSuperUser (mkForce "postgres");
+      User = lib.mkIf cfg.runAsLocalSuperUser (lib.mkForce "postgres");
       EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       ExecStart = ''
         ${pkgs.prometheus-postgres-exporter}/bin/postgres_exporter \

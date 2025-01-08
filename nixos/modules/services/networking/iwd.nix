@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    recursiveUpdate
-    ;
-
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
   defaults = {
@@ -24,7 +15,7 @@ let
       with config.networking.networkmanager;
       (enable && (wifi.backend == "iwd"));
   };
-  configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
+  configFile = ini.generate "main.conf" (lib.recursiveUpdate defaults cfg.settings);
 
 in
 {

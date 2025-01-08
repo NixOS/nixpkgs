@@ -8,20 +8,6 @@
 let
   cfg = config.services.wyoming.satellite;
 
-  inherit (lib)
-    elem
-    escapeShellArgs
-    getExe
-    literalExpression
-    lib.mkOption
-    mkEnableOption
-    mkIf
-    mkPackageOption
-    lib.optional
-    lib.optionals
-    types
-    ;
-
   finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
     propagatedBuildInputs =
       oldAttrs.propagatedBuildInputs
@@ -35,13 +21,13 @@ in
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.wyoming.satellite = with lib.types; {
+  options.services.wyoming.satellite = {
     enable = lib.mkEnableOption "Wyoming Satellite";
 
     package = lib.mkPackageOption pkgs "wyoming-satellite" { };
 
     user = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       example = "alice";
       description = ''
         User to run wyoming-satellite under.
@@ -49,7 +35,7 @@ in
     };
 
     group = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       default = "users";
       description = ''
         Group to run wyoming-satellite under.
@@ -57,7 +43,7 @@ in
     };
 
     uri = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       default = "tcp://0.0.0.0:10700";
       description = ''
         URI where wyoming-satellite will bind its socket.
@@ -65,7 +51,7 @@ in
     };
 
     name = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       default = config.networking.hostName;
       defaultText = lib.literalExpression ''
         config.networking.hostName
@@ -76,7 +62,7 @@ in
     };
 
     area = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "Kitchen";
       description = ''
@@ -86,7 +72,7 @@ in
 
     microphone = {
       command = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "arecord -r 16000 -c 1 -f S16_LE -t raw";
         description = ''
           Program to run for audio input.
@@ -94,7 +80,7 @@ in
       };
 
       autoGain = lib.mkOption {
-        type = ints.between 0 31;
+        type = lib.types.ints.between 0 31;
         default = 5;
         example = 15;
         description = ''
@@ -103,7 +89,7 @@ in
       };
 
       noiseSuppression = lib.mkOption {
-        type = ints.between 0 4;
+        type = lib.types.ints.between 0 4;
         default = 2;
         example = 3;
         description = ''
@@ -115,7 +101,7 @@ in
 
     sound = {
       command = lib.mkOption {
-        type = nullOr str;
+        type = lib.types.nullOr lib.types.str;
         default = "aplay -r 22050 -c 1 -f S16_LE -t raw";
         description = ''
           Program to run for sound output.
@@ -125,7 +111,7 @@ in
 
     sounds = {
       awake = lib.mkOption {
-        type = nullOr path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Path to audio file in WAV format to play when wake word is detected.
@@ -133,7 +119,7 @@ in
       };
 
       done = lib.mkOption {
-        type = nullOr path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Path to audio file in WAV format to play when voice command recording has ended.
@@ -143,7 +129,7 @@ in
 
     vad = {
       enable = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable voice activity detection.
@@ -155,7 +141,7 @@ in
     };
 
     extraArgs = lib.mkOption {
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Extra arguments to pass to the executable.
@@ -188,7 +174,7 @@ in
             param: argument:
             lib.optionals
               (
-                !elem argument [
+                !lib.elem argument [
                   null
                   0
                   false
@@ -203,7 +189,7 @@ in
           export XDG_RUNTIME_DIR=/run/user/$UID
           ${lib.escapeShellArgs (
             [
-              (getExe finalPackage)
+              (lib.getExe finalPackage)
               "--uri"
               cfg.uri
               "--name"

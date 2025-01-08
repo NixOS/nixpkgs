@@ -39,38 +39,16 @@ let
     stage2TimerOptions
     ;
 
-  inherit (lib)
-    mkDefault
-    mkDerivedConfig
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    ;
-
-  inherit (lib.types)
-    attrsOf
-    coercedTo
-    enum
-    lines
-    listOf
-    nullOr
-    oneOf
-    package
-    path
-    singleLineStr
-    submodule
-    ;
-
   initrdStorePathModule =
     { config, ... }:
     {
       options = {
-        enable = (mkEnableOption "copying of this file and symlinking it") // {
+        enable = (lib.mkEnableOption "copying of this file and symlinking it") // {
           default = true;
         };
 
         target = lib.mkOption {
-          type = nullOr path;
+          type = lib.types.nullOr lib.types.path;
           description = ''
             Path of the symlink.
           '';
@@ -78,13 +56,13 @@ let
         };
 
         source = lib.mkOption {
-          type = path;
+          type = lib.types.path;
           description = "Path of the source file.";
         };
 
         dlopen = {
           usePriority = lib.mkOption {
-            type = enum [
+            type = lib.types.enum [
               "required"
               "recommended"
               "suggested"
@@ -100,7 +78,7 @@ let
           };
 
           features = lib.mkOption {
-            type = listOf singleLineStr;
+            type = lib.types.listOf lib.types.singleLineStr;
             default = [ ];
             description = ''
               Features to enable via dlopen ELF notes. These will be in
@@ -115,8 +93,8 @@ let
 in
 
 {
-  units = attrsOf (
-    submodule (
+  units = lib.types.attrsOf (
+    lib.types.submodule (
       { name, config, ... }:
       {
         options = concreteUnitOptions;
@@ -128,103 +106,103 @@ in
     )
   );
 
-  services = attrsOf (submodule [
+  services = lib.types.attrsOf (lib.types.submodule [
     stage2ServiceOptions
     unitConfig
     stage2ServiceConfig
   ]);
-  initrdServices = attrsOf (submodule [
+  initrdServices = lib.types.attrsOf (lib.types.submodule [
     stage1ServiceOptions
     unitConfig
     stage1ServiceConfig
   ]);
 
-  targets = attrsOf (submodule [
+  targets = lib.types.attrsOf (lib.types.submodule [
     stage2CommonUnitOptions
     unitConfig
     targetConfig
   ]);
-  initrdTargets = attrsOf (submodule [
+  initrdTargets = lib.types.attrsOf (lib.types.submodule [
     stage1CommonUnitOptions
     unitConfig
     targetConfig
   ]);
 
-  sockets = attrsOf (submodule [
+  sockets = lib.types.attrsOf (lib.types.submodule [
     stage2SocketOptions
     unitConfig
     socketConfig
   ]);
-  initrdSockets = attrsOf (submodule [
+  initrdSockets = lib.types.attrsOf (lib.types.submodule [
     stage1SocketOptions
     unitConfig
     socketConfig
   ]);
 
-  timers = attrsOf (submodule [
+  timers = lib.types.attrsOf (lib.types.submodule [
     stage2TimerOptions
     unitConfig
     timerConfig
   ]);
-  initrdTimers = attrsOf (submodule [
+  initrdTimers = lib.types.attrsOf (lib.types.submodule [
     stage1TimerOptions
     unitConfig
     timerConfig
   ]);
 
-  paths = attrsOf (submodule [
+  paths = lib.types.attrsOf (lib.types.submodule [
     stage2PathOptions
     unitConfig
     pathConfig
   ]);
-  initrdPaths = attrsOf (submodule [
+  initrdPaths = lib.types.attrsOf (lib.types.submodule [
     stage1PathOptions
     unitConfig
     pathConfig
   ]);
 
-  slices = attrsOf (submodule [
+  slices = lib.types.attrsOf (lib.types.submodule [
     stage2SliceOptions
     unitConfig
     sliceConfig
   ]);
-  initrdSlices = attrsOf (submodule [
+  initrdSlices = lib.types.attrsOf (lib.types.submodule [
     stage1SliceOptions
     unitConfig
     sliceConfig
   ]);
 
-  mounts = listOf (submodule [
+  mounts = lib.types.listOf (lib.types.submodule [
     stage2MountOptions
     unitConfig
     mountConfig
   ]);
-  initrdMounts = listOf (submodule [
+  initrdMounts = lib.types.listOf (lib.types.submodule [
     stage1MountOptions
     unitConfig
     mountConfig
   ]);
 
-  automounts = listOf (submodule [
+  automounts = lib.types.listOf (lib.types.submodule [
     stage2AutomountOptions
     unitConfig
     automountConfig
   ]);
-  initrdAutomounts = attrsOf (submodule [
+  initrdAutomounts = lib.types.attrsOf (lib.types.submodule [
     stage1AutomountOptions
     unitConfig
     automountConfig
   ]);
 
-  initrdStorePath = listOf (
-    coercedTo (oneOf [
-      singleLineStr
-      package
-    ]) (source: { inherit source; }) (submodule initrdStorePathModule)
+  initrdStorePath = lib.types.listOf (
+    lib.types.coercedTo (lib.types.oneOf [
+      lib.types.singleLineStr
+      lib.types.package
+    ]) (source: { inherit source; }) (lib.types.submodule initrdStorePathModule)
   );
 
-  initrdContents = attrsOf (
-    submodule (
+  initrdContents = lib.types.attrsOf (
+    lib.types.submodule (
       {
         config,
         options,
@@ -236,7 +214,7 @@ in
         options = {
           text = lib.mkOption {
             default = null;
-            type = nullOr lines;
+            type = lib.types.nullOr lib.types.lines;
             description = "Text of the file.";
           };
         };
@@ -247,7 +225,7 @@ in
             let
               name' = "initrd-" + baseNameOf name;
             in
-            mkDerivedConfig options.text (pkgs.writeText name')
+            lib.mkDerivedConfig options.text (pkgs.writeText name')
           );
         };
       }

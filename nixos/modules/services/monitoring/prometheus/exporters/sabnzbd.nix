@@ -7,7 +7,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption types;
   cfg = config.services.prometheus.exporters.sabnzbd;
 in
 {
@@ -17,7 +16,7 @@ in
     servers = lib.mkOption {
       description = "List of sabnzbd servers to connect to.";
       type = lib.types.listOf (
-        types.submodule {
+        lib.types.submodule {
           options = {
             baseUrl = lib.mkOption {
               type = lib.types.str;

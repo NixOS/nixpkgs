@@ -5,13 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    ;
-
   cfg = config.programs.corectrl;
 in
 {

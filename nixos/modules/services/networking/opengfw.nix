@@ -5,12 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    lib.mkOption
-    types
-    mkIf
-    lib.optionalString
-    ;
   cfg = config.services.opengfw;
 in
 {
@@ -103,7 +97,7 @@ in
         Settings passed to OpenGFW. [Example config](https://gfw.dev/docs/build-run/#config-example)
       '';
       type = lib.types.nullOr (
-        types.submodule {
+        lib.types.submodule {
           options = {
             replay = lib.mkOption {
               description = ''
@@ -255,7 +249,7 @@ in
         Rules passed to OpenGFW. [Example rules](https://gfw.dev/docs/rules)
       '';
       type = lib.types.listOf (
-        types.submodule {
+        lib.types.submodule {
           options = {
             name = lib.mkOption {
               description = "Name of the rule.";
@@ -298,7 +292,7 @@ in
                 Modification of specified packets when using the `modify` action. [Available modifiers](https://github.com/apernet/OpenGFW/tree/master/modifier)
               '';
               type = lib.types.nullOr (
-                types.submodule {
+                lib.types.submodule {
                   options = {
                     name = lib.mkOption {
                       description = "Name of the modifier.";

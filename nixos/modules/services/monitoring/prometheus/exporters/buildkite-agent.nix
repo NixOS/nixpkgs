@@ -8,13 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.buildkite-agent;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    lib.optionalString
-    literalExpression
-    ;
 in
 {
   port = 9876;
@@ -56,7 +49,7 @@ in
   serviceOpts = {
     script =
       let
-        queues = concatStringsSep " " (map (q: "-queue ${q}") cfg.queues);
+        queues = lib.concatStringsSep " " (map (q: "-queue ${q}") cfg.queues);
       in
       ''
         export BUILDKITE_AGENT_TOKEN="$(cat ${toString cfg.tokenPath})"

@@ -6,14 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    concatStringsSep
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.https-dns-proxy;
 
   providers = {
@@ -52,7 +44,7 @@ let
 
   defaultProvider = "quad9";
 
-  providerCfg = concatStringsSep " " [
+  providerCfg = lib.concatStringsSep " " [
     "-b"
     (lib.concatStringsSep "," providers."${cfg.provider.kind}".ips)
     "-r"
@@ -136,7 +128,7 @@ in
       wants = [ "nss-lookup.target" ];
       before = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = rec {
+      serviceConfig = {
         Type = "exec";
         DynamicUser = true;
         ProtectHome = "tmpfs";

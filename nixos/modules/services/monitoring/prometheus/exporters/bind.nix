@@ -8,7 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.bind;
-  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9119;
@@ -40,7 +39,7 @@ in
     };
     bindGroups = lib.mkOption {
       type = lib.types.listOf (
-        types.enum [
+        lib.types.enum [
           "server"
           "view"
           "tasks"

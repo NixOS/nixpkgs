@@ -2,7 +2,6 @@
 
 let
   cfg = config.services.cockpit;
-  inherit (lib) types mkEnableOption lib.mkOption mkIf literalMD mkPackageOption;
   settingsFormat = pkgs.formats.ini {};
 in {
   options = {

@@ -8,13 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.flow;
-  inherit (lib)
-    lib.mkOption
-    types
-    literalExpression
-    concatStringsSep
-    lib.optionalString
-    ;
 in
 {
   port = 9590;

@@ -18,18 +18,6 @@ srv:
 }:
 
 let
-  inherit (lib) types;
-  inherit (lib.attrsets) mapAttrs lib.optionalAttrs;
-  inherit (lib.lists) lib.optional;
-  inherit (lib.modules)
-    mkBefore
-    mkDefault
-    mkForce
-    mkIf
-    mkMerge
-    ;
-  inherit (lib.options) mkEnableOption lib.mkOption;
-  inherit (lib.strings) concatStringsSep hasSuffix lib.optionalString;
   inherit (config.services) postgresql;
   redis = config.services.redis.servers."sourcehut-${srvsrht}";
   inherit (config.users) users;
@@ -46,7 +34,7 @@ let
       runDir = "/run/sourcehut/${serviceName}";
       rootDir = "/run/sourcehut/chroots/${serviceName}";
     in
-    mkMerge [
+    lib.mkMerge [
       extraService
       {
         after =
@@ -96,7 +84,7 @@ let
           # Hence this one is run as root (the +) with RootDirectoryStartOnly=
           # to reach credentials wherever they are.
           # Note that each systemd service gets its own ${runDir}/config.ini file.
-          ExecStartPre = mkBefore [
+          ExecStartPre = lib.mkBefore [
             (
               "+"
               + pkgs.writeShellScript "${serviceName}-credentials" ''
@@ -244,7 +232,7 @@ in
       };
     };
 
-  config = lib.mkIf (cfg.enable && srvCfg.enable) (mkMerge [
+  config = lib.mkIf (cfg.enable && srvCfg.enable) (lib.mkMerge [
     extraConfig
     {
       users = {
@@ -261,11 +249,11 @@ in
           }
           //
             lib.optionalAttrs
-              (cfg.postgresql.enable && hasSuffix "0" (postgresql.settings.unix_socket_permissions or ""))
+              (cfg.postgresql.enable && lib.hasSuffix "0" (postgresql.settings.unix_socket_permissions or ""))
               {
                 "postgres".members = [ srvCfg.user ];
               }
-          // lib.optionalAttrs (cfg.redis.enable && hasSuffix "0" (redis.settings.unixsocketperm or "")) {
+          // lib.optionalAttrs (cfg.redis.enable && lib.hasSuffix "0" (redis.settings.unixsocketperm or "")) {
             "redis-sourcehut-${srvsrht}".members = [ srvCfg.user ];
           };
       };
@@ -323,7 +311,7 @@ in
 
         (lib.mkIf cfg.postgresql.enable {
           "${srv}.sr.ht".connection-string =
-            mkDefault "postgresql:///${srvCfg.postgresql.database}?user=${srvCfg.user}&host=/run/postgresql";
+            lib.mkDefault "postgresql:///${srvCfg.postgresql.database}?user=${srvCfg.user}&host=/run/postgresql";
         })
       ];
 
@@ -351,7 +339,7 @@ in
 
       systemd.services = lib.mkMerge [
         {
-          "${srvsrht}" = baseService srvsrht { allowStripe = srv == "meta"; } (mkMerge [
+          "${srvsrht}" = baseService srvsrht { allowStripe = srv == "meta"; } (lib.mkMerge [
             {
               description = "sourcehut ${srv}.sr.ht website service";
               before = lib.optional cfg.nginx.enable "nginx.service";
@@ -368,7 +356,7 @@ in
                 StateDirectoryMode = "2750";
                 ExecStart =
                   "${cfg.python}/bin/gunicorn ${srvsrht}.app:app --name ${srvsrht} --bind ${cfg.listenAddress}:${toString srvCfg.port} "
-                  + concatStringsSep " " srvCfg.gunicorn.extraArgs;
+                  + lib.concatStringsSep " " srvCfg.gunicorn.extraArgs;
               };
               preStart =
                 let
@@ -376,7 +364,7 @@ in
                   version = package.version;
                   stateDir = "/var/lib/sourcehut/${srvsrht}";
                 in
-                mkBefore ''
+                lib.mkBefore ''
                   set -x
                   # Use the /run/sourcehut/${srvsrht}/config.ini
                   # installed by a previous ExecStartPre= in baseService
@@ -425,16 +413,16 @@ in
               Restart = "always";
               ExecStart =
                 "${cfg.python}/bin/celery --app ${srvsrht}.webhooks worker --hostname ${srvsrht}-webhooks@%%h "
-                + concatStringsSep " " srvCfg.webhooks.extraArgs;
+                + lib.concatStringsSep " " srvCfg.webhooks.extraArgs;
               # Avoid crashing: os.getloadavg()
-              ProcSubset = mkForce "all";
+              ProcSubset = lib.mkForce "all";
             };
           };
         })
 
-        (mapAttrs (
+        (lib.mapAttrs (
           timerName: timer:
-          (baseService timerName { } (mkMerge [
+          (baseService timerName { } (lib.mkMerge [
             {
               description = "sourcehut ${timerName} service";
               after = [
@@ -450,9 +438,9 @@ in
           ]))
         ) extraTimers)
 
-        (mapAttrs (
+        (lib.mapAttrs (
           serviceName: extraService:
-          baseService serviceName { } (mkMerge [
+          baseService serviceName { } (lib.mkMerge [
             {
               description = "sourcehut ${serviceName} service";
               # So that extraServices have the PostgreSQL database initialized.
@@ -488,7 +476,7 @@ in
         )
       ];
 
-      systemd.timers = mapAttrs (timerName: timer: {
+      systemd.timers = lib.mapAttrs (timerName: timer: {
         description = "sourcehut timer for ${timerName}";
         wantedBy = [ "timers.target" ];
         inherit (timer) timerConfig;

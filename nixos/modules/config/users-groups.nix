@@ -1,45 +1,6 @@
 { config, lib, utils, pkgs, ... }:
 
 let
-  inherit (lib)
-    any
-    attrNames
-    attrValues
-    concatMap
-    concatMapStringsSep
-    concatStrings
-    elem
-    filter
-    filterAttrs
-    flatten
-    flip
-    foldr
-    generators
-    getAttr
-    hasAttr
-    id
-    length
-    listToAttrs
-    literalExpression
-    mapAttrs'
-    mapAttrsToList
-    match
-    mkAliasOptionModuleMD
-    mkDefault
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkRenamedOptionModule
-    lib.optional
-    lib.optionals
-    sort
-    stringAfter
-    stringLength
-    trace
-    types
-    xor
-    ;
-
   ids = config.ids;
   cfg = config.users;
 
@@ -125,8 +86,8 @@ let
     options = {
 
       name = lib.mkOption {
-        type = lib.types.passwdEntry types.str;
-        apply = x: assert (stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
+        type = lib.types.passwdEntry lib.types.str;
+        apply = x: assert (lib.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -134,7 +95,7 @@ let
       };
 
       description = lib.mkOption {
-        type = lib.types.passwdEntry types.str;
+        type = lib.types.passwdEntry lib.types.str;
         default = "";
         example = "Alice Q. User";
         description = ''
@@ -184,7 +145,7 @@ let
 
       group = lib.mkOption {
         type = lib.types.str;
-        apply = x: assert (stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (lib.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "";
         description = "The user's primary group.";
       };
@@ -196,7 +157,7 @@ let
       };
 
       home = lib.mkOption {
-        type = lib.types.passwdEntry types.path;
+        type = lib.types.passwdEntry lib.types.path;
         default = "/var/empty";
         description = "The user's home directory.";
       };
@@ -230,7 +191,7 @@ let
       };
 
       shell = lib.mkOption {
-        type = lib.types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
+        type = lib.types.nullOr (lib.types.either lib.types.shellPackage (lib.types.passwdEntry lib.types.path));
         default = pkgs.shadow;
         defaultText = lib.literalExpression "pkgs.shadow";
         example = lib.literalExpression "pkgs.bashInteractive";
@@ -402,7 +363,7 @@ let
       };
 
       expires = lib.mkOption {
-        type = lib.types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
+        type = lib.types.nullOr (lib.types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
         default = null;
         description = ''
           Set the date on which the user's account will no longer be
@@ -430,7 +391,7 @@ let
 
     config = lib.mkMerge
       [ { name = lib.mkDefault name;
-          shell = lib.mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
+          shell = lib.mkIf config.useDefaultShell (lib.mkDefault cfg.defaultUserShell);
         }
         (lib.mkIf config.isNormalUser {
           group = lib.mkDefault "users";
@@ -460,7 +421,7 @@ let
     options = {
 
       name = lib.mkOption {
-        type = lib.types.passwdEntry types.str;
+        type = lib.types.passwdEntry lib.types.str;
         description = ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
@@ -490,8 +451,8 @@ let
     config = {
       name = lib.mkDefault name;
 
-      members = mapAttrsToList (n: u: u.name) (
-        filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
+      members = lib.mapAttrsToList (n: u: u.name) (
+        lib.filterAttrs (n: u: lib.elem config.name u.extraGroups) cfg.users
       );
     };
 
@@ -531,15 +492,15 @@ let
     };
   };
 
-  idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
+  idsAreUnique = set: idAttr: !(lib.foldr (name: args@{ dup, acc }:
     let
-      id = toString (getAttr idAttr (getAttr name set));
-      exists = hasAttr id acc;
-      newAcc = acc // (listToAttrs [ { name = id; value = true; } ]);
+      id = toString (lib.getAttr idAttr (lib.getAttr name set));
+      exists = lib.hasAttr id acc;
+      newAcc = acc // (lib.listToAttrs [ { name = id; value = true; } ]);
     in if dup then args else if exists
-      then trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
+      then lib.trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
       else { dup = false; acc = newAcc; }
-    ) { dup = false; acc = {}; } (attrNames set)).dup;
+    ) { dup = false; acc = {}; } (lib.attrNames set)).dup;
 
   uidsAreUnique = idsAreUnique (lib.filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (lib.filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
@@ -550,7 +511,7 @@ let
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
-    users = mapAttrsToList (_: u:
+    users = lib.mapAttrsToList (_: u:
       { inherit (u)
           name uid group description home homeMode createHome isSystemUser
           password hashedPasswordFile hashedPassword
@@ -558,20 +519,20 @@ let
           initialPassword initialHashedPassword expires;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
-    groups = attrValues cfg.groups;
+    groups = lib.attrValues cfg.groups;
   });
 
   systemShells =
     let
-      shells = mapAttrsToList (_: u: u.shell) cfg.users;
+      shells = lib.mapAttrsToList (_: u: u.shell) cfg.users;
     in
-      filter types.shellPackage.check shells;
+      lib.filter lib.types.shellPackage.check shells;
 
-  lingeringUsers = map (u: u.name) (lib.attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
+  lingeringUsers = map (u: u.name) (lib.attrValues (lib.flip lib.filterAttrs cfg.users (n: u: u.linger)));
 in {
   imports = [
-    (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
-    (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
+    (lib.mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
+    (lib.mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
     (lib.mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
@@ -661,7 +622,7 @@ in {
         Users to include in initrd.
       '';
       default = {};
-      type = lib.types.attrsOf (types.submodule ({ name, ... }: {
+      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
         options.uid = lib.mkOption {
           type = lib.types.int;
           description = ''
@@ -679,7 +640,7 @@ in {
           default = cfg.users.${name}.group;
         };
         options.shell = lib.mkOption {
-          type = lib.types.passwdEntry types.path;
+          type = lib.types.passwdEntry lib.types.path;
           description = ''
             The path to the user's shell in initrd.
           '';
@@ -694,7 +655,7 @@ in {
         Groups to include in initrd.
       '';
       default = {};
-      type = lib.types.attrsOf (types.submodule ({ name, ... }: {
+      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
         options.gid = lib.mkOption {
           type = lib.types.int;
           description = ''
@@ -767,7 +728,7 @@ in {
       '';
     } else ""; # keep around for backwards compatibility
 
-    systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
+    systemd.services.linger-users = lib.mkIf ((lib.length lingeringUsers) > 0) {
       wantedBy = ["multi-user.target"];
       after = ["systemd-logind.service"];
       requires = ["systemd-logind.service"];
@@ -775,8 +736,8 @@ in {
       script = let
         lingerDir = "/var/lib/systemd/linger";
         lingeringUsersFile = builtins.toFile "lingering-users"
-          (concatStrings (map (s: "${s}\n")
-            (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
+          (lib.concatStrings (map (s: "${s}\n")
+            (lib.sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
       in ''
         mkdir -vp ${lingerDir}
         cd ${lingerDir}
@@ -817,12 +778,12 @@ in {
     } else ""; # keep around for backwards compatibility
 
     # for backwards compatibility
-    system.activationScripts.groups = stringAfter [ "users" ] "";
+    system.activationScripts.groups = lib.stringAfter [ "users" ] "";
 
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = mapAttrs' (_: { packages, name, ... }: {
+    environment.etc = lib.mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";
@@ -908,10 +869,10 @@ in {
         # The check does not apply when users.disableLoginPossibilityAssertion
         # The check does not apply when users.mutableUsers
         assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
-          any id (mapAttrsToList (name: cfg:
+          lib.any lib.id (lib.mapAttrsToList (name: cfg:
             (name == "root"
              || cfg.group == "wheel"
-             || elem "wheel" cfg.extraGroups)
+             || lib.elem "wheel" cfg.extraGroups)
             &&
             (allowsLogin cfg.hashedPassword
              || cfg.password != null
@@ -929,11 +890,11 @@ in {
           manually running passwd root to set the root password.
           '';
       }
-    ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
+    ] ++ lib.flatten (lib.flip lib.mapAttrsToList cfg.users (name: user:
       [
         {
         assertion = (user.hashedPassword != null)
-        -> (match ".*:.*" user.hashedPassword == null);
+        -> (lib.match ".*:.*" user.hashedPassword == null);
         message = ''
             The password hash of user "${user.name}" contains a ":" character.
             This is invalid and would break the login system because the fields
@@ -943,7 +904,7 @@ in {
           {
             assertion = let
               isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
-            in xor isEffectivelySystemUser user.isNormalUser;
+            in lib.xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
             '';
@@ -979,7 +940,7 @@ in {
     ));
 
     warnings =
-      flip concatMap (lib.attrValues cfg.users) (user: let
+      lib.flip lib.concatMap (lib.attrValues cfg.users) (user: let
         passwordOptions = [
           "hashedPassword"
           "hashedPasswordFile"
@@ -990,8 +951,8 @@ in {
           "initialHashedPassword"
           "initialPassword"
         ];
-        unambiguousPasswordConfiguration = 1 >= length
-          (filter (x: x != null) (map (flip getAttr user) passwordOptions));
+        unambiguousPasswordConfiguration = 1 >= lib.length
+          (lib.filter (x: x != null) (map (lib.flip lib.getAttr user) passwordOptions));
       in lib.optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
         `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
@@ -1000,14 +961,14 @@ in {
         ${multiplePasswordsWarning}
         ${overrideOrderText cfg.mutableUsers}
         The values of these options are:
-        ${concatMapStringsSep
+        ${lib.concatMapStringsSep
           "\n"
           (value:
-            "* users.users.\"${user.name}\".${value}: ${generators.toPretty {} user.${value}}")
+            "* users.users.\"${user.name}\".${value}: ${lib.generators.toPretty {} user.${value}}")
           passwordOptions}
       '')
-      ++ filter (x: x != null) (
-        flip mapAttrsToList cfg.users (_: user:
+      ++ lib.filter (x: x != null) (
+        lib.flip lib.mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the
         # specific implementation of crypt(3) we only support the (sane)
@@ -1029,13 +990,13 @@ in {
         in
         if (allowsLogin user.hashedPassword
             && user.hashedPassword != ""  # login without password
-            && match mcf user.hashedPassword == null)
+            && lib.match mcf user.hashedPassword == null)
         then ''
           The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please
           check the value of option `users.users."${user.name}".hashedPassword`.''
         else null)
-        ++ flip mapAttrsToList cfg.users (name: user:
+        ++ lib.flip lib.mapAttrsToList cfg.users (name: user:
           if user.passwordFile != null then
             ''The option `users.users."${name}".passwordFile' has been renamed '' +
             ''to `users.users."${name}".hashedPasswordFile'.''

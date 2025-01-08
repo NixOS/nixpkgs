@@ -140,8 +140,8 @@ in
           };
       in
       lib.attrsets.mergeAttrsList [
-        (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
-        (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
+        (lib.optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
+        (lib.optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
         (lib.concatMapAttrs (
           name: value: lib.optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
         ) cfg.settings.addons)

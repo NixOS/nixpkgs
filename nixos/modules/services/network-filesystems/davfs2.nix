@@ -6,25 +6,9 @@
 }:
 
 let
-  inherit (lib.attrsets) lib.optionalAttrs;
-  inherit (lib.generators) toINIWithGlobalSection;
-  inherit (lib.lists) lib.optional;
-  inherit (lib.modules) mkIf mkRemovedOptionModule;
-  inherit (lib.options) literalExpression mkEnableOption lib.mkOption;
-  inherit (lib.strings) escape;
-  inherit (lib.types)
-    attrsOf
-    bool
-    int
-    lines
-    oneOf
-    str
-    submodule
-    ;
-
   cfg = config.services.davfs2;
 
-  escapeString = escape [
+  escapeString = lib.escape [
     "\""
     "\\"
   ];
@@ -41,7 +25,7 @@ let
       toString value;
 
   configFile = pkgs.writeText "davfs2.conf" (
-    toINIWithGlobalSection {
+    lib.generators.toINIWithGlobalSection {
       mkSectionName = escapeString;
       mkKeyValue = k: v: "${k} ${formatValue v}";
     } cfg.settings
@@ -60,7 +44,7 @@ in
     enable = lib.mkEnableOption "davfs2";
 
     davUser = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       default = "davfs2";
       description = ''
         When invoked by root the mount.davfs daemon will run as this user.
@@ -69,7 +53,7 @@ in
     };
 
     davGroup = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       default = "davfs2";
       description = ''
         The group of the running mount.davfs daemon. Ordinary users must be
@@ -79,16 +63,16 @@ in
     };
 
     settings = lib.mkOption {
-      type = submodule {
+      type = lib.types.submodule {
         freeformType =
           let
             valueTypes = [
-              bool
-              int
-              str
+              lib.types.bool
+              lib.types.int
+              lib.types.str
             ];
           in
-          attrsOf (attrsOf (oneOf (valueTypes ++ [ (attrsOf (oneOf valueTypes)) ])));
+          lib.types.attrsOf (lib.types.attrsOf (lib.types.oneOf (valueTypes ++ [ (lib.types.attrsOf (lib.types.oneOf valueTypes)) ])));
       };
       default = { };
       example = lib.literalExpression ''

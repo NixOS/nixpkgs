@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf lib.mkOption lib.optional;
-  inherit (lib.types) path bool listOf str port;
   cfg = config.services.darkhttpd;
 
   args = lib.concatStringsSep " " ([
@@ -19,7 +17,7 @@ in {
 
     port = lib.mkOption {
       default = 80;
-      type = port;
+      type = lib.types.port;
       description = ''
         Port to listen on.
         Pass 0 to let the system choose any free port for you.
@@ -28,7 +26,7 @@ in {
 
     address = lib.mkOption {
       default = "127.0.0.1";
-      type = str;
+      type = lib.types.str;
       description = ''
         Address to listen on.
         Pass `all` to listen on all interfaces.
@@ -36,14 +34,14 @@ in {
     };
 
     rootDir = lib.mkOption {
-      type = path;
+      type = lib.types.path;
       description = ''
         Path from which to serve files.
       '';
     };
 
     hideServerId = lib.mkOption {
-      type = bool;
+      type = lib.types.bool;
       default = true;
       description = ''
         Don't identify the server type in headers or directory listings.
@@ -51,7 +49,7 @@ in {
     };
 
     extraArgs = lib.mkOption {
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Additional configuration passed to the executable.

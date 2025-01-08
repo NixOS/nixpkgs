@@ -7,7 +7,6 @@
 
 let
   cfg = config.services.prometheus.exporters.deluge;
-  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9354;

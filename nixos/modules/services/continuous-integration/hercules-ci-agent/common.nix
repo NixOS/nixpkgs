@@ -12,16 +12,6 @@
   ...
 }:
 let
-  inherit (lib)
-    filterAttrs
-    literalExpression
-    mkIf
-    lib.mkOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    types
-    mkPackageOption
-    ;
 
   cfg = config.services.hercules-ci-agent;
 

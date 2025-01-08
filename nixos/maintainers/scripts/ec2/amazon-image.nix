@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    lib.mkOption
-    lib.optionalString
-    types
-    versionAtLeast
-    ;
-  inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
   amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
 in
@@ -51,7 +44,7 @@ in
   config.boot.kernelParams =
     let
       timeout =
-        if versionAtLeast config.boot.kernelPackages.kernel.version "4.15" then "4294967295" else "255";
+        if lib.versionAtLeast config.boot.kernelPackages.kernel.version "4.15" then "4294967295" else "255";
     in
     [ "nvme_core.io_timeout=${timeout}" ];
 

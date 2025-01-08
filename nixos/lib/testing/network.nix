@@ -1,26 +1,8 @@
 { lib, nodes, ... }:
 
 let
-  inherit (lib)
-    attrNames
-    concatMap
-    concatMapStrings
-    flip
-    forEach
-    head
-    listToAttrs
-    mkDefault
-    lib.mkOption
-    nameValuePair
-    lib.optionalString
-    range
-    toLower
-    types
-    zipListsWith
-    zipLists
-    ;
 
-  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames nodes) (range 1 254));
+  nodeNumbers = lib.listToAttrs (lib.zipListsWith lib.nameValuePair (lib.attrNames nodes) (lib.range 1 254));
 
   networkModule =
     {
@@ -33,20 +15,20 @@ let
       qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
 
       # Convert legacy VLANs to named interfaces and merge with explicit interfaces.
-      vlansNumbered = forEach (zipLists config.virtualisation.vlans (range 1 255)) (v: {
+      vlansNumbered = lib.forEach (lib.zipLists config.virtualisation.vlans (lib.range 1 255)) (v: {
         name = "eth${toString v.snd}";
         vlan = v.fst;
         assignIP = true;
       });
       explicitInterfaces = lib.mapAttrsToList (n: v: v // { name = n; }) config.virtualisation.interfaces;
       interfaces = vlansNumbered ++ explicitInterfaces;
-      interfacesNumbered = zipLists interfaces (range 1 255);
+      interfacesNumbered = lib.zipLists interfaces (lib.range 1 255);
 
       # Automatically assign IP addresses to requested interfaces.
       assignIPs = lib.filter (i: i.assignIP) interfaces;
-      ipInterfaces = forEach assignIPs (
+      ipInterfaces = lib.forEach assignIPs (
         i:
-        nameValuePair i.name {
+        lib.nameValuePair i.name {
           ipv4.addresses = [
             {
               address = "192.168.${toString i.vlan}.${toString config.virtualisation.test.nodeNumber}";
@@ -63,35 +45,35 @@ let
       );
 
       qemuOptions = lib.flatten (
-        forEach interfacesNumbered (
+        lib.forEach interfacesNumbered (
           { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
         )
       );
-      udevRules = forEach interfacesNumbered (
+      udevRules = lib.forEach interfacesNumbered (
         { fst, snd }:
         # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"''
+        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${lib.toLower (qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"''
       );
 
       networkConfig = {
         networking.hostName = lib.mkDefault config.virtualisation.test.nodeName;
 
-        networking.interfaces = listToAttrs ipInterfaces;
+        networking.interfaces = lib.listToAttrs ipInterfaces;
 
         networking.primaryIPAddress =
           lib.optionalString (ipInterfaces != [ ])
-            (head (head ipInterfaces).value.ipv4.addresses).address;
+            (lib.head (lib.head ipInterfaces).value.ipv4.addresses).address;
 
         networking.primaryIPv6Address =
           lib.optionalString (ipInterfaces != [ ])
-            (head (head ipInterfaces).value.ipv6.addresses).address;
+            (lib.head (lib.head ipInterfaces).value.ipv6.addresses).address;
 
         # Put the IP addresses of all VMs in this machine's
         # /etc/hosts file.  If a machine has multiple
         # interfaces, use the IP address corresponding to
         # the first interface (i.e. the first network in its
         # virtualisation.vlans option).
-        networking.extraHosts = flip concatMapStrings (attrNames nodes) (
+        networking.extraHosts = lib.flip lib.concatMapStrings (lib.attrNames nodes) (
           m':
           let
             config = nodes.${m'};
@@ -110,7 +92,7 @@ let
         );
 
         virtualisation.qemu.options = qemuOptions;
-        boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
+        boot.initrd.services.udev.rules = lib.concatMapStrings (x: x + "\n") udevRules;
       };
 
     in
@@ -150,7 +132,7 @@ let
         # so we push the real `virtualisation.test.nodeName`.
         specialisation = lib.mkOption {
           type = lib.types.attrsOf (
-            types.submodule {
+            lib.types.submodule {
               options.configuration = lib.mkOption {
                 type = lib.types.submoduleWith {
                   modules = [

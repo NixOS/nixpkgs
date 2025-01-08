@@ -5,8 +5,6 @@
   ...
 }:
 let
-  inherit (lib) mkIf lib.mkOption types;
-
   cfg = config.hardware.sensor.hddtemp;
 
   wrapper = pkgs.writeShellScript "hddtemp-wrapper" ''

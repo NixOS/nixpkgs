@@ -7,14 +7,6 @@
 
 let
   cfg = config.services.go-camo;
-  inherit (lib)
-    lib.mkOption
-    mkEnableOption
-    mkIf
-    mkMerge
-    types
-    lib.optionalString
-    ;
 in
 {
   options.services.go-camo = {

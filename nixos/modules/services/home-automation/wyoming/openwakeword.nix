@@ -8,18 +8,6 @@
 let
   cfg = config.services.wyoming.openwakeword;
 
-  inherit (lib)
-    concatStringsSep
-    concatMapStringsSep
-    escapeShellArgs
-    lib.mkOption
-    mkEnableOption
-    mkIf
-    mkPackageOption
-    mkRemovedOptionModule
-    types
-    ;
-
   inherit (builtins)
     toString
     ;
@@ -38,13 +26,13 @@ in
 
   meta.buildDocsInSandbox = false;
 
-  options.services.wyoming.openwakeword = with lib.types; {
+  options.services.wyoming.openwakeword = {
     enable = lib.mkEnableOption "Wyoming openWakeWord server";
 
     package = lib.mkPackageOption pkgs "wyoming-openwakeword" { };
 
     uri = lib.mkOption {
-      type = strMatching "^(tcp|unix)://.*$";
+      type = lib.types.strMatching "^(tcp|unix)://.*$";
       default = "tcp://0.0.0.0:10400";
       example = "tcp://192.0.2.1:5000";
       description = ''
@@ -53,7 +41,7 @@ in
     };
 
     customModelsDirectories = lib.mkOption {
-      type = listOf types.path;
+      type = lib.types.listOf lib.types.types.path;
       default = [ ];
       description = ''
         Paths to directories with custom wake word models (*.tflite model files).
@@ -61,7 +49,7 @@ in
     };
 
     preloadModels = lib.mkOption {
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       default = [
         "ok_nabu"
       ];
@@ -79,7 +67,7 @@ in
     };
 
     threshold = lib.mkOption {
-      type = float;
+      type = lib.types.float;
       default = 0.5;
       description = ''
         Activation threshold (0-1), where higher means fewer activations.
@@ -91,7 +79,7 @@ in
     };
 
     triggerLevel = lib.mkOption {
-      type = int;
+      type = lib.types.int;
       default = 1;
       description = ''
         Number of activations before a detection is registered.
@@ -102,12 +90,12 @@ in
     };
 
     extraArgs = lib.mkOption {
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Extra arguments to pass to the server commandline.
       '';
-      apply = escapeShellArgs;
+      apply = lib.escapeShellArgs;
     };
   };
 
@@ -127,11 +115,11 @@ in
         DynamicUser = true;
         User = "wyoming-openwakeword";
         # https://github.com/home-assistant/addons/blob/master/openwakeword/rootfs/etc/s6-overlay/s6-rc.d/openwakeword/run
-        ExecStart = concatStringsSep " " [
+        ExecStart = lib.concatStringsSep " " [
           "${cfg.package}/bin/wyoming-openwakeword"
           "--uri ${cfg.uri}"
-          (concatMapStringsSep " " (model: "--preload-model ${model}") cfg.preloadModels)
-          (concatMapStringsSep " " (dir: "--custom-model-dir ${toString dir}") cfg.customModelsDirectories)
+          (lib.concatMapStringsSep " " (model: "--preload-model ${model}") cfg.preloadModels)
+          (lib.concatMapStringsSep " " (dir: "--custom-model-dir ${toString dir}") cfg.customModelsDirectories)
           "--threshold ${cfg.threshold}"
           "--trigger-level ${cfg.triggerLevel}"
           "${cfg.extraArgs}"

@@ -8,15 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.pgbouncer;
-  inherit (lib)
-    lib.mkOption
-    mkPackageOption
-    types
-    lib.optionals
-    getExe
-    escapeShellArg
-    concatStringsSep
-    ;
 in
 {
   port = 9127;
@@ -139,9 +130,9 @@ in
 
   serviceOpts = {
     after = [ "pgbouncer.service" ];
-    script = concatStringsSep " " (
+    script = lib.concatStringsSep " " (
       [
-        "exec -- ${lib.escapeShellArg (getExe cfg.package)}"
+        "exec -- ${lib.escapeShellArg (lib.getExe cfg.package)}"
         "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
       ]
       ++ lib.optionals (cfg.connectionString != null) [

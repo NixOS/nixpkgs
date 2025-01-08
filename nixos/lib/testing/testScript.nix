@@ -6,21 +6,17 @@ testModuleArgs@{
   moduleType,
   ...
 }:
-let
-  inherit (lib) lib.mkOption types;
-  inherit (types) either str functionTo;
-in
 {
   options = {
     testScript = lib.mkOption {
-      type = either str (functionTo str);
+      type = lib.types.either lib.types.str (lib.types.functionTo lib.types.str);
       description = ''
         A series of python declarations and statements that you write to perform
         the test.
       '';
     };
     testScriptString = lib.mkOption {
-      type = str;
+      type = lib.types.str;
       readOnly = true;
       internal = true;
     };

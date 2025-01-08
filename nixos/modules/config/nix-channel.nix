@@ -8,13 +8,6 @@
  */
 { config, lib, ... }:
 let
-  inherit (lib)
-    mkDefault
-    mkIf
-    lib.mkOption
-    stringAfter
-    types
-    ;
 
   cfg = config.nix;
 
@@ -79,7 +72,7 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.extraInit =
-      mkIf cfg.channel.enable ''
+      lib.mkIf cfg.channel.enable ''
         if [ -e "$HOME/.nix-defexpr/channels" ]; then
           export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
         fi
@@ -100,6 +93,6 @@ in
     ];
 
     system.activationScripts.no-nix-channel = lib.mkIf (!cfg.channel.enable)
-      (stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh));
+      (lib.stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh));
   };
 }

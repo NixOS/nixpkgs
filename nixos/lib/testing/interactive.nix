@@ -5,9 +5,7 @@
   hostPkgs,
   ...
 }:
-let
-  inherit (lib) lib.mkOption types;
-in
+
 {
   options = {
     interactive = lib.mkOption {

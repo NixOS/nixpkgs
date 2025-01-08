@@ -8,12 +8,6 @@
 
 let
   cfg = config.services.prometheus.exporters.zfs;
-  inherit (lib)
-    lib.mkOption
-    types
-    concatStringsSep
-    concatMapStringsSep
-    ;
 in
 {
   port = 9134;
@@ -44,7 +38,7 @@ in
         ${pkgs.prometheus-zfs-exporter}/bin/zfs_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
-          ${concatMapStringsSep " " (x: "--pool=${x}") cfg.pools} \
+          ${lib.concatMapStringsSep " " (x: "--pool=${x}") cfg.pools} \
           ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       ProtectClock = false;

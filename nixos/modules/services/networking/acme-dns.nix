@@ -8,13 +8,6 @@
 let
   cfg = config.services.acme-dns;
   format = pkgs.formats.toml { };
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
   domain = "acme-dns.example.com";
 in
 {

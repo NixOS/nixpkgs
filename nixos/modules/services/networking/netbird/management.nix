@@ -7,19 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    any
-    concatMap
-    getExe'
-    literalExpression
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optional
-    recursiveUpdate
-    ;
-
   inherit (lib.types)
     bool
     enum
@@ -128,7 +115,7 @@ let
     };
   };
 
-  managementConfig = recursiveUpdate defaultSettings cfg.settings;
+  managementConfig = lib.recursiveUpdate defaultSettings cfg.settings;
 
   managementFile = settingsFormat.generate "config.json" managementConfig;
 
@@ -341,12 +328,12 @@ in
       description = "Log level of the netbird services.";
     };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
+    enableNginx = lib.mkEnableOption "Nginx reverse-proxy for the netbird management service";
   };
 
   config = lib.mkIf cfg.enable {
     warnings =
-      concatMap
+      lib.concatMap
         (
           { check, name }:
           lib.optional check "${name} is world-readable in the Nix Store, you should provide it as a _secret."
@@ -361,7 +348,7 @@ in
             name = "The DataStoreEncryptionKey";
           }
           {
-            check = any (T: (T ? Password) && builtins.isString T.Password) managementConfig.TURNConfig.Turns;
+            check = lib.any (T: (T ? Password) && builtins.isString T.Password) managementConfig.TURNConfig.Turns;
             name = "A Turn configuration's password";
           }
         ];
@@ -386,7 +373,7 @@ in
       serviceConfig = {
         ExecStart = escapeSystemdExecArgs (
           [
-            (getExe' cfg.package "netbird-mgmt")
+            (lib.getExe' cfg.package "netbird-mgmt")
             "management"
             # Config file
             "--config"
@@ -415,8 +402,8 @@ in
             "--single-account-mode-domain"
             cfg.singleAccountModeDomain
           ]
-          ++ (optional cfg.disableAnonymousMetrics "--disable-anonymous-metrics")
-          ++ (optional cfg.disableSingleAccountMode "--disable-single-account-mode")
+          ++ (lib.optional cfg.disableAnonymousMetrics "--disable-anonymous-metrics")
+          ++ (lib.optional cfg.disableSingleAccountMode "--disable-single-account-mode")
           ++ cfg.extraOptions
         );
         Restart = "always";
