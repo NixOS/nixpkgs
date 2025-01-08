@@ -39,13 +39,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libspa-0.8.0" = "sha256-kp5x5QhmgEqCrt7xDRfMFGoTK5IXOuvW2yOW02B8Ftk=";
-      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2hFavY3Y6aBPjo53o7GMjuvUKOcj+ZQiV0M1mpoH/Ck=";
 
   strictDeps = true;
 
