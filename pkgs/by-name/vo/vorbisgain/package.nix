@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1v1h6mhnckmvvn7345hzi9abn5z282g4lyyl4nnbqwnrr98v0vfx";
   };
 
+  patches = [
+    ./isatty.patch
+  ];
+
   hardeningDisable = [ "format" ];
 
   buildInputs = [
