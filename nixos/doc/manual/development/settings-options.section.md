@@ -343,6 +343,12 @@ have a predefined type and string generator already declared under
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.cdn` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with [CDN](https://github.com/dzikoysk/cdn)-specific
+    attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+
 `pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
 
 :   A function taking an attribute set with values
