@@ -5,10 +5,10 @@
 }:
 let
   pname = "rquickshare";
-  version = "0.11.2";
+  version = "0.11.3";
   src = fetchurl {
     url = "https://github.com/Martichou/rquickshare/releases/download/v${version}/r-quick-share-legacy_v${version}_glibc-2.31_amd64.AppImage";
-    hash = "sha256-VXYiYrTSedH8xFjuxbdplzVdfnO6s3ftY2I121Unlfw=";
+    hash = "sha256-SEAm4K00bdVaLEEF17EapbxtfSGBE2Kv1eIQ2GHsHdM=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
