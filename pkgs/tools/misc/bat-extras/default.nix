@@ -103,6 +103,7 @@ let
       license = with licenses; [ mit ];
       maintainers = with maintainers; [ bbigras ];
       platforms = platforms.all;
+      broken = true;
     };
   };
   script =
