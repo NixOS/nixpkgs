@@ -17,7 +17,7 @@ let
       django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.0";
         src = oldAttrs.src.override {
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-a8BopUwZjmvxOzBVqs4fTo0SY8sEEloGUw90daYWfz8=";
         };
 
