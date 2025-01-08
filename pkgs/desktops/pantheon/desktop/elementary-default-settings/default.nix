@@ -34,12 +34,15 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    accountsservice
-    dbus
-    glib # polkit requires
+    glib # glib-compile-schemas
     meson
     ninja
     pkg-config
+  ];
+
+  buildInputs = [
+    accountsservice
+    dbus
     polkit
   ];
 
