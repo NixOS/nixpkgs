@@ -2245,8 +2245,6 @@ with pkgs;
 
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
-  eas-cli = callPackage ../development/tools/eas-cli { };
-
   eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
 
   element-web = callPackage ../by-name/el/element-web/package.nix {
