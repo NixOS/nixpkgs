@@ -39,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "rc";
+    };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
