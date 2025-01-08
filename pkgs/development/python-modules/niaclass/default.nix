@@ -26,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-2VNLXVciWInkZwk9O+U+6oU+FOVQx3InV4UVgny/B6I=";
   };
 
-  pythonRelaxDeps = [ "pandas" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+  ];
 
   nativeBuildInputs = [
     poetry-core
