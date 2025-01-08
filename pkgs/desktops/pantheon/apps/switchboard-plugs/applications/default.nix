@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  gettext,
   meson,
   ninja,
   pkg-config,
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
