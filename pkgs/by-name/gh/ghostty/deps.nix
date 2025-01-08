@@ -16,15 +16,11 @@ with lib;
 let
   unpackZigArtifact =
     { name, artifact }:
-    runCommandLocal name
-      {
-        nativeBuildInputs = [ zig ];
-      }
-      ''
-        hash="$(zig fetch --global-cache-dir "$TMPDIR" ${artifact})"
-        mv "$TMPDIR/p/$hash" "$out"
-        chmod 755 "$out"
-      '';
+    runCommandLocal name { nativeBuildInputs = [ zig ]; } ''
+      hash="$(zig fetch --global-cache-dir "$TMPDIR" ${artifact})"
+      mv "$TMPDIR/p/$hash" "$out"
+      chmod 755 "$out"
+    '';
 
   fetchZig =
     {
