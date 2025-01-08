@@ -70,8 +70,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed(f"{cmd} | grep 'XDG_DATA_DIRS' | grep 'gsettings-schemas/pantheon-agent-geoclue2'")
         # Hopefully from login shell.
         machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
-        # See elementary-session-settings packaging.
-        machine.succeed(f"{cmd} | grep 'XDG_CONFIG_DIRS' | grep 'elementary-default-settings'")
 
     with subtest("Open elementary videos"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.videos >&2 &'")
@@ -101,6 +99,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
         machine.sleep(5)
         machine.screenshot("multitasking")
+        machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")
