@@ -6,6 +6,7 @@
   autoreconfHook,
   pkg-config,
   pandoc,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +29,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     pandoc
+    installShellFiles
   ];
 
   doCheck = true;
+
+  postInstall = ''
+    installShellCompletion --bash bash-completion/stenc
+  '';
 
   passthru.updateScript = gitUpdater { };
 
