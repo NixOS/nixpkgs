@@ -20,9 +20,6 @@ permissions:
 
 jobs:
   periodic-merge:
-    permissions:
-      contents: write  # for devmasx/merge-branch to merge branches
-      pull-requests: write  # for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS'
     runs-on: ubuntu-24.04
     strategy:
@@ -39,6 +36,15 @@ jobs:
             into: staging-24.11
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
+      # Use a GitHub App to create the PR so that CI gets triggered
+      # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
+      # Same app as in backport.yml
+      - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
+        id: app-token
+        with:
+          app-id: ${{ vars.BACKPORT_APP_ID }}
+          private-key: ${{ secrets.BACKPORT_PRIVATE_KEY }}
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
@@ -47,12 +53,13 @@ jobs:
           type: now
           from_branch: ${{ matrix.pairs.from }}
           target_branch: ${{ matrix.pairs.into }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token  }}
 
       - name: Comment on failure
         uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
         if: ${{ failure() }}
         with:
+          token: ${{ steps.app-token.outputs.token }}
           issue-number: 105153
           body: |
             Periodic merge from `${{ matrix.pairs.from }}` into `${{ matrix.pairs.into }}` has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
