@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_20,
   versionCheckHook,
   node-gyp,
   python3,
@@ -11,7 +12,15 @@
   apple-sdk_12,
 }:
 
-buildNpmPackage rec {
+let
+  buildNpmPackage' = buildNpmPackage.override {
+    nodejs = nodejs_20;
+  };
+  node-gyp' = node-gyp.override {
+    nodejs = nodejs_20;
+  };
+in
+buildNpmPackage' rec {
   pname = "balena-cli";
   version = "20.1.2";
 
@@ -31,7 +40,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs =
     [
-      node-gyp
+      node-gyp'
       python3
       versionCheckHook
     ]
