@@ -23,6 +23,8 @@ mkDerivation rec {
     hash = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
   };
 
+  patches = [ ./remove-upload-import.diff ];
+
   nativeBuildInputs = [
     python3.pkgs.wrapPython
     qmake
