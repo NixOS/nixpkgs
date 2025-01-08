@@ -67,6 +67,7 @@ buildPythonPackage rec {
   meta = {
     description = "A J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
+    changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/v${version}";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ bcdarwin ];
     # x86-linux: test_encode.py::TestEncodeBuffer failures
