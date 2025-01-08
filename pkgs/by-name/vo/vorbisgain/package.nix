@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
     libvorbis
   ];
 
-  patchPhase = ''
-    chmod -v +x configure
-    configureFlags="--mandir=$out/share/man"
-  '';
-
   meta = with lib; {
     homepage = "https://sjeng.org/vorbisgain.html";
     description = "Utility that corrects the volume of an Ogg Vorbis file to a predefined standardized loudness";
