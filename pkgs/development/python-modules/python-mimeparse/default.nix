@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  legacy-cgi,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -14,6 +16,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78";
   };
+
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
