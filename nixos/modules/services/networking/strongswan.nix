@@ -8,21 +8,10 @@
 let
 
   inherit (builtins) toFile;
-  inherit (lib)
-    concatMapStrings
-    concatStringsSep
-    mapAttrsToList
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    types
-    literalExpression
-    lib.optionalString
-    ;
 
   cfg = config.services.strongswan;
 
-  ipsecSecrets = secrets: concatMapStrings (f: "include ${f}\n") secrets;
+  ipsecSecrets = secrets: lib.concatMapStrings (f: "include ${f}\n") secrets;
 
   ipsecConf =
     {
@@ -34,10 +23,10 @@ let
       # https://wiki.strongswan.org/projects/strongswan/wiki/IpsecConf
       makeSections =
         type: sections:
-        concatStringsSep "\n\n" (
-          mapAttrsToList (
+        lib.concatStringsSep "\n\n" (
+          lib.mapAttrsToList (
             sec: attrs:
-            "${type} ${sec}\n" + (lib.concatStringsSep "\n" (mapAttrsToList (k: v: "  ${k}=${v}") attrs))
+            "${type} ${sec}\n" + (lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "  ${k}=${v}") attrs))
           ) sections
         );
       setupConf = makeSections "config" { inherit setup; };
@@ -108,7 +97,7 @@ in
     };
 
     connections = lib.mkOption {
-      type = lib.types.attrsOf (types.attrsOf types.str);
+      type = lib.types.attrsOf (lib.types.attrsOf lib.types.str);
       default = { };
       example = lib.literalExpression ''
         {
@@ -132,7 +121,7 @@ in
     };
 
     ca = lib.mkOption {
-      type = lib.types.attrsOf (types.attrsOf types.str);
+      type = lib.types.attrsOf (lib.types.attrsOf lib.types.str);
       default = { };
       example = {
         strongswan = {
@@ -169,8 +158,7 @@ in
   };
 
   config =
-    with cfg;
-    mkIf enable {
+    lib.mkIf cfg.enable {
 
       # here we should use the default strongswan ipsec.secrets and
       # append to it (default one is empty so not a pb for now)
@@ -189,7 +177,7 @@ in
         after = [ "network-online.target" ];
         environment = {
           STRONGSWAN_CONF = strongswanConf {
-            inherit
+            inherit (cfg)
               setup
               connections
               ca

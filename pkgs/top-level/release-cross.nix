@@ -38,6 +38,7 @@ let
     mapTestOnCross
     pkgsForCross
     unix
+    lib
     ;
 
   inherit (release-lib.lib)
@@ -46,7 +47,6 @@ let
     elem
     getAttrFromPath
     isDerivation
-    maintainers
     mapAttrsRecursive
     mapAttrsRecursiveCond
     recursiveUpdate

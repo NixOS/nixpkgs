@@ -37,8 +37,6 @@ let
     "packs" = pkgs.linkFarm "packs" cfg.resourcepacks;
     "addons" = addonsFolder;
   };
-
-  inherit (lib) lib.mkOption;
 in
 {
   imports = [

@@ -5,22 +5,11 @@
   ...
 }:
 let
-  inherit (lib)
-    concatMapStringsSep
-    generators
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionalString
-    types
-    ;
-
   cfg = config.services.typesense;
   settingsFormatIni = pkgs.formats.ini {
-    listToValue = concatMapStringsSep " " (generators.mkValueStringDefault { });
-    mkKeyValue = generators.mkKeyValueDefault {
-      mkValueString = v: if v == null then "" else generators.mkValueStringDefault { } v;
+    listToValue = lib.concatMapStringsSep " " (lib.generators.mkValueStringDefault { });
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = v: if v == null then "" else lib.generators.mkValueStringDefault { } v;
     } "=";
   };
   configFile = settingsFormatIni.generate "typesense.ini" cfg.settings;

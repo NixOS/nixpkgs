@@ -4,14 +4,7 @@
   name,
   ...
 }:
-let
-  inherit (lib)
-    literalExpression
-    lib.mkOption
-    nameValuePair
-    types
-    ;
-in
+
 {
   options = {
 
@@ -36,8 +29,7 @@ in
 
     listen = lib.mkOption {
       type =
-        with lib.types;
-        listOf (submodule ({
+        lib.types.listOf (lib.types.submodule ({
           options = {
             port = lib.mkOption {
               type = lib.types.port;
@@ -206,7 +198,7 @@ in
     };
 
     servedDirs = lib.mkOption {
-      type = lib.types.listOf types.attrs;
+      type = lib.types.listOf lib.types.attrs;
       default = [ ];
       example = [
         {
@@ -220,7 +212,7 @@ in
     };
 
     servedFiles = lib.mkOption {
-      type = lib.types.listOf types.attrs;
+      type = lib.types.listOf lib.types.attrs;
       default = [ ];
       example = [
         {
@@ -314,7 +306,7 @@ in
   config = {
 
     locations = builtins.listToAttrs (
-      map (elem: nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles
+      map (elem: lib.nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles
     );
 
   };

@@ -5,16 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    getExe
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
   cfg = config.services.actual;
   configFile = formatType.generate "config.json" cfg.settings;
   dataDir = "/var/lib/actual";
@@ -70,7 +60,7 @@ in
       wantedBy = [ "multi-user.target" ];
       environment.ACTUAL_CONFIG_PATH = configFile;
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = lib.getExe cfg.package;
         DynamicUser = true;
         User = "actual";
         Group = "actual";

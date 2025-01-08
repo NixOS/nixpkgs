@@ -6,24 +6,6 @@
 }:
 
 let
-
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkForce
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkPackageOption
-    ;
-  inherit (lib)
-    literalExpression
-    mapAttrs
-    lib.optional
-    lib.optionalString
-    types
-    ;
-
   cfg = config.services.limesurvey;
   fpm = config.services.phpfpm.pools.limesurvey;
 
@@ -280,7 +262,7 @@ in
       }
     ];
 
-    services.limesurvey.config = mapAttrs (name: mkDefault) {
+    services.limesurvey.config = lib.mapAttrs (name: lib.mkDefault) {
       runtimePath = "${stateDir}/tmp/runtime";
       components = {
         db = {
@@ -368,7 +350,7 @@ in
       virtualHosts.${cfg.virtualHost.hostName} = lib.mkMerge [
         cfg.virtualHost
         {
-          documentRoot = mkForce "${cfg.package}/share/limesurvey";
+          documentRoot = lib.mkForce "${cfg.package}/share/limesurvey";
           extraConfig = ''
             Alias "/tmp" "${stateDir}/tmp"
             <Directory "${stateDir}">

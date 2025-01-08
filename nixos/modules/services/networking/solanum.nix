@@ -6,12 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
   inherit (pkgs) solanum util-linux;
   cfg = config.services.solanum;
 
@@ -69,7 +63,7 @@ in
       };
 
       motd = lib.mkOption {
-        type = lib.types.nullOr types.lines;
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Solanum MOTD text.

@@ -5,8 +5,7 @@
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix replaceStrings singleton splitString makeBinPath;
+  inherit (pkgs) lib;
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -202,7 +201,7 @@ let
         enable = true;
         extraFlags = [ "--web.collectd-push-path /collectd" ];
       };
-      exporterTest = let postData = replaceStrings [ "\n" ] [ "" ] ''
+      exporterTest = let postData = lib.replaceStrings [ "\n" ] [ "" ] ''
         [{
           "values":[23],
           "dstypes":["gauge"],
@@ -1023,7 +1022,7 @@ let
               ignore_startup_parameters = "extra_float_digits";
             };
             databases = {
-              postgres = concatStringsSep " " [
+              postgres = lib.concatStringsSep " " [
                 "host=/run/postgresql"
                 "port=5432"
                 "auth_user=postgres"
@@ -1076,7 +1075,7 @@ let
             "listen" = "127.0.0.1:9000";
             "listen.allowed_clients" = "127.0.0.1";
           };
-          phpEnv."PATH" = makeBinPath [ pkgs.php ];
+          phpEnv."PATH" = lib.makeBinPath [ pkgs.php ];
         };
       };
       exporterTest = ''
@@ -1711,7 +1710,7 @@ let
 
     wireguard = let
       snakeoil = import ./wireguard/snakeoil-keys.nix;
-      publicKeyWithoutNewlines = replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
+      publicKeyWithoutNewlines = lib.replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
     in
       {
         exporterConfig.enable = true;
@@ -1756,7 +1755,7 @@ let
     };
   };
 in
-mapAttrs
+lib.mapAttrs
   (exporter: testConfig: (makeTest (
     let
       nodeName = testConfig.nodeName or exporter;
@@ -1780,12 +1779,12 @@ mapAttrs
           ]
           then line
           else "${nodeName}.${line}"
-        ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
+        ) (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.exporterTest)))}
         ${nodeName}.shutdown()
       '';
 
-      meta = with maintainers; {
-        maintainers = [ willibutz ];
+      meta = {
+        maintainers = with lib.maintainers; [ willibutz ];
       };
     }
   )))

@@ -6,18 +6,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    literalExpression
-    mkIf
-    mkDefault
-    types
-    lib.optionals
-    getExe
-    ;
-  inherit (utils) escapeSystemdExecArgs;
   cfg = config.services.sunshine;
 
   # ports used are offset from a single base port, see https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#port
@@ -163,7 +151,7 @@ in
       owner = "root";
       group = "root";
       capabilities = "cap_sys_admin+p";
-      source = getExe cfg.package;
+      source = lib.getExe cfg.package;
     };
 
     systemd.user.services.sunshine = {
@@ -181,9 +169,9 @@ in
 
       serviceConfig = {
         # only add configFile if an application or a setting other than the default port is set to allow configuration from web UI
-        ExecStart = escapeSystemdExecArgs (
+        ExecStart = utils.escapeSystemdExecArgs (
           [
-            (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${getExe cfg.package}")
+            (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${lib.getExe cfg.package}")
           ]
           ++ lib.optionals (
             cfg.applications.apps != [ ]

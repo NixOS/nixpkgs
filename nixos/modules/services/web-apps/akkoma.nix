@@ -1,45 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    any
-    attrsets
-    attrByPath
-    catAttrs
-    collect
-    concatMapStrings
-    concatStringsSep
-    escape
-    escapeShellArg
-    escapeShellArgs
-    hasInfix
-    isAttrs
-    isList
-    isStorePath
-    isString
-    mapAttrs
-    mapAttrsToList
-    lib.optionalString
-    lib.optionals
-    replaceStrings
-    splitString
-    substring
-    versionOlder
-
-    fileContents
-    readFile
-
-    literalExpression
-    literalMD
-    mkBefore
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    lib.mkOptionType
-    mkPackageOption
-    types;
-
   cfg = config.services.akkoma;
   ex = cfg.config;
   db = ex.":pleroma"."Pleroma.Repo";
@@ -53,17 +14,17 @@ let
     mkTuple;
 
   isConfined = config.systemd.services.akkoma.confinement.enable;
-  hasSmtp = (attrByPath [ ":pleroma" "Pleroma.Emails.Mailer" "adapter" "value" ] null ex) == "Swoosh.Adapters.SMTP";
+  hasSmtp = (lib.attrByPath [ ":pleroma" "Pleroma.Emails.Mailer" "adapter" "value" ] null ex) == "Swoosh.Adapters.SMTP";
 
-  isAbsolutePath = v: isString v && substring 0 1 v == "/";
-  isSecret = v: isAttrs v && v ? _secret && isAbsolutePath v._secret;
+  isAbsolutePath = v: lib.isString v && lib.substring 0 1 v == "/";
+  isSecret = v: lib.isAttrs v && v ? _secret && isAbsolutePath v._secret;
 
-  absolutePath = with lib.types; lib.mkOptionType {
+  absolutePath = lib.mkOptionType {
     name = "absolutePath";
     description = "absolute path";
     descriptionClass = "noun";
     check = isAbsolutePath;
-    inherit (str) merge;
+    inherit (lib.types.str) merge;
   };
 
   secret = lib.mkOptionType {
@@ -76,12 +37,12 @@ let
     };
   };
 
-  ipAddress = with lib.types; lib.mkOptionType {
+  ipAddress = lib.mkOptionType {
     name = "ipAddress";
     description = "IPv4 or IPv6 address";
     descriptionClass = "conjunction";
-    check = x: str.check x && builtins.match "[.0-9:A-Fa-f]+" x != null;
-    inherit (str) merge;
+    check = x: lib.types.str.check x && builtins.match "[.0-9:A-Fa-f]+" x != null;
+    inherit (lib.types.str) merge;
   };
 
   elixirValue = let
@@ -117,19 +78,19 @@ let
 
   replaceSec = let
     replaceSec' = { }@args: v:
-      if isAttrs v
+      if lib.isAttrs v
         then if v ? _secret
           then if isAbsolutePath v._secret
             then sha256 v._secret
             else abort "Invalid secret path (_secret = ${v._secret})"
-          else mapAttrs (_: val: replaceSec' args val) v
-        else if isList v
+          else lib.mapAttrs (_: val: replaceSec' args val) v
+        else if lib.isList v
           then map (replaceSec' args) v
           else v;
     in replaceSec' { };
 
   # Erlang/Elixir uses a somewhat special format for IP addresses
-  erlAddr = addr: fileContents
+  erlAddr = addr: lib.fileContents
     (pkgs.runCommand addr {
       nativeBuildInputs = [ cfg.package.elixirPackage ];
       code = ''
@@ -143,7 +104,7 @@ let
 
   configFile = format.generate "config.exs"
     (replaceSec
-      (attrsets.updateManyAttrsByPath [{
+      (lib.attrsets.updateManyAttrsByPath [{
         path = [ ":pleroma" "Pleroma.Web.Endpoint" "http" "ip" ];
         update = addr:
           if isAbsolutePath addr
@@ -179,7 +140,7 @@ let
     '';
   };
 
-  secretPaths = catAttrs "_secret" (collect isSecret cfg.config);
+  secretPaths = lib.catAttrs "_secret" (lib.collect isSecret cfg.config);
 
   vapidKeygen = pkgs.writeText "vapidKeygen.exs" ''
     [public_path, private_path] = System.argv()
@@ -230,7 +191,7 @@ let
       trap 'rm -f "$tmp"' EXIT TERM
 
       cat ${lib.escapeShellArg configFile} >"$tmp"
-      ${concatMapStrings (file: ''
+      ${lib.concatMapStrings (file: ''
         replace-secret ${lib.escapeShellArgs [ (sha256 file) file ]} "$tmp"
       '') secretPaths}
 
@@ -241,15 +202,15 @@ let
   };
 
   pgpass = let
-    esc = escape [ ":" ''\'' ];
+    esc = lib.escape [ ":" ''\'' ];
   in if (cfg.initDb.password != null)
     then pkgs.writeText "pgpass.conf" ''
       *:*:*${esc cfg.initDb.username}:${esc (sha256 cfg.initDb.password._secret)}
     ''
     else null;
 
-  escapeSqlId = x: ''"${replaceStrings [ ''"'' ] [ ''""'' ] x}"'';
-  escapeSqlStr = x: "'${replaceStrings [ "'" ] [ "''" ] x}'";
+  escapeSqlId = x: ''"${lib.replaceStrings [ ''"'' ] [ ''""'' ] x}"'';
+  escapeSqlStr = x: "'${lib.replaceStrings [ "'" ] [ "''" ] x}'";
 
   setupSql = pkgs.writeText "setup.psql" ''
     \set ON_ERROR_STOP on
@@ -327,7 +288,7 @@ let
         AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
-        ERL_FLAGS=${lib.escapeShellArg (escapeShellArgs ([
+        ERL_FLAGS=${lib.escapeShellArg (lib.escapeShellArgs ([
           "-kernel" "inet_dist_use_interface" (erlAddr cfg.dist.address)
           "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
           "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
@@ -385,13 +346,13 @@ let
   staticFiles = pkgs.runCommand "akkoma-static" {
     preferLocalBuild = true;
   } ''
-    ${lib.concatStringsSep "\n" (mapAttrsToList (key: val: ''
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (key: val: ''
       mkdir -p $out/frontends/${lib.escapeShellArg val.name}/
       ln -s ${lib.escapeShellArg val.package} $out/frontends/${lib.escapeShellArg val.name}/${lib.escapeShellArg val.ref}
     '') cfg.frontends)}
 
     ${lib.optionalString (cfg.extraStatic != null)
-      (lib.concatStringsSep "\n" (mapAttrsToList (key: val: ''
+      (lib.concatStringsSep "\n" (lib.mapAttrsToList (key: val: ''
         mkdir -p "$out/$(dirname ${lib.escapeShellArg key})"
         ln -s ${lib.escapeShellArg val} $out/${lib.escapeShellArg key}
       '') cfg.extraStatic))}
@@ -662,7 +623,7 @@ in {
                 static_dir = lib.mkOption {
                   type = lib.types.path;
                   default = toString staticFiles;
-                  defaultText = literalMD ''
+                  defaultText = lib.literalMD ''
                     Derivation gathering the following paths into a directory:
 
                     - [{option}`services.akkoma.frontends`](#opt-services.akkoma.frontends)
@@ -818,7 +779,7 @@ in {
               in {
                 base_url = lib.mkOption {
                     type = lib.types.nonEmptyStr;
-                    default = if versionOlder config.system.stateVersion "24.05"
+                    default = if lib.versionOlder config.system.stateVersion "24.05"
                               then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
                               else null;
                     defaultText = lib.literalExpression ''
@@ -835,7 +796,7 @@ in {
 
               ":frontends" = lib.mkOption {
                 type = elixirValue;
-                default = mapAttrs
+                default = lib.mapAttrs
                   (key: val: mkMap { name = val.name; ref = val.ref; })
                   cfg.frontends;
                 defaultText = lib.literalExpression ''
@@ -864,8 +825,8 @@ in {
                     '';
                 };
                 base_url = lib.mkOption {
-                    type = lib.types.nullOr types.nonEmptyStr;
-                    default = if versionOlder config.system.stateVersion "24.05"
+                    type = lib.types.nullOr lib.types.nonEmptyStr;
+                    default = if lib.versionOlder config.system.stateVersion "24.05"
                               then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}"
                               else null;
                     defaultText = lib.literalExpression ''
@@ -1033,7 +994,7 @@ in {
         RemainAfterExit = true;
         UMask = "0077";
 
-        RuntimeDirectory = mkBefore "akkoma";
+        RuntimeDirectory = lib.mkBefore "akkoma";
 
         ExecStart = lib.mkMerge [
           (lib.mkIf (cfg.dist.cookie == null) [ genScript ])
@@ -1102,11 +1063,11 @@ in {
 
         BindPaths = [ "${uploadDir}:${uploadDir}:norbind" ];
         BindReadOnlyPaths = lib.mkMerge [
-          (lib.mkIf (!isStorePath staticDir) [ "${staticDir}:${staticDir}:norbind" ])
-          (lib.mkIf isConfined (mkMerge [
+          (lib.mkIf (!lib.isStorePath staticDir) [ "${staticDir}:${staticDir}:norbind" ])
+          (lib.mkIf isConfined (lib.mkMerge [
             [ "/etc/hosts" "/etc/resolv.conf" ]
-            (lib.mkIf (isStorePath staticDir) (map (dir: "${dir}:${dir}:norbind")
-              (splitString "\n" (readFile ((pkgs.closureInfo { rootPaths = staticDir; }) + "/store-paths")))))
+            (lib.mkIf (lib.isStorePath staticDir) (map (dir: "${dir}:${dir}:norbind")
+              (lib.splitString "\n" (lib.readFile ((pkgs.closureInfo { rootPaths = staticDir; }) + "/store-paths")))))
             (lib.mkIf (db ? socket_dir) [ "${db.socket_dir}:${db.socket_dir}:norbind" ])
             (lib.mkIf (db ? socket) [ "${db.socket}:${db.socket}:norbind" ])
           ]))
@@ -1141,7 +1102,7 @@ in {
         RemoveIPC = true;
 
         CapabilityBoundingSet = lib.mkIf
-          (any (port: port > 0 && port < 1024)
+          (lib.any (port: port > 0 && port < 1024)
             [ web.http.port cfg.dist.epmdPort cfg.dist.portMin ])
           [ "CAP_NET_BIND_SERVICE" ];
 
@@ -1153,7 +1114,7 @@ in {
         DevicePolicy = "closed";
 
         # SMTP adapter uses dynamic port 0 binding, which is incompatible with bind address filtering
-        SocketBindAllow = lib.mkIf (!hasSmtp) (mkMerge [
+        SocketBindAllow = lib.mkIf (!hasSmtp) (lib.mkMerge [
           [ "tcp:${toString cfg.dist.epmdPort}" "tcp:${toString cfg.dist.portMin}-${toString cfg.dist.portMax}" ]
           (lib.mkIf (web.http.port != 0) [ "tcp:${toString web.http.port}" ])
         ]);
@@ -1174,7 +1135,7 @@ in {
           proxyPass =
             if isAbsolutePath web.http.ip
               then "http://unix:${web.http.ip}"
-              else if hasInfix ":" web.http.ip
+              else if lib.hasInfix ":" web.http.ip
                 then "http://[${web.http.ip}]:${toString web.http.port}"
                 else "http://${web.http.ip}:${toString web.http.port}";
 

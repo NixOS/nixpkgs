@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge lib.mkOption;
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList lib.optional lib.optionals lib.optionalString types;
-
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
   user = "mediawiki";
@@ -31,12 +27,12 @@ let
       cp -r * $out/
 
       # try removing directories before symlinking to allow overwriting any builtin extension or skin
-      ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: ''
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: ''
         rm -rf $out/share/mediawiki/skins/${k}
         ln -s ${v} $out/share/mediawiki/skins/${k}
       '') cfg.skins)}
 
-      ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: ''
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: ''
         rm -rf $out/share/mediawiki/extensions/${k}
         ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
@@ -197,10 +193,10 @@ let
         $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
 
         # Enabled skins.
-        ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
         # Enabled extensions.
-        ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
 
 
         # End of automatically generated settings.
@@ -294,7 +290,7 @@ in
 
       skins = lib.mkOption {
         default = {};
-        type = lib.types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         description = ''
           Attribute set of paths whose content is copied to the {file}`skins`
           subdirectory of the MediaWiki installation in addition to the default skins.
@@ -303,7 +299,7 @@ in
 
       extensions = lib.mkOption {
         default = {};
-        type = lib.types.attrsOf (types.nullOr types.path);
+        type = lib.types.attrsOf (lib.types.nullOr lib.types.path);
         description = ''
           Attribute set of paths whose content is copied to the {file}`extensions`
           subdirectory of the MediaWiki installation and enabled in configuration.
@@ -531,7 +527,7 @@ in
       virtualHosts.${cfg.httpd.virtualHost.hostName} = lib.mkMerge [
         cfg.httpd.virtualHost
         {
-          documentRoot = mkForce "${pkg}/share/mediawiki";
+          documentRoot = lib.mkForce "${pkg}/share/mediawiki";
           extraConfig = ''
             <Directory "${pkg}/share/mediawiki">
               <FilesMatch "\.php$">

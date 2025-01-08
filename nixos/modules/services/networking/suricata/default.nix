@@ -8,18 +8,6 @@ let
   cfg = config.services.suricata;
   pkg = cfg.package;
   yaml = pkgs.formats.yaml { };
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    literalExpression
-    filterAttrsRecursive
-    concatStringsSep
-    strings
-    lists
-    mkIf
-    ;
 in
 {
   meta.maintainers = with lib.maintainers; [ felbinger ];
@@ -39,7 +27,7 @@ in
           ---
           ${builtins.readFile (
             yaml.generate "suricata-settings-raw.yaml" (
-              filterAttrsRecursive (name: value: value != null) cfg.settings
+              lib.filterAttrsRecursive (name: value: value != null) cfg.settings
             )
           )}
         '';
@@ -153,17 +141,14 @@ in
   config =
     let
       captureInterfaces =
-        let
-          inherit (lists) unique lib.optionals;
-        in
-        unique (
+        lib.unique (
           map (e: e.interface) (
-            (optionals (cfg.settings.af-packet != null) cfg.settings.af-packet)
-            ++ (optionals (cfg.settings.af-xdp != null) cfg.settings.af-xdp)
-            ++ (optionals (
+            (lib.optionals (cfg.settings.af-packet != null) cfg.settings.af-packet)
+            ++ (lib.optionals (cfg.settings.af-xdp != null) cfg.settings.af-xdp)
+            ++ (lib.optionals (
               cfg.settings.dpdk != null && cfg.settings.dpdk.interfaces != null
             ) cfg.settings.dpdk.interfaces)
-            ++ (optionals (cfg.settings.pcap != null) cfg.settings.pcap)
+            ++ (lib.optionals (cfg.settings.pcap != null) cfg.settings.pcap)
           )
         );
     in
@@ -241,7 +226,7 @@ in
           after = [ "suricata-update.service" ];
           serviceConfig =
             let
-              interfaceOptions = strings.concatMapStrings (interface: " -i ${interface}") captureInterfaces;
+              interfaceOptions = lib.strings.concatMapStrings (interface: " -i ${interface}") captureInterfaces;
             in
             {
               ExecStartPre = "!${pkg}/bin/suricata -c ${cfg.configFile} -T";

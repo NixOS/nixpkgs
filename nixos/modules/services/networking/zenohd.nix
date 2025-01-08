@@ -6,12 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    types
-    mkDefault
-    lib.mkOption
-    ;
-
   json = pkgs.formats.json { };
 
   cfg = config.services.zenohd;

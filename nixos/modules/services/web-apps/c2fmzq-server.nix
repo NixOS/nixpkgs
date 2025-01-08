@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.c2fmzq-server;
 
   argsFormat = {

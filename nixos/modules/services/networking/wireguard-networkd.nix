@@ -6,28 +6,9 @@
 }:
 
 let
-  inherit (lib) types;
-  inherit (lib.attrsets)
-    filterAttrs
-    mapAttrs
-    mapAttrs'
-    mapAttrsToList
-    nameValuePair
-    ;
-  inherit (lib.lists)
-    concatMap
-    concatLists
-    filter
-    flatten
-    ;
-  inherit (lib.modules) mkIf;
-  inherit (lib.options) literalExpression lib.mkOption;
-  inherit (lib.strings) hasInfix replaceStrings;
-  inherit (lib.trivial) flip pipe;
+  removeNulls = lib.filterAttrs (_: v: v != null);
 
-  removeNulls = filterAttrs (_: v: v != null);
-
-  escapeCredentialName = input: replaceStrings [ "\\" ] [ "_" ] input;
+  escapeCredentialName = input: lib.replaceStrings [ "\\" ] [ "_" ] input;
 
   privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
   presharedKeyCredential =
@@ -36,14 +17,14 @@ let
   interfaceCredentials =
     interfaceName: interface:
     [ "${privateKeyCredential interfaceName}:${interface.privateKeyFile}" ]
-    ++ pipe interface.peers [
-      (filter (peer: peer.presharedKeyFile != null))
+    ++ lib.pipe interface.peers [
+      (lib.filter (peer: peer.presharedKeyFile != null))
       (map (peer: "${presharedKeyCredential interfaceName peer}:${peer.presharedKeyFile}"))
     ];
 
   generateNetdev =
     name: interface:
-    nameValuePair "40-${name}" {
+    lib.nameValuePair "40-${name}" {
       netdevConfig = removeNulls {
         Kind = "wireguard";
         Name = name;
@@ -77,13 +58,13 @@ let
 
   cfg = config.networking.wireguard;
 
-  refreshEnabledInterfaces = filterAttrs (
+  refreshEnabledInterfaces = lib.filterAttrs (
     name: interface: interface.dynamicEndpointRefreshSeconds != 0
   ) cfg.interfaces;
 
   generateRefreshTimer =
     name: interface:
-    nameValuePair "wireguard-dynamic-refresh-${name}" {
+    lib.nameValuePair "wireguard-dynamic-refresh-${name}" {
       partOf = [ "wireguard-dynamic-refresh-${name}.service" ];
       wantedBy = [ "timers.target" ];
       description = "Wireguard dynamic endpoint refresh (${name}) timer";
@@ -93,7 +74,7 @@ let
 
   generateRefreshService =
     name: interface:
-    nameValuePair "wireguard-dynamic-refresh-${name}" {
+    lib.nameValuePair "wireguard-dynamic-refresh-${name}" {
       description = "Wireguard dynamic endpoint refresh (${name})";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -152,8 +133,8 @@ in
     # https://github.com/systemd/systemd/issues/11103
     # https://github.com/systemd/systemd/pull/14915
 
-    assertions = concatLists (
-      flip mapAttrsToList cfg.interfaces (
+    assertions = lib.concatLists (
+      lib.flip lib.mapAttrsToList cfg.interfaces (
         name: interface:
         [
           # Interface assertions
@@ -190,14 +171,14 @@ in
             message = "networking.wireguard.interfaces.${name}.interfaceNamespace cannot be used with networkd.";
           }
         ]
-        ++ flip concatMap interface.ips (ip: [
+        ++ lib.flip lib.concatMap interface.ips (ip: [
           # IP assertions
           {
-            assertion = hasInfix "/" ip;
+            assertion = lib.hasInfix "/" ip;
             message = "networking.wireguard.interfaces.${name}.ips value \"${ip}\" requires a subnet (e.g. 192.0.2.1/32) with networkd.";
           }
         ])
-        ++ flip concatMap interface.peers (peer: [
+        ++ lib.flip lib.concatMap interface.peers (peer: [
           # Peer assertions
           {
             assertion = peer.presharedKey == null;
@@ -217,14 +198,14 @@ in
 
     systemd.network = {
       enable = true;
-      netdevs = mapAttrs' generateNetdev cfg.interfaces;
-      networks = mapAttrs generateNetwork cfg.interfaces;
+      netdevs = lib.mapAttrs' generateNetdev cfg.interfaces;
+      networks = lib.mapAttrs generateNetwork cfg.interfaces;
     };
 
-    systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
-    systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
-      systemd-networkd.serviceConfig.LoadCredential = flatten (
-        mapAttrsToList interfaceCredentials cfg.interfaces
+    systemd.timers = lib.mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
+    systemd.services = (lib.mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
+      systemd-networkd.serviceConfig.LoadCredential = lib.flatten (
+        lib.mapAttrsToList interfaceCredentials cfg.interfaces
       );
     };
   };

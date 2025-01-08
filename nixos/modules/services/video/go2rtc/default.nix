@@ -7,14 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    types
-    ;
-
   cfg = config.services.go2rtc;
   opt = options.services.go2rtc;
 
@@ -25,7 +17,7 @@ in
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.go2rtc = with lib.types; {
+  options.services.go2rtc = {
     enable = lib.mkEnableOption "go2rtc streaming server";
 
     package = lib.mkPackageOption pkgs "go2rtc" { };
@@ -37,13 +29,13 @@ in
 
         See the [wiki](https://github.com/AlexxIT/go2rtc/wiki/Configuration) for possible configuration options.
       '';
-      type = submodule {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
           # https://github.com/AlexxIT/go2rtc/blob/v1.5.0/README.md#module-api
           api = {
             listen = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               default = ":1984";
               example = "127.0.0.1:1984";
               description = ''
@@ -55,7 +47,7 @@ in
           # https://github.com/AlexxIT/go2rtc/blob/v1.5.0/README.md#source-ffmpeg
           ffmpeg = {
             bin = lib.mkOption {
-              type = path;
+              type = lib.types.path;
               default = lib.getExe pkgs.ffmpeg-headless;
               defaultText = lib.literalExpression "lib.getExe pkgs.ffmpeg-headless";
               description = ''
@@ -69,7 +61,7 @@ in
           };
 
           streams = lib.mkOption {
-            type = attrsOf (either str (listOf str));
+            type = lib.types.attrsOf (lib.types.either lib.types.str (lib.types.listOf lib.types.str));
             default = { };
             example = lib.literalExpression ''
               {

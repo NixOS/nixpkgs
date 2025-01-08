@@ -7,16 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRenamedOptionModule
-    types
-    ;
-
   cfg = config.services.engelsystem;
 in
 {

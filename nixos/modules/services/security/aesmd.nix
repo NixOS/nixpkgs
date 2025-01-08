@@ -6,33 +6,18 @@
   ...
 }:
 let
-  inherit (lib)
-    concatStringsSep
-    literalExpression
-    makeLibraryPath
-    mkEnableOption
-    mkForce
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    lib.optional
-    types
-    ;
-
   cfg = config.services.aesmd;
   opt = options.services.aesmd;
 
   sgx-psw = cfg.package;
 
   configFile =
-    with cfg.settings;
     pkgs.writeText "aesmd.conf" (
-      concatStringsSep "\n" (
-        lib.optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}"
-        ++ lib.optional (proxy != null) "aesm proxy = ${proxy}"
-        ++ lib.optional (proxyType != null) "proxy type = ${proxyType}"
-        ++ lib.optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}"
+      lib.concatStringsSep "\n" (
+        lib.optional (cfg.settings.whitelistUrl != null) "whitelist url = ${cfg.settings.whitelistUrl}"
+        ++ lib.optional (cfg.settings.proxy != null) "aesm proxy = ${cfg.settings.proxy}"
+        ++ lib.optional (cfg.settings.proxyType != null) "proxy type = ${cfg.settings.proxyType}"
+        ++ lib.optional (cfg.settings.defaultQuotingType != null) "default quoting type = ${cfg.settings.defaultQuotingType}"
         ++
           # Newline at end of file
           [ "" ]
@@ -132,7 +117,7 @@ in
     # Make sure the AESM service can find the SGX devices until
     # https://github.com/intel/linux-sgx/issues/772 is resolved
     # and updated in nixpkgs.
-    hardware.cpu.intel.sgx.enableDcapCompat = mkForce true;
+    hardware.cpu.intel.sgx.enableDcapCompat = lib.mkForce true;
 
     systemd.services.aesmd =
       let
@@ -152,7 +137,7 @@ in
         environment = {
           NAME = "aesm_service";
           AESM_PATH = storeAesmFolder;
-          LD_LIBRARY_PATH = makeLibraryPath [ cfg.quoteProviderLibrary ];
+          LD_LIBRARY_PATH = lib.makeLibraryPath [ cfg.quoteProviderLibrary ];
         } // cfg.environment;
 
         # Make sure any of the SGX application enclave devices is available

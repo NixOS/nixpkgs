@@ -7,12 +7,7 @@
 }:
 
 let
-  inherit (pkgs.lib)
-    concatMapStrings
-    listToAttrs
-    lib.optionals
-    lib.optionalString
-    ;
+  inherit (pkgs) lib;
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
 
   hello32 = "${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe";
@@ -35,7 +30,7 @@ let
 
       testScript = ''
         machine.wait_for_unit("multi-user.target")
-        ${concatMapStrings (
+        ${lib.concatMapStrings (
           exe:
           ''
             greeting = machine.succeed(
@@ -64,7 +59,7 @@ let
   ];
 
 in
-listToAttrs (
+lib.listToAttrs (
   map (makeWineTest "winePackages" [ hello32 ]) variants
   ++ lib.optionals pkgs.stdenv.hostPlatform.is64bit (
     map

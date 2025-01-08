@@ -7,7 +7,6 @@
 
 let
   cfg = config.services.pict-rs;
-  inherit (lib) maintainers lib.mkOption types;
 in
 {
   meta.maintainers = with lib.maintainers; [ happysalada ];
@@ -27,7 +26,7 @@ in
     };
 
     repoPath = lib.mkOption {
-      type = lib.types.nullOr (types.path);
+      type = lib.types.nullOr (lib.types.path);
       default = null;
       description = ''
         The directory where to store the database.
@@ -36,7 +35,7 @@ in
     };
 
     storePath = lib.mkOption {
-      type = lib.types.nullOr (types.path);
+      type = lib.types.nullOr (lib.types.path);
       default = null;
       description = ''
         The directory where to store the uploaded images.

@@ -1,20 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    filterAttrsRecursive
-    generators
-    literalExpression
-    mkDefault
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    mkMerge
-    pipe
-    types
-    ;
-
   cfg = config.services.movim;
 
   defaultPHPCfg = {
@@ -28,13 +14,13 @@ let
     "opcache.fast_shutdown" = 1;
   };
 
-  phpCfg = generators.toKeyValue
-    { mkKeyValue = generators.mkKeyValueDefault { } " = "; }
+  phpCfg = lib.generators.toKeyValue
+    { mkKeyValue = lib.generators.mkKeyValueDefault { } " = "; }
     (defaultPHPCfg // cfg.phpCfg);
 
   podConfigFlags =
     let
-      bevalue = a: lib.escapeShellArg (generators.mkValueStringDefault { } a);
+      bevalue = a: lib.escapeShellArg (lib.generators.mkValueStringDefault { } a);
     in
     lib.concatStringsSep " "
       (lib.attrsets.foldlAttrs
@@ -131,9 +117,9 @@ let
         ];
       });
 
-  configFile = pipe cfg.settings [
+  configFile = lib.pipe cfg.settings [
     (lib.filterAttrsRecursive (_: v: v != null))
-    (generators.toKeyValue { })
+    (lib.generators.toKeyValue { })
     (pkgs.writeText "movim-env")
   ];
 
@@ -151,11 +137,11 @@ in
     movim = {
       enable = lib.mkEnableOption "a Movim instance";
       package = lib.mkPackageOption pkgs "movim" { };
-      phpPackage = mkPackageOption pkgs "php" { };
+      phpPackage = lib.mkPackageOption pkgs "php" { };
 
       phpCfg = lib.mkOption {
         type = with lib.types; attrsOf (oneOf [ int str bool ]);
-        defaultText = lib.literalExpression (generators.toPretty { } defaultPHPCfg);
+        defaultText = lib.literalExpression (lib.generators.toPretty { } defaultPHPCfg);
         default = { };
         description = "Extra PHP INI options such as `memory_limit`, `max_execution_time`, etc.";
       };

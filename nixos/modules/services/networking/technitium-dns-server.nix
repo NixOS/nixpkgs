@@ -8,13 +8,6 @@
 let
   cfg = config.services.technitium-dns-server;
   stateDir = "/var/lib/technitium-dns-server";
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    mkIf
-    types
-    ;
 in
 {
   options.services.technitium-dns-server = {

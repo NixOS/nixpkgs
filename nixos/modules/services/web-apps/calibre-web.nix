@@ -2,8 +2,6 @@
 
 let
   cfg = config.services.calibre-web;
-
-  inherit (lib) concatStringsSep mkEnableOption mkIf lib.mkOption lib.optional lib.optionalString types;
 in
 {
   options = {
@@ -75,7 +73,7 @@ in
           '';
         };
 
-        enableKepubify = mkEnableOption "kebup conversion support";
+        enableKepubify = lib.mkEnableOption "kebup conversion support";
 
         enableBookUploading = lib.mkOption {
           type = lib.types.bool;
@@ -112,7 +110,7 @@ in
       gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
       calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
-      settings = concatStringsSep ", " (
+      settings = lib.concatStringsSep ", " (
         [
           "config_port = ${toString cfg.listen.port}"
           "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"

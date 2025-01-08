@@ -1,7 +1,5 @@
 { lib, ... }:
 let
-  inherit (lib) mkOption types;
-
   moduleWithoutKey = {
     config = {
       raw = "pear";
@@ -17,16 +15,16 @@ let
 
   decl = {
     options = {
-      raw = mkOption {
-        type = types.lines;
+      raw = lib.mkOption {
+        type = lib.types.lines;
       };
     };
   };
 in
 {
   options = {
-    once = mkOption {
-      type = types.submodule {
+    once = lib.mkOption {
+      type = lib.types.submodule {
         imports = [
           decl
           moduleWithKey
@@ -35,8 +33,8 @@ in
       };
       default = { };
     };
-    twice = mkOption {
-      type = types.submodule {
+    twice = lib.mkOption {
+      type = lib.types.submodule {
         imports = [
           decl
           moduleWithoutKey

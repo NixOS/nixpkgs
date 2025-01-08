@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption types mkIf;
   cfg = config.services.screego;
   defaultSettings = {
     SCREEGO_SERVER_ADDRESS = "127.0.0.1:5050";
@@ -67,7 +66,7 @@ in
       turnUDPPorts = lib.splitString ":" mergedConfig.SCREEGO_TURN_PORT_RANGE;
       turnPort = lib.toInt (builtins.elemAt (lib.splitString ":" mergedConfig.SCREEGO_TURN_ADDRESS) 1);
     in
-    mkIf (cfg.enable) {
+    lib.mkIf (cfg.enable) {
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ turnPort ];

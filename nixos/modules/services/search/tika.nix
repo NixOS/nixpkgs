@@ -7,15 +7,6 @@
 
 let
   cfg = config.services.tika;
-  inherit (lib)
-    literalExpression
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    mkPackageOption
-    getExe
-    types
-    ;
 in
 {
   meta.maintainers = [ lib.maintainers.drupol ];
@@ -84,7 +75,7 @@ in
         {
           Type = "simple";
 
-          ExecStart = "${getExe package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${
+          ExecStart = "${lib.getExe package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${
             lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
           }";
           DynamicUser = true;

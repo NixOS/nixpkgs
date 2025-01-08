@@ -5,18 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    getExe'
-    literalExpression
-    maintainers
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkRenamedOptionModule
-    lib.optionals
-    lib.optionalString
-    types
-    ;
   cfg = config.virtualisation.vmware.guest;
   xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
@@ -65,7 +53,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "display-manager.service" ];
       unitConfig.ConditionVirtualization = "vmware";
-      serviceConfig.ExecStart = getExe' cfg.package "vmtoolsd";
+      serviceConfig.ExecStart = lib.getExe' cfg.package "vmtoolsd";
     };
 
     # Mount the vmblock for drag-and-drop and copy-and-paste.
@@ -76,7 +64,7 @@ in
           "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt"
         ];
         unitConfig.ConditionVirtualization = "vmware";
-        what = getExe' cfg.package "vmware-vmblock-fuse";
+        what = lib.getExe' cfg.package "vmware-vmblock-fuse";
         where = "/run/vmblock-fuse";
         type = "fuse";
         options = "subtype=vmware-vmblock,default_permissions,allow_other";
@@ -88,7 +76,7 @@ in
       setuid = true;
       owner = "root";
       group = "root";
-      source = getExe' cfg.package "vmware-user-suid-wrapper";
+      source = lib.getExe' cfg.package "vmware-user-suid-wrapper";
     };
 
     environment.etc.vmware-tools.source = "${cfg.package}/etc/vmware-tools/*";
@@ -106,7 +94,7 @@ in
       '';
 
       displayManager.sessionCommands = ''
-        ${getExe' cfg.package "vmware-user-suid-wrapper"}
+        ${lib.getExe' cfg.package "vmware-user-suid-wrapper"}
       '';
     };
 

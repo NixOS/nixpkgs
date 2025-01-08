@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) lib.mkOption types;
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 

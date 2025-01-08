@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) lib.mkOption types;
   cfg = config.services.xserver.windowManager;
 in
 

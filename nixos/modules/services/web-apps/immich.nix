@@ -39,12 +39,6 @@ let
     RestrictSUIDSGID = true;
     UMask = "0077";
   };
-  inherit (lib)
-    types
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    ;
 in
 {
   options.services.immich = {
@@ -57,7 +51,7 @@ in
       description = "Directory used to store media files. If it is not the default, the directory has to be created manually such that the immich user is able to read and write to it.";
     };
     environment = lib.mkOption {
-      type = lib.types.submodule { freeformType = types.attrsOf types.str; };
+      type = lib.types.submodule { freeformType = lib.types.attrsOf lib.types.str; };
       default = { };
       example = {
         IMMICH_LOG_LEVEL = "verbose";
@@ -68,7 +62,7 @@ in
     };
     secretsFile = lib.mkOption {
       type = lib.types.nullOr (
-        types.str
+        lib.types.str
         // {
           # We don't want users to be able to pass a path literal here but
           # it should look like a path.
@@ -122,7 +116,7 @@ in
         Setting it to `null` allows configuring Immich in the web interface.
       '';
       type = lib.types.nullOr (
-        types.submodule {
+        lib.types.submodule {
           freeformType = format.type;
           options = {
             newVersionCheck.enabled = lib.mkOption {
@@ -145,12 +139,12 @@ in
 
     machine-learning = {
       enable =
-        mkEnableOption "immich's machine-learning functionality to detect faces and search for objects"
+        lib.mkEnableOption "immich's machine-learning functionality to detect faces and search for objects"
         // {
           default = true;
         };
       environment = lib.mkOption {
-        type = lib.types.submodule { freeformType = types.attrsOf types.str; };
+        type = lib.types.submodule { freeformType = lib.types.attrsOf lib.types.str; };
         default = { };
         example = {
           MACHINE_LEARNING_MODEL_TTL = "600";
@@ -163,11 +157,11 @@ in
 
     database = {
       enable =
-        mkEnableOption "the postgresql database for use with immich. See {option}`services.postgresql`"
+        lib.mkEnableOption "the postgresql database for use with immich. See {option}`services.postgresql`"
         // {
           default = true;
         };
-      createDB = mkEnableOption "the automatic creation of the database for immich." // {
+      createDB = lib.mkEnableOption "the automatic creation of the database for immich." // {
         default = true;
       };
       name = lib.mkOption {

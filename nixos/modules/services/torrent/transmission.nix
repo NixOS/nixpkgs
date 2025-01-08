@@ -7,23 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkRenamedOptionModule
-    mkAliasOptionModuleMD
-    mkEnableOption
-    lib.mkOption
-    types
-    literalExpression
-    mkPackageOption
-    mkIf
-    lib.optionalString
-    lib.optional
-    mkDefault
-    escapeShellArgs
-    lib.optionalAttrs
-    mkMerge
-    ;
-
   cfg = config.services.transmission;
   opt = options.services.transmission;
   inherit (config.environment) etc;
@@ -51,7 +34,7 @@ in
         "rpc-port"
       ]
     )
-    (mkAliasOptionModuleMD
+    (lib.mkAliasOptionModuleMD
       [
         "services"
         "transmission"
@@ -176,7 +159,7 @@ in
               description = "Executable to be run at torrent completion.";
             };
             umask = lib.mkOption {
-              type = lib.types.either types.int types.str;
+              type = lib.types.either lib.types.int lib.types.str;
               default = if cfg.package == pkgs.transmission_3 then 18 else "022";
               defaultText = lib.literalExpression "if cfg.package == pkgs.transmission_3 then 18 else \"022\"";
               description = ''
@@ -298,11 +281,11 @@ in
         '';
       };
 
-      openPeerPorts = mkEnableOption "opening of the peer port(s) in the firewall";
+      openPeerPorts = lib.mkEnableOption "opening of the peer port(s) in the firewall";
 
-      openRPCPort = mkEnableOption "opening of the RPC port in the firewall";
+      openRPCPort = lib.mkEnableOption "opening of the RPC port in the firewall";
 
-      performanceNetParameters = mkEnableOption "performance tweaks" // {
+      performanceNetParameters = lib.mkEnableOption "performance tweaks" // {
         description = ''
           Whether to enable tweaking of kernel parameters
           to open many more connections at the same time.

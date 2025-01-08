@@ -7,15 +7,6 @@
 let
   cfg = config.services.glance;
 
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    mkIf
-    getExe
-    types
-    ;
-
   settingsFormat = pkgs.formats.yaml { };
 in
 {
@@ -108,7 +99,7 @@ in
           let
             glance-yaml = settingsFormat.generate "glance.yaml" cfg.settings;
           in
-          "${getExe cfg.package} --config ${glance-yaml}";
+          "${lib.getExe cfg.package} --config ${glance-yaml}";
         WorkingDirectory = "/var/lib/glance";
         StateDirectory = "glance";
         RuntimeDirectory = "glance";

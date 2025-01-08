@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    literalExpression
-    mkIf
-    mkDefault
-    ;
   cfg = config.services.miniflux;
 
   defaultAddress = "localhost:8080";

@@ -11,7 +11,6 @@
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) lib.optionalString;
 
   makeBird2Host =
     hostId:

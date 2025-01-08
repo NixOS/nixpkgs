@@ -7,16 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    concatMapStrings
-    literalExpression
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.xserver.desktopManager.budgie;
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.nineish;
@@ -131,7 +121,7 @@ in
     services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie-desktop-view ];
 
     environment.extraInit = ''
-      ${concatMapStrings (p: ''
+      ${lib.concatMapStrings (p: ''
         if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
         fi

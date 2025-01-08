@@ -7,34 +7,12 @@
 }:
 
 let
-  inherit (lib)
-    concatMapStringsSep
-    escapeShellArgs
-    filter
-    filterAttrs
-    getExe
-    getExe'
-    isAttrs
-    isList
-    literalExpression
-    mapAttrs
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionals
-    lib.optionalString
-    recursiveUpdate
-    types
-    ;
-
   filterRecursiveNull =
     o:
-    if isAttrs o then
-      mapAttrs (_: v: filterRecursiveNull v) (lib.filterAttrs (_: v: v != null) o)
-    else if isList o then
-      map filterRecursiveNull (filter (v: v != null) o)
+    if lib.isAttrs o then
+      lib.mapAttrs (_: v: filterRecursiveNull v) (lib.filterAttrs (_: v: v != null) o)
+    else if lib.isList o then
+      map filterRecursiveNull (lib.filter (v: v != null) o)
     else
       o;
 
@@ -128,7 +106,7 @@ in
         Extra arguments to pass to gunicorn.
         See <https://docs.pretix.eu/en/latest/admin/installation/manual_smallscale.html#start-pretix-as-a-service> for details.
       '';
-      apply = escapeShellArgs;
+      apply = lib.escapeShellArgs;
     };
 
     celery = {
@@ -371,7 +349,7 @@ in
           tools = {
             pdftk = lib.mkOption {
               type = lib.types.path;
-              default = getExe pkgs.pdftk;
+              default = lib.getExe pkgs.pdftk;
               defaultText = lib.literalExpression ''
                 lib.getExe pkgs.pdftk
               '';
@@ -403,7 +381,7 @@ in
           sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} ${lib.optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
         fi
         export PRETIX_CONFIG_FILE=${configFile}
-        $sudo ${getExe' pythonEnv "pretix-manage"} "$@"
+        $sudo ${lib.getExe' pythonEnv "pretix-manage"} "$@"
       '')
     ];
 
@@ -528,7 +506,7 @@ in
         };
       in
       {
-        pretix-web = recursiveUpdate commonUnitConfig {
+        pretix-web = lib.recursiveUpdate commonUnitConfig {
           description = "pretix web service";
           after = [
             "network.target"
@@ -542,10 +520,10 @@ in
 
             pluginsFile="${cfg.settings.pretix.datadir}/.plugins"
             plugins=$(cat "$pluginsFile" 2>/dev/null || echo "")
-            configuredPlugins="${concatMapStringsSep "|" (package: package.name) cfg.plugins}"
+            configuredPlugins="${lib.concatMapStringsSep "|" (package: package.name) cfg.plugins}"
 
             if [[ $version != ${cfg.package.version} || $plugins != $configuredPlugins ]]; then
-              ${getExe' pythonEnv "pretix-manage"} migrate
+              ${lib.getExe' pythonEnv "pretix-manage"} migrate
 
               echo "${cfg.package.version}" > "$versionFile"
               echo "$configuredPlugins" > "$pluginsFile"
@@ -553,23 +531,23 @@ in
           '';
           serviceConfig = {
             TimeoutStartSec = "15min";
-            ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
+            ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
             RuntimeDirectory = "pretix";
             Restart = "on-failure";
           };
         };
 
-        pretix-periodic = recursiveUpdate commonUnitConfig {
+        pretix-periodic = lib.recursiveUpdate commonUnitConfig {
           description = "pretix periodic task runner";
           # every 15 minutes
           startAt = [ "*:3,18,33,48" ];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${getExe' pythonEnv "pretix-manage"} runperiodic";
+            ExecStart = "${lib.getExe' pythonEnv "pretix-manage"} runperiodic";
           };
         };
 
-        pretix-worker = recursiveUpdate commonUnitConfig {
+        pretix-worker = lib.recursiveUpdate commonUnitConfig {
           description = "pretix asynchronous job runner";
           after = [
             "network.target"
@@ -578,7 +556,7 @@ in
           ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
+            ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
             Restart = "on-failure";
           };
         };

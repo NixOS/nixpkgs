@@ -6,14 +6,7 @@
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib)
-    concatStringsSep
-    maintainers
-    mapAttrs
-    mkMerge
-    removeSuffix
-    splitString
-    ;
+  inherit (pkgs) lib;
 
   tests = {
     default = {
@@ -72,7 +65,7 @@ let
     };
   };
 in
-mapAttrs (
+lib.mapAttrs (
   test: testConfig:
   (makeTest (
     let
@@ -109,13 +102,13 @@ mapAttrs (
               line
             else
               "${nodeName}.${line}"
-          ) (splitString "\n" (removeSuffix "\n" testConfig.calibreScript))
+          ) (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.calibreScript))
         )}
         ${nodeName}.shutdown()
       '';
 
-      meta = with maintainers; {
-        maintainers = [ gaelreyrol ];
+      meta = {
+        maintainers = with lib.maintainers; [ gaelreyrol ];
       };
     }
   ))

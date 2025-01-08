@@ -7,13 +7,6 @@
 
 let
   cfg = config.services.suwayomi-server;
-  inherit (lib)
-    lib.mkOption
-    mkEnableOption
-    mkIf
-    types
-    ;
-
   format = pkgs.formats.hocon { };
 in
 {
@@ -81,7 +74,7 @@ in
                 '';
               };
 
-              basicAuthEnabled = mkEnableOption ''
+              basicAuthEnabled = lib.mkEnableOption ''
                 basic access authentication for Suwayomi-Server.
                 Enabling this option is useful when hosting on a public network/the Internet
               '';

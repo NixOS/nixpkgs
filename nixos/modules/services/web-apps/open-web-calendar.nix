@@ -6,16 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    mkDefault
-    types
-    concatMapStringsSep
-    generators
-    ;
   cfg = config.services.open-web-calendar;
 
   nixosSpec = calendarSettingsFormat.generate "nixos_specification.json" cfg.calendarSettings;

@@ -10,30 +10,6 @@ let
   cfg = config.services.keycloak;
   opt = options.services.keycloak;
 
-  inherit (lib)
-    types
-    mkMerge
-    lib.mkOption
-    mkChangedOptionModule
-    mkRenamedOptionModule
-    mkRemovedOptionModule
-    mkPackageOption
-    concatStringsSep
-    mapAttrsToList
-    escapeShellArg
-    mkIf
-    lib.optionalString
-    lib.optionals
-    mkDefault
-    literalExpression
-    isAttrs
-    literalMD
-    maintainers
-    catAttrs
-    collect
-    hasPrefix
-    ;
-
   inherit (builtins)
     elem
     typeOf
@@ -55,12 +31,12 @@ in
       [ "services" "keycloak" "forceBackendUrlToFrontendUrl" ]
       [ "services" "keycloak" "settings" "hostname-strict-backchannel" ]
     )
-    (mkChangedOptionModule
+    (lib.mkChangedOptionModule
       [ "services" "keycloak" "httpPort" ]
       [ "services" "keycloak" "settings" "http-port" ]
       (config: builtins.fromJSON config.services.keycloak.httpPort)
     )
-    (mkChangedOptionModule
+    (lib.mkChangedOptionModule
       [ "services" "keycloak" "httpsPort" ]
       [ "services" "keycloak" "settings" "https-port" ]
       (config: builtins.fromJSON config.services.keycloak.httpsPort)
@@ -79,7 +55,7 @@ in
 
   options.services.keycloak =
     let
-      inherit (types)
+      inherit (lib.types)
         bool
         str
         int
@@ -180,7 +156,7 @@ in
           lib.mkOption {
             type = port;
             default = dbPorts.${cfg.database.type};
-            defaultText = literalMD "default port of selected database";
+            defaultText = lib.literalMD "default port of selected database";
             description = ''
               Port of the database to connect to.
             '';
@@ -331,7 +307,7 @@ in
               type = str;
               default = "/";
               example = "/auth";
-              apply = x: if !(hasPrefix "/") x then "/" + x else x;
+              apply = x: if !(lib.hasPrefix "/") x then "/" + x else x;
               description = ''
                 The path relative to `/` for serving
                 resources.
@@ -448,7 +424,7 @@ in
         done
 
         ${lib.concatStringsSep "\n" (
-          mapAttrsToList (name: theme: "linkTheme ${theme} ${lib.escapeShellArg name}") cfg.themes
+          lib.mapAttrsToList (name: theme: "linkTheme ${theme} ${lib.escapeShellArg name}") cfg.themes
         )}
       '';
 
@@ -471,7 +447,7 @@ in
         };
       };
 
-      isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+      isSecret = v: lib.isAttrs v && v ? _secret && isString v._secret;
       filteredConfig = lib.converge (lib.filterAttrsRecursive (
         _: v:
         !elem v [
@@ -539,7 +515,7 @@ in
 
       services.keycloak.settings =
         let
-          postgresParams = concatStringsSep "&" (
+          postgresParams = lib.concatStringsSep "&" (
             lib.optionals cfg.database.useSSL [
               "ssl=true"
             ]
@@ -548,7 +524,7 @@ in
               "sslmode=verify-ca"
             ]
           );
-          mariadbParams = concatStringsSep "&" (
+          mariadbParams = lib.concatStringsSep "&" (
             [
               "characterEncoding=UTF-8"
             ]
@@ -564,7 +540,7 @@ in
           );
           dbProps = if cfg.database.type == "postgresql" then postgresParams else mariadbParams;
         in
-        mkMerge [
+        lib.mkMerge [
           {
             db = if cfg.database.type == "postgresql" then "postgres" else cfg.database.type;
             db-username = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
@@ -659,7 +635,7 @@ in
               ]
             else
               [ ];
-          secretPaths = catAttrs "_secret" (collect isSecret cfg.settings);
+          secretPaths = lib.catAttrs "_secret" (lib.collect isSecret cfg.settings);
           mkSecretReplacement = file: ''
             replace-secret ${hashString "sha256" file} $CREDENTIALS_DIRECTORY/${baseNameOf file} /run/keycloak/conf/keycloak.conf
           '';
@@ -735,7 +711,7 @@ in
         let
           dbPkg = if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql80;
         in
-        mkIf createLocalMySQL (mkDefault dbPkg);
+        lib.mkIf createLocalMySQL (lib.mkDefault dbPkg);
     };
 
   meta.doc = ./keycloak.md;

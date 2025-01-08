@@ -9,33 +9,6 @@
 
 let
   inherit (builtins) readFile;
-  inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule mkIf;
-  inherit (lib.options)
-    lib.mkOption
-    mkEnableOption
-    literalExpression
-    mkPackageOption
-    ;
-  inherit (lib.types)
-    listOf
-    str
-    ints
-    lines
-    enum
-    path
-    submodule
-    addCheck
-    float
-    bool
-    int
-    nullOr
-    ;
-  inherit (lib.lists) lib.optional lib.optionals;
-  inherit (lib.strings) hasSuffix lib.optionalString;
-  inherit (lib.meta) getExe;
-  inherit (lib.attrsets) lib.optionalAttrs;
-  inherit (lib.trivial) boolToString;
-  inherit (lib.teams.xen) members;
 
   cfg = config.virtualisation.xen;
 
@@ -154,10 +127,10 @@ in
 
     enable = lib.mkEnableOption "the Xen Project Hypervisor, a virtualisation technology defined as a *type-1 hypervisor*, which allows multiple virtual machines, known as *domains*, to run concurrently on the physical machine. NixOS runs as the privileged *Domain 0*. This option requires a reboot into a Xen kernel to take effect";
 
-    debug = mkEnableOption "Xen debug features for Domain 0. This option enables some hidden debugging tests and features, and should not be used in production";
+    debug = lib.mkEnableOption "Xen debug features for Domain 0. This option enables some hidden debugging tests and features, and should not be used in production";
 
     trace = lib.mkOption {
-      type = bool;
+      type = lib.types.bool;
       default = cfg.debug;
       defaultText = lib.literalExpression "false";
       example = true;
@@ -171,7 +144,7 @@ in
         default = [ "qemu_xen" ];
       };
       pidFile = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "/run/xen/qemu-dom0.pid";
         example = "/var/run/xen/qemu-dom0.pid";
         description = "Path to the QEMU PID file.";
@@ -187,7 +160,7 @@ in
           "vga=ask"
         ]
       '';
-      type = listOf str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         Xen Command Line parameters passed to Domain 0 at boot time.
         Note: these are different from `boot.kernelParams`. See
@@ -197,7 +170,7 @@ in
 
     efi = {
       bootBuilderVerbosity = lib.mkOption {
-        type = enum [
+        type = lib.types.enum [
           "default"
           "info"
           "debug"
@@ -222,7 +195,7 @@ in
       };
 
       path = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "${cfg.package.boot}/${cfg.package.efi}";
         defaultText = lib.literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
         example = lib.literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.version}.efi";
@@ -240,7 +213,7 @@ in
       maxVCPUs = lib.mkOption {
         default = 0;
         example = 4;
-        type = ints.unsigned;
+        type = lib.types.ints.unsigned;
         description = ''
           Amount of virtual CPU cores allocated to Domain 0 on boot.
           If set to 0, all cores are assigned to Domain 0, and
@@ -251,7 +224,7 @@ in
       memory = lib.mkOption {
         default = 0;
         example = 512;
-        type = ints.unsigned;
+        type = lib.types.ints.unsigned;
         description = ''
           Amount of memory (in MiB) allocated to Domain 0 on boot.
           If set to 0, all memory is assigned to Domain 0, and
@@ -263,7 +236,7 @@ in
         default = cfg.dom0Resources.memory;
         defaultText = lib.literalExpression "config.virtualisation.xen.dom0Resources.memory";
         example = 1024;
-        type = ints.unsigned;
+        type = lib.types.ints.unsigned;
         description = ''
           Maximum amount of memory (in MiB) that Domain 0 can
           dynamically allocate to itself. Does nothing if set
@@ -275,7 +248,7 @@ in
 
     domains = {
       extraConfig = lib.mkOption {
-        type = lines;
+        type = lib.types.lines;
         default = "";
         example = ''
           XENDOMAINS_SAVE=/persist/xen/save
@@ -292,7 +265,7 @@ in
 
     store = {
       path = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         default = "${cfg.package}/bin/oxenstored";
         defaultText = lib.literalExpression "\${config.virtualisation.xen.package}/bin/oxenstored";
         example = lib.literalExpression "\${config.virtualisation.xen.package}/bin/xenstored";
@@ -303,11 +276,11 @@ in
         '';
       };
       type = lib.mkOption {
-        type = enum [
+        type = lib.types.enum [
           "c"
           "ocaml"
         ];
-        default = if (hasSuffix "oxenstored" cfg.store.path) then "ocaml" else "c";
+        default = if (lib.hasSuffix "oxenstored" cfg.store.path) then "ocaml" else "c";
         internal = true;
         readOnly = true;
         description = "Helper internal option that determines the type of the Xen Store Daemon based on cfg.store.path.";
@@ -327,34 +300,34 @@ in
           The OCaml-based Xen Store Daemon configuration. This
           option does nothing with the C-based `xenstored`.
         '';
-        type = submodule {
+        type = lib.types.submodule {
           options = {
             pidFile = lib.mkOption {
               default = "/run/xen/xenstored.pid";
               example = "/var/run/xen/xenstored.pid";
-              type = path;
+              type = lib.types.path;
               description = "Path to the Xen Store Daemon PID file.";
             };
             testEAGAIN = lib.mkOption {
               default = cfg.debug;
               defaultText = lib.literalExpression "config.virtualisation.xen.debug";
               example = true;
-              type = bool;
+              type = lib.types.bool;
               visible = false;
               description = "Randomly fail a transaction with EAGAIN. This option is used for debugging purposes only.";
             };
             enableMerge = lib.mkOption {
               default = true;
               example = false;
-              type = bool;
+              type = lib.types.bool;
               description = "Whether to enable transaction merge support.";
             };
             conflict = {
               burstLimit = lib.mkOption {
                 default = 5.0;
                 example = 15.0;
-                type = addCheck (
-                  float
+                type = lib.types.addCheck (
+                  lib.types.float
                   // {
                     name = "nonnegativeFloat";
                     description = "nonnegative floating point number, meaning >=0";
@@ -375,7 +348,7 @@ in
               maxHistorySeconds = lib.mkOption {
                 default = 5.0e-2;
                 example = 1.0;
-                type = addCheck (float // { description = "nonnegative floating point number, meaning >=0"; }) (
+                type = lib.types.addCheck (lib.types.float // { description = "nonnegative floating point number, meaning >=0"; }) (
                   n: n >= 0
                 );
                 description = ''
@@ -390,7 +363,7 @@ in
               rateLimitIsAggregate = lib.mkOption {
                 default = true;
                 example = false;
-                type = bool;
+                type = lib.types.bool;
                 description = ''
                   If the conflict.rateLimitIsAggregate option is `true`, then after each
                   tick one point of conflict-credit is given to just one domain: the
@@ -414,13 +387,13 @@ in
               enable = lib.mkOption {
                 default = true;
                 example = false;
-                type = bool;
+                type = lib.types.bool;
                 description = "Whether to enable the node permission system.";
               };
               enableWatch = lib.mkOption {
                 default = true;
                 example = false;
-                type = bool;
+                type = lib.types.bool;
                 description = ''
                   Whether to enable the watch permission system.
 
@@ -438,62 +411,62 @@ in
               enable = lib.mkOption {
                 default = true;
                 example = false;
-                type = bool;
+                type = lib.types.bool;
                 description = "Whether to enable the quota system.";
               };
               maxEntity = lib.mkOption {
                 default = 1000;
                 example = 1024;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Entity limit for transactions.";
               };
               maxSize = lib.mkOption {
                 default = 2048;
                 example = 4096;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Size limit for transactions.";
               };
               maxWatch = lib.mkOption {
                 default = 100;
                 example = 256;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Maximum number of watches by the Xenstore Watchdog.";
               };
               transaction = lib.mkOption {
                 default = 10;
                 example = 50;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Maximum number of transactions.";
               };
               maxRequests = lib.mkOption {
                 default = 1024;
                 example = 1024;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Maximum number of requests per transaction.";
               };
               maxPath = lib.mkOption {
                 default = 1024;
                 example = 1024;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Path limit for the quota system.";
               };
               maxOutstanding = lib.mkOption {
                 default = 1024;
                 example = 1024;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Maximum outstanding requests, i.e. in-flight requests / domain.";
               };
               maxWatchEvents = lib.mkOption {
                 default = 1024;
                 example = 2048;
-                type = ints.positive;
+                type = lib.types.ints.positive;
                 description = "Maximum number of outstanding watch events per watch.";
               };
             };
             persistent = lib.mkOption {
               default = false;
               example = true;
-              type = bool;
+              type = lib.types.bool;
               description = "Whether to activate the filed base backend.";
             };
             xenstored = {
@@ -501,14 +474,14 @@ in
                 file = lib.mkOption {
                   default = "/var/log/xen/xenstored.log";
                   example = "/dev/null";
-                  type = path;
+                  type = lib.types.path;
                   description = "Path to the Xen Store log file.";
                 };
                 level = lib.mkOption {
                   default = if cfg.trace then "debug" else null;
                   defaultText = lib.literalExpression "if (config.virtualisation.xen.trace == true) then \"debug\" else null";
                   example = "error";
-                  type = nullOr (enum [
+                  type = lib.types.nullOr (lib.types.enum [
                     "debug"
                     "info"
                     "warn"
@@ -522,7 +495,7 @@ in
                 nbFiles = lib.mkOption {
                   default = 10;
                   example = 16;
-                  type = int;
+                  type = lib.types.int;
                   visible = false;
                   description = "Set `xenstored-log-nb-files`.";
                 };
@@ -531,27 +504,27 @@ in
                 file = lib.mkOption {
                   default = "/var/log/xen/xenstored-access.log";
                   example = "/var/log/security/xenstored-access.log";
-                  type = path;
+                  type = lib.types.path;
                   description = "Path to the Xen Store access log file.";
                 };
                 nbLines = lib.mkOption {
                   default = 13215;
                   example = 16384;
-                  type = int;
+                  type = lib.types.int;
                   visible = false;
                   description = "Set `access-log-nb-lines`.";
                 };
                 nbChars = lib.mkOption {
                   default = 180;
                   example = 256;
-                  type = int;
+                  type = lib.types.int;
                   visible = false;
                   description = "Set `acesss-log-nb-chars`.";
                 };
                 specialOps = lib.mkOption {
                   default = false;
                   example = true;
-                  type = bool;
+                  type = lib.types.bool;
                   visible = false;
                   description = "Set `access-log-special-ops`.";
                 };
@@ -560,7 +533,7 @@ in
                 kva = lib.mkOption {
                   default = "/proc/xen/xsd_kva";
                   example = cfg.store.settings.xenstored.xenfs.kva;
-                  type = path;
+                  type = lib.types.path;
                   visible = false;
                   description = ''
                     Path to the Xen Store Daemon KVA location inside the XenFS pseudo-filesystem.
@@ -570,7 +543,7 @@ in
                 port = lib.mkOption {
                   default = "/proc/xen/xsd_port";
                   example = cfg.store.settings.xenstored.xenfs.port;
-                  type = path;
+                  type = lib.types.path;
                   visible = false;
                   description = ''
                     Path to the Xen Store Daemon userspace port inside the XenFS pseudo-filesystem.
@@ -582,8 +555,8 @@ in
             ringScanInterval = lib.mkOption {
               default = 20;
               example = 30;
-              type = addCheck (
-                int
+              type = lib.types.addCheck (
+                lib.types.int
                 // {
                   name = "nonzeroInt";
                   description = "nonzero signed integer, meaning !=0";
@@ -702,7 +675,7 @@ in
 
       # See the `xenBootBuilder` script in the main `let...in` statement of this file.
       loader.systemd-boot.extraInstallCommands = ''
-        ${getExe xenBootBuilder} ${cfg.efi.bootBuilderVerbosity}
+        ${lib.getExe xenBootBuilder} ${cfg.efi.bootBuilderVerbosity}
       '';
     };
 
@@ -760,7 +733,7 @@ in
         // lib.optionalAttrs (cfg.store.type == "ocaml") {
           "xen/oxenstored.conf".text = ''
             pid-file = ${cfg.store.settings.pidFile}
-            test-eagain = ${boolToString cfg.store.settings.testEAGAIN}
+            test-eagain = ${lib.boolToString cfg.store.settings.testEAGAIN}
             merge-activate = ${toString cfg.store.settings.enableMerge}
             conflict-burst-limit = ${toString cfg.store.settings.conflict.burstLimit}
             conflict-max-history-seconds = ${toString cfg.store.settings.conflict.maxHistorySeconds}
@@ -776,7 +749,7 @@ in
             quota-path-max = ${toString cfg.store.settings.quota.maxPath}
             quota-maxoutstanding = ${toString cfg.store.settings.quota.maxOutstanding}
             quota-maxwatchevents = ${toString cfg.store.settings.quota.maxWatchEvents}
-            persistent = ${boolToString cfg.store.settings.persistent}
+            persistent = ${lib.boolToString cfg.store.settings.persistent}
             xenstored-log-file = ${cfg.store.settings.xenstored.log.file}
             xenstored-log-level = ${
               if isNull cfg.store.settings.xenstored.log.level then
@@ -788,7 +761,7 @@ in
             access-log-file = ${cfg.store.settings.xenstored.accessLog.file}
             access-log-nb-lines = ${toString cfg.store.settings.xenstored.accessLog.nbLines}
             acesss-log-nb-chars = ${toString cfg.store.settings.xenstored.accessLog.nbChars}
-            access-log-special-ops = ${boolToString cfg.store.settings.xenstored.accessLog.specialOps}
+            access-log-special-ops = ${lib.boolToString cfg.store.settings.xenstored.accessLog.specialOps}
             ring-scan-interval = ${toString cfg.store.settings.ringScanInterval}
             xenstored-kva = ${cfg.store.settings.xenstored.xenfs.kva}
             xenstored-port = ${cfg.store.settings.xenstored.xenfs.port}
@@ -871,5 +844,5 @@ in
       };
     };
   };
-  meta.maintainers = members;
+  meta.maintainers = lib.teams.xen.members;
 }

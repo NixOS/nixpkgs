@@ -8,25 +8,13 @@
 let
   cfg = config.services.canaille;
 
-  inherit (lib)
-    lib.mkOption
-    mkIf
-    mkEnableOption
-    mkPackageOption
-    types
-    getExe
-    lib.optional
-    converge
-    filterAttrsRecursive
-    ;
-
   dataDir = "/var/lib/canaille";
   secretsDir = "${dataDir}/secrets";
 
   settingsFormat = pkgs.formats.toml { };
 
   # Remove null values, so we can document lib.optional/forbidden values that don't end up in the generated TOML file.
-  filterConfig = converge (lib.filterAttrsRecursive (_: v: v != null));
+  filterConfig = lib.converge (lib.filterAttrsRecursive (_: v: v != null));
 
   finalPackage = cfg.package.overridePythonAttrs (old: {
     dependencies =
@@ -144,7 +132,7 @@ in
                 See also [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.core.configuration.ACLSettings).
               '';
               type = lib.types.nullOr (
-                types.submodule {
+                lib.types.submodule {
                   freeformType = settingsFormat.type;
                   options = { };
                 }
@@ -162,7 +150,7 @@ in
                 See also [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.core.configuration.SMTPSettings).
               '';
               type = lib.types.nullOr (
-                types.submodule {
+                lib.types.submodule {
                   freeformType = settingsFormat.type;
                   options = {
                     PASSWORD = lib.mkOption {
@@ -186,7 +174,7 @@ in
               OpenID Connect settings. See [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.oidc.configuration.OIDCSettings).
             '';
             type = lib.types.nullOr (
-              types.submodule {
+              lib.types.submodule {
                 freeformType = settingsFormat.type;
                 options = {
                   JWT.PRIVATE_KEY = lib.mkOption {
@@ -209,7 +197,7 @@ in
               yet supported by the module, so use at your own risk!
             '';
             type = lib.types.nullOr (
-              types.submodule {
+              lib.types.submodule {
                 freeformType = settingsFormat.type;
                 options = {
                   BIND_PW = lib.mkOption {
@@ -283,7 +271,7 @@ in
       after = lib.optional createLocalPostgresqlDb "postgresql.service";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
-        ExecStart = "${getExe finalPackage} install";
+        ExecStart = "${lib.getExe finalPackage} install";
       };
     };
 
@@ -313,7 +301,7 @@ in
             });
           in
           ''
-            ${getExe gunicorn} \
+            ${lib.getExe gunicorn} \
               --name=canaille \
               --bind='unix:///run/canaille.socket' \
               'canaille:create_app()'

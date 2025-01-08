@@ -26,11 +26,6 @@ let
         emptyValue.value = {};
       };
 
-  inherit (lib)
-    getBin lib.optionalAttrs literalExpression
-    mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge lib.mkOption mkPackageOption types;
-
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
 
@@ -55,7 +50,7 @@ let
     # Qt from doing this wackiness in the first place.
     trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
     if [ -e "$trolltech_conf" ]; then
-      ${getBin pkgs.gnused}/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
+      ${lib.getBin pkgs.gnused}/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
     fi
 
     # Remove the kbuildsyscoca5 cache. It will be regenerated
@@ -106,7 +101,7 @@ in
         default = true;
       };
 
-      notoPackage = mkPackageOption pkgs "Noto fonts" {
+      notoPackage = lib.mkPackageOption pkgs "Noto fonts" {
         default = [ "noto-fonts" ];
         example = "noto-fonts-lgc-plus";
       };
@@ -174,14 +169,14 @@ in
           owner = "root";
           group = "root";
           capabilities = "cap_sys_nice+ep";
-          source = "${getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
+          source = "${lib.getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
         };
       } // lib.optionalAttrs (!cfg.runUsingSystemd) {
         start_kdeinit = {
           setuid = true;
           owner = "root";
           group = "root";
-          source = "${getBin pkgs.plasma5Packages.kinit}/libexec/kf5/start_kdeinit";
+          source = "${lib.getBin pkgs.plasma5Packages.kinit}/libexec/kf5/start_kdeinit";
         };
       };
 
@@ -345,7 +340,7 @@ in
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.power-profiles-daemon.enable = lib.mkDefault true;
-      services.system-config-printer.enable = lib.mkIf config.services.printing.enable (mkDefault true);
+      services.system-config-printer.enable = lib.mkIf config.services.printing.enable (lib.mkDefault true);
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.libinput.enable = lib.mkDefault true;

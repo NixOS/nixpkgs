@@ -6,21 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    ;
-
-  inherit (lib.types)
-    attrsOf
-    package
-    port
-    str
-    ;
-
   cfg = config.services.crabfit;
 in
 
@@ -33,7 +18,7 @@ in
 
       finalDrv = lib.mkOption {
         readOnly = true;
-        type = package;
+        type = lib.types.package;
         default = cfg.frontend.package.override {
           api_url = "https://${cfg.api.host}";
           frontend_url = cfg.frontend.host;
@@ -52,7 +37,7 @@ in
       };
 
       environment = lib.mkOption {
-        type = attrsOf str;
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         description = ''
           Environment variables for the crabfit frontend.
@@ -60,14 +45,14 @@ in
       };
 
       host = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         description = ''
           The hostname of the frontend.
         '';
       };
 
       port = lib.mkOption {
-        type = port;
+        type = lib.types.port;
         default = 3001;
         description = ''
           The internal listening port of the frontend.
@@ -79,7 +64,7 @@ in
       package = lib.mkPackageOption pkgs "crabfit-api" { };
 
       environment = lib.mkOption {
-        type = attrsOf str;
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         description = ''
           Environment variables for the crabfit API.
@@ -87,14 +72,14 @@ in
       };
 
       host = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         description = ''
           The hostname of the API.
         '';
       };
 
       port = lib.mkOption {
-        type = port;
+        type = lib.types.port;
         default = 3000;
         description = ''
           The internal listening port of the API.

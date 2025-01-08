@@ -5,13 +5,6 @@
   ...
 }:
 let
-  inherit (lib.types) package str;
-  inherit (lib)
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    ;
   cfg = config.services.dashy;
 in
 {
@@ -28,7 +21,7 @@ in
     '';
 
     virtualHost = {
-      enableNginx = mkEnableOption "a virtualhost to serve dashy through nginx";
+      enableNginx = lib.mkEnableOption "a virtualhost to serve dashy through nginx";
 
       domain = lib.mkOption {
         description = ''
@@ -43,7 +36,7 @@ in
           services.nginx.virtualHosts."example.com".listen = [ ... ]
           ```
         '';
-        type = str;
+        type = lib.types.str;
       };
     };
 
@@ -58,7 +51,7 @@ in
         then cfg.package.override {inherit (cfg) settings;}
         else cfg.package;
       '';
-      type = package;
+      type = lib.types.package;
       description = ''
         Final derivation containing the fully built static files
       '';

@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    getExe
-    maintainers
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    ;
   cfg = config.services.tailscaleAuth;
 in
 {
@@ -70,7 +61,7 @@ in
       requires = [ "tailscale-nginx-auth.socket" ];
 
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = "tailscale-nginx-auth";
         User = cfg.user;
         Group = cfg.group;

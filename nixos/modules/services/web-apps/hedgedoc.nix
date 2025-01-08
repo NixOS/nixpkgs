@@ -6,8 +6,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption types literalExpression;
-
   cfg = config.services.hedgedoc;
 
   # 21.03 will not be an official release - it was instead 21.05.  This

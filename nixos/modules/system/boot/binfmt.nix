@@ -5,13 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    lib.mkOption
-    mkDefault
-    types
-    lib.optionalString
-    ;
-
   cfg = config.boot.binfmt;
 
   makeBinfmtLine =
@@ -189,7 +182,7 @@ in
         '';
 
         type = lib.types.attrsOf (
-          types.submodule (
+          lib.types.submodule (
             { config, ... }:
             {
               options = {
@@ -314,7 +307,7 @@ in
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
-        type = lib.types.listOf (types.enum (builtins.attrNames magics));
+        type = lib.types.listOf (lib.types.enum (builtins.attrNames magics));
       };
 
       addEmulatedSystemsToNixSandbox = lib.mkOption {

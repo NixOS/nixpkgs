@@ -6,16 +6,6 @@
   ...
 }:
 let
-  inherit (lib)
-    getExe
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionals
-    types
-    ;
-
   cfg = config.services.ustreamer;
 in
 {
@@ -81,7 +71,7 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe cfg.package)
+            (lib.getExe cfg.package)
             "--systemd"
           ]
           ++ cfg.extraArgs

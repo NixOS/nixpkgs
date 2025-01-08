@@ -6,24 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    mkForce
-    mkIf
-    mkMerge
-    lib.mkOption
-    types
-    ;
-  inherit (lib)
-    concatStringsSep
-    literalExpression
-    mapAttrsToList
-    lib.optional
-    lib.optionalString
-    ;
-
   cfg = config.services.moodle;
   fpm = config.services.phpfpm.pools.moodle;
 
@@ -327,7 +309,7 @@ in
       virtualHosts.${cfg.virtualHost.hostName} = lib.mkMerge [
         cfg.virtualHost
         {
-          documentRoot = mkForce "${cfg.package}/share/moodle";
+          documentRoot = lib.mkForce "${cfg.package}/share/moodle";
           extraConfig = ''
             <Directory "${cfg.package}/share/moodle">
               <FilesMatch "\.php$">

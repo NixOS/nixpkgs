@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.tempo;
 
   settingsFormat = pkgs.formats.yaml { };

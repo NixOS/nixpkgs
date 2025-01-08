@@ -5,20 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    lib.optionalString
-    lib.optionalAttrs
-    isDerivation
-    recursiveUpdate
-    getExe
-    literalExpression
-    types
-    maintainers
-    ;
   cfg = config.services.wivrn;
   configFormat = pkgs.formats.json { };
 
@@ -48,8 +34,8 @@ let
       cfg.config.json.application
   );
   applicationPackage = lib.mkIf applicationCheck applicationAttr;
-  applicationPackageExe = getExe applicationAttr;
-  serverPackageExe = getExe cfg.package;
+  applicationPackageExe = lib.getExe applicationAttr;
+  serverPackageExe = lib.getExe cfg.package;
 
   # Managing strings
   applicationStrings = builtins.tail cfg.config.json.application;
@@ -61,7 +47,7 @@ let
   );
 
   # Manage config file
-  applicationUpdate = recursiveUpdate cfg.config.json (
+  applicationUpdate = lib.recursiveUpdate cfg.config.json (
     lib.optionalAttrs applicationCheck { application = applicationConcat; }
   );
   configFile = configFormat.generate "config.json" applicationUpdate;
@@ -92,9 +78,9 @@ in
 
       package = lib.mkPackageOption pkgs "wivrn" { };
 
-      openFirewall = mkEnableOption "the default ports in the firewall for the WiVRn server";
+      openFirewall = lib.mkEnableOption "the default ports in the firewall for the WiVRn server";
 
-      defaultRuntime = mkEnableOption ''
+      defaultRuntime = lib.mkEnableOption ''
         WiVRn Monado as the default OpenXR runtime on the system.
         The config can be found at `/etc/xdg/openxr/1/active_runtime.json`.
 
@@ -102,7 +88,7 @@ in
         runtime in a writable XDG_CONFIG_DIRS location like `~/.config`
       '';
 
-      autoStart = mkEnableOption "starting the service by default";
+      autoStart = lib.mkEnableOption "starting the service by default";
 
       monadoEnvironment = lib.mkOption {
         type = lib.types.attrs;
@@ -172,7 +158,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = !applicationCheck || isDerivation applicationAttr;
+        assertion = !applicationCheck || lib.isDerivation applicationAttr;
         message = "The application in WiVRn configuration is not a package. Please ensure that the application is a package or that a package is the first element in the list.";
       }
     ];

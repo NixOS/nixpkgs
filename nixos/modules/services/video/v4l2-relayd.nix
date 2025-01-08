@@ -6,24 +6,6 @@
   ...
 }:
 let
-
-  inherit (lib)
-    attrValues
-    concatStringsSep
-    filterAttrs
-    length
-    listToAttrs
-    literalExpression
-    makeSearchPathOutput
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    nameValuePair
-    lib.optionals
-    types
-    ;
-  inherit (utils) escapeSystemdPath;
-
   cfg = config.services.v4l2-relayd;
 
   kernelPackages = config.boot.kernelPackages;
@@ -165,13 +147,13 @@ in
         };
 
         environment = {
-          GST_PLUGIN_PATH = makeSearchPathOutput "lib" "lib/gstreamer-1.0" (gst ++ instance.extraPackages);
+          GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (gst ++ instance.extraPackages);
           V4L2_DEVICE_FILE = "/run/v4l2-relayd-${instance.name}/device";
         };
 
         script =
           let
-            appsrcOptions = concatStringsSep "," [
+            appsrcOptions = lib.concatStringsSep "," [
               "caps=video/x-raw"
               "format=${instance.input.format}"
               "width=${toString instance.input.width}"
@@ -207,19 +189,19 @@ in
 
       mkInstanceServices =
         instances:
-        listToAttrs (
+        lib.listToAttrs (
           map (
             instance:
-            nameValuePair "v4l2-relayd-${escapeSystemdPath instance.name}" (mkInstanceService instance)
+            lib.nameValuePair "v4l2-relayd-${utils.escapeSystemdPath instance.name}" (mkInstanceService instance)
           ) instances
         );
 
-      enabledInstances = attrValues (lib.filterAttrs (n: v: v.enable) cfg.instances);
+      enabledInstances = lib.attrValues (lib.filterAttrs (n: v: v.enable) cfg.instances);
 
     in
     {
 
-      boot = lib.mkIf ((length enabledInstances) > 0) {
+      boot = lib.mkIf ((lib.length enabledInstances) > 0) {
         extraModulePackages = [ kernelPackages.v4l2loopback ];
         kernelModules = [ "v4l2loopback" ];
       };

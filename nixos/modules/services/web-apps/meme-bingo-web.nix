@@ -6,15 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    types
-    literalExpression
-    ;
-
   cfg = config.services.meme-bingo-web;
 in
 {

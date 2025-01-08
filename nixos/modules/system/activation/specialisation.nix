@@ -8,21 +8,13 @@
 }:
 
 let
-  inherit (lib)
-    concatStringsSep
-    mapAttrs
-    mapAttrsToList
-    lib.mkOption
-    types
-    ;
-
   # This attribute is responsible for creating boot entries for
   # child configuration. They are only (directly) accessible
   # when the parent configuration is boot default. For example,
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  children = mapAttrs (
+  children = lib.mapAttrs (
     childName: childConfig: childConfig.configuration.system.build.toplevel
   ) config.specialisation;
 
@@ -52,7 +44,7 @@ in
         ```
       '';
       type = lib.types.attrsOf (
-        types.submodule (
+        lib.types.submodule (
           local@{ ... }:
           let
             extend = if local.config.inheritParentConfig then extendModules else noUserModules.extendModules;
@@ -87,7 +79,7 @@ in
     system.systemBuilderCommands = ''
       mkdir $out/specialisation
       ${lib.concatStringsSep "\n" (
-        mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children
+        lib.mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children
       )}
     '';
   };

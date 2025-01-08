@@ -5,15 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mapAttrs
-    mkIf
-    lib.mkOption
-    lib.optional
-    lib.optionals
-    types
-    ;
-
   cfg = config.services.kmscon;
 
   autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
@@ -50,22 +41,21 @@ in
         default = null;
         example = lib.literalExpression ''[ { name = "Source Code Pro"; package = pkgs.source-code-pro; } ]'';
         type =
-          with lib.types;
           let
-            fontType = submodule {
+            fontType = lib.types.submodule {
               options = {
                 name = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   description = "Font name, as used by fontconfig.";
                 };
                 package = lib.mkOption {
-                  type = package;
+                  type = lib.types.package;
                   description = "Package providing the font.";
                 };
               };
             };
           in
-          nullOr (nonEmptyListOf fontType);
+          lib.types.nullOr (lib.types.nonEmptyListOf fontType);
       };
 
       useXkbConfig = lib.mkOption {

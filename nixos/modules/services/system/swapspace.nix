@@ -7,13 +7,6 @@
 }:
 let
   cfg = config.services.swapspace;
-  inherit (lib)
-    types
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkEnableOption
-    ;
   inherit (pkgs)
     makeWrapper
     runCommand

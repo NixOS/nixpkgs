@@ -6,12 +6,6 @@
 }:
 let
   cfg = config.boot.uvesafb;
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    types
-    ;
 in
 {
   options = {

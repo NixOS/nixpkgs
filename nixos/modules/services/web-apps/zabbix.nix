@@ -7,26 +7,6 @@
 }:
 
 let
-
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    mkRenamedOptionModule
-    mkForce
-    mkIf
-    mkMerge
-    lib.mkOption
-    types
-    ;
-  inherit (lib)
-    literalExpression
-    mapAttrs
-    lib.optionalString
-    lib.optionals
-    versionAtLeast
-    ;
-
   cfg = config.services.zabbixWeb;
   opt = options.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
@@ -261,7 +241,7 @@ in
     services.zabbixWeb.extraConfig =
       lib.optionalString
         (
-          (versionAtLeast config.system.stateVersion "20.09") && (versionAtLeast cfg.package.version "5.0.0")
+          (lib.versionAtLeast config.system.stateVersion "20.09") && (lib.versionAtLeast cfg.package.version "5.0.0")
         )
         ''
           $DB['DOUBLE_IEEE754'] = 'true';
@@ -315,7 +295,7 @@ in
       virtualHosts.${cfg.hostname} = lib.mkMerge [
         cfg.httpd.virtualHost
         {
-          documentRoot = mkForce "${cfg.package}/share/zabbix";
+          documentRoot = lib.mkForce "${cfg.package}/share/zabbix";
           extraConfig = ''
             <Directory "${cfg.package}/share/zabbix">
               <FilesMatch "\.php$">
@@ -337,7 +317,7 @@ in
       virtualHosts.${cfg.hostname} = lib.mkMerge [
         cfg.nginx.virtualHost
         {
-          root = mkForce "${cfg.package}/share/zabbix";
+          root = lib.mkForce "${cfg.package}/share/zabbix";
           locations."/" = {
             index = "index.html index.htm index.php";
             tryFiles = "$uri $uri/ =404";
@@ -350,12 +330,12 @@ in
       ];
     };
 
-    users.users.${user} = mapAttrs (name: mkDefault) {
+    users.users.${user} = lib.mapAttrs (name: lib.mkDefault) {
       description = "Zabbix daemon user";
       uid = config.ids.uids.zabbix;
       inherit group;
     };
 
-    users.groups.${group} = mapAttrs (name: mkDefault) { gid = config.ids.gids.zabbix; };
+    users.groups.${group} = lib.mapAttrs (name: lib.mkDefault) { gid = config.ids.gids.zabbix; };
   };
 }

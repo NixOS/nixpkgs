@@ -1,33 +1,24 @@
 { config, lib, ... }:
 
 let
-  inherit (lib)
-    genAttrs
-    maintainers
-    mkAliasOptionModule
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    ;
   cfg = config.services.nginx.tailscaleAuth;
   cfgAuth = config.services.tailscaleAuth;
 in
 {
   imports = [
-    (mkAliasOptionModule
+    (lib.mkAliasOptionModule
       [ "services" "nginx" "tailscaleAuth" "package" ]
       [ "services" "tailscaleAuth" "package" ]
     )
-    (mkAliasOptionModule
+    (lib.mkAliasOptionModule
       [ "services" "nginx" "tailscaleAuth" "user" ]
       [ "services" "tailscaleAuth" "user" ]
     )
-    (mkAliasOptionModule
+    (lib.mkAliasOptionModule
       [ "services" "nginx" "tailscaleAuth" "group" ]
       [ "services" "tailscaleAuth" "group" ]
     )
-    (mkAliasOptionModule
+    (lib.mkAliasOptionModule
       [ "services" "nginx" "tailscaleAuth" "socketPath" ]
       [ "services" "tailscaleAuth" "socketPath" ]
     )
@@ -66,7 +57,7 @@ in
       wants = [ "nginx.service" ];
     };
 
-    services.nginx.virtualHosts = genAttrs cfg.virtualHosts (vhost: {
+    services.nginx.virtualHosts = lib.genAttrs cfg.virtualHosts (vhost: {
       locations."/auth" = {
         extraConfig = ''
           internal;

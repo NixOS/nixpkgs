@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf lib.mkOption;
-  inherit (lib.types) nullOr path bool listOf str;
   keysPath = "/var/lib/yggdrasil/keys.json";
 
   cfg = config.services.yggdrasil;
@@ -60,7 +58,7 @@ in
       };
 
       configFile = lib.mkOption {
-        type = nullOr path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
         description = ''
@@ -75,14 +73,14 @@ in
       };
 
       group = lib.mkOption {
-        type = nullOr str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "wheel";
         description = "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
       openMulticastPort = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the UDP port used for multicast peer discovery. The
@@ -97,7 +95,7 @@ in
       };
 
       denyDhcpcdInterfaces = lib.mkOption {
-        type = listOf str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "tap*" ];
         description = ''
@@ -119,7 +117,7 @@ in
       '';
 
       extraArgs = lib.mkOption {
-        type = listOf str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-loglevel" "info" ];
         description = "Extra command line arguments.";
@@ -206,7 +204,7 @@ in
           RuntimeDirectoryMode = "0750";
           BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
           LoadCredential =
-            mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
+            lib.mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";

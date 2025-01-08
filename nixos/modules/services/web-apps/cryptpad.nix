@@ -8,14 +8,6 @@
 let
   cfg = config.services.cryptpad;
 
-  inherit (lib)
-    mkIf
-    mkMerge
-    lib.mkOption
-    strings
-    types
-    ;
-
   # The Cryptpad configuration file isn't JSON, but a JavaScript source file that assigns a JSON value
   # to a variable.
   cryptpadConfigFile = builtins.toFile "cryptpad_config.js" ''
@@ -23,12 +15,12 @@ let
   '';
 
   # Derive domain names for Nginx configuration from Cryptpad configuration
-  mainDomain = strings.removePrefix "https://" cfg.settings.httpUnsafeOrigin;
+  mainDomain = lib.strings.removePrefix "https://" cfg.settings.httpUnsafeOrigin;
   sandboxDomain =
     if cfg.settings.httpSafeOrigin == null then
       mainDomain
     else
-      strings.removePrefix "https://" cfg.settings.httpSafeOrigin;
+      lib.strings.removePrefix "https://" cfg.settings.httpSafeOrigin;
 
 in
 {
@@ -129,7 +121,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       systemd.services.cryptpad = {
         description = "Cryptpad service";
@@ -252,12 +244,12 @@ in
           message = "services.cryptpad.settings.httpUnsafeOrigin is required";
         }
         {
-          assertion = strings.hasPrefix "https://" cfg.settings.httpUnsafeOrigin;
+          assertion = lib.strings.hasPrefix "https://" cfg.settings.httpUnsafeOrigin;
           message = "services.cryptpad.settings.httpUnsafeOrigin must start with https://";
         }
         {
           assertion =
-            cfg.settings.httpSafeOrigin == null || strings.hasPrefix "https://" cfg.settings.httpSafeOrigin;
+            cfg.settings.httpSafeOrigin == null || lib.strings.hasPrefix "https://" cfg.settings.httpSafeOrigin;
           message = "services.cryptpad.settings.httpSafeOrigin must start with https:// (or be unset)";
         }
       ];

@@ -9,18 +9,6 @@ let
 
   settingsFormat = pkgs.formats.yaml { };
   settingsFile = settingsFormat.generate "wakapi-settings" cfg.settings;
-
-  inherit (lib)
-    getExe
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    types
-    mkIf
-    lib.optional
-    mkMerge
-    singleton
-    ;
 in
 {
   options.services.wakapi = {
@@ -68,7 +56,7 @@ in
     };
 
     database = {
-      createLocally = mkEnableOption ''
+      createLocally = lib.mkEnableOption ''
         automatic database configuration.
 
         ::: {.note}
@@ -78,7 +66,7 @@ in
 
       dialect = lib.mkOption {
         type = lib.types.nullOr (
-          types.enum [
+          lib.types.enum [
             "postgres"
             "sqlite3"
             "mysql"
@@ -134,7 +122,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       script = ''
-        exec ${getExe cfg.package} -config ${settingsFile}
+        exec ${lib.getExe cfg.package} -config ${settingsFile}
       '';
 
       serviceConfig = {
@@ -216,7 +204,7 @@ in
     services.postgresql = lib.mkIf (cfg.database.createLocally && cfg.database.dialect == "postgres") {
       enable = true;
 
-      ensureDatabases = singleton cfg.database.name;
+      ensureDatabases = lib.singleton cfg.database.name;
       ensureUsers = lib.singleton {
         name = cfg.settings.db.user;
         ensureDBOwnership = true;

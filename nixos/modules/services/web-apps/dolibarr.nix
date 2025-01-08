@@ -5,23 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    any
-    boolToString
-    concatStringsSep
-    isBool
-    isString
-    mapAttrsToList
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkMerge
-    lib.mkOption
-    lib.optionalAttrs
-    types
-    mkPackageOption
-    ;
-
   package = cfg.package.override { inherit (cfg) stateDir; };
 
   cfg = config.services.dolibarr;
@@ -39,12 +22,12 @@ let
 
       toStr =
         k: v:
-        if (any (str: k == str) secretKeys) then
+        if (lib.any (str: k == str) secretKeys) then
           v
-        else if isString v then
+        else if lib.isString v then
           "'${v}'"
-        else if isBool v then
-          boolToString v
+        else if lib.isBool v then
+          lib.boolToString v
         else if v == null then
           "null"
         else
@@ -52,7 +35,7 @@ let
     in
     pkgs.writeText filename ''
       <?php
-      ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: "\$${k} = ${toStr k v};") settings)}
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "\$${k} = ${toStr k v};") settings)}
     '';
 
   # see https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/install/install.forced.sample.php for all possible values
@@ -176,7 +159,7 @@ in
 
     nginx = lib.mkOption {
       type = lib.types.nullOr (
-        types.submodule (
+        lib.types.submodule (
           lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
             # enable encryption by default,
             # as sensitive login and Dolibarr (ERP) data should not be transmitted in clear text.
@@ -229,7 +212,7 @@ in
   };
 
   # implementation
-  config = lib.mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
 
       assertions = [

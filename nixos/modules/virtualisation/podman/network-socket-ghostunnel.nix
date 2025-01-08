@@ -5,11 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    lib.mkOption
-    types
-    ;
-
   cfg = config.virtualisation.podman.networkSocket;
 
 in

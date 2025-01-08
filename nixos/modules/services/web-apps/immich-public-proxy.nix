@@ -7,12 +7,6 @@
 let
   cfg = config.services.immich-public-proxy;
   format = pkgs.formats.json { };
-  inherit (lib)
-    types
-    mkIf
-    lib.mkOption
-    mkEnableOption
-    ;
 in
 {
   options.services.immich-public-proxy = {

@@ -7,14 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    lib.mkOption
-    types
-    mkDefault
-    mkEnableOption
-    literalExpression
-    ;
-
   cfg = config.services.xserver.desktopManager.gnome;
   serviceCfg = config.services.gnome;
 
@@ -42,7 +34,7 @@ let
     inherit flashbackEnabled nixos-background-dark nixos-background-light;
   };
 
-  nixos-background-info = pkgs.writeTextFile rec {
+  nixos-background-info = pkgs.writeTextFile {
     name = "nixos-background-info";
     text = ''
       <?xml version="1.0"?>
@@ -73,7 +65,7 @@ let
     ++ cfg.flashback.customSessions;
 
   notExcluded =
-    pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
+    pkg: lib.mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
 
 in
 
@@ -138,14 +130,14 @@ in
         description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption "pkgs.gnome-session debug messages";
+      debug = lib.mkEnableOption "pkgs.gnome-session debug messages";
 
       flashback = {
-        enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
+        enableMetacity = lib.mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = lib.mkOption {
           type = lib.types.listOf (
-            types.submodule {
+            lib.types.submodule {
               options = {
                 wmName = lib.mkOption {
                   type = lib.types.strMatching "[a-zA-Z0-9_-]+";
@@ -347,7 +339,7 @@ in
       services.gnome.gnome-user-share.enable = lib.mkDefault true;
       services.gnome.rygel.enable = lib.mkDefault true;
       services.gvfs.enable = true;
-      services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (mkDefault true));
+      services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (lib.mkDefault true));
 
       systemd.packages = [
         pkgs.gnome-session

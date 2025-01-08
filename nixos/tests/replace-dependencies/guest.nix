@@ -1,16 +1,10 @@
 # This needs to be run in a NixOS test, because Hydra cannot do IFD.
 let
   pkgs = import ../../.. { };
-  inherit (pkgs)
-    runCommand
-    writeShellScriptBin
-    replaceDependency
-    replaceDependencies
-    ;
-  inherit (pkgs.lib) escapeShellArg;
+  inherit (pkgs) lib;
   mkCheckOutput =
     name: test: output:
-    runCommand name { } ''
+    pkgs.runCommand name { } ''
       actualOutput="$(${lib.escapeShellArg "${test}/bin/test"})"
       if [ "$(${lib.escapeShellArg "${test}/bin/test"})" != ${lib.escapeShellArg output} ]; then
         echo >&2 "mismatched output: expected \""${lib.escapeShellArg output}"\", got \"$actualOutput\""
@@ -18,71 +12,71 @@ let
       fi
       touch "$out"
     '';
-  oldDependency = writeShellScriptBin "dependency" ''
+  oldDependency = pkgs.writeShellScriptBin "dependency" ''
     echo "got old dependency"
   '';
   oldDependency-ca = oldDependency.overrideAttrs { __contentAddressed = true; };
-  newDependency = writeShellScriptBin "dependency" ''
+  newDependency = pkgs.writeShellScriptBin "dependency" ''
     echo "got new dependency"
   '';
   newDependency-ca = newDependency.overrideAttrs { __contentAddressed = true; };
-  basic = writeShellScriptBin "test" ''
+  basic = pkgs.writeShellScriptBin "test" ''
     ${oldDependency}/bin/dependency
   '';
-  basic-ca = writeShellScriptBin "test" ''
+  basic-ca = pkgs.writeShellScriptBin "test" ''
     ${oldDependency-ca}/bin/dependency
   '';
-  transitive = writeShellScriptBin "test" ''
+  transitive = pkgs.writeShellScriptBin "test" ''
     ${basic}/bin/test
   '';
-  weirdDependency = writeShellScriptBin "dependency" ''
+  weirdDependency = pkgs.writeShellScriptBin "dependency" ''
     echo "got weird dependency"
     ${basic}/bin/test
   '';
-  oldDependency1 = writeShellScriptBin "dependency1" ''
+  oldDependency1 = pkgs.writeShellScriptBin "dependency1" ''
     echo "got old dependency 1"
   '';
-  newDependency1 = writeShellScriptBin "dependency1" ''
+  newDependency1 = pkgs.writeShellScriptBin "dependency1" ''
     echo "got new dependency 1"
   '';
-  oldDependency2 = writeShellScriptBin "dependency2" ''
+  oldDependency2 = pkgs.writeShellScriptBin "dependency2" ''
     ${oldDependency1}/bin/dependency1
       echo "got old dependency 2"
   '';
-  newDependency2 = writeShellScriptBin "dependency2" ''
+  newDependency2 = pkgs.writeShellScriptBin "dependency2" ''
     ${oldDependency1}/bin/dependency1
       echo "got new dependency 2"
   '';
-  deep = writeShellScriptBin "test" ''
+  deep = pkgs.writeShellScriptBin "test" ''
     ${oldDependency2}/bin/dependency2
   '';
 in
 {
-  replacedependency-basic = mkCheckOutput "replacedependency-basic" (replaceDependency {
+  replacedependency-basic = mkCheckOutput "replacedependency-basic" (pkgs.replaceDependency {
     drv = basic;
     inherit oldDependency newDependency;
   }) "got new dependency";
 
-  replacedependency-basic-old-ca = mkCheckOutput "replacedependency-basic" (replaceDependency {
+  replacedependency-basic-old-ca = mkCheckOutput "replacedependency-basic" (pkgs.replaceDependency {
     drv = basic-ca;
     oldDependency = oldDependency-ca;
     inherit newDependency;
   }) "got new dependency";
 
-  replacedependency-basic-new-ca = mkCheckOutput "replacedependency-basic" (replaceDependency {
+  replacedependency-basic-new-ca = mkCheckOutput "replacedependency-basic" (pkgs.replaceDependency {
     drv = basic;
     inherit oldDependency;
     newDependency = newDependency-ca;
   }) "got new dependency";
 
-  replacedependency-transitive = mkCheckOutput "replacedependency-transitive" (replaceDependency {
+  replacedependency-transitive = mkCheckOutput "replacedependency-transitive" (pkgs.replaceDependency {
     drv = transitive;
     inherit oldDependency newDependency;
   }) "got new dependency";
 
   replacedependency-weird =
     mkCheckOutput "replacedependency-weird"
-      (replaceDependency {
+      (pkgs.replaceDependency {
         drv = basic;
         inherit oldDependency;
         newDependency = weirdDependency;
@@ -91,7 +85,7 @@ in
         got weird dependency
         got old dependency'';
 
-  replacedependencies-precedence = mkCheckOutput "replacedependencies-precedence" (replaceDependencies
+  replacedependencies-precedence = mkCheckOutput "replacedependencies-precedence" (pkgs.replaceDependencies
     {
       drv = basic;
       replacements = [ { inherit oldDependency newDependency; } ];
@@ -99,7 +93,7 @@ in
     }
   ) "got new dependency";
 
-  replacedependencies-self = mkCheckOutput "replacedependencies-self" (replaceDependencies {
+  replacedependencies-self = mkCheckOutput "replacedependencies-self" (pkgs.replaceDependencies {
     drv = basic;
     replacements = [
       {
@@ -111,7 +105,7 @@ in
 
   replacedependencies-deep-order1 =
     mkCheckOutput "replacedependencies-deep-order1"
-      (replaceDependencies {
+      (pkgs.replaceDependencies {
         drv = deep;
         replacements = [
           {
@@ -130,7 +124,7 @@ in
 
   replacedependencies-deep-order2 =
     mkCheckOutput "replacedependencies-deep-order2"
-      (replaceDependencies {
+      (pkgs.replaceDependencies {
         drv = deep;
         replacements = [
           {

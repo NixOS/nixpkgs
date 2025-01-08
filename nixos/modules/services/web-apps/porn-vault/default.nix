@@ -9,15 +9,6 @@ let
   cfg = config.services.porn-vault;
   configFormat = pkgs.formats.json { };
   defaultConfig = import ./default-config.nix;
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    getExe
-    literalExpression
-    types
-    ;
 in
 {
   options = {
@@ -75,7 +66,7 @@ in
         PORT = toString cfg.port;
       };
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = lib.getExe cfg.package;
         CacheDirectory = "porn-vault";
         # Hardening options
         CapabilityBoundingSet = [ "CAP_SYS_NICE" ];

@@ -1,15 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  inherit (lib)
-    boolToString
-    mkDefault
-    mkIf
-    lib.optional
-    readFile
-  ;
-in
-
 {
   imports = [
     ../profiles/headless.nix
@@ -90,7 +80,7 @@ in
 
   users.groups.google-sudoers = lib.mkIf config.users.mutableUsers { };
 
-  boot.extraModprobeConfig = readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
+  boot.extraModprobeConfig = lib.readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
 
   environment.etc."sysctl.d/60-gce-network-security.conf".source = "${pkgs.google-guest-configs}/etc/sysctl.d/60-gce-network-security.conf";
 
@@ -99,7 +89,7 @@ in
     useradd_cmd = useradd -m -s /run/current-system/sw/bin/bash -p * {user}
 
     [Daemons]
-    accounts_daemon = ${boolToString config.users.mutableUsers}
+    accounts_daemon = ${lib.boolToString config.users.mutableUsers}
 
     [InstanceSetup]
     # Make sure GCE image does not replace host key that NixOps sets.

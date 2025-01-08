@@ -7,13 +7,6 @@
 
 let
 
-  inherit (lib)
-    mkIf
-    mkEnableOption
-    lib.mkOption
-    types
-    literalExpression
-    ;
   cfg = config.services.nextcloud-whiteboard-server;
 
 in

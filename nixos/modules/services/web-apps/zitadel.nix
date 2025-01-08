@@ -12,14 +12,6 @@ let
 in
 {
   options.services.zitadel =
-    let
-      inherit (lib)
-        mkEnableOption
-        lib.mkOption
-        mkPackageOption
-        types
-        ;
-    in
     {
       enable = lib.mkEnableOption "ZITADEL, a user and identity access management platform";
 

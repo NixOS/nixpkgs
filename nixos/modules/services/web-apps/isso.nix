@@ -6,14 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    types
-    literalExpression
-    ;
-
   cfg = config.services.isso;
 
   settingsFormat = pkgs.formats.ini { };

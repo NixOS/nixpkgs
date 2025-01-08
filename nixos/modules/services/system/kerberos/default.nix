@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (lib) lib.mkOption types;
   cfg = config.services.kerberos_server;
   inherit (config.security.krb5) package;
 

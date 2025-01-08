@@ -6,22 +6,6 @@
 }:
 let
   cfg = config.services.bitmagnet;
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optional
-    ;
-  inherit (lib.types)
-    bool
-    int
-    port
-    str
-    submodule
-    ;
-  inherit (lib.generators) toYAML;
-
   freeformType = (pkgs.formats.yaml { }).type;
 in
 {
@@ -29,23 +13,23 @@ in
     enable = lib.mkEnableOption "Bitmagnet service";
     useLocalPostgresDB = lib.mkOption {
       description = "Use a local postgresql database, create user and database";
-      type = bool;
+      type = lib.types.bool;
       default = true;
     };
     settings = lib.mkOption {
       description = "Bitmagnet configuration (https://bitmagnet.io/setup/configuration.html).";
       default = { };
-      type = submodule {
+      type = lib.types.submodule {
         inherit freeformType;
         options = {
           http_server = lib.mkOption {
             default = { };
             description = "HTTP server settings";
-            type = submodule {
+            type = lib.types.submodule {
               inherit freeformType;
               options = {
                 port = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   default = ":3333";
                   description = "HTTP server listen port";
                 };
@@ -55,11 +39,11 @@ in
           dht_server = lib.mkOption {
             default = { };
             description = "DHT server settings";
-            type = submodule {
+            type = lib.types.submodule {
               inherit freeformType;
               options = {
                 port = lib.mkOption {
-                  type = port;
+                  type = lib.types.port;
                   default = 3334;
                   description = "DHT listen port";
                 };
@@ -69,26 +53,26 @@ in
           postgres = lib.mkOption {
             default = { };
             description = "PostgreSQL database configuration";
-            type = submodule {
+            type = lib.types.submodule {
               inherit freeformType;
               options = {
                 host = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   default = "";
                   description = "Address, hostname or Unix socket path of the database server";
                 };
                 name = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   default = "bitmagnet";
                   description = "Database name to connect to";
                 };
                 user = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   default = "";
                   description = "User to connect as";
                 };
                 password = lib.mkOption {
-                  type = str;
+                  type = lib.types.str;
                   default = "";
                   description = "Password for database user";
                 };
@@ -101,23 +85,23 @@ in
     package = lib.mkPackageOption pkgs "bitmagnet" { };
     user = lib.mkOption {
       description = "User running bitmagnet";
-      type = str;
+      type = lib.types.str;
       default = "bitmagnet";
     };
     group = lib.mkOption {
       description = "Group of user running bitmagnet";
-      type = str;
+      type = lib.types.str;
       default = "bitmagnet";
     };
     openFirewall = lib.mkOption {
       description = "Open DHT ports in firewall";
-      type = bool;
+      type = lib.types.bool;
       default = false;
     };
   };
   config = lib.mkIf cfg.enable {
     environment.etc."xdg/bitmagnet/config.yml" = {
-      text = toYAML { } cfg.settings;
+      text = lib.generators.toYAML { } cfg.settings;
       mode = "0440";
       user = cfg.user;
       group = cfg.group;

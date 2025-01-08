@@ -1,32 +1,6 @@
 { config, options, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    all
-    concatMap
-    concatMapStrings
-    concatStrings
-    escapeShellArg
-    flip
-    foldr
-    forEach
-    hasPrefix
-    mapAttrsToList
-    literalExpression
-    makeBinPath
-    mkDefault
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    lib.optional
-    lib.optionals
-    lib.optionalString
-    replaceStrings
-    types
-  ;
-
   cfg = config.boot.loader.grub;
 
   efi = config.boot.loader.efi;
@@ -55,7 +29,7 @@ let
   grubConfig = args:
     let
       efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
-      efiSysMountPoint' = replaceStrings [ "/" ] [ "-" ] efiSysMountPoint;
+      efiSysMountPoint' = lib.replaceStrings [ "/" ] [ "-" ] efiSysMountPoint;
     in
     pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
@@ -99,15 +73,15 @@ let
              else "${convertedFont}");
     });
 
-  bootDeviceCounters = foldr (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
-    (concatMap (args: args.devices) cfg.mirroredBoots);
+  bootDeviceCounters = lib.foldr (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
+    (lib.concatMap (args: args.devices) cfg.mirroredBoots);
 
   convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
            (builtins.concatStringsSep " "
              ([ "${realGrub}/bin/grub-mkfont"
                cfg.font
                "--output" "$out"
-             ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
+             ] ++ (lib.optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
          );
 
   defaultSplash = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath;
@@ -173,7 +147,7 @@ in
           (as opposed to external files) will be copied into the Nix store, and
           will be visible to all local users.
         '';
-        type = lib.types.attrsOf (types.submodule {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
             hashedPasswordFile = lib.mkOption {
               example = "/path/to/file";
@@ -405,7 +379,7 @@ in
       };
 
       extraFiles = lib.mkOption {
-        type = lib.types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         default = {};
         example = lib.literalExpression ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
@@ -582,7 +556,7 @@ in
 
       default = lib.mkOption {
         default = "0";
-        type = lib.types.either types.int types.str;
+        type = lib.types.either lib.types.int lib.types.str;
         apply = toString;
         description = ''
           Index of the default menu item to be booted.
@@ -742,7 +716,7 @@ in
         #!${pkgs.runtimeShell}
         set -e
         ${lib.optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
-      '' + flip concatMapStrings cfg.mirroredBoots (args: ''
+      '' + lib.flip lib.concatMapStrings cfg.mirroredBoots (args: ''
         ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       '') + cfg.extraInstallCommands);
 
@@ -755,7 +729,7 @@ in
       environment.systemPackages = lib.mkIf (grub != null) [ grub ];
 
       boot.loader.grub.extraPrepareConfig =
-        concatStrings (mapAttrsToList (n: v: ''
+        lib.concatStrings (lib.mapAttrsToList (n: v: ''
           ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${lib.escapeShellArg n}
         '') config.boot.loader.grub.extraFiles);
 
@@ -766,7 +740,7 @@ in
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
         }
         {
-          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
+          assertion = cfg.efiSupport || lib.all (c: c < 2) (lib.mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
@@ -781,21 +755,21 @@ in
           assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
           message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
         }
-      ] ++ flip concatMap cfg.mirroredBoots (args: [
+      ] ++ lib.flip lib.concatMap cfg.mirroredBoots (args: [
         {
           assertion = args.devices != [ ];
           message = "A boot path cannot have an empty devices string in ${args.path}";
         }
         {
-          assertion = hasPrefix "/" args.path;
+          assertion = lib.hasPrefix "/" args.path;
           message = "Boot paths must be absolute, not ${args.path}";
         }
         {
-          assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
+          assertion = if args.efiSysMountPoint == null then true else lib.hasPrefix "/" args.efiSysMountPoint;
           message = "EFI paths must be absolute, not ${args.efiSysMountPoint}";
         }
-      ] ++ forEach args.devices (device: {
-        assertion = device == "nodev" || hasPrefix "/" device;
+      ] ++ lib.forEach args.devices (device: {
+        assertion = device == "nodev" || lib.hasPrefix "/" device;
         message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
       }));
     })

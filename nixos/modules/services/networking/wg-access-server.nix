@@ -5,13 +5,6 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    ;
-
   cfg = config.services.wg-access-server;
 
   settingsFormat = pkgs.formats.yaml { };

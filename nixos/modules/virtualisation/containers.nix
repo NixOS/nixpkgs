@@ -6,9 +6,6 @@
 }:
 let
   cfg = config.virtualisation.containers;
-
-  inherit (lib) literalExpression lib.mkOption types;
-
   toml = pkgs.formats.toml { };
 in
 {

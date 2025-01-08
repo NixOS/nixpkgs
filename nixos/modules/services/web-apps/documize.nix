@@ -9,11 +9,11 @@ let
   cfg = config.services.documize;
 
   mkParams =
-    lib.optional:
+    optional:
     lib.concatMapStrings (
       name:
       let
-        predicate = lib.optional -> cfg.${name} != null;
+        predicate = optional -> cfg.${name} != null;
         template = " -${name} '${toString cfg.${name}}'";
       in
       lib.optionalString predicate template

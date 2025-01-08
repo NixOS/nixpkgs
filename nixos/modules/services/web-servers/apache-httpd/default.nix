@@ -611,7 +611,7 @@ in
 
     assertions = [
       {
-        assertion = all (hostOpts: !hostOpts.enableSSL) vhosts;
+        assertion = lib.all (hostOpts: !hostOpts.enableSSL) vhosts;
         message = ''
           The option `services.httpd.virtualHosts.<name>.enableSSL` no longer has any effect; please remove it.
           Select one of `services.httpd.virtualHosts.<name>.addSSL`, `services.httpd.virtualHosts.<name>.forceSSL`,
@@ -619,7 +619,7 @@ in
         '';
       }
       {
-        assertion = all (hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)) vhosts;
+        assertion = lib.all (hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)) vhosts;
         message = ''
           Options `services.httpd.virtualHosts.<name>.addSSL`,
           `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
@@ -627,7 +627,7 @@ in
         '';
       }
       {
-        assertion = all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
+        assertion = lib.all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
         message = ''
           Options `services.httpd.virtualHosts.<name>.enableACME` and
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
@@ -647,7 +647,7 @@ in
     }) vhostCertNames;
 
     warnings =
-      mapAttrsToList (name: hostOpts: ''
+      lib.mapAttrsToList (name: hostOpts: ''
         Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
       '') (lib.filterAttrs (name: hostOpts: hostOpts.servedFiles != []) cfg.virtualHosts);
 
@@ -666,21 +666,21 @@ in
     security.acme.certs = let
       acmePairs = map (hostOpts: let
         hasRoot = hostOpts.acmeRoot != null;
-      in nameValuePair hostOpts.hostName {
+      in lib.nameValuePair hostOpts.hostName {
         group = lib.mkDefault cfg.group;
         # if acmeRoot is null inherit config.security.acme
         # Since config.security.acme.certs.<cert>.webroot's own default value
         # should take precedence set priority higher than lib.mkOptionDefault
-        webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
+        webroot = lib.mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
         # Also nudge dnsProvider to null in case it is inherited
-        dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
+        dnsProvider = lib.mkOverride (if hasRoot then 1000 else 2000) null;
         extraDomainNames = hostOpts.serverAliases;
         # Use the vhost-specific email address if provided, otherwise let
         # security.acme.email or security.acme.certs.<cert>.email be used.
-        email = mkOverride 2000 (if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr);
+        email = lib.mkOverride 2000 (if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr);
       # Filter for enableACME-only vhosts. Don't want to create dud certs
-      }) (filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
-    in listToAttrs acmePairs;
+      }) (lib.filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
+    in lib.listToAttrs acmePairs;
 
     # httpd requires a stable path to the configuration file for reloads
     environment.etc."httpd/httpd.conf".source = cfg.configFile;
@@ -713,7 +713,7 @@ in
         date.timezone = "${config.time.timeZone}"
       '';
 
-    services.httpd.extraModules = mkBefore [
+    services.httpd.extraModules = lib.mkBefore [
       # HTTP authentication mechanisms: basic and digest.
       "auth_basic" "auth_digest"
 
@@ -747,7 +747,7 @@ in
     systemd.services.httpd = {
         description = "Apache HTTPD";
         wantedBy = [ "multi-user.target" ];
-        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+        wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
         after = [ "network.target" ]
           ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
           ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
@@ -793,7 +793,7 @@ in
     systemd.services.httpd-config-reload = let
       sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
       sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
-    in mkIf (vhostCertNames != []) {
+    in lib.mkIf (vhostCertNames != []) {
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm

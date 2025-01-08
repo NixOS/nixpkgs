@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (builtins) toString;
-  inherit (lib) types mkIf lib.mkOption mkDefault;
-  inherit (lib) lib.optional lib.optionals lib.optionalAttrs lib.optionalString;
-
   inherit (pkgs) sqlite;
 
   format = pkgs.formats.ini {

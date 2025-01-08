@@ -7,13 +7,6 @@
 
 let
   cfg = config.services.pingvin-share;
-  inherit (lib)
-    lib.mkOption
-    mkEnableOption
-    mkIf
-    mkPackageOption
-    types
-    ;
 in
 
 {

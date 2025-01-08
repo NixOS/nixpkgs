@@ -6,22 +6,6 @@
 }:
 
 let
-
-  inherit (lib.options) literalExpression mkEnableOption lib.mkOption;
-  inherit (lib.types)
-    bool
-    enum
-    ints
-    lines
-    attrsOf
-    nonEmptyStr
-    nullOr
-    path
-    str
-    submodule
-    ;
-  inherit (lib.modules) mkDefault mkIf mkMerge;
-
   commonDescr = ''
     Values can be either strings or integers
     (which will be added to the config file verbatimly)
@@ -40,15 +24,9 @@ let
     # This type definition resolves all
     # those types into a list of strings.
     let
-      inherit (lib.types)
-        attrsOf
-        coercedTo
-        int
-        listOf
-        ;
-      innerType = coercedTo bool (x: if x then "Yes" else "No") (coercedTo int (toString) str);
+      innerType = lib.types.coercedTo lib.types.bool (x: if x then "Yes" else "No") (lib.types.coercedTo lib.types.int (toString) lib.types.str);
     in
-    attrsOf (coercedTo innerType lib.singleton (listOf innerType));
+    lib.types.attrsOf (lib.types.coercedTo innerType lib.singleton (lib.types.listOf innerType));
 
   cfg = config.services.hylafax;
 
@@ -57,7 +35,7 @@ let
     {
       options = {
         name = lib.mkOption {
-          type = nonEmptyStr;
+          type = lib.types.nonEmptyStr;
           example = "ttyS1";
           description = ''
             Name of modem device,
@@ -65,7 +43,7 @@ let
           '';
         };
         type = lib.mkOption {
-          type = nonEmptyStr;
+          type = lib.types.nonEmptyStr;
           example = "cirrus";
           description = ''
             Name of modem configuration file,
@@ -97,7 +75,7 @@ let
     let
       inherit (config.security) wrapperDir;
       inherit (config.services.mail.sendmailSetuidWrapper) program;
-      mkIfDefault = cond: value: mkIf cond (mkDefault value);
+      mkIfDefault = cond: value: lib.mkIf cond (lib.mkDefault value);
       noWrapper = config.services.mail.sendmailSetuidWrapper == null;
       # If a sendmail setuid wrapper exists,
       # we add the path to the default configuration file.
@@ -108,7 +86,7 @@ let
         (lib.mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig =
-        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit pkgs; });
+        file: lib.attrsets.mapAttrs (lib.trivial.const lib.mkDefault) (import file { inherit pkgs; });
       c.commonModemConfig = importDefaultConfig ./modem-default.nix;
       c.faxqConfig = importDefaultConfig ./faxq-default.nix;
       c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
@@ -118,7 +96,7 @@ let
   localConfig =
     let
       c.hfaxdConfig.UserAccessFile = cfg.userAccessFile;
-      c.faxqConfig = lib.attrsets.mapAttrs (lib.trivial.const (v: mkIf (v != null) v)) {
+      c.faxqConfig = lib.attrsets.mapAttrs (lib.trivial.const (v: lib.mkIf (v != null) v)) {
         AreaCode = cfg.areaCode;
         CountryCode = cfg.countryCode;
         LongDistancePrefix = cfg.longDistancePrefix;
@@ -137,7 +115,7 @@ in
     enable = lib.mkEnableOption "HylaFAX server";
 
     autostart = lib.mkOption {
-      type = bool;
+      type = lib.bool;
       default = true;
       example = false;
       description = ''
@@ -149,35 +127,35 @@ in
     };
 
     countryCode = lib.mkOption {
-      type = nullOr nonEmptyStr;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
       example = "49";
       description = "Country code for server and all modems.";
     };
 
     areaCode = lib.mkOption {
-      type = nullOr nonEmptyStr;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
       example = "30";
       description = "Area code for server and all modems.";
     };
 
     longDistancePrefix = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "0";
       description = "Long distance prefix for server and all modems.";
     };
 
     internationalPrefix = lib.mkOption {
-      type = nullOr str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "00";
       description = "International prefix for server and all modems.";
     };
 
     spoolAreaPath = lib.mkOption {
-      type = path;
+      type = lib.types.path;
       default = "/var/spool/fax";
       description = ''
         The spooling area will be created/maintained
@@ -186,7 +164,7 @@ in
     };
 
     userAccessFile = lib.mkOption {
-      type = path;
+      type = lib.types.path;
       default = "/etc/hosts.hfaxd";
       description = ''
         The {file}`hosts.hfaxd`
@@ -210,7 +188,7 @@ in
     };
 
     sendmailPath = lib.mkOption {
-      type = path;
+      type = lib.types.path;
       example = lib.literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
       # '' ;  # fix vim
       description = ''
@@ -261,7 +239,7 @@ in
     };
 
     modems = lib.mkOption {
-      type = attrsOf (submodule [ modemConfigOptions ]);
+      type = lib.types.attrsOf (lib.types.submodule [ modemConfigOptions ]);
       default = { };
       example.ttyS1 = {
         type = "cirrus";
@@ -278,7 +256,7 @@ in
     };
 
     spoolExtraInit = lib.mkOption {
-      type = lines;
+      type = lib.types.lines;
       default = "";
       example = "chmod 0755 .  # everyone may read my faxes";
       description = ''
@@ -287,13 +265,13 @@ in
       '';
     };
 
-    faxcron.enable.spoolInit = mkEnableOption ''
+    faxcron.enable.spoolInit = lib.mkEnableOption ''
       purging old files from the spooling area with
       {file}`faxcron`
       each time the spooling area is initialized
     '';
     faxcron.enable.frequency = lib.mkOption {
-      type = nullOr nonEmptyStr;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
       example = "daily";
       description = ''
@@ -303,7 +281,7 @@ in
       '';
     };
     faxcron.infoDays = lib.mkOption {
-      type = ints.positive;
+      type = lib.types.ints.positive;
       default = 30;
       description = ''
         Set the expiration time for data in the
@@ -311,7 +289,7 @@ in
       '';
     };
     faxcron.logDays = lib.mkOption {
-      type = ints.positive;
+      type = lib.types.ints.positive;
       default = 30;
       description = ''
         Set the expiration time for
@@ -319,7 +297,7 @@ in
       '';
     };
     faxcron.rcvDays = lib.mkOption {
-      type = ints.positive;
+      type = lib.types.ints.positive;
       default = 7;
       description = ''
         Set the expiration time for files in
@@ -327,13 +305,13 @@ in
       '';
     };
 
-    faxqclean.enable.spoolInit = mkEnableOption ''
+    faxqclean.enable.spoolInit = lib.mkEnableOption ''
       purging old files from the spooling area with
       {file}`faxqclean`
       each time the spooling area is initialized
     '';
     faxqclean.enable.frequency = lib.mkOption {
-      type = nullOr nonEmptyStr;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
       example = "daily";
       description = ''
@@ -343,7 +321,7 @@ in
       '';
     };
     faxqclean.archiving = lib.mkOption {
-      type = enum [
+      type = lib.types.enum [
         "never"
         "as-flagged"
         "always"
@@ -360,7 +338,7 @@ in
       '';
     };
     faxqclean.doneqMinutes = lib.mkOption {
-      type = ints.positive;
+      type = lib.types.ints.positive;
       default = 15;
       example = lib.literalExpression "24*60";
       description = ''
@@ -370,7 +348,7 @@ in
       '';
     };
     faxqclean.docqMinutes = lib.mkOption {
-      type = ints.positive;
+      type = lib.types.ints.positive;
       default = 60;
       example = lib.literalExpression "24*60";
       description = ''
@@ -382,7 +360,7 @@ in
 
   };
 
-  config.services.hylafax = lib.mkIf (config.services.hylafax.enable) (mkMerge [
+  config.services.hylafax = lib.mkIf (config.services.hylafax.enable) (lib.mkMerge [
     defaultConfig
     localConfig
   ]);

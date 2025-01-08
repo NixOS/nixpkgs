@@ -7,21 +7,6 @@
 let
   cfg = config.services.gancio;
   settingsFormat = pkgs.formats.json { };
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    lib.mkOption
-    types
-    literalExpression
-    mkIf
-    lib.optional
-    mapAttrsToList
-    concatStringsSep
-    concatMapStringsSep
-    getExe
-    mkMerge
-    mkDefault
-    ;
 in
 {
   options.services.gancio = {
@@ -44,7 +29,7 @@ in
       default = "gancio";
     };
 
-    settings = lib.mkOption rec {
+    settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
@@ -216,17 +201,17 @@ in
 
           rm -f user_locale/*
           ${lib.concatStringsSep "\n" (
-            mapAttrsToList (
+            lib.mapAttrsToList (
               l: c: "ln -sf ${settingsFormat.generate "gancio-${l}-locale.json" c} user_locale/${l}.json"
             ) cfg.userLocale
           )}
 
           rm -f plugins/*
-          ${concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/") cfg.plugins}
+          ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/") cfg.plugins}
         '';
 
         serviceConfig = {
-          ExecStart = "${getExe cfg.package} start ${configFile}";
+          ExecStart = "${lib.getExe cfg.package} start ${configFile}";
           # set umask so that nginx can write to the server socket
           # FIXME: upstream socket permission configuration in Nuxt
           UMask = "0002";

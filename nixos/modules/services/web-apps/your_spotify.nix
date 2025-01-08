@@ -5,50 +5,27 @@
   ...
 }:
 let
-  inherit (lib)
-    boolToString
-    concatMapAttrs
-    concatStrings
-    isBool
-    mapAttrsToList
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    lib.optionalAttrs
-    types
-    mkDefault
-    ;
   cfg = config.services.your_spotify;
 
-  configEnv = concatMapAttrs (
+  configEnv = lib.concatMapAttrs (
     name: value:
     lib.optionalAttrs (value != null) {
-      ${name} = if isBool value then boolToString value else toString value;
+      ${name} = if lib.isBool value then lib.boolToString value else toString value;
     }
   ) cfg.settings;
 
   configFile = pkgs.writeText "your_spotify.env" (
-    concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv)
+    lib.concatStrings (lib.mapAttrsToList (name: value: "${name}=${value}\n") configEnv)
   );
 in
 {
   options.services.your_spotify =
-    let
-      inherit (types)
-        nullOr
-        port
-        str
-        path
-        package
-        ;
-    in
     {
       enable = lib.mkEnableOption "your_spotify";
 
-      enableLocalDB = mkEnableOption "a local mongodb instance";
+      enableLocalDB = lib.mkEnableOption "a local mongodb instance";
       nginxVirtualHost = lib.mkOption {
-        type = nullOr str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           If set creates an nginx virtual host for the client.
@@ -60,12 +37,12 @@ in
       package = lib.mkPackageOption pkgs "your_spotify" { };
 
       clientPackage = lib.mkOption {
-        type = package;
+        type = lib.types.package;
         description = "Client package to use.";
       };
 
       spotifySecretFile = lib.mkOption {
-        type = path;
+        type = lib.types.path;
         description = ''
           A file containing the secret key of your Spotify application.
           Refer to: [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application).
@@ -84,10 +61,10 @@ in
           }
         '';
         type = lib.types.submodule {
-          freeformType = types.attrsOf types.str;
+          freeformType = lib.types.attrsOf lib.types.str;
           options = {
             CLIENT_ENDPOINT = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               description = ''
                 The endpoint of your web application.
                 Has to include a protocol Prefix (e.g. `http://`)
@@ -95,7 +72,7 @@ in
               example = "https://your_spotify.example.org";
             };
             API_ENDPOINT = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               description = ''
                 The endpoint of your server
                 This api has to be reachable from the device you use the website from not from the server.
@@ -106,19 +83,19 @@ in
               example = "https://localhost:3000";
             };
             SPOTIFY_PUBLIC = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               description = ''
                 The public client ID of your Spotify application.
                 Refer to: [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application)
               '';
             };
             MONGO_ENDPOINT = lib.mkOption {
-              type = str;
+              type = lib.types.str;
               description = ''The endpoint of the Mongo database.'';
               default = "mongodb://localhost:27017/your_spotify";
             };
             PORT = lib.mkOption {
-              type = port;
+              type = lib.types.port;
               description = "The port of the api server";
               default = 3000;
             };

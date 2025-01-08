@@ -3,8 +3,6 @@ let
   cfg = config.virtualisation.podman;
   json = pkgs.formats.json { };
 
-  inherit (lib) lib.mkOption types;
-
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommand "${cfg.package.pname}-docker-compat-${cfg.package.version}"
     {

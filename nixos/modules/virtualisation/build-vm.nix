@@ -5,11 +5,6 @@
   ...
 }:
 let
-
-  inherit (lib)
-    lib.mkOption
-    ;
-
   vmVariant = extendModules {
     modules = [ ./qemu-vm.nix ];
   };

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.tor.torsocks;
-  lib.optionalNullStr = b: v: lib.optionalString (b != null) v;
+  optionalNullStr = b: v: lib.optionalString (b != null) v;
 
   configFile = server: ''
     TorAddress ${toString (lib.head (lib.splitString ":" server))}

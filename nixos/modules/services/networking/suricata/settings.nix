@@ -6,15 +6,9 @@
 }:
 let
   cfg = config.services.suricata;
-  inherit (lib)
-    mkEnableOption
-    lib.mkOption
-    types
-    literalExpression
-    ;
   mkDisableOption =
     name:
-    mkEnableOption name
+    lib.mkEnableOption name
     // {
       default = true;
       example = false;
@@ -25,11 +19,11 @@ in
   options = {
     vars = lib.mkOption {
       type = lib.types.nullOr (
-        types.submodule {
+        lib.types.submodule {
           options = {
             address-groups = lib.mkOption {
               type = (
-                types.submodule {
+                lib.types.submodule {
                   options = {
                     HOME_NET = lib.mkOption {
                       default = "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]";
@@ -179,8 +173,7 @@ in
 
     stats = lib.mkOption {
       type =
-        with lib.types;
-        nullOr (submodule {
+        lib.types.nullOr (lib.types.submodule {
           options = {
             enable = lib.mkEnableOption "suricata global stats";
 

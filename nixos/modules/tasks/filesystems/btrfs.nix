@@ -7,21 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    lib.mkOption
-    types
-    mkMerge
-    mkIf
-    lib.optionals
-    mkDefault
-    nameValuePair
-    listToAttrs
-    filterAttrs
-    mapAttrsToList
-    foldl'
-    ;
-
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
 
@@ -120,12 +105,12 @@ in
         let
           isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
 
-          uniqueDeviceList = foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
+          uniqueDeviceList = lib.foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
         in
-        mkDefault (
+        lib.mkDefault (
           map (e: e.mountPoint) (
             uniqueDeviceList (
-              mapAttrsToList (name: fs: {
+              lib.mapAttrsToList (name: fs: {
                 mountPoint = fs.mountPoint;
                 device = fs.device;
               }) (lib.filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
@@ -144,7 +129,7 @@ in
             let
               fs' = utils.escapeSystemdPath fs;
             in
-            nameValuePair "btrfs-scrub-${fs'}" {
+            lib.nameValuePair "btrfs-scrub-${fs'}" {
               description = "regular btrfs scrub timer on ${fs}";
 
               wantedBy = [ "timers.target" ];
@@ -155,7 +140,7 @@ in
               };
             };
         in
-        listToAttrs (map scrubTimer cfgScrub.fileSystems);
+        lib.listToAttrs (map scrubTimer cfgScrub.fileSystems);
 
       systemd.services =
         let
@@ -164,7 +149,7 @@ in
             let
               fs' = utils.escapeSystemdPath fs;
             in
-            nameValuePair "btrfs-scrub-${fs'}" {
+            lib.nameValuePair "btrfs-scrub-${fs'}" {
               description = "btrfs scrub on ${fs}";
               # scrub prevents suspend2ram or proper shutdown
               conflicts = [
@@ -189,7 +174,7 @@ in
               };
             };
         in
-        listToAttrs (map scrubService cfgScrub.fileSystems);
+        lib.listToAttrs (map scrubService cfgScrub.fileSystems);
     })
   ];
 }

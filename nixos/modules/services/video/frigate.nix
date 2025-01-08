@@ -5,30 +5,13 @@
 }:
 
 let
-  inherit (lib)
-    any
-    attrValues
-    converge
-    elem
-    filterAttrsRecursive
-    hasPrefix
-    makeLibraryPath
-    mkDefault
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    lib.mkOption
-    lib.optionalAttrs
-    lib.optionals
-    types;
-
   cfg = config.services.frigate;
 
   format = pkgs.formats.yaml { };
 
-  filteredConfig = converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.settings;
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ null ])) cfg.settings;
 
-  cameraFormat = with lib.types; submodule {
+  cameraFormat = lib.types.submodule {
     freeformType = format.type;
     options = {
       ffmpeg = {
@@ -36,18 +19,18 @@ let
           description = ''
             List of inputs for this camera.
           '';
-          type = listOf (submodule {
+          type = lib.types.listOf (lib.types.submodule {
             freeformType = format.type;
             options = {
               path = lib.mkOption {
-                type = str;
+                type = lib.types.str;
                 example = "rtsp://192.0.2.1:554/rtsp";
                 description = ''
                   Stream URL
                 '';
               };
               roles = lib.mkOption {
-                type = listOf (enum [ "audio" "detect" "record" ]);
+                type = lib.types.listOf (lib.types.enum [ "audio" "detect" "record" ]);
                 example = [ "detect" "record" ];
                 description = ''
                   List of roles for this stream
@@ -103,9 +86,9 @@ let
   '';
 
   # Discover configured detectors for acceleration support
-  detectors = attrValues cfg.settings.detectors or {};
-  withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
-  withCoralPCI =  any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
+  detectors = lib.attrValues cfg.settings.detectors or {};
+  withCoralUSB = lib.any (d: d.type == "edgetpu" && lib.hasPrefix "usb" d.device or "") detectors;
+  withCoralPCI =  lib.any (d: d.type == "edgetpu" && lib.hasPrefix "pci" d.device or "") detectors;
   withCoral = withCoralPCI || withCoralUSB;
 in
 
@@ -566,7 +549,7 @@ in
       } // lib.optionalAttrs (cfg.vaapiDriver != null) {
         LIBVA_DRIVER_NAME = cfg.vaapiDriver;
       } // lib.optionalAttrs withCoral {
-        LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
+        LD_LIBRARY_PATH = lib.makeLibraryPath (with pkgs; [ libedgetpu ]);
       };
       path = with pkgs; [
         # unfree:
@@ -591,7 +574,7 @@ in
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ lib.optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = lib.optionals (elem cfg.vaapiDriver [ "i965" "iHD" ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        AmbientCapabilities = lib.optionals (lib.elem cfg.vaapiDriver [ "i965" "iHD" ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
 
         UMask = "0027";
 

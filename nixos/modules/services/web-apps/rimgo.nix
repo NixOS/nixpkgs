@@ -6,18 +6,6 @@
 }:
 let
   cfg = config.services.rimgo;
-  inherit (lib)
-    lib.mkOption
-    mkEnableOption
-    mkPackageOption
-    mkDefault
-    mkIf
-    types
-    literalExpression
-    lib.optionalString
-    getExe
-    mapAttrs
-    ;
 in
 {
   options.services.rimgo = {
@@ -58,9 +46,9 @@ in
       description = "Rimgo";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = mapAttrs (_: toString) cfg.settings;
+      environment = lib.mapAttrs (_: toString) cfg.settings;
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = lib.getExe cfg.package;
         AmbientCapabilities = lib.mkIf (cfg.settings.PORT < 1024) [
           "CAP_NET_BIND_SERVICE"
         ];
@@ -68,7 +56,7 @@ in
         Restart = "on-failure";
         RestartSec = "5s";
         CapabilityBoundingSet = [
-          (optionalString (cfg.settings.PORT < 1024) "CAP_NET_BIND_SERVICE")
+          (lib.optionalString (cfg.settings.PORT < 1024) "CAP_NET_BIND_SERVICE")
         ];
         DeviceAllow = [ "" ];
         LockPersonality = true;

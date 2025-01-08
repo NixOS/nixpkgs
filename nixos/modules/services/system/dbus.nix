@@ -13,8 +13,6 @@ let
     serviceDirectories = cfg.packages;
   };
 
-  inherit (lib) lib.mkOption mkEnableOption mkIf mkMerge types;
-
 in
 
 {
@@ -84,7 +82,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       environment.etc."dbus-1".source = configDir;
 

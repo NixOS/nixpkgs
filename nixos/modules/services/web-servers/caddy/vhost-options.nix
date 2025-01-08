@@ -5,9 +5,7 @@
   name,
   ...
 }:
-let
-  inherit (lib) literalExpression lib.mkOption types;
-in
+
 {
   options = {
 

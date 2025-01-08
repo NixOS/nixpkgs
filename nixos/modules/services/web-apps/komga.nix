@@ -7,8 +7,6 @@
 
 let
   cfg = config.services.komga;
-  inherit (lib) lib.mkOption mkEnableOption maintainers;
-  inherit (lib.types) port str bool;
 
   settingsFormat = pkgs.formats.yaml { };
 in
@@ -35,19 +33,19 @@ in
       enable = lib.mkEnableOption "Komga, a free and open source comics/mangas media server";
 
       user = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "komga";
         description = "User account under which Komga runs.";
       };
 
       group = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "komga";
         description = "Group under which Komga runs.";
       };
 
       stateDir = lib.mkOption {
-        type = str;
+        type = lib.types.str;
         default = "/var/lib/komga";
         description = "State and configuration directory Komga will use.";
       };
@@ -68,7 +66,7 @@ in
       };
 
       openFirewall = lib.mkOption {
-        type = bool;
+        type = lib.types.bool;
         default = false;
         description = "Whether to open the firewall for the port in {option}`services.komga.settings.server.port`.";
       };
@@ -76,9 +74,6 @@ in
   };
 
   config =
-    let
-      inherit (lib) mkIf getExe;
-    in
     lib.mkIf cfg.enable {
       assertions = [
         {
@@ -130,7 +125,7 @@ in
 
           Type = "simple";
           Restart = "on-failure";
-          ExecStart = getExe pkgs.komga;
+          ExecStart = lib.getExe pkgs.komga;
 
           StateDirectory = lib.mkIf (cfg.stateDir == "/var/lib/komga") "komga";
 

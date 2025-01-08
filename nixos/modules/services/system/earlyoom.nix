@@ -7,19 +7,6 @@
 
 let
   cfg = config.services.earlyoom;
-
-  inherit (lib)
-    literalExpression
-    mkDefault
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    lib.optionalString
-    lib.optionals
-    types
-    ;
 in
 {
   meta = {
@@ -48,7 +35,7 @@ in
     };
 
     freeMemKillThreshold = lib.mkOption {
-      type = lib.types.nullOr (types.ints.between 1 100);
+      type = lib.types.nullOr (lib.types.ints.between 1 100);
       default = null;
       description = ''
         Minimum available memory (in percent) before sending SIGKILL.
@@ -69,7 +56,7 @@ in
     };
 
     freeSwapKillThreshold = lib.mkOption {
-      type = lib.types.nullOr (types.ints.between 1 100);
+      type = lib.types.nullOr (lib.types.ints.between 1 100);
       default = null;
       description = ''
         Minimum free swap space (in percent) before sending SIGKILL.

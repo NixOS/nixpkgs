@@ -1,16 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    mkIf
-    lib.mkOption
-    mkPackageOption
-    mkRemovedOptionModule
-    types
-    ;
-
   cfg = config.services.plantuml-server;
 
 in
@@ -27,8 +17,8 @@ in
       package = lib.mkPackageOption pkgs "plantuml-server" { };
 
       packages = {
-        jdk = mkPackageOption pkgs "jdk" { };
-        jetty = mkPackageOption pkgs "jetty" {
+        jdk = lib.mkPackageOption pkgs "jdk" { };
+        jetty = lib.mkPackageOption pkgs "jetty" {
           default = [ "jetty_11" ];
           extraDescription = ''
             At the time of writing (v1.2023.12), PlantUML Server does not support
@@ -77,7 +67,7 @@ in
         description = "Limits image width and height.";
       };
 
-      graphvizPackage = mkPackageOption pkgs "graphviz" { };
+      graphvizPackage = lib.mkPackageOption pkgs "graphviz" { };
 
       plantumlStats = lib.mkOption {
         type = lib.types.bool;

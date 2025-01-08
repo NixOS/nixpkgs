@@ -6,54 +6,21 @@
   ...
 }:
 let
-  inherit (lib)
-    any
-    attrNames
-    attrValues
-    concatLines
-    concatLists
-    converge
-    filter
-    filterAttrs
-    filterAttrsRecursive
-    flip
-    foldl'
-    getExe
-    hasInfix
-    hasPrefix
-    isStorePath
-    last
-    mapAttrsToList
-    mkEnableOption
-    mkForce
-    mkIf
-    mkMerge
-    lib.mkOption
-    mkPackageOption
-    lib.optional
-    lib.optionals
-    lib.optionalString
-    splitString
-    subtractLists
-    types
-    unique
-    ;
-
   cfg = config.services.kanidm;
   settingsFormat = pkgs.formats.toml { };
   # Remove null values, so we can document lib.optional values that don't end up in the generated TOML file.
-  filterConfig = converge (lib.filterAttrsRecursive (_: v: v != null));
+  filterConfig = lib.converge (lib.filterAttrsRecursive (_: v: v != null));
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
-  provisionSecretFiles = filter (x: x != null) (
+  provisionSecretFiles = lib.filter (x: x != null) (
     [
       cfg.provision.idmAdminPasswordFile
       cfg.provision.adminPasswordFile
     ]
-    ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
+    ++ lib.mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
   );
-  secretDirectories = unique (
+  secretDirectories = lib.unique (
     map builtins.dirOf (
       [
         cfg.serverSettings.tls_chain
@@ -67,12 +34,12 @@ let
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
   hasPrefixInList =
-    list: newPath: any (path: hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
-  mergePaths = foldl' (
+    list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  mergePaths = lib.foldl' (
     merged: newPath:
     let
       # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
       filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
     in
@@ -137,7 +104,7 @@ let
       default = true;
     };
 
-  filterPresent = filterAttrs (_: v: v.present);
+  filterPresent = lib.filterAttrs (_: v: v.present);
 
   provisionStateJson = pkgs.writeText "provision-state.json" (
     builtins.toJSON { inherit (cfg.provision) groups persons systems; }
@@ -175,7 +142,7 @@ let
           echo "kanidm provision: Failed to recover admin account" >&2
           exit 1
         fi
-        if ! KANIDM_IDM_ADMIN_PASSWORD=$(grep '{"password' <<< "$recover_out" | ${getExe pkgs.jq} -r .password); then
+        if ! KANIDM_IDM_ADMIN_PASSWORD=$(grep '{"password' <<< "$recover_out" | ${lib.getExe pkgs.jq} -r .password); then
           echo "$recover_out" >&2
           echo "kanidm provision: Failed to parse password for idm_admin account" >&2
           exit 1
@@ -187,7 +154,7 @@ let
 
     # Wait for the kanidm server to come online
     count=0
-    while ! ${getExe pkgs.curl} -L --silent --max-time 1 --connect-timeout 1 --fail \
+    while ! ${lib.getExe pkgs.curl} -L --silent --max-time 1 --connect-timeout 1 --fail \
        ${lib.optionalString cfg.provision.acceptInvalidCerts "--insecure"} \
        ${cfg.provision.instanceUrl} >/dev/null
     do
@@ -203,7 +170,7 @@ let
     ${maybeRecoverAdmin}
 
     KANIDM_PROVISION_IDM_ADMIN_TOKEN=$KANIDM_IDM_ADMIN_PASSWORD \
-      ${getExe pkgs.kanidm-provision} \
+      ${lib.getExe pkgs.kanidm-provision} \
         ${lib.optionalString (!cfg.provision.autoRemove) "--no-auto-remove"} \
         ${lib.optionalString cfg.provision.acceptInvalidCerts "--accept-invalid-certs"} \
         --url "${cfg.provision.instanceUrl}" \
@@ -215,21 +182,21 @@ let
       address = cfg.serverSettings.bindaddress;
     in
     # ipv6:
-    if hasInfix "]:" address then
-      last (splitString "]:" address)
+    if lib.hasInfix "]:" address then
+      lib.last (lib.splitString "]:" address)
     else
     # ipv4:
-    if hasInfix "." address then
-      last (splitString ":" address)
+    if lib.hasInfix "." address then
+      lib.last (lib.splitString ":" address)
     # default is 8443
     else
       throw "Address not parseable as IPv4 nor IPv6.";
 in
 {
   options.services.kanidm = {
-    enableClient = mkEnableOption "the Kanidm client";
-    enableServer = mkEnableOption "the Kanidm server";
-    enablePam = mkEnableOption "the Kanidm PAM and NSS integration";
+    enableClient = lib.mkEnableOption "the Kanidm client";
+    enableServer = lib.mkEnableOption "the Kanidm server";
+    enablePam = lib.mkEnableOption "the Kanidm PAM and NSS integration";
 
     package = lib.mkPackageOption pkgs "kanidm" {
       example = "kanidm_1_4";
@@ -399,7 +366,7 @@ in
           dangerous when used with an external URL.
         '';
         type = lib.types.bool;
-        default = hasPrefix "https://localhost:" cfg.provision.instanceUrl;
+        default = lib.hasPrefix "https://localhost:" cfg.provision.instanceUrl;
         defaultText = ''hasPrefix "https://localhost:" cfg.provision.instanceUrl'';
       };
 
@@ -435,19 +402,19 @@ in
         description = "Provisioning of kanidm groups";
         default = { };
         type = lib.types.attrsOf (
-          types.submodule (groupSubmod: {
+          lib.types.submodule (groupSubmod: {
             options = {
               present = mkPresentOption "group";
 
               members = lib.mkOption {
                 description = "List of kanidm entities (persons, groups, ...) which are part of this group.";
                 type = lib.types.listOf lib.types.str;
-                apply = unique;
+                apply = lib.unique;
                 default = [ ];
               };
             };
-            config.members = concatLists (
-              flip mapAttrsToList cfg.provision.persons (
+            config.members = lib.concatLists (
+              lib.flip lib.mapAttrsToList cfg.provision.persons (
                 person: personCfg:
                 lib.optional (
                   personCfg.present && builtins.elem groupSubmod.config._module.args.name personCfg.groups
@@ -462,7 +429,7 @@ in
         description = "Provisioning of kanidm persons";
         default = { };
         type = lib.types.attrsOf (
-          types.submodule {
+          lib.types.submodule {
             options = {
               present = mkPresentOption "person";
 
@@ -489,7 +456,7 @@ in
               groups = lib.mkOption {
                 description = "List of groups this person should belong to.";
                 type = lib.types.listOf lib.types.str;
-                apply = unique;
+                apply = lib.unique;
                 default = [ ];
               };
             };
@@ -501,7 +468,7 @@ in
         description = "Provisioning of oauth2 resource servers";
         default = { };
         type = lib.types.attrsOf (
-          types.submodule {
+          lib.types.submodule {
             options = {
               present = mkPresentOption "oauth2 resource server";
 
@@ -521,9 +488,9 @@ in
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*$";
+                    originStrType = lib.types.strMatching ".*://.*$";
                   in
-                  types.either originStrType (types.nonEmptyListOf originStrType);
+                  lib.types.either originStrType (lib.types.nonEmptyListOf originStrType);
                 example = "https://someservice.example.com/auth/login";
               };
 
@@ -576,7 +543,7 @@ in
                   Maps kanidm groups to returned oauth scopes.
                   See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
                 '';
-                type = lib.types.attrsOf (types.listOf types.str);
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
                 default = { };
               };
 
@@ -585,7 +552,7 @@ in
                   Maps kanidm groups to additionally returned oauth scopes.
                   See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
                 '';
-                type = lib.types.attrsOf (types.listOf types.str);
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
                 default = { };
               };
 
@@ -602,7 +569,7 @@ in
                 '';
                 default = { };
                 type = lib.types.attrsOf (
-                  types.submodule {
+                  lib.types.submodule {
                     options = {
                       joinType = lib.mkOption {
                         description = ''
@@ -620,7 +587,7 @@ in
                       valuesByGroup = lib.mkOption {
                         description = "Maps kanidm groups to values for the claim.";
                         default = { };
-                        type = lib.types.attrsOf (types.listOf types.str);
+                        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
                       };
                     };
                   }
@@ -637,22 +604,22 @@ in
     assertions =
       let
         entityList =
-          type: attrs: flip mapAttrsToList (filterPresent attrs) (name: _: { inherit type name; });
+          type: attrs: lib.flip lib.mapAttrsToList (filterPresent attrs) (name: _: { inherit type name; });
         entities =
           entityList "group" cfg.provision.groups
           ++ entityList "person" cfg.provision.persons
           ++ entityList "oauth2" cfg.provision.systems.oauth2;
 
         # Accumulate entities by name. Track corresponding entity types for later duplicate check.
-        entitiesByName = foldl' (
+        entitiesByName = lib.foldl' (
           acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
         ) { } entities;
 
         assertGroupsKnown =
           opt: groups:
           let
-            knownGroups = attrNames (filterPresent cfg.provision.groups);
-            unknownGroups = subtractLists knownGroups groups;
+            knownGroups = lib.attrNames (filterPresent cfg.provision.groups);
+            unknownGroups = lib.subtractLists knownGroups groups;
           in
           {
             assertion = (cfg.enableServer && cfg.provision.enable) -> unknownGroups == [ ];
@@ -662,7 +629,7 @@ in
         assertEntitiesKnown =
           opt: entities:
           let
-            unknownEntities = subtractLists (attrNames entitiesByName) entities;
+            unknownEntities = lib.subtractLists (lib.attrNames entitiesByName) entities;
           in
           {
             assertion = (cfg.enableServer && cfg.provision.enable) -> unknownEntities == [ ];
@@ -674,7 +641,7 @@ in
           assertion =
             !cfg.enableServer
             || ((cfg.serverSettings.tls_chain or null) == null)
-            || (!isStorePath cfg.serverSettings.tls_chain);
+            || (!lib.isStorePath cfg.serverSettings.tls_chain);
           message = ''
             <option>services.kanidm.serverSettings.tls_chain</option> points to
             a file in the Nix store. You should use a quoted absolute path to
@@ -685,7 +652,7 @@ in
           assertion =
             !cfg.enableServer
             || ((cfg.serverSettings.tls_key or null) == null)
-            || (!isStorePath cfg.serverSettings.tls_key);
+            || (!lib.isStorePath cfg.serverSettings.tls_key);
           message = ''
             <option>services.kanidm.serverSettings.tls_key</option> points to
             a file in the Nix store. You should use a quoted absolute path to
@@ -731,7 +698,7 @@ in
               && (
                 cfg.provision.adminPasswordFile != null
                 || cfg.provision.idmAdminPasswordFile != null
-                || any (x: x.basicSecretFile != null) (lib.attrValues (filterPresent cfg.provision.systems.oauth2))
+                || lib.any (x: x.basicSecretFile != null) (lib.attrValues (filterPresent cfg.provision.systems.oauth2))
               )
             )
             -> cfg.package.enableSecretProvisioning;
@@ -744,48 +711,48 @@ in
         (
           let
             # Filter all names that occurred in more than one entity type.
-            duplicateNames = filterAttrs (_: v: builtins.length v > 1) entitiesByName;
+            duplicateNames = lib.filterAttrs (_: v: builtins.length v > 1) entitiesByName;
           in
           {
             assertion = cfg.provision.enable -> duplicateNames == { };
             message = ''
               services.kanidm.provision requires all entity names (group, person, oauth2, ...) to be unique!
-              ${concatLines (
-                mapAttrsToList (name: xs: "  - '${name}' used as: ${toString xs}") duplicateNames
+              ${lib.concatLines (
+                lib.mapAttrsToList (name: xs: "  - '${name}' used as: ${toString xs}") duplicateNames
               )}'';
           }
         )
       ]
-      ++ flip mapAttrsToList (filterPresent cfg.provision.persons) (
+      ++ lib.flip lib.mapAttrsToList (filterPresent cfg.provision.persons) (
         person: personCfg:
         assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
       )
-      ++ flip mapAttrsToList (filterPresent cfg.provision.groups) (
+      ++ lib.flip lib.mapAttrsToList (filterPresent cfg.provision.groups) (
         group: groupCfg:
         assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
       )
-      ++ concatLists (
-        flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
+      ++ lib.concatLists (
+        lib.flip lib.mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
           oauth2: oauth2Cfg:
           [
             (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
-              attrNames oauth2Cfg.scopeMaps
+              lib.attrNames oauth2Cfg.scopeMaps
             ))
             (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
-              attrNames oauth2Cfg.supplementaryScopeMaps
+              lib.attrNames oauth2Cfg.supplementaryScopeMaps
             ))
           ]
-          ++ concatLists (
-            flip mapAttrsToList oauth2Cfg.claimMaps (
+          ++ lib.concatLists (
+            lib.flip lib.mapAttrsToList oauth2Cfg.claimMaps (
               claim: claimCfg: [
                 (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
-                  attrNames claimCfg.valuesByGroup
+                  lib.attrNames claimCfg.valuesByGroup
                 ))
                 # At least one group must map to a value in each claim map
                 {
                   assertion =
                     (cfg.provision.enable && cfg.enableServer)
-                    -> any (xs: xs != [ ]) (lib.attrValues claimCfg.valuesByGroup);
+                    -> lib.any (xs: xs != [ ]) (lib.attrValues claimCfg.valuesByGroup);
                   message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
                 }
                 # Public clients cannot define a basic secret
@@ -865,9 +832,9 @@ in
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
           # This would otherwise override the CAP_NET_BIND_SERVICE capability.
-          PrivateUsers = mkForce false;
+          PrivateUsers = lib.mkForce false;
           # Port needs to be exposed to the host network
-          PrivateNetwork = mkForce false;
+          PrivateNetwork = lib.mkForce false;
           RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
@@ -910,7 +877,7 @@ in
             "/run/kanidm-unixd:/var/run/kanidm-unixd"
           ];
           # Needs to connect to kanidmd
-          PrivateNetwork = mkForce false;
+          PrivateNetwork = lib.mkForce false;
           RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
