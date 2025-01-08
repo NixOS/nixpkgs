@@ -22,16 +22,16 @@ let
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "20.1.2";
+  version = "20.2.1";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-E27EHOxi54ZyNCoJuV/P6wjlJ29/JAQc/YqikP5SgZ8=";
+    hash = "sha256-D+V4WJ7/jkhUmEeRnYCtYtUzT7OXnHitIaGk2aimDFI=";
   };
 
-  npmDepsHash = "sha256-dXvqgv+0jwDyyZrTN5/t/QnrLRJl8rBNdCq4+iex9eI=";
+  npmDepsHash = "sha256-HslQ7Jvn8M7eKMePnwWd/xDhx1QyXwwjOS6EexRULJM=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
