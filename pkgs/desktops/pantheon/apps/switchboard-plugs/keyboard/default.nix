@@ -9,6 +9,7 @@
 , vala
 , libadwaita
 , libgee
+, gettext
 , gnome-settings-daemon
 , granite7
 , gsettings-desktop-schemas
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja
