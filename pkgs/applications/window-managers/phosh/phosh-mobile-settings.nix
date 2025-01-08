@@ -22,7 +22,7 @@
 , gmobile
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh-mobile-settings";
   version = "0.44.0";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "Phosh";
     repo = "phosh-mobile-settings";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ysQ0lwCS1bQLRQg2aoauyAYnhAqM5B7c3neKJvqcsjw=";
   };
 
@@ -58,12 +58,6 @@ stdenv.mkDerivation rec {
     gmobile
   ];
 
-  postPatch = ''
-    # There are no schemas to compile.
-    substituteInPlace meson.build \
-      --replace 'glib_compile_schemas: true' 'glib_compile_schemas: false'
-  '';
-
   postInstall = ''
     # this is optional, but without it phosh-mobile-settings won't know about lock screen plugins
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
@@ -74,13 +68,13 @@ stdenv.mkDerivation rec {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Settings app for mobile specific things";
     mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rvl ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${finalAttrs.version}/debian/changelog";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rvl ];
+    platforms = lib.platforms.linux;
   };
-}
+})
