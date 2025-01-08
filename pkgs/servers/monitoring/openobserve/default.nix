@@ -10,18 +10,16 @@
   xz,
   zlib,
   zstd,
-  stdenv,
-  apple_sdk,
   buildNpmPackage,
 }:
 
 let
-  version = "0.11.0";
+  version = "0.14.0";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
-    rev = "v${version}";
-    hash = "sha256-VRkAOUtF/eOxE7/Xjxi/WEfeSseGEJ9IROCFbgeFUkI=";
+    tag = "v${version}";
+    hash = "sha256-rTp+DkADqYkJg1zJog1yURE082V5kCqgid/oUd81SN8=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -29,7 +27,7 @@ let
 
     sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-2beTB6BHHshQkgbqVc195j2/0hBEn/fFz8+0ViSG5Gc=";
+    npmDepsHash = "sha256-awfQR1wZBX3ggmD0uJE9Fur4voPydeygrviRijKnBTE=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -63,38 +61,23 @@ rustPlatform.buildRustPackage {
   preBuild = ''
     cp -r ${web}/share/openobserve-ui web/dist
   '';
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "chromiumoxide-0.5.7" = "sha256-GHrm5u8FtXRUjSRGMU4PNU6AJZ5W2KcgfZY1c/CBVYA=";
-      "enrichment-0.1.0" = "sha256-Ui4rsvmemOF00E4yBRFRS2gw9qliDrNEVQu5fvIpahA=";
-    };
-  };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FWMUPghx9CxuzP7jFZYSIwZsylApWzQsfx8DuwS4GTo=";
 
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
 
-  buildInputs =
-    [
-      bzip2
-      oniguruma
-      sqlite
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with apple_sdk.frameworks;
-      [
-        CoreFoundation
-        CoreServices
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    bzip2
+    oniguruma
+    sqlite
+    xz
+    zlib
+    zstd
+  ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
@@ -103,41 +86,15 @@ rustPlatform.buildRustPackage {
     RUSTC_BOOTSTRAP = 1; # uses experimental features
 
     # the patched build.rs file sets these variables
-    GIT_VERSION = src.rev;
+    GIT_VERSION = src.tag;
     GIT_COMMIT_HASH = "builtByNix";
     GIT_BUILD_DATE = "1970-01-01T00:00:00Z";
   };
 
   # requires network access or filesystem mutations
   checkFlags = [
-    "--skip handler::http::auth::tests::test_validate"
-    "--skip handler::http::router::tests::test_get_proxy_routes"
-    "--skip handler::http::router::ui::tests::test_index_not_ok"
-    "--skip handler::http::router::ui::tests::test_index_ok"
-    "--skip handler::http::request::search::saved_view::tests::test_create_view_post"
-    "--skip infra::cache::file_list::tests::test_get_file_from_cache"
-    "--skip infra::cache::tmpfs::tests::test_delete_prefix"
-    "--skip infra::cluster::tests::test_get_node_ip"
-    "--skip infra::db::tests::test_delete"
-    "--skip service::alerts::test::test_alerts"
-    "--skip service::compact::merge::tests::test_compact"
-    "--skip service::db::compact::file_list::tests::test_files"
-    "--skip service::db::compact::file_list::tests::test_file_list_offset"
-    "--skip service::db::compact::file_list::tests::test_file_list_process_offset"
-    "--skip service::db::compact::files::tests::test_compact_files"
-    "--skip service::db::user::tests::test_user"
-    "--skip service::ingestion::grpc::tests::test_get_val"
-    "--skip service::metadata::trace_list_index::tests::test_write"
-    "--skip service::organization::tests::test_organization"
-    "--skip service::search::sql::tests::test_sql_full"
-    "--skip service::triggers::tests::test_triggers"
-    "--skip service::users::tests::test_post_user"
-    "--skip service::users::tests::test_user"
-    "--skip common::infra::cache::file_data::disk::tests::test_get_file_from_cache"
-    "--skip common::infra::cluster::tests::test_consistent_hashing"
-    "--skip common::infra::db::tests::test_get"
-    "--skip common::utils::auth::tests::test_is_root_user2"
-    "--skip tests::e2e_test"
+    "--skip=handler::http::router::tests::test_get_proxy_routes"
+    "--skip=tests::e2e_test"
   ];
 
   meta = with lib; {
