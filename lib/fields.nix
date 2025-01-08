@@ -26,9 +26,8 @@
       internal ? null,
       # Whether the field shows up in the manual. Default: true. Use false to hide the field and any sub-options from submodules. Use "shallow" to hide only sub-options.
       visible ? null,
+      # Whether the field is omitted from the final record when undefined. Default false.
+      optional ? null,
     }@attrs:
-    assert lib.assertMsg (
-      (attrs.optional or false) -> (!attrs ? default)
-    ) "mkField: `optional` is true, but a `default` is provided";
     attrs // { _type = "field"; };
 }

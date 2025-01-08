@@ -169,7 +169,7 @@ checkConfigError 'define-record-mallory.nix.: "beginning of time"' config.people
 checkConfigOutput '^true$' config.people.bob.isCool ./declare-record.nix ./define-record-alice.nix ./define-record-bob.nix
 
 # record field bad default definition
-checkConfigError 'In .the default value of option people.mallory.: "yeah"' config.people.mallory.isCool ./declare-record-bad-default.nix ./define-record-mallory.nix
+checkConfigError 'In .the default value of field people.mallory.: "yeah"' config.people.mallory.isCool ./declare-record-bad-default.nix ./define-record-mallory.nix
 checkConfigError 'A definition for option .people.mallory.isCool. is not of type .boolean.. Definition values:' config.people.mallory.isCool ./declare-record-bad-default.nix ./define-record-mallory.nix
 
 # record field works in presence of wildcard
@@ -179,7 +179,7 @@ checkConfigOutput '^2016$' config.people.alice.nixerSince ./declare-record-wildc
 checkConfigOutput '^true$' config.people.alice.mechKeyboard ./declare-record-wildcard.nix ./define-record-alice-prefs.nix
 
 # record definition without corresponding field
-checkConfigError 'A definition for option .people.mike. has an unknown field' config.people.mike.age ./declare-record.nix ./define-record-mike.nix
+checkConfigError 'A definition for option .people.mike. has an unknown fields' config.people.mike.age ./declare-record.nix ./define-record-mike.nix
 # record optional field without definition
 checkConfigError "attribute 'age' in selection path 'config.people.alice.age' not found" config.people.alice.age ./declare-record-optional-field.nix ./define-record-alice.nix
 # record optional field with definition
