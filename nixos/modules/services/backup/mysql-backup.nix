@@ -8,40 +8,36 @@ let
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
 
-  compressionPkg =
-    {
-      gzip = pkgs.gzip;
-      xz = pkgs.xz;
-      zstd = pkgs.zstd;
-    }
-    .${cfg.compressionAlg};
-
-  fileExt =
-    {
-      gzip = ".gz";
-      zstd = ".zst";
-      xz = ".xz";
-    }
-    .${cfg.compressionAlg};
-
-  validCompressionLevels = {
-    zstd = range: 1 <= range && range <= 19;
-    xz = range: 0 <= range && range <= 9;
-    gzip = range: 1 <= range && range <= 9;
+  compressionAlgs = {
+    gzip = rec {
+      pkg = pkgs.gzip;
+      ext = ".gz";
+      minLevel = 1;
+      maxLevel = 9;
+      cmd = compressionLevelFlag: "${pkg}/bin/gzip -c ${cfg.gzipOptions} ${compressionLevelFlag}";
+    };
+    xz = rec {
+      pkg = pkgs.xz;
+      ext = ".xz";
+      minLevel = 0;
+      maxLevel = 9;
+      cmd = compressionLevelFlag: "${pkg}/bin/xz -z -c ${compressionLevelFlag} -";
+    };
+    zstd = rec {
+      pkg = pkgs.zstd;
+      ext = ".zst";
+      minLevel = 1;
+      maxLevel = 19;
+      cmd = compressionLevelFlag: "${pkg}/bin/zstd ${compressionLevelFlag} -";
+    };
   };
 
-  compressionCmd =
-    let
-      compressionLevelFlag = lib.optionalString (cfg.compressionLevel != null) (
-        "-" + toString cfg.compressionLevel
-      );
-    in
-    {
-      gzip = "${pkgs.gzip}/bin/gzip -c ${cfg.gzipOptions} ${compressionLevelFlag}";
-      xz = "${pkgs.xz}/bin/xz -z -c ${compressionLevelFlag} -";
-      zstd = "${pkgs.zstd}/bin/zstd ${compressionLevelFlag} -";
-    }
-    .${cfg.compressionAlg};
+  compressionLevelFlag = lib.optionalString (cfg.compressionLevel != null) (
+    "-" + toString cfg.compressionLevel
+  );
+
+  selectedAlg = compressionAlgs.${cfg.compressionAlg};
+  compressionCmd = selectedAlg.cmd compressionLevelFlag;
 
   backupScript = ''
     set -o pipefail
@@ -54,7 +50,7 @@ let
   '';
 
   backupDatabaseScript = db: ''
-    dest="${cfg.location}/${db}${fileExt}"
+    dest="${cfg.location}/${db}${selectedAlg.ext}"
     if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
@@ -80,11 +76,7 @@ in
       };
 
       compressionAlg = lib.mkOption {
-        type = lib.types.enum [
-          "gzip"
-          "zstd"
-          "xz"
-        ];
+        type = lib.types.enum (lib.attrNames compressionAlgs);
         default = "gzip";
         description = ''
           Compression algorithm to use for database dumps.
@@ -95,10 +87,13 @@ in
         type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
-          Compression level to use for gzip, zstd or xz.
-          For gzip: 1-9 (note: if compression level is also specified in gzipOptions, the gzipOptions value will be overwritten)
-          For zstd: 1-19
-          For xz: 0-9
+          Compression level to use for ${lib.concatStringsSep ", " (lib.init (lib.attrNames compressionAlgs))} or ${lib.last (lib.attrNames compressionAlgs)}.
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (
+              name: algo: "  For ${name}: ${toString algo.minLevel}-${toString algo.maxLevel}"
+            ) compressionAlgs
+          )}
+          (note: if compression level is also specified in gzipOptions, the gzipOptions value will be overwritten)
         '';
       };
 
@@ -150,17 +145,8 @@ in
     # assert config to be correct
     assertions = [
       {
-        assertion =
-          cfg.compressionLevel == null || validCompressionLevels.${cfg.compressionAlg} cfg.compressionLevel;
-        message =
-          let
-            rangeMsg = {
-              "zstd" = "zstd compression level must be between 1 and 19";
-              "xz" = "xz compression level must be between 0 and 9";
-              "gzip" = "gzip compression level must be between 1 and 9";
-            };
-          in
-          rangeMsg.${cfg.compressionAlg};
+        assertion = cfg.compressionLevel == null || selectedAlg.minLevel <= cfg.compressionLevel && cfg.compressionLevel <= selectedAlg.maxLevel;
+        message = "${cfg.compressionAlg} compression level must be between ${toString selectedAlg.minLevel} and ${toString selectedAlg.maxLevel}";
       }
     ];
 
@@ -175,7 +161,7 @@ in
     };
 
     # add the compression tool to the system environment.
-    environment.systemPackages = [ compressionPkg ];
+    environment.systemPackages = [ selectedAlg.pkg ];
 
     # ensure database user to be used to perform backup exist.
     services.mysql.ensureUsers = [
