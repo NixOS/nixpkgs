@@ -40,6 +40,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "lark"
     "networkx"
+    "numpy"
     "packaging"
     "qcs-sdk-python"
     "rpcq"
