@@ -66,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix compatibility with pipewire's JACK emulation
+    # https://github.com/BespokeSynth/BespokeSynth/issues/1405#issuecomment-1721437868
+    ./2001-bespokesynth-fix-pipewire-jack.patch
+  ];
+
   # Linux builds are sandboxed properly, this always returns "localhost" there.
   # Darwin builds doesn't have the same amount of sandboxing by default, and the builder's hostname is returned.
   # In case this ever gets embedded into VersionInfoBld.cpp, hardcode it to the Linux value
