@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "guppy-rs";
     repo = "guppy";
     rev = "cargo-hakari-${version}";
-    sha256 = "sha256-xMgNk82U32AtMeZJ8v2M0faHLAPkXrdIJHwOJcqE9m8=";
+    sha256 = "sha256-+IjtK4kSm2vThgIxDsBLpoh0j9cDhhEqI6Hr2BmC7hc=";
   };
 
   cargoHash = "sha256-xMgNk82U32AtMeZJ8v2M0faHLAPkXrdIJHwOJcqE9m8=";
