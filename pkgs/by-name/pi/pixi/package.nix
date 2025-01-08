@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       aaronjheng
       edmundmiller
+      xiaoxiangmoe
     ];
     mainProgram = "pixi";
   };
