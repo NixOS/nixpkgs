@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   cmake,
   hunspell,
@@ -24,12 +25,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-FFfNjjVwi0bE6oc8LYhXrCKd+nwRQrjWzK5P4DSIIgs=";
   };
 
+  patches = [
+    # Respect DICPATH when searching for available languages for spell checking
+    # Remove with the next release
+    (fetchpatch {
+      name = "focuswriter-respect-dicpath.patch";
+      url = "https://github.com/gottcode/focuswriter/commit/520a6a3858ab6a6f0ed264c27df83d93e6aa866e.patch";
+      hash = "sha256-dwyFDy4kyKF0Fdp0oC0NiAykASdKI0KD+zrCH7raTYI=";
+    })
+    (fetchpatch {
+      name = "focuswriter-respect-dicpath-windows.patch";
+      url = "https://github.com/gottcode/focuswriter/commit/2b0f9ac1effdb0ddb63532e7ce392f5ad041433d.patch";
+      hash = "sha256-iADIEH7VzSEqYjTyWCTitexCaePFmPDl/YHETfU+rpw=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cmake
     qttools
     wrapQtAppsHook
   ];
+
   buildInputs = [
     hunspell
     qtbase
