@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix GCC 14 build error (remove for next update)
+    # https://github.com/Murmele/Gittyup/pull/759
+    ./0001-Fix-incorrect-order-of-argument-to-calloc-345.patch
+  ];
+
   cmakeFlags =
     let
       inherit (lib) cmakeBool;
