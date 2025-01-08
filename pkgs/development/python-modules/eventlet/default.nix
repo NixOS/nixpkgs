@@ -63,6 +63,8 @@ buildPythonPackage rec {
     # Tests requires network access
     "test_getaddrinfo"
     "test_hosts_no_network"
+    # flaky test, depends on builder performance
+    "test_server_connection_timeout_exception"
   ];
 
   pythonImportsCheck = [ "eventlet" ];

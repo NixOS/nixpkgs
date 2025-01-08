@@ -49,27 +49,15 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.11.0";
+  version = "8.11.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-21nPDWccpuf1wsXsF3CEozp54EyX5xzxg6XN6iNQVOs=";
+    hash = "sha256-x8p9tIsJCXQ+rvNCUNoCwZvGHU8dzt1mA/EJQJU2q1Y=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/356114
-    # https://github.com/curl/curl/issues/15496
-    # https://github.com/curl/curl/commit/f5c616930b5cf148b1b2632da4f5963ff48bdf88
-    # TODO: Remove this patch when 8.11.1/8.12.0 releases
-    ./fix-netrc-regression.patch
-
-    # https://github.com/curl/curl/issues/15513
-    # https://github.com/curl/curl/commit/0cdde0fdfbeb8c35420f6d03fa4b77ed73497694
-    ./fix-netrc-regression-2.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure

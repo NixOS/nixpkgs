@@ -5427,10 +5427,9 @@ self: super: with self; {
 
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override {
-    pythonSupport = true;
-    python3 = python;
-  });
+  gpgme = callPackage ../development/python-modules/gpgme {
+    inherit (pkgs) gpgme;
+  };
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 { };
 
@@ -7319,6 +7318,7 @@ self: super: with self; {
       p.override {
         enablePython = true;
         python3 = python;
+        python3Packages = pythonPackages;
       })
     (p: p.py)
   ];
@@ -13751,6 +13751,8 @@ self: super: with self; {
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
+
+  reno = callPackage ../development/python-modules/reno { };
 
   renson-endura-delta = callPackage ../development/python-modules/renson-endura-delta { };
 

@@ -61,34 +61,10 @@ let
         inherit darwinVersionInputs;
       };
 
-      qtbase = callPackage ./modules/qtbase.nix {
+      qtbase = callPackage ./modules/qtbase {
         withGtk3 = !stdenv.hostPlatform.isMinGW;
         inherit darwinVersionInputs;
         inherit (srcs.qtbase) src version;
-        patches = [
-          ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
-          ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
-          ./patches/0004-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0005-qtbase-find-tools-in-PATH.patch
-          ./patches/0006-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
-          ./patches/0007-qtbase-allow-translations-outside-prefix.patch
-          ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
-          ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
-          ./patches/0010-qtbase-derive-plugin-load-path-from-PATH.patch
-          # Backport patch for https://bugs.kde.org/show_bug.cgi?id=493116
-          # FIXME: remove for 6.8.1
-          (fetchpatch2 {
-            url = "https://github.com/qt/qtbase/commit/2ea3abed0125d81ca4f3bacb9650db7314657332.patch";
-            hash = "sha256-mdTdwhJtebuLUQRo+y1XUrrzgqG9G7GvPQwvrXLycJI=";
-          })
-
-          # Backport patch to fix plugin loading through symlinks
-          # FIXME: remove for 6.8.1
-          (fetchpatch2 {
-            url = "https://github.com/qt/qtbase/commit/e25150ca29437ab315e3686aa801b8636e201e2a.patch";
-            hash = "sha256-8WOjjffI48Vlx7gQIiOzfUtPloLys5lf06RQi1lsTys=";
-          })
-        ];
       };
       env = callPackage ./qt-env.nix { };
       full = callPackage (
@@ -148,7 +124,7 @@ let
       qtcharts = callPackage ./modules/qtcharts.nix { };
       qtconnectivity = callPackage ./modules/qtconnectivity.nix { };
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
-      qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
+      qtdeclarative = callPackage ./modules/qtdeclarative { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
       qtgraphs = callPackage ./modules/qtgraphs.nix { };
       qtgrpc = callPackage ./modules/qtgrpc.nix { };
@@ -157,7 +133,7 @@ let
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlocation = callPackage ./modules/qtlocation.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
-      qtmultimedia = callPackage ./modules/qtmultimedia.nix {
+      qtmultimedia = callPackage ./modules/qtmultimedia {
         inherit (gst_all_1)
           gstreamer
           gst-plugins-base
@@ -181,12 +157,12 @@ let
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };
       qtscxml = callPackage ./modules/qtscxml.nix { };
-      qttools = callPackage ./modules/qttools.nix { };
+      qttools = callPackage ./modules/qttools { };
       qttranslations = callPackage ./modules/qttranslations.nix { };
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
-      qtwebengine = callPackage ./modules/qtwebengine.nix {
+      qtwebengine = callPackage ./modules/qtwebengine {
         inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds;
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
