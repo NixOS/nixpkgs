@@ -14435,6 +14435,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  WarThunder = callPackage ../by-name/wa/WarThunder {};
+
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     python = python3;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) ImageMagick;
