@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-sI24tSvwbh+zPTPVjkNlBg7TM6D5qMxfeF4pfj+6Q+E=";
+    hash = "sha256-h2XoHb3ukh6MKQG2v0TZg81mcwNGk4cfK8CWjzhM8W4=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
