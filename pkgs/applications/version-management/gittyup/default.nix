@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    cmark
     ninja
     pkg-config
     wrapQtAppsHook
