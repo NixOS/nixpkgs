@@ -1,10 +1,22 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  llm,
+
+  # dependencies
+  click,
+  ollama,
+  pydantic,
+
+  # tests
+  pytestCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "llm-ollama";
   version = "0.8.1";
   pyproject = true;
@@ -16,20 +28,20 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-9AgHX2FJRXSKZOLt7JR/9Fg4i2HGNQY2vSsJa4+2BGQ=";
   };
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
     # Follows the reasoning from https://github.com/NixOS/nixpkgs/pull/327800#discussion_r1681586659 about including llm in build-system
     llm
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     click
     ollama
     pydantic
   ];
 
   nativeCheckInputs = [
-    python3Packages.pytestCheckHook
+    pytestCheckHook
   ];
 
   # These tests try to access the filesystem and fail
