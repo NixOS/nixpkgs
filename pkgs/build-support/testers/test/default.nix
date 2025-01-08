@@ -6,6 +6,7 @@
   runCommand,
   emptyFile,
   emptyDirectory,
+  stdenvNoCC,
   ...
 }:
 let
@@ -165,6 +166,41 @@ lib.recurseIntoAttrs {
           # Checking our note that dev is the default output
           echo $failed/_ | grep -- '-dev/_' >/dev/null
           echo 'All good.'
+          touch $out
+        '';
+
+    sideEffects =
+      runCommand "testBuildFailure-sideEffects"
+        {
+          failed = testers.testBuildFailure (
+            stdenvNoCC.mkDerivation {
+              name = "fail-with-side-effects";
+              src = emptyDirectory;
+
+              postHook = ''
+                echo touching side-effect...
+                # Assert that the side-effect doesn't exist yet...
+                # We're checking that this hook isn't run by expect-failure.sh
+                if [[ -e side-effect ]]; then
+                  echo "side-effect already exists"
+                  exit 1
+                fi
+                touch side-effect
+              '';
+
+              buildPhase = ''
+                echo i am failing
+                exit 1
+              '';
+            }
+          );
+        }
+        ''
+          grep -F 'touching side-effect...' $failed/testBuildFailure.log >/dev/null
+          grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          [[ ! -e side-effect ]]
+
           touch $out
         '';
   };
