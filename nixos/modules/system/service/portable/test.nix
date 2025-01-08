@@ -5,6 +5,8 @@ let
 
   inherit (lib) mkOption types;
 
+  portable-lib = import ./lib.nix { inherit lib; };
+
   dummyPkg =
     name:
     derivation {
@@ -21,6 +23,15 @@ let
           executable = "/usr/bin/echo"; # *giggles*
           args = [ "hello" ];
         };
+        assertions = [
+          {
+            assertion = false;
+            message = "you can't enable this for that reason";
+          }
+        ];
+        warnings = [
+          "The `foo' service is deprecated and will go away soon!"
+        ];
       };
       service2 = {
         process = {
@@ -32,10 +43,25 @@ let
       };
       service3 = {
         process = {
-          executable = dummyPkg "cowsay-ng" // {
-            meta.mainProgram = "cowsay";
+          executable = "/bin/false";
+          args = [ ];
+        };
+        services.exclacow = {
+          process = {
+            executable = dummyPkg "cowsay-ng" // {
+              meta.mainProgram = "cowsay";
+            };
+            args = [ "!" ];
           };
-          args = [ "!" ];
+          assertions = [
+            {
+              assertion = false;
+              message = "you can't enable this for such reason";
+            }
+          ];
+          warnings = [
+            "The `bar' service is deprecated and will go away soon!"
+          ];
         };
       };
     };
@@ -69,6 +95,15 @@ let
               args = [ "hello" ];
             };
             services = { };
+            assertions = [
+              {
+                assertion = false;
+                message = "you can't enable this for that reason";
+              }
+            ];
+            warnings = [
+              "The `foo' service is deprecated and will go away soon!"
+            ];
           };
           service2 = {
             process = {
@@ -76,16 +111,58 @@ let
               args = [ "world" ];
             };
             services = { };
+            assertions = [ ];
+            warnings = [ ];
           };
           service3 = {
             process = {
-              executable = "${dummyPkg "cowsay-ng"}/bin/cowsay";
-              args = [ "!" ];
+              executable = "/bin/false";
+              args = [ ];
             };
-            services = { };
+            services.exclacow = {
+              process = {
+                executable = "${dummyPkg "cowsay-ng"}/bin/cowsay";
+                args = [ "!" ];
+              };
+              services = { };
+              assertions = [
+                {
+                  assertion = false;
+                  message = "you can't enable this for such reason";
+                }
+              ];
+              warnings = [ "The `bar' service is deprecated and will go away soon!" ];
+            };
+            assertions = [ ];
+            warnings = [ ];
           };
         };
       };
+
+    assert
+      portable-lib.getWarnings [ "service1" ] exampleEval.config.services.service1 == [
+        "in service1: The `foo' service is deprecated and will go away soon!"
+      ];
+
+    assert
+      portable-lib.getAssertions [ "service1" ] exampleEval.config.services.service1 == [
+        {
+          message = "in service1: you can't enable this for that reason";
+          assertion = false;
+        }
+      ];
+
+    assert
+      portable-lib.getWarnings [ "service3" ] exampleEval.config.services.service3 == [
+        "in service3.services.exclacow: The `bar' service is deprecated and will go away soon!"
+      ];
+    assert
+      portable-lib.getAssertions [ "service3" ] exampleEval.config.services.service3 == [
+        {
+          message = "in service3.services.exclacow: you can't enable this for such reason";
+          assertion = false;
+        }
+      ];
 
     "ok";
 
