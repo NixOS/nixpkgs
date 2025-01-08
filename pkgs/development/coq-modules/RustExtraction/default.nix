@@ -1,13 +1,11 @@
 {
   lib,
   mkCoqDerivation,
-  which,
   coq,
   metacoq,
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "RustExtraction";
   repo = "coq-rust-extraction";
@@ -16,7 +14,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
-    with versions;
+    with lib.versions;
     switch
       [
         coq.coq-version

@@ -42,9 +42,9 @@ let
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
-        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
+        ${lib.optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
-        ${optionalString (bootLoader == "grub") ''
+        ${lib.optionalString (bootLoader == "grub") ''
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
           ${
             if grubUseEfi then
@@ -63,13 +63,13 @@ let
           boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
         ''}
 
-        ${optionalString (bootLoader == "systemd-boot") ''
+        ${lib.optionalString (bootLoader == "systemd-boot") ''
           boot.loader.systemd-boot.enable = true;
         ''}
 
         boot.initrd.secrets."/etc/secret" = "/etc/nixos/secret";
 
-        ${optionalString clevisTest ''
+        ${lib.optionalString clevisTest ''
           boot.kernelParams = [ "console=tty0" "ip=192.168.1.1:::255.255.255.0::eth1:none" ];
           boot.initrd = {
             availableKernelModules = [ "tpm_tis" ];
@@ -113,14 +113,14 @@ let
     }:
     let
       startTarget = ''
-        ${optionalString clevisTest "tpm.start()"}
+        ${lib.optionalString clevisTest "tpm.start()"}
         target.start()
         ${postBootCommands}
         target.wait_for_unit("multi-user.target")
       '';
     in
     ''
-      ${optionalString clevisTest ''
+      ${lib.optionalString clevisTest ''
         import os
         import subprocess
 
@@ -159,7 +159,7 @@ let
       ''}
 
       installer.start()
-      ${optionalString clevisTest ''
+      ${lib.optionalString clevisTest ''
         tang.start()
         tang.wait_for_unit("sockets.target")
         tang.systemctl("start network-online.target")
@@ -178,7 +178,7 @@ let
       ${createPartitions}
 
       with subtest("Create the NixOS configuration"):
-          installer.succeed("nixos-generate-config ${optionalString disableFileSystems "--no-filesystems"} --root /mnt")
+          installer.succeed("nixos-generate-config ${lib.optionalString disableFileSystems "--no-filesystems"} --root /mnt")
           installer.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
           installer.copy_from_host(
               "${
@@ -197,13 +197,13 @@ let
           )
           installer.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
-      ${optionalString clevisTest ''
+      ${lib.optionalString clevisTest ''
         with subtest("Create the Clevis secret with Tang"):
              installer.systemctl("start network-online.target")
              installer.wait_for_unit("network-online.target")
              installer.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
 
-      ${optionalString clevisFallbackTest ''
+      ${lib.optionalString clevisFallbackTest ''
         with subtest("Shutdown Tang to check fallback to interactive prompt"):
             tang.shutdown()
       ''}
@@ -337,7 +337,7 @@ let
 
       # Tests for validating clone configuration entries in grub menu
     ''
-    + optionalString testSpecialisationConfig ''
+    + lib.optionalString testSpecialisationConfig ''
       # Reboot target
       ${startTarget}
 
@@ -367,7 +367,7 @@ let
 
       target.shutdown()
     ''
-    + optionalString testByAttrSwitch ''
+    + lib.optionalString testByAttrSwitch ''
       with subtest("Configure system with attribute set"):
         target.succeed("""
           mkdir /root/my-config
@@ -456,7 +456,7 @@ let
         """)
         target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
     ''
-    + optionalString (testByAttrSwitch && testFlakeSwitch) ''
+    + lib.optionalString (testByAttrSwitch && testFlakeSwitch) ''
       with subtest("Restore channel profiles"):
         target.succeed("""
           (
@@ -495,10 +495,10 @@ let
         """)
 
     ''
-    + optionalString (testByAttrSwitch && !testFlakeSwitch) ''
+    + lib.optionalString (testByAttrSwitch && !testFlakeSwitch) ''
       target.shutdown()
     ''
-    + optionalString testFlakeSwitch ''
+    + lib.optionalString testFlakeSwitch ''
       ${startTarget}
 
       with subtest("Configure system with flake"):
@@ -670,7 +670,7 @@ let
             virtualisation.diskImage = "./target.qcow2";
 
             # and the same TPM options
-            virtualisation.qemu.options = mkIf (clevisTest) [
+            virtualisation.qemu.options = lib.mkIf (clevisTest) [
               "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
               "-tpmdev emulator,id=tpm0,chardev=chrtpm"
               "-device tpm-tis,tpmdev=tpm0"
@@ -739,7 +739,7 @@ let
                 # curl's tarball, we see what it's trying to download
                 curl
               ]
-              ++ optionals (bootLoader == "grub") (
+              ++ lib.optionals (bootLoader == "grub") (
                 let
                   zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
                 in
@@ -752,13 +752,13 @@ let
                   pkgs.perlPackages.XMLSAXBase
                 ]
               )
-              ++ optionals (bootLoader == "systemd-boot") [
+              ++ lib.optionals (bootLoader == "systemd-boot") [
                 pkgs.zstd.bin
                 pkgs.mypy
                 pkgs.bootspec
               ]
-              ++ optionals clevisTest [ pkgs.klibc ]
-              ++ optional systemdStage1 pkgs.chroot-realpath;
+              ++ lib.optionals clevisTest [ pkgs.klibc ]
+              ++ lib.optional systemdStage1 pkgs.chroot-realpath;
 
             nix.settings = {
               substituters = mkForce [ ];
@@ -780,7 +780,7 @@ let
             };
           };
         }
-        // optionalAttrs clevisTest {
+        // lib.optionalAttrs clevisTest {
           tang = {
             services.tang = {
               enable = true;
@@ -927,7 +927,7 @@ let
     {
       fallback ? false,
     }:
-    makeInstallerTest "clevis-bcachefs${optionalString fallback "-fallback"}" {
+    makeInstallerTest "clevis-bcachefs${lib.optionalString fallback "-fallback"}" {
       clevisTest = true;
       clevisFallbackTest = fallback;
       enableOCR = fallback;
@@ -964,7 +964,7 @@ let
         # not know the UUID in advance.
         fileSystems."/" = lib.mkForce { device = "/dev/vda3"; fsType = "bcachefs"; };
       '';
-      postBootCommands = optionalString fallback ''
+      postBootCommands = lib.optionalString fallback ''
         target.wait_for_text("enter passphrase for")
         target.send_chars("password\n")
       '';
@@ -974,7 +974,7 @@ let
     {
       fallback ? false,
     }:
-    makeInstallerTest "clevis-luks${optionalString fallback "-fallback"}" {
+    makeInstallerTest "clevis-luks${lib.optionalString fallback "-fallback"}" {
       clevisTest = true;
       clevisFallbackTest = fallback;
       enableOCR = fallback;
@@ -1003,7 +1003,7 @@ let
       extraConfig = ''
         boot.initrd.clevis.devices."crypt-root".secretFile = "/etc/nixos/clevis-secret.jwe";
       '';
-      postBootCommands = optionalString fallback ''
+      postBootCommands = lib.optionalString fallback ''
         ${
           if systemdStage1 then
             ''
@@ -1024,7 +1024,7 @@ let
       parentDataset ? false,
     }:
     makeInstallerTest
-      "clevis-zfs${optionalString parentDataset "-parent-dataset"}${optionalString fallback "-fallback"}"
+      "clevis-zfs${lib.optionalString parentDataset "-parent-dataset"}${lib.optionalString fallback "-fallback"}"
       {
         clevisTest = true;
         clevisFallbackTest = fallback;
@@ -1044,12 +1044,12 @@ let
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
           ''
-          + optionalString (!parentDataset) ''
+          + lib.optionalString (!parentDataset) ''
             "zpool create -O mountpoint=legacy rpool /dev/vda3",
             "echo -n password | zfs create"
             + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
           ''
-          + optionalString (parentDataset) ''
+          + lib.optionalString (parentDataset) ''
             "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
             "zfs create -o mountpoint=legacy rpool/root",
           ''
@@ -1061,10 +1061,10 @@ let
             "udevadm settle")
           '';
         extraConfig =
-          optionalString (!parentDataset) ''
+          lib.optionalString (!parentDataset) ''
             boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
-          + optionalString (parentDataset) ''
+          + lib.optionalString (parentDataset) ''
             boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
           + ''
@@ -1077,7 +1077,7 @@ let
             boot.zfs.devNodes = "/dev/disk/by-uuid/";
             networking.hostId = "00000000";
           '';
-        postBootCommands = optionalString fallback ''
+        postBootCommands = lib.optionalString fallback ''
           ${
             if systemdStage1 then
               ''
@@ -1313,7 +1313,7 @@ in
           "mount LABEL=nixos /mnt",
       )
     '';
-    extraConfig = optionalString systemdStage1 ''
+    extraConfig = lib.optionalString systemdStage1 ''
       boot.initrd.services.lvm.enable = true;
     '';
   };
@@ -1705,7 +1705,7 @@ in
     fallback = true;
   };
 }
-// optionalAttrs systemdStage1 {
+// lib.optionalAttrs systemdStage1 {
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
       installer.succeed(

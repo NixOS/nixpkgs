@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   inherit (config.boot) kernelPatches;
@@ -10,7 +8,7 @@ let
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
     ''
-      ${concatStringsSep "\n" config.boot.kernelModules}
+      ${lib.concatStringsSep "\n" config.boot.kernelModules}
     '';
 
 in
@@ -20,13 +18,13 @@ in
   ###### interface
 
   options = {
-    boot.kernel.enable = mkEnableOption "the Linux kernel. This is useful for systemd-like containers which do not require a kernel" // {
+    boot.kernel.enable = lib.mkEnableOption "the Linux kernel. This is useful for systemd-like containers which do not require a kernel" // {
       default = true;
     };
 
-    boot.kernel.features = mkOption {
+    boot.kernel.features = lib.mkOption {
       default = {};
-      example = literalExpression "{ debug = true; }";
+      example = lib.literalExpression "{ debug = true; }";
       internal = true;
       description = ''
         This option allows to enable or disable certain kernel features.
@@ -37,9 +35,9 @@ in
       '';
     };
 
-    boot.kernelPackages = mkOption {
+    boot.kernelPackages = lib.mkOption {
       default = pkgs.linuxPackages;
-      type = types.raw;
+      type = lib.types.raw;
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
@@ -49,8 +47,8 @@ in
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
-      defaultText = literalExpression "pkgs.linuxPackages";
-      example = literalExpression "pkgs.linuxKernel.packages.linux_5_10";
+      defaultText = lib.literalExpression "pkgs.linuxPackages";
+      example = lib.literalExpression "pkgs.linuxKernel.packages.linux_5_10";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
@@ -70,10 +68,10 @@ in
       '';
     };
 
-    boot.kernelPatches = mkOption {
-      type = types.listOf types.attrs;
+    boot.kernelPatches = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
       default = [];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           {
             name = "foo";
@@ -109,7 +107,7 @@ in
                                         # lib.kernel.no or lib.kernel.module
 
           features = {                  # attrset of extra "features" the kernel is considered to have
-            foo = true;                 # (may be checked by other NixOS modules, optional)
+            foo = true;                 # (may be checked by other NixOS modules, lib.optional)
           };
 
           extraConfig = "FOO y";        # extra configuration options in string form without the CONFIG_ prefix
@@ -123,8 +121,8 @@ in
       '';
     };
 
-    boot.kernel.randstructSeed = mkOption {
-      type = types.str;
+    boot.kernel.randstructSeed = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = "my secret seed";
       description = ''
@@ -136,8 +134,8 @@ in
       '';
     };
 
-    boot.kernelParams = mkOption {
-      type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
+    boot.kernelParams = lib.mkOption {
+      type = lib.types.listOf (lib.types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
         name = "kernelParam";
         description = "string, with spaces inside double quotes";
       });
@@ -145,8 +143,8 @@ in
       description = "Parameters added to the kernel command line.";
     };
 
-    boot.consoleLogLevel = mkOption {
-      type = types.int;
+    boot.consoleLogLevel = lib.mkOption {
+      type = lib.types.int;
       default = 4;
       description = ''
         The kernel console `loglevel`. All Kernel Messages with a log level smaller
@@ -154,8 +152,8 @@ in
       '';
     };
 
-    boot.vesa = mkOption {
-      type = types.bool;
+    boot.vesa = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         (Deprecated) This option, if set, activates the VESA 800x600 video
@@ -167,15 +165,15 @@ in
       '';
     };
 
-    boot.extraModulePackages = mkOption {
-      type = types.listOf types.package;
+    boot.extraModulePackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [];
-      example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
+      example = lib.literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
-    boot.kernelModules = mkOption {
-      type = types.listOf types.str;
+    boot.kernelModules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         The set of kernel modules to be loaded in the second stage of
@@ -186,8 +184,8 @@ in
       '';
     };
 
-    boot.initrd.availableKernelModules = mkOption {
-      type = types.listOf types.str;
+    boot.initrd.availableKernelModules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "sata_nv" "ext3" ];
       description = ''
@@ -207,14 +205,14 @@ in
       '';
     };
 
-    boot.initrd.kernelModules = mkOption {
-      type = types.listOf types.str;
+    boot.initrd.kernelModules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = "List of modules that are always loaded by the initrd.";
     };
 
-    boot.initrd.includeDefaultModules = mkOption {
-      type = types.bool;
+    boot.initrd.includeDefaultModules = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         This option, if set, adds a collection of default kernel modules
@@ -223,8 +221,8 @@ in
       '';
     };
 
-    system.modulesTree = mkOption {
-      type = types.listOf types.path;
+    system.modulesTree = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
       internal = true;
       default = [];
       description = ''
@@ -238,9 +236,9 @@ in
       in modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
     };
 
-    system.requiredKernelConfig = mkOption {
+    system.requiredKernelConfig = lib.mkOption {
       default = [];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with config.lib.kernelConfig; [
           (isYes "MODULES")
           (isEnabled "FB_CON_DECOR")
@@ -248,7 +246,7 @@ in
         ]
       '';
       internal = true;
-      type = types.listOf types.attrs;
+      type = lib.types.listOf lib.types.attrs;
       description = ''
         This option allows modules to specify the kernel config options that
         must be set (or unset) for the module to work. Please use the
@@ -261,10 +259,10 @@ in
 
   ###### implementation
 
-  config = mkMerge
-    [ (mkIf config.boot.initrd.enable {
+  config = lib.mkMerge
+    [ (lib.mkIf config.boot.initrd.enable {
         boot.initrd.availableKernelModules =
-          optionals config.boot.initrd.includeDefaultModules ([
+          lib.optionals config.boot.initrd.includeDefaultModules ([
             # Note: most of these (especially the SATA/PATA modules)
             # shouldn't be included by default since nixos-generate-config
             # detects them, but I'm keeping them for now for backwards
@@ -303,19 +301,19 @@ in
             "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
             "hid_corsair"
 
-          ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
+          ] ++ lib.optionals pkgs.stdenv.hostPlatform.isx86 [
             # Misc. x86 keyboard stuff.
             "pcips2" "atkbd" "i8042"
           ]);
 
         boot.initrd.kernelModules =
-          optionals config.boot.initrd.includeDefaultModules [
+          lib.optionals config.boot.initrd.includeDefaultModules [
             # For LVM.
             "dm_mod"
           ];
       })
 
-      (mkIf config.boot.kernel.enable {
+      (lib.mkIf config.boot.kernel.enable {
         system.build = { inherit kernel; };
 
         system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
@@ -339,7 +337,7 @@ in
 
             ln -s ${kernelPath} $out/kernel
             ln -s ${config.system.modulesTree} $out/kernel-modules
-            ${optionalString (config.hardware.deviceTree.package != null) ''
+            ${lib.optionalString (config.hardware.deviceTree.package != null) ''
               ln -s ${config.hardware.deviceTree.package} $out/dtbs
             ''}
 
@@ -356,9 +354,9 @@ in
         # (so you don't need to reboot to have changes take effect).
         boot.kernelParams =
           [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-          optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
+          lib.optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
-        boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
+        boot.kernel.sysctl."kernel.printk" = lib.mkDefault config.boot.consoleLogLevel;
 
         boot.kernelModules = [ "loop" "atkbd" ];
 

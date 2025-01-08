@@ -5,28 +5,26 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.convos;
 in
 {
   options.services.convos = {
-    enable = mkEnableOption "Convos";
-    listenPort = mkOption {
-      type = types.port;
+    enable = lib.mkEnableOption "Convos";
+    listenPort = lib.mkOption {
+      type = lib.types.port;
       default = 3000;
       example = 8080;
       description = "Port the web interface should listen on";
     };
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "*";
       example = "127.0.0.1";
       description = "Address or host the web interface should listen on";
     };
-    reverseProxy = mkOption {
-      type = types.bool;
+    reverseProxy = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enables reverse proxy support. This will allow Convos to automatically
@@ -37,7 +35,7 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.convos = {
       description = "Convos Service";
       wantedBy = [ "multi-user.target" ];

@@ -208,7 +208,7 @@ in
           hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/configuration.yaml'")
           hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
 
-      with subtest("Check that optional dependencies are in the PYTHONPATH"):
+      with subtest("Check that lib.optional dependencies are in the PYTHONPATH"):
           env = get_unit_property("Environment")
           python_path = env.split("PYTHONPATH=")[1].split()[0]
           for package in ["colorama", "paho-mqtt", "psycopg2"]:

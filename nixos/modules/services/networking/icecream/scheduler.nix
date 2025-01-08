@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.icecream.scheduler;
 in
@@ -17,10 +15,10 @@ in
   options = {
 
     services.icecream.scheduler = {
-      enable = mkEnableOption "Icecream Scheduler";
+      enable = lib.mkEnableOption "Icecream Scheduler";
 
-      netName = mkOption {
-        type = types.nullOr types.str;
+      netName = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Network name for the icecream scheduler.
@@ -29,41 +27,41 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8765;
         description = ''
           Server port to listen for icecream daemon requests.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         description = ''
           Whether to automatically open the daemon port in the firewall.
         '';
       };
 
-      openTelnet = mkOption {
-        type = types.bool;
+      openTelnet = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the telnet TCP port on 8766.
         '';
       };
 
-      persistentClientConnection = mkOption {
-        type = types.bool;
+      persistentClientConnection = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to prevent clients from connecting to a better scheduler.
         '';
       };
 
-      package = mkPackageOption pkgs "icecream" { };
+      package = lib.mkPackageOption pkgs "icecream" { };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Additional command line parameters";
         example = [ "-v" ];
@@ -73,10 +71,10 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkMerge [
-      (mkIf cfg.openFirewall [ cfg.port ])
-      (mkIf cfg.openTelnet [ 8766 ])
+  config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = lib.mkMerge [
+      (lib.mkIf cfg.openFirewall [ cfg.port ])
+      (lib.mkIf cfg.openTelnet [ 8766 ])
     ];
 
     systemd.services.icecc-scheduler = {
@@ -85,17 +83,17 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeShellArgs (
+        ExecStart = lib.escapeShellArgs (
           [
-            "${getBin cfg.package}/bin/icecc-scheduler"
+            "${lib.getBin cfg.package}/bin/icecc-scheduler"
             "-p"
             (toString cfg.port)
           ]
-          ++ optionals (cfg.netName != null) [
+          ++ lib.optionals (cfg.netName != null) [
             "-n"
             (toString cfg.netName)
           ]
-          ++ optional cfg.persistentClientConnection "-r"
+          ++ lib.optional cfg.persistentClientConnection "-r"
           ++ cfg.extraArgs
         );
 

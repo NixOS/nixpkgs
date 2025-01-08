@@ -8,7 +8,7 @@
 let
   cfg = config.services.pingvin-share;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkIf
     mkPackageOption
@@ -19,34 +19,34 @@ in
 {
   options = {
     services.pingvin-share = {
-      enable = mkEnableOption "Pingvin Share, a self-hosted file sharing platform";
+      enable = lib.mkEnableOption "Pingvin Share, a self-hosted file sharing platform";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "pingvin";
         description = ''
           User account under which Pingvin Share runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "pingvin";
         description = ''
           Group under which Pingvin Share runs.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the firewall for the port in {option}`services.pingvin-share.frontend.port`.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/pingvin-share";
         example = "/var/lib/pingvin";
         description = ''
@@ -54,8 +54,8 @@ in
         '';
       };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         default = "localhost:${toString cfg.backend.port}";
         defaultText = lib.literalExpression "localhost:\${options.services.pingvin-share.backend.port}";
         example = "pingvin-share.domain.tdl";
@@ -64,8 +64,8 @@ in
         '';
       };
 
-      https = mkOption {
-        type = types.bool;
+      https = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         example = true;
         description = ''
@@ -74,13 +74,13 @@ in
       };
 
       backend = {
-        package = mkPackageOption pkgs [
+        package = lib.mkPackageOption pkgs [
           "pingvin-share"
           "backend"
         ] { };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 8080;
           example = 9000;
           description = ''
@@ -90,13 +90,13 @@ in
       };
 
       frontend = {
-        package = mkPackageOption pkgs [
+        package = lib.mkPackageOption pkgs [
           "pingvin-share"
           "frontend"
         ] { };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 3000;
           example = 8000;
           description = ''
@@ -106,16 +106,16 @@ in
       };
 
       nginx = {
-        enable = mkEnableOption "a Nginx reverse proxy for Pingvin Share.";
+        enable = lib.mkEnableOption "a Nginx reverse proxy for Pingvin Share.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.groups = mkIf (cfg.group == "pingvin") { pingvin = { }; };
+    users.groups = lib.mkIf (cfg.group == "pingvin") { pingvin = { }; };
 
-    users.users = mkIf (cfg.user == "pingvin") {
+    users.users = lib.mkIf (cfg.user == "pingvin") {
       pingvin = {
         group = cfg.group;
         description = "Pingvin Share daemon user";
@@ -123,7 +123,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.frontend.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.frontend.port ];
 
     systemd.services.pingvin-share-backend = {
       description = "Backend service of Pingvin Share, a self-hosted file sharing platform.";
@@ -166,7 +166,7 @@ in
           "${cfg.backend.package}/node_modules/.bin/prisma db seed"
         ];
         ExecStart = "${cfg.backend.package}/node_modules/.bin/ts-node dist/src/main";
-        StateDirectory = mkIf (cfg.dataDir == "/var/lib/pingvin-share") "pingvin-share";
+        StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/pingvin-share") "pingvin-share";
         WorkingDirectory = cfg.backend.package;
       };
     };
@@ -196,12 +196,12 @@ in
         Type = "simple";
         Restart = "on-failure";
         ExecStart = "${cfg.frontend.package}/node_modules/.bin/next start";
-        StateDirectory = mkIf (cfg.dataDir == "/var/lib/pingvin-share") "pingvin-share";
+        StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/pingvin-share") "pingvin-share";
         WorkingDirectory = cfg.frontend.package;
       };
     };
 
-    services.nginx = mkIf cfg.nginx.enable {
+    services.nginx = lib.mkIf cfg.nginx.enable {
       enable = lib.mkDefault true;
       virtualHosts."${cfg.hostname}" = {
         enableACME = cfg.https;

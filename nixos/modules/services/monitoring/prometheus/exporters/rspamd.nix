@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.rspamd;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     replaceStrings
     mkRemovedOptionModule
@@ -76,13 +76,13 @@ in
 {
   port = 7980;
   extraOpts = {
-    extraLabels = mkOption {
-      type = types.attrsOf types.str;
+    extraLabels = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = {
         host = config.networking.hostName;
       };
-      defaultText = literalExpression "{ host = config.networking.hostName; }";
-      example = literalExpression ''
+      defaultText = lib.literalExpression "{ host = config.networking.hostName; }";
+      example = lib.literalExpression ''
         {
           host = config.networking.hostName;
           custom_label = "some_value";
@@ -95,11 +95,11 @@ in
     ${pkgs.prometheus-json-exporter}/bin/json_exporter \
       --config.file ${mkFile (generateConfig cfg.extraLabels)} \
       --web.listen-address "${cfg.listenAddress}:${toString cfg.port}" \
-      ${concatStringsSep " \\\n  " cfg.extraFlags}
+      ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
   '';
 
   imports = [
-    (mkRemovedOptionModule [ "url" ] ''
+    (lib.mkRemovedOptionModule [ "url" ] ''
       This option was removed. The URL of the rspamd metrics endpoint
       must now be provided to the exporter by prometheus via the url
       parameter `target'.

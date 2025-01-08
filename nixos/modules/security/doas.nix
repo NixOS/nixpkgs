@@ -122,7 +122,7 @@ in
           options = {
 
             noPass = lib.mkOption {
-              type = with types; bool;
+              type = with lib.types; bool;
               default = false;
               description = ''
                 If `true`, the user is not required to enter a
@@ -131,7 +131,7 @@ in
             };
 
             noLog = lib.mkOption {
-              type = with types; bool;
+              type = with lib.types; bool;
               default = false;
               description = ''
                 If `true`, successful executions will not be logged
@@ -141,7 +141,7 @@ in
             };
 
             persist = lib.mkOption {
-              type = with types; bool;
+              type = with lib.types; bool;
               default = false;
               description = ''
                 If `true`, do not ask for a password again for some
@@ -150,7 +150,7 @@ in
             };
 
             keepEnv = lib.mkOption {
-              type = with types; bool;
+              type = with lib.types; bool;
               default = false;
               description = ''
                 If `true`, environment variables other than those
@@ -161,7 +161,7 @@ in
             };
 
             setEnv = lib.mkOption {
-              type = with types; listOf str;
+              type = with lib.types; listOf str;
               default = [ ];
               description = ''
                 Keep or set the specified variables. Variables may also be
@@ -180,19 +180,19 @@ in
             };
 
             users = lib.mkOption {
-              type = with types; listOf (either str int);
+              type = with lib.types; listOf (either str int);
               default = [ ];
               description = "The usernames / UIDs this rule should apply for.";
             };
 
             groups = lib.mkOption {
-              type = with types; listOf (either str int);
+              type = with lib.types; listOf (either str int);
               default = [ ];
               description = "The groups / GIDs this rule should apply for.";
             };
 
             runAs = lib.mkOption {
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               default = null;
               description = ''
                 Which user or group the specified command is allowed to run as.
@@ -206,7 +206,7 @@ in
             };
 
             cmd = lib.mkOption {
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               default = null;
               description = ''
                 The command the user is allowed to run. When set to
@@ -219,7 +219,7 @@ in
             };
 
             args = lib.mkOption {
-              type = with types; nullOr (listOf str);
+              type = with lib.types; nullOr (listOf str);
               default = null;
               description = ''
                 Arguments that must be provided to the command. When set to

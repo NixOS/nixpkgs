@@ -8,7 +8,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -44,11 +44,11 @@ in
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   options.hardware.sata.timeout = {
-    enable = mkEnableOption "SATA drive timeouts";
+    enable = lib.mkEnableOption "SATA drive timeouts";
 
-    deciSeconds = mkOption {
+    deciSeconds = lib.mkOption {
       example = 70;
-      type = types.int;
+      type = lib.types.int;
       description = ''
         Set SCT Error Recovery Control timeout in deciseconds for use in RAID configurations.
 
@@ -60,19 +60,19 @@ in
       '';
     };
 
-    drives = mkOption {
+    drives = lib.mkOption {
       description = "List of drives for which to configure the timeout.";
-      type = types.listOf (
+      type = lib.types.listOf (
         types.submodule {
           options = {
-            name = mkOption {
+            name = lib.mkOption {
               description = "Drive name without the full path.";
-              type = types.str;
+              type = lib.types.str;
             };
 
-            idBy = mkOption {
+            idBy = lib.mkOption {
               description = "The method to identify the drive.";
-              type = types.enum [
+              type = lib.types.enum [
                 "path"
                 "wwn"
               ];
@@ -84,7 +84,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.extraRules = lib.concatMapStringsSep "\n" buildRule cfg.drives;
 
     systemd.services = lib.listToAttrs (

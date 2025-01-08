@@ -7,8 +7,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.lighttpd;
@@ -69,10 +67,10 @@ let
   ];
 
   maybeModuleString =
-    moduleName: optionalString (elem moduleName cfg.enableModules) ''"${moduleName}"'';
+    moduleName: lib.optionalString (lib.elem moduleName cfg.enableModules) ''"${moduleName}"'';
 
-  modulesIncludeString = concatStringsSep ",\n" (
-    filter (x: x != "") (map maybeModuleString allKnownModules)
+  modulesIncludeString = lib.concatStringsSep ",\n" (
+    lib.filter (x: x != "") (map maybeModuleString allKnownModules)
   );
 
   configFile =
@@ -113,11 +111,11 @@ let
         static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
         index-file.names = ( "index.html" )
 
-        ${optionalString cfg.mod_userdir ''
+        ${lib.optionalString cfg.mod_userdir ''
           userdir.path = "public_html"
         ''}
 
-        ${optionalString cfg.mod_status ''
+        ${lib.optionalString cfg.mod_status ''
           status.status-url = "/server-status"
           status.statistics-url = "/server-statistics"
           status.config-url = "/server-config"
@@ -134,43 +132,43 @@ in
 
     services.lighttpd = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable the lighttpd web server.
         '';
       };
 
-      package = mkPackageOption pkgs "lighttpd" { };
+      package = lib.mkPackageOption pkgs "lighttpd" { };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 80;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           TCP port number for lighttpd to bind to.
         '';
       };
 
-      document-root = mkOption {
+      document-root = lib.mkOption {
         default = "/srv/www";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           Document-root of the web server. Must be readable by the "lighttpd" user.
         '';
       };
 
-      mod_userdir = mkOption {
+      mod_userdir = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If true, requests in the form /~user/page.html are rewritten to take
           the file public_html/page.html from the home directory of the user.
         '';
       };
 
-      enableModules = mkOption {
-        type = types.listOf types.str;
+      enableModules = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
           "mod_cgi"
@@ -185,8 +183,8 @@ in
         '';
       };
 
-      enableUpstreamMimeTypes = mkOption {
-        type = types.bool;
+      enableUpstreamMimeTypes = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to include the list of mime types bundled with lighttpd
@@ -196,18 +194,18 @@ in
         '';
       };
 
-      mod_status = mkOption {
+      mod_status = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Show server status overview at /server-status, statistics at
           /server-statistics and list of loaded modules at /server-config.
         '';
       };
 
-      configText = mkOption {
+      configText = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example = "...verbatim config file contents...";
         description = ''
           Overridable config file contents to use for lighttpd. By default, use
@@ -215,9 +213,9 @@ in
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           These configuration lines will be appended to the generated lighttpd
           config file. Note that this mechanism does not work when the manual
@@ -229,11 +227,11 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
-        assertion = all (x: elem x allKnownModules) cfg.enableModules;
+        assertion = lib.all (x: lib.elem x allKnownModules) cfg.enableModules;
         message = ''
           One (or more) modules in services.lighttpd.enableModules are
           unrecognized.
@@ -245,9 +243,9 @@ in
       }
     ];
 
-    services.lighttpd.enableModules = mkMerge [
-      (mkIf cfg.mod_status [ "mod_status" ])
-      (mkIf cfg.mod_userdir [ "mod_userdir" ])
+    services.lighttpd.enableModules = lib.mkMerge [
+      (lib.mkIf cfg.mod_status [ "mod_status" ])
+      (lib.mkIf cfg.mod_userdir [ "mod_userdir" ])
       # always load mod_accesslog so that we can log to the journal
       [ "mod_accesslog" ]
     ];

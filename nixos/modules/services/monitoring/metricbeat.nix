@@ -12,7 +12,7 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
   cfg = config.services.metricbeat;
@@ -25,13 +25,13 @@ in
 
     services.metricbeat = {
 
-      enable = mkEnableOption "metricbeat";
+      enable = lib.mkEnableOption "metricbeat";
 
-      package = mkPackageOption pkgs "metricbeat" {
+      package = lib.mkPackageOption pkgs "metricbeat" {
         example = "metricbeat7";
       };
 
-      modules = mkOption {
+      modules = lib.mkOption {
         description = ''
           Metricbeat modules are responsible for reading metrics from the various sources.
 
@@ -45,14 +45,14 @@ in
           See <https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html>.
         '';
         default = { };
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule (
             { name, ... }:
             {
               freeformType = settingsFormat.type;
               options = {
-                module = mkOption {
-                  type = types.str;
+                module = lib.mkOption {
+                  type = lib.types.str;
                   default = name;
                   description = ''
                     The name of the module.
@@ -89,13 +89,13 @@ in
         };
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
           options = {
 
-            name = mkOption {
-              type = types.str;
+            name = lib.mkOption {
+              type = lib.types.str;
               default = "";
               description = ''
                 Name of the beat. Defaults to the hostname.
@@ -103,8 +103,8 @@ in
               '';
             };
 
-            tags = mkOption {
-              type = types.listOf types.str;
+            tags = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [ ];
               description = ''
                 Tags to place on the shipped metrics.
@@ -112,8 +112,8 @@ in
               '';
             };
 
-            metricbeat.modules = mkOption {
-              type = types.listOf settingsFormat.type;
+            metricbeat.modules = lib.mkOption {
+              type = lib.types.listOf settingsFormat.type;
               default = [ ];
               internal = true;
               description = ''
@@ -133,7 +133,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {

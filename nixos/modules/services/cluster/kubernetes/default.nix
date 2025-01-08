@@ -169,7 +169,7 @@ in
     apiserverAddress = lib.mkOption {
       description = ''
         Clusterwide accessible address for the kubernetes apiserver,
-        including protocol and optional port.
+        including protocol and lib.optional port.
       '';
       example = "https://kubernetes-apiserver.example.com:6443";
       type = lib.types.str;

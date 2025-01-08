@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.process;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     literalExpression
     concatStringsSep
@@ -19,10 +19,10 @@ in
 {
   port = 9256;
   extraOpts = {
-    settings.process_names = mkOption {
-      type = types.listOf types.anything;
+    settings.process_names = lib.mkOption {
+      type = lib.types.listOf types.anything;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           # Remove nix store path from process name
           { name = "{{.Matches.Wrapped}} {{ .Matches.Args }}"; cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ]; }
@@ -43,7 +43,7 @@ in
         ${pkgs.prometheus-process-exporter}/bin/process-exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --config.path ${configFile} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       NoNewPrivileges = true;
       ProtectHome = true;

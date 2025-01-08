@@ -1,7 +1,5 @@
 { pkgs, lib, config, ... }:
 
-with lib;
-
 let
   cfg = config.services.thelounge;
   dataDir = "/var/lib/thelounge";
@@ -9,28 +7,28 @@ let
     { inherit (cfg) public port; } // cfg.extraConfig
   );
   pluginManifest = {
-    dependencies = builtins.listToAttrs (builtins.map (pkg: { name = getName pkg; value = getVersion pkg; }) cfg.plugins);
+    dependencies = builtins.listToAttrs (builtins.map (pkg: { name = lib.getName pkg; value = lib.getVersion pkg; }) cfg.plugins);
   };
   plugins = pkgs.runCommand "thelounge-plugins" {
     preferLocalBuild = true;
   } ''
     mkdir -p $out/node_modules
-    echo ${escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
-    ${concatMapStringsSep "\n" (pkg: ''
-    ln -s ${pkg}/lib/node_modules/${getName pkg} $out/node_modules/${getName pkg}
+    echo ${lib.escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
+    ${lib.concatMapStringsSep "\n" (pkg: ''
+    ln -s ${pkg}/lib/node_modules/${lib.getName pkg} $out/node_modules/${lib.getName pkg}
     '') cfg.plugins}
   '';
 in
 {
-  imports = [ (mkRemovedOptionModule [ "services" "thelounge" "private" ] "The option was renamed to `services.thelounge.public` to follow upstream changes.") ];
+  imports = [ (lib.mkRemovedOptionModule [ "services" "thelounge" "private" ] "The option was renamed to `services.thelounge.public` to follow upstream changes.") ];
 
   options.services.thelounge = {
-    enable = mkEnableOption "The Lounge web IRC client";
+    enable = lib.mkEnableOption "The Lounge web IRC client";
 
-    package = mkPackageOption pkgs "thelounge" { };
+    package = lib.mkPackageOption pkgs "thelounge" { };
 
-    public = mkOption {
-      type = types.bool;
+    public = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Make your The Lounge instance public.
@@ -41,16 +39,16 @@ in
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 9000;
       description = "TCP port to listen on for http connections.";
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       default = { };
-      type = types.attrs;
-      example = literalExpression ''
+      type = lib.types.attrs;
+      example = lib.literalExpression ''
         {
           reverseProxy = true;
           defaults = {
@@ -71,10 +69,10 @@ in
       '';
     };
 
-    plugins = mkOption {
+    plugins = lib.mkOption {
       default = [ ];
-      type = types.listOf types.package;
-      example = literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
+      type = lib.types.listOf lib.types.package;
+      example = lib.literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
       description = ''
         The Lounge plugins to install. Plugins can be found in
         `pkgs.theLoungePlugins.plugins` and `pkgs.theLoungePlugins.themes`.
@@ -82,7 +80,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.thelounge = {
       description = "The Lounge service user";
       group = "thelounge";
@@ -95,11 +93,11 @@ in
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];
       preStart = "ln -sf ${pkgs.writeText "config.js" configJsData} ${dataDir}/config.js";
-      environment.THELOUNGE_PACKAGES = mkIf (cfg.plugins != [ ]) "${plugins}";
+      environment.THELOUNGE_PACKAGES = lib.mkIf (cfg.plugins != [ ]) "${plugins}";
       serviceConfig = {
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;
-        ExecStart = "${getExe cfg.package} start";
+        ExecStart = "${lib.getExe cfg.package} start";
       };
     };
 

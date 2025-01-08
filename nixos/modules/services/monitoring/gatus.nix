@@ -15,7 +15,7 @@ let
     maintainers
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     ;
 
@@ -29,14 +29,14 @@ let
 in
 {
   options.services.gatus = {
-    enable = mkEnableOption "Gatus";
+    enable = lib.mkEnableOption "Gatus";
 
-    package = mkPackageOption pkgs "gatus" { };
+    package = lib.mkPackageOption pkgs "gatus" { };
 
-    configFile = mkOption {
+    configFile = lib.mkOption {
       type = path;
       default = settingsFormat.generate "gatus.yaml" cfg.settings;
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         let settingsFormat = pkgs.formats.yaml { }; in settingsFormat.generate "gatus.yaml" cfg.settings;
       '';
       description = ''
@@ -45,7 +45,7 @@ in
       '';
     };
 
-    environmentFile = mkOption {
+    environmentFile = lib.mkOption {
       type = nullOr path;
       default = null;
       description = ''
@@ -55,11 +55,11 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = submodule {
         freeformType = settingsFormat.type;
         options = {
-          web.port = mkOption {
+          web.port = lib.mkOption {
             type = int;
             default = 8080;
             description = ''
@@ -71,7 +71,7 @@ in
 
       default = { };
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           web.port = 8080;
           endpoints = [{
@@ -93,7 +93,7 @@ in
       '';
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       type = bool;
       default = false;
       description = ''
@@ -102,7 +102,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.gatus = {
       description = "Automated developer-oriented status page";
       after = [ "network.target" ];

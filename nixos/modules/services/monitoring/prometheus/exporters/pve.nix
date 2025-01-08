@@ -9,11 +9,11 @@
 let
   cfg = config.services.prometheus.exporters.pve;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkPackageOption
-    optionalString
-    optionalAttrs
+    lib.optionalString
+    lib.optionalAttrs
     ;
 
   # pve exporter requires a config file so create an empty one if configFile is not provided
@@ -27,10 +27,10 @@ in
 {
   port = 9221;
   extraOpts = {
-    package = mkPackageOption pkgs "prometheus-pve-exporter" { };
+    package = lib.mkPackageOption pkgs "prometheus-pve-exporter" { };
 
-    environmentFile = mkOption {
-      type = with types; nullOr path;
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       example = "/etc/prometheus-pve-exporter/pve.env";
       description = ''
@@ -42,8 +42,8 @@ in
       '';
     };
 
-    configFile = mkOption {
-      type = with types; nullOr path;
+    configFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       example = "/etc/prometheus-pve-exporter/pve.yml";
       description = ''
@@ -58,8 +58,8 @@ in
     };
 
     server = {
-      keyFile = mkOption {
-        type = with types; nullOr path;
+      keyFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/var/lib/prometheus-pve-exporter/privkey.key";
         description = ''
@@ -67,8 +67,8 @@ in
         '';
       };
 
-      certFile = mkOption {
-        type = with types; nullOr path;
+      certFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/var/lib/prometheus-pve-exporter/full-chain.pem";
         description = ''
@@ -78,50 +78,50 @@ in
     };
 
     collectors = {
-      status = mkOption {
-        type = types.bool;
+      status = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect Node/VM/CT status
         '';
       };
-      version = mkOption {
-        type = types.bool;
+      version = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect PVE version info
         '';
       };
-      node = mkOption {
-        type = types.bool;
+      node = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect PVE node info
         '';
       };
-      cluster = mkOption {
-        type = types.bool;
+      cluster = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect PVE cluster info
         '';
       };
-      resources = mkOption {
-        type = types.bool;
+      resources = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect PVE resources info
         '';
       };
-      config = mkOption {
-        type = types.bool;
+      config = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect PVE onboot status
         '';
       };
-      replication = mkOption {
-        type = types.bool;
+      replication = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Collect PVE replication info
@@ -136,20 +136,20 @@ in
         LoadCredential = "configFile:${computedConfigFile}";
         ExecStart = ''
           ${cfg.package}/bin/pve_exporter \
-            --${optionalString (!cfg.collectors.status) "no-"}collector.status \
-            --${optionalString (!cfg.collectors.version) "no-"}collector.version \
-            --${optionalString (!cfg.collectors.node) "no-"}collector.node \
-            --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
-            --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
-            --${optionalString (!cfg.collectors.config) "no-"}collector.config \
-            --${optionalString (!cfg.collectors.replication) "no-"}collector.replication \
-            ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
-            ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
+            --${lib.optionalString (!cfg.collectors.status) "no-"}collector.status \
+            --${lib.optionalString (!cfg.collectors.version) "no-"}collector.version \
+            --${lib.optionalString (!cfg.collectors.node) "no-"}collector.node \
+            --${lib.optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
+            --${lib.optionalString (!cfg.collectors.resources) "no-"}collector.resources \
+            --${lib.optionalString (!cfg.collectors.config) "no-"}collector.config \
+            --${lib.optionalString (!cfg.collectors.replication) "no-"}collector.replication \
+            ${lib.optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
+            ${lib.optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
             --config.file %d/configFile \
             --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
         '';
       }
-      // optionalAttrs (cfg.environmentFile != null) {
+      // lib.optionalAttrs (cfg.environmentFile != null) {
         EnvironmentFile = cfg.environmentFile;
       };
   };

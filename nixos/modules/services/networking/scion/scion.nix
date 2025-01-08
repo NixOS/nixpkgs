@@ -5,17 +5,15 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.scion;
 in
 {
   options.services.scion = {
-    enable = mkEnableOption "all of the scion components and services";
-    package = mkPackageOption pkgs "scion" { };
-    stateless = mkOption {
-      type = types.bool;
+    enable = lib.mkEnableOption "all of the scion components and services";
+    package = lib.mkPackageOption pkgs "scion" { };
+    stateless = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Setting this value to false (stateful) can lead to improved caching and
@@ -30,15 +28,15 @@ in
         If false, use /var/lib/scion-* is used for data
       '';
     };
-    bypassBootstrapWarning = mkOption {
-      type = types.bool;
+    bypassBootstrapWarning = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         bypass Nix warning about SCION PKI bootstrapping
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.package
     ];

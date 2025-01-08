@@ -67,10 +67,10 @@ let
 
 in
 {
-  options.services.fastnetmon-advanced = with lib; {
-    enable = mkEnableOption "the fastnetmon-advanced DDoS Protection daemon";
+  options.services.fastnetmon-advanced = {
+    enable = lib.mkEnableOption "the fastnetmon-advanced DDoS Protection daemon";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Extra configuration options to declaratively load into FastNetMon Advanced.
 
@@ -78,7 +78,7 @@ in
       '';
       type = settingsFormat.type;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           networks_list = [ "192.0.2.0/24" ];
           gobgp = true;
@@ -86,24 +86,24 @@ in
         }
       '';
     };
-    hostgroups = mkOption {
+    hostgroups = lib.mkOption {
       description = "Hostgroups to declaratively load into FastNetMon Advanced";
-      type = types.attrsOf settingsFormat.type;
+      type = lib.types.attrsOf settingsFormat.type;
       default = { };
     };
-    bgpPeers = mkOption {
+    bgpPeers = lib.mkOption {
       description = "BGP Peers to declaratively load into FastNetMon Advanced";
-      type = types.attrsOf settingsFormat.type;
+      type = lib.types.attrsOf settingsFormat.type;
       default = { };
     };
 
-    enableAdvancedTrafficPersistence = mkOption {
+    enableAdvancedTrafficPersistence = lib.mkOption {
       description = "Store historical flow data in clickhouse";
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
     };
 
-    traffic_db.settings = mkOption {
+    traffic_db.settings = lib.mkOption {
       type = settingsFormat.type;
       description = "Additional settings for /etc/fastnetmon/traffic_db.conf";
     };

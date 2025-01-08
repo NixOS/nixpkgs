@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.ragnarwm;
 in
@@ -15,14 +13,14 @@ in
 
   options = {
     services.xserver.windowManager.ragnarwm = {
-      enable = mkEnableOption "ragnarwm";
-      package = mkPackageOption pkgs "ragnarwm" { };
+      enable = lib.mkEnableOption "ragnarwm";
+      package = lib.mkPackageOption pkgs "ragnarwm" { };
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.displayManager.sessionPackages = [ cfg.package ];
     environment.systemPackages = [ cfg.package ];
   };

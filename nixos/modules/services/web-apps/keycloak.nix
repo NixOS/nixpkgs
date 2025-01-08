@@ -13,7 +13,7 @@ let
   inherit (lib)
     types
     mkMerge
-    mkOption
+    lib.mkOption
     mkChangedOptionModule
     mkRenamedOptionModule
     mkRemovedOptionModule
@@ -22,8 +22,8 @@ let
     mapAttrsToList
     escapeShellArg
     mkIf
-    optionalString
-    optionals
+    lib.optionalString
+    lib.optionals
     mkDefault
     literalExpression
     isAttrs
@@ -43,15 +43,15 @@ let
     isPath
     ;
 
-  prefixUnlessEmpty = prefix: string: optionalString (string != "") "${prefix}${string}";
+  prefixUnlessEmpty = prefix: string: lib.optionalString (string != "") "${prefix}${string}";
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "keycloak" "bindAddress" ]
       [ "services" "keycloak" "settings" "http-host" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "keycloak" "forceBackendUrlToFrontendUrl" ]
       [ "services" "keycloak" "settings" "hostname-strict-backchannel" ]
     )
@@ -65,12 +65,12 @@ in
       [ "services" "keycloak" "settings" "https-port" ]
       (config: builtins.fromJSON config.services.keycloak.httpsPort)
     )
-    (mkRemovedOptionModule [ "services" "keycloak" "frontendUrl" ] ''
+    (lib.mkRemovedOptionModule [ "services" "keycloak" "frontendUrl" ] ''
       Set `services.keycloak.settings.hostname' and `services.keycloak.settings.http-relative-path' instead.
       NOTE: You likely want to set 'http-relative-path' to '/auth' to keep compatibility with your clients.
             See its description for more information.
     '')
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "keycloak"
       "extraConfig"
@@ -105,7 +105,7 @@ in
           value;
     in
     {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = false;
         example = true;
@@ -115,7 +115,7 @@ in
         '';
       };
 
-      sslCertificate = mkOption {
+      sslCertificate = lib.mkOption {
         type = nullOr path;
         default = null;
         example = "/run/keys/ssl_cert";
@@ -126,7 +126,7 @@ in
         '';
       };
 
-      sslCertificateKey = mkOption {
+      sslCertificateKey = lib.mkOption {
         type = nullOr path;
         default = null;
         example = "/run/keys/ssl_key";
@@ -148,7 +148,7 @@ in
       };
 
       database = {
-        type = mkOption {
+        type = lib.mkOption {
           type = enum [
             "mysql"
             "mariadb"
@@ -161,7 +161,7 @@ in
           '';
         };
 
-        host = mkOption {
+        host = lib.mkOption {
           type = str;
           default = "localhost";
           description = ''
@@ -177,7 +177,7 @@ in
               mysql = 3306;
             };
           in
-          mkOption {
+          lib.mkOption {
             type = port;
             default = dbPorts.${cfg.database.type};
             defaultText = literalMD "default port of selected database";
@@ -186,17 +186,17 @@ in
             '';
           };
 
-        useSSL = mkOption {
+        useSSL = lib.mkOption {
           type = bool;
           default = cfg.database.host != "localhost";
-          defaultText = literalExpression ''config.${opt.database.host} != "localhost"'';
+          defaultText = lib.literalExpression ''config.${opt.database.host} != "localhost"'';
           description = ''
             Whether the database connection should be secured by SSL /
             TLS.
           '';
         };
 
-        caCert = mkOption {
+        caCert = lib.mkOption {
           type = nullOr path;
           default = null;
           description = ''
@@ -211,7 +211,7 @@ in
           '';
         };
 
-        createLocally = mkOption {
+        createLocally = lib.mkOption {
           type = bool;
           default = true;
           description = ''
@@ -222,7 +222,7 @@ in
           '';
         };
 
-        name = mkOption {
+        name = lib.mkOption {
           type = str;
           default = "keycloak";
           description = ''
@@ -236,7 +236,7 @@ in
           '';
         };
 
-        username = mkOption {
+        username = lib.mkOption {
           type = str;
           default = "keycloak";
           description = ''
@@ -250,7 +250,7 @@ in
           '';
         };
 
-        passwordFile = mkOption {
+        passwordFile = lib.mkOption {
           type = path;
           example = "/run/keys/db_password";
           apply = assertStringPath "passwordFile";
@@ -260,9 +260,9 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "keycloak" { };
+      package = lib.mkPackageOption pkgs "keycloak" { };
 
-      initialAdminPassword = mkOption {
+      initialAdminPassword = lib.mkOption {
         type = nullOr str;
         default = null;
         description = ''
@@ -274,7 +274,7 @@ in
         '';
       };
 
-      themes = mkOption {
+      themes = lib.mkOption {
         type = attrsOf package;
         default = { };
         description = ''
@@ -288,7 +288,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = attrsOf (
             nullOr (oneOf [
@@ -300,7 +300,7 @@ in
           );
 
           options = {
-            http-host = mkOption {
+            http-host = lib.mkOption {
               type = str;
               default = "::";
               example = "::1";
@@ -309,7 +309,7 @@ in
               '';
             };
 
-            http-port = mkOption {
+            http-port = lib.mkOption {
               type = port;
               default = 80;
               example = 8080;
@@ -318,7 +318,7 @@ in
               '';
             };
 
-            https-port = mkOption {
+            https-port = lib.mkOption {
               type = port;
               default = 443;
               example = 8443;
@@ -327,7 +327,7 @@ in
               '';
             };
 
-            http-relative-path = mkOption {
+            http-relative-path = lib.mkOption {
               type = str;
               default = "/";
               example = "/auth";
@@ -350,7 +350,7 @@ in
               '';
             };
 
-            hostname = mkOption {
+            hostname = lib.mkOption {
               type = nullOr str;
               example = "keycloak.example.com";
               description = ''
@@ -362,7 +362,7 @@ in
               '';
             };
 
-            hostname-backchannel-dynamic = mkOption {
+            hostname-backchannel-dynamic = lib.mkOption {
               type = bool;
               default = false;
               example = true;
@@ -377,7 +377,7 @@ in
           };
         };
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             hostname = "keycloak.example.com";
             https-key-store-file = "/path/to/file";
@@ -447,8 +447,8 @@ in
           fi
         done
 
-        ${concatStringsSep "\n" (
-          mapAttrsToList (name: theme: "linkTheme ${theme} ${escapeShellArg name}") cfg.themes
+        ${lib.concatStringsSep "\n" (
+          mapAttrsToList (name: theme: "linkTheme ${theme} ${lib.escapeShellArg name}") cfg.themes
         )}
       '';
 
@@ -491,7 +491,7 @@ in
           ]);
       };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         {
           assertion =
@@ -540,10 +540,10 @@ in
       services.keycloak.settings =
         let
           postgresParams = concatStringsSep "&" (
-            optionals cfg.database.useSSL [
+            lib.optionals cfg.database.useSSL [
               "ssl=true"
             ]
-            ++ optionals (cfg.database.caCert != null) [
+            ++ lib.optionals (cfg.database.caCert != null) [
               "sslrootcert=${cfg.database.caCert}"
               "sslmode=verify-ca"
             ]
@@ -552,12 +552,12 @@ in
             [
               "characterEncoding=UTF-8"
             ]
-            ++ optionals cfg.database.useSSL [
+            ++ lib.optionals cfg.database.useSSL [
               "useSSL=true"
               "requireSSL=true"
               "verifyServerCertificate=true"
             ]
-            ++ optionals (cfg.database.caCert != null) [
+            ++ lib.optionals (cfg.database.caCert != null) [
               "trustCertificateKeyStoreUrl=file:${mySqlCaKeystore}"
               "trustCertificateKeyStorePassword=notsosecretpassword"
             ]
@@ -575,13 +575,13 @@ in
             db-url-properties = prefixUnlessEmpty "?" dbProps;
             db-url = null;
           }
-          (mkIf (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
+          (lib.mkIf (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
             https-certificate-file = "/run/keycloak/ssl/ssl_cert";
             https-certificate-key-file = "/run/keycloak/ssl/ssl_key";
           })
         ];
 
-      systemd.services.keycloakPostgreSQLInit = mkIf createLocalPostgreSQL {
+      systemd.services.keycloakPostgreSQLInit = lib.mkIf createLocalPostgreSQL {
         after = [ "postgresql.service" ];
         before = [ "keycloak.service" ];
         bindsTo = [ "postgresql.service" ];
@@ -613,7 +613,7 @@ in
         '';
       };
 
-      systemd.services.keycloakMySQLInit = mkIf createLocalMySQL {
+      systemd.services.keycloakMySQLInit = lib.mkIf createLocalMySQL {
         after = [ "mysql.service" ];
         before = [ "keycloak.service" ];
         bindsTo = [ "mysql.service" ];
@@ -686,7 +686,7 @@ in
           serviceConfig = {
             LoadCredential =
               map (p: "${baseNameOf p}:${p}") secretPaths
-              ++ optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null) [
+              ++ lib.optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null) [
                 "ssl_cert:${cfg.sslCertificate}"
                 "ssl_key:${cfg.sslCertificateKey}"
               ];
@@ -720,7 +720,7 @@ in
               sed -i '/db-/ s|\\|\\\\|g' /run/keycloak/conf/keycloak.conf
 
             ''
-            + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+            + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
               mkdir -p /run/keycloak/ssl
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             ''
@@ -729,8 +729,8 @@ in
             '';
         };
 
-      services.postgresql.enable = mkDefault createLocalPostgreSQL;
-      services.mysql.enable = mkDefault createLocalMySQL;
+      services.postgresql.enable = lib.mkDefault createLocalPostgreSQL;
+      services.mysql.enable = lib.mkDefault createLocalMySQL;
       services.mysql.package =
         let
           dbPkg = if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql80;

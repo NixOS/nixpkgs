@@ -13,7 +13,7 @@ let
       libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
       description = ''
         Hardened memory allocator coming from GrapheneOS project.
-        The default configuration template has all normal optional security
+        The default configuration template has all normal lib.optional security
         features enabled and is quite aggressive in terms of sacrificing
         performance and memory usage for security.
       '';
@@ -64,7 +64,7 @@ let
       libPath = "${pkgs.mimalloc}/lib/libmimalloc.so";
       description = ''
         A compact and fast general purpose allocator, which may
-        optionally be built with mitigations against various heap
+        lib.optionally be built with mitigations against various heap
         vulnerabilities.
       '';
     };

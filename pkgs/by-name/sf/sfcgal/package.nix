@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/sfcgal/SFCGAL/-/releases/v${finalAttrs.version}";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib; lib.teams.geospatial.members ++ [ maintainers.fqidz ];
+    maintainers = lib.teams.geospatial.members ++ [ lib.maintainers.fqidz ];
   };
 })

@@ -18,7 +18,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-redis-exporter}/bin/redis_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

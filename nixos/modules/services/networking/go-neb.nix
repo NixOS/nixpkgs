@@ -16,7 +16,7 @@ in
 
     bindAddress = lib.mkOption {
       type = lib.types.str;
-      description = "Port (and optionally address) to listen on.";
+      description = "Port (and lib.optionally address) to listen on.";
       default = ":4050";
     };
 

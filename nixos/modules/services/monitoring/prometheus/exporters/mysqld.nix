@@ -9,36 +9,36 @@ let
   cfg = config.services.prometheus.exporters.mysqld;
   inherit (lib)
     types
-    mkOption
+    lib.mkOption
     mkIf
     mkForce
     cli
     concatStringsSep
-    optionalString
+    lib.optionalString
     escapeShellArgs
     ;
 in
 {
   port = 9104;
   extraOpts = {
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
 
-    runAsLocalSuperUser = mkOption {
-      type = types.bool;
+    runAsLocalSuperUser = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to run the exporter as {option}`services.mysql.user`.
       '';
     };
 
-    configFile = mkOption {
-      type = types.path;
+    configFile = lib.mkOption {
+      type = lib.types.path;
       example = "/var/lib/prometheus-mysqld-exporter.cnf";
       description = ''
         Path to the services config file.
@@ -57,8 +57,8 @@ in
   serviceOpts = {
     serviceConfig = {
       DynamicUser = !cfg.runAsLocalSuperUser;
-      User = mkIf cfg.runAsLocalSuperUser (mkForce config.services.mysql.user);
-      LoadCredential = mkIf (cfg.configFile != null) (mkForce ("config:" + cfg.configFile));
+      User = lib.mkIf cfg.runAsLocalSuperUser (mkForce config.services.mysql.user);
+      LoadCredential = lib.mkIf (cfg.configFile != null) (mkForce ("config:" + cfg.configFile));
       ExecStart = concatStringsSep " " [
         "${pkgs.prometheus-mysqld-exporter}/bin/mysqld_exporter"
         "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"

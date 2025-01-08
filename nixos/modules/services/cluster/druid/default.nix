@@ -15,16 +15,16 @@ let
     mkIf
     mkMerge
     mkEnableOption
-    mkOption
+    lib.mkOption
     types
     mkPackageOption
     ;
 
   druidServiceOption = serviceName: {
-    enable = mkEnableOption serviceName;
+    enable = lib.mkEnableOption serviceName;
 
-    restartIfChanged = mkOption {
-      type = types.bool;
+    restartIfChanged = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         Automatically restart the service on config change.
         This can be set to false to defer restarts on clusters running critical applications.
@@ -34,9 +34,9 @@ let
       default = false;
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       default = { };
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf types.anything;
       description = ''
         (key=value) Configuration to be written to runtime.properties of the druid ${serviceName}
         <https://druid.apache.org/docs/latest/configuration/index.html>
@@ -49,21 +49,21 @@ let
 
     jdk = mkPackageOption pkgs "JDK" { default = [ "jdk17_headless" ]; };
 
-    jvmArgs = mkOption {
-      type = types.str;
+    jvmArgs = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = "Arguments to pass to the JVM";
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Open firewall ports for ${serviceName}.";
     };
 
-    internalConfig = mkOption {
+    internalConfig = lib.mkOption {
       default = { };
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf types.anything;
       internal = true;
       description = "Internal Option to add to runtime.properties for ${serviceName}.";
     };
@@ -77,7 +77,7 @@ let
       tmpDirs ? [ ],
       extraConfig ? { },
     }:
-    (mkIf serviceOptions.enable (mkMerge [
+    (lib.mkIf serviceOptions.enable (mkMerge [
       {
         systemd = {
           services."druid-${name}" = {
@@ -128,7 +128,7 @@ let
 
           tmpfiles.rules = concatMap (x: [ "d ${x} 0755 druid druid" ]) (cfg.commonTmpDirs ++ tmpDirs);
         };
-        networking.firewall.allowedTCPPorts = mkIf (attrByPath [
+        networking.firewall.allowedTCPPorts = lib.mkIf (attrByPath [
           "openFirewall"
         ] false serviceOptions) allowedTCPPorts;
 
@@ -146,12 +146,12 @@ let
 in
 {
   options.services.druid = {
-    package = mkPackageOption pkgs "apache-druid" { default = [ "druid" ]; };
+    package = lib.mkPackageOption pkgs "apache-druid" { default = [ "druid" ]; };
 
-    commonConfig = mkOption {
+    commonConfig = lib.mkOption {
       default = { };
 
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf types.anything;
 
       description = "(key=value) Configuration to be written to common.runtime.properties";
 
@@ -163,26 +163,26 @@ in
       };
     };
 
-    commonTmpDirs = mkOption {
+    commonTmpDirs = lib.mkOption {
       default = [ "/var/log/druid/requests" ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = "Common List of directories used by druid processes";
     };
 
-    log4j = mkOption {
-      type = types.path;
+    log4j = lib.mkOption {
+      type = lib.types.path;
       description = "Log4j Configuration for the druid process";
     };
 
-    extraClassPaths = mkOption {
+    extraClassPaths = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = "Extra classpath to include in the jvm";
     };
 
-    extraConfDirs = mkOption {
+    extraConfDirs = lib.mkOption {
       default = [ ];
-      type = types.listOf types.path;
+      type = lib.types.listOf lib.types.path;
       description = "Extra Conf Dirs to include in the jvm";
     };
 
@@ -193,28 +193,28 @@ in
     broker = druidServiceOption "Druid Broker";
 
     historical = (druidServiceOption "Druid Historical") // {
-      segmentLocations = mkOption {
+      segmentLocations = lib.mkOption {
 
         default = null;
 
         description = "Locations where the historical will store its data.";
 
         type =
-          with types;
+          with lib.types;
           nullOr (
             listOf (submodule {
               options = {
-                path = mkOption {
+                path = lib.mkOption {
                   type = path;
                   description = "the path to store the segments";
                 };
 
-                maxSize = mkOption {
+                maxSize = lib.mkOption {
                   type = str;
                   description = "Max size the druid historical can occupy";
                 };
 
-                freeSpacePercent = mkOption {
+                freeSpacePercent = lib.mkOption {
                   type = float;
                   default = 1.0;
                   description = "Druid Historical will fail to write if it exceeds this value";
@@ -229,7 +229,7 @@ in
     middleManager = druidServiceOption "Druid middleManager";
     router = druidServiceOption "Druid Router";
   };
-  config = mkMerge [
+  config = lib.mkMerge [
     (druidServiceConfig rec {
       name = "overlord";
       allowedTCPPorts = [ (attrByPath [ "druid.plaintextPort" ] 8090 cfg."${name}".config) ];
@@ -278,7 +278,7 @@ in
             + " -Dlog4j.configurationFile=file:${cfg.log4j}";
         };
 
-        networking.firewall.allowedTCPPortRanges = mkIf cfg.middleManager.openFirewall [
+        networking.firewall.allowedTCPPortRanges = lib.mkIf cfg.middleManager.openFirewall [
           {
             from = attrByPath [ "druid.indexer.runner.startPort" ] 8100 cfg.middleManager.config;
             to = attrByPath [ "druid.indexer.runner.endPort" ] 65535 cfg.middleManager.config;

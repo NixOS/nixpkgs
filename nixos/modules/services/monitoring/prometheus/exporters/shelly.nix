@@ -8,13 +8,13 @@
 
 let
   cfg = config.services.prometheus.exporters.shelly;
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   port = 9784;
   extraOpts = {
-    metrics-file = mkOption {
-      type = types.path;
+    metrics-file = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to the JSON file with the metric definitions
       '';

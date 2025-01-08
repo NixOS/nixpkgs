@@ -5,42 +5,40 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.nix-serve;
 in
 {
   options = {
     services.nix-serve = {
-      enable = mkEnableOption "nix-serve, the standalone Nix binary cache server";
+      enable = lib.mkEnableOption "nix-serve, the standalone Nix binary cache server";
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5000;
         description = ''
           Port number where nix-serve will listen on.
         '';
       };
 
-      bindAddress = mkOption {
-        type = types.str;
+      bindAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = ''
           IP address where nix-serve will bind its listening socket.
         '';
       };
 
-      package = mkPackageOption pkgs "nix-serve" { };
+      package = lib.mkPackageOption pkgs "nix-serve" { };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for nix-serve.";
       };
 
-      secretKeyFile = mkOption {
-        type = types.nullOr types.str;
+      secretKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The path to the file used for signing derivation data.
@@ -54,8 +52,8 @@ in
         '';
       };
 
-      extraParams = mkOption {
-        type = types.separatedString " ";
+      extraParams = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "";
         description = ''
           Extra command line parameters for nix-serve.
@@ -64,7 +62,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     nix.settings = lib.optionalAttrs (lib.versionAtLeast config.nix.package.version "2.4") {
       extra-allowed-users = [ "nix-serve" ];
     };
@@ -99,7 +97,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

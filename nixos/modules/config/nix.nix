@@ -29,10 +29,10 @@ let
     mkAfter
     mkDefault
     mkIf
-    mkOption
+    lib.mkOption
     mkRenamedOptionModuleWith
-    optionalString
-    optionals
+    lib.optionalString
+    lib.optionals
     strings
     systems
     toPretty
@@ -61,7 +61,7 @@ let
     systemFeatures = "system-features";
   };
 
-  semanticConfType = with types;
+  semanticConfType = with lib.types;
     let
       confAtom = nullOr
         (oneOf [
@@ -108,8 +108,8 @@ let
         # WARNING: this file is generated from the nix.* options in
         # your NixOS configuration, typically
         # /etc/nixos/configuration.nix.  Do not edit it!
-        ${mkKeyValuePairs (filterAttrs (key: value: !(isExtra key)) cfg.settings)}
-        ${mkKeyValuePairs (filterAttrs (key: value: isExtra key) cfg.settings)}
+        ${mkKeyValuePairs (lib.filterAttrs (key: value: !(isExtra key)) cfg.settings)}
+        ${mkKeyValuePairs (lib.filterAttrs (key: value: isExtra key) cfg.settings)}
         ${cfg.extraOptions}
       '';
       checkPhase = lib.optionalString cfg.checkConfig (
@@ -126,8 +126,8 @@ let
           set -e
           set +o pipefail
           NIX_CONF_DIR=$PWD \
-            ${cfg.package}/bin/nix ${showCommand} ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
-              ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
+            ${cfg.package}/bin/nix ${showCommand} ${lib.optionalString (isNixAtLeast "2.3pre") "--no-net"} \
+              ${lib.optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
             |& sed -e 's/^warning:/error:/' \
             | (! grep '${if cfg.checkAllErrors then "^error:" else "^error: unknown setting"}')
           set -o pipefail
@@ -137,8 +137,8 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
-    (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
+    (lib.mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
+    (lib.mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
   ] ++
     mapAttrsToList
       (oldConf: newConf:
@@ -151,24 +151,24 @@ in
 
   options = {
     nix = {
-      checkConfig = mkOption {
-        type = types.bool;
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           If enabled, checks that Nix can parse the generated nix.conf.
         '';
       };
 
-      checkAllErrors = mkOption {
-        type = types.bool;
+      checkAllErrors = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           If enabled, checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
         '';
       };
 
-      extraOptions = mkOption {
-        type = types.lines;
+      extraOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           keep-outputs = true
@@ -177,13 +177,13 @@ in
         description = "Additional text appended to {file}`nix.conf`.";
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = semanticConfType;
 
           options = {
-            max-jobs = mkOption {
-              type = types.either types.int (types.enum [ "auto" ]);
+            max-jobs = lib.mkOption {
+              type = lib.types.either types.int (types.enum [ "auto" ]);
               default = "auto";
               example = 64;
               description = ''
@@ -195,8 +195,8 @@ in
               '';
             };
 
-            auto-optimise-store = mkOption {
-              type = types.bool;
+            auto-optimise-store = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               example = true;
               description = ''
@@ -207,8 +207,8 @@ in
               '';
             };
 
-            cores = mkOption {
-              type = types.int;
+            cores = lib.mkOption {
+              type = lib.types.int;
               default = 0;
               example = 64;
               description = ''
@@ -221,8 +221,8 @@ in
               '';
             };
 
-            sandbox = mkOption {
-              type = types.either types.bool (types.enum [ "relaxed" ]);
+            sandbox = lib.mkOption {
+              type = lib.types.either types.bool (types.enum [ "relaxed" ]);
               default = true;
               description = ''
                 If set, Nix will perform builds in a sandboxed environment that it
@@ -243,8 +243,8 @@ in
               '';
             };
 
-            extra-sandbox-paths = mkOption {
-              type = types.listOf types.str;
+            extra-sandbox-paths = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [ ];
               example = [ "/dev" "/proc" ];
               description = ''
@@ -253,8 +253,8 @@ in
               '';
             };
 
-            substituters = mkOption {
-              type = types.listOf types.str;
+            substituters = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               description = ''
                 List of binary cache URLs used to obtain pre-built binaries
                 of Nix packages.
@@ -263,8 +263,8 @@ in
               '';
             };
 
-            trusted-substituters = mkOption {
-              type = types.listOf types.str;
+            trusted-substituters = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [ ];
               example = [ "https://hydra.nixos.org/" ];
               description = ''
@@ -275,8 +275,8 @@ in
               '';
             };
 
-            require-sigs = mkOption {
-              type = types.bool;
+            require-sigs = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 If enabled (the default), Nix will only download binaries from binary caches if
@@ -287,8 +287,8 @@ in
               '';
             };
 
-            trusted-public-keys = mkOption {
-              type = types.listOf types.str;
+            trusted-public-keys = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
               description = ''
                 List of public keys used to sign binary caches. If
@@ -300,8 +300,8 @@ in
               '';
             };
 
-            trusted-users = mkOption {
-              type = types.listOf types.str;
+            trusted-users = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               example = [ "root" "alice" "@wheel" ];
               description = ''
                 A list of names of users that have additional rights when
@@ -314,8 +314,8 @@ in
               '';
             };
 
-            system-features = mkOption {
-              type = types.listOf types.str;
+            system-features = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               example = [ "kvm" "big-parallel" "gccarch-skylake" ];
               description = ''
                 The set of features supported by the machine. Derivations
@@ -328,8 +328,8 @@ in
               '';
             };
 
-            allowed-users = mkOption {
-              type = types.listOf types.str;
+            allowed-users = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [ "*" ];
               example = [ "@wheel" "@builders" "alice" "bob" ];
               description = ''
@@ -345,7 +345,7 @@ in
           };
         };
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             use-sandbox = true;
             show-trace = true;
@@ -371,15 +371,15 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."nix/nix.conf".source = nixConf;
     nix.settings = {
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
       trusted-users = [ "root" ];
       substituters = mkAfter [ "https://cache.nixos.org/" ];
-      system-features = mkDefault (
+      system-features = lib.mkDefault (
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
+        lib.optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
           # a builder can run code for `gcc.arch` and inferior architectures
           [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
           map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])

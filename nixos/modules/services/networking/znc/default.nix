@@ -1,7 +1,5 @@
 { config, lib, pkgs, ...}:
 
-with lib;
-
 let
 
   cfg = config.services.znc;
@@ -13,25 +11,25 @@ let
     paths = cfg.modulePackages;
   };
 
-  listenerPorts = concatMap (l: optional (l ? Port) l.Port)
-    (attrValues (cfg.config.Listener or {}));
+  listenerPorts = lib.concatMap (l: lib.optional (l ? Port) l.Port)
+    (lib.attrValues (cfg.config.Listener or {}));
 
   # Converts the config option to a string
   semanticString = let
 
-      sortedAttrs = set: sort (l: r:
+      sortedAttrs = set: lib.sort (l: r:
         if l == "extraConfig" then false # Always put extraConfig last
-        else if isAttrs set.${l} == isAttrs set.${r} then l < r
-        else isAttrs set.${r} # Attrsets should be last, makes for a nice config
+        else if lib.isAttrs set.${l} == lib.isAttrs set.${r} then l < r
+        else lib.isAttrs set.${r} # Attrsets should be last, makes for a nice config
         # This last case occurs when any side (but not both) is an attrset
         # The order of these is correct when the attrset is on the right
         # which we're just returning
-      ) (attrNames set);
+      ) (lib.attrNames set);
 
       # Specifies an attrset that encodes the value according to its type
       encode = name: value: {
           null = [];
-          bool = [ "${name} = ${boolToString value}" ];
+          bool = [ "${name} = ${lib.boolToString value}" ];
           int = [ "${name} = ${toString value}" ];
 
           # extraConfig should be inserted verbatim
@@ -40,28 +38,28 @@ let
           # Values like `Foo = [ "bar" "baz" ];` should be transformed into
           #   Foo=bar
           #   Foo=baz
-          list = concatMap (encode name) value;
+          list = lib.concatMap (encode name) value;
 
           # Values like `Foo = { bar = { Baz = "baz"; Qux = "qux"; Florps = null; }; };` should be transmed into
           #   <Foo bar>
           #     Baz=baz
           #     Qux=qux
           #   </Foo>
-          set = concatMap (subname: optionals (value.${subname} != null) ([
+          set = lib.concatMap (subname: lib.optionals (value.${subname} != null) ([
               "<${name} ${subname}>"
             ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
               "</${name}>"
-            ])) (filter (v: v != null) (attrNames value));
+            ])) (lib.filter (v: v != null) (lib.attrNames value));
 
         }.${builtins.typeOf value};
 
       # One level "above" encode, acts upon a set and uses encode on each name,value pair
-      toLines = set: concatMap (name: encode name set.${name}) (sortedAttrs set);
+      toLines = set: lib.concatMap (name: encode name set.${name}) (sortedAttrs set);
 
     in
-      concatStringsSep "\n" (toLines cfg.config);
+      lib.concatStringsSep "\n" (toLines cfg.config);
 
-  semanticTypes = with types; rec {
+  semanticTypes = with lib.types; rec {
     zncAtom = nullOr (oneOf [ int bool str ]);
     zncAttr = attrsOf (nullOr zncConf);
     zncAll = oneOf [ zncAtom (listOf zncAtom) zncAttr ];
@@ -81,39 +79,39 @@ in
 
   options = {
     services.znc = {
-      enable = mkEnableOption "ZNC";
+      enable = lib.mkEnableOption "ZNC";
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "znc";
         example = "john";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The name of an existing user account to use to own the ZNC server
           process. If not specified, a default user will be created.
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = defaultUser;
         example = "users";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Group to own the ZNC process.
         '';
       };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         default = "/var/lib/znc";
         example = "/home/john/.znc";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           The state directory for ZNC. The config and the modules will be linked
           to from this directory as well.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open ports in the firewall for ZNC. Does work with
@@ -122,10 +120,10 @@ in
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         type = semanticTypes.zncConf;
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             LoadModule = [ "webadmin" "adminlog" ];
             User.paul = {
@@ -174,9 +172,9 @@ in
         '';
       };
 
-      configFile = mkOption {
-        type = types.path;
-        example = literalExpression "~/.znc/configs/znc.conf";
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        example = lib.literalExpression "~/.znc/configs/znc.conf";
         description = ''
           Configuration file for ZNC. It is recommended to use the
           {option}`config` option instead.
@@ -187,18 +185,18 @@ in
         '';
       };
 
-      modulePackages = mkOption {
-        type = types.listOf types.package;
+      modulePackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = literalExpression "[ pkgs.zncModules.fish pkgs.zncModules.push ]";
+        example = lib.literalExpression "[ pkgs.zncModules.fish pkgs.zncModules.push ]";
         description = ''
           A list of global znc module packages to add to znc.
         '';
       };
 
-      mutable = mkOption {
+      mutable = lib.mkOption {
         default = true; # TODO: Default to true when config is set, make sure to not delete the old config if present
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Indicates whether to allow the contents of the
           `dataDir` directory to be changed by the user at
@@ -213,10 +211,10 @@ in
         '';
       };
 
-      extraFlags = mkOption {
+      extraFlags = lib.mkOption {
         default = [ ];
         example = [ "--debug" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           Extra arguments to use for executing znc.
         '';
@@ -227,18 +225,18 @@ in
 
   ###### Implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.znc = {
-      configFile = mkDefault (pkgs.writeText "znc-generated.conf" semanticString);
+      configFile = lib.mkDefault (pkgs.writeText "znc-generated.conf" semanticString);
       config = {
         Version = lib.getVersion pkgs.znc;
-        Listener.l.Port = mkDefault 5000;
-        Listener.l.SSL = mkDefault true;
+        Listener.l.Port = lib.mkDefault 5000;
+        Listener.l.SSL = lib.mkDefault true;
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall listenerPorts;
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall listenerPorts;
 
     systemd.services.znc = {
       description = "ZNC Server";
@@ -249,7 +247,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         Restart = "always";
-        ExecStart = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${lib.escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         # Hardening
@@ -285,7 +283,7 @@ in
         mkdir -p ${cfg.dataDir}/configs
 
         # If mutable, regenerate conf file every time.
-        ${optionalString (!cfg.mutable) ''
+        ${lib.optionalString (!cfg.mutable) ''
           echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
           rm -f ${cfg.dataDir}/configs/znc.conf
         ''}
@@ -308,7 +306,7 @@ in
       '';
     };
 
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} =
         { description = "ZNC server daemon owner";
           group = defaultUser;
@@ -318,7 +316,7 @@ in
         };
       };
 
-    users.groups = optionalAttrs (cfg.user == defaultUser) {
+    users.groups = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} =
         { gid = config.ids.gids.znc;
           members = [ defaultUser ];

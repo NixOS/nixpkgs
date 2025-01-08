@@ -28,11 +28,11 @@ let
     mkForce
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optional
-    optionals
-    optionalString
+    lib.optional
+    lib.optionals
+    lib.optionalString
     splitString
     subtractLists
     types
@@ -41,8 +41,8 @@ let
 
   cfg = config.services.kanidm;
   settingsFormat = pkgs.formats.toml { };
-  # Remove null values, so we can document optional values that don't end up in the generated TOML file.
-  filterConfig = converge (filterAttrsRecursive (_: v: v != null));
+  # Remove null values, so we can document lib.optional values that don't end up in the generated TOML file.
+  filterConfig = converge (lib.filterAttrsRecursive (_: v: v != null));
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
@@ -59,7 +59,7 @@ let
         cfg.serverSettings.tls_chain
         cfg.serverSettings.tls_key
       ]
-      ++ optionals cfg.provision.enable provisionSecretFiles
+      ++ lib.optionals cfg.provision.enable provisionSecretFiles
     )
   );
 
@@ -74,7 +74,7 @@ let
       # If the new path is a prefix to some existing path, we need to filter it out
       filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
-      filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
+      filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
     in
     filteredPaths ++ filteredNew
   ) [ ];
@@ -131,9 +131,9 @@ let
 
   mkPresentOption =
     what:
-    mkOption {
+    lib.mkOption {
       description = "Whether to ensure that this ${what} is present or absent.";
-      type = types.bool;
+      type = lib.types.bool;
       default = true;
     };
 
@@ -145,7 +145,7 @@ let
 
   # Only recover the admin account if a password should explicitly be provisioned
   # for the account. Otherwise it is not needed for provisioning.
-  maybeRecoverAdmin = optionalString (cfg.provision.adminPasswordFile != null) ''
+  maybeRecoverAdmin = lib.optionalString (cfg.provision.adminPasswordFile != null) ''
     KANIDM_ADMIN_PASSWORD=$(< ${cfg.provision.adminPasswordFile})
     # We always reset the admin account password if a desired password was specified.
     if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_ADMIN_PASSWORD ${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} admin --from-environment >/dev/null; then
@@ -188,7 +188,7 @@ let
     # Wait for the kanidm server to come online
     count=0
     while ! ${getExe pkgs.curl} -L --silent --max-time 1 --connect-timeout 1 --fail \
-       ${optionalString cfg.provision.acceptInvalidCerts "--insecure"} \
+       ${lib.optionalString cfg.provision.acceptInvalidCerts "--insecure"} \
        ${cfg.provision.instanceUrl} >/dev/null
     do
       sleep 1
@@ -204,8 +204,8 @@ let
 
     KANIDM_PROVISION_IDM_ADMIN_TOKEN=$KANIDM_IDM_ADMIN_PASSWORD \
       ${getExe pkgs.kanidm-provision} \
-        ${optionalString (!cfg.provision.autoRemove) "--no-auto-remove"} \
-        ${optionalString cfg.provision.acceptInvalidCerts "--accept-invalid-certs"} \
+        ${lib.optionalString (!cfg.provision.autoRemove) "--no-auto-remove"} \
+        ${lib.optionalString cfg.provision.acceptInvalidCerts "--accept-invalid-certs"} \
         --url "${cfg.provision.instanceUrl}" \
         --state ${provisionStateJson}
   '';
@@ -231,37 +231,37 @@ in
     enableServer = mkEnableOption "the Kanidm server";
     enablePam = mkEnableOption "the Kanidm PAM and NSS integration";
 
-    package = mkPackageOption pkgs "kanidm" {
+    package = lib.mkPackageOption pkgs "kanidm" {
       example = "kanidm_1_4";
       extraDescription = "If not set will receive a specific version based on stateVersion. Set to `pkgs.kanidm` to always receive the latest version, with the understanding that this could introduce breaking changes.";
     };
 
-    serverSettings = mkOption {
-      type = types.submodule {
+    serverSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
-          bindaddress = mkOption {
+          bindaddress = lib.mkOption {
             description = "Address/port combination the webserver binds to.";
             example = "[::1]:8443";
             default = "127.0.0.1:8443";
-            type = types.str;
+            type = lib.types.str;
           };
-          # Should be optional but toml does not accept null
-          ldapbindaddress = mkOption {
+          # Should be lib.optional but toml does not accept null
+          ldapbindaddress = lib.mkOption {
             description = ''
               Address and port the LDAP server is bound to. Setting this to `null` disables the LDAP interface.
             '';
             example = "[::1]:636";
             default = null;
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
           };
-          origin = mkOption {
+          origin = lib.mkOption {
             description = "The origin of your Kanidm instance. Must have https as protocol.";
             example = "https://idm.example.org";
-            type = types.strMatching "^https://.*";
+            type = lib.types.strMatching "^https://.*";
           };
-          domain = mkOption {
+          domain = lib.mkOption {
             description = ''
               The `domain` that Kanidm manages. Must be below or equal to the domain
               specified in `serverSettings.origin`.
@@ -272,58 +272,58 @@ in
             '';
             example = "example.org";
             default = null;
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
           };
-          db_path = mkOption {
+          db_path = lib.mkOption {
             description = "Path to Kanidm database.";
             default = "/var/lib/kanidm/kanidm.db";
             readOnly = true;
-            type = types.path;
+            type = lib.types.path;
           };
-          tls_chain = mkOption {
+          tls_chain = lib.mkOption {
             description = "TLS chain in pem format.";
-            type = types.path;
+            type = lib.types.path;
           };
-          tls_key = mkOption {
+          tls_key = lib.mkOption {
             description = "TLS key in pem format.";
-            type = types.path;
+            type = lib.types.path;
           };
-          log_level = mkOption {
+          log_level = lib.mkOption {
             description = "Log level of the server.";
             default = "info";
-            type = types.enum [
+            type = lib.types.enum [
               "info"
               "debug"
               "trace"
             ];
           };
-          role = mkOption {
+          role = lib.mkOption {
             description = "The role of this server. This affects the replication relationship and thereby available features.";
             default = "WriteReplica";
-            type = types.enum [
+            type = lib.types.enum [
               "WriteReplica"
               "WriteReplicaNoUI"
               "ReadOnlyReplica"
             ];
           };
           online_backup = {
-            path = mkOption {
+            path = lib.mkOption {
               description = "Path to the output directory for backups.";
-              type = types.path;
+              type = lib.types.path;
               default = "/var/lib/kanidm/backups";
             };
-            schedule = mkOption {
+            schedule = lib.mkOption {
               description = "The schedule for backups in cron format.";
-              type = types.str;
+              type = lib.types.str;
               default = "00 22 * * *";
             };
-            versions = mkOption {
+            versions = lib.mkOption {
               description = ''
                 Number of backups to keep.
 
                 The default is set to `0`, in order to disable backups by default.
               '';
-              type = types.ints.unsigned;
+              type = lib.types.ints.unsigned;
               default = 0;
               example = 7;
             };
@@ -339,14 +339,14 @@ in
       '';
     };
 
-    clientSettings = mkOption {
-      type = types.submodule {
+    clientSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        options.uri = mkOption {
+        options.uri = lib.mkOption {
           description = "Address of the Kanidm server.";
           example = "http://127.0.0.1:8080";
-          type = types.str;
+          type = lib.types.str;
         };
       };
       description = ''
@@ -357,20 +357,20 @@ in
       '';
     };
 
-    unixSettings = mkOption {
-      type = types.submodule {
+    unixSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
-          pam_allowed_login_groups = mkOption {
+          pam_allowed_login_groups = lib.mkOption {
             description = "Kanidm groups that are allowed to login using PAM.";
             example = "my_pam_group";
-            type = types.listOf types.str;
+            type = lib.types.listOf lib.types.str;
           };
-          hsm_pin_path = mkOption {
+          hsm_pin_path = lib.mkOption {
             description = "Path to a HSM pin.";
             default = "/var/cache/kanidm-unixd/hsm-pin";
-            type = types.path;
+            type = lib.types.path;
           };
         };
       };
@@ -383,65 +383,65 @@ in
     };
 
     provision = {
-      enable = mkEnableOption "provisioning of groups, users and oauth2 resource servers";
+      enable = lib.mkEnableOption "provisioning of groups, users and oauth2 resource servers";
 
-      instanceUrl = mkOption {
+      instanceUrl = lib.mkOption {
         description = "The instance url to which the provisioning tool should connect.";
         default = "https://localhost:${serverPort}";
         defaultText = ''"https://localhost:<port from serverSettings.bindaddress>"'';
-        type = types.str;
+        type = lib.types.str;
       };
 
-      acceptInvalidCerts = mkOption {
+      acceptInvalidCerts = lib.mkOption {
         description = ''
           Whether to allow invalid certificates when provisioning the target instance.
           By default this is only allowed when the instanceUrl is localhost. This is
           dangerous when used with an external URL.
         '';
-        type = types.bool;
+        type = lib.types.bool;
         default = hasPrefix "https://localhost:" cfg.provision.instanceUrl;
         defaultText = ''hasPrefix "https://localhost:" cfg.provision.instanceUrl'';
       };
 
-      adminPasswordFile = mkOption {
+      adminPasswordFile = lib.mkOption {
         description = "Path to a file containing the admin password for kanidm. Do NOT use a file from the nix store here!";
         example = "/run/secrets/kanidm-admin-password";
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
       };
 
-      idmAdminPasswordFile = mkOption {
+      idmAdminPasswordFile = lib.mkOption {
         description = ''
           Path to a file containing the idm admin password for kanidm. Do NOT use a file from the nix store here!
           If this is not given but provisioning is enabled, the idm_admin password will be reset on each restart.
         '';
         example = "/run/secrets/kanidm-idm-admin-password";
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
       };
 
-      autoRemove = mkOption {
+      autoRemove = lib.mkOption {
         description = ''
           Determines whether deleting an entity in this provisioning config should automatically
           cause them to be removed from kanidm, too. This works because the provisioning tool tracks
           all entities it has ever created. If this is set to false, you need to explicitly specify
           `present = false` to delete an entity.
         '';
-        type = types.bool;
+        type = lib.types.bool;
         default = true;
       };
 
-      groups = mkOption {
+      groups = lib.mkOption {
         description = "Provisioning of kanidm groups";
         default = { };
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule (groupSubmod: {
             options = {
               present = mkPresentOption "group";
 
-              members = mkOption {
+              members = lib.mkOption {
                 description = "List of kanidm entities (persons, groups, ...) which are part of this group.";
-                type = types.listOf types.str;
+                type = lib.types.listOf lib.types.str;
                 apply = unique;
                 default = [ ];
               };
@@ -449,7 +449,7 @@ in
             config.members = concatLists (
               flip mapAttrsToList cfg.provision.persons (
                 person: personCfg:
-                optional (
+                lib.optional (
                   personCfg.present && builtins.elem groupSubmod.config._module.args.name personCfg.groups
                 ) person
               )
@@ -458,37 +458,37 @@ in
         );
       };
 
-      persons = mkOption {
+      persons = lib.mkOption {
         description = "Provisioning of kanidm persons";
         default = { };
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule {
             options = {
               present = mkPresentOption "person";
 
-              displayName = mkOption {
+              displayName = lib.mkOption {
                 description = "Display name";
-                type = types.str;
+                type = lib.types.str;
                 example = "My User";
               };
 
-              legalName = mkOption {
+              legalName = lib.mkOption {
                 description = "Full legal name";
-                type = types.nullOr types.str;
+                type = lib.types.nullOr lib.types.str;
                 example = "Jane Doe";
                 default = null;
               };
 
-              mailAddresses = mkOption {
+              mailAddresses = lib.mkOption {
                 description = "Mail addresses. First given address is considered the primary address.";
-                type = types.listOf types.str;
+                type = lib.types.listOf lib.types.str;
                 example = [ "jane.doe@example.com" ];
                 default = [ ];
               };
 
-              groups = mkOption {
+              groups = lib.mkOption {
                 description = "List of groups this person should belong to.";
-                type = types.listOf types.str;
+                type = lib.types.listOf lib.types.str;
                 apply = unique;
                 default = [ ];
               };
@@ -497,27 +497,27 @@ in
         );
       };
 
-      systems.oauth2 = mkOption {
+      systems.oauth2 = lib.mkOption {
         description = "Provisioning of oauth2 resource servers";
         default = { };
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule {
             options = {
               present = mkPresentOption "oauth2 resource server";
 
-              public = mkOption {
+              public = lib.mkOption {
                 description = "Whether this is a public client (enforces PKCE, doesn't use a basic secret)";
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               };
 
-              displayName = mkOption {
+              displayName = lib.mkOption {
                 description = "Display name";
-                type = types.str;
+                type = lib.types.str;
                 example = "Some Service";
               };
 
-              originUrl = mkOption {
+              originUrl = lib.mkOption {
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
@@ -527,89 +527,89 @@ in
                 example = "https://someservice.example.com/auth/login";
               };
 
-              originLanding = mkOption {
+              originLanding = lib.mkOption {
                 description = "When redirecting from the Kanidm Apps Listing page, some linked applications may need to land on a specific page to trigger oauth2/oidc interactions.";
-                type = types.str;
+                type = lib.types.str;
                 example = "https://someservice.example.com/home";
               };
 
-              basicSecretFile = mkOption {
+              basicSecretFile = lib.mkOption {
                 description = ''
                   The basic secret to use for this service. If null, the random secret generated
                   by kanidm will not be touched. Do NOT use a path from the nix store here!
                 '';
-                type = types.nullOr types.path;
+                type = lib.types.nullOr lib.types.path;
                 example = "/run/secrets/some-oauth2-basic-secret";
                 default = null;
               };
 
-              enableLocalhostRedirects = mkOption {
+              enableLocalhostRedirects = lib.mkOption {
                 description = "Allow localhost redirects. Only for public clients.";
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               };
 
-              enableLegacyCrypto = mkOption {
+              enableLegacyCrypto = lib.mkOption {
                 description = "Enable legacy crypto on this client. Allows JWT signing algorthms like RS256.";
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               };
 
-              allowInsecureClientDisablePkce = mkOption {
+              allowInsecureClientDisablePkce = lib.mkOption {
                 description = ''
                   Disable PKCE on this oauth2 resource server to work around insecure clients
                   that may not support it. You should request the client to enable PKCE!
                   Only for non-public clients.
                 '';
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               };
 
-              preferShortUsername = mkOption {
+              preferShortUsername = lib.mkOption {
                 description = "Use 'name' instead of 'spn' in the preferred_username claim";
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               };
 
-              scopeMaps = mkOption {
+              scopeMaps = lib.mkOption {
                 description = ''
                   Maps kanidm groups to returned oauth scopes.
                   See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
                 '';
-                type = types.attrsOf (types.listOf types.str);
+                type = lib.types.attrsOf (types.listOf types.str);
                 default = { };
               };
 
-              supplementaryScopeMaps = mkOption {
+              supplementaryScopeMaps = lib.mkOption {
                 description = ''
                   Maps kanidm groups to additionally returned oauth scopes.
                   See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
                 '';
-                type = types.attrsOf (types.listOf types.str);
+                type = lib.types.attrsOf (types.listOf types.str);
                 default = { };
               };
 
-              removeOrphanedClaimMaps = mkOption {
+              removeOrphanedClaimMaps = lib.mkOption {
                 description = "Whether claim maps not specified here but present in kanidm should be removed from kanidm.";
-                type = types.bool;
+                type = lib.types.bool;
                 default = true;
               };
 
-              claimMaps = mkOption {
+              claimMaps = lib.mkOption {
                 description = ''
                   Adds additional claims (and values) based on which kanidm groups an authenticating party belongs to.
                   See [Claim Maps](https://kanidm.github.io/kanidm/master/integrations/oauth2.html#custom-claim-maps) for more information.
                 '';
                 default = { };
-                type = types.attrsOf (
+                type = lib.types.attrsOf (
                   types.submodule {
                     options = {
-                      joinType = mkOption {
+                      joinType = lib.mkOption {
                         description = ''
                           Determines how multiple values are joined to create the claim value.
                           See [Claim Maps](https://kanidm.github.io/kanidm/master/integrations/oauth2.html#custom-claim-maps) for more information.
                         '';
-                        type = types.enum [
+                        type = lib.types.enum [
                           "array"
                           "csv"
                           "ssv"
@@ -617,10 +617,10 @@ in
                         default = "array";
                       };
 
-                      valuesByGroup = mkOption {
+                      valuesByGroup = lib.mkOption {
                         description = "Maps kanidm groups to values for the claim.";
                         default = { };
-                        type = types.attrsOf (types.listOf types.str);
+                        type = lib.types.attrsOf (types.listOf types.str);
                       };
                     };
                   }
@@ -633,7 +633,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
+  config = lib.mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
     assertions =
       let
         entityList =
@@ -731,7 +731,7 @@ in
               && (
                 cfg.provision.adminPasswordFile != null
                 || cfg.provision.idmAdminPasswordFile != null
-                || any (x: x.basicSecretFile != null) (attrValues (filterPresent cfg.provision.systems.oauth2))
+                || any (x: x.basicSecretFile != null) (lib.attrValues (filterPresent cfg.provision.systems.oauth2))
               )
             )
             -> cfg.package.enableSecretProvisioning;
@@ -785,7 +785,7 @@ in
                 {
                   assertion =
                     (cfg.provision.enable && cfg.enableServer)
-                    -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
+                    -> any (xs: xs != [ ]) (lib.attrValues claimCfg.valuesByGroup);
                   message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
                 }
                 # Public clients cannot define a basic secret
@@ -824,7 +824,7 @@ in
       in
       lib.mkDefault pkg;
 
-    environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
+    environment.systemPackages = lib.mkIf cfg.enableClient [ cfg.package ];
 
     systemd.tmpfiles.settings."10-kanidm" = {
       ${cfg.serverSettings.online_backup.path}.d = {
@@ -834,11 +834,11 @@ in
       };
     };
 
-    systemd.services.kanidm = mkIf cfg.enableServer {
+    systemd.services.kanidm = lib.mkIf cfg.enableServer {
       description = "kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         # Merge paths and ignore existing prefixes needs to sidestep mkMerge
         (
           defaultServiceConfig
@@ -851,7 +851,7 @@ in
           StateDirectoryMode = "0700";
           RuntimeDirectory = "kanidmd";
           ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
-          ExecStartPost = mkIf cfg.provision.enable postStartScript;
+          ExecStartPost = lib.mkIf cfg.provision.enable postStartScript;
           User = "kanidm";
           Group = "kanidm";
 
@@ -879,7 +879,7 @@ in
       environment.RUST_LOG = "info";
     };
 
-    systemd.services.kanidm-unixd = mkIf cfg.enablePam {
+    systemd.services.kanidm-unixd = lib.mkIf cfg.enablePam {
       description = "Kanidm PAM daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -887,7 +887,7 @@ in
         unixConfigFile
         clientConfigFile
       ];
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         defaultServiceConfig
         {
           CacheDirectory = "kanidm-unixd";
@@ -922,7 +922,7 @@ in
       environment.RUST_LOG = "info";
     };
 
-    systemd.services.kanidm-unixd-tasks = mkIf cfg.enablePam {
+    systemd.services.kanidm-unixd-tasks = lib.mkIf cfg.enablePam {
       description = "Kanidm PAM home management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [
@@ -972,25 +972,25 @@ in
     };
 
     # These paths are hardcoded
-    environment.etc = mkMerge [
-      (mkIf cfg.enableServer { "kanidm/server.toml".source = serverConfigFile; })
-      (mkIf options.services.kanidm.clientSettings.isDefined {
+    environment.etc = lib.mkMerge [
+      (lib.mkIf cfg.enableServer { "kanidm/server.toml".source = serverConfigFile; })
+      (lib.mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })
-      (mkIf cfg.enablePam { "kanidm/unixd".source = unixConfigFile; })
+      (lib.mkIf cfg.enablePam { "kanidm/unixd".source = unixConfigFile; })
     ];
 
-    system.nssModules = mkIf cfg.enablePam [ cfg.package ];
+    system.nssModules = lib.mkIf cfg.enablePam [ cfg.package ];
 
-    system.nssDatabases.group = optional cfg.enablePam "kanidm";
-    system.nssDatabases.passwd = optional cfg.enablePam "kanidm";
+    system.nssDatabases.group = lib.optional cfg.enablePam "kanidm";
+    system.nssDatabases.passwd = lib.optional cfg.enablePam "kanidm";
 
-    users.groups = mkMerge [
-      (mkIf cfg.enableServer { kanidm = { }; })
-      (mkIf cfg.enablePam { kanidm-unixd = { }; })
+    users.groups = lib.mkMerge [
+      (lib.mkIf cfg.enableServer { kanidm = { }; })
+      (lib.mkIf cfg.enablePam { kanidm-unixd = { }; })
     ];
-    users.users = mkMerge [
-      (mkIf cfg.enableServer {
+    users.users = lib.mkMerge [
+      (lib.mkIf cfg.enableServer {
         kanidm = {
           description = "Kanidm server";
           isSystemUser = true;
@@ -998,7 +998,7 @@ in
           packages = [ cfg.package ];
         };
       })
-      (mkIf cfg.enablePam {
+      (lib.mkIf cfg.enablePam {
         kanidm-unixd = {
           description = "Kanidm PAM daemon";
           isSystemUser = true;

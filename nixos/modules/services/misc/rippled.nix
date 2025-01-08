@@ -305,7 +305,7 @@ in
           https://ripple.com/ripple.txt or if you prefer you can let it
            default to r.ripple.com 51235
 
-          A port may optionally be specified after adding a space to the
+          A port may lib.optionally be specified after adding a space to the
           address. By convention, if known, IPs are listed in from most
           to least trusted.
         '';
@@ -321,7 +321,7 @@ in
           validation server that connects to the Ripple network through a
           public-facing server, or for building a set of cluster peers.
 
-          A port may optionally be specified after adding a space to the address
+          A port may lib.optionally be specified after adding a space to the address
         '';
         type = lib.types.listOf lib.types.str;
         default = [ ];

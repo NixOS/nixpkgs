@@ -95,7 +95,7 @@ in
         ''${pkgs.mullvad-vpn}/bin/mullvad-exclude
       '';
       description = ''
-        An optional command to prepend to the microsocks command (such as proxychains, or a VPN exclude command).
+        An lib.optional command to prepend to the microsocks command (such as proxychains, or a VPN exclude command).
       '';
     };
   };

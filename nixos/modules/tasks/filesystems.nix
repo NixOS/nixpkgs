@@ -1,19 +1,16 @@
 { config, lib, pkgs, utils, ... }@moduleArgs:
 
-with lib;
-with utils;
-
 let
   # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
   escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
 
-  addCheckDesc = desc: elemType: check: types.addCheck elemType check
+  addCheckDesc = desc: elemType: check: lib.types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
 
   isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
-  nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
+  nonEmptyStr = addCheckDesc "non-empty" lib.types.str isNonEmpty;
 
-  fileSystems' = toposort fsBefore (attrValues config.fileSystems);
+  fileSystems' = lib.toposort utils.fsBefore (lib.attrValues config.fileSystems);
 
   fileSystems = if fileSystems' ? result
                 then # use topologically sorted fileSystems everywhere
@@ -22,28 +19,28 @@ let
                      # but we fall back to the original order
                      # anyway so that other modules could check
                      # their assertions too
-                     (attrValues config.fileSystems);
+                     (lib.attrValues config.fileSystems);
 
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
-  nonEmptyWithoutTrailingSlash = addCheckDesc "non-empty without trailing slash" types.str
+  nonEmptyWithoutTrailingSlash = addCheckDesc "non-empty without trailing slash" lib.types.str
     (s: isNonEmpty s && (builtins.match ".+/" s) == null);
 
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
-      enable = mkEnableOption "the filesystem mount" // {
+      enable = lib.mkEnableOption "the filesystem mount" // {
         default = true;
       };
 
-      mountPoint = mkOption {
+      mountPoint = lib.mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
         description = "Location of the mounted file system.";
       };
 
       stratis.poolUuid = lib.mkOption {
-        type = types.uniq (types.nullOr types.str);
+        type = lib.types.uniq (lib.types.nullOr lib.types.str);
         description = ''
           UUID of the stratis pool that the fs is located in
         '';
@@ -51,31 +48,31 @@ let
         default = null;
       };
 
-      device = mkOption {
+      device = lib.mkOption {
         default = null;
         example = "/dev/sda";
-        type = types.nullOr nonEmptyStr;
+        type = lib.types.nullOr nonEmptyStr;
         description = "Location of the device.";
       };
 
-      fsType = mkOption {
+      fsType = lib.mkOption {
         default = "auto";
         example = "ext3";
         type = nonEmptyStr;
         description = "Type of the file system.";
       };
 
-      options = mkOption {
+      options = lib.mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-        type = types.nonEmptyListOf nonEmptyStr;
+        type = lib.types.nonEmptyListOf nonEmptyStr;
       };
 
-      depends = mkOption {
+      depends = lib.mkOption {
         default = [ ];
         example = [ "/persist" ];
-        type = types.listOf nonEmptyWithoutTrailingSlash;
+        type = lib.types.listOf nonEmptyWithoutTrailingSlash;
         description = ''
           List of paths that should be mounted before this one. This filesystem's
           {option}`device` and {option}`mountPoint` are always
@@ -89,8 +86,8 @@ let
     };
 
     config = {
-      mountPoint = mkDefault name;
-      device = mkIf (elem config.fsType specialFSTypes) (mkDefault config.fsType);
+      mountPoint = lib.mkDefault name;
+      device = lib.mkIf (lib.elem config.fsType specialFSTypes) (lib.mkDefault config.fsType);
     };
 
   };
@@ -99,16 +96,16 @@ let
 
     options = {
 
-      label = mkOption {
+      label = lib.mkOption {
         default = null;
         example = "root-partition";
-        type = types.nullOr nonEmptyStr;
+        type = lib.types.nullOr nonEmptyStr;
         description = "Label of the device (if any).";
       };
 
-      autoFormat = mkOption {
+      autoFormat = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If the device does not currently contain a filesystem (as
           determined by {command}`blkid`), then automatically
@@ -117,15 +114,15 @@ let
         '';
       };
 
-      formatOptions = mkOption {
+      formatOptions = lib.mkOption {
         visible = false;
-        type = types.unspecified;
+        type = lib.types.unspecified;
         default = null;
       };
 
-      autoResize = mkOption {
+      autoResize = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, the filesystem is grown to its maximum size before
           being mounted. (This is typically the size of the containing
@@ -134,9 +131,9 @@ let
         '';
       };
 
-      noCheck = mkOption {
+      noCheck = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Disable running fsck on this filesystem.";
       };
 
@@ -146,16 +143,16 @@ let
 
     config.options = let
       inInitrd = utils.fsNeededForBoot config;
-    in mkMerge [
-      (mkIf config.autoResize [ "x-systemd.growfs" ])
-      (mkIf config.autoFormat [ "x-systemd.makefs" ])
-      (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
-      (mkIf
+    in lib.mkMerge [
+      (lib.mkIf config.autoResize [ "x-systemd.growfs" ])
+      (lib.mkIf config.autoFormat [ "x-systemd.makefs" ])
+      (lib.mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+      (lib.mkIf
         # With scripted stage 1, depends is implemented by sorting 'config.system.build.fileSystems'
         (lib.length config.depends > 0 && (inInitrd -> moduleArgs.config.boot.initrd.systemd.enable))
         (
           map (
-            x: "x-systemd.requires-mounts-for=${optionalString inInitrd "/sysroot"}${x}"
+            x: "x-systemd.requires-mounts-for=${lib.optionalString inInitrd "/sysroot"}${x}"
           ) config.depends
         )
       )
@@ -166,8 +163,8 @@ let
   # Makes sequence of `specialMount device mountPoint options fsType` commands.
   # `systemMount` should be defined in the sourcing script.
   makeSpecialMounts = mounts:
-    pkgs.writeText "mounts.sh" (concatMapStringsSep "\n" (mount: ''
-      specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
+    pkgs.writeText "mounts.sh" (lib.concatMapStringsSep "\n" (mount: ''
+      specialMount "${mount.device}" "${mount.mountPoint}" "${lib.concatStringsSep "," mount.options}" "${mount.fsType}"
     '') mounts);
 
   makeFstabEntries =
@@ -204,7 +201,7 @@ let
       ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
-    in fstabFileSystems: { }: concatMapStrings (fs:
+    in fstabFileSystems: { }: lib.concatMapStrings (fs:
       (if fs.device != null then escape fs.device
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
@@ -214,7 +211,7 @@ let
       + "\n"
     ) fstabFileSystems;
 
-    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) { });
+    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (lib.filter utils.fsNeededForBoot fileSystems) { });
 
 in
 
@@ -224,9 +221,9 @@ in
 
   options = {
 
-    fileSystems = mkOption {
+    fileSystems = lib.mkOption {
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "/".device = "/dev/hda1";
           "/data" = {
@@ -237,7 +234,7 @@ in
           "/bigdisk".label = "bigdisk";
         }
       '';
-      type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      type = lib.types.attrsOf (lib.types.submodule [coreFileSystemOpts fileSystemOpts]);
       apply = lib.filterAttrs (_: fs: fs.enable);
       description = ''
         The file systems to be mounted.  It must include an entry for
@@ -256,13 +253,13 @@ in
       '';
     };
 
-    system.fsPackages = mkOption {
+    system.fsPackages = lib.mkOption {
       internal = true;
       default = [ ];
       description = "Packages supplying file system mounters and checkers.";
     };
 
-    boot.supportedFilesystems = mkOption {
+    boot.supportedFilesystems = lib.mkOption {
       default = { };
       example = lib.literalExpression ''
         {
@@ -270,10 +267,10 @@ in
           zfs = lib.mkForce false;
         }
       '';
-      type = types.coercedTo
-        (types.listOf types.str)
+      type = lib.types.coercedTo
+        (lib.types.listOf lib.types.str)
         (enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled))
-        (types.attrsOf types.bool);
+        (lib.types.attrsOf lib.types.bool);
       description = ''
         Names of supported filesystem types, or an attribute set of file system types
         and their state. The set form may be used together with `lib.mkForce` to
@@ -282,9 +279,9 @@ in
       '';
     };
 
-    boot.specialFileSystems = mkOption {
+    boot.specialFileSystems = lib.mkOption {
       default = {};
-      type = types.attrsOf (types.submodule coreFileSystemOpts);
+      type = lib.types.attrsOf (lib.types.submodule coreFileSystemOpts);
       apply = lib.filterAttrs (_: fs: fs.enable);
       internal = true;
       description = ''
@@ -292,30 +289,30 @@ in
       '';
     };
 
-    boot.devSize = mkOption {
+    boot.devSize = lib.mkOption {
       default = "5%";
       example = "32m";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax.
       '';
     };
 
-    boot.devShmSize = mkOption {
+    boot.devShmSize = lib.mkOption {
       default = "50%";
       example = "256m";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax.
       '';
     };
 
-    boot.runSize = mkOption {
+    boot.runSize = lib.mkOption {
       default = "25%";
       example = "256m";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax.
@@ -329,7 +326,7 @@ in
   config = {
 
     assertions = let
-      ls = sep: concatMapStringsSep sep (x: x.mountPoint);
+      ls = sep: lib.concatMapStringsSep sep (x: x.mountPoint);
       resizableFSes = [
         "ext3"
         "ext4"
@@ -341,19 +338,19 @@ in
       { assertion = ! (fileSystems' ? cycle);
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
       }
-      { assertion = ! (any notAutoResizable fileSystems);
+      { assertion = ! (lib.any notAutoResizable fileSystems);
         message = let
-          fs = head (filter notAutoResizable fileSystems);
+          fs = lib.head (lib.filter notAutoResizable fileSystems);
         in ''
           Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
-          ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
+          ${lib.optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
           only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
         '';
       }
       {
-        assertion = ! (any (fs: fs.formatOptions != null) fileSystems);
+        assertion = ! (lib.any (fs: fs.formatOptions != null) fileSystems);
         message = let
-          fs = head (filter (fs: fs.formatOptions != null) fileSystems);
+          fs = lib.head (lib.filter (fs: fs.formatOptions != null) fileSystems);
         in ''
           'fileSystems.<name>.formatOptions' has been removed, since
           systemd-makefs does not support any way to provide formatting
@@ -372,7 +369,7 @@ in
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
-    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
+    system.build.earlyMountScript = makeSpecialMounts (lib.toposort utils.fsBefore (lib.attrValues config.boot.specialFileSystems)).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
@@ -383,10 +380,10 @@ in
 
     environment.etc.fstab.text =
       let
-        swapOptions = sw: concatStringsSep "," (
+        swapOptions = sw: lib.concatStringsSep "," (
           sw.options
-          ++ optional (sw.priority != null) "pri=${toString sw.priority}"
-          ++ optional (sw.discardPolicy != null) "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
+          ++ lib.optional (sw.priority != null) "pri=${toString sw.priority}"
+          ++ lib.optional (sw.discardPolicy != null) "discard${lib.optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
         );
       in ''
         # This is a generated file.  Do not edit!
@@ -400,7 +397,7 @@ in
         ${makeFstabEntries fileSystems {}}
 
         # Swap devices.
-        ${flip concatMapStrings config.swapDevices (sw:
+        ${lib.flip lib.concatMapStrings config.swapDevices (sw:
             "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}
       '';
@@ -466,7 +463,7 @@ in
 
       # To hold secrets that shouldn't be written to disk
       "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" ]; };
-    } // optionalAttrs (!config.boot.isContainer) {
+    } // lib.optionalAttrs (!config.boot.isContainer) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device
       # nodes).

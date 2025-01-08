@@ -1,22 +1,20 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   format = pkgs.formats.yaml {};
 in
 {
   options.services.pomerium = {
-    enable = mkEnableOption "the Pomerium authenticating reverse proxy";
+    enable = lib.mkEnableOption "the Pomerium authenticating reverse proxy";
 
-    configFile = mkOption {
-      type = with types; nullOr path;
+    configFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
     };
 
-    useACMEHost = mkOption {
-      type = with types; nullOr str;
+    useACMEHost = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       description = ''
         If set, use a NixOS-generated ACME certificate with the specified name.
@@ -31,7 +29,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         The contents of Pomerium's config.yaml, in Nix expressions.
 
@@ -45,8 +43,8 @@ in
       type = format.type;
     };
 
-    secretsFile = mkOption {
-      type = with types; nullOr path;
+    secretsFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = ''
         Path to file containing secrets for Pomerium, in systemd
@@ -58,13 +56,13 @@ in
   config = let
     cfg = config.services.pomerium;
     cfgFile = if cfg.configFile != null then cfg.configFile else (format.generate "pomerium.yaml" cfg.settings);
-  in mkIf cfg.enable ({
+  in lib.mkIf cfg.enable ({
     systemd.services.pomerium = {
       description = "Pomerium authenticating reverse proxy";
-      wants = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
-      after = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+      wants = [ "network.target" ] ++ (lib.optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+      after = [ "network.target" ] ++ (lib.optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
       wantedBy = [ "multi-user.target" ];
-      environment = optionalAttrs (cfg.useACMEHost != null) {
+      environment = lib.optionalAttrs (cfg.useACMEHost != null) {
         CERTIFICATE_FILE = "fullchain.pem";
         CERTIFICATE_KEY_FILE = "key.pem";
       };
@@ -104,7 +102,7 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
 
-        LoadCredential = optionals (cfg.useACMEHost != null) [
+        LoadCredential = lib.optionals (cfg.useACMEHost != null) [
           "fullchain.pem:/var/lib/acme/${cfg.useACMEHost}/fullchain.pem"
           "key.pem:/var/lib/acme/${cfg.useACMEHost}/key.pem"
         ];
@@ -115,7 +113,7 @@ in
     # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
-    systemd.services.pomerium-config-reload = mkIf (cfg.useACMEHost != null) {
+    systemd.services.pomerium-config-reload = lib.mkIf (cfg.useACMEHost != null) {
       # TODO(lukegb): figure out how to make config reloading work with credentials.
 
       wantedBy = [ "acme-finished-${cfg.useACMEHost}.target" "multi-user.target" ];

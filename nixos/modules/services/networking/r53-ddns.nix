@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.r53-ddns;
   pkg = pkgs.r53-ddns;
@@ -15,34 +13,34 @@ in
   options = {
     services.r53-ddns = {
 
-      enable = mkEnableOption "r53-ddyns";
+      enable = lib.mkEnableOption "r53-ddyns";
 
-      interval = mkOption {
-        type = types.str;
+      interval = lib.mkOption {
+        type = lib.types.str;
         default = "15min";
         description = "How often to update the entry";
       };
 
-      zoneID = mkOption {
-        type = types.str;
+      zoneID = lib.mkOption {
+        type = lib.types.str;
         description = "The ID of your zone in Route53";
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         description = "The name of your domain in Route53";
       };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Manually specify the hostname. Otherwise the tool will try to use the name
           returned by the OS (Call to gethostname)
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.str;
+      environmentFile = lib.mkOption {
+        type = lib.types.str;
         description = ''
           File containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
           in the format of an EnvironmentFile as described by systemd.exec(5)
@@ -52,7 +50,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.timers.r53-ddns = {
       description = "r53-ddns timer";

@@ -6,13 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    literalMD
-    mkEnableOption
-    mkIf
-    mkOption
-    types
-    ;
   cfg = config.services.quake3-server;
 
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
@@ -52,27 +45,27 @@ in
 {
   options = {
     services.quake3-server = {
-      enable = mkEnableOption "Quake 3 dedicated server";
+      enable = lib.mkEnableOption "Quake 3 dedicated server";
       package = lib.mkPackageOption pkgs "ioquake3" { };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 27960;
         description = ''
           UDP Port the server should listen on.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the firewall.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           seta rconPassword "superSecret"      // sets RCON password for remote console
@@ -84,10 +77,10 @@ in
         '';
       };
 
-      baseq3 = mkOption {
-        type = types.either types.package types.path;
+      baseq3 = lib.mkOption {
+        type = lib.types.either lib.types.package lib.types.path;
         default = defaultBaseq3;
-        defaultText = literalMD "Manually downloaded Quake 3 installation directory.";
+        defaultText = lib.literalMD "Manually downloaded Quake 3 installation directory.";
         example = "/var/lib/q3ds";
         description = ''
           Path to the baseq3 files (pak*.pk3). If this is on the nix store (type = package) all .pk3 files should be saved
@@ -102,8 +95,8 @@ in
     let
       baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
     in
-    mkIf cfg.enable {
-      networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    lib.mkIf cfg.enable {
+      networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
       systemd.services.q3ds = {
         description = "Quake 3 dedicated server";
@@ -112,14 +105,14 @@ in
 
         environment.HOME = if baseq3InStore then home else cfg.baseq3;
 
-        serviceConfig = with lib; {
+        serviceConfig = {
           Restart = "always";
           DynamicUser = true;
           WorkingDirectory = home;
 
           # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
           ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
-          ExecStartPre = optionalString (
+          ExecStartPre = lib.optionalString (
             !baseq3InStore
           ) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 

@@ -17,36 +17,36 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
-    optionalAttrs
-    optionals
+    lib.mkOption
+    lib.optionalAttrs
+    lib.optionals
     types;
 
   cfg = config.services.frigate;
 
   format = pkgs.formats.yaml { };
 
-  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.settings;
+  filteredConfig = converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.settings;
 
-  cameraFormat = with types; submodule {
+  cameraFormat = with lib.types; submodule {
     freeformType = format.type;
     options = {
       ffmpeg = {
-        inputs = mkOption {
+        inputs = lib.mkOption {
           description = ''
             List of inputs for this camera.
           '';
           type = listOf (submodule {
             freeformType = format.type;
             options = {
-              path = mkOption {
+              path = lib.mkOption {
                 type = str;
                 example = "rtsp://192.0.2.1:554/rtsp";
                 description = ''
                   Stream URL
                 '';
               };
-              roles = mkOption {
+              roles = lib.mkOption {
                 type = listOf (enum [ "audio" "detect" "record" ]);
                 example = [ "detect" "record" ];
                 description = ''
@@ -112,12 +112,12 @@ in
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.frigate = with types; {
-    enable = mkEnableOption "Frigate NVR";
+  options.services.frigate = with lib.types; {
+    enable = lib.mkEnableOption "Frigate NVR";
 
-    package = mkPackageOption pkgs "frigate" { };
+    package = lib.mkPackageOption pkgs "frigate" { };
 
-    hostname = mkOption {
+    hostname = lib.mkOption {
       type = str;
       example = "frigate.exampe.com";
       description = ''
@@ -127,7 +127,7 @@ in
       '';
     };
 
-    vaapiDriver = mkOption {
+    vaapiDriver = lib.mkOption {
       type = nullOr (enum [ "i965" "iHD" "nouveau" "vdpau" "nvidia" "radeonsi" ]);
       default = null;
       example = "radeonsi";
@@ -148,11 +148,11 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = submodule {
         freeformType = format.type;
         options = {
-          cameras = mkOption {
+          cameras = lib.mkOption {
             type = attrsOf cameraFormat;
             description = ''
               Attribute set of cameras configurations.
@@ -162,7 +162,7 @@ in
           };
 
           database = {
-            path = mkOption {
+            path = lib.mkOption {
               type = path;
               default = "/var/lib/frigate/frigate.db";
               description = ''
@@ -174,7 +174,7 @@ in
           mqtt = {
             enabled = mkEnableOption "MQTT support";
 
-            host = mkOption {
+            host = lib.mkOption {
               type = nullOr str;
               default = null;
               example = "mqtt.example.com";
@@ -196,7 +196,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nginx = {
       enable = true;
       additionalModules = with pkgs.nginxModules; [
@@ -206,8 +206,8 @@ in
         set-misc
         vod
       ];
-      recommendedGzipSettings = mkDefault true;
-      mapHashBucketSize = mkDefault 128;
+      recommendedGzipSettings = lib.mkDefault true;
+      mapHashBucketSize = lib.mkDefault 128;
       upstreams = {
         frigate-api.servers = {
           "127.0.0.1:5001" = { };
@@ -541,8 +541,8 @@ in
     ];
 
     hardware.coral = {
-      usb.enable = mkDefault withCoralUSB;
-      pcie.enable = mkDefault withCoralPCI;
+      usb.enable = lib.mkDefault withCoralUSB;
+      pcie.enable = lib.mkDefault withCoralPCI;
     };
 
     users.users.frigate = {
@@ -563,9 +563,9 @@ in
         CONFIG_FILE = format.generate "frigate.yml" filteredConfig;
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
-      } // optionalAttrs (cfg.vaapiDriver != null) {
+      } // lib.optionalAttrs (cfg.vaapiDriver != null) {
         LIBVA_DRIVER_NAME = cfg.vaapiDriver;
-      } // optionalAttrs withCoral {
+      } // lib.optionalAttrs withCoral {
         LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
       };
       path = with pkgs; [
@@ -575,7 +575,7 @@ in
         libva-utils
         procps
         radeontop
-      ] ++ optionals (!stdenv.hostPlatform.isAarch64) [
+      ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [
         # not available on aarch64-linux
         intel-gpu-tools
       ];
@@ -589,9 +589,9 @@ in
 
         User = "frigate";
         Group = "frigate";
-        SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
+        SupplementaryGroups = [ "render" ] ++ lib.optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = optionals (elem cfg.vaapiDriver [ "i965" "iHD" ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        AmbientCapabilities = lib.optionals (elem cfg.vaapiDriver [ "i965" "iHD" ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
 
         UMask = "0027";
 

@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-with lib;
+
 let
   cfg = config.services.sogo;
 
@@ -13,13 +13,13 @@ let
       if (cfg.configReplaces != { }) then
         ''
           # Insert secrets
-          ${concatStringsSep "\n" (
-            mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces
           )}
 
           ${pkgs.perl}/bin/perl -p ${
-            concatStringsSep " " (
-              mapAttrsToList (k: v: ''-e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces
+            lib.concatStringsSep " " (
+              lib.mapAttrsToList (k: v: ''-e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces
             )
           } /etc/sogo/sogo.conf.raw | install -m 640 -o sogo -g sogo /dev/stdin /etc/sogo/sogo.conf
         ''
@@ -32,34 +32,34 @@ let
 
 in
 {
-  options.services.sogo = with types; {
-    enable = mkEnableOption "SOGo groupware";
+  options.services.sogo = with lib.types; {
+    enable = lib.mkEnableOption "SOGo groupware";
 
-    vhostName = mkOption {
+    vhostName = lib.mkOption {
       description = "Name of the nginx vhost";
       type = str;
       default = "sogo";
     };
 
-    timezone = mkOption {
+    timezone = lib.mkOption {
       description = "Timezone of your SOGo instance";
       type = str;
       example = "America/Montreal";
     };
 
-    language = mkOption {
+    language = lib.mkOption {
       description = "Language of SOGo";
       type = str;
       default = "English";
     };
 
-    ealarmsCredFile = mkOption {
+    ealarmsCredFile = lib.mkOption {
       description = "Optional path to a credentials file for email alarms";
       type = nullOr str;
       default = null;
     };
 
-    configReplaces = mkOption {
+    configReplaces = lib.mkOption {
       description = ''
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
@@ -74,14 +74,14 @@ in
       };
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       description = "Extra sogo.conf configuration lines";
       type = lines;
       default = "";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.sogo ];
 
     environment.etc."sogo/sogo.conf.raw".text = ''
@@ -205,7 +205,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.sogo}/bin/sogo-ealarms-notify${
-          optionalString (cfg.ealarmsCredFile != null) " -p ${cfg.ealarmsCredFile}"
+          lib.optionalString (cfg.ealarmsCredFile != null) " -p ${cfg.ealarmsCredFile}"
         }";
 
         ProtectSystem = "strict";

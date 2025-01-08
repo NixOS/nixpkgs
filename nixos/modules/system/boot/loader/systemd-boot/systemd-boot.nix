@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.boot.loader.systemd-boot;
 
@@ -70,9 +68,9 @@ let
 
     inherit (config.system.nixos) distroName;
 
-    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
+    memtest86 = lib.optionalString cfg.memtest86.enable pkgs.memtest86plus;
 
-    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
+    netbootxyz = lib.optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
     checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
       fail() {
@@ -88,17 +86,17 @@ let
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(${pkgs.coreutils}/bin/mktemp)
 
-      ${concatStrings (
-        mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-          ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+      ${lib.concatStrings (
+        lib.mapAttrsToList (n: v: ''
+          ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${lib.escapeShellArg n}
+          ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${lib.escapeShellArg n}
         '') cfg.extraFiles
       )}
 
-      ${concatStrings (
-        mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-          ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+      ${lib.concatStrings (
+        lib.mapAttrsToList (n: v: ''
+          ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${lib.escapeShellArg n}
+          ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${lib.escapeShellArg n}
         '') cfg.extraEntries
       )}
     '';
@@ -115,7 +113,7 @@ in
   meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [
         "boot"
         "loader"
@@ -166,10 +164,10 @@ in
   ];
 
   options.boot.loader.systemd-boot = {
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
 
-      type = types.bool;
+      type = lib.types.bool;
 
       description = ''
         Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
@@ -178,9 +176,9 @@ in
       '';
     };
 
-    sortKey = mkOption {
+    sortKey = lib.mkOption {
       default = "nixos";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         The sort key used for the NixOS bootloader entries.
         This key determines sorting relative to non-NixOS entries.
@@ -207,10 +205,10 @@ in
       '';
     };
 
-    editor = mkOption {
+    editor = lib.mkOption {
       default = true;
 
-      type = types.bool;
+      type = lib.types.bool;
 
       description = ''
         Whether to allow editing the kernel command-line before
@@ -221,9 +219,9 @@ in
       '';
     };
 
-    xbootldrMountPoint = mkOption {
+    xbootldrMountPoint = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = ''
         Where the XBOOTLDR partition is mounted.
 
@@ -233,10 +231,10 @@ in
       '';
     };
 
-    configurationLimit = mkOption {
+    configurationLimit = lib.mkOption {
       default = null;
       example = 120;
-      type = types.nullOr types.int;
+      type = lib.types.nullOr lib.types.int;
       description = ''
         Maximum number of latest generations in the boot menu.
         Useful to prevent boot partition running out of disk space.
@@ -246,7 +244,7 @@ in
       '';
     };
 
-    installDeviceTree = mkOption {
+    installDeviceTree = lib.mkOption {
       default = with config.hardware.deviceTree; enable && name != null;
       defaultText = ''with config.hardware.deviceTree; enable && name != null'';
       description = ''
@@ -255,14 +253,14 @@ in
       '';
     };
 
-    extraInstallCommands = mkOption {
+    extraInstallCommands = lib.mkOption {
       default = "";
       example = ''
         default_cfg=$(cat /boot/loader/loader.conf | grep default | awk '{print $2}')
         init_value=$(cat /boot/loader/entries/$default_cfg | grep init= | awk '{print $2}')
         sed -i "s|@INIT@|$init_value|g" /boot/custom/config_with_placeholder.conf
       '';
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Additional shell commands inserted in the bootloader installer
         script after generating menu entries. It can be used to expand
@@ -271,10 +269,10 @@ in
       '';
     };
 
-    consoleMode = mkOption {
+    consoleMode = lib.mkOption {
       default = "keep";
 
-      type = types.enum [
+      type = lib.types.enum [
         "0"
         "1"
         "2"
@@ -298,18 +296,18 @@ in
     };
 
     memtest86 = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Make Memtest86+ available from the systemd-boot menu. Memtest86+ is a
           program for testing memory.
         '';
       };
 
-      sortKey = mkOption {
+      sortKey = lib.mkOption {
         default = "o_memtest86";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
@@ -321,9 +319,9 @@ in
     };
 
     netbootxyz = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Make `netboot.xyz` available from the
           `systemd-boot` menu. `netboot.xyz`
@@ -332,9 +330,9 @@ in
         '';
       };
 
-      sortKey = mkOption {
+      sortKey = lib.mkOption {
         default = "o_netbootxyz";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
@@ -346,8 +344,8 @@ in
     };
 
     edk2-uefi-shell = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Make the EDK2 UEFI Shell available from the systemd-boot menu.
@@ -355,8 +353,8 @@ in
         '';
       };
 
-      sortKey = mkOption {
-        type = types.str;
+      sortKey = lib.mkOption {
+        type = lib.types.str;
         default = "o_edk2-uefi-shell";
         description = ''
           `systemd-boot` orders the menu entries by their sort keys,
@@ -368,10 +366,10 @@ in
       };
     };
 
-    extraEntries = mkOption {
-      type = types.attrsOf types.lines;
+    extraEntries = lib.mkOption {
+      type = lib.types.attrsOf lib.types.lines;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "memtest86.conf" = '''
           title Memtest86+
           efi /efi/memtest86/memtest.efi
@@ -391,10 +389,10 @@ in
       '';
     };
 
-    extraFiles = mkOption {
-      type = types.attrsOf types.path;
+    extraFiles = lib.mkOption {
+      type = lib.types.attrsOf lib.types.path;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
       description = ''
@@ -405,10 +403,10 @@ in
       '';
     };
 
-    graceful = mkOption {
+    graceful = lib.mkOption {
       default = false;
 
-      type = types.bool;
+      type = lib.types.bool;
 
       description = ''
         Invoke `bootctl install` with the `--graceful` option,
@@ -420,10 +418,10 @@ in
       '';
     };
 
-    rebootForBitlocker = mkOption {
+    rebootForBitlocker = lib.mkOption {
       default = false;
 
-      type = types.bool;
+      type = lib.types.bool;
 
       description = ''
         Enable *EXPERIMENTAL* BitLocker support.
@@ -437,7 +435,7 @@ in
       '';
     };
 
-    windows = mkOption {
+    windows = lib.mkOption {
       default = { };
       description = ''
         Make Windows bootable from systemd-boot. This option is not necessary when Windows and
@@ -449,7 +447,7 @@ in
 
         The attribute name is used for the title of the menu entry and internal file names.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "10".efiDeviceHandle = "HD0c3";
           "11-ame" = {
@@ -463,13 +461,13 @@ in
           };
         }
       '';
-      type = types.attrsOf (
-        types.submodule (
+      type = lib.types.attrsOf (
+        lib.types.submodule (
           { name, ... }:
           {
             options = {
-              efiDeviceHandle = mkOption {
-                type = types.str;
+              efiDeviceHandle = lib.mkOption {
+                type = lib.types.str;
                 example = "HD1b3";
                 description = ''
                   The device handle of the EFI System Partition (ESP) where the Windows bootloader is
@@ -490,8 +488,8 @@ in
                 '';
               };
 
-              title = mkOption {
-                type = types.str;
+              title = lib.mkOption {
+                type = lib.types.str;
                 example = "Michaelsoft Binbows";
                 default = "Windows ${name}";
                 defaultText = ''attribute name of this entry, prefixed with "Windows "'';
@@ -500,8 +498,8 @@ in
                 '';
               };
 
-              sortKey = mkOption {
-                type = types.str;
+              sortKey = lib.mkOption {
+                type = lib.types.str;
                 default = "o_windows_${name}";
                 defaultText = ''attribute name of this entry, prefixed with "o_windows_"'';
                 description = ''
@@ -519,15 +517,15 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       [
         {
-          assertion = (hasPrefix "/" efi.efiSysMountPoint);
+          assertion = (lib.hasPrefix "/" efi.efiSysMountPoint);
           message = "The ESP mount point '${toString efi.efiSysMountPoint}' must be an absolute path";
         }
         {
-          assertion = cfg.xbootldrMountPoint == null || (hasPrefix "/" cfg.xbootldrMountPoint);
+          assertion = cfg.xbootldrMountPoint == null || (lib.hasPrefix "/" cfg.xbootldrMountPoint);
           message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' must be an absolute path";
         }
         {
@@ -546,70 +544,70 @@ in
           message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
         }
       ]
-      ++ concatMap (filename: [
+      ++ lib.concatMap (filename: [
         {
-          assertion = !(hasInfix "/" filename);
+          assertion = !(lib.hasInfix "/" filename);
           message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
         }
         {
-          assertion = hasSuffix ".conf" filename;
+          assertion = lib.hasSuffix ".conf" filename;
           message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
         }
       ]) (builtins.attrNames cfg.extraEntries)
-      ++ concatMap (filename: [
+      ++ lib.concatMap (filename: [
         {
-          assertion = !(hasPrefix "/" filename);
+          assertion = !(lib.hasPrefix "/" filename);
           message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
         }
         {
-          assertion = !(hasInfix ".." filename);
+          assertion = !(lib.hasInfix ".." filename);
           message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not reference the parent directory";
         }
         {
-          assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
+          assertion = !(lib.hasInfix "nixos/.extra-files" (lib.toLower filename));
           message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
         }
       ]) (builtins.attrNames cfg.extraFiles)
-      ++ concatMap (winVersion: [
+      ++ lib.concatMap (winVersion: [
         {
           assertion = lib.match "^[-_0-9A-Za-z]+$" winVersion != null;
           message = "boot.loader.systemd-boot.windows.${winVersion} is invalid: key must only contain alphanumeric characters, hyphens, and underscores";
         }
       ]) (builtins.attrNames cfg.windows);
 
-    boot.loader.grub.enable = mkDefault false;
+    boot.loader.grub.enable = lib.mkDefault false;
 
     boot.loader.supportsInitrdSecrets = true;
 
-    boot.loader.systemd-boot.extraFiles = mkMerge [
-      (mkIf cfg.memtest86.enable {
+    boot.loader.systemd-boot.extraFiles = lib.mkMerge [
+      (lib.mkIf cfg.memtest86.enable {
         "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
       })
-      (mkIf cfg.netbootxyz.enable {
+      (lib.mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
       })
-      (mkIf (cfg.edk2-uefi-shell.enable || cfg.windows != { }) {
+      (lib.mkIf (cfg.edk2-uefi-shell.enable || cfg.windows != { }) {
         ${edk2ShellEspPath} = "${pkgs.edk2-uefi-shell}/shell.efi";
       })
     ];
 
-    boot.loader.systemd-boot.extraEntries = mkMerge (
+    boot.loader.systemd-boot.extraEntries = lib.mkMerge (
       [
-        (mkIf cfg.memtest86.enable {
+        (lib.mkIf cfg.memtest86.enable {
           "memtest86.conf" = ''
             title  Memtest86+
             efi    /efi/memtest86/memtest.efi
             sort-key ${cfg.memtest86.sortKey}
           '';
         })
-        (mkIf cfg.netbootxyz.enable {
+        (lib.mkIf cfg.netbootxyz.enable {
           "netbootxyz.conf" = ''
             title  netboot.xyz
             efi    /efi/netbootxyz/netboot.xyz.efi
             sort-key ${cfg.netbootxyz.sortKey}
           '';
         })
-        (mkIf cfg.edk2-uefi-shell.enable {
+        (lib.mkIf cfg.edk2-uefi-shell.enable {
           "edk2-uefi-shell.conf" = ''
             title  EDK2 UEFI Shell
             efi    /${edk2ShellEspPath}
@@ -617,7 +615,7 @@ in
           '';
         })
       ]
-      ++ (mapAttrsToList (winVersion: cfg: {
+      ++ (lib.mapAttrsToList (winVersion: cfg: {
         "windows_${winVersion}.conf" = ''
           title ${cfg.title}
           efi /${edk2ShellEspPath}

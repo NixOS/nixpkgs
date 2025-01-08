@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.syncthing.relay;
 
@@ -12,20 +10,20 @@ let
       "--keys=${dataDirectory}"
       "--listen=${cfg.listenAddress}:${toString cfg.port}"
       "--status-srv=${cfg.statusListenAddress}:${toString cfg.statusPort}"
-      "--provided-by=${escapeShellArg cfg.providedBy}"
+      "--provided-by=${lib.escapeShellArg cfg.providedBy}"
     ]
-    ++ optional (cfg.pools != null) "--pools=${escapeShellArg (concatStringsSep "," cfg.pools)}"
-    ++ optional (cfg.globalRateBps != null) "--global-rate=${toString cfg.globalRateBps}"
-    ++ optional (cfg.perSessionRateBps != null) "--per-session-rate=${toString cfg.perSessionRateBps}"
+    ++ lib.optional (cfg.pools != null) "--pools=${lib.escapeShellArg (lib.concatStringsSep "," cfg.pools)}"
+    ++ lib.optional (cfg.globalRateBps != null) "--global-rate=${toString cfg.globalRateBps}"
+    ++ lib.optional (cfg.perSessionRateBps != null) "--per-session-rate=${toString cfg.perSessionRateBps}"
     ++ cfg.extraOptions;
 in {
   ###### interface
 
   options.services.syncthing.relay = {
-    enable = mkEnableOption "Syncthing relay service";
+    enable = lib.mkEnableOption "Syncthing relay service";
 
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = "1.2.3.4";
       description = ''
@@ -33,8 +31,8 @@ in {
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 22067;
       description = ''
         Port to listen on for relay traffic. This port should be added to
@@ -42,8 +40,8 @@ in {
       '';
     };
 
-    statusListenAddress = mkOption {
-      type = types.str;
+    statusListenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = "1.2.3.4";
       description = ''
@@ -51,8 +49,8 @@ in {
       '';
     };
 
-    statusPort = mkOption {
-      type = types.port;
+    statusPort = lib.mkOption {
+      type = lib.types.port;
       default = 22070;
       description = ''
         Port to listen on for serving the relay status API. This port should be
@@ -60,40 +58,40 @@ in {
       '';
     };
 
-    pools = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    pools = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = ''
         Relay pools to join. If null, uses the default global pool.
       '';
     };
 
-    providedBy = mkOption {
-      type = types.str;
+    providedBy = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Human-readable description of the provider of the relay (you).
       '';
     };
 
-    globalRateBps = mkOption {
-      type = types.nullOr types.ints.positive;
+    globalRateBps = lib.mkOption {
+      type = lib.types.nullOr lib.types.ints.positive;
       default = null;
       description = ''
         Global bandwidth rate limit in bytes per second.
       '';
     };
 
-    perSessionRateBps = mkOption {
-      type = types.nullOr types.ints.positive;
+    perSessionRateBps = lib.mkOption {
+      type = lib.types.nullOr lib.types.ints.positive;
       default = null;
       description = ''
         Per session bandwidth rate limit in bytes per second.
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Extra command line arguments to pass to strelaysrv.
@@ -103,7 +101,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.syncthing-relay = {
       description = "Syncthing relay service";
       wantedBy = [ "multi-user.target" ];
@@ -114,7 +112,7 @@ in {
         StateDirectory = baseNameOf dataDirectory;
 
         Restart = "on-failure";
-        ExecStart = "${pkgs.syncthing-relay}/bin/strelaysrv ${concatStringsSep " " relayOptions}";
+        ExecStart = "${pkgs.syncthing-relay}/bin/strelaysrv ${lib.concatStringsSep " " relayOptions}";
       };
     };
   };

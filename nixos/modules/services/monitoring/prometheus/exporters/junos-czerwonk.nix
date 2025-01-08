@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.junos-czerwonk;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     escapeShellArg
     mkIf
@@ -26,22 +26,22 @@ in
 {
   port = 9326;
   extraOpts = {
-    environmentFile = mkOption {
-      type = types.nullOr types.str;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         File containing env-vars to be substituted into the exporter's config.
       '';
     };
-    configurationFile = mkOption {
-      type = types.nullOr types.path;
+    configurationFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Specify the JunOS exporter configuration file to use.
       '';
     };
-    configuration = mkOption {
-      type = types.nullOr types.attrs;
+    configuration = lib.mkOption {
+      type = lib.types.nullOr lib.types.attrs;
       default = null;
       description = ''
         JunOS exporter configuration as nix attribute set. Mutually exclusive with the `configurationFile` option.
@@ -55,8 +55,8 @@ in
         ];
       };
     };
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
@@ -66,7 +66,7 @@ in
   serviceOpts = {
     serviceConfig = {
       DynamicUser = false;
-      EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+      EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       RuntimeDirectory = "prometheus-junos-czerwonk-exporter";
       ExecStartPre = [
         "${pkgs.writeShellScript "subst-secrets-junos-czerwonk-exporter" ''
@@ -79,7 +79,7 @@ in
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           -web.telemetry-path ${cfg.telemetryPath} \
           -config.file ''${RUNTIME_DIRECTORY}/junos-exporter.json \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

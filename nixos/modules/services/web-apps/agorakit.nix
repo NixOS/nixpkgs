@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.agorakit;
   agorakit = pkgs.agorakit.override { dataDir = cfg.dataDir; };
@@ -32,28 +31,28 @@ let
 in
 {
   options.services.agorakit = {
-    enable = mkEnableOption "agorakit";
+    enable = lib.mkEnableOption "agorakit";
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "agorakit";
       description = "User agorakit runs as.";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "agorakit";
       description = "Group agorakit runs as.";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    appKeyFile = mkOption {
+    appKeyFile = lib.mkOption {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
         generated with <code>head -c 32 /dev/urandom | base64</code>.
       '';
       example = "/run/keys/agorakit-appkey";
-      type = types.path;
+      type = lib.types.path;
     };
 
     hostName = lib.mkOption {
@@ -67,7 +66,7 @@ in
       '';
     };
 
-    appURL = mkOption {
+    appURL = lib.mkOption {
       description = ''
         The root URL that you want to host agorakit on. All URLs in agorakit will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
@@ -76,39 +75,39 @@ in
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostName}";
       defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostName}'';
       example = "https://example.com";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       description = "agorakit data directory";
       default = "/var/lib/agorakit";
-      type = types.path;
+      type = lib.types.path;
     };
 
     database = {
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Database host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3306;
         description = "Database host port.";
       };
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "agorakit";
         description = "Database name.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = user;
         defaultText = lib.literalExpression "user";
         description = "Database username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/agorakit-dbpassword";
         description = ''
@@ -116,50 +115,50 @@ in
           <option>database.user</option>.
         '';
       };
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Create the database and database user locally.";
       };
     };
 
     mail = {
-      driver = mkOption {
-        type = types.enum [
+      driver = lib.mkOption {
+        type = lib.types.enum [
           "smtp"
           "sendmail"
         ];
         default = "smtp";
         description = "Mail driver to use.";
       };
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Mail host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 1025;
         description = "Mail host port.";
       };
-      fromName = mkOption {
-        type = types.str;
+      fromName = lib.mkOption {
+        type = lib.types.str;
         default = "agorakit";
         description = "Mail \"from\" name.";
       };
-      from = mkOption {
-        type = types.str;
+      from = lib.mkOption {
+        type = lib.types.str;
         default = "mail@agorakit.com";
         description = "Mail \"from\" email.";
       };
-      user = mkOption {
-        type = with types; nullOr str;
+      user = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         example = "agorakit";
         description = "Mail username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/agorakit-mailpassword";
         description = ''
@@ -167,27 +166,24 @@ in
           <option>mail.user</option>.
         '';
       };
-      encryption = mkOption {
-        type = with types; nullOr (enum [ "tls" ]);
+      encryption = lib.mkOption {
+        type = with lib.types; nullOr (enum [ "tls" ]);
         default = null;
         description = "SMTP encryption mechanism to use.";
       };
     };
 
-    maxUploadSize = mkOption {
-      type = types.str;
+    maxUploadSize = lib.mkOption {
+      type = lib.types.str;
       default = "18M";
       example = "1G";
       description = "The maximum size for uploads (e.g. images).";
     };
 
-    poolConfig = mkOption {
+    poolConfig = lib.mkOption {
       type =
-        with types;
-        attrsOf (oneOf [
-          str
-          int
-          bool
+        lib.types.attrsOf (lib.types.oneOf [
+          lib.types.lib.types.bool
         ]);
       default = {
         "pm" = "dynamic";
@@ -203,9 +199,9 @@ in
       '';
     };
 
-    nginx = mkOption {
-      type = types.submodule (
-        recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
+        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
           inherit config lib;
         }) { }
       );
@@ -225,23 +221,22 @@ in
       '';
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       type =
-        with types;
-        attrsOf (
-          nullOr (
-            either
-              (oneOf [
-                bool
-                int
-                port
-                path
-                str
+        lib.types.attrsOf (
+          lib.types.nullOr (
+            lib.types.either
+              (lib.types.oneOf [
+                lib.types.bool
+                lib.types.int
+                lib.types.port
+                lib.types.path
+                lib.types.str
               ])
-              (submodule {
+              (lib.types.submodule {
                 options = {
-                  _secret = mkOption {
-                    type = nullOr str;
+                  _secret = lib.mkOption {
+                    type = lib.types.nullOr lib.types.str;
                     description = ''
                       The path to a file containing the value the
                       option should be set to in the final
@@ -284,7 +279,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = db.createLocally -> db.user == user;
@@ -323,9 +318,9 @@ in
 
     environment.systemPackages = [ artisan ];
 
-    services.mysql = mkIf db.createLocally {
+    services.mysql = lib.mkIf db.createLocally {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
       ensureUsers = [
         {
@@ -352,16 +347,16 @@ in
     };
 
     services.nginx = {
-      enable = mkDefault true;
+      enable = lib.mkDefault true;
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
       recommendedBrotliSettings = true;
       recommendedProxySettings = true;
-      virtualHosts.${cfg.hostName} = mkMerge [
+      virtualHosts.${cfg.hostName} = lib.mkMerge [
         cfg.nginx
         {
-          root = mkForce "${agorakit}/public";
+          root = lib.mkForce "${agorakit}/public";
           locations = {
             "/" = {
               index = "index.php";
@@ -381,7 +376,7 @@ in
     systemd.services.agorakit-setup = {
       description = "Preparation tasks for agorakit";
       before = [ "phpfpm-agorakit.service" ];
-      after = optional db.createLocally "mysql.service";
+      after = lib.optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
@@ -395,30 +390,29 @@ in
       path = [ pkgs.replace-secret ];
       script =
         let
-          isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+          isSecret = v: lib.isAttrs v && v ? _secret && lib.isString v._secret;
           agorakitEnvVars = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString =
                 v:
-                with builtins;
-                if isInt v then
+                if lib.isInt v then
                   toString v
-                else if isString v then
+                else if lib.isString v then
                   v
                 else if true == v then
                   "true"
                 else if false == v then
                   "false"
                 else if isSecret v then
-                  hashString "sha256" v._secret
+                  lib.hashString "sha256" v._secret
                 else
-                  throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
+                  throw "unsupported type ${lib.typeOf v}: ${(lib.generators.toPretty { }) v}";
             };
           };
           secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
           mkSecretReplacement = file: ''
             replace-secret ${
-              escapeShellArgs [
+              lib.escapeShellArgs [
                 (builtins.hashString "sha256" file)
                 file
                 "${cfg.dataDir}/.env"
@@ -428,7 +422,7 @@ in
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
           filteredConfig = lib.converge (lib.filterAttrsRecursive (
             _: v:
-            !elem v [
+            !lib.elem v [
               { }
               null
             ]
@@ -469,14 +463,14 @@ in
     ];
 
     users = {
-      users = mkIf (user == "agorakit") {
+      users = lib.mkIf (user == "agorakit") {
         agorakit = {
           inherit group;
           isSystemUser = true;
         };
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
-      groups = mkIf (group == "agorakit") { agorakit = { }; };
+      groups = lib.mkIf (group == "agorakit") { agorakit = { }; };
     };
   };
 }

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.i3;
   updateSessionEnvironmentScript = ''
@@ -17,44 +15,44 @@ in
 
 {
   options.services.xserver.windowManager.i3 = {
-    enable = mkEnableOption "i3 window manager";
+    enable = lib.mkEnableOption "i3 window manager";
 
-    configFile = mkOption {
+    configFile = lib.mkOption {
       default = null;
-      type = with types; nullOr path;
+      type = with lib.types; nullOr path;
       description = ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
       '';
     };
 
-    updateSessionEnvironment = mkOption {
+    updateSessionEnvironment = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to run dbus-update-activation-environment and systemctl import-environment before session start.
         Required for xdg portals to function properly.
       '';
     };
 
-    extraSessionCommands = mkOption {
+    extraSessionCommands = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Shell commands executed just before i3 is started.
       '';
     };
 
-    package = mkPackageOption pkgs "i3" { };
+    package = lib.mkPackageOption pkgs "i3" { };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
       default = with pkgs; [
         dmenu
         i3status
         i3lock
       ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         with pkgs; [
           dmenu
           i3status
@@ -67,7 +65,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.windowManager.session = [
       {
         name = "i3";
@@ -76,19 +74,19 @@ in
 
           ${lib.optionalString cfg.updateSessionEnvironment updateSessionEnvironmentScript}
 
-          ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null) "-c /etc/i3/config"} &
+          ${cfg.package}/bin/i3 ${lib.optionalString (cfg.configFile != null) "-c /etc/i3/config"} &
           waitPID=$!
         '';
       }
     ];
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
-    environment.etc."i3/config" = mkIf (cfg.configFile != null) {
+    environment.etc."i3/config" = lib.mkIf (cfg.configFile != null) {
       source = cfg.configFile;
     };
   };
 
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "xserver"
       "windowManager"

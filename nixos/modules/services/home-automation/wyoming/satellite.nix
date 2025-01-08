@@ -13,12 +13,12 @@ let
     escapeShellArgs
     getExe
     literalExpression
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkIf
     mkPackageOption
-    optional
-    optionals
+    lib.optional
+    lib.optionals
     types
     ;
 
@@ -27,20 +27,20 @@ let
       oldAttrs.propagatedBuildInputs
       # for audio enhancements like auto-gain, noise suppression
       ++ cfg.package.optional-dependencies.webrtc
-      # vad is currently optional, because it is broken on aarch64-linux
-      ++ optionals cfg.vad.enable cfg.package.optional-dependencies.silerovad;
+      # vad is currently lib.optional, because it is broken on aarch64-linux
+      ++ lib.optionals cfg.vad.enable cfg.package.optional-dependencies.silerovad;
   });
 in
 
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.wyoming.satellite = with types; {
-    enable = mkEnableOption "Wyoming Satellite";
+  options.services.wyoming.satellite = with lib.types; {
+    enable = lib.mkEnableOption "Wyoming Satellite";
 
-    package = mkPackageOption pkgs "wyoming-satellite" { };
+    package = lib.mkPackageOption pkgs "wyoming-satellite" { };
 
-    user = mkOption {
+    user = lib.mkOption {
       type = str;
       example = "alice";
       description = ''
@@ -48,7 +48,7 @@ in
       '';
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       type = str;
       default = "users";
       description = ''
@@ -56,7 +56,7 @@ in
       '';
     };
 
-    uri = mkOption {
+    uri = lib.mkOption {
       type = str;
       default = "tcp://0.0.0.0:10700";
       description = ''
@@ -64,10 +64,10 @@ in
       '';
     };
 
-    name = mkOption {
+    name = lib.mkOption {
       type = str;
       default = config.networking.hostName;
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         config.networking.hostName
       '';
       description = ''
@@ -75,7 +75,7 @@ in
       '';
     };
 
-    area = mkOption {
+    area = lib.mkOption {
       type = nullOr str;
       default = null;
       example = "Kitchen";
@@ -85,7 +85,7 @@ in
     };
 
     microphone = {
-      command = mkOption {
+      command = lib.mkOption {
         type = str;
         default = "arecord -r 16000 -c 1 -f S16_LE -t raw";
         description = ''
@@ -93,7 +93,7 @@ in
         '';
       };
 
-      autoGain = mkOption {
+      autoGain = lib.mkOption {
         type = ints.between 0 31;
         default = 5;
         example = 15;
@@ -102,7 +102,7 @@ in
         '';
       };
 
-      noiseSuppression = mkOption {
+      noiseSuppression = lib.mkOption {
         type = ints.between 0 4;
         default = 2;
         example = 3;
@@ -114,7 +114,7 @@ in
     };
 
     sound = {
-      command = mkOption {
+      command = lib.mkOption {
         type = nullOr str;
         default = "aplay -r 22050 -c 1 -f S16_LE -t raw";
         description = ''
@@ -124,7 +124,7 @@ in
     };
 
     sounds = {
-      awake = mkOption {
+      awake = lib.mkOption {
         type = nullOr path;
         default = null;
         description = ''
@@ -132,7 +132,7 @@ in
         '';
       };
 
-      done = mkOption {
+      done = lib.mkOption {
         type = nullOr path;
         default = null;
         description = ''
@@ -142,7 +142,7 @@ in
     };
 
     vad = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -154,7 +154,7 @@ in
       };
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -165,7 +165,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services."wyoming-satellite" = {
       description = "Wyoming Satellite";
       after = [
@@ -184,9 +184,9 @@ in
       ];
       script =
         let
-          optionalParam =
+          lib.optionalParam =
             param: argument:
-            optionals
+            lib.optionals
               (
                 !elem argument [
                   null
@@ -201,7 +201,7 @@ in
         in
         ''
           export XDG_RUNTIME_DIR=/run/user/$UID
-          ${escapeShellArgs (
+          ${lib.escapeShellArgs (
             [
               (getExe finalPackage)
               "--uri"
@@ -211,13 +211,13 @@ in
               "--mic-command"
               cfg.microphone.command
             ]
-            ++ optionalParam "--mic-auto-gain" cfg.microphone.autoGain
-            ++ optionalParam "--mic-noise-suppression" cfg.microphone.noiseSuppression
-            ++ optionalParam "--area" cfg.area
-            ++ optionalParam "--snd-command" cfg.sound.command
-            ++ optionalParam "--awake-wav" cfg.sounds.awake
-            ++ optionalParam "--done-wav" cfg.sounds.done
-            ++ optional cfg.vad.enable "--vad"
+            ++ lib.optionalParam "--mic-auto-gain" cfg.microphone.autoGain
+            ++ lib.optionalParam "--mic-noise-suppression" cfg.microphone.noiseSuppression
+            ++ lib.optionalParam "--area" cfg.area
+            ++ lib.optionalParam "--snd-command" cfg.sound.command
+            ++ lib.optionalParam "--awake-wav" cfg.sounds.awake
+            ++ lib.optionalParam "--done-wav" cfg.sounds.done
+            ++ lib.optional cfg.vad.enable "--vad"
             ++ cfg.extraArgs
           )}
         '';

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.molly-brown;
   settingsFormat = pkgs.formats.toml { };
@@ -16,20 +14,20 @@ in
 
   options.services.molly-brown = {
 
-    enable = mkEnableOption "Molly-Brown Gemini server";
+    enable = lib.mkEnableOption "Molly-Brown Gemini server";
 
-    port = mkOption {
+    port = lib.mkOption {
       default = 1965;
-      type = types.port;
+      type = lib.types.port;
       description = ''
         TCP port for molly-brown to bind to.
       '';
     };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      defaultText = lib.literalExpression "config.networking.hostName";
       description = ''
         The hostname to respond to requests for. Requests for URLs with
         other hosts will result in a status 53 (PROXY REQUEST REFUSED)
@@ -37,8 +35,8 @@ in
       '';
     };
 
-    certPath = mkOption {
-      type = types.path;
+    certPath = lib.mkOption {
+      type = lib.types.path;
       example = "/var/lib/acme/example.com/cert.pem";
       description = ''
         Path to TLS certificate. An ACME certificate and key may be
@@ -53,19 +51,19 @@ in
       '';
     };
 
-    keyPath = mkOption {
-      type = types.path;
+    keyPath = lib.mkOption {
+      type = lib.types.path;
       example = "/var/lib/acme/example.com/key.pem";
       description = "Path to TLS key. See {option}`CertPath`.";
     };
 
-    docBase = mkOption {
-      type = types.path;
+    docBase = lib.mkOption {
+      type = lib.types.path;
       example = "/var/lib/molly-brown";
       description = "Base directory for Gemini content.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       inherit (settingsFormat) type;
       default = { };
       description = ''
@@ -77,7 +75,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.molly-brown.settings =
       let

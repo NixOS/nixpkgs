@@ -17,7 +17,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-domain-exporter}/bin/domain_exporter \
           --bind ${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

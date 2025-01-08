@@ -1,7 +1,5 @@
 { lib, pkgs, config, ... }:
 
-with lib;
-
 let
   pkg = pkgs.tox-node;
   cfg = config.services.tox-node;
@@ -28,45 +26,45 @@ let
 
 in {
   options.services.tox-node = {
-    enable = mkEnableOption "Tox Node service";
+    enable = lib.mkEnableOption "Tox Node service";
 
-    logType = mkOption {
-      type = types.enum [ "Stderr" "Stdout" "Syslog" "None" ];
+    logType = lib.mkOption {
+      type = lib.types.enum [ "Stderr" "Stdout" "Syslog" "None" ];
       default = "Stderr";
       description = "Logging implementation.";
     };
-    keysFile = mkOption {
-      type = types.str;
+    keysFile = lib.mkOption {
+      type = lib.types.str;
       default = "${homeDir}/keys";
       description = "Path to the file where DHT keys are stored.";
     };
-    udpAddress = mkOption {
-      type = types.str;
+    udpAddress = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0:33445";
       description = "UDP address to run DHT node.";
     };
-    tcpAddresses = mkOption {
-      type = types.listOf types.str;
+    tcpAddresses = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "0.0.0.0:33445" ];
       description = "TCP addresses to run TCP relay.";
     };
-    tcpConnectionLimit = mkOption {
-      type = types.int;
+    tcpConnectionLimit = lib.mkOption {
+      type = lib.types.int;
       default = 8192;
       description = "Maximum number of active TCP connections relay can hold";
     };
-    lanDiscovery = mkOption {
-      type = types.bool;
+    lanDiscovery = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable local network discovery.";
     };
-    threads = mkOption {
-      type = types.int;
+    threads = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = "Number of threads for execution";
     };
-    motd = mkOption {
-      type = types.str;
+    motd = lib.mkOption {
+      type = lib.types.str;
       default = "Hi from tox-rs! I'm up {{uptime}}. TCP: incoming {{tcp_packets_in}}, outgoing {{tcp_packets_out}}, UDP: incoming {{udp_packets_in}}, outgoing {{udp_packets_out}}";
       description = "Message of the day";
     };

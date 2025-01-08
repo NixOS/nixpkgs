@@ -5,7 +5,7 @@ let
     literalExpression
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRemovedOptionModule
     types
@@ -17,14 +17,14 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "plantuml-server" "allowPlantumlInclude" ] "This option has been removed from PlantUML.")
+    (lib.mkRemovedOptionModule [ "services" "plantuml-server" "allowPlantumlInclude" ] "This option has been removed from PlantUML.")
   ];
 
   options = {
     services.plantuml-server = {
-      enable = mkEnableOption "PlantUML server";
+      enable = lib.mkEnableOption "PlantUML server";
 
-      package = mkPackageOption pkgs "plantuml-server" { };
+      package = lib.mkPackageOption pkgs "plantuml-server" { };
 
       packages = {
         jdk = mkPackageOption pkgs "jdk" { };
@@ -41,59 +41,59 @@ in
         };
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "plantuml";
         description = "User which runs PlantUML server.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "plantuml";
         description = "Group which runs PlantUML server.";
       };
 
-      home = mkOption {
-        type = types.path;
+      home = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/plantuml";
         description = "Home directory of the PlantUML server instance.";
       };
 
-      listenHost = mkOption {
-        type = types.str;
+      listenHost = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Host to listen on.";
       };
 
-      listenPort = mkOption {
-        type = types.int;
+      listenPort = lib.mkOption {
+        type = lib.types.int;
         default = 8080;
         description = "Port to listen on.";
       };
 
-      plantumlLimitSize = mkOption {
-        type = types.int;
+      plantumlLimitSize = lib.mkOption {
+        type = lib.types.int;
         default = 4096;
         description = "Limits image width and height.";
       };
 
       graphvizPackage = mkPackageOption pkgs "graphviz" { };
 
-      plantumlStats = mkOption {
-        type = types.bool;
+      plantumlStats = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
       };
 
-      httpAuthorization = mkOption {
-        type = types.nullOr types.str;
+      httpAuthorization = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.plantuml-server = {
       description = "PlantUML server";
       wantedBy = [ "multi-user.target" ];
@@ -117,8 +117,8 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = mkIf (cfg.home == "/var/lib/plantuml") "plantuml";
-        StateDirectoryMode = mkIf (cfg.home == "/var/lib/plantuml") "0750";
+        StateDirectory = lib.mkIf (cfg.home == "/var/lib/plantuml") "plantuml";
+        StateDirectoryMode = lib.mkIf (cfg.home == "/var/lib/plantuml") "0750";
 
         # Hardening
         AmbientCapabilities = [ "" ];

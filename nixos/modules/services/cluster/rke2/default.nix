@@ -26,7 +26,7 @@ in
         If it's a server:
 
         - By default it also runs workloads as an agent.
-        - any optionals is allowed.
+        - any lib.optionals is allowed.
 
         If it's an agent:
 

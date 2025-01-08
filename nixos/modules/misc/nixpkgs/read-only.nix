@@ -13,7 +13,7 @@
 
 let
   cfg = config.nixpkgs;
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 
 in
 {
@@ -22,32 +22,32 @@ in
   ];
   options = {
     nixpkgs = {
-      pkgs = mkOption {
+      pkgs = lib.mkOption {
         type = lib.types.pkgs;
         description = ''The pkgs module argument.'';
       };
-      config = mkOption {
+      config = lib.mkOption {
         internal = true;
-        type = types.unique { message = "nixpkgs.config is set to read-only"; } types.anything;
+        type = lib.types.unique { message = "nixpkgs.config is set to read-only"; } types.anything;
         description = ''
           The Nixpkgs `config` that `pkgs` was initialized with.
         '';
       };
-      overlays = mkOption {
+      overlays = lib.mkOption {
         internal = true;
-        type = types.unique { message = "nixpkgs.overlays is set to read-only"; } types.anything;
+        type = lib.types.unique { message = "nixpkgs.overlays is set to read-only"; } types.anything;
         description = ''
           The Nixpkgs overlays that `pkgs` was initialized with.
         '';
       };
-      hostPlatform = mkOption {
+      hostPlatform = lib.mkOption {
         internal = true;
         readOnly = true;
         description = ''
           The platform of the machine that is running the NixOS configuration.
         '';
       };
-      buildPlatform = mkOption {
+      buildPlatform = lib.mkOption {
         internal = true;
         readOnly = true;
         description = ''

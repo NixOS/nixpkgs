@@ -12,7 +12,7 @@ let
     mkEnableOption
     mkIf
     mkPackageOption
-    mkOption
+    lib.mkOption
     ;
 
   inherit (lib.types)
@@ -29,30 +29,30 @@ in
 
 {
   options.services.netbird.server.signal = {
-    enable = mkEnableOption "Netbird's Signal Service";
+    enable = lib.mkEnableOption "Netbird's Signal Service";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = lib.mkPackageOption pkgs "netbird" { };
 
     enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
 
-    domain = mkOption {
+    domain = lib.mkOption {
       type = str;
       description = "The domain name for the signal service.";
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       type = port;
       default = 8012;
       description = "Internal port of the signal server.";
     };
 
-    metricsPort = mkOption {
+    metricsPort = lib.mkOption {
       type = port;
       default = 9091;
       description = "Internal port of the metrics server.";
     };
 
-    extraOptions = mkOption {
+    extraOptions = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -60,7 +60,7 @@ in
       '';
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       type = enum [
         "ERROR"
         "WARN"
@@ -72,7 +72,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -134,7 +134,7 @@ in
       stopIfChanged = false;
     };
 
-    services.nginx = mkIf cfg.enableNginx {
+    services.nginx = lib.mkIf cfg.enableNginx {
       enable = true;
 
       virtualHosts.${cfg.domain} = {

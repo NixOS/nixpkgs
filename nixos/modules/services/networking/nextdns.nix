@@ -5,21 +5,19 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.nextdns;
 in
 {
   options = {
     services.nextdns = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the NextDNS DNS/53 to DoH Proxy service.";
       };
-      arguments = mkOption {
-        type = types.listOf types.str;
+      arguments = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
           "-config"
@@ -31,7 +29,7 @@ in
   };
 
   # https://github.com/nextdns/nextdns/blob/628ea509eaaccd27adb66337db03e5b56f6f38a8/host/service/systemd/service.go
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.nextdns = {
       description = "NextDNS DNS/53 to DoH Proxy";
       environment = {
@@ -40,7 +38,7 @@ in
       startLimitIntervalSec = 5;
       startLimitBurst = 10;
       serviceConfig = {
-        ExecStart = "${pkgs.nextdns}/bin/nextdns run ${escapeShellArgs config.services.nextdns.arguments}";
+        ExecStart = "${pkgs.nextdns}/bin/nextdns run ${lib.escapeShellArgs config.services.nextdns.arguments}";
         RestartSec = 120;
         LimitMEMLOCK = "infinity";
       };

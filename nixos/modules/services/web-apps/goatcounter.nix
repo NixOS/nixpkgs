@@ -19,19 +19,19 @@ in
       package = lib.mkPackageOption pkgs "goatcounter" { };
 
       address = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Web interface address.";
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 8081;
         description = "Web interface port.";
       };
 
       proxy = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether Goatcounter service is running behind a reverse proxy. Will listen for HTTPS if `false`.
@@ -40,7 +40,7 @@ in
       };
 
       extraArgs = lib.mkOption {
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         default = [ ];
         description = ''
           List of extra arguments to be passed to goatcounter cli.

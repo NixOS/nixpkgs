@@ -1,7 +1,5 @@
 { options, config, lib, pkgs, ... }:
 
-with lib;
-
 let
   runDir = "/run/searx";
 
@@ -27,10 +25,14 @@ let
     done
   '';
 
-  settingType = with types; (oneOf
-    [ bool int float str
-      (listOf settingType)
-      (attrsOf settingType)
+  settingType = (lib.types.oneOf
+    [
+      lib.types.bool
+      lib.types.int
+      lib.types.float
+      lib.types.str
+      (lib.types.listOf settingType)
+      (lib.types.attrsOf settingType)
     ]) // { description = "JSON value"; };
 
 in
@@ -38,22 +40,22 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "searx" "configFile" ]
       [ "services" "searx" "settingsFile" ])
   ];
 
   options = {
     services.searx = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         relatedPackages = [ "searx" ];
         description = "Whether to enable Searx, the meta search engine.";
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Environment file (see `systemd.exec(5)`
@@ -63,8 +65,8 @@ in
         '';
       };
 
-      redisCreateLocally = mkOption {
-        type = types.bool;
+      redisCreateLocally = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Configure a local Redis server for SearXNG. This is required if you
@@ -72,10 +74,10 @@ in
         '';
       };
 
-      settings = mkOption {
-        type = types.attrsOf settingType;
+      settings = lib.mkOption {
+        type = lib.types.attrsOf settingType;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           { server.port = 8080;
             server.bind_address = "0.0.0.0";
             server.secret_key = "@SEARX_SECRET_KEY@";
@@ -102,8 +104,8 @@ in
         '';
       };
 
-      settingsFile = mkOption {
-        type = types.path;
+      settingsFile = lib.mkOption {
+        type = lib.types.path;
         default = "${runDir}/settings.yml";
         description = ''
           The path of the Searx server settings.yml file. If no file is
@@ -118,10 +120,10 @@ in
         '';
       };
 
-      limiterSettings = mkOption {
-        type = types.attrsOf settingType;
+      limiterSettings = lib.mkOption {
+        type = lib.types.attrsOf settingType;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             real_ip = {
               x_for = 1;
@@ -143,10 +145,10 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "searxng" { };
+      package = lib.mkPackageOption pkgs "searxng" { };
 
-      runInUwsgi = mkOption {
-        type = types.bool;
+      runInUwsgi = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
@@ -159,10 +161,10 @@ in
         '';
       };
 
-      uwsgiConfig = mkOption {
+      uwsgiConfig = lib.mkOption {
         type = options.services.uwsgi.instance.type;
         default = { http = ":8080"; };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             disable-logging = true;
             http = ":8080";                   # serve via HTTP...
@@ -181,7 +183,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     users.users.searx =
@@ -200,12 +202,12 @@ in
         User = "searx";
         RuntimeDirectory = "searx";
         RuntimeDirectoryMode = "750";
-      } // optionalAttrs (cfg.environmentFile != null)
+      } // lib.optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       script = generateConfig;
     };
 
-    systemd.services.searx = mkIf (!cfg.runInUwsgi) {
+    systemd.services.searx = lib.mkIf (!cfg.runInUwsgi) {
       description = "Searx server, the meta search engine.";
       wantedBy = [ "network.target" "multi-user.target" ];
       requires = [ "searx-init.service" ];
@@ -214,7 +216,7 @@ in
         User  = "searx";
         Group = "searx";
         ExecStart = lib.getExe cfg.package;
-      } // optionalAttrs (cfg.environmentFile != null)
+      } // lib.optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       environment = {
         SEARX_SETTINGS_PATH = cfg.settingsFile;
@@ -222,18 +224,18 @@ in
       };
     };
 
-    systemd.services.uwsgi = mkIf cfg.runInUwsgi {
+    systemd.services.uwsgi = lib.mkIf cfg.runInUwsgi {
       requires = [ "searx-init.service" ];
       after = [ "searx-init.service" ];
     };
 
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
-      use_default_settings = mkDefault true;
+      use_default_settings = lib.mkDefault true;
       redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
-    services.uwsgi = mkIf cfg.runInUwsgi {
+    services.uwsgi = lib.mkIf cfg.runInUwsgi {
       enable = true;
       plugins = [ "python3" ];
 

@@ -13,47 +13,47 @@ in
 {
   meta.maintainers = with lib.maintainers; [ ambroisie ];
 
-  options = with lib; {
+  options = {
     services.pyload = {
-      enable = mkEnableOption "pyLoad download manager";
+      enable = lib.mkEnableOption "pyLoad download manager";
 
-      package = mkPackageOption pkgs "pyLoad" { default = [ "pyload-ng" ]; };
+      package = lib.mkPackageOption pkgs "pyLoad" { default = [ "pyload-ng" ]; };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         example = "0.0.0.0";
         description = "Address to listen on for the web UI.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8000;
         example = 9876;
         description = "Port to listen on for the web UI.";
       };
 
-      downloadDirectory = mkOption {
-        type = types.path;
+      downloadDirectory = lib.mkOption {
+        type = lib.types.path;
         default = "${stateDir}/downloads";
         example = "/mnt/downloads";
         description = "Directory to store downloads.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "pyload";
         description = "User under which pyLoad runs, and which owns the download directory.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "pyload";
         description = "Group under which pyLoad runs, and which owns the download directory.";
       };
 
-      credentialsFile = mkOption {
-        type = with types; nullOr path;
+      credentialsFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/secrets/pyload-credentials.env";
         description = ''

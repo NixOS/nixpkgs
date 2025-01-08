@@ -17,7 +17,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-statsd-exporter}/bin/statsd_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

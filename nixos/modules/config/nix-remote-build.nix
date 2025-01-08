@@ -16,9 +16,9 @@ let
     getVersion
     mkIf
     mkMerge
-    mkOption
-    optional
-    optionalString
+    lib.mkOption
+    lib.optional
+    lib.optionalString
     types
     versionAtLeast
     ;
@@ -31,10 +31,10 @@ let
 
   buildMachinesText = concatMapStrings (
     machine:
-    (concatStringsSep " " (
+    (lib.concatStringsSep " " (
       [
-        "${optionalString (machine.protocol != null) "${machine.protocol}://"}${
-          optionalString (machine.sshUser != null) "${machine.sshUser}@"
+        "${lib.optionalString (machine.protocol != null) "${machine.protocol}://"}${
+          lib.optionalString (machine.sshUser != null) "${machine.sshUser}@"
         }${machine.hostName}"
         (
           if machine.system != null then
@@ -51,16 +51,16 @@ let
           let
             res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
           in
-          if (res == [ ]) then "-" else (concatStringsSep "," res)
+          if (res == [ ]) then "-" else (lib.concatStringsSep "," res)
         )
         (
           let
             res = machine.mandatoryFeatures;
           in
-          if (res == [ ]) then "-" else (concatStringsSep "," machine.mandatoryFeatures)
+          if (res == [ ]) then "-" else (lib.concatStringsSep "," machine.mandatoryFeatures)
         )
       ]
-      ++ optional (isNixAtLeast "2.4pre") (
+      ++ lib.optional (isNixAtLeast "2.4pre") (
         if machine.publicHostKey != null then machine.publicHostKey else "-"
       )
     ))
@@ -71,19 +71,19 @@ in
 {
   options = {
     nix = {
-      buildMachines = mkOption {
-        type = types.listOf (
+      buildMachines = lib.mkOption {
+        type = lib.types.listOf (
           types.submodule {
             options = {
-              hostName = mkOption {
-                type = types.str;
+              hostName = lib.mkOption {
+                type = lib.types.str;
                 example = "nixbuilder.example.org";
                 description = ''
                   The hostname of the build machine.
                 '';
               };
-              protocol = mkOption {
-                type = types.enum [
+              protocol = lib.mkOption {
+                type = lib.types.enum [
                   null
                   "ssh"
                   "ssh-ng"
@@ -99,8 +99,8 @@ in
                   without a protocol which is for example used by hydra.
                 '';
               };
-              system = mkOption {
-                type = types.nullOr types.str;
+              system = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 example = "x86_64-linux";
                 description = ''
@@ -110,8 +110,8 @@ in
                   both are set.
                 '';
               };
-              systems = mkOption {
-                type = types.listOf types.str;
+              systems = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 example = [
                   "x86_64-linux"
@@ -124,8 +124,8 @@ in
                   both are set.
                 '';
               };
-              sshUser = mkOption {
-                type = types.nullOr types.str;
+              sshUser = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 example = "builder";
                 description = ''
@@ -135,8 +135,8 @@ in
                   {option}`nix.settings.trusted-users`.
                 '';
               };
-              sshKey = mkOption {
-                type = types.nullOr types.str;
+              sshKey = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 example = "/root/.ssh/id_buildhost_builduser";
                 description = ''
@@ -149,8 +149,8 @@ in
                   in the local filesystem, *not* to the nix store.
                 '';
               };
-              maxJobs = mkOption {
-                type = types.int;
+              maxJobs = lib.mkOption {
+                type = lib.types.int;
                 default = 1;
                 description = ''
                   The number of concurrent jobs the build machine supports. The
@@ -159,8 +159,8 @@ in
                   machines.
                 '';
               };
-              speedFactor = mkOption {
-                type = types.int;
+              speedFactor = lib.mkOption {
+                type = lib.types.int;
                 default = 1;
                 description = ''
                   The relative speed of this builder. This is an arbitrary integer
@@ -168,8 +168,8 @@ in
                   builders. Higher is faster.
                 '';
               };
-              mandatoryFeatures = mkOption {
-                type = types.listOf types.str;
+              mandatoryFeatures = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 example = [ "big-parallel" ];
                 description = ''
@@ -179,8 +179,8 @@ in
                   {var}`supportedFeatures`.
                 '';
               };
-              supportedFeatures = mkOption {
-                type = types.listOf types.str;
+              supportedFeatures = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 example = [
                   "kvm"
@@ -192,8 +192,8 @@ in
                   list.
                 '';
               };
-              publicHostKey = mkOption {
-                type = types.nullOr types.str;
+              publicHostKey = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
                   The (base64-encoded) public host key of this builder. The field
@@ -214,8 +214,8 @@ in
         '';
       };
 
-      distributedBuilds = mkOption {
-        type = types.bool;
+      distributedBuilds = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to distribute builds to the machines listed in
@@ -227,7 +227,7 @@ in
 
   # distributedBuilds does *not* inhibit /etc/nix/machines generation; caller may
   # override that nix option.
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       let
         badMachine = m: m.system == null && m.systems == [ ];
@@ -242,16 +242,16 @@ in
                 Invalid machine specifications:
             ''
             + "      "
-            + (concatStringsSep "\n      " (map (m: m.hostName) (filter (badMachine) cfg.buildMachines)));
+            + (lib.concatStringsSep "\n      " (map (m: m.hostName) (filter (badMachine) cfg.buildMachines)));
         }
       ];
 
     # List of machines for distributed Nix builds
-    environment.etc."nix/machines" = mkIf (cfg.buildMachines != [ ]) {
+    environment.etc."nix/machines" = lib.mkIf (cfg.buildMachines != [ ]) {
       text = buildMachinesText;
     };
 
     # Legacy configuration conversion.
-    nix.settings = mkIf (!cfg.distributedBuilds) { builders = null; };
+    nix.settings = lib.mkIf (!cfg.distributedBuilds) { builders = null; };
   };
 }

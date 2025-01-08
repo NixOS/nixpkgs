@@ -12,7 +12,7 @@ let
     getExe
     maintainers
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkIf
     mkPackageOption
     ;
@@ -31,23 +31,23 @@ let
 in
 {
   options.services.glances = {
-    enable = mkEnableOption "Glances";
+    enable = lib.mkEnableOption "Glances";
 
-    package = mkPackageOption pkgs "glances" { };
+    package = lib.mkPackageOption pkgs "glances" { };
 
-    port = mkOption {
+    port = lib.mkOption {
       description = "Port the server will isten on.";
       type = port;
       default = 61208;
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       description = "Open port in the firewall for glances.";
       type = bool;
       default = false;
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [ "--webserver" ];
       example = [
@@ -62,7 +62,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 
@@ -103,7 +103,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
   };
 
   meta.maintainers = with lib.maintainers; [ claha ];

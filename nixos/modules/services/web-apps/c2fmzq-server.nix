@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -34,47 +34,47 @@ let
 in
 {
   options.services.c2fmzq-server = {
-    enable = mkEnableOption "c2fmzq-server";
+    enable = lib.mkEnableOption "c2fmzq-server";
 
-    bindIP = mkOption {
-      type = types.str;
+    bindIP = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = "The local address to use.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = "The local port to use.";
     };
 
-    passphraseFile = mkOption {
-      type = types.str;
+    passphraseFile = lib.mkOption {
+      type = lib.types.str;
       example = "/run/secrets/c2fmzq/pwfile";
       description = "Path to file containing the database passphrase";
     };
 
-    package = mkPackageOption pkgs "c2fmzq" { };
+    package = lib.mkPackageOption pkgs "c2fmzq" { };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = argsFormat.type;
 
         options = {
-          address = mkOption {
+          address = lib.mkOption {
             internal = true;
-            type = types.str;
+            type = lib.types.str;
             default = "${cfg.bindIP}:${toString cfg.port}";
           };
 
-          database = mkOption {
-            type = types.str;
+          database = lib.mkOption {
+            type = lib.types.str;
             default = "%S/c2fmzq-server/data";
             description = "Path of the database";
           };
 
-          verbose = mkOption {
-            type = types.ints.between 1 3;
+          verbose = lib.mkOption {
+            type = lib.types.ints.between 1 3;
             default = 2;
             description = "The level of logging verbosity: 1:Error 2:Info 3:Debug";
           };

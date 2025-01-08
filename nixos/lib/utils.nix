@@ -5,37 +5,6 @@
 }:
 
 let
-  inherit (lib)
-    any
-    attrNames
-    concatMapStringsSep
-    concatStringsSep
-    elem
-    escapeShellArg
-    filter
-    flatten
-    getName
-    hasPrefix
-    hasSuffix
-    imap0
-    imap1
-    isAttrs
-    isDerivation
-    isFloat
-    isInt
-    isList
-    isPath
-    isString
-    listToAttrs
-    mapAttrs
-    nameValuePair
-    optionalString
-    removePrefix
-    removeSuffix
-    replaceStrings
-    stringToCharacters
-    types
-    ;
 
   inherit (lib.strings) toJSON normalizePath escapeC;
 in
@@ -64,7 +33,7 @@ let
       "/etc"
       "/usr"
     ];
-    fsNeededForBoot = fs: fs.neededForBoot || elem fs.mountPoint pathsNeededForBoot;
+    fsNeededForBoot = fs: fs.neededForBoot || lib.elem fs.mountPoint pathsNeededForBoot;
 
     # Check whenever `b` depends on `a` as a fileSystem
     fsBefore =
@@ -80,7 +49,7 @@ let
         # Here a.mountPoint *is* a prefix of b.device even though a.mountPoint is
         # *not* a parent of b.device. If we add a slash at the end of each string,
         # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
-        normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
+        normalisePath = path: "${path}${lib.optionalString (!(lib.hasSuffix "/" path)) "/"}";
         normalise =
           mount:
           mount
@@ -94,9 +63,9 @@ let
         b' = normalise b;
 
       in
-      hasPrefix a'.mountPoint b'.device
-      || hasPrefix a'.mountPoint b'.mountPoint
-      || any (hasPrefix a'.mountPoint) b'.depends;
+      lib.hasPrefix a'.mountPoint b'.device
+      || lib.hasPrefix a'.mountPoint b'.mountPoint
+      || lib.any (lib.hasPrefix a'.mountPoint) b'.depends;
 
     # Escape a path according to the systemd rules. FIXME: slow
     # The rules are described in systemd.unit(5) as follows:
@@ -107,13 +76,13 @@ let
       let
         replacePrefix =
           p: r: s:
-          (if (hasPrefix p s) then r + (removePrefix p s) else s);
-        trim = s: removeSuffix "/" (removePrefix "/" s);
+          (if (lib.hasPrefix p s) then r + (lib.removePrefix p s) else s);
+        trim = s: lib.removeSuffix "/" (lib.removePrefix "/" s);
         normalizedPath = normalizePath s;
       in
-      replaceStrings [ "/" ] [ "-" ] (
+      lib.replaceStrings [ "/" ] [ "-" ] (
         replacePrefix "." (escapeC [ "." ] ".") (
-          escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-") (
+          escapeC (lib.stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-") (
             if normalizedPath == "/" then normalizedPath else trim normalizedPath
           )
         )
@@ -130,27 +99,27 @@ let
       arg:
       let
         s =
-          if isPath arg then
+          if lib.isPath arg then
             "${arg}"
-          else if isString arg then
+          else if lib.isString arg then
             arg
-          else if isInt arg || isFloat arg || isDerivation arg then
+          else if lib.isInt arg || lib.isFloat arg || lib.isDerivation arg then
             toString arg
           else
             throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations";
       in
-      replaceStrings [ "%" "$" ] [ "%%" "$$" ] (toJSON s);
+      lib.replaceStrings [ "%" "$" ] [ "%%" "$$" ] (toJSON s);
 
     # Quotes a list of arguments into a single string for use in a Exec*
     # line.
-    escapeSystemdExecArgs = concatMapStringsSep " " escapeSystemdExecArg;
+    escapeSystemdExecArgs = lib.concatMapStringsSep " " escapeSystemdExecArg;
 
     # Returns a system path for a given shell package
     toShellPath =
       shell:
-      if types.shellPackage.check shell then
+      if lib.types.shellPackage.check shell then
         "/run/current-system/sw${shell.shellPath}"
-      else if types.package.check shell then
+      else if lib.types.package.check shell then
         throw "${shell} is not a shell package"
       else
         shell;
@@ -179,7 +148,7 @@ let
         } "_secret" -> { ".example[1].relevant.secret" = "/path/to/secret"; }
     */
     recursiveGetAttrWithJqPrefix =
-      item: attr: mapAttrs (_name: set: set.${attr}) (recursiveGetAttrsetWithJqPrefix item attr);
+      item: attr: lib.mapAttrs (_name: set: set.${attr}) (recursiveGetAttrsetWithJqPrefix item attr);
 
     /*
       Similar to `recursiveGetAttrWithJqPrefix`, but returns the whole
@@ -210,23 +179,23 @@ let
         recurse =
           prefix: item:
           if item ? ${attr} then
-            nameValuePair prefix item
-          else if isDerivation item then
+            lib.nameValuePair prefix item
+          else if lib.isDerivation item then
             [ ]
-          else if isAttrs item then
+          else if lib.isAttrs item then
             map (
               name:
               let
-                escapedName = ''"${replaceStrings [ ''"'' "\\" ] [ ''\"'' "\\\\" ] name}"'';
+                escapedName = ''"${lib.replaceStrings [ ''"'' "\\" ] [ ''\"'' "\\\\" ] name}"'';
               in
               recurse (prefix + "." + escapedName) item.${name}
-            ) (attrNames item)
-          else if isList item then
-            imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
+            ) (lib.attrNames item)
+          else if lib.isList item then
+            lib.imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
           else
             [ ];
       in
-      listToAttrs (flatten (recurse "" item));
+      lib.listToAttrs (lib.flatten (recurse "" item));
 
     /*
       Takes an attrset and a file path and generates a bash snippet that
@@ -339,7 +308,7 @@ let
       let
         secretsRaw = recursiveGetAttrsetWithJqPrefix set attr;
         # Set default option values
-        secrets = mapAttrs (
+        secrets = lib.mapAttrs (
           _name: set:
           {
             quote = true;
@@ -357,20 +326,20 @@ let
         shopt -pq inherit_errexit && inherit_errexit_enabled=1
         shopt -s inherit_errexit
       ''
-      + concatStringsSep "\n" (
-        imap1 (index: name: ''
+      + lib.concatStringsSep "\n" (
+        lib.imap1 (index: name: ''
           secret${toString index}=$(<'${secrets.${name}.${attr}}')
           export secret${toString index}
-        '') (attrNames secrets)
+        '') (lib.attrNames secrets)
       )
       + "\n"
       + "${pkgs.jq}/bin/jq >'${output}' "
-      + escapeShellArg (
-        stringOrDefault (concatStringsSep " | " (
-          imap1 (
+      + lib.escapeShellArg (
+        stringOrDefault (lib.concatStringsSep " | " (
+          lib.imap1 (
             index: name:
-            ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
-          ) (attrNames secrets)
+            ''${name} = ($ENV.secret${toString index}${lib.optionalString (!secrets.${name}.quote) " | fromjson"})''
+          ) (lib.attrNames secrets)
         )) "."
       )
       + ''
@@ -394,9 +363,9 @@ let
     removePackagesByName =
       packages: packagesToRemove:
       let
-        namesToRemove = map getName packagesToRemove;
+        namesToRemove = map lib.getName packagesToRemove;
       in
-      filter (x: !(elem (getName x) namesToRemove)) packages;
+      lib.filter (x: !(lib.elem (lib.getName x) namesToRemove)) packages;
 
     /*
       Returns false if a package with the same name as the `package` is present in `packagesToDisable`.
@@ -415,9 +384,9 @@ let
     disablePackageByName =
       package: packagesToDisable:
       let
-        namesToDisable = map getName packagesToDisable;
+        namesToDisable = map lib.getName packagesToDisable;
       in
-      !elem (getName package) namesToDisable;
+      !lib.elem (lib.getName package) namesToDisable;
 
     systemdUtils = {
       lib = import ./systemd-lib.nix {

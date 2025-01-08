@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.tayga;
 
@@ -11,26 +10,26 @@ let
     tun-device ${cfg.tunDevice}
 
     ipv4-addr ${cfg.ipv4.address}
-    ${optionalString (cfg.ipv6.address != null) "ipv6-addr ${cfg.ipv6.address}"}
+    ${lib.optionalString (cfg.ipv6.address != null) "ipv6-addr ${cfg.ipv6.address}"}
 
     prefix ${strAddr cfg.ipv6.pool}
     dynamic-pool ${strAddr cfg.ipv4.pool}
     data-dir ${cfg.dataDir}
 
-    ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
   '';
 
   addrOpts = v:
     assert v == 4 || v == 6;
     {
       options = {
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           description = "IPv${toString v} address.";
         };
 
-        prefixLength = mkOption {
-          type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+        prefixLength = lib.mkOption {
+          type = lib.types.addCheck lib.types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
           description = ''
             Subnet mask of the interface, specified as the number of
             bits in the prefix ("${if v == 4 then "24" else "64"}").
@@ -42,20 +41,20 @@ let
   versionOpts = v: {
     options = {
       router = {
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           description = "The IPv${toString v} address of the router.";
         };
       };
 
-      address = mkOption {
-        type = types.nullOr types.str;
+      address = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "The source IPv${toString v} address of the TAYGA server.";
       };
 
-      pool = mkOption {
-        type = with types; nullOr (submodule (addrOpts v));
+      pool = lib.mkOption {
+        type = with lib.types; nullOr (submodule (addrOpts v));
         description = "The pool of IPv${toString v} addresses which are used for translation.";
       };
     };
@@ -64,14 +63,14 @@ in
 {
   options = {
     services.tayga = {
-      enable = mkEnableOption "Tayga";
+      enable = lib.mkEnableOption "Tayga";
 
-      package = mkPackageOption pkgs "tayga" { };
+      package = lib.mkPackageOption pkgs "tayga" { };
 
-      ipv4 = mkOption {
-        type = types.submodule (versionOpts 4);
+      ipv4 = lib.mkOption {
+        type = lib.types.submodule (versionOpts 4);
         description = "IPv4-specific configuration.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             address = "192.0.2.0";
             router = {
@@ -85,10 +84,10 @@ in
         '';
       };
 
-      ipv6 = mkOption {
-        type = types.submodule (versionOpts 6);
+      ipv6 = lib.mkOption {
+        type = lib.types.submodule (versionOpts 6);
         description = "IPv6-specific configuration.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             address = "2001:db8::1";
             router = {
@@ -102,23 +101,23 @@ in
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/tayga";
         description = "Directory for persistent data.";
       };
 
-      tunDevice = mkOption {
-        type = types.str;
+      tunDevice = lib.mkOption {
+        type = lib.types.str;
         default = "nat64";
         description = "Name of the nat64 tun device.";
       };
 
-      mappings = mkOption {
-        type = types.attrsOf types.str;
+      mappings = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         default = {};
         description = "Static IPv4 -> IPv6 host mappings.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "192.168.5.42" = "2001:db8:1:4444::1";
             "192.168.5.43" = "2001:db8:1:4444::2";
@@ -129,10 +128,10 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = allUnique (attrValues cfg.mappings);
+        assertion = lib.allUnique (lib.attrValues cfg.mappings);
         message = "Neither the IPv4 nor the IPv6 addresses must be entered twice in the mappings.";
       }
     ];
@@ -140,7 +139,7 @@ in
     networking.interfaces."${cfg.tunDevice}" = {
       virtual = true;
       virtualType = "tun";
-      virtualOwner = mkIf config.networking.useNetworkd "";
+      virtualOwner = lib.mkIf config.networking.useNetworkd "";
       ipv4 = {
         addresses = [
           { address = cfg.ipv4.router.address; prefixLength = 32; }
@@ -190,7 +189,7 @@ in
           "AF_NETLINK"
         ];
         StateDirectory = "tayga";
-        DynamicUser = mkIf config.networking.useNetworkd true;
+        DynamicUser = lib.mkIf config.networking.useNetworkd true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

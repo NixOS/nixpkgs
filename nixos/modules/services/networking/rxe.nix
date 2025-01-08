@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.networking.rxe;
 
@@ -10,9 +8,9 @@ in {
 
   options = {
     networking.rxe = {
-      enable = mkEnableOption "RDMA over converged ethernet";
-      interfaces = mkOption {
-        type = types.listOf types.str;
+      enable = lib.mkEnableOption "RDMA over converged ethernet";
+      interfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "eth0" ];
         description = ''
@@ -26,7 +24,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.rxe = {
       description = "RoCE interfaces";

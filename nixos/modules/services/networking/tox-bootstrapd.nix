@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   WorkingDirectory = "/var/lib/tox-bootstrapd";
   PIDFile = "${WorkingDirectory}/pid";
@@ -19,28 +17,28 @@ in
 {
   options =
     { services.toxBootstrapd =
-        { enable = mkOption {
-            type = types.bool;
+        { enable = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
                 Whether to enable the Tox DHT bootstrap daemon.
               '';
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 33445;
             description = "Listening port (UDP).";
           };
 
-          keysFile = mkOption {
-            type = types.str;
+          keysFile = lib.mkOption {
+            type = lib.types.str;
             default = "${WorkingDirectory}/keys";
             description = "Node key file.";
           };
 
-          extraConfig = mkOption {
-            type = types.lines;
+          extraConfig = lib.mkOption {
+            type = lib.types.lines;
             default = "";
             description = ''
                 Configuration for bootstrap daemon.
@@ -52,7 +50,7 @@ in
 
     };
 
-  config = mkIf config.services.toxBootstrapd.enable {
+  config = lib.mkIf config.services.toxBootstrapd.enable {
 
     systemd.services.tox-bootstrapd = {
       description = "Tox DHT bootstrap daemon";

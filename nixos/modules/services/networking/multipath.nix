@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 
 # See http://christophe.varoqui.free.fr/usage.html and
 # https://github.com/opensvc/multipath-tools/blob/master/multipath/multipath.conf.5
@@ -14,29 +13,29 @@ let
 
   indentLines =
     n: str:
-    concatStringsSep "\n" (
-      map (line: "${fixedWidthString n " " " "}${line}") (filter (x: x != "") (splitString "\n" str))
+    lib.concatStringsSep "\n" (
+      map (line: "${lib.fixedWidthString n " " " "}${line}") (lib.filter (x: x != "") (lib.splitString "\n" str))
     );
 
   addCheckDesc =
     desc: elemType: check:
-    types.addCheck elemType check // { description = "${elemType.description} (with check: ${desc})"; };
-  hexChars = stringToCharacters "0123456789abcdef";
-  isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
-  hexStr = addCheckDesc "hexadecimal string" types.str isHexString;
+    lib.types.addCheck elemType check // { description = "${elemType.description} (with check: ${desc})"; };
+  hexChars = lib.stringToCharacters "0123456789abcdef";
+  isHexString = s: lib.all (c: lib.elem c hexChars) (lib.stringToCharacters (lib.toLower s));
+  hexStr = addCheckDesc "hexadecimal string" lib.types.str isHexString;
 
 in
 {
 
-  options.services.multipath = with types; {
+  options.services.multipath = with lib.types; {
 
-    enable = mkEnableOption "the device mapper multipath (DM-MP) daemon";
+    enable = lib.mkEnableOption "the device mapper multipath (DM-MP) daemon";
 
-    package = mkPackageOption pkgs "multipath-tools" { };
+    package = lib.mkPackageOption pkgs "multipath-tools" { };
 
-    devices = mkOption {
+    devices = lib.mkOption {
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           {
             vendor = "\"COMPELNT\"";
@@ -54,43 +53,43 @@ in
       type = listOf (submodule {
         options = {
 
-          vendor = mkOption {
+          vendor = lib.mkOption {
             type = str;
             example = "COMPELNT";
             description = "Regular expression to match the vendor name";
           };
 
-          product = mkOption {
+          product = lib.mkOption {
             type = str;
             example = "Compellent Vol";
             description = "Regular expression to match the product name";
           };
 
-          revision = mkOption {
+          revision = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "Regular expression to match the product revision";
           };
 
-          product_blacklist = mkOption {
+          product_blacklist = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "Products with the given vendor matching this string are blacklisted";
           };
 
-          alias_prefix = mkOption {
+          alias_prefix = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "The user_friendly_names prefix to use for this device type, instead of the default mpath";
           };
 
-          vpd_vendor = mkOption {
+          vpd_vendor = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "The vendor specific vpd page information, using the vpd page abbreviation";
           };
 
-          hardware_handler = mkOption {
+          hardware_handler = lib.mkOption {
             type = nullOr (enum [
               "emc"
               "rdac"
@@ -103,7 +102,7 @@ in
           };
 
           # Optional arguments
-          path_grouping_policy = mkOption {
+          path_grouping_policy = lib.mkOption {
             type = nullOr (enum [
               "failover"
               "multibus"
@@ -115,13 +114,13 @@ in
             description = "The default path grouping policy to apply to unspecified multipaths";
           };
 
-          uid_attribute = mkOption {
+          uid_attribute = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "The udev attribute providing a unique path identifier (WWID)";
           };
 
-          getuid_callout = mkOption {
+          getuid_callout = lib.mkOption {
             type = nullOr str;
             default = null;
             description = ''
@@ -130,7 +129,7 @@ in
             '';
           };
 
-          path_selector = mkOption {
+          path_selector = lib.mkOption {
             type = nullOr (enum [
               ''"round-robin 0"''
               ''"queue-length 0"''
@@ -141,7 +140,7 @@ in
             description = "The default path selector algorithm to use; they are offered by the kernel multipath target";
           };
 
-          path_checker = mkOption {
+          path_checker = lib.mkOption {
             type = enum [
               "readsector0"
               "tur"
@@ -156,7 +155,7 @@ in
             description = "The default method used to determine the paths state";
           };
 
-          prio = mkOption {
+          prio = lib.mkOption {
             type = nullOr (enum [
               "none"
               "const"
@@ -178,25 +177,25 @@ in
             description = "The name of the path priority routine";
           };
 
-          prio_args = mkOption {
+          prio_args = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "Arguments to pass to to the prio function";
           };
 
-          features = mkOption {
+          features = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "Specify any device-mapper features to be used";
           };
 
-          failback = mkOption {
+          failback = lib.mkOption {
             type = nullOr str;
             default = null; # real default: "manual"
             description = "Tell multipathd how to manage path group failback. Quote integers as strings";
           };
 
-          rr_weight = mkOption {
+          rr_weight = lib.mkOption {
             type = nullOr (enum [
               "priorities"
               "uniform"
@@ -208,13 +207,13 @@ in
             '';
           };
 
-          no_path_retry = mkOption {
+          no_path_retry = lib.mkOption {
             type = nullOr str;
             default = null; # real default: "fail"
             description = "Specify what to do when all paths are down. Quote integers as strings";
           };
 
-          rr_min_io = mkOption {
+          rr_min_io = lib.mkOption {
             type = nullOr int;
             default = null; # real default: 1000
             description = ''
@@ -224,7 +223,7 @@ in
             '';
           };
 
-          rr_min_io_rq = mkOption {
+          rr_min_io_rq = lib.mkOption {
             type = nullOr int;
             default = null; # real default: 1
             description = ''
@@ -234,7 +233,7 @@ in
             '';
           };
 
-          fast_io_fail_tmo = mkOption {
+          fast_io_fail_tmo = lib.mkOption {
             type = nullOr str;
             default = null; # real default: 5
             description = ''
@@ -245,7 +244,7 @@ in
             '';
           };
 
-          dev_loss_tmo = mkOption {
+          dev_loss_tmo = lib.mkOption {
             type = nullOr str;
             default = null; # real default: 600
             description = ''
@@ -261,7 +260,7 @@ in
             '';
           };
 
-          flush_on_last_del = mkOption {
+          flush_on_last_del = lib.mkOption {
             type = nullOr (enum [
               "yes"
               "no"
@@ -273,7 +272,7 @@ in
             '';
           };
 
-          user_friendly_names = mkOption {
+          user_friendly_names = lib.mkOption {
             type = nullOr (enum [
               "yes"
               "no"
@@ -288,7 +287,7 @@ in
             '';
           };
 
-          detect_prio = mkOption {
+          detect_prio = lib.mkOption {
             type = nullOr (enum [
               "yes"
               "no"
@@ -303,7 +302,7 @@ in
             '';
           };
 
-          detect_checker = mkOption {
+          detect_checker = lib.mkOption {
             type = nullOr (enum [
               "yes"
               "no"
@@ -316,7 +315,7 @@ in
             '';
           };
 
-          deferred_remove = mkOption {
+          deferred_remove = lib.mkOption {
             type = nullOr (enum [
               "yes"
               "no"
@@ -331,7 +330,7 @@ in
             '';
           };
 
-          san_path_err_threshold = mkOption {
+          san_path_err_threshold = lib.mkOption {
             type = nullOr str;
             default = null;
             description = ''
@@ -344,7 +343,7 @@ in
             '';
           };
 
-          san_path_err_forget_rate = mkOption {
+          san_path_err_forget_rate = lib.mkOption {
             type = nullOr str;
             default = null;
             description = ''
@@ -355,7 +354,7 @@ in
             '';
           };
 
-          san_path_err_recovery_time = mkOption {
+          san_path_err_recovery_time = lib.mkOption {
             type = nullOr str;
             default = null;
             description = ''
@@ -368,43 +367,43 @@ in
             '';
           };
 
-          marginal_path_err_sample_time = mkOption {
+          marginal_path_err_sample_time = lib.mkOption {
             type = nullOr int;
             default = null;
             description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
-          marginal_path_err_rate_threshold = mkOption {
+          marginal_path_err_rate_threshold = lib.mkOption {
             type = nullOr int;
             default = null;
             description = "The error rate threshold as a permillage (1/1000)";
           };
 
-          marginal_path_err_recheck_gap_time = mkOption {
+          marginal_path_err_recheck_gap_time = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
-          marginal_path_double_failed_time = mkOption {
+          marginal_path_double_failed_time = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
-          delay_watch_checks = mkOption {
+          delay_watch_checks = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "This option is deprecated, and mapped to san_path_err_forget_rate";
           };
 
-          delay_wait_checks = mkOption {
+          delay_wait_checks = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "This option is deprecated, and mapped to san_path_err_recovery_time";
           };
 
-          skip_kpartx = mkOption {
+          skip_kpartx = lib.mkOption {
             type = nullOr (enum [
               "yes"
               "no"
@@ -413,19 +412,19 @@ in
             description = "If set to yes, kpartx will not automatically create partitions on the device";
           };
 
-          max_sectors_kb = mkOption {
+          max_sectors_kb = lib.mkOption {
             type = nullOr int;
             default = null;
             description = "Sets the max_sectors_kb device parameter on all path devices and the multipath device to the specified value";
           };
 
-          ghost_delay = mkOption {
+          ghost_delay = lib.mkOption {
             type = nullOr int;
             default = null;
             description = "Sets the number of seconds that multipath will wait after creating a device with only ghost paths before marking it ready for use in systemd";
           };
 
-          all_tg_pt = mkOption {
+          all_tg_pt = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "Set the 'all targets ports' flag when registering keys with mpathpersist";
@@ -435,7 +434,7 @@ in
       });
     };
 
-    defaults = mkOption {
+    defaults = lib.mkOption {
       type = nullOr str;
       default = null;
       description = ''
@@ -445,7 +444,7 @@ in
       '';
     };
 
-    blacklist = mkOption {
+    blacklist = lib.mkOption {
       type = nullOr str;
       default = null;
       description = ''
@@ -454,7 +453,7 @@ in
       '';
     };
 
-    blacklist_exceptions = mkOption {
+    blacklist_exceptions = lib.mkOption {
       type = nullOr str;
       default = null;
       description = ''
@@ -464,7 +463,7 @@ in
       '';
     };
 
-    overrides = mkOption {
+    overrides = lib.mkOption {
       type = nullOr str;
       default = null;
       description = ''
@@ -473,27 +472,27 @@ in
       '';
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "Lines to append to default multipath.conf";
     };
 
-    extraConfigFile = mkOption {
+    extraConfigFile = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "Append an additional file's contents to /etc/multipath.conf";
     };
 
-    pathGroups = mkOption {
-      example = literalExpression ''
+    pathGroups = lib.mkOption {
+      example = lib.literalExpression ''
         [
           {
             wwid = "360080e500043b35c0123456789abcdef";
             alias = 10001234;
             array = "bigarray.example.com";
-            fsType = "zfs"; # optional
-            options = "ro"; # optional
+            fsType = "zfs"; # lib.optional
+            options = "ro"; # lib.optional
           }, ...
         ]
       '';
@@ -504,33 +503,33 @@ in
       type = listOf (submodule {
         options = {
 
-          alias = mkOption {
+          alias = lib.mkOption {
             type = int;
             example = 1001234;
             description = "The name of the multipath device";
           };
 
-          wwid = mkOption {
+          wwid = lib.mkOption {
             type = hexStr;
             example = "360080e500043b35c0123456789abcdef";
             description = "The identifier for the multipath device";
           };
 
-          array = mkOption {
+          array = lib.mkOption {
             type = str;
             default = null;
             example = "bigarray.example.com";
             description = "The DNS name of the storage array";
           };
 
-          fsType = mkOption {
+          fsType = lib.mkOption {
             type = nullOr str;
             default = null;
             example = "zfs";
             description = "Type of the filesystem";
           };
 
-          options = mkOption {
+          options = lib.mkOption {
             type = nullOr str;
             default = null;
             example = "ro";
@@ -543,7 +542,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."multipath.conf".text =
       let
         inherit (cfg)
@@ -580,22 +579,22 @@ in
         ${indentLines 2 devices}
         }
 
-        ${optionalString (defaults != null) ''
+        ${lib.optionalString (defaults != null) ''
           defaults {
           ${indentLines 2 defaults}
           }
         ''}
-        ${optionalString (blacklist != null) ''
+        ${lib.optionalString (blacklist != null) ''
           blacklist {
           ${indentLines 2 blacklist}
           }
         ''}
-        ${optionalString (blacklist_exceptions != null) ''
+        ${lib.optionalString (blacklist_exceptions != null) ''
           blacklist_exceptions {
           ${indentLines 2 blacklist_exceptions}
           }
         ''}
-        ${optionalString (overrides != null) ''
+        ${lib.optionalString (overrides != null) ''
           overrides {
           ${indentLines 2 overrides}
           }
@@ -621,7 +620,7 @@ in
       "dm-multipath"
       "dm-service-time"
     ];
-    boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       modprobe -a dm-multipath dm-service-time
       multipathd -s
       (set -x && sleep 1 && multipath -ll)

@@ -10,9 +10,9 @@ let
     generators
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionalString
+    lib.optionalString
     types
     ;
 
@@ -27,11 +27,11 @@ let
 in
 {
   options.services.typesense = {
-    enable = mkEnableOption "typesense";
-    package = mkPackageOption pkgs "typesense" { };
+    enable = lib.mkEnableOption "typesense";
+    package = lib.mkPackageOption pkgs "typesense" { };
 
-    apiKeyFile = mkOption {
-      type = types.path;
+    apiKeyFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Sets the admin api key for typesense. Always use this option
         instead of {option}`settings.server.api-key` to prevent the key
@@ -39,25 +39,25 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = "Typesense configuration. Refer to [the documentation](https://typesense.org/docs/0.24.1/api/server-configuration.html) for supported values.";
       default = { };
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = settingsFormatIni.type;
         options.server = {
-          data-dir = mkOption {
-            type = types.str;
+          data-dir = lib.mkOption {
+            type = lib.types.str;
             default = "/var/lib/typesense";
             description = "Path to the directory where data will be stored on disk.";
           };
 
-          api-address = mkOption {
-            type = types.str;
+          api-address = lib.mkOption {
+            type = lib.types.str;
             description = "Address to which Typesense API service binds.";
           };
 
-          api-port = mkOption {
-            type = types.port;
+          api-port = lib.mkOption {
+            type = lib.types.port;
             default = 8108;
             description = "Port on which the Typesense API service listens.";
           };
@@ -66,7 +66,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.typesense = {
       description = "Typesense search engine";
       wantedBy = [ "multi-user.target" ];

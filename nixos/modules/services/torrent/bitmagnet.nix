@@ -9,9 +9,9 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optional
+    lib.optional
     ;
   inherit (lib.types)
     bool
@@ -26,25 +26,25 @@ let
 in
 {
   options.services.bitmagnet = {
-    enable = mkEnableOption "Bitmagnet service";
-    useLocalPostgresDB = mkOption {
+    enable = lib.mkEnableOption "Bitmagnet service";
+    useLocalPostgresDB = lib.mkOption {
       description = "Use a local postgresql database, create user and database";
       type = bool;
       default = true;
     };
-    settings = mkOption {
+    settings = lib.mkOption {
       description = "Bitmagnet configuration (https://bitmagnet.io/setup/configuration.html).";
       default = { };
       type = submodule {
         inherit freeformType;
         options = {
-          http_server = mkOption {
+          http_server = lib.mkOption {
             default = { };
             description = "HTTP server settings";
             type = submodule {
               inherit freeformType;
               options = {
-                port = mkOption {
+                port = lib.mkOption {
                   type = str;
                   default = ":3333";
                   description = "HTTP server listen port";
@@ -52,13 +52,13 @@ in
               };
             };
           };
-          dht_server = mkOption {
+          dht_server = lib.mkOption {
             default = { };
             description = "DHT server settings";
             type = submodule {
               inherit freeformType;
               options = {
-                port = mkOption {
+                port = lib.mkOption {
                   type = port;
                   default = 3334;
                   description = "DHT listen port";
@@ -66,28 +66,28 @@ in
               };
             };
           };
-          postgres = mkOption {
+          postgres = lib.mkOption {
             default = { };
             description = "PostgreSQL database configuration";
             type = submodule {
               inherit freeformType;
               options = {
-                host = mkOption {
+                host = lib.mkOption {
                   type = str;
                   default = "";
                   description = "Address, hostname or Unix socket path of the database server";
                 };
-                name = mkOption {
+                name = lib.mkOption {
                   type = str;
                   default = "bitmagnet";
                   description = "Database name to connect to";
                 };
-                user = mkOption {
+                user = lib.mkOption {
                   type = str;
                   default = "";
                   description = "User to connect as";
                 };
-                password = mkOption {
+                password = lib.mkOption {
                   type = str;
                   default = "";
                   description = "Password for database user";
@@ -98,24 +98,24 @@ in
         };
       };
     };
-    package = mkPackageOption pkgs "bitmagnet" { };
-    user = mkOption {
+    package = lib.mkPackageOption pkgs "bitmagnet" { };
+    user = lib.mkOption {
       description = "User running bitmagnet";
       type = str;
       default = "bitmagnet";
     };
-    group = mkOption {
+    group = lib.mkOption {
       description = "Group of user running bitmagnet";
       type = str;
       default = "bitmagnet";
     };
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       description = "Open DHT ports in firewall";
       type = bool;
       default = false;
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."xdg/bitmagnet/config.yml" = {
       text = toYAML { } cfg.settings;
       mode = "0440";
@@ -127,8 +127,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-      ] ++ optional cfg.useLocalPostgresDB "postgresql.service";
-      requires = optional cfg.useLocalPostgresDB "postgresql.service";
+      ] ++ lib.optional cfg.useLocalPostgresDB "postgresql.service";
+      requires = lib.optional cfg.useLocalPostgresDB "postgresql.service";
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
@@ -164,18 +164,18 @@ in
         PrivateMounts = true;
       };
     };
-    users.users = mkIf (cfg.user == "bitmagnet") {
+    users.users = lib.mkIf (cfg.user == "bitmagnet") {
       bitmagnet = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
-    users.groups = mkIf (cfg.group == "bitmagnet") { bitmagnet = { }; };
-    networking.firewall = mkIf cfg.openFirewall {
+    users.groups = lib.mkIf (cfg.group == "bitmagnet") { bitmagnet = { }; };
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.settings.dht_server.port ];
       allowedUDPPorts = [ cfg.settings.dht_server.port ];
     };
-    services.postgresql = mkIf cfg.useLocalPostgresDB {
+    services.postgresql = lib.mkIf cfg.useLocalPostgresDB {
       enable = true;
       ensureDatabases = [
         cfg.settings.postgres.name

@@ -133,7 +133,7 @@ let
   # - a list:    that will be interpreted as an attribute path from `pkgs` and turned into a link
   #              to search.nixos.org,
   # - an attrset: that can specify `name`, `path`, `comment`
-  #   (either of `name`, `path` is required, the rest are optional).
+  #   (either of `name`, `path` is required, the rest are lib.optional).
   #
   # NOTE: No checks against `pkgs` are made to ensure that the referenced package actually exists.
   # Such checks are not compatible with option docs caching.

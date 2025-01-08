@@ -91,7 +91,7 @@ mapAttrs (
     {
       name = "calibre-server-${test}";
 
-      nodes.${nodeName} = mkMerge [
+      nodes.${nodeName} = lib.mkMerge [
         {
           environment.systemPackages = [ pkgs.zip ];
           services.calibre-server = calibreConfig;
@@ -101,8 +101,8 @@ mapAttrs (
 
       testScript = ''
         ${nodeName}.start()
-        ${concatStringsSep "\n" (map librariesInitScript calibreConfig.libraries)}
-        ${concatStringsSep "\n" (
+        ${lib.concatStringsSep "\n" (map librariesInitScript calibreConfig.libraries)}
+        ${lib.concatStringsSep "\n" (
           map (
             line:
             if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")") then

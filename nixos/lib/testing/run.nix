@@ -5,12 +5,12 @@
   ...
 }:
 let
-  inherit (lib) types mkOption;
+  inherit (lib) types lib.mkOption;
 in
 {
   options = {
-    passthru = mkOption {
-      type = types.lazyAttrsOf types.raw;
+    passthru = lib.mkOption {
+      type = lib.types.lazyAttrsOf types.raw;
       description = ''
         Attributes to add to the returned derivations,
         which are not necessarily part of the build.
@@ -21,8 +21,8 @@ in
       '';
     };
 
-    rawTestDerivation = mkOption {
-      type = types.package;
+    rawTestDerivation = lib.mkOption {
+      type = lib.types.package;
       description = ''
         Unfiltered version of `test`, for troubleshooting the test framework and `testBuildFailure` in the test framework's test suite.
         This is not intended for general use. Use `test` instead.
@@ -30,8 +30,8 @@ in
       internal = true;
     };
 
-    test = mkOption {
-      type = types.package;
+    test = lib.mkOption {
+      type = lib.types.package;
       # TODO: can the interactive driver be configured to access the network?
       description = ''
         Derivation that runs the test as its "build" process.

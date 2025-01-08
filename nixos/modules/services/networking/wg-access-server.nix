@@ -8,7 +8,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -20,24 +20,24 @@ in
 {
 
   options.services.wg-access-server = {
-    enable = mkEnableOption "wg-access-server";
+    enable = lib.mkEnableOption "wg-access-server";
 
-    package = mkPackageOption pkgs "wg-access-server" { };
+    package = lib.mkPackageOption pkgs "wg-access-server" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          dns.enabled = mkOption {
-            type = types.bool;
+          dns.enabled = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = ''
               Enable/disable the embedded DNS proxy server.
               This is enabled by default and allows VPN clients to avoid DNS leaks by sending all DNS requests to wg-access-server itself.
             '';
           };
-          storage = mkOption {
-            type = types.str;
+          storage = lib.mkOption {
+            type = lib.types.str;
             default = "sqlite3://db.sqlite";
             description = "A storage backend connection string. See [storage docs](https://www.freie-netze.org/wg-access-server/3-storage/)";
           };
@@ -46,8 +46,8 @@ in
       description = "See https://www.freie-netze.org/wg-access-server/2-configuration/ for possible options";
     };
 
-    secretsFile = mkOption {
-      type = types.path;
+    secretsFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         yaml file containing all secrets. this needs to be in the same structure as the configuration.
 

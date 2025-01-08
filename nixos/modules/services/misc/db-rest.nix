@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkIf
     mkMerge
@@ -20,82 +20,82 @@ in
 {
   options = {
     services.db-rest = {
-      enable = mkEnableOption "db-rest service";
+      enable = lib.mkEnableOption "db-rest service";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "db-rest";
         description = "User account under which db-rest runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "db-rest";
         description = "Group under which db-rest runs.";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "The host address the db-rest server should listen on.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3000;
         description = "The port the db-rest server should listen on.";
       };
 
       redis = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Enable caching with redis for db-rest.";
         };
 
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Configure a local redis server for db-rest.";
         };
 
-        host = mkOption {
-          type = with types; nullOr str;
+        host = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = "Redis host.";
         };
 
-        port = mkOption {
-          type = with types; nullOr port;
+        port = lib.mkOption {
+          type = with lib.types; nullOr port;
           default = null;
           description = "Redis port.";
         };
 
-        user = mkOption {
-          type = with types; nullOr str;
+        user = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = "Optional username used for authentication with redis.";
         };
 
-        passwordFile = mkOption {
-          type = with types; nullOr path;
+        passwordFile = lib.mkOption {
+          type = with lib.types; nullOr path;
           default = null;
           example = "/run/keys/db-rest/pasword-redis-db";
           description = "Path to a file containing the redis password.";
         };
 
-        useSSL = mkOption {
-          type = types.bool;
+        useSSL = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Use SSL if using a redis network connection.";
         };
       };
 
-      package = mkPackageOption pkgs "db-rest" { };
+      package = lib.mkPackageOption pkgs "db-rest" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion =
@@ -113,7 +113,7 @@ in
       }
     ];
 
-    systemd.services.db-rest = mkMerge [
+    systemd.services.db-rest = lib.mkMerge [
       {
         description = "db-rest service";
         after = [ "network.target" ] ++ lib.optional cfg.redis.createLocally "redis-db-rest.service";
@@ -135,7 +135,7 @@ in
           LoadCredential = lib.optional (
             cfg.redis.enable && cfg.redis.passwordFile != null
           ) "REDIS_PASSWORD:${cfg.redis.passwordFile}";
-          ExecStart = mkDefault "${cfg.package}/bin/db-rest";
+          ExecStart = lib.mkDefault "${cfg.package}/bin/db-rest";
 
           RemoveIPC = true;
           NoNewPrivileges = true;
@@ -167,7 +167,7 @@ in
           PORT = toString cfg.port;
         };
       }
-      (mkIf cfg.redis.enable (
+      (lib.mkIf cfg.redis.enable (
         if cfg.redis.createLocally then
           { environment.REDIS_URL = config.services.redis.servers.db-rest.unixSocket; }
         else

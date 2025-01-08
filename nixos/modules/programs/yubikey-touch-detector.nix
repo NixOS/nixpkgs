@@ -17,7 +17,7 @@ in
       libnotify = lib.mkOption {
         # This used to be true previously and using libnotify would be a sane default.
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set to true, yubikey-touch-detctor will send notifications using libnotify
         '';
@@ -25,7 +25,7 @@ in
 
       unixSocket = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set to true, yubikey-touch-detector will send notifications to a unix socket
         '';
@@ -33,7 +33,7 @@ in
 
       verbose = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enables verbose logging
         '';

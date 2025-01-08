@@ -8,13 +8,13 @@
 
 let
   cfg = config.services.prometheus.exporters.modemmanager;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9539;
   extraOpts = {
-    refreshRate = mkOption {
-      type = types.str;
+    refreshRate = lib.mkOption {
+      type = lib.types.str;
       default = "5s";
       description = ''
         How frequently ModemManager will refresh the extended signal quality
@@ -31,7 +31,7 @@ in
         ${pkgs.prometheus-modemmanager-exporter}/bin/modemmanager_exporter \
           -addr ${cfg.listenAddress}:${toString cfg.port} \
           -rate ${cfg.refreshRate} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data

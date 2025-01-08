@@ -8,21 +8,21 @@
 
 let
   cfg = config.services.prometheus.exporters.apcupsd;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9162;
   extraOpts = {
-    apcupsdAddress = mkOption {
-      type = types.str;
+    apcupsdAddress = lib.mkOption {
+      type = lib.types.str;
       default = ":3551";
       description = ''
         Address of the apcupsd Network Information Server (NIS).
       '';
     };
 
-    apcupsdNetwork = mkOption {
-      type = types.enum [
+    apcupsdNetwork = lib.mkOption {
+      type = lib.types.enum [
         "tcp"
         "tcp4"
         "tcp6"
@@ -40,7 +40,7 @@ in
           -telemetry.addr ${cfg.listenAddress}:${toString cfg.port} \
           -apcupsd.addr ${cfg.apcupsdAddress} \
           -apcupsd.network ${cfg.apcupsdNetwork} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

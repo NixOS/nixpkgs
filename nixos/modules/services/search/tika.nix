@@ -11,7 +11,7 @@ let
     literalExpression
     mkIf
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     getExe
     types
@@ -22,11 +22,11 @@ in
 
   options = {
     services.tika = {
-      enable = mkEnableOption "Apache Tika server";
-      package = mkPackageOption pkgs "tika" { };
+      enable = lib.mkEnableOption "Apache Tika server";
+      package = lib.mkPackageOption pkgs "tika" { };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
         description = ''
@@ -34,33 +34,33 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9998;
         description = ''
           The Apache Tike port to listen on
         '';
       };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           The Apache Tika configuration (XML) file to use.
         '';
-        example = literalExpression "./tika/tika-config.xml";
+        example = lib.literalExpression "./tika/tika-config.xml";
       };
 
-      enableOcr = mkOption {
-        type = types.bool;
+      enableOcr = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable OCR support by adding the `tesseract` package as a dependency.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the firewall for Apache Tika.
@@ -70,7 +70,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.tika = {
       description = "Apache Tika Server";
 
@@ -93,6 +93,6 @@ in
         };
     };
 
-    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }

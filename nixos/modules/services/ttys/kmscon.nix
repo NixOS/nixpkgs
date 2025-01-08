@@ -8,9 +8,9 @@ let
   inherit (lib)
     mapAttrs
     mkIf
-    mkOption
-    optional
-    optionals
+    lib.mkOption
+    lib.optional
+    lib.optionals
     types
     ;
 
@@ -27,7 +27,7 @@ in
 {
   options = {
     services.kmscon = {
-      enable = mkOption {
+      enable = lib.mkOption {
         description = ''
           Use kmscon as the virtual console instead of gettys.
           kmscon is a kms/dri-based userspace virtual terminal implementation.
@@ -35,30 +35,30 @@ in
           including full unicode support, and when the video card supports drm
           should be much faster.
         '';
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
 
-      hwRender = mkOption {
+      hwRender = lib.mkOption {
         description = "Whether to use 3D hardware acceleration to render the console.";
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
 
-      fonts = mkOption {
+      fonts = lib.mkOption {
         description = "Fonts used by kmscon, in order of priority.";
         default = null;
         example = lib.literalExpression ''[ { name = "Source Code Pro"; package = pkgs.source-code-pro; } ]'';
         type =
-          with types;
+          with lib.types;
           let
             fontType = submodule {
               options = {
-                name = mkOption {
+                name = lib.mkOption {
                   type = str;
                   description = "Font name, as used by fontconfig.";
                 };
-                package = mkOption {
+                package = lib.mkOption {
                   type = package;
                   description = "Package providing the font.";
                 };
@@ -68,28 +68,28 @@ in
           nullOr (nonEmptyListOf fontType);
       };
 
-      useXkbConfig = mkOption {
+      useXkbConfig = lib.mkOption {
         description = "Configure keymap from xserver keyboard settings.";
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         description = "Extra contents of the kmscon.conf file.";
-        type = types.lines;
+        type = lib.types.lines;
         default = "";
         example = "font-size=14";
       };
 
-      extraOptions = mkOption {
+      extraOptions = lib.mkOption {
         description = "Extra flags to pass to kmscon.";
-        type = types.separatedString " ";
+        type = lib.types.separatedString " ";
         default = "";
         example = "--term xterm-256color";
       };
 
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
+      autologinUser = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Username of the account that will be automatically logged in at the console.
@@ -99,7 +99,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ pkgs.kmscon ];
 
     systemd.services."kmsconvt@" = {
@@ -127,7 +127,7 @@ in
 
     services.kmscon.extraConfig =
       let
-        xkb = optionals cfg.useXkbConfig (
+        xkb = lib.optionals cfg.useXkbConfig (
           lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
             lib.filterAttrs (
               n: v:
@@ -141,19 +141,19 @@ in
             ) config.services.xserver.xkb
           )
         );
-        render = optionals cfg.hwRender [
+        render = lib.optionals cfg.hwRender [
           "drm"
           "hwaccel"
         ];
         fonts =
-          optional (cfg.fonts != null)
+          lib.optional (cfg.fonts != null)
             "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
       in
       lib.concatLines (xkb ++ render ++ fonts);
 
-    hardware.graphics.enable = mkIf cfg.hwRender true;
+    hardware.graphics.enable = lib.mkIf cfg.hwRender true;
 
-    fonts = mkIf (cfg.fonts != null) {
+    fonts = lib.mkIf (cfg.fonts != null) {
       fontconfig.enable = true;
       packages = map (f: f.package) cfg.fonts;
     };

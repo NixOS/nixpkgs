@@ -5,23 +5,21 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.qemuGuest;
 in
 {
 
   options.services.qemuGuest = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Whether to enable the qemu guest agent.";
     };
-    package = mkPackageOption pkgs [ "qemu_kvm" "ga" ] { };
+    package = lib.mkPackageOption pkgs [ "qemu_kvm" "ga" ] { };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
 
       services.udev.extraRules = ''

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.boot.initrd.network.openvpn;
@@ -17,8 +15,8 @@ in
 
   options = {
 
-    boot.initrd.network.openvpn.enable = mkOption {
-      type = types.bool;
+    boot.initrd.network.openvpn.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Starts an OpenVPN client during initrd boot. It can be used to e.g.
@@ -28,8 +26,8 @@ in
       '';
     };
 
-    boot.initrd.network.openvpn.configuration = mkOption {
-      type = types.path; # Same type as boot.initrd.secrets
+    boot.initrd.network.openvpn.configuration = lib.mkOption {
+      type = lib.types.path; # Same type as boot.initrd.secrets
       description = ''
         The configuration file for OpenVPN.
 
@@ -38,12 +36,12 @@ in
         is stored insecurely in the global Nix store.
         :::
       '';
-      example = literalExpression "./configuration.ovpn";
+      example = lib.literalExpression "./configuration.ovpn";
     };
 
   };
 
-  config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
+  config = lib.mkIf (config.boot.initrd.network.enable && cfg.enable) {
     assertions = [
       {
         assertion = cfg.configuration != null;
@@ -59,7 +57,7 @@ in
 
     # Add openvpn and ip binaries to the initrd
     # The shared libraries are required for DNS resolution
-    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.openvpn}/bin/openvpn
       copy_bin_and_libs ${pkgs.iproute2}/bin/ip
 
@@ -79,11 +77,11 @@ in
     };
 
     # openvpn --version would exit with 1 instead of 0
-    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       $out/bin/openvpn --show-gateway
     '';
 
-    boot.initrd.network.postCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.network.postCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       openvpn /etc/initrd.ovpn &
     '';
 

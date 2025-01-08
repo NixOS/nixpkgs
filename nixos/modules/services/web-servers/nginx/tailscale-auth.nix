@@ -7,7 +7,7 @@ let
     mkAliasOptionModule
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
   cfg = config.services.nginx.tailscaleAuth;
@@ -34,11 +34,11 @@ in
   ];
 
   options.services.nginx.tailscaleAuth = {
-    enable = mkEnableOption "tailscale.nginx-auth, to authenticate nginx users via tailscale";
+    enable = lib.mkEnableOption "tailscale.nginx-auth, to authenticate nginx users via tailscale";
 
-    expectedTailnet = mkOption {
+    expectedTailnet = lib.mkOption {
       default = "";
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       example = "tailnet012345.ts.net";
       description = ''
         If you want to prevent node sharing from allowing users to access services
@@ -46,8 +46,8 @@ in
       '';
     };
 
-    virtualHosts = mkOption {
-      type = types.listOf types.str;
+    virtualHosts = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         A list of nginx virtual hosts to put behind tailscale.nginx-auth
@@ -55,7 +55,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.tailscaleAuth.enable = true;
     services.nginx.enable = true;
 

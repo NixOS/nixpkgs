@@ -2,8 +2,8 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge lib.mkOption;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList lib.optional lib.optionals lib.optionalString types;
 
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
@@ -31,12 +31,12 @@ let
       cp -r * $out/
 
       # try removing directories before symlinking to allow overwriting any builtin extension or skin
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+      ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: ''
         rm -rf $out/share/mediawiki/skins/${k}
         ln -s ${v} $out/share/mediawiki/skins/${k}
       '') cfg.skins)}
 
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+      ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: ''
         rm -rf $out/share/mediawiki/extensions/${k}
         ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
@@ -134,14 +134,14 @@ let
         $wgDBport = "${toString cfg.database.port}";
         $wgDBname = "${cfg.database.name}";
         $wgDBuser = "${cfg.database.user}";
-        ${optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
+        ${lib.optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
 
-        ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
+        ${lib.optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
           # MySQL specific settings
           $wgDBprefix = "${cfg.database.tablePrefix}";
         ''}
 
-        ${optionalString (cfg.database.type == "mysql") ''
+        ${lib.optionalString (cfg.database.type == "mysql") ''
           # MySQL table options to use during installation or update
           $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
         ''}
@@ -150,7 +150,7 @@ let
         $wgMainCacheType = CACHE_NONE;
         $wgMemCachedServers = [];
 
-        ${optionalString (cfg.uploadsDir != null) ''
+        ${lib.optionalString (cfg.uploadsDir != null) ''
           $wgEnableUploads = true;
           $wgUploadDirectory = "${cfg.uploadsDir}";
         ''}
@@ -197,10 +197,10 @@ let
         $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
 
         # Enabled skins.
-        ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
+        ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
         # Enabled extensions.
-        ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
+        ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
 
 
         # End of automatically generated settings.
@@ -217,29 +217,29 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption "MediaWiki";
+      enable = lib.mkEnableOption "MediaWiki";
 
-      package = mkPackageOption pkgs "mediawiki" { };
+      package = lib.mkPackageOption pkgs "mediawiki" { };
 
-      finalPackage = mkOption {
-        type = types.package;
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
         readOnly = true;
         default = pkg;
-        defaultText = literalExpression "pkg";
+        defaultText = lib.literalExpression "pkg";
         description = ''
           The final package used by the module. This is the package that will have extensions and skins installed.
         '';
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
         description = "Name of the wiki.";
       };
 
-      url = mkOption {
-        type = types.str;
+      url = lib.mkOption {
+        type = lib.types.str;
         default =
           if cfg.webserver == "apache" then
             "${if cfg.httpd.virtualHost.addSSL || cfg.httpd.virtualHost.forceSSL || cfg.httpd.virtualHost.onlySSL then "https" else "http"}://${cfg.httpd.virtualHost.hostName}"
@@ -257,8 +257,8 @@ in
         description = "URL of the wiki.";
       };
 
-      uploadsDir = mkOption {
-        type = types.nullOr types.path;
+      uploadsDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "${stateDir}/uploads";
         description = ''
           This directory is used for uploads of pictures. The directory passed here is automatically
@@ -266,23 +266,23 @@ in
         '';
       };
 
-      passwordFile = mkOption {
-        type = types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.path;
         description = ''
           A file containing the initial password for the administrator account "admin".
         '';
         example = "/run/keys/mediawiki-password";
       };
 
-      passwordSender = mkOption {
-        type = types.str;
+      passwordSender = lib.mkOption {
+        type = lib.types.str;
         default =
           if cfg.webserver == "apache" then
             if cfg.httpd.virtualHost.adminAddr != null then
               cfg.httpd.virtualHost.adminAddr
             else
               config.services.httpd.adminAddr else "root@localhost";
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           if cfg.webserver == "apache" then
             if cfg.httpd.virtualHost.adminAddr != null then
               cfg.httpd.virtualHost.adminAddr
@@ -292,25 +292,25 @@ in
         description = "Contact address for password reset.";
       };
 
-      skins = mkOption {
+      skins = lib.mkOption {
         default = {};
-        type = types.attrsOf types.path;
+        type = lib.types.attrsOf types.path;
         description = ''
           Attribute set of paths whose content is copied to the {file}`skins`
           subdirectory of the MediaWiki installation in addition to the default skins.
         '';
       };
 
-      extensions = mkOption {
+      extensions = lib.mkOption {
         default = {};
-        type = types.attrsOf (types.nullOr types.path);
+        type = lib.types.attrsOf (types.nullOr types.path);
         description = ''
           Attribute set of paths whose content is copied to the {file}`extensions`
           subdirectory of the MediaWiki installation and enabled in configuration.
 
           Use `null` instead of path to enable extensions that are part of MediaWiki.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             Matomo = pkgs.fetchzip {
               url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
@@ -321,46 +321,46 @@ in
         '';
       };
 
-      webserver = mkOption {
-        type = types.enum [ "apache" "none" "nginx" ];
+      webserver = lib.mkOption {
+        type = lib.types.enum [ "apache" "none" "nginx" ];
         default = "apache";
         description = "Webserver to use.";
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [ "mysql" "postgres" "mssql" "oracle" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "mysql" "postgres" "mssql" "oracle" ];
           default = "mysql";
           description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
           description = "Database host address.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = if cfg.database.type == "mysql" then 3306 else 5432;
-          defaultText = literalExpression "3306";
+          defaultText = lib.literalExpression "3306";
           description = "Database host port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "mediawiki";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "mediawiki";
           description = "Database user.";
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/mediawiki-dbpassword";
           description = ''
@@ -369,8 +369,8 @@ in
           '';
         };
 
-        tablePrefix = mkOption {
-          type = types.nullOr types.str;
+        tablePrefix = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             If you only have access to a single database and wish to install more than
@@ -381,22 +381,22 @@ in
           '';
         };
 
-        socket = mkOption {
-          type = types.nullOr types.path;
+        socket = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = if (cfg.database.type == "mysql" && cfg.database.createLocally) then
               "/run/mysqld/mysqld.sock"
             else if (cfg.database.type == "postgres" && cfg.database.createLocally) then
               "/run/postgresql"
             else
               null;
-          defaultText = literalExpression "/run/mysqld/mysqld.sock";
+          defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = cfg.database.type == "mysql" || cfg.database.type == "postgres";
-          defaultText = literalExpression "true";
+          defaultText = lib.literalExpression "true";
           description = ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
@@ -404,9 +404,9 @@ in
         };
       };
 
-      nginx.hostName = mkOption {
-        type = types.str;
-        example = literalExpression ''wiki.example.com'';
+      nginx.hostName = lib.mkOption {
+        type = lib.types.str;
+        example = lib.literalExpression ''wiki.example.com'';
         default = "localhost";
         description = ''
           The hostname to use for the nginx virtual host.
@@ -414,9 +414,9 @@ in
         '';
       };
 
-      httpd.virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExpression ''
+      httpd.virtualHost = lib.mkOption {
+        type = lib.types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = lib.literalExpression ''
           {
             hostName = "mediawiki.example.org";
             adminAddr = "webmaster@example.org";
@@ -430,8 +430,8 @@ in
         '';
       };
 
-      poolConfig = mkOption {
-        type = with types; attrsOf (oneOf [ str int bool ]);
+      poolConfig = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ str int bool ]);
         default = {
           "pm" = "dynamic";
           "pm.max_children" = 32;
@@ -446,8 +446,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         description = ''
           Any additional text to be appended to MediaWiki's
           LocalSettings.php configuration file. For configuration
@@ -467,7 +467,7 @@ in
   ];
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = cfg.database.createLocally -> (cfg.database.type == "mysql" || cfg.database.type == "postgres");
@@ -490,9 +490,9 @@ in
       Vector = "${cfg.package}/share/mediawiki/skins/Vector";
     };
 
-    services.mysql = mkIf (cfg.database.type == "mysql" && cfg.database.createLocally) {
+    services.mysql = lib.mkIf (cfg.database.type == "mysql" && cfg.database.createLocally) {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [{
         name = cfg.database.user;
@@ -500,7 +500,7 @@ in
       }];
     };
 
-    services.postgresql = mkIf (cfg.database.type == "postgres" && cfg.database.createLocally) {
+    services.postgresql = lib.mkIf (cfg.database.type == "postgres" && cfg.database.createLocally) {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [{
@@ -528,7 +528,7 @@ in
     services.httpd = lib.mkIf (cfg.webserver == "apache") {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.httpd.virtualHost.hostName} = mkMerge [
+      virtualHosts.${cfg.httpd.virtualHost.hostName} = lib.mkMerge [
         cfg.httpd.virtualHost
         {
           documentRoot = mkForce "${pkg}/share/mediawiki";
@@ -544,7 +544,7 @@ in
               DirectoryIndex index.php
               AllowOverride All
             </Directory>
-          '' + optionalString (cfg.uploadsDir != null) ''
+          '' + lib.optionalString (cfg.uploadsDir != null) ''
             Alias "/images" "${cfg.uploadsDir}"
             <Directory "${cfg.uploadsDir}">
               Require all granted
@@ -608,7 +608,7 @@ in
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0750 ${user} ${group} - -"
       "d '${cacheDir}' 0750 ${user} ${group} - -"
-    ] ++ optionals (cfg.uploadsDir != null) [
+    ] ++ lib.optionals (cfg.uploadsDir != null) [
       "d '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
     ];
@@ -616,8 +616,8 @@ in
     systemd.services.mediawiki-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-mediawiki.service" ];
-      after = optional (cfg.database.type == "mysql" && cfg.database.createLocally) "mysql.service"
-              ++ optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.service";
+      after = lib.optional (cfg.database.type == "mysql" && cfg.database.createLocally) "mysql.service"
+              ++ lib.optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.service";
       script = ''
         if ! test -e "${stateDir}/secret.key"; then
           tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 64 > ${stateDir}/secret.key
@@ -631,9 +631,9 @@ in
           --dbserver ${lib.escapeShellArg dbAddr} \
           --dbport ${toString cfg.database.port} \
           --dbname ${lib.escapeShellArg cfg.database.name} \
-          ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"} \
+          ${lib.optionalString (cfg.database.tablePrefix != null) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"} \
           --dbuser ${lib.escapeShellArg cfg.database.user} \
-          ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"} \
+          ${lib.optionalString (cfg.database.passwordFile != null) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"} \
           --passfile ${lib.escapeShellArg cfg.passwordFile} \
           --dbtype ${cfg.database.type} \
           ${lib.escapeShellArg cfg.name} \
@@ -650,8 +650,8 @@ in
       };
     };
 
-    systemd.services.httpd.after = optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service"
-      ++ optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
+    systemd.services.httpd.after = lib.optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service"
+      ++ lib.optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
 
     users.users.${user} = {
       inherit group;

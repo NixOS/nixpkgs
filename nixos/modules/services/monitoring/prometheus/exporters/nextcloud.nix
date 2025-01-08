@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.nextcloud;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     escapeShellArg
     concatStringsSep
@@ -18,17 +18,17 @@ in
 {
   port = 9205;
   extraOpts = {
-    url = mkOption {
-      type = types.str;
+    url = lib.mkOption {
+      type = lib.types.str;
       example = "https://domain.tld";
       description = ''
         URL to the Nextcloud serverinfo page.
-        Adding the path to the serverinfo API is optional, it defaults
+        Adding the path to the serverinfo API is lib.optional, it defaults
         to `/ocs/v2.php/apps/serverinfo/api/v1/info`.
       '';
     };
-    username = mkOption {
-      type = types.str;
+    username = lib.mkOption {
+      type = lib.types.str;
       default = "nextcloud-exporter";
       description = ''
         Username for connecting to Nextcloud.
@@ -36,8 +36,8 @@ in
         Unused when using token authentication.
       '';
     };
-    passwordFile = mkOption {
-      type = types.nullOr types.path;
+    passwordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/path/to/password-file";
       description = ''
@@ -45,8 +45,8 @@ in
         Make sure that this file is readable by the exporter user.
       '';
     };
-    tokenFile = mkOption {
-      type = types.nullOr types.path;
+    tokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/path/to/token-file";
       description = ''
@@ -54,8 +54,8 @@ in
         Make sure that this file is readable by the exporter user.
       '';
     };
-    timeout = mkOption {
-      type = types.str;
+    timeout = lib.mkOption {
+      type = lib.types.str;
       default = "5s";
       description = ''
         Timeout for getting server info document.
@@ -74,14 +74,14 @@ in
             if cfg.passwordFile != null then
               ''
                 --username ${cfg.username} \
-                --password ${escapeShellArg "@${cfg.passwordFile}"} \
+                --password ${lib.escapeShellArg "@${cfg.passwordFile}"} \
               ''
             else
               ''
-                --auth-token ${escapeShellArg "@${cfg.tokenFile}"} \
+                --auth-token ${lib.escapeShellArg "@${cfg.tokenFile}"} \
               ''
           } \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}'';
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}'';
     };
   };
 }

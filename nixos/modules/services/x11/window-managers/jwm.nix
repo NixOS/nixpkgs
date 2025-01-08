@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.jwm;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.jwm.enable = mkEnableOption "jwm";
+    services.xserver.windowManager.jwm.enable = lib.mkEnableOption "jwm";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "jwm";
       start = ''
         ${pkgs.jwm}/bin/jwm &

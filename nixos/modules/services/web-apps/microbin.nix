@@ -17,11 +17,10 @@ in
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType =
-          with lib.types;
-          attrsOf (oneOf [
-            bool
-            int
-            str
+          lib.types.attrsOf (lib.types.oneOf [
+            lib.types.bool
+            lib.types.int
+            lib.types.str
           ]);
       };
       default = { };
@@ -62,11 +61,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.microbin.settings = with lib; {
-      MICROBIN_BIND = mkDefault "0.0.0.0";
-      MICROBIN_DISABLE_TELEMETRY = mkDefault true;
-      MICROBIN_LIST_SERVER = mkDefault false;
-      MICROBIN_PORT = mkDefault "8080";
+    services.microbin.settings = {
+      MICROBIN_BIND = lib.mkDefault "0.0.0.0";
+      MICROBIN_DISABLE_TELEMETRY = lib.mkDefault true;
+      MICROBIN_LIST_SERVER = lib.mkDefault false;
+      MICROBIN_PORT = lib.mkDefault "8080";
     };
 
     systemd.services.microbin = {

@@ -87,7 +87,7 @@ let
 
   llvm = symlinkJoin {
     name = "llvm";
-    paths = with llvmPackages; [
+    paths = [
       clang
       llvmPackages.llvm
     ];
@@ -330,7 +330,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta =
-    with lib;
     {
       # Very broken on Darwin
       broken = stdenv.hostPlatform.isDarwin;

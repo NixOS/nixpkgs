@@ -10,7 +10,7 @@ let
 
   inherit (lib)
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkIf
     mkRemovedOptionModule
     types
@@ -46,7 +46,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "packagekit"
       "backend"
@@ -54,26 +54,26 @@ in
   ];
 
   options.services.packagekit = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       PackageKit, a cross-platform D-Bus abstraction layer for
       installing software. Software utilizing PackageKit can install
       software regardless of the package manager
     '';
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = iniFmt.type;
       default = { };
       description = "Additional settings passed straight through to PackageKit.conf";
     };
 
-    vendorSettings = mkOption {
+    vendorSettings = lib.mkOption {
       type = iniFmt.type;
       default = { };
       description = "Additional settings passed straight through to Vendor.conf";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.dbus.packages = with pkgs; [ packagekit ];
 

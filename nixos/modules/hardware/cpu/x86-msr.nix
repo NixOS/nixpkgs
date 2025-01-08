@@ -41,33 +41,33 @@ in
     with lib.options;
     with lib.types;
     {
-      enable = mkEnableOption "the `msr` (Model-Specific Registers) kernel module and configure `udev` rules for its devices (usually `/dev/cpu/*/msr`)";
-      owner = mkOption {
+      enable = lib.mkEnableOption "the `msr` (Model-Specific Registers) kernel module and configure `udev` rules for its devices (usually `/dev/cpu/*/msr`)";
+      owner = lib.mkOption {
         type = str;
         default = "root";
         example = "nobody";
         description = "Owner ${set}";
       };
-      group = mkOption {
+      group = lib.mkOption {
         type = str;
         default = defaultGroup;
         example = "nobody";
         description = "Group ${set}";
       };
-      mode = mkOption {
+      mode = lib.mkOption {
         type = str;
         default = "0640";
         example = "0660";
         description = "Mode ${set}";
       };
-      settings = mkOption {
+      settings = lib.mkOption {
         type = submodule {
           freeformType = attrsOf (oneOf [
             bool
             int
             str
           ]);
-          options.allow-writes = mkOption {
+          options.allow-writes = lib.mkOption {
             type = nullOr (enum [
               "on"
               "off"
@@ -81,7 +81,7 @@ in
       };
     };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = hasAttr cfg.owner config.users.users;
@@ -100,7 +100,7 @@ in
       );
     };
 
-    users.groups.${cfg.group} = mkIf isDefaultGroup { };
+    users.groups.${cfg.group} = lib.mkIf isDefaultGroup { };
 
     services.udev.extraRules = ''
       SUBSYSTEM=="msr", OWNER="${cfg.owner}", GROUP="${cfg.group}", MODE="${cfg.mode}"

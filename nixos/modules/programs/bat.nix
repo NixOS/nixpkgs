@@ -13,10 +13,10 @@ let
     mapAttrs'
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     nameValuePair
-    optionalString
+    lib.optionalString
     types
     ;
   inherit (types) listOf package;
@@ -43,11 +43,11 @@ let
 
   shellInit =
     shell:
-    optionalString (elem pkgs.bat-extras.batpipe cfg.extraPackages) (initScript {
+    lib.optionalString (elem pkgs.bat-extras.batpipe cfg.extraPackages) (initScript {
       program = pkgs.bat-extras.batpipe;
       inherit shell;
     })
-    + optionalString (elem pkgs.bat-extras.batman cfg.extraPackages) (initScript {
+    + lib.optionalString (elem pkgs.bat-extras.batman cfg.extraPackages) (initScript {
       program = pkgs.bat-extras.batman;
       inherit shell;
       flags = [ "--export-env" ];
@@ -55,13 +55,13 @@ let
 in
 {
   options.programs.bat = {
-    enable = mkEnableOption "`bat`, a {manpage}`cat(1)` clone with wings";
+    enable = lib.mkEnableOption "`bat`, a {manpage}`cat(1)` clone with wings";
 
-    package = mkPackageOption pkgs "bat" { };
+    package = lib.mkPackageOption pkgs "bat" { };
 
-    extraPackages = mkOption {
+    extraPackages = lib.mkOption {
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with pkgs.bat-extras; [
           batdiff
           batman
@@ -74,7 +74,7 @@ in
       type = listOf package;
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       example = {
         theme = "TwoDark";
@@ -93,7 +93,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ] ++ cfg.extraPackages;
       etc."bat/config".source = generate "bat-config" (
@@ -107,13 +107,13 @@ in
     };
 
     programs = {
-      bash = mkIf (!config.programs.fish.enable) {
+      bash = lib.mkIf (!config.programs.fish.enable) {
         interactiveShellInit = shellInit "bash";
       };
-      fish = mkIf config.programs.fish.enable {
+      fish = lib.mkIf config.programs.fish.enable {
         interactiveShellInit = shellInit "fish";
       };
-      zsh = mkIf (!config.programs.fish.enable && config.programs.zsh.enable) {
+      zsh = lib.mkIf (!config.programs.fish.enable && config.programs.zsh.enable) {
         interactiveShellInit = shellInit "zsh";
       };
     };

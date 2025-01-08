@@ -7,7 +7,7 @@
 let
   cfg = config.virtualisation.containers;
 
-  inherit (lib) literalExpression mkOption types;
+  inherit (lib) literalExpression lib.mkOption types;
 
   toml = pkgs.formats.toml { };
 in
@@ -18,34 +18,34 @@ in
 
   options.virtualisation.containers = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         This option enables the common /etc/containers configuration module.
       '';
     };
 
-    ociSeccompBpfHook.enable = mkOption {
-      type = types.bool;
+    ociSeccompBpfHook.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Enable the OCI seccomp BPF hook";
     };
 
-    containersConf.settings = mkOption {
+    containersConf.settings = lib.mkOption {
       type = toml.type;
       default = { };
       description = "containers.conf configuration";
     };
 
-    containersConf.cniPlugins = mkOption {
-      type = types.listOf types.package;
-      defaultText = literalExpression ''
+    containersConf.cniPlugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      defaultText = lib.literalExpression ''
         [
           pkgs.cni-plugins
         ]
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           pkgs.cniPlugins.dnsname
         ]
@@ -55,14 +55,14 @@ in
       '';
     };
 
-    storage.settings = mkOption {
+    storage.settings = lib.mkOption {
       type = toml.type;
       description = "storage.conf configuration";
     };
 
     registries = {
-      search = mkOption {
-        type = types.listOf types.str;
+      search = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "docker.io"
           "quay.io"
@@ -72,27 +72,27 @@ in
         '';
       };
 
-      insecure = mkOption {
+      insecure = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           List of insecure repositories.
         '';
       };
 
-      block = mkOption {
+      block = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           List of blocked repositories.
         '';
       };
     };
 
-    policy = mkOption {
+    policy = lib.mkOption {
       default = { };
-      type = types.attrs;
-      example = literalExpression ''
+      type = lib.types.attrs;
+      example = lib.literalExpression ''
         {
           default = [ { type = "insecureAcceptAnything"; } ];
           transports = {

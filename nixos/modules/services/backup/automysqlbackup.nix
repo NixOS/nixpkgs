@@ -20,9 +20,9 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkRenamedOptionModule
-    optional
+    lib.optional
     types
     ;
 
@@ -48,13 +48,13 @@ let
     #version=${pkg.version}
     # DONT'T REMOVE THE PREVIOUS VERSION LINE!
     #
-    ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
+    ${lib.concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
   '';
 
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "automysqlbackup" "config" ]
       [ "services" "automysqlbackup" "settings" ]
     )
@@ -64,19 +64,19 @@ in
   options = {
     services.automysqlbackup = {
 
-      enable = mkEnableOption "AutoMySQLBackup";
+      enable = lib.mkEnableOption "AutoMySQLBackup";
 
-      calendar = mkOption {
-        type = types.str;
+      calendar = lib.mkOption {
+        type = lib.types.str;
         default = "01:15:00";
         description = ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             str
             int
@@ -89,7 +89,7 @@ in
           {file}`''${pkgs.automysqlbackup}/etc/automysqlbackup.conf`
           for details on supported values.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             db_names = [ "nextcloud" "matomo" ];
             table_exclude = [ "nextcloud.oc_users" "nextcloud.oc_whats_new" ];
@@ -103,7 +103,7 @@ in
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -156,7 +156,7 @@ in
     ];
 
     services.mysql.ensureUsers =
-      optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost")
+      lib.optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost")
         {
           name = user;
           ensurePermissions = {

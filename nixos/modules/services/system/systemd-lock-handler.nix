@@ -10,11 +10,11 @@ let
 in
 {
   options.services.systemd-lock-handler = {
-    enable = mkEnableOption "systemd-lock-handler";
-    package = mkPackageOption pkgs "systemd-lock-handler" { };
+    enable = lib.mkEnableOption "systemd-lock-handler";
+    package = lib.mkPackageOption pkgs "systemd-lock-handler" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
 
     # https://github.com/NixOS/nixpkgs/issues/81138

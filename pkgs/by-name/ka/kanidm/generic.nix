@@ -148,7 +148,6 @@ rustPlatform.buildRustPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta =
-    with lib;
     {
       changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
       description = "Simple, secure and fast identity management platform";

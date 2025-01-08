@@ -8,11 +8,11 @@
 let
   inherit (lib)
     mkRemovedOptionModule
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     mkIf
-    optionalString
+    lib.optionalString
     ;
 
   cfg = config.programs.gnupg;
@@ -23,7 +23,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "programs"
       "gnupg"
       "agent"
@@ -32,18 +32,18 @@ in
   ];
 
   options.programs.gnupg = {
-    package = mkPackageOption pkgs "gnupg" { };
+    package = lib.mkPackageOption pkgs "gnupg" { };
 
-    agent.enable = mkOption {
-      type = types.bool;
+    agent.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enables GnuPG agent with socket-activation for every user session.
       '';
     };
 
-    agent.enableSSHSupport = mkOption {
-      type = types.bool;
+    agent.enableSSHSupport = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable SSH agent support in GnuPG agent. Also sets SSH_AUTH_SOCK
@@ -52,24 +52,24 @@ in
       '';
     };
 
-    agent.enableExtraSocket = mkOption {
-      type = types.bool;
+    agent.enableExtraSocket = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable extra socket for GnuPG agent.
       '';
     };
 
-    agent.enableBrowserSocket = mkOption {
-      type = types.bool;
+    agent.enableBrowserSocket = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable browser socket for GnuPG agent.
       '';
     };
 
-    agent.pinentryPackage = mkOption {
-      type = types.nullOr types.package;
+    agent.pinentryPackage = lib.mkOption {
+      type = lib.types.nullOr types.package;
       example = lib.literalMD "pkgs.pinentry-gnome3";
       default = pkgs.pinentry-curses;
       defaultText = lib.literalMD "matching the configured desktop environment or `pkgs.pinentry-curses`";
@@ -82,7 +82,7 @@ in
       '';
     };
 
-    agent.settings = mkOption {
+    agent.settings = lib.mkOption {
       type = agentSettingsFormat.type;
       default = { };
       example = {
@@ -94,8 +94,8 @@ in
       '';
     };
 
-    dirmngr.enable = mkOption {
-      type = types.bool;
+    dirmngr.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enables GnuPG network certificate management daemon with socket-activation for every user session.
@@ -103,8 +103,8 @@ in
     };
   };
 
-  config = mkIf cfg.agent.enable {
-    programs.gnupg.agent.settings = mkIf (cfg.agent.pinentryPackage != null) {
+  config = lib.mkIf cfg.agent.enable {
+    programs.gnupg.agent.settings = lib.mkIf (cfg.agent.pinentryPackage != null) {
       pinentry-program = lib.getExe cfg.agent.pinentryPackage;
     };
 
@@ -138,7 +138,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.user.sockets.gpg-agent-ssh = mkIf cfg.agent.enableSSHSupport {
+    systemd.user.sockets.gpg-agent-ssh = lib.mkIf cfg.agent.enableSSHSupport {
       unitConfig = {
         Description = "GnuPG cryptographic agent (ssh-agent emulation)";
         Documentation = "man:gpg-agent(1) man:ssh-add(1) man:ssh-agent(1) man:ssh(1)";
@@ -153,7 +153,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.user.sockets.gpg-agent-extra = mkIf cfg.agent.enableExtraSocket {
+    systemd.user.sockets.gpg-agent-extra = lib.mkIf cfg.agent.enableExtraSocket {
       unitConfig = {
         Description = "GnuPG cryptographic agent and passphrase cache (restricted)";
         Documentation = "man:gpg-agent(1)";
@@ -168,7 +168,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.user.sockets.gpg-agent-browser = mkIf cfg.agent.enableBrowserSocket {
+    systemd.user.sockets.gpg-agent-browser = lib.mkIf cfg.agent.enableBrowserSocket {
       unitConfig = {
         Description = "GnuPG cryptographic agent and passphrase cache (access for web browsers)";
         Documentation = "man:gpg-agent(1)";
@@ -183,7 +183,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.user.services.dirmngr = mkIf cfg.dirmngr.enable {
+    systemd.user.services.dirmngr = lib.mkIf cfg.dirmngr.enable {
       unitConfig = {
         Description = "GnuPG network certificate management daemon";
         Documentation = "man:dirmngr(8)";
@@ -195,7 +195,7 @@ in
       };
     };
 
-    systemd.user.sockets.dirmngr = mkIf cfg.dirmngr.enable {
+    systemd.user.sockets.dirmngr = lib.mkIf cfg.dirmngr.enable {
       unitConfig = {
         Description = "GnuPG network certificate management daemon";
         Documentation = "man:dirmngr(8)";
@@ -208,7 +208,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [ ])) [
+    services.dbus.packages = lib.mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [ ])) [
       pkgs.gcr
     ];
 
@@ -219,14 +219,14 @@ in
       export GPG_TTY=$(tty)
     '';
 
-    programs.ssh.extraConfig = optionalString cfg.agent.enableSSHSupport ''
+    programs.ssh.extraConfig = lib.optionalString cfg.agent.enableSSHSupport ''
       # The SSH agent protocol doesn't have support for changing TTYs; however we
       # can simulate this with the `exec` feature of openssh (see ssh_config(5))
       # that hooks a command to the shell currently running the ssh program.
       Match host * exec "${pkgs.runtimeShell} -c '${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye >/dev/null 2>&1'"
     '';
 
-    environment.extraInit = mkIf cfg.agent.enableSSHSupport ''
+    environment.extraInit = lib.mkIf cfg.agent.enableSSHSupport ''
       if [ -z "$SSH_AUTH_SOCK" ]; then
         export SSH_AUTH_SOCK=$(${cfg.package}/bin/gpgconf --list-dirs agent-ssh-socket)
       fi

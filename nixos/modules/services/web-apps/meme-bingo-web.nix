@@ -10,7 +10,7 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     literalExpression
     ;
@@ -20,34 +20,34 @@ in
 {
   options = {
     services.meme-bingo-web = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         a web app for the meme bingo, rendered entirely on the web server and made interactive with forms.
 
         Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3
       '';
 
-      package = mkPackageOption pkgs "meme-bingo-web" { };
+      package = lib.mkPackageOption pkgs "meme-bingo-web" { };
 
-      baseUrl = mkOption {
+      baseUrl = lib.mkOption {
         description = ''
           URL to be used for the HTML \<base\> element on all HTML routes.
         '';
-        type = types.str;
+        type = lib.types.str;
         default = "http://localhost:41678/";
         example = "https://bingo.example.com/";
       };
-      port = mkOption {
+      port = lib.mkOption {
         description = ''
           Port to be used for the web server.
         '';
-        type = types.port;
+        type = lib.types.port;
         default = 41678;
         example = 21035;
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.meme-bingo-web = {
       description = "A web app for playing meme bingos";
       wantedBy = [ "multi-user.target" ];

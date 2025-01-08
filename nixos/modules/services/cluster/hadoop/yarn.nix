@@ -190,7 +190,7 @@ in
         with cfg.yarn.nodemanager;
         lib.mkMerge [
           ({
-            "yarn.nodemanager.local-dirs" = lib.mkIf (localDir != null) (concatStringsSep "," localDir);
+            "yarn.nodemanager.local-dirs" = lib.mkIf (localDir != null) (lib.concatStringsSep "," localDir);
             "yarn.scheduler.maximum-allocation-vcores" = resource.maximumAllocationVCores;
             "yarn.scheduler.maximum-allocation-mb" = resource.maximumAllocationMB;
             "yarn.nodemanager.resource.cpu-vcores" = resource.cpuVCores;

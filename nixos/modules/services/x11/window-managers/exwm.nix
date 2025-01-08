@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
@@ -18,17 +16,17 @@ in
 {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "exwm" "enableDefaultConfig" ]
+    (lib.mkRemovedOptionModule [ "services" "xserver" "windowManager" "exwm" "enableDefaultConfig" ]
       "The upstream EXWM project no longer provides a default configuration, instead copy (parts of) exwm-config.el to your local config."
     )
   ];
 
   options = {
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption "exwm";
-      loadScript = mkOption {
+      enable = lib.mkEnableOption "exwm";
+      loadScript = lib.mkOption {
         default = "(require 'exwm)";
-        type = types.lines;
+        type = lib.types.lines;
         example = ''
           (require 'exwm)
           (exwm-enable)
@@ -38,11 +36,11 @@ in
           file.
         '';
       };
-      extraPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = epkgs: [ ];
-        defaultText = literalExpression "epkgs: []";
-        example = literalExpression ''
+        defaultText = lib.literalExpression "epkgs: []";
+        example = lib.literalExpression ''
           epkgs: [
             epkgs.emms
             epkgs.magit
@@ -58,8 +56,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "exwm";
       start = ''
         ${exwm-emacs}/bin/emacs -l ${loadScript}

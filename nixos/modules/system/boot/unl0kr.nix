@@ -17,7 +17,7 @@ in
 
     package = lib.mkPackageOption pkgs "buffybox" { };
 
-    allowVendorDrivers = lib.mkEnableOption "load optional drivers" // {
+    allowVendorDrivers = lib.mkEnableOption "load lib.optional drivers" // {
       description = ''Whether to load additional drivers for certain vendors (I.E: Wacom, Intel, etc.)'';
     };
 

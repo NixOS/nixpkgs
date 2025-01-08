@@ -97,7 +97,7 @@ let
     };
   };
 
-  optionalKV = k: v: lib.optionalString (v != null) "${k} = ${builtins.toString v}";
+  lib.optionalKV = k: v: lib.optionalString (v != null) "${k} = ${builtins.toString v}";
 
   renderPhocOutput = name: output: let
     modelines = if builtins.isList output.modeline

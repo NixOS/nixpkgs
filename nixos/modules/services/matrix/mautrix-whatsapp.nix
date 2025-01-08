@@ -93,7 +93,7 @@ in {
       default = null;
       description = ''
         File containing environment variables to be passed to the mautrix-whatsapp service,
-        in which secret tokens can be specified securely by optionally defining a value for
+        in which secret tokens can be specified securely by lib.optionally defining a value for
         `MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET`.
       '';
     };
@@ -102,7 +102,7 @@ in {
       type = with lib.types; listOf str;
       default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
       defaultText = lib.literalExpression ''
-        optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits
+        lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits
       '';
       description = ''
         List of Systemd services to require and wait for when starting the application service.

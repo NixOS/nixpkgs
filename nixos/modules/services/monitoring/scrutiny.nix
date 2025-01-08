@@ -3,7 +3,7 @@ let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
-  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
+  inherit (lib.options) literalExpression mkEnableOption lib.mkOption mkPackageOption;
   inherit (lib.types) bool enum nullOr port str submodule;
 
   cfg = config.services.scrutiny;
@@ -13,13 +13,13 @@ in
 {
   options = {
     services.scrutiny = {
-      enable = mkEnableOption "Scrutiny, a web application for drive monitoring";
+      enable = lib.mkEnableOption "Scrutiny, a web application for drive monitoring";
 
-      package = mkPackageOption pkgs "scrutiny" { };
+      package = lib.mkPackageOption pkgs "scrutiny" { };
 
       openFirewall = mkEnableOption "opening the default ports in the firewall for Scrutiny";
 
-      influxdb.enable = mkOption {
+      influxdb.enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -31,7 +31,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Scrutiny settings to be rendered into the configuration file.
 
@@ -41,19 +41,19 @@ in
         type = submodule {
           freeformType = settingsFormat.type;
 
-          options.web.listen.port = mkOption {
+          options.web.listen.port = lib.mkOption {
             type = port;
             default = 8080;
             description = "Port for web application to listen on.";
           };
 
-          options.web.listen.host = mkOption {
+          options.web.listen.host = lib.mkOption {
             type = str;
             default = "0.0.0.0";
             description = "Interface address for web application to bind to.";
           };
 
-          options.web.listen.basepath = mkOption {
+          options.web.listen.basepath = lib.mkOption {
             type = str;
             default = "";
             example = "/scrutiny";
@@ -63,25 +63,25 @@ in
             '';
           };
 
-          options.log.level = mkOption {
+          options.log.level = lib.mkOption {
             type = enum [ "INFO" "DEBUG" ];
             default = "INFO";
             description = "Log level for Scrutiny.";
           };
 
-          options.web.influxdb.scheme = mkOption {
+          options.web.influxdb.scheme = lib.mkOption {
             type = str;
             default = "http";
             description = "URL scheme to use when connecting to InfluxDB.";
           };
 
-          options.web.influxdb.host = mkOption {
+          options.web.influxdb.host = lib.mkOption {
             type = str;
             default = "0.0.0.0";
             description = "IP or hostname of the InfluxDB instance.";
           };
 
-          options.web.influxdb.port = mkOption {
+          options.web.influxdb.port = lib.mkOption {
             type = port;
             default = 8086;
             description = "The port of the InfluxDB instance.";
@@ -89,19 +89,19 @@ in
 
           options.web.influxdb.tls.insecure_skip_verify = mkEnableOption "skipping TLS verification when connecting to InfluxDB";
 
-          options.web.influxdb.token = mkOption {
+          options.web.influxdb.token = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "Authentication token for connecting to InfluxDB.";
           };
 
-          options.web.influxdb.org = mkOption {
+          options.web.influxdb.org = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "InfluxDB organisation under which to store data.";
           };
 
-          options.web.influxdb.bucket = mkOption {
+          options.web.influxdb.bucket = lib.mkOption {
             type = nullOr str;
             default = null;
             description = "InfluxDB bucket in which to store data.";
@@ -110,14 +110,14 @@ in
       };
 
       collector = {
-        enable = mkEnableOption "the Scrutiny metrics collector" // {
+        enable = lib.mkEnableOption "the Scrutiny metrics collector" // {
           default = cfg.enable;
           defaultText = lib.literalExpression "config.services.scrutiny.enable";
         };
 
-        package = mkPackageOption pkgs "scrutiny-collector" { };
+        package = lib.mkPackageOption pkgs "scrutiny-collector" { };
 
-        schedule = mkOption {
+        schedule = lib.mkOption {
           type = str;
           default = "*:0/15";
           description = ''
@@ -125,7 +125,7 @@ in
           '';
         };
 
-        settings = mkOption {
+        settings = lib.mkOption {
           description = ''
             Collector settings to be rendered into the collector configuration file.
 
@@ -135,20 +135,20 @@ in
           type = submodule {
             freeformType = settingsFormat.type;
 
-            options.host.id = mkOption {
+            options.host.id = lib.mkOption {
               type = nullOr str;
               default = null;
               description = "Host ID for identifying/labelling groups of disks";
             };
 
-            options.api.endpoint = mkOption {
+            options.api.endpoint = lib.mkOption {
               type = str;
               default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}";
-              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
+              defaultText = lib.literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
-            options.log.level = mkOption {
+            options.log.level = lib.mkOption {
               type = enum [ "INFO" "DEBUG" ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
@@ -159,11 +159,11 @@ in
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       services.influxdb2.enable = cfg.influxdb.enable;
 
-      networking.firewall = mkIf cfg.openFirewall {
+      networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.settings.web.listen.port ];
       };
 
@@ -198,7 +198,7 @@ in
         };
       };
     })
-    (mkIf cfg.collector.enable {
+    (lib.mkIf cfg.collector.enable {
       services.smartd = {
         enable = true;
         extraOptions = [

@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.mikrotik;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     literalExpression
     concatStringsSep
@@ -19,18 +19,18 @@ in
 {
   port = 9436;
   extraOpts = {
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Path to a mikrotik exporter configuration file. Mutually exclusive with
         {option}`configuration` option.
       '';
-      example = literalExpression "./mikrotik.yml";
+      example = lib.literalExpression "./mikrotik.yml";
     };
 
-    configuration = mkOption {
-      type = types.nullOr types.attrs;
+    configuration = lib.mkOption {
+      type = lib.types.nullOr lib.types.attrs;
       default = null;
       description = ''
         Mikrotik exporter configuration as nix attribute set. Mutually exclusive with
@@ -39,7 +39,7 @@ in
         See <https://github.com/nshttpd/mikrotik-exporter/blob/master/README.md>
         for the description of the configuration file format.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           devices = [
             {
@@ -72,9 +72,9 @@ in
         # -port is misleading name, it actually accepts address too
         ExecStart = ''
           ${pkgs.prometheus-mikrotik-exporter}/bin/mikrotik-exporter \
-            -config-file=${escapeShellArg configFile} \
+            -config-file=${lib.escapeShellArg configFile} \
             -port=${cfg.listenAddress}:${toString cfg.port} \
-            ${concatStringsSep " \\\n  " cfg.extraFlags}
+            ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
         '';
       };
     };

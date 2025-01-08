@@ -10,9 +10,9 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    optionalAttrs
-    optionalString
+    lib.mkOption
+    lib.optionalAttrs
+    lib.optionalString
     generators
     mapAttrsToList
     ;
@@ -40,7 +40,7 @@ let
             if builtins.isInt q then
               "${p}=${builtins.toString q}"
             else
-              "${p}=\"${if builtins.isList q then (concatStringsSep " " q) else q}\""
+              "${p}=\"${if builtins.isList q then (lib.concatStringsSep " " q) else q}\""
           else
             ""
         ) v;
@@ -73,10 +73,10 @@ let
 in
 {
   options.services.cyrus-imap = {
-    enable = mkEnableOption "Cyrus IMAP, an email, contacts and calendar server";
+    enable = lib.mkEnableOption "Cyrus IMAP, an email, contacts and calendar server";
     debug = mkEnableOption "debugging messages for the Cyrus master process";
 
-    listenQueue = mkOption {
+    listenQueue = lib.mkOption {
       type = int;
       default = 32;
       description = ''
@@ -84,7 +84,7 @@ in
         Default is 32, which may be increased if you have a very high connection rate.
       '';
     };
-    tmpDBDir = mkOption {
+    tmpDBDir = lib.mkOption {
       type = path;
       default = "/run/cyrus/db";
       description = ''
@@ -92,7 +92,7 @@ in
         Databases in this directory are recreated upon startup, so ideally they should live in ephemeral storage for best performance.
       '';
     };
-    cyrusSettings = mkOption {
+    cyrusSettings = lib.mkOption {
       type = submodule {
         freeformType = attrsOf (
           attrsOf (oneOf [
@@ -102,7 +102,7 @@ in
           ])
         );
         options = {
-          START = mkOption {
+          START = lib.mkOption {
             default = {
               recover = {
                 cmd = [
@@ -117,7 +117,7 @@ in
               Master itself will not startup until all tasks in START have completed, so put no blocking commands here.
             '';
           };
-          SERVICES = mkOption {
+          SERVICES = lib.mkOption {
             default = {
               imap = {
                 cmd = [ "imapd" ];
@@ -145,7 +145,7 @@ in
               This section is the heart of the cyrus.conf file. It lists the processes that should be spawned to handle client connections made on certain Internet/UNIX sockets.
             '';
           };
-          EVENTS = mkOption {
+          EVENTS = lib.mkOption {
             default = {
               tlsprune = {
                 cmd = [ "tls_prune" ];
@@ -191,7 +191,7 @@ in
               This section lists processes that should be run at specific intervals, similar to cron jobs. This section is typically used to perform scheduled cleanup/maintenance.
             '';
           };
-          DAEMON = mkOption {
+          DAEMON = lib.mkOption {
             default = { };
             description = ''
               This section lists long running daemons to start before any SERVICES are spawned. master(8) will ensure that these processes are running, restarting any process which dies or forks. All listed processes will be shutdown when master(8) is exiting.
@@ -201,7 +201,7 @@ in
       };
       description = "Cyrus configuration settings. See [cyrus.conf(5)](https://www.cyrusimap.org/imap/reference/manpages/configs/cyrus.conf.html)";
     };
-    imapdSettings = mkOption {
+    imapdSettings = lib.mkOption {
       type = submodule {
         freeformType = attrsOf (oneOf [
           str
@@ -210,28 +210,28 @@ in
           (listOf str)
         ]);
         options = {
-          configdirectory = mkOption {
+          configdirectory = lib.mkOption {
             type = path;
             default = "/var/lib/cyrus";
             description = ''
               The pathname of the IMAP configuration directory.
             '';
           };
-          lmtpsocket = mkOption {
+          lmtpsocket = lib.mkOption {
             type = path;
             default = "/run/cyrus/lmtp";
             description = ''
               Unix socket that lmtpd listens on, used by deliver(8). This should match the path specified in cyrus.conf(5).
             '';
           };
-          idlesocket = mkOption {
+          idlesocket = lib.mkOption {
             type = path;
             default = "/run/cyrus/idle";
             description = ''
               Unix socket that idled listens on.
             '';
           };
-          notifysocket = mkOption {
+          notifysocket = lib.mkOption {
             type = path;
             default = "/run/cyrus/notify";
             description = ''
@@ -269,59 +269,59 @@ in
       description = "IMAP configuration settings. See [imapd.conf(5)](https://www.cyrusimap.org/imap/reference/manpages/configs/imapd.conf.html)";
     };
 
-    user = mkOption {
+    user = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "Cyrus IMAP user name. If this is not set, a user named `cyrus` will be created.";
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "Cyrus IMAP group name. If this is not set, a group named `cyrus` will be created.";
     };
 
-    imapdConfigFile = mkOption {
+    imapdConfigFile = lib.mkOption {
       type = nullOr path;
       default = null;
       description = "Path to the configuration file used for cyrus-imap.";
       apply = v: if v != null then v else pkgs.writeText "imapd.conf" imapdConfig;
     };
 
-    cyrusConfigFile = mkOption {
+    cyrusConfigFile = lib.mkOption {
       type = nullOr path;
       default = null;
       description = "Path to the configuration file used for Cyrus.";
       apply = v: if v != null then v else pkgs.writeText "cyrus.conf" cyrusConfig;
     };
 
-    sslCACert = mkOption {
+    sslCACert = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "File path which containing one or more CA certificates to use.";
     };
 
-    sslServerCert = mkOption {
+    sslServerCert = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "File containing the global certificate used for all services (IMAP, POP3, LMTP, Sieve)";
     };
 
-    sslServerKey = mkOption {
+    sslServerKey = lib.mkOption {
       type = nullOr str;
       default = null;
       description = "File containing the private key belonging to the global server certificate.";
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users.cyrus = optionalAttrs (cfg.user == null) {
+  config = lib.mkIf cfg.enable {
+    users.users.cyrus = lib.optionalAttrs (cfg.user == null) {
       description = "Cyrus IMAP user";
       isSystemUser = true;
-      group = optionalString (cfg.group == null) "cyrus";
+      group = lib.optionalString (cfg.group == null) "cyrus";
     };
 
-    users.groups.cyrus = optionalAttrs (cfg.group == null) { };
+    users.groups.cyrus = lib.optionalAttrs (cfg.group == null) { };
 
     environment.etc."imapd.conf".source = cfg.imapdConfigFile;
     environment.etc."cyrus.conf".source = cfg.cyrusConfigFile;
@@ -338,7 +338,7 @@ in
 
       startLimitIntervalSec = 60;
       environment = {
-        CYRUS_VERBOSE = mkIf cfg.debug "1";
+        CYRUS_VERBOSE = lib.mkIf cfg.debug "1";
         LISTENQUEUE = builtins.toString cfg.listenQueue;
       };
       serviceConfig = {

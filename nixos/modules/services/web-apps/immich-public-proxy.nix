@@ -10,33 +10,33 @@ let
   inherit (lib)
     types
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     ;
 in
 {
   options.services.immich-public-proxy = {
-    enable = mkEnableOption "Immich Public Proxy";
+    enable = lib.mkEnableOption "Immich Public Proxy";
     package = lib.mkPackageOption pkgs "immich-public-proxy" { };
 
-    immichUrl = mkOption {
-      type = types.str;
+    immichUrl = lib.mkOption {
+      type = lib.types.str;
       description = "URL of the Immich instance";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 3000;
       description = "The port that IPP will listen on.";
     };
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Whether to open the IPP port in the firewall";
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = format.type;
       };
       default = { };
@@ -46,7 +46,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.immich-public-proxy = {
       description = "Immich public proxy for sharing albums publicly without exposing your Immich instance";
       after = [ "network.target" ];
@@ -91,7 +91,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     meta.maintainers = with lib.maintainers; [ jaculabilis ];
   };

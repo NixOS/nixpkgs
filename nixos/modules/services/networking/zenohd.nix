@@ -9,7 +9,7 @@ let
   inherit (lib)
     types
     mkDefault
-    mkOption
+    lib.mkOption
     ;
 
   json = pkgs.formats.json { };
@@ -22,14 +22,14 @@ in
     services.zenohd = {
       enable = lib.mkEnableOption "Zenoh daemon.";
 
-      package = mkOption {
+      package = lib.mkOption {
         description = "The zenoh package to use.";
-        type = types.package;
+        type = lib.types.package;
         default = pkgs.zenoh;
         defaultText = "pkgs.zenoh";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Config options for `zenoh.json5` configuration file.
 
@@ -37,46 +37,46 @@ in
           for more information.
         '';
         default = { };
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = json.type;
         };
       };
 
-      plugins = mkOption {
+      plugins = lib.mkOption {
         description = "Plugin packages to add to zenohd search paths.";
-        type = with types; listOf package;
+        type = with lib.types; listOf package;
         default = [ ];
         example = lib.literalExpression ''
           [ pkgs.zenoh-plugin-mqtt ]
         '';
       };
 
-      backends = mkOption {
+      backends = lib.mkOption {
         description = "Storage backend packages to add to zenohd search paths.";
-        type = with types; listOf package;
+        type = with lib.types; listOf package;
         default = [ ];
         example = lib.literalExpression ''
           [ pkgs.zenoh-backend-rocksdb ]
         '';
       };
 
-      home = mkOption {
+      home = lib.mkOption {
         description = "Base directory for zenohd related files defined via ZENOH_HOME.";
-        type = types.str;
+        type = lib.types.str;
         default = "/var/lib/zenoh";
       };
 
-      env = mkOption {
+      env = lib.mkOption {
         description = ''
           Set environment variables consumed by zenohd and its plugins.
         '';
-        type = with types; attrsOf str;
+        type = with lib.types; attrsOf str;
         default = { };
       };
 
-      extraOptions = mkOption {
+      extraOptions = lib.mkOption {
         description = "Extra command line options for zenohd.";
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         default = [ ];
       };
     };
@@ -119,13 +119,13 @@ in
 
       settings = {
         plugins_loading = {
-          enabled = mkDefault true;
-          search_dirs = mkDefault (
+          enabled = lib.mkDefault true;
+          search_dirs = lib.mkDefault (
             (map (x: "${lib.getLib x}/lib") cfg.plugins) ++ [ "${lib.getLib cfg.package}/lib" ]
           ); # needed for internal plugins
         };
 
-        plugins.storage_manager.backend_search_dirs = mkDefault (
+        plugins.storage_manager.backend_search_dirs = lib.mkDefault (
           map (x: "${lib.getLib x}/lib") cfg.backends
         );
       };

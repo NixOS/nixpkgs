@@ -76,7 +76,7 @@ let
 in
 {
   options = {
-    services.zoneminder = with lib; {
+    services.zoneminder = {
       enable = lib.mkEnableOption ''
         ZoneMinder.
 
@@ -88,8 +88,8 @@ in
         upgrading to a newer version
       '';
 
-      webserver = mkOption {
-        type = types.enum [
+      webserver = lib.mkOption {
+        type = lib.types.enum [
           "nginx"
           "none"
         ];
@@ -102,24 +102,24 @@ in
         '';
       };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = ''
           The hostname on which to listen.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8095;
         description = ''
           The port on which to listen.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the firewall port(s).
@@ -127,40 +127,40 @@ in
       };
 
       database = {
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Create the database and database user locally.
           '';
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
           description = ''
             Hostname hosting the database.
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "zm";
           description = ''
             Name of database.
           '';
         };
 
-        username = mkOption {
-          type = types.str;
+        username = lib.mkOption {
+          type = lib.types.str;
           default = "zmuser";
           description = ''
             Username for accessing the database.
           '';
         };
 
-        password = mkOption {
-          type = types.str;
+        password = lib.mkOption {
+          type = lib.types.str;
           default = "zmpass";
           description = ''
             Username for accessing the database.
@@ -169,16 +169,16 @@ in
         };
       };
 
-      cameras = mkOption {
-        type = types.int;
+      cameras = lib.mkOption {
+        type = lib.types.int;
         default = 1;
         description = ''
           Set this to the number of cameras you expect to support.
         '';
       };
 
-      storageDir = mkOption {
-        type = types.nullOr types.str;
+      storageDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/storage/tank";
         description = ''
@@ -187,8 +187,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Additional configuration added verbatim to the configuration file.

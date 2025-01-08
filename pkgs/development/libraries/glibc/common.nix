@@ -326,7 +326,6 @@ stdenv.mkDerivation (
       doCheck = false; # fails
 
       meta =
-        with lib;
         {
           homepage = "https://www.gnu.org/software/libc/";
           description = "GNU C Library";

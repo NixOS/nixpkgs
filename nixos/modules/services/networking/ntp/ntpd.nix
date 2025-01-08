@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   inherit (pkgs) ntp;
@@ -45,8 +43,8 @@ in
 
     services.ntp = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
@@ -56,8 +54,8 @@ in
         '';
       };
 
-      restrictDefault = mkOption {
-        type = types.listOf types.str;
+      restrictDefault = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = ''
           The restriction flags to be set by default.
 
@@ -76,8 +74,8 @@ in
         ];
       };
 
-      restrictSource = mkOption {
-        type = types.listOf types.str;
+      restrictSource = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = ''
           The restriction flags to be set on source.
 
@@ -93,17 +91,17 @@ in
         ];
       };
 
-      servers = mkOption {
+      servers = lib.mkOption {
         default = config.networking.timeServers;
-        defaultText = literalExpression "config.networking.timeServers";
-        type = types.listOf types.str;
+        defaultText = lib.literalExpression "config.networking.timeServers";
+        type = lib.types.listOf lib.types.str;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           fudge 127.127.1.0 stratum 10
@@ -113,10 +111,10 @@ in
         '';
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "Extra flags passed to the ntpd command.";
-        example = literalExpression ''[ "--interface=eth0" ]'';
+        example = lib.literalExpression ''[ "--interface=eth0" ]'';
         default = [ ];
       };
 
@@ -126,12 +124,12 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.ntp.enable {
+  config = lib.mkIf config.services.ntp.enable {
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
     # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];
-    services.timesyncd.enable = mkForce false;
+    services.timesyncd.enable = lib.mkForce false;
 
     systemd.services.systemd-timedated.environment = {
       SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service";

@@ -1,27 +1,25 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
   ###### interface
 
   options = {
     services.tinydns = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to run the tinydns dns server";
       };
 
-      data = mkOption {
-        type = types.lines;
+      data = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "The DNS data to serve, in the format described by tinydns-data(8)";
       };
 
-      ip = mkOption {
+      ip = lib.mkOption {
         default = "0.0.0.0";
-        type = types.str;
+        type = lib.types.str;
         description = "IP address on which to listen for connections";
       };
     };
@@ -29,7 +27,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.tinydns.enable {
+  config = lib.mkIf config.services.tinydns.enable {
     environment.systemPackages = [ pkgs.djbdns ];
 
     users.users.tinydns = {

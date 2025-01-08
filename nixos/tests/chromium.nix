@@ -50,9 +50,9 @@ mapAttrs (
           primeos
         ];
       }
-      // optionalAttrs (chromiumPkg.meta ? timeout) {
+      // lib.optionalAttrs (chromiumPkg.meta ? timeout) {
         # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
-        # Note: optionalAttrs is used since meta.timeout is not set for Google Chrome
+        # Note: lib.optionalAttrs is used since meta.timeout is not set for Google Chrome
         inherit (chromiumPkg.meta) timeout;
       };
 
@@ -108,7 +108,7 @@ mapAttrs (
                 binary = "google-chrome-unstable"
             else:  # For google-chrome-beta and as fallback:
                 binary = pname
-            # Add optional CLI options:
+            # Add lib.optional CLI options:
             options = []
             if major_version > "95" and not pname.startswith("google-chrome"):
                 # Workaround to avoid a GPU crash:

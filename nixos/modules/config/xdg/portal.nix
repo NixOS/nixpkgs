@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkRenamedOptionModule
     mkRemovedOptionModule
     teams
@@ -17,14 +17,14 @@ let
     ;
 
   associationOptions =
-    with types;
+    with lib.types;
     attrsOf (coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str);
 in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
-    (mkRemovedOptionModule [
+    (lib.mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
+    (lib.mkRemovedOptionModule [
       "xdg"
       "portal"
       "gtkUsePortal"
@@ -42,8 +42,8 @@ in
         default = false;
       };
 
-    extraPortals = mkOption {
-      type = types.listOf types.package;
+    extraPortals = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ ];
       description = ''
         List of additional portals to add to path. Portals allow interaction
@@ -55,8 +55,8 @@ in
       '';
     };
 
-    xdgOpenUsePortal = mkOption {
-      type = types.bool;
+    xdgOpenUsePortal = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Sets environment variable `NIXOS_XDG_OPEN_USE_PORTAL` to `1`
@@ -66,8 +66,8 @@ in
       '';
     };
 
-    config = mkOption {
-      type = types.attrsOf associationOptions;
+    config = lib.mkOption {
+      type = lib.types.attrsOf associationOptions;
       default = { };
       example = {
         x-cinnamon = {
@@ -97,8 +97,8 @@ in
       '';
     };
 
-    configPackages = mkOption {
-      type = types.listOf types.package;
+    configPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ ];
       example = lib.literalExpression "[ pkgs.gnome-session ]";
       description = ''
@@ -115,7 +115,7 @@ in
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
         xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
         should either set `xdg.portal.config` or `xdg.portal.configPackages`
@@ -149,7 +149,7 @@ in
         ];
 
         sessionVariables = {
-          NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
+          NIXOS_XDG_OPEN_USE_PORTAL = lib.mkIf cfg.xdgOpenUsePortal "1";
           NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 

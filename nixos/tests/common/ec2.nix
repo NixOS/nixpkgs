@@ -23,7 +23,7 @@ with pkgs.lib;
             echo "${hostname}" > $out/1.0/meta-data/hostname
             echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
           ''
-          + optionalString (sshPublicKey != null) ''
+          + lib.optionalString (sshPublicKey != null) ''
             mkdir -p $out/1.0/meta-data/public-keys/0
             ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
           '';

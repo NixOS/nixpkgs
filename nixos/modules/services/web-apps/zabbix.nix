@@ -16,14 +16,14 @@ let
     mkForce
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     types
     ;
   inherit (lib)
     literalExpression
     mapAttrs
-    optionalString
-    optionals
+    lib.optionalString
+    lib.optionals
     versionAtLeast
     ;
 
@@ -70,7 +70,7 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [
         "services"
         "zabbixWeb"
@@ -88,30 +88,30 @@ in
 
   options.services = {
     zabbixWeb = {
-      enable = mkEnableOption "the Zabbix web interface";
+      enable = lib.mkEnableOption "the Zabbix web interface";
 
-      package = mkPackageOption pkgs [
+      package = lib.mkPackageOption pkgs [
         "zabbix"
         "web"
       ] { };
 
       server = {
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           description = "The port of the Zabbix server to connect to.";
           default = 10051;
         };
 
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           description = "The IP address or hostname of the Zabbix server to connect to.";
           default = "localhost";
         };
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [
+        type = lib.mkOption {
+          type = lib.types.enum [
             "mysql"
             "pgsql"
             "oracle"
@@ -121,14 +121,14 @@ in
           description = "Database engine to use.";
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "";
           description = "Database host address.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default =
             if cfg.database.type == "mysql" then
               config.services.mysql.port
@@ -136,7 +136,7 @@ in
               config.services.postgresql.settings.port
             else
               1521;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             if config.${opt.database.type} == "mysql" then config.${options.services.mysql.port}
             else if config.${opt.database.type} == "pgsql" then config.services.postgresql.settings.port
             else 1521
@@ -144,20 +144,20 @@ in
           description = "Database host port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "zabbix";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "zabbix";
           description = "Database user.";
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/zabbix-dbpassword";
           description = ''
@@ -166,16 +166,16 @@ in
           '';
         };
 
-        socket = mkOption {
-          type = types.nullOr types.path;
+        socket = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/postgresql";
           description = "Path to the unix socket file to use for authentication.";
         };
       };
 
-      frontend = mkOption {
-        type = types.enum [
+      frontend = lib.mkOption {
+        type = lib.types.enum [
           "nginx"
           "httpd"
         ];
@@ -184,9 +184,9 @@ in
         description = "Frontend server to use.";
       };
 
-      httpd.virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExpression ''
+      httpd.virtualHost = lib.mkOption {
+        type = lib.types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = lib.literalExpression ''
           {
             hostName = "zabbix.example.org";
             adminAddr = "webmaster@example.org";
@@ -201,15 +201,15 @@ in
         '';
       };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         default = "zabbix.local";
         description = "Hostname for either nginx or httpd.";
       };
 
-      nginx.virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/nginx/vhost-options.nix);
-        example = literalExpression ''
+      nginx.virtualHost = lib.mkOption {
+        type = lib.types.submodule (import ../web-servers/nginx/vhost-options.nix);
+        example = lib.literalExpression ''
           {
             forceSSL = true;
             sslCertificateKey = "/etc/ssl/zabbix.key";
@@ -223,9 +223,9 @@ in
         '';
       };
 
-      poolConfig = mkOption {
+      poolConfig = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             str
             int
@@ -244,8 +244,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Additional configuration to be copied verbatim into {file}`zabbix.conf.php`.
@@ -256,10 +256,10 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.zabbixWeb.extraConfig =
-      optionalString
+      lib.optionalString
         (
           (versionAtLeast config.system.stateVersion "20.09") && (versionAtLeast cfg.package.version "5.0.0")
         )
@@ -269,10 +269,10 @@ in
 
     systemd.tmpfiles.rules =
       [ "d '${stateDir}' 0750 ${user} ${group} - -" ]
-      ++ optionals (cfg.frontend == "httpd") [
+      ++ lib.optionals (cfg.frontend == "httpd") [
         "d '${stateDir}/session' 0750 ${user} ${config.services.httpd.group} - -"
       ]
-      ++ optionals (cfg.frontend == "nginx") [
+      ++ lib.optionals (cfg.frontend == "nginx") [
         "d '${stateDir}/session' 0750 ${user} ${config.services.nginx.group} - -"
       ];
 
@@ -293,10 +293,10 @@ in
           # https://bbs.archlinux.org/viewtopic.php?pid=1745214#p1745214
           session.save_path = ${stateDir}/session
         ''
-        + optionalString (config.time.timeZone != null) ''
+        + lib.optionalString (config.time.timeZone != null) ''
           date.timezone = "${config.time.timeZone}"
         ''
-        + optionalString (cfg.database.type == "oracle") ''
+        + lib.optionalString (cfg.database.type == "oracle") ''
           extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
         '';
       phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
@@ -308,11 +308,11 @@ in
       } // cfg.poolConfig;
     };
 
-    services.httpd = mkIf (cfg.frontend == "httpd") {
+    services.httpd = lib.mkIf (cfg.frontend == "httpd") {
       enable = true;
-      adminAddr = mkDefault cfg.httpd.virtualHost.adminAddr;
+      adminAddr = lib.mkDefault cfg.httpd.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.hostname} = mkMerge [
+      virtualHosts.${cfg.hostname} = lib.mkMerge [
         cfg.httpd.virtualHost
         {
           documentRoot = mkForce "${cfg.package}/share/zabbix";
@@ -332,9 +332,9 @@ in
       ];
     };
 
-    services.nginx = mkIf (cfg.frontend == "nginx") {
+    services.nginx = lib.mkIf (cfg.frontend == "nginx") {
       enable = true;
-      virtualHosts.${cfg.hostname} = mkMerge [
+      virtualHosts.${cfg.hostname} = lib.mkMerge [
         cfg.nginx.virtualHost
         {
           root = mkForce "${cfg.package}/share/zabbix";

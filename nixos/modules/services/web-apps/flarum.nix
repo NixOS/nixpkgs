@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.flarum;
 
@@ -30,73 +28,72 @@ let
 in
 {
   options.services.flarum = {
-    enable = mkEnableOption "Flarum discussion platform";
+    enable = lib.mkEnableOption "Flarum discussion platform";
 
-    package = mkPackageOption pkgs "flarum" { };
+    package = lib.mkPackageOption pkgs "flarum" { };
 
-    forumTitle = mkOption {
-      type = types.str;
+    forumTitle = lib.mkOption {
+      type = lib.types.str;
       default = "A Flarum Forum on NixOS";
       description = "Title of the forum.";
     };
 
-    domain = mkOption {
-      type = types.str;
+    domain = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       example = "forum.example.com";
       description = "Domain to serve on.";
     };
 
-    baseUrl = mkOption {
-      type = types.str;
+    baseUrl = lib.mkOption {
+      type = lib.types.str;
       default = "http://localhost";
       example = "https://forum.example.com";
       description = "Change `domain` instead.";
     };
 
-    adminUser = mkOption {
-      type = types.str;
+    adminUser = lib.mkOption {
+      type = lib.types.str;
       default = "flarum";
       description = "Username for first web application administrator";
     };
 
-    adminEmail = mkOption {
-      type = types.str;
+    adminEmail = lib.mkOption {
+      type = lib.types.str;
       default = "admin@example.com";
       description = "Email for first web application administrator";
     };
 
-    initialAdminPassword = mkOption {
-      type = types.str;
+    initialAdminPassword = lib.mkOption {
+      type = lib.types.str;
       default = "flarum";
       description = "Initial password for the adminUser";
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "flarum";
       description = "System user to run Flarum";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "flarum";
       description = "System group to run Flarum";
     };
 
-    stateDir = mkOption {
-      type = types.path;
+    stateDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/flarum";
       description = "Home directory for writable storage";
     };
 
-    database = mkOption rec {
+    database = lib.mkOption {
       type =
-        with types;
-        attrsOf (oneOf [
-          str
-          bool
-          int
+        lib.types.attrsOf (lib.types.oneOf [
+          lib.types.str
+          lib.types.bool
+          lib.types.int
         ]);
       description = "MySQL database parameters";
       default = {
@@ -118,8 +115,8 @@ in
       };
     };
 
-    createDatabaseLocally = mkOption {
-      type = types.bool;
+    createDatabaseLocally = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Create the database and database user locally, and run installation.
@@ -131,7 +128,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
       home = cfg.stateDir;
@@ -147,12 +144,12 @@ in
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;
         "listen.mode" = "0600";
-        "pm" = mkDefault "dynamic";
-        "pm.max_children" = mkDefault 10;
-        "pm.max_requests" = mkDefault 500;
-        "pm.start_servers" = mkDefault 2;
-        "pm.min_spare_servers" = mkDefault 1;
-        "pm.max_spare_servers" = mkDefault 3;
+        "pm" = lib.mkDefault "dynamic";
+        "pm.max_children" = lib.mkDefault 10;
+        "pm.max_requests" = lib.mkDefault 500;
+        "pm.start_servers" = lib.mkDefault 2;
+        "pm.min_spare_servers" = lib.mkDefault 1;
+        "pm.max_spare_servers" = lib.mkDefault 3;
       };
       phpOptions = ''
         error_log = syslog
@@ -175,7 +172,7 @@ in
       };
     };
 
-    services.mysql = mkIf cfg.enable {
+    services.mysql = lib.mkIf cfg.enable {
       enable = true;
       package = pkgs.mariadb;
       ensureDatabases = [ cfg.database.database ];
@@ -217,7 +214,7 @@ in
           ln -sf ${cfg.package}/share/php/flarum/vendor .
           ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
         ''
-        + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
+        + lib.optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
           if [ ! -f config.php ]; then
             php flarum install --file=${flarumInstallConfig}
           fi

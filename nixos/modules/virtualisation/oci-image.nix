@@ -15,7 +15,7 @@ in
   ];
 
   config = {
-    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # Use a priority just below lib.mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
     virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
     virtualisation.diskSizeAutoSupported = false;

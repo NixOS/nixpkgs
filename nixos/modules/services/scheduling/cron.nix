@@ -5,15 +5,13 @@
   ...
 }:
 
-with lib;
-
 let
 
   # Put all the system cronjobs together.
   systemCronJobsFile = pkgs.writeText "system-crontab" ''
     SHELL=${pkgs.bash}/bin/bash
     PATH=${config.system.path}/bin:${config.system.path}/sbin
-    ${optionalString (config.services.cron.mailto != null) ''
+    ${lib.optionalString (config.services.cron.mailto != null) ''
       MAILTO="${config.services.cron.mailto}"
     ''}
     NIX_CONF_DIR=/etc/nix
@@ -28,7 +26,7 @@ let
   };
 
   allFiles =
-    optional (config.services.cron.systemCronJobs != [ ]) systemCronJobsFile
+    lib.optional (config.services.cron.systemCronJobs != [ ]) systemCronJobsFile
     ++ config.services.cron.cronFiles;
 
 in
@@ -41,22 +39,22 @@ in
 
     services.cron = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the Vixie cron daemon.";
       };
 
-      mailto = mkOption {
-        type = types.nullOr types.str;
+      mailto = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Email address to which job output will be mailed.";
       };
 
-      systemCronJobs = mkOption {
-        type = types.listOf types.str;
+      systemCronJobs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [ "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
             "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
           ]
@@ -77,8 +75,8 @@ in
         '';
       };
 
-      cronFiles = mkOption {
-        type = types.listOf types.path;
+      cronFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           A list of extra crontab files that will be read and appended to the main
@@ -92,10 +90,10 @@ in
 
   ###### implementation
 
-  config = mkMerge [
+  config = lib.mkMerge [
 
-    { services.cron.enable = mkDefault (allFiles != [ ]); }
-    (mkIf (config.services.cron.enable) {
+    { services.cron.enable = lib.mkDefault (allFiles != [ ]); }
+    (lib.mkIf (config.services.cron.enable) {
       security.wrappers.crontab = {
         setuid = true;
         owner = "root";

@@ -2425,67 +2425,67 @@ runTests {
   };
 
   testTypeDescriptionInt = {
-    expr = (with types; int).description;
+    expr = (with lib.types; int).description;
     expected = "signed integer";
   };
   testTypeDescriptionIntsPositive = {
-    expr = (with types; ints.positive).description;
+    expr = (with lib.types; ints.positive).description;
     expected = "positive integer, meaning >0";
   };
   testTypeDescriptionIntsPositiveOrEnumAuto = {
-    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expr = (with lib.types; either ints.positive (enum ["auto"])).description;
     expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
   };
   testTypeDescriptionListOfPositive = {
-    expr = (with types; listOf ints.positive).description;
+    expr = (with lib.types; listOf ints.positive).description;
     expected = "list of (positive integer, meaning >0)";
   };
   testTypeDescriptionListOfInt = {
-    expr = (with types; listOf int).description;
+    expr = (with lib.types; listOf int).description;
     expected = "list of signed integer";
   };
   testTypeDescriptionListOfListOfInt = {
-    expr = (with types; listOf (listOf int)).description;
+    expr = (with lib.types; listOf (listOf int)).description;
     expected = "list of list of signed integer";
   };
   testTypeDescriptionListOfEitherStrOrBool = {
-    expr = (with types; listOf (either str bool)).description;
+    expr = (with lib.types; listOf (either str bool)).description;
     expected = "list of (string or boolean)";
   };
   testTypeDescriptionEitherListOfStrOrBool = {
-    expr = (with types; either (listOf bool) str).description;
+    expr = (with lib.types; either (listOf bool) str).description;
     expected = "(list of boolean) or string";
   };
   testTypeDescriptionEitherStrOrListOfBool = {
-    expr = (with types; either str (listOf bool)).description;
+    expr = (with lib.types; either str (listOf bool)).description;
     expected = "string or list of boolean";
   };
   testTypeDescriptionOneOfListOfStrOrBool = {
-    expr = (with types; oneOf [ (listOf bool) str ]).description;
+    expr = (with lib.types; oneOf [ (listOf bool) str ]).description;
     expected = "(list of boolean) or string";
   };
   testTypeDescriptionOneOfListOfStrOrBoolOrNumber = {
-    expr = (with types; oneOf [ (listOf bool) str number ]).description;
+    expr = (with lib.types; oneOf [ (listOf bool) str number ]).description;
     expected = "(list of boolean) or string or signed integer or floating point number";
   };
   testTypeDescriptionEitherListOfBoolOrEitherStringOrNumber = {
-    expr = (with types; either (listOf bool) (either str number)).description;
+    expr = (with lib.types; either (listOf bool) (either str number)).description;
     expected = "(list of boolean) or string or signed integer or floating point number";
   };
   testTypeDescriptionEitherEitherListOfBoolOrStringOrNumber = {
-    expr = (with types; either (either (listOf bool) str) number).description;
+    expr = (with lib.types; either (either (listOf bool) str) number).description;
     expected = "(list of boolean) or string or signed integer or floating point number";
   };
   testTypeDescriptionEitherNullOrBoolOrString = {
-    expr = (with types; either (nullOr bool) str).description;
+    expr = (with lib.types; either (nullOr bool) str).description;
     expected = "null or boolean or string";
   };
   testTypeDescriptionEitherListOfEitherBoolOrStrOrInt = {
-    expr = (with types; either (listOf (either bool str)) int).description;
+    expr = (with lib.types; either (listOf (either bool str)) int).description;
     expected = "(list of (boolean or string)) or signed integer";
   };
   testTypeDescriptionEitherIntOrListOrEitherBoolOrStr = {
-    expr = (with types; either int (listOf (either bool str))).description;
+    expr = (with lib.types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
 

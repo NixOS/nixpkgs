@@ -30,18 +30,18 @@ in
 
           default = { };
 
-          type = types.attrsOf (
+          type = lib.types.attrsOf (
             types.submodule {
               options = {
                 mount = lib.mkOption {
                   description = "Where to mount this dataset.";
-                  type = types.nullOr types.str;
+                  type = lib.types.nullOr lib.types.str;
                   default = null;
                 };
 
                 properties = lib.mkOption {
                   description = "Properties to set on this dataset.";
-                  type = types.attrsOf types.str;
+                  type = lib.types.attrsOf lib.types.str;
                   default = { };
                 };
               };
@@ -52,7 +52,7 @@ in
 
       efi = lib.mkOption {
         default = pkgs.stdenv.hostPlatform.isAarch64;
-        defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
+        defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
         description = ''
           Whether the instance is using EFI.

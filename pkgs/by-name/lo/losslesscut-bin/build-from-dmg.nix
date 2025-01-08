@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   _7zz,
-  pname,
+  pname ? "losslesscut",
   version,
   hash,
   isAarch64,
@@ -11,7 +11,6 @@
 }:
 
 let
-  pname = "losslesscut";
   src = fetchurl {
     url = "https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-mac-${
       if isAarch64 then "arm64" else "x64"
@@ -38,8 +37,8 @@ stdenvNoCC.mkDerivation {
 
   meta =
     metaCommon
-    // (with lib; {
-      platforms = if isAarch64 then [ "aarch64-darwin" ] else platforms.darwin;
+    // {
+      platforms = if isAarch64 then [ "aarch64-darwin" ] else lib.platforms.darwin;
       mainProgram = "losslesscut";
-    });
+    };
 }

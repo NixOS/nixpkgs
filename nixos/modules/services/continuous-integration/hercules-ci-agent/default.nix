@@ -28,7 +28,7 @@ in
     )
   ];
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.hercules-ci-agent = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
@@ -94,12 +94,12 @@ in
             mkIfNotNull = x: mkIf (x != null) x;
           in
           {
-            nixos.configurationRevision = mkIfNotNull config.system.configurationRevision;
+            nixos.configurationRevision = lib.mkIfNotNull config.system.configurationRevision;
             nixos.release = config.system.nixos.release;
-            nixos.label = mkIfNotNull config.system.nixos.label;
+            nixos.label = lib.mkIfNotNull config.system.nixos.label;
             nixos.codeName = config.system.nixos.codeName;
             nixos.tags = config.system.nixos.tags;
-            nixos.systemName = mkIfNotNull config.system.name;
+            nixos.systemName = lib.mkIfNotNull config.system.name;
           };
       };
     };

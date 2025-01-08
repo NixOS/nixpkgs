@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.freshrss;
 
@@ -17,15 +16,15 @@ in
   meta.maintainers = with lib.maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
+    enable = lib.mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
 
-    package = mkPackageOption pkgs "freshrss" { };
+    package = lib.mkPackageOption pkgs "freshrss" { };
 
-    extensions = mkOption {
-      type = types.listOf types.package;
+    extensions = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ ];
-      defaultText = literalExpression "[]";
-      example = literalExpression ''
+      defaultText = lib.literalExpression "[]";
+      example = lib.literalExpression ''
         with freshrss-extensions; [
           youtube
         ] ++ [
@@ -46,90 +45,90 @@ in
       description = "Additional extensions to be used.";
     };
 
-    defaultUser = mkOption {
-      type = types.str;
+    defaultUser = lib.mkOption {
+      type = lib.types.str;
       default = "admin";
       description = "Default username for FreshRSS.";
       example = "eva";
     };
 
-    passwordFile = mkOption {
-      type = types.nullOr types.path;
+    passwordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "Password for the defaultUser for FreshRSS.";
       example = "/run/secrets/freshrss";
     };
 
-    baseUrl = mkOption {
-      type = types.str;
+    baseUrl = lib.mkOption {
+      type = lib.types.str;
       description = "Default URL for FreshRSS.";
       example = "https://freshrss.example.com";
     };
 
-    language = mkOption {
-      type = types.str;
+    language = lib.mkOption {
+      type = lib.types.str;
       default = "en";
       description = "Default language for FreshRSS.";
       example = "de";
     };
 
     database = {
-      type = mkOption {
-        type = types.enum [ "sqlite" "pgsql" "mysql" ];
+      type = lib.mkOption {
+        type = lib.types.enum [ "sqlite" "pgsql" "mysql" ];
         default = "sqlite";
         description = "Database type.";
         example = "pgsql";
       };
 
-      host = mkOption {
-        type = types.nullOr types.str;
+      host = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "localhost";
         description = "Database host for FreshRSS.";
       };
 
-      port = mkOption {
-        type = types.nullOr types.port;
+      port = lib.mkOption {
+        type = lib.types.nullOr lib.types.port;
         default = null;
         description = "Database port for FreshRSS.";
         example = 3306;
       };
 
-      user = mkOption {
-        type = types.nullOr types.str;
+      user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "freshrss";
         description = "Database user for FreshRSS.";
       };
 
-      passFile = mkOption {
-        type = types.nullOr types.path;
+      passFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "Database password file for FreshRSS.";
         example = "/run/secrets/freshrss";
       };
 
-      name = mkOption {
-        type = types.nullOr types.str;
+      name = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "freshrss";
         description = "Database name for FreshRSS.";
       };
 
-      tableprefix = mkOption {
-        type = types.nullOr types.str;
+      tableprefix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Database table prefix for FreshRSS.";
         example = "freshrss";
       };
     };
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/freshrss";
       description = "Default data folder for FreshRSS.";
       example = "/mnt/freshrss";
     };
 
-    virtualHost = mkOption {
-      type = types.nullOr types.str;
+    virtualHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "freshrss";
       description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
@@ -138,8 +137,8 @@ in
       '';
     };
 
-    pool = mkOption {
-      type = types.nullOr types.str;
+    pool = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "freshrss";
       description = ''
         Name of the php-fpm pool to use and setup. If not specified, a pool will be created
@@ -147,14 +146,14 @@ in
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "freshrss";
       description = "User under which FreshRSS runs.";
     };
 
-    authType = mkOption {
-      type = types.enum [ "form" "http_auth" "none" ];
+    authType = lib.mkOption {
+      type = lib.types.enum [ "form" "http_auth" "none" ];
       default = "form";
       description = "Authentication type for FreshRSS.";
     };
@@ -194,8 +193,8 @@ in
         WorkingDirectory = cfg.package;
       };
     in
-    mkIf cfg.enable {
-      assertions = mkIf (cfg.authType == "form") [
+    lib.mkIf cfg.enable {
+      assertions = lib.mkIf (cfg.authType == "form") [
         {
           assertion = cfg.passwordFile != null;
           message = ''
@@ -204,7 +203,7 @@ in
         }
       ];
       # Set up a Nginx virtual host.
-      services.nginx = mkIf (cfg.virtualHost != null) {
+      services.nginx = lib.mkIf (cfg.virtualHost != null) {
         enable = true;
         virtualHosts.${cfg.virtualHost} = {
           root = "${cfg.package}/p";
@@ -232,7 +231,7 @@ in
       };
 
       # Set up phpfpm pool
-      services.phpfpm.pools = mkIf (cfg.pool != null) {
+      services.phpfpm.pools = lib.mkIf (cfg.pool != null) {
         ${cfg.pool} = {
           user = "freshrss";
           settings = {
@@ -266,14 +265,14 @@ in
 
       systemd.services.freshrss-config =
         let
-          settingsFlags = concatStringsSep " \\\n    "
-            (mapAttrsToList (k: v: "${k} ${toString v}") {
+          settingsFlags = lib.concatStringsSep " \\\n    "
+            (lib.mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default-user" = ''"${cfg.defaultUser}"'';
               "--auth-type" = ''"${cfg.authType}"'';
               "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
-              # The following attributes are optional depending on the type of
+              # The following attributes are lib.optional depending on the type of
               # database.  Those that evaluate to null on the left hand side
               # will be omitted.
               ${if cfg.database.name != null then "--db-base" else null} = ''"${cfg.database.name}"'';
@@ -297,11 +296,11 @@ in
 
           script =
             let
-              userScriptArgs = ''--user ${cfg.defaultUser} ${optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''}'';
-              updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
+              userScriptArgs = ''--user ${cfg.defaultUser} ${lib.optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''}'';
+              updateUserScript = lib.optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/update-user.php ${userScriptArgs}
               '';
-              createUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
+              createUserScript = lib.optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/create-user.php ${userScriptArgs}
               '';
             in

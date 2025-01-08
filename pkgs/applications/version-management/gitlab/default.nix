@@ -307,7 +307,6 @@ stdenv.mkDerivation {
   };
 
   meta =
-    with lib;
     {
       homepage = "http://www.gitlab.com/";
       platforms = lib.platforms.linux;

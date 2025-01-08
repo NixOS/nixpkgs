@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   json = pkgs.formats.json { };
 in {
   options = {
 
     services.v2ray = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run v2ray server.
@@ -18,10 +16,10 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "v2ray" { };
+      package = lib.mkPackageOption pkgs "v2ray" { };
 
-      configFile = mkOption {
-        type = types.nullOr types.str;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/etc/v2ray/config.json";
         description = ''
@@ -33,8 +31,8 @@ in {
         '';
       };
 
-      config = mkOption {
-        type = types.nullOr json.type;
+      config = lib.mkOption {
+        type = lib.types.nullOr json.type;
         default = null;
         example = {
           inbounds = [{
@@ -70,7 +68,7 @@ in {
         '';
       };
 
-  in mkIf cfg.enable {
+  in lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (cfg.configFile == null) != (cfg.config == null);

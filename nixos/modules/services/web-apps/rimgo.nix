@@ -7,41 +7,41 @@
 let
   cfg = config.services.rimgo;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     mkDefault
     mkIf
     types
     literalExpression
-    optionalString
+    lib.optionalString
     getExe
     mapAttrs
     ;
 in
 {
   options.services.rimgo = {
-    enable = mkEnableOption "rimgo";
-    package = mkPackageOption pkgs "rimgo" { };
-    settings = mkOption {
-      type = types.submodule {
-        freeformType = with types; attrsOf str;
+    enable = lib.mkEnableOption "rimgo";
+    package = lib.mkPackageOption pkgs "rimgo" { };
+    settings = lib.mkOption {
+      type = lib.types.submodule {
+        freeformType = with lib.types; attrsOf str;
         options = {
-          PORT = mkOption {
-            type = types.port;
+          PORT = lib.mkOption {
+            type = lib.types.port;
             default = 3000;
             example = 69420;
             description = "The port to use.";
           };
-          ADDRESS = mkOption {
-            type = types.str;
+          ADDRESS = lib.mkOption {
+            type = lib.types.str;
             default = "127.0.0.1";
             example = "1.1.1.1";
             description = "The address to listen on.";
           };
         };
       };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           PORT = 69420;
           FORCE_WEBP = "1";
@@ -53,7 +53,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.rimgo = {
       description = "Rimgo";
       wantedBy = [ "multi-user.target" ];
@@ -61,7 +61,7 @@ in
       environment = mapAttrs (_: toString) cfg.settings;
       serviceConfig = {
         ExecStart = getExe cfg.package;
-        AmbientCapabilities = mkIf (cfg.settings.PORT < 1024) [
+        AmbientCapabilities = lib.mkIf (cfg.settings.PORT < 1024) [
           "CAP_NET_BIND_SERVICE"
         ];
         DynamicUser = true;

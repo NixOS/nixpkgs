@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.powerManagement.powertop;
 in
@@ -14,18 +12,18 @@ in
   ###### interface
 
   options.powerManagement.powertop = {
-    enable = mkEnableOption "powertop auto tuning on startup";
+    enable = lib.mkEnableOption "powertop auto tuning on startup";
 
-    preStart = mkOption {
-      type = types.lines;
+    preStart = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Shell commands executed before `powertop` is started.
       '';
     };
 
-    postStart = mkOption {
-      type = types.lines;
+    postStart = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         ''${lib.getExe' config.systemd.package "udevadm"} trigger -c bind -s usb -a idVendor=046d -a idProduct=c08c
@@ -48,7 +46,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
     systemd.services = {
       powertop = {
         wantedBy = [ "multi-user.target" ];

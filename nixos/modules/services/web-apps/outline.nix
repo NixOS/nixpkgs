@@ -12,7 +12,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "outline"
       "sequelizeArguments"

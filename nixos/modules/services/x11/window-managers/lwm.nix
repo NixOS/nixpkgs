@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.lwm;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.lwm.enable = mkEnableOption "lwm";
+    services.xserver.windowManager.lwm.enable = lib.mkEnableOption "lwm";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "lwm";
       start = ''
         ${pkgs.lwm}/bin/lwm &

@@ -67,11 +67,11 @@ in
 {
   meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
 
-  options.services.guix = with lib; {
-    enable = mkEnableOption "Guix build daemon service";
+  options.services.guix = {
+    enable = lib.mkEnableOption "Guix build daemon service";
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "guixbuild";
       example = "guixbuild";
       description = ''
@@ -79,8 +79,8 @@ in
       '';
     };
 
-    nrBuildUsers = mkOption {
-      type = types.ints.unsigned;
+    nrBuildUsers = lib.mkOption {
+      type = lib.types.ints.unsigned;
       description = ''
         Number of Guix build users to be used in the build pool.
       '';
@@ -88,8 +88,8 @@ in
       example = 20;
     };
 
-    extraArgs = mkOption {
-      type = with types; listOf str;
+    extraArgs = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [ ];
       example = [
         "--max-jobs=4"
@@ -100,15 +100,15 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "guix" {
+    package = lib.mkPackageOption pkgs "guix" {
       extraDescription = ''
         It should contain {command}`guix-daemon` and {command}`guix`
         executable.
       '';
     };
 
-    storeDir = mkOption {
-      type = types.path;
+    storeDir = lib.mkOption {
+      type = lib.types.path;
       default = "/gnu/store";
       description = ''
         The store directory where the Guix service will serve to/from. Take
@@ -123,8 +123,8 @@ in
       '';
     };
 
-    stateDir = mkOption {
-      type = types.path;
+    stateDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var";
       description = ''
         The state directory where Guix service will store its data such as its
@@ -190,10 +190,10 @@ in
     };
 
     publish = {
-      enable = mkEnableOption "substitute server for your Guix store directory";
+      enable = lib.mkEnableOption "substitute server for your Guix store directory";
 
-      generateKeyPair = mkOption {
-        type = types.bool;
+      generateKeyPair = lib.mkOption {
+        type = lib.types.bool;
         description = ''
           Whether to generate signing keys in {file}`/etc/guix` which are
           required to initialize a substitute server. Otherwise,
@@ -204,8 +204,8 @@ in
         example = false;
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8181;
         example = 8200;
         description = ''
@@ -213,16 +213,16 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "guix-publish";
         description = ''
           Name of the user to change once the server is up.
         '';
       };
 
-      extraArgs = mkOption {
-        type = with types; listOf str;
+      extraArgs = lib.mkOption {
+        type = with lib.types; listOf str;
         description = ''
           Extra flags to pass to the substitute server.
         '';
@@ -235,10 +235,10 @@ in
     };
 
     gc = {
-      enable = mkEnableOption "automatic garbage collection service for Guix";
+      enable = lib.mkEnableOption "automatic garbage collection service for Guix";
 
-      extraArgs = mkOption {
-        type = with types; listOf str;
+      extraArgs = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [ ];
         description = ''
           List of arguments to be passed to {command}`guix gc`.
@@ -255,7 +255,7 @@ in
       };
 
       dates = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "03:15";
         example = "weekly";
         description = ''

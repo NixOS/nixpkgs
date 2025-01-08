@@ -4,21 +4,20 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.icingaweb2.modules.monitoring;
 
   configIni = ''
     [security]
-    protected_customvars = "${concatStringsSep "," cfg.generalConfig.protectedVars}"
+    protected_customvars = "${lib.concatStringsSep "," cfg.generalConfig.protectedVars}"
   '';
 
   backendsIni =
     let
       formatBool = b: if b then "1" else "0";
     in
-    concatStringsSep "\n" (
-      mapAttrsToList (name: config: ''
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: config: ''
         [${name}]
         type = "ido"
         resource = "${config.resource}"
@@ -26,39 +25,39 @@ let
       '') cfg.backends
     );
 
-  transportsIni = concatStringsSep "\n" (
-    mapAttrsToList (name: config: ''
+  transportsIni = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (name: config: ''
       [${name}]
       type = "${config.type}"
-      ${optionalString (config.instance != null) ''instance = "${config.instance}"''}
-      ${optionalString (config.type == "local" || config.type == "remote") ''path = "${config.path}"''}
-      ${optionalString (config.type != "local") ''
+      ${lib.optionalString (config.instance != null) ''instance = "${config.instance}"''}
+      ${lib.optionalString (config.type == "local" || config.type == "remote") ''path = "${config.path}"''}
+      ${lib.optionalString (config.type != "local") ''
         host = "${config.host}"
-        ${optionalString (config.port != null) ''port = "${toString config.port}"''}
-        user${optionalString (config.type == "api") "name"} = "${config.username}"
+        ${lib.optionalString (config.port != null) ''port = "${toString config.port}"''}
+        user${lib.optionalString (config.type == "api") "name"} = "${config.username}"
       ''}
-      ${optionalString (config.type == "api") ''password = "${config.password}"''}
-      ${optionalString (config.type == "remote") ''resource = "${config.resource}"''}
+      ${lib.optionalString (config.type == "api") ''password = "${config.password}"''}
+      ${lib.optionalString (config.type == "remote") ''resource = "${config.resource}"''}
     '') cfg.transports
   );
 
 in
 {
-  options.services.icingaweb2.modules.monitoring = with types; {
-    enable = mkOption {
+  options.services.icingaweb2.modules.monitoring = with lib.types; {
+    enable = lib.mkOption {
       type = bool;
       default = true;
       description = "Whether to enable the icingaweb2 monitoring module.";
     };
 
     generalConfig = {
-      mutable = mkOption {
+      mutable = lib.mkOption {
         type = bool;
         default = false;
         description = "Make config.ini of the monitoring module mutable (e.g. via the web interface).";
       };
 
-      protectedVars = mkOption {
+      protectedVars = lib.mkOption {
         type = listOf str;
         default = [
           "*pw*"
@@ -69,13 +68,13 @@ in
       };
     };
 
-    mutableBackends = mkOption {
+    mutableBackends = lib.mkOption {
       type = bool;
       default = false;
       description = "Make backends.ini of the monitoring module mutable (e.g. via the web interface).";
     };
 
-    backends = mkOption {
+    backends = lib.mkOption {
       default = {
         icinga = {
           resource = "icinga_ido";
@@ -87,19 +86,19 @@ in
           { name, ... }:
           {
             options = {
-              name = mkOption {
+              name = lib.mkOption {
                 visible = false;
                 default = name;
                 type = str;
                 description = "Name of this backend";
               };
 
-              resource = mkOption {
+              resource = lib.mkOption {
                 type = str;
                 description = "Name of the IDO resource";
               };
 
-              disabled = mkOption {
+              disabled = lib.mkOption {
                 type = bool;
                 default = false;
                 description = "Disable this backend";
@@ -110,13 +109,13 @@ in
       );
     };
 
-    mutableTransports = mkOption {
+    mutableTransports = lib.mkOption {
       type = bool;
       default = true;
       description = "Make commandtransports.ini of the monitoring module mutable (e.g. via the web interface).";
     };
 
-    transports = mkOption {
+    transports = lib.mkOption {
       default = { };
       description = "Command transports to define";
       type = attrsOf (
@@ -124,14 +123,14 @@ in
           { name, ... }:
           {
             options = {
-              name = mkOption {
+              name = lib.mkOption {
                 visible = false;
                 default = name;
                 type = str;
                 description = "Name of this transport";
               };
 
-              type = mkOption {
+              type = lib.mkOption {
                 type = enum [
                   "api"
                   "local"
@@ -141,39 +140,39 @@ in
                 description = "Type of  this transport";
               };
 
-              instance = mkOption {
+              instance = lib.mkOption {
                 type = nullOr str;
                 default = null;
                 description = "Assign a icinga instance to this transport";
               };
 
-              path = mkOption {
+              path = lib.mkOption {
                 type = str;
                 description = "Path to the socket for local or remote transports";
               };
 
-              host = mkOption {
+              host = lib.mkOption {
                 type = str;
                 description = "Host for the api or remote transport";
               };
 
-              port = mkOption {
+              port = lib.mkOption {
                 type = nullOr str;
                 default = null;
                 description = "Port to connect to for the api or remote transport";
               };
 
-              username = mkOption {
+              username = lib.mkOption {
                 type = str;
                 description = "Username for the api or remote transport";
               };
 
-              password = mkOption {
+              password = lib.mkOption {
                 type = str;
                 description = "Password for the api transport";
               };
 
-              resource = mkOption {
+              resource = lib.mkOption {
                 type = str;
                 description = "SSH identity resource for the remote transport";
               };
@@ -184,20 +183,20 @@ in
     };
   };
 
-  config = mkIf (config.services.icingaweb2.enable && cfg.enable) {
+  config = lib.mkIf (config.services.icingaweb2.enable && cfg.enable) {
     environment.etc =
       {
         "icingaweb2/enabledModules/monitoring" = {
           source = "${pkgs.icingaweb2}/modules/monitoring";
         };
       }
-      // optionalAttrs (!cfg.generalConfig.mutable) {
+      // lib.optionalAttrs (!cfg.generalConfig.mutable) {
         "icingaweb2/modules/monitoring/config.ini".text = configIni;
       }
-      // optionalAttrs (!cfg.mutableBackends) {
+      // lib.optionalAttrs (!cfg.mutableBackends) {
         "icingaweb2/modules/monitoring/backends.ini".text = backendsIni;
       }
-      // optionalAttrs (!cfg.mutableTransports) {
+      // lib.optionalAttrs (!cfg.mutableTransports) {
         "icingaweb2/modules/monitoring/commandtransports.ini".text = transportsIni;
       };
   };

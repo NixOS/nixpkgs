@@ -5,11 +5,9 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.lighttpd.cgit;
-  pathPrefix = optionalString (stringLength cfg.subdir != 0) ("/" + cfg.subdir);
+  pathPrefix = lib.optionalString (lib.stringLength cfg.subdir != 0) ("/" + cfg.subdir);
   configFile = pkgs.writeText "cgitrc" ''
     # default paths to static assets
     css=${pathPrefix}/cgit.css
@@ -24,28 +22,28 @@ in
 
   options.services.lighttpd.cgit = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         If true, enable cgit (fast web interface for git repositories) as a
         sub-service in lighttpd.
       '';
     };
 
-    subdir = mkOption {
+    subdir = lib.mkOption {
       default = "cgit";
       example = "";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         The subdirectory in which to serve cgit. The web application will be
         accessible at http://yourserver/''${subdir}
       '';
     };
 
-    configText = mkOption {
+    configText = lib.mkOption {
       default = "";
-      example = literalExpression ''
+      example = lib.literalExpression ''
         '''
           source-filter=''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py
           about-filter=''${pkgs.cgit}/lib/cgit/filters/about-formatting.sh
@@ -53,7 +51,7 @@ in
           scan-path=/srv/git
         '''
       '';
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:
@@ -63,7 +61,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # make the cgitrc manpage available
     environment.systemPackages = [ pkgs.cgit ];

@@ -13,36 +13,34 @@ let
     lib.filterAttrsRecursive (n: v: v != null) cfg.settings
   );
 in
-with lib;
 {
   options.services.lokinet = {
-    enable = mkEnableOption "Lokinet daemon";
+    enable = lib.mkEnableOption "Lokinet daemon";
 
-    package = mkPackageOption pkgs "lokinet" { };
+    package = lib.mkPackageOption pkgs "lokinet" { };
 
-    useLocally = mkOption {
-      type = types.bool;
+    useLocally = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       example = true;
       description = "Whether to use Lokinet locally.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type =
-        with types;
-        submodule {
+        lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
             dns = {
-              bind = mkOption {
-                type = str;
+              bind = lib.mkOption {
+                type = lib.types.str;
                 default = "127.3.2.1";
                 description = "Address to bind to for handling DNS requests.";
               };
 
-              upstream = mkOption {
-                type = listOf str;
+              upstream = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ "9.9.9.10" ];
                 example = [
                   "1.1.1.1"
@@ -56,8 +54,8 @@ with lib;
             };
 
             network = {
-              exit = mkOption {
-                type = bool;
+              exit = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to act as an exit node. Beware that this
@@ -66,22 +64,22 @@ with lib;
                 '';
               };
 
-              exit-node = mkOption {
-                type = nullOr (listOf str);
+              exit-node = lib.mkOption {
+                type = lib.types.nullOr (lib.types.listOf lib.types.str);
                 default = null;
                 example = ''
                   exit-node = [ "example.loki" ];              # maps all exit traffic to example.loki
                   exit-node = [ "example.loki:100.0.0.0/24" ]; # maps 100.0.0.0/24 to example.loki
                 '';
                 description = ''
-                  Specify a `.loki` address and an optional ip range to use as an exit broker.
+                  Specify a `.loki` address and an lib.optional ip range to use as an exit broker.
                   See <http://probably.loki/wiki/index.php?title=Exit_Nodes> for
                   a list of exit nodes.
                 '';
               };
 
-              keyfile = mkOption {
-                type = nullOr str;
+              keyfile = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 example = "snappkey.private";
                 description = ''
@@ -93,7 +91,7 @@ with lib;
           };
         };
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           dns = {
             bind = "127.3.2.1";
@@ -111,8 +109,8 @@ with lib;
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.resolvconf.extraConfig = mkIf cfg.useLocally ''
+  config = lib.mkIf cfg.enable {
+    networking.resolvconf.extraConfig = lib.mkIf cfg.useLocally ''
       name_servers="${cfg.settings.dns.bind}"
     '';
 
@@ -132,7 +130,7 @@ with lib;
         ln -sf ${cfg.package}/share/bootstrap.signed ${dataDir}
         ${pkgs.coreutils}/bin/install -m 600 ${configFile} ${dataDir}/lokinet.ini
 
-        ${optionalString (cfg.settings.network.keyfile != null) ''
+        ${lib.optionalString (cfg.settings.network.keyfile != null) ''
           ${pkgs.crudini}/bin/crudini --set ${dataDir}/lokinet.ini network keyfile "${dataDir}/${cfg.settings.network.keyfile}"
         ''}
       '';

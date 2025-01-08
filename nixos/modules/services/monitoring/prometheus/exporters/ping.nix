@@ -8,7 +8,7 @@
 
 let
   cfg = config.services.prometheus.exporters.ping;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yml" cfg.settings;
@@ -16,15 +16,15 @@ in
 {
   port = 9427;
   extraOpts = {
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
 
@@ -46,7 +46,7 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --config.path="${configFile}" \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

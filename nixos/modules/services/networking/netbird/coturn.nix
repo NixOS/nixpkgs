@@ -13,9 +13,9 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
-    optionalAttrs
-    optionalString
+    lib.mkOption
+    lib.optionalAttrs
+    lib.optionalString
     ;
 
   inherit (lib.types)
@@ -32,9 +32,9 @@ in
 
 {
   options.services.netbird.server.coturn = {
-    enable = mkEnableOption "a Coturn server for Netbird, will also open the firewall on the configured range";
+    enable = lib.mkEnableOption "a Coturn server for Netbird, will also open the firewall on the configured range";
 
-    useAcmeCertificates = mkOption {
+    useAcmeCertificates = lib.mkOption {
       type = bool;
       default = false;
       description = ''
@@ -42,12 +42,12 @@ in
       '';
     };
 
-    domain = mkOption {
+    domain = lib.mkOption {
       type = str;
       description = "The domain under which the coturn server runs.";
     };
 
-    user = mkOption {
+    user = lib.mkOption {
       type = str;
       default = "netbird";
       description = ''
@@ -55,7 +55,7 @@ in
       '';
     };
 
-    password = mkOption {
+    password = lib.mkOption {
       type = nullOr str;
       default = null;
       description = ''
@@ -64,7 +64,7 @@ in
       '';
     };
 
-    passwordFile = mkOption {
+    passwordFile = lib.mkOption {
       type = nullOr path;
       default = null;
       description = ''
@@ -72,7 +72,7 @@ in
       '';
     };
 
-    openPorts = mkOption {
+    openPorts = lib.mkOption {
       type = listOf port;
       default = with config.services.coturn; [
         listening-port
@@ -80,7 +80,7 @@ in
         tls-listening-port
         alt-tls-listening-port
       ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         with config.services.coturn; [
           listening-port
           alt-listening-port
@@ -95,7 +95,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
     {
       assertions = [
         {
@@ -143,7 +143,7 @@ in
           ];
         });
 
-      security.acme.certs = mkIf cfg.useAcmeCertificates {
+      security.acme.certs = lib.mkIf cfg.useAcmeCertificates {
         ${cfg.domain}.postRun = ''
           systemctl restart coturn.service
         '';

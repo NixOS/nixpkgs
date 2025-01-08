@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.jirafeau;
 
   group = config.services.nginx.group;
   user = config.services.nginx.user;
 
-  withTrailingSlash = str: if hasSuffix "/" str then str else "${str}/";
+  withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
 
   localConfig = pkgs.writeText "config.local.php" ''
     <?php
@@ -22,24 +21,24 @@ let
 in
 {
   options.services.jirafeau = {
-    adminPasswordSha256 = mkOption {
-      type = types.str;
+    adminPasswordSha256 = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         SHA-256 of the desired administration password. Leave blank/unset for no password.
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/jirafeau/data/";
       description = "Location of Jirafeau storage directory.";
     };
 
-    enable = mkEnableOption "Jirafeau file upload application";
+    enable = lib.mkEnableOption "Jirafeau file upload application";
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         $cfg['style'] = 'courgette';
@@ -54,20 +53,20 @@ in
         '';
     };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "URL of instance. Must have trailing slash.";
     };
 
-    maxUploadSizeMegabytes = mkOption {
-      type = types.int;
+    maxUploadSizeMegabytes = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       description = "Maximum upload size of accepted files.";
     };
 
-    maxUploadTimeout = mkOption {
-      type = types.str;
+    maxUploadTimeout = lib.mkOption {
+      type = lib.types.str;
       default = "30m";
       description = let
         nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
@@ -78,11 +77,11 @@ in
         '';
     };
 
-    nginxConfig = mkOption {
-      type = types.submodule
+    nginxConfig = lib.mkOption {
+      type = lib.types.submodule
         (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           serverAliases = [ "wiki.''${config.networking.domain}" ];
         }
@@ -90,10 +89,10 @@ in
       description = "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
-    package = mkPackageOption pkgs "jirafeau" { };
+    package = lib.mkPackageOption pkgs "jirafeau" { };
 
-    poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+    poolConfig = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -110,11 +109,11 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services = {
       nginx = {
         enable = true;
-        virtualHosts."${cfg.hostName}" = mkMerge [
+        virtualHosts."${cfg.hostName}" = lib.mkMerge [
           cfg.nginxConfig
           {
             extraConfig = let
@@ -137,7 +136,7 @@ in
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               '';
             };
-            root = mkForce "${cfg.package}";
+            root = lib.mkForce "${cfg.package}";
           }
         ];
       };

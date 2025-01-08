@@ -8,7 +8,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     mkIf
     ;
@@ -42,16 +42,16 @@ in
   ];
 
   options.services.renovate = {
-    enable = mkEnableOption "renovate";
-    package = mkPackageOption pkgs "renovate" { };
-    schedule = mkOption {
-      type = with types; nullOr str;
+    enable = lib.mkEnableOption "renovate";
+    package = lib.mkPackageOption pkgs "renovate" { };
+    schedule = lib.mkOption {
+      type = with lib.types; nullOr str;
       description = "How often to run renovate. See {manpage}`systemd.time(7)` for the format.";
       example = "*:0/10";
       default = null;
     };
-    credentials = mkOption {
-      type = with types; attrsOf path;
+    credentials = lib.mkOption {
+      type = with lib.types; attrsOf path;
       description = ''
         Allows configuring environment variable credentials for renovate, read from files.
         This should always be used for passing confidential data to renovate.
@@ -61,17 +61,17 @@ in
       };
       default = { };
     };
-    runtimePackages = mkOption {
-      type = with types; listOf package;
+    runtimePackages = lib.mkOption {
+      type = with lib.types; listOf package;
       description = "Packages available to renovate.";
       default = [ ];
     };
-    validateSettings = mkOption {
-      type = types.bool;
+    validateSettings = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Weither to run renovate's config validator on the built configuration.";
     };
-    settings = mkOption {
+    settings = lib.mkOption {
       type = json.type;
       default = { };
       example = {
@@ -86,7 +86,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.renovate.settings = {
       cacheDir = "/var/cache/renovate";
       baseDir = "/var/lib/renovate";

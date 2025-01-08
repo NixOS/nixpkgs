@@ -8,12 +8,12 @@
 let
   inherit (lib)
     literalExpression
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkIf
     mkMerge
     types
-    optional
+    lib.optional
     ;
 
   cfg = config.services.uptime;
@@ -44,7 +44,7 @@ let
 in
 {
   options.services.uptime = {
-    configFile = mkOption {
+    configFile = lib.mkOption {
       description = ''
         The uptime configuration file
 
@@ -57,37 +57,37 @@ in
         services, please set enableSeparateMonitoringService = true
       '';
 
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
 
       default = null;
     };
 
-    usesRemoteMongo = mkOption {
+    usesRemoteMongo = lib.mkOption {
       description = "Whether the configuration file specifies a remote mongo instance";
 
       default = false;
 
-      type = types.bool;
+      type = lib.types.bool;
     };
 
     enableWebService = mkEnableOption "the uptime monitoring program web service";
 
     enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service" // {
       default = cfg.enableWebService;
-      defaultText = literalExpression "config.${opt.enableWebService}";
+      defaultText = lib.literalExpression "config.${opt.enableWebService}";
     };
 
-    nodeEnv = mkOption {
+    nodeEnv = lib.mkOption {
       description = "The node environment to run in (development, production, etc.)";
 
-      type = types.str;
+      type = lib.types.str;
 
       default = "production";
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enableWebService {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enableWebService {
       systemd.services.uptime = {
         description = "uptime web service";
         wantedBy = [ "multi-user.target" ];
@@ -100,14 +100,14 @@ in
         serviceConfig.ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/app.js";
       };
 
-      services.mongodb.enable = mkIf (!cfg.usesRemoteMongo) true;
+      services.mongodb.enable = lib.mkIf (!cfg.usesRemoteMongo) true;
     })
-    (mkIf cfg.enableSeparateMonitoringService {
+    (lib.mkIf cfg.enableSeparateMonitoringService {
       systemd.services.uptime-monitor = {
         description = "uptime monitoring service";
         wantedBy = [ "multi-user.target" ];
-        requires = optional cfg.enableWebService "uptime.service";
-        after = optional cfg.enableWebService "uptime.service";
+        requires = lib.optional cfg.enableWebService "uptime.service";
+        after = lib.optional cfg.enableWebService "uptime.service";
         environment = {
           NODE_CONFIG_DIR = configDir;
           NODE_ENV = cfg.nodeEnv;

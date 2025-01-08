@@ -11,13 +11,13 @@ let
     flip
     literalMD
     literalExpression
-    optionalAttrs
-    optionals
+    lib.optionalAttrs
+    lib.optionals
     recursiveUpdate
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     versionAtLeast
     ;
@@ -42,7 +42,7 @@ let
       commitlog_directory = "${cfg.homeDir}/commitlog";
       saved_caches_directory = "${cfg.homeDir}/saved_caches";
     }
-    // optionalAttrs (cfg.seedAddresses != [ ]) {
+    // lib.optionalAttrs (cfg.seedAddresses != [ ]) {
       seed_provider = [
         {
           class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
@@ -50,7 +50,7 @@ let
         }
       ];
     }
-    // optionalAttrs atLeast3 {
+    // lib.optionalAttrs atLeast3 {
       hints_directory = "${cfg.homeDir}/hints";
     }
   );
@@ -109,14 +109,14 @@ let
 
   fullJvmOptions =
     cfg.jvmOpts
-    ++ optionals (cfg.jmxRoles != [ ]) [
+    ++ lib.optionals (cfg.jmxRoles != [ ]) [
       "-Dcom.sun.management.jmxremote.authenticate=true"
       "-Dcom.sun.management.jmxremote.password.file=${cfg.jmxRolesFile}"
     ]
-    ++ optionals cfg.remoteJmx [
+    ++ lib.optionals cfg.remoteJmx [
       "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
     ]
-    ++ optionals atLeast4 [
+    ++ lib.optionals atLeast4 [
       # Historically, we don't use a log dir, whereas the upstream scripts do
       # expect this. We override those by providing our own -Xlog:gc flag.
       "-Xlog:gc=warning,heap*=warning,age*=warning,safepoint=warning,promotion*=warning"
@@ -134,12 +134,12 @@ in
 {
   options.services.cassandra = {
 
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       Apache Cassandra – Scalable and highly available database
     '';
 
-    clusterName = mkOption {
-      type = types.str;
+    clusterName = lib.mkOption {
+      type = lib.types.str;
       default = "Test Cluster";
       description = ''
         The name of the cluster.
@@ -148,40 +148,40 @@ in
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       description = "Run Apache Cassandra under this user.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       description = "Run Apache Cassandra under this group.";
     };
 
-    homeDir = mkOption {
-      type = types.path;
+    homeDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/cassandra";
       description = ''
         Home directory for Apache Cassandra.
       '';
     };
 
-    package = mkPackageOption pkgs "cassandra" {
+    package = lib.mkPackageOption pkgs "cassandra" {
       example = "cassandra_3_11";
     };
 
-    jvmOpts = mkOption {
-      type = types.listOf types.str;
+    jvmOpts = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Populate the `JVM_OPT` environment variable.
       '';
     };
 
-    listenAddress = mkOption {
-      type = types.nullOr types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "127.0.0.1";
       example = null;
       description = ''
@@ -201,8 +201,8 @@ in
       '';
     };
 
-    listenInterface = mkOption {
-      type = types.nullOr types.str;
+    listenInterface = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "eth1";
       description = ''
@@ -212,8 +212,8 @@ in
       '';
     };
 
-    rpcAddress = mkOption {
-      type = types.nullOr types.str;
+    rpcAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "127.0.0.1";
       example = null;
       description = ''
@@ -234,8 +234,8 @@ in
       '';
     };
 
-    rpcInterface = mkOption {
-      type = types.nullOr types.str;
+    rpcInterface = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "eth1";
       description = ''
@@ -244,8 +244,8 @@ in
       '';
     };
 
-    logbackConfig = mkOption {
-      type = types.lines;
+    logbackConfig = lib.mkOption {
+      type = lib.types.lines;
       default = ''
         <configuration scan="false">
           <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -266,8 +266,8 @@ in
       '';
     };
 
-    seedAddresses = mkOption {
-      type = types.listOf types.str;
+    seedAddresses = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "127.0.0.1" ];
       description = ''
         The addresses of hosts designated as contact points in the cluster. A
@@ -277,8 +277,8 @@ in
       '';
     };
 
-    allowClients = mkOption {
-      type = types.bool;
+    allowClients = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Enables or disables the native transport server (CQL binary protocol).
@@ -290,8 +290,8 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.attrs;
+    extraConfig = lib.mkOption {
+      type = lib.types.attrs;
       default = { };
       example = {
         commitlog_sync_batch_window_in_ms = 3;
@@ -301,17 +301,17 @@ in
       '';
     };
 
-    extraEnvSh = mkOption {
-      type = types.lines;
+    extraEnvSh = lib.mkOption {
+      type = lib.types.lines;
       default = "";
-      example = literalExpression ''"CLASSPATH=$CLASSPATH:''${extraJar}"'';
+      example = lib.literalExpression ''"CLASSPATH=$CLASSPATH:''${extraJar}"'';
       description = ''
         Extra shell lines to be appended onto {file}`cassandra-env.sh`.
       '';
     };
 
-    fullRepairInterval = mkOption {
-      type = types.nullOr types.str;
+    fullRepairInterval = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "3w";
       example = null;
       description = ''
@@ -324,8 +324,8 @@ in
       '';
     };
 
-    fullRepairOptions = mkOption {
-      type = types.listOf types.str;
+    fullRepairOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--partitioner-range" ];
       description = ''
@@ -333,8 +333,8 @@ in
       '';
     };
 
-    incrementalRepairInterval = mkOption {
-      type = types.nullOr types.str;
+    incrementalRepairInterval = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "3d";
       example = null;
       description = ''
@@ -347,8 +347,8 @@ in
       '';
     };
 
-    incrementalRepairOptions = mkOption {
-      type = types.listOf types.str;
+    incrementalRepairOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--partitioner-range" ];
       description = ''
@@ -356,8 +356,8 @@ in
       '';
     };
 
-    maxHeapSize = mkOption {
-      type = types.nullOr types.str;
+    maxHeapSize = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "4G";
       description = ''
@@ -377,8 +377,8 @@ in
       '';
     };
 
-    heapNewSize = mkOption {
-      type = types.nullOr types.str;
+    heapNewSize = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "800M";
       description = ''
@@ -401,8 +401,8 @@ in
       '';
     };
 
-    mallocArenaMax = mkOption {
-      type = types.nullOr types.int;
+    mallocArenaMax = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       example = 4;
       description = ''
@@ -410,8 +410,8 @@ in
       '';
     };
 
-    remoteJmx = mkOption {
-      type = types.bool;
+    remoteJmx = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Cassandra ships with JMX accessible *only* from localhost.
@@ -422,8 +422,8 @@ in
       '';
     };
 
-    jmxPort = mkOption {
-      type = types.int;
+    jmxPort = lib.mkOption {
+      type = lib.types.int;
       default = 7199;
       description = ''
         Specifies the default port over which Cassandra will be available for
@@ -433,7 +433,7 @@ in
       '';
     };
 
-    jmxRoles = mkOption {
+    jmxRoles = lib.mkOption {
       default = [ ];
       description = ''
         Roles that are allowed to access the JMX (e.g. {command}`nodetool`)
@@ -444,15 +444,15 @@ in
         Doesn't work in versions older than 3.11 because they don't like that
         it's world readable.
       '';
-      type = types.listOf (
+      type = lib.types.listOf (
         types.submodule {
           options = {
-            username = mkOption {
-              type = types.str;
+            username = lib.mkOption {
+              type = lib.types.str;
               description = "Username for JMX";
             };
-            password = mkOption {
-              type = types.str;
+            password = lib.mkOption {
+              type = lib.types.str;
               description = "Password for JMX";
             };
           };
@@ -460,8 +460,8 @@ in
       );
     };
 
-    jmxRolesFile = mkOption {
-      type = types.nullOr types.path;
+    jmxRolesFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = if atLeast3_11 then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile else null;
       defaultText = literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
       example = "/var/lib/cassandra/jmx.password";
@@ -474,7 +474,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (cfg.listenAddress == null) != (cfg.listenInterface == null);
@@ -497,7 +497,7 @@ in
         '';
       }
     ];
-    users = mkIf (cfg.user == defaultUser) {
+    users = lib.mkIf (cfg.user == defaultUser) {
       users.${defaultUser} = {
         group = cfg.group;
         home = cfg.homeDir;
@@ -547,7 +547,7 @@ in
       };
     };
 
-    systemd.timers.cassandra-full-repair = mkIf (cfg.fullRepairInterval != null) {
+    systemd.timers.cassandra-full-repair = lib.mkIf (cfg.fullRepairInterval != null) {
       description = "Schedule full repairs on Cassandra";
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -575,7 +575,7 @@ in
       };
     };
 
-    systemd.timers.cassandra-incremental-repair = mkIf (cfg.incrementalRepairInterval != null) {
+    systemd.timers.cassandra-incremental-repair = lib.mkIf (cfg.incrementalRepairInterval != null) {
       description = "Schedule incremental repairs on Cassandra";
       wantedBy = [ "timers.target" ];
       timerConfig = {

@@ -8,8 +8,8 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    optional
-    optionalString
+    lib.optional
+    lib.optionalString
     ;
   cfg = config.programs.skim;
 in
@@ -18,30 +18,30 @@ in
     programs.skim = {
       fuzzyCompletion = mkEnableOption "fuzzy completion with skim";
       keybindings = mkEnableOption "skim keybindings";
-      package = mkPackageOption pkgs "skim" { };
+      package = lib.mkPackageOption pkgs "skim" { };
     };
   };
 
   config = {
-    environment.systemPackages = optional (cfg.keybindings || cfg.fuzzyCompletion) cfg.package;
+    environment.systemPackages = lib.optional (cfg.keybindings || cfg.fuzzyCompletion) cfg.package;
 
     programs.bash.interactiveShellInit =
-      optionalString cfg.fuzzyCompletion ''
+      lib.optionalString cfg.fuzzyCompletion ''
         source ${cfg.package}/share/skim/completion.bash
       ''
-      + optionalString cfg.keybindings ''
+      + lib.optionalString cfg.keybindings ''
         source ${cfg.package}/share/skim/key-bindings.bash
       '';
 
     programs.zsh.interactiveShellInit =
-      optionalString cfg.fuzzyCompletion ''
+      lib.optionalString cfg.fuzzyCompletion ''
         source ${cfg.package}/share/skim/completion.zsh
       ''
-      + optionalString cfg.keybindings ''
+      + lib.optionalString cfg.keybindings ''
         source ${cfg.package}/share/skim/key-bindings.zsh
       '';
 
-    programs.fish.interactiveShellInit = optionalString cfg.keybindings ''
+    programs.fish.interactiveShellInit = lib.optionalString cfg.keybindings ''
       source ${cfg.package}/share/skim/key-bindings.fish && skim_key_bindings
     '';
   };

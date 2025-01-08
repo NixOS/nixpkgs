@@ -10,14 +10,13 @@ let
   package = pkgs.nix-required-mounts;
 
   Mount =
-    with lib;
-    types.submodule {
-      options.host = mkOption {
-        type = types.str;
+    lib.types.submodule {
+      options.host = lib.mkOption {
+        type = lib.types.str;
         description = "Host path to mount";
       };
-      options.guest = mkOption {
-        type = types.str;
+      options.guest = lib.mkOption {
+        type = lib.types.str;
         description = "Location in the sandbox to mount the host path at";
       };
     };
@@ -76,7 +75,7 @@ in
     '';
     allowedPatterns =
       with lib.types;
-      lib.mkOption rec {
+      lib.mkOption {
         type = attrsOf Pattern;
         description = "The hook config, describing which paths to mount for which system features";
         default = { };

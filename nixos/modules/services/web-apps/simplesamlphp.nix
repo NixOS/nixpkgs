@@ -23,33 +23,32 @@ in
   };
 
   options.services.simplesamlphp =
-    with lib;
-    mkOption {
-      type = types.attrsOf (
-        types.submodule (
+    lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (
           { config, ... }:
           {
             options = {
-              package = mkPackageOption pkgs "simplesamlphp" { };
-              configureNginx = mkOption {
-                type = types.bool;
+              package = lib.mkPackageOption pkgs "simplesamlphp" { };
+              configureNginx = lib.mkOption {
+                type = lib.types.bool;
                 default = true;
                 description = "Configure nginx as a reverse proxy for SimpleSAMLphp.";
               };
-              phpfpmPool = mkOption {
-                type = types.str;
+              phpfpmPool = lib.mkOption {
+                type = lib.types.str;
                 description = "The PHP-FPM pool that serves SimpleSAMLphp instance.";
               };
-              localDomain = mkOption {
-                type = types.str;
+              localDomain = lib.mkOption {
+                type = lib.types.str;
                 description = "The domain serving your SimpleSAMLphp instance. This option modifies only /saml route.";
               };
-              settings = mkOption {
-                type = types.submodule {
+              settings = lib.mkOption {
+                type = lib.types.submodule {
                   freeformType = format.type;
                   options = {
-                    baseurlpath = mkOption {
-                      type = types.str;
+                    baseurlpath = lib.mkOption {
+                      type = lib.types.str;
                       example = "https://filesender.example.com/saml/";
                       description = "URL where SimpleSAMLphp can be reached.";
                     };
@@ -63,7 +62,7 @@ in
                 '';
               };
 
-              authSources = mkOption {
+              authSources = lib.mkOption {
                 type = format.type;
                 default = { };
                 description = ''
@@ -71,15 +70,15 @@ in
                 '';
               };
 
-              libDir = mkOption {
-                type = types.str;
+              libDir = lib.mkOption {
+                type = lib.types.str;
                 readOnly = true;
                 description = ''
                   Path to the SimpleSAMLphp library directory.
                 '';
               };
-              configDir = mkOption {
-                type = types.str;
+              configDir = lib.mkOption {
+                type = lib.types.str;
                 readOnly = true;
                 description = ''
                   Path to the SimpleSAMLphp config directory.

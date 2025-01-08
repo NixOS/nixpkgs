@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.komga;
-  inherit (lib) mkOption mkEnableOption maintainers;
+  inherit (lib) lib.mkOption mkEnableOption maintainers;
   inherit (lib.types) port str bool;
 
   settingsFormat = pkgs.formats.yaml { };
@@ -32,21 +32,21 @@ in
 
   options = {
     services.komga = {
-      enable = mkEnableOption "Komga, a free and open source comics/mangas media server";
+      enable = lib.mkEnableOption "Komga, a free and open source comics/mangas media server";
 
-      user = mkOption {
+      user = lib.mkOption {
         type = str;
         default = "komga";
         description = "User account under which Komga runs.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         type = str;
         default = "komga";
         description = "Group under which Komga runs.";
       };
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         type = str;
         default = "/var/lib/komga";
         description = "State and configuration directory Komga will use.";
@@ -67,7 +67,7 @@ in
         '';
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         type = bool;
         default = false;
         description = "Whether to open the firewall for the port in {option}`services.komga.settings.server.port`.";
@@ -79,7 +79,7 @@ in
     let
       inherit (lib) mkIf getExe;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         {
           assertion = (cfg.settings.komga.config-dir or cfg.stateDir) == cfg.stateDir;
@@ -91,11 +91,11 @@ in
         server.port = lib.mkDefault 8080;
       };
 
-      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
-      users.groups = mkIf (cfg.group == "komga") { komga = { }; };
+      users.groups = lib.mkIf (cfg.group == "komga") { komga = { }; };
 
-      users.users = mkIf (cfg.user == "komga") {
+      users.users = lib.mkIf (cfg.user == "komga") {
         komga = {
           group = cfg.group;
           home = cfg.stateDir;
@@ -132,7 +132,7 @@ in
           Restart = "on-failure";
           ExecStart = getExe pkgs.komga;
 
-          StateDirectory = mkIf (cfg.stateDir == "/var/lib/komga") "komga";
+          StateDirectory = lib.mkIf (cfg.stateDir == "/var/lib/komga") "komga";
 
           RemoveIPC = true;
           NoNewPrivileges = true;

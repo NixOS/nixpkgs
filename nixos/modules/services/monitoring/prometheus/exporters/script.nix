@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.script;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     literalExpression
     concatStringsSep
@@ -19,22 +19,22 @@ in
 {
   port = 9172;
   extraOpts = {
-    settings.scripts = mkOption {
+    settings.scripts = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         listOf (submodule {
           options = {
-            name = mkOption {
+            name = lib.mkOption {
               type = str;
               example = "sleep";
               description = "Name of the script.";
             };
-            script = mkOption {
+            script = lib.mkOption {
               type = str;
               example = "sleep 5";
               description = "Shell script to execute when metrics are requested.";
             };
-            timeout = mkOption {
+            timeout = lib.mkOption {
               type = nullOr int;
               default = null;
               example = 60;
@@ -42,7 +42,7 @@ in
             };
           };
         });
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           scripts = [
             { name = "sleep"; script = "sleep 5"; }
@@ -63,7 +63,7 @@ in
         ${pkgs.prometheus-script-exporter}/bin/script_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --config.file ${configFile} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       NoNewPrivileges = true;
       ProtectHome = true;

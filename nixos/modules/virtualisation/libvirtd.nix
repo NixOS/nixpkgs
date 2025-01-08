@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.virtualisation.libvirtd;
@@ -12,7 +10,7 @@ let
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
-    ${optionalString cfg.qemu.ovmf.enable ''
+    ${lib.optionalString cfg.qemu.ovmf.enable ''
       nvram = [
         "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd",
         "/run/libvirt/nix-ovmf/AAVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.ms.fd",
@@ -20,7 +18,7 @@ let
         "/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd"
       ]
     ''}
-    ${optionalString (!cfg.qemu.runAsRoot) ''
+    ${lib.optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
       group = "qemu-libvirtd"
     ''}
@@ -29,10 +27,10 @@ let
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
 
-  ovmfModule = types.submodule {
+  ovmfModule = lib.types.submodule {
     options = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Allows libvirtd to take advantage of OVMF when creating new
@@ -41,17 +39,17 @@ let
       };
 
       # mkRemovedOptionModule does not work in submodules, do it manually
-      package = mkOption {
-        type = types.nullOr types.package;
+      package = lib.mkOption {
+        type = lib.types.nullOr lib.types.package;
         default = null;
         internal = true;
       };
 
-      packages = mkOption {
-        type = types.listOf types.package;
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ pkgs.OVMF.fd ];
-        defaultText = literalExpression "[ pkgs.OVMF.fd ]";
-        example = literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd ]";
+        defaultText = lib.literalExpression "[ pkgs.OVMF.fd ]";
+        example = lib.literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd ]";
         description = ''
           List of OVMF packages to use. Each listed package must contain files names FV/OVMF_CODE.fd and FV/OVMF_VARS.fd or FV/AAVMF_CODE.fd and FV/AAVMF_VARS.fd
         '';
@@ -59,31 +57,31 @@ let
     };
   };
 
-  swtpmModule = types.submodule {
+  swtpmModule = lib.types.submodule {
     options = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Allows libvirtd to use swtpm to create an emulated TPM.
         '';
       };
 
-      package = mkPackageOption pkgs "swtpm" { };
+      package = lib.mkPackageOption pkgs "swtpm" { };
     };
   };
 
-  qemuModule = types.submodule {
+  qemuModule = lib.types.submodule {
     options = {
-      package = mkPackageOption pkgs "qemu" {
+      package = lib.mkPackageOption pkgs "qemu" {
         extraDescription = ''
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
         '';
       };
 
-      runAsRoot = mkOption {
-        type = types.bool;
+      runAsRoot = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           If true,  libvirtd runs qemu as root.
@@ -94,8 +92,8 @@ let
         '';
       };
 
-      verbatimConfig = mkOption {
-        type = types.lines;
+      verbatimConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           namespaces = []
         '';
@@ -106,7 +104,7 @@ let
         '';
       };
 
-      ovmf = mkOption {
+      ovmf = lib.mkOption {
         type = ovmfModule;
         default = { };
         description = ''
@@ -114,7 +112,7 @@ let
         '';
       };
 
-      swtpm = mkOption {
+      swtpm = lib.mkOption {
         type = swtpmModule;
         default = { };
         description = ''
@@ -122,8 +120,8 @@ let
         '';
       };
 
-      vhostUserPackages = mkOption {
-        type = types.listOf types.package;
+      vhostUserPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         example = lib.literalExpression "[ pkgs.virtiofsd ]";
         description = ''
@@ -133,10 +131,10 @@ let
     };
   };
 
-  hooksModule = types.submodule {
+  hooksModule = lib.types.submodule {
     options = {
-      daemon = mkOption {
-        type = types.attrsOf types.path;
+      daemon = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
@@ -145,8 +143,8 @@ let
         '';
       };
 
-      qemu = mkOption {
-        type = types.attrsOf types.path;
+      qemu = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/qemu.d/
@@ -155,8 +153,8 @@ let
         '';
       };
 
-      lxc = mkOption {
-        type = types.attrsOf types.path;
+      lxc = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
@@ -165,8 +163,8 @@ let
         '';
       };
 
-      libxl = mkOption {
-        type = types.attrsOf types.path;
+      libxl = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/libxl.d/
@@ -175,8 +173,8 @@ let
         '';
       };
 
-      network = mkOption {
-        type = types.attrsOf types.path;
+      network = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
@@ -187,10 +185,10 @@ let
     };
   };
 
-  nssModule = types.submodule {
+  nssModule = lib.types.submodule {
     options = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           This option enables the older libvirt NSS module. This method uses
@@ -200,8 +198,8 @@ let
         '';
       };
 
-      enableGuest = mkOption {
-        type = types.bool;
+      enableGuest = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           This option enables the newer libvirt_guest NSS module. This module
@@ -215,24 +213,24 @@ in
 {
 
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
+    (lib.mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
       "Set the option `virtualisation.libvirtd.qemu.package' instead.")
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuPackage" ]
       [ "virtualisation" "libvirtd" "qemu" "package" ])
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuRunAsRoot" ]
       [ "virtualisation" "libvirtd" "qemu" "runAsRoot" ])
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuVerbatimConfig" ]
       [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ])
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmf" ]
       [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ])
-    (mkRemovedOptionModule
+    (lib.mkRemovedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
       "If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.")
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuSwtpm" ]
       [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ])
   ];
@@ -241,8 +239,8 @@ in
 
   options.virtualisation.libvirtd = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         This option enables libvirtd, a daemon that manages
@@ -252,10 +250,10 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "libvirt" { };
+    package = lib.mkPackageOption pkgs "libvirt" { };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Extra contents appended to the libvirtd configuration file,
@@ -263,8 +261,8 @@ in
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--verbose" ];
       description = ''
@@ -272,8 +270,8 @@ in
       '';
     };
 
-    onBoot = mkOption {
-      type = types.enum [ "start" "ignore" ];
+    onBoot = lib.mkOption {
+      type = lib.types.enum [ "start" "ignore" ];
       default = "start";
       description = ''
         Specifies the action to be done to / on the guests when the host boots.
@@ -284,8 +282,8 @@ in
       '';
     };
 
-    onShutdown = mkOption {
-      type = types.enum [ "shutdown" "suspend" ];
+    onShutdown = lib.mkOption {
+      type = lib.types.enum [ "shutdown" "suspend" ];
       default = "suspend";
       description = ''
         When shutting down / restarting the host what method should
@@ -295,8 +293,8 @@ in
       '';
     };
 
-    parallelShutdown = mkOption {
-      type = types.ints.unsigned;
+    parallelShutdown = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 0;
       description = ''
         Number of guests that will be shutdown concurrently, taking effect when onShutdown
@@ -306,8 +304,8 @@ in
       '';
     };
 
-    shutdownTimeout = mkOption {
-      type = types.ints.unsigned;
+    shutdownTimeout = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 300;
       description = ''
         Number of seconds we're willing to wait for a guest to shut down.
@@ -318,8 +316,8 @@ in
       '';
     };
 
-    startDelay = mkOption {
-      type = types.ints.unsigned;
+    startDelay = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 0;
       description = ''
         Number of seconds to wait between each guest start.
@@ -327,15 +325,15 @@ in
       '';
     };
 
-    allowedBridges = mkOption {
-      type = types.listOf types.str;
+    allowedBridges = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "virbr0" ];
       description = ''
         List of bridge devices that can be used by qemu:///session
       '';
     };
 
-    qemu = mkOption {
+    qemu = lib.mkOption {
       type = qemuModule;
       default = { };
       description = ''
@@ -343,7 +341,7 @@ in
       '';
     };
 
-    hooks = mkOption {
+    hooks = lib.mkOption {
       type = hooksModule;
       default = { };
       description = ''
@@ -351,7 +349,7 @@ in
       '';
     };
 
-    nss = mkOption {
+    nss = lib.mkOption {
       type = nssModule;
       default = { };
       description = ''
@@ -359,8 +357,8 @@ in
       '';
     };
 
-    sshProxy = mkOption {
-      type = types.bool;
+    sshProxy = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Weither to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
@@ -371,7 +369,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -416,7 +414,7 @@ in
       source = "${cfg.qemu.package}/libexec/qemu-bridge-helper";
     };
 
-    programs.ssh.extraConfig = mkIf cfg.sshProxy ''
+    programs.ssh.extraConfig = lib.mkIf cfg.sshProxy ''
       Include ${cfg.package}/etc/ssh/ssh_config.d/30-libvirt-ssh-proxy.conf
     '';
 
@@ -449,7 +447,7 @@ in
 
         ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
-        ${optionalString cfg.qemu.ovmf.enable (let
+        ${lib.optionalString cfg.qemu.ovmf.enable (let
           ovmfpackage = pkgs.buildEnv {
             name = "qemu-ovmf";
             paths = cfg.qemu.ovmf.packages;
@@ -463,13 +461,13 @@ in
         '')}
 
         # Symlink hooks to /var/lib/libvirt
-        ${concatStringsSep "\n" (map (driver:
+        ${lib.concatStringsSep "\n" (map (driver:
           ''
           mkdir -p /var/lib/${dirName}/hooks/${driver}.d
           rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
-          ${concatStringsSep "\n" (mapAttrsToList (name: value:
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value:
             "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}") cfg.hooks.${driver})}
-        '') (attrNames cfg.hooks))}
+        '') (lib.attrNames cfg.hooks))}
       '';
 
       serviceConfig = {
@@ -485,9 +483,9 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "libvirtd-config.service" ]
-        ++ optional vswitch.enable "ovs-vswitchd.service";
+        ++ lib.optional vswitch.enable "ovs-vswitchd.service";
 
-      environment.LIBVIRTD_ARGS = escapeShellArgs (
+      environment.LIBVIRTD_ARGS = lib.escapeShellArgs (
         [
           "--config"
           configFile
@@ -497,8 +495,8 @@ in
       );
 
       path = [ cfg.qemu.package pkgs.netcat ] # libvirtd requires qemu-img to manage disk images
-        ++ optional vswitch.enable vswitch.package
-        ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
+        ++ lib.optional vswitch.enable vswitch.package
+        ++ lib.optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
       serviceConfig = {
         Type = "notify";
@@ -572,11 +570,11 @@ in
       '';
     };
 
-    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
-    system.nssDatabases.hosts = mkMerge [
+    system.nssModules = lib.optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssDatabases.hosts = lib.mkMerge [
       # ensure that the NSS modules come between mymachines (which is 400) and resolve (which is 501)
-      (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))
-      (mkIf cfg.nss.enableGuest (mkOrder 432 [ "libvirt_guest" ]))
+      (lib.mkIf cfg.nss.enable (lib.mkOrder 430 [ "libvirt" ]))
+      (lib.mkIf cfg.nss.enableGuest (lib.mkOrder 432 [ "libvirt_guest" ]))
     ];
   };
 }

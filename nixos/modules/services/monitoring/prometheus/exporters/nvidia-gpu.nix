@@ -20,7 +20,7 @@ in
         ${pkgs.prometheus-nvidia-gpu-exporter}/bin/nvidia_gpu_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --nvidia-smi-command ${config.hardware.nvidia.package.bin}/bin/nvidia-smi \
-          ${concatStringsSep " " cfg.extraFlags}
+          ${lib.concatStringsSep " " cfg.extraFlags}
       '';
       PrivateDevices = false;
     };

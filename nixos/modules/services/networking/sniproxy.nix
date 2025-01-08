@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.sniproxy;
@@ -14,26 +12,26 @@ let
 
 in
 {
-  imports = [ (mkRemovedOptionModule [ "services" "sniproxy" "logDir" ] "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config.") ];
+  imports = [ (lib.mkRemovedOptionModule [ "services" "sniproxy" "logDir" ] "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config.") ];
 
   options = {
     services.sniproxy = {
-      enable = mkEnableOption "sniproxy server";
+      enable = lib.mkEnableOption "sniproxy server";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "sniproxy";
         description = "User account under which sniproxy runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "sniproxy";
         description = "Group under which sniproxy runs.";
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "sniproxy.conf configuration excluding the daemon username and pid file.";
         example = ''
@@ -56,7 +54,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.sniproxy = {
       description = "sniproxy server";
       after = [ "network.target" ];
@@ -71,14 +69,14 @@ in
       };
     };
 
-    users.users = mkIf (cfg.user == "sniproxy") {
+    users.users = lib.mkIf (cfg.user == "sniproxy") {
       sniproxy = {
         group = cfg.group;
         uid = config.ids.uids.sniproxy;
       };
     };
 
-    users.groups = mkIf (cfg.group == "sniproxy") {
+    users.groups = lib.mkIf (cfg.group == "sniproxy") {
       sniproxy = {
         gid = config.ids.gids.sniproxy;
       };

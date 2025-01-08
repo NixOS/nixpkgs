@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkDefault
     types
-    optionalString
+    lib.optionalString
     ;
 
   cfg = config.boot.binfmt;
@@ -36,10 +36,10 @@ let
         if !(matchCredentials -> openBinary) then
           throw "boot.binfmt.registrations.${name}: you can't specify openBinary = false when matchCredentials = true."
         else
-          optionalString preserveArgvZero "P"
-          + optionalString (openBinary && !matchCredentials) "O"
-          + optionalString matchCredentials "C"
-          + optionalString fixBinary "F";
+          lib.optionalString preserveArgvZero "P"
+          + lib.optionalString (openBinary && !matchCredentials) "O"
+          + lib.optionalString matchCredentials "C"
+          + lib.optionalString fixBinary "F";
     in
     ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
@@ -180,7 +180,7 @@ in
 
   options = {
     boot.binfmt = {
-      registrations = mkOption {
+      registrations = lib.mkOption {
         default = { };
 
         description = ''
@@ -188,38 +188,38 @@ in
           See https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html for more details.
         '';
 
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule (
             { config, ... }:
             {
               options = {
-                recognitionType = mkOption {
+                recognitionType = lib.mkOption {
                   default = "magic";
                   description = "Whether to recognize executables by magic number or extension.";
-                  type = types.enum [
+                  type = lib.types.enum [
                     "magic"
                     "extension"
                   ];
                 };
 
-                offset = mkOption {
+                offset = lib.mkOption {
                   default = null;
                   description = "The byte offset of the magic number used for recognition.";
-                  type = types.nullOr types.int;
+                  type = lib.types.nullOr lib.types.int;
                 };
 
-                magicOrExtension = mkOption {
+                magicOrExtension = lib.mkOption {
                   description = "The magic number or extension to match on.";
-                  type = types.str;
+                  type = lib.types.str;
                 };
 
-                mask = mkOption {
+                mask = lib.mkOption {
                   default = null;
                   description = "A mask to be ANDed with the byte sequence of the file before matching";
-                  type = types.nullOr types.str;
+                  type = lib.types.nullOr lib.types.str;
                 };
 
-                interpreter = mkOption {
+                interpreter = lib.mkOption {
                   description = ''
                     The interpreter to invoke to run the program.
 
@@ -227,10 +227,10 @@ in
                     /run/binfmt/''${name}, so the kernel interpreter length
                     limit doesn't apply.
                   '';
-                  type = types.path;
+                  type = lib.types.path;
                 };
 
-                preserveArgvZero = mkOption {
+                preserveArgvZero = lib.mkOption {
                   default = false;
                   description = ''
                     Whether to pass the original argv[0] to the interpreter.
@@ -238,19 +238,19 @@ in
                     See the description of the 'P' flag in the kernel docs
                     for more details;
                   '';
-                  type = types.bool;
+                  type = lib.types.bool;
                 };
 
-                openBinary = mkOption {
+                openBinary = lib.mkOption {
                   default = config.matchCredentials;
                   description = ''
                     Whether to pass the binary to the interpreter as an open
                     file descriptor, instead of a path.
                   '';
-                  type = types.bool;
+                  type = lib.types.bool;
                 };
 
-                matchCredentials = mkOption {
+                matchCredentials = lib.mkOption {
                   default = false;
                   description = ''
                     Whether to launch with the credentials and security
@@ -262,10 +262,10 @@ in
 
                     Implies/requires openBinary = true.
                   '';
-                  type = types.bool;
+                  type = lib.types.bool;
                 };
 
-                fixBinary = mkOption {
+                fixBinary = lib.mkOption {
                   default = false;
                   description = ''
                     Whether to open the interpreter file as soon as the
@@ -275,26 +275,26 @@ in
                     See the description of the 'F' flag in the kernel docs
                     for more details.
                   '';
-                  type = types.bool;
+                  type = lib.types.bool;
                 };
 
-                wrapInterpreterInShell = mkOption {
+                wrapInterpreterInShell = lib.mkOption {
                   default = true;
                   description = ''
                     Whether to wrap the interpreter in a shell script.
 
                     This allows a shell command to be set as the interpreter.
                   '';
-                  type = types.bool;
+                  type = lib.types.bool;
                 };
 
-                interpreterSandboxPath = mkOption {
+                interpreterSandboxPath = lib.mkOption {
                   internal = true;
                   default = null;
                   description = ''
                     Path of the interpreter to expose in the build sandbox.
                   '';
-                  type = types.nullOr types.path;
+                  type = lib.types.nullOr lib.types.path;
                 };
               };
             }
@@ -302,7 +302,7 @@ in
         );
       };
 
-      emulatedSystems = mkOption {
+      emulatedSystems = lib.mkOption {
         default = [ ];
         example = [
           "wasm32-wasi"
@@ -314,11 +314,11 @@ in
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
-        type = types.listOf (types.enum (builtins.attrNames magics));
+        type = lib.types.listOf (types.enum (builtins.attrNames magics));
       };
 
-      addEmulatedSystemsToNixSandbox = mkOption {
-        type = types.bool;
+      addEmulatedSystemsToNixSandbox = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         example = false;
         description = ''
@@ -327,7 +327,7 @@ in
         '';
       };
 
-      preferStaticEmulators = mkOption {
+      preferStaticEmulators = lib.mkOption {
         default = false;
         description = ''
           Whether to use static emulators when available.
@@ -337,7 +337,7 @@ in
           the emulator binaries available inside chroots and chroot-like
           sandboxes.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
     };
   };
@@ -373,12 +373,12 @@ in
             in
             (
               {
-                preserveArgvZero = mkDefault isQemu;
+                preserveArgvZero = lib.mkDefault isQemu;
 
-                interpreter = mkDefault interpreterReg;
-                fixBinary = mkDefault useStaticEmulator;
-                wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
-                interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
+                interpreter = lib.mkDefault interpreterReg;
+                fixBinary = lib.mkDefault useStaticEmulator;
+                wrapInterpreterInShell = lib.mkDefault (!config.preserveArgvZero && !config.fixBinary);
+                interpreterSandboxPath = lib.mkDefault (dirOf (dirOf config.interpreter));
               }
               // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"))
             );

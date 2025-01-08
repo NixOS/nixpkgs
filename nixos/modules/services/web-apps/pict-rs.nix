@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.pict-rs;
-  inherit (lib) maintainers mkOption types;
+  inherit (lib) maintainers lib.mkOption types;
 in
 {
   meta.maintainers = with lib.maintainers; [ happysalada ];
@@ -18,16 +18,16 @@ in
 
     package = lib.mkPackageOption pkgs "pict-rs" { };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/pict-rs";
       description = ''
         The directory where to store the uploaded images & database.
       '';
     };
 
-    repoPath = mkOption {
-      type = types.nullOr (types.path);
+    repoPath = lib.mkOption {
+      type = lib.types.nullOr (types.path);
       default = null;
       description = ''
         The directory where to store the database.
@@ -35,8 +35,8 @@ in
       '';
     };
 
-    storePath = mkOption {
-      type = types.nullOr (types.path);
+    storePath = lib.mkOption {
+      type = lib.types.nullOr (types.path);
       default = null;
       description = ''
         The directory where to store the uploaded images.
@@ -44,16 +44,16 @@ in
       '';
     };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         The IPv4 address to deploy the service to.
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = ''
         The port which to bind the service to.

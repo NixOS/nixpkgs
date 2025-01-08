@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) lib.mkOption mkIf types;
 
   cfg = config.services.gvpe;
 
@@ -51,16 +51,16 @@ in
     services.gvpe = {
       enable = lib.mkEnableOption "gvpe";
 
-      nodename = mkOption {
+      nodename = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           GVPE node name
         '';
       };
-      configText = mkOption {
+      configText = lib.mkOption {
         default = null;
-        type = types.nullOr types.lines;
+        type = lib.types.nullOr types.lines;
         example = ''
           tcp-port = 655
           udp-port = 655
@@ -79,39 +79,39 @@ in
           GVPE config contents
         '';
       };
-      configFile = mkOption {
+      configFile = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         example = "/root/my-gvpe-conf";
         description = ''
           GVPE config file, if already present
         '';
       };
-      ipAddress = mkOption {
+      ipAddress = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           IP address to assign to GVPE interface
         '';
       };
-      subnet = mkOption {
+      subnet = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = "10.0.0.0/8";
         description = ''
           IP subnet assigned to GVPE network
         '';
       };
-      customIFSetup = mkOption {
+      customIFSetup = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Additional commands to apply in ifup script
         '';
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.gvpe = {
       description = "GNU Virtual Private Ethernet node";
       after = [ "network.target" ];

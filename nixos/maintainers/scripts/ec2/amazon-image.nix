@@ -7,8 +7,8 @@
 
 let
   inherit (lib)
-    mkOption
-    optionalString
+    lib.mkOption
+    lib.optionalString
     types
     versionAtLeast
     ;
@@ -56,8 +56,8 @@ in
     [ "nvme_core.io_timeout=${timeout}" ];
 
   options.amazonImage = {
-    contents = mkOption {
-      example = literalExpression ''
+    contents = lib.mkOption {
+      example = lib.literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
           }
@@ -70,8 +70,8 @@ in
       '';
     };
 
-    format = mkOption {
-      type = types.enum [
+    format = lib.mkOption {
+      type = lib.types.enum [
         "raw"
         "qcow2"
         "vpc"
@@ -81,7 +81,7 @@ in
     };
   };
 
-  # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+  # Use a priority just below lib.mkOptionDefault (1500) instead of lib.mkDefault
   # to avoid breaking existing configs using that.
   config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
@@ -95,10 +95,10 @@ in
       configFile = pkgs.writeText "configuration.nix" ''
         { modulesPath, ... }: {
           imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
-          ${optionalString config.ec2.efi ''
+          ${lib.optionalString config.ec2.efi ''
             ec2.efi = true;
           ''}
-          ${optionalString config.ec2.zfs.enable ''
+          ${lib.optionalString config.ec2.zfs.enable ''
             ec2.zfs.enable = true;
             networking.hostId = "${config.networking.hostId}";
           ''}

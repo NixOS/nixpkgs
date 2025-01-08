@@ -10,7 +10,7 @@ let
     concatStringsSep
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
   cfg = config.services.openarena;
@@ -18,17 +18,17 @@ in
 {
   options = {
     services.openarena = {
-      enable = mkEnableOption "OpenArena game server";
+      enable = lib.mkEnableOption "OpenArena game server";
       package = lib.mkPackageOption pkgs "openarena" { };
 
-      openPorts = mkOption {
-        type = types.bool;
+      openPorts = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to open firewall ports for OpenArena";
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Extra flags to pass to {command}`oa_ded`";
         example = [
@@ -41,8 +41,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openPorts {
+  config = lib.mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openPorts {
       allowedUDPPorts = [ 27960 ];
     };
 
@@ -54,7 +54,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "openarena";
-        ExecStart = "${cfg.package}/bin/oa_ded +set fs_basepath ${cfg.package}/share/openarena +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/oa_ded +set fs_basepath ${cfg.package}/share/openarena +set fs_homepath /var/lib/openarena ${lib.concatStringsSep " " cfg.extraFlags}";
         Restart = "on-failure";
 
         # Hardening

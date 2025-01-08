@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   globalCfg = config.services.scion;
   cfg = config.services.scion.scion-control;
@@ -31,15 +29,15 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-control.toml" (recursiveUpdate defaultConfig cfg.settings);
+  configFile = toml.generate "scion-control.toml" (lib.recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-control = {
-    enable = mkEnableOption "the scion-control service";
-    settings = mkOption {
+    enable = lib.mkEnableOption "the scion-control service";
+    settings = lib.mkOption {
       default = { };
       type = toml.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           path_db = {
             connection = "/run/scion-control/control.path.db";
@@ -56,7 +54,7 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.scion-control = {
       description = "SCION Control Service";
       after = [

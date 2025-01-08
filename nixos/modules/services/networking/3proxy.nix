@@ -7,7 +7,7 @@
 let
   pkg = pkgs._3proxy;
   cfg = config.services._3proxy;
-  optionalList = list: if list == [ ] then "*" else lib.concatMapStringsSep "," toString list;
+  lib.optionalList = list: if list == [ ] then "*" else lib.concatMapStringsSep "," toString list;
 in
 {
   options.services._3proxy = {
@@ -376,7 +376,7 @@ in
           ${lib.concatMapStringsSep "\n" (
             acl:
             "${acl.rule} ${
-              lib.concatMapStringsSep " " optionalList [
+              lib.concatMapStringsSep " " lib.optionalList [
                 acl.users
                 acl.sources
                 acl.targets

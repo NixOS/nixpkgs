@@ -3,11 +3,8 @@
   lib,
   options,
   pkgs,
-  buildEnv,
   ...
 }:
-
-with lib;
 
 let
   defaultUser = "healthchecks";
@@ -36,18 +33,18 @@ let
 in
 {
   options.services.healthchecks = {
-    enable = mkEnableOption "healthchecks" // {
+    enable = lib.mkEnableOption "healthchecks" // {
       description = ''
         Enable healthchecks.
         It is expected to be run behind a HTTP reverse proxy.
       '';
     };
 
-    package = mkPackageOption pkgs "healthchecks" { };
+    package = lib.mkPackageOption pkgs "healthchecks" { };
 
-    user = mkOption {
+    user = lib.mkOption {
       default = defaultUser;
-      type = types.str;
+      type = lib.types.str;
       description = ''
         User account under which healthchecks runs.
 
@@ -59,9 +56,9 @@ in
       '';
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = defaultUser;
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Group account under which healthchecks runs.
 
@@ -73,20 +70,20 @@ in
       '';
     };
 
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "Address the server will listen on.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8000;
       description = "Port the server will listen on.";
     };
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/healthchecks";
       description = ''
         The directory used to store all data for healthchecks.
@@ -128,31 +125,31 @@ in
 
         If the same variable is set in both `settings` and `settingsFile` the value from `settingsFile` has priority.
       '';
-      type = types.submodule (settings: {
-        freeformType = types.attrsOf types.str;
+      type = lib.types.submodule (settings: {
+        freeformType = lib.types.attrsOf lib.types.str;
         options = {
           ALLOWED_HOSTS = lib.mkOption {
-            type = types.listOf types.str;
+            type = lib.types.listOf lib.types.str;
             default = [ "*" ];
             description = "The host/domain names that this site can serve.";
             apply = lib.concatStringsSep ",";
           };
 
-          SECRET_KEY_FILE = mkOption {
-            type = types.nullOr types.path;
+          SECRET_KEY_FILE = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             description = "Path to a file containing the secret key.";
             default = null;
           };
 
-          DEBUG = mkOption {
-            type = types.bool;
+          DEBUG = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = "Enable debug mode.";
             apply = boolToPython;
           };
 
-          REGISTRATION_OPEN = mkOption {
-            type = types.bool;
+          REGISTRATION_OPEN = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               A boolean that controls whether site visitors can create new accounts.
@@ -165,8 +162,8 @@ in
             apply = boolToPython;
           };
 
-          DB = mkOption {
-            type = types.enum [
+          DB = lib.mkOption {
+            type = lib.types.enum [
               "sqlite"
               "postgres"
               "mysql"
@@ -175,8 +172,8 @@ in
             description = "Database engine to use.";
           };
 
-          DB_NAME = mkOption {
-            type = types.str;
+          DB_NAME = lib.mkOption {
+            type = lib.types.str;
             default = if settings.config.DB == "sqlite" then "${cfg.dataDir}/healthchecks.sqlite" else "hc";
             defaultText = lib.literalExpression ''
               if config.${settings.options.DB} == "sqlite"
@@ -190,7 +187,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ healthchecksManageScript ];
 
     systemd.targets.healthchecks = {
@@ -212,8 +209,8 @@ in
           EnvironmentFile = [
             environmentFile
           ] ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
-          StateDirectory = mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
-          StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
+          StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
+          StateDirectoryMode = lib.mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };
       in
       {
@@ -279,7 +276,7 @@ in
         };
       };
 
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         description = "healthchecks service owner";
         isSystemUser = true;
@@ -287,7 +284,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.user == defaultUser) {
+    users.groups = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         members = [ defaultUser ];
       };

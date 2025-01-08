@@ -9,10 +9,10 @@
 let
   cfg = config.services.prometheus.exporters.pgbouncer;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
-    optionals
+    lib.optionals
     getExe
     escapeShellArg
     concatStringsSep
@@ -21,18 +21,18 @@ in
 {
   port = 9127;
   extraOpts = {
-    package = mkPackageOption pkgs "prometheus-pgbouncer-exporter" { };
+    package = lib.mkPackageOption pkgs "prometheus-pgbouncer-exporter" { };
 
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
 
-    connectionString = mkOption {
-      type = types.nullOr types.str;
+    connectionString = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "postgres://admin:@localhost:6432/pgbouncer?sslmode=require";
       description = ''
@@ -51,8 +51,8 @@ in
       '';
     };
 
-    connectionEnvFile = mkOption {
-      type = types.nullOr types.str;
+    connectionEnvFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         File that must contain the environment variable
@@ -71,8 +71,8 @@ in
       '';
     };
 
-    pidFile = mkOption {
-      type = types.nullOr types.str;
+    pidFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Path to PgBouncer pid file.
@@ -87,16 +87,16 @@ in
       '';
     };
 
-    webSystemdSocket = mkOption {
-      type = types.bool;
+    webSystemdSocket = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Use systemd socket activation listeners instead of port listeners (Linux only).
       '';
     };
 
-    logLevel = mkOption {
-      type = types.enum [
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
         "debug"
         "info"
         "warn"
@@ -108,8 +108,8 @@ in
       '';
     };
 
-    logFormat = mkOption {
-      type = types.enum [
+    logFormat = lib.mkOption {
+      type = lib.types.enum [
         "logfmt"
         "json"
       ];
@@ -119,16 +119,16 @@ in
       '';
     };
 
-    webConfigFile = mkOption {
-      type = types.nullOr types.path;
+    webConfigFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Path to configuration file that can enable TLS or authentication.
       '';
     };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Extra commandline options when launching Prometheus.
@@ -141,29 +141,29 @@ in
     after = [ "pgbouncer.service" ];
     script = concatStringsSep " " (
       [
-        "exec -- ${escapeShellArg (getExe cfg.package)}"
+        "exec -- ${lib.escapeShellArg (getExe cfg.package)}"
         "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
       ]
-      ++ optionals (cfg.connectionString != null) [
-        "--pgBouncer.connectionString ${escapeShellArg cfg.connectionString}"
+      ++ lib.optionals (cfg.connectionString != null) [
+        "--pgBouncer.connectionString ${lib.escapeShellArg cfg.connectionString}"
       ]
-      ++ optionals (cfg.telemetryPath != null) [
-        "--web.telemetry-path ${escapeShellArg cfg.telemetryPath}"
+      ++ lib.optionals (cfg.telemetryPath != null) [
+        "--web.telemetry-path ${lib.escapeShellArg cfg.telemetryPath}"
       ]
-      ++ optionals (cfg.pidFile != null) [
-        "--pgBouncer.pid-file ${escapeShellArg cfg.pidFile}"
+      ++ lib.optionals (cfg.pidFile != null) [
+        "--pgBouncer.pid-file ${lib.escapeShellArg cfg.pidFile}"
       ]
-      ++ optionals (cfg.logLevel != null) [
-        "--log.level ${escapeShellArg cfg.logLevel}"
+      ++ lib.optionals (cfg.logLevel != null) [
+        "--log.level ${lib.escapeShellArg cfg.logLevel}"
       ]
-      ++ optionals (cfg.logFormat != null) [
-        "--log.format ${escapeShellArg cfg.logFormat}"
+      ++ lib.optionals (cfg.logFormat != null) [
+        "--log.format ${lib.escapeShellArg cfg.logFormat}"
       ]
-      ++ optionals (cfg.webSystemdSocket != false) [
-        "--web.systemd-socket ${escapeShellArg cfg.webSystemdSocket}"
+      ++ lib.optionals (cfg.webSystemdSocket != false) [
+        "--web.systemd-socket ${lib.escapeShellArg cfg.webSystemdSocket}"
       ]
-      ++ optionals (cfg.webConfigFile != null) [
-        "--web.config.file ${escapeShellArg cfg.webConfigFile}"
+      ++ lib.optionals (cfg.webConfigFile != null) [
+        "--web.config.file ${lib.escapeShellArg cfg.webConfigFile}"
       ]
       ++ cfg.extraFlags
     );

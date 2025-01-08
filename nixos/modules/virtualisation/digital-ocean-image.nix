@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.virtualisation.digitalOceanImage;
 in
@@ -30,8 +29,8 @@ in
   ];
 
   options = {
-    virtualisation.digitalOceanImage.configFile = mkOption {
-      type = with types; nullOr path;
+    virtualisation.digitalOceanImage.configFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = ''
         A path to a configuration file which will be placed at
@@ -42,8 +41,8 @@ in
       '';
     };
 
-    virtualisation.digitalOceanImage.compressionMethod = mkOption {
-      type = types.enum [
+    virtualisation.digitalOceanImage.compressionMethod = lib.mkOption {
+      type = lib.types.enum [
         "gzip"
         "bzip2"
       ];

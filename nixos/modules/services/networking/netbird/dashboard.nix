@@ -15,7 +15,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     ;
 
@@ -35,24 +35,24 @@ in
 
 {
   options.services.netbird.server.dashboard = {
-    enable = mkEnableOption "the static netbird dashboard frontend";
+    enable = lib.mkEnableOption "the static netbird dashboard frontend";
 
-    package = mkPackageOption pkgs "netbird-dashboard" { };
+    package = lib.mkPackageOption pkgs "netbird-dashboard" { };
 
     enableNginx = mkEnableOption "Nginx reverse-proxy to serve the dashboard";
 
-    domain = mkOption {
+    domain = lib.mkOption {
       type = str;
       default = "localhost";
       description = "The domain under which the dashboard runs.";
     };
 
-    managementServer = mkOption {
+    managementServer = lib.mkOption {
       type = str;
       description = "The address of the management server, used for the API endpoints.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = submodule { freeformType = attrsOf (either str bool); };
 
       defaultText = ''
@@ -74,7 +74,7 @@ in
       '';
     };
 
-    finalDrv = mkOption {
+    finalDrv = lib.mkOption {
       readOnly = true;
       type = package;
       description = ''
@@ -83,7 +83,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = hasAttr "AUTH_AUTHORITY" cfg.settings;
@@ -162,7 +162,7 @@ in
           '';
     };
 
-    services.nginx = mkIf cfg.enableNginx {
+    services.nginx = lib.mkIf cfg.enableNginx {
       enable = true;
 
       virtualHosts.${cfg.domain} = {

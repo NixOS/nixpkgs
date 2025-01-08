@@ -9,7 +9,7 @@ let
   inherit (lib)
     literalExpression
     mkIf
-    mkOption
+    lib.mkOption
     singleton
     types
     mkPackageOption
@@ -26,14 +26,14 @@ in
 
     services.exim = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the Exim mail transfer agent.";
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Verbatim Exim configuration.  This should not contain exim_user,
@@ -41,8 +41,8 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "exim";
         description = ''
           User to use when no root privileges are required.
@@ -53,30 +53,30 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "exim";
         description = ''
           Group to use when no root privileges are required.
         '';
       };
 
-      spoolDir = mkOption {
-        type = types.path;
+      spoolDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/spool/exim";
         description = ''
           Location of the spool directory of exim.
         '';
       };
 
-      package = mkPackageOption pkgs "exim" {
+      package = lib.mkPackageOption pkgs "exim" {
         extraDescription = ''
           This can be used to enable features such as LDAP or PAM support.
         '';
       };
 
-      queueRunnerInterval = mkOption {
-        type = types.str;
+      queueRunnerInterval = lib.mkOption {
+        type = lib.types.str;
         default = "5m";
         description = ''
           How often to spawn a new queue runner.
@@ -88,7 +88,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment = {
       etc."exim.conf".text = ''

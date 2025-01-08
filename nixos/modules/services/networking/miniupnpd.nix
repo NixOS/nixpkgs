@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.miniupnpd;
   configFile = pkgs.writeText "miniupnpd.conf" ''
@@ -14,7 +12,7 @@ let
     enable_natpmp=${if cfg.natpmp then "yes" else "no"}
     enable_upnp=${if cfg.upnp then "yes" else "no"}
 
-    ${concatMapStrings (range: ''
+    ${lib.concatMapStrings (range: ''
       listening_ip=${range}
     '') cfg.internalIPs}
 
@@ -34,17 +32,17 @@ in
 {
   options = {
     services.miniupnpd = {
-      enable = mkEnableOption "MiniUPnP daemon";
+      enable = lib.mkEnableOption "MiniUPnP daemon";
 
-      externalInterface = mkOption {
-        type = types.str;
+      externalInterface = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Name of the external interface.
         '';
       };
 
-      internalIPs = mkOption {
-        type = types.listOf types.str;
+      internalIPs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         example = [
           "192.168.1.1/24"
           "enp1s0"
@@ -54,18 +52,18 @@ in
         '';
       };
 
-      natpmp = mkEnableOption "NAT-PMP support";
+      natpmp = lib.mkEnableOption "NAT-PMP support";
 
-      upnp = mkOption {
+      upnp = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to enable UPNP support.
         '';
       };
 
-      appendConfig = mkOption {
-        type = types.lines;
+      appendConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Configuration lines appended to the MiniUPnP config.
@@ -74,7 +72,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     networking.firewall.extraCommands = lib.mkIf (firewallScripts != [ ]) (
       builtins.concatStringsSep "\n" (
         map (fw: ''

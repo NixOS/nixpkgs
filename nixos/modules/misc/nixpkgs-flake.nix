@@ -28,7 +28,7 @@ in
         the store path of the nixpkgs flake used to build the system if using
         `nixpkgs.lib.nixosSystem`, and is otherwise null by default.
 
-        This can also be optionally set if the NixOS system is not built with a flake but still uses
+        This can also be lib.optionally set if the NixOS system is not built with a flake but still uses
         pinned sources: set this to the store path for the nixpkgs sources used to build the system,
         as may be obtained by `builtins.fetchTarball`, for example.
 

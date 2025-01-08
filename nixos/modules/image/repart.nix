@@ -30,7 +30,7 @@ let
         type = with lib.types; attrsOf (submodule {
           options = {
             source = lib.mkOption {
-              type = types.path;
+              type = lib.types.path;
               description = "Path of the source file.";
             };
           };

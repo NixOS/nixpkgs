@@ -16,10 +16,10 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkPackageOption
     nameValuePair
-    optional
+    lib.optional
     versionOlder
     ;
 
@@ -39,16 +39,16 @@ in
   meta.doc = ./netbird.md;
 
   options.services.netbird = {
-    enable = mkEnableOption "Netbird daemon";
-    package = mkPackageOption pkgs "netbird" { };
+    enable = lib.mkEnableOption "Netbird daemon";
+    package = lib.mkPackageOption pkgs "netbird" { };
 
-    tunnels = mkOption {
+    tunnels = lib.mkOption {
       type = attrsOf (
         submodule (
           { name, config, ... }:
           {
             options = {
-              port = mkOption {
+              port = lib.mkOption {
                 type = port;
                 default = 51820;
                 description = ''
@@ -56,9 +56,9 @@ in
                 '';
               };
 
-              environment = mkOption {
+              environment = lib.mkOption {
                 type = attrsOf str;
-                defaultText = literalExpression ''
+                defaultText = lib.literalExpression ''
                   {
                     NB_CONFIG = "/var/lib/''${stateDir}/config.json";
                     NB_LOG_FILE = "console";
@@ -72,7 +72,7 @@ in
                 '';
               };
 
-              stateDir = mkOption {
+              stateDir = lib.mkOption {
                 type = str;
                 default = "netbird-${name}";
                 description = ''
@@ -98,20 +98,20 @@ in
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       # For backwards compatibility
       services.netbird.tunnels.wt0.stateDir = "netbird";
     })
 
-    (mkIf (cfg.tunnels != { }) {
-      boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+    (lib.mkIf (cfg.tunnels != { }) {
+      boot.extraModulePackages = lib.optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
 
       environment.systemPackages = [ cfg.package ];
 
       networking.dhcpcd.denyInterfaces = attrNames cfg.tunnels;
 
-      systemd.network.networks = mkIf config.networking.useNetworkd (
+      systemd.network.networks = lib.mkIf config.networking.useNetworkd (
         mapAttrs' (
           name: _:
           nameValuePair "50-netbird-${name}" {

@@ -31,7 +31,7 @@ let
                 package = lib.mkPackageOption pkgs pkgName { };
 
                 user = lib.mkOption {
-                  type = types.str;
+                  type = lib.types.str;
                   default = "root";
                   description = ''
                     User under which this instance runs.
@@ -39,7 +39,7 @@ let
                 };
 
                 group = lib.mkOption {
-                  type = types.str;
+                  type = lib.types.str;
                   default = "root";
                   description = ''
                     Group under which this instance runs.
@@ -47,13 +47,13 @@ let
                 };
 
                 settings = lib.mkOption {
-                  type = types.submodule {
+                  type = lib.types.submodule {
                     freeformType = format.type;
 
                     options = {
                       pid_file = lib.mkOption {
                         default = "/run/${flavour}/${name}.pid";
-                        type = types.str;
+                        type = lib.types.str;
                         description = ''
                           Path to use for the pid file.
                         '';
@@ -61,7 +61,7 @@ let
 
                       template = lib.mkOption {
                         default = null;
-                        type = with types; nullOr (listOf (attrsOf anything));
+                        type = with lib.types; nullOr (listOf (attrsOf anything));
                         description =
                           let
                             upstreamDocs =

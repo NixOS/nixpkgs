@@ -12,10 +12,10 @@ in
     maintainers = lib.teams.freedesktop.members;
   };
 
-  options = with lib; {
+  options = {
     networking.modemmanager = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use ModemManager to manage modem devices.
@@ -25,25 +25,25 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "modemmanager" { };
+      package = lib.mkPackageOption pkgs "modemmanager" { };
 
-      fccUnlockScripts = mkOption {
-        type = types.listOf (
-          types.submodule {
+      fccUnlockScripts = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.submodule {
             options = {
-              id = mkOption {
-                type = types.str;
+              id = lib.mkOption {
+                type = lib.types.str;
                 description = "vid:pid of either the PCI or USB vendor and product ID";
               };
-              path = mkOption {
-                type = types.path;
+              path = lib.mkOption {
+                type = lib.types.path;
                 description = "Path to the unlock script";
               };
             };
           }
         );
         default = [ ];
-        example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
+        example = lib.literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
         description = ''
           List of FCC unlock scripts to enable on the system, behaving as described in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.

@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.phpfpm;
 
@@ -14,13 +12,13 @@ let
 
   fpmCfgFile = pool: poolOpts: pkgs.writeText "phpfpm-${pool}.conf" ''
     [global]
-    ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
-    ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
+    ${lib.optionalString (cfg.extraConfig != null) cfg.extraConfig}
 
     [${pool}]
-    ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
-    ${concatStringsSep "\n" (mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}
-    ${optionalString (poolOpts.extraConfig != null) poolOpts.extraConfig}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}
+    ${lib.optionalString (poolOpts.extraConfig != null) poolOpts.extraConfig}
   '';
 
   phpIni = poolOpts: pkgs.runCommand "php.ini" {
@@ -37,8 +35,8 @@ let
     in
     {
       options = {
-        socket = mkOption {
-          type = types.str;
+        socket = lib.mkOption {
+          type = lib.types.str;
           readOnly = true;
           description = ''
             Path to the unix socket file on which to accept FastCGI requests.
@@ -50,8 +48,8 @@ let
           example = "${runtimeDir}/<name>.sock";
         };
 
-        listen = mkOption {
-          type = types.str;
+        listen = lib.mkOption {
+          type = lib.types.str;
           default = "";
           example = "/path/to/unix/socket";
           description = ''
@@ -59,29 +57,29 @@ let
           '';
         };
 
-        phpPackage = mkOption {
-          type = types.package;
+        phpPackage = lib.mkOption {
+          type = lib.types.package;
           default = cfg.phpPackage;
-          defaultText = literalExpression "config.services.phpfpm.phpPackage";
+          defaultText = lib.literalExpression "config.services.phpfpm.phpPackage";
           description = ''
             The PHP package to use for running this PHP-FPM pool.
           '';
         };
 
-        phpOptions = mkOption {
-          type = types.lines;
+        phpOptions = lib.mkOption {
+          type = lib.types.lines;
           description = ''
             "Options appended to the PHP configuration file {file}`php.ini` used for this PHP-FPM pool."
           '';
         };
 
         phpEnv = lib.mkOption {
-          type = with types; attrsOf str;
+          type = with lib.types; attrsOf str;
           default = {};
           description = ''
             Environment variables used for this PHP-FPM pool.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               HOSTNAME = "$HOSTNAME";
               TMP = "/tmp";
@@ -91,18 +89,18 @@ let
           '';
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           description = "User account under which this pool runs.";
         };
 
-        group = mkOption {
-          type = types.str;
+        group = lib.mkOption {
+          type = lib.types.str;
           description = "Group account under which this pool runs.";
         };
 
-        settings = mkOption {
-          type = with types; attrsOf (oneOf [ str int bool ]);
+        settings = lib.mkOption {
+          type = with lib.types; attrsOf (oneOf [ str int bool ]);
           default = {};
           description = ''
             PHP-FPM pool directives. Refer to the "List of pool directives" section of
@@ -110,7 +108,7 @@ let
             for details. Note that settings names must be enclosed in quotes (e.g.
             `"pm.max_children"` instead of `pm.max_children`).
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               "pm" = "dynamic";
               "pm.max_children" = 75;
@@ -122,8 +120,8 @@ let
           '';
         };
 
-        extraConfig = mkOption {
-          type = with types; nullOr lines;
+        extraConfig = lib.mkOption {
+          type = with lib.types; nullOr lines;
           default = null;
           description = ''
             Extra lines that go into the pool configuration.
@@ -135,10 +133,10 @@ let
 
       config = {
         socket = if poolOpts.listen == "" then "${runtimeDir}/${name}.sock" else poolOpts.listen;
-        group = mkDefault poolOpts.user;
-        phpOptions = mkBefore cfg.phpOptions;
+        group = lib.mkDefault poolOpts.user;
+        phpOptions = lib.mkBefore cfg.phpOptions;
 
-        settings = mapAttrs (name: mkDefault){
+        settings = lib.mapAttrs (name: lib.mkDefault){
           listen = poolOpts.socket;
           user = poolOpts.user;
           group = poolOpts.group;
@@ -148,14 +146,14 @@ let
 
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
-    (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
+    (lib.mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+    (lib.mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
   ];
 
   options = {
     services.phpfpm = {
-      settings = mkOption {
-        type = with types; attrsOf (oneOf [ str int bool ]);
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ str int bool ]);
         default = {};
         description = ''
           PHP-FPM global directives. Refer to the "List of global php-fpm.conf directives" section of
@@ -167,8 +165,8 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = with types; nullOr lines;
+      extraConfig = lib.mkOption {
+        type = with lib.types; nullOr lines;
         default = null;
         description = ''
           Extra configuration that should be put in the global section of
@@ -179,10 +177,10 @@ in {
         '';
       };
 
-      phpPackage = mkPackageOption pkgs "php" { };
+      phpPackage = lib.mkPackageOption pkgs "php" { };
 
-      phpOptions = mkOption {
-        type = types.lines;
+      phpOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
           ''
@@ -193,10 +191,10 @@ in {
         '';
       };
 
-      pools = mkOption {
-        type = types.attrsOf (types.submodule poolOpts);
+      pools = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule poolOpts);
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
          {
            mypool = {
              user = "php";
@@ -220,16 +218,16 @@ in {
     };
   };
 
-  config = mkIf (cfg.pools != {}) {
+  config = lib.mkIf (cfg.pools != {}) {
 
     warnings =
-      mapAttrsToList (pool: poolOpts: ''
+      lib.mapAttrsToList (pool: poolOpts: ''
         Using config.services.phpfpm.pools.${pool}.listen is deprecated and will become unsupported in a future release. Please reference the read-only option config.services.phpfpm.pools.${pool}.socket to access the path of your socket.
-      '') (filterAttrs (pool: poolOpts: poolOpts.listen != "") cfg.pools) ++
-      mapAttrsToList (pool: poolOpts: ''
+      '') (lib.filterAttrs (pool: poolOpts: poolOpts.listen != "") cfg.pools) ++
+      lib.mapAttrsToList (pool: poolOpts: ''
         Using config.services.phpfpm.pools.${pool}.extraConfig is deprecated and will become unsupported in a future release. Please migrate your configuration to config.services.phpfpm.pools.${pool}.settings.
-      '') (filterAttrs (pool: poolOpts: poolOpts.extraConfig != null) cfg.pools) ++
-      optional (cfg.extraConfig != null) ''
+      '') (lib.filterAttrs (pool: poolOpts: poolOpts.extraConfig != null) cfg.pools) ++
+      lib.optional (cfg.extraConfig != null) ''
         Using config.services.phpfpm.extraConfig is deprecated and will become unsupported in a future release. Please migrate your configuration to config.services.phpfpm.settings.
       ''
     ;
@@ -248,8 +246,8 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services = mapAttrs' (pool: poolOpts:
-      nameValuePair "phpfpm-${pool}" {
+    systemd.services = lib.mapAttrs' (pool: poolOpts:
+      lib.nameValuePair "phpfpm-${pool}" {
         description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];

@@ -10,7 +10,7 @@ let
     concatStringsSep
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -54,7 +54,7 @@ let
 
   providerCfg = concatStringsSep " " [
     "-b"
-    (concatStringsSep "," providers."${cfg.provider.kind}".ips)
+    (lib.concatStringsSep "," providers."${cfg.provider.kind}".ips)
     "-r"
     providers."${cfg.provider.kind}".url
   ];
@@ -66,22 +66,22 @@ in
   ###### interface
 
   options.services.https-dns-proxy = {
-    enable = mkEnableOption "https-dns-proxy daemon";
+    enable = lib.mkEnableOption "https-dns-proxy daemon";
 
-    address = mkOption {
+    address = lib.mkOption {
       description = "The address on which to listen";
-      type = types.str;
+      type = lib.types.str;
       default = "127.0.0.1";
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       description = "The port on which to listen";
-      type = types.port;
+      type = lib.types.port;
       default = 5053;
     };
 
     provider = {
-      kind = mkOption {
+      kind = lib.mkOption {
         description = ''
           The upstream provider to use or custom in case you do not trust any of
           the predefined providers or just want to use your own.
@@ -90,38 +90,38 @@ in
           trade-offs when using any upstream provider. Please consider that
           before using any of them.
 
-          Supported providers: ${concatStringsSep ", " (builtins.attrNames providers)}
+          Supported providers: ${lib.concatStringsSep ", " (builtins.attrNames providers)}
 
           If you pick the custom provider, you will need to provide the
           bootstrap IP addresses as well as the resolver https URL.
         '';
-        type = types.enum (builtins.attrNames providers);
+        type = lib.types.enum (builtins.attrNames providers);
         default = defaultProvider;
       };
 
-      ips = mkOption {
+      ips = lib.mkOption {
         description = "The custom provider IPs";
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
       };
 
-      url = mkOption {
+      url = lib.mkOption {
         description = "The custom provider URL";
-        type = types.str;
+        type = lib.types.str;
       };
     };
 
-    preferIPv4 = mkOption {
+    preferIPv4 = lib.mkOption {
       description = ''
         https_dns_proxy will by default use IPv6 and fail if it is not available.
         To play it safe, we choose IPv4.
       '';
-      type = types.bool;
+      type = lib.types.bool;
       default = true;
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       description = "Additional arguments to pass to the process.";
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [ "-v" ];
     };
   };

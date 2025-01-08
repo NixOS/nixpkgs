@@ -69,7 +69,7 @@ in
   options = {
     system.build = {
       images = lib.mkOption {
-        type = types.lazyAttrsOf types.raw;
+        type = lib.types.lazyAttrsOf types.raw;
         readOnly = true;
         description = ''
           Different target images generated for this NixOS configuration.
@@ -77,7 +77,7 @@ in
       };
     };
     image.modules = lib.mkOption {
-      type = types.attrsOf (types.listOf types.deferredModule);
+      type = lib.types.attrsOf (types.listOf types.deferredModule);
       description = ''
         image-specific NixOS Modules used for `system.build.images`.
       '';

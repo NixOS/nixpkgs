@@ -14,34 +14,34 @@ in
     package = lib.mkPackageOption pkgs "taskchampion-sync-server" { };
     user = lib.mkOption {
       description = "Unix User to run the server under";
-      type = types.str;
+      type = lib.types.str;
       default = "taskchampion";
     };
     group = lib.mkOption {
       description = "Unix Group to run the server under";
-      type = types.str;
+      type = lib.types.str;
       default = "taskchampion";
     };
     port = lib.mkOption {
       description = "Port on which to serve";
-      type = types.port;
+      type = lib.types.port;
       default = 10222;
     };
     openFirewall = lib.mkEnableOption "Open firewall port for taskchampion-sync-server";
     dataDir = lib.mkOption {
       description = "Directory in which to store data";
-      type = types.path;
+      type = lib.types.path;
       default = "/var/lib/taskchampion-sync-server";
     };
     snapshot = {
       versions = lib.mkOption {
         description = "Target number of versions between snapshots";
-        type = types.ints.positive;
+        type = lib.types.ints.positive;
         default = 100;
       };
       days = lib.mkOption {
         description = "Target number of days between snapshots";
-        type = types.ints.positive;
+        type = lib.types.ints.positive;
         default = 14;
       };
     };

@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkIf
-    optionalString
+    lib.optionalString
     ;
   cfg = config.services.opengfw;
 in
@@ -21,45 +21,45 @@ in
 
     package = lib.mkPackageOption pkgs "opengfw" { default = "opengfw"; };
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "opengfw";
-      type = types.singleLineStr;
+      type = lib.types.singleLineStr;
       description = "Username of the OpenGFW user.";
     };
 
-    dir = mkOption {
+    dir = lib.mkOption {
       default = "/var/lib/opengfw";
-      type = types.singleLineStr;
+      type = lib.types.singleLineStr;
       description = ''
         Working directory of the OpenGFW service and home of `opengfw.user`.
       '';
     };
 
-    logFile = mkOption {
+    logFile = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       example = "/var/lib/opengfw/opengfw.log";
       description = ''
         File to write the output to instead of systemd.
       '';
     };
 
-    logFormat = mkOption {
+    logFormat = lib.mkOption {
       description = ''
         Format of the logs. [logFormatMap](https://github.com/apernet/OpenGFW/blob/d7737e92117a11c9a6100d53019fac3b9d724fe3/cmd/root.go#L62)
       '';
       default = "json";
       example = "console";
-      type = types.enum [
+      type = lib.types.enum [
         "json"
         "console"
       ];
     };
 
-    pcapReplay = mkOption {
+    pcapReplay = lib.mkOption {
       default = null;
       example = "./opengfw.pcap";
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to PCAP replay file.
         In pcap mode, none of the actions in the rules have any effect.
@@ -67,13 +67,13 @@ in
       '';
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       description = ''
         Level of the logs. [logLevelMap](https://github.com/apernet/OpenGFW/blob/d7737e92117a11c9a6100d53019fac3b9d724fe3/cmd/root.go#L55)
       '';
       default = "info";
       example = "warn";
-      type = types.enum [
+      type = lib.types.enum [
         "debug"
         "info"
         "warn"
@@ -81,122 +81,122 @@ in
       ];
     };
 
-    rulesFile = mkOption {
+    rulesFile = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to file containing OpenGFW rules.
       '';
     };
 
-    settingsFile = mkOption {
+    settingsFile = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to file containing OpenGFW settings.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = null;
       description = ''
         Settings passed to OpenGFW. [Example config](https://gfw.dev/docs/build-run/#config-example)
       '';
-      type = types.nullOr (
+      type = lib.types.nullOr (
         types.submodule {
           options = {
-            replay = mkOption {
+            replay = lib.mkOption {
               description = ''
                 PCAP replay settings.
               '';
               default = { };
-              type = types.submodule {
+              type = lib.types.submodule {
                 options = {
-                  realtime = mkOption {
+                  realtime = lib.mkOption {
                     description = ''
                       Whether the packets in the PCAP file should be replayed in "real time" (instead of as fast as possible).
                     '';
                     default = false;
                     example = true;
-                    type = types.bool;
+                    type = lib.types.bool;
                   };
                 };
               };
             };
 
-            io = mkOption {
+            io = lib.mkOption {
               description = ''
                 IO settings.
               '';
               default = { };
-              type = types.submodule {
+              type = lib.types.submodule {
                 options = {
-                  queueSize = mkOption {
+                  queueSize = lib.mkOption {
                     description = "IO queue size.";
-                    type = types.int;
+                    type = lib.types.int;
                     default = 1024;
                     example = 2048;
                   };
-                  local = mkOption {
+                  local = lib.mkOption {
                     description = ''
                       Set to false if you want to run OpenGFW on FORWARD chain. (e.g. on a router)
                     '';
-                    type = types.bool;
+                    type = lib.types.bool;
                     default = true;
                     example = false;
                   };
-                  rst = mkOption {
+                  rst = lib.mkOption {
                     description = ''
                       Set to true if you want to send RST for blocked TCP connections, needs `local = false`.
                     '';
-                    type = types.bool;
+                    type = lib.types.bool;
                     default = !cfg.settings.io.local;
                     defaultText = "`!config.services.opengfw.settings.io.local`";
                     example = false;
                   };
-                  rcvBuf = mkOption {
+                  rcvBuf = lib.mkOption {
                     description = "Netlink receive buffer size.";
-                    type = types.int;
+                    type = lib.types.int;
                     default = 4194304;
                     example = 2097152;
                   };
-                  sndBuf = mkOption {
+                  sndBuf = lib.mkOption {
                     description = "Netlink send buffer size.";
-                    type = types.int;
+                    type = lib.types.int;
                     default = 4194304;
                     example = 2097152;
                   };
                 };
               };
             };
-            ruleset = mkOption {
+            ruleset = lib.mkOption {
               description = ''
                 The path to load specific local geoip/geosite db files.
                 If not set, they will be automatically downloaded from (Loyalsoldier/v2ray-rules-dat)[https://github.com/Loyalsoldier/v2ray-rules-dat].
               '';
               default = { };
-              type = types.submodule {
+              type = lib.types.submodule {
                 options = {
-                  geoip = mkOption {
+                  geoip = lib.mkOption {
                     description = "Path to `geoip.dat`.";
                     default = null;
-                    type = types.nullOr types.path;
+                    type = lib.types.nullOr lib.types.path;
                   };
-                  geosite = mkOption {
+                  geosite = lib.mkOption {
                     description = "Path to `geosite.dat`.";
                     default = null;
-                    type = types.nullOr types.path;
+                    type = lib.types.nullOr lib.types.path;
                   };
                 };
               };
             };
-            workers = mkOption {
+            workers = lib.mkOption {
               default = { };
               description = "Worker settings.";
-              type = types.submodule {
+              type = lib.types.submodule {
                 options = {
-                  count = mkOption {
-                    type = types.int;
+                  count = lib.mkOption {
+                    type = lib.types.int;
                     description = ''
                       Number of workers.
                       Recommended to be no more than the number of CPU cores
@@ -204,30 +204,30 @@ in
                     default = 4;
                     example = 8;
                   };
-                  queueSize = mkOption {
-                    type = types.int;
+                  queueSize = lib.mkOption {
+                    type = lib.types.int;
                     description = "Worker queue size.";
                     default = 16;
                     example = 32;
                   };
-                  tcpMaxBufferedPagesTotal = mkOption {
-                    type = types.int;
+                  tcpMaxBufferedPagesTotal = lib.mkOption {
+                    type = lib.types.int;
                     description = ''
                       TCP max total buffered pages.
                     '';
                     default = 4096;
                     example = 8192;
                   };
-                  tcpMaxBufferedPagesPerConn = mkOption {
-                    type = types.int;
+                  tcpMaxBufferedPagesPerConn = lib.mkOption {
+                    type = lib.types.int;
                     description = ''
                       TCP max total bufferd pages per connection.
                     '';
                     default = 64;
                     example = 128;
                   };
-                  tcpTimeout = mkOption {
-                    type = types.str;
+                  tcpTimeout = lib.mkOption {
+                    type = lib.types.str;
                     description = ''
                       How long a connection is considered dead when no data is being transferred.
                       Dead connections are purged from TCP reassembly pools once per minute.
@@ -235,8 +235,8 @@ in
                     default = "10m";
                     example = "5m";
                   };
-                  udpMaxStreams = mkOption {
-                    type = types.int;
+                  udpMaxStreams = lib.mkOption {
+                    type = lib.types.int;
                     description = "UDP max streams.";
                     default = 4096;
                     example = 8192;
@@ -249,27 +249,27 @@ in
       );
     };
 
-    rules = mkOption {
+    rules = lib.mkOption {
       default = [ ];
       description = ''
         Rules passed to OpenGFW. [Example rules](https://gfw.dev/docs/rules)
       '';
-      type = types.listOf (
+      type = lib.types.listOf (
         types.submodule {
           options = {
-            name = mkOption {
+            name = lib.mkOption {
               description = "Name of the rule.";
               example = "block google dns";
-              type = types.singleLineStr;
+              type = lib.types.singleLineStr;
             };
 
-            action = mkOption {
+            action = lib.mkOption {
               description = ''
                 Action of the rule. [Supported actions](https://gfw.dev/docs/rules#supported-actions)
               '';
               default = "allow";
               example = "block";
-              type = types.enum [
+              type = lib.types.enum [
                 "allow"
                 "block"
                 "drop"
@@ -277,38 +277,38 @@ in
               ];
             };
 
-            log = mkOption {
+            log = lib.mkOption {
               description = "Whether to enable logging for the rule.";
               default = true;
               example = false;
-              type = types.bool;
+              type = lib.types.bool;
             };
 
-            expr = mkOption {
+            expr = lib.mkOption {
               description = ''
                 [Expr Language](https://expr-lang.org/docs/language-definition) expression using [analyzers](https://gfw.dev/docs/analyzers) and [functions](https://gfw.dev/docs/functions).
               '';
-              type = types.str;
+              type = lib.types.str;
               example = ''dns != nil && dns.qr && any(dns.questions, {.name endsWith "google.com"})'';
             };
 
-            modifier = mkOption {
+            modifier = lib.mkOption {
               default = null;
               description = ''
                 Modification of specified packets when using the `modify` action. [Available modifiers](https://github.com/apernet/OpenGFW/tree/master/modifier)
               '';
-              type = types.nullOr (
+              type = lib.types.nullOr (
                 types.submodule {
                   options = {
-                    name = mkOption {
+                    name = lib.mkOption {
                       description = "Name of the modifier.";
-                      type = types.singleLineStr;
+                      type = lib.types.singleLineStr;
                       example = "dns";
                     };
 
-                    args = mkOption {
+                    args = lib.mkOption {
                       description = "Arguments passed to the modifier.";
-                      type = types.attrs;
+                      type = lib.types.attrs;
                       example = {
                         a = "0.0.0.0";
                         aaaa = "::";
@@ -360,7 +360,7 @@ in
           cfg.settingsFile;
       rules = if cfg.rules != [ ] then format.generate "opengfw-rules.yaml" cfg.rules else cfg.rulesFile;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       security.wrappers.OpenGFW = {
         owner = cfg.user;
         group = cfg.user;
@@ -375,15 +375,15 @@ in
         path = with pkgs; [ iptables ];
 
         preStart = ''
-          ${optionalString (rules != null) "ln -sf ${rules} rules.yaml"}
-          ${optionalString (settings != null) "ln -sf ${settings} config.yaml"}
+          ${lib.optionalString (rules != null) "ln -sf ${rules} rules.yaml"}
+          ${lib.optionalString (settings != null) "ln -sf ${settings} config.yaml"}
         '';
 
         script = ''
           ${config.security.wrapperDir}/OpenGFW \
             -f ${cfg.logFormat} \
             -l ${cfg.logLevel} \
-            ${optionalString (cfg.pcapReplay != null) "-p ${cfg.pcapReplay}"} \
+            ${lib.optionalString (cfg.pcapReplay != null) "-p ${cfg.pcapReplay}"} \
             -c config.yaml \
             rules.yaml
         '';
@@ -393,7 +393,7 @@ in
           ExecReload = "kill -HUP $MAINPID";
           Restart = "always";
           User = cfg.user;
-          StandardOutput = mkIf (cfg.logFile != null) "append:${cfg.logFile}";
+          StandardOutput = lib.mkIf (cfg.logFile != null) "append:${cfg.logFile}";
           StandardError = StandardOutput;
         };
       };

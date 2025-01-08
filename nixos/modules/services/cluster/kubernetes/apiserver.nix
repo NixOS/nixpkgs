@@ -120,26 +120,26 @@ in
       servers = lib.mkOption {
         description = "List of etcd servers.";
         default = ["http://127.0.0.1:2379"];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
       };
 
       keyFile = lib.mkOption {
         description = "Etcd key file.";
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
       };
 
       certFile = lib.mkOption {
         description = "Etcd cert file.";
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
       };
 
       caFile = lib.mkOption {
         description = "Etcd ca file.";
         default = top.caFile;
         defaultText = lib.literalExpression "config.${otop.caFile}";
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
       };
     };
 

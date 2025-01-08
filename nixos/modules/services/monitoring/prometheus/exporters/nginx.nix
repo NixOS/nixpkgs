@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.nginx;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkMerge
     mkRemovedOptionModule
@@ -21,30 +21,30 @@ in
 {
   port = 9113;
   extraOpts = {
-    scrapeUri = mkOption {
-      type = types.str;
+    scrapeUri = lib.mkOption {
+      type = lib.types.str;
       default = "http://localhost/nginx_status";
       description = ''
         Address to access the nginx status page.
         Can be enabled with services.nginx.statusPage = true.
       '';
     };
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
-    sslVerify = mkOption {
-      type = types.bool;
+    sslVerify = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to perform certificate verification for https.
       '';
     };
-    constLabels = mkOption {
-      type = types.listOf types.str;
+    constLabels = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "label1=value1"
@@ -55,7 +55,7 @@ in
       '';
     };
   };
-  serviceOpts = mkMerge (
+  serviceOpts = lib.mkMerge (
     [
       {
         environment.CONST_LABELS = concatStringsSep "," cfg.constLabels;
@@ -66,21 +66,21 @@ in
               --${lib.optionalString (!cfg.sslVerify) "no-"}nginx.ssl-verify \
               --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
               --web.telemetry-path=${cfg.telemetryPath} \
-              ${concatStringsSep " \\\n  " cfg.extraFlags}
+              ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
           '';
         };
       }
     ]
     ++ [
-      (mkIf config.services.nginx.enable {
+      (lib.mkIf config.services.nginx.enable {
         after = [ "nginx.service" ];
         requires = [ "nginx.service" ];
       })
     ]
   );
   imports = [
-    (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
-    (mkRemovedOptionModule [ "insecure" ] ''
+    (lib.mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
+    (lib.mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify'.
     '')
     ({

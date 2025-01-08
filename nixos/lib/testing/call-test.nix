@@ -1,10 +1,10 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   options = {
-    result = mkOption {
+    result = lib.mkOption {
       internal = true;
       default = config;
     };

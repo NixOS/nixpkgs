@@ -3,8 +3,6 @@
 
 { options, config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.testing;
 
@@ -143,7 +141,7 @@ in
     virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
       qemu = {
         # Only use a serial console, no TTY.
-        # NOTE: optionalAttrs
+        # NOTE: lib.optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
         #       we avoid defining consoles if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
@@ -202,8 +200,8 @@ in
     boot.consoleLogLevel = 7;
 
     # Prevent tests from accessing the Internet.
-    networking.defaultGateway = mkOverride 150 null;
-    networking.nameservers = mkOverride 150 [ ];
+    networking.defaultGateway = lib.mkOverride 150 null;
+    networking.nameservers = lib.mkOverride 150 [ ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")
@@ -217,11 +215,11 @@ in
     # This needs to be a file because of a quirk in systemd credentials,
     # where you cannot specify an empty string as a value. systemd-sysusers
     # uses credentials to set passwords on users.
-    users.users.root.hashedPasswordFile = mkOverride 150 "${pkgs.writeText "hashed-password.root" ""}";
+    users.users.root.hashedPasswordFile = lib.mkOverride 150 "${pkgs.writeText "hashed-password.root" ""}";
 
     services.displayManager.logToJournal = true;
 
-    services.logrotate.enable = mkOverride 150 false;
+    services.logrotate.enable = lib.mkOverride 150 false;
 
     # Make sure we use the Guest Agent from the QEMU package for testing
     # to reduce the closure size required for the tests.

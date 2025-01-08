@@ -25,13 +25,13 @@ let
           )
       );
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     concatStrings
     concatStringsSep
     attrValues
     mapAttrs
-    optionalString
+    lib.optionalString
     ;
   createConfigFile =
     accounts:
@@ -43,7 +43,7 @@ let
           mapAttrs (
             name: config:
             "[[Accounts]]\nname = \"${name}\"\n${
-              concatStrings (attrValues (mapAttrs (k: v: "${k} = ${valueToString v}\n") config))
+              concatStrings (lib.attrValues (mapAttrs (k: v: "${k} = ${valueToString v}\n") config))
             }"
           ) accounts
         )
@@ -51,16 +51,16 @@ let
     '';
   mkOpt =
     type: description:
-    mkOption {
-      type = types.nullOr type;
+    lib.mkOption {
+      type = lib.types.nullOr type;
       default = null;
       description = description;
     };
   accountOptions.options = {
-    mailaddress = mkOpt types.str "Your email address (at the moment used as login name)";
-    username = mkOpt types.str "If empty string mailaddress value is used";
-    password = mkOpt types.str "";
-    serveraddress = mkOpt types.str "mailserver name or address";
+    mailaddress = mkOpt lib.types.str "Your email address (at the moment used as login name)";
+    username = mkOpt lib.types.str "If empty string mailaddress value is used";
+    password = mkOpt lib.types.str "";
+    serveraddress = mkOpt lib.types.str "mailserver name or address";
     serverport = mkOpt types.int "imap port number (at the moment only tls connection is supported)";
     starttls = mkOpt types.bool "set to true for using STARTTLS to start a TLS connection";
   };
@@ -68,22 +68,22 @@ in
 {
   port = 8081;
   extraOpts = {
-    oldestUnseenDate = mkOption {
-      type = types.bool;
+    oldestUnseenDate = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable metric with timestamp of oldest unseen mail
       '';
     };
-    accounts = mkOption {
-      type = types.attrsOf (types.submodule accountOptions);
+    accounts = lib.mkOption {
+      type = lib.types.attrsOf (types.submodule accountOptions);
       default = { };
       description = ''
         Accounts to monitor
       '';
     };
-    configurationFile = mkOption {
-      type = types.path;
+    configurationFile = lib.mkOption {
+      type = lib.types.path;
       example = "/path/to/config-file";
       description = ''
         File containing the configuration
@@ -95,8 +95,8 @@ in
       ExecStart = ''
         ${pkgs.prometheus-imap-mailstat-exporter}/bin/imap-mailstat-exporter \
           -config ${createConfigFile cfg.accounts} \
-          ${optionalString cfg.oldestUnseenDate "-oldestunseendate"} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.optionalString cfg.oldestUnseenDate "-oldestunseendate"} \
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

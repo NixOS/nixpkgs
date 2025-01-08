@@ -89,7 +89,6 @@ stdenv.mkDerivation (
     } // (args.passthru or { });
 
     meta =
-      with lib;
       {
         inherit mainProgram;
         inherit (retroarch-bare.meta) platforms;

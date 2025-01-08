@@ -6,8 +6,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.ofono;
@@ -20,12 +18,12 @@ in
   ###### interface
   options = {
     services.ofono = {
-      enable = mkEnableOption "Ofono";
+      enable = lib.mkEnableOption "Ofono";
 
-      plugins = mkOption {
-        type = types.listOf types.package;
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = literalExpression "[ pkgs.modem-manager-gui ]";
+        example = lib.literalExpression "[ pkgs.modem-manager-gui ]";
         description = ''
           The list of plugins to install.
         '';
@@ -34,12 +32,12 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.dbus.packages = [ pkgs.ofono ];
 
     systemd.packages = [ pkgs.ofono ];
 
-    systemd.services.ofono.environment.OFONO_PLUGIN_PATH = mkIf (cfg.plugins != [ ]) plugin_path;
+    systemd.services.ofono.environment.OFONO_PLUGIN_PATH = lib.mkIf (cfg.plugins != [ ]) plugin_path;
 
   };
 }

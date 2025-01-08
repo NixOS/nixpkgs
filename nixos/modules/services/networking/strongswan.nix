@@ -14,10 +14,10 @@ let
     mapAttrsToList
     mkIf
     mkEnableOption
-    mkOption
+    lib.mkOption
     types
     literalExpression
-    optionalString
+    lib.optionalString
     ;
 
   cfg = config.services.strongswan;
@@ -37,7 +37,7 @@ let
         concatStringsSep "\n\n" (
           mapAttrsToList (
             sec: attrs:
-            "${type} ${sec}\n" + (concatStringsSep "\n" (mapAttrsToList (k: v: "  ${k}=${v}") attrs))
+            "${type} ${sec}\n" + (lib.concatStringsSep "\n" (mapAttrsToList (k: v: "  ${k}=${v}") attrs))
           ) sections
         );
       setupConf = makeSections "config" { inherit setup; };
@@ -62,8 +62,8 @@ let
     }:
     toFile "strongswan.conf" ''
       charon {
-        ${optionalString managePlugins "load_modular = no"}
-        ${optionalString managePlugins ("load = " + (concatStringsSep " " enabledPlugins))}
+        ${lib.optionalString managePlugins "load_modular = no"}
+        ${lib.optionalString managePlugins ("load = " + (lib.concatStringsSep " " enabledPlugins))}
         plugins {
           stroke {
             secrets_file = ${secretsFile}
@@ -79,10 +79,10 @@ let
 in
 {
   options.services.strongswan = {
-    enable = mkEnableOption "strongSwan";
+    enable = lib.mkEnableOption "strongSwan";
 
-    secrets = mkOption {
-      type = types.listOf types.str;
+    secrets = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "/run/keys/ipsec-foo.secret" ];
       description = ''
@@ -93,8 +93,8 @@ in
       '';
     };
 
-    setup = mkOption {
-      type = types.attrsOf types.str;
+    setup = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       example = {
         cachecrls = "yes";
@@ -107,10 +107,10 @@ in
       '';
     };
 
-    connections = mkOption {
-      type = types.attrsOf (types.attrsOf types.str);
+    connections = lib.mkOption {
+      type = lib.types.attrsOf (types.attrsOf types.str);
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "%default" = {
             keyexchange = "ikev2";
@@ -131,8 +131,8 @@ in
       '';
     };
 
-    ca = mkOption {
-      type = types.attrsOf (types.attrsOf types.str);
+    ca = lib.mkOption {
+      type = lib.types.attrsOf (types.attrsOf types.str);
       default = { };
       example = {
         strongswan = {
@@ -148,8 +148,8 @@ in
       '';
     };
 
-    managePlugins = mkOption {
-      type = types.bool;
+    managePlugins = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         If set to true, this option will disable automatic plugin loading and
@@ -158,8 +158,8 @@ in
       '';
     };
 
-    enabledPlugins = mkOption {
-      type = types.listOf types.str;
+    enabledPlugins = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         A list of additional plugins to enable if

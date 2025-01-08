@@ -71,7 +71,7 @@ in
                     };
                     settings = lib.mkOption {
                       description = "Settings specific to this plugin.";
-                      type = with types; attrsOf str;
+                      type = with lib.types; attrsOf str;
                       example = {
                         file = "/etc/uhub/users.db";
                       };

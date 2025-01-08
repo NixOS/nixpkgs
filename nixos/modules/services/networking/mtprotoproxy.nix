@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.mtprotoproxy;
@@ -22,23 +20,23 @@ let
 
   convertOption =
     opt:
-    if isString opt || isInt opt then
+    if lib.isString opt || lib.isInt opt then
       builtins.toJSON opt
-    else if isBool opt then
+    else if lib.isBool opt then
       if opt then "True" else "False"
-    else if isList opt then
-      "[" + concatMapStringsSep "," convertOption opt + "]"
-    else if isAttrs opt then
+    else if lib.isList opt then
+      "[" + lib.concatMapStringsSep "," convertOption opt + "]"
+    else if lib.isAttrs opt then
       "{"
-      + concatStringsSep "," (
-        mapAttrsToList (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt
+      + lib.concatStringsSep "," (
+        lib.mapAttrsToList (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt
       )
       + "}"
     else
       throw "Invalid option type";
 
   configFile = pkgs.writeText "config.py" (
-    concatStringsSep "\n" (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts)
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts)
   );
 
 in
@@ -51,18 +49,18 @@ in
 
     services.mtprotoproxy = {
 
-      enable = mkEnableOption "mtprotoproxy";
+      enable = lib.mkEnableOption "mtprotoproxy";
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3256;
         description = ''
           TCP port to accept mtproto connections on.
         '';
       };
 
-      users = mkOption {
-        type = types.attrsOf types.str;
+      users = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         example = {
           tg = "00000000000000000000000000000000";
           tg2 = "0123456789abcdef0123456789abcdef";
@@ -72,16 +70,16 @@ in
         '';
       };
 
-      secureOnly = mkOption {
-        type = types.bool;
+      secureOnly = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Don't allow users to connect in non-secure mode (without random padding).
         '';
       };
 
-      adTag = mkOption {
-        type = types.nullOr types.str;
+      adTag = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         # Taken from mtproxyproto's repo.
         example = "3c09c680b76ee91a4c25ad51f742267d";
@@ -90,8 +88,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.attrs;
+      extraConfig = lib.mkOption {
+        type = lib.types.attrs;
         default = { };
         example = {
           STATS_PRINT_PERIOD = 600;
@@ -107,7 +105,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.mtprotoproxy = {
       description = "MTProto Proxy Daemon";

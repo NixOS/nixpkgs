@@ -11,9 +11,9 @@ let
   mkCheckOutput =
     name: test: output:
     runCommand name { } ''
-      actualOutput="$(${escapeShellArg "${test}/bin/test"})"
-      if [ "$(${escapeShellArg "${test}/bin/test"})" != ${escapeShellArg output} ]; then
-        echo >&2 "mismatched output: expected \""${escapeShellArg output}"\", got \"$actualOutput\""
+      actualOutput="$(${lib.escapeShellArg "${test}/bin/test"})"
+      if [ "$(${lib.escapeShellArg "${test}/bin/test"})" != ${lib.escapeShellArg output} ]; then
+        echo >&2 "mismatched output: expected \""${lib.escapeShellArg output}"\", got \"$actualOutput\""
         exit 1
       fi
       touch "$out"

@@ -140,8 +140,7 @@ let
       passthru = { inherit tests; };
 
       meta =
-        with lib;
-        recursiveUpdate {
+        lib.recursiveUpdate {
           homepage = "https://hadoop.apache.org/";
           description = "Framework for distributed processing of large data sets across clusters of computers";
           license = lib.licenses.asl20;
@@ -159,8 +158,8 @@ let
             computers, each of which may be prone to failures.
           '';
           maintainers = with lib.maintainers; [ illustris ];
-          platforms = attrNames platformAttrs;
-        } (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
+          platforms = lib.attrNames platformAttrs;
+        } (lib.attrByPath [ stdenv.system "meta" ] { } platformAttrs);
     });
 in
 {

@@ -8,13 +8,13 @@
 let
   cfg = config.services.prometheus.exporters.klipper;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkMerge
     mkIf
     types
     concatStringsSep
     any
-    optionalString
+    lib.optionalString
     ;
   moonraker = config.services.moonraker;
 in
@@ -23,8 +23,8 @@ in
   extraOpts = {
     package = lib.mkPackageOption pkgs "prometheus-klipper-exporter" { };
 
-    moonrakerApiKey = mkOption {
-      type = types.str;
+    moonrakerApiKey = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         API Key to authenticate with the Moonraker APIs.
@@ -32,7 +32,7 @@ in
       '';
     };
   };
-  serviceOpts = mkMerge (
+  serviceOpts = lib.mkMerge (
     [
       {
         serviceConfig = {
@@ -40,13 +40,13 @@ in
             "${cfg.package}/bin/prometheus-klipper-exporter"
             (optionalString (cfg.moonrakerApiKey != "") "--moonraker.apikey ${cfg.moonrakerApiKey}")
             "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
-            "${concatStringsSep " " cfg.extraFlags}"
+            "${lib.concatStringsSep " " cfg.extraFlags}"
           ];
         };
       }
     ]
     ++ [
-      (mkIf config.services.moonraker.enable {
+      (lib.mkIf config.services.moonraker.enable {
         after = [ "moonraker.service" ];
         requires = [ "moonraker.service" ];
       })

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   /*
@@ -26,15 +24,15 @@ let
   inherit (pkgs) vsftpd;
 
   yesNoOption = nixosName: vsftpdName: default: description: {
-    cfgText = "${vsftpdName}=${if getAttr nixosName cfg then "YES" else "NO"}";
+    cfgText = "${vsftpdName}=${if lib.getAttr nixosName cfg then "YES" else "NO"}";
 
     nixosOption = {
-      type = types.bool;
+      type = lib.types.bool;
       name = nixosName;
-      value = mkOption {
+      value = lib.mkOption {
         description = description;
         inherit default;
-        type = types.bool;
+        type = lib.types.bool;
       };
     };
   };
@@ -109,15 +107,15 @@ let
   ];
 
   configFile = pkgs.writeText "vsftpd.conf" ''
-    ${concatMapStrings (x: "${x.cfgText}\n") optionDescription}
-    ${optionalString (cfg.rsaCertFile != null) ''
+    ${lib.concatMapStrings (x: "${x.cfgText}\n") optionDescription}
+    ${lib.optionalString (cfg.rsaCertFile != null) ''
       ssl_enable=YES
       rsa_cert_file=${cfg.rsaCertFile}
     ''}
-    ${optionalString (cfg.rsaKeyFile != null) ''
+    ${lib.optionalString (cfg.rsaKeyFile != null) ''
       rsa_private_key_file=${cfg.rsaKeyFile}
     ''}
-    ${optionalString (cfg.userlistFile != null) ''
+    ${lib.optionalString (cfg.userlistFile != null) ''
       userlist_file=${cfg.userlistFile}
     ''}
     background=YES
@@ -125,18 +123,18 @@ let
     listen_ipv6=YES
     nopriv_user=vsftpd
     secure_chroot_dir=/var/empty
-    ${optionalString (cfg.localRoot != null) ''
+    ${lib.optionalString (cfg.localRoot != null) ''
       local_root=${cfg.localRoot}
     ''}
     syslog_enable=YES
-    ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
+    ${lib.optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
       seccomp_sandbox=NO
     ''}
     anon_umask=${cfg.anonymousUmask}
-    ${optionalString cfg.anonymousUser ''
+    ${lib.optionalString cfg.anonymousUser ''
       anon_root=${cfg.anonymousUserHome}
     ''}
-    ${optionalString cfg.enableVirtualUsers ''
+    ${lib.optionalString cfg.enableVirtualUsers ''
       guest_enable=YES
       guest_username=vsftpd
     ''}
@@ -154,18 +152,18 @@ in
 
     services.vsftpd = {
 
-      enable = mkEnableOption "vsftpd";
+      enable = lib.mkEnableOption "vsftpd";
 
-      userlist = mkOption {
+      userlist = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = "See {option}`userlistFile`.";
       };
 
-      userlistFile = mkOption {
-        type = types.path;
-        default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
-        defaultText = literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
+      userlistFile = lib.mkOption {
+        type = lib.types.path;
+        default = pkgs.writeText "userlist" (lib.concatMapStrings (x: "${x}\n") cfg.userlist);
+        defaultText = lib.literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
         description = ''
           Newline separated list of names to be allowed/denied if {option}`userlistEnable`
           is `true`. Meaning see {option}`userlistDeny`.
@@ -176,8 +174,8 @@ in
         '';
       };
 
-      enableVirtualUsers = mkOption {
-        type = types.bool;
+      enableVirtualUsers = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the `pam_userdb`-based
@@ -185,8 +183,8 @@ in
         '';
       };
 
-      userDbPath = mkOption {
-        type = types.nullOr types.str;
+      userDbPath = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         example = "/etc/vsftpd/userDb";
         default = null;
         description = ''
@@ -219,8 +217,8 @@ in
         '';
       };
 
-      localRoot = mkOption {
-        type = types.nullOr types.str;
+      localRoot = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/var/www/$USER";
         description = ''
@@ -231,47 +229,47 @@ in
         '';
       };
 
-      anonymousUserHome = mkOption {
-        type = types.path;
+      anonymousUserHome = lib.mkOption {
+        type = lib.types.path;
         default = "/home/ftp/";
         description = ''
           Directory to consider the HOME of the anonymous user.
         '';
       };
 
-      rsaCertFile = mkOption {
-        type = types.nullOr types.path;
+      rsaCertFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "RSA certificate file.";
       };
 
-      rsaKeyFile = mkOption {
-        type = types.nullOr types.path;
+      rsaKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "RSA private key file.";
       };
 
-      anonymousUmask = mkOption {
-        type = types.str;
+      anonymousUmask = lib.mkOption {
+        type = lib.types.str;
         default = "077";
         example = "002";
         description = "Anonymous write umask.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "ftpd_banner=Hello";
         description = "Extra configuration to add at the bottom of the generated configuration file.";
       };
 
-    } // (listToAttrs (catAttrs "nixosOption" optionDescription));
+    } // (lib.listToAttrs (lib.catAttrs "nixosOption" optionDescription));
 
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -300,7 +298,7 @@ in
               "/homeless-shelter";
         };
       }
-      // optionalAttrs cfg.anonymousUser {
+      // lib.optionalAttrs cfg.anonymousUser {
         "ftp" = {
           name = "ftp";
           uid = config.ids.uids.ftp;
@@ -315,11 +313,11 @@ in
 
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root
-    services.vsftpd.userlist = optional cfg.userlistDeny "root";
+    services.vsftpd.userlist = lib.optional cfg.userlistDeny "root";
 
     systemd = {
       tmpfiles.rules =
-        optional cfg.anonymousUser
+        lib.optional cfg.anonymousUser
           #Type Path                       Mode User   Gr    Age Arg
           "d    '${builtins.toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
       services.vsftpd = {
@@ -333,7 +331,7 @@ in
       };
     };
 
-    security.pam.services.vsftpd.text = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) ''
+    security.pam.services.vsftpd.text = lib.mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) ''
       auth required pam_userdb.so db=${cfg.userDbPath}
       account required pam_userdb.so db=${cfg.userDbPath}
     '';

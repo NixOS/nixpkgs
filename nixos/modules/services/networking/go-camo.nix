@@ -8,57 +8,57 @@
 let
   cfg = config.services.go-camo;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkIf
     mkMerge
     types
-    optionalString
+    lib.optionalString
     ;
 in
 {
   options.services.go-camo = {
-    enable = mkEnableOption "go-camo service";
-    listen = mkOption {
-      type = types.nullOr types.str;
+    enable = lib.mkEnableOption "go-camo service";
+    listen = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Address:Port to bind to for HTTP (default: 0.0.0.0:8080).";
-      apply = v: optionalString (v != null) "--listen=${v}";
+      apply = v: lib.optionalString (v != null) "--listen=${v}";
     };
-    sslListen = mkOption {
-      type = types.nullOr types.str;
+    sslListen = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Address:Port to bind to for HTTPS.";
-      apply = v: optionalString (v != null) "--ssl-listen=${v}";
+      apply = v: lib.optionalString (v != null) "--ssl-listen=${v}";
     };
-    sslKey = mkOption {
-      type = types.nullOr types.path;
+    sslKey = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "Path to TLS private key.";
-      apply = v: optionalString (v != null) "--ssl-key=${v}";
+      apply = v: lib.optionalString (v != null) "--ssl-key=${v}";
     };
-    sslCert = mkOption {
-      type = types.nullOr types.path;
+    sslCert = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "Path to TLS certificate.";
-      apply = v: optionalString (v != null) "--ssl-cert=${v}";
+      apply = v: lib.optionalString (v != null) "--ssl-cert=${v}";
     };
-    keyFile = mkOption {
-      type = types.path;
+    keyFile = lib.mkOption {
+      type = lib.types.path;
       default = null;
       description = ''
         A file containing the HMAC key to use for signing URLs.
         The file can contain any string. Can be generated using "openssl rand -base64 18 > the_file".
       '';
     };
-    extraOptions = mkOption {
-      type = with types; listOf str;
+    extraOptions = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [ ];
       description = "Extra options passed to the go-camo command.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.go-camo = {
       description = "go-camo service";
       wantedBy = [ "multi-user.target" ];

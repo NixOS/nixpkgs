@@ -10,7 +10,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     mkIf
     getExe
     types
@@ -20,28 +20,28 @@ let
 in
 {
   options.services.glance = {
-    enable = mkEnableOption "glance";
-    package = mkPackageOption pkgs "glance" { };
+    enable = lib.mkEnableOption "glance";
+    package = lib.mkPackageOption pkgs "glance" { };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
           server = {
-            host = mkOption {
+            host = lib.mkOption {
               description = "Glance bind address";
               default = "127.0.0.1";
               example = "0.0.0.0";
-              type = types.str;
+              type = lib.types.str;
             };
-            port = mkOption {
+            port = lib.mkOption {
               description = "Glance port to listen on";
               default = 8080;
               example = 5678;
-              type = types.port;
+              type = lib.types.port;
             };
           };
-          pages = mkOption {
+          pages = lib.mkOption {
             type = settingsFormat.type;
             description = ''
               List of pages to be present on the dashboard.
@@ -87,8 +87,8 @@ in
       '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to open the firewall for Glance.
@@ -97,7 +97,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.glance = {
       description = "Glance feed dashboard server";
       wantedBy = [ "multi-user.target" ];
@@ -133,7 +133,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.server.port ]; };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.server.port ]; };
   };
 
   meta.doc = ./glance.md;

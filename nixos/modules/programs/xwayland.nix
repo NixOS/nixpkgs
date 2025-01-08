@@ -19,7 +19,7 @@ in
       type = lib.types.str;
       default = lib.optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts";
       defaultText = lib.literalExpression ''
-        optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
+        lib.optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
       '';
       description = ''
         Default font path. Setting this option causes Xwayland to be rebuilt.

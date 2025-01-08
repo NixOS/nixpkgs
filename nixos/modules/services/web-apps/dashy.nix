@@ -8,7 +8,7 @@ let
   inherit (lib.types) package str;
   inherit (lib)
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     ;
@@ -16,7 +16,7 @@ let
 in
 {
   options.services.dashy = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       Dashy, a highly customizable, easy to use, privacy-respecting dashboard app.
 
       Note that this builds a static web app as opposed to running a full node server, unlike the default docker image.
@@ -30,7 +30,7 @@ in
     virtualHost = {
       enableNginx = mkEnableOption "a virtualhost to serve dashy through nginx";
 
-      domain = mkOption {
+      domain = lib.mkOption {
         description = ''
           Domain to use for the virtual host.
 
@@ -47,9 +47,9 @@ in
       };
     };
 
-    package = mkPackageOption pkgs "dashy-ui" { };
+    package = lib.mkPackageOption pkgs "dashy-ui" { };
 
-    finalDrv = mkOption {
+    finalDrv = lib.mkOption {
       readOnly = true;
       default =
         if cfg.settings != { } then cfg.package.override { inherit (cfg) settings; } else cfg.package;
@@ -64,7 +64,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = ''
         Settings serialized into `user-data/conf.yml` before build.
@@ -155,8 +155,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.nginx = mkIf cfg.virtualHost.enableNginx {
+  config = lib.mkIf cfg.enable {
+    services.nginx = lib.mkIf cfg.virtualHost.enableNginx {
       enable = true;
       virtualHosts."${cfg.virtualHost.domain}" = {
         locations."/" = {

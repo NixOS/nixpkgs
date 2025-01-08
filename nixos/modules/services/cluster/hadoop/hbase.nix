@@ -215,7 +215,7 @@ in
         environment.systemPackages = lib.mkIf cfg.gatewayRole.enableHbaseCli [ cfg.hbase.package ];
 
         services.hadoop.hbaseSiteInternal = with cfg.hbase; {
-          "hbase.zookeeper.quorum" = mkIfNotNull zookeeperQuorum;
+          "hbase.zookeeper.quorum" = lib.mkIfNotNull zookeeperQuorum;
         };
 
         users.users.hbase = {

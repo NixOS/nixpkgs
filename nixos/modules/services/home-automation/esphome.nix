@@ -11,7 +11,7 @@ let
     maintainers
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -29,35 +29,35 @@ in
   meta.maintainers = with lib.maintainers; [ oddlama ];
 
   options.services.esphome = {
-    enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
+    enable = lib.mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
 
     package = lib.mkPackageOption pkgs "esphome" { };
 
-    enableUnixSocket = mkOption {
-      type = types.bool;
+    enableUnixSocket = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
     };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "esphome address";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 6052;
       description = "esphome port";
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
 
-    allowedDevices = mkOption {
+    allowedDevices = lib.mkOption {
       default = [
         "char-ttyS"
         "char-ttyUSB"
@@ -71,18 +71,18 @@ in
         Beware that if a device is referred to by an absolute path instead of a device category,
         it will only allow devices that already are plugged in when the service is started.
       '';
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
     };
 
-    usePing = mkOption {
+    usePing = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Use ping to check online status of devices instead of mDNS";
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [ cfg.port ];
+  config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [ cfg.port ];
 
     systemd.services.esphome = {
       description = "ESPHome dashboard";
@@ -104,7 +104,7 @@ in
         StateDirectory = "esphome";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
-        RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
+        RuntimeDirectory = lib.mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
 
         # Hardening

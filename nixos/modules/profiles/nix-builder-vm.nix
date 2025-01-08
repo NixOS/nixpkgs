@@ -43,49 +43,49 @@ in
     }
   ];
 
-  options.virtualisation.darwin-builder = with lib; {
-    diskSize = mkOption {
+  options.virtualisation.darwin-builder = {
+    diskSize = lib.mkOption {
       default = 20 * 1024;
-      type = types.int;
+      type = lib.types.int;
       example = 30720;
       description = "The maximum disk space allocated to the runner in MB";
     };
-    memorySize = mkOption {
+    memorySize = lib.mkOption {
       default = 3 * 1024;
-      type = types.int;
+      type = lib.types.int;
       example = 8192;
       description = "The runner's memory in MB";
     };
-    min-free = mkOption {
+    min-free = lib.mkOption {
       default = 1024 * 1024 * 1024;
-      type = types.int;
+      type = lib.types.int;
       example = 1073741824;
       description = ''
         The threshold (in bytes) of free disk space left at which to
         start garbage collection on the runner
       '';
     };
-    max-free = mkOption {
+    max-free = lib.mkOption {
       default = 3 * 1024 * 1024 * 1024;
-      type = types.int;
+      type = lib.types.int;
       example = 3221225472;
       description = ''
         The threshold (in bytes) of free disk space left at which to
         stop garbage collection on the runner
       '';
     };
-    workingDirectory = mkOption {
+    workingDirectory = lib.mkOption {
       default = ".";
-      type = types.str;
+      type = lib.types.str;
       example = "/var/lib/darwin-builder";
       description = ''
         The working directory to use to run the script. When running
         as part of a flake will need to be set to a non read-only filesystem.
       '';
     };
-    hostPort = mkOption {
+    hostPort = lib.mkOption {
       default = 31022;
-      type = types.int;
+      type = lib.types.int;
       example = 22;
       description = ''
         The localhost host port to forward TCP to the guest port.

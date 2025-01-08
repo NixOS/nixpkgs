@@ -73,7 +73,7 @@ let
       touch /mnt-root/boot-done
       hostname "${vmName}"
       mkdir -p /nix/store
-      unshare -m ${escapeShellArg pkgs.runtimeShell} -c '
+      unshare -m ${lib.escapeShellArg pkgs.runtimeShell} -c '
         mount -t vboxsf nixstore /nix/store
         exec "$stage2Init"
       '
@@ -129,7 +129,7 @@ let
 
     cat > /mnt/grub/grub.cfg <<GRUB
     set root=hd0,1
-    linux /linux ${concatStringsSep " " cfg.boot.kernelParams}
+    linux /linux ${lib.concatStringsSep " " cfg.boot.kernelParams}
     initrd /initrd
     boot
     GRUB

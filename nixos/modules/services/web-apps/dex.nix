@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.dex;
   fixClient =
@@ -20,18 +18,18 @@ let
       )
     else
       client;
-  filteredSettings = mapAttrs (
+  filteredSettings = lib.mapAttrs (
     n: v: if n == "staticClients" then (builtins.map fixClient v) else v
   ) cfg.settings;
-  secretFiles = flatten (
-    builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or [ ])
+  secretFiles = lib.flatten (
+    builtins.map (c: lib.optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or [ ])
   );
 
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" filteredSettings;
 
   startPreScript = pkgs.writeShellScript "dex-start-pre" (
-    concatStringsSep "\n" (
+    lib.concatStringsSep "\n" (
       map (file: ''
         replace-secret '${file}' '${file}' /run/dex/config.yaml
       '') secretFiles
@@ -40,15 +38,15 @@ let
 
   restartTriggers =
     [ ]
-    ++ (optionals (cfg.environmentFile != null) [ cfg.environmentFile ])
-    ++ (filter (file: builtins.typeOf file == "path") secretFiles);
+    ++ (lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ])
+    ++ (lib.filter (file: builtins.typeOf file == "path") secretFiles);
 in
 {
   options.services.dex = {
-    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
+    enable = lib.mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Environment file (see `systemd.exec(5)`
@@ -57,10 +55,10 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           # External url
           issuer = "http://127.0.0.1:5556/dex";
@@ -92,13 +90,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.dex = {
       description = "dex identity provider";
       wantedBy = [ "multi-user.target" ];
       after = [
         "networking.target"
-      ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
+      ] ++ (lib.optional (cfg.settings.storage.type == "postgres") "postgresql.service");
       path = with pkgs; [ replace-secret ];
       restartTriggers = restartTriggers;
       serviceConfig =
@@ -119,7 +117,7 @@ in
             "-/etc/resolv.conf"
             "-/etc/ssl/certs/ca-certificates.crt"
           ];
-          BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
+          BindPaths = lib.optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
           # ProtectClock= adds DeviceAllow=char-rtc r
           DeviceAllow = "";
           DynamicUser = true;
@@ -157,7 +155,7 @@ in
           ];
           UMask = "0066";
         }
-        // optionalAttrs (cfg.environmentFile != null) {
+        // lib.optionalAttrs (cfg.environmentFile != null) {
           EnvironmentFile = cfg.environmentFile;
         };
     };

@@ -5,29 +5,27 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.documize;
 
   mkParams =
-    optional:
-    concatMapStrings (
+    lib.optional:
+    lib.concatMapStrings (
       name:
       let
-        predicate = optional -> cfg.${name} != null;
+        predicate = lib.optional -> cfg.${name} != null;
         template = " -${name} '${toString cfg.${name}}'";
       in
-      optionalString predicate template
+      lib.optionalString predicate template
     );
 
 in
 {
   options.services.documize = {
-    enable = mkEnableOption "Documize Wiki";
+    enable = lib.mkEnableOption "Documize Wiki";
 
-    stateDirectoryName = mkOption {
-      type = types.str;
+    stateDirectoryName = lib.mkOption {
+      type = lib.types.str;
       default = "documize";
       description = ''
         The name of the directory below {file}`/var/lib/private`
@@ -35,10 +33,10 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "documize-community" { };
+    package = lib.mkPackageOption pkgs "documize-community" { };
 
-    salt = mkOption {
-      type = types.nullOr types.str;
+    salt = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "3edIYV6c8B28b19fh";
       description = ''
@@ -46,40 +44,40 @@ in
       '';
     };
 
-    cert = mkOption {
-      type = types.nullOr types.str;
+    cert = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The {file}`cert.pem` file used for https.
       '';
     };
 
-    key = mkOption {
-      type = types.nullOr types.str;
+    key = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The {file}`key.pem` file used for https.
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5001;
       description = ''
         The http/https port number.
       '';
     };
 
-    forcesslport = mkOption {
-      type = types.nullOr types.port;
+    forcesslport = lib.mkOption {
+      type = lib.types.nullOr lib.types.port;
       default = null;
       description = ''
         Redirect given http port number to TLS.
       '';
     };
 
-    offline = mkOption {
-      type = types.bool;
+    offline = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Set `true` for offline mode.
@@ -87,8 +85,8 @@ in
       apply = v: if true == v then 1 else 0;
     };
 
-    dbtype = mkOption {
-      type = types.enum [
+    dbtype = lib.mkOption {
+      type = lib.types.enum [
         "mysql"
         "percona"
         "mariadb"
@@ -101,8 +99,8 @@ in
       '';
     };
 
-    db = mkOption {
-      type = types.str;
+    db = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Database specific connection string for example:
         - MySQL/Percona/MariaDB:
@@ -117,8 +115,8 @@ in
       '';
     };
 
-    location = mkOption {
-      type = types.nullOr types.str;
+    location = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         reserved
@@ -126,14 +124,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.documize-server = {
       description = "Documize Wiki";
       documentation = [ "https://documize.com/" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = concatStringsSep " " [
+        ExecStart = lib.concatStringsSep " " [
           "${cfg.package}/bin/documize"
           (mkParams false [
             "db"

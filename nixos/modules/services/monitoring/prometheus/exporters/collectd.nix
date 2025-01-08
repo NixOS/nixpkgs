@@ -9,10 +9,10 @@
 let
   cfg = config.services.prometheus.exporters.collectd;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkEnableOption
     types
-    optionalString
+    lib.optionalString
     concatStringsSep
     escapeShellArg
     ;
@@ -21,30 +21,30 @@ in
   port = 9103;
   extraOpts = {
     collectdBinary = {
-      enable = mkEnableOption "collectd binary protocol receiver";
+      enable = lib.mkEnableOption "collectd binary protocol receiver";
 
-      authFile = mkOption {
+      authFile = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         description = "File mapping user names to pre-shared keys (passwords).";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 25826;
         description = "Network address on which to accept collectd binary network packets.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = ''
           Address to listen on for binary network packets.
         '';
       };
 
-      securityLevel = mkOption {
-        type = types.enum [
+      securityLevel = lib.mkOption {
+        type = lib.types.enum [
           "None"
           "Sign"
           "Encrypt"
@@ -56,8 +56,8 @@ in
       };
     };
 
-    logFormat = mkOption {
-      type = types.enum [
+    logFormat = lib.mkOption {
+      type = lib.types.enum [
         "logfmt"
         "json"
       ];
@@ -68,8 +68,8 @@ in
       '';
     };
 
-    logLevel = mkOption {
-      type = types.enum [
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
         "debug"
         "info"
         "warn"
@@ -84,7 +84,7 @@ in
   };
   serviceOpts =
     let
-      collectSettingsArgs = optionalString (cfg.collectdBinary.enable) ''
+      collectSettingsArgs = lib.optionalString (cfg.collectdBinary.enable) ''
         --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
         --collectd.security-level ${cfg.collectdBinary.securityLevel} \
       '';
@@ -93,11 +93,11 @@ in
       serviceConfig = {
         ExecStart = ''
           ${pkgs.prometheus-collectd-exporter}/bin/collectd_exporter \
-            --log.format ${escapeShellArg cfg.logFormat} \
+            --log.format ${lib.escapeShellArg cfg.logFormat} \
             --log.level ${cfg.logLevel} \
             --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
             ${collectSettingsArgs} \
-            ${concatStringsSep " \\\n  " cfg.extraFlags}
+            ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
         '';
       };
     };

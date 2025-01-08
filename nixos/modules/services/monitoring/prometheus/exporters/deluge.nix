@@ -7,38 +7,38 @@
 
 let
   cfg = config.services.prometheus.exporters.deluge;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9354;
 
   extraOpts = {
-    delugeHost = mkOption {
-      type = types.str;
+    delugeHost = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         Hostname where deluge server is running.
       '';
     };
 
-    delugePort = mkOption {
-      type = types.port;
+    delugePort = lib.mkOption {
+      type = lib.types.port;
       default = 58846;
       description = ''
         Port where deluge server is listening.
       '';
     };
 
-    delugeUser = mkOption {
-      type = types.str;
+    delugeUser = lib.mkOption {
+      type = lib.types.str;
       default = "localclient";
       description = ''
         User to connect to deluge server.
       '';
     };
 
-    delugePassword = mkOption {
-      type = types.nullOr types.str;
+    delugePassword = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Password to connect to deluge server.
@@ -48,16 +48,16 @@ in
       '';
     };
 
-    delugePasswordFile = mkOption {
-      type = types.nullOr types.path;
+    delugePasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         File containing the password to connect to deluge server.
       '';
     };
 
-    exportPerTorrentMetrics = mkOption {
-      type = types.bool;
+    exportPerTorrentMetrics = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable per-torrent metrics.

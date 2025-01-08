@@ -120,7 +120,7 @@ let
             // lib.genAttrs isolateFlags (
               name:
               lib.mkOption {
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               }
             );
@@ -189,7 +189,7 @@ let
             // lib.genAttrs flags (
               name:
               lib.mkOption {
-                type = types.bool;
+                type = lib.types.bool;
                 default = false;
               }
             );
@@ -239,7 +239,7 @@ let
                   // lib.genAttrs flags (
                     name:
                     lib.mkOption {
-                      type = types.bool;
+                      type = lib.types.bool;
                       default = false;
                     }
                   );
@@ -923,7 +923,7 @@ in
                         // lib.genAttrs flags (
                           name:
                           lib.mkOption {
-                            type = types.bool;
+                            type = lib.types.bool;
                             default = false;
                           }
                         );
@@ -1118,7 +1118,7 @@ in
                         ];
                       };
                       exec = lib.mkOption {
-                        type = types.str;
+                        type = lib.types.str;
                         description = "Command of pluggable transport.";
                       };
                     };

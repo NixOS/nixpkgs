@@ -9,18 +9,16 @@
   ...
 }:
 
-with lib;
-
 {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
+    (lib.mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
   ];
 
   options = {
-    boot.growPartition = mkEnableOption "growing the root partition on boot";
+    boot.growPartition = lib.mkEnableOption "growing the root partition on boot";
   };
 
-  config = mkIf config.boot.growPartition {
+  config = lib.mkIf config.boot.growPartition {
     assertions = [
       {
         assertion = !config.boot.initrd.systemd.repart.enable && !config.systemd.repart.enable;

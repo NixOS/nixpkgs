@@ -106,7 +106,6 @@ in
       {
         name = cfg.user;
         ensurePermissions =
-          with lib;
           let
             privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
             grant = db: lib.nameValuePair "${db}.*" privs;

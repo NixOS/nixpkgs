@@ -10,7 +10,7 @@
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) optionalString;
+  inherit (pkgs.lib) lib.optionalString;
 in
 makeTest {
   name = "alice-lg";

@@ -1,17 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.virtualisation.hypervGuest;
 
 in {
   options = {
     virtualisation.hypervGuest = {
-      enable = mkEnableOption "Hyper-V Guest Support";
+      enable = lib.mkEnableOption "Hyper-V Guest Support";
 
-      videoMode = mkOption {
-        type = types.str;
+      videoMode = lib.mkOption {
+        type = lib.types.str;
         default = "1152x864";
         example = "1024x768";
         description = ''
@@ -25,7 +23,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot = {
       initrd.kernelModules = [
         "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"

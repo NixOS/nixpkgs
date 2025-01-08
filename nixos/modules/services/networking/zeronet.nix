@@ -6,20 +6,10 @@
 }:
 
 let
-  inherit (lib)
-    generators
-    literalExpression
-    mkEnableOption
-    mkPackageOption
-    mkIf
-    mkOption
-    recursiveUpdate
-    types
-    ;
   cfg = config.services.zeronet;
   dataDir = "/var/lib/zeronet";
   configFile = pkgs.writeText "zeronet.conf" (
-    generators.toINI { } (recursiveUpdate defaultSettings cfg.settings)
+    lib.generators.toINI { } (lib.recursiveUpdate defaultSettings cfg.settings)
   );
 
   defaultSettings = {
@@ -38,26 +28,24 @@ let
     };
   };
 in
-with lib;
 {
   options.services.zeronet = {
-    enable = mkEnableOption "zeronet";
+    enable = lib.mkEnableOption "zeronet";
 
-    package = mkPackageOption pkgs "zeronet" { };
+    package = lib.mkPackageOption pkgs "zeronet" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type =
-        with types;
-        attrsOf (
-          attrsOf (oneOf [
-            str
-            int
-            bool
-            (listOf str)
+        lib.types.attrsOf (
+          lib.types.attrsOf (lib.types.oneOf [
+            lib.types.str
+            lib.types.int
+            lib.types.bool
+            (lib.types.listOf lib.types.str)
           ])
         );
       default = { };
-      example = literalExpression "{ global.tor = enable; }";
+      example = lib.literalExpression "{ global.tor = enable; }";
 
       description = ''
         {file}`zeronet.conf` configuration. Refer to
@@ -66,35 +54,35 @@ with lib;
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 43110;
       description = "Optional zeronet web UI port.";
     };
 
-    fileserverPort = mkOption {
-      # Not optional: when absent zeronet tries to write one to the
+    fileserverPort = lib.mkOption {
+      # Not lib.optional: when absent zeronet tries to write one to the
       # read-only config file and crashes
-      type = types.port;
+      type = lib.types.port;
       default = 12261;
       description = "Zeronet fileserver port.";
     };
 
-    tor = mkOption {
-      type = types.bool;
+    tor = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Use TOR for zeronet traffic where possible.";
     };
 
-    torAlways = mkOption {
-      type = types.bool;
+    torAlways = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Use TOR for all zeronet traffic.";
     };
   };
 
-  config = mkIf cfg.enable {
-    services.tor = mkIf cfg.tor {
+  config = lib.mkIf cfg.enable {
+    services.tor = lib.mkIf cfg.tor {
       enable = true;
       controlPort = 9051;
 
@@ -107,26 +95,26 @@ with lib;
 
     systemd.services.zeronet = {
       description = "zeronet";
-      after = [ "network.target" ] ++ optional cfg.tor "tor.service";
+      after = [ "network.target" ] ++ lib.optional cfg.tor "tor.service";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         User = "zeronet";
         DynamicUser = true;
         StateDirectory = "zeronet";
-        SupplementaryGroups = mkIf cfg.tor [ "tor" ];
+        SupplementaryGroups = lib.mkIf cfg.tor [ "tor" ];
         ExecStart = "${cfg.package}/bin/zeronet --config_file ${configFile}";
       };
     };
   };
 
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "zeronet"
       "dataDir"
     ] "Zeronet will store data by default in /var/lib/zeronet")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "zeronet"
       "logDir"

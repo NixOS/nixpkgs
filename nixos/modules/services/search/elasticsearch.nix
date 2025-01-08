@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.elasticsearch;
 
@@ -49,48 +47,48 @@ in
   ###### interface
 
   options.services.elasticsearch = {
-    enable = mkOption {
+    enable = lib.mkOption {
       description = "Whether to enable elasticsearch.";
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    package = mkPackageOption pkgs "elasticsearch" { };
+    package = lib.mkPackageOption pkgs "elasticsearch" { };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       description = "Elasticsearch listen address.";
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       description = "Elasticsearch port to listen for HTTP traffic.";
       default = 9200;
-      type = types.port;
+      type = lib.types.port;
     };
 
-    tcp_port = mkOption {
+    tcp_port = lib.mkOption {
       description = "Elasticsearch port for the node to node communication.";
       default = 9300;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    cluster_name = mkOption {
+    cluster_name = lib.mkOption {
       description = "Elasticsearch name that identifies your cluster for auto-discovery.";
       default = "elasticsearch";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    single_node = mkOption {
+    single_node = lib.mkOption {
       description = "Start a single-node cluster";
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    extraConf = mkOption {
+    extraConf = lib.mkOption {
       description = "Extra configuration for elasticsearch.";
       default = "";
-      type = types.str;
+      type = lib.types.str;
       example = ''
         node.name: "elasticsearch"
         node.master: true
@@ -98,7 +96,7 @@ in
       '';
     };
 
-    logging = mkOption {
+    logging = lib.mkOption {
       description = "Elasticsearch logging configuration.";
       default = ''
         logger.action.name = org.elasticsearch.action
@@ -112,39 +110,39 @@ in
         rootLogger.level = info
         rootLogger.appenderRef.console.ref = console
       '';
-      type = types.str;
+      type = lib.types.str;
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/elasticsearch";
       description = ''
         Data directory for elasticsearch.
       '';
     };
 
-    extraCmdLineOptions = mkOption {
+    extraCmdLineOptions = lib.mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
     };
 
-    extraJavaOptions = mkOption {
+    extraJavaOptions = lib.mkOption {
       description = "Extra command line options for Java.";
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
-    plugins = mkOption {
+    plugins = lib.mkOption {
       description = "Extra elasticsearch plugins";
       default = [ ];
-      type = types.listOf types.package;
+      type = lib.types.listOf lib.types.package;
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
-    restartIfChanged = mkOption {
-      type = types.bool;
+    restartIfChanged = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         Automatically restart the service on config change.
         This can be set to false to defer restarts on a server or cluster.
@@ -158,7 +156,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.elasticsearch = {
       description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -179,7 +177,7 @@ in
         TimeoutStartSec = "infinity";
       };
       preStart = ''
-        ${optionalString (!config.boot.isContainer) ''
+        ${lib.optionalString (!config.boot.isContainer) ''
           # Only set vm.max_map_count if lower than ES required minimum
           # This avoids conflict if configured via boot.kernel.sysctl
           if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then

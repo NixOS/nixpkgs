@@ -23,7 +23,7 @@ let
       default = true;
       description = "Whether to enable ${n}.";
     };
-  optionalType =
+  lib.optionalType =
     ty: x:
     lib.mkOption (
       x
@@ -33,16 +33,16 @@ let
         default = null;
       }
     );
-  optionalPath = optionalType lib.types.path;
-  optionalStr = optionalType lib.types.str;
-  optionalInt = optionalType lib.types.int;
+  lib.optionalPath = lib.optionalType lib.types.path;
+  lib.optionalStr = lib.optionalType lib.types.str;
+  lib.optionalInt = lib.optionalType lib.types.int;
 in
 {
   options = {
     services.below = {
       enable = lib.mkEnableOption "'below' resource monitor";
 
-      cgroupFilterOut = optionalStr {
+      cgroupFilterOut = lib.optionalStr {
         description = "A regexp matching the full paths of cgroups whose data shouldn't be collected";
         example = "user.slice.*";
       };
@@ -53,7 +53,7 @@ in
       };
       compression.enable = lib.mkEnableOption "data compression";
       retention = {
-        size = optionalInt {
+        size = lib.optionalInt {
           description = ''
             Size limit for below's data, in bytes. Data is deleted oldest-first, in 24h 'shards'.
 
@@ -64,7 +64,7 @@ in
             :::
           '';
         };
-        time = optionalInt {
+        time = lib.optionalInt {
           description = ''
             Retention time, in seconds.
 
@@ -80,8 +80,8 @@ in
         };
       };
       dirs = {
-        log = optionalPath { description = "Where to store below's logs"; };
-        store = optionalPath {
+        log = lib.optionalPath { description = "Where to store below's logs"; };
+        store = lib.optionalPath {
           description = "Where to store below's data";
           example = "/var/lib/below";
         };

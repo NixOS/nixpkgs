@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -19,9 +19,9 @@ let
 in
 {
   options.services.tempo = {
-    enable = mkEnableOption "Grafana Tempo";
+    enable = lib.mkEnableOption "Grafana Tempo";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
       description = ''
@@ -31,16 +31,16 @@ in
       '';
     };
 
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Specify a path to a configuration file that Tempo should use.
       '';
     };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = lib.literalExpression ''
         [ "-config.expand-env=true" ]
@@ -51,7 +51,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # for tempo-cli and friends
     environment.systemPackages = [ pkgs.tempo ];
 

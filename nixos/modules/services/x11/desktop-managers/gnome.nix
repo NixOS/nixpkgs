@@ -8,7 +8,7 @@
 
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkDefault
     mkEnableOption
@@ -87,24 +87,24 @@ in
   options = {
 
     services.gnome = {
-      core-os-services.enable = mkEnableOption "essential services for GNOME3";
-      core-shell.enable = mkEnableOption "GNOME Shell services";
-      core-utilities.enable = mkEnableOption "GNOME core utilities";
-      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
-      games.enable = mkEnableOption "GNOME games";
+      core-os-services.enable = lib.mkEnableOption "essential services for GNOME3";
+      core-shell.enable = lib.mkEnableOption "GNOME Shell services";
+      core-utilities.enable = lib.mkEnableOption "GNOME core utilities";
+      core-developer-tools.enable = lib.mkEnableOption "GNOME core developer tools";
+      games.enable = lib.mkEnableOption "GNOME games";
     };
 
     services.xserver.desktopManager.gnome = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable GNOME desktop manager.";
       };
 
-      sessionPath = mkOption {
+      sessionPath = lib.mkOption {
         default = [ ];
-        type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gpaste ]";
+        type = lib.types.listOf lib.types.package;
+        example = lib.literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GNOME Shell extensions or GSettings-conditional autostart.
@@ -113,11 +113,11 @@ in
         '';
       };
 
-      favoriteAppsOverride = mkOption {
+      favoriteAppsOverride = lib.mkOption {
         internal = true; # this is messy
         default = defaultFavoriteAppsOverride;
-        type = types.lines;
-        example = literalExpression ''
+        type = lib.types.lines;
+        example = lib.literalExpression ''
           '''
             [org.gnome.shell]
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
@@ -126,15 +126,15 @@ in
         description = "List of desktop files to put as favorite apps into pkgs.gnome-shell. These need to be installed somehow globally.";
       };
 
-      extraGSettingsOverrides = mkOption {
+      extraGSettingsOverrides = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = "Additional gsettings overrides.";
       };
 
-      extraGSettingsOverridePackages = mkOption {
+      extraGSettingsOverridePackages = lib.mkOption {
         default = [ ];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
         description = "List of packages for which gsettings are overridden.";
       };
 
@@ -143,30 +143,30 @@ in
       flashback = {
         enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
 
-        customSessions = mkOption {
-          type = types.listOf (
+        customSessions = lib.mkOption {
+          type = lib.types.listOf (
             types.submodule {
               options = {
-                wmName = mkOption {
-                  type = types.strMatching "[a-zA-Z0-9_-]+";
+                wmName = lib.mkOption {
+                  type = lib.types.strMatching "[a-zA-Z0-9_-]+";
                   description = "A unique identifier for the window manager.";
                   example = "xmonad";
                 };
 
-                wmLabel = mkOption {
-                  type = types.str;
+                wmLabel = lib.mkOption {
+                  type = lib.types.str;
                   description = "The name of the window manager to show in the session chooser.";
                   example = "XMonad";
                 };
 
-                wmCommand = mkOption {
-                  type = types.str;
+                wmCommand = lib.mkOption {
+                  type = lib.types.str;
                   description = "The executable of the window manager to use.";
-                  example = literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
+                  example = lib.literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
                 };
 
-                enableGnomePanel = mkOption {
-                  type = types.bool;
+                enableGnomePanel = lib.mkOption {
+                  type = lib.types.bool;
                   default = true;
                   example = false;
                   description = "Whether to enable the GNOME panel in this session.";
@@ -178,10 +178,10 @@ in
           description = "Other GNOME Flashback sessions to enable.";
         };
 
-        panelModulePackages = mkOption {
+        panelModulePackages = lib.mkOption {
           default = [ pkgs.gnome-applets ];
-          defaultText = literalExpression "[ pkgs.gnome-applets ]";
-          type = types.listOf types.package;
+          defaultText = lib.literalExpression "[ pkgs.gnome-applets ]";
+          type = lib.types.listOf lib.types.package;
           description = ''
             Packages containing modules that should be made available to `pkgs.gnome-panel` (usually for applets).
 
@@ -191,10 +191,10 @@ in
       };
     };
 
-    environment.gnome.excludePackages = mkOption {
+    environment.gnome.excludePackages = lib.mkOption {
       default = [ ];
-      example = literalExpression "[ pkgs.totem ]";
-      type = types.listOf types.package;
+      example = lib.literalExpression "[ pkgs.totem ]";
+      type = lib.types.listOf lib.types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
 
@@ -213,7 +213,7 @@ in
 
       services.gnome.core-os-services.enable = true;
       services.gnome.core-shell.enable = true;
-      services.gnome.core-utilities.enable = mkDefault true;
+      services.gnome.core-utilities.enable = lib.mkDefault true;
 
       services.displayManager.sessionPackages = [ pkgs.gnome-session.sessions ];
 
@@ -278,25 +278,25 @@ in
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
-      hardware.bluetooth.enable = mkDefault true;
+      hardware.bluetooth.enable = lib.mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
-      services.dleyna-renderer.enable = mkDefault true;
-      services.dleyna-server.enable = mkDefault true;
-      services.power-profiles-daemon.enable = mkDefault true;
+      services.dleyna-renderer.enable = lib.mkDefault true;
+      services.dleyna-server.enable = lib.mkDefault true;
+      services.power-profiles-daemon.enable = lib.mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
-      services.gnome.gnome-online-accounts.enable = mkDefault true;
-      services.gnome.localsearch.enable = mkDefault true;
-      services.gnome.tinysparql.enable = mkDefault true;
-      services.hardware.bolt.enable = mkDefault true;
+      services.gnome.gnome-online-accounts.enable = lib.mkDefault true;
+      services.gnome.localsearch.enable = lib.mkDefault true;
+      services.gnome.tinysparql.enable = lib.mkDefault true;
+      services.hardware.bolt.enable = lib.mkDefault true;
       # TODO: Enable once #177946 is resolved
-      # services.packagekit.enable = mkDefault true;
+      # services.packagekit.enable = lib.mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
+      services.libinput.enable = lib.mkDefault true; # for controlling touchpad settings via gnome control center
 
       # Explicitly enabled since GNOME will be severely broken without these.
       xdg.mime.enable = true;
@@ -307,9 +307,9 @@ in
         pkgs.xdg-desktop-portal-gnome
         pkgs.xdg-desktop-portal-gtk
       ];
-      xdg.portal.configPackages = mkDefault [ pkgs.gnome-session ];
+      xdg.portal.configPackages = lib.mkDefault [ pkgs.gnome-session ];
 
-      networking.networkmanager.enable = mkDefault true;
+      networking.networkmanager.enable = lib.mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
 
@@ -331,21 +331,21 @@ in
           mandatoryPackages = [
             pkgs.gnome-shell
           ];
-          optionalPackages = [
+          lib.optionalPackages = [
             pkgs.gnome-shell-extensions
           ];
         in
         mandatoryPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+        ++ utils.removePackagesByName lib.optionalPackages config.environment.gnome.excludePackages;
 
-      services.colord.enable = mkDefault true;
+      services.colord.enable = lib.mkDefault true;
       services.gnome.glib-networking.enable = true;
-      services.gnome.gnome-browser-connector.enable = mkDefault true;
-      services.gnome.gnome-initial-setup.enable = mkDefault true;
-      services.gnome.gnome-remote-desktop.enable = mkDefault true;
+      services.gnome.gnome-browser-connector.enable = lib.mkDefault true;
+      services.gnome.gnome-initial-setup.enable = lib.mkDefault true;
+      services.gnome.gnome-remote-desktop.enable = lib.mkDefault true;
       services.gnome.gnome-settings-daemon.enable = true;
-      services.gnome.gnome-user-share.enable = mkDefault true;
-      services.gnome.rygel.enable = mkDefault true;
+      services.gnome.gnome-user-share.enable = lib.mkDefault true;
+      services.gnome.rygel.enable = lib.mkDefault true;
       services.gvfs.enable = true;
       services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (mkDefault true));
 
@@ -360,9 +360,9 @@ in
         pkgs.mutter
       ];
 
-      services.avahi.enable = mkDefault true;
+      services.avahi.enable = lib.mkDefault true;
 
-      services.geoclue2.enable = mkDefault true;
+      services.geoclue2.enable = lib.mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
 
       services.geoclue2.appConfig.gnome-datetime-panel = {
@@ -393,7 +393,7 @@ in
           mandatoryPackages = [
             pkgs.gnome-shell
           ];
-          optionalPackages = [
+          lib.optionalPackages = [
             pkgs.adwaita-icon-theme
             nixos-background-info
             pkgs.gnome-backgrounds
@@ -411,7 +411,7 @@ in
           ];
         in
         mandatoryPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+        ++ utils.removePackagesByName lib.optionalPackages config.environment.gnome.excludePackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
@@ -460,8 +460,8 @@ in
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
 
       # VTE shell integration for gnome-console
-      programs.bash.vteIntegration = mkDefault true;
-      programs.zsh.vteIntegration = mkDefault true;
+      programs.bash.vteIntegration = lib.mkDefault true;
+      programs.zsh.vteIntegration = lib.mkDefault true;
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package

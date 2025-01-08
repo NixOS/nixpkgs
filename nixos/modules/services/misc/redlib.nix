@@ -12,7 +12,7 @@ let
     mapAttrs
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRenamedOptionModule
     types
@@ -29,7 +29,7 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [
         "services"
         "libreddit"
@@ -43,26 +43,26 @@ in
 
   options = {
     services.redlib = {
-      enable = mkEnableOption "Private front-end for Reddit";
+      enable = lib.mkEnableOption "Private front-end for Reddit";
 
-      package = mkPackageOption pkgs "redlib" { };
+      package = lib.mkPackageOption pkgs "redlib" { };
 
-      address = mkOption {
+      address = lib.mkOption {
         default = "0.0.0.0";
         example = "127.0.0.1";
-        type = types.str;
+        type = lib.types.str;
         description = "The address to listen on";
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 8080;
         example = 8000;
-        type = types.port;
+        type = lib.types.port;
         description = "The port to listen on";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the redlib web interface";
       };
@@ -70,7 +70,7 @@ in
       settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType =
-            with types;
+            with lib.types;
             attrsOf (
               nullOr (oneOf [
                 bool
@@ -88,7 +88,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
     systemd.services.redlib = {
       wantedBy = [ "default.target" ];
@@ -115,7 +115,7 @@ in
         );
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

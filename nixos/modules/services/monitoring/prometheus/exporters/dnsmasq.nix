@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.dnsmasq;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     concatStringsSep
     escapeShellArg
@@ -18,15 +18,15 @@ in
 {
   port = 9153;
   extraOpts = {
-    dnsmasqListenAddress = mkOption {
-      type = types.str;
+    dnsmasqListenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "localhost:53";
       description = ''
         Address on which dnsmasq listens.
       '';
     };
-    leasesPath = mkOption {
-      type = types.path;
+    leasesPath = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/dnsmasq/dnsmasq.leases";
       example = "/var/lib/misc/dnsmasq.leases";
       description = ''
@@ -40,8 +40,8 @@ in
         ${pkgs.prometheus-dnsmasq-exporter}/bin/dnsmasq_exporter \
           --listen ${cfg.listenAddress}:${toString cfg.port} \
           --dnsmasq ${cfg.dnsmasqListenAddress} \
-          --leases_path ${escapeShellArg cfg.leasesPath} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          --leases_path ${lib.escapeShellArg cfg.leasesPath} \
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

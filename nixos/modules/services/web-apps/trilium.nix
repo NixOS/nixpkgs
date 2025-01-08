@@ -23,75 +23,75 @@ let
 in
 {
 
-  options.services.trilium-server = with lib; {
-    enable = mkEnableOption "trilium-server";
+  options.services.trilium-server = {
+    enable = lib.mkEnableOption "trilium-server";
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/trilium";
       description = ''
         The directory storing the notes database and the configuration.
       '';
     };
 
-    instanceName = mkOption {
-      type = types.str;
+    instanceName = lib.mkOption {
+      type = lib.types.str;
       default = "Trilium";
       description = ''
         Instance name used to distinguish between different instances
       '';
     };
 
-    noBackup = mkOption {
-      type = types.bool;
+    noBackup = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Disable periodic database backups.
       '';
     };
 
-    noAuthentication = mkOption {
-      type = types.bool;
+    noAuthentication = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         If set to true, no password is required to access the web frontend.
       '';
     };
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         The host address to bind to (defaults to localhost).
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = ''
         The port number to bind to.
       '';
     };
 
-    nginx = mkOption {
+    nginx = lib.mkOption {
       default = {};
       description = ''
         Configuration for nginx reverse proxy.
       '';
 
-      type = types.submodule {
+      type = lib.types.submodule {
         options = {
-          enable = mkOption {
-            type = types.bool;
+          enable = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Configure the nginx reverse proxy settings.
             '';
           };
 
-          hostName = mkOption {
-            type = types.str;
+          hostName = lib.mkOption {
+            type = lib.types.str;
             description = ''
               The hostname use to setup the virtualhost configuration
             '';

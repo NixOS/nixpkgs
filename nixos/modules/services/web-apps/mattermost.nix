@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.mattermost;
@@ -24,14 +22,14 @@ let
       useSudo ? true,
     }:
     ''
-      if ! test -e ${escapeShellArg "${statePath}/.db-created"}; then
-        ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
+      if ! test -e ${lib.escapeShellArg "${statePath}/.db-created"}; then
+        ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${lib.escapeShellArg config.services.postgresql.superUser} \\"}
           ${postgresPackage}/bin/psql postgres -c \
             "CREATE ROLE ${localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${localDatabasePassword}'"
-        ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
+        ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${lib.escapeShellArg config.services.postgresql.superUser} \\"}
           ${postgresPackage}/bin/createdb \
-            --owner ${escapeShellArg localDatabaseUser} ${escapeShellArg localDatabaseName}
-        touch ${escapeShellArg "${statePath}/.db-created"}
+            --owner ${lib.escapeShellArg localDatabaseUser} ${lib.escapeShellArg localDatabaseName}
+        touch ${lib.escapeShellArg "${statePath}/.db-created"}
       fi
     '';
 
@@ -88,7 +86,7 @@ let
         preferLocalBuild = true;
       };
 
-  mattermostConfWithoutPlugins = recursiveUpdate {
+  mattermostConfWithoutPlugins = lib.recursiveUpdate {
     ServiceSettings.SiteURL = cfg.siteUrl;
     ServiceSettings.ListenAddress = cfg.listenAddress;
     TeamSettings.SiteName = cfg.siteName;
@@ -98,7 +96,7 @@ let
     PluginSettings.ClientDirectory = "${cfg.statePath}/plugins/client";
   } cfg.extraConfig;
 
-  mattermostConf = recursiveUpdate mattermostConfWithoutPlugins (
+  mattermostConf = lib.recursiveUpdate mattermostConfWithoutPlugins (
     lib.optionalAttrs (mattermostPlugins != null) {
       PluginSettings = {
         Enable = true;
@@ -113,32 +111,32 @@ in
 {
   options = {
     services.mattermost = {
-      enable = mkEnableOption "Mattermost chat server";
+      enable = lib.mkEnableOption "Mattermost chat server";
 
-      package = mkPackageOption pkgs "mattermost" { };
+      package = lib.mkPackageOption pkgs "mattermost" { };
 
-      statePath = mkOption {
-        type = types.str;
+      statePath = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/mattermost";
         description = "Mattermost working directory";
       };
 
-      siteUrl = mkOption {
-        type = types.str;
+      siteUrl = lib.mkOption {
+        type = lib.types.str;
         example = "https://chat.example.com";
         description = ''
           URL this Mattermost instance is reachable under, without trailing slash.
         '';
       };
 
-      siteName = mkOption {
-        type = types.str;
+      siteName = lib.mkOption {
+        type = lib.types.str;
         default = "Mattermost";
         description = "Name of this Mattermost site.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = ":8065";
         example = "[::1]:8065";
         description = ''
@@ -146,8 +144,8 @@ in
         '';
       };
 
-      mutableConfig = mkOption {
-        type = types.bool;
+      mutableConfig = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether the Mattermost config.json is writeable by Mattermost.
@@ -163,8 +161,8 @@ in
         '';
       };
 
-      preferNixConfig = mkOption {
-        type = types.bool;
+      preferNixConfig = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If both mutableConfig and this option are set, the Nix configuration
@@ -173,19 +171,19 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.attrs;
+      extraConfig = lib.mkOption {
+        type = lib.types.attrs;
         default = { };
         description = ''
           Additional configuration options as Nix attribute set in config.json schema.
         '';
       };
 
-      plugins = mkOption {
-        type = types.listOf (
-          types.oneOf [
-            types.path
-            types.package
+      plugins = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.oneOf [
+            lib.types.path
+            lib.types.package
           ]
         );
         default = [ ];
@@ -196,8 +194,8 @@ in
           .tar.gz files.
         '';
       };
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Environment file (see {manpage}`systemd.exec(5)`
@@ -213,48 +211,48 @@ in
         '';
       };
 
-      localDatabaseCreate = mkOption {
-        type = types.bool;
+      localDatabaseCreate = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Create a local PostgreSQL database for Mattermost automatically.
         '';
       };
 
-      localDatabaseName = mkOption {
-        type = types.str;
+      localDatabaseName = lib.mkOption {
+        type = lib.types.str;
         default = "mattermost";
         description = ''
           Local Mattermost database name.
         '';
       };
 
-      localDatabaseUser = mkOption {
-        type = types.str;
+      localDatabaseUser = lib.mkOption {
+        type = lib.types.str;
         default = "mattermost";
         description = ''
           Local Mattermost database username.
         '';
       };
 
-      localDatabasePassword = mkOption {
-        type = types.str;
+      localDatabasePassword = lib.mkOption {
+        type = lib.types.str;
         default = "mmpgsecret";
         description = ''
           Password for local Mattermost database user.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "mattermost";
         description = ''
           User which runs the Mattermost service.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "mattermost";
         description = ''
           Group which runs the Mattermost service.
@@ -262,10 +260,10 @@ in
       };
 
       matterircd = {
-        enable = mkEnableOption "Mattermost IRC bridge";
-        package = mkPackageOption pkgs "matterircd" { };
-        parameters = mkOption {
-          type = types.listOf types.str;
+        enable = lib.mkEnableOption "Mattermost IRC bridge";
+        package = lib.mkPackageOption pkgs "matterircd" { };
+        parameters = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           example = [
             "-mmserver chat.example.com"
@@ -280,9 +278,9 @@ in
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
-      users.users = optionalAttrs (cfg.user == "mattermost") {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      users.users = lib.optionalAttrs (cfg.user == "mattermost") {
         mattermost = {
           group = cfg.group;
           uid = config.ids.uids.mattermost;
@@ -290,7 +288,7 @@ in
         };
       };
 
-      users.groups = optionalAttrs (cfg.group == "mattermost") {
+      users.groups = lib.optionalAttrs (cfg.group == "mattermost") {
         mattermost.gid = config.ids.gids.mattermost;
       };
 
@@ -357,17 +355,17 @@ in
           LimitNOFILE = "49152";
           EnvironmentFile = cfg.environmentFile;
         };
-        unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
+        unitConfig.JoinsNamespaceOf = lib.mkIf cfg.localDatabaseCreate "postgresql.service";
       };
     })
-    (mkIf cfg.matterircd.enable {
+    (lib.mkIf cfg.matterircd.enable {
       systemd.services.matterircd = {
         description = "Mattermost IRC bridge service";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";
-          ExecStart = "${cfg.matterircd.package}/bin/matterircd ${escapeShellArgs cfg.matterircd.parameters}";
+          ExecStart = "${cfg.matterircd.package}/bin/matterircd ${lib.escapeShellArgs cfg.matterircd.parameters}";
           WorkingDirectory = "/tmp";
           PrivateTmp = true;
           Restart = "always";

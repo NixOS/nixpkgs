@@ -9,12 +9,12 @@
 let
   inherit (lib)
     literalExpression
-    mkOption
+    lib.mkOption
     mkEnableOption
     types
     mkIf
     mkMerge
-    optional
+    lib.optional
     versionOlder
     ;
   cfg = config.hardware.system76;
@@ -26,7 +26,7 @@ let
     "system76-io"
   ] ++ (optional (versionOlder kpkgs.kernel.version "5.5") "system76-acpi");
   modulePackages = map (m: kpkgs.${m}) modules;
-  moduleConfig = mkIf cfg.kernel-modules.enable {
+  moduleConfig = lib.mkIf cfg.kernel-modules.enable {
     boot.extraModulePackages = modulePackages;
 
     boot.kernelModules = modules;
@@ -35,7 +35,7 @@ let
   };
 
   firmware-pkg = pkgs.system76-firmware;
-  firmwareConfig = mkIf cfg.firmware-daemon.enable {
+  firmwareConfig = lib.mkIf cfg.firmware-daemon.enable {
     # Make system76-firmware-cli usable by root from the command line.
     environment.systemPackages = [ firmware-pkg ];
 
@@ -55,7 +55,7 @@ let
   };
 
   power-pkg = pkgs.system76-power;
-  powerConfig = mkIf cfg.power-daemon.enable {
+  powerConfig = lib.mkIf cfg.power-daemon.enable {
     # Make system76-power usable by root from the command line.
     environment.systemPackages = [ power-pkg ];
 
@@ -78,33 +78,33 @@ in
     hardware.system76 = {
       enableAll = mkEnableOption "all recommended configuration for system76 systems";
 
-      firmware-daemon.enable = mkOption {
+      firmware-daemon.enable = lib.mkOption {
         default = cfg.enableAll;
-        defaultText = literalExpression "config.${opt.enableAll}";
+        defaultText = lib.literalExpression "config.${opt.enableAll}";
         example = true;
         description = "Whether to enable the system76 firmware daemon";
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      kernel-modules.enable = mkOption {
+      kernel-modules.enable = lib.mkOption {
         default = cfg.enableAll;
-        defaultText = literalExpression "config.${opt.enableAll}";
+        defaultText = lib.literalExpression "config.${opt.enableAll}";
         example = true;
         description = "Whether to make the system76 out-of-tree kernel modules available";
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      power-daemon.enable = mkOption {
+      power-daemon.enable = lib.mkOption {
         default = cfg.enableAll;
-        defaultText = literalExpression "config.${opt.enableAll}";
+        defaultText = lib.literalExpression "config.${opt.enableAll}";
         example = true;
         description = "Whether to enable the system76 power daemon";
-        type = types.bool;
+        type = lib.types.bool;
       };
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     moduleConfig
     firmwareConfig
     powerConfig

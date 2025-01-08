@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -15,8 +15,8 @@ let
 in
 {
   options.virtualisation.podman.networkSocket = {
-    server = mkOption {
-      type = types.enum [ "ghostunnel" ];
+    server = lib.mkOption {
+      type = lib.types.enum [ "ghostunnel" ];
     };
   };
 

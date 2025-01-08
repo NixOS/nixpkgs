@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   top = config.services.kubernetes;
   cfg = top.pki;
@@ -17,7 +15,7 @@ let
         algo = "rsa";
         size = 2048;
       };
-      names = singleton cfg.caSpec;
+      names = lib.singleton cfg.caSpec;
     }
   );
 
@@ -51,15 +49,15 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption "easyCert issuer service";
+    enable = lib.mkEnableOption "easyCert issuer service";
 
-    certs = mkOption {
+    certs = lib.mkOption {
       description = "List of certificate specs to feed to cert generator.";
       default = { };
       type = attrs;
     };
 
-    genCfsslCACert = mkOption {
+    genCfsslCACert = lib.mkOption {
       description = ''
         Whether to automatically generate cfssl CA certificate and key,
         if they don't exist.
@@ -68,7 +66,7 @@ in
       type = bool;
     };
 
-    genCfsslAPICerts = mkOption {
+    genCfsslAPICerts = lib.mkOption {
       description = ''
         Whether to automatically generate cfssl API webserver TLS cert and key,
         if they don't exist.
@@ -77,7 +75,7 @@ in
       type = bool;
     };
 
-    cfsslAPIExtraSANs = mkOption {
+    cfsslAPIExtraSANs = lib.mkOption {
       description = ''
         Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
       '';
@@ -86,7 +84,7 @@ in
       type = listOf str;
     };
 
-    genCfsslAPIToken = mkOption {
+    genCfsslAPIToken = lib.mkOption {
       description = ''
         Whether to automatically generate cfssl API-token secret,
         if they doesn't exist.
@@ -95,24 +93,24 @@ in
       type = bool;
     };
 
-    pkiTrustOnBootstrap = mkOption {
+    pkiTrustOnBootstrap = lib.mkOption {
       description = "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
       default = true;
       type = bool;
     };
 
-    caCertPathPrefix = mkOption {
+    caCertPathPrefix = lib.mkOption {
       description = ''
         Path-prefrix for the CA-certificate to be used for cfssl signing.
         Suffixes ".pem" and "-key.pem" will be automatically appended for
         the public and private keys respectively.
       '';
       default = "${config.services.cfssl.dataDir}/ca";
-      defaultText = literalExpression ''"''${config.services.cfssl.dataDir}/ca"'';
+      defaultText = lib.literalExpression ''"''${config.services.cfssl.dataDir}/ca"'';
       type = str;
     };
 
-    caSpec = mkOption {
+    caSpec = lib.mkOption {
       description = "Certificate specification for the auto-generated CAcert.";
       default = {
         CN = "kubernetes-cluster-ca";
@@ -123,7 +121,7 @@ in
       type = attrs;
     };
 
-    etcClusterAdminKubeconfig = mkOption {
+    etcClusterAdminKubeconfig = lib.mkOption {
       description = ''
         Symlink a kubeconfig with cluster-admin privileges to environment path
         (/etc/\<path\>).
@@ -135,7 +133,7 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let
       cfsslCertPathPrefix = "${config.services.cfssl.dataDir}/cfssl";
       cfsslCert = "${cfsslCertPathPrefix}.pem";
@@ -143,7 +141,7 @@ in
     in
     {
 
-      services.cfssl = mkIf (top.apiserver.enable) {
+      services.cfssl = lib.mkIf (top.apiserver.enable) {
         enable = true;
         address = "0.0.0.0";
         tlsCert = cfsslCert;
@@ -203,7 +201,7 @@ in
         description = "Kubernetes certmgr bootstrapper";
         wantedBy = [ "certmgr.service" ];
         after = [ "cfssl.target" ];
-        script = concatStringsSep "\n" [
+        script = lib.concatStringsSep "\n" [
           ''
             set -e
 
@@ -219,7 +217,7 @@ in
               install -m 600 /dev/null "${certmgrAPITokenPath}"
             fi
           ''
-          (optionalString (cfg.pkiTrustOnBootstrap) ''
+          (lib.optionalString (cfg.pkiTrustOnBootstrap) ''
             if [ ! -f "${top.caFile}" ] || [ $(cat "${top.caFile}" | wc -c) -lt 1 ]; then
               ${pkgs.curl}/bin/curl --fail-early -f -kd '{}' ${remote}/api/v1/cfssl/info | \
                 ${pkgs.cfssl}/bin/cfssljson -stdout >${top.caFile}
@@ -261,7 +259,7 @@ in
               };
             };
           in
-          mapAttrs mkSpec cfg.certs;
+          lib.mapAttrs mkSpec cfg.certs;
       };
 
       #TODO: Get rid of kube-addon-manager in the future for the following reasons
@@ -269,7 +267,7 @@ in
       # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
       # - it is designed to be used with k8s system components only
       # - it would be better with a more Nix-oriented way of managing addons
-      systemd.services.kube-addon-manager = mkIf top.addonManager.enable (mkMerge [
+      systemd.services.kube-addon-manager = lib.mkIf top.addonManager.enable (lib.mkMerge [
         {
           environment.KUBECONFIG =
             with cfg.certs.addonManager;
@@ -280,7 +278,7 @@ in
             };
         }
 
-        (optionalAttrs (top.addonManager.bootstrapAddons != { }) {
+        (lib.optionalAttrs (top.addonManager.bootstrapAddons != { }) {
           serviceConfig.PermissionsStartOnly = true;
           preStart =
             with pkgs;
@@ -291,16 +289,16 @@ in
             in
             ''
               export KUBECONFIG=${clusterAdminKubeconfig}
-              ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+              ${top.package}/bin/kubectl apply -f ${lib.concatStringsSep " \\\n -f " files}
             '';
         })
       ]);
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = lib.mkIf (
         cfg.etcClusterAdminKubeconfig != null
       ) clusterAdminKubeconfig;
 
-      environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [
+      environment.systemPackages = lib.mkIf (top.kubelet.enable || top.proxy.enable) [
         (pkgs.writeScriptBin "nixos-kubernetes-node-join" ''
           set -e
           exec 1>&2
@@ -331,19 +329,19 @@ in
 
           echo "Waiting for certs to appear..." >&1
 
-          ${optionalString top.kubelet.enable ''
+          ${lib.optionalString top.kubelet.enable ''
             while [ ! -f ${cfg.certs.kubelet.cert} ]; do sleep 1; done
             echo "Restarting kubelet..." >&1
             systemctl restart kubelet
           ''}
 
-          ${optionalString top.proxy.enable ''
+          ${lib.optionalString top.proxy.enable ''
             while [ ! -f ${cfg.certs.kubeProxyClient.cert} ]; do sleep 1; done
             echo "Restarting kube-proxy..." >&1
             systemctl restart kube-proxy
           ''}
 
-          ${optionalString top.flannel.enable ''
+          ${lib.optionalString top.flannel.enable ''
             while [ ! -f ${cfg.certs.flannelClient.cert} ]; do sleep 1; done
             echo "Restarting flannel..." >&1
             systemctl restart flannel
@@ -361,11 +359,11 @@ in
         advertiseClientUrls = [ "https://etcd.local:2379" ];
         initialCluster = [ "${top.masterAddress}=https://etcd.local:2380" ];
         initialAdvertisePeerUrls = [ "https://etcd.local:2380" ];
-        certFile = mkDefault cert;
-        keyFile = mkDefault key;
-        trustedCaFile = mkDefault caCert;
+        certFile = lib.mkDefault cert;
+        keyFile = lib.mkDefault key;
+        trustedCaFile = lib.mkDefault caCert;
       };
-      networking.extraHosts = mkIf (config.services.etcd.enable) ''
+      networking.extraHosts = lib.mkIf (config.services.etcd.enable) ''
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
 
@@ -379,54 +377,54 @@ in
 
       services.kubernetes = {
 
-        apiserver = mkIf top.apiserver.enable (
+        apiserver = lib.mkIf top.apiserver.enable (
           with cfg.certs.apiServer;
           {
             etcd = with cfg.certs.apiserverEtcdClient; {
               servers = [ "https://etcd.local:2379" ];
-              certFile = mkDefault cert;
-              keyFile = mkDefault key;
-              caFile = mkDefault caCert;
+              certFile = lib.mkDefault cert;
+              keyFile = lib.mkDefault key;
+              caFile = lib.mkDefault caCert;
             };
-            clientCaFile = mkDefault caCert;
-            tlsCertFile = mkDefault cert;
-            tlsKeyFile = mkDefault key;
-            serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.cert;
-            serviceAccountSigningKeyFile = mkDefault cfg.certs.serviceAccount.key;
-            kubeletClientCaFile = mkDefault caCert;
-            kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
-            kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
-            proxyClientCertFile = mkDefault cfg.certs.apiserverProxyClient.cert;
-            proxyClientKeyFile = mkDefault cfg.certs.apiserverProxyClient.key;
+            clientCaFile = lib.mkDefault caCert;
+            tlsCertFile = lib.mkDefault cert;
+            tlsKeyFile = lib.mkDefault key;
+            serviceAccountKeyFile = lib.mkDefault cfg.certs.serviceAccount.cert;
+            serviceAccountSigningKeyFile = lib.mkDefault cfg.certs.serviceAccount.key;
+            kubeletClientCaFile = lib.mkDefault caCert;
+            kubeletClientCertFile = lib.mkDefault cfg.certs.apiserverKubeletClient.cert;
+            kubeletClientKeyFile = lib.mkDefault cfg.certs.apiserverKubeletClient.key;
+            proxyClientCertFile = lib.mkDefault cfg.certs.apiserverProxyClient.cert;
+            proxyClientKeyFile = lib.mkDefault cfg.certs.apiserverProxyClient.key;
           }
         );
-        controllerManager = mkIf top.controllerManager.enable {
-          serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.key;
+        controllerManager = lib.mkIf top.controllerManager.enable {
+          serviceAccountKeyFile = lib.mkDefault cfg.certs.serviceAccount.key;
           rootCaFile = cfg.certs.controllerManagerClient.caCert;
           kubeconfig = with cfg.certs.controllerManagerClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
+            certFile = lib.mkDefault cert;
+            keyFile = lib.mkDefault key;
           };
         };
-        scheduler = mkIf top.scheduler.enable {
+        scheduler = lib.mkIf top.scheduler.enable {
           kubeconfig = with cfg.certs.schedulerClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
+            certFile = lib.mkDefault cert;
+            keyFile = lib.mkDefault key;
           };
         };
-        kubelet = mkIf top.kubelet.enable {
-          clientCaFile = mkDefault cfg.certs.kubelet.caCert;
-          tlsCertFile = mkDefault cfg.certs.kubelet.cert;
-          tlsKeyFile = mkDefault cfg.certs.kubelet.key;
+        kubelet = lib.mkIf top.kubelet.enable {
+          clientCaFile = lib.mkDefault cfg.certs.kubelet.caCert;
+          tlsCertFile = lib.mkDefault cfg.certs.kubelet.cert;
+          tlsKeyFile = lib.mkDefault cfg.certs.kubelet.key;
           kubeconfig = with cfg.certs.kubeletClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
+            certFile = lib.mkDefault cert;
+            keyFile = lib.mkDefault key;
           };
         };
-        proxy = mkIf top.proxy.enable {
+        proxy = lib.mkIf top.proxy.enable {
           kubeconfig = with cfg.certs.kubeProxyClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
+            certFile = lib.mkDefault cert;
+            keyFile = lib.mkDefault key;
           };
         };
       };

@@ -28,10 +28,10 @@ let
     mkDefault
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkRenamedOptionModule
-    optional
-    optionals
+    lib.optional
+    lib.optionals
     sort
     stringAfter
     stringLength
@@ -124,8 +124,8 @@ let
 
     options = {
 
-      name = mkOption {
-        type = types.passwdEntry types.str;
+      name = lib.mkOption {
+        type = lib.types.passwdEntry types.str;
         apply = x: assert (stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
@@ -133,8 +133,8 @@ let
         '';
       };
 
-      description = mkOption {
-        type = types.passwdEntry types.str;
+      description = lib.mkOption {
+        type = lib.types.passwdEntry types.str;
         default = "";
         example = "Alice Q. User";
         description = ''
@@ -144,8 +144,8 @@ let
         '';
       };
 
-      uid = mkOption {
-        type = with types; nullOr int;
+      uid = lib.mkOption {
+        type = with lib.types; nullOr int;
         default = null;
         description = ''
           The account UID. If the UID is null, a free UID is picked on
@@ -153,8 +153,8 @@ let
         '';
       };
 
-      isSystemUser = mkOption {
-        type = types.bool;
+      isSystemUser = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Indicates if the user is a system user or not. This option
@@ -168,8 +168,8 @@ let
         '';
       };
 
-      isNormalUser = mkOption {
-        type = types.bool;
+      isNormalUser = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Indicates whether this is an account for a “real” user.
@@ -182,33 +182,33 @@ let
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         apply = x: assert (stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "";
         description = "The user's primary group.";
       };
 
-      extraGroups = mkOption {
-        type = types.listOf types.str;
+      extraGroups = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         description = "The user's auxiliary groups.";
       };
 
-      home = mkOption {
-        type = types.passwdEntry types.path;
+      home = lib.mkOption {
+        type = lib.types.passwdEntry types.path;
         default = "/var/empty";
         description = "The user's home directory.";
       };
 
-      homeMode = mkOption {
-        type = types.strMatching "[0-7]{1,5}";
+      homeMode = lib.mkOption {
+        type = lib.types.strMatching "[0-7]{1,5}";
         default = "700";
         description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
-      cryptHomeLuks = mkOption {
-        type = with types; nullOr str;
+      cryptHomeLuks = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = ''
           Path to encrypted luks device that contains
@@ -216,8 +216,8 @@ let
         '';
       };
 
-      pamMount = mkOption {
-        type = with types; attrsOf str;
+      pamMount = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = {};
         description = ''
           Attributes for user's entry in
@@ -229,11 +229,11 @@ let
         '';
       };
 
-      shell = mkOption {
-        type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
+      shell = lib.mkOption {
+        type = lib.types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
         default = pkgs.shadow;
-        defaultText = literalExpression "pkgs.shadow";
-        example = literalExpression "pkgs.bashInteractive";
+        defaultText = lib.literalExpression "pkgs.shadow";
+        example = lib.literalExpression "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
           like `pkgs.bashInteractive`. Don’t
@@ -243,8 +243,8 @@ let
         '';
       };
 
-      ignoreShellProgramCheck = mkOption {
-        type = types.bool;
+      ignoreShellProgramCheck = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           By default, nixos will check that programs.SHELL.enable is set to
@@ -254,8 +254,8 @@ let
         '';
       };
 
-      subUidRanges = mkOption {
-        type = with types; listOf (submodule subordinateUidRange);
+      subUidRanges = lib.mkOption {
+        type = with lib.types; listOf (submodule subordinateUidRange);
         default = [];
         example = [
           { startUid = 1000; count = 1; }
@@ -268,8 +268,8 @@ let
         '';
       };
 
-      subGidRanges = mkOption {
-        type = with types; listOf (submodule subordinateGidRange);
+      subGidRanges = lib.mkOption {
+        type = with lib.types; listOf (submodule subordinateGidRange);
         default = [];
         example = [
           { startGid = 100; count = 1; }
@@ -282,8 +282,8 @@ let
         '';
       };
 
-      autoSubUidGidRange = mkOption {
-        type = types.bool;
+      autoSubUidGidRange = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         example = true;
         description = ''
@@ -292,8 +292,8 @@ let
         '';
       };
 
-      createHome = mkOption {
-        type = types.bool;
+      createHome = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to create the home directory and ensure ownership as well as
@@ -301,8 +301,8 @@ let
         '';
       };
 
-      useDefaultShell = mkOption {
-        type = types.bool;
+      useDefaultShell = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If true, the user's shell will be set to
@@ -310,8 +310,8 @@ let
         '';
       };
 
-      hashedPassword = mkOption {
-        type = with types; nullOr (passwdEntry str);
+      hashedPassword = lib.mkOption {
+        type = with lib.types; nullOr (passwdEntry str);
         default = null;
         description = ''
           Specifies the hashed password for the user.
@@ -321,8 +321,8 @@ let
         '';
       };
 
-      password = mkOption {
-        type = with types; nullOr str;
+      password = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = ''
           Specifies the (clear text) password for the user.
@@ -334,10 +334,10 @@ let
         '';
       };
 
-      hashedPasswordFile = mkOption {
-        type = with types; nullOr str;
+      hashedPasswordFile = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = cfg.users.${name}.passwordFile;
-        defaultText = literalExpression "null";
+        defaultText = lib.literalExpression "null";
         description = ''
           The full path to a file that contains the hash of the user's
           password. The password file is read on each system activation. The
@@ -348,15 +348,15 @@ let
         '';
       };
 
-      passwordFile = mkOption {
-        type = with types; nullOr str;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         visible = false;
         description = "Deprecated alias of hashedPasswordFile";
       };
 
-      initialHashedPassword = mkOption {
-        type = with types; nullOr (passwdEntry str);
+      initialHashedPassword = lib.mkOption {
+        type = with lib.types; nullOr (passwdEntry str);
         default = null;
         description = ''
           Specifies the initial hashed password for the user, i.e. the
@@ -371,8 +371,8 @@ let
         '';
       };
 
-      initialPassword = mkOption {
-        type = with types; nullOr str;
+      initialPassword = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = ''
           Specifies the initial password for the user, i.e. the
@@ -390,10 +390,10 @@ let
         '';
       };
 
-      packages = mkOption {
-        type = types.listOf types.package;
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
+        example = lib.literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that should be made available to the user.
           This is in contrast to {option}`environment.systemPackages`,
@@ -401,8 +401,8 @@ let
         '';
       };
 
-      expires = mkOption {
-        type = types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
+      expires = lib.mkOption {
+        type = lib.types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
         default = null;
         description = ''
           Set the date on which the user's account will no longer be
@@ -413,8 +413,8 @@ let
         '';
       };
 
-      linger = mkOption {
-        type = types.bool;
+      linger = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable lingering for this user. If true, systemd user
@@ -428,28 +428,28 @@ let
       };
     };
 
-    config = mkMerge
-      [ { name = mkDefault name;
-          shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
+    config = lib.mkMerge
+      [ { name = lib.mkDefault name;
+          shell = lib.mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
         }
-        (mkIf config.isNormalUser {
-          group = mkDefault "users";
-          createHome = mkDefault true;
-          home = mkDefault "/home/${config.name}";
-          homeMode = mkDefault "700";
-          useDefaultShell = mkDefault true;
-          isSystemUser = mkDefault false;
+        (lib.mkIf config.isNormalUser {
+          group = lib.mkDefault "users";
+          createHome = lib.mkDefault true;
+          home = lib.mkDefault "/home/${config.name}";
+          homeMode = lib.mkDefault "700";
+          useDefaultShell = lib.mkDefault true;
+          isSystemUser = lib.mkDefault false;
         })
         # If !mutableUsers, setting ‘initialPassword’ is equivalent to
         # setting ‘password’ (and similarly for hashed passwords).
-        (mkIf (!cfg.mutableUsers && config.initialPassword != null) {
-          password = mkDefault config.initialPassword;
+        (lib.mkIf (!cfg.mutableUsers && config.initialPassword != null) {
+          password = lib.mkDefault config.initialPassword;
         })
-        (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
-          hashedPassword = mkDefault config.initialHashedPassword;
+        (lib.mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
+          hashedPassword = lib.mkDefault config.initialHashedPassword;
         })
-        (mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
-          autoSubUidGidRange = mkDefault true;
+        (lib.mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
+          autoSubUidGidRange = lib.mkDefault true;
         })
       ];
 
@@ -459,16 +459,16 @@ let
 
     options = {
 
-      name = mkOption {
-        type = types.passwdEntry types.str;
+      name = lib.mkOption {
+        type = lib.types.passwdEntry types.str;
         description = ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
         '';
       };
 
-      gid = mkOption {
-        type = with types; nullOr int;
+      gid = lib.mkOption {
+        type = with lib.types; nullOr int;
         default = null;
         description = ''
           The group GID. If the GID is null, a free GID is picked on
@@ -476,8 +476,8 @@ let
         '';
       };
 
-      members = mkOption {
-        type = with types; listOf (passwdEntry str);
+      members = lib.mkOption {
+        type = with lib.types; listOf (passwdEntry str);
         default = [];
         description = ''
           The user names of the group members, added to the
@@ -488,7 +488,7 @@ let
     };
 
     config = {
-      name = mkDefault name;
+      name = lib.mkDefault name;
 
       members = mapAttrsToList (n: u: u.name) (
         filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
@@ -499,15 +499,15 @@ let
 
   subordinateUidRange = {
     options = {
-      startUid = mkOption {
-        type = types.int;
+      startUid = lib.mkOption {
+        type = lib.types.int;
         description = ''
           Start of the range of subordinate user ids that user is
           allowed to use.
         '';
       };
-      count = mkOption {
-        type = types.int;
+      count = lib.mkOption {
+        type = lib.types.int;
         default = 1;
         description = "Count of subordinate user ids";
       };
@@ -516,15 +516,15 @@ let
 
   subordinateGidRange = {
     options = {
-      startGid = mkOption {
-        type = types.int;
+      startGid = lib.mkOption {
+        type = lib.types.int;
         description = ''
           Start of the range of subordinate group ids that user is
           allowed to use.
         '';
       };
-      count = mkOption {
-        type = types.int;
+      count = lib.mkOption {
+        type = lib.types.int;
         default = 1;
         description = "Count of subordinate group ids";
       };
@@ -541,10 +541,10 @@ let
       else { dup = false; acc = newAcc; }
     ) { dup = false; acc = {}; } (attrNames set)).dup;
 
-  uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
-  gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
-  sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
-  sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
+  uidsAreUnique = idsAreUnique (lib.filterAttrs (n: u: u.uid != null) cfg.users) "uid";
+  gidsAreUnique = idsAreUnique (lib.filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
+  sdInitrdUidsAreUnique = idsAreUnique (lib.filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
+  sdInitrdGidsAreUnique = idsAreUnique (lib.filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
   usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
 
@@ -567,19 +567,19 @@ let
     in
       filter types.shellPackage.check shells;
 
-  lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
+  lingeringUsers = map (u: u.name) (lib.attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
 in {
   imports = [
     (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
-    (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
+    (lib.mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
   ###### interface
   options = {
 
-    users.mutableUsers = mkOption {
-      type = types.bool;
+    users.mutableUsers = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         If set to `true`, you are free to add new users and groups to the system
@@ -603,17 +603,17 @@ in {
       '';
     };
 
-    users.enforceIdUniqueness = mkOption {
-      type = types.bool;
+    users.enforceIdUniqueness = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to require that no two users/groups share the same uid/gid.
       '';
     };
 
-    users.users = mkOption {
+    users.users = lib.mkOption {
       default = {};
-      type = with types; attrsOf (submodule userOpts);
+      type = with lib.types; attrsOf (submodule userOpts);
       example = {
         alice = {
           uid = 1234;
@@ -631,21 +631,21 @@ in {
       '';
     };
 
-    users.groups = mkOption {
+    users.groups = lib.mkOption {
       default = {};
       example =
         { students.gid = 1001;
           hackers = { };
         };
-      type = with types; attrsOf (submodule groupOpts);
+      type = with lib.types; attrsOf (submodule groupOpts);
       description = ''
         Additional groups to be created automatically by the system.
       '';
     };
 
 
-    users.allowNoPasswordLogin = mkOption {
-      type = types.bool;
+    users.allowNoPasswordLogin = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Disable checking that at least the `root` user or a user in the `wheel` group can log in using
@@ -656,51 +656,51 @@ in {
     };
 
     # systemd initrd
-    boot.initrd.systemd.users = mkOption {
+    boot.initrd.systemd.users = lib.mkOption {
       description = ''
         Users to include in initrd.
       '';
       default = {};
-      type = types.attrsOf (types.submodule ({ name, ... }: {
-        options.uid = mkOption {
-          type = types.int;
+      type = lib.types.attrsOf (types.submodule ({ name, ... }: {
+        options.uid = lib.mkOption {
+          type = lib.types.int;
           description = ''
             ID of the user in initrd.
           '';
-          defaultText = literalExpression "config.users.users.\${name}.uid";
+          defaultText = lib.literalExpression "config.users.users.\${name}.uid";
           default = cfg.users.${name}.uid;
         };
-        options.group = mkOption {
-          type = types.singleLineStr;
+        options.group = lib.mkOption {
+          type = lib.types.singleLineStr;
           description = ''
             Group the user belongs to in initrd.
           '';
-          defaultText = literalExpression "config.users.users.\${name}.group";
+          defaultText = lib.literalExpression "config.users.users.\${name}.group";
           default = cfg.users.${name}.group;
         };
-        options.shell = mkOption {
-          type = types.passwdEntry types.path;
+        options.shell = lib.mkOption {
+          type = lib.types.passwdEntry types.path;
           description = ''
             The path to the user's shell in initrd.
           '';
           default = "${pkgs.shadow}/bin/nologin";
-          defaultText = literalExpression "\${pkgs.shadow}/bin/nologin";
+          defaultText = lib.literalExpression "\${pkgs.shadow}/bin/nologin";
         };
       }));
     };
 
-    boot.initrd.systemd.groups = mkOption {
+    boot.initrd.systemd.groups = lib.mkOption {
       description = ''
         Groups to include in initrd.
       '';
       default = {};
-      type = types.attrsOf (types.submodule ({ name, ... }: {
-        options.gid = mkOption {
-          type = types.int;
+      type = lib.types.attrsOf (types.submodule ({ name, ... }: {
+        options.gid = lib.mkOption {
+          type = lib.types.int;
           description = ''
             ID of the group in initrd.
           '';
-          defaultText = literalExpression "config.users.groups.\${name}.gid";
+          defaultText = lib.literalExpression "config.users.groups.\${name}.gid";
           default = cfg.groups.${name}.gid;
         };
       }));
@@ -719,7 +719,7 @@ in {
         uid = ids.uids.root;
         description = "System administrator";
         home = "/root";
-        shell = mkDefault cfg.defaultUserShell;
+        shell = lib.mkDefault cfg.defaultUserShell;
         group = "root";
       };
       nobody = {
@@ -830,7 +830,7 @@ in {
         inherit (config.environment) pathsToLink extraOutputsToInstall;
         inherit (config.system.path) ignoreCollisions postBuild;
       };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users);
+    }) (lib.filterAttrs (_: u: u.packages != []) cfg.users);
 
     environment.profiles = [
       "$HOME/.nix-profile"
@@ -979,12 +979,12 @@ in {
     ));
 
     warnings =
-      flip concatMap (attrValues cfg.users) (user: let
+      flip concatMap (lib.attrValues cfg.users) (user: let
         passwordOptions = [
           "hashedPassword"
           "hashedPasswordFile"
           "password"
-        ] ++ optionals cfg.mutableUsers [
+        ] ++ lib.optionals cfg.mutableUsers [
           # For immutable users, initialHashedPassword is set to hashedPassword,
           # so using these options would always trigger the assertion.
           "initialHashedPassword"
@@ -992,7 +992,7 @@ in {
         ];
         unambiguousPasswordConfiguration = 1 >= length
           (filter (x: x != null) (map (flip getAttr user) passwordOptions));
-      in optional (!unambiguousPasswordConfiguration) ''
+      in lib.optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
         `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
         & `hashedPasswordFile` set to a non-null value.

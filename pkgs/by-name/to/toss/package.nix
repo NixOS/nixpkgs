@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   };
   preInstall = "export DESTDIR=$out/bin";
   meta =
-    with lib;
     src.meta
     // {
       description = "Dead simple LAN file transfers from the command line";

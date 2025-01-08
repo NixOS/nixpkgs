@@ -14,7 +14,7 @@ let
 
     nodes = {
       kafka = { ... }: {
-        services.apache-kafka = mkMerge [
+        services.apache-kafka = lib.mkMerge [
           ({
             enable = true;
             package = kafkaPackage;
@@ -26,13 +26,13 @@ let
               ];
             };
           })
-          (mkIf (mode == "zookeeper") {
+          (lib.mkIf (mode == "zookeeper") {
             settings = {
               "zookeeper.session.timeout.ms" = 600000;
               "zookeeper.connect" = [ "zookeeper1:2181" ];
             };
           })
-          (mkIf (mode == "kraft") {
+          (lib.mkIf (mode == "kraft") {
             clusterId = "ak2fIHr4S8WWarOF_ODD0g";
             formatLogDirs = true;
             settings = {
@@ -61,7 +61,7 @@ let
         # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
         virtualisation.memorySize = 2047;
       };
-    } // optionalAttrs (mode == "zookeeper") {
+    } // lib.optionalAttrs (mode == "zookeeper") {
       zookeeper1 = { ... }: {
         services.zookeeper = {
           enable = true;
@@ -74,7 +74,7 @@ let
     testScript = ''
       start_all()
 
-      ${optionalString (mode == "zookeeper") ''
+      ${lib.optionalString (mode == "zookeeper") ''
       zookeeper1.wait_for_unit("default.target")
       zookeeper1.wait_for_unit("zookeeper.service")
       zookeeper1.wait_for_open_port(2181)

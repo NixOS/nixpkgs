@@ -5,13 +5,13 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   options = {
 
-    proxyPass = mkOption {
-      type = with types; nullOr str;
+    proxyPass = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "http://www.example.org/";
       description = ''
@@ -19,8 +19,8 @@ in
       '';
     };
 
-    index = mkOption {
-      type = with types; nullOr str;
+    index = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "index.php index.html";
       description = ''
@@ -28,8 +28,8 @@ in
       '';
     };
 
-    alias = mkOption {
-      type = with types; nullOr path;
+    alias = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       example = "/your/alias/directory";
       description = ''
@@ -37,16 +37,16 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         These lines go to the end of the location verbatim.
       '';
     };
 
-    priority = mkOption {
-      type = types.int;
+    priority = lib.mkOption {
+      type = lib.types.int;
       default = 1000;
       description = ''
         Order of this location block in relation to the others in the vhost.

@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.pekwm;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.pekwm.enable = mkEnableOption "pekwm";
+    services.xserver.windowManager.pekwm.enable = lib.mkEnableOption "pekwm";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "pekwm";
       start = ''
         ${pkgs.pekwm}/bin/pekwm &

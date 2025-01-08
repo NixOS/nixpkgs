@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   globalCfg = config.services.scion;
   cfg = config.services.scion.scion-daemon;
@@ -28,15 +26,15 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-daemon.toml" (recursiveUpdate defaultConfig cfg.settings);
+  configFile = toml.generate "scion-daemon.toml" (lib.recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-daemon = {
-    enable = mkEnableOption "the scion-daemon service";
-    settings = mkOption {
+    enable = lib.mkEnableOption "the scion-daemon service";
+    settings = lib.mkOption {
       default = { };
       type = toml.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           path_db = {
             connection = "/run/scion-daemon/sd.path.db";
@@ -53,7 +51,7 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.scion-daemon = {
       description = "SCION Daemon";
       after = [

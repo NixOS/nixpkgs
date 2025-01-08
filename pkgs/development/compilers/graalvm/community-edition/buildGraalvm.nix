@@ -251,7 +251,6 @@ let
       } // (args.passhtru or { });
 
       meta =
-        with lib;
         (
           {
             homepage = "https://www.graalvm.org/";
@@ -263,7 +262,7 @@ let
             ];
             sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
-            maintainers = with lib.maintainers; lib.teams.graalvm-ce.members ++ [ ];
+            maintainers = lib.teams.graalvm-ce.members ++ [ ];
           }
           // (args.meta or { })
         );

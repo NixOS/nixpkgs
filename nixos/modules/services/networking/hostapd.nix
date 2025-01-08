@@ -30,12 +30,12 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRemovedOptionModule
-    optionalAttrs
-    optionalString
-    optionals
+    lib.optionalAttrs
+    lib.optionalString
+    lib.optionals
     stringLength
     toLower
     types
@@ -77,7 +77,7 @@ let
     pkgs.writeShellScript "make-hostapd-${radio}-files" (''
       set -euo pipefail
 
-      hostapd_config_file=/run/hostapd/${escapeShellArg radio}.hostapd.conf
+      hostapd_config_file=/run/hostapd/${lib.escapeShellArg radio}.hostapd.conf
       rm -f "$hostapd_config_file"
       cat > "$hostapd_config_file" <<EOF
       # Radio base configuration: ${radio}
@@ -85,24 +85,24 @@ let
 
       EOF
 
-      cat ${escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-extra.conf" radioCfg.settings)} >> "$hostapd_config_file"
-      ${concatMapStrings (script: "${script} \"$hostapd_config_file\"\n") (attrValues radioCfg.dynamicConfigScripts)}
+      cat ${lib.escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-extra.conf" radioCfg.settings)} >> "$hostapd_config_file"
+      ${concatMapStrings (script: "${script} \"$hostapd_config_file\"\n") (lib.attrValues radioCfg.dynamicConfigScripts)}
     ''
     + concatMapStrings (x: "${x}\n") (imap0 (i: f: f i)
       (mapAttrsToList (bss: bssCfg: bssIdx: ''
         ''\n# BSS configuration: ${bss}
 
-        mac_allow_file=/run/hostapd/${escapeShellArg bss}.mac.allow
+        mac_allow_file=/run/hostapd/${lib.escapeShellArg bss}.mac.allow
         rm -f "$mac_allow_file"
         touch "$mac_allow_file"
 
-        mac_deny_file=/run/hostapd/${escapeShellArg bss}.mac.deny
+        mac_deny_file=/run/hostapd/${lib.escapeShellArg bss}.mac.deny
         rm -f "$mac_deny_file"
         touch "$mac_deny_file"
 
         cat ${writeBssHeader radio bss bssIdx} >> "$hostapd_config_file"
-        cat ${escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
-        ${concatMapStrings (script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n") (attrValues bssCfg.dynamicConfigScripts)}
+        cat ${lib.escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
+        ${concatMapStrings (script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n") (lib.attrValues bssCfg.dynamicConfigScripts)}
       '') radioCfg.networks)));
 
   runtimeConfigFiles = mapAttrsToList (radio: _: "/run/hostapd/${radio}.hostapd.conf") cfg.radios;
@@ -111,18 +111,18 @@ in {
 
   options = {
     services.hostapd = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         hostapd, a user space daemon for access point and
         authentication servers. It implements IEEE 802.11 access point management,
         IEEE 802.1X/WPA/WPA2/EAP Authenticators, RADIUS client, EAP server, and RADIUS
         authentication server
       '';
 
-      package = mkPackageOption pkgs "hostapd" {};
+      package = lib.mkPackageOption pkgs "hostapd" {};
 
-      radios = mkOption {
+      radios = lib.mkOption {
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             # Simple 2.4GHz AP
             wlp2s0 = {
@@ -176,12 +176,12 @@ in {
           and supports configuring multiple APs (Refer to valid interface combinations in
           {command}`iw list`).
         '';
-        type = types.attrsOf (types.submodule (radioSubmod: {
+        type = lib.types.attrsOf (types.submodule (radioSubmod: {
           options = {
-            driver = mkOption {
+            driver = lib.mkOption {
               default = "nl80211";
               example = "none";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 The driver {command}`hostapd` will use.
                 {var}`nl80211` is used with all Linux mac80211 drivers.
@@ -191,8 +191,8 @@ in {
               '';
             };
 
-            noScan = mkOption {
-              type = types.bool;
+            noScan = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Disables scan for overlapping BSSs in HT40+/- mode.
@@ -200,10 +200,10 @@ in {
               '';
             };
 
-            countryCode = mkOption {
+            countryCode = lib.mkOption {
               default = null;
               example = "US";
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 Country code (ISO/IEC 3166-1). Used to set regulatory domain.
                 Set as needed to indicate country in which device is operating.
@@ -222,19 +222,19 @@ in {
               '';
             };
 
-            band = mkOption {
+            band = lib.mkOption {
               default = "2g";
-              type = types.enum ["2g" "5g" "6g" "60g"];
+              type = lib.types.enum ["2g" "5g" "6g" "60g"];
               description = ''
                 Specifies the frequency band to use, possible values are 2g for 2.4 GHz,
                 5g for 5 GHz, 6g for 6 GHz and 60g for 60 GHz.
               '';
             };
 
-            channel = mkOption {
+            channel = lib.mkOption {
               default = 0;
               example = 11;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 The channel to operate on. Use 0 to enable ACS (Automatic Channel Selection).
                 Beware that not every device supports ACS in which case {command}`hostapd`
@@ -242,10 +242,10 @@ in {
               '';
             };
 
-            settings = mkOption {
+            settings = lib.mkOption {
               default = {};
               example = { acs_exclude_dfs = true; };
-              type = types.submodule {
+              type = lib.types.submodule {
                 freeformType = extraSettingsFormat.type;
               };
               description = ''
@@ -258,10 +258,10 @@ in {
               '';
             };
 
-            dynamicConfigScripts = mkOption {
+            dynamicConfigScripts = lib.mkOption {
               default = {};
-              type = types.attrsOf types.path;
-              example = literalExpression ''
+              type = lib.types.attrsOf types.path;
+              example = lib.literalExpression ''
                 {
                   exampleDynamicConfig = pkgs.writeShellScript "dynamic-config" '''
                     HOSTAPD_CONFIG=$1
@@ -285,9 +285,9 @@ in {
             #### IEEE 802.11n (WiFi 4) related configuration
 
             wifi4 = {
-              enable = mkOption {
+              enable = lib.mkOption {
                 default = true;
-                type = types.bool;
+                type = lib.types.bool;
                 description = ''
                   Enables support for IEEE 802.11n (WiFi 4, HT).
                   This is enabled by default, since the vase majority of devices
@@ -295,8 +295,8 @@ in {
                 '';
               };
 
-              capabilities = mkOption {
-                type = types.listOf types.str;
+              capabilities = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = ["HT40" "SHORT-GI-20" "SHORT-GI-40"];
                 example = ["LDPC" "HT40+" "HT40-" "GF" "SHORT-GI-20" "SHORT-GI-40" "TX-STBC" "RX-STBC1"];
                 description = ''
@@ -308,9 +308,9 @@ in {
                 '';
               };
 
-              require = mkOption {
+              require = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "Require stations (clients) to support WiFi 4 (HT) and disassociate them if they don't.";
               };
             };
@@ -318,14 +318,14 @@ in {
             #### IEEE 802.11ac (WiFi 5) related configuration
 
             wifi5 = {
-              enable = mkOption {
+              enable = lib.mkOption {
                 default = true;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "Enables support for IEEE 802.11ac (WiFi 5, VHT)";
               };
 
-              capabilities = mkOption {
-                type = types.listOf types.str;
+              capabilities = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [];
                 example = ["SHORT-GI-80" "TX-STBC-2BY1" "RX-STBC-1" "RX-ANTENNA-PATTERN" "TX-ANTENNA-PATTERN"];
                 description = ''
@@ -335,15 +335,15 @@ in {
                 '';
               };
 
-              require = mkOption {
+              require = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "Require stations (clients) to support WiFi 5 (VHT) and disassociate them if they don't.";
               };
 
-              operatingChannelWidth = mkOption {
+              operatingChannelWidth = lib.mkOption {
                 default = "20or40";
-                type = types.enum ["20or40" "80" "160" "80+80"];
+                type = lib.types.enum ["20or40" "80" "160" "80+80"];
                 apply = x:
                   getAttr x {
                     "20or40" = 0;
@@ -365,39 +365,39 @@ in {
             #### IEEE 802.11ax (WiFi 6) related configuration
 
             wifi6 = {
-              enable = mkOption {
+              enable = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "Enables support for IEEE 802.11ax (WiFi 6, HE)";
               };
 
-              require = mkOption {
+              require = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "Require stations (clients) to support WiFi 6 (HE) and disassociate them if they don't.";
               };
 
-              singleUserBeamformer = mkOption {
+              singleUserBeamformer = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "HE single user beamformer support";
               };
 
-              singleUserBeamformee = mkOption {
+              singleUserBeamformee = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "HE single user beamformee support";
               };
 
-              multiUserBeamformer = mkOption {
+              multiUserBeamformer = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "HE multi user beamformee support";
               };
 
-              operatingChannelWidth = mkOption {
+              operatingChannelWidth = lib.mkOption {
                 default = "20or40";
-                type = types.enum ["20or40" "80" "160" "80+80"];
+                type = lib.types.enum ["20or40" "80" "160" "80+80"];
                 apply = x:
                   getAttr x {
                     "20or40" = 0;
@@ -419,36 +419,36 @@ in {
             #### IEEE 802.11be (WiFi 7) related configuration
 
             wifi7 = {
-              enable = mkOption {
+              enable = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = ''
                   Enables support for IEEE 802.11be (WiFi 7, EHT). This is currently experimental
                   and requires you to manually enable CONFIG_IEEE80211BE when building hostapd.
                 '';
               };
 
-              singleUserBeamformer = mkOption {
+              singleUserBeamformer = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "EHT single user beamformer support";
               };
 
-              singleUserBeamformee = mkOption {
+              singleUserBeamformee = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "EHT single user beamformee support";
               };
 
-              multiUserBeamformer = mkOption {
+              multiUserBeamformer = lib.mkOption {
                 default = false;
-                type = types.bool;
+                type = lib.types.bool;
                 description = "EHT multi user beamformee support";
               };
 
-              operatingChannelWidth = mkOption {
+              operatingChannelWidth = lib.mkOption {
                 default = "20or40";
-                type = types.enum ["20or40" "80" "160" "80+80"];
+                type = lib.types.enum ["20or40" "80" "160" "80+80"];
                 apply = x:
                   getAttr x {
                     "20or40" = 0;
@@ -469,9 +469,9 @@ in {
 
             #### BSS definitions
 
-            networks = mkOption {
+            networks = lib.mkOption {
               default = {};
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 {
                   wlp2s0 = {
                     ssid = "Primary advertised network";
@@ -487,11 +487,11 @@ in {
                 This defines a BSS, colloquially known as a WiFi network.
                 You have to specify at least one.
               '';
-              type = types.attrsOf (types.submodule (bssSubmod: {
+              type = lib.types.attrsOf (types.submodule (bssSubmod: {
                 options = {
-                  logLevel = mkOption {
+                  logLevel = lib.mkOption {
                     default = 2;
-                    type = types.int;
+                    type = lib.types.int;
                     description = ''
                       Levels (minimum value for logged events):
                       0 = verbose debugging
@@ -502,29 +502,29 @@ in {
                     '';
                   };
 
-                  group = mkOption {
+                  group = lib.mkOption {
                     default = "wheel";
                     example = "network";
-                    type = types.str;
+                    type = lib.types.str;
                     description = ''
                       Members of this group can access the control socket for this interface.
                     '';
                   };
 
-                  utf8Ssid = mkOption {
+                  utf8Ssid = lib.mkOption {
                     default = true;
-                    type = types.bool;
+                    type = lib.types.bool;
                     description = "Whether the SSID is to be interpreted using UTF-8 encoding.";
                   };
 
-                  ssid = mkOption {
+                  ssid = lib.mkOption {
                     example = "❄️ cool ❄️";
-                    type = types.str;
+                    type = lib.types.str;
                     description = "SSID to be used in IEEE 802.11 management frames.";
                   };
 
-                  bssid = mkOption {
-                    type = types.nullOr types.str;
+                  bssid = lib.mkOption {
+                    type = lib.types.nullOr lib.types.str;
                     default = null;
                     example = "11:22:33:44:55:66";
                     description = ''
@@ -537,9 +537,9 @@ in {
                     '';
                   };
 
-                  macAcl = mkOption {
+                  macAcl = lib.mkOption {
                     default = "deny";
-                    type = types.enum ["deny" "allow" "radius"];
+                    type = lib.types.enum ["deny" "allow" "radius"];
                     apply = x:
                       getAttr x {
                         "deny" = 0;
@@ -559,8 +559,8 @@ in {
                     '';
                   };
 
-                  macAllow = mkOption {
-                    type = types.listOf types.str;
+                  macAllow = lib.mkOption {
+                    type = lib.types.listOf lib.types.str;
                     default = [];
                     example = ["11:22:33:44:55:66"];
                     description = ''
@@ -570,8 +570,8 @@ in {
                     '';
                   };
 
-                  macAllowFile = mkOption {
-                    type = types.nullOr types.path;
+                  macAllowFile = lib.mkOption {
+                    type = lib.types.nullOr lib.types.path;
                     default = null;
                     description = ''
                       Specifies a file containing the MAC addresses to allow if {option}`macAcl` is set to {var}`"allow"` or {var}`"radius"`.
@@ -581,8 +581,8 @@ in {
                     '';
                   };
 
-                  macDeny = mkOption {
-                    type = types.listOf types.str;
+                  macDeny = lib.mkOption {
+                    type = lib.types.listOf lib.types.str;
                     default = [];
                     example = ["11:22:33:44:55:66"];
                     description = ''
@@ -592,8 +592,8 @@ in {
                     '';
                   };
 
-                  macDenyFile = mkOption {
-                    type = types.nullOr types.path;
+                  macDenyFile = lib.mkOption {
+                    type = lib.types.nullOr lib.types.path;
                     default = null;
                     description = ''
                       Specifies a file containing the MAC addresses to deny if {option}`macAcl` is set to {var}`"deny"` or {var}`"radius"`.
@@ -603,9 +603,9 @@ in {
                     '';
                   };
 
-                  ignoreBroadcastSsid = mkOption {
+                  ignoreBroadcastSsid = lib.mkOption {
                     default = "disabled";
-                    type = types.enum ["disabled" "empty" "clear"];
+                    type = lib.types.enum ["disabled" "empty" "clear"];
                     apply = x:
                       getAttr x {
                         "disabled" = 0;
@@ -626,19 +626,19 @@ in {
                     '';
                   };
 
-                  apIsolate = mkOption {
+                  apIsolate = lib.mkOption {
                     default = false;
-                    type = types.bool;
+                    type = lib.types.bool;
                     description = ''
                       Isolate traffic between stations (clients) and prevent them from
                       communicating with each other.
                     '';
                   };
 
-                  settings = mkOption {
+                  settings = lib.mkOption {
                     default = {};
                     example = { multi_ap = true; };
-                    type = types.submodule {
+                    type = lib.types.submodule {
                       freeformType = extraSettingsFormat.type;
                     };
                     description = ''
@@ -652,10 +652,10 @@ in {
                     '';
                   };
 
-                  dynamicConfigScripts = mkOption {
+                  dynamicConfigScripts = lib.mkOption {
                     default = {};
-                    type = types.attrsOf types.path;
-                    example = literalExpression ''
+                    type = lib.types.attrsOf types.path;
+                    example = lib.literalExpression ''
                       {
                         exampleDynamicConfig = pkgs.writeShellScript "dynamic-config" '''
                           HOSTAPD_CONFIG=$1
@@ -682,9 +682,9 @@ in {
                   #### IEEE 802.11i (WPA) configuration
 
                   authentication = {
-                    mode = mkOption {
+                    mode = lib.mkOption {
                       default = "wpa3-sae";
-                      type = types.enum ["none" "wpa2-sha1" "wpa2-sha256" "wpa3-sae-transition" "wpa3-sae"];
+                      type = lib.types.enum ["none" "wpa2-sha1" "wpa2-sha256" "wpa3-sae-transition" "wpa3-sae"];
                       description = ''
                         Selects the authentication mode for this AP.
 
@@ -705,10 +705,10 @@ in {
                       '';
                     };
 
-                    pairwiseCiphers = mkOption {
+                    pairwiseCiphers = lib.mkOption {
                       default = ["CCMP"];
                       example = ["GCMP" "GCMP-256"];
-                      type = types.listOf types.str;
+                      type = lib.types.listOf lib.types.str;
                       description = ''
                         Set of accepted cipher suites (encryption algorithms) for pairwise keys (unicast packets).
                         By default this allows just CCMP, which is the only commonly supported secure option.
@@ -721,10 +721,10 @@ in {
                       '';
                     };
 
-                    enableRecommendedPairwiseCiphers = mkOption {
+                    enableRecommendedPairwiseCiphers = lib.mkOption {
                       default = false;
                       example = true;
-                      type = types.bool;
+                      type = lib.types.bool;
                       description = ''
                         Additionally enable the recommended set of pairwise ciphers.
                         This enables newer secure ciphers, additionally to those defined in {option}`pairwiseCiphers`.
@@ -737,10 +737,10 @@ in {
                       '';
                     };
 
-                    wpaPassword = mkOption {
+                    wpaPassword = lib.mkOption {
                       default = null;
                       example = "a flakey password";
-                      type = types.nullOr types.str;
+                      type = lib.types.nullOr lib.types.str;
                       description = ''
                         Sets the password for WPA-PSK that will be converted to the pre-shared key.
                         The password length must be in the range [8, 63] characters. While some devices
@@ -755,9 +755,9 @@ in {
                       '';
                     };
 
-                    wpaPasswordFile = mkOption {
+                    wpaPasswordFile = lib.mkOption {
                       default = null;
-                      type = types.nullOr types.path;
+                      type = lib.types.nullOr lib.types.path;
                       description = ''
                         Sets the password for WPA-PSK. Follows the same rules as {option}`wpaPassword`,
                         but reads the password from the given file to prevent the password from being
@@ -767,9 +767,9 @@ in {
                       '';
                     };
 
-                    wpaPskFile = mkOption {
+                    wpaPskFile = lib.mkOption {
                       default = null;
-                      type = types.nullOr types.path;
+                      type = lib.types.nullOr lib.types.path;
                       description = ''
                         Sets the password(s) for WPA-PSK. Similar to {option}`wpaPasswordFile`,
                         but additionally allows specifying multiple passwords, and some other options.
@@ -780,9 +780,9 @@ in {
                         The special MAC address `00:00:00:00:00:00` can be used to configure PSKs
                         that any client can use.
 
-                        An optional key identifier can be added by prefixing the line with `keyid=<keyid_string>`
-                        An optional VLAN ID can be specified by prefixing the line with `vlanid=<VLAN ID>`.
-                        An optional WPS tag can be added by prefixing the line with `wps=<0/1>` (default: 0).
+                        An lib.optional key identifier can be added by prefixing the line with `keyid=<keyid_string>`
+                        An lib.optional VLAN ID can be specified by prefixing the line with `vlanid=<VLAN ID>`.
+                        An lib.optional WPS tag can be added by prefixing the line with `wps=<0/1>` (default: 0).
                         Any matching entry with that tag will be used when generating a PSK for a WPS Enrollee
                         instead of generating a new random per-Enrollee PSK.
 
@@ -790,9 +790,9 @@ in {
                       '';
                     };
 
-                    saePasswords = mkOption {
+                    saePasswords = lib.mkOption {
                       default = [];
-                      example = literalExpression ''
+                      example = lib.literalExpression ''
                         [
                           # Any client may use these passwords
                           { password = "Wi-Figure it out"; }
@@ -814,11 +814,11 @@ in {
 
                         Not used when {option}`mode` is {var}`"wpa2-sha1"` or {var}`"wpa2-sha256"`.
                       '';
-                      type = types.listOf (types.submodule {
+                      type = lib.types.listOf (lib.types.submodule {
                         options = {
-                          password = mkOption {
+                          password = lib.mkOption {
                             example = "a flakey password";
-                            type = types.str;
+                            type = lib.types.str;
                             description = ''
                               The password for this entry. SAE technically imposes no restrictions on
                               password length or character set. But due to limitations of {command}`hostapd`'s
@@ -829,10 +829,10 @@ in {
                             '';
                           };
 
-                          mac = mkOption {
+                          mac = lib.mkOption {
                             default = null;
                             example = "11:22:33:44:55:66";
-                            type = types.nullOr types.str;
+                            type = lib.types.nullOr lib.types.str;
                             description = ''
                               If this attribute is not included, or if is set to the wildcard address (`ff:ff:ff:ff:ff:ff`),
                               the entry is available for any station (client) to use. If a specific peer MAC address is included,
@@ -840,17 +840,17 @@ in {
                             '';
                           };
 
-                          vlanid = mkOption {
+                          vlanid = lib.mkOption {
                             default = null;
                             example = 1;
-                            type = types.nullOr types.int;
+                            type = lib.types.nullOr lib.types.int;
                             description = "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
                           };
 
-                          pk = mkOption {
+                          pk = lib.mkOption {
                             default = null;
                             example = "";
-                            type = types.nullOr types.str;
+                            type = lib.types.nullOr lib.types.str;
                             description = ''
                               If this attribute is given, SAE-PK will be enabled for this connection.
                               This prevents evil-twin attacks, but a public key is required additionally to connect.
@@ -858,10 +858,10 @@ in {
                             '';
                           };
 
-                          id = mkOption {
+                          id = lib.mkOption {
                             default = null;
                             example = "";
-                            type = types.nullOr types.str;
+                            type = lib.types.nullOr lib.types.str;
                             description = ''
                               If this attribute is given with non-zero length, it will set the password identifier
                               for this entry. It can then only be used with that identifier.
@@ -871,16 +871,16 @@ in {
                       });
                     };
 
-                    saePasswordsFile = mkOption {
+                    saePasswordsFile = lib.mkOption {
                       default = null;
-                      type = types.nullOr types.path;
+                      type = lib.types.nullOr lib.types.path;
                       description = ''
                         Sets the password for WPA3-SAE. Follows the same rules as {option}`saePasswords`,
                         but reads the entries from the given file to prevent them from being
                         put into the Nix store.
 
                         One entry per line, empty lines and lines beginning with # will be ignored.
-                        Each line must match the following format, although the order of optional
+                        Each line must match the following format, although the order of lib.optional
                         parameters doesn't matter:
                         `<password>[|mac=<peer mac>][|vlanid=<VLAN ID>][|pk=<m:ECPrivateKey-base64>][|id=<identifier>]`
 
@@ -888,8 +888,8 @@ in {
                       '';
                     };
 
-                    saeAddToMacAllow = mkOption {
-                      type = types.bool;
+                    saeAddToMacAllow = lib.mkOption {
+                      type = lib.types.bool;
                       default = false;
                       description = ''
                         If set, all sae password entries that have a non-wildcard MAC associated to
@@ -904,17 +904,17 @@ in {
                   bssCfg = bssSubmod.config;
                   pairwiseCiphers =
                     concatStringsSep " " (unique (bssCfg.authentication.pairwiseCiphers
-                      ++ optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "GCMP" "GCMP-256"]));
+                      ++ lib.optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "GCMP" "GCMP-256"]));
                 in {
                   settings = {
                     ssid = bssCfg.ssid;
                     utf8_ssid = bssCfg.utf8Ssid;
 
-                    logger_syslog = mkDefault (-1);
+                    logger_syslog = lib.mkDefault (-1);
                     logger_syslog_level = bssCfg.logLevel;
-                    logger_stdout = mkDefault (-1);
+                    logger_stdout = lib.mkDefault (-1);
                     logger_stdout_level = bssCfg.logLevel;
-                    ctrl_interface = mkDefault "/run/hostapd";
+                    ctrl_interface = lib.mkDefault "/run/hostapd";
                     ctrl_interface_group = bssCfg.group;
 
                     macaddr_acl = bssCfg.macAcl;
@@ -923,32 +923,32 @@ in {
 
                     # IEEE 802.11i (authentication) related configuration
                     # Encrypt management frames to protect against deauthentication and similar attacks
-                    ieee80211w = mkDefault 1;
-                    sae_require_mfp = mkDefault 1;
+                    ieee80211w = lib.mkDefault 1;
+                    sae_require_mfp = lib.mkDefault 1;
 
                     # Only allow WPA by default and disable insecure WEP
-                    auth_algs = mkDefault 1;
+                    auth_algs = lib.mkDefault 1;
                     # Always enable QoS, which is required for 802.11n and above
-                    wmm_enabled = mkDefault true;
+                    wmm_enabled = lib.mkDefault true;
                     ap_isolate = bssCfg.apIsolate;
 
                     sae_password = flip map bssCfg.authentication.saePasswords (
                       entry:
                         entry.password
-                        + optionalString (entry.mac != null) "|mac=${entry.mac}"
-                        + optionalString (entry.vlanid != null) "|vlanid=${toString entry.vlanid}"
-                        + optionalString (entry.pk != null) "|pk=${entry.pk}"
-                        + optionalString (entry.id != null) "|id=${entry.id}"
+                        + lib.optionalString (entry.mac != null) "|mac=${entry.mac}"
+                        + lib.optionalString (entry.vlanid != null) "|vlanid=${toString entry.vlanid}"
+                        + lib.optionalString (entry.pk != null) "|pk=${entry.pk}"
+                        + lib.optionalString (entry.id != null) "|id=${entry.id}"
                     );
-                  } // optionalAttrs (bssCfg.bssid != null) {
+                  } // lib.optionalAttrs (bssCfg.bssid != null) {
                     bssid = bssCfg.bssid;
-                  } // optionalAttrs (bssCfg.macAllow != [] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow) {
+                  } // lib.optionalAttrs (bssCfg.macAllow != [] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow) {
                     accept_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.allow";
-                  } // optionalAttrs (bssCfg.macDeny != [] || bssCfg.macDenyFile != null) {
+                  } // lib.optionalAttrs (bssCfg.macDeny != [] || bssCfg.macDenyFile != null) {
                     deny_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.deny";
-                  } // optionalAttrs (bssCfg.authentication.mode == "none") {
-                    wpa = mkDefault 0;
-                  } // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae") {
+                  } // lib.optionalAttrs (bssCfg.authentication.mode == "none") {
+                    wpa = lib.mkDefault 0;
+                  } // lib.optionalAttrs (bssCfg.authentication.mode == "wpa3-sae") {
                     wpa = 2;
                     wpa_key_mgmt = "SAE";
                     # Derive PWE using both hunting-and-pecking loop and hash-to-element
@@ -956,21 +956,21 @@ in {
                     # Prevent downgrade attacks by indicating to clients that they should
                     # disable any transition modes from now on.
                     transition_disable = "0x01";
-                  } // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
+                  } // lib.optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
-                  } // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
+                  } // lib.optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK";
-                  } // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
+                  } // lib.optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK-SHA256";
-                  } // optionalAttrs (bssCfg.authentication.mode != "none") {
+                  } // lib.optionalAttrs (bssCfg.authentication.mode != "none") {
                     wpa_pairwise = pairwiseCiphers;
                     rsn_pairwise = pairwiseCiphers;
-                  } // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
+                  } // lib.optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                     wpa_passphrase = bssCfg.authentication.wpaPassword;
-                  } // optionalAttrs (bssCfg.authentication.wpaPskFile != null) {
+                  } // lib.optionalAttrs (bssCfg.authentication.wpaPskFile != null) {
                     wpa_psk_file = toString bssCfg.authentication.wpaPskFile;
                   };
 
@@ -978,52 +978,52 @@ in {
                     # All MAC addresses from SAE entries that aren't the wildcard address
                     saeMacs = filter (mac: mac != null && (toLower mac) != "ff:ff:ff:ff:ff:ff") (map (x: x.mac) bssCfg.authentication.saePasswords);
                   in {
-                    "20-addMacAllow" = mkIf (bssCfg.macAllow != []) (pkgs.writeShellScript "add-mac-allow" ''
+                    "20-addMacAllow" = lib.mkIf (bssCfg.macAllow != []) (pkgs.writeShellScript "add-mac-allow" ''
                       MAC_ALLOW_FILE=$2
                       cat >> "$MAC_ALLOW_FILE" <<EOF
-                      ${concatStringsSep "\n" bssCfg.macAllow}
+                      ${lib.concatStringsSep "\n" bssCfg.macAllow}
                       EOF
                     '');
-                    "20-addMacAllowFile" = mkIf (bssCfg.macAllowFile != null) (pkgs.writeShellScript "add-mac-allow-file" ''
+                    "20-addMacAllowFile" = lib.mkIf (bssCfg.macAllowFile != null) (pkgs.writeShellScript "add-mac-allow-file" ''
                       MAC_ALLOW_FILE=$2
-                      grep -Eo '^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})' ${escapeShellArg bssCfg.macAllowFile} >> "$MAC_ALLOW_FILE"
+                      grep -Eo '^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})' ${lib.escapeShellArg bssCfg.macAllowFile} >> "$MAC_ALLOW_FILE"
                     '');
-                    "20-addMacAllowFromSae" = mkIf (bssCfg.authentication.saeAddToMacAllow && saeMacs != []) (pkgs.writeShellScript "add-mac-allow-from-sae" ''
+                    "20-addMacAllowFromSae" = lib.mkIf (bssCfg.authentication.saeAddToMacAllow && saeMacs != []) (pkgs.writeShellScript "add-mac-allow-from-sae" ''
                       MAC_ALLOW_FILE=$2
                       cat >> "$MAC_ALLOW_FILE" <<EOF
-                      ${concatStringsSep "\n" saeMacs}
+                      ${lib.concatStringsSep "\n" saeMacs}
                       EOF
                     '');
                     # Populate mac allow list from saePasswordsFile
                     # (filter for lines with mac=;  exclude commented lines; filter for real mac-addresses; strip mac=)
-                    "20-addMacAllowFromSaeFile" = mkIf (bssCfg.authentication.saeAddToMacAllow && bssCfg.authentication.saePasswordsFile != null) (pkgs.writeShellScript "add-mac-allow-from-sae-file" ''
+                    "20-addMacAllowFromSaeFile" = lib.mkIf (bssCfg.authentication.saeAddToMacAllow && bssCfg.authentication.saePasswordsFile != null) (pkgs.writeShellScript "add-mac-allow-from-sae-file" ''
                       MAC_ALLOW_FILE=$2
-                      grep mac= ${escapeShellArg bssCfg.authentication.saePasswordsFile} \
+                      grep mac= ${lib.escapeShellArg bssCfg.authentication.saePasswordsFile} \
                         | grep -v '^\s*#' \
                         | grep -Eo 'mac=([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})' \
                         | sed 's|^mac=||' >> "$MAC_ALLOW_FILE"
                     '');
-                    "20-addMacDeny" = mkIf (bssCfg.macDeny != []) (pkgs.writeShellScript "add-mac-deny" ''
+                    "20-addMacDeny" = lib.mkIf (bssCfg.macDeny != []) (pkgs.writeShellScript "add-mac-deny" ''
                       MAC_DENY_FILE=$3
                       cat >> "$MAC_DENY_FILE" <<EOF
-                      ${concatStringsSep "\n" bssCfg.macDeny}
+                      ${lib.concatStringsSep "\n" bssCfg.macDeny}
                       EOF
                     '');
-                    "20-addMacDenyFile" = mkIf (bssCfg.macDenyFile != null) (pkgs.writeShellScript "add-mac-deny-file" ''
+                    "20-addMacDenyFile" = lib.mkIf (bssCfg.macDenyFile != null) (pkgs.writeShellScript "add-mac-deny-file" ''
                       MAC_DENY_FILE=$3
-                      grep -Eo '^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})' ${escapeShellArg bssCfg.macDenyFile} >> "$MAC_DENY_FILE"
+                      grep -Eo '^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})' ${lib.escapeShellArg bssCfg.macDenyFile} >> "$MAC_DENY_FILE"
                     '');
                     # Add wpa_passphrase from file
-                    "20-wpaPasswordFile" = mkIf (bssCfg.authentication.wpaPasswordFile != null) (pkgs.writeShellScript "wpa-password-file" ''
+                    "20-wpaPasswordFile" = lib.mkIf (bssCfg.authentication.wpaPasswordFile != null) (pkgs.writeShellScript "wpa-password-file" ''
                       HOSTAPD_CONFIG_FILE=$1
                       cat >> "$HOSTAPD_CONFIG_FILE" <<EOF
-                      wpa_passphrase=$(cat ${escapeShellArg bssCfg.authentication.wpaPasswordFile})
+                      wpa_passphrase=$(cat ${lib.escapeShellArg bssCfg.authentication.wpaPasswordFile})
                       EOF
                     '');
                     # Add sae passwords from file
-                    "20-saePasswordsFile" = mkIf (bssCfg.authentication.saePasswordsFile != null) (pkgs.writeShellScript "sae-passwords-file" ''
+                    "20-saePasswordsFile" = lib.mkIf (bssCfg.authentication.saePasswordsFile != null) (pkgs.writeShellScript "sae-passwords-file" ''
                       HOSTAPD_CONFIG_FILE=$1
-                      grep -v '^\s*#' ${escapeShellArg bssCfg.authentication.saePasswordsFile} \
+                      grep -v '^\s*#' ${lib.escapeShellArg bssCfg.authentication.saePasswordsFile} \
                         | sed 's/^/sae_password=/' >> "$HOSTAPD_CONFIG_FILE"
                     '');
                   };
@@ -1044,32 +1044,32 @@ in {
             }.${radioCfg.band};
             channel = radioCfg.channel;
             noscan = radioCfg.noScan;
-          } // optionalAttrs (radioCfg.countryCode != null) {
+          } // lib.optionalAttrs (radioCfg.countryCode != null) {
             country_code = radioCfg.countryCode;
             # IEEE 802.11d: Limit to frequencies allowed in country
             ieee80211d = true;
             # IEEE 802.11h: Enable radar detection and DFS (Dynamic Frequency Selection)
             ieee80211h = true;
-          } // optionalAttrs radioCfg.wifi4.enable {
+          } // lib.optionalAttrs radioCfg.wifi4.enable {
             # IEEE 802.11n (WiFi 4) related configuration
             ieee80211n = true;
             require_ht = radioCfg.wifi4.require;
             ht_capab = concatMapStrings (x: "[${x}]") radioCfg.wifi4.capabilities;
-          } // optionalAttrs radioCfg.wifi5.enable {
+          } // lib.optionalAttrs radioCfg.wifi5.enable {
             # IEEE 802.11ac (WiFi 5) related configuration
             ieee80211ac = true;
             require_vht = radioCfg.wifi5.require;
             vht_oper_chwidth = radioCfg.wifi5.operatingChannelWidth;
             vht_capab = concatMapStrings (x: "[${x}]") radioCfg.wifi5.capabilities;
-          } // optionalAttrs radioCfg.wifi6.enable {
+          } // lib.optionalAttrs radioCfg.wifi6.enable {
             # IEEE 802.11ax (WiFi 6) related configuration
             ieee80211ax = true;
-            require_he = mkIf radioCfg.wifi6.require true;
+            require_he = lib.mkIf radioCfg.wifi6.require true;
             he_oper_chwidth = radioCfg.wifi6.operatingChannelWidth;
             he_su_beamformer = radioCfg.wifi6.singleUserBeamformer;
             he_su_beamformee = radioCfg.wifi6.singleUserBeamformee;
             he_mu_beamformer = radioCfg.wifi6.multiUserBeamformer;
-          } // optionalAttrs radioCfg.wifi7.enable {
+          } // lib.optionalAttrs radioCfg.wifi7.enable {
             # IEEE 802.11be (WiFi 7) related configuration
             ieee80211be = true;
             eht_oper_chwidth = radioCfg.wifi7.operatingChannelWidth;
@@ -1088,43 +1088,43 @@ in {
       Refer to the documentation of `services.hostapd.radios` for an example and more information.
     '';
   in [
-    (mkRemovedOptionModule ["services" "hostapd" "interface"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "interface"]
       (renamedOptionMessage "All other options for this interface are now set via `services.hostapd.radios.«interface».*`."))
 
-    (mkRemovedOptionModule ["services" "hostapd" "driver"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "driver"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».driver`."))
-    (mkRemovedOptionModule ["services" "hostapd" "noScan"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "noScan"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».noScan`."))
-    (mkRemovedOptionModule ["services" "hostapd" "countryCode"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "countryCode"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».countryCode`."))
-    (mkRemovedOptionModule ["services" "hostapd" "hwMode"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "hwMode"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».band`."))
-    (mkRemovedOptionModule ["services" "hostapd" "channel"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "channel"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».channel`."))
-    (mkRemovedOptionModule ["services" "hostapd" "extraConfig"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "extraConfig"]
       (renamedOptionMessage ''
         It has been replaced by `services.hostapd.radios.«interface».settings` and
         `services.hostapd.radios.«interface».networks.«network».settings` respectively
         for per-radio and per-network extra configuration. The module now supports a lot more
         options inherently, so please re-check whether using settings is still necessary.''))
 
-    (mkRemovedOptionModule ["services" "hostapd" "logLevel"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "logLevel"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».networks.«network».logLevel`."))
-    (mkRemovedOptionModule ["services" "hostapd" "group"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "group"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».networks.«network».group`."))
-    (mkRemovedOptionModule ["services" "hostapd" "ssid"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "ssid"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».networks.«network».ssid`."))
 
-    (mkRemovedOptionModule ["services" "hostapd" "wpa"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "wpa"]
       (renamedOptionMessage "It has been replaced by `services.hostapd.radios.«interface».networks.«network».authentication.mode`."))
-    (mkRemovedOptionModule ["services" "hostapd" "wpaPassphrase"]
+    (lib.mkRemovedOptionModule ["services" "hostapd" "wpaPassphrase"]
       (renamedOptionMessage ''
         It has been replaced by `services.hostapd.radios.«interface».networks.«network».authentication.wpaPassword`.
         While upgrading your config, please consider using the newer SAE authentication scheme
         and one of the new `passwordFile`-like options to avoid putting the password into the world readable nix-store.''))
   ];
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       [
         {
@@ -1211,7 +1211,7 @@ in {
       preStart = concatStringsSep "\n" (mapAttrsToList makeRadioRuntimeFiles cfg.radios);
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/hostapd ${concatStringsSep " " runtimeConfigFiles}";
+        ExecStart = "${cfg.package}/bin/hostapd ${lib.concatStringsSep " " runtimeConfigFiles}";
         Restart = "always";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = "hostapd";

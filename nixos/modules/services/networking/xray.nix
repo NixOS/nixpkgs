@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
   options = {
 
     services.xray = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run xray server.
@@ -16,10 +14,10 @@ with lib;
         '';
       };
 
-      package = mkPackageOption pkgs "xray" { };
+      package = lib.mkPackageOption pkgs "xray" { };
 
-      settingsFile = mkOption {
-        type = types.nullOr types.path;
+      settingsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/etc/xray/config.json";
         description = ''
@@ -31,8 +29,8 @@ with lib;
         '';
       };
 
-      settings = mkOption {
-        type = types.nullOr (types.attrsOf types.unspecified);
+      settings = lib.mkOption {
+        type = lib.types.nullOr (lib.types.attrsOf lib.types.unspecified);
         default = null;
         example = {
           inbounds = [{
@@ -68,7 +66,7 @@ with lib;
         '';
       };
 
-  in mkIf cfg.enable {
+  in lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (cfg.settingsFile == null) != (cfg.settings == null);

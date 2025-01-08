@@ -12,7 +12,7 @@ let
     types
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     literalExpression
     mkIf
     flatten
@@ -24,15 +24,15 @@ let
 
   settingsFormat = pkgs.formats.ini { };
 
-  checks = mapAttrs' (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v)) cfg.checks;
+  checks = mapAttrs' (n: v: nameValuePair "check.${n}" (lib.filterAttrs (_: v: v != null) v)) cfg.checks;
   wakeups = mapAttrs' (
-    n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v)
+    n: v: nameValuePair "wakeup.${n}" (lib.filterAttrs (_: v: v != null) v)
   ) cfg.wakeups;
 
   # Whether the given check is enabled
   hasCheck =
     class:
-    (filterAttrs (n: v: v.enabled && (if v.class == null then n else v.class) == class) cfg.checks)
+    (lib.filterAttrs (n: v: v.enabled && (if v.class == null then n else v.class) == class) cfg.checks)
     != { };
 
   # Dependencies needed by specific checks
@@ -57,10 +57,10 @@ let
       default = true;
     };
 
-    options.class = mkOption {
+    options.class = lib.mkOption {
       default = null;
       type =
-        with types;
+        with lib.types;
         nullOr (enum [
           "ActiveCalendarEvent"
           "ActiveConnection"
@@ -94,10 +94,10 @@ let
       default = true;
     };
 
-    options.class = mkOption {
+    options.class = lib.mkOption {
       default = null;
       type =
-        with types;
+        with lib.types;
         nullOr (enum [
           "Calendar"
           "Command"
@@ -117,27 +117,27 @@ in
 {
   options = {
     services.autosuspend = {
-      enable = mkEnableOption "the autosuspend daemon";
+      enable = lib.mkEnableOption "the autosuspend daemon";
 
-      package = mkPackageOption pkgs "autosuspend" { };
+      package = lib.mkPackageOption pkgs "autosuspend" { };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type.nestedTypes.elemType;
 
           options = {
             # Provide reasonable defaults for these two (required) options
-            suspend_cmd = mkOption {
+            suspend_cmd = lib.mkOption {
               default = "systemctl suspend";
-              type = with types; str;
+              type = with lib.types; str;
               description = ''
                 The command to execute in case the host shall be suspended. This line can contain
                 additional command line arguments to the command to execute.
               '';
             };
-            wakeup_cmd = mkOption {
+            wakeup_cmd = lib.mkOption {
               default = ''sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm && echo {timestamp:.0f} > /sys/class/rtc/rtc0/wakealarm' '';
-              type = with types; str;
+              type = with lib.types; str;
               description = ''
                 The command to execute for scheduling a wake up of the system. The given string is
                 processed using Python’s `str.format()` and a format argument called `timestamp`
@@ -148,7 +148,7 @@ in
           };
         };
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             enable = true;
             interval = 30;
@@ -162,15 +162,15 @@ in
         '';
       };
 
-      checks = mkOption {
+      checks = lib.mkOption {
         default = { };
-        type = with types; attrsOf checkType;
+        type = with lib.types; attrsOf checkType;
         description = ''
           Checks for activity.  For more information, see:
            - <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#activity-check-configuration>
            - <https://autosuspend.readthedocs.io/en/latest/available_checks.html>
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             # Basic activity check configuration.
             # The check class name is derived from the section header (Ping in this case).
@@ -204,15 +204,15 @@ in
         '';
       };
 
-      wakeups = mkOption {
+      wakeups = lib.mkOption {
         default = { };
-        type = with types; attrsOf wakeupType;
+        type = with lib.types; attrsOf wakeupType;
         description = ''
           Checks for wake up.  For more information, see:
            - <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#wake-up-check-configuration>
            - <https://autosuspend.readthedocs.io/en/latest/available_wakeups.html>
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             # Wake up checks reuse the same configuration mechanism as activity checks.
             Calendar = {
@@ -224,13 +224,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.autosuspend = {
       description = "A daemon to suspend your server in case of inactivity";
       documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = flatten (attrValues (filterAttrs (n: _: hasCheck n) dependenciesForChecks));
+      path = flatten (lib.attrValues (lib.filterAttrs (n: _: hasCheck n) dependenciesForChecks));
       serviceConfig = {
         ExecStart = ''${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon'';
       };

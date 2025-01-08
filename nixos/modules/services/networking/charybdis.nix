@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     singleton
     types
     ;
@@ -29,41 +29,41 @@ in
 
     services.charybdis = {
 
-      enable = mkEnableOption "Charybdis IRC daemon";
+      enable = lib.mkEnableOption "Charybdis IRC daemon";
 
-      config = mkOption {
-        type = types.str;
+      config = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Charybdis IRC daemon configuration file.
         '';
       };
 
-      statedir = mkOption {
-        type = types.path;
+      statedir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/charybdis";
         description = ''
           Location of the state directory of charybdis.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon user.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon group.
         '';
       };
 
-      motd = mkOption {
-        type = types.nullOr types.lines;
+      motd = lib.mkOption {
+        type = lib.types.nullOr types.lines;
         default = null;
         description = ''
           Charybdis MOTD text.
@@ -79,7 +79,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
         users.users.${cfg.user} = {
@@ -118,7 +118,7 @@ in
 
       }
 
-      (mkIf (cfg.motd != null) {
+      (lib.mkIf (cfg.motd != null) {
         environment.etc."charybdis/ircd.motd".text = cfg.motd;
       })
     ]

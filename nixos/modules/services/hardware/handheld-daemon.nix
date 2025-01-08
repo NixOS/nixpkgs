@@ -4,30 +4,29 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.handheld-daemon;
 in
 {
   options.services.handheld-daemon = {
-    enable = mkEnableOption "Handheld Daemon";
-    package = mkPackageOption pkgs "handheld-daemon" { };
+    enable = lib.mkEnableOption "Handheld Daemon";
+    package = lib.mkPackageOption pkgs "handheld-daemon" { };
 
     ui = {
-      enable = mkEnableOption "Handheld Daemon UI";
-      package = mkPackageOption pkgs "handheld-daemon-ui" { };
+      enable = lib.mkEnableOption "Handheld Daemon UI";
+      package = lib.mkPackageOption pkgs "handheld-daemon-ui" { };
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       description = ''
         The user to run Handheld Daemon with.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    services.handheld-daemon.ui.enable = mkDefault true;
+  config = lib.mkIf cfg.enable {
+    services.handheld-daemon.ui.enable = lib.mkDefault true;
     environment.systemPackages = [
       cfg.package
     ] ++ lib.optional cfg.ui.enable cfg.ui.package;
@@ -41,7 +40,7 @@ in
 
       restartIfChanged = true;
 
-      path = mkIf cfg.ui.enable [
+      path = lib.mkIf cfg.ui.enable [
         cfg.ui.package
         pkgs.lsof
       ];

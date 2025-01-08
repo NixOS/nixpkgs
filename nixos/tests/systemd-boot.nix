@@ -305,7 +305,7 @@ in
 
   memtest86 =
     with pkgs.lib;
-    optionalAttrs (meta.availableOn { inherit system; } pkgs.memtest86plus) (makeTest {
+    lib.optionalAttrs (meta.availableOn { inherit system; } pkgs.memtest86plus) (makeTest {
       name = "systemd-boot-memtest86";
       meta.maintainers = with lib.maintainers; [ julienmalka ];
 

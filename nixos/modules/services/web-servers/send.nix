@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   cfg = config.services.send;
 in
 {
@@ -15,9 +15,9 @@ in
 
       package = lib.mkPackageOption pkgs "send" { };
 
-      environment = mkOption {
+      environment = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (
             nullOr (oneOf [
               bool
@@ -47,7 +47,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = types.path;
+        type = lib.types.path;
         readOnly = true;
         default = "/var/lib/send";
         description = ''
@@ -56,8 +56,8 @@ in
         '';
       };
 
-      baseUrl = mkOption {
-        type = types.nullOr types.str;
+      baseUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Base URL for the Send service.
@@ -66,32 +66,32 @@ in
       };
 
       host = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "The hostname or IP address for Send to bind to.";
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 1443;
         description = "Port the Send service listens on.";
       };
 
       openFirewall = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
         description = "Whether to open firewall ports for send";
       };
 
       redis = {
         createLocally = lib.mkOption {
-          type = types.bool;
+          type = lib.types.bool;
           default = true;
           description = "Whether to create a local redis automatically.";
         };
 
         name = lib.mkOption {
-          type = types.str;
+          type = lib.types.str;
           default = "send";
           description = ''
             Name of the redis server.
@@ -100,19 +100,19 @@ in
         };
 
         host = lib.mkOption {
-          type = types.str;
+          type = lib.types.str;
           default = "localhost";
           description = "Redis server address.";
         };
 
         port = lib.mkOption {
-          type = types.port;
+          type = lib.types.port;
           default = 6379;
           description = "Port of the redis server.";
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/agenix/send-redis-password";
           description = ''

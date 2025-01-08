@@ -4,7 +4,7 @@ let
   logPrefix = "services.prometheus.exporters.snmp";
   cfg = config.services.prometheus.exporters.snmp;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     literalExpression
     escapeShellArg
@@ -34,17 +34,17 @@ in
 {
   port = 9116;
   extraOpts = {
-    configurationPath = mkOption {
-      type = types.nullOr types.path;
+    configurationPath = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Path to a snmp exporter configuration file. Mutually exclusive with 'configuration' option.
       '';
-      example = literalExpression "./snmp.yml";
+      example = lib.literalExpression "./snmp.yml";
     };
 
-    configuration = mkOption {
-      type = types.nullOr types.attrs;
+    configuration = lib.mkOption {
+      type = lib.types.nullOr lib.types.attrs;
       default = null;
       description = ''
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
@@ -57,8 +57,8 @@ in
       };
     };
 
-    enableConfigCheck = mkOption {
-      type = types.bool;
+    enableConfigCheck = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to run a correctness check for the configuration file. This depends
@@ -67,24 +67,24 @@ in
       '';
     };
 
-    logFormat = mkOption {
-      type = types.enum ["logfmt" "json"];
+    logFormat = lib.mkOption {
+      type = lib.types.enum ["logfmt" "json"];
       default = "logfmt";
       description = ''
         Output format of log messages.
       '';
     };
 
-    logLevel = mkOption {
-      type = types.enum ["debug" "info" "warn" "error"];
+    logLevel = lib.mkOption {
+      type = lib.types.enum ["debug" "info" "warn" "error"];
       default = "info";
       description = ''
         Only log messages with the given severity or above.
       '';
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/root/prometheus-snmp-exporter.env";
       description = ''
@@ -123,13 +123,13 @@ in
       EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       ExecStart = ''
         ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \
-          --config.file=${escapeShellArg configFile} \
+          --config.file=${lib.escapeShellArg configFile} \
           ${lib.optionalString (cfg.environmentFile != null)
             "--config.expand-environment-variables"} \
-          --log.format=${escapeShellArg cfg.logFormat} \
+          --log.format=${lib.escapeShellArg cfg.logFormat} \
           --log.level=${cfg.logLevel} \
           --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

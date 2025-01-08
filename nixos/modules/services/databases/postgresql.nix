@@ -26,11 +26,11 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRemovedOptionModule
     mkRenamedOptionModule
-    optionalString
+    lib.optionalString
     types
     versionAtLeast
     warn
@@ -62,7 +62,7 @@ let
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeTextDir "postgresql.conf" (
     concatStringsSep "\n" (
-      mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)
+      mapAttrsToList (n: v: "${n} = ${toStr v}") (lib.filterAttrs (const (x: x != null)) cfg.settings)
     )
   );
 
@@ -79,21 +79,21 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "postgresql"
       "extraConfig"
     ] "Use services.postgresql.settings instead.")
 
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "postgresql" "logLinePrefix" ]
       [ "services" "postgresql" "settings" "log_line_prefix" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "postgresql" "port" ]
       [ "services" "postgresql" "settings" "port" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "postgresql" "extraPlugins" ]
       [ "services" "postgresql" "extensions" ]
     )
@@ -105,16 +105,16 @@ in
 
     services.postgresql = {
 
-      enable = mkEnableOption "PostgreSQL Server";
+      enable = lib.mkEnableOption "PostgreSQL Server";
 
       enableJIT = mkEnableOption "JIT support";
 
-      package = mkPackageOption pkgs "postgresql" {
+      package = lib.mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
       };
 
-      finalPackage = mkOption {
-        type = types.package;
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
         readOnly = true;
         default = postgresql;
         defaultText = "with config.services.postgresql; package.withPackages extensions";
@@ -124,15 +124,15 @@ in
         '';
       };
 
-      checkConfig = mkOption {
-        type = types.bool;
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Check the syntax of the configuration file at compile time";
       };
 
-      dataDir = mkOption {
-        type = types.path;
-        defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
+      dataDir = lib.mkOption {
+        type = lib.types.path;
+        defaultText = lib.literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/15";
         description = ''
           The data directory for PostgreSQL. If left as the default value
@@ -142,8 +142,8 @@ in
         '';
       };
 
-      authentication = mkOption {
-        type = types.lines;
+      authentication = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Defines how users authenticate themselves to the server. See the
@@ -158,8 +158,8 @@ in
         '';
       };
 
-      identMap = mkOption {
-        type = types.lines;
+      identMap = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           map-name-0 system-username-0 database-username-0
@@ -172,8 +172,8 @@ in
         '';
       };
 
-      initdbArgs = mkOption {
-        type = with types; listOf str;
+      initdbArgs = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [ ];
         example = [
           "--data-checksums"
@@ -185,10 +185,10 @@ in
         '';
       };
 
-      initialScript = mkOption {
-        type = types.nullOr types.path;
+      initialScript = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           pkgs.writeText "init-sql-script" '''
             alter user postgres with password 'myPassword';
           ''';'';
@@ -198,8 +198,8 @@ in
         '';
       };
 
-      ensureDatabases = mkOption {
-        type = types.listOf types.str;
+      ensureDatabases = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           Ensures that the specified databases exist.
@@ -213,19 +213,19 @@ in
         ];
       };
 
-      ensureUsers = mkOption {
-        type = types.listOf (
+      ensureUsers = lib.mkOption {
+        type = lib.types.listOf (
           types.submodule {
             options = {
-              name = mkOption {
-                type = types.str;
+              name = lib.mkOption {
+                type = lib.types.str;
                 description = ''
                   Name of the user to ensure.
                 '';
               };
 
-              ensureDBOwnership = mkOption {
-                type = types.bool;
+              ensureDBOwnership = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Grants the user ownership to a database with the same name.
@@ -234,14 +234,14 @@ in
                 '';
               };
 
-              ensureClauses = mkOption {
+              ensureClauses = lib.mkOption {
                 description = ''
                   An attrset of clauses to grant to the user. Under the hood this uses the
                   [ALTER USER syntax](https://www.postgresql.org/docs/current/sql-alteruser.html) for each attrName where
                   the attrValue is true in the attrSet:
                   `ALTER USER user.name WITH attrName`
                 '';
-                example = literalExpression ''
+                example = lib.literalExpression ''
                   {
                     superuser = true;
                     createrole = true;
@@ -252,7 +252,7 @@ in
                 defaultText = lib.literalMD ''
                   The default, `null`, means that the user created will have the default permissions assigned by PostgreSQL. Subsequent server starts will not set or unset the clause, so imperative changes are preserved.
                 '';
-                type = types.submodule {
+                type = lib.types.submodule {
                   options =
                     let
                       defaultText = lib.literalMD ''
@@ -260,8 +260,8 @@ in
                       '';
                     in
                     {
-                      superuser = mkOption {
-                        type = types.nullOr types.bool;
+                      superuser = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user, created by the ensureUser attr, superuser permissions. From the postgres docs:
 
@@ -277,8 +277,8 @@ in
                         default = null;
                         inherit defaultText;
                       };
-                      createrole = mkOption {
-                        type = types.nullOr types.bool;
+                      createrole = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user, created by the ensureUser attr, createrole permissions. From the postgres docs:
 
@@ -296,8 +296,8 @@ in
                         default = null;
                         inherit defaultText;
                       };
-                      createdb = mkOption {
-                        type = types.nullOr types.bool;
+                      createdb = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user, created by the ensureUser attr, createdb permissions. From the postgres docs:
 
@@ -311,8 +311,8 @@ in
                         default = null;
                         inherit defaultText;
                       };
-                      "inherit" = mkOption {
-                        type = types.nullOr types.bool;
+                      "inherit" = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user created inherit permissions. From the postgres docs:
 
@@ -326,8 +326,8 @@ in
                         default = null;
                         inherit defaultText;
                       };
-                      login = mkOption {
-                        type = types.nullOr types.bool;
+                      login = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user, created by the ensureUser attr, login permissions. From the postgres docs:
 
@@ -348,8 +348,8 @@ in
                         default = null;
                         inherit defaultText;
                       };
-                      replication = mkOption {
-                        type = types.nullOr types.bool;
+                      replication = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
 
@@ -364,8 +364,8 @@ in
                         default = null;
                         inherit defaultText;
                       };
-                      bypassrls = mkOption {
-                        type = types.nullOr types.bool;
+                      bypassrls = lib.mkOption {
+                        type = lib.types.nullOr lib.types.bool;
                         description = ''
                           Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
 
@@ -395,7 +395,7 @@ in
           once granted with `ensureDBOwnership = true;`. This means that this must be
           cleaned up manually when changing after changing the config in here.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             {
               name = "nextcloud";
@@ -408,8 +408,8 @@ in
         '';
       };
 
-      enableTCPIP = mkOption {
-        type = types.bool;
+      enableTCPIP = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether PostgreSQL should listen on all network interfaces.
@@ -418,18 +418,18 @@ in
         '';
       };
 
-      extensions = mkOption {
-        type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
+      extensions = lib.mkOption {
+        type = with lib.types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
         default = _: [ ];
-        example = literalExpression "ps: with ps; [ postgis pg_repack ]";
+        example = lib.literalExpression "ps: with ps; [ postgis pg_repack ]";
         description = ''
           List of PostgreSQL extensions to install.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           submodule {
             freeformType = attrsOf (oneOf [
               bool
@@ -438,17 +438,17 @@ in
               str
             ]);
             options = {
-              shared_preload_libraries = mkOption {
-                type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+              shared_preload_libraries = lib.mkOption {
+                type = nullOr (coercedTo (listOf str) (lib.concatStringsSep ", ") str);
                 default = null;
-                example = literalExpression ''[ "auto_explain" "anon" ]'';
+                example = lib.literalExpression ''[ "auto_explain" "anon" ]'';
                 description = ''
                   List of libraries to be preloaded.
                 '';
               };
 
-              log_line_prefix = mkOption {
-                type = types.str;
+              log_line_prefix = lib.mkOption {
+                type = lib.types.str;
                 default = "[%p] ";
                 example = "%m [%p] ";
                 description = ''
@@ -458,8 +458,8 @@ in
                 '';
               };
 
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 5432;
                 description = ''
                   The port on which PostgreSQL listens.
@@ -478,7 +478,7 @@ in
           escaped with two single quotes as described by the upstream documentation linked above.
           :::
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             log_connections = true;
             log_statement = "all";
@@ -489,16 +489,16 @@ in
         '';
       };
 
-      recoveryConfig = mkOption {
-        type = types.nullOr types.lines;
+      recoveryConfig = lib.mkOption {
+        type = lib.types.nullOr types.lines;
         default = null;
         description = ''
           Contents of the {file}`recovery.conf` file.
         '';
       };
 
-      superUser = mkOption {
-        type = types.str;
+      superUser = lib.mkOption {
+        type = lib.types.str;
         default = "postgres";
         internal = true;
         readOnly = true;
@@ -513,7 +513,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = map (
       { name, ensureDBOwnership, ... }:
@@ -534,7 +534,7 @@ in
       ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
       log_destination = "stderr";
       listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
-      jit = mkDefault (if cfg.enableJIT then "on" else "off");
+      jit = lib.mkDefault (if cfg.enableJIT then "on" else "off");
     };
 
     services.postgresql.package =
@@ -571,9 +571,9 @@ in
       # systems!
       mkDefault (if cfg.enableJIT then base.withJIT else base);
 
-    services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
+    services.postgresql.dataDir = lib.mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
-    services.postgresql.authentication = mkMerge [
+    services.postgresql.authentication = lib.mkMerge [
       (mkBefore "# Generated file; do not edit!")
       (mkAfter ''
         # default value of services.postgresql.authentication
@@ -620,14 +620,14 @@ in
           rm -f ${cfg.dataDir}/*.conf
 
           # Initialise the database.
-          initdb -U ${cfg.superUser} ${escapeShellArgs cfg.initdbArgs}
+          initdb -U ${cfg.superUser} ${lib.escapeShellArgs cfg.initdbArgs}
 
           # See postStart!
           touch "${cfg.dataDir}/.first_startup"
         fi
 
         ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
-        ${optionalString (cfg.recoveryConfig != null) ''
+        ${lib.optionalString (cfg.recoveryConfig != null) ''
           ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
             "${cfg.dataDir}/recovery.conf"
         ''}
@@ -644,13 +644,13 @@ in
           done
 
           if test -e "${cfg.dataDir}/.first_startup"; then
-            ${optionalString (cfg.initialScript != null) ''
+            ${lib.optionalString (cfg.initialScript != null) ''
               $PSQL -f "${cfg.initialScript}" -d postgres
             ''}
             rm -f "${cfg.dataDir}/.first_startup"
           fi
         ''
-        + optionalString (cfg.ensureDatabases != [ ]) ''
+        + lib.optionalString (cfg.ensureDatabases != [ ]) ''
           ${concatMapStrings (database: ''
             $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
           '') cfg.ensureDatabases}
@@ -659,13 +659,13 @@ in
           ${concatMapStrings (
             user:
             let
-              dbOwnershipStmt = optionalString user.ensureDBOwnership ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
+              dbOwnershipStmt = lib.optionalString user.ensureDBOwnership ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
 
               filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
 
               clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
 
-              userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
+              userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${lib.concatStringsSep " " clauseSqlStatements}' '';
             in
             ''
               $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
@@ -676,7 +676,7 @@ in
           ) cfg.ensureUsers}
         '';
 
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         {
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           User = "postgres";
@@ -733,10 +733,10 @@ in
           ] ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
           UMask = if groupAccessAvailable then "0027" else "0077";
         }
-        (mkIf (cfg.dataDir != "/var/lib/postgresql") {
+        (lib.mkIf (cfg.dataDir != "/var/lib/postgresql") {
           ReadWritePaths = [ cfg.dataDir ];
         })
-        (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+        (lib.mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
           StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
           StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
         })

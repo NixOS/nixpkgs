@@ -1,19 +1,19 @@
 { lib, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   options = {
 
-    system.build = mkOption {
+    system.build = lib.mkOption {
       default = { };
       description = ''
         Attribute set of derivations used to set up the system.
       '';
-      type = types.submoduleWith {
+      type = lib.types.submoduleWith {
         modules = [
           {
-            freeformType = with types; lazyAttrsOf (uniq unspecified);
+            freeformType = with lib.types; lazyAttrsOf (uniq unspecified);
           }
         ];
       };

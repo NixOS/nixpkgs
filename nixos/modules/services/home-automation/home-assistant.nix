@@ -20,11 +20,11 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
-    optionals
-    optionalString
+    lib.optionals
+    lib.optionalString
     recursiveUpdate
     singleton
     splitString
@@ -51,8 +51,8 @@ let
   '';
 
   # Filter null values from the configuration, so that we can still advertise
-  # optional options in the config attribute.
-  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) (recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
+  # lib.optional options in the config attribute.
+  filteredConfig = converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
 
   lovelaceConfigFile = renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig;
@@ -77,8 +77,8 @@ let
     if isDerivation config then
       [ ]
     else if isAttrs config then
-      optionals (config ? platform) [ config.platform ]
-      ++ concatMap usedPlatforms (attrValues config)
+      lib.optionals (config ? platform) [ config.platform ]
+      ++ concatMap usedPlatforms (lib.attrValues config)
     else if isList config then
       concatMap usedPlatforms config
     else [ ];
@@ -121,9 +121,9 @@ let
 in {
   imports = [
     # Migrations in NixOS 22.05
-    (mkRemovedOptionModule [ "services" "home-assistant" "applyDefaultConfig" ] "The default config was migrated into services.home-assistant.config")
-    (mkRemovedOptionModule [ "services" "home-assistant" "autoExtraComponents" ] "Components are now parsed from services.home-assistant.config unconditionally")
-    (mkRenamedOptionModule [ "services" "home-assistant" "port" ] [ "services" "home-assistant" "config" "http" "server_port" ])
+    (lib.mkRemovedOptionModule [ "services" "home-assistant" "applyDefaultConfig" ] "The default config was migrated into services.home-assistant.config")
+    (lib.mkRemovedOptionModule [ "services" "home-assistant" "autoExtraComponents" ] "Components are now parsed from services.home-assistant.config unconditionally")
+    (lib.mkRenamedOptionModule [ "services" "home-assistant" "port" ] [ "services" "home-assistant" "config" "http" "server_port" ])
   ];
 
   meta = {
@@ -134,10 +134,10 @@ in {
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
     # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
-    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
+    enable = lib.mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--debug" ];
       description = ''
@@ -145,14 +145,14 @@ in {
       '';
     };
 
-    configDir = mkOption {
+    configDir = lib.mkOption {
       default = "/var/lib/hass";
-      type = types.path;
+      type = lib.types.path;
       description = "The config directory, where your {file}`configuration.yaml` is located.";
     };
 
-    defaultIntegrations = mkOption {
-      type = types.listOf (types.enum availableComponents);
+    defaultIntegrations = lib.mkOption {
+      type = lib.types.listOf (types.enum availableComponents);
       # https://github.com/home-assistant/core/blob/dev/homeassistant/bootstrap.py#L109
       default = [
         "application_credentials"
@@ -190,19 +190,19 @@ in {
       '';
     };
 
-    extraComponents = mkOption {
-      type = types.listOf (types.enum availableComponents);
+    extraComponents = lib.mkOption {
+      type = lib.types.listOf (types.enum availableComponents);
       default = [
         # List of components required to complete the onboarding
         "default_config"
         "met"
         "esphome"
-      ] ++ optionals pkgs.stdenv.hostPlatform.isAarch [
+      ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
         # Use the platform as an indicator that we might be running on a RaspberryPi and include
         # relevant components
         "rpi_power"
       ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           "analytics"
           "default_config"
@@ -219,13 +219,13 @@ in {
       '';
     };
 
-    extraPackages = mkOption {
-      type = types.functionTo (types.listOf types.package);
+    extraPackages = lib.mkOption {
+      type = lib.types.functionTo (types.listOf types.package);
       default = _: [];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         python3Packages: with python3Packages; [];
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         python3Packages: with python3Packages; [
           # postgresql support
           psycopg2
@@ -239,15 +239,15 @@ in {
       '';
     };
 
-    customComponents = mkOption {
-      type = types.listOf (
+    customComponents = lib.mkOption {
+      type = lib.types.listOf (
         types.addCheck types.package (p: p.isHomeAssistantComponent or false) // {
           name = "home-assistant-component";
           description = "package that is a Home Assistant component";
         }
       );
       default = [];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with pkgs.home-assistant-custom-components; [
           prometheus_sensor
         ];
@@ -259,10 +259,10 @@ in {
       '';
     };
 
-    customLovelaceModules = mkOption {
-      type = types.listOf types.package;
+    customLovelaceModules = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with pkgs.home-assistant-custom-lovelace-modules; [
           mini-graph-card
           mini-media-player
@@ -279,8 +279,8 @@ in {
       '';
     };
 
-    config = mkOption {
-      type = types.nullOr (types.submodule {
+    config = lib.mkOption {
+      type = lib.types.nullOr (lib.types.submodule {
         freeformType = format.type;
         options = {
           # This is a partial selection of the most common options, so new users can quickly
@@ -289,8 +289,8 @@ in {
 
           homeassistant = {
             # https://www.home-assistant.io/docs/configuration/basic/
-            name = mkOption {
-              type = types.nullOr types.str;
+            name = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               example = "Home";
               description = ''
@@ -298,8 +298,8 @@ in {
               '';
             };
 
-            latitude = mkOption {
-              type = types.nullOr (types.either types.float types.str);
+            latitude = lib.mkOption {
+              type = lib.types.nullOr (types.either types.float types.str);
               default = null;
               example = 52.3;
               description = ''
@@ -307,8 +307,8 @@ in {
               '';
             };
 
-            longitude = mkOption {
-              type = types.nullOr (types.either types.float types.str);
+            longitude = lib.mkOption {
+              type = lib.types.nullOr (types.either types.float types.str);
               default = null;
               example = 4.9;
               description = ''
@@ -316,8 +316,8 @@ in {
               '';
             };
 
-            unit_system = mkOption {
-              type = types.nullOr (types.enum [ "metric" "imperial" ]);
+            unit_system = lib.mkOption {
+              type = lib.types.nullOr (types.enum [ "metric" "imperial" ]);
               default = null;
               example = "metric";
               description = ''
@@ -325,8 +325,8 @@ in {
               '';
             };
 
-            temperature_unit = mkOption {
-              type = types.nullOr (types.enum [ "C" "F" ]);
+            temperature_unit = lib.mkOption {
+              type = lib.types.nullOr (types.enum [ "C" "F" ]);
               default = null;
               example = "C";
               description = ''
@@ -334,10 +334,10 @@ in {
               '';
             };
 
-            time_zone = mkOption {
-              type = types.nullOr types.str;
+            time_zone = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = config.time.timeZone or null;
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 config.time.timeZone or null
               '';
               example = "Europe/Amsterdam";
@@ -349,8 +349,8 @@ in {
 
           http = {
             # https://www.home-assistant.io/integrations/http/
-            server_host = mkOption {
-              type = types.either types.str (types.listOf types.str);
+            server_host = lib.mkOption {
+              type = lib.types.either types.str (types.listOf types.str);
               default = [
                 "0.0.0.0"
                 "::"
@@ -361,9 +361,9 @@ in {
               '';
             };
 
-            server_port = mkOption {
+            server_port = lib.mkOption {
               default = 8123;
-              type = types.port;
+              type = lib.types.port;
               description = ''
                 The port on which to listen.
               '';
@@ -372,12 +372,12 @@ in {
 
           lovelace = {
             # https://www.home-assistant.io/lovelace/dashboards/
-            mode = mkOption {
-              type = types.enum [ "yaml" "storage" ];
+            mode = lib.mkOption {
+              type = lib.types.enum [ "yaml" "storage" ];
               default = if cfg.lovelaceConfig != null
                 then "yaml"
                 else "storage";
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 if cfg.lovelaceConfig != null
                   then "yaml"
                 else "storage";
@@ -390,7 +390,7 @@ in {
           };
         };
       });
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           homeassistant = {
             name = "Home";
@@ -419,9 +419,9 @@ in {
       '';
     };
 
-    configWritable = mkOption {
+    configWritable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to make {file}`configuration.yaml` writable.
 
@@ -432,11 +432,11 @@ in {
       '';
     };
 
-    lovelaceConfig = mkOption {
+    lovelaceConfig = lib.mkOption {
       default = null;
-      type = types.nullOr format.type;
+      type = lib.types.nullOr format.type;
       # from https://www.home-assistant.io/lovelace/dashboards/
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           title = "My Awesome Home";
           views = [ {
@@ -457,9 +457,9 @@ in {
       '';
     };
 
-    lovelaceConfigWritable = mkOption {
+    lovelaceConfigWritable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to make {file}`ui-lovelace.yaml` writable.
 
@@ -470,17 +470,17 @@ in {
       '';
     };
 
-    package = mkOption {
+    package = lib.mkOption {
       default = pkgs.home-assistant.overrideAttrs (oldAttrs: {
         doInstallCheck = false;
       });
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         pkgs.home-assistant.overrideAttrs (oldAttrs: {
           doInstallCheck = false;
         })
       '';
-      type = types.package;
-      example = literalExpression ''
+      type = lib.types.package;
+      example = lib.literalExpression ''
         pkgs.home-assistant.override {
           extraPackages = python3Packages: with python3Packages; [
             psycopg2
@@ -497,14 +497,14 @@ in {
       '';
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.openFirewall -> cfg.config != null;
@@ -512,15 +512,15 @@ in {
       }
     ];
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.config.http.server_port ];
 
     # symlink the configuration to /etc/home-assistant
-    environment.etc = mkMerge [
-      (mkIf (cfg.config != null && !cfg.configWritable) {
+    environment.etc = lib.mkMerge [
+      (lib.mkIf (cfg.config != null && !cfg.configWritable) {
         "home-assistant/configuration.yaml".source = configFile;
       })
 
-      (mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
+      (lib.mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
         "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
       })
     ];
@@ -535,8 +535,8 @@ in {
         "mysql.service"
         "postgresql.service"
       ];
-      reloadTriggers = optionals (cfg.config != null) [ configFile ]
-      ++ optionals (cfg.lovelaceConfig != null) [ lovelaceConfigFile ];
+      reloadTriggers = lib.optionals (cfg.config != null) [ configFile ]
+      ++ lib.optionals (cfg.lovelaceConfig != null) [ lovelaceConfigFile ];
 
       preStart = let
         copyConfig = if cfg.configWritable then ''
@@ -563,13 +563,13 @@ in {
           # remove components symlinked in from below the /nix/store
           readarray -d "" components < <(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l -print0)
           for component in "''${components[@]}"; do
-            if [[ "$(readlink "$component")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
+            if [[ "$(readlink "$component")" =~ ^${lib.escapeShellArg builtins.storeDir} ]]; then
               rm "$component"
             fi
           done
 
           # recreate symlinks for desired components
-          declare -a components=(${escapeShellArgs cfg.customComponents})
+          declare -a components=(${lib.escapeShellArgs cfg.customComponents})
           for component in "''${components[@]}"; do
             readarray -t manifests < <(find "$component" -name manifest.json)
             readarray -t paths < <(dirname "''${manifests[@]}")
@@ -589,16 +589,16 @@ in {
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ optionals (any useComponent componentsUsingBluetooth) [
+        ] ++ lib.optionals (any useComponent componentsUsingBluetooth) [
           # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
-        ] ++ optionals (useComponent "emulated_hue") [
+        ] ++ lib.optionals (useComponent "emulated_hue") [
           # Alexa looks for the service on port 80
           # https://www.home-assistant.io/integrations/emulated_hue
           "CAP_NET_BIND_SERVICE"
-        ] ++ optionals (useComponent "nmap_tracker") [
+        ] ++ lib.optionals (useComponent "nmap_tracker") [
           # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
           "CAP_NET_ADMIN"
           "CAP_NET_BIND_SERVICE"
@@ -765,20 +765,20 @@ in {
           "AF_INET6"
           "AF_NETLINK"
           "AF_UNIX"
-        ] ++ optionals (any useComponent componentsUsingBluetooth) [
+        ] ++ lib.optionals (any useComponent componentsUsingBluetooth) [
           "AF_BLUETOOTH"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SupplementaryGroups = optionals (any useComponent componentsUsingSerialDevices) [
+        SupplementaryGroups = lib.optionals (any useComponent componentsUsingSerialDevices) [
           "dialout"
         ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ optionals (any useComponent componentsUsingPing) [
+        ] ++ lib.optionals (any useComponent componentsUsingPing) [
           "capset"
           "setuid"
         ];

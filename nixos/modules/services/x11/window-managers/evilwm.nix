@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.evilwm;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.evilwm.enable = mkEnableOption "evilwm";
+    services.xserver.windowManager.evilwm.enable = lib.mkEnableOption "evilwm";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "evilwm";
       start = ''
         ${pkgs.evilwm}/bin/evilwm &

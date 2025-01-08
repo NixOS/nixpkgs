@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.trafficserver;
   user = config.users.users.trafficserver.name;
@@ -30,24 +28,24 @@ let
 
   mkRecordLines =
     path: value:
-    if isAttrs value then
+    if lib.isAttrs value then
       lib.mapAttrsToList (n: v: mkRecordLines (path ++ [ n ]) v) value
-    else if isInt value then
-      "CONFIG ${concatStringsSep "." path} INT ${toString value}"
-    else if isFloat value then
-      "CONFIG ${concatStringsSep "." path} FLOAT ${toString value}"
+    else if lib.isInt value then
+      "CONFIG ${lib.concatStringsSep "." path} INT ${toString value}"
+    else if lib.isFloat value then
+      "CONFIG ${lib.concatStringsSep "." path} FLOAT ${toString value}"
     else
-      "CONFIG ${concatStringsSep "." path} STRING ${toString value}";
+      "CONFIG ${lib.concatStringsSep "." path} STRING ${toString value}";
 
-  mkRecordsConfig = cfg: concatStringsSep "\n" (flatten (mkRecordLines [ ] cfg));
-  mkPluginConfig = cfg: concatStringsSep "\n" (map (p: "${p.path} ${p.arg}") cfg);
+  mkRecordsConfig = cfg: lib.concatStringsSep "\n" (lib.flatten (mkRecordLines [ ] cfg));
+  mkPluginConfig = cfg: lib.concatStringsSep "\n" (map (p: "${p.path} ${p.arg}") cfg);
 in
 {
   options.services.trafficserver = {
-    enable = mkEnableOption "Apache Traffic Server";
+    enable = lib.mkEnableOption "Apache Traffic Server";
 
-    cache = mkOption {
-      type = types.lines;
+    cache = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "dest_domain=example.com suffix=js action=never-cache";
       description = ''
@@ -58,8 +56,8 @@ in
       '';
     };
 
-    hosting = mkOption {
-      type = types.lines;
+    hosting = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "domain=example.com volume=1";
       description = ''
@@ -70,11 +68,11 @@ in
       '';
     };
 
-    ipAllow = mkOption {
-      type = types.nullOr yaml.type;
+    ipAllow = lib.mkOption {
+      type = lib.types.nullOr yaml.type;
       default = lib.importJSON ./ip_allow.json;
-      defaultText = literalMD "upstream defaults";
-      example = literalExpression ''
+      defaultText = lib.literalMD "upstream defaults";
+      example = lib.literalExpression ''
         {
           ip_allow = [{
             apply = "in";
@@ -93,10 +91,10 @@ in
       '';
     };
 
-    logging = mkOption {
-      type = types.nullOr yaml.type;
+    logging = lib.mkOption {
+      type = lib.types.nullOr yaml.type;
       default = lib.importJSON ./logging.json;
-      defaultText = literalMD "upstream defaults";
+      defaultText = lib.literalMD "upstream defaults";
       example = { };
       description = ''
         Configure logs.
@@ -106,8 +104,8 @@ in
       '';
     };
 
-    parent = mkOption {
-      type = types.lines;
+    parent = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         dest_domain=. method=get parent="p1.example:8080; p2.example:8080" round_robin=true
@@ -120,7 +118,7 @@ in
       '';
     };
 
-    plugins = mkOption {
+    plugins = lib.mkOption {
       default = [ ];
 
       description = ''
@@ -132,9 +130,9 @@ in
       '';
 
       type =
-        with types;
+        with lib.types;
         listOf (submodule {
-          options.path = mkOption {
+          options.path = lib.mkOption {
             type = str;
             example = "xdebug.so";
             description = ''
@@ -142,7 +140,7 @@ in
               the plugin directory.
             '';
           };
-          options.arg = mkOption {
+          options.arg = lib.mkOption {
             type = str;
             default = "";
             example = "--header=ATS-My-Debug";
@@ -151,9 +149,9 @@ in
         });
     };
 
-    records = mkOption {
+    records = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         let
           valueType =
             (attrsOf (oneOf [
@@ -179,8 +177,8 @@ in
       '';
     };
 
-    remap = mkOption {
-      type = types.lines;
+    remap = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "map http://from.example http://origin.example";
       description = ''
@@ -191,8 +189,8 @@ in
       '';
     };
 
-    splitDns = mkOption {
-      type = types.lines;
+    splitDns = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         dest_domain=internal.corp.example named="255.255.255.255:212 255.255.255.254" def_domain=corp.example search_list="corp.example corp1.example"
@@ -207,8 +205,8 @@ in
       '';
     };
 
-    sslMulticert = mkOption {
-      type = types.lines;
+    sslMulticert = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "dest_ip=* ssl_cert_name=default.pem";
       description = ''
@@ -219,10 +217,10 @@ in
       '';
     };
 
-    sni = mkOption {
-      type = types.nullOr yaml.type;
+    sni = lib.mkOption {
+      type = lib.types.nullOr yaml.type;
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           sni = [{
             fqdn = "no-http2.example.com";
@@ -239,8 +237,8 @@ in
       '';
     };
 
-    storage = mkOption {
-      type = types.lines;
+    storage = lib.mkOption {
+      type = lib.types.lines;
       default = "/var/cache/trafficserver 256M";
       example = "/dev/disk/by-id/XXXXX volume=1";
       description = ''
@@ -251,8 +249,8 @@ in
       '';
     };
 
-    strategies = mkOption {
-      type = types.nullOr yaml.type;
+    strategies = lib.mkOption {
+      type = lib.types.nullOr yaml.type;
       default = null;
       description = ''
         Specify the next hop proxies used in an cache hierarchy and the
@@ -263,8 +261,8 @@ in
       '';
     };
 
-    volume = mkOption {
-      type = types.nullOr yaml.type;
+    volume = lib.mkOption {
+      type = lib.types.nullOr yaml.type;
       default = "";
       example = "volume=1 scheme=http size=20%";
       description = ''
@@ -277,7 +275,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc =
       {
         "trafficserver/cache.config".text = cfg.cache;

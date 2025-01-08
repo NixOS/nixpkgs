@@ -39,71 +39,71 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRemovedOptionModule
     mkRenamedOptionModule
-    optionalAttrs
-    optionals
-    optionalString
+    lib.optionalAttrs
+    lib.optionals
+    lib.optionalString
     types
     ;
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "appName" ]
       [ "services" "forgejo" "settings" "DEFAULT" "APP_NAME" ]
     )
-    (mkRemovedOptionModule [ "services" "forgejo" "extraConfig" ]
+    (lib.mkRemovedOptionModule [ "services" "forgejo" "extraConfig" ]
       "services.forgejo.extraConfig has been removed. Please use the freeform services.forgejo.settings option instead"
     )
-    (mkRemovedOptionModule [ "services" "forgejo" "database" "password" ]
+    (lib.mkRemovedOptionModule [ "services" "forgejo" "database" "password" ]
       "services.forgejo.database.password has been removed. Please use services.forgejo.database.passwordFile instead"
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "mailerPasswordFile" ]
       [ "services" "forgejo" "secrets" "mailer" "PASSWD" ]
     )
 
     # copied from services.gitea; remove at some point
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "cookieSecure" ]
       [ "services" "forgejo" "settings" "session" "COOKIE_SECURE" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "disableRegistration" ]
       [ "services" "forgejo" "settings" "service" "DISABLE_REGISTRATION" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "domain" ]
       [ "services" "forgejo" "settings" "server" "DOMAIN" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "httpAddress" ]
       [ "services" "forgejo" "settings" "server" "HTTP_ADDR" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "httpPort" ]
       [ "services" "forgejo" "settings" "server" "HTTP_PORT" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "log" "level" ]
       [ "services" "forgejo" "settings" "log" "LEVEL" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "log" "rootPath" ]
       [ "services" "forgejo" "settings" "log" "ROOT_PATH" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "rootUrl" ]
       [ "services" "forgejo" "settings" "server" "ROOT_URL" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "ssh" "clonePort" ]
       [ "services" "forgejo" "settings" "server" "SSH_PORT" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "forgejo" "staticRootPath" ]
       [ "services" "forgejo" "settings" "server" "STATIC_ROOT_PATH" ]
     )
@@ -112,36 +112,36 @@ in
       [ "services" "forgejo" "settings" "server" "PROTOCOL" ]
       (config: if config.services.forgejo.enableUnixSocket then "http+unix" else "http")
     )
-    (mkRemovedOptionModule [ "services" "forgejo" "ssh" "enable" ]
+    (lib.mkRemovedOptionModule [ "services" "forgejo" "ssh" "enable" ]
       "services.forgejo.ssh.enable has been migrated into freeform setting services.forgejo.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted"
     )
   ];
 
   options = {
     services.forgejo = {
-      enable = mkEnableOption "Forgejo, a software forge";
+      enable = lib.mkEnableOption "Forgejo, a software forge";
 
-      package = mkPackageOption pkgs "forgejo-lts" { };
+      package = lib.mkPackageOption pkgs "forgejo-lts" { };
 
-      useWizard = mkOption {
+      useWizard = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to use the built-in installation wizard instead of
           declaratively managing the {file}`app.ini` config file in nix.
         '';
       };
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         default = "/var/lib/forgejo";
-        type = types.str;
+        type = lib.types.str;
         description = "Forgejo data directory.";
       };
 
-      customDir = mkOption {
+      customDir = lib.mkOption {
         default = "${cfg.stateDir}/custom";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/custom"'';
+        type = lib.types.str;
         description = ''
           Base directory for custom templates and other options.
 
@@ -150,21 +150,21 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "forgejo";
         description = "User account under which Forgejo runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "forgejo";
         description = "Group under which Forgejo runs.";
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [
+        type = lib.mkOption {
+          type = lib.types.enum [
             "sqlite3"
             "mysql"
             "postgres"
@@ -174,16 +174,16 @@ in
           description = "Database engine to use.";
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
           description = "Database host address.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = if usePostgresql then pg.settings.port else 3306;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             if config.${opt.database.type} != "postgresql"
             then 3306
             else 5432
@@ -191,20 +191,20 @@ in
           description = "Database host port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "forgejo";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "forgejo";
           description = "Database user.";
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/forgejo-dbpassword";
           description = ''
@@ -213,8 +213,8 @@ in
           '';
         };
 
-        socket = mkOption {
-          type = types.nullOr types.path;
+        socket = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default =
             if (cfg.database.createDatabase && usePostgresql) then
               "/run/postgresql"
@@ -222,30 +222,30 @@ in
               "/run/mysqld/mysqld.sock"
             else
               null;
-          defaultText = literalExpression "null";
+          defaultText = lib.literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
-        path = mkOption {
-          type = types.str;
+        path = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/data/forgejo.db";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/forgejo.db"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/data/forgejo.db"'';
           description = "Path to the sqlite3 database file.";
         };
 
-        createDatabase = mkOption {
-          type = types.bool;
+        createDatabase = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to create a local database automatically.";
         };
       };
 
       dump = {
-        enable = mkEnableOption "periodic dumps via the [built-in {command}`dump` command](https://forgejo.org/docs/latest/admin/command-line/#dump)";
+        enable = lib.mkEnableOption "periodic dumps via the [built-in {command}`dump` command](https://forgejo.org/docs/latest/admin/command-line/#dump)";
 
-        interval = mkOption {
-          type = types.str;
+        interval = lib.mkOption {
+          type = lib.types.str;
           default = "04:31";
           example = "hourly";
           description = ''
@@ -256,15 +256,15 @@ in
           '';
         };
 
-        backupDir = mkOption {
-          type = types.str;
+        backupDir = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/dump";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the directory where the dump archives will be stored.";
         };
 
-        type = mkOption {
-          type = types.enum [
+        type = lib.mkOption {
+          type = lib.types.enum [
             "zip"
             "tar"
             "tar.sz"
@@ -279,8 +279,8 @@ in
           description = "Archive format used to store the dump file.";
         };
 
-        file = mkOption {
-          type = types.nullOr types.str;
+        file = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = "Filename to be used for the dump. If `null` a default name is chosen by forgejo.";
           example = "forgejo-dump";
@@ -288,34 +288,34 @@ in
       };
 
       lfs = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Enables git-lfs support.";
         };
 
-        contentDir = mkOption {
-          type = types.str;
+        contentDir = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/data/lfs";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
           description = "Where to store LFS files.";
         };
       };
 
-      repositoryRoot = mkOption {
-        type = types.str;
+      repositoryRoot = lib.mkOption {
+        type = lib.types.str;
         default = "${cfg.stateDir}/repositories";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         description = ''
           Free-form settings written directly to the `app.ini` configfile file.
           Refer to <https://forgejo.org/docs/latest/admin/config-cheat-sheet/> for supported values.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             DEFAULT = {
               RUN_MODE = "dev";
@@ -336,19 +336,19 @@ in
             };
           }
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
           options = {
             log = {
-              ROOT_PATH = mkOption {
+              ROOT_PATH = lib.mkOption {
                 default = "${cfg.stateDir}/log";
-                defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
-                type = types.str;
+                defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/log"'';
+                type = lib.types.str;
                 description = "Root path for log files.";
               };
-              LEVEL = mkOption {
+              LEVEL = lib.mkOption {
                 default = "Info";
-                type = types.enum [
+                type = lib.types.enum [
                   "Trace"
                   "Debug"
                   "Info"
@@ -361,8 +361,8 @@ in
             };
 
             server = {
-              PROTOCOL = mkOption {
-                type = types.enum [
+              PROTOCOL = lib.mkOption {
+                type = lib.types.enum [
                   "http"
                   "https"
                   "fcgi"
@@ -373,52 +373,52 @@ in
                 description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
               };
 
-              HTTP_ADDR = mkOption {
-                type = types.either types.str types.path;
+              HTTP_ADDR = lib.mkOption {
+                type = lib.types.either types.str types.path;
                 default =
                   if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then
                     "/run/forgejo/forgejo.sock"
                   else
                     "0.0.0.0";
-                defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/forgejo/forgejo.sock" else "0.0.0.0"'';
+                defaultText = lib.literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/forgejo/forgejo.sock" else "0.0.0.0"'';
                 description = "Listen address. Must be a path when using a unix socket.";
               };
 
-              HTTP_PORT = mkOption {
-                type = types.port;
+              HTTP_PORT = lib.mkOption {
+                type = lib.types.port;
                 default = 3000;
                 description = "Listen port. Ignored when using a unix socket.";
               };
 
-              DOMAIN = mkOption {
-                type = types.str;
+              DOMAIN = lib.mkOption {
+                type = lib.types.str;
                 default = "localhost";
                 description = "Domain name of your server.";
               };
 
-              ROOT_URL = mkOption {
-                type = types.str;
+              ROOT_URL = lib.mkOption {
+                type = lib.types.str;
                 default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
-                defaultText = literalExpression ''"http://''${config.services.forgejo.settings.server.DOMAIN}:''${toString config.services.forgejo.settings.server.HTTP_PORT}/"'';
+                defaultText = lib.literalExpression ''"http://''${config.services.forgejo.settings.server.DOMAIN}:''${toString config.services.forgejo.settings.server.HTTP_PORT}/"'';
                 description = "Full public URL of Forgejo server.";
               };
 
-              STATIC_ROOT_PATH = mkOption {
-                type = types.either types.str types.path;
+              STATIC_ROOT_PATH = lib.mkOption {
+                type = lib.types.either types.str types.path;
                 default = cfg.package.data;
-                defaultText = literalExpression "config.${opt.package}.data";
+                defaultText = lib.literalExpression "config.${opt.package}.data";
                 example = "/var/lib/forgejo/data";
                 description = "Upper level of template and static files path.";
               };
 
-              DISABLE_SSH = mkOption {
-                type = types.bool;
+              DISABLE_SSH = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = "Disable external SSH feature.";
               };
 
-              SSH_PORT = mkOption {
-                type = types.port;
+              SSH_PORT = lib.mkOption {
+                type = lib.types.port;
                 default = 22;
                 example = 2222;
                 description = ''
@@ -430,8 +430,8 @@ in
             };
 
             session = {
-              COOKIE_SECURE = mkOption {
-                type = types.bool;
+              COOKIE_SECURE = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Marks session cookies as "secure" as a hint for browsers to only send
@@ -443,7 +443,7 @@ in
         };
       };
 
-      secrets = mkOption {
+      secrets = lib.mkOption {
         default = { };
         description = ''
           This is a small wrapper over systemd's `LoadCredential`.
@@ -461,7 +461,7 @@ in
           Keys specified here take priority over the ones in {option}`services.forgejo.settings`!
           :::
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             metrics = {
               TOKEN = "/run/keys/forgejo-metrics-token";
@@ -475,15 +475,15 @@ in
             };
           }
         '';
-        type = types.submodule {
-          freeformType = with types; attrsOf (attrsOf path);
+        type = lib.types.submodule {
+          freeformType = with lib.types; attrsOf (attrsOf path);
           options = { };
         };
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
@@ -502,16 +502,16 @@ in
 
     services.forgejo.settings = {
       DEFAULT = {
-        RUN_MODE = mkDefault "prod";
-        RUN_USER = mkDefault cfg.user;
-        WORK_PATH = mkDefault cfg.stateDir;
+        RUN_MODE = lib.mkDefault "prod";
+        RUN_USER = lib.mkDefault cfg.user;
+        WORK_PATH = lib.mkDefault cfg.stateDir;
       };
 
-      database = mkMerge [
+      database = lib.mkMerge [
         {
           DB_TYPE = cfg.database.type;
         }
-        (mkIf (useMysql || usePostgresql) {
+        (lib.mkIf (useMysql || usePostgresql) {
           HOST =
             if cfg.database.socket != null then
               cfg.database.socket
@@ -520,10 +520,10 @@ in
           NAME = cfg.database.name;
           USER = cfg.database.user;
         })
-        (mkIf useSqlite {
+        (lib.mkIf useSqlite {
           PATH = cfg.database.path;
         })
-        (mkIf usePostgresql {
+        (lib.mkIf usePostgresql {
           SSL_MODE = "disable";
         })
       ];
@@ -532,19 +532,19 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = mkIf cfg.lfs.enable {
+      server = lib.mkIf cfg.lfs.enable {
         LFS_START_SERVER = true;
       };
 
       session = {
-        COOKIE_NAME = mkDefault "session";
+        COOKIE_NAME = lib.mkDefault "session";
       };
 
       security = {
         INSTALL_LOCK = true;
       };
 
-      lfs = mkIf cfg.lfs.enable {
+      lfs = lib.mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
     };
@@ -559,17 +559,17 @@ in
         JWT_SECRET = "${cfg.customDir}/conf/oauth2_jwt_secret";
       };
 
-      database = mkIf (cfg.database.passwordFile != null) {
+      database = lib.mkIf (cfg.database.passwordFile != null) {
         PASSWD = cfg.database.passwordFile;
       };
 
-      server = mkIf cfg.lfs.enable {
+      server = lib.mkIf cfg.lfs.enable {
         LFS_JWT_SECRET = "${cfg.customDir}/conf/lfs_jwt_secret";
       };
     };
 
-    services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
-      enable = mkDefault true;
+    services.postgresql = lib.optionalAttrs (usePostgresql && cfg.database.createDatabase) {
+      enable = lib.mkDefault true;
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -580,9 +580,9 @@ in
       ];
     };
 
-    services.mysql = optionalAttrs (useMysql && cfg.database.createDatabase) {
-      enable = mkDefault true;
-      package = mkDefault pkgs.mariadb;
+    services.mysql = lib.optionalAttrs (useMysql && cfg.database.createDatabase) {
+      enable = lib.mkDefault true;
+      package = lib.mkDefault pkgs.mariadb;
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -620,12 +620,12 @@ in
         "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
 
       ]
-      ++ optionals cfg.lfs.enable [
+      ++ lib.optionals cfg.lfs.enable [
         "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
         "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
       ];
 
-    systemd.services.forgejo-secrets = mkIf (!cfg.useWizard) {
+    systemd.services.forgejo-secrets = lib.mkIf (!cfg.useWizard) {
       description = "Forgejo secret bootstrap helper";
       script = ''
         if [ ! -s '${cfg.secrets.security.SECRET_KEY}' ]; then
@@ -636,7 +636,7 @@ in
             ${exe} generate secret JWT_SECRET > '${cfg.secrets.oauth2.JWT_SECRET}'
         fi
 
-        ${optionalString cfg.lfs.enable ''
+        ${lib.optionalString cfg.lfs.enable ''
           if [ ! -s '${cfg.secrets.server.LFS_JWT_SECRET}' ]; then
               ${exe} generate secret LFS_JWT_SECRET > '${cfg.secrets.server.LFS_JWT_SECRET}'
           fi
@@ -662,23 +662,23 @@ in
         [
           "network.target"
         ]
-        ++ optionals usePostgresql [
+        ++ lib.optionals usePostgresql [
           "postgresql.service"
         ]
-        ++ optionals useMysql [
+        ++ lib.optionals useMysql [
           "mysql.service"
         ]
-        ++ optionals (!cfg.useWizard) [
+        ++ lib.optionals (!cfg.useWizard) [
           "forgejo-secrets.service"
         ];
       requires =
-        optionals (cfg.database.createDatabase && usePostgresql) [
+        lib.optionals (cfg.database.createDatabase && usePostgresql) [
           "postgresql.service"
         ]
-        ++ optionals (cfg.database.createDatabase && useMysql) [
+        ++ lib.optionals (cfg.database.createDatabase && useMysql) [
           "mysql.service"
         ]
-        ++ optionals (!cfg.useWizard) [
+        ++ lib.optionals (!cfg.useWizard) [
           "forgejo-secrets.service"
         ];
       wantedBy = [ "multi-user.target" ];
@@ -696,7 +696,7 @@ in
       # lfs_jwt_secret.
       # We have to consider this to stay compatible with older installations.
       preStart = ''
-        ${optionalString (!cfg.useWizard) ''
+        ${lib.optionalString (!cfg.useWizard) ''
           function forgejo_setup {
             config='${cfg.customDir}/conf/app.ini'
             cp -f '${format.generate "app.ini" cfg.settings}' "$config"
@@ -789,11 +789,11 @@ in
       } // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
-    services.openssh.settings.AcceptEnv = mkIf (
+    services.openssh.settings.AcceptEnv = lib.mkIf (
       !cfg.settings.server.START_SSH_SERVER or false
     ) "GIT_PROTOCOL";
 
-    users.users = mkIf (cfg.user == "forgejo") {
+    users.users = lib.mkIf (cfg.user == "forgejo") {
       forgejo = {
         home = cfg.stateDir;
         useDefaultShell = true;
@@ -802,11 +802,11 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "forgejo") {
+    users.groups = lib.mkIf (cfg.group == "forgejo") {
       forgejo = { };
     };
 
-    systemd.services.forgejo-dump = mkIf cfg.dump.enable {
+    systemd.services.forgejo-dump = lib.mkIf cfg.dump.enable {
       description = "forgejo dump";
       after = [ "forgejo.service" ];
       path = [ cfg.package ];
@@ -823,12 +823,12 @@ in
         User = cfg.user;
         ExecStart =
           "${exe} dump --type ${cfg.dump.type}"
-          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+          + lib.optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
         WorkingDirectory = cfg.dump.backupDir;
       };
     };
 
-    systemd.timers.forgejo-dump = mkIf cfg.dump.enable {
+    systemd.timers.forgejo-dump = lib.mkIf cfg.dump.enable {
       description = "Forgejo dump timer";
       partOf = [ "forgejo-dump.service" ];
       wantedBy = [ "timers.target" ];

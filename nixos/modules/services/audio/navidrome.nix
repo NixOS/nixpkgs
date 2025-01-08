@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     maintainers
     ;
   inherit (lib.types)
@@ -25,28 +25,28 @@ in
   options = {
     services.navidrome = {
 
-      enable = mkEnableOption "Navidrome music server";
+      enable = lib.mkEnableOption "Navidrome music server";
 
-      package = mkPackageOption pkgs "navidrome" { };
+      package = lib.mkPackageOption pkgs "navidrome" { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = submodule {
           freeformType = settingsFormat.type;
 
           options = {
-            Address = mkOption {
+            Address = lib.mkOption {
               default = "127.0.0.1";
               description = "Address to run Navidrome on.";
               type = str;
             };
 
-            Port = mkOption {
+            Port = lib.mkOption {
               default = 4533;
               description = "Port to run Navidrome on.";
               type = port;
             };
 
-            EnableInsightsCollector = mkOption {
+            EnableInsightsCollector = lib.mkOption {
               default = false;
               description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
               type = bool;
@@ -60,19 +60,19 @@ in
         description = "Configuration for Navidrome, see <https://www.navidrome.org/docs/usage/configuration-options/> for supported values.";
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         type = str;
         default = "navidrome";
         description = "User under which Navidrome runs.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         type = str;
         default = "navidrome";
         description = "Group under which Navidrome runs.";
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         type = bool;
         default = false;
         description = "Whether to open the TCP port in the firewall";
@@ -82,10 +82,10 @@ in
 
   config =
     let
-      inherit (lib) mkIf optional getExe;
+      inherit (lib) mkIf lib.optional getExe;
       WorkingDirectory = "/var/lib/navidrome";
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       systemd = {
         tmpfiles.settings.navidromeDirs = {
           "${cfg.settings.DataFolder or WorkingDirectory}"."d" = {
@@ -113,8 +113,8 @@ in
             RootDirectory = "/run/navidrome";
             ReadWritePaths = "";
             BindPaths =
-              optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
-              ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder;
+              lib.optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
+              ++ lib.optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder;
             BindReadOnlyPaths =
               [
                 # navidrome uses online services to download additional album metadata / covers
@@ -124,7 +124,7 @@ in
                 builtins.storeDir
                 "/etc"
               ]
-              ++ optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
+              ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
               ++ lib.optionals config.services.resolved.enable [
                 "/run/systemd/resolve/stub-resolv.conf"
                 "/run/systemd/resolve/resolv.conf"
@@ -158,16 +158,16 @@ in
         };
       };
 
-      users.users = mkIf (cfg.user == "navidrome") {
+      users.users = lib.mkIf (cfg.user == "navidrome") {
         navidrome = {
           inherit (cfg) group;
           isSystemUser = true;
         };
       };
 
-      users.groups = mkIf (cfg.group == "navidrome") { navidrome = { }; };
+      users.groups = lib.mkIf (cfg.group == "navidrome") { navidrome = { }; };
 
-      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
   meta.maintainers = with lib.maintainers; [ fsnkty ];
 }

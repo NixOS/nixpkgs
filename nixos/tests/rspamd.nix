@@ -45,7 +45,7 @@ let
         machine.log(machine.succeed("systemctl cat rspamd.service"))
         machine.log(machine.succeed("curl http://localhost:11334/auth"))
         machine.log(machine.succeed("curl http://127.0.0.1:11334/auth"))
-        ${optionalString enableIPv6 ''machine.log(machine.succeed("curl http://[::1]:11334/auth"))''}
+        ${lib.optionalString enableIPv6 ''machine.log(machine.succeed("curl http://[::1]:11334/auth"))''}
         # would not reformat
       '';
     };
@@ -181,7 +181,7 @@ in
       services.rspamd = {
         enable = true;
         locals = {
-          "antivirus.conf" = mkIf false {
+          "antivirus.conf" = lib.mkIf false {
             text = ''
               clamav {
                 action = "reject";

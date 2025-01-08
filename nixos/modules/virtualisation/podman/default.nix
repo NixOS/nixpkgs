@@ -3,7 +3,7 @@ let
   cfg = config.virtualisation.podman;
   json = pkgs.formats.json { };
 
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommand "${cfg.package.pname}-docker-compat-${cfg.package.version}"
@@ -39,8 +39,8 @@ in
   options.virtualisation.podman = {
 
     enable =
-      mkOption {
-        type = types.bool;
+      lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           This option enables Podman, a daemonless container engine for
@@ -50,8 +50,8 @@ in
         '';
       };
 
-    dockerSocket.enable = mkOption {
-      type = types.bool;
+    dockerSocket.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Make the Podman socket available in place of the Docker socket, so
@@ -64,16 +64,16 @@ in
       '';
     };
 
-    dockerCompat = mkOption {
-      type = types.bool;
+    dockerCompat = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Create an alias mapping {command}`docker` to {command}`podman`.
       '';
     };
 
-    enableNvidia = mkOption {
-      type = types.bool;
+    enableNvidia = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
@@ -82,8 +82,8 @@ in
       '';
     };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
       default = [ ];
       example = lib.literalExpression ''
         [
@@ -96,8 +96,8 @@ in
     };
 
     autoPrune = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to periodically prune Podman resources. If enabled, a
@@ -106,8 +106,8 @@ in
         '';
       };
 
-      flags = mkOption {
-        type = types.listOf types.str;
+      flags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "--all" ];
         description = ''
@@ -115,9 +115,9 @@ in
         '';
       };
 
-      dates = mkOption {
+      dates = lib.mkOption {
         default = "weekly";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at

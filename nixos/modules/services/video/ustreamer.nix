@@ -10,9 +10,9 @@ let
     getExe
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionals
+    lib.optionals
     types
     ;
 
@@ -20,56 +20,56 @@ let
 in
 {
   options.services.ustreamer = {
-    enable = mkEnableOption "µStreamer, a lightweight MJPEG-HTTP streamer";
+    enable = lib.mkEnableOption "µStreamer, a lightweight MJPEG-HTTP streamer";
 
-    package = mkPackageOption pkgs "ustreamer" { };
+    package = lib.mkPackageOption pkgs "ustreamer" { };
 
-    autoStart = mkOption {
+    autoStart = lib.mkOption {
       description = ''
         Wether to start µStreamer on boot. Disabling this will use socket
         activation. The service will stop gracefully after some inactivity.
         Disabling this will set `--exit-on-no-clients=300`
       '';
-      type = types.bool;
+      type = lib.types.bool;
       default = true;
       example = false;
     };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       description = ''
         Address to expose the HTTP server. This accepts values for
         ListenStream= defined in {manpage}`systemd.socket(5)`
       '';
-      type = types.str;
+      type = lib.types.str;
       default = "0.0.0.0:8080";
       example = "/run/ustreamer.sock";
     };
 
-    device = mkOption {
+    device = lib.mkOption {
       description = ''
         The v4l2 device to stream.
       '';
-      type = types.path;
+      type = lib.types.path;
       default = "/dev/video0";
       example = "/dev/v4l/by-id/usb-0000_Dummy_abcdef-video-index0";
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       description = ''
         Extra arguments to pass to `ustreamer`. See {manpage}`ustreamer(1)`
       '';
-      type = with types; listOf str;
+      type = with lib.types; listOf str;
       default = [ ];
       example = [ "--resolution=1920x1080" ];
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.ustreamer.extraArgs =
       [
         "--device=${cfg.device}"
       ]
-      ++ optionals (!cfg.autoStart) [
+      ++ lib.optionals (!cfg.autoStart) [
         "--exit-on-no-clients=300"
       ];
 
@@ -77,7 +77,7 @@ in
       description = "µStreamer, a lightweight MJPEG-HTTP streamer";
       after = [ "network.target" ];
       requires = [ "ustreamer.socket" ];
-      wantedBy = mkIf cfg.autoStart [ "multi-user.target" ];
+      wantedBy = lib.mkIf cfg.autoStart [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [

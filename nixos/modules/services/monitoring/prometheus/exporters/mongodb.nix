@@ -9,9 +9,9 @@
 let
   cfg = config.services.prometheus.exporters.mongodb;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
-    optionalString
+    lib.optionalString
     getExe
     length
     concatStringsSep
@@ -22,14 +22,14 @@ in
 {
   port = 9216;
   extraOpts = {
-    uri = mkOption {
-      type = types.str;
+    uri = lib.mkOption {
+      type = lib.types.str;
       default = "mongodb://localhost:27017/test";
       example = "mongodb://localhost:27017/test";
       description = "MongoDB URI to connect to.";
     };
-    collStats = mkOption {
-      type = types.listOf types.str;
+    collStats = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "db1.coll1"
@@ -39,8 +39,8 @@ in
         List of comma separared databases.collections to get $collStats
       '';
     };
-    indexStats = mkOption {
-      type = types.listOf types.str;
+    indexStats = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "db1.coll1"
@@ -50,8 +50,8 @@ in
         List of comma separared databases.collections to get $indexStats
       '';
     };
-    collector = mkOption {
-      type = types.listOf types.str;
+    collector = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "diagnosticdata"
@@ -65,15 +65,15 @@ in
       ];
       description = "Enabled collectors";
     };
-    collectAll = mkOption {
-      type = types.bool;
+    collectAll = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable all collectors. Same as specifying all --collector.<name>
       '';
     };
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       example = "/metrics";
       description = "Metrics expose path";
@@ -92,18 +92,18 @@ in
               concatMapStringsSep " " (x: "--collect.${x}") cfg.collector
           } \
           ${
-            optionalString (
+            lib.optionalString (
               length cfg.collStats > 0
-            ) "--mongodb.collstats-colls=${concatStringsSep "," cfg.collStats}"
+            ) "--mongodb.collstats-colls=${lib.concatStringsSep "," cfg.collStats}"
           } \
           ${
-            optionalString (
+            lib.optionalString (
               length cfg.indexStats > 0
-            ) "--mongodb.indexstats-colls=${concatStringsSep "," cfg.indexStats}"
+            ) "--mongodb.indexstats-colls=${lib.concatStringsSep "," cfg.indexStats}"
           } \
           --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \
           --web.telemetry-path="${cfg.telemetryPath}" \
-          ${escapeShellArgs cfg.extraFlags}
+          ${lib.escapeShellArgs cfg.extraFlags}
       '';
     };
   };

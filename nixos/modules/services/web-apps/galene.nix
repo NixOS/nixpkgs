@@ -1,6 +1,5 @@
 { config, lib, options, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.galene;
   opt = options.services.galene;
@@ -12,11 +11,11 @@ in
 {
   options = {
     services.galene = {
-      enable = mkEnableOption "Galene Service";
+      enable = lib.mkEnableOption "Galene Service";
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         default = defaultstateDir;
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The directory where Galene stores its internal state. If left as the default
           value this directory will automatically be created before the Galene server
@@ -25,20 +24,20 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "galene";
         description = "User account under which galene runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "galene";
         description = "Group under which galene runs.";
       };
 
-      insecure = mkOption {
-        type = types.bool;
+      insecure = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether Galene should listen in http or in https. If left as the default
@@ -46,8 +45,8 @@ in
         '';
       };
 
-      certFile = mkOption {
-        type = types.nullOr types.str;
+      certFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/path/to/your/cert.pem";
         description = ''
@@ -56,8 +55,8 @@ in
         '';
       };
 
-      keyFile = mkOption {
-        type = types.nullOr types.str;
+      keyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/path/to/your/key.pem";
         description = ''
@@ -66,62 +65,62 @@ in
         '';
       };
 
-      httpAddress = mkOption {
-        type = types.str;
+      httpAddress = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "HTTP listen address for galene.";
       };
 
-      httpPort = mkOption {
-        type = types.port;
+      httpPort = lib.mkOption {
+        type = lib.types.port;
         default = 8443;
         description = "HTTP listen port.";
       };
 
-      turnAddress = mkOption {
-        type = types.str;
+      turnAddress = lib.mkOption {
+        type = lib.types.str;
         default = "auto";
         example = "127.0.0.1:1194";
         description = "Built-in TURN server listen address and port. Set to \"\" to disable.";
       };
 
-      staticDir = mkOption {
-        type = types.str;
+      staticDir = lib.mkOption {
+        type = lib.types.str;
         default = "${cfg.package.static}/static";
-        defaultText = literalExpression ''"''${package.static}/static"'';
+        defaultText = lib.literalExpression ''"''${package.static}/static"'';
         example = "/var/lib/galene/static";
         description = "Web server directory.";
       };
 
-      recordingsDir = mkOption {
-        type = types.str;
+      recordingsDir = lib.mkOption {
+        type = lib.types.str;
         default = defaultrecordingsDir;
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/recordings"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/recordings"'';
         example = "/var/lib/galene/recordings";
         description = "Recordings directory.";
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = defaultdataDir;
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/data"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/data"'';
         example = "/var/lib/galene/data";
         description = "Data directory.";
       };
 
-      groupsDir = mkOption {
-        type = types.str;
+      groupsDir = lib.mkOption {
+        type = lib.types.str;
         default = defaultgroupsDir;
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/groups"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/groups"'';
         example = "/var/lib/galene/groups";
         description = "Web server directory.";
       };
 
-      package = mkPackageOption pkgs "galene" { };
+      package = lib.mkPackageOption pkgs "galene" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.insecure || (cfg.certFile != null && cfg.keyFile != null);
@@ -138,20 +137,20 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ${optionalString (cfg.insecure != true) ''
+        ${lib.optionalString (cfg.insecure != true) ''
            install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
            install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
         ''}
       '';
 
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
           ExecStart = ''${cfg.package}/bin/galene \
-          ${optionalString (cfg.insecure) "-insecure"} \
+          ${lib.optionalString (cfg.insecure) "-insecure"} \
           -http ${cfg.httpAddress}:${toString cfg.httpPort} \
           -turn ${cfg.turnAddress} \
           -data ${cfg.dataDir} \
@@ -162,10 +161,10 @@ in
           # Upstream Requirements
           LimitNOFILE = 65536;
           StateDirectory = [ ] ++
-            optional (cfg.stateDir == defaultstateDir) "galene" ++
-            optional (cfg.dataDir == defaultdataDir) "galene/data" ++
-            optional (cfg.groupsDir == defaultgroupsDir) "galene/groups" ++
-            optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
+            lib.optional (cfg.stateDir == defaultstateDir) "galene" ++
+            lib.optional (cfg.dataDir == defaultdataDir) "galene/data" ++
+            lib.optional (cfg.groupsDir == defaultgroupsDir) "galene/groups" ++
+            lib.optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
 
           # Hardening
           CapabilityBoundingSet = [ "" ];
@@ -199,7 +198,7 @@ in
       ];
     };
 
-    users.users = mkIf (cfg.user == "galene")
+    users.users = lib.mkIf (cfg.user == "galene")
       {
         galene = {
           description = "galene Service";
@@ -208,7 +207,7 @@ in
         };
       };
 
-    users.groups = mkIf (cfg.group == "galene") {
+    users.groups = lib.mkIf (cfg.group == "galene") {
       galene = { };
     };
   };

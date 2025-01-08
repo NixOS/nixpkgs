@@ -23,12 +23,12 @@ buildNimPackage (
 
     meta =
       final.src.meta
-      // (with lib; {
+      // {
         description = "Nim language server implementation (based on nimsuggest)";
         homepage = "https://github.com/nim-lang/langserver";
         license = lib.licenses.mit;
         mainProgram = "nimlangserver";
         maintainers = with lib.maintainers; [ daylinmorgan ];
-      });
+      };
   }
 )

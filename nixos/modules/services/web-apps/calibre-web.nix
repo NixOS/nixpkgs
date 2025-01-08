@@ -3,26 +3,26 @@
 let
   cfg = config.services.calibre-web;
 
-  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionalString types;
+  inherit (lib) concatStringsSep mkEnableOption mkIf lib.mkOption lib.optional lib.optionalString types;
 in
 {
   options = {
     services.calibre-web = {
-      enable = mkEnableOption "Calibre-Web";
+      enable = lib.mkEnableOption "Calibre-Web";
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
 
       listen = {
-        ip = mkOption {
-          type = types.str;
+        ip = lib.mkOption {
+          type = lib.types.str;
           default = "::1";
           description = ''
             IP address that Calibre-Web should listen on.
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 8083;
           description = ''
             Listen port for Calibre-Web.
@@ -30,28 +30,28 @@ in
         };
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "calibre-web";
         description = ''
           The directory below {file}`/var/lib` where Calibre-Web stores its data.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "calibre-web";
         description = "User account under which Calibre-Web runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "calibre-web";
         description = "Group account under which Calibre-Web runs.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for the server.
@@ -59,16 +59,16 @@ in
       };
 
       options = {
-        calibreLibrary = mkOption {
-          type = types.nullOr types.path;
+        calibreLibrary = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           description = ''
             Path to Calibre library.
           '';
         };
 
-        enableBookConversion = mkOption {
-          type = types.bool;
+        enableBookConversion = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Configure path to the Calibre's ebook-convert in the DB.
@@ -77,8 +77,8 @@ in
 
         enableKepubify = mkEnableOption "kebup conversion support";
 
-        enableBookUploading = mkOption {
-          type = types.bool;
+        enableBookUploading = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Allow books to be uploaded via Calibre-Web UI.
@@ -86,16 +86,16 @@ in
         };
 
         reverseProxyAuth = {
-          enable = mkOption {
-            type = types.bool;
+          enable = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Enable authorization using auth proxy.
             '';
           };
 
-          header = mkOption {
-            type = types.str;
+          header = lib.mkOption {
+            type = lib.types.str;
             default = "";
             description = ''
               Auth proxy header name.
@@ -106,7 +106,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.calibre-web = let
       appDb = "/var/lib/${cfg.dataDir}/app.db";
       gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
@@ -119,9 +119,9 @@ in
           "config_allow_reverse_proxy_header_login = ${if cfg.options.reverseProxyAuth.enable then "1" else "0"}"
           "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
         ]
-        ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
-        ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-        ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
+        ++ lib.optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+        ++ lib.optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
+        ++ lib.optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
       );
     in
       {
@@ -140,7 +140,7 @@ in
               __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
               ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-            '' + optionalString (cfg.options.calibreLibrary != null) ''
+            '' + lib.optionalString (cfg.options.calibreLibrary != null) ''
               test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
             ''
           );
@@ -150,18 +150,18 @@ in
         };
       };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listen.port ];
     };
 
-    users.users = mkIf (cfg.user == "calibre-web") {
+    users.users = lib.mkIf (cfg.user == "calibre-web") {
       calibre-web = {
         isSystemUser = true;
         group = cfg.group;
       };
     };
 
-    users.groups = mkIf (cfg.group == "calibre-web") {
+    users.groups = lib.mkIf (cfg.group == "calibre-web") {
       calibre-web = {};
     };
   };

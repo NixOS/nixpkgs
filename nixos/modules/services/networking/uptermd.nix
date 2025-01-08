@@ -1,33 +1,31 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.uptermd;
 in
 {
   options = {
     services.uptermd = {
-      enable = mkEnableOption "uptermd";
+      enable = lib.mkEnableOption "uptermd";
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the firewall for the port in {option}`services.uptermd.port`.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 2222;
         description = ''
           Port the server will listen on.
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "[::]";
         example = "127.0.0.1";
         description = ''
@@ -35,8 +33,8 @@ in
         '';
       };
 
-      hostKey = mkOption {
-        type = types.nullOr types.path;
+      hostKey = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/upterm_host_ed25519_key";
         description = ''
@@ -44,8 +42,8 @@ in
         '';
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "--debug" ];
         description = ''
@@ -55,8 +53,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openFirewall {
+  config = lib.mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
@@ -67,7 +65,7 @@ in
 
       path = [ pkgs.openssh ];
 
-      preStart = mkIf (cfg.hostKey == null) ''
+      preStart = lib.mkIf (cfg.hostKey == null) ''
         if ! [ -f ssh_host_ed25519_key ]; then
           ssh-keygen \
             -t ed25519 \
@@ -79,11 +77,11 @@ in
       serviceConfig = {
         StateDirectory = "uptermd";
         WorkingDirectory = "/var/lib/uptermd";
-        ExecStart = "${pkgs.upterm}/bin/uptermd --ssh-addr ${cfg.listenAddress}:${toString cfg.port} --private-key ${if cfg.hostKey == null then "ssh_host_ed25519_key" else cfg.hostKey} ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart = "${pkgs.upterm}/bin/uptermd --ssh-addr ${cfg.listenAddress}:${toString cfg.port} --private-key ${if cfg.hostKey == null then "ssh_host_ed25519_key" else cfg.hostKey} ${lib.concatStringsSep " " cfg.extraFlags}";
 
         # Hardening
-        AmbientCapabilities = mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
         PrivateUsers = cfg.port >= 1024;
         DynamicUser = true;
         LockPersonality = true;

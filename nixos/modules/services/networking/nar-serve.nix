@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   cfg = config.services.nar-serve;
 in
 {
@@ -22,16 +22,16 @@ in
 
       package = lib.mkPackageOption pkgs "nar-serve" { };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8383;
         description = ''
           Port number where nar-serve will listen on.
         '';
       };
 
-      cacheURL = mkOption {
-        type = types.str;
+      cacheURL = lib.mkOption {
+        type = lib.types.str;
         default = "https://cache.nixos.org/";
         description = ''
           Binary cache URL to connect to.
@@ -43,8 +43,8 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           When set, enables the feature of serving <nar-hash>.<domain>

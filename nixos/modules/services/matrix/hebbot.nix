@@ -5,12 +5,12 @@
 }:
 
 let
-  inherit (lib) mkEnableOption mkOption mkIf types;
+  inherit (lib) mkEnableOption lib.mkOption mkIf types;
   format = pkgs.formats.toml { };
   cfg = config.services.hebbot;
   settingsFile = format.generate "config.toml" cfg.settings;
-  mkTemplateOption = templateName: mkOption {
-    type = types.path;
+  mkTemplateOption = templateName: lib.mkOption {
+    type = lib.types.path;
     description = ''
       A path to the Markdown file for the ${templateName}.
     '';
@@ -19,9 +19,9 @@ in
   {
     meta.maintainers = [ lib.maintainers.raitobezarius ];
     options.services.hebbot = {
-      enable = mkEnableOption "hebbot";
-      botPasswordFile = mkOption {
-        type = types.path;
+      enable = lib.mkEnableOption "hebbot";
+      botPasswordFile = lib.mkOption {
+        type = lib.types.path;
         description = ''
           A path to the password file for your bot.
 
@@ -34,7 +34,7 @@ in
         report = mkTemplateOption "report template";
         section = mkTemplateOption "section template";
       };
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         description = ''
@@ -46,7 +46,7 @@ in
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       systemd.services.hebbot = {
         description = "hebbot - a TWIM-style Matrix bot written in Rust";
         after = [ "network.target" ];

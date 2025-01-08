@@ -41,7 +41,7 @@ in
         Disable this if you use the Include directive on files unavailable in
         the build sandbox, or when cross-compiling.
       '';
-      type = types.bool;
+      type = lib.types.bool;
     };
 
     package = lib.mkPackageOption pkgs "collectd" { };

@@ -9,21 +9,21 @@
 let
   cfg = config.services.prometheus.exporters.unbound;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkRemovedOptionModule
-    optionalAttrs
-    optionalString
+    lib.optionalAttrs
+    lib.optionalString
     mkMerge
     mkIf
     ;
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "controlInterface"
     ] "This option was removed, use the `unbound.host` option instead.")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "fetchType"
     ] "This option was removed, use the `unbound.host` option instead.")
     ({
@@ -34,8 +34,8 @@ in
 
   port = 9167;
   extraOpts = {
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
@@ -43,8 +43,8 @@ in
     };
 
     unbound = {
-      ca = mkOption {
-        type = types.nullOr types.path;
+      ca = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "/var/lib/unbound/unbound_server.pem";
         example = null;
         description = ''
@@ -52,8 +52,8 @@ in
         '';
       };
 
-      certificate = mkOption {
-        type = types.nullOr types.path;
+      certificate = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "/var/lib/unbound/unbound_control.pem";
         example = null;
         description = ''
@@ -61,8 +61,8 @@ in
         '';
       };
 
-      key = mkOption {
-        type = types.nullOr types.path;
+      key = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "/var/lib/unbound/unbound_control.key";
         example = null;
         description = ''
@@ -70,8 +70,8 @@ in
         '';
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "tcp://127.0.0.1:8953";
         example = "unix:///run/unbound/unbound.socket";
         description = ''
@@ -81,7 +81,7 @@ in
     };
   };
 
-  serviceOpts = mkMerge (
+  serviceOpts = lib.mkMerge (
     [
       {
         serviceConfig =
@@ -92,9 +92,9 @@ in
                 --unbound.host "${cfg.unbound.host}" \
                 --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
                 --web.telemetry-path ${cfg.telemetryPath} \
-                ${optionalString (cfg.unbound.ca != null) "--unbound.ca ${cfg.unbound.ca}"} \
-                ${optionalString (cfg.unbound.certificate != null) "--unbound.cert ${cfg.unbound.certificate}"} \
-                ${optionalString (cfg.unbound.key != null) "--unbound.key ${cfg.unbound.key}"} \
+                ${lib.optionalString (cfg.unbound.ca != null) "--unbound.ca ${cfg.unbound.ca}"} \
+                ${lib.optionalString (cfg.unbound.certificate != null) "--unbound.cert ${cfg.unbound.certificate}"} \
+                ${lib.optionalString (cfg.unbound.key != null) "--unbound.key ${cfg.unbound.key}"} \
                 ${toString cfg.extraFlags}
             '';
             RestrictAddressFamilies = [
@@ -103,13 +103,13 @@ in
               "AF_INET6"
             ];
           }
-          // optionalAttrs (!config.services.unbound.enable) {
+          // lib.optionalAttrs (!config.services.unbound.enable) {
             DynamicUser = true;
           };
       }
     ]
     ++ [
-      (mkIf config.services.unbound.enable {
+      (lib.mkIf config.services.unbound.enable {
         after = [ "unbound.service" ];
         requires = [ "unbound.service" ];
       })

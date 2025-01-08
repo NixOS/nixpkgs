@@ -9,12 +9,12 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     literalExpression
     mkIf
     mkDefault
     types
-    optionals
+    lib.optionals
     getExe
     ;
   inherit (utils) escapeSystemdExecArgs;
@@ -31,45 +31,45 @@ let
   configFile = settingsFormat.generate "sunshine.conf" cfg.settings;
 in
 {
-  options.services.sunshine = with types; {
-    enable = mkEnableOption "Sunshine, a self-hosted game stream host for Moonlight";
-    package = mkPackageOption pkgs "sunshine" { };
-    openFirewall = mkOption {
+  options.services.sunshine = with lib.types; {
+    enable = lib.mkEnableOption "Sunshine, a self-hosted game stream host for Moonlight";
+    package = lib.mkPackageOption pkgs "sunshine" { };
+    openFirewall = lib.mkOption {
       type = bool;
       default = false;
       description = ''
         Whether to automatically open ports in the firewall.
       '';
     };
-    capSysAdmin = mkOption {
+    capSysAdmin = lib.mkOption {
       type = bool;
       default = false;
       description = ''
         Whether to give the Sunshine binary CAP_SYS_ADMIN, required for DRM/KMS screen capture.
       '';
     };
-    autoStart = mkOption {
+    autoStart = lib.mkOption {
       type = bool;
       default = true;
       description = ''
         Whether sunshine should be started automatically.
       '';
     };
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = ''
         Settings to be rendered into the configuration file. If this is set, no configuration is possible from the web UI.
 
         See https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#configuration for syntax.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           sunshine_name = "nixos";
         }
       '';
       type = submodule (settings: {
         freeformType = settingsFormat.type;
-        options.port = mkOption {
+        options.port = lib.mkOption {
           type = port;
           default = defaultPort;
           description = ''
@@ -78,12 +78,12 @@ in
         };
       });
     };
-    applications = mkOption {
+    applications = lib.mkOption {
       default = { };
       description = ''
         Configuration for applications to be exposed to Moonlight. If this is set, no configuration is possible from the web UI, and must be by the `settings` option.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           env = {
             PATH = "$(PATH):$(HOME)/.local/bin";
@@ -105,14 +105,14 @@ in
       '';
       type = submodule {
         options = {
-          env = mkOption {
+          env = lib.mkOption {
             default = { };
             description = ''
               Environment variables to be set for the applications.
             '';
             type = attrsOf str;
           };
-          apps = mkOption {
+          apps = lib.mkOption {
             default = [ ];
             description = ''
               Applications to be exposed to Moonlight.
@@ -124,14 +124,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.sunshine.settings.file_apps = mkIf (cfg.applications.apps != [ ]) "${appsFile}";
+  config = lib.mkIf cfg.enable {
+    services.sunshine.settings.file_apps = lib.mkIf (cfg.applications.apps != [ ]) "${appsFile}";
 
     environment.systemPackages = [
       cfg.package
     ];
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = generatePorts cfg.settings.port [
         (-5)
         0
@@ -152,14 +152,14 @@ in
     services.udev.packages = [ cfg.package ];
 
     services.avahi = {
-      enable = mkDefault true;
+      enable = lib.mkDefault true;
       publish = {
-        enable = mkDefault true;
-        userServices = mkDefault true;
+        enable = lib.mkDefault true;
+        userServices = lib.mkDefault true;
       };
     };
 
-    security.wrappers.sunshine = mkIf cfg.capSysAdmin {
+    security.wrappers.sunshine = lib.mkIf cfg.capSysAdmin {
       owner = "root";
       group = "root";
       capabilities = "cap_sys_admin+p";
@@ -169,7 +169,7 @@ in
     systemd.user.services.sunshine = {
       description = "Self-hosted game stream host for Moonlight";
 
-      wantedBy = mkIf cfg.autoStart [ "graphical-session.target" ];
+      wantedBy = lib.mkIf cfg.autoStart [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
@@ -185,7 +185,7 @@ in
           [
             (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${getExe cfg.package}")
           ]
-          ++ optionals (
+          ++ lib.optionals (
             cfg.applications.apps != [ ]
             || (builtins.length (builtins.attrNames cfg.settings) > 1 || cfg.settings.port != defaultPort)
           ) [ "${configFile}" ]

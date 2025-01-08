@@ -5,17 +5,15 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.ethercalc;
 in
 {
   options = {
     services.ethercalc = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           ethercalc, an online collaborative spreadsheet server.
 
@@ -30,23 +28,23 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "ethercalc" { };
+      package = lib.mkPackageOption pkgs "ethercalc" { };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8000;
         description = "Port to bind to.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.ethercalc = {
       description = "Ethercalc service";
       wantedBy = [ "multi-user.target" ];

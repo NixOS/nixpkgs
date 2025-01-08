@@ -13,7 +13,7 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -26,13 +26,13 @@ in
 
     services.filebeat = {
 
-      enable = mkEnableOption "filebeat";
+      enable = lib.mkEnableOption "filebeat";
 
-      package = mkPackageOption pkgs "filebeat" {
+      package = lib.mkPackageOption pkgs "filebeat" {
         example = "filebeat7";
       };
 
-      inputs = mkOption {
+      inputs = lib.mkOption {
         description = ''
           Inputs specify how Filebeat locates and processes input data.
 
@@ -49,14 +49,14 @@ in
           See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
         default = { };
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule (
             { name, ... }:
             {
               freeformType = json.type;
               options = {
-                type = mkOption {
-                  type = types.str;
+                type = lib.mkOption {
+                  type = lib.types.str;
                   default = name;
                   description = ''
                     The input type.
@@ -70,7 +70,7 @@ in
             }
           )
         );
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             journald.id = "everything";  # Only for filebeat7
             log = {
@@ -83,7 +83,7 @@ in
         '';
       };
 
-      modules = mkOption {
+      modules = lib.mkOption {
         description = ''
           Filebeat modules provide a quick way to get started
           processing common log formats. They contain default
@@ -104,14 +104,14 @@ in
           See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
         default = { };
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule (
             { name, ... }:
             {
               freeformType = json.type;
               options = {
-                module = mkOption {
-                  type = types.str;
+                module = lib.mkOption {
+                  type = lib.types.str;
                   default = name;
                   description = ''
                     The name of the module.
@@ -125,7 +125,7 @@ in
             }
           )
         );
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             nginx = {
               access = {
@@ -141,14 +141,14 @@ in
         '';
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = json.type;
 
           options = {
 
-            output.elasticsearch.hosts = mkOption {
-              type = with types; listOf str;
+            output.elasticsearch.hosts = lib.mkOption {
+              type = with lib.types; listOf str;
               default = [ "127.0.0.1:9200" ];
               example = [ "myEShost:9200" ];
               description = ''
@@ -167,8 +167,8 @@ in
             };
 
             filebeat = {
-              inputs = mkOption {
-                type = types.listOf json.type;
+              inputs = lib.mkOption {
+                type = lib.types.listOf json.type;
                 default = [ ];
                 internal = true;
                 description = ''
@@ -178,8 +178,8 @@ in
                   See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
                 '';
               };
-              modules = mkOption {
-                type = types.listOf json.type;
+              modules = lib.mkOption {
+                type = lib.types.listOf json.type;
                 default = [ ];
                 internal = true;
                 description = ''
@@ -198,7 +198,7 @@ in
           };
         };
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             settings = {
               output.elasticsearch = {
@@ -230,7 +230,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.filebeat.settings.filebeat.inputs = attrValues cfg.inputs;
     services.filebeat.settings.filebeat.modules = attrValues cfg.modules;

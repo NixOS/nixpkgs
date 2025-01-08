@@ -87,8 +87,8 @@ in
 
               {
                 dhcp-leasefile = "${stateDir}/dnsmasq.leases";
-                conf-file = optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf";
-                resolv-file = optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf";
+                conf-file = lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf";
+                resolv-file = lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf";
               }
         '';
         example = lib.literalExpression ''

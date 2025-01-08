@@ -21,7 +21,7 @@ let
     attrNames
     getAttr
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     ;
@@ -58,11 +58,11 @@ in
 {
   options = {
     services.displayManager.ly = {
-      enable = mkEnableOption "ly as the display manager";
+      enable = lib.mkEnableOption "ly as the display manager";
 
-      package = mkPackageOption pkgs [ "ly" ] { };
+      package = lib.mkPackageOption pkgs [ "ly" ] { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type =
           with lib.types;
           attrsOf (oneOf [
@@ -82,7 +82,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {

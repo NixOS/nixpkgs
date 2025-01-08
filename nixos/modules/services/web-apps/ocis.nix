@@ -19,7 +19,7 @@ in
       package = lib.mkPackageOption pkgs "ocis-bin" { };
 
       configDir = lib.mkOption {
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/var/lib/ocis/config";
         description = ''
@@ -36,7 +36,7 @@ in
       };
 
       environmentFile = lib.mkOption {
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/ocis.env";
         description = ''
@@ -47,7 +47,7 @@ in
       };
 
       user = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = defaultUser;
         example = "yourUser";
         description = ''
@@ -58,7 +58,7 @@ in
       };
 
       group = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = defaultGroup;
         example = "yourGroup";
         description = ''
@@ -68,19 +68,19 @@ in
       };
 
       address = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Web interface address.";
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 9200;
         description = "Web interface port.";
       };
 
       url = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "https://localhost:9200";
         example = "https://some-hostname-or-ip:9200";
         description = "Web interface address.";
@@ -88,12 +88,12 @@ in
 
       stateDir = lib.mkOption {
         default = "/var/lib/ocis";
-        type = types.str;
+        type = lib.types.str;
         description = "ownCloud data directory.";
       };
 
       environment = lib.mkOption {
-        type = types.attrsOf types.str;
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         description = ''
           Extra config options.

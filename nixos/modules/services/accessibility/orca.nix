@@ -14,11 +14,11 @@ let
 in
 {
   options.services.orca = {
-    enable = mkEnableOption "Orca screen reader";
-    package = mkPackageOption pkgs "orca" { };
+    enable = lib.mkEnableOption "Orca screen reader";
+    package = lib.mkPackageOption pkgs "orca" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.speechd.enable = true;
   };

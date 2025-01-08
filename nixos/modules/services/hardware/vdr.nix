@@ -10,46 +10,46 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     mkIf
-    optional
+    lib.optional
     ;
 in
 {
   options = {
 
     services.vdr = {
-      enable = mkEnableOption "VDR, a video disk recorder";
+      enable = lib.mkEnableOption "VDR, a video disk recorder";
 
-      package = mkPackageOption pkgs "vdr" {
+      package = lib.mkPackageOption pkgs "vdr" {
         example = "wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
       };
 
-      videoDir = mkOption {
-        type = types.path;
+      videoDir = lib.mkOption {
+        type = lib.types.path;
         default = "/srv/vdr/video";
         description = "Recording directory";
       };
 
-      extraArguments = mkOption {
-        type = types.listOf types.str;
+      extraArguments = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Additional command line arguments to pass to VDR.";
       };
 
       enableLirc = mkEnableOption "LIRC";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "vdr";
         description = ''
           User under which the VDR service runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "vdr";
         description = ''
           Group under which the VDRvdr service runs.
@@ -59,7 +59,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
       "d ${cfg.videoDir} 0755 ${cfg.user} ${cfg.group} -"
@@ -69,8 +69,8 @@ in
     systemd.services.vdr = {
       description = "VDR";
       wantedBy = [ "multi-user.target" ];
-      wants = optional cfg.enableLirc "lircd.service";
-      after = [ "network.target" ] ++ optional cfg.enableLirc "lircd.service";
+      wants = lib.optional cfg.enableLirc "lircd.service";
+      after = [ "network.target" ] ++ lib.optional cfg.enableLirc "lircd.service";
       serviceConfig = {
         ExecStart =
           let
@@ -78,7 +78,7 @@ in
               [
                 "--video=${cfg.videoDir}"
               ]
-              ++ optional cfg.enableLirc "--lirc=${config.passthru.lirc.socket}"
+              ++ lib.optional cfg.enableLirc "--lirc=${config.passthru.lirc.socket}"
               ++ cfg.extraArguments;
           in
           "${cfg.package}/bin/vdr ${lib.escapeShellArgs args}";
@@ -93,7 +93,7 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = mkIf (cfg.user == "vdr") {
+    users.users = lib.mkIf (cfg.user == "vdr") {
       vdr = {
         inherit (cfg) group;
         home = "/run/vdr";
@@ -101,11 +101,11 @@ in
         extraGroups = [
           "video"
           "audio"
-        ] ++ optional cfg.enableLirc "lirc";
+        ] ++ lib.optional cfg.enableLirc "lirc";
       };
     };
 
-    users.groups = mkIf (cfg.group == "vdr") { vdr = { }; };
+    users.groups = lib.mkIf (cfg.group == "vdr") { vdr = { }; };
 
   };
 }

@@ -20,13 +20,13 @@ in
   };
 
   options = {
-    services.gnome.gnome-browser-connector.enable = mkEnableOption ''
+    services.gnome.gnome-browser-connector.enable = lib.mkEnableOption ''
       native host connector for the GNOME Shell browser extension, a DBus service
       allowing to install GNOME Shell extensions from a web browser
     '';
   };
 
-  config = mkIf config.services.gnome.gnome-browser-connector.enable {
+  config = lib.mkIf config.services.gnome.gnome-browser-connector.enable {
     environment.etc = {
       "chromium/native-messaging-hosts/org.gnome.browser_connector.json".source =
         "${pkgs.gnome-browser-connector}/etc/chromium/native-messaging-hosts/org.gnome.browser_connector.json";

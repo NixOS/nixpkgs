@@ -12,7 +12,7 @@ in
   options = {
     services.shorewall6 = {
       enable = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Shorewall IPv6 Firewall.
@@ -25,13 +25,13 @@ in
         '';
       };
       package = lib.mkOption {
-        type = types.package;
+        type = lib.types.package;
         default = pkgs.shorewall;
         defaultText = lib.literalExpression "pkgs.shorewall";
         description = "The shorewall package to use.";
       };
       configs = lib.mkOption {
-        type = types.attrsOf types.lines;
+        type = lib.types.attrsOf types.lines;
         default = { };
         description = ''
           This option defines the Shorewall configs.

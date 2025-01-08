@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   cfg = config.services.xserver.windowManager;
 in
 
@@ -55,7 +55,7 @@ in
 
     services.xserver.windowManager = {
 
-      session = mkOption {
+      session = lib.mkOption {
         internal = true;
         default = [ ];
         example = [

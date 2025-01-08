@@ -13,7 +13,7 @@ let
     mapAttrsToList
     mkDefault
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -23,12 +23,12 @@ in
 {
   options = {
     nix = {
-      registry = mkOption {
-        type = types.attrsOf (
+      registry = lib.mkOption {
+        type = lib.types.attrsOf (
           types.submodule (
             let
               referenceAttrs =
-                with types;
+                with lib.types;
                 attrsOf (oneOf [
                   str
                   int
@@ -40,7 +40,7 @@ in
             { config, name, ... }:
             {
               options = {
-                from = mkOption {
+                from = lib.mkOption {
                   type = referenceAttrs;
                   example = {
                     type = "indirect";
@@ -48,7 +48,7 @@ in
                   };
                   description = "The flake reference to be rewritten.";
                 };
-                to = mkOption {
+                to = lib.mkOption {
                   type = referenceAttrs;
                   example = {
                     type = "github";
@@ -57,16 +57,16 @@ in
                   };
                   description = "The flake reference {option}`from` is rewritten to.";
                 };
-                flake = mkOption {
-                  type = types.nullOr types.attrs;
+                flake = lib.mkOption {
+                  type = lib.types.nullOr lib.types.attrs;
                   default = null;
-                  example = literalExpression "nixpkgs";
+                  example = lib.literalExpression "nixpkgs";
                   description = ''
                     The flake input {option}`from` is rewritten to.
                   '';
                 };
-                exact = mkOption {
-                  type = types.bool;
+                exact = lib.mkOption {
+                  type = lib.types.bool;
                   default = true;
                   description = ''
                     Whether the {option}`from` reference needs to match exactly. If set,
@@ -76,11 +76,11 @@ in
                 };
               };
               config = {
-                from = mkDefault {
+                from = lib.mkDefault {
                   type = "indirect";
                   id = name;
                 };
-                to = mkIf (config.flake != null) (
+                to = lib.mkIf (config.flake != null) (
                   mkDefault (
                     {
                       type = "path";
@@ -101,7 +101,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."nix/registry.json".text = builtins.toJSON {
       version = 2;
       flakes = mapAttrsToList (n: v: { inherit (v) from to exact; }) cfg.registry;

@@ -126,7 +126,6 @@ stdenv.mkDerivation (
     '';
 
     meta =
-      with lib;
       {
         sourceProvenance = with lib.sourceTypes; [
           fromSource

@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
   cfg = config.services.neard;
@@ -18,15 +18,15 @@ let
 in
 {
   options.services.neard = {
-    enable = mkEnableOption "neard, an NFC daemon";
+    enable = lib.mkEnableOption "neard, an NFC daemon";
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
           General = {
-            ConstantPoll = mkOption {
-              type = types.bool;
+            ConstantPoll = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Enable constant polling. Constant polling will automatically trigger a new
@@ -34,16 +34,16 @@ in
               '';
             };
 
-            DefaultPowered = mkOption {
-              type = types.bool;
+            DefaultPowered = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Automatically turn an adapter on when being discovered.
               '';
             };
 
-            ResetOnError = mkOption {
-              type = types.bool;
+            ResetOnError = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Power cycle the adapter when getting a driver error from the kernel.
@@ -61,7 +61,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."neard/main.conf".source = configFile;
 
     environment.systemPackages = [ pkgs.neard ];

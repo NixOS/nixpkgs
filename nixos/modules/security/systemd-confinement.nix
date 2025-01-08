@@ -13,12 +13,12 @@ let
 in
 {
   options.systemd.services = lib.mkOption {
-    type = types.attrsOf (
+    type = lib.types.attrsOf (
       types.submodule (
         { name, config, ... }:
         {
           options.confinement.enable = lib.mkOption {
-            type = types.bool;
+            type = lib.types.bool;
             default = false;
             description = ''
               If set, all the required runtime store paths for this service are
@@ -28,7 +28,7 @@ in
           };
 
           options.confinement.fullUnit = lib.mkOption {
-            type = types.bool;
+            type = lib.types.bool;
             default = false;
             description = ''
               Whether to include the full closure of the systemd unit file into the
@@ -45,7 +45,7 @@ in
           };
 
           options.confinement.packages = lib.mkOption {
-            type = types.listOf (types.either types.str types.package);
+            type = lib.types.listOf (types.either types.str types.package);
             default = [ ];
             description =
               let
@@ -76,7 +76,7 @@ in
           };
 
           options.confinement.binSh = lib.mkOption {
-            type = types.nullOr types.path;
+            type = lib.types.nullOr lib.types.path;
             default = toplevelConfig.environment.binsh;
             defaultText = lib.literalExpression "config.environment.binsh";
             example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
@@ -91,7 +91,7 @@ in
           };
 
           options.confinement.mode = lib.mkOption {
-            type = types.enum [
+            type = lib.types.enum [
               "full-apivfs"
               "chroot-only"
             ];

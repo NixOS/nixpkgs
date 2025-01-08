@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.networking.nat;
 
@@ -9,16 +7,16 @@ let
   dest = mkDest cfg.externalIP;
   destIPv6 = mkDest cfg.externalIPv6;
 
-  toNftSet = list: concatStringsSep ", " list;
-  toNftRange = ports: replaceStrings [ ":" ] [ "-" ] (toString ports);
+  toNftSet = list: lib.concatStringsSep ", " list;
+  toNftRange = ports: lib.replaceStrings [ ":" ] [ "-" ] (toString ports);
 
   ifaceSet = toNftSet (map (x: ''"${x}"'') cfg.internalInterfaces);
   ipSet = toNftSet cfg.internalIPs;
   ipv6Set = toNftSet cfg.internalIPv6s;
-  oifExpr = optionalString (cfg.externalInterface != null) ''oifname "${cfg.externalInterface}"'';
+  oifExpr = lib.optionalString (cfg.externalInterface != null) ''oifname "${cfg.externalInterface}"'';
 
-  # Whether given IP (plus optional port) is an IPv6.
-  isIPv6 = ip: length (lib.splitString ":" ip) > 2;
+  # Whether given IP (plus lib.optional port) is an IPv6.
+  isIPv6 = ip: lib.length (lib.splitString ":" ip) > 2;
 
   splitIPPorts =
     IPPorts:
@@ -27,8 +25,8 @@ let
       m = builtins.match "${matchIP}:([0-9-]+)" IPPorts;
     in
     {
-      IP = if m == null then throw "bad ip:ports `${IPPorts}'" else elemAt m 0;
-      ports = if m == null then throw "bad ip:ports `${IPPorts}'" else elemAt m 1;
+      IP = if m == null then throw "bad ip:ports `${IPPorts}'" else lib.elemAt m 0;
+      ports = if m == null then throw "bad ip:ports `${IPPorts}'" else lib.elemAt m 1;
     };
 
   mkTable =
@@ -48,7 +46,7 @@ let
           fwd:
           with (splitIPPorts fwd.destination);
           "${
-            optionalString (externalIP != null) "${externalIP} . "
+            lib.optionalString (externalIP != null) "${externalIP} . "
           }${fwd.proto} . ${toNftRange fwd.sourcePort} : ${IP} . ${ports}"
         ) forwardPorts
       );
@@ -56,7 +54,7 @@ let
       # nftables maps for port forward loopback dnat
       # daddr . l4proto . dport : addr . port
       fwdLoopDnatMap = toNftSet (
-        concatMap (
+        lib.concatMap (
           fwd:
           map (
             loopbackip:
@@ -76,17 +74,17 @@ let
       chain pre {
         type nat hook prerouting priority dstnat;
 
-        ${optionalString (fwdMap != "") ''
+        ${lib.optionalString (fwdMap != "") ''
           iifname "${cfg.externalInterface}" meta l4proto { tcp, udp } dnat ${
-            optionalString (externalIP != null) "${ipVer} daddr . "
+            lib.optionalString (externalIP != null) "${ipVer} daddr . "
           }meta l4proto . th dport map { ${fwdMap} } comment "port forward"
         ''}
 
-        ${optionalString (fwdLoopDnatMap != "") ''
+        ${lib.optionalString (fwdLoopDnatMap != "") ''
           meta l4proto { tcp, udp } dnat ${ipVer} daddr . meta l4proto . th dport map { ${fwdLoopDnatMap} } comment "port forward loopback from other hosts behind NAT"
         ''}
 
-        ${optionalString (dmzHost != null) ''
+        ${lib.optionalString (dmzHost != null) ''
           iifname "${cfg.externalInterface}" dnat ${dmzHost} comment "dmz"
         ''}
       }
@@ -94,14 +92,14 @@ let
       chain post {
         type nat hook postrouting priority srcnat;
 
-        ${optionalString (ifaceSet != "") ''
+        ${lib.optionalString (ifaceSet != "") ''
           iifname { ${ifaceSet} } ${oifExpr} ${dest} comment "from internal interfaces"
         ''}
-        ${optionalString (ipSet != "") ''
+        ${lib.optionalString (ipSet != "") ''
           ${ipVer} saddr { ${ipSet} } ${oifExpr} ${dest} comment "from internal IPs"
         ''}
 
-        ${optionalString (fwdLoopSnatSet != "") ''
+        ${lib.optionalString (fwdLoopSnatSet != "") ''
           iifname != "${cfg.externalInterface}" ${ipVer} daddr . meta l4proto . th dport { ${fwdLoopSnatSet} } masquerade comment "port forward loopback snat"
         ''}
       }
@@ -109,7 +107,7 @@ let
       chain out {
         type nat hook output priority mangle;
 
-        ${optionalString (fwdLoopDnatMap != "") ''
+        ${lib.optionalString (fwdLoopDnatMap != "") ''
           meta l4proto { tcp, udp } dnat ${ipVer} daddr . meta l4proto . th dport map { ${fwdLoopDnatMap} } comment "port forward loopback from the host itself"
         ''}
       }
@@ -119,7 +117,7 @@ in
 
 {
 
-  config = mkIf (config.networking.nftables.enable && cfg.enable) {
+  config = lib.mkIf (config.networking.nftables.enable && cfg.enable) {
 
     assertions = [
       {
@@ -142,32 +140,32 @@ in
         content = mkTable {
           ipVer = "ip";
           inherit dest ipSet;
-          forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
+          forwardPorts = lib.filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
           inherit (cfg) dmzHost externalIP;
         };
       };
-      "nixos-nat6" = mkIf cfg.enableIPv6 {
+      "nixos-nat6" = lib.mkIf cfg.enableIPv6 {
         family = "ip6";
         name = "nixos-nat";
         content = mkTable {
           ipVer = "ip6";
           dest = destIPv6;
           ipSet = ipv6Set;
-          forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
+          forwardPorts = lib.filter (x: isIPv6 x.destination) cfg.forwardPorts;
           dmzHost = null;
           externalIP = cfg.externalIPv6;
         };
       };
     };
 
-    networking.firewall.extraForwardRules = optionalString config.networking.firewall.filterForward ''
-      ${optionalString (ifaceSet != "") ''
+    networking.firewall.extraForwardRules = lib.optionalString config.networking.firewall.filterForward ''
+      ${lib.optionalString (ifaceSet != "") ''
         iifname { ${ifaceSet} } ${oifExpr} accept comment "from internal interfaces"
       ''}
-      ${optionalString (ipSet != "") ''
+      ${lib.optionalString (ipSet != "") ''
         ip saddr { ${ipSet} } ${oifExpr} accept comment "from internal IPs"
       ''}
-      ${optionalString (ipv6Set != "") ''
+      ${lib.optionalString (ipv6Set != "") ''
         ip6 saddr { ${ipv6Set} } ${oifExpr} accept comment "from internal IPv6s"
       ''}
     '';

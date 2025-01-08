@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.hyperv;
 in
@@ -42,8 +40,8 @@ in
 
   options = {
     hyperv = {
-      vmDerivationName = mkOption {
-        type = types.str;
+      vmDerivationName = lib.mkOption {
+        type = lib.types.str;
         default = "nixos-hyperv-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
         description = ''
           The name of the derivation for the hyper-v appliance.
@@ -53,7 +51,7 @@ in
   };
 
   config = {
-    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # Use a priority just below lib.mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
     virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
 

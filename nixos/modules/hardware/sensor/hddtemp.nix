@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib) mkIf lib.mkOption types;
 
   cfg = config.hardware.sensor.hddtemp;
 
@@ -34,37 +34,37 @@ in
 
   options = {
     hardware.sensor.hddtemp = {
-      enable = mkOption {
+      enable = lib.mkOption {
         description = ''
           Enable this option to support HDD/SSD temperature sensors.
         '';
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
 
-      drives = mkOption {
+      drives = lib.mkOption {
         description = "List of drives to monitor. If you pass /dev/disk/by-path/* entries the symlinks will be resolved as hddtemp doesn't like names with colons.";
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
       };
 
-      unit = mkOption {
+      unit = lib.mkOption {
         description = "Celsius or Fahrenheit";
-        type = types.enum [
+        type = lib.types.enum [
           "C"
           "F"
         ];
         default = "C";
       };
 
-      dbEntries = mkOption {
+      dbEntries = lib.mkOption {
         description = "Additional DB entries";
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
       };
 
-      extraArgs = mkOption {
+      extraArgs = lib.mkOption {
         description = "Additional arguments passed to the daemon.";
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
       };
     };
@@ -72,7 +72,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.hddtemp = {
       description = "HDD/SSD temperature";
       wantedBy = [ "multi-user.target" ];

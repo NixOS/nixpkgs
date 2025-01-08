@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.xrdp;
 
@@ -49,31 +47,31 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
+      enable = lib.mkEnableOption "xrdp, the Remote Desktop Protocol server";
 
-      package = mkPackageOption pkgs "xrdp" { };
+      package = lib.mkPackageOption pkgs "xrdp" { };
 
       audio = {
-        enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
-        package = mkPackageOption pkgs "pulseaudio-module-xrdp" {};
+        enable = lib.mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
+        package = lib.mkPackageOption pkgs "pulseaudio-module-xrdp" {};
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3389;
         description = ''
           Specifies on which port the xrdp daemon listens.
         '';
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to open the firewall for the specified RDP port.";
       };
 
-      sslKey = mkOption {
-        type = types.str;
+      sslKey = lib.mkOption {
+        type = lib.types.str;
         default = "/etc/xrdp/key.pem";
         example = "/path/to/your/key.pem";
         description = ''
@@ -82,8 +80,8 @@ in
         '';
       };
 
-      sslCert = mkOption {
-        type = types.str;
+      sslCert = lib.mkOption {
+        type = lib.types.str;
         default = "/etc/xrdp/cert.pem";
         example = "/path/to/your/cert.pem";
         description = ''
@@ -92,8 +90,8 @@ in
         '';
       };
 
-      defaultWindowManager = mkOption {
-        type = types.str;
+      defaultWindowManager = lib.mkOption {
+        type = lib.types.str;
         default = "xterm";
         example = "xfce4-session";
         description = ''
@@ -102,8 +100,8 @@ in
         '';
       };
 
-      confDir = mkOption {
-        type = types.path;
+      confDir = lib.mkOption {
+        type = lib.types.path;
         default = confDir;
         internal = true;
         description = ''
@@ -114,8 +112,8 @@ in
         readOnly = true;
       };
 
-      extraConfDirCommands = mkOption {
-        type = types.str;
+      extraConfDirCommands = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Extra commands to run on the default confDir derivation.
@@ -132,15 +130,15 @@ in
   ###### implementation
 
   config = lib.mkMerge [
-    (mkIf cfg.audio.enable {
+    (lib.mkIf cfg.audio.enable {
       environment.systemPackages = [ cfg.audio.package ];  # needed for autostart
 
       services.pulseaudio.extraModules = [ cfg.audio.package ];
     })
 
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
 
-      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
       # xrdp can run X11 program even if "services.xserver.enable = false"
       xdg = {
@@ -150,7 +148,7 @@ in
         icons.enable = true;
       };
 
-      fonts.enableDefaultPackages = mkDefault true;
+      fonts.enableDefaultPackages = lib.mkDefault true;
 
       environment.etc."xrdp".source = "${confDir}/*";
 

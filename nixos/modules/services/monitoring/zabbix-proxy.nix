@@ -18,16 +18,16 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     ;
   inherit (lib)
     attrValues
     concatMapStringsSep
     getName
     literalExpression
-    optional
-    optionalAttrs
-    optionalString
+    lib.optional
+    lib.optionalAttrs
+    lib.optionalString
     types
     ;
   inherit (lib.generators) toKeyValue;
@@ -66,17 +66,17 @@ in
   options = {
 
     services.zabbixProxy = {
-      enable = mkEnableOption "the Zabbix Proxy";
+      enable = lib.mkEnableOption "the Zabbix Proxy";
 
-      server = mkOption {
-        type = types.str;
+      server = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default =
           if cfg.database.type == "mysql" then
             pkgs.zabbix.proxy-mysql
@@ -84,29 +84,29 @@ in
             pkgs.zabbix.proxy-pgsql
           else
             pkgs.zabbix.proxy-sqlite;
-        defaultText = literalExpression "pkgs.zabbix.proxy-pgsql";
+        defaultText = lib.literalExpression "pkgs.zabbix.proxy-pgsql";
         description = "The Zabbix package to use.";
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = with pkgs; [
           nettools
           nmap
           traceroute
         ];
-        defaultText = literalExpression "[ nettools nmap traceroute ]";
+        defaultText = lib.literalExpression "[ nettools nmap traceroute ]";
         description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };
 
-      modules = mkOption {
-        type = types.attrsOf types.package;
+      modules = lib.mkOption {
+        type = lib.types.attrsOf types.package;
         description = "A set of modules to load.";
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";
@@ -123,8 +123,8 @@ in
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [
+        type = lib.mkOption {
+          type = lib.types.enum [
             "mysql"
             "pgsql"
             "sqlite"
@@ -134,16 +134,16 @@ in
           description = "Database engine to use.";
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
           description = "Database host address.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = if cfg.database.type == "mysql" then mysql.port else pgsql.settings.port;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             if config.${opt.database.type} == "mysql"
             then config.${options.services.mysql.port}
             else config.services.postgresql.settings.port
@@ -151,21 +151,21 @@ in
           description = "Database host port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = if cfg.database.type == "sqlite" then "${stateDir}/zabbix.db" else "zabbix";
-          defaultText = literalExpression "zabbix";
+          defaultText = lib.literalExpression "zabbix";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "zabbix";
           description = "Database user.";
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/zabbix-dbpassword";
           description = ''
@@ -174,23 +174,23 @@ in
           '';
         };
 
-        socket = mkOption {
-          type = types.nullOr types.path;
+        socket = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/postgresql";
           description = "Path to the unix socket file to use for authentication.";
         };
 
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to create a local database automatically.";
         };
       };
 
       listen = {
-        ip = mkOption {
-          type = types.str;
+        ip = lib.mkOption {
+          type = lib.types.str;
           default = "0.0.0.0";
           description = ''
             List of comma delimited IP addresses that the trapper should listen on.
@@ -198,8 +198,8 @@ in
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 10051;
           description = ''
             Listen port for trapper.
@@ -207,17 +207,17 @@ in
         };
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for the Zabbix Proxy.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             int
             str
@@ -242,7 +242,7 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -260,37 +260,37 @@ in
       }
     ];
 
-    services.zabbixProxy.settings = mkMerge [
+    services.zabbixProxy.settings = lib.mkMerge [
       {
         LogType = "console";
         ListenIP = cfg.listen.ip;
         ListenPort = cfg.listen.port;
         Server = cfg.server;
         # TODO: set to cfg.database.socket if database type is pgsql?
-        DBHost = optionalString (cfg.database.createLocally != true) cfg.database.host;
+        DBHost = lib.optionalString (cfg.database.createLocally != true) cfg.database.host;
         DBName = cfg.database.name;
         DBUser = cfg.database.user;
         SocketDir = runtimeDir;
         FpingLocation = "/run/wrappers/bin/fping";
         LoadModule = builtins.attrNames cfg.modules;
       }
-      (mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })
-      (mkIf (cfg.database.passwordFile != null) { Include = [ "${passwordFile}" ]; })
-      (mkIf (mysqlLocal && cfg.database.socket != null) { DBSocket = cfg.database.socket; })
-      (mkIf (cfg.modules != { }) { LoadModulePath = "${moduleEnv}/lib"; })
+      (lib.mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })
+      (lib.mkIf (cfg.database.passwordFile != null) { Include = [ "${passwordFile}" ]; })
+      (lib.mkIf (mysqlLocal && cfg.database.socket != null) { DBSocket = cfg.database.socket; })
+      (lib.mkIf (cfg.modules != { }) { LoadModulePath = "${moduleEnv}/lib"; })
     ];
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listen.port ];
     };
 
-    services.mysql = optionalAttrs mysqlLocal {
+    services.mysql = lib.optionalAttrs mysqlLocal {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
     };
 
     systemd.services.mysql.postStart = mkAfter (
-      optionalString mysqlLocal ''
+      lib.optionalString mysqlLocal ''
         ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
           echo "CREATE USER IF NOT EXISTS '${cfg.database.user}'@'localhost' IDENTIFIED WITH ${
             if (getName config.services.mysql.package == getName pkgs.mariadb) then
@@ -303,7 +303,7 @@ in
       ''
     );
 
-    services.postgresql = optionalAttrs pgsqlLocal {
+    services.postgresql = lib.optionalAttrs pgsqlLocal {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -337,28 +337,28 @@ in
       description = "Zabbix Proxy";
 
       wantedBy = [ "multi-user.target" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.service";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;
       preStart =
-        optionalString pgsqlLocal ''
+        lib.optionalString pgsqlLocal ''
           if ! test -e "${stateDir}/db-created"; then
             cat ${cfg.package}/share/zabbix/database/postgresql/schema.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
             touch "${stateDir}/db-created"
           fi
         ''
-        + optionalString mysqlLocal ''
+        + lib.optionalString mysqlLocal ''
           if ! test -e "${stateDir}/db-created"; then
             cat ${cfg.package}/share/zabbix/database/mysql/schema.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
             touch "${stateDir}/db-created"
           fi
         ''
-        + optionalString (cfg.database.type == "sqlite") ''
+        + lib.optionalString (cfg.database.type == "sqlite") ''
           if ! test -e "${cfg.database.name}"; then
             ${pkgs.sqlite}/bin/sqlite3 "${cfg.database.name}" < ${cfg.package}/share/zabbix/database/sqlite3/schema.sql
           fi
         ''
-        + optionalString (cfg.database.passwordFile != null) ''
+        + lib.optionalString (cfg.database.passwordFile != null) ''
           # create a copy of the supplied password file in a format zabbix can consume
           install -m 0600 <(echo "DBPassword = $(cat ${cfg.database.passwordFile})") ${passwordFile}
         '';

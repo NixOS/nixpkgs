@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.kimai;
   eachSite = cfg.sites;
@@ -44,7 +42,7 @@ let
     hostName: cfg:
     pkgs.writeTextFile {
       name = "kimai-config-${hostName}.yaml";
-      text = generators.toYAML { } cfg.settings;
+      text = lib.generators.toYAML { } cfg.settings;
     };
 
   siteOpts =
@@ -56,35 +54,35 @@ let
     }:
     {
       options = {
-        package = mkPackageOption pkgs "kimai" { };
+        package = lib.mkPackageOption pkgs "kimai" { };
 
         database = {
-          host = mkOption {
-            type = types.str;
+          host = lib.mkOption {
+            type = lib.types.str;
             default = "localhost";
             description = "Database host address.";
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 3306;
             description = "Database host port.";
           };
 
-          name = mkOption {
-            type = types.str;
+          name = lib.mkOption {
+            type = lib.types.str;
             default = "kimai";
             description = "Database name.";
           };
 
-          user = mkOption {
-            type = types.str;
+          user = lib.mkOption {
+            type = lib.types.str;
             default = "kimai";
             description = "Database user.";
           };
 
-          passwordFile = mkOption {
-            type = types.nullOr types.path;
+          passwordFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
             example = "/run/keys/kimai-dbpassword";
             description = ''
@@ -93,21 +91,21 @@ let
             '';
           };
 
-          socket = mkOption {
-            type = types.nullOr types.path;
+          socket = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
-            defaultText = literalExpression "/run/mysqld/mysqld.sock";
+            defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
             description = "Path to the unix socket file to use for authentication.";
           };
 
-          charset = mkOption {
-            type = types.str;
+          charset = lib.mkOption {
+            type = lib.types.str;
             default = "utf8mb4";
             description = "Database charset.";
           };
 
-          serverVersion = mkOption {
-            type = types.nullOr types.str;
+          serverVersion = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               MySQL *exact* version string. Not used if `createdLocally` is set,
@@ -117,16 +115,16 @@ let
             '';
           };
 
-          createLocally = mkOption {
-            type = types.bool;
+          createLocally = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Create the database and database user locally.";
           };
         };
 
-        poolConfig = mkOption {
+        poolConfig = lib.mkOption {
           type =
-            with types;
+            with lib.types;
             attrsOf (oneOf [
               str
               int
@@ -146,15 +144,15 @@ let
           '';
         };
 
-        settings = mkOption {
-          type = types.attrsOf types.anything;
+        settings = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
           default = { };
           description = ''
             Structural Kimai's local.yaml configuration.
             Refer to <https://www.kimai.org/documentation/local-yaml.html#localyaml>
             for details.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               kimai = {
                 timesheet = {
@@ -170,8 +168,8 @@ let
           '';
         };
 
-        environmentFile = mkOption {
-          type = types.nullOr types.path;
+        environmentFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/secrets/kimai.env";
           description = ''
@@ -186,14 +184,14 @@ in
   # interface
   options = {
     services.kimai = {
-      sites = mkOption {
-        type = types.attrsOf (types.submodule siteOpts);
+      sites = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule siteOpts);
         default = { };
         description = "Specification of one or more Kimai sites to serve";
       };
 
-      webserver = mkOption {
-        type = types.enum [ "nginx" ];
+      webserver = lib.mkOption {
+        type = lib.types.enum [ "nginx" ];
         default = "nginx";
         description = ''
           The webserver to configure for the PHP frontend.
@@ -206,28 +204,28 @@ in
   };
 
   # implementation
-  config = mkIf (eachSite != { }) (mkMerge [
+  config = lib.mkIf (eachSite != { }) (lib.mkMerge [
     {
 
       assertions =
-        (mapAttrsToList (hostName: cfg: {
+        (lib.mapAttrsToList (hostName: cfg: {
           assertion = cfg.database.createLocally -> cfg.database.user == user;
           message = ''services.kimai.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
         }) eachSite)
-        ++ (mapAttrsToList (hostName: cfg: {
+        ++ (lib.mapAttrsToList (hostName: cfg: {
           assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
           message = ''services.kimai.sites."${hostName}".database.passwordFile cannot be specified if services.kimai.sites."${hostName}".database.createLocally is set to true.'';
         }) eachSite)
-        ++ (mapAttrsToList (hostName: cfg: {
+        ++ (lib.mapAttrsToList (hostName: cfg: {
           assertion = !cfg.database.createLocally -> cfg.database.serverVersion != null;
           message = ''services.kimai.sites."${hostName}".database.serverVersion must be specified if services.kimai.sites."${hostName}".database.createLocally is set to false.'';
         }) eachSite);
 
-      services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
+      services.mysql = lib.mkIf (lib.any (v: v.database.createLocally) (lib.attrValues eachSite)) {
         enable = true;
-        package = mkDefault pkgs.mariadb;
-        ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-        ensureUsers = mapAttrsToList (hostName: cfg: {
+        package = lib.mkDefault pkgs.mariadb;
+        ensureDatabases = lib.mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
+        ensureUsers = lib.mapAttrsToList (hostName: cfg: {
           name = cfg.database.user;
           ensurePermissions = {
             "${cfg.database.name}.*" = "ALL PRIVILEGES";
@@ -235,9 +233,9 @@ in
         }) eachSite;
       };
 
-      services.phpfpm.pools = mapAttrs' (
+      services.phpfpm.pools = lib.mapAttrs' (
         hostName: cfg:
-        (nameValuePair "kimai-${hostName}" {
+        (lib.nameValuePair "kimai-${hostName}" {
           phpPackage = cfg.package.php;
           inherit user;
           group = webserver.group;
@@ -251,19 +249,19 @@ in
     }
 
     {
-      systemd.tmpfiles.rules = flatten (
-        mapAttrsToList (hostName: cfg: [
+      systemd.tmpfiles.rules = lib.flatten (
+        lib.mapAttrsToList (hostName: cfg: [
           "d '${stateDir hostName}' 0770 ${user} ${webserver.group} - -"
         ]) eachSite
       );
 
-      systemd.services = mkMerge [
-        (mapAttrs' (
+      systemd.services = lib.mkMerge [
+        (lib.mapAttrs' (
           hostName: cfg:
-          (nameValuePair "kimai-init-${hostName}" {
+          (lib.nameValuePair "kimai-init-${hostName}" {
             wantedBy = [ "multi-user.target" ];
             before = [ "phpfpm-kimai-${hostName}.service" ];
-            after = optional cfg.database.createLocally "mysql.service";
+            after = lib.optional cfg.database.createLocally "mysql.service";
             script =
               let
                 envFile = "${stateDir hostName}/.env";
@@ -334,16 +332,16 @@ in
           })
         ) eachSite)
 
-        (mapAttrs' (
+        (lib.mapAttrs' (
           hostName: cfg:
-          (nameValuePair "phpfpm-kimai-${hostName}" {
+          (lib.nameValuePair "phpfpm-kimai-${hostName}" {
             serviceConfig = {
               EnvironmentFile = [ cfg.environmentFile ];
             };
           })
         ) eachSite)
 
-        (optionalAttrs (any (v: v.database.createLocally) (attrValues eachSite)) {
+        (lib.optionalAttrs (lib.any (v: v.database.createLocally) (lib.attrValues eachSite)) {
           "${cfg.webserver}".after = [ "mysql.service" ];
         })
       ];
@@ -354,11 +352,11 @@ in
       };
     }
 
-    (mkIf (cfg.webserver == "nginx") {
+    (lib.mkIf (cfg.webserver == "nginx") {
       services.nginx = {
         enable = true;
-        virtualHosts = mapAttrs (hostName: cfg: {
-          serverName = mkDefault hostName;
+        virtualHosts = lib.mapAttrs (hostName: cfg: {
+          serverName = lib.mkDefault hostName;
           root = "${pkg hostName cfg}/share/php/kimai/public";
           extraConfig = ''
             index index.php;

@@ -17,12 +17,12 @@ let
     mkDefault
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
-    optional
-    optionals
-    optionalString
+    lib.optional
+    lib.optionals
+    lib.optionalString
     replaceStrings
     types
   ;
@@ -50,7 +50,7 @@ let
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
-  f = x: optionalString (x != null) ("" + x);
+  f = x: lib.optionalString (x != null) ("" + x);
 
   grubConfig = args:
     let
@@ -72,7 +72,7 @@ let
       fullName = lib.getName realGrub;
       fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
-      grubTargetEfi = optionalString cfg.efiSupport (f (grubEfi.grubTarget or ""));
+      grubTargetEfi = lib.optionalString cfg.efiSupport (f (grubEfi.grubTarget or ""));
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;
@@ -91,8 +91,8 @@ let
       ;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
-        ++ optional cfg.efiSupport efibootmgr
-        ++ optionals cfg.useOSProber [ busybox os-prober ]);
+        ++ lib.optional cfg.efiSupport efibootmgr
+        ++ lib.optionals cfg.useOSProber [ busybox os-prober ]);
       font = lib.optionalString (cfg.font != null) (
              if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
@@ -121,24 +121,24 @@ in
 
     boot.loader.grub = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = !config.boot.isContainer;
-        defaultText = literalExpression "!config.boot.isContainer";
-        type = types.bool;
+        defaultText = lib.literalExpression "!config.boot.isContainer";
+        type = lib.types.bool;
         description = ''
           Whether to enable the GNU GRUB boot loader.
         '';
       };
 
-      version = mkOption {
+      version = lib.mkOption {
         visible = false;
-        type = types.int;
+        type = lib.types.int;
       };
 
-      device = mkOption {
+      device = lib.mkOption {
         default = "";
         example = "/dev/disk/by-id/wwn-0x500001234567890a";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The device on which the GRUB boot loader will be installed.
           The special value `nodev` means that a GRUB
@@ -148,10 +148,10 @@ in
         '';
       };
 
-      devices = mkOption {
+      devices = lib.mkOption {
         default = [];
         example = [ "/dev/disk/by-id/wwn-0x500001234567890a" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           The devices on which the boot loader, GRUB, will be
           installed. Can be used instead of `device` to
@@ -159,7 +159,7 @@ in
         '';
       };
 
-      users = mkOption {
+      users = lib.mkOption {
         default = {};
         example = {
           root = { hashedPasswordFile = "/path/to/file"; };
@@ -173,12 +173,12 @@ in
           (as opposed to external files) will be copied into the Nix store, and
           will be visible to all local users.
         '';
-        type = types.attrsOf (types.submodule {
+        type = lib.types.attrsOf (types.submodule {
           options = {
-            hashedPasswordFile = mkOption {
+            hashedPasswordFile = lib.mkOption {
               example = "/path/to/file";
               default = null;
-              type = with types; uniq (nullOr str);
+              type = with lib.types; uniq (nullOr str);
               description = ''
                 Specifies the path to a file containing the password hash
                 for the account, generated with grub-mkpasswd-pbkdf2.
@@ -186,20 +186,20 @@ in
                 be visible to any local user who can read this file.
               '';
             };
-            hashedPassword = mkOption {
+            hashedPassword = lib.mkOption {
               example = "grub.pbkdf2.sha512.10000.674DFFDEF76E13EA...2CC972B102CF4355";
               default = null;
-              type = with types; uniq (nullOr str);
+              type = with lib.types; uniq (nullOr str);
               description = ''
                 Specifies the password hash for the account,
                 generated with grub-mkpasswd-pbkdf2.
                 This hash will be copied to the Nix store, and will be visible to all local users.
               '';
             };
-            passwordFile = mkOption {
+            passwordFile = lib.mkOption {
               example = "/path/to/file";
               default = null;
-              type = with types; uniq (nullOr str);
+              type = with lib.types; uniq (nullOr str);
               description = ''
                 Specifies the path to a file containing the
                 clear text password for the account.
@@ -207,10 +207,10 @@ in
                 be visible to any local user who can read this file.
               '';
             };
-            password = mkOption {
+            password = lib.mkOption {
               example = "Pa$$w0rd!";
               default = null;
-              type = with types; uniq (nullOr str);
+              type = with lib.types; uniq (nullOr str);
               description = ''
                 Specifies the clear text password for the account.
                 This password will be copied to the Nix store, and will be visible to all local users.
@@ -220,7 +220,7 @@ in
         });
       };
 
-      mirroredBoots = mkOption {
+      mirroredBoots = lib.mkOption {
         default = [ ];
         example = [
           { path = "/boot1"; devices = [ "/dev/disk/by-id/wwn-0x500001234567890a" ]; }
@@ -231,32 +231,32 @@ in
           to the respective devices corresponding to those partitions.
         '';
 
-        type = with types; listOf (submodule {
+        type = with lib.types; listOf (submodule {
           options = {
 
-            path = mkOption {
+            path = lib.mkOption {
               example = "/boot1";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 The path to the boot directory where GRUB will be written. Generally
                 this boot path should double as an EFI path.
               '';
             };
 
-            efiSysMountPoint = mkOption {
+            efiSysMountPoint = lib.mkOption {
               default = null;
               example = "/boot1/efi";
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The path to the efi system mount point. Usually this is the same
                 partition as the above path and can be left as null.
               '';
             };
 
-            efiBootloaderId = mkOption {
+            efiBootloaderId = lib.mkOption {
               default = null;
               example = "NixOS-fsid";
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The id of the bootloader to store in efi nvram.
                 The default is to name it NixOS and append the path or efiSysMountPoint.
@@ -264,10 +264,10 @@ in
               '';
             };
 
-            devices = mkOption {
+            devices = lib.mkOption {
               default = [ ];
               example = [ "/dev/disk/by-id/wwn-0x500001234567890a" "/dev/disk/by-id/wwn-0x500009876543210a" ];
-              type = types.listOf types.str;
+              type = lib.types.listOf lib.types.str;
               description = ''
                 The path to the devices which will have the GRUB MBR written.
                 Note these are typically device paths and not paths to partitions.
@@ -278,51 +278,51 @@ in
         });
       };
 
-      configurationName = mkOption {
+      configurationName = lib.mkOption {
         default = "";
         example = "Stable 2.6.21";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           GRUB entry name instead of default.
         '';
       };
 
-      storePath = mkOption {
+      storePath = lib.mkOption {
         default = "/nix/store";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Path to the Nix store when looking for kernels at boot.
           Only makes sense when copyKernels is false.
         '';
       };
 
-      extraPrepareConfig = mkOption {
+      extraPrepareConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Additional bash commands to be run at the script that
           prepares the GRUB menu entries.
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
         example = ''
           serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
           terminal_input --append serial
           terminal_output --append serial
         '';
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Additional GRUB commands inserted in the configuration file
           just before the menu entries.
         '';
       };
 
-      extraGrubInstallArgs = mkOption {
+      extraGrubInstallArgs = lib.mkOption {
         default = [ ];
         example = [ "--modules=nativedisk ahci pata part_gpt part_msdos diskfilter mdraid1x lvm ext2" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           Additional arguments passed to `grub-install`.
 
@@ -346,7 +346,7 @@ in
         '';
       };
 
-      extraInstallCommands = mkOption {
+      extraInstallCommands = lib.mkOption {
         default = "";
         example = ''
           # the example below generates detached signatures that GRUB can verify
@@ -359,26 +359,26 @@ in
           rm -rf $GNUPGHOME
           export GNUPGHOME=$old_gpg_home
         '';
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Additional shell commands inserted in the bootloader installer
           script after generating menu entries.
         '';
       };
 
-      extraPerEntryConfig = mkOption {
+      extraPerEntryConfig = lib.mkOption {
         default = "";
         example = "root (hd0)";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Additional GRUB commands inserted in the configuration file
           at the start of each NixOS menu entry.
         '';
       };
 
-      extraEntries = mkOption {
+      extraEntries = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example = ''
           # GRUB 2 example
           menuentry "Windows 7" {
@@ -396,18 +396,18 @@ in
         '';
       };
 
-      extraEntriesBeforeNixOS = mkOption {
+      extraEntriesBeforeNixOS = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether extraEntries are included before the default option.
         '';
       };
 
-      extraFiles = mkOption {
-        type = types.attrsOf types.path;
+      extraFiles = lib.mkOption {
+        type = lib.types.attrsOf types.path;
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
         '';
         description = ''
@@ -418,17 +418,17 @@ in
         '';
       };
 
-      useOSProber = mkOption {
+      useOSProber = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set to true, append entries for other OSs detected by os-prober.
         '';
       };
 
-      splashImage = mkOption {
-        type = types.nullOr types.path;
-        example = literalExpression "./my-background.png";
+      splashImage = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        example = lib.literalExpression "./my-background.png";
         description = ''
           Background image used for GRUB.
           Set to `null` to run GRUB in text mode.
@@ -441,8 +441,8 @@ in
         '';
       };
 
-      backgroundColor = mkOption {
-        type = types.nullOr types.str;
+      backgroundColor = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         example = "#7EBAE4";
         default = null;
         description = ''
@@ -450,9 +450,9 @@ in
         '';
       };
 
-      timeoutStyle = mkOption {
+      timeoutStyle = lib.mkOption {
         default = "menu";
-        type = types.enum [ "menu" "countdown" "hidden" ];
+        type = lib.types.enum [ "menu" "countdown" "hidden" ];
         description = ''
            - `menu` shows the menu.
            - `countdown` uses a text-mode countdown.
@@ -472,50 +472,50 @@ in
         '';
       };
 
-      entryOptions = mkOption {
+      entryOptions = lib.mkOption {
         default = "--class nixos --unrestricted";
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           Options applied to the primary NixOS menu entry.
         '';
       };
 
-      subEntryOptions = mkOption {
+      subEntryOptions = lib.mkOption {
         default = "--class nixos";
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           Options applied to the secondary NixOS submenu entry.
         '';
       };
 
-      theme = mkOption {
-        type = types.nullOr types.path;
-        example = literalExpression ''"''${pkgs.libsForQt5.breeze-grub}/grub/themes/breeze"'';
+      theme = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        example = lib.literalExpression ''"''${pkgs.libsForQt5.breeze-grub}/grub/themes/breeze"'';
         default = null;
         description = ''
           Path to the grub theme to be used.
         '';
       };
 
-      splashMode = mkOption {
-        type = types.enum [ "normal" "stretch" ];
+      splashMode = lib.mkOption {
+        type = lib.types.enum [ "normal" "stretch" ];
         default = "stretch";
         description = ''
           Whether to stretch the image or show the image in the top-left corner unstretched.
         '';
       };
 
-      font = mkOption {
-        type = types.nullOr types.path;
+      font = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
-        defaultText = literalExpression ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
+        defaultText = lib.literalExpression ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
         description = ''
           Path to a TrueType, OpenType, or pf2 font to be used by Grub.
         '';
       };
 
-      fontSize = mkOption {
-        type = types.nullOr types.int;
+      fontSize = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         example = 16;
         default = null;
         description = ''
@@ -524,55 +524,55 @@ in
         '';
       };
 
-      gfxmodeEfi = mkOption {
+      gfxmodeEfi = lib.mkOption {
         default = "auto";
         example = "1024x768";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The gfxmode to pass to GRUB when loading a graphical boot interface under EFI.
         '';
       };
 
-      gfxmodeBios = mkOption {
+      gfxmodeBios = lib.mkOption {
         default = "1024x768";
         example = "auto";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The gfxmode to pass to GRUB when loading a graphical boot interface under BIOS.
         '';
       };
 
-      gfxpayloadEfi = mkOption {
+      gfxpayloadEfi = lib.mkOption {
         default = "keep";
         example = "text";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI.
         '';
       };
 
-      gfxpayloadBios = mkOption {
+      gfxpayloadBios = lib.mkOption {
         default = "text";
         example = "keep";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS.
         '';
       };
 
-      configurationLimit = mkOption {
+      configurationLimit = lib.mkOption {
         default = 100;
         example = 120;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Maximum of configurations in boot menu. GRUB has problems when
           there are too many entries.
         '';
       };
 
-      copyKernels = mkOption {
+      copyKernels = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether the GRUB menu builder should copy kernels and initial
           ramdisks to /boot.  This is done automatically if /boot is
@@ -580,9 +580,9 @@ in
         '';
       };
 
-      default = mkOption {
+      default = lib.mkOption {
         default = "0";
-        type = types.either types.int types.str;
+        type = lib.types.either types.int types.str;
         apply = toString;
         description = ''
           Index of the default menu item to be booted.
@@ -591,9 +591,9 @@ in
         '';
       };
 
-      fsIdentifier = mkOption {
+      fsIdentifier = lib.mkOption {
         default = "uuid";
-        type = types.enum [ "uuid" "label" "provided" ];
+        type = lib.types.enum [ "uuid" "label" "provided" ];
         description = ''
           Determines how GRUB will identify devices when generating the
           configuration file. A value of uuid / label signifies that grub
@@ -605,35 +605,35 @@ in
         '';
       };
 
-      zfsSupport = mkOption {
+      zfsSupport = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether GRUB should be built against libzfs.
         '';
       };
 
-      zfsPackage = mkOption {
-        type = types.package;
+      zfsPackage = lib.mkOption {
+        type = lib.types.package;
         internal = true;
         default = pkgs.zfs;
-        defaultText = literalExpression "pkgs.zfs";
+        defaultText = lib.literalExpression "pkgs.zfs";
         description = ''
           Which ZFS package to use if `config.boot.loader.grub.zfsSupport` is true.
         '';
       };
 
-      efiSupport = mkOption {
+      efiSupport = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether GRUB should be built with EFI support.
         '';
       };
 
-      efiInstallAsRemovable = mkOption {
+      efiInstallAsRemovable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to invoke `grub-install` with
           `--removable`.
@@ -666,18 +666,18 @@ in
         '';
       };
 
-      enableCryptodisk = mkOption {
+      enableCryptodisk = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable support for encrypted partitions. GRUB should automatically
           unlock the correct encrypted partition and look for filesystems.
         '';
       };
 
-      forceInstall = mkOption {
+      forceInstall = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to try and forcibly install GRUB even if problems are
           detected. It is not recommended to enable this unless you know what
@@ -685,9 +685,9 @@ in
         '';
       };
 
-      forcei686 = mkOption {
+      forcei686 = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to force the use of a ia32 boot loader on x64 systems. Required
           to install and run NixOS on 64bit x86 systems with 32bit (U)EFI.
@@ -701,20 +701,20 @@ in
 
   ###### implementation
 
-  config = mkMerge [
+  config = lib.mkMerge [
 
-    { boot.loader.grub.splashImage = mkDefault defaultSplash; }
+    { boot.loader.grub.splashImage = lib.mkDefault defaultSplash; }
 
-    (mkIf (cfg.splashImage == defaultSplash) {
-      boot.loader.grub.backgroundColor = mkDefault "#2F302F";
-      boot.loader.grub.splashMode = mkDefault "normal";
+    (lib.mkIf (cfg.splashImage == defaultSplash) {
+      boot.loader.grub.backgroundColor = lib.mkDefault "#2F302F";
+      boot.loader.grub.splashMode = lib.mkDefault "normal";
     })
 
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
 
-      boot.loader.grub.devices = mkIf (cfg.device != "") [ cfg.device ];
+      boot.loader.grub.devices = lib.mkIf (cfg.device != "") [ cfg.device ];
 
-      boot.loader.grub.mirroredBoots = mkIf (cfg.devices != [ ]) [
+      boot.loader.grub.mirroredBoots = lib.mkIf (cfg.devices != [ ]) [
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
 
@@ -741,7 +741,7 @@ in
         in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.runtimeShell}
         set -e
-        ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
+        ${lib.optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       '') + cfg.extraInstallCommands);
@@ -752,11 +752,11 @@ in
       # set at once.
       system.boot.loader.id = "grub";
 
-      environment.systemPackages = mkIf (grub != null) [ grub ];
+      environment.systemPackages = lib.mkIf (grub != null) [ grub ];
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
+          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${lib.escapeShellArg n}
         '') config.boot.loader.grub.extraFiles);
 
       assertions = [
@@ -800,7 +800,7 @@ in
       }));
     })
 
-    (mkIf options.boot.loader.grub.version.isDefined {
+    (lib.mkIf options.boot.loader.grub.version.isDefined {
       warnings = [ ''
         The boot.loader.grub.version option does not have any effect anymore, please remove it from your configuration.
       '' ];
@@ -809,18 +809,18 @@ in
 
 
   imports =
-    [ (mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "")
-      (mkRenamedOptionModule [ "boot" "copyKernels" ] [ "boot" "loader" "grub" "copyKernels" ])
-      (mkRenamedOptionModule [ "boot" "extraGrubEntries" ] [ "boot" "loader" "grub" "extraEntries" ])
-      (mkRenamedOptionModule [ "boot" "extraGrubEntriesBeforeNixos" ] [ "boot" "loader" "grub" "extraEntriesBeforeNixOS" ])
-      (mkRenamedOptionModule [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ])
-      (mkRenamedOptionModule [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ])
-      (mkRenamedOptionModule [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ])
-      (mkRemovedOptionModule [ "boot" "loader" "grub" "trustedBoot" ] ''
+    [ (lib.mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "")
+      (lib.mkRenamedOptionModule [ "boot" "copyKernels" ] [ "boot" "loader" "grub" "copyKernels" ])
+      (lib.mkRenamedOptionModule [ "boot" "extraGrubEntries" ] [ "boot" "loader" "grub" "extraEntries" ])
+      (lib.mkRenamedOptionModule [ "boot" "extraGrubEntriesBeforeNixos" ] [ "boot" "loader" "grub" "extraEntriesBeforeNixOS" ])
+      (lib.mkRenamedOptionModule [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ])
+      (lib.mkRenamedOptionModule [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ])
+      (lib.mkRenamedOptionModule [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ])
+      (lib.mkRemovedOptionModule [ "boot" "loader" "grub" "trustedBoot" ] ''
         Support for Trusted GRUB has been removed, because the project
         has been retired upstream.
       '')
-      (mkRemovedOptionModule [ "boot" "loader" "grub" "extraInitrd" ] ''
+      (lib.mkRemovedOptionModule [ "boot" "loader" "grub" "extraInitrd" ] ''
         This option has been replaced with the bootloader agnostic
         boot.initrd.secrets option. To migrate to the initrd secrets system,
         extract the extraInitrd archive into your main filesystem:

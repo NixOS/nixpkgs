@@ -44,9 +44,9 @@ let
 
 in
 {
-  options.services.peering-manager = with lib; {
-    enable = mkOption {
-      type = types.bool;
+  options.services.peering-manager = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable Peering Manager.
@@ -56,34 +56,34 @@ in
       '';
     };
 
-    enableScheduledTasks = mkOption {
-      type = types.bool;
+    enableScheduledTasks = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Set up [scheduled tasks](https://peering-manager.readthedocs.io/en/stable/setup/8-scheduled-tasks/)
       '';
     };
 
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "[::1]";
       description = ''
         Address the server will listen on.
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8001;
       description = ''
         Port the server will listen on.
       '';
     };
 
-    plugins = mkOption {
-      type = types.functionTo (types.listOf types.package);
+    plugins = lib.mkOption {
+      type = lib.types.functionTo (lib.types.listOf lib.types.package);
       default = _: [ ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         python3Packages: with python3Packages; [];
       '';
       description = ''
@@ -91,15 +91,15 @@ in
       '';
     };
 
-    secretKeyFile = mkOption {
-      type = types.path;
+    secretKeyFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to a file containing the secret key.
       '';
     };
 
-    peeringdbApiKeyFile = mkOption {
-      type = with types; nullOr path;
+    peeringdbApiKeyFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = ''
         Path to a file containing the PeeringDB API key.
@@ -130,8 +130,8 @@ in
       };
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Additional lines of configuration appended to the `configuration.py`.
@@ -139,8 +139,8 @@ in
       '';
     };
 
-    enableLdap = mkOption {
-      type = types.bool;
+    enableLdap = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable LDAP-Authentication for Peering Manager.
@@ -149,16 +149,16 @@ in
       '';
     };
 
-    ldapConfigPath = mkOption {
-      type = types.path;
+    ldapConfigPath = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';
     };
 
-    enableOidc = mkOption {
-      type = types.bool;
+    enableOidc = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable OIDC-Authentication for Peering Manager.
@@ -167,8 +167,8 @@ in
       '';
     };
 
-    oidcConfigPath = mkOption {
-      type = types.path;
+    oidcConfigPath = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to the Configuration-File for OIDC-Authentication, will be loaded as `oidc_config.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6b-oidc/#configuration) for possible options.

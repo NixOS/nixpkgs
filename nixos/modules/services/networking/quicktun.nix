@@ -7,21 +7,21 @@
 }:
 
 let
-  inherit (lib) mkOption types mkIf;
+  inherit (lib) lib.mkOption types mkIf;
 
   opt = options.services.quicktun;
   cfg = config.services.quicktun;
 in
 {
   options = {
-    services.quicktun = mkOption {
+    services.quicktun = lib.mkOption {
       default = { };
       description = ''
         QuickTun tunnels.
 
         See <http://wiki.ucis.nl/QuickTun> for more information about available options.
       '';
-      type = types.attrsOf (
+      type = lib.types.attrsOf (
         types.submodule (
           { name, ... }:
           let
@@ -29,15 +29,15 @@ in
           in
           {
             options = {
-              tunMode = mkOption {
-                type = with types; coercedTo bool (b: if b then 1 else 0) (ints.between 0 1);
+              tunMode = lib.mkOption {
+                type = with lib.types; coercedTo bool (b: if b then 1 else 0) (ints.between 0 1);
                 default = false;
                 example = true;
                 description = "Whether to operate in tun (IP) or tap (Ethernet) mode.";
               };
 
-              remoteAddress = mkOption {
-                type = types.str;
+              remoteAddress = lib.mkOption {
+                type = lib.types.str;
                 default = "0.0.0.0";
                 example = "tunnel.example.com";
                 description = ''
@@ -45,28 +45,28 @@ in
                 '';
               };
 
-              localAddress = mkOption {
-                type = with types; nullOr str;
+              localAddress = lib.mkOption {
+                type = with lib.types; nullOr str;
                 default = null;
                 example = "0.0.0.0";
                 description = "IP address or hostname of the local end.";
               };
 
-              localPort = mkOption {
-                type = types.port;
+              localPort = lib.mkOption {
+                type = lib.types.port;
                 default = 2998;
                 description = "Local UDP port.";
               };
 
-              remotePort = mkOption {
-                type = types.port;
+              remotePort = lib.mkOption {
+                type = lib.types.port;
                 default = qtcfg.localPort;
                 defaultText = lib.literalExpression "config.services.quicktun.<name>.localPort";
                 description = " remote UDP port";
               };
 
-              remoteFloat = mkOption {
-                type = with types; coercedTo bool (b: if b then 1 else 0) (ints.between 0 1);
+              remoteFloat = lib.mkOption {
+                type = with lib.types; coercedTo bool (b: if b then 1 else 0) (ints.between 0 1);
                 default = false;
                 example = true;
                 description = ''
@@ -74,8 +74,8 @@ in
                 '';
               };
 
-              protocol = mkOption {
-                type = types.enum [
+              protocol = lib.mkOption {
+                type = lib.types.enum [
                   "raw"
                   "nacl0"
                   "nacltai"
@@ -85,8 +85,8 @@ in
                 description = "Which protocol to use.";
               };
 
-              privateKey = mkOption {
-                type = with types; nullOr str;
+              privateKey = lib.mkOption {
+                type = with lib.types; nullOr str;
                 default = null;
                 description = ''
                   Local secret key in hexadecimal form.
@@ -101,8 +101,8 @@ in
                 '';
               };
 
-              privateKeyFile = mkOption {
-                type = with types; nullOr path;
+              privateKeyFile = lib.mkOption {
+                type = with lib.types; nullOr path;
                 # This is a hack to deprecate `privateKey` without using `mkChangedModuleOption`
                 default =
                   if qtcfg.privateKey == null then null else pkgs.writeText "quickttun-key-${name}" qtcfg.privateKey;
@@ -116,8 +116,8 @@ in
                 '';
               };
 
-              publicKey = mkOption {
-                type = with types; nullOr str;
+              publicKey = lib.mkOption {
+                type = with lib.types; nullOr str;
                 default = null;
                 description = ''
                   Remote public key in hexadecimal form.
@@ -128,16 +128,16 @@ in
                 '';
               };
 
-              timeWindow = mkOption {
-                type = types.ints.unsigned;
+              timeWindow = lib.mkOption {
+                type = lib.types.ints.unsigned;
                 default = 5;
                 description = ''
                   Allowed time window for first received packet in seconds (positive number allows packets from history)
                 '';
               };
 
-              upScript = mkOption {
-                type = with types; nullOr lines;
+              upScript = lib.mkOption {
+                type = with lib.types; nullOr lines;
                 default = null;
                 description = ''
                   Run specified command or script after the tunnel device has been opened.
@@ -176,14 +176,14 @@ in
             INTERFACE = name;
             TUN_MODE = toString qtcfg.tunMode;
             REMOTE_ADDRESS = qtcfg.remoteAddress;
-            LOCAL_ADDRESS = mkIf (qtcfg.localAddress != null) (qtcfg.localAddress);
+            LOCAL_ADDRESS = lib.mkIf (qtcfg.localAddress != null) (qtcfg.localAddress);
             LOCAL_PORT = toString qtcfg.localPort;
             REMOTE_PORT = toString qtcfg.remotePort;
             REMOTE_FLOAT = toString qtcfg.remoteFloat;
-            PRIVATE_KEY_FILE = mkIf (qtcfg.privateKeyFile != null) qtcfg.privateKeyFile;
-            PUBLIC_KEY = mkIf (qtcfg.publicKey != null) qtcfg.publicKey;
+            PRIVATE_KEY_FILE = lib.mkIf (qtcfg.privateKeyFile != null) qtcfg.privateKeyFile;
+            PUBLIC_KEY = lib.mkIf (qtcfg.publicKey != null) qtcfg.publicKey;
             TIME_WINDOW = toString qtcfg.timeWindow;
-            TUN_UP_SCRIPT = mkIf (qtcfg.upScript != null) (
+            TUN_UP_SCRIPT = lib.mkIf (qtcfg.upScript != null) (
               pkgs.writeScript "quicktun-${name}-up.sh" qtcfg.upScript
             );
             SUID = "nobody";

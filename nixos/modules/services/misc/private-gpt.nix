@@ -17,7 +17,7 @@ in
       package = lib.mkPackageOption pkgs "private-gpt" { };
 
       stateDir = lib.mkOption {
-        type = types.path;
+        type = lib.types.path;
         default = "/var/lib/private-gpt";
         description = "State directory of private-gpt.";
       };

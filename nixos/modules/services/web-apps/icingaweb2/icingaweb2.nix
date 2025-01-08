@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.icingaweb2;
   fpm = config.services.phpfpm.pools.${poolName};
@@ -19,10 +18,10 @@ in
 {
   meta.maintainers = lib.teams.helsinki-systems.members;
 
-  options.services.icingaweb2 = with types; {
-    enable = mkEnableOption "the icingaweb2 web interface";
+  options.services.icingaweb2 = with lib.types; {
+    enable = lib.mkEnableOption "the icingaweb2 web interface";
 
-    pool = mkOption {
+    pool = lib.mkOption {
       type = str;
       default = poolName;
       description = ''
@@ -31,7 +30,7 @@ in
       '';
     };
 
-    libraryPaths = mkOption {
+    libraryPaths = lib.mkOption {
       type = attrsOf package;
       default = { };
       description = ''
@@ -41,7 +40,7 @@ in
       '';
     };
 
-    virtualHost = mkOption {
+    virtualHost = lib.mkOption {
       type = nullOr str;
       default = "icingaweb2";
       description = ''
@@ -49,7 +48,7 @@ in
       '';
     };
 
-    timezone = mkOption {
+    timezone = lib.mkOption {
       type = str;
       default = "UTC";
       example = "Europe/Berlin";
@@ -57,17 +56,17 @@ in
     };
 
     modules = {
-      doc.enable = mkEnableOption "the icingaweb2 doc module";
-      migrate.enable = mkEnableOption "the icingaweb2 migrate module";
-      setup.enable = mkEnableOption "the icingaweb2 setup module";
-      test.enable = mkEnableOption "the icingaweb2 test module";
-      translation.enable = mkEnableOption "the icingaweb2 translation module";
+      doc.enable = lib.mkEnableOption "the icingaweb2 doc module";
+      migrate.enable = lib.mkEnableOption "the icingaweb2 migrate module";
+      setup.enable = lib.mkEnableOption "the icingaweb2 setup module";
+      test.enable = lib.mkEnableOption "the icingaweb2 test module";
+      translation.enable = lib.mkEnableOption "the icingaweb2 translation module";
     };
 
-    modulePackages = mkOption {
+    modulePackages = lib.mkOption {
       type = attrsOf package;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "snow" = icingaweb2Modules.theme-snow;
         }
@@ -79,7 +78,7 @@ in
       '';
     };
 
-    generalConfig = mkOption {
+    generalConfig = lib.mkOption {
       type = nullOr attrs;
       default = null;
       example = {
@@ -103,7 +102,7 @@ in
       '';
     };
 
-    resources = mkOption {
+    resources = lib.mkOption {
       type = nullOr attrs;
       default = null;
       example = {
@@ -126,7 +125,7 @@ in
       '';
     };
 
-    authentications = mkOption {
+    authentications = lib.mkOption {
       type = nullOr attrs;
       default = null;
       example = {
@@ -144,7 +143,7 @@ in
       '';
     };
 
-    groupBackends = mkOption {
+    groupBackends = lib.mkOption {
       type = nullOr attrs;
       default = null;
       example = {
@@ -162,7 +161,7 @@ in
       '';
     };
 
-    roles = mkOption {
+    roles = lib.mkOption {
       type = nullOr attrs;
       default = null;
       example = {
@@ -181,14 +180,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+  config = lib.mkIf cfg.enable {
+    services.phpfpm.pools = lib.mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         user = "icingaweb2";
         phpEnv = {
           ICINGAWEB_LIBDIR = toString (
             pkgs.linkFarm "icingaweb2-libdir" (
-              mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths
+              lib.mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths
             )
           );
         };
@@ -196,7 +195,7 @@ in
         phpOptions = ''
           date.timezone = "${cfg.timezone}"
         '';
-        settings = mapAttrs (name: mkDefault) {
+        settings = lib.mapAttrs (name: lib.mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
           "listen.mode" = "0600";
@@ -218,7 +217,7 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts = mkIf (cfg.virtualHost != null) {
+      virtualHosts = lib.mkIf (cfg.virtualHost != null) {
         ${cfg.virtualHost} = {
           root = "${pkgs.icingaweb2}/public";
 
@@ -249,14 +248,14 @@ in
       let
         doModule =
           name:
-          optionalAttrs (cfg.modules.${name}.enable) {
+          lib.optionalAttrs (cfg.modules.${name}.enable) {
             "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}";
           };
       in
       { }
       # Module packages
-      // (mapAttrs' (
-        k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }
+      // (lib.mapAttrs' (
+        k: v: lib.nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }
       ) cfg.modulePackages)
       # Built-in modules
       // doModule "doc"
@@ -265,20 +264,20 @@ in
       // doModule "test"
       // doModule "translation"
       # Configs
-      // optionalAttrs (cfg.generalConfig != null) {
-        "icingaweb2/config.ini".text = generators.toINI { } (defaultConfig // cfg.generalConfig);
+      // lib.optionalAttrs (cfg.generalConfig != null) {
+        "icingaweb2/config.ini".text = lib.generators.toINI { } (defaultConfig // cfg.generalConfig);
       }
-      // optionalAttrs (cfg.resources != null) {
-        "icingaweb2/resources.ini".text = generators.toINI { } cfg.resources;
+      // lib.optionalAttrs (cfg.resources != null) {
+        "icingaweb2/resources.ini".text = lib.generators.toINI { } cfg.resources;
       }
-      // optionalAttrs (cfg.authentications != null) {
-        "icingaweb2/authentication.ini".text = generators.toINI { } cfg.authentications;
+      // lib.optionalAttrs (cfg.authentications != null) {
+        "icingaweb2/authentication.ini".text = lib.generators.toINI { } cfg.authentications;
       }
-      // optionalAttrs (cfg.groupBackends != null) {
-        "icingaweb2/groups.ini".text = generators.toINI { } cfg.groupBackends;
+      // lib.optionalAttrs (cfg.groupBackends != null) {
+        "icingaweb2/groups.ini".text = lib.generators.toINI { } cfg.groupBackends;
       }
-      // optionalAttrs (cfg.roles != null) {
-        "icingaweb2/roles.ini".text = generators.toINI { } cfg.roles;
+      // lib.optionalAttrs (cfg.roles != null) {
+        "icingaweb2/roles.ini".text = lib.generators.toINI { } cfg.roles;
       };
 
     # User and group

@@ -8,30 +8,30 @@
 
 let
   cfg = config.services.prometheus.exporters.bitcoin;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9332;
   extraOpts = {
     package = lib.mkPackageOption pkgs "prometheus-bitcoin-exporter" { };
 
-    rpcUser = mkOption {
-      type = types.str;
+    rpcUser = lib.mkOption {
+      type = lib.types.str;
       default = "bitcoinrpc";
       description = ''
         RPC user name.
       '';
     };
 
-    rpcPasswordFile = mkOption {
-      type = types.path;
+    rpcPasswordFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         File containing RPC password.
       '';
     };
 
-    rpcScheme = mkOption {
-      type = types.enum [
+    rpcScheme = lib.mkOption {
+      type = lib.types.enum [
         "http"
         "https"
       ];
@@ -41,32 +41,32 @@ in
       '';
     };
 
-    rpcHost = mkOption {
-      type = types.str;
+    rpcHost = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         RPC host.
       '';
     };
 
-    rpcPort = mkOption {
-      type = types.port;
+    rpcPort = lib.mkOption {
+      type = lib.types.port;
       default = 8332;
       description = ''
         RPC port number.
       '';
     };
 
-    refreshSeconds = mkOption {
-      type = types.ints.unsigned;
+    refreshSeconds = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 300;
       description = ''
         How often to ask bitcoind for metrics.
       '';
     };
 
-    extraEnv = mkOption {
-      type = types.attrsOf types.str;
+    extraEnv = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       description = ''
         Extra environment variables for the exporter.

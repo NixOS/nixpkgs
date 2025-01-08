@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib) mkIf lib.mkOption types;
 
   randomEncryptionCoerce = enable: { inherit enable; };
 
@@ -9,9 +9,9 @@ let
 
     options = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
@@ -25,10 +25,10 @@ let
         '';
       };
 
-      cipher = mkOption {
+      cipher = lib.mkOption {
         default = "aes-xts-plain64";
         example = "serpent-xts-plain64";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Use specified cipher for randomEncryption.
 
@@ -36,10 +36,10 @@ let
         '';
       };
 
-      keySize = mkOption {
+      keySize = lib.mkOption {
         default = null;
         example = "512";
-        type = types.nullOr types.int;
+        type = lib.types.nullOr lib.types.int;
         description = ''
           Set the encryption key size for the plain device.
 
@@ -50,10 +50,10 @@ let
         '';
       };
 
-      sectorSize = mkOption {
+      sectorSize = lib.mkOption {
         default = null;
         example = "4096";
-        type = types.nullOr types.int;
+        type = lib.types.nullOr lib.types.int;
         description = ''
           Set the sector size for the plain encrypted device type.
 
@@ -64,18 +64,18 @@ let
         '';
       };
 
-      source = mkOption {
+      source = lib.mkOption {
         default = "/dev/urandom";
         example = "/dev/random";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Define the source of randomness to obtain a random key for encryption.
         '';
       };
 
-      allowDiscards = mkOption {
+      allowDiscards = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to allow TRIM requests to the underlying device. This option
           has security implications; please read the LUKS documentation before
@@ -90,24 +90,24 @@ let
 
     options = {
 
-      device = mkOption {
+      device = lib.mkOption {
         example = "/dev/sda3";
-        type = types.nonEmptyStr;
+        type = lib.types.nonEmptyStr;
         description = "Path of the device or swap file.";
       };
 
-      label = mkOption {
+      label = lib.mkOption {
         example = "swap";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Label of the device.  Can be used instead of {var}`device`.
         '';
       };
 
-      size = mkOption {
+      size = lib.mkOption {
         default = null;
         example = 2048;
-        type = types.nullOr types.int;
+        type = lib.types.nullOr lib.types.int;
         description = ''
           If this option is set, ‘device’ is interpreted as the
           path of a swapfile that will be created automatically
@@ -115,10 +115,10 @@ let
         '';
       };
 
-      priority = mkOption {
+      priority = lib.mkOption {
         default = null;
         example = 2048;
-        type = types.nullOr types.int;
+        type = lib.types.nullOr lib.types.int;
         description = ''
           Specify the priority of the swap device. Priority is a value between 0 and 32767.
           Higher numbers indicate higher priority.
@@ -126,14 +126,14 @@ let
         '';
       };
 
-      randomEncryption = mkOption {
+      randomEncryption = lib.mkOption {
         default = false;
         example = {
           enable = true;
           cipher = "serpent-xts-plain64";
           source = "/dev/random";
         };
-        type = types.coercedTo types.bool randomEncryptionCoerce (types.submodule randomEncryptionOpts);
+        type = lib.types.coercedTo types.bool randomEncryptionCoerce (types.submodule randomEncryptionOpts);
         description = ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
@@ -149,10 +149,10 @@ let
         '';
       };
 
-      discardPolicy = mkOption {
+      discardPolicy = lib.mkOption {
         default = null;
         example = "once";
-        type = types.nullOr (types.enum ["once" "pages" "both" ]);
+        type = lib.types.nullOr (types.enum ["once" "pages" "both" ]);
         description = ''
           Specify the discard policy for the swap device. If "once", then the
           whole swap space is discarded at swapon invocation. If "pages",
@@ -162,29 +162,29 @@ let
         '';
       };
 
-      options = mkOption {
+      options = lib.mkOption {
         default = [ "defaults" ];
         example = [ "nofail" ];
-        type = types.listOf types.nonEmptyStr;
+        type = lib.types.listOf types.nonEmptyStr;
         description = ''
           Options used to mount the swap.
         '';
       };
 
-      deviceName = mkOption {
-        type = types.str;
+      deviceName = lib.mkOption {
+        type = lib.types.str;
         internal = true;
       };
 
-      realDevice = mkOption {
-        type = types.path;
+      realDevice = lib.mkOption {
+        type = lib.types.path;
         internal = true;
       };
 
     };
 
     config = {
-      device = mkIf options.label.isDefined
+      device = lib.mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
       deviceName = lib.replaceStrings ["\\"] [""] (utils.escapeSystemdPath config.device);
       realDevice = if config.randomEncryption.enable then "/dev/mapper/${config.deviceName}" else config.device;
@@ -200,7 +200,7 @@ in
 
   options = {
 
-    swapDevices = mkOption {
+    swapDevices = lib.mkOption {
       default = [];
       example = [
         { device = "/dev/hda7"; }
@@ -217,12 +217,12 @@ in
         recommended.
       '';
 
-      type = types.listOf (types.submodule swapCfg);
+      type = lib.types.listOf (types.submodule swapCfg);
     };
 
   };
 
-  config = mkIf ((lib.length config.swapDevices) != 0) {
+  config = lib.mkIf ((lib.length config.swapDevices) != 0) {
     assertions = lib.map (sw: {
       assertion = sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;
       message = ''

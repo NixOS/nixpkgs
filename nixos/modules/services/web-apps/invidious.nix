@@ -89,11 +89,11 @@ let
           + ''
             configParts+=("$(< ${lib.escapeShellArg settingsFile})")
           ''
-          # optional database password file
+          # lib.optional database password file
           + lib.optionalString (cfg.database.host != null) ''
             configParts+=("$(${pkgs.jq}/bin/jq -R '{"db":{"password":.}}' ${lib.escapeShellArg cfg.database.passwordFile})")
           ''
-          # optional extra settings file
+          # lib.optional extra settings file
           + lib.optionalString (cfg.extraSettingsFile != null) ''
             configParts+=("$(< ${lib.escapeShellArg cfg.extraSettingsFile})")
           ''
@@ -315,7 +315,7 @@ in
     };
 
     hmacKeyFile = lib.mkOption {
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         A path to a file containing the `hmac_key`. If `null`, a key will be generated automatically on first
@@ -327,7 +327,7 @@ in
     };
 
     extraSettingsFile = lib.mkOption {
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         A file including Invidious settings.
@@ -338,7 +338,7 @@ in
     };
 
     serviceScale = lib.mkOption {
-      type = types.int;
+      type = lib.types.int;
       default = 1;
       description = ''
         How many invidious instances to run.
@@ -355,7 +355,7 @@ in
     # (determining if nginx should be enabled and therefore the settings
     # modified).
     domain = lib.mkOption {
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The FQDN Invidious is reachable on.
@@ -365,7 +365,7 @@ in
     };
 
     address = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       # default from https://github.com/iv-org/invidious/blob/master/config/config.example.yml
       default = if cfg.nginx.enable then "127.0.0.1" else "0.0.0.0";
       defaultText = lib.literalExpression ''if config.services.invidious.nginx.enable then "127.0.0.1" else "0.0.0.0"'';
@@ -375,7 +375,7 @@ in
     };
 
     port = lib.mkOption {
-      type = types.port;
+      type = lib.types.port;
       # Default from https://docs.invidious.io/Configuration.md
       default = 3000;
       description = ''
@@ -389,7 +389,7 @@ in
 
     database = {
       createLocally = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to create a local database with PostgreSQL.
@@ -397,7 +397,7 @@ in
       };
 
       host = lib.mkOption {
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The database host Invidious should use.
@@ -408,7 +408,7 @@ in
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = config.services.postgresql.settings.port;
         defaultText = lib.literalExpression "config.services.postgresql.settings.port";
         description = ''
@@ -419,7 +419,7 @@ in
       };
 
       passwordFile = lib.mkOption {
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         apply = lib.mapNullable toString;
         default = null;
         description = ''
@@ -429,7 +429,7 @@ in
     };
 
     nginx.enable = lib.mkOption {
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to configure nginx as a reverse proxy for Invidious.

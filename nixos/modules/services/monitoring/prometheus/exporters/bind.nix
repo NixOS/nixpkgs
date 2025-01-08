@@ -8,27 +8,27 @@
 
 let
   cfg = config.services.prometheus.exporters.bind;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9119;
   extraOpts = {
-    bindURI = mkOption {
-      type = types.str;
+    bindURI = lib.mkOption {
+      type = lib.types.str;
       default = "http://localhost:8053/";
       description = ''
         HTTP XML API address of an Bind server.
       '';
     };
-    bindTimeout = mkOption {
-      type = types.str;
+    bindTimeout = lib.mkOption {
+      type = lib.types.str;
       default = "10s";
       description = ''
         Timeout for trying to get stats from Bind.
       '';
     };
-    bindVersion = mkOption {
-      type = types.enum [
+    bindVersion = lib.mkOption {
+      type = lib.types.enum [
         "xml.v2"
         "xml.v3"
         "auto"
@@ -38,8 +38,8 @@ in
         BIND statistics version. Can be detected automatically.
       '';
     };
-    bindGroups = mkOption {
-      type = types.listOf (
+    bindGroups = lib.mkOption {
+      type = lib.types.listOf (
         types.enum [
           "server"
           "view"
@@ -64,8 +64,8 @@ in
           --bind.timeout ${toString cfg.bindTimeout} \
           --bind.stats-url ${cfg.bindURI} \
           --bind.stats-version ${cfg.bindVersion} \
-          --bind.stats-groups ${concatStringsSep "," cfg.bindGroups} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          --bind.stats-groups ${lib.concatStringsSep "," cfg.bindGroups} \
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

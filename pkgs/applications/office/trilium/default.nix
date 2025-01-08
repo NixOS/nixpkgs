@@ -1,7 +1,7 @@
 { lib, callPackage, ... }:
 
 let
-  metaCommon = with lib; {
+  metaCommon = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://github.com/zadam/trilium";
     license = lib.licenses.agpl3Plus;

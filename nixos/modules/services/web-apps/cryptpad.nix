@@ -11,7 +11,7 @@ let
   inherit (lib)
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     strings
     types
     ;
@@ -37,76 +37,76 @@ in
 
     package = lib.mkPackageOption pkgs "cryptpad" { };
 
-    configureNginx = mkOption {
+    configureNginx = lib.mkOption {
       description = ''
         Configure Nginx as a reverse proxy for Cryptpad.
         Note that this makes some assumptions on your setup, and sets settings that will
         affect other virtualHosts running on your Nginx instance, if any.
         Alternatively you can configure a reverse-proxy of your choice.
       '';
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Cryptpad configuration settings.
         See https://github.com/cryptpad/cryptpad/blob/main/config/config.example.js for a more extensive
         reference documentation.
         Test your deployed instance through `https://<domain>/checkup/`.
       '';
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = (pkgs.formats.json { }).type;
         options = {
-          httpUnsafeOrigin = mkOption {
-            type = types.str;
+          httpUnsafeOrigin = lib.mkOption {
+            type = lib.types.str;
             example = "https://cryptpad.example.com";
             default = "";
             description = "This is the URL that users will enter to load your instance";
           };
-          httpSafeOrigin = mkOption {
-            type = types.nullOr types.str;
-            example = "https://cryptpad-ui.example.com. Apparently optional but recommended.";
+          httpSafeOrigin = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            example = "https://cryptpad-ui.example.com. Apparently lib.optional but recommended.";
             description = "Cryptpad sandbox URL";
           };
-          httpAddress = mkOption {
-            type = types.str;
+          httpAddress = lib.mkOption {
+            type = lib.types.str;
             default = "127.0.0.1";
             description = "Address on which the Node.js server should listen";
           };
-          httpPort = mkOption {
-            type = types.int;
+          httpPort = lib.mkOption {
+            type = lib.types.int;
             default = 3000;
             description = "Port on which the Node.js server should listen";
           };
-          websocketPort = mkOption {
-            type = types.int;
+          websocketPort = lib.mkOption {
+            type = lib.types.int;
             default = 3003;
             description = "Port for the websocket that needs to be separate";
           };
-          maxWorkers = mkOption {
-            type = types.nullOr types.int;
+          maxWorkers = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
             default = null;
             description = "Number of child processes, defaults to number of cores available";
           };
-          adminKeys = mkOption {
-            type = types.listOf types.str;
+          adminKeys = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "List of public signing keys of users that can access the admin panel";
             example = [ "[cryptpad-user1@my.awesome.website/YZgXQxKR0Rcb6r6CmxHPdAGLVludrAF2lEnkbx1vVOo=]" ];
           };
-          logToStdout = mkOption {
-            type = types.bool;
+          logToStdout = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Controls whether log output should go to stdout of the systemd service";
           };
-          logLevel = mkOption {
-            type = types.str;
+          logLevel = lib.mkOption {
+            type = lib.types.str;
             default = "info";
             description = "Controls log level";
           };
-          blockDailyCheck = mkOption {
-            type = types.bool;
+          blockDailyCheck = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = ''
               Disable telemetry. This setting is only effective if the 'Disable server telemetry'
@@ -116,8 +116,8 @@ in
               menu will not be able to resolve DNS and fail; this setting must be set as well.
             '';
           };
-          installMethod = mkOption {
-            type = types.str;
+          installMethod = lib.mkOption {
+            type = lib.types.str;
             default = "nixos";
             description = ''
               Install method is listed in telemetry if you agree to it through the consentToContact
@@ -129,7 +129,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
     {
       systemd.services.cryptpad = {
         description = "Cryptpad service";
@@ -214,7 +214,7 @@ in
     }
     # block external network access if not phoning home and
     # binding to localhost (default)
-    (mkIf
+    (lib.mkIf
       (
         cfg.settings.blockDailyCheck
         && (builtins.elem cfg.settings.httpAddress [
@@ -232,7 +232,7 @@ in
       }
     )
     # .. conversely allow DNS & TLS if telemetry is explicitly enabled
-    (mkIf (!cfg.settings.blockDailyCheck) {
+    (lib.mkIf (!cfg.settings.blockDailyCheck) {
       systemd.services.cryptpad = {
         serviceConfig = {
           BindReadOnlyPaths = [
@@ -245,7 +245,7 @@ in
       };
     })
 
-    (mkIf cfg.configureNginx {
+    (lib.mkIf cfg.configureNginx {
       assertions = [
         {
           assertion = cfg.settings.httpUnsafeOrigin != "";
@@ -268,7 +268,7 @@ in
         recommendedOptimisation = true;
         recommendedGzipSettings = true;
 
-        virtualHosts = mkMerge [
+        virtualHosts = lib.mkMerge [
           {
             "${mainDomain}" = {
               serverAliases = lib.optionals (cfg.settings.httpSafeOrigin != null) [ sandboxDomain ];

@@ -13,25 +13,25 @@ with (import ./param-constructors.nix lib);
 
 let
   certParams = {
-    file = mkOptionalStrParam ''
+    file = lib.mkOptionalStrParam ''
       Absolute path to the certificate to load. Passed as-is to the daemon, so
       it must be readable by it.
 
       Configure either this or {option}`handle`, but not both, in one section.
     '';
 
-    handle = mkOptionalHexParam ''
+    handle = lib.mkOptionalHexParam ''
       Hex-encoded CKA_ID or handle of the certificate on a token or TPM,
       respectively.
 
       Configure either this or {option}`file`, but not both, in one section.
     '';
 
-    slot = mkOptionalIntParam ''
+    slot = lib.mkOptionalIntParam ''
       Optional slot number of the token that stores the certificate.
     '';
 
-    module = mkOptionalStrParam ''
+    module = lib.mkOptionalStrParam ''
       Optional PKCS#11 module name.
     '';
   };
@@ -42,7 +42,7 @@ in
       (
         {
 
-          cacert = mkOptionalStrParam ''
+          cacert = lib.mkOptionalStrParam ''
             The certificates may use a relative path from the swanctl
             `x509ca` directory or an absolute path.
 
@@ -51,7 +51,7 @@ in
             {option}`handle` per section.
           '';
 
-          cert_uri_base = mkOptionalStrParam ''
+          cert_uri_base = lib.mkOptionalStrParam ''
             Defines the base URI for the Hash and URL feature supported by
             IKEv2. Instead of exchanging complete certificates, IKEv2 allows one to
             send an URI that resolves to the DER encoded certificate. The certificate
@@ -273,7 +273,7 @@ in
             unconditionally whenever certificate authentication is used.
         '';
 
-        ppk_id = mkOptionalStrParam ''
+        ppk_id = lib.mkOptionalStrParam ''
           String identifying the Postquantum Preshared Key (PPK) to be used.
         '';
 
@@ -337,7 +337,7 @@ in
           reauthentication.
         '';
 
-        over_time = mkOptionalDurationParam ''
+        over_time = lib.mkOptionalDurationParam ''
           Hard IKE_SA lifetime if rekey/reauth does not complete, as time. To avoid
           having an IKE/ISAKMP kept alive if IKE reauthentication or rekeying fails
           perpetually, a maximum hard lifetime may be specified. If the IKE_SA fails
@@ -351,7 +351,7 @@ in
           {option}`reauth_time`.
         '';
 
-        rand_time = mkOptionalDurationParam ''
+        rand_time = lib.mkOptionalDurationParam ''
           Time range from which to choose a random value to subtract from
           rekey/reauth times. To avoid having both peers initiating the rekey/reauth
           procedure simultaneously, a random time gets subtracted from the
@@ -393,13 +393,13 @@ in
           Extension. Mediation connections create no CHILD_SA.
         '';
 
-        mediated_by = mkOptionalStrParam ''
+        mediated_by = lib.mkOptionalStrParam ''
           The name of the connection to mediate this connection through. If given,
           the connection will be mediated through the named mediation
           connection. The mediation connection must have mediation enabled.
         '';
 
-        mediation_peer = mkOptionalStrParam ''
+        mediation_peer = lib.mkOptionalStrParam ''
           Identity under which the peer is registered at the mediation server, that
           is, the IKE identity the other end of this connection uses as its local
           identity on its connection to the mediation server. This is the identity
@@ -486,17 +486,17 @@ in
                   will only be used if enabled in `strongswan.conf`(5).
               '';
 
-              id = mkOptionalStrParam ''
+              id = lib.mkOptionalStrParam ''
                 IKE identity to use for authentication round. When using certificate
                 authentication, the IKE identity must be contained in the certificate,
                 either as subject or as subjectAltName.
               '';
 
-              eap_id = mkOptionalStrParam ''
+              eap_id = lib.mkOptionalStrParam ''
                 Client EAP-Identity to use in EAP-Identity exchange and the EAP method.
               '';
 
-              aaa_id = mkOptionalStrParam ''
+              aaa_id = lib.mkOptionalStrParam ''
                 Server side EAP-Identity to expect in the EAP method. Some EAP methods,
                 such as EAP-TLS, use an identity for the server to perform mutual
                 authentication. This identity may differ from the IKE identity,
@@ -507,7 +507,7 @@ in
                 provide a certificate in the TLS exchange.
               '';
 
-              xauth_id = mkOptionalStrParam ''
+              xauth_id = lib.mkOptionalStrParam ''
                 Client XAuth username used in the XAuth exchange.
               '';
 
@@ -519,7 +519,7 @@ in
               Authentication or IKEv1 XAuth.
 
               Each round is defined in a section having `local` as
-              prefix, and an optional unique suffix. To define a single authentication
+              prefix, and an lib.optional unique suffix. To define a single authentication
               round, the suffix may be omitted.
             '';
 
@@ -539,7 +539,7 @@ in
                 either as subject or as subjectAltName.
               '';
 
-              eap_id = mkOptionalStrParam ''
+              eap_id = lib.mkOptionalStrParam ''
                 Identity to use as peer identity during EAP authentication. If set to
                 `%any` the EAP-Identity method will be used to ask the
                 client for an EAP identity.
@@ -570,7 +570,7 @@ in
                 these sections offer more flexibility.
               '';
 
-              ca_id = mkOptionalStrParam ''
+              ca_id = lib.mkOptionalStrParam ''
                 Identity in CA certificate to accept for authentication. The specified
                 identity must be contained in one (intermediate) CA of the remote peer
                 trustchain, either as subject or as subjectAltName. This has the same
@@ -649,7 +649,7 @@ in
               Authentication or IKEv1 XAuth.
 
               Each round is defined in a section having `remote` as
-              prefix, and an optional unique suffix. To define a single authentication
+              prefix, and an lib.optional unique suffix. To define a single authentication
               round, the suffix may be omitted.
             '';
 
@@ -658,7 +658,7 @@ in
             {
               ah_proposals = mkCommaSepListParam [ ] ''
                 AH proposals to offer for the CHILD_SA. A proposal is a set of
-                algorithms. For AH, this includes an integrity algorithm and an optional
+                algorithms. For AH, this includes an integrity algorithm and an lib.optional
                 Diffie-Hellman group. If a DH group is specified, CHILD_SA/Quick Mode
                 rekeying and initial negotiation uses a separate Diffie-Hellman exchange
                 using the specified group (refer to esp_proposals for details).
@@ -679,8 +679,8 @@ in
               esp_proposals = mkCommaSepListParam [ "default" ] ''
                 ESP proposals to offer for the CHILD_SA. A proposal is a set of
                 algorithms. For ESP non-AEAD proposals, this includes an integrity
-                algorithm, an encryption algorithm, an optional Diffie-Hellman group and
-                an optional Extended Sequence Number Mode indicator. For AEAD proposals,
+                algorithm, an encryption algorithm, an lib.optional Diffie-Hellman group and
+                an lib.optional Extended Sequence Number Mode indicator. For AEAD proposals,
                 a combined mode algorithm is used instead of the separate
                 encryption/integrity algorithms.
 
@@ -722,15 +722,15 @@ in
 
               local_ts = mkCommaSepListParam [ "dynamic" ] ''
                 List of local traffic selectors to include in CHILD_SA. Each selector is
-                a CIDR subnet definition, followed by an optional proto/port
+                a CIDR subnet definition, followed by an lib.optional proto/port
                 selector. The special value `dynamic` may be used
                 instead of a subnet definition, which gets replaced by the tunnel outer
                 address or the virtual IP, if negotiated. This is the default.
 
                 A protocol/port selector is surrounded by opening and closing square
                 brackets. Between these brackets, a numeric or getservent(3) protocol
-                name may be specified. After the optional protocol restriction, an
-                optional port restriction may be specified, separated by a slash. The
+                name may be specified. After the lib.optional protocol restriction, an
+                lib.optional port restriction may be specified, separated by a slash. The
                 port restriction may be numeric, a getservent(3) service name, or the
                 special value `opaque` for RFC 4301 OPAQUE
                 selectors. Port ranges may be specified as well, none of the kernel
@@ -754,7 +754,7 @@ in
 
               rekey_time = mkDurationParam "1h" ''
                 Time to schedule CHILD_SA rekeying. CHILD_SA rekeying refreshes key
-                material, optionally using a Diffie-Hellman exchange if a group is
+                material, lib.optionally using a Diffie-Hellman exchange if a group is
                 specified in the proposal.  To avoid rekey collisions initiated by both
                 ends simultaneously, a value in the range of {option}`rand_time`
                 gets subtracted to form the effective soft lifetime.
@@ -763,14 +763,14 @@ in
                 {option}`rand_time`.
               '';
 
-              life_time = mkOptionalDurationParam ''
+              life_time = lib.mkOptionalDurationParam ''
                 Maximum lifetime before CHILD_SA gets closed. Usually this hard lifetime
                 is never reached, because the CHILD_SA gets rekeyed before. If that fails
                 for whatever reason, this limit closes the CHILD_SA.  The default is 10%
                 more than the {option}`rekey_time`.
               '';
 
-              rand_time = mkOptionalDurationParam ''
+              rand_time = lib.mkOptionalDurationParam ''
                 Time range from which to choose a random value to subtract from
                 {option}`rekey_time`. The default is the difference between
                 {option}`life_time` and {option}`rekey_time`.
@@ -778,7 +778,7 @@ in
 
               rekey_bytes = mkIntParam 0 ''
                 Number of bytes processed before initiating CHILD_SA rekeying. CHILD_SA
-                rekeying refreshes key material, optionally using a Diffie-Hellman
+                rekeying refreshes key material, lib.optionally using a Diffie-Hellman
                 exchange if a group is specified in the proposal.
 
                 To avoid rekey collisions initiated by both ends simultaneously, a value
@@ -788,14 +788,14 @@ in
                 Volume based CHILD_SA rekeying is disabled by default.
               '';
 
-              life_bytes = mkOptionalIntParam ''
+              life_bytes = lib.mkOptionalIntParam ''
                 Maximum bytes processed before CHILD_SA gets closed. Usually this hard
                 volume limit is never reached, because the CHILD_SA gets rekeyed
                 before. If that fails for whatever reason, this limit closes the
                 CHILD_SA.  The default is 10% more than {option}`rekey_bytes`.
               '';
 
-              rand_bytes = mkOptionalIntParam ''
+              rand_bytes = lib.mkOptionalIntParam ''
                 Byte range from which to choose a random value to subtract from
                 {option}`rekey_bytes`. The default is the difference between
                 {option}`life_bytes` and {option}`rekey_bytes`.
@@ -803,7 +803,7 @@ in
 
               rekey_packets = mkIntParam 0 ''
                 Number of packets processed before initiating CHILD_SA rekeying. CHILD_SA
-                rekeying refreshes key material, optionally using a Diffie-Hellman
+                rekeying refreshes key material, lib.optionally using a Diffie-Hellman
                 exchange if a group is specified in the proposal.
 
                 To avoid rekey collisions initiated by both ends simultaneously, a value
@@ -813,7 +813,7 @@ in
                 Packet count based CHILD_SA rekeying is disabled by default.
               '';
 
-              life_packets = mkOptionalIntParam ''
+              life_packets = lib.mkOptionalIntParam ''
                 Maximum number of packets processed before CHILD_SA gets closed. Usually
                 this hard packets limit is never reached, because the CHILD_SA gets
                 rekeyed before. If that fails for whatever reason, this limit closes the
@@ -822,13 +822,13 @@ in
                 The default is 10% more than {option}`rekey_bytes`.
               '';
 
-              rand_packets = mkOptionalIntParam ''
+              rand_packets = lib.mkOptionalIntParam ''
                 Packet range from which to choose a random value to subtract from
                 {option}`rekey_packets`. The default is the difference between
                 {option}`life_packets` and {option}`rekey_packets`.
               '';
 
-              updown = mkOptionalStrParam ''
+              updown = lib.mkOptionalStrParam ''
                 Updown script to invoke on CHILD_SA up and down events.
               '';
 
@@ -911,7 +911,7 @@ in
                 calculated priorities based on the size of the traffic selectors.
               '';
 
-              interface = mkOptionalStrParam ''
+              interface = lib.mkOptionalStrParam ''
                 Optional interface name to restrict outbound IPsec policies.
               '';
 
@@ -1107,7 +1107,7 @@ in
       mkEapXauthParams =
         mkPrefixedAttrsOfParams
           {
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of the EAP/XAuth secret. It may either be an ASCII string, a hex
               encoded string if it has a 0x prefix or a Base64 encoded string if it
               has a 0s prefix in its value.
@@ -1135,7 +1135,7 @@ in
       ntlm =
         mkPrefixedAttrsOfParams
           {
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of the NTLM secret, which is the NT Hash of the actual secret,
               that is, MD4(UTF-16LE(secret)). The resulting 16-byte value may either
               be given as a hex encoded string with a 0x prefix or as a Base64 encoded
@@ -1157,7 +1157,7 @@ in
       ike =
         mkPrefixedAttrsOfParams
           {
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of the IKE preshared secret. It may either be an ASCII string, a
               hex encoded string if it has a 0x prefix or a Base64 encoded string if
               it has a 0s prefix in its value.
@@ -1177,7 +1177,7 @@ in
       ppk =
         mkPrefixedAttrsOfParams
           {
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of the PPK. It may either be an ASCII string, a hex encoded string
               if it has a `0x` prefix or a Base64 encoded string if
               it has a `0s` prefix in its value. Should have at least
@@ -1198,11 +1198,11 @@ in
       private =
         mkPrefixedAttrsOfParams
           {
-            file = mkOptionalStrParam ''
+            file = lib.mkOptionalStrParam ''
               File name in the private folder for which this passphrase should be used.
             '';
 
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of decryption passphrase for private key.
             '';
           }
@@ -1214,11 +1214,11 @@ in
       rsa =
         mkPrefixedAttrsOfParams
           {
-            file = mkOptionalStrParam ''
+            file = lib.mkOptionalStrParam ''
               File name in the `rsa` folder for which this passphrase
               should be used.
             '';
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of decryption passphrase for RSA key.
             '';
           }
@@ -1230,11 +1230,11 @@ in
       ecdsa =
         mkPrefixedAttrsOfParams
           {
-            file = mkOptionalStrParam ''
+            file = lib.mkOptionalStrParam ''
               File name in the `ecdsa` folder for which this
               passphrase should be used.
             '';
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of decryption passphrase for ECDSA key.
             '';
           }
@@ -1246,11 +1246,11 @@ in
       pkcs8 =
         mkPrefixedAttrsOfParams
           {
-            file = mkOptionalStrParam ''
+            file = lib.mkOptionalStrParam ''
               File name in the `pkcs8` folder for which this
               passphrase should be used.
             '';
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of decryption passphrase for PKCS#8 key.
             '';
           }
@@ -1262,11 +1262,11 @@ in
       pkcs12 =
         mkPrefixedAttrsOfParams
           {
-            file = mkOptionalStrParam ''
+            file = lib.mkOptionalStrParam ''
               File name in the `pkcs12` folder for which this
               passphrase should be used.
             '';
-            secret = mkOptionalStrParam ''
+            secret = lib.mkOptionalStrParam ''
               Value of decryption passphrase for PKCS#12 container.
             '';
           }
@@ -1276,20 +1276,20 @@ in
           '';
 
       token = mkPrefixedAttrsOfParams {
-        handle = mkOptionalHexParam ''
+        handle = lib.mkOptionalHexParam ''
           Hex-encoded CKA_ID or handle of the private key on the token or TPM,
           respectively.
         '';
 
-        slot = mkOptionalIntParam ''
+        slot = lib.mkOptionalIntParam ''
           Optional slot number to access the token.
         '';
 
-        module = mkOptionalStrParam ''
+        module = lib.mkOptionalStrParam ''
           Optional PKCS#11 module name to access the token.
         '';
 
-        pin = mkOptionalStrParam ''
+        pin = lib.mkOptionalStrParam ''
           Optional PIN required to access the key on the token. If none is
           provided the user is prompted during an interactive
           `--load-creds` call.
@@ -1301,7 +1301,7 @@ in
   pools =
     mkAttrsOfParams
       {
-        addrs = mkOptionalStrParam ''
+        addrs = lib.mkOptionalStrParam ''
           Subnet or range defining addresses allocated in pool. Accepts a single
           CIDR subnet defining the pool to allocate addresses from or an address
           range (\<from\>-\<to\>). Pools must be unique and non-overlapping.

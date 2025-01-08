@@ -8,7 +8,7 @@
 let
   inherit (lib)
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     mkDefault
@@ -42,22 +42,22 @@ in
 {
   options.services.open-web-calendar = {
 
-    enable = mkEnableOption "OpenWebCalendar service";
+    enable = lib.mkEnableOption "OpenWebCalendar service";
 
-    package = mkPackageOption pkgs "open-web-calendar" { };
+    package = lib.mkPackageOption pkgs "open-web-calendar" { };
 
-    domain = mkOption {
-      type = types.str;
+    domain = lib.mkOption {
+      type = lib.types.str;
       description = "The domain under which open-web-calendar is made available";
       example = "open-web-calendar.example.org";
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          ALLOWED_HOSTS = mkOption {
-            type = types.str;
+          ALLOWED_HOSTS = lib.mkOption {
+            type = lib.types.str;
             readOnly = true;
             description = ''
               The hosts that the Open Web Calendar permits. This is required to
@@ -77,8 +77,8 @@ in
       '';
     };
 
-    calendarSettings = mkOption {
-      type = types.submodule {
+    calendarSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = calendarSettingsFormat.type;
         options = { };
       };
@@ -94,7 +94,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -147,8 +147,8 @@ in
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.domain}" = {
-        forceSSL = mkDefault true;
-        enableACME = mkDefault true;
+        forceSSL = lib.mkDefault true;
+        enableACME = lib.mkDefault true;
         locations."/".proxyPass = "http://unix:///run/open-web-calendar/socket";
       };
     };

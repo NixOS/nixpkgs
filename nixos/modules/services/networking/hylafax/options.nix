@@ -7,7 +7,7 @@
 
 let
 
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption lib.mkOption;
   inherit (lib.types)
     bool
     enum
@@ -56,7 +56,7 @@ let
     { name, config, ... }:
     {
       options = {
-        name = mkOption {
+        name = lib.mkOption {
           type = nonEmptyStr;
           example = "ttyS1";
           description = ''
@@ -64,7 +64,7 @@ let
             will be searched for in {file}`/dev`.
           '';
         };
-        type = mkOption {
+        type = lib.mkOption {
           type = nonEmptyStr;
           example = "cirrus";
           description = ''
@@ -73,7 +73,7 @@ let
             in the spooling area directory.
           '';
         };
-        config = mkOption {
+        config = lib.mkOption {
           type = configAttrType;
           example = {
             AreaCode = "49";
@@ -89,7 +89,7 @@ let
           '';
         };
       };
-      config.name = mkDefault name;
+      config.name = lib.mkDefault name;
       config.config.Include = [ "config/${config.type}" ];
     };
 
@@ -103,9 +103,9 @@ let
       # we add the path to the default configuration file.
       # Otherwise, we use `false` to provoke
       # an error if hylafax tries to use it.
-      c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
-        (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
+      c.sendmailPath = lib.mkMerge [
+        (lib.mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
+        (lib.mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig =
         file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit pkgs; });
@@ -134,9 +134,9 @@ in
 
   options.services.hylafax = {
 
-    enable = mkEnableOption "HylaFAX server";
+    enable = lib.mkEnableOption "HylaFAX server";
 
-    autostart = mkOption {
+    autostart = lib.mkOption {
       type = bool;
       default = true;
       example = false;
@@ -148,35 +148,35 @@ in
       '';
     };
 
-    countryCode = mkOption {
+    countryCode = lib.mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "49";
       description = "Country code for server and all modems.";
     };
 
-    areaCode = mkOption {
+    areaCode = lib.mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "30";
       description = "Area code for server and all modems.";
     };
 
-    longDistancePrefix = mkOption {
+    longDistancePrefix = lib.mkOption {
       type = nullOr str;
       default = null;
       example = "0";
       description = "Long distance prefix for server and all modems.";
     };
 
-    internationalPrefix = mkOption {
+    internationalPrefix = lib.mkOption {
       type = nullOr str;
       default = null;
       example = "00";
       description = "International prefix for server and all modems.";
     };
 
-    spoolAreaPath = mkOption {
+    spoolAreaPath = lib.mkOption {
       type = path;
       default = "/var/spool/fax";
       description = ''
@@ -185,7 +185,7 @@ in
       '';
     };
 
-    userAccessFile = mkOption {
+    userAccessFile = lib.mkOption {
       type = path;
       default = "/etc/hosts.hfaxd";
       description = ''
@@ -209,9 +209,9 @@ in
       '';
     };
 
-    sendmailPath = mkOption {
+    sendmailPath = lib.mkOption {
       type = path;
-      example = literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
+      example = lib.literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
       # '' ;  # fix vim
       description = ''
         Path to {file}`sendmail` program.
@@ -222,7 +222,7 @@ in
       '';
     };
 
-    hfaxdConfig = mkOption {
+    hfaxdConfig = lib.mkOption {
       type = configAttrType;
       example.RecvqProtection = "0400";
       description = ''
@@ -232,7 +232,7 @@ in
       '';
     };
 
-    faxqConfig = mkOption {
+    faxqConfig = lib.mkOption {
       type = configAttrType;
       example = {
         InternationalPrefix = "00";
@@ -245,7 +245,7 @@ in
       '';
     };
 
-    commonModemConfig = mkOption {
+    commonModemConfig = lib.mkOption {
       type = configAttrType;
       example = {
         InternationalPrefix = "00";
@@ -260,7 +260,7 @@ in
       '';
     };
 
-    modems = mkOption {
+    modems = lib.mkOption {
       type = attrsOf (submodule [ modemConfigOptions ]);
       default = { };
       example.ttyS1 = {
@@ -277,7 +277,7 @@ in
       '';
     };
 
-    spoolExtraInit = mkOption {
+    spoolExtraInit = lib.mkOption {
       type = lines;
       default = "";
       example = "chmod 0755 .  # everyone may read my faxes";
@@ -292,7 +292,7 @@ in
       {file}`faxcron`
       each time the spooling area is initialized
     '';
-    faxcron.enable.frequency = mkOption {
+    faxcron.enable.frequency = lib.mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
@@ -302,7 +302,7 @@ in
         (see systemd.time(7))
       '';
     };
-    faxcron.infoDays = mkOption {
+    faxcron.infoDays = lib.mkOption {
       type = ints.positive;
       default = 30;
       description = ''
@@ -310,7 +310,7 @@ in
         remote machine information directory in days.
       '';
     };
-    faxcron.logDays = mkOption {
+    faxcron.logDays = lib.mkOption {
       type = ints.positive;
       default = 30;
       description = ''
@@ -318,7 +318,7 @@ in
         session trace log files in days.
       '';
     };
-    faxcron.rcvDays = mkOption {
+    faxcron.rcvDays = lib.mkOption {
       type = ints.positive;
       default = 7;
       description = ''
@@ -332,7 +332,7 @@ in
       {file}`faxqclean`
       each time the spooling area is initialized
     '';
-    faxqclean.enable.frequency = mkOption {
+    faxqclean.enable.frequency = lib.mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
@@ -342,7 +342,7 @@ in
         (see systemd.time(7)).
       '';
     };
-    faxqclean.archiving = mkOption {
+    faxqclean.archiving = lib.mkOption {
       type = enum [
         "never"
         "as-flagged"
@@ -359,20 +359,20 @@ in
         See also sendfax(1) and faxqclean(8).
       '';
     };
-    faxqclean.doneqMinutes = mkOption {
+    faxqclean.doneqMinutes = lib.mkOption {
       type = ints.positive;
       default = 15;
-      example = literalExpression "24*60";
+      example = lib.literalExpression "24*60";
       description = ''
         Set the job
         age threshold (in minutes) that controls how long
         jobs may reside in the doneq directory.
       '';
     };
-    faxqclean.docqMinutes = mkOption {
+    faxqclean.docqMinutes = lib.mkOption {
       type = ints.positive;
       default = 60;
-      example = literalExpression "24*60";
+      example = lib.literalExpression "24*60";
       description = ''
         Set the document
         age threshold (in minutes) that controls how long
@@ -382,7 +382,7 @@ in
 
   };
 
-  config.services.hylafax = mkIf (config.services.hylafax.enable) (mkMerge [
+  config.services.hylafax = lib.mkIf (config.services.hylafax.enable) (mkMerge [
     defaultConfig
     localConfig
   ]);

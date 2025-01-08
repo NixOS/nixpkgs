@@ -160,7 +160,7 @@ mapAttrs (
           (pkg pkgs)
           (pkgs.writeShellScriptBin "report-success" ''
             echo 1 > /tmp/term-ran-successfully
-            ${optionalString kill "pkill ${executable}"}
+            ${lib.optionalString kill "pkill ${executable}"}
           '')
           (pkgs.writeShellScriptBin "display-colour" ''
             # A 256-colour background colour code for pink, then spaces.
@@ -206,7 +206,7 @@ mapAttrs (
             # We run this command synchronously, so we can be certain the exit codes are happy
             machine.${if kill then "execute" else "succeed"}("run-in-this-term report-success")
             machine.wait_for_file("/tmp/term-ran-successfully")
-        ${optionalString colourTest ''
+        ${lib.optionalString colourTest ''
 
           import tempfile
           import subprocess

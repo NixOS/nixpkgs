@@ -5,16 +5,14 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.services.waagent;
 
   # Format for waagent.conf
   settingsFormat = {
     type =
-      with types;
       let
-        singleAtom =
+        singleAtom = with lib.types;
           (nullOr (oneOf [
             bool
             str
@@ -24,12 +22,12 @@ let
           // {
             description = "atom (bool, string, int or float) or null";
           };
-        atom = either singleAtom (listOf singleAtom) // {
+        atom = lib.either singleAtom (lib.listOf singleAtom) // {
           description = singleAtom.description + " or a list of them";
         };
       in
-      attrsOf (
-        either atom (attrsOf atom)
+      lib.attrsOf (
+        lib.either atom (lib.attrsOf atom)
         // {
           description = atom.description + "or an attribute set of them";
         }
@@ -41,11 +39,11 @@ let
         transform =
           x:
           # Transform bool to "y" or "n"
-          if (isBool x) then
+          if (lib.isBool x) then
             (if x then "y" else "n")
           # Concatenate list items with comma
-          else if (isList x) then
-            concatStringsSep "," (map transform x)
+          else if (lib.isList x) then
+            lib.concatStringsSep "," (map transform x)
           else
             toString x;
 
@@ -53,38 +51,38 @@ let
         recurse =
           path: value:
           if builtins.isAttrs value then
-            pipe value [
-              (mapAttrsToList (k: v: recurse (path ++ [ k ]) v))
-              concatLists
+            lib.pipe value [
+              (lib.mapAttrsToList (k: v: recurse (path ++ [ k ]) v))
+              lib.concatLists
             ]
           else
             [
               {
-                name = concatStringsSep "." path;
+                name = lib.concatStringsSep "." path;
                 inherit value;
               }
             ];
         convert =
           attrs:
-          pipe (recurse [ ] attrs) [
+          lib.pipe (recurse [ ] attrs) [
             # Filter out null values and emoty lists
-            (filter (kv: kv.value != null && kv.value != [ ]))
+            (lib.filter (kv: kv.value != null && kv.value != [ ]))
             # Transform to Key=Value form, then concatenate
             (map (kv: "${kv.name}=${transform kv.value}"))
-            (concatStringsSep "\n")
+            (lib.concatStringsSep "\n")
           ];
       in
       pkgs.writeText name (convert value);
   };
 
-  settingsType = types.submodule {
+  settingsType = lib.types.submodule {
     freeformType = settingsFormat.type;
     options = {
       Provisioning = {
-        Enable = mkOption {
-          type = types.bool;
+        Enable = lib.mkOption {
+          type = lib.types.bool;
           default = !config.services.cloud-init.enable;
-          defaultText = literalExpression "!config.services.cloud-init.enable";
+          defaultText = lib.literalExpression "!config.services.cloud-init.enable";
           description = ''
             Whether to enable provisioning functionality in the agent.
 
@@ -95,8 +93,8 @@ let
           '';
         };
 
-        Agent = mkOption {
-          type = types.enum [
+        Agent = lib.mkOption {
+          type = lib.types.enum [
             "auto"
             "waagent"
             "cloud-init"
@@ -110,7 +108,7 @@ let
       };
 
       ResourceDisk = {
-        Format = mkEnableOption ''
+        Format = lib.mkEnableOption ''
           If set to `true`, waagent formats and mounts the resource disk that the platform provides,
           unless the file system type in `ResourceDisk.FileSystem` is set to `ntfs`.
           The agent makes a single Linux partition (ID 83) available on the disk.
@@ -119,8 +117,8 @@ let
           This configuration has no effect if resource disk is managed by cloud-init.
         '';
 
-        FileSystem = mkOption {
-          type = types.str;
+        FileSystem = lib.mkOption {
+          type = lib.types.str;
           default = "ext4";
           description = ''
             The file system type for the resource disk.
@@ -131,8 +129,8 @@ let
           '';
         };
 
-        MountPoint = mkOption {
-          type = types.str;
+        MountPoint = lib.mkOption {
+          type = lib.types.str;
           default = "/mnt/resource";
           description = ''
             This option specifies the path at which the resource disk is mounted.
@@ -142,8 +140,8 @@ let
           '';
         };
 
-        MountOptions = mkOption {
-          type = with types; listOf str;
+        MountOptions = lib.mkOption {
+          type = with lib.types; listOf str;
           default = [ ];
           example = [
             "nodev"
@@ -155,15 +153,15 @@ let
           '';
         };
 
-        EnableSwap = mkEnableOption ''
+        EnableSwap = lib.mkEnableOption ''
           If enabled, the agent creates a swap file (`/swapfile`) on the resource disk
           and adds it to the system swap space.
 
           This configuration has no effect if resource disk is managed by cloud-init.
         '';
 
-        SwapSizeMB = mkOption {
-          type = types.int;
+        SwapSizeMB = lib.mkOption {
+          type = lib.types.int;
           default = 0;
           description = ''
             Specifies the size of the swap file in megabytes.
@@ -185,7 +183,7 @@ let
         '';
 
         RootDeviceScsiTimeout = lib.mkOption {
-          type = types.nullOr types.int;
+          type = lib.types.nullOr lib.types.int;
           default = 300;
           description = ''
             Configures the SCSI timeout in seconds on the OS disk and data drives.
@@ -196,7 +194,7 @@ let
 
       HttpProxy = {
         Host = lib.mkOption {
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             If you set http proxy, waagent will use is proxy to access the Internet.
@@ -204,7 +202,7 @@ let
         };
 
         Port = lib.mkOption {
-          type = types.nullOr types.int;
+          type = lib.types.nullOr lib.types.int;
           default = null;
           description = ''
             If you set http proxy, waagent will use this proxy to access the Internet.

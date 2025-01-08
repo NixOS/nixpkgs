@@ -16,7 +16,7 @@ in
     services.hddfancontrol.enable = lib.mkEnableOption "hddfancontrol daemon";
 
     services.hddfancontrol.disks = lib.mkOption {
-      type = with types; listOf path;
+      type = with lib.types; listOf path;
       default = [ ];
       description = ''
         Drive(s) to get temperature from
@@ -25,7 +25,7 @@ in
     };
 
     services.hddfancontrol.pwmPaths = lib.mkOption {
-      type = with types; listOf path;
+      type = with lib.types; listOf path;
       default = [ ];
       description = ''
         PWM filepath(s) to control fan speed (under /sys)
@@ -34,7 +34,7 @@ in
     };
 
     services.hddfancontrol.smartctl = lib.mkOption {
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
       description = ''
         Probe temperature using smartctl instead of hddtemp or hdparm
@@ -42,7 +42,7 @@ in
     };
 
     services.hddfancontrol.extraArgs = lib.mkOption {
-      type = with types; listOf str;
+      type = with lib.types; listOf str;
       default = [ ];
       description = ''
         Extra commandline arguments for hddfancontrol

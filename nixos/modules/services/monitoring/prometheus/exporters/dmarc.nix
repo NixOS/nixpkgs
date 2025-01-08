@@ -8,7 +8,7 @@
 
 let
   cfg = config.services.prometheus.exporters.dmarc;
-  inherit (lib) mkOption types optionalString;
+  inherit (lib) lib.mkOption types lib.optionalString;
 
   json = builtins.toJSON {
     inherit (cfg) folders port;
@@ -30,29 +30,29 @@ in
   port = 9797;
   extraOpts = {
     imap = {
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = ''
           Hostname of IMAP server to connect to.
         '';
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 993;
         description = ''
           Port of the IMAP server to connect to.
         '';
       };
-      username = mkOption {
-        type = types.str;
+      username = lib.mkOption {
+        type = lib.types.str;
         example = "postmaster@example.org";
         description = ''
           Login username for the IMAP connection.
         '';
       };
-      passwordFile = mkOption {
-        type = types.str;
+      passwordFile = lib.mkOption {
+        type = lib.types.str;
         example = "/run/secrets/dovecot_pw";
         description = ''
           File containing the login password for the IMAP connection.
@@ -60,37 +60,37 @@ in
       };
     };
     folders = {
-      inbox = mkOption {
-        type = types.str;
+      inbox = lib.mkOption {
+        type = lib.types.str;
         default = "INBOX";
         description = ''
           IMAP mailbox that is checked for incoming DMARC aggregate reports
         '';
       };
-      done = mkOption {
-        type = types.str;
+      done = lib.mkOption {
+        type = lib.types.str;
         default = "Archive";
         description = ''
           IMAP mailbox that successfully processed reports are moved to.
         '';
       };
-      error = mkOption {
-        type = types.str;
+      error = lib.mkOption {
+        type = lib.types.str;
         default = "Invalid";
         description = ''
           IMAP mailbox that emails are moved to that could not be processed.
         '';
       };
     };
-    pollIntervalSeconds = mkOption {
-      type = types.ints.unsigned;
+    pollIntervalSeconds = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 60;
       description = ''
         How often to poll the IMAP server in seconds.
       '';
     };
-    deduplicationMaxSeconds = mkOption {
-      type = types.ints.unsigned;
+    deduplicationMaxSeconds = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 604800;
       defaultText = "7 days (in seconds)";
       description = ''
@@ -98,8 +98,8 @@ in
         counting double delivered reports twice.
       '';
     };
-    debug = mkOption {
-      type = types.bool;
+    debug = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to declare enable `--debug`.
@@ -122,7 +122,7 @@ in
 
         exec ${pkgs.dmarc-metrics-exporter}/bin/dmarc-metrics-exporter \
           --configuration /var/lib/prometheus-dmarc-exporter/dmarc-exporter.json \
-          ${optionalString cfg.debug "--debug"}
+          ${lib.optionalString cfg.debug "--debug"}
       ''}";
     };
   };

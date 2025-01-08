@@ -46,17 +46,17 @@ let
     + lib.concatStrings (lib.mapAttrsToList toQueryString opt.query)
     + "\"";
 
-  optionalNull = val: ret: lib.optional (val != null) ret;
+  lib.optionalNull = val: ret: lib.optional (val != null) ret;
 
   optionString = lib.concatStringsSep " " (
     lib.mapAttrsToList streamToOption cfg.streams
     # global options
     ++ [ "--stream.bind_to_address=${cfg.listenAddress}" ]
     ++ [ "--stream.port=${toString cfg.port}" ]
-    ++ optionalNull cfg.sampleFormat "--stream.sampleformat=${cfg.sampleFormat}"
-    ++ optionalNull cfg.codec "--stream.codec=${cfg.codec}"
-    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer=${toString cfg.streamBuffer}"
-    ++ optionalNull cfg.buffer "--stream.buffer=${toString cfg.buffer}"
+    ++ lib.optionalNull cfg.sampleFormat "--stream.sampleformat=${cfg.sampleFormat}"
+    ++ lib.optionalNull cfg.codec "--stream.codec=${cfg.codec}"
+    ++ lib.optionalNull cfg.streamBuffer "--stream.stream_buffer=${toString cfg.streamBuffer}"
+    ++ lib.optionalNull cfg.buffer "--stream.buffer=${toString cfg.buffer}"
     ++ lib.optional cfg.sendToMuted "--stream.send_to_muted"
     # tcp json rpc
     ++ [ "--tcp.enabled=${toString cfg.tcp.enable}" ]

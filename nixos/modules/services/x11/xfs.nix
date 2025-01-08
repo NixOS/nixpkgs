@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   configFile = ./xfs.conf;
@@ -21,8 +19,8 @@ in
 
     services.xfs = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the X Font Server.";
       };
@@ -33,8 +31,8 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.xfs.enable {
-    assertions = singleton {
+  config = lib.mkIf config.services.xfs.enable {
+    assertions = lib.singleton {
       assertion = config.fonts.enableFontDir;
       message = "Please enable fonts.enableFontDir to use the X Font Server.";
     };

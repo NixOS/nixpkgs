@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     literalExpression
     ;
@@ -23,7 +23,7 @@ in
 
   options = {
     services.isso = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         isso, a commenting server similar to Disqus.
 
         Note: The application's author suppose to run isso behind a reverse proxy.
@@ -31,7 +31,7 @@ in
         below 20 requests per second
       '';
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Configuration for `isso`.
 
@@ -39,11 +39,11 @@ in
           for supported values.
         '';
 
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
         };
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             general = {
               host = "http://localhost";
@@ -54,7 +54,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.isso.settings.general.dbpath = lib.mkDefault "/var/lib/isso/comments.db";
 
     systemd.services.isso = {

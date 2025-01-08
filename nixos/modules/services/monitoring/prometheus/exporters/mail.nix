@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.mail;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mapAttrs'
     nameValuePair
@@ -41,62 +41,62 @@ let
           )
         else
           nameValuePair (toLower name) value
-      ) (filterAttrs (n: _: !(n == "_module")) cfg.configuration)
+      ) (lib.filterAttrs (n: _: !(n == "_module")) cfg.configuration)
     )
   );
 
   serverOptions.options = {
-    name = mkOption {
-      type = types.str;
+    name = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Value for label 'configname' which will be added to all metrics.
       '';
     };
-    server = mkOption {
-      type = types.str;
+    server = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Hostname of the server that should be probed.
       '';
     };
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       example = 587;
       description = ''
         Port to use for SMTP.
       '';
     };
-    from = mkOption {
-      type = types.str;
+    from = lib.mkOption {
+      type = lib.types.str;
       example = "exporteruser@domain.tld";
       description = ''
         Content of 'From' Header for probing mails.
       '';
     };
-    to = mkOption {
-      type = types.str;
+    to = lib.mkOption {
+      type = lib.types.str;
       example = "exporteruser@domain.tld";
       description = ''
         Content of 'To' Header for probing mails.
       '';
     };
-    detectionDir = mkOption {
-      type = types.path;
+    detectionDir = lib.mkOption {
+      type = lib.types.path;
       example = "/var/spool/mail/exporteruser/new";
       description = ''
         Directory in which new mails for the exporter user are placed.
         Note that this needs to exist when the exporter starts.
       '';
     };
-    login = mkOption {
-      type = types.nullOr types.str;
+    login = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "exporteruser@domain.tld";
       description = ''
         Username to use for SMTP authentication.
       '';
     };
-    passphrase = mkOption {
-      type = types.nullOr types.str;
+    passphrase = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Password to use for SMTP authentication.
@@ -105,30 +105,30 @@ let
   };
 
   exporterOptions.options = {
-    monitoringInterval = mkOption {
-      type = types.str;
+    monitoringInterval = lib.mkOption {
+      type = lib.types.str;
       example = "10s";
       description = ''
         Time interval between two probe attempts.
       '';
     };
-    mailCheckTimeout = mkOption {
-      type = types.str;
+    mailCheckTimeout = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Timeout until mails are considered "didn't make it".
       '';
     };
-    disableFileDeletion = mkOption {
-      type = types.bool;
+    disableFileDeletion = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Disables the exporter's function to delete probing mails.
       '';
     };
-    servers = mkOption {
-      type = types.listOf (types.submodule serverOptions);
+    servers = lib.mkOption {
+      type = lib.types.listOf (types.submodule serverOptions);
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [ {
           name = "testserver";
           server = "smtp.domain.tld";
@@ -164,29 +164,29 @@ in
 {
   port = 9225;
   extraOpts = {
-    environmentFile = mkOption {
-      type = types.nullOr types.str;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         File containing env-vars to be substituted into the exporter's config.
       '';
     };
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';
     };
-    configuration = mkOption {
-      type = types.nullOr (types.submodule exporterOptions);
+    configuration = lib.mkOption {
+      type = lib.types.nullOr (types.submodule exporterOptions);
       default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';
     };
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
@@ -196,7 +196,7 @@ in
   serviceOpts = {
     serviceConfig = {
       DynamicUser = false;
-      EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+      EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       RuntimeDirectory = "prometheus-mail-exporter";
       ExecStartPre = [
         "${pkgs.writeShellScript "subst-secrets-mail-exporter" ''
@@ -209,7 +209,7 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --config.file ''${RUNTIME_DIRECTORY}/mail-exporter.json \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

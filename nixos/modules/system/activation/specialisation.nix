@@ -12,7 +12,7 @@ let
     concatStringsSep
     mapAttrs
     mapAttrsToList
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -29,14 +29,14 @@ let
 in
 {
   options = {
-    isSpecialisation = mkOption {
+    isSpecialisation = lib.mkOption {
       type = lib.types.bool;
       internal = true;
       default = false;
       description = "Whether this system is a specialisation of another.";
     };
 
-    specialisation = mkOption {
+    specialisation = lib.mkOption {
       default = { };
       example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
       description = ''
@@ -51,20 +51,20 @@ in
         sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
         ```
       '';
-      type = types.attrsOf (
+      type = lib.types.attrsOf (
         types.submodule (
           local@{ ... }:
           let
             extend = if local.config.inheritParentConfig then extendModules else noUserModules.extendModules;
           in
           {
-            options.inheritParentConfig = mkOption {
-              type = types.bool;
+            options.inheritParentConfig = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
             };
 
-            options.configuration = mkOption {
+            options.configuration = lib.mkOption {
               default = { };
               description = ''
                 Arbitrary NixOS configuration.
@@ -86,7 +86,7 @@ in
   config = {
     system.systemBuilderCommands = ''
       mkdir $out/specialisation
-      ${concatStringsSep "\n" (
+      ${lib.concatStringsSep "\n" (
         mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children
       )}
     '';

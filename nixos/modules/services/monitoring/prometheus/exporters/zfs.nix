@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.zfs;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     concatStringsSep
     concatMapStringsSep
@@ -19,16 +19,16 @@ in
   port = 9134;
 
   extraOpts = {
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
 
-    pools = mkOption {
-      type = with types; nullOr (listOf str);
+    pools = lib.mkOption {
+      type = with lib.types; nullOr (listOf str);
       default = [ ];
       description = ''
         Name of the pool(s) to collect, repeat for multiple pools (default: all pools).
@@ -45,7 +45,7 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           ${concatMapStringsSep " " (x: "--pool=${x}") cfg.pools} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       ProtectClock = false;
       PrivateDevices = false;

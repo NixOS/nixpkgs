@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     mkIf
     maintainers
@@ -44,14 +44,14 @@ let
 in
 {
   options.security.isolate = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       Sandbox for securely executing untrusted programs
     '';
 
-    package = mkPackageOption pkgs "isolate-unwrapped" { };
+    package = lib.mkPackageOption pkgs "isolate-unwrapped" { };
 
-    boxRoot = mkOption {
-      type = types.path;
+    boxRoot = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/isolate/boxes";
       description = ''
         All sandboxes are created under this directory.
@@ -60,16 +60,16 @@ in
       '';
     };
 
-    lockRoot = mkOption {
-      type = types.path;
+    lockRoot = lib.mkOption {
+      type = lib.types.path;
       default = "/run/isolate/locks";
       description = ''
         Directory where lock files are created.
       '';
     };
 
-    cgRoot = mkOption {
-      type = types.str;
+    cgRoot = lib.mkOption {
+      type = lib.types.str;
       default = "auto:/run/isolate/cgroup";
       description = ''
         Control group which subgroups are placed under.
@@ -78,24 +78,24 @@ in
       '';
     };
 
-    firstUid = mkOption {
-      type = types.numbers.between 1000 65533;
+    firstUid = lib.mkOption {
+      type = lib.types.numbers.between 1000 65533;
       default = 60000;
       description = ''
         Start of block of UIDs reserved for sandboxes.
       '';
     };
 
-    firstGid = mkOption {
-      type = types.numbers.between 1000 65533;
+    firstGid = lib.mkOption {
+      type = lib.types.numbers.between 1000 65533;
       default = 60000;
       description = ''
         Start of block of GIDs reserved for sandboxes.
       '';
     };
 
-    numBoxes = mkOption {
-      type = types.numbers.between 1000 65533;
+    numBoxes = lib.mkOption {
+      type = lib.types.numbers.between 1000 65533;
       default = 1000;
       description = ''
         Number of UIDs and GIDs to reserve, starting from
@@ -103,16 +103,16 @@ in
       '';
     };
 
-    restrictedInit = mkOption {
-      type = types.bool;
+    restrictedInit = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         If true, only root can create sandboxes.
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.str;
+    extraConfig = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Extra configuration to append to the configuration file.
@@ -120,7 +120,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       isolate
     ];

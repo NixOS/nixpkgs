@@ -9,7 +9,7 @@ let
 
   # Convert systemd-style address specification to kresd config line(s).
   # On Nix level we don't attempt to precisely validate the address specifications.
-  # The optional IPv6 scope spec comes *after* port, perhaps surprisingly.
+  # The lib.optional IPv6 scope spec comes *after* port, perhaps surprisingly.
   mkListen =
     kind: addr:
     let

@@ -8,7 +8,7 @@
 
 let
   cfg = config.services.prometheus.exporters.py-air-control;
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 
   workingDir = "/var/lib/${cfg.stateDir}";
 
@@ -16,23 +16,23 @@ in
 {
   port = 9896;
   extraOpts = {
-    deviceHostname = mkOption {
-      type = types.str;
+    deviceHostname = lib.mkOption {
+      type = lib.types.str;
       example = "192.168.1.123";
       description = ''
         The hostname of the air purification device from which to scrape the metrics.
       '';
     };
-    protocol = mkOption {
-      type = types.str;
+    protocol = lib.mkOption {
+      type = lib.types.str;
       default = "http";
       description = ''
         The protocol to use when communicating with the air purification device.
         Available: [http, coap, plain_coap]
       '';
     };
-    stateDir = mkOption {
-      type = types.str;
+    stateDir = lib.mkOption {
+      type = lib.types.str;
       default = "prometheus-py-air-control-exporter";
       description = ''
         Directory below `/var/lib` to store runtime data.

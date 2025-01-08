@@ -1,11 +1,37 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, utils, ... }:
 
-with utils.systemdUtils.unitOptions;
-with utils.systemdUtils.lib;
-with utils.systemdUtils.network.units;
-with lib;
+
 
 let
+
+  inherit (utils.systemdUtils.options)
+    unitOption
+    ;
+  inherit (utils.systemdUtils.lib)
+    linkToUnit
+    netdevToUnit
+    networkToUnit
+    attrsToSection
+    checkUnitConfig
+    assertValueOneOf
+    assertOnlyFields
+    assertByteFormat
+    assertMacAddress
+    assertNetdevMacAddress
+    assertPort
+    assertPortOrPortRange
+    assertHasField
+    assertRange
+    assertValuesSomeOfOr
+    assertRangeOrOneOf
+    assertKeyIsSystemdCredential
+    checkUnitConfigWithLegacyKey
+    assertRangeWithOptionalMask
+    assertInt
+    assertMinimum
+    assertRemoved
+    boolValues
+    ;
 
   check = {
 
@@ -618,7 +644,7 @@ let
               "enslaved"
               "routable"
             ];
-            operationalStateRanges = concatLists (imap0 (i: min: map (max: "${min}:${max}") (drop i operationalStates)) operationalStates);
+            operationalStateRanges = lib.concatLists (lib.imap0 (i: min: map (max: "${min}:${max}") (lib.drop i operationalStates)) operationalStates);
           in
           operationalStates ++ operationalStateRanges
         )))
@@ -1612,9 +1638,9 @@ let
 
   commonNetworkOptions = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to manage network configuration using {command}`systemd-network`.
 
@@ -1622,10 +1648,10 @@ let
       '';
     };
 
-    matchConfig = mkOption {
+    matchConfig = lib.mkOption {
       default = {};
       example = { Name = "eth0"; };
-      type = types.attrsOf unitOption;
+      type = lib.types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
         `[Match]` section of the unit.  See
@@ -1636,18 +1662,18 @@ let
       '';
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = "Extra configuration append to unit";
     };
   };
 
   networkdOptions = {
-    networkConfig = mkOption {
+    networkConfig = lib.mkOption {
       default = {};
       example = { SpeedMeter = true; ManageForeignRoutingPolicyRules = false; };
-      type = types.addCheck (types.attrsOf unitOption) check.global.sectionNetwork;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.global.sectionNetwork;
       description = ''
         Each attribute in this set specifies an option in the
         `[Network]` section of the networkd config.
@@ -1655,10 +1681,10 @@ let
       '';
     };
 
-    dhcpV4Config = mkOption {
+    dhcpV4Config = lib.mkOption {
       default = {};
       example = { DUIDType = "vendor"; };
-      type = types.addCheck (types.attrsOf unitOption) check.global.sectionDHCPv4;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.global.sectionDHCPv4;
       description = ''
         Each attribute in this set specifies an option in the
         `[DHCPv4]` section of the networkd config.
@@ -1666,10 +1692,10 @@ let
       '';
     };
 
-    dhcpV6Config = mkOption {
+    dhcpV6Config = lib.mkOption {
       default = {};
       example = { DUIDType = "vendor"; };
-      type = types.addCheck (types.attrsOf unitOption) check.global.sectionDHCPv6;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.global.sectionDHCPv6;
       description = ''
         Each attribute in this set specifies an option in the
         `[DHCPv6]` section of the networkd config.
@@ -1680,18 +1706,18 @@ let
 
   linkOptions = commonNetworkOptions // {
     # overwrite enable option from above
-    enable = mkOption {
+    enable = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable this .link unit. It's handled by udev no matter if {command}`systemd-networkd` is enabled or not
       '';
     };
 
-    linkConfig = mkOption {
+    linkConfig = lib.mkOption {
       default = {};
       example = { MACAddress = "00:ff:ee:aa:cc:dd"; };
-      type = types.addCheck (types.attrsOf unitOption) check.link.sectionLink;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.link.sectionLink;
       description = ''
         Each attribute in this set specifies an option in the
         `[Link]` section of the unit.  See
@@ -1703,14 +1729,14 @@ let
 
   mkSubsectionType = oldKey: checkF:
     let
-      type = types.addCheck (types.attrsOf unitOption) checkF;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) checkF;
     in type // {
       merge = loc: defs:
         let
           final = type.merge loc defs;
         in
         if final?${oldKey}
-          then warn
+          then lib.warn
             "Using '${oldKey}' is deprecated! Move all attributes inside one level up and remove it."
             final.${oldKey}
         else
@@ -1719,9 +1745,9 @@ let
 
   netdevOptions = commonNetworkOptions // {
 
-    netdevConfig = mkOption {
+    netdevConfig = lib.mkOption {
       example = { Name = "mybridge"; Kind = "bridge"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionNetdev;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionNetdev;
       description = ''
         Each attribute in this set specifies an option in the
         `[Netdev]` section of the unit.  See
@@ -1729,10 +1755,10 @@ let
       '';
     };
 
-    bridgeConfig = mkOption {
+    bridgeConfig = lib.mkOption {
       default = {};
       example = { STP = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBridge;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionBridge;
       description = ''
         Each attribute in this set specifies an option in the
         `[Bridge]` section of the unit.  See
@@ -1740,10 +1766,10 @@ let
       '';
     };
 
-    vlanConfig = mkOption {
+    vlanConfig = lib.mkOption {
       default = {};
       example = { Id = 4; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVLAN;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionVLAN;
       description = ''
         Each attribute in this set specifies an option in the
         `[VLAN]` section of the unit.  See
@@ -1751,30 +1777,30 @@ let
       '';
     };
 
-    ipvlanConfig = mkOption {
+    ipvlanConfig = lib.mkOption {
       default = {};
       example = { Mode = "L2"; Flags = "private"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionIPVLAN;
       description = ''
         Each attribute in this set specifies an option in the `[IPVLAN]` section of the unit.
         See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
-    ipvtapConfig = mkOption {
+    ipvtapConfig = lib.mkOption {
       default = {};
       example = { Mode = "L3"; Flags = "vepa"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionIPVTAP;
       description = ''
         Each attribute in this set specifies an option in the `[IPVTAP]` section of the unit.
         See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
-    macvlanConfig = mkOption {
+    macvlanConfig = lib.mkOption {
       default = {};
       example = { Mode = "private"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVLAN;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionMACVLAN;
       description = ''
         Each attribute in this set specifies an option in the
         `[MACVLAN]` section of the unit.  See
@@ -1782,9 +1808,9 @@ let
       '';
     };
 
-    vxlanConfig = mkOption {
+    vxlanConfig = lib.mkOption {
       default = {};
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
         `[VXLAN]` section of the unit.  See
@@ -1792,10 +1818,10 @@ let
       '';
     };
 
-    tunnelConfig = mkOption {
+    tunnelConfig = lib.mkOption {
       default = {};
       example = { Remote = "192.168.1.1"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTunnel;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionTunnel;
       description = ''
         Each attribute in this set specifies an option in the
         `[Tunnel]` section of the unit.  See
@@ -1803,10 +1829,10 @@ let
       '';
     };
 
-    fooOverUDPConfig = mkOption {
+    fooOverUDPConfig = lib.mkOption {
       default = { };
       example = { Port = 9001; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
       description = ''
         Each attribute in this set specifies an option in the
         `[FooOverUDP]` section of the unit.  See
@@ -1814,10 +1840,10 @@ let
       '';
     };
 
-    peerConfig = mkOption {
+    peerConfig = lib.mkOption {
       default = {};
       example = { Name = "veth2"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionPeer;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionPeer;
       description = ''
         Each attribute in this set specifies an option in the
         `[Peer]` section of the unit.  See
@@ -1825,10 +1851,10 @@ let
       '';
     };
 
-    tunConfig = mkOption {
+    tunConfig = lib.mkOption {
       default = {};
       example = { User = "openvpn"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTun;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionTun;
       description = ''
         Each attribute in this set specifies an option in the
         `[Tun]` section of the unit.  See
@@ -1836,10 +1862,10 @@ let
       '';
     };
 
-    tapConfig = mkOption {
+    tapConfig = lib.mkOption {
       default = {};
       example = { User = "openvpn"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTap;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionTap;
       description = ''
         Each attribute in this set specifies an option in the
         `[Tap]` section of the unit.  See
@@ -1847,7 +1873,7 @@ let
       '';
     };
 
-    l2tpConfig = mkOption {
+    l2tpConfig = lib.mkOption {
       default = {};
       example = {
         TunnelId = 10;
@@ -1856,7 +1882,7 @@ let
         Remote = "192.168.30.101";
         EncapsulationType = "ip";
       };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TP;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionL2TP;
       description = ''
         Each attribute in this set specifies an option in the
         `[L2TP]` section of the unit. See
@@ -1864,14 +1890,14 @@ let
       '';
     };
 
-    l2tpSessions = mkOption {
+    l2tpSessions = lib.mkOption {
       default = [];
       example = [ {
         SessionId = 25;
         PeerSessionId = 26;
         Name = "l2tp-sess";
       }];
-      type = types.listOf (mkSubsectionType "l2tpSessionConfig" check.netdev.sectionL2TPSession);
+      type = lib.types.listOf (mkSubsectionType "l2tpSessionConfig" check.netdev.sectionL2TPSession);
       description = ''
         Each item in this array specifies an option in the
         `[L2TPSession]` section of the unit. See
@@ -1879,14 +1905,14 @@ let
       '';
     };
 
-    wireguardConfig = mkOption {
+    wireguardConfig = lib.mkOption {
       default = {};
       example = {
         PrivateKeyFile = "/etc/wireguard/secret.key";
         ListenPort = 51820;
         FirewallMark = 42;
       };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuard;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionWireGuard;
       description = ''
         Each attribute in this set specifies an option in the
         `[WireGuard]` section of the unit. See
@@ -1897,7 +1923,7 @@ let
       '';
     };
 
-    wireguardPeers = mkOption {
+    wireguardPeers = lib.mkOption {
       default = [];
       example = [ {
         Endpoint = "192.168.1.1:51820";
@@ -1906,7 +1932,7 @@ let
         AllowedIPs = [ "10.0.0.1/32" ];
         PersistentKeepalive = 15;
       } ];
-      type = types.listOf (mkSubsectionType "wireguardPeerConfig" check.netdev.sectionWireGuardPeer);
+      type = lib.types.listOf (mkSubsectionType "wireguardPeerConfig" check.netdev.sectionWireGuardPeer);
       description = ''
         Each item in this array specifies an option in the
         `[WireGuardPeer]` section of the unit. See
@@ -1917,10 +1943,10 @@ let
       '';
     };
 
-    bondConfig = mkOption {
+    bondConfig = lib.mkOption {
       default = {};
       example = { Mode = "802.3ad"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBond;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionBond;
       description = ''
         Each attribute in this set specifies an option in the
         `[Bond]` section of the unit.  See
@@ -1928,10 +1954,10 @@ let
       '';
     };
 
-    xfrmConfig = mkOption {
+    xfrmConfig = lib.mkOption {
       default = {};
       example = { InterfaceId = 1; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionXfrm;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionXfrm;
       description = ''
         Each attribute in this set specifies an option in the
         `[Xfrm]` section of the unit.  See
@@ -1939,10 +1965,10 @@ let
       '';
     };
 
-    vrfConfig = mkOption {
+    vrfConfig = lib.mkOption {
       default = {};
       example = { Table = 2342; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVRF;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionVRF;
       description = ''
         Each attribute in this set specifies an option in the
         `[VRF]` section of the unit. See
@@ -1952,23 +1978,23 @@ let
       '';
     };
 
-    wlanConfig = mkOption {
+    wlanConfig = lib.mkOption {
       default = {};
       example = { PhysicalDevice = 0; Type = "station"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionWLAN;
       description = ''
         Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
         See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
-    batmanAdvancedConfig = mkOption {
+    batmanAdvancedConfig = lib.mkOption {
       default = {};
       example = {
         GatewayMode = "server";
         RoutingAlgorithm = "batman-v";
       };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBatmanAdvanced;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.netdev.sectionBatmanAdvanced;
       description = ''
         Each attribute in this set specifies an option in the
         `[BatmanAdvanced]` section of the unit. See
@@ -1980,10 +2006,10 @@ let
 
   networkOptions = commonNetworkOptions // {
 
-    linkConfig = mkOption {
+    linkConfig = lib.mkOption {
       default = {};
       example = { Unmanaged = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionLink;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionLink;
       description = ''
         Each attribute in this set specifies an option in the
         `[Link]` section of the unit.  See
@@ -1991,10 +2017,10 @@ let
       '';
     };
 
-    networkConfig = mkOption {
+    networkConfig = lib.mkOption {
       default = {};
       example = { Description = "My Network"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionNetwork;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionNetwork;
       description = ''
         Each attribute in this set specifies an option in the
         `[Network]` section of the unit.  See
@@ -2004,15 +2030,15 @@ let
 
     # systemd.network.networks.*.dhcpConfig has been deprecated in favor of ….dhcpV4Config
     # Produce a nice warning message so users know it is gone.
-    dhcpConfig = mkOption {
+    dhcpConfig = lib.mkOption {
       visible = false;
       apply = _: throw "The option `systemd.network.networks.*.dhcpConfig` can no longer be used since it's been removed. Please use `systemd.network.networks.*.dhcpV4Config` instead.";
     };
 
-    dhcpV4Config = mkOption {
+    dhcpV4Config = lib.mkOption {
       default = {};
       example = { UseDNS = true; UseRoutes = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv4;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionDHCPv4;
       description = ''
         Each attribute in this set specifies an option in the
         `[DHCPv4]` section of the unit.  See
@@ -2020,10 +2046,10 @@ let
       '';
     };
 
-    dhcpV6Config = mkOption {
+    dhcpV6Config = lib.mkOption {
       default = {};
       example = { UseDNS = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionDHCPv6;
       description = ''
         Each attribute in this set specifies an option in the
         `[DHCPv6]` section of the unit.  See
@@ -2031,15 +2057,15 @@ let
       '';
     };
 
-    dhcpV6PrefixDelegationConfig = mkOption {
+    dhcpV6PrefixDelegationConfig = lib.mkOption {
       visible = false;
       apply = _: throw "The option `systemd.network.networks.<name>.dhcpV6PrefixDelegationConfig` has been renamed to `systemd.network.networks.<name>.dhcpPrefixDelegationConfig`.";
     };
 
-    dhcpPrefixDelegationConfig = mkOption {
+    dhcpPrefixDelegationConfig = lib.mkOption {
       default = {};
       example = { SubnetId = "auto"; Announce = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPPrefixDelegation;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionDHCPPrefixDelegation;
       description = ''
         Each attribute in this set specifies an option in the
         `[DHCPPrefixDelegation]` section of the unit. See
@@ -2047,10 +2073,10 @@ let
       '';
     };
 
-    ipv6AcceptRAConfig = mkOption {
+    ipv6AcceptRAConfig = lib.mkOption {
       default = {};
       example = { UseDNS = true; DHCPv6Client = "always"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
       description = ''
         Each attribute in this set specifies an option in the
         `[IPv6AcceptRA]` section of the unit. See
@@ -2058,10 +2084,10 @@ let
       '';
     };
 
-    dhcpServerConfig = mkOption {
+    dhcpServerConfig = lib.mkOption {
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPServer;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionDHCPServer;
       description = ''
         Each attribute in this set specifies an option in the
         `[DHCPServer]` section of the unit.  See
@@ -2071,15 +2097,15 @@ let
 
     # systemd.network.networks.*.ipv6PrefixDelegationConfig has been deprecated
     # in 247 in favor of systemd.network.networks.*.ipv6SendRAConfig.
-    ipv6PrefixDelegationConfig = mkOption {
+    ipv6PrefixDelegationConfig = lib.mkOption {
       visible = false;
       apply = _: throw "The option `systemd.network.networks.*.ipv6PrefixDelegationConfig` has been replaced by `systemd.network.networks.*.ipv6SendRAConfig`.";
     };
 
-    ipv6SendRAConfig = mkOption {
+    ipv6SendRAConfig = lib.mkOption {
       default = {};
       example = { EmitDNS = true; Managed = true; OtherInformation = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6SendRA;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionIPv6SendRA;
       description = ''
         Each attribute in this set specifies an option in the
         `[IPv6SendRA]` section of the unit.  See
@@ -2087,50 +2113,50 @@ let
       '';
     };
 
-    ipv6PREF64Prefixes = mkOption {
+    ipv6PREF64Prefixes = lib.mkOption {
       default = [];
       example = [ { Prefix = "64:ff9b::/96"; } ];
-      type = types.listOf (mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix);
+      type = lib.types.listOf (mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix);
       description = ''
         A list of IPv6PREF64Prefix sections to be added to the unit. See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    dhcpServerStaticLeases = mkOption {
+    dhcpServerStaticLeases = lib.mkOption {
       default = [];
       example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
-      type = types.listOf (mkSubsectionType "dhcpServerStaticLeaseConfig" check.network.sectionDHCPServerStaticLease);
+      type = lib.types.listOf (mkSubsectionType "dhcpServerStaticLeaseConfig" check.network.sectionDHCPServerStaticLease);
       description = ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    ipv6Prefixes = mkOption {
+    ipv6Prefixes = lib.mkOption {
       default = [];
       example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
-      type = types.listOf (mkSubsectionType "ipv6PrefixConfig" check.network.sectionIPv6Prefix);
+      type = lib.types.listOf (mkSubsectionType "ipv6PrefixConfig" check.network.sectionIPv6Prefix);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    ipv6RoutePrefixes = mkOption {
+    ipv6RoutePrefixes = lib.mkOption {
       default = [];
       example = [ { Route = "fd00::/64"; LifetimeSec = 3600; } ];
-      type = types.listOf (mkSubsectionType "ipv6RoutePrefixConfig" check.network.sectionIPv6RoutePrefix);
+      type = lib.types.listOf (mkSubsectionType "ipv6RoutePrefixConfig" check.network.sectionIPv6RoutePrefix);
       description = ''
         A list of ipv6RoutePrefix sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    bridgeConfig = mkOption {
+    bridgeConfig = lib.mkOption {
       default = {};
       example = { MulticastFlood = false; Cost = 20; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridge;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionBridge;
       description = ''
         Each attribute in this set specifies an option in the
         `[Bridge]` section of the unit.  See
@@ -2138,30 +2164,30 @@ let
       '';
     };
 
-    bridgeFDBs = mkOption {
+    bridgeFDBs = lib.mkOption {
       default = [];
       example = [ { MACAddress = "90:e2:ba:43:fc:71"; Destination = "192.168.100.4"; VNI = 3600; } ];
-      type = types.listOf (mkSubsectionType "bridgeFDBConfig" check.network.sectionBridgeFDB);
+      type = lib.types.listOf (mkSubsectionType "bridgeFDBConfig" check.network.sectionBridgeFDB);
       description = ''
         A list of BridgeFDB sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    bridgeMDBs = mkOption {
+    bridgeMDBs = lib.mkOption {
       default = [];
       example = [ { MulticastGroupAddress = "ff02::1:2:3:4"; VLANId = 10; } ];
-      type = types.listOf (mkSubsectionType "bridgeMDBConfig" check.network.sectionBridgeMDB);
+      type = lib.types.listOf (mkSubsectionType "bridgeMDBConfig" check.network.sectionBridgeMDB);
       description = ''
         A list of BridgeMDB sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    lldpConfig = mkOption {
+    lldpConfig = lib.mkOption {
       default = {};
       example = { MUDURL = "https://things.example.org/product_abc123/v5"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionLLDP;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionLLDP;
       description = ''
         Each attribute in this set specifies an option in the
         `[LLDP]` section of the unit.  See
@@ -2169,10 +2195,10 @@ let
       '';
     };
 
-    canConfig = mkOption {
+    canConfig = lib.mkOption {
       default = {};
       example = { };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionCAN;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionCAN;
       description = ''
         Each attribute in this set specifies an option in the
         `[CAN]` section of the unit.  See
@@ -2180,10 +2206,10 @@ let
       '';
     };
 
-    ipoIBConfig = mkOption {
+    ipoIBConfig = lib.mkOption {
       default = {};
       example = { };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPoIB;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionIPoIB;
       description = ''
         Each attribute in this set specifies an option in the
         `[IPoIB]` section of the unit.  See
@@ -2191,10 +2217,10 @@ let
       '';
     };
 
-    qdiscConfig = mkOption {
+    qdiscConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionQDisc;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionQDisc;
       description = ''
         Each attribute in this set specifies an option in the
         `[QDisc]` section of the unit.  See
@@ -2202,10 +2228,10 @@ let
       '';
     };
 
-    networkEmulatorConfig = mkOption {
+    networkEmulatorConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; DelaySec = "20msec"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionNetworkEmulator;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionNetworkEmulator;
       description = ''
         Each attribute in this set specifies an option in the
         `[NetworkEmulator]` section of the unit.  See
@@ -2213,10 +2239,10 @@ let
       '';
     };
 
-    tokenBucketFilterConfig = mkOption {
+    tokenBucketFilterConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; Rate = "100k"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionTokenBucketFilter;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionTokenBucketFilter;
       description = ''
         Each attribute in this set specifies an option in the
         `[TokenBucketFilter]` section of the unit.  See
@@ -2224,10 +2250,10 @@ let
       '';
     };
 
-    pieConfig = mkOption {
+    pieConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; PacketLimit = "3847"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPIE;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionPIE;
       description = ''
         Each attribute in this set specifies an option in the
         `[PIE]` section of the unit.  See
@@ -2235,10 +2261,10 @@ let
       '';
     };
 
-    flowQueuePIEConfig = mkOption {
+    flowQueuePIEConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; PacketLimit = "3847"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionFlowQueuePIE;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionFlowQueuePIE;
       description = ''
         Each attribute in this set specifies an option in the
         `[FlowQueuePIE]` section of the unit.  See
@@ -2246,10 +2272,10 @@ let
       '';
     };
 
-    stochasticFairBlueConfig = mkOption {
+    stochasticFairBlueConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; PacketLimit = "3847"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionStochasticFairBlue;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionStochasticFairBlue;
       description = ''
         Each attribute in this set specifies an option in the
         `[StochasticFairBlue]` section of the unit.  See
@@ -2257,10 +2283,10 @@ let
       '';
     };
 
-    stochasticFairnessQueueingConfig = mkOption {
+    stochasticFairnessQueueingConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; PerturbPeriodSec = "30"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionStochasticFairnessQueueing;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionStochasticFairnessQueueing;
       description = ''
         Each attribute in this set specifies an option in the
         `[StochasticFairnessQueueing]` section of the unit.  See
@@ -2268,10 +2294,10 @@ let
       '';
     };
 
-    bfifoConfig = mkOption {
+    bfifoConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; LimitBytes = "20K"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBFIFO;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionBFIFO;
       description = ''
         Each attribute in this set specifies an option in the
         `[BFIFO]` section of the unit.  See
@@ -2279,10 +2305,10 @@ let
       '';
     };
 
-    pfifoConfig = mkOption {
+    pfifoConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; PacketLimit = "300"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPFIFO;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionPFIFO;
       description = ''
         Each attribute in this set specifies an option in the
         `[PFIFO]` section of the unit.  See
@@ -2290,10 +2316,10 @@ let
       '';
     };
 
-    pfifoHeadDropConfig = mkOption {
+    pfifoHeadDropConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; PacketLimit = "300"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPFIFOHeadDrop;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionPFIFOHeadDrop;
       description = ''
         Each attribute in this set specifies an option in the
         `[PFIFOHeadDrop]` section of the unit.  See
@@ -2301,10 +2327,10 @@ let
       '';
     };
 
-    pfifoFastConfig = mkOption {
+    pfifoFastConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPFIFOFast;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionPFIFOFast;
       description = ''
         Each attribute in this set specifies an option in the
         `[PFIFOFast]` section of the unit.  See
@@ -2312,10 +2338,10 @@ let
       '';
     };
 
-    cakeConfig = mkOption {
+    cakeConfig = lib.mkOption {
       default = {};
       example = { Bandwidth = "40M"; OverheadBytes = 8; CompensationMode = "ptm"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionCAKE;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionCAKE;
       description = ''
         Each attribute in this set specifies an option in the
         `[CAKE]` section of the unit.  See
@@ -2323,10 +2349,10 @@ let
       '';
     };
 
-    controlledDelayConfig = mkOption {
+    controlledDelayConfig = lib.mkOption {
       default = {};
       example = { Parent = "ingress"; TargetSec = "20msec"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionControlledDelay;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionControlledDelay;
       description = ''
         Each attribute in this set specifies an option in the
         `[ControlledDelay]` section of the unit.  See
@@ -2334,10 +2360,10 @@ let
       '';
     };
 
-    deficitRoundRobinSchedulerConfig = mkOption {
+    deficitRoundRobinSchedulerConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDeficitRoundRobinScheduler;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionDeficitRoundRobinScheduler;
       description = ''
         Each attribute in this set specifies an option in the
         `[DeficitRoundRobinScheduler]` section of the unit.  See
@@ -2345,10 +2371,10 @@ let
       '';
     };
 
-    deficitRoundRobinSchedulerClassConfig = mkOption {
+    deficitRoundRobinSchedulerClassConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; QuantumBytes = "300k"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDeficitRoundRobinSchedulerClass;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionDeficitRoundRobinSchedulerClass;
       description = ''
         Each attribute in this set specifies an option in the
         `[DeficitRoundRobinSchedulerClass]` section of the unit.  See
@@ -2356,10 +2382,10 @@ let
       '';
     };
 
-    enhancedTransmissionSelectionConfig = mkOption {
+    enhancedTransmissionSelectionConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; QuantumBytes = "300k"; Bands = 3; PriorityMap = "100 200 300"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionEnhancedTransmissionSelection;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionEnhancedTransmissionSelection;
       description = ''
         Each attribute in this set specifies an option in the
         `[EnhancedTransmissionSelection]` section of the unit.  See
@@ -2367,10 +2393,10 @@ let
       '';
     };
 
-    genericRandomEarlyDetectionConfig = mkOption {
+    genericRandomEarlyDetectionConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; VirtualQueues = 5; DefaultVirtualQueue = 3; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionGenericRandomEarlyDetection;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionGenericRandomEarlyDetection;
       description = ''
         Each attribute in this set specifies an option in the
         `[GenericRandomEarlyDetection]` section of the unit.  See
@@ -2378,10 +2404,10 @@ let
       '';
     };
 
-    fairQueueingControlledDelayConfig = mkOption {
+    fairQueueingControlledDelayConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; Flows = 5; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionFairQueueingControlledDelay;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionFairQueueingControlledDelay;
       description = ''
         Each attribute in this set specifies an option in the
         `[FairQueueingControlledDelay]` section of the unit.  See
@@ -2389,10 +2415,10 @@ let
       '';
     };
 
-    fairQueueingConfig = mkOption {
+    fairQueueingConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; FlowLimit = 5; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionFairQueueing;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionFairQueueing;
       description = ''
         Each attribute in this set specifies an option in the
         `[FairQueueing]` section of the unit.  See
@@ -2400,10 +2426,10 @@ let
       '';
     };
 
-    trivialLinkEqualizerConfig = mkOption {
+    trivialLinkEqualizerConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; Id = 0; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionTrivialLinkEqualizer;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionTrivialLinkEqualizer;
       description = ''
         Each attribute in this set specifies an option in the
         `[TrivialLinkEqualizer]` section of the unit.  See
@@ -2411,10 +2437,10 @@ let
       '';
     };
 
-    hierarchyTokenBucketConfig = mkOption {
+    hierarchyTokenBucketConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionHierarchyTokenBucket;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionHierarchyTokenBucket;
       description = ''
         Each attribute in this set specifies an option in the
         `[HierarchyTokenBucket]` section of the unit.  See
@@ -2422,10 +2448,10 @@ let
       '';
     };
 
-    hierarchyTokenBucketClassConfig = mkOption {
+    hierarchyTokenBucketClassConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; Rate = "10M"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionHierarchyTokenBucketClass;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionHierarchyTokenBucketClass;
       description = ''
         Each attribute in this set specifies an option in the
         `[HierarchyTokenBucketClass]` section of the unit.  See
@@ -2433,10 +2459,10 @@ let
       '';
     };
 
-    heavyHitterFilterConfig = mkOption {
+    heavyHitterFilterConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; PacketLimit = 10000; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionHeavyHitterFilter;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionHeavyHitterFilter;
       description = ''
         Each attribute in this set specifies an option in the
         `[HeavyHitterFilter]` section of the unit.  See
@@ -2444,10 +2470,10 @@ let
       '';
     };
 
-    quickFairQueueingConfig = mkOption {
+    quickFairQueueingConfig = lib.mkOption {
       default = {};
       example = { Parent = "root"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionQuickFairQueueing;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionQuickFairQueueing;
       description = ''
         Each attribute in this set specifies an option in the
         `[QuickFairQueueing]` section of the unit.  See
@@ -2455,10 +2481,10 @@ let
       '';
     };
 
-    quickFairQueueingConfigClass = mkOption {
+    quickFairQueueingConfigClass = lib.mkOption {
       default = {};
       example = { Parent = "root"; Weight = 133; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionQuickFairQueueingClass;
+      type = lib.types.addCheck (lib.types.attrsOf unitOption) check.network.sectionQuickFairQueueingClass;
       description = ''
         Each attribute in this set specifies an option in the
         `[QuickFairQueueingClass]` section of the unit.  See
@@ -2466,181 +2492,181 @@ let
       '';
     };
 
-    bridgeVLANs = mkOption {
+    bridgeVLANs = lib.mkOption {
       default = [];
       example = [ { VLAN = "10-20"; } ];
-      type = types.listOf (mkSubsectionType "bridgeVLANConfig" check.network.sectionBridgeVLAN);
+      type = lib.types.listOf (mkSubsectionType "bridgeVLANConfig" check.network.sectionBridgeVLAN);
       description = ''
         A list of BridgeVLAN sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    name = mkOption {
-      type = types.nullOr types.str;
+    name = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The name of the network interface to match against.
       '';
     };
 
-    DHCP = mkOption {
-      type = types.nullOr types.str;
+    DHCP = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Whether to enable DHCP on the interfaces matched.
       '';
     };
 
-    domains = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    domains = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = ''
         A list of domains to pass to the network config.
       '';
     };
 
-    address = mkOption {
+    address = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of addresses to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    gateway = mkOption {
+    gateway = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of gateways to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    dns = mkOption {
+    dns = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of dns servers to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    ntp = mkOption {
+    ntp = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of ntp servers to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    bridge = mkOption {
+    bridge = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of bridge interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    bond = mkOption {
+    bond = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of bond interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    vrf = mkOption {
+    vrf = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of vrf interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    vlan = mkOption {
+    vlan = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of vlan interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    macvlan = mkOption {
+    macvlan = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of macvlan interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    macvtap = mkOption {
+    macvtap = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of macvtap interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    vxlan = mkOption {
+    vxlan = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of vxlan interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    tunnel = mkOption {
+    tunnel = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of tunnel interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    xfrm = mkOption {
+    xfrm = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of xfrm interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    addresses = mkOption {
+    addresses = lib.mkOption {
       default = [ ];
       example = [ { Address = "192.168.0.100/24"; } ];
-      type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
+      type = lib.types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
       description = ''
         A list of address sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    routingPolicyRules = mkOption {
+    routingPolicyRules = lib.mkOption {
       default = [ ];
       example = [ { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ];
-      type = types.listOf (mkSubsectionType "routingPolicyRuleConfig" check.network.sectionRoutingPolicyRule);
+      type = lib.types.listOf (mkSubsectionType "routingPolicyRuleConfig" check.network.sectionRoutingPolicyRule);
       description = ''
         A list of routing policy rules sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
 
-    routes = mkOption {
+    routes = lib.mkOption {
       default = [ ];
       example = [ { Gateway = "192.168.0.1"; } ];
-      type = types.listOf (mkSubsectionType "routeConfig" check.network.sectionRoute);
+      type = lib.types.listOf (mkSubsectionType "routeConfig" check.network.sectionRoute);
       description = ''
         A list of route sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2651,33 +2677,33 @@ let
 
   networkConfig = { config, ... }: {
     config = {
-      matchConfig = optionalAttrs (config.name != null) {
+      matchConfig = lib.optionalAttrs (config.name != null) {
         Name = config.name;
       };
-      networkConfig = optionalAttrs (config.DHCP != null) {
+      networkConfig = lib.optionalAttrs (config.DHCP != null) {
         DHCP = config.DHCP;
-      } // optionalAttrs (config.domains != null) {
-        Domains = concatStringsSep " " config.domains;
+      } // lib.optionalAttrs (config.domains != null) {
+        Domains = lib.concatStringsSep " " config.domains;
       };
     };
   };
 
   networkdConfig = { config, ... }: {
     options = {
-      routeTables = mkOption {
+      routeTables = lib.mkOption {
         default = {};
         example = { foo = 27; };
-        type = with types; attrsOf int;
+        type = with lib.types; attrsOf int;
         description = ''
           Defines route table names as an attrset of name to number.
           See {manpage}`networkd.conf(5)` for details.
         '';
       };
 
-      addRouteTablesToIPRoute2 = mkOption {
+      addRouteTablesToIPRoute2 = lib.mkOption {
         default = true;
         example = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If true and routeTables are set, then the specified route tables
           will also be installed into /etc/iproute2/rt_tables.
@@ -2686,8 +2712,8 @@ let
     };
 
     config = {
-      networkConfig = optionalAttrs (config.routeTables != { }) {
-        RouteTable = mapAttrsToList
+      networkConfig = lib.optionalAttrs (config.routeTables != { }) {
+        RouteTable = lib.mapAttrsToList
           (name: number: "${name}:${toString number}")
           config.routeTables;
       };
@@ -2699,74 +2725,74 @@ let
         [Network]
         ${attrsToSection def.networkConfig}
       ''
-      + optionalString (def.dhcpV4Config != { }) ''
+      + lib.optionalString (def.dhcpV4Config != { }) ''
         [DHCPv4]
         ${attrsToSection def.dhcpV4Config}
       ''
-      + optionalString (def.dhcpV6Config != { }) ''
+      + lib.optionalString (def.dhcpV6Config != { }) ''
         [DHCPv6]
         ${attrsToSection def.dhcpV6Config}
       ''; };
 
-  mkUnitFiles = prefix: cfg: listToAttrs (map (name: {
+  mkUnitFiles = prefix: cfg: lib.listToAttrs (map (name: {
     name = "${prefix}systemd/network/${name}";
     value.source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units));
+  }) (lib.attrNames cfg.units));
 
   commonOptions = visible: {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable networkd or not.
       '';
     };
 
-    links = mkOption {
+    links = lib.mkOption {
       default = {};
       inherit visible;
-      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
+      type = with lib.types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = "Definition of systemd network links.";
     };
 
-    netdevs = mkOption {
+    netdevs = lib.mkOption {
       default = {};
       inherit visible;
-      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
+      type = with lib.types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = "Definition of systemd network devices.";
     };
 
-    networks = mkOption {
+    networks = lib.mkOption {
       default = {};
       inherit visible;
-      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
+      type = with lib.types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = "Definition of systemd networks.";
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       default = {};
       inherit visible;
-      type = with types; submodule [ { options = networkdOptions; } networkdConfig ];
+      type = with lib.types; submodule [ { options = networkdOptions; } networkdConfig ];
       description = "Definition of global systemd network config.";
     };
 
-    units = mkOption {
+    units = lib.mkOption {
       description = "Definition of networkd units.";
       default = {};
       internal = true;
-      type = with types; attrsOf (submodule (
+      type = with lib.types; attrsOf (submodule (
         { name, config, ... }:
         { options = mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
           config = {
-            unit = mkDefault (makeUnit name config);
+            unit = lib.mkDefault (makeUnit name config);
           };
         }));
     };
 
     wait-online = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         example = false;
         description = ''
@@ -2779,44 +2805,44 @@ let
           disabled.
         '';
       };
-      anyInterface = mkOption {
+      anyInterface = lib.mkOption {
         description = ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
           This is useful on portable machines with a wired and a wireless interface, for example.
 
           This is on by default if {option}`networking.useDHCP` is enabled.
         '';
-        type = types.bool;
+        type = lib.types.bool;
         defaultText = "config.networking.useDHCP";
         default = config.networking.useDHCP;
       };
 
-      ignoredInterfaces = mkOption {
+      ignoredInterfaces = lib.mkOption {
         description = ''
           Network interfaces to be ignored when deciding if the system is online.
         '';
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         default = [];
         example = [ "wg0" ];
       };
 
-      timeout = mkOption {
+      timeout = lib.mkOption {
         description = ''
           Time to wait for the network to come online, in seconds. Set to 0 to disable.
         '';
-        type = types.ints.unsigned;
+        type = lib.types.ints.unsigned;
         default = 120;
         example = 0;
       };
 
-      extraArgs = mkOption {
+      extraArgs = lib.mkOption {
         description = ''
           Extra command-line arguments to pass to systemd-networkd-wait-online.
           These also affect per-interface `systemd-network-wait-online@` services.
 
           See {manpage}`systemd-networkd-wait-online.service(8)` for all available options.
         '';
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         default = [];
       };
     };
@@ -2826,22 +2852,22 @@ let
   commonConfig = config: let
     cfg = config.systemd.network;
     mkUnit = f: def: { inherit (def) enable; text = f def; };
-  in mkMerge [
+  in lib.mkMerge [
 
     # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
     {
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
+      systemd.network.units = lib.mapAttrs' (n: v: lib.nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
 
       systemd.network.wait-online.extraArgs =
         [ "--timeout=${toString cfg.wait-online.timeout}" ]
-        ++ optional cfg.wait-online.anyInterface "--any"
+        ++ lib.optional cfg.wait-online.anyInterface "--any"
         ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
     }
 
-    (mkIf config.systemd.network.enable {
+    (lib.mkIf config.systemd.network.enable {
 
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (mkUnit netdevToUnit v)) cfg.netdevs
-        // mapAttrs' (n: v: nameValuePair "${n}.network" (mkUnit networkToUnit v)) cfg.networks;
+      systemd.network.units = lib.mapAttrs' (n: v: lib.nameValuePair "${n}.netdev" (mkUnit netdevToUnit v)) cfg.netdevs
+        // lib.mapAttrs' (n: v: lib.nameValuePair "${n}.network" (mkUnit networkToUnit v)) cfg.networks;
 
       # systemd-networkd is socket-activated by kernel netlink route change
       # messages. It is important to have systemd buffer those on behalf of
@@ -2870,12 +2896,12 @@ let
   stage2Config = let
     cfg = config.systemd.network;
     unitFiles = mkUnitFiles "" cfg;
-  in mkMerge [
+  in lib.mkMerge [
     (commonConfig config)
 
     { environment.etc = unitFiles; }
 
-    (mkIf config.systemd.network.enable {
+    (lib.mkIf config.systemd.network.enable {
 
       users.users.systemd-network.group = "systemd-network";
 
@@ -2890,10 +2916,10 @@ let
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
       systemd.services.systemd-networkd = let
-        isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
-        reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
-        nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
-        unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
+        isReloadableUnitFileName = unitFileName: lib.strings.hasSuffix ".network" unitFileName;
+        reloadableUnitFiles = lib.attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+        nonReloadableUnitFiles = lib.attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
+        unitFileSources = unitFiles: map (x: x.source) (lib.attrValues unitFiles);
       in {
         wantedBy = [ "multi-user.target" ];
         reloadTriggers = unitFileSources reloadableUnitFiles;
@@ -2904,26 +2930,26 @@ let
         notSocketActivated = true;
       };
 
-      networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
-        enable = mkDefault true;
+      networking.iproute2 = lib.mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
+        enable = lib.mkDefault true;
         rttablesExtraConfig = ''
 
           # Extra tables defined in NixOS systemd.networkd.config.routeTables.
-          ${concatStringsSep "\n" (mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables)}
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables)}
         '';
       };
 
-      services.resolved.enable = mkDefault true;
+      services.resolved.enable = lib.mkDefault true;
 
     })
   ];
 
   stage1Options = {
-    options.boot.initrd.systemd.network.networks = mkOption {
-      type = with types; attrsOf (submodule {
+    options.boot.initrd.systemd.network.networks = lib.mkOption {
+      type = with lib.types; attrsOf (submodule {
         # Default in initrd is dhcp-on-stop, which is correct if flushBeforeStage2 = false
-        config = mkIf config.boot.initrd.network.flushBeforeStage2 {
-          networkConfig.KeepConfiguration = mkDefault false;
+        config = lib.mkIf config.boot.initrd.network.flushBeforeStage2 {
+          networkConfig.KeepConfiguration = lib.mkDefault false;
         };
       });
     };
@@ -2931,24 +2957,24 @@ let
 
   stage1Config = let
     cfg = config.boot.initrd.systemd.network;
-  in mkMerge [
+  in lib.mkMerge [
     (commonConfig config.boot.initrd)
 
     {
-      systemd.network.enable = mkDefault config.boot.initrd.network.enable;
+      systemd.network.enable = lib.mkDefault config.boot.initrd.network.enable;
       systemd.contents = mkUnitFiles "/etc/" cfg;
 
       # Networkd link files are used early by udev to set up interfaces early.
       # This must be done in stage 1 to avoid race conditions between udev and
       # network daemons.
-      systemd.network.units = lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units;
+      systemd.network.units = lib.filterAttrs (n: _: lib.hasSuffix ".link" n) config.systemd.network.units;
       systemd.storePaths = ["${config.boot.initrd.systemd.package}/lib/systemd/network/99-default.link"];
     }
 
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
 
       # For networkctl
-      systemd.dbus.enable = mkDefault true;
+      systemd.dbus.enable = lib.mkDefault true;
 
       systemd.additionalUpstreamUnits = [
         "systemd-networkd-wait-online.service"
@@ -2997,9 +3023,9 @@ in
     boot.initrd.systemd.network = commonOptions "shallow";
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     stage2Config
-    (mkIf config.boot.initrd.systemd.enable {
+    (lib.mkIf config.boot.initrd.systemd.enable {
       assertions = [{
         assertion = !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [];
         message = ''

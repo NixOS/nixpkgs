@@ -33,13 +33,13 @@ in
   ];
 
   config = {
-    fileSystems."/" = mkIf (!cfg.zfs.enable) {
+    fileSystems."/" = lib.mkIf (!cfg.zfs.enable) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+    fileSystems."/boot" = lib.mkIf (cfg.efi || cfg.zfs.enable) {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
@@ -58,21 +58,21 @@ in
       terminal_input console serial
     '';
 
-    services.zfs.expandOnBoot = mkIf cfg.zfs.enable (lib.mkDefault "all");
-    boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
+    services.zfs.expandOnBoot = lib.mkIf cfg.zfs.enable (lib.mkDefault "all");
+    boot.zfs.devNodes = lib.mkIf cfg.zfs.enable "/dev/";
 
     # Allow root logins
     services.openssh = {
       enable = true;
       settings.PermitRootLogin = "prohibit-password";
-      settings.PasswordAuthentication = mkDefault false;
+      settings.PasswordAuthentication = lib.mkDefault false;
     };
 
     # Enable the serial console on tty1
     systemd.services."serial-getty@tty1".enable = true;
 
     # Force getting the hostname from Openstack metadata.
-    networking.hostName = mkDefault "";
+    networking.hostName = lib.mkDefault "";
 
     systemd.services.openstack-init = {
       path = [ pkgs.wget ];

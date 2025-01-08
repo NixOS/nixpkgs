@@ -8,7 +8,7 @@
 
 let
   cfg = config.services.prometheus.exporters.idrac;
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 
   configFile =
     if cfg.configurationPath != null then
@@ -19,8 +19,8 @@ in
 {
   port = 9348;
   extraOpts = {
-    configurationPath = mkOption {
-      type = with types; nullOr path;
+    configurationPath = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       example = "/etc/prometheus-idrac-exporter/idrac.yml";
       description = ''
@@ -33,8 +33,8 @@ in
         Configuration reference: https://github.com/mrlhansen/idrac_exporter/#configuration
       '';
     };
-    configuration = mkOption {
-      type = types.nullOr types.attrs;
+    configuration = lib.mkOption {
+      type = lib.types.nullOr lib.types.attrs;
       description = ''
         Configuration for iDRAC exporter, as a nix attribute set.
 

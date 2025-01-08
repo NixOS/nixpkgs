@@ -75,7 +75,6 @@ let
       dontStrip = true;
 
       meta =
-        with lib;
         {
           homepage = "https://www.barebox.org";
           description = "Swiss Army Knive for bare metal";

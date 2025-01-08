@@ -5,10 +5,8 @@
   ...
 }:
 
-with lib;
-
 {
-  config = mkIf (config.boot.supportedFilesystems.glusterfs or false) {
+  config = lib.mkIf (config.boot.supportedFilesystems.glusterfs or false) {
 
     system.fsPackages = [ pkgs.glusterfs ];
 

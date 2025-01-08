@@ -15,13 +15,13 @@ in
   };
 
   options = {
-    services.tigerbeetle = with lib; {
-      enable = mkEnableOption "TigerBeetle server";
+    services.tigerbeetle = {
+      enable = lib.mkEnableOption "TigerBeetle server";
 
-      package = mkPackageOption pkgs "tigerbeetle" { };
+      package = lib.mkPackageOption pkgs "tigerbeetle" { };
 
-      clusterId = mkOption {
-        type = types.either types.ints.unsigned (types.strMatching "[0-9]+");
+      clusterId = lib.mkOption {
+        type = lib.types.either lib.types.ints.unsigned (lib.types.strMatching "[0-9]+");
         default = 0;
         description = ''
           The 128-bit cluster ID used to create the replica data file (if needed).
@@ -30,24 +30,24 @@ in
         '';
       };
 
-      replicaIndex = mkOption {
-        type = types.ints.unsigned;
+      replicaIndex = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           The index (starting at 0) of the replica in the cluster.
         '';
       };
 
-      replicaCount = mkOption {
-        type = types.ints.unsigned;
+      replicaCount = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 1;
         description = ''
           The number of replicas participating in replication of the cluster.
         '';
       };
 
-      cacheGridSize = mkOption {
-        type = types.strMatching "[0-9]+(K|M|G)iB";
+      cacheGridSize = lib.mkOption {
+        type = lib.types.strMatching "[0-9]+(K|M|G)iB";
         default = "1GiB";
         description = ''
           The grid cache size.
@@ -56,8 +56,8 @@ in
         '';
       };
 
-      addresses = mkOption {
-        type = types.listOf types.nonEmptyStr;
+      addresses = lib.mkOption {
+        type = lib.types.listOf lib.types.nonEmptyStr;
         default = [ "3001" ];
         description = ''
           The addresses of all replicas in the cluster.

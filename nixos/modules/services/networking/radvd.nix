@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.radvd;
@@ -18,8 +16,8 @@ in
 
   options.services.radvd = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
           Whether to enable the Router Advertisement Daemon
@@ -31,10 +29,10 @@ in
         '';
     };
 
-    package = mkPackageOption pkgs "radvd" { };
+    package = lib.mkPackageOption pkgs "radvd" { };
 
-    debugLevel = mkOption {
-      type = types.int;
+    debugLevel = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       example = 5;
       description = ''
@@ -44,8 +42,8 @@ in
         '';
     };
 
-    config = mkOption {
-      type = types.lines;
+    config = lib.mkOption {
+      type = lib.types.lines;
       example =
         ''
           interface eth0 {
@@ -63,7 +61,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.radvd =
       {

@@ -13,7 +13,7 @@ let
     literalExpression
     mkDefault
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -26,14 +26,14 @@ in
 {
   options = {
     services.desktopManager.plasma6 = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable the Plasma 6 (KDE 6) desktop environment.";
       };
 
-      enableQt5Integration = mkOption {
-        type = types.bool;
+      enableQt5Integration = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
@@ -44,11 +44,11 @@ in
       };
     };
 
-    environment.plasma6.excludePackages = mkOption {
+    environment.plasma6.excludePackages = lib.mkOption {
       description = "List of default packages to exclude from the configuration";
-      type = types.listOf types.package;
+      type = lib.types.listOf lib.types.package;
       default = [ ];
-      example = literalExpression "[ pkgs.kdePackages.elisa ]";
+      example = lib.literalExpression "[ pkgs.kdePackages.elisa ]";
     };
   };
 
@@ -67,7 +67,7 @@ in
     )
   ];
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.enable -> !config.services.xserver.desktopManager.plasma5.enable;
@@ -93,7 +93,7 @@ in
           kguiaddons # provides geo URL handlers
           kiconthemes # provides Qt plugins
           kimageformats # provides Qt plugins
-          qtimageformats # provides optional image formats such as .webp and .avif
+          qtimageformats # provides lib.optional image formats such as .webp and .avif
           kio # provides helper service + a bunch of other stuff
           kio-admin # managing files as admin
           kio-extras # stuff for MTP, AFC, etc
@@ -154,7 +154,7 @@ in
           systemsettings
           kcmutils
         ];
-        optionalPackages =
+        lib.optionalPackages =
           [
             plasma-browser-integration
             konsole
@@ -180,7 +180,7 @@ in
           ];
       in
       requiredPackages
-      ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
+      ++ utils.removePackagesByName lib.optionalPackages config.environment.plasma6.excludePackages
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
@@ -254,20 +254,20 @@ in
       serif = [ "Noto Serif" ];
     };
 
-    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
-    programs.kde-pim.enable = mkDefault true;
-    programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
+    programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-qt;
+    programs.kde-pim.enable = lib.mkDefault true;
+    programs.ssh.askPassword = lib.mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
     services.accounts-daemon.enable = true;
     # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
     systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
 
-    services.power-profiles-daemon.enable = mkDefault true;
-    services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
+    services.power-profiles-daemon.enable = lib.mkDefault true;
+    services.system-config-printer.enable = lib.mkIf config.services.printing.enable (mkDefault true);
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.libinput.enable = mkDefault true;
+    services.libinput.enable = lib.mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [
@@ -281,7 +281,7 @@ in
     systemd.services."drkonqi-coredump-processor@".wantedBy = [ "systemd-coredump@.service" ];
 
     xdg.icons.enable = true;
-    xdg.icons.fallbackCursorThemes = mkDefault [ "breeze_cursors" ];
+    xdg.icons.fallbackCursorThemes = lib.mkDefault [ "breeze_cursors" ];
 
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [
@@ -289,20 +289,20 @@ in
       kdePackages.xdg-desktop-portal-kde
       pkgs.xdg-desktop-portal-gtk
     ];
-    xdg.portal.configPackages = mkDefault [ kdePackages.plasma-workspace ];
-    services.pipewire.enable = mkDefault true;
+    xdg.portal.configPackages = lib.mkDefault [ kdePackages.plasma-workspace ];
+    services.pipewire.enable = lib.mkDefault true;
 
     # Enable screen reader by default
-    services.orca.enable = mkDefault true;
+    services.orca.enable = lib.mkDefault true;
 
     services.displayManager = {
       sessionPackages = [ kdePackages.plasma-workspace ];
-      defaultSession = mkDefault "plasma";
+      defaultSession = lib.mkDefault "plasma";
     };
     services.displayManager.sddm = {
       package = kdePackages.sddm;
-      theme = mkDefault "breeze";
-      wayland = mkDefault {
+      theme = lib.mkDefault "breeze";
+      wayland = lib.mkDefault {
         enable = true;
         compositor = "kwin";
       };

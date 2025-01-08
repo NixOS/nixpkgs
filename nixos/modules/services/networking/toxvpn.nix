@@ -1,26 +1,24 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
   options = {
     services.toxvpn = {
-      enable = mkEnableOption "toxvpn running on startup";
+      enable = lib.mkEnableOption "toxvpn running on startup";
 
-      localip = mkOption {
-        type        = types.str;
+      localip = lib.mkOption {
+        type        = lib.types.str;
         default     = "10.123.123.1";
         description = "your ip on the vpn";
       };
 
-      port = mkOption {
-        type        = types.port;
+      port = lib.mkOption {
+        type        = lib.types.port;
         default     = 33445;
         description = "udp port for toxcore, port-forward to help with connectivity if you run many nodes behind one NAT";
       };
 
-      auto_add_peers = mkOption {
-        type        = types.listOf types.str;
+      auto_add_peers = lib.mkOption {
+        type        = lib.types.listOf lib.types.str;
         default     = [];
         example     = [ "toxid1" "toxid2" ];
         description = "peers to automatically connect to on startup";
@@ -28,7 +26,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.toxvpn.enable {
+  config = lib.mkIf config.services.toxvpn.enable {
     systemd.services.toxvpn = {
       description = "toxvpn daemon";
 

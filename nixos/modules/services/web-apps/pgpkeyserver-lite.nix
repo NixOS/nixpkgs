@@ -6,8 +6,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.pgpkeyserver-lite;
@@ -24,30 +22,30 @@ in
 
     services.pgpkeyserver-lite = {
 
-      enable = mkEnableOption "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
+      enable = lib.mkEnableOption "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
 
-      package = mkPackageOption pkgs "pgpkeyserver-lite" { };
+      package = lib.mkPackageOption pkgs "pgpkeyserver-lite" { };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Which hostname to set the vHost to that is proxying to sks.
         '';
       };
 
-      hkpAddress = mkOption {
+      hkpAddress = lib.mkOption {
         default = builtins.head sksCfg.hkpAddress;
-        defaultText = literalExpression "head config.${sksOpt.hkpAddress}";
-        type = types.str;
+        defaultText = lib.literalExpression "head config.${sksOpt.hkpAddress}";
+        type = lib.types.str;
         description = ''
           Which IP address the sks-keyserver is listening on.
         '';
       };
 
-      hkpPort = mkOption {
+      hkpPort = lib.mkOption {
         default = sksCfg.hkpPort;
-        defaultText = literalExpression "config.${sksOpt.hkpPort}";
-        type = types.int;
+        defaultText = lib.literalExpression "config.${sksOpt.hkpPort}";
+        type = lib.types.int;
         description = ''
           Which port the sks-keyserver is listening on.
         '';
@@ -55,7 +53,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.nginx.enable = true;
 

@@ -13,7 +13,7 @@ let
     serviceDirectories = cfg.packages;
   };
 
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+  inherit (lib) lib.mkOption mkEnableOption mkIf mkMerge types;
 
 in
 
@@ -21,13 +21,13 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
-      enable = mkEnableOption "dbus in stage 1";
+      enable = lib.mkEnableOption "dbus in stage 1";
     };
 
     services.dbus = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         internal = true;
         description = ''
@@ -40,8 +40,8 @@ in
 
       brokerPackage = lib.mkPackageOption pkgs "dbus-broker" {};
 
-      implementation = mkOption {
-        type = types.enum [ "dbus" "broker" ];
+      implementation = lib.mkOption {
+        type = lib.types.enum [ "dbus" "broker" ];
         default = "dbus";
         description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
@@ -51,8 +51,8 @@ in
         '';
       };
 
-      packages = mkOption {
-        type = types.listOf types.path;
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           Packages whose D-Bus configuration files should be included in
@@ -68,8 +68,8 @@ in
         '';
       };
 
-      apparmor = mkOption {
-        type = types.enum [ "enabled" "disabled" "required" ];
+      apparmor = lib.mkOption {
+        type = lib.types.enum [ "enabled" "disabled" "required" ];
         description = ''
           AppArmor mode for dbus.
 
@@ -84,7 +84,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
     {
       environment.etc."dbus-1".source = configDir;
 
@@ -123,7 +123,7 @@ in
       ];
     }
 
-    (mkIf config.boot.initrd.systemd.dbus.enable {
+    (lib.mkIf config.boot.initrd.systemd.dbus.enable {
       boot.initrd.systemd = {
         users.messagebus = { };
         groups.messagebus = { };
@@ -143,7 +143,7 @@ in
       };
     })
 
-    (mkIf (cfg.implementation == "dbus") {
+    (lib.mkIf (cfg.implementation == "dbus") {
       security.wrappers.dbus-daemon-launch-helper = {
         source = "${cfg.dbusPackage}/libexec/dbus-daemon-launch-helper";
         owner = "root";
@@ -182,7 +182,7 @@ in
 
     })
 
-    (mkIf (cfg.implementation == "broker") {
+    (lib.mkIf (cfg.implementation == "broker") {
       environment.systemPackages = [
         cfg.brokerPackage
       ];

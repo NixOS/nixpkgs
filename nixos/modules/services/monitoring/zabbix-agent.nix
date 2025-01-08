@@ -14,13 +14,13 @@ let
     mkPackageOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     ;
   inherit (lib)
     attrValues
     concatMapStringsSep
     literalExpression
-    optionalString
+    lib.optionalString
     types
     ;
   inherit (lib.generators) toKeyValue;
@@ -53,26 +53,26 @@ in
   options = {
 
     services.zabbixAgent = {
-      enable = mkEnableOption "the Zabbix Agent";
+      enable = lib.mkEnableOption "the Zabbix Agent";
 
-      package = mkPackageOption pkgs [ "zabbix" "agent" ] { };
+      package = lib.mkPackageOption pkgs [ "zabbix" "agent" ] { };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = with pkgs; [ nettools ];
-        defaultText = literalExpression "with pkgs; [ nettools ]";
-        example = literalExpression "with pkgs; [ nettools mysql ]";
+        defaultText = lib.literalExpression "with pkgs; [ nettools ]";
+        example = lib.literalExpression "with pkgs; [ nettools mysql ]";
         description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };
 
-      modules = mkOption {
-        type = types.attrsOf types.package;
+      modules = lib.mkOption {
+        type = lib.types.attrsOf types.package;
         description = "A set of modules to load.";
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";
@@ -88,24 +88,24 @@ in
         '';
       };
 
-      server = mkOption {
-        type = types.str;
+      server = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
 
       listen = {
-        ip = mkOption {
-          type = types.str;
+        ip = lib.mkOption {
+          type = lib.types.str;
           default = "0.0.0.0";
           description = ''
             List of comma delimited IP addresses that the agent should listen on.
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 10050;
           description = ''
             Agent will listen on this port for connections from the server.
@@ -113,17 +113,17 @@ in
         };
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for the Zabbix Agent.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             int
             str
@@ -147,25 +147,25 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.zabbixAgent.settings = mkMerge [
+    services.zabbixAgent.settings = lib.mkMerge [
       {
         LogType = "console";
         Server = cfg.server;
         ListenPort = cfg.listen.port;
       }
-      (mkIf (cfg.modules != { }) {
+      (lib.mkIf (cfg.modules != { }) {
         LoadModule = builtins.attrNames cfg.modules;
         LoadModulePath = "${moduleEnv}/lib";
       })
 
       # the default value for "ListenIP" is 0.0.0.0 but zabbix agent 2 cannot accept configuration files which
       # explicitly set "ListenIP" to the default value...
-      (mkIf (cfg.listen.ip != "0.0.0.0") { ListenIP = cfg.listen.ip; })
+      (lib.mkIf (cfg.listen.ip != "0.0.0.0") { ListenIP = cfg.listen.ip; })
     ];
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listen.port ];
     };
 

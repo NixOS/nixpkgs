@@ -50,7 +50,7 @@ let
           default = [ ];
           description = ''
             A required list of local or remote repositories with paths and
-            optional labels (which can be used with the --repository flag to
+            lib.optional labels (which can be used with the --repository flag to
             select a repository). Tildes are expanded. Multiple repositories are
             backed up to in sequence. Borg placeholders can be used. See the
             output of "borg help placeholders" for details. See ssh_command for

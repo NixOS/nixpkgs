@@ -40,7 +40,7 @@ in
       package = lib.mkPackageOption pkgs "ollama" { };
 
       user = lib.mkOption {
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
         example = "ollama";
         description = ''
@@ -51,9 +51,9 @@ in
         '';
       };
       group = lib.mkOption {
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = cfg.user;
-        defaultText = literalExpression "config.services.ollama.user";
+        defaultText = lib.literalExpression "config.services.ollama.user";
         example = "ollama";
         description = ''
           Group under which to run ollama. Only used when `services.ollama.user` is set.
@@ -63,7 +63,7 @@ in
       };
 
       home = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "/var/lib/ollama";
         example = "/home/foo";
         description = ''
@@ -71,7 +71,7 @@ in
         '';
       };
       models = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "${cfg.home}/models";
         defaultText = "\${config.services.ollama.home}/models";
         example = "/path/to/ollama/models";
@@ -81,7 +81,7 @@ in
       };
 
       host = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         example = "[::]";
         description = ''
@@ -89,7 +89,7 @@ in
         '';
       };
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 11434;
         example = 11111;
         description = ''
@@ -98,7 +98,7 @@ in
       };
 
       acceleration = lib.mkOption {
-        type = types.nullOr (
+        type = lib.types.nullOr (
           types.enum [
             false
             "rocm"
@@ -122,7 +122,7 @@ in
         '';
       };
       rocmOverrideGfx = lib.mkOption {
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "10.3.0";
         description = ''
@@ -136,7 +136,7 @@ in
       };
 
       environmentVariables = lib.mkOption {
-        type = types.attrsOf types.str;
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         example = {
           OLLAMA_LLM_LIBRARY = "cpu";
@@ -151,7 +151,7 @@ in
         '';
       };
       loadModels = lib.mkOption {
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           Download these models using `ollama pull` as soon as `ollama.service` has started.
@@ -162,7 +162,7 @@ in
         '';
       };
       openFirewall = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the firewall for ollama.

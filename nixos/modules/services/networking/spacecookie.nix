@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.spacecookie;
 
@@ -17,38 +15,38 @@ let
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
-    (mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])
+    (lib.mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
+    (lib.mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])
   ];
 
   options = {
 
     services.spacecookie = {
 
-      enable = mkEnableOption "spacecookie";
+      enable = lib.mkEnableOption "spacecookie";
 
-      package = mkPackageOption pkgs "spacecookie" {
+      package = lib.mkPackageOption pkgs "spacecookie" {
         example = "haskellPackages.spacecookie";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the necessary port in the firewall for spacecookie.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 70;
         description = ''
           Port the gopher service should be exposed on.
         '';
       };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "[::]";
         description = ''
           Address to listen on. Must be in the
@@ -57,12 +55,12 @@ in {
         '';
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = format.type;
 
-          options.hostname = mkOption {
-            type = types.str;
+          options.hostname = lib.mkOption {
+            type = lib.types.str;
             default = "localhost";
             description = ''
               The hostname the service is reachable via. Clients
@@ -71,8 +69,8 @@ in {
             '';
           };
 
-          options.root = mkOption {
-            type = types.path;
+          options.root = lib.mkOption {
+            type = lib.types.path;
             default = "/srv/gopher";
             description = ''
               The directory spacecookie should serve via gopher.
@@ -83,11 +81,11 @@ in {
           };
 
           options.log = {
-            enable = mkEnableOption "logging for spacecookie"
+            enable = lib.mkEnableOption "logging for spacecookie"
               // { default = true; example = false; };
 
-            hide-ips = mkOption {
-              type = types.bool;
+            hide-ips = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 If enabled, spacecookie will hide personal
@@ -96,8 +94,8 @@ in {
               '';
             };
 
-            hide-time = mkOption {
-              type = types.bool;
+            hide-time = lib.mkOption {
+              type = lib.types.bool;
               # since we are starting with systemd anyways
               # we deviate from the default behavior here:
               # journald will add timestamps, so no need
@@ -109,8 +107,8 @@ in {
               '';
             };
 
-            level = mkOption {
-              type = types.enum [
+            level = lib.mkOption {
+              type = lib.types.enum [
                 "info"
                 "warn"
                 "error"
@@ -134,7 +132,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !(cfg.settings ? user);
@@ -202,7 +200,7 @@ in {
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

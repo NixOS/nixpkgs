@@ -22,27 +22,27 @@ in
   ];
 
   options = {
-    services.dae = with lib; {
-      enable = mkEnableOption "dae, a Linux high-performance transparent proxy solution based on eBPF";
+    services.dae = {
+      enable = lib.mkEnableOption "dae, a Linux high-performance transparent proxy solution based on eBPF";
 
-      package = mkPackageOption pkgs "dae" { };
+      package = lib.mkPackageOption pkgs "dae" { };
 
-      assets = mkOption {
-        type = with types; (listOf path);
+      assets = lib.mkOption {
+        type = with lib.types; (listOf path);
         default = with pkgs; [
           v2ray-geoip
           v2ray-domain-list-community
         ];
-        defaultText = literalExpression "with pkgs; [ v2ray-geoip v2ray-domain-list-community ]";
+        defaultText = lib.literalExpression "with pkgs; [ v2ray-geoip v2ray-domain-list-community ]";
         description = ''
           Assets required to run dae.
         '';
       };
 
-      assetsPath = mkOption {
-        type = types.str;
+      assetsPath = lib.mkOption {
+        type = lib.types.str;
         default = "${genAssetsDrv assets}/share/v2ray";
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           (symlinkJoin {
               name = "dae-assets";
               paths = assets;
@@ -54,14 +54,13 @@ in
         '';
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         type =
-          with types;
-          submodule {
+          lib.types.submodule {
             options = {
-              enable = mkEnableOption "opening {option}`port` in the firewall";
-              port = mkOption {
-                type = types.port;
+              enable = lib.mkEnableOption "opening {option}`port` in the firewall";
+              port = lib.mkOption {
+                type = lib.types.port;
                 description = ''
                   Port to be opened. Consist with field `tproxy_port` in config file.
                 '';
@@ -72,7 +71,7 @@ in
           enable = true;
           port = 12345;
         };
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             enable = true;
             port = 12345;
@@ -83,8 +82,8 @@ in
         '';
       };
 
-      configFile = mkOption {
-        type = with types; (nullOr path);
+      configFile = lib.mkOption {
+        type = with lib.types; (nullOr path);
         default = null;
         example = "/path/to/your/config.dae";
         description = ''
@@ -92,8 +91,8 @@ in
         '';
       };
 
-      config = mkOption {
-        type = with types; (nullOr str);
+      config = lib.mkOption {
+        type = with lib.types; (nullOr str);
         default = null;
         description = ''
           WARNING: This option will expose store your config unencrypted world-readable in the nix store.
@@ -103,7 +102,7 @@ in
         '';
       };
 
-      disableTxChecksumIpGeneric = mkEnableOption "" // {
+      disableTxChecksumIpGeneric = lib.mkEnableOption "" // {
         description = "See <https://github.com/daeuniverse/dae/issues/43>";
       };
 
@@ -136,8 +135,7 @@ in
               if cfg.configFile != null then cfg.configFile else pkgs.writeText "config.dae" cfg.config;
 
             TxChecksumIpGenericWorkaround =
-              with lib;
-              (getExe pkgs.writeShellApplication {
+              (lib.getExe pkgs.writeShellApplication {
                 name = "disable-tx-checksum-ip-generic";
                 text = with pkgs; ''
                   iface=$(${iproute2}/bin/ip route | ${lib.getExe gawk} '/default/ {print $5}')
@@ -152,7 +150,7 @@ in
               ExecStartPre = [
                 ""
                 "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae"
-              ] ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
+              ] ++ (lib.optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
               ExecStart = [
                 ""
                 "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae"

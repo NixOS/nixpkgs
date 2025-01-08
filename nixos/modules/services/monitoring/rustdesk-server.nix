@@ -32,15 +32,13 @@ in
   ];
 
   options.services.rustdesk-server =
-    with lib;
-    with types;
     {
-      enable = mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices";
+      enable = lib.mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices";
 
-      package = mkPackageOption pkgs "rustdesk-server" { };
+      package = lib.mkPackageOption pkgs "rustdesk-server" { };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the connection ports.
@@ -50,16 +48,16 @@ in
       };
 
       signal = {
-        enable = mkOption {
-          type = bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable the RustDesk signal server.
           '';
         };
 
-        relayHosts = mkOption {
-          type = listOf str;
+        relayHosts = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           # reference: https://rustdesk.com/docs/en/self-host/rustdesk-server-pro/relay/
           description = ''
@@ -67,8 +65,8 @@ in
           '';
         };
 
-        extraArgs = mkOption {
-          type = listOf str;
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           example = [
             "-k"
@@ -82,15 +80,15 @@ in
       };
 
       relay = {
-        enable = mkOption {
-          type = bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable the RustDesk relay server.
           '';
         };
-        extraArgs = mkOption {
-          type = listOf str;
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           example = [
             "-k"

@@ -10,10 +10,10 @@ let
     literalExpression
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionalAttrs
-    optional
+    lib.optionalAttrs
+    lib.optional
     types
     ;
 
@@ -28,94 +28,94 @@ let
 in
 {
   options.services.legit = {
-    enable = mkEnableOption "legit git web frontend";
+    enable = lib.mkEnableOption "legit git web frontend";
 
-    package = mkPackageOption pkgs "legit-web" { };
+    package = lib.mkPackageOption pkgs "legit-web" { };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "legit";
       description = "User account under which legit runs.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "legit";
       description = "Group account under which legit runs.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = ''
         The primary legit configuration. See the
         [sample configuration](https://github.com/icyphox/legit/blob/master/config.yaml)
         for possible values.
       '';
-      type = types.submodule {
+      type = lib.types.submodule {
         options.repo = {
-          scanPath = mkOption {
-            type = types.path;
+          scanPath = lib.mkOption {
+            type = lib.types.path;
             default = defaultStateDir;
             description = "Directory where legit will scan for repositories.";
           };
-          readme = mkOption {
-            type = types.listOf types.str;
+          readme = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "Readme files to look for.";
           };
-          mainBranch = mkOption {
-            type = types.listOf types.str;
+          mainBranch = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [
               "main"
               "master"
             ];
             description = "Main branch to look for.";
           };
-          ignore = mkOption {
-            type = types.listOf types.str;
+          ignore = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "Repositories to ignore.";
           };
         };
         options.dirs = {
-          templates = mkOption {
-            type = types.path;
+          templates = lib.mkOption {
+            type = lib.types.path;
             default = "${pkgs.legit-web}/lib/legit/templates";
-            defaultText = literalExpression ''"''${pkgs.legit-web}/lib/legit/templates"'';
+            defaultText = lib.literalExpression ''"''${pkgs.legit-web}/lib/legit/templates"'';
             description = "Directories where template files are located.";
           };
-          static = mkOption {
-            type = types.path;
+          static = lib.mkOption {
+            type = lib.types.path;
             default = "${pkgs.legit-web}/lib/legit/static";
-            defaultText = literalExpression ''"''${pkgs.legit-web}/lib/legit/static"'';
+            defaultText = lib.literalExpression ''"''${pkgs.legit-web}/lib/legit/static"'';
             description = "Directories where static files are located.";
           };
         };
         options.meta = {
-          title = mkOption {
-            type = types.str;
+          title = lib.mkOption {
+            type = lib.types.str;
             default = "legit";
             description = "Website title.";
           };
-          description = mkOption {
-            type = types.str;
+          description = lib.mkOption {
+            type = lib.types.str;
             default = "git frontend";
             description = "Website description.";
           };
         };
         options.server = {
-          name = mkOption {
-            type = types.str;
+          name = lib.mkOption {
+            type = lib.types.str;
             default = "localhost";
             description = "Server name.";
           };
-          host = mkOption {
-            type = types.str;
+          host = lib.mkOption {
+            type = lib.types.str;
             default = "127.0.0.1";
             description = "Host address.";
           };
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 5555;
             description = "Legit port.";
           };
@@ -124,12 +124,12 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    users.groups = optionalAttrs (cfg.group == "legit") {
+  config = lib.mkIf cfg.enable {
+    users.groups = lib.optionalAttrs (cfg.group == "legit") {
       "${cfg.group}" = { };
     };
 
-    users.users = optionalAttrs (cfg.user == "legit") {
+    users.users = lib.optionalAttrs (cfg.user == "legit") {
       "${cfg.user}" = {
         group = cfg.group;
         isSystemUser = true;
@@ -153,9 +153,9 @@ in
         WorkingDirectory = cfg.settings.repo.scanPath;
         StateDirectory =
           [ ]
-          ++ optional (cfg.settings.repo.scanPath == defaultStateDir) "legit"
-          ++ optional (cfg.settings.dirs.static == defaultStaticDir) "legit/static"
-          ++ optional (cfg.settings.dirs.templates == defaultTemplatesDir) "legit/templates";
+          ++ lib.optional (cfg.settings.repo.scanPath == defaultStateDir) "legit"
+          ++ lib.optional (cfg.settings.dirs.static == defaultStaticDir) "legit/static"
+          ++ lib.optional (cfg.settings.dirs.templates == defaultTemplatesDir) "legit/templates";
 
         # Hardening
         CapabilityBoundingSet = [ "" ];

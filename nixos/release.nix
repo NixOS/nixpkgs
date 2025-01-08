@@ -109,8 +109,8 @@ let
     inherit system;
     modules = makeModules module
       ({ ... }:
-      { fileSystems."/".device  = mkDefault "/dev/sda1";
-        boot.loader.grub.device = mkDefault "/dev/sda";
+      { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+        boot.loader.grub.device = lib.mkDefault "/dev/sda";
       });
   }).config));
 
@@ -482,9 +482,9 @@ in rec {
     { toplevel = (import lib/eval-config.nix {
         inherit system;
         modules = singleton ({ ... }:
-          { fileSystems."/".device  = mkDefault "/dev/sda1";
-            boot.loader.grub.device = mkDefault "/dev/sda";
-            system.stateVersion = mkDefault lib.trivial.release;
+          { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+            boot.loader.grub.device = lib.mkDefault "/dev/sda";
+            system.stateVersion = lib.mkDefault lib.trivial.release;
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;

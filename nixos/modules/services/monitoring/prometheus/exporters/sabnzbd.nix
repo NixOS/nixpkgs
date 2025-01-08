@@ -7,25 +7,25 @@
 }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   cfg = config.services.prometheus.exporters.sabnzbd;
 in
 {
   port = 9387;
 
   extraOpts = {
-    servers = mkOption {
+    servers = lib.mkOption {
       description = "List of sabnzbd servers to connect to.";
-      type = types.listOf (
+      type = lib.types.listOf (
         types.submodule {
           options = {
-            baseUrl = mkOption {
-              type = types.str;
+            baseUrl = lib.mkOption {
+              type = lib.types.str;
               description = "Base URL of the sabnzbd server.";
               example = "http://localhost:8080/sabnzbd";
             };
-            apiKeyFile = mkOption {
-              type = types.str;
+            apiKeyFile = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 The path to a file containing the API key.
                 The file is securely passed to the service by leveraging systemd credentials.

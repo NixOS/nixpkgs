@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.pppd;
 in
@@ -17,41 +15,41 @@ in
 
   options = {
     services.pppd = {
-      enable = mkEnableOption "pppd";
+      enable = lib.mkEnableOption "pppd";
 
-      package = mkPackageOption pkgs "ppp" { };
+      package = lib.mkPackageOption pkgs "ppp" { };
 
-      peers = mkOption {
+      peers = lib.mkOption {
         default = { };
         description = "pppd peers.";
-        type = types.attrsOf (
-          types.submodule (
+        type = lib.types.attrsOf (
+          lib.types.submodule (
             { name, ... }:
             {
               options = {
-                name = mkOption {
-                  type = types.str;
+                name = lib.mkOption {
+                  type = lib.types.str;
                   default = name;
                   example = "dialup";
                   description = "Name of the PPP peer.";
                 };
 
-                enable = mkOption {
-                  type = types.bool;
+                enable = lib.mkOption {
+                  type = lib.types.bool;
                   default = true;
                   example = false;
                   description = "Whether to enable this PPP peer.";
                 };
 
-                autostart = mkOption {
-                  type = types.bool;
+                autostart = lib.mkOption {
+                  type = lib.types.bool;
                   default = true;
                   example = false;
                   description = "Whether the PPP session is automatically started at boot time.";
                 };
 
-                config = mkOption {
-                  type = types.lines;
+                config = lib.mkOption {
+                  type = lib.types.lines;
                   default = "";
                   description = "pppd configuration for this peer, see the pppd(8) man page.";
                 };
@@ -65,7 +63,7 @@ in
 
   config =
     let
-      enabledConfigs = filter (f: f.enable) (attrValues cfg.peers);
+      enabledConfigs = lib.filter (f: f.enable) (lib.attrValues cfg.peers);
 
       mkEtc = peerCfg: {
         name = "ppp/peers/${peerCfg.name}";
@@ -96,7 +94,7 @@ in
               ];
             in
             {
-              ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
+              ExecStart = "${lib.getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
               Restart = "always";
               RestartSec = 5;
 
@@ -145,15 +143,15 @@ in
               RuntimeDirectory = "pppd";
               RuntimeDirectoryPreserve = true;
             };
-          wantedBy = mkIf peerCfg.autostart [ "multi-user.target" ];
+          wantedBy = lib.mkIf peerCfg.autostart [ "multi-user.target" ];
         };
       };
 
-      etcFiles = listToAttrs (map mkEtc enabledConfigs);
-      systemdConfigs = listToAttrs (map mkSystemd enabledConfigs);
+      etcFiles = lib.listToAttrs (map mkEtc enabledConfigs);
+      systemdConfigs = lib.listToAttrs (map mkSystemd enabledConfigs);
 
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       environment.etc = etcFiles;
       systemd.services = systemdConfigs;
     };

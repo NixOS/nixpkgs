@@ -212,7 +212,7 @@ in
       wants = [ "ncdns.service" ];
     };
 
-    services.ncdns.settings = mkDefaultAttrs {
+    services.ncdns.settings = lib.mkDefaultAttrs {
       ncdns =
         { # Namecoin RPC
           namecoinrpcaddress =

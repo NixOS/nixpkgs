@@ -1,17 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.soju;
   stateDir = "/var/lib/soju";
   runtimeDir = "/run/soju";
   listen = cfg.listen
-    ++ optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
-  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") listen;
-  tlsCfg = optionalString (cfg.tlsCertificate != null)
+    ++ lib.optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
+  listenCfg = lib.concatMapStringsSep "\n" (l: "listen ${l}") listen;
+  tlsCfg = lib.optionalString (cfg.tlsCertificate != null)
     "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
-  logCfg = optionalString cfg.enableMessageLogging
+  logCfg = lib.optionalString cfg.enableMessageLogging
     "message-store fs ${stateDir}/logs";
 
   configFile = pkgs.writeText "soju.conf" ''
@@ -20,8 +18,8 @@ let
     ${tlsCfg}
     db sqlite3 ${stateDir}/soju.db
     ${logCfg}
-    http-origin ${concatStringsSep " " cfg.httpOrigins}
-    accept-proxy-ip ${concatStringsSep " " cfg.acceptProxyIP}
+    http-origin ${lib.concatStringsSep " " cfg.httpOrigins}
+    accept-proxy-ip ${lib.concatStringsSep " " cfg.acceptProxyIP}
 
     ${cfg.extraConfig}
   '';
@@ -34,12 +32,12 @@ in
   ###### interface
 
   options.services.soju = {
-    enable = mkEnableOption "soju";
+    enable = lib.mkEnableOption "soju";
 
-    package = mkPackageOption pkgs "soju" { };
+    package = lib.mkPackageOption pkgs "soju" { };
 
-    listen = mkOption {
-      type = types.listOf types.str;
+    listen = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ":6697" ];
       description = ''
         Where soju should listen for incoming connections. See the
@@ -48,43 +46,43 @@ in
       '';
     };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      defaultText = lib.literalExpression "config.networking.hostName";
       description = "Server hostname.";
     };
 
-    tlsCertificate = mkOption {
-      type = types.nullOr types.path;
+    tlsCertificate = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/var/host.cert";
       description = "Path to server TLS certificate.";
     };
 
-    tlsCertificateKey = mkOption {
-      type = types.nullOr types.path;
+    tlsCertificateKey = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/var/host.key";
       description = "Path to server TLS certificate key.";
     };
 
-    enableMessageLogging = mkOption {
-      type = types.bool;
+    enableMessageLogging = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Whether to enable message logging.";
     };
 
-    adminSocket.enable = mkOption {
-      type = types.bool;
+    adminSocket.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Listen for admin connections from sojuctl at /run/soju/admin.
       '';
     };
 
-    httpOrigins = mkOption {
-      type = types.listOf types.str;
+    httpOrigins = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
@@ -93,8 +91,8 @@ in
       '';
     };
 
-    acceptProxyIP = mkOption {
-      type = types.listOf types.str;
+    acceptProxyIP = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
@@ -104,8 +102,8 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = "Lines added verbatim to the configuration file.";
     };
@@ -113,7 +111,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (cfg.tlsCertificate != null) == (cfg.tlsCertificateKey != null);

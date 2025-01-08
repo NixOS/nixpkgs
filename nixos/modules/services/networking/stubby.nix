@@ -1,16 +1,14 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.stubby;
   settingsFormat = pkgs.formats.yaml { };
   confFile = settingsFormat.generate "stubby.yml" cfg.settings;
 in {
   imports = [
-    (mkRemovedOptionModule [ "stubby" "debugLogging" ] "Use services.stubby.logLevel = \"debug\"; instead.")
+    (lib.mkRemovedOptionModule [ "stubby" "debugLogging" ] "Use services.stubby.logLevel = \"debug\"; instead.")
   ] ++ map (x:
-    (mkRemovedOptionModule [ "services" "stubby" x ]
+    (lib.mkRemovedOptionModule [ "services" "stubby" x ]
       "Stubby configuration moved to services.stubby.settings.")) [
         "authenticationMode"
         "fallbackProtocols"
@@ -25,10 +23,10 @@ in {
   options = {
     services.stubby = {
 
-      enable = mkEnableOption "Stubby DNS resolver";
+      enable = lib.mkEnableOption "Stubby DNS resolver";
 
-      settings = mkOption {
-        type = types.attrsOf settingsFormat.type;
+      settings = lib.mkOption {
+        type = lib.types.attrsOf settingsFormat.type;
         example = lib.literalExpression ''
           pkgs.stubby.passthru.settingsExample // {
             upstream_recursive_servers = [{
@@ -62,17 +60,17 @@ in {
           info = 6;
           debug = 7;
         };
-      in mkOption {
+      in lib.mkOption {
         default = null;
-        type = types.nullOr (types.enum (attrNames logLevels ++ attrValues logLevels));
-        apply = v: if isString v then logLevels.${v} else v;
+        type = lib.types.nullOr (lib.types.enum (lib.attrNames logLevels ++ lib.attrValues logLevels));
+        apply = v: if lib.isString v then logLevels.${v} else v;
         description = "Log verbosity (syslog keyword or level).";
       };
 
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [{
       assertion =
         (cfg.settings.resolution_type or "") == "GETDNS_RESOLUTION_STUB";
@@ -94,7 +92,7 @@ in {
         Type = "notify";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString (cfg.logLevel != null) "-v ${toString cfg.logLevel}"}";
+        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${lib.optionalString (cfg.logLevel != null) "-v ${toString cfg.logLevel}"}";
         DynamicUser = true;
         CacheDirectory = "stubby";
       };

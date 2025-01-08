@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.kea;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkRenamedOptionModule
     literalExpression
@@ -17,13 +17,13 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "controlSocketPaths" ] [ "targets" ])
+    (lib.mkRenamedOptionModule [ "controlSocketPaths" ] [ "targets" ])
   ];
   port = 9547;
   extraOpts = {
-    targets = mkOption {
-      type = types.listOf types.str;
-      example = literalExpression ''
+    targets = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      example = lib.literalExpression ''
         [
           "/run/kea/kea-dhcp4.socket"
           "/run/kea/kea-dhcp6.socket"

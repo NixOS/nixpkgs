@@ -140,7 +140,7 @@ import ./make-test-python.nix (
 
                 assert "INITIALIZED" in state, f"{state} instead of INITIALIZED"
 
-                # Enable and optionally disable
+                # Enable and lib.optionally disable
 
                 machine.succeed(f"${run "gnome-extensions enable {extension}"}")
                 checkState("ACTIVE", extension)

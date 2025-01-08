@@ -26,9 +26,9 @@ let
     mkChangedOptionModule
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionals
+    lib.optionals
     types
     ;
 
@@ -230,10 +230,10 @@ in
 {
   options = {
     services.knot = {
-      enable = mkEnableOption "Knot authoritative-only DNS server";
+      enable = lib.mkEnableOption "Knot authoritative-only DNS server";
 
-      enableXDP = mkOption {
-        type = types.bool;
+      enableXDP = lib.mkOption {
+        type = lib.types.bool;
         default = lib.hasAttrByPath [ "xdp" "listen" ] cfg.settings;
         defaultText = ''
           Enabled when the `xdp.listen` setting is configured through `settings`.
@@ -250,8 +250,8 @@ in
         '';
       };
 
-      checkConfig = mkOption {
-        type = types.bool;
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
         # TODO: maybe we could do some checks even when private keys complicate this?
         # conf-check fails hard on missing IPs/devices with XDP
         default = cfg.keyFiles == [ ] && !cfg.enableXDP;
@@ -265,16 +265,16 @@ in
         '';
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of additional command line parameters for knotd
         '';
       };
 
-      keyFiles = mkOption {
-        type = types.listOf types.path;
+      keyFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           A list of files containing additional configuration
@@ -286,7 +286,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = (pkgs.formats.yaml { }).type;
         default = { };
         description = ''
@@ -294,8 +294,8 @@ in
         '';
       };
 
-      settingsFile = mkOption {
-        type = types.nullOr types.path;
+      settingsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           As alternative to ``settings``, you can provide whole configuration
@@ -304,7 +304,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "knot-dns" { };
+      package = lib.mkPackageOption pkgs "knot-dns" { };
     };
   };
   imports = [
@@ -314,7 +314,7 @@ in
     ))
   ];
 
-  config = mkIf config.services.knot.enable {
+  config = lib.mkIf config.services.knot.enable {
     users.groups.knot = { };
     users.users.knot = {
       isSystemUser = true;
@@ -394,7 +394,7 @@ in
               "AF_INET6"
               "AF_UNIX"
             ]
-            ++ optionals (cfg.enableXDP) [
+            ++ lib.optionals (cfg.enableXDP) [
               "AF_NETLINK"
               "AF_XDP"
             ];
@@ -411,7 +411,7 @@ in
               "~@privileged"
               "@chown"
             ]
-            ++ optionals (cfg.enableXDP) [
+            ++ lib.optionals (cfg.enableXDP) [
               "bpf"
             ];
           UMask = "0077";

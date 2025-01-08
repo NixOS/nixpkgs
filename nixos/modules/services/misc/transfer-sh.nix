@@ -12,25 +12,25 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     mapAttrs
     isBool
     getExe
     boolToString
-    optionalAttrs
+    lib.optionalAttrs
     ;
 in
 {
   options.services.transfer-sh = {
-    enable = mkEnableOption "Easy and fast file sharing from the command-line";
+    enable = lib.mkEnableOption "Easy and fast file sharing from the command-line";
 
-    package = mkPackageOption pkgs "transfer-sh" { };
+    package = lib.mkPackageOption pkgs "transfer-sh" { };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             bool
             int
@@ -52,8 +52,8 @@ in
       '';
     };
 
-    provider = mkOption {
-      type = types.enum [
+    provider = lib.mkOption {
+      type = lib.types.enum [
         "local"
         "s3"
         "storj"
@@ -63,8 +63,8 @@ in
       description = "Storage providers to use";
     };
 
-    secretFile = mkOption {
-      type = types.nullOr types.path;
+    secretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/secrets/transfer-sh.env";
       description = ''
@@ -84,13 +84,13 @@ in
       localProvider = (cfg.provider == "local");
       stateDirectory = "/var/lib/transfer.sh";
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       services.transfer-sh.settings =
         {
-          LISTENER = mkDefault ":8080";
+          LISTENER = lib.mkDefault ":8080";
         }
-        // optionalAttrs localProvider {
-          BASEDIR = mkDefault stateDirectory;
+        // lib.optionalAttrs localProvider {
+          BASEDIR = lib.mkDefault stateDirectory;
         };
 
       systemd.services.transfer-sh = {
@@ -123,10 +123,10 @@ in
             SystemCallFilter = [ "@system-service" ];
             StateDirectory = baseNameOf stateDirectory;
           }
-          // optionalAttrs (cfg.secretFile != null) {
+          // lib.optionalAttrs (cfg.secretFile != null) {
             EnvironmentFile = cfg.secretFile;
           }
-          // optionalAttrs localProvider {
+          // lib.optionalAttrs localProvider {
             ReadWritePaths = cfg.settings.BASEDIR;
           };
       };

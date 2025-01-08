@@ -8,7 +8,7 @@
 let
 
   inherit (lib) mkIf mkMerge;
-  inherit (lib) concatStringsSep optionalString;
+  inherit (lib) concatStringsSep lib.optionalString;
 
   cfg = config.services.hylafax;
   mapModems = lib.forEach (lib.attrValues cfg.modems);
@@ -25,7 +25,7 @@ let
       include = mkLines { Include = conf.Include or [ ]; };
       other = mkLines (conf // { Include = [ ]; });
     in
-    pkgs.writeText "hylafax-config${name}" (concatStringsSep "\n" (include ++ other));
+    pkgs.writeText "hylafax-config${name}" (lib.concatStringsSep "\n" (include ++ other));
 
   globalConfigPath = mkConfigFile "" cfg.faxqConfig;
 
@@ -47,7 +47,7 @@ let
     in
     pkgs.runCommand "hylafax-config-modems" {
       preferLocalBuild = true;
-    } ''mkdir --parents "$out/" ${concatStringsSep "\n" (mapModems mkLine)}'';
+    } ''mkdir --parents "$out/" ${lib.concatStringsSep "\n" (mapModems mkLine)}'';
 
   setupSpoolScript = pkgs.substituteAll {
     name = "hylafax-setup-spool.sh";
@@ -91,9 +91,9 @@ let
     pathConfig.PathExistsGlob = [ "${cfg.spoolAreaPath}/sendq/q*" ];
   };
 
-  timers = mkMerge [
-    (mkIf (cfg.faxcron.enable.frequency != null) { hylafax-faxcron.timerConfig.Persistent = true; })
-    (mkIf (cfg.faxqclean.enable.frequency != null) { hylafax-faxqclean.timerConfig.Persistent = true; })
+  timers = lib.mkMerge [
+    (lib.mkIf (cfg.faxcron.enable.frequency != null) { hylafax-faxcron.timerConfig.Persistent = true; })
+    (lib.mkIf (cfg.faxqclean.enable.frequency != null) { hylafax-faxqclean.timerConfig.Persistent = true; })
   ];
 
   hardenService =
@@ -149,7 +149,7 @@ let
     requires = [ "hylafax-spool.service" ];
     after = [ "hylafax-spool.service" ];
     wants = mapModems ({ name, ... }: "hylafax-faxgetty@${name}.service");
-    wantedBy = mkIf cfg.autostart [ "multi-user.target" ];
+    wantedBy = lib.mkIf cfg.autostart [ "multi-user.target" ];
     serviceConfig.Type = "forking";
     serviceConfig.ExecStart = ''${pkgs.hylafaxplus}/spool/bin/faxq -q "${cfg.spoolAreaPath}"'';
     # This delays the "readiness" of this service until
@@ -186,8 +186,8 @@ let
     documentation = [ "man:faxcron(8)" ];
     after = [ "hylafax-spool.service" ];
     requires = [ "hylafax-spool.service" ];
-    wantedBy = mkIf cfg.faxcron.enable.spoolInit requires;
-    startAt = mkIf (cfg.faxcron.enable.frequency != null) cfg.faxcron.enable.frequency;
+    wantedBy = lib.mkIf cfg.faxcron.enable.spoolInit requires;
+    startAt = lib.mkIf (cfg.faxcron.enable.frequency != null) cfg.faxcron.enable.frequency;
     serviceConfig.ExecStart = concatStringsSep " " [
       "${pkgs.hylafaxplus}/spool/bin/faxcron"
       ''-q "${cfg.spoolAreaPath}"''
@@ -202,8 +202,8 @@ let
     documentation = [ "man:faxqclean(8)" ];
     after = [ "hylafax-spool.service" ];
     requires = [ "hylafax-spool.service" ];
-    wantedBy = mkIf cfg.faxqclean.enable.spoolInit requires;
-    startAt = mkIf (cfg.faxqclean.enable.frequency != null) cfg.faxqclean.enable.frequency;
+    wantedBy = lib.mkIf cfg.faxqclean.enable.spoolInit requires;
+    startAt = lib.mkIf (cfg.faxqclean.enable.frequency != null) cfg.faxqclean.enable.frequency;
     serviceConfig.ExecStart = concatStringsSep " " [
       "${pkgs.hylafaxplus}/spool/bin/faxqclean"
       ''-q "${cfg.spoolAreaPath}"''
@@ -248,7 +248,7 @@ let
 in
 
 {
-  config.systemd = mkIf cfg.enable {
+  config.systemd = lib.mkIf cfg.enable {
     inherit sockets timers paths;
     services = lib.mapAttrs (lib.const hardenService) (services // modemServices);
   };

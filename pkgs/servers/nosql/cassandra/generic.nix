@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   python311Packages,
-  makeWrapper,
   gawk,
   bash,
   getopt,
@@ -130,7 +129,6 @@ stdenv.mkDerivation rec {
   };
 
   meta =
-    with lib;
     {
       homepage = "https://cassandra.apache.org/";
       description = "Massively scalable open source NoSQL database";

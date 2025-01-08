@@ -33,9 +33,9 @@ let
     match
     mkAfter
     mkIf
-    optional
-    optionalAttrs
-    optionalString
+    lib.optional
+    lib.optionalAttrs
+    lib.optionalString
     pipe
     range
     replaceStrings
@@ -71,7 +71,7 @@ in rec {
           # unit.text can be null. But variables that are null listed in
           # passAsFile are ignored by nix, resulting in no file being created,
           # making the mv operation fail.
-          text = optionalString (unit.text != null) unit.text;
+          text = lib.optionalString (unit.text != null) unit.text;
           passAsFile = [ "text" ];
         }
         ''
@@ -104,7 +104,7 @@ in rec {
           && all (num: elem num digits) nums);
 
   assertByteFormat = name: group: attr:
-    optional (attr ? ${name} && ! isByteFormat attr.${name})
+    lib.optional (attr ? ${name} && ! isByteFormat attr.${name})
       "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
 
   toIntBaseDetected = value: assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null; (builtins.fromTOML "v=${value}").v;
@@ -117,11 +117,11 @@ in rec {
     );
 
   assertMacAddress = name: group: attr:
-    optional (attr ? ${name} && ! isMacAddress attr.${name})
+    lib.optional (attr ? ${name} && ! isMacAddress attr.${name})
       "Systemd ${group} field `${name}' must be a valid MAC address.";
 
   assertNetdevMacAddress = name: group: attr:
-    optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
+    lib.optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
       "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
 
   isNumberOrRangeOf = check: v:
@@ -137,31 +137,31 @@ in rec {
   isPortOrPortRange = isNumberOrRangeOf isPort;
 
   assertPort = name: group: attr:
-    optional (attr ? ${name} && ! isPort attr.${name})
+    lib.optional (attr ? ${name} && ! isPort attr.${name})
       "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
 
   assertPortOrPortRange = name: group: attr:
-    optional (attr ? ${name} && ! isPortOrPortRange attr.${name})
+    lib.optional (attr ? ${name} && ! isPortOrPortRange attr.${name})
       "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number or range of port numbers.";
 
   assertValueOneOf = name: values: group: attr:
-    optional (attr ? ${name} && !elem attr.${name} values)
+    lib.optional (attr ? ${name} && !elem attr.${name} values)
       "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertValuesSomeOfOr = name: values: default: group: attr:
-    optional (attr ? ${name} && !(all (x: elem x values) (splitString " " attr.${name}) || attr.${name} == default))
+    lib.optional (attr ? ${name} && !(all (x: elem x values) (splitString " " attr.${name}) || attr.${name} == default))
       "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertHasField = name: group: attr:
-    optional (!(attr ? ${name}))
+    lib.optional (!(attr ? ${name}))
       "Systemd ${group} field `${name}' must exist.";
 
   assertRange = name: min: max: group: attr:
-    optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
+    lib.optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
       "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
   assertRangeOrOneOf = name: min: max: values: group: attr:
-    optional (attr ? ${name} && !(((isInt attr.${name} || isFloat attr.${name}) && min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
+    lib.optional (attr ? ${name} && !(((isInt attr.${name} || isFloat attr.${name}) && min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
       "Systemd ${group} field `${name}' is not a value in range [${toString min},${toString max}], or one of ${toString values}";
 
   assertRangeWithOptionalMask = name: min: max: group: attr:
@@ -176,30 +176,30 @@ in rec {
           value = toIntBaseDetected (elemAt fields 0);
           mask = mapNullable toIntBaseDetected (elemAt fields 2);
         in
-          optional (!(min <= value && max >= value)) "Systemd ${group} field `${name}' has main value outside the range [${toString min},${toString max}]."
-          ++ optional (mask != null && !(min <= mask && max >= mask)) "Systemd ${group} field `${name}' has mask outside the range [${toString min},${toString max}]."
+          lib.optional (!(min <= value && max >= value)) "Systemd ${group} field `${name}' has main value outside the range [${toString min},${toString max}]."
+          ++ lib.optional (mask != null && !(min <= mask && max >= mask)) "Systemd ${group} field `${name}' has mask outside the range [${toString min},${toString max}]."
       else ["Systemd ${group} field `${name}' must either be an integer or a string."]
     else [];
 
   assertMinimum = name: min: group: attr:
-    optional (attr ? ${name} && attr.${name} < min)
+    lib.optional (attr ? ${name} && attr.${name} < min)
       "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
 
   assertOnlyFields = fields: group: attr:
     let badFields = filter (name: ! elem name fields) (attrNames attr); in
-    optional (badFields != [ ])
-      "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
+    lib.optional (badFields != [ ])
+      "Systemd ${group} has extra fields [${lib.concatStringsSep " " badFields}].";
 
   assertInt = name: group: attr:
-    optional (attr ? ${name} && !isInt attr.${name})
+    lib.optional (attr ? ${name} && !isInt attr.${name})
       "Systemd ${group} field `${name}' is not an integer";
 
   assertRemoved = name: see: group: attr:
-    optional (attr ? ${name})
+    lib.optional (attr ? ${name})
       "Systemd ${group} field `${name}' has been removed. See ${see}";
 
   assertKeyIsSystemdCredential = name: group: attr:
-    optional (attr ? ${name} && !(hasPrefix "@" attr.${name}))
+    lib.optional (attr ? ${name} && !(hasPrefix "@" attr.${name}))
       "Systemd ${group} field `${name}' is not a systemd credential";
 
   checkUnitConfig = group: checks: attrs: let
@@ -213,7 +213,7 @@ in rec {
     )) attrs;
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true
-     else trace (concatStringsSep "\n" errors) false;
+     else trace (lib.concatStringsSep "\n" errors) false;
 
   checkUnitConfigWithLegacyKey = legacyKey: group: checks: attrs:
     let
@@ -324,7 +324,7 @@ in rec {
       # upstream unit.
       for i in ${toString (mapAttrsToList
           (n: v: v.unit)
-          (filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
+          (lib.filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
         fn=$(basename $i/*)
         if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
@@ -347,7 +347,7 @@ in rec {
       # treated as drop-in file.
       for i in ${toString (mapAttrsToList
           (n: v: v.unit)
-          (filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
+          (lib.filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
         fn=$(basename $i/*)
         mkdir -p $out/$fn.d
         ln -s $i/$fn $out/$fn.d/overrides.conf
@@ -379,7 +379,7 @@ in rec {
             ln -sfn '../${name}' $out/'${name2}.requires'/
           '') (unit.requiredBy or [])) units)}
 
-      ${optionalString (type == "system") ''
+      ${lib.optionalString (type == "system") ''
         # Stupid misc. symlinks.
         ln -s ${cfg.defaultUnit} $out/default.target
         ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
@@ -417,47 +417,47 @@ in rec {
   unitConfig = { config, name, options, ... }: {
     config = {
       unitConfig =
-        optionalAttrs (config.requires != [])
+        lib.optionalAttrs (config.requires != [])
           { Requires = toString config.requires; }
-        // optionalAttrs (config.wants != [])
+        // lib.optionalAttrs (config.wants != [])
           { Wants = toString config.wants; }
-        // optionalAttrs (config.upholds != [])
+        // lib.optionalAttrs (config.upholds != [])
           { Upholds = toString config.upholds; }
-        // optionalAttrs (config.after != [])
+        // lib.optionalAttrs (config.after != [])
           { After = toString config.after; }
-        // optionalAttrs (config.before != [])
+        // lib.optionalAttrs (config.before != [])
           { Before = toString config.before; }
-        // optionalAttrs (config.bindsTo != [])
+        // lib.optionalAttrs (config.bindsTo != [])
           { BindsTo = toString config.bindsTo; }
-        // optionalAttrs (config.partOf != [])
+        // lib.optionalAttrs (config.partOf != [])
           { PartOf = toString config.partOf; }
-        // optionalAttrs (config.conflicts != [])
+        // lib.optionalAttrs (config.conflicts != [])
           { Conflicts = toString config.conflicts; }
-        // optionalAttrs (config.requisite != [])
+        // lib.optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
-        // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
+        // lib.optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
           { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers-${name}" (pipe config.restartTriggers [
               flatten
               (map (x: if isPath x then "${x}" else x))
               toString
             ])}"; }
-        // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
+        // lib.optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
           { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers-${name}" (pipe config.reloadTriggers [
               flatten
               (map (x: if isPath x then "${x}" else x))
               toString
             ])}"; }
-        // optionalAttrs (config.description != "") {
+        // lib.optionalAttrs (config.description != "") {
           Description = config.description; }
-        // optionalAttrs (config.documentation != []) {
+        // lib.optionalAttrs (config.documentation != []) {
           Documentation = toString config.documentation; }
-        // optionalAttrs (config.onFailure != []) {
+        // lib.optionalAttrs (config.onFailure != []) {
           OnFailure = toString config.onFailure; }
-        // optionalAttrs (config.onSuccess != []) {
+        // lib.optionalAttrs (config.onSuccess != []) {
           OnSuccess = toString config.onSuccess; }
-        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+        // lib.optionalAttrs (options.startLimitIntervalSec.isDefined) {
           StartLimitIntervalSec = toString config.startLimitIntervalSec;
-        } // optionalAttrs (options.startLimitBurst.isDefined) {
+        } // lib.optionalAttrs (options.startLimitBurst.isDefined) {
           StartLimitBurst = toString config.startLimitBurst;
         };
     };
@@ -470,7 +470,7 @@ in rec {
   { name, lib, config, ... }: {
     config = {
       name = "${name}.service";
-      environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+      environment.PATH = lib.mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
 
       enableStrictShellChecks = lib.mkOptionDefault nixosConfig.systemd.enableStrictShellChecks;
     };
@@ -526,9 +526,9 @@ in rec {
       mountConfig =
         { What = config.what;
           Where = config.where;
-        } // optionalAttrs (config.type != "") {
+        } // lib.optionalAttrs (config.type != "") {
           Type = config.type;
-        } // optionalAttrs (config.options != "") {
+        } // lib.optionalAttrs (config.options != "") {
           Options = config.options;
         };
     };
@@ -546,10 +546,10 @@ in rec {
   commonUnitText = def: lines: ''
       [Unit]
       ${attrsToSection def.unitConfig}
-    '' + lines + optionalString (def.wantedBy != [ ]) ''
+    '' + lines + lib.optionalString (def.wantedBy != [ ]) ''
 
       [Install]
-      WantedBy=${concatStringsSep " " def.wantedBy}
+      WantedBy=${lib.concatStringsSep " " def.wantedBy}
     '';
 
   targetToUnit = def:
@@ -567,7 +567,7 @@ in rec {
         [Service]
       '' + (let env = cfg.globalEnvironment // def.environment;
         in concatMapStrings (n:
-          let s = optionalString (env.${n} != null)
+          let s = lib.optionalString (env.${n} != null)
             "Environment=${toJSON "${n}=${env.${n}}"}\n";
           # systemd max line length is now 1MiB
           # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
@@ -577,10 +577,10 @@ in rec {
       '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
         X-RestartIfChanged=false
       '' else "")
-       + optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
+       + lib.optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
          X-StopIfChanged=false
       ''
-       + optionalString (def ? notSocketActivated && def.notSocketActivated) ''
+       + lib.optionalString (def ? notSocketActivated && def.notSocketActivated) ''
          X-NotSocketActivated=true
       '' + attrsToSection def.serviceConfig);
     };
@@ -590,8 +590,8 @@ in rec {
       text = commonUnitText def ''
         [Socket]
         ${attrsToSection def.socketConfig}
-        ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
-        ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
+        ${lib.concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+        ${lib.concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
       '';
     };
 
@@ -646,7 +646,7 @@ in rec {
     in
     pkgs.runCommand directoryName { } ''
       mkdir -p $out
-      ${(concatStringsSep "\n"
+      ${(lib.concatStringsSep "\n"
         (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
       )}
     '';

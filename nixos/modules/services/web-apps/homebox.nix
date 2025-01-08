@@ -16,10 +16,10 @@ let
 in
 {
   options.services.homebox = {
-    enable = mkEnableOption "homebox";
-    package = mkPackageOption pkgs "homebox" { };
+    enable = lib.mkEnableOption "homebox";
+    package = lib.mkPackageOption pkgs "homebox" { };
     settings = lib.mkOption {
-      type = types.attrsOf types.str;
+      type = lib.types.attrsOf lib.types.str;
       defaultText = ''
         HBOX_STORAGE_DATA = "/var/lib/homebox/data";
         HBOX_STORAGE_SQLITE_URL = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
@@ -33,17 +33,17 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.homebox = {
       isSystemUser = true;
       group = "homebox";
     };
     users.groups.homebox = { };
     services.homebox.settings = {
-      HBOX_STORAGE_DATA = mkDefault "/var/lib/homebox/data";
-      HBOX_STORAGE_SQLITE_URL = mkDefault "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
-      HBOX_OPTIONS_ALLOW_REGISTRATION = mkDefault "false";
-      HBOX_MODE = mkDefault "production";
+      HBOX_STORAGE_DATA = lib.mkDefault "/var/lib/homebox/data";
+      HBOX_STORAGE_SQLITE_URL = lib.mkDefault "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
+      HBOX_OPTIONS_ALLOW_REGISTRATION = lib.mkDefault "false";
+      HBOX_MODE = lib.mkDefault "production";
     };
     systemd.services.homebox = {
       after = [ "network.target" ];

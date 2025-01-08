@@ -9,8 +9,8 @@
 let
   inherit (lib)
     getExe
-    mkOption
-    optionals
+    lib.mkOption
+    lib.optionals
     types
     ;
 
@@ -20,8 +20,8 @@ let
 in
 {
   port = 9118;
-  extraOpts = with types; {
-    configFile = mkOption {
+  extraOpts = with lib.types; {
+    configFile = lib.mkOption {
       type = nullOr path;
       default = null;
       example = "./fastly-exporter-config.txt";
@@ -31,7 +31,7 @@ in
       '';
     };
 
-    environmentFile = mkOption {
+    environmentFile = lib.mkOption {
       type = path;
       description = ''
         An environment file containg at least the FASTLY_API_TOKEN= environment
@@ -48,7 +48,7 @@ in
           "-listen"
           "${cfg.listenAddress}:${toString cfg.port}"
         ]
-        ++ optionals (cfg.configFile != null) [
+        ++ lib.optionals (cfg.configFile != null) [
           "--config-file"
           cfg.configFile
         ]

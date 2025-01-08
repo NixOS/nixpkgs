@@ -11,7 +11,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     literalExpression
     filterAttrsRecursive
@@ -25,12 +25,12 @@ in
   meta.maintainers = with lib.maintainers; [ felbinger ];
 
   options.services.suricata = {
-    enable = mkEnableOption "Suricata";
+    enable = lib.mkEnableOption "Suricata";
 
-    package = mkPackageOption pkgs "suricata" { };
+    package = lib.mkPackageOption pkgs "suricata" { };
 
-    configFile = mkOption {
-      type = types.path;
+    configFile = lib.mkOption {
+      type = lib.types.path;
       visible = false;
       default = pkgs.writeTextFile {
         name = "suricata.yaml";
@@ -52,9 +52,9 @@ in
       '';
     };
 
-    settings = mkOption {
-      type = types.submodule (import ./settings.nix { inherit config lib yaml; });
-      example = literalExpression ''
+    settings = lib.mkOption {
+      type = lib.types.submodule (import ./settings.nix { inherit config lib yaml; });
+      example = lib.literalExpression ''
         vars.address-groups.HOME_NET = "192.168.178.0/24";
         outputs = [
           {
@@ -113,8 +113,8 @@ in
       description = "Suricata settings";
     };
 
-    enabledSources = mkOption {
-      type = types.listOf types.str;
+    enabledSources = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       # see: nix-shell -p suricata python3Packages.pyyaml --command 'suricata-update list-sources'
       default = [
         "et/open"
@@ -133,8 +133,8 @@ in
       '';
     };
 
-    disabledRules = mkOption {
-      type = types.listOf types.str;
+    disabledRules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       # protocol dnp3 seams to be disabled, which causes the signature evaluation to fail, so we disable the
       # dnp3 rules, see https://github.com/OISF/suricata/blob/master/rules/dnp3-events.rules for more details
       default = [
@@ -154,7 +154,7 @@ in
     let
       captureInterfaces =
         let
-          inherit (lists) unique optionals;
+          inherit (lists) unique lib.optionals;
         in
         unique (
           map (e: e.interface) (
@@ -167,7 +167,7 @@ in
           )
         );
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         {
           assertion = (builtins.length captureInterfaces) > 0;
@@ -181,7 +181,7 @@ in
         }
       ];
 
-      boot.kernelModules = mkIf (cfg.settings.af-packet != null) [ "af_packet" ];
+      boot.kernelModules = lib.mkIf (cfg.settings.af-packet != null) [ "af_packet" ];
 
       users = {
         groups.${cfg.settings.run-as.group} = { };
@@ -212,10 +212,10 @@ in
               ) cfg.enabledSources;
             in
             ''
-              ${concatStringsSep "\n" enabledSourcesCmds}
+              ${lib.concatStringsSep "\n" enabledSourcesCmds}
               ${python.interpreter} ${pkg}/bin/suricata-update update-sources
               ${python.interpreter} ${pkg}/bin/suricata-update update --suricata-conf ${cfg.configFile} --no-test \
-                --disable-conf ${pkgs.writeText "suricata-disable-conf" "${concatStringsSep "\n" cfg.disabledRules}"}
+                --disable-conf ${pkgs.writeText "suricata-disable-conf" "${lib.concatStringsSep "\n" cfg.disabledRules}"}
             '';
           serviceConfig = {
             Type = "oneshot";

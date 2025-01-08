@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.services.wordpress;
   eachSite = cfg.sites;
@@ -32,9 +30,9 @@ let
       # Since hard linking directories is not allowed, copying is the next best thing.
 
       # copy additional plugin(s), theme(s) and language(s)
-      ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
-      ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
-      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
+      ${lib.concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
@@ -52,7 +50,7 @@ let
   } // cfg.settings;
 
   wpConfig = hostName: cfg: let
-    conf_gen = c: mapAttrsToList (k: v: "define('${k}', ${mkPhpValue v});") cfg.mergedConfig;
+    conf_gen = c: lib.mapAttrsToList (k: v: "define('${k}', ${mkPhpValue v});") cfg.mergedConfig;
   in pkgs.writeTextFile {
     name = "wp-config-${hostName}.php";
     text = ''
@@ -62,7 +60,7 @@ let
         require_once('${stateDir hostName}/secret-keys.php');
 
         ${cfg.extraConfig}
-        ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
+        ${lib.concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
 
         if ( !defined('ABSPATH') )
           define('ABSPATH', dirname(__FILE__) . '/');
@@ -74,16 +72,16 @@ let
   };
 
   mkPhpValue = v: let
-    isHasAttr = s: isAttrs v && hasAttr s v;
+    isHasAttr = s: lib.isAttrs v && lib.hasAttr s v;
     # "you're escaped" -> "'you\'re escaped'"
     # https://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.single
-    toPhpString = s: "'${escape [ "'" "\\" ] s}'";
+    toPhpString = s: "'${lib.escape [ "'" "\\" ] s}'";
   in
-    if isString v then toPhpString v
+    if lib.isString v then toPhpString v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && strings.isConvertibleWithToString v then toPhpString (concatMapStringsSep "," toString v)
-    else if isInt v then toString v
-    else if isBool v then boolToString v
+    else if lib.isList v && lib.strings.isConvertibleWithToString v then toPhpString (lib.concatMapStringsSep "," toString v)
+    else if lib.isInt v then toString v
+    else if lib.isBool v then lib.boolToString v
     else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString (toString v._file)}))"
     else if isHasAttr "_raw" then v._raw
     else abort "The Wordpress config value ${lib.generators.toPretty {} v} can not be encoded."
@@ -96,7 +94,7 @@ let
     if ! test -e "${hostStateDir}/secret-keys.php"; then
       umask 0177
       echo "<?php" >> "${hostStateDir}/secret-keys.php"
-      ${concatMapStringsSep "\n" (var: ''
+      ${lib.concatMapStringsSep "\n" (var: ''
         echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
       '') secretsVars}
       echo "?>" >> "${hostStateDir}/secret-keys.php"
@@ -107,10 +105,10 @@ let
   siteOpts = { lib, name, config, ... }:
     {
       options = {
-        package = mkPackageOption pkgs "wordpress" { };
+        package = lib.mkPackageOption pkgs "wordpress" { };
 
-        uploadsDir = mkOption {
-          type = types.path;
+        uploadsDir = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/wordpress/${name}/uploads";
           description = ''
             This directory is used for uploads of pictures. The directory passed here is automatically
@@ -118,8 +116,8 @@ let
           '';
         };
 
-        fontsDir = mkOption {
-          type = types.path;
+        fontsDir = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/wordpress/${name}/fonts";
           description = ''
             This directory is used to download fonts from a remote location, e.g.
@@ -127,8 +125,8 @@ let
           '';
         };
 
-        plugins = mkOption {
-          type = with types; coercedTo
+        plugins = lib.mkOption {
+          type = with lib.types; coercedTo
             (listOf path)
             (l: warn "setting this option with a list is deprecated"
               listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
@@ -141,21 +139,21 @@ let
             These plugins need to be packaged before use, see example.
             :::
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               inherit (pkgs.wordpressPackages.plugins) embed-pdf-viewer-plugin;
             }
           '';
         };
 
-        themes = mkOption {
-          type = with types; coercedTo
+        themes = lib.mkOption {
+          type = with lib.types; coercedTo
             (listOf path)
             (l: warn "setting this option with a list is deprecated"
               listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
             (attrsOf path);
           default = { inherit (pkgs.wordpressPackages.themes) twentytwentyfive; };
-          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentyfive; }";
+          defaultText = lib.literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentyfive; }";
           description = ''
             Path(s) to respective theme(s) which are copied from the 'theme' directory.
 
@@ -163,20 +161,20 @@ let
             These themes need to be packaged before use, see example.
             :::
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               inherit (pkgs.wordpressPackages.themes) responsive-theme;
             }
           '';
         };
 
-        languages = mkOption {
-          type = types.listOf types.path;
+        languages = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
           default = [];
           description = ''
             List of path(s) to respective language(s) which are copied from the 'languages' directory.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [
               # Let's package the German language.
               # For other languages try to replace language and country code in the download URL with your desired one.
@@ -197,32 +195,32 @@ let
         };
 
         database = {
-          host = mkOption {
-            type = types.str;
+          host = lib.mkOption {
+            type = lib.types.str;
             default = "localhost";
             description = "Database host address.";
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 3306;
             description = "Database host port.";
           };
 
-          name = mkOption {
-            type = types.str;
+          name = lib.mkOption {
+            type = lib.types.str;
             default = "wordpress";
             description = "Database name.";
           };
 
-          user = mkOption {
-            type = types.str;
+          user = lib.mkOption {
+            type = lib.types.str;
             default = "wordpress";
             description = "Database user.";
           };
 
-          passwordFile = mkOption {
-            type = types.nullOr types.path;
+          passwordFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
             example = "/run/keys/wordpress-dbpassword";
             description = ''
@@ -231,8 +229,8 @@ let
             '';
           };
 
-          tablePrefix = mkOption {
-            type = types.str;
+          tablePrefix = lib.mkOption {
+            type = lib.types.str;
             default = "wp_";
             description = ''
               The $table_prefix is the value placed in the front of your database tables.
@@ -244,23 +242,23 @@ let
             '';
           };
 
-          socket = mkOption {
-            type = types.nullOr types.path;
+          socket = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
-            defaultText = literalExpression "/run/mysqld/mysqld.sock";
+            defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
             description = "Path to the unix socket file to use for authentication.";
           };
 
-          createLocally = mkOption {
-            type = types.bool;
+          createLocally = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Create the database and database user locally.";
           };
         };
 
-        virtualHost = mkOption {
-          type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-          example = literalExpression ''
+        virtualHost = lib.mkOption {
+          type = lib.types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+          example = lib.literalExpression ''
             {
               adminAddr = "webmaster@example.org";
               forceSSL = true;
@@ -272,8 +270,8 @@ let
           '';
         };
 
-        poolConfig = mkOption {
-          type = with types; attrsOf (oneOf [ str int bool ]);
+        poolConfig = lib.mkOption {
+          type = with lib.types; attrsOf (oneOf [ str int bool ]);
           default = {
             "pm" = "dynamic";
             "pm.max_children" = 32;
@@ -288,15 +286,15 @@ let
           '';
         };
 
-        settings = mkOption {
-          type = types.attrsOf types.anything;
+        settings = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
           default = {};
           description = ''
             Structural Wordpress configuration.
             Refer to <https://developer.wordpress.org/apis/wp-config-php>
             for details and supported values.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               WP_DEFAULT_THEME = "twentytwentytwo";
               WP_SITEURL = "https://example.org";
@@ -310,10 +308,10 @@ let
           '';
         };
 
-        mergedConfig = mkOption {
+        mergedConfig = lib.mkOption {
           readOnly = true;
           default = mergeConfig config;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             {
               DISALLOW_FILE_EDIT = true;
               AUTOMATIC_UPDATER_DISABLED = true;
@@ -324,8 +322,8 @@ let
           '';
         };
 
-        extraConfig = mkOption {
-          type = types.lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           description = ''
             Any additional text to be appended to the wp-config.php
@@ -343,7 +341,7 @@ let
 
       };
 
-      config.virtualHost.hostName = mkDefault name;
+      config.virtualHost.hostName = lib.mkDefault name;
     };
 in
 {
@@ -351,14 +349,14 @@ in
   options = {
     services.wordpress = {
 
-      sites = mkOption {
-        type = types.attrsOf (types.submodule siteOpts);
+      sites = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule siteOpts);
         default = {};
         description = "Specification of one or more WordPress sites to serve";
       };
 
-      webserver = mkOption {
-        type = types.enum [ "httpd" "nginx" "caddy" ];
+      webserver = lib.mkOption {
+        type = lib.types.enum [ "httpd" "nginx" "caddy" ];
         default = "httpd";
         description = ''
           Whether to use apache2 or nginx for virtual host management.
@@ -375,32 +373,32 @@ in
   };
 
   # implementation
-  config = mkIf (eachSite != {}) (mkMerge [{
+  config = lib.mkIf (eachSite != {}) (lib.mkMerge [{
 
     assertions =
-      (mapAttrsToList (hostName: cfg:
+      (lib.mapAttrsToList (hostName: cfg:
         { assertion = cfg.database.createLocally -> cfg.database.user == user;
           message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
         }) eachSite) ++
-      (mapAttrsToList (hostName: cfg:
+      (lib.mapAttrsToList (hostName: cfg:
         { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
           message = ''services.wordpress.sites."${hostName}".database.passwordFile cannot be specified if services.wordpress.sites."${hostName}".database.createLocally is set to true.'';
         }) eachSite);
 
 
-    services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
+    services.mysql = lib.mkIf (lib.any (v: v.database.createLocally) (lib.attrValues eachSite)) {
       enable = true;
-      package = mkDefault pkgs.mariadb;
-      ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-      ensureUsers = mapAttrsToList (hostName: cfg:
+      package = lib.mkDefault pkgs.mariadb;
+      ensureDatabases = lib.mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
+      ensureUsers = lib.mapAttrsToList (hostName: cfg:
         { name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ) eachSite;
     };
 
-    services.phpfpm.pools = mapAttrs' (hostName: cfg: (
-      nameValuePair "wordpress-${hostName}" {
+    services.phpfpm.pools = lib.mapAttrs' (hostName: cfg: (
+      lib.nameValuePair "wordpress-${hostName}" {
         inherit user;
         group = webserver.group;
         settings = {
@@ -412,12 +410,12 @@ in
 
   }
 
-  (mkIf (cfg.webserver == "httpd") {
+  (lib.mkIf (cfg.webserver == "httpd") {
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = mapAttrs (hostName: cfg: mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+      virtualHosts = lib.mapAttrs (hostName: cfg: lib.mkMerge [ cfg.virtualHost {
+        documentRoot = lib.mkForce "${pkg hostName cfg}/share/wordpress";
         extraConfig = ''
           <Directory "${pkg hostName cfg}/share/wordpress">
             <FilesMatch "\.php$">
@@ -452,7 +450,7 @@ in
   })
 
   {
-    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
+    systemd.tmpfiles.rules = lib.flatten (lib.mapAttrsToList (hostName: cfg: [
       "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
@@ -460,12 +458,12 @@ in
       "Z '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
     ]) eachSite);
 
-    systemd.services = mkMerge [
-      (mapAttrs' (hostName: cfg: (
-        nameValuePair "wordpress-init-${hostName}" {
+    systemd.services = lib.mkMerge [
+      (lib.mapAttrs' (hostName: cfg: (
+        lib.nameValuePair "wordpress-init-${hostName}" {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-wordpress-${hostName}.service" ];
-          after = optional cfg.database.createLocally "mysql.service";
+          after = lib.optional cfg.database.createLocally "mysql.service";
           script = secretsScript (stateDir hostName);
 
           serviceConfig = {
@@ -475,7 +473,7 @@ in
           };
       })) eachSite)
 
-      (optionalAttrs (any (v: v.database.createLocally) (attrValues eachSite)) {
+      (lib.optionalAttrs (lib.any (v: v.database.createLocally) (lib.attrValues eachSite)) {
         httpd.after = [ "mysql.service" ];
       })
     ];
@@ -486,11 +484,11 @@ in
     };
   }
 
-  (mkIf (cfg.webserver == "nginx") {
+  (lib.mkIf (cfg.webserver == "nginx") {
     services.nginx = {
       enable = true;
-      virtualHosts = mapAttrs (hostName: cfg: {
-        serverName = mkDefault hostName;
+      virtualHosts = lib.mapAttrs (hostName: cfg: {
+        serverName = lib.mkDefault hostName;
         root = "${pkg hostName cfg}/share/wordpress";
         extraConfig = ''
           index index.php;
@@ -541,11 +539,11 @@ in
     };
   })
 
-  (mkIf (cfg.webserver == "caddy") {
+  (lib.mkIf (cfg.webserver == "caddy") {
     services.caddy = {
       enable = true;
-      virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
+      virtualHosts = lib.mapAttrs' (hostName: cfg: (
+        lib.nameValuePair "http://${hostName}" {
           extraConfig = ''
             root    * /${pkg hostName cfg}/share/wordpress
             file_server

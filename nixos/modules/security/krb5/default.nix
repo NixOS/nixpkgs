@@ -7,7 +7,7 @@
 let
   inherit (lib)
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRemovedOptionModule
     ;
@@ -26,32 +26,32 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModuleCfg "libdefaults")
-    (mkRemovedOptionModuleCfg "realms")
-    (mkRemovedOptionModuleCfg "domain_realm")
-    (mkRemovedOptionModuleCfg "capaths")
-    (mkRemovedOptionModuleCfg "appdefaults")
-    (mkRemovedOptionModuleCfg "plugins")
-    (mkRemovedOptionModuleCfg "config")
-    (mkRemovedOptionModuleCfg "extraConfig")
-    (mkRemovedOptionModule' "kerberos" ''
+    (lib.mkRemovedOptionModuleCfg "libdefaults")
+    (lib.mkRemovedOptionModuleCfg "realms")
+    (lib.mkRemovedOptionModuleCfg "domain_realm")
+    (lib.mkRemovedOptionModuleCfg "capaths")
+    (lib.mkRemovedOptionModuleCfg "appdefaults")
+    (lib.mkRemovedOptionModuleCfg "plugins")
+    (lib.mkRemovedOptionModuleCfg "config")
+    (lib.mkRemovedOptionModuleCfg "extraConfig")
+    (lib.mkRemovedOptionModule' "kerberos" ''
       The option `krb5.kerberos' has been moved to `security.krb5.package'.
     '')
   ];
 
   options = {
     security.krb5 = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
         description = "Enable and configure Kerberos utilities";
         type = bool;
       };
 
-      package = mkPackageOption pkgs "krb5" {
+      package = lib.mkPackageOption pkgs "krb5" {
         example = "heimdal";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         type = format.type;
         description = ''
@@ -91,7 +91,7 @@ in
   };
 
   config = {
-    assertions = mkIf (cfg.enable || config.services.kerberos_server.enable) [
+    assertions = lib.mkIf (cfg.enable || config.services.kerberos_server.enable) [
       (
         let
           implementation = cfg.package.passthru.implementation or "<NOT SET>";
@@ -113,7 +113,7 @@ in
       )
     ];
 
-    environment = mkIf cfg.enable {
+    environment = lib.mkIf cfg.enable {
       systemPackages = [ cfg.package ];
       etc."krb5.conf".source = format.generate "krb5.conf" cfg.settings;
     };

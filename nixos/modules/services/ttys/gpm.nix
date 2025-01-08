@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.gpm;
@@ -21,8 +19,8 @@ in
 
     services.gpm = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable GPM, the General Purpose Mouse daemon,
@@ -30,8 +28,8 @@ in
         '';
       };
 
-      protocol = mkOption {
-        type = types.str;
+      protocol = lib.mkOption {
+        type = lib.types.str;
         default = "ps/2";
         description = "Mouse protocol to use.";
       };
@@ -42,7 +40,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.gpm = {
       description = "Console Mouse Daemon";

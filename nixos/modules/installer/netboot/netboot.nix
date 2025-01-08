@@ -3,8 +3,6 @@
 
 { config, lib, pkgs, modulesPath, ... }:
 
-with lib;
-
 {
   imports = [
     ../../image/file-options.nix
@@ -12,17 +10,17 @@ with lib;
 
   options = {
 
-    netboot.squashfsCompression = mkOption {
+    netboot.squashfsCompression = lib.mkOption {
       default = "zstd -Xcompression-level 19";
       description = ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    netboot.storeContents = mkOption {
-      example = literalExpression "[ pkgs.stdenv ]";
+    netboot.storeContents = lib.mkOption {
+      example = lib.literalExpression "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
@@ -36,27 +34,27 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    fileSystems."/" = mkImageMediaOverride
+    fileSystems."/" = lib.mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
       };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" = mkImageMediaOverride
+    fileSystems."/nix/.ro-store" = lib.mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
         options = [ "loop" ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
         neededForBoot = true;
       };
 
-    fileSystems."/nix/.rw-store" = mkImageMediaOverride
+    fileSystems."/nix/.rw-store" = lib.mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
-    fileSystems."/nix/store" = mkImageMediaOverride
+    fileSystems."/nix/store" = lib.mkImageMediaOverride
       { overlay = {
           lowerdir = [ "/nix/.ro-store" ];
           upperdir = "/nix/.rw-store/store";

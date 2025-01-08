@@ -10,7 +10,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -23,46 +23,46 @@ let
 in
 {
   options.services.actual = {
-    enable = mkEnableOption "actual, a privacy focused app for managing your finances";
-    package = mkPackageOption pkgs "actual-server" { };
+    enable = lib.mkEnableOption "actual, a privacy focused app for managing your finances";
+    package = lib.mkPackageOption pkgs "actual-server" { };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = "Server settings, refer to [the documentation](https://actualbudget.org/docs/config/) for available options.";
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = formatType.type;
 
         options = {
-          hostname = mkOption {
-            type = types.str;
+          hostname = lib.mkOption {
+            type = lib.types.str;
             description = "The address to listen on";
             default = "::";
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             description = "The port to listen on";
             default = 3000;
           };
         };
 
         config = {
-          serverFiles = mkDefault "${dataDir}/server-files";
-          userFiles = mkDefault "${dataDir}/user-files";
-          dataDir = mkDefault dataDir;
+          serverFiles = lib.mkDefault "${dataDir}/server-files";
+          userFiles = lib.mkDefault "${dataDir}/user-files";
+          dataDir = lib.mkDefault dataDir;
         };
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.port ];
+  config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.port ];
 
     systemd.services.actual = {
       description = "Actual server, a local-first personal finance app";

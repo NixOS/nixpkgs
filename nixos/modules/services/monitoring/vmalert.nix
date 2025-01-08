@@ -4,17 +4,17 @@
   lib,
   ...
 }:
-with lib;
+
 let
   cfg = config.services.vmalert;
 
   format = pkgs.formats.yaml { };
 
-  confOpts = concatStringsSep " \\\n" (
-    mapAttrsToList mkLine (filterAttrs (_: v: v != false) cfg.settings)
+  confOpts = lib.concatStringsSep " \\\n" (
+    lib.mapAttrsToList mkLine (lib.filterAttrs (_: v: v != false) cfg.settings)
   );
   confType =
-    with types;
+    with lib.types;
     let
       valueType = oneOf [
         bool
@@ -29,10 +29,10 @@ let
     key: value:
     if value == true then
       "-${key}"
-    else if isList value then
-      concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
+    else if lib.isList value then
+      lib.concatMapStringsSep " " (v: "-${key}=${lib.escapeShellArg (toString v)}") value
     else
-      "-${key}=${escapeShellArg (toString value)}";
+      "-${key}=${lib.escapeShellArg (toString value)}";
 in
 {
   # interface
@@ -47,23 +47,23 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = lib.mkPackageOption pkgs "victoriametrics" { };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = confType;
         options = {
 
-          "datasource.url" = mkOption {
-            type = types.nonEmptyStr;
+          "datasource.url" = lib.mkOption {
+            type = lib.types.nonEmptyStr;
             example = "http://localhost:8428";
             description = ''
               Datasource compatible with Prometheus HTTP API.
             '';
           };
 
-          "notifier.url" = mkOption {
-            type = with types; listOf nonEmptyStr;
+          "notifier.url" = lib.mkOption {
+            type = with lib.types; listOf nonEmptyStr;
             default = [ ];
             example = [ "http://127.0.0.1:9093" ];
             description = ''
@@ -71,8 +71,8 @@ in
             '';
           };
 
-          "rule" = mkOption {
-            type = with types; listOf path;
+          "rule" = lib.mkOption {
+            type = with lib.types; listOf path;
             description = ''
               Path to the files with alerting and/or recording rules.
 
@@ -102,7 +102,7 @@ in
       '';
     };
 
-    rules = mkOption {
+    rules = lib.mkOption {
       type = format.type;
       default = { };
       example = {
@@ -131,7 +131,7 @@ in
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc."vmalert/rules.yml".source = format.generate "rules.yml" cfg.rules;
 

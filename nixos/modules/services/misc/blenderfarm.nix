@@ -54,12 +54,12 @@ in
           Port = lib.mkOption {
             description = "Default port blendfarm server listens on.";
             default = 15000;
-            type = types.port;
+            type = lib.types.port;
           };
           BroadcastPort = lib.mkOption {
             description = "Default port blendfarm server advertises itself on.";
             default = 16342;
-            type = types.port;
+            type = lib.types.port;
           };
 
           BypassScriptUpdate = lib.mkOption {

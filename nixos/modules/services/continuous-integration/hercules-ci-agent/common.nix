@@ -16,7 +16,7 @@ let
     filterAttrs
     literalExpression
     mkIf
-    mkOption
+    lib.mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
     types
@@ -30,26 +30,26 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "hercules-ci-agent" "extraOptions" ]
       [ "services" "hercules-ci-agent" "settings" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "hercules-ci-agent" "baseDirectory" ]
       [ "services" "hercules-ci-agent" "settings" "baseDirectory" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "hercules-ci-agent" "concurrentTasks" ]
       [ "services" "hercules-ci-agent" "settings" "concurrentTasks" ]
     )
-    (mkRemovedOptionModule [ "services" "hercules-ci-agent" "patchNix" ]
+    (lib.mkRemovedOptionModule [ "services" "hercules-ci-agent" "patchNix" ]
       "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters."
     )
   ];
 
   options.services.hercules-ci-agent = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable to run Hercules CI Agent as a system service.
@@ -60,8 +60,8 @@ in
         Support is available at [help@hercules-ci.com](mailto:help@hercules-ci.com).
       '';
     };
-    package = mkPackageOption pkgs "hercules-ci-agent" { };
-    settings = mkOption {
+    package = lib.mkPackageOption pkgs "hercules-ci-agent" { };
+    settings = lib.mkOption {
       description = ''
         These settings are written to the `agent.toml` file.
 
@@ -69,7 +69,7 @@ in
 
         For the exhaustive list of settings, see <https://docs.hercules-ci.com/hercules-ci/reference/agent-config/>.
       '';
-      type = types.submoduleWith { modules = [ settingsModule ]; };
+      type = lib.types.submoduleWith { modules = [ settingsModule ]; };
     };
 
     /*
@@ -78,8 +78,8 @@ in
       These are written as options instead of let binding to allow sharing with
       default.nix on both NixOS and nix-darwin.
     */
-    tomlFile = mkOption {
-      type = types.path;
+    tomlFile = lib.mkOption {
+      type = lib.types.path;
       internal = true;
       defaultText = lib.literalMD "generated `hercules-ci-agent.toml`";
       description = ''
@@ -88,7 +88,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Make sure that nix.extraOptions does not override trusted-users
     assertions = [
       {

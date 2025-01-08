@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
   inherit (pkgs) solanum util-linux;
@@ -26,10 +26,10 @@ in
 
     services.solanum = {
 
-      enable = mkEnableOption "Solanum IRC daemon";
+      enable = lib.mkEnableOption "Solanum IRC daemon";
 
-      config = mkOption {
-        type = types.str;
+      config = lib.mkOption {
+        type = lib.types.str;
         default = ''
           serverinfo {
             name = "irc.example.com";
@@ -60,16 +60,16 @@ in
         '';
       };
 
-      openFilesLimit = mkOption {
-        type = types.int;
+      openFilesLimit = lib.mkOption {
+        type = lib.types.int;
         default = 1024;
         description = ''
           Maximum number of open files. Limits the clients and server connections.
         '';
       };
 
-      motd = mkOption {
-        type = types.nullOr types.lines;
+      motd = lib.mkOption {
+        type = lib.types.nullOr types.lines;
         default = null;
         description = ''
           Solanum MOTD text.
@@ -85,7 +85,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
 
@@ -112,7 +112,7 @@ in
 
       }
 
-      (mkIf (cfg.motd != null) {
+      (lib.mkIf (cfg.motd != null) {
         environment.etc."solanum/ircd.motd".text = cfg.motd;
       })
     ]

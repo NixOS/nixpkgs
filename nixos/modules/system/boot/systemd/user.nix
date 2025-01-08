@@ -5,17 +5,15 @@
   utils,
   ...
 }:
-with utils;
-with systemdUtils.unitOptions;
-with lib;
-
 let
   cfg = config.systemd.user;
 
-  systemd = config.systemd.package;
+  # systemd = config.systemd.package;
+
+  inherit (utils) systemdUtils;
 
   inherit (systemdUtils.lib)
-    makeUnit
+    # makeUnit
     generateUnits
     targetToUnit
     serviceToUnit
@@ -24,6 +22,8 @@ let
     timerToUnit
     pathToUnit
     ;
+
+  # inherit (systemdUtils) unitOptions;
 
   upstreamUserUnits = [
     "app.slice"
@@ -52,7 +52,7 @@ let
       user ? null,
     }:
     let
-      suffix = optionalString (user != null) "-${user}";
+      suffix = lib.optionalString (user != null) "-${user}";
     in
     pkgs.writeTextFile {
       name = "nixos-user-tmpfiles.d${suffix}";
@@ -60,15 +60,15 @@ let
       text = ''
         # This file is created automatically and should not be modified.
         # Please change the options ‘systemd.user.tmpfiles’ instead.
-        ${concatStringsSep "\n" rules}
+        ${lib.concatStringsSep "\n" rules}
       '';
     };
 in
 {
   options = {
-    systemd.user.extraConfig = mkOption {
+    systemd.user.extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       example = "DefaultCPUAccounting=yes";
       description = ''
         Extra config options for systemd user instances. See {manpage}`systemd-user.conf(5)` for
@@ -76,51 +76,51 @@ in
       '';
     };
 
-    systemd.user.units = mkOption {
+    systemd.user.units = lib.mkOption {
       description = "Definition of systemd per-user units.";
       default = { };
       type = systemdUtils.types.units;
     };
 
-    systemd.user.paths = mkOption {
+    systemd.user.paths = lib.mkOption {
       default = { };
       type = systemdUtils.types.paths;
       description = "Definition of systemd per-user path units.";
     };
 
-    systemd.user.services = mkOption {
+    systemd.user.services = lib.mkOption {
       default = { };
       type = systemdUtils.types.services;
       description = "Definition of systemd per-user service units.";
     };
 
-    systemd.user.slices = mkOption {
+    systemd.user.slices = lib.mkOption {
       default = { };
       type = systemdUtils.types.slices;
       description = "Definition of systemd per-user slice units.";
     };
 
-    systemd.user.sockets = mkOption {
+    systemd.user.sockets = lib.mkOption {
       default = { };
       type = systemdUtils.types.sockets;
       description = "Definition of systemd per-user socket units.";
     };
 
-    systemd.user.targets = mkOption {
+    systemd.user.targets = lib.mkOption {
       default = { };
       type = systemdUtils.types.targets;
       description = "Definition of systemd per-user target units.";
     };
 
-    systemd.user.timers = mkOption {
+    systemd.user.timers = lib.mkOption {
       default = { };
       type = systemdUtils.types.timers;
       description = "Definition of systemd per-user timer units.";
     };
 
     systemd.user.tmpfiles = {
-      rules = mkOption {
-        type = types.listOf types.str;
+      rules = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "D %C - - - 7d" ];
         description = ''
@@ -131,17 +131,17 @@ in
         '';
       };
 
-      users = mkOption {
+      users = lib.mkOption {
         description = ''
           Per-user rules for creation, deletion and cleaning of volatile and
           temporary files automatically.
         '';
         default = { };
-        type = types.attrsOf (
-          types.submodule {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
             options = {
-              rules = mkOption {
-                type = types.listOf types.str;
+              rules = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 example = [ "D %C - - - 7d" ];
                 description = ''
@@ -157,8 +157,8 @@ in
       };
     };
 
-    systemd.user.generators = mkOption {
-      type = types.attrsOf types.path;
+    systemd.user.generators = lib.mkOption {
+      type = lib.types.attrsOf lib.types.path;
       default = { };
       example = {
         systemd-gpt-auto-generator = "/dev/null";
@@ -171,9 +171,9 @@ in
       '';
     };
 
-    systemd.additionalUpstreamUserUnits = mkOption {
+    systemd.additionalUpstreamUserUnits = lib.mkOption {
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       example = [ ];
       description = ''
         Additional units shipped with systemd that should be enabled for per-user systemd instances.
@@ -202,18 +202,18 @@ in
     };
 
     systemd.user.units =
-      mapAttrs' (n: v: nameValuePair "${n}.path" (pathToUnit v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.slice" (sliceToUnit v)) cfg.slices
-      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit v)) cfg.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit v)) cfg.targets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit v)) cfg.timers;
+         lib.mapAttrs' (n: v: lib.nameValuePair "${n}.path" (pathToUnit v)) cfg.paths
+      // lib.mapAttrs' (n: v: lib.nameValuePair "${n}.service" (serviceToUnit v)) cfg.services
+      // lib.mapAttrs' (n: v: lib.nameValuePair "${n}.slice" (sliceToUnit v)) cfg.slices
+      // lib.mapAttrs' (n: v: lib.nameValuePair "${n}.socket" (socketToUnit v)) cfg.sockets
+      // lib.mapAttrs' (n: v: lib.nameValuePair "${n}.target" (targetToUnit v)) cfg.targets
+      // lib.mapAttrs' (n: v: lib.nameValuePair "${n}.timer" (timerToUnit v)) cfg.timers;
 
     # Generate timer units for all services that have a ‘startAt’ value.
-    systemd.user.timers = mapAttrs (name: service: {
+    systemd.user.timers = lib.mapAttrs (name: service: {
       wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = service.startAt;
-    }) (filterAttrs (name: service: service.startAt != [ ]) cfg.services);
+    }) (lib.filterAttrs (name: service: service.startAt != [ ]) cfg.services);
 
     # Provide the systemd-user PAM service, required to run systemd
     # user instances.
@@ -232,20 +232,20 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
 
     # enable systemd user tmpfiles
-    systemd.user.services.systemd-tmpfiles-setup.wantedBy = optional (
-      cfg.tmpfiles.rules != [ ] || any (cfg': cfg'.rules != [ ]) (attrValues cfg.tmpfiles.users)
+    systemd.user.services.systemd-tmpfiles-setup.wantedBy = lib.optional (
+      cfg.tmpfiles.rules != [ ] || lib.any (cfg': cfg'.rules != [ ]) (lib.attrValues cfg.tmpfiles.users)
     ) "basic.target";
 
     # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
     # write the tmpfiles.d rules for everyone there
-    environment.systemPackages = optional (cfg.tmpfiles.rules != [ ]) (writeTmpfiles {
+    environment.systemPackages = lib.optional (cfg.tmpfiles.rules != [ ]) (writeTmpfiles {
       inherit (cfg.tmpfiles) rules;
     });
 
     # /etc/profiles/per-user/$USER/etc/xdg is in systemd's $XDG_CONFIG_DIRS so
     # we can write a single user's tmpfiles.d rules there
-    users.users = mapAttrs (user: cfg': {
-      packages = optional (cfg'.rules != [ ]) (writeTmpfiles {
+    users.users = lib.mapAttrs (user: cfg': {
+      packages = lib.optional (cfg'.rules != [ ]) (writeTmpfiles {
         inherit (cfg') rules;
         inherit user;
       });

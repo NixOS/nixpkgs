@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   globalCfg = config.services.scion;
   cfg = config.services.scion.scion-ip-gateway;
@@ -23,18 +21,18 @@ let
     ASes = { };
     ConfigVersion = 9001;
   };
-  configFile = toml.generate "scion-ip-gateway.toml" (recursiveUpdate defaultConfig cfg.config);
+  configFile = toml.generate "scion-ip-gateway.toml" (lib.recursiveUpdate defaultConfig cfg.config);
   trafficConfigFile = json.generate "scion-ip-gateway-traffic.json" (
-    recursiveUpdate defaultTrafficConfig cfg.trafficConfig
+    lib.recursiveUpdate defaultTrafficConfig cfg.trafficConfig
   );
 in
 {
   options.services.scion.scion-ip-gateway = {
-    enable = mkEnableOption "the scion-ip-gateway service";
-    config = mkOption {
+    enable = lib.mkEnableOption "the scion-ip-gateway service";
+    config = lib.mkOption {
       default = { };
       type = toml.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           tunnel = {
             src_ipv4 = "172.16.100.1";
@@ -45,10 +43,10 @@ in
         scion-ip-gateway daemon configuration
       '';
     };
-    trafficConfig = mkOption {
+    trafficConfig = lib.mkOption {
       default = { };
       type = json.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           ASes = {
             "2-ffaa:0:b" = {
@@ -65,7 +63,7 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.scion-ip-gateway = {
       description = "SCION IP Gateway Service";
       after = [

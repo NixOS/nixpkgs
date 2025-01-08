@@ -10,10 +10,10 @@ let
   logPrefix = "services.prometheus.exporter.ipmi";
   cfg = config.services.prometheus.exporters.ipmi;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     concatStringsSep
-    optionals
+    lib.optionals
     escapeShellArg
     ;
 in
@@ -21,16 +21,16 @@ in
   port = 9290;
 
   extraOpts = {
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Path to configuration file.
       '';
     };
 
-    webConfigFile = mkOption {
-      type = types.nullOr types.path;
+    webConfigFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Path to configuration file that can enable TLS or authentication.
@@ -46,11 +46,11 @@ in
           "${pkgs.prometheus-ipmi-exporter}/bin/ipmi_exporter"
           "--web.listen-address ${listenAddress}:${toString port}"
         ]
-        ++ optionals (cfg.webConfigFile != null) [
-          "--web.config.file ${escapeShellArg cfg.webConfigFile}"
+        ++ lib.optionals (cfg.webConfigFile != null) [
+          "--web.config.file ${lib.escapeShellArg cfg.webConfigFile}"
         ]
-        ++ optionals (cfg.configFile != null) [
-          "--config.file ${escapeShellArg cfg.configFile}"
+        ++ lib.optionals (cfg.configFile != null) [
+          "--config.file ${lib.escapeShellArg cfg.configFile}"
         ]
         ++ extraFlags
       );

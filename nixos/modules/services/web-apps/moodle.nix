@@ -13,15 +13,15 @@ let
     mkForce
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     types
     ;
   inherit (lib)
     concatStringsSep
     literalExpression
     mapAttrsToList
-    optional
-    optionalString
+    lib.optional
+    lib.optionalString
     ;
 
   cfg = config.services.moodle;
@@ -49,14 +49,14 @@ let
     $CFG->dbhost    = '${cfg.database.host}';
     $CFG->dbname    = '${cfg.database.name}';
     $CFG->dbuser    = '${cfg.database.user}';
-    ${optionalString (
+    ${lib.optionalString (
       cfg.database.passwordFile != null
     ) "$CFG->dbpass = file_get_contents('${cfg.database.passwordFile}');"}
     $CFG->prefix    = 'mdl_';
     $CFG->dboptions = array (
       'dbpersist' => 0,
       'dbport' => '${toString cfg.database.port}',
-      ${optionalString (cfg.database.socket != null) "'dbsocket' => '${cfg.database.socket}',"}
+      ${lib.optionalString (cfg.database.socket != null) "'dbsocket' => '${cfg.database.socket}',"}
       'dbcollation' => 'utf8mb4_unicode_ci',
     );
 
@@ -129,12 +129,12 @@ in
 {
   # interface
   options.services.moodle = {
-    enable = mkEnableOption "Moodle web application";
+    enable = lib.mkEnableOption "Moodle web application";
 
-    package = mkPackageOption pkgs "moodle" { };
+    package = lib.mkPackageOption pkgs "moodle" { };
 
-    initialPassword = mkOption {
-      type = types.str;
+    initialPassword = lib.mkOption {
+      type = lib.types.str;
       example = "correcthorsebatterystaple";
       description = ''
         Specifies the initial password for the admin, i.e. the password assigned if the user does not already exist.
@@ -143,8 +143,8 @@ in
     };
 
     database = {
-      type = mkOption {
-        type = types.enum [
+      type = lib.mkOption {
+        type = lib.types.enum [
           "mysql"
           "pgsql"
         ];
@@ -152,14 +152,14 @@ in
         description = "Database engine to use.";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Database host address.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         description = "Database host port.";
         default =
           {
@@ -167,23 +167,23 @@ in
             pgsql = 5432;
           }
           .${cfg.database.type};
-        defaultText = literalExpression "3306";
+        defaultText = lib.literalExpression "3306";
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "moodle";
         description = "Database name.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "moodle";
         description = "Database user.";
       };
 
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/moodle-dbpassword";
         description = ''
@@ -192,8 +192,8 @@ in
         '';
       };
 
-      socket = mkOption {
-        type = types.nullOr types.path;
+      socket = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default =
           if mysqlLocal then
             "/run/mysqld/mysqld.sock"
@@ -201,20 +201,20 @@ in
             "/run/postgresql"
           else
             null;
-        defaultText = literalExpression "/run/mysqld/mysqld.sock";
+        defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
         description = "Path to the unix socket file to use for authentication.";
       };
 
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Create the database and database user locally.";
       };
     };
 
-    virtualHost = mkOption {
-      type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-      example = literalExpression ''
+    virtualHost = lib.mkOption {
+      type = lib.types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+      example = lib.literalExpression ''
         {
           hostName = "moodle.example.org";
           adminAddr = "webmaster@example.org";
@@ -228,9 +228,9 @@ in
       '';
     };
 
-    poolConfig = mkOption {
+    poolConfig = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         attrsOf (oneOf [
           str
           int
@@ -250,8 +250,8 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Any additional text to be appended to the config.php
@@ -265,7 +265,7 @@ in
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -279,9 +279,9 @@ in
       }
     ];
 
-    services.mysql = mkIf mysqlLocal {
+    services.mysql = lib.mkIf mysqlLocal {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
@@ -294,7 +294,7 @@ in
       ];
     };
 
-    services.postgresql = mkIf pgsqlLocal {
+    services.postgresql = lib.mkIf pgsqlLocal {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -322,9 +322,9 @@ in
 
     services.httpd = {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
+      adminAddr = lib.mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+      virtualHosts.${cfg.virtualHost.hostName} = lib.mkMerge [
         cfg.virtualHost
         {
           documentRoot = mkForce "${cfg.package}/share/moodle";
@@ -351,7 +351,7 @@ in
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-moodle.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.service";
       environment.MOODLE_CONFIG = moodleConfig;
       script = ''
         ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?
@@ -393,8 +393,8 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service"
-      ++ optional pgsqlLocal "postgresql.service";
+      lib.optional mysqlLocal "mysql.service"
+      ++ lib.optional pgsqlLocal "postgresql.service";
 
     users.users.${user} = {
       group = group;

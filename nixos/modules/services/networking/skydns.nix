@@ -1,82 +1,80 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.services.skydns;
 
 in {
   options.services.skydns = {
-    enable = mkEnableOption "skydns service";
+    enable = lib.mkEnableOption "skydns service";
 
     etcd = {
-      machines = mkOption {
+      machines = lib.mkOption {
         default = [ "http://127.0.0.1:2379" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = "Skydns list of etcd endpoints to connect to.";
       };
 
-      tlsKey = mkOption {
+      tlsKey = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         description = "Skydns path of TLS client certificate - private key.";
       };
 
-      tlsPem = mkOption {
+      tlsPem = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         description = "Skydns path of TLS client certificate - public key.";
       };
 
-      caCert = mkOption {
+      caCert = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         description = "Skydns path of TLS certificate authority public key.";
       };
     };
 
-    address = mkOption {
+    address = lib.mkOption {
       default = "0.0.0.0:53";
-      type = types.str;
+      type = lib.types.str;
       description = "Skydns address to bind to.";
     };
 
-    domain = mkOption {
+    domain = lib.mkOption {
       default = "skydns.local.";
-      type = types.str;
+      type = lib.types.str;
       description = "Skydns default domain if not specified by etcd config.";
     };
 
-    nameservers = mkOption {
+    nameservers = lib.mkOption {
       default = map (n: n + ":53") config.networking.nameservers;
-      defaultText = literalExpression ''map (n: n + ":53") config.networking.nameservers'';
-      type = types.listOf types.str;
+      defaultText = lib.literalExpression ''map (n: n + ":53") config.networking.nameservers'';
+      type = lib.types.listOf lib.types.str;
       description = "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
       example = ["8.8.8.8:53" "8.8.4.4:53"];
     };
 
-    package = mkPackageOption pkgs "skydns" { };
+    package = lib.mkPackageOption pkgs "skydns" { };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       default = {};
-      type = types.attrsOf types.str;
+      type = lib.types.attrsOf lib.types.str;
       description = "Skydns attribute set of extra config options passed as environment variables.";
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
     systemd.services.skydns = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "etcd.service" ];
       description = "Skydns Service";
       environment = {
-        ETCD_MACHINES = concatStringsSep "," cfg.etcd.machines;
+        ETCD_MACHINES = lib.concatStringsSep "," cfg.etcd.machines;
         ETCD_TLSKEY = cfg.etcd.tlsKey;
         ETCD_TLSPEM = cfg.etcd.tlsPem;
         ETCD_CACERT = cfg.etcd.caCert;
         SKYDNS_ADDR = cfg.address;
         SKYDNS_DOMAIN = cfg.domain;
-        SKYDNS_NAMESERVERS = concatStringsSep "," cfg.nameservers;
+        SKYDNS_NAMESERVERS = lib.concatStringsSep "," cfg.nameservers;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/skydns";

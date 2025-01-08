@@ -56,7 +56,7 @@ evalConfigArgs@
 }:
 
 let
-  inherit (lib) optional;
+  inherit (lib) lib.optional;
 
   evalModulesMinimal = (import ./default.nix {
     inherit lib;

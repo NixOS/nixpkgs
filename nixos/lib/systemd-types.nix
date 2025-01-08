@@ -44,7 +44,7 @@ let
     mkDerivedConfig
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     ;
 
   inherit (lib.types)
@@ -69,7 +69,7 @@ let
           default = true;
         };
 
-        target = mkOption {
+        target = lib.mkOption {
           type = nullOr path;
           description = ''
             Path of the symlink.
@@ -77,13 +77,13 @@ let
           default = null;
         };
 
-        source = mkOption {
+        source = lib.mkOption {
           type = path;
           description = "Path of the source file.";
         };
 
         dlopen = {
-          usePriority = mkOption {
+          usePriority = lib.mkOption {
             type = enum [
               "required"
               "recommended"
@@ -99,7 +99,7 @@ let
             '';
           };
 
-          features = mkOption {
+          features = lib.mkOption {
             type = listOf singleLineStr;
             default = [ ];
             description = ''
@@ -121,8 +121,8 @@ in
       {
         options = concreteUnitOptions;
         config = {
-          name = mkDefault name;
-          unit = mkDefault (makeUnit name config);
+          name = lib.mkDefault name;
+          unit = lib.mkDefault (makeUnit name config);
         };
       }
     )
@@ -234,7 +234,7 @@ in
       {
         imports = [ initrdStorePathModule ];
         options = {
-          text = mkOption {
+          text = lib.mkOption {
             default = null;
             type = nullOr lines;
             description = "Text of the file.";
@@ -242,8 +242,8 @@ in
         };
 
         config = {
-          target = mkDefault name;
-          source = mkIf (config.text != null) (
+          target = lib.mkDefault name;
+          source = lib.mkIf (config.text != null) (
             let
               name' = "initrd-" + baseNameOf name;
             in

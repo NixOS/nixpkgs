@@ -1,6 +1,6 @@
 { config, lib, hostPkgs, ... }:
 let
-  inherit (lib) mkOption types literalMD;
+  inherit (lib) lib.mkOption types literalMD;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -103,49 +103,49 @@ in
 {
   options = {
 
-    driver = mkOption {
+    driver = lib.mkOption {
       description = "Package containing a script that runs the test.";
-      type = types.package;
+      type = lib.types.package;
       defaultText = literalMD "set by the test framework";
     };
 
-    hostPkgs = mkOption {
+    hostPkgs = lib.mkOption {
       description = "Nixpkgs attrset used outside the nodes.";
-      type = types.raw;
+      type = lib.types.raw;
       example = lib.literalExpression ''
         import nixpkgs { inherit system config overlays; }
       '';
     };
 
-    qemu.package = mkOption {
+    qemu.package = lib.mkOption {
       description = "Which qemu package to use for the virtualisation of [{option}`nodes`](#test-opt-nodes).";
-      type = types.package;
+      type = lib.types.package;
       default = hostPkgs.qemu_test;
       defaultText = "hostPkgs.qemu_test";
     };
 
-    globalTimeout = mkOption {
+    globalTimeout = lib.mkOption {
       description = ''
         A global timeout for the complete test, expressed in seconds.
         Beyond that timeout, every resource will be killed and released and the test will fail.
 
         By default, we use a 1 hour timeout.
       '';
-      type = types.int;
+      type = lib.types.int;
       default = 60 * 60;
       example = 10 * 60;
     };
 
-    enableOCR = mkOption {
+    enableOCR = lib.mkOption {
       description = ''
         Whether to enable Optical Character Recognition functionality for
         testing graphical programs. See [`Machine objects`](#ssec-machine-objects).
       '';
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
     };
 
-    extraPythonPackages = mkOption {
+    extraPythonPackages = lib.mkOption {
       description = ''
         Python packages to add to the test driver.
 
@@ -154,30 +154,30 @@ in
       example = lib.literalExpression ''
         p: [ p.numpy ]
       '';
-      type = types.functionTo (types.listOf types.package);
+      type = lib.types.functionTo (types.listOf types.package);
       default = ps: [ ];
     };
 
-    extraDriverArgs = mkOption {
+    extraDriverArgs = lib.mkOption {
       description = ''
         Extra arguments to pass to the test driver.
 
         They become part of [{option}`driver`](#test-opt-driver) via `wrapProgram`.
       '';
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [];
     };
 
-    skipLint = mkOption {
-      type = types.bool;
+    skipLint = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Do not run the linters. This may speed up your iteration cycle, but it is not something you should commit.
       '';
     };
 
-    skipTypeCheck = mkOption {
-      type = types.bool;
+    skipTypeCheck = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Disable type checking. This must not be enabled for new NixOS tests.

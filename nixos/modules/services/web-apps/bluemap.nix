@@ -38,7 +38,7 @@ let
     "addons" = addonsFolder;
   };
 
-  inherit (lib) mkOption;
+  inherit (lib) lib.mkOption;
 in
 {
   imports = [
@@ -51,7 +51,7 @@ in
   options.services.bluemap = {
     enable = lib.mkEnableOption "bluemap";
 
-    eula = mkOption {
+    eula = lib.mkOption {
       type = lib.types.bool;
       description = ''
         By changing this option to true you confirm that you own a copy of minecraft Java Edition,
@@ -60,7 +60,7 @@ in
       default = false;
     };
 
-    defaultWorld = mkOption {
+    defaultWorld = lib.mkOption {
       type = lib.types.path;
       description = ''
         The world used by the default map ruleset.
@@ -69,30 +69,30 @@ in
       example = lib.literalExpression "\${config.services.minecraft.dataDir}/world";
     };
 
-    enableRender = mkOption {
+    enableRender = lib.mkOption {
       type = lib.types.bool;
       description = "Enable rendering";
       default = true;
     };
 
-    webRoot = mkOption {
+    webRoot = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/bluemap/web";
       description = "The directory for saving and serving the webapp and the maps";
     };
 
-    enableNginx = mkOption {
+    enableNginx = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable configuring a virtualHost for serving the bluemap webapp";
     };
 
-    host = mkOption {
+    host = lib.mkOption {
       type = lib.types.str;
       description = "Domain on which nginx will serve the bluemap webapp";
     };
 
-    onCalendar = mkOption {
+    onCalendar = lib.mkOption {
       type = lib.types.str;
       description = ''
         How often to trigger rendering the map,
@@ -102,11 +102,11 @@ in
       default = "*-*-* 03:10:00";
     };
 
-    coreSettings = mkOption {
+    coreSettings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          data = mkOption {
+          data = lib.mkOption {
             type = lib.types.path;
             description = "Folder for where bluemap stores its data";
             default = "/var/lib/bluemap";
@@ -117,7 +117,7 @@ in
       description = "Settings for the core.conf file, [see upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/core.conf).";
     };
 
-    webappSettings = mkOption {
+    webappSettings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
       };
@@ -134,11 +134,11 @@ in
       description = "Settings for the webapp.conf file, see [upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/webapp.conf).";
     };
 
-    webserverSettings = mkOption {
+    webserverSettings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          enabled = mkOption {
+          enabled = lib.mkOption {
             type = lib.types.bool;
             description = ''
               Enable bluemap's built-in webserver.
@@ -155,7 +155,7 @@ in
       '';
     };
 
-    maps = mkOption {
+    maps = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule {
           freeformType = format.type;
@@ -239,7 +239,7 @@ in
       '';
     };
 
-    addons = mkOption {
+    addons = lib.mkOption {
       type = lib.types.attrsOf lib.types.pathInStore;
       default = { };
       description = ''
@@ -259,12 +259,12 @@ in
       '';
     };
 
-    storage = mkOption {
+    storage = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule {
           freeformType = format.type;
           options = {
-            storage-type = mkOption {
+            storage-type = lib.mkOption {
               type = lib.types.enum [
                 "FILE"
                 "SQL"
@@ -294,7 +294,7 @@ in
       '';
     };
 
-    packs = mkOption {
+    packs = lib.mkOption {
       type = lib.types.attrsOf lib.types.pathInStore;
       default = { };
       description = ''

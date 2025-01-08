@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.ircdHybrid;
@@ -30,7 +28,7 @@ let
       procps
       ;
 
-    ipv6Enabled = boolToString config.networking.enableIPv6;
+    ipv6Enabled = lib.boolToString config.networking.enableIPv6;
 
     inherit (cfg)
       serverName
@@ -41,8 +39,8 @@ let
       ;
 
     cryptoSettings =
-      (optionalString (cfg.rsaKey != null) "rsa_private_key_file = \"${cfg.rsaKey}\";\n")
-      + (optionalString (cfg.certificate != null) "ssl_certificate_file = \"${cfg.certificate}\";\n");
+      (lib.optionalString (cfg.rsaKey != null) "rsa_private_key_file = \"${cfg.rsaKey}\";\n")
+      + (lib.optionalString (cfg.certificate != null) "ssl_certificate_file = \"${cfg.certificate}\";\n");
 
     extraListen = map (
       ip: "host = \"" + ip + "\";\nport = 6665 .. 6669, " + extraPort + "; "
@@ -61,71 +59,71 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkEnableOption "IRCD";
+      enable = lib.mkEnableOption "IRCD";
 
-      serverName = mkOption {
+      serverName = lib.mkOption {
         default = "hades.arpa";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           IRCD server name.
         '';
       };
 
-      sid = mkOption {
+      sid = lib.mkOption {
         default = "0NL";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           IRCD server unique ID in a net of servers.
         '';
       };
 
-      description = mkOption {
+      description = lib.mkOption {
         default = "Hybrid-7 IRC server.";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           IRCD server description.
         '';
       };
 
-      rsaKey = mkOption {
+      rsaKey = lib.mkOption {
         default = null;
-        example = literalExpression "/root/certificates/irc.key";
-        type = types.nullOr types.path;
+        example = lib.literalExpression "/root/certificates/irc.key";
+        type = lib.types.nullOr lib.types.path;
         description = ''
           IRCD server RSA key.
         '';
       };
 
-      certificate = mkOption {
+      certificate = lib.mkOption {
         default = null;
-        example = literalExpression "/root/certificates/irc.pem";
-        type = types.nullOr types.path;
+        example = lib.literalExpression "/root/certificates/irc.pem";
+        type = lib.types.nullOr lib.types.path;
         description = ''
           IRCD server SSL certificate. There are some limitations - read manual.
         '';
       };
 
-      adminEmail = mkOption {
+      adminEmail = lib.mkOption {
         default = "<bit-bucket@example.com>";
-        type = types.str;
+        type = lib.types.str;
         example = "<name@domain.tld>";
         description = ''
           IRCD server administrator e-mail.
         '';
       };
 
-      extraIPs = mkOption {
+      extraIPs = lib.mkOption {
         default = [ ];
         example = [ "127.0.0.1" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           Extra IP's to bind.
         '';
       };
 
-      extraPort = mkOption {
+      extraPort = lib.mkOption {
         default = "7117";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Extra port to avoid filtering.
         '';
@@ -137,7 +135,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.ircdHybrid.enable {
+  config = lib.mkIf config.services.ircdHybrid.enable {
 
     users.users.ircd = {
       description = "IRCD owner";

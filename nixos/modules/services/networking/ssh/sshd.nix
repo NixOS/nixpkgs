@@ -13,11 +13,11 @@ let
   settingsFormat =
     let
       # reports boolean as yes / no
-      mkValueString = with lib; v:
+      mkValueString = v:
             if lib.isInt           v then toString v
             else if lib.isString   v then v
-            else if true  ==   v then "yes"
-            else if false ==   v then "no"
+            else if true  ==       v then "yes"
+            else if false ==       v then "no"
             else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
 
       base = pkgs.formats.keyValue {

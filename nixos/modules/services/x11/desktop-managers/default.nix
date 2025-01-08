@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
@@ -28,8 +28,8 @@ in
     services.xserver.desktopManager = {
 
       wallpaper = {
-        mode = mkOption {
-          type = types.enum [ "center" "fill" "max" "scale" "tile" ];
+        mode = lib.mkOption {
+          type = lib.types.enum [ "center" "fill" "max" "scale" "tile" ];
           default = "scale";
           example = "fill";
           description = ''
@@ -45,8 +45,8 @@ in
           '';
         };
 
-        combineScreens = mkOption {
-          type = types.bool;
+        combineScreens = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             When set to `true` the wallpaper will stretch across all screens.
@@ -55,7 +55,7 @@ in
         };
       };
 
-      session = mkOption {
+      session = lib.mkOption {
         internal = true;
         default = [];
         example = lib.singleton

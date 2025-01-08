@@ -4,7 +4,6 @@
   lib,
   ...
 }:
-with lib;
 let
   cfg = config.services.victoriametrics;
   settingsFormat = pkgs.formats.yaml { };
@@ -40,18 +39,18 @@ in
         VictoriaMetrics is a fast, cost-effective and scalable monitoring solution and time series database.
       '';
     };
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = lib.mkPackageOption pkgs "victoriametrics" { };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       default = ":8428";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         TCP address to listen for incoming http requests.
       '';
     };
 
-    stateDir = mkOption {
-      type = types.str;
+    stateDir = lib.mkOption {
+      type = lib.types.str;
       default = "victoriametrics";
       description = ''
         Directory below `/var/lib` to store VictoriaMetrics metrics data.
@@ -59,14 +58,14 @@ in
       '';
     };
 
-    retentionPeriod = mkOption {
-      type = types.nullOr types.str;
+    retentionPeriod = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "15d";
       description = ''
         How long to retain samples in storage.
         The minimum retentionPeriod is 24h or 1d. See also -retentionFilter
-        The following optional suffixes are supported: s (second), h (hour), d (day), w (week), y (year).
+        The following lib.optional suffixes are supported: s (second), h (hour), d (day), w (week), y (year).
         If suffix isn't set, then the duration is counted in months (default 1)
       '';
     };
@@ -74,7 +73,7 @@ in
     prometheusConfig = lib.mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           scrape_configs = [
             {
@@ -111,10 +110,10 @@ in
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           "-httpAuth.username=username"
           "-httpAuth.password=file:///abs/path/to/file"

@@ -30,7 +30,6 @@ let
     name = "${toolName}-${version}";
 
     meta =
-      with lib;
       {
         homepage = "http://bitscope.com/software/";
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

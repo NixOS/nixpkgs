@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.mighttpd2;
   configFile = pkgs.writeText "mighty-config" cfg.config;
@@ -14,9 +12,9 @@ let
 in
 {
   options.services.mighttpd2 = {
-    enable = mkEnableOption "Mighttpd2 web server";
+    enable = lib.mkEnableOption "Mighttpd2 web server";
 
-    config = mkOption {
+    config = lib.mkOption {
       default = "";
       example = ''
         # Example configuration for Mighttpd 2
@@ -47,14 +45,14 @@ in
         Tls_Key_File: privkey.pem # should change this with an absolute path
         Service: 0 # 0 is HTTP only, 1 is HTTPS only, 2 is both
       '';
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Verbatim config file to use
         (see https://kazu-yamamoto.github.io/mighttpd2/config.html)
       '';
     };
 
-    routing = mkOption {
+    routing = lib.mkOption {
       default = "";
       example = ''
         # Example routing for Mighttpd 2
@@ -81,16 +79,16 @@ in
 
         /                -> /export/www/
       '';
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Verbatim routing file to use
         (see https://kazu-yamamoto.github.io/mighttpd2/config.html)
       '';
     };
 
-    cores = mkOption {
+    cores = lib.mkOption {
       default = null;
-      type = types.nullOr types.int;
+      type = lib.types.nullOr lib.types.int;
       description = ''
         How many cores to use.
         If null it will be determined automatically
@@ -99,7 +97,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.routing != "";
@@ -116,7 +114,7 @@ in
           ${pkgs.haskellPackages.mighttpd2}/bin/mighty \
             ${configFile} \
             ${routingFile} \
-            +RTS -N${optionalString (cfg.cores != null) "${cfg.cores}"}
+            +RTS -N${lib.optionalString (cfg.cores != null) "${cfg.cores}"}
         '';
         Type = "simple";
         User = "mighttpd2";

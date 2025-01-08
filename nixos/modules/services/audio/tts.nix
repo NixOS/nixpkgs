@@ -14,30 +14,30 @@ in
     let
       inherit (lib)
         literalExpression
-        mkOption
+        lib.mkOption
         mkEnableOption
         types
         ;
     in
     {
-      servers = mkOption {
-        type = types.attrsOf (
+      servers = lib.mkOption {
+        type = lib.types.attrsOf (
           types.submodule (
             { ... }:
             {
               options = {
-                enable = mkEnableOption "Coqui TTS server";
+                enable = lib.mkEnableOption "Coqui TTS server";
 
-                port = mkOption {
-                  type = types.port;
+                port = lib.mkOption {
+                  type = lib.types.port;
                   example = 5000;
                   description = ''
                     Port to bind the TTS server to.
                   '';
                 };
 
-                model = mkOption {
-                  type = types.nullOr types.str;
+                model = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
                   default = "tts_models/en/ljspeech/tacotron2-DDC";
                   example = null;
                   description = ''
@@ -49,8 +49,8 @@ in
                   '';
                 };
 
-                useCuda = mkOption {
-                  type = types.bool;
+                useCuda = lib.mkOption {
+                  type = lib.types.bool;
                   default = false;
                   example = true;
                   description = ''
@@ -58,8 +58,8 @@ in
                   '';
                 };
 
-                extraArgs = mkOption {
-                  type = types.listOf types.str;
+                extraArgs = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
                   default = [ ];
                   description = ''
                     Extra arguments to pass to the server commandline.
@@ -70,7 +70,7 @@ in
           )
         );
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             english = {
               port = 5300;
@@ -98,7 +98,7 @@ in
         mkIf
         mapAttrs'
         nameValuePair
-        optionalString
+        lib.optionalString
         concatMapStringsSep
         escapeShellArgs
         ;
@@ -124,8 +124,8 @@ in
             StateDirectory = "tts";
             ExecStart =
               "${pkgs.tts}/bin/tts-server --port ${toString options.port} "
-              + optionalString (options.model != null) "--model_name ${options.model} "
-              + optionalString (options.useCuda) "--use_cuda "
+              + lib.optionalString (options.model != null) "--model_name ${options.model} "
+              + lib.optionalString (options.useCuda) "--use_cuda "
               + (escapeShellArgs options.extraArgs);
             CapabilityBoundingSet = "";
             DeviceAllow =

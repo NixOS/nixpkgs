@@ -29,11 +29,11 @@ let
     }
 
     table.chain local_rewrites {
-      optional_step regexp "(.+)\+(.+)@(.+)" "$1@$3"
-      optional_step static {
+      lib.optional_step regexp "(.+)\+(.+)@(.+)" "$1@$3"
+      lib.optional_step static {
         entry postmaster postmaster@$(primary_domain)
       }
-      optional_step file /etc/maddy/aliases
+      lib.optional_step file /etc/maddy/aliases
     }
 
     msgpipeline local_routing {

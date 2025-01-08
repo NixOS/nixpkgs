@@ -1,14 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.keepalived;
 
   keepalivedConf = pkgs.writeText "keepalived.conf" ''
     global_defs {
-      ${optionalString cfg.enableScriptSecurity "enable_script_security"}
+      ${lib.optionalString cfg.enableScriptSecurity "enable_script_security"}
       ${snmpGlobalDefs}
       ${cfg.extraGlobalDefs}
     }
@@ -18,17 +16,17 @@ let
     ${cfg.extraConfig}
   '';
 
-  snmpGlobalDefs = with cfg.snmp; optionalString enable (
-    optionalString (socket != null) "snmp_socket ${socket}\n"
-    + optionalString enableKeepalived "enable_snmp_keepalived\n"
-    + optionalString enableChecker "enable_snmp_checker\n"
-    + optionalString enableRfc "enable_snmp_rfc\n"
-    + optionalString enableRfcV2 "enable_snmp_rfcv2\n"
-    + optionalString enableRfcV3 "enable_snmp_rfcv3\n"
-    + optionalString enableTraps "enable_traps"
+  snmpGlobalDefs = with cfg.snmp; lib.optionalString enable (
+    lib.optionalString (socket != null) "snmp_socket ${socket}\n"
+    + lib.optionalString enableKeepalived "enable_snmp_keepalived\n"
+    + lib.optionalString enableChecker "enable_snmp_checker\n"
+    + lib.optionalString enableRfc "enable_snmp_rfc\n"
+    + lib.optionalString enableRfcV2 "enable_snmp_rfcv2\n"
+    + lib.optionalString enableRfcV3 "enable_snmp_rfcv3\n"
+    + lib.optionalString enableTraps "enable_traps"
   );
 
-  vrrpScriptStr = concatStringsSep "\n" (map (s:
+  vrrpScriptStr = lib.concatStringsSep "\n" (map (s:
     ''
       vrrp_script ${s.name} {
         script "${s.script}"
@@ -37,47 +35,47 @@ let
         rise ${toString s.rise}
         timeout ${toString s.timeout}
         weight ${toString s.weight}
-        user ${s.user} ${optionalString (s.group != null) s.group}
+        user ${s.user} ${lib.optionalString (s.group != null) s.group}
 
         ${s.extraConfig}
       }
     ''
   ) vrrpScripts);
 
-  vrrpInstancesStr = concatStringsSep "\n" (map (i:
+  vrrpInstancesStr = lib.concatStringsSep "\n" (map (i:
     ''
       vrrp_instance ${i.name} {
         interface ${i.interface}
         state ${i.state}
         virtual_router_id ${toString i.virtualRouterId}
         priority ${toString i.priority}
-        ${optionalString i.noPreempt "nopreempt"}
+        ${lib.optionalString i.noPreempt "nopreempt"}
 
-        ${optionalString i.useVmac (
-          "use_vmac" + optionalString (i.vmacInterface != null) " ${i.vmacInterface}"
+        ${lib.optionalString i.useVmac (
+          "use_vmac" + lib.optionalString (i.vmacInterface != null) " ${i.vmacInterface}"
         )}
-        ${optionalString i.vmacXmitBase "vmac_xmit_base"}
+        ${lib.optionalString i.vmacXmitBase "vmac_xmit_base"}
 
-        ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
-        ${optionalString (builtins.length i.unicastPeers > 0) ''
+        ${lib.optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
+        ${lib.optionalString (builtins.length i.unicastPeers > 0) ''
           unicast_peer {
-            ${concatStringsSep "\n" i.unicastPeers}
+            ${lib.concatStringsSep "\n" i.unicastPeers}
           }
         ''}
 
         virtual_ipaddress {
-          ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
+          ${lib.concatMapStringsSep "\n" virtualIpLine i.virtualIps}
         }
 
-        ${optionalString (builtins.length i.trackScripts > 0) ''
+        ${lib.optionalString (builtins.length i.trackScripts > 0) ''
           track_script {
-            ${concatStringsSep "\n" i.trackScripts}
+            ${lib.concatStringsSep "\n" i.trackScripts}
           }
         ''}
 
-        ${optionalString (builtins.length i.trackInterfaces > 0) ''
+        ${lib.optionalString (builtins.length i.trackInterfaces > 0) ''
           track_interface {
-            ${concatStringsSep "\n" i.trackInterfaces}
+            ${lib.concatStringsSep "\n" i.trackInterfaces}
           }
         ''}
 
@@ -87,20 +85,20 @@ let
   ) vrrpInstances);
 
   virtualIpLine = ip: ip.addr
-    + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
-    + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
-    + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
-    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}";
+    + lib.optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
+    + lib.optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
+    + lib.optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
+    + lib.optionalString (notNullOrEmpty ip.label) " label ${ip.label}";
 
   notNullOrEmpty = s: !(s == null || s == "");
 
-  vrrpScripts = mapAttrsToList (name: config:
+  vrrpScripts = lib.mapAttrsToList (name: config:
     {
       inherit name;
     } // config
   ) cfg.vrrpScripts;
 
-  vrrpInstances = mapAttrsToList (iName: iConfig:
+  vrrpInstances = lib.mapAttrsToList (iName: iConfig:
     {
       name = iName;
     } // iConfig
@@ -122,8 +120,8 @@ let
     { assertion = !i.vmacXmitBase || i.useVmac;
       message = "services.keepalived.vrrpInstances.${i.name}.vmacXmitBase has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
     }
-  ] ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
-    ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
+  ] ++ lib.flatten (map (virtualIpAssertions i.name) i.virtualIps)
+    ++ lib.flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
 
   virtualIpAssertions = vrrpName: ip: [
     { assertion = ip.addr != "";
@@ -145,8 +143,8 @@ in
   options = {
     services.keepalived = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Keepalived.
@@ -155,16 +153,16 @@ in
 
       package = lib.mkPackageOption pkgs "keepalived" { };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to automatically allow VRRP and AH packets in the firewall.
         '';
       };
 
-      enableScriptSecurity = mkOption {
-        type = types.bool;
+      enableScriptSecurity = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Don't run scripts configured to be run as root if any part of the path is writable by a non-root user.
@@ -173,16 +171,16 @@ in
 
       snmp = {
 
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable the builtin AgentX subagent.
           '';
         };
 
-        socket = mkOption {
-          type = types.nullOr types.str;
+        socket = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             Socket to use for connecting to SNMP master agent. If this value is
@@ -192,48 +190,48 @@ in
           '';
         };
 
-        enableKeepalived = mkOption {
-          type = types.bool;
+        enableKeepalived = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable SNMP handling of vrrp element of KEEPALIVED MIB.
           '';
         };
 
-        enableChecker = mkOption {
-          type = types.bool;
+        enableChecker = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable SNMP handling of checker element of KEEPALIVED MIB.
           '';
         };
 
-        enableRfc = mkOption {
-          type = types.bool;
+        enableRfc = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable SNMP handling of RFC2787 and RFC6527 VRRP MIBs.
           '';
         };
 
-        enableRfcV2 = mkOption {
-          type = types.bool;
+        enableRfcV2 = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable SNMP handling of RFC2787 VRRP MIB.
           '';
         };
 
-        enableRfcV3 = mkOption {
-          type = types.bool;
+        enableRfcV3 = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable SNMP handling of RFC6527 VRRP MIB.
           '';
         };
 
-        enableTraps = mkOption {
-          type = types.bool;
+        enableTraps = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable SNMP traps.
@@ -242,24 +240,24 @@ in
 
       };
 
-      vrrpScripts = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-script-options.nix {
+      vrrpScripts = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule (import ./vrrp-script-options.nix {
           inherit lib;
         }));
         default = {};
         description = "Declarative vrrp script config";
       };
 
-      vrrpInstances = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-instance-options.nix {
+      vrrpInstances = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule (import ./vrrp-instance-options.nix {
           inherit lib;
         }));
         default = {};
         description = "Declarative vhost config";
       };
 
-      extraGlobalDefs = mkOption {
-        type = types.lines;
+      extraGlobalDefs = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra lines to be added verbatim to the 'global_defs' block of the
@@ -267,16 +265,16 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra lines to be added verbatim to the configuration file.
         '';
       };
 
-      secretFile = mkOption {
-        type = types.nullOr types.path;
+      secretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/keepalived.env";
         description = ''
@@ -291,9 +289,9 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    assertions = flatten (map vrrpInstanceAssertions vrrpInstances);
+    assertions = lib.flatten (map vrrpInstanceAssertions vrrpInstances);
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       extraCommands = ''
@@ -339,7 +337,7 @@ in
         ExecStart = "${lib.getExe cfg.package}"
           + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
-          + optionalString cfg.snmp.enable " --snmp";
+          + lib.optionalString cfg.snmp.enable " --snmp";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "1s";

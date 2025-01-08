@@ -10,8 +10,8 @@ let
   inherit (pkgs.lib)
     concatMapStrings
     listToAttrs
-    optionals
-    optionalString
+    lib.optionals
+    lib.optionalString
     ;
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
 
@@ -44,7 +44,7 @@ let
             assert 'Hello, world!' in greeting
           ''
           # only the full version contains Gecko, but the error is not printed reliably in other variants
-          + optionalString (variant == "full") ''
+          + lib.optionalString (variant == "full") ''
             machine.fail(
                 "fgrep 'Could not find Wine Gecko. HTML rendering will be disabled.' wine-stderr"
             )
@@ -66,7 +66,7 @@ let
 in
 listToAttrs (
   map (makeWineTest "winePackages" [ hello32 ]) variants
-  ++ optionals pkgs.stdenv.hostPlatform.is64bit (
+  ++ lib.optionals pkgs.stdenv.hostPlatform.is64bit (
     map
       (makeWineTest "wineWowPackages" [
         hello32

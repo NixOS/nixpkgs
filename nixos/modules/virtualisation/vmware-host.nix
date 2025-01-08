@@ -22,9 +22,9 @@ let
     ];
 in
 {
-  options = with lib; {
+  options = {
     virtualisation.vmware.host = {
-      enable = mkEnableOption "VMware" // {
+      enable = lib.mkEnableOption "VMware" // {
         description = ''
           This enables VMware host virtualisation for running VMs.
 
@@ -41,15 +41,15 @@ in
           :::
         '';
       };
-      package = mkPackageOption pkgs "vmware-workstation" { };
-      extraPackages = mkOption {
-        type = with types; listOf package;
+      package = lib.mkPackageOption pkgs "vmware-workstation" { };
+      extraPackages = lib.mkOption {
+        type = with lib.types; listOf package;
         default = with pkgs; [ ];
         description = "Extra packages to be used with VMware host.";
         example = "with pkgs; [ ntfs3g ]";
       };
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Add extra config to /etc/vmware/config";
         example = ''

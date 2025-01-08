@@ -167,7 +167,7 @@
           default = null;
           description = ''
             A list of remote servers to which to send each message. Each line
-            contains a remote host name or address followed by an optional
+            contains a remote host name or address followed by an lib.optional
             protocol string, separated by white space.
 
             See `man 8 nullmailer-send` for syntax and available

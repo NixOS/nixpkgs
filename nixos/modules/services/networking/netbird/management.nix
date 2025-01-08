@@ -14,9 +14,9 @@ let
     literalExpression
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optional
+    lib.optional
     recursiveUpdate
     ;
 
@@ -137,21 +137,21 @@ in
 
 {
   options.services.netbird.server.management = {
-    enable = mkEnableOption "Netbird Management Service";
+    enable = lib.mkEnableOption "Netbird Management Service";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = lib.mkPackageOption pkgs "netbird" { };
 
-    domain = mkOption {
+    domain = lib.mkOption {
       type = str;
       description = "The domain under which the management API runs.";
     };
 
-    turnDomain = mkOption {
+    turnDomain = lib.mkOption {
       type = str;
       description = "The domain of the TURN server to use.";
     };
 
-    turnPort = mkOption {
+    turnPort = lib.mkOption {
       type = port;
       default = 3478;
       description = ''
@@ -159,13 +159,13 @@ in
       '';
     };
 
-    dnsDomain = mkOption {
+    dnsDomain = lib.mkOption {
       type = str;
       default = "netbird.selfhosted";
       description = "Domain used for peer resolution.";
     };
 
-    singleAccountModeDomain = mkOption {
+    singleAccountModeDomain = lib.mkOption {
       type = str;
       default = "netbird.selfhosted";
       description = ''
@@ -175,13 +175,13 @@ in
       '';
     };
 
-    disableAnonymousMetrics = mkOption {
+    disableAnonymousMetrics = lib.mkOption {
       type = bool;
       default = true;
       description = "Disables push of anonymous usage metrics to NetBird.";
     };
 
-    disableSingleAccountMode = mkOption {
+    disableSingleAccountMode = lib.mkOption {
       type = bool;
       default = false;
       description = ''
@@ -190,19 +190,19 @@ in
       '';
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       type = port;
       default = 8011;
       description = "Internal port of the management server.";
     };
 
-    metricsPort = mkOption {
+    metricsPort = lib.mkOption {
       type = port;
       default = 9090;
       description = "Internal port of the metrics server.";
     };
 
-    extraOptions = mkOption {
+    extraOptions = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -210,16 +210,16 @@ in
       '';
     };
 
-    oidcConfigEndpoint = mkOption {
+    oidcConfigEndpoint = lib.mkOption {
       type = str;
       description = "The oidc discovery endpoint.";
       example = "https://example.eu.auth0.com/.well-known/openid-configuration";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       inherit (settingsFormat) type;
 
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         defaultSettings = {
           Stuns = [
             {
@@ -330,7 +330,7 @@ in
       };
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       type = enum [
         "ERROR"
         "WARN"
@@ -344,12 +344,12 @@ in
     enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     warnings =
       concatMap
         (
           { check, name }:
-          optional check "${name} is world-readable in the Nix Store, you should provide it as a _secret."
+          lib.optional check "${name} is world-readable in the Nix Store, you should provide it as a _secret."
         )
         [
           {
@@ -452,7 +452,7 @@ in
       stopIfChanged = false;
     };
 
-    services.nginx = mkIf cfg.enableNginx {
+    services.nginx = lib.mkIf cfg.enableNginx {
       enable = true;
 
       virtualHosts.${cfg.domain} = {

@@ -627,7 +627,7 @@ let
         inherit (defaultAndText "environmentFile" null) default defaultText;
         description = ''
           Path to an EnvironmentFile for the cert's service containing any required and
-          optional environment variables for your selected dnsProvider.
+          lib.optional environment variables for your selected dnsProvider.
           To find out what values you need to set, consult the documentation at
           <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
         '';

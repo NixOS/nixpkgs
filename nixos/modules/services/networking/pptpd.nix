@@ -5,39 +5,37 @@
   ...
 }:
 
-with lib;
-
 {
   options = {
     services.pptpd = {
-      enable = mkEnableOption "pptpd, the Point-to-Point Tunneling Protocol daemon";
+      enable = lib.mkEnableOption "pptpd, the Point-to-Point Tunneling Protocol daemon";
 
-      serverIp = mkOption {
-        type = types.str;
+      serverIp = lib.mkOption {
+        type = lib.types.str;
         description = "The server-side IP address.";
         default = "10.124.124.1";
       };
 
-      clientIpRange = mkOption {
-        type = types.str;
+      clientIpRange = lib.mkOption {
+        type = lib.types.str;
         description = "The range from which client IPs are drawn.";
         default = "10.124.124.2-11";
       };
 
-      maxClients = mkOption {
-        type = types.int;
+      maxClients = lib.mkOption {
+        type = lib.types.int;
         description = "The maximum number of simultaneous connections.";
         default = 10;
       };
 
-      extraPptpdOptions = mkOption {
-        type = types.lines;
+      extraPptpdOptions = lib.mkOption {
+        type = lib.types.lines;
         description = "Adds extra lines to the pptpd configuration file.";
         default = "";
       };
 
-      extraPppdOptions = mkOption {
-        type = types.lines;
+      extraPppdOptions = lib.mkOption {
+        type = lib.types.lines;
         description = "Adds extra lines to the pppd options file.";
         default = "";
         example = ''
@@ -48,7 +46,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.pptpd.enable {
+  config = lib.mkIf config.services.pptpd.enable {
     systemd.services.pptpd =
       let
         cfg = config.services.pptpd;

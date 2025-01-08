@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.shellhub-agent;
 in
@@ -12,12 +10,12 @@ in
 
     services.shellhub-agent = {
 
-      enable = mkEnableOption "ShellHub Agent daemon";
+      enable = lib.mkEnableOption "ShellHub Agent daemon";
 
-      package = mkPackageOption pkgs "shellhub-agent" { };
+      package = lib.mkPackageOption pkgs "shellhub-agent" { };
 
-      preferredHostname = mkOption {
-        type = types.str;
+      preferredHostname = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Set the device preferred hostname. This provides a hint to
@@ -25,8 +23,8 @@ in
         '';
       };
 
-      keepAliveInterval = mkOption {
-        type = types.int;
+      keepAliveInterval = lib.mkOption {
+        type = lib.types.int;
         default = 30;
         description = ''
           Determine the interval to send the keep alive message to
@@ -35,8 +33,8 @@ in
         '';
       };
 
-      tenantId = mkOption {
-        type = types.str;
+      tenantId = lib.mkOption {
+        type = lib.types.str;
         example = "ba0a880c-2ada-11eb-a35e-17266ef329d6";
         description = ''
           The tenant ID to use when connecting to the ShellHub
@@ -44,16 +42,16 @@ in
         '';
       };
 
-      server = mkOption {
-        type = types.str;
+      server = lib.mkOption {
+        type = lib.types.str;
         default = "https://cloud.shellhub.io";
         description = ''
           Server address of ShellHub Gateway to connect.
         '';
       };
 
-      privateKey = mkOption {
-        type = types.path;
+      privateKey = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/shellhub-agent/private.key";
         description = ''
           Location where to store the ShellHub Agent private
@@ -65,7 +63,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.shellhub-agent = {
       description = "ShellHub Agent";

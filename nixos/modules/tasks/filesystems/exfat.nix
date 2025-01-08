@@ -5,10 +5,8 @@
   ...
 }:
 
-with lib;
-
 {
-  config = mkIf (config.boot.supportedFilesystems.exfat or false) {
+  config = lib.mkIf (config.boot.supportedFilesystems.exfat or false) {
     system.fsPackages =
       if config.boot.kernelPackages.kernelOlder "5.7" then
         [

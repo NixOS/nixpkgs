@@ -8,26 +8,26 @@
 
 let
   cfg = config.services.prometheus.exporters.nginxlog;
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   port = 9117;
   extraOpts = {
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         options = {
-          consul = mkOption {
+          consul = lib.mkOption {
             default = null;
-            type = types.nullOr (types.attrsOf types.anything);
+            type = lib.types.nullOr (types.attrsOf types.anything);
             description = ''
               Consul integration options. For more information see the [example config](https://github.com/martin-helmich/prometheus-nginxlog-exporter#configuration-file).
 
               This is disabled by default.
             '';
           };
-          namespaces = mkOption {
+          namespaces = lib.mkOption {
             default = [ ];
-            type = types.listOf (types.attrsOf types.anything);
+            type = lib.types.listOf (types.attrsOf types.anything);
 
             description = ''
               Namespaces to collect the metrics for. For more information see the [example config](https://github.com/martin-helmich/prometheus-nginxlog-exporter#configuration-file).
@@ -47,8 +47,8 @@ in
       '';
     };
 
-    metricsEndpoint = mkOption {
-      type = types.str;
+    metricsEndpoint = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.

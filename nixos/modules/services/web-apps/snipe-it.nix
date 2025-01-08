@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.snipe-it;
   snipe-it = pkgs.snipe-it.override {
@@ -34,28 +32,28 @@ let
 in {
   options.services.snipe-it = {
 
-    enable = mkEnableOption "snipe-it, a free open source IT asset/license management system";
+    enable = lib.mkEnableOption "snipe-it, a free open source IT asset/license management system";
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "snipeit";
       description = "User snipe-it runs as.";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "snipeit";
       description = "Group snipe-it runs as.";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    appKeyFile = mkOption {
+    appKeyFile = lib.mkOption {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
         generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/snipe-it/appkey";
-      type = types.path;
+      type = lib.types.path;
     };
 
     hostName = lib.mkOption {
@@ -68,7 +66,7 @@ in {
       '';
     };
 
-    appURL = mkOption {
+    appURL = lib.mkOption {
       description = ''
         The root URL that you want to host Snipe-IT on. All URLs in Snipe-IT will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
@@ -79,39 +77,39 @@ in {
         http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostName}
       '';
       example = "https://example.com";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       description = "snipe-it data directory";
       default = "/var/lib/snipe-it";
-      type = types.path;
+      type = lib.types.path;
     };
 
     database = {
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Database host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3306;
         description = "Database host port.";
       };
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "snipeit";
         description = "Database name.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = user;
-        defaultText = literalExpression "user";
+        defaultText = lib.literalExpression "user";
         description = "Database username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/snipe-it/dbpassword";
         description = ''
@@ -119,42 +117,42 @@ in {
           {option}`database.user`.
         '';
       };
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Create the database and database user locally.";
       };
     };
 
     mail = {
-      driver = mkOption {
-        type = types.enum [ "smtp" "sendmail" ];
+      driver = lib.mkOption {
+        type = lib.types.enum [ "smtp" "sendmail" ];
         default = "smtp";
         description = "Mail driver to use.";
       };
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Mail host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 1025;
         description = "Mail host port.";
       };
-      encryption = mkOption {
-        type = with types; nullOr (enum [ "tls" "ssl" ]);
+      encryption = lib.mkOption {
+        type = with lib.types; nullOr (enum [ "tls" "ssl" ]);
         default = null;
         description = "SMTP encryption mechanism to use.";
       };
-      user = mkOption {
-        type = with types; nullOr str;
+      user = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         example = "snipeit";
         description = "Mail username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/snipe-it/mailpassword";
         description = ''
@@ -162,46 +160,46 @@ in {
           {option}`mail.user`.
         '';
       };
-      backupNotificationAddress = mkOption {
-        type = types.str;
+      backupNotificationAddress = lib.mkOption {
+        type = lib.types.str;
         default = "backup@example.com";
         description = "Email Address to send Backup Notifications to.";
       };
       from = {
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "Snipe-IT Asset Management";
           description = "Mail \"from\" name.";
         };
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           default = "mail@example.com";
           description = "Mail \"from\" address.";
         };
       };
       replyTo = {
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "Snipe-IT Asset Management";
           description = "Mail \"reply-to\" name.";
         };
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           default = "mail@example.com";
           description = "Mail \"reply-to\" address.";
         };
       };
     };
 
-    maxUploadSize = mkOption {
-      type = types.str;
+    maxUploadSize = lib.mkOption {
+      type = lib.types.str;
       default = "18M";
       example = "1G";
       description = "The maximum size for uploads (e.g. images).";
     };
 
-    poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+    poolConfig = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -216,13 +214,13 @@ in {
       '';
     };
 
-    nginx = mkOption {
-      type = types.submodule (
-        recursiveUpdate
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
+        lib.recursiveUpdate
           (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
       );
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           serverAliases = [
             "snipe-it.''${config.networking.domain}"
@@ -237,8 +235,8 @@ in {
       '';
     };
 
-    config = mkOption {
-      type = with types;
+    config = lib.mkOption {
+      type = with lib.types;
         attrsOf
           (nullOr
             (either
@@ -251,7 +249,7 @@ in {
               ])
               (submodule {
                 options = {
-                  _secret = mkOption {
+                  _secret = lib.mkOption {
                     type = nullOr (oneOf [ str path ]);
                     description = ''
                       The path to a file containing the value the
@@ -262,7 +260,7 @@ in {
                 };
               })));
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           ALLOWED_IFRAME_HOSTS = "https://example.com";
           WKHTMLTOPDF = "''${pkgs.wkhtmltopdf}/bin/wkhtmltopdf";
@@ -293,7 +291,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = db.createLocally -> db.user == user;
@@ -334,9 +332,9 @@ in {
       SECURE_COOKIES = tlsEnabled;
     };
 
-    services.mysql = mkIf db.createLocally {
+    services.mysql = lib.mkIf db.createLocally {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
       ensureUsers = [
         { name = db.user;
@@ -359,10 +357,10 @@ in {
     };
 
     services.nginx = {
-      enable = mkDefault true;
-      virtualHosts."${cfg.hostName}" = mkMerge [ cfg.nginx {
-        root = mkForce "${snipe-it}/share/php/snipe-it/public";
-        extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
+      enable = lib.mkDefault true;
+      virtualHosts."${cfg.hostName}" = lib.mkMerge [ cfg.nginx {
+        root = lib.mkForce "${snipe-it}/share/php/snipe-it/public";
+        extraConfig = lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
         locations = {
           "/" = {
             index = "index.php";
@@ -375,7 +373,7 @@ in {
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."snipe-it".socket};
-              ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
+              ${lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
             '';
           };
           "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
@@ -388,7 +386,7 @@ in {
     systemd.services.snipe-it-setup = {
       description = "Preparation tasks for snipe-it";
       before = [ "phpfpm-snipe-it.service" ];
-      after = optional db.createLocally "mysql.service";
+      after = lib.optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
@@ -401,7 +399,7 @@ in {
       path = [ pkgs.replace-secret artisan ];
       script =
         let
-          isSecret  = v: isAttrs v && v ? _secret && (isString v._secret || builtins.isPath v._secret);
+          isSecret  = v: lib.isAttrs v && v ? _secret && (lib.isString v._secret || builtins.isPath v._secret);
           snipeITEnvVars = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString = v: with builtins;
@@ -419,9 +417,9 @@ in {
           };
           secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
           mkSecretReplacement = file: ''
-            replace-secret ${escapeShellArgs [
+            replace-secret ${lib.escapeShellArgs [
               (
-                if (isString file) then
+                if (lib.isString file) then
                   builtins.hashString "sha256" file
                 else
                   builtins.hashString "sha256" (builtins.readFile file)
@@ -431,7 +429,7 @@ in {
             ]}
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ {} null ])) cfg.config;
           snipeITEnv = pkgs.writeText "snipeIT.env" (snipeITEnvVars filteredConfig);
         in ''
           # error handling
@@ -497,14 +495,14 @@ in {
     ];
 
     users = {
-      users = mkIf (user == "snipeit") {
+      users = lib.mkIf (user == "snipeit") {
         snipeit = {
           inherit group;
           isSystemUser = true;
         };
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
-      groups = mkIf (group == "snipeit") {
+      groups = lib.mkIf (group == "snipeit") {
         snipeit = {};
       };
     };

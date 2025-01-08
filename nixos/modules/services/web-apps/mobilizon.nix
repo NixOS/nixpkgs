@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.mobilizon;
 
@@ -20,7 +18,7 @@ let
   # Make a package containing launchers with the correct envirenment, instead of
   # setting it with systemd services, so that the user can also use them without
   # troubles
-  launchers = pkgs.stdenv.mkDerivation rec {
+  launchers = pkgs.stdenv.mkDerivation {
     pname = "${cfg.package.pname}-launchers";
     inherit (cfg.package) version;
 
@@ -64,7 +62,7 @@ in
 {
   options = {
     services.mobilizon = {
-      enable = mkEnableOption "Mobilizon federated organization and mobilization platform";
+      enable = lib.mkEnableOption "Mobilizon federated organization and mobilization platform";
 
       nginx.enable = lib.mkOption {
         type = lib.types.bool;
@@ -75,21 +73,21 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "mobilizon" { };
+      package = lib.mkPackageOption pkgs "mobilizon" { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type =
           let
             elixirTypes = settingsFormat.lib.types;
           in
-          types.submodule {
+          lib.types.submodule {
             freeformType = settingsFormat.type;
 
             options = {
               ":mobilizon" = {
 
                 "Mobilizon.Web.Endpoint" = {
-                  url.host = mkOption {
+                  url.host = lib.mkOption {
                     type = elixirTypes.str;
                     defaultText = lib.literalMD ''
                       ''${settings.":mobilizon".":instance".hostname}
@@ -100,14 +98,14 @@ in
                   };
 
                   http = {
-                    port = mkOption {
+                    port = lib.mkOption {
                       type = elixirTypes.port;
                       default = 4000;
                       description = ''
                         The port to run the server
                       '';
                     };
-                    ip = mkOption {
+                    ip = lib.mkOption {
                       type = elixirTypes.tuple;
                       default = settingsFormat.lib.mkTuple [
                         0
@@ -125,7 +123,7 @@ in
                     };
                   };
 
-                  has_reverse_proxy = mkOption {
+                  has_reverse_proxy = lib.mkOption {
                     type = elixirTypes.bool;
                     default = true;
                     description = ''
@@ -135,23 +133,23 @@ in
                 };
 
                 ":instance" = {
-                  name = mkOption {
+                  name = lib.mkOption {
                     type = elixirTypes.str;
                     description = ''
                       The fallback instance name if not configured into the admin UI
                     '';
                   };
 
-                  hostname = mkOption {
+                  hostname = lib.mkOption {
                     type = elixirTypes.str;
                     description = ''
                       Your instance's hostname
                     '';
                   };
 
-                  email_from = mkOption {
+                  email_from = lib.mkOption {
                     type = elixirTypes.str;
-                    defaultText = literalExpression ''
+                    defaultText = lib.literalExpression ''
                       noreply@''${settings.":mobilizon".":instance".hostname}
                     '';
                     description = ''
@@ -159,9 +157,9 @@ in
                     '';
                   };
 
-                  email_reply_to = mkOption {
+                  email_reply_to = lib.mkOption {
                     type = elixirTypes.str;
-                    defaultText = literalExpression ''
+                    defaultText = lib.literalExpression ''
                       ''${email_from}
                     '';
                     description = ''
@@ -171,8 +169,8 @@ in
                 };
 
                 "Mobilizon.Storage.Repo" = {
-                  socket_dir = mkOption {
-                    type = types.nullOr elixirTypes.str;
+                  socket_dir = lib.mkOption {
+                    type = lib.types.nullOr elixirTypes.str;
                     default = postgresqlSocketDir;
                     description = ''
                       Path to the postgres socket directory.
@@ -188,16 +186,16 @@ in
                     '';
                   };
 
-                  username = mkOption {
-                    type = types.nullOr elixirTypes.str;
+                  username = lib.mkOption {
+                    type = lib.types.nullOr elixirTypes.str;
                     default = user;
                     description = ''
                       User used to connect to the database
                     '';
                   };
 
-                  database = mkOption {
-                    type = types.nullOr elixirTypes.str;
+                  database = lib.mkOption {
+                    type = lib.types.nullOr elixirTypes.str;
                     default = "mobilizon_prod";
                     description = ''
                       Name of the database
@@ -218,7 +216,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -244,7 +242,7 @@ in
       ":mobilizon" = {
         "Mobilizon.Web.Endpoint" = {
           server = true;
-          url.host = mkDefault instanceSettings.hostname;
+          url.host = lib.mkDefault instanceSettings.hostname;
           secret_key_base = settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_INSTANCE_SECRET"; };
         };
 
@@ -253,16 +251,16 @@ in
         };
 
         ":instance" = {
-          registrations_open = mkDefault false;
-          demo = mkDefault false;
-          email_from = mkDefault "noreply@${instanceSettings.hostname}";
-          email_reply_to = mkDefault instanceSettings.email_from;
+          registrations_open = lib.mkDefault false;
+          demo = lib.mkDefault false;
+          email_from = lib.mkDefault "noreply@${instanceSettings.hostname}";
+          email_reply_to = lib.mkDefault instanceSettings.email_from;
         };
 
         "Mobilizon.Storage.Repo" = {
           # Forced by upstream since it uses PostgreSQL-specific extensions
           adapter = settingsFormat.lib.mkAtom "Ecto.Adapters.Postgres";
-          pool_size = mkDefault 10;
+          pool_size = lib.mkDefault 10;
         };
       };
 
@@ -305,7 +303,7 @@ in
         ProtectSystem = "full";
         NoNewPrivileges = true;
 
-        ReadWritePaths = mkIf isLocalPostgres postgresqlSocketDir;
+        ReadWritePaths = lib.mkIf isLocalPostgres postgresqlSocketDir;
       };
     };
 
@@ -360,7 +358,7 @@ in
 
     # Add the required PostgreSQL extensions to the local PostgreSQL server,
     # if local PostgreSQL is configured.
-    systemd.services.mobilizon-postgresql = mkIf isLocalPostgres {
+    systemd.services.mobilizon-postgresql = lib.mkIf isLocalPostgres {
       description = "Mobilizon PostgreSQL setup";
 
       after = [ "postgresql.service" ];
@@ -398,7 +396,7 @@ in
       "Z /var/lib/mobilizon 700 mobilizon mobilizon - -"
     ];
 
-    services.postgresql = mkIf isLocalPostgres {
+    services.postgresql = lib.mkIf isLocalPostgres {
       enable = true;
       ensureDatabases = [ repoSettings.database ];
       ensureUsers = [

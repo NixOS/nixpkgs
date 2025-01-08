@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.resilio;
 
@@ -27,13 +25,13 @@ let
     download_limit = cfg.downloadLimit;
     upload_limit = cfg.uploadLimit;
     lan_encrypt_data = cfg.encryptLAN;
-  } // optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; }
-    // optionalAttrs cfg.enableWebUI {
+  } // lib.optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; }
+    // lib.optionalAttrs cfg.enableWebUI {
     webui = { listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}"; } //
-      (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; }) //
-      (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; }) //
-      (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
-  } // optionalAttrs (sharedFoldersRecord != []) {
+      (lib.optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; }) //
+      (lib.optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; }) //
+      (lib.optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
+  } // lib.optionalAttrs (sharedFoldersRecord != []) {
     shared_folders = sharedFoldersRecord;
   }));
 
@@ -71,8 +69,8 @@ in
 {
   options = {
     services.resilio = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If enabled, start the Resilio Sync daemon. Once enabled, you can
@@ -81,20 +79,20 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "resilio-sync" { };
+      package = lib.mkPackageOption pkgs "resilio-sync" { };
 
-      deviceName = mkOption {
-        type = types.str;
+      deviceName = lib.mkOption {
+        type = lib.types.str;
         example = "Voltron";
         default = config.networking.hostName;
-        defaultText = literalExpression "config.networking.hostName";
+        defaultText = lib.literalExpression "config.networking.hostName";
         description = ''
           Name of the Resilio Sync device.
         '';
       };
 
-      listeningPort = mkOption {
-        type = types.int;
+      listeningPort = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         example = 44444;
         description = ''
@@ -102,8 +100,8 @@ in
         '';
       };
 
-      checkForUpdates = mkOption {
-        type = types.bool;
+      checkForUpdates = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Determines whether to check for updates and alert the user
@@ -111,16 +109,16 @@ in
         '';
       };
 
-      useUpnp = mkOption {
-        type = types.bool;
+      useUpnp = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Use Universal Plug-n-Play (UPnP)
         '';
       };
 
-      downloadLimit = mkOption {
-        type = types.int;
+      downloadLimit = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         example = 1024;
         description = ''
@@ -128,8 +126,8 @@ in
         '';
       };
 
-      uploadLimit = mkOption {
-        type = types.int;
+      uploadLimit = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         example = 1024;
         description = ''
@@ -137,8 +135,8 @@ in
         '';
       };
 
-      httpListenAddr = mkOption {
-        type = types.str;
+      httpListenAddr = lib.mkOption {
+        type = lib.types.str;
         default = "[::1]";
         example = "0.0.0.0";
         description = ''
@@ -146,16 +144,16 @@ in
         '';
       };
 
-      httpListenPort = mkOption {
-        type = types.int;
+      httpListenPort = lib.mkOption {
+        type = lib.types.int;
         default = 9000;
         description = ''
           HTTP port to bind on.
         '';
       };
 
-      httpLogin = mkOption {
-        type = types.str;
+      httpLogin = lib.mkOption {
+        type = lib.types.str;
         example = "allyourbase";
         default = "";
         description = ''
@@ -163,8 +161,8 @@ in
         '';
       };
 
-      httpPass = mkOption {
-        type = types.str;
+      httpPass = lib.mkOption {
+        type = lib.types.str;
         example = "arebelongtous";
         default = "";
         description = ''
@@ -172,14 +170,14 @@ in
         '';
       };
 
-      encryptLAN = mkOption {
-        type = types.bool;
+      encryptLAN = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Encrypt LAN data.";
       };
 
-      enableWebUI = mkOption {
-        type = types.bool;
+      enableWebUI = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable Web UI for administration. Bound to the specified
@@ -188,8 +186,8 @@ in
           '';
       };
 
-      storagePath = mkOption {
-        type = types.path;
+      storagePath = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/resilio-sync/";
         description = ''
           Where BitTorrent Sync will store it's database files (containing
@@ -198,22 +196,22 @@ in
         '';
       };
 
-      apiKey = mkOption {
-        type = types.str;
+      apiKey = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "API key, which enables the developer API.";
       };
 
-      directoryRoot = mkOption {
-        type = types.str;
+      directoryRoot = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "/media";
         description = "Default directory to add folders in the web UI.";
       };
 
-      sharedFolders = mkOption {
+      sharedFolders = lib.mkOption {
         default = [];
-        type = types.listOf (types.attrsOf types.anything);
+        type = lib.types.listOf (lib.types.attrsOf lib.types.anything);
         example =
           [ { secretFile     = "/run/resilio-secret";
               directory      = "/home/user/sync_test";
@@ -251,7 +249,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       [ { assertion = cfg.deviceName != "";
           message   = "Device name cannot be empty.";
@@ -274,7 +272,7 @@ in
 
     users.groups.rslsync.gid = config.ids.gids.rslsync;
 
-    systemd.services.resilio = with pkgs; {
+    systemd.services.resilio = {
       description = "Resilio Sync Service";
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network.target" ];

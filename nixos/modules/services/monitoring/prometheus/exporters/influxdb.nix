@@ -8,19 +8,19 @@
 
 let
   cfg = config.services.prometheus.exporters.influxdb;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9122;
   extraOpts = {
-    sampleExpiry = mkOption {
-      type = types.str;
+    sampleExpiry = lib.mkOption {
+      type = lib.types.str;
       default = "5m";
       example = "10m";
       description = "How long a sample is valid for";
     };
-    udpBindAddress = mkOption {
-      type = types.str;
+    udpBindAddress = lib.mkOption {
+      type = lib.types.str;
       default = ":9122";
       example = "192.0.2.1:9122";
       description = "Address on which to listen for udp packets";
@@ -32,7 +32,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-influxdb-exporter}/bin/influxdb_exporter \
         --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-        --influxdb.sample-expiry ${cfg.sampleExpiry} ${concatStringsSep " " cfg.extraFlags}
+        --influxdb.sample-expiry ${cfg.sampleExpiry} ${lib.concatStringsSep " " cfg.extraFlags}
       '';
     };
   };

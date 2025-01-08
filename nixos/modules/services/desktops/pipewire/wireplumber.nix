@@ -4,9 +4,9 @@ let
   inherit (builtins) concatMap;
   inherit (lib) maintainers;
   inherit (lib.attrsets) attrByPath mapAttrsToList;
-  inherit (lib.lists) flatten optional;
+  inherit (lib.lists) flatten lib.optional;
   inherit (lib.modules) mkIf;
-  inherit (lib.options) literalExpression mkOption;
+  inherit (lib.options) literalExpression lib.mkOption;
   inherit (lib.strings) concatStringsSep makeSearchPath;
   inherit (lib.types) bool listOf attrsOf package lines;
   inherit (lib.path) subpath;
@@ -20,7 +20,7 @@ let
   configSectionsToConfFile = path: value:
     pkgs.writeTextDir
       path
-      (concatStringsSep "\n" (
+      (lib.concatStringsSep "\n" (
         mapAttrsToList
           (section: content: "${section} = " + (builtins.toJSON content))
           value
@@ -41,27 +41,27 @@ in
 
   options = {
     services.pipewire.wireplumber = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = pwCfg.enable;
-        defaultText = literalExpression "config.services.pipewire.enable";
+        defaultText = lib.literalExpression "config.services.pipewire.enable";
         description = "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
       };
 
-      package = mkOption {
+      package = lib.mkOption {
         type = package;
         default = pkgs.wireplumber;
-        defaultText = literalExpression "pkgs.wireplumber";
+        defaultText = lib.literalExpression "pkgs.wireplumber";
         description = "The WirePlumber derivation to use.";
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         # Two layer attrset is necessary before using JSON, because of the whole
         # config file not being a JSON object, but a concatenation of JSON objects
         # in sections.
         type = attrsOf (attrsOf json.type);
         default = { };
-        example = literalExpression ''{
+        example = lib.literalExpression ''{
           "log-level-debug" = {
             "context.properties" = {
               # Output Debug log messages as opposed to only the default level (Notice)
@@ -112,7 +112,7 @@ in
         '';
       };
 
-      extraScripts = mkOption {
+      extraScripts = lib.mkOption {
         type = attrsOf lines;
         default = { };
         example = {
@@ -163,10 +163,10 @@ in
         '';
       };
 
-      configPackages = mkOption {
+      configPackages = lib.mkOption {
         type = listOf package;
         default = [ ];
-        example = literalExpression ''[
+        example = lib.literalExpression ''[
           (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez.conf" '''
             monitor.bluez.properties = {
               bluez5.roles = [ a2dp_sink a2dp_source bap_sink bap_source hsp_hs hsp_ag hfp_hf hfp_ag ]
@@ -185,10 +185,10 @@ in
         '';
       };
 
-      extraLv2Packages = mkOption {
+      extraLv2Packages = lib.mkOption {
         type = listOf package;
         default = [ ];
-        example = literalExpression "[ pkgs.lsp-plugins ]";
+        example = lib.literalExpression "[ pkgs.lsp-plugins ]";
         description = ''
           List of packages that provide LV2 plugins in `lib/lv2` that should
           be made available to WirePlumber for [filter chains][wiki-filter-chain].
@@ -229,7 +229,7 @@ in
 
       configPackages = cfg.configPackages
         ++ [ extraConfigPkg extraScriptsPkg ]
-        ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg;
+        ++ lib.optional (!pwUsedForAudio) pwNotForAudioConfigPkg;
 
       configs = pkgs.buildEnv {
         name = "wireplumber-configs";
@@ -252,7 +252,7 @@ in
         pathsToLink = [ "/lib/lv2" ];
       };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         {
           assertion = !config.hardware.bluetooth.hsphfpd.enable;
@@ -270,7 +270,7 @@ in
       systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
       systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
 
-      systemd.services.wireplumber.environment = mkIf pwCfg.systemWide {
+      systemd.services.wireplumber.environment = lib.mkIf pwCfg.systemWide {
         # Force WirePlumber to use system dbus.
         DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
 
@@ -280,7 +280,7 @@ in
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
 
-      systemd.user.services.wireplumber.environment = mkIf (!pwCfg.systemWide) {
+      systemd.user.services.wireplumber.environment = lib.mkIf (!pwCfg.systemWide) {
         XDG_DATA_DIRS = makeSearchPath "share" [ configs cfg.package ];
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };

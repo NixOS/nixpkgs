@@ -8,7 +8,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     ;
 
@@ -16,20 +16,20 @@ let
 in
 {
   options.programs.corectrl = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       CoreCtrl, a tool to overclock amd graphics cards and processors.
       Add your user to the corectrl group to run corectrl without needing to enter your password
     '';
 
-    package = mkPackageOption pkgs "corectrl" {
+    package = lib.mkPackageOption pkgs "corectrl" {
       extraDescription = "Useful for overriding the configuration options used for the package.";
     };
 
     gpuOverclock = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         GPU overclocking
       '';
-      ppfeaturemask = mkOption {
+      ppfeaturemask = lib.mkOption {
         type = lib.types.str;
         default = "0xfffd7fff";
         example = "0xffffffff";
@@ -43,7 +43,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     services.dbus.packages = [ cfg.package ];
@@ -64,7 +64,7 @@ in
 
     # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd/include/amd_shared.h#n169
     # The overdrive bit
-    boot.kernelParams = mkIf cfg.gpuOverclock.enable [
+    boot.kernelParams = lib.mkIf cfg.gpuOverclock.enable [
       "amdgpu.ppfeaturemask=${cfg.gpuOverclock.ppfeaturemask}"
     ];
   };

@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.agate;
 in
 {
   options = {
     services.agate = {
-      enable = mkEnableOption "Agate Server";
+      enable = lib.mkEnableOption "Agate Server";
 
-      package = mkPackageOption pkgs "agate" { };
+      package = lib.mkPackageOption pkgs "agate" { };
 
-      addresses = mkOption {
-        type = types.listOf types.str;
+      addresses = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "0.0.0.0:1965" ];
         description = ''
           Addresses to listen on, IP:PORT, if you haven't disabled forwarding
@@ -26,41 +24,41 @@ in
         '';
       };
 
-      contentDir = mkOption {
+      contentDir = lib.mkOption {
         default = "/var/lib/agate/content";
-        type = types.path;
+        type = lib.types.path;
         description = "Root of the content directory.";
       };
 
-      certificatesDir = mkOption {
+      certificatesDir = lib.mkOption {
         default = "/var/lib/agate/certificates";
-        type = types.path;
+        type = lib.types.path;
         description = "Root of the certificate directory.";
       };
 
-      hostnames = mkOption {
+      hostnames = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           Domain name of this Gemini server, enables checking hostname and port
           in requests. (multiple occurrences means basic vhosts)
         '';
       };
 
-      language = mkOption {
+      language = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = "RFC 4646 Language code for text/gemini documents.";
       };
 
-      onlyTls_1_3 = mkOption {
+      onlyTls_1_3 = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Only use TLSv1.3 (default also allows TLSv1.2).";
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "" ];
         example = [ "--log-ip" ];
         description = "Extra arguments to use running agate.";
@@ -68,7 +66,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # available for generating certs by hand
     # it can be a bit arduous with openssl
     environment.systemPackages = [ cfg.package ];
@@ -86,7 +84,7 @@ in
         let
           prefixKeyList =
             key: list:
-            concatMap (v: [
+            lib.concatMap (v: [
               key
               v
             ]) list;
@@ -95,7 +93,7 @@ in
         in
         ''
           exec ${cfg.package}/bin/agate ${
-            escapeShellArgs (
+            lib.escapeShellArgs (
               [
                 "--content"
                 "${cfg.contentDir}"
@@ -103,13 +101,13 @@ in
                 "${cfg.certificatesDir}"
               ]
               ++ addresses
-              ++ (optionals (cfg.hostnames != [ ]) hostnames)
-              ++ (optionals (cfg.language != null) [
+              ++ (lib.optionals (cfg.hostnames != [ ]) hostnames)
+              ++ (lib.optionals (cfg.language != null) [
                 "--lang"
                 cfg.language
               ])
-              ++ (optionals cfg.onlyTls_1_3 [ "--only-tls13" ])
-              ++ (optionals (cfg.extraArgs != [ ]) cfg.extraArgs)
+              ++ (lib.optionals cfg.onlyTls_1_3 [ "--only-tls13" ])
+              ++ (lib.optionals (cfg.extraArgs != [ ]) cfg.extraArgs)
             )
           }
         '';

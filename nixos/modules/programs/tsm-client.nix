@@ -27,11 +27,11 @@ let
     map
     ;
   inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) mkEnableOption mkOption mkPackageOption;
+  inherit (lib.options) mkEnableOption lib.mkOption mkPackageOption;
   inherit (lib.strings)
     concatLines
     match
-    optionalString
+    lib.optionalString
     toLower
     ;
   inherit (lib.trivial) isInt;
@@ -76,7 +76,7 @@ let
       freeformType = attrsOf (either scalarType (listOf scalarType));
       # Client system-options file directives are explained here:
       # https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=commands-processing-options
-      options.servername = mkOption {
+      options.servername = lib.mkOption {
         type = servernameType;
         default = name;
         example = "mainTsmServer";
@@ -85,14 +85,14 @@ let
           must not contain space or more than 64 chars.
         '';
       };
-      options.tcpserveraddress = mkOption {
+      options.tcpserveraddress = lib.mkOption {
         type = nonEmptyStr;
         example = "tsmserver.company.com";
         description = ''
           Host/domain name or IP address of the IBM TSM server.
         '';
       };
-      options.tcpport = mkOption {
+      options.tcpport = lib.mkOption {
         type = addCheck port (p: p <= 32767);
         default = 1500; # official default
         description = ''
@@ -100,7 +100,7 @@ let
           TSM does not support ports above 32767.
         '';
       };
-      options.nodename = mkOption {
+      options.nodename = lib.mkOption {
         type = nonEmptyStr;
         example = "MY-TSM-NODE";
         description = ''
@@ -119,14 +119,14 @@ let
         to renew the password (e.g. on first connection),
         a random password will be generated and stored
       '';
-      options.passwordaccess = mkOption {
+      options.passwordaccess = lib.mkOption {
         type = enum [
           "generate"
           "prompt"
         ];
         visible = false;
       };
-      options.passworddir = mkOption {
+      options.passworddir = lib.mkOption {
         type = nullOr path;
         default = null;
         example = "/home/alice/tsm-password";
@@ -135,7 +135,7 @@ let
           node's password information.
         '';
       };
-      options.inclexcl = mkOption {
+      options.inclexcl = lib.mkOption {
         type = coercedTo lines (pkgs.writeText "inclexcl.dsm.sys") (nullOr path);
         default = null;
         example = ''
@@ -148,7 +148,7 @@ let
           or an absolute path pointing to a file with such lines.
         '';
       };
-      config.commmethod = mkDefault "v6tcpip"; # uses v4 or v6, based on dns lookup result
+      config.commmethod = lib.mkDefault "v6tcpip"; # uses v4 or v6, based on dns lookup result
       config.passwordaccess = if config.genPasswd then "generate" else "prompt";
       # XXX migration code for freeform settings, these can be removed in 2025:
       options.warnings = optionsGlobal.warnings;
@@ -158,28 +158,28 @@ let
           inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule;
         in
         [
-          (mkRemovedOptionModule [ "extraConfig" ]
+          (lib.mkRemovedOptionModule [ "extraConfig" ]
             "Please just add options directly to the server attribute set, cf. the description of `programs.tsmClient.servers`."
           )
-          (mkRemovedOptionModule [ "text" ]
+          (lib.mkRemovedOptionModule [ "text" ]
             "Please just add options directly to the server attribute set, cf. the description of `programs.tsmClient.servers`."
           )
-          (mkRenamedOptionModule [ "name" ] [ "servername" ])
-          (mkRenamedOptionModule [ "server" ] [ "tcpserveraddress" ])
-          (mkRenamedOptionModule [ "port" ] [ "tcpport" ])
-          (mkRenamedOptionModule [ "node" ] [ "nodename" ])
-          (mkRenamedOptionModule [ "passwdDir" ] [ "passworddir" ])
-          (mkRenamedOptionModule [ "includeExclude" ] [ "inclexcl" ])
+          (lib.mkRenamedOptionModule [ "name" ] [ "servername" ])
+          (lib.mkRenamedOptionModule [ "server" ] [ "tcpserveraddress" ])
+          (lib.mkRenamedOptionModule [ "port" ] [ "tcpport" ])
+          (lib.mkRenamedOptionModule [ "node" ] [ "nodename" ])
+          (lib.mkRenamedOptionModule [ "passwdDir" ] [ "passworddir" ])
+          (lib.mkRenamedOptionModule [ "includeExclude" ] [ "inclexcl" ])
         ];
     };
 
   options.programs.tsmClient = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       IBM Storage Protect (Tivoli Storage Manager, TSM)
       client command line applications with a
       client system-options file "dsm.sys"
     '';
-    servers = mkOption {
+    servers = lib.mkOption {
       type = attrsOf (submodule serverOptions);
       default = { };
       example.mainTsmServer = {
@@ -203,7 +203,7 @@ let
         each value, according to the rules above.
       '';
     };
-    defaultServername = mkOption {
+    defaultServername = lib.mkOption {
       type = nullOr servernameType;
       default = null;
       example = "mainTsmServer";
@@ -217,7 +217,7 @@ let
         `defaultserver` configuration line.
       '';
     };
-    dsmSysText = mkOption {
+    dsmSysText = lib.mkOption {
       type = lines;
       readOnly = true;
       description = ''
@@ -228,7 +228,7 @@ let
         TSM-depending packages used on the system.
       '';
     };
-    package = mkPackageOption pkgs "tsm-client" {
+    package = lib.mkPackageOption pkgs "tsm-client" {
       example = "tsm-client-withGui";
       extraDescription = ''
         It will be used with `.override`
@@ -252,7 +252,7 @@ let
   };
 
   cfg = config.programs.tsmClient;
-  servernames = map (s: s.servername) (attrValues cfg.servers);
+  servernames = map (s: s.servername) (lib.attrValues cfg.servers);
 
   assertions =
     [
@@ -364,9 +364,9 @@ let
     ****  Do not edit!
     ****  This file is generated by NixOS configuration.
 
-    ${optionalString (cfg.defaultServername != null) "defaultserver  ${cfg.defaultServername}"}
+    ${lib.optionalString (cfg.defaultServername != null) "defaultserver  ${cfg.defaultServername}"}
 
-    ${concatLines (map makeDsmSysStanza (attrValues cfg.servers))}
+    ${concatLines (map makeDsmSysStanza (lib.attrValues cfg.servers))}
   '';
 
   # XXX migration code for freeform settings, this can be removed in 2025:
@@ -385,7 +385,7 @@ in
 
   inherit options;
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     inherit assertions;
     programs.tsmClient.dsmSysText = dsmSysText;
     programs.tsmClient.wrappedPackage = cfg.package.override rec {

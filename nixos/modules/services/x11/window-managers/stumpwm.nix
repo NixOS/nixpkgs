@@ -5,19 +5,17 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.stumpwm;
 in
 
 {
   options = {
-    services.xserver.windowManager.stumpwm.enable = mkEnableOption "stumpwm";
+    services.xserver.windowManager.stumpwm.enable = lib.mkEnableOption "stumpwm";
   };
 
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "stumpwm";
       start = ''
         ${pkgs.sbclPackages.stumpwm}/bin/stumpwm &

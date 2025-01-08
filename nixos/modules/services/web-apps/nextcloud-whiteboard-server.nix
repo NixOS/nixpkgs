@@ -10,7 +10,7 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
-    mkOption
+    lib.mkOption
     types
     literalExpression
     ;
@@ -20,17 +20,17 @@ in
 {
   options.services.nextcloud-whiteboard-server = {
 
-    enable = mkEnableOption "Nextcloud backend server for the Whiteboard app";
+    enable = lib.mkEnableOption "Nextcloud backend server for the Whiteboard app";
 
-    settings = mkOption {
-      type = types.attrsOf types.str;
+    settings = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       description = ''
         Settings to configure backend server. Especially the Nextcloud host
         url has to be set. The required environment variable `JWT_SECRET_KEY`
         should be set via the secrets option.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           NEXTCLOUD_URL = "https://nextcloud.example.org";
         }
@@ -38,7 +38,7 @@ in
     };
 
     secrets = lib.mkOption {
-      type = with types; listOf str;
+      type = with lib.types; listOf str;
       description = ''
         A list of files containing the various secrets. Should be in the
         format expected by systemd's `EnvironmentFile` directory.
@@ -48,7 +48,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.nextcloud-whiteboard-server = {
       description = "Nextcloud backend server for the Whiteboard app";

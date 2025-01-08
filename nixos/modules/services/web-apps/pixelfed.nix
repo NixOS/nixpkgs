@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.pixelfed;
   user = cfg.user;
@@ -38,12 +36,12 @@ let
 in {
   options.services = {
     pixelfed = {
-      enable = mkEnableOption "a Pixelfed instance";
-      package = mkPackageOption pkgs "pixelfed" { };
-      phpPackage = mkPackageOption pkgs "php82" { };
+      enable = lib.mkEnableOption "a Pixelfed instance";
+      package = lib.mkPackageOption pkgs "pixelfed" { };
+      phpPackage = lib.mkPackageOption pkgs "php82" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "pixelfed";
         description = ''
           User account under which pixelfed runs.
@@ -56,8 +54,8 @@ in {
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "pixelfed";
         description = ''
           Group account under which pixelfed runs.
@@ -70,31 +68,31 @@ in {
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         description = ''
           FQDN for the Pixelfed instance.
         '';
       };
 
-      secretFile = mkOption {
-        type = types.path;
+      secretFile = lib.mkOption {
+        type = lib.types.path;
         description = ''
           A secret file to be sourced for the .env settings.
           Place `APP_KEY` and other settings that should not end up in the Nix store here.
         '';
       };
 
-      settings = mkOption {
-        type = with types; (attrsOf (oneOf [ bool int str ]));
+      settings = lib.mkOption {
+        type = with lib.types; (attrsOf (oneOf [ bool int str ]));
         description = ''
           .env settings for Pixelfed.
           Secrets should use `secretFile` option instead.
         '';
       };
 
-      nginx = mkOption {
-        type = types.nullOr (types.submodule
+      nginx = lib.mkOption {
+        type = lib.types.nullOr (lib.types.submodule
           (import ../web-servers/nginx/vhost-options.nix {
             inherit config lib;
           }));
@@ -117,21 +115,21 @@ in {
         '';
       };
 
-      redis.createLocally = mkEnableOption "a local Redis database using UNIX socket authentication"
+      redis.createLocally = lib.mkEnableOption "a local Redis database using UNIX socket authentication"
         // {
           default = true;
         };
 
       database = {
-        createLocally = mkEnableOption "a local database using UNIX socket authentication" // {
+        createLocally = lib.mkEnableOption "a local database using UNIX socket authentication" // {
             default = true;
           };
-        automaticMigrations = mkEnableOption "automatic migrations for database schema and data" // {
+        automaticMigrations = lib.mkEnableOption "automatic migrations for database schema and data" // {
             default = true;
           };
 
-        type = mkOption {
-          type = types.enum [ "mysql" "pgsql" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "mysql" "pgsql" ];
           example = "pgsql";
           default = "mysql";
           description = ''
@@ -140,23 +138,23 @@ in {
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "pixelfed";
           description = "Database name.";
         };
       };
 
-      maxUploadSize = mkOption {
-        type = types.str;
+      maxUploadSize = lib.mkOption {
+        type = lib.types.str;
         default = "8M";
         description = ''
           Max upload size with units.
         '';
       };
 
-      poolConfig = mkOption {
-        type = with types; attrsOf (oneOf [ int str bool ]);
+      poolConfig = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ int str bool ]);
         default = { };
 
         description = ''
@@ -164,8 +162,8 @@ in {
         '';
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/pixelfed";
         description = ''
           State directory of the `pixelfed` user which holds
@@ -173,8 +171,8 @@ in {
         '';
       };
 
-      runtimeDir = mkOption {
-        type = types.str;
+      runtimeDir = lib.mkOption {
+        type = lib.types.str;
         default = "/run/pixelfed";
         description = ''
           Ruutime directory of the `pixelfed` user which holds
@@ -182,64 +180,64 @@ in {
         '';
       };
 
-      schedulerInterval = mkOption {
-        type = types.str;
+      schedulerInterval = lib.mkOption {
+        type = lib.types.str;
         default = "1d";
         description = "How often the Pixelfed cron task should run";
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users.pixelfed = mkIf (cfg.user == "pixelfed") {
+  config = lib.mkIf cfg.enable {
+    users.users.pixelfed = lib.mkIf (cfg.user == "pixelfed") {
       isSystemUser = true;
       group = cfg.group;
       extraGroups = lib.optional cfg.redis.createLocally "redis-pixelfed";
     };
-    users.groups.pixelfed = mkIf (cfg.group == "pixelfed") { };
+    users.groups.pixelfed = lib.mkIf (cfg.group == "pixelfed") { };
 
     services.redis.servers.pixelfed.enable = lib.mkIf cfg.redis.createLocally true;
-    services.pixelfed.settings = mkMerge [
+    services.pixelfed.settings = lib.mkMerge [
       ({
-        APP_ENV = mkDefault "production";
-        APP_DEBUG = mkDefault false;
+        APP_ENV = lib.mkDefault "production";
+        APP_DEBUG = lib.mkDefault false;
         # https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L312-L316
-        APP_URL = mkDefault "https://${cfg.domain}";
-        ADMIN_DOMAIN = mkDefault cfg.domain;
-        APP_DOMAIN = mkDefault cfg.domain;
-        SESSION_DOMAIN = mkDefault cfg.domain;
-        SESSION_SECURE_COOKIE = mkDefault true;
-        OPEN_REGISTRATION = mkDefault false;
+        APP_URL = lib.mkDefault "https://${cfg.domain}";
+        ADMIN_DOMAIN = lib.mkDefault cfg.domain;
+        APP_DOMAIN = lib.mkDefault cfg.domain;
+        SESSION_DOMAIN = lib.mkDefault cfg.domain;
+        SESSION_SECURE_COOKIE = lib.mkDefault true;
+        OPEN_REGISTRATION = lib.mkDefault false;
         # ActivityPub: https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L360-L364
-        ACTIVITY_PUB = mkDefault true;
-        AP_REMOTE_FOLLOW = mkDefault true;
-        AP_INBOX = mkDefault true;
-        AP_OUTBOX = mkDefault true;
-        AP_SHAREDINBOX = mkDefault true;
+        ACTIVITY_PUB = lib.mkDefault true;
+        AP_REMOTE_FOLLOW = lib.mkDefault true;
+        AP_INBOX = lib.mkDefault true;
+        AP_OUTBOX = lib.mkDefault true;
+        AP_SHAREDINBOX = lib.mkDefault true;
         # Image optimization: https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L367-L404
-        PF_OPTIMIZE_IMAGES = mkDefault true;
-        IMAGE_DRIVER = mkDefault "imagick";
+        PF_OPTIMIZE_IMAGES = lib.mkDefault true;
+        IMAGE_DRIVER = lib.mkDefault "imagick";
         # Mobile APIs
-        OAUTH_ENABLED = mkDefault true;
+        OAUTH_ENABLED = lib.mkDefault true;
         # https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L351
-        EXP_EMC = mkDefault true;
+        EXP_EMC = lib.mkDefault true;
         # Defer to systemd
-        LOG_CHANNEL = mkDefault "stderr";
+        LOG_CHANNEL = lib.mkDefault "stderr";
         # TODO: find out the correct syntax?
-        # TRUST_PROXIES = mkDefault "127.0.0.1/8, ::1/128";
+        # TRUST_PROXIES = lib.mkDefault "127.0.0.1/8, ::1/128";
       })
-      (mkIf (cfg.redis.createLocally) {
-        BROADCAST_DRIVER = mkDefault "redis";
-        CACHE_DRIVER = mkDefault "redis";
-        QUEUE_DRIVER = mkDefault "redis";
-        SESSION_DRIVER = mkDefault "redis";
-        WEBSOCKET_REPLICATION_MODE = mkDefault "redis";
+      (lib.mkIf (cfg.redis.createLocally) {
+        BROADCAST_DRIVER = lib.mkDefault "redis";
+        CACHE_DRIVER = lib.mkDefault "redis";
+        QUEUE_DRIVER = lib.mkDefault "redis";
+        SESSION_DRIVER = lib.mkDefault "redis";
+        WEBSOCKET_REPLICATION_MODE = lib.mkDefault "redis";
         # Support phpredis and predis configuration-style.
         REDIS_SCHEME = "unix";
         REDIS_HOST = config.services.redis.servers.pixelfed.unixSocket;
         REDIS_PATH = config.services.redis.servers.pixelfed.unixSocket;
       })
-      (mkIf (cfg.database.createLocally) {
+      (lib.mkIf (cfg.database.createLocally) {
         DB_CONNECTION = cfg.database.type;
         DB_SOCKET = dbSocket;
         DB_DATABASE = cfg.database.name;
@@ -252,9 +250,9 @@ in {
     environment.systemPackages = [ pixelfed-manage ];
 
     services.mysql =
-      mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
-        enable = mkDefault true;
-        package = mkDefault pkgs.mariadb;
+      lib.mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = user;
@@ -263,8 +261,8 @@ in {
       };
 
     services.postgresql =
-      mkIf (cfg.database.createLocally && cfg.database.type == "pgsql") {
-        enable = mkDefault true;
+      lib.mkIf (cfg.database.createLocally && cfg.database.type == "pgsql") {
+        enable = lib.mkDefault true;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = user;
@@ -443,9 +441,9 @@ in {
 
     # Enable NGINX to access our phpfpm-socket.
     users.users."${config.services.nginx.user}".extraGroups = [ cfg.group ];
-    services.nginx = mkIf (cfg.nginx != null) {
+    services.nginx = lib.mkIf (cfg.nginx != null) {
       enable = true;
-      virtualHosts."${cfg.domain}" = mkMerge [
+      virtualHosts."${cfg.domain}" = lib.mkMerge [
         cfg.nginx
         {
           root = lib.mkForce "${pixelfed}/public/";

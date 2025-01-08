@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption optional;
+  inherit (lib) mkIf lib.mkOption lib.optional;
   inherit (lib.types) path bool listOf str port;
   cfg = config.services.darkhttpd;
 
@@ -10,14 +10,14 @@ let
     "--port ${toString cfg.port}"
     "--addr ${cfg.address}"
   ] ++ cfg.extraArgs
-    ++ optional cfg.hideServerId             "--no-server-id"
-    ++ optional config.networking.enableIPv6 "--ipv6");
+    ++ lib.optional cfg.hideServerId             "--no-server-id"
+    ++ lib.optional config.networking.enableIPv6 "--ipv6");
 
 in {
   options.services.darkhttpd = {
     enable = lib.mkEnableOption "DarkHTTPd web server";
 
-    port = mkOption {
+    port = lib.mkOption {
       default = 80;
       type = port;
       description = ''
@@ -26,7 +26,7 @@ in {
       '';
     };
 
-    address = mkOption {
+    address = lib.mkOption {
       default = "127.0.0.1";
       type = str;
       description = ''
@@ -35,14 +35,14 @@ in {
       '';
     };
 
-    rootDir = mkOption {
+    rootDir = lib.mkOption {
       type = path;
       description = ''
         Path from which to serve files.
       '';
     };
 
-    hideServerId = mkOption {
+    hideServerId = lib.mkOption {
       type = bool;
       default = true;
       description = ''
@@ -50,7 +50,7 @@ in {
       '';
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [];
       description = ''
@@ -59,7 +59,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.darkhttpd = {
       description = "Dark HTTPd";
       wants = [ "network.target" ];

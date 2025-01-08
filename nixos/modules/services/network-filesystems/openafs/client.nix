@@ -12,9 +12,9 @@ let
   inherit (lib)
     getBin
     literalExpression
-    mkOption
+    lib.mkOption
     mkIf
-    optionalString
+    lib.optionalString
     singleton
     types
     ;
@@ -45,29 +45,29 @@ in
 
     services.openafsClient = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to enable the OpenAFS client.";
       };
 
-      afsdb = mkOption {
+      afsdb = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Resolve cells via AFSDB DNS records.";
       };
 
-      cellName = mkOption {
+      cellName = lib.mkOption {
         default = "";
-        type = types.str;
+        type = lib.types.str;
         description = "Cell name.";
         example = "grand.central.org";
       };
 
-      cellServDB = mkOption {
+      cellServDB = lib.mkOption {
         default = [ ];
         type =
-          with types;
+          with lib.types;
           listOf (submodule {
             options = cellServDBConfig;
           });
@@ -89,15 +89,15 @@ in
       };
 
       cache = {
-        blocks = mkOption {
+        blocks = lib.mkOption {
           default = 100000;
-          type = types.int;
+          type = lib.types.int;
           description = "Cache size in 1KB blocks.";
         };
 
-        chunksize = mkOption {
+        chunksize = lib.mkOption {
           default = 0;
-          type = types.ints.between 0 30;
+          type = lib.types.ints.between 0 30;
           description = ''
             Size of each cache chunk given in powers of
             2. `0` resets the chunk size to its default
@@ -107,15 +107,15 @@ in
           '';
         };
 
-        directory = mkOption {
+        directory = lib.mkOption {
           default = "/var/cache/openafs";
-          type = types.str;
+          type = lib.types.str;
           description = "Cache directory.";
         };
 
-        diskless = mkOption {
+        diskless = lib.mkOption {
           default = false;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             Use in-memory cache for diskless machines. Has no real
             performance benefit anymore.
@@ -123,15 +123,15 @@ in
         };
       };
 
-      crypt = mkOption {
+      crypt = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to enable (weak) protocol encryption.";
       };
 
-      daemons = mkOption {
+      daemons = lib.mkOption {
         default = 2;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Number of daemons to serve user requests. Numbers higher than 6
           usually do no increase performance. Default is sufficient for up
@@ -139,9 +139,9 @@ in
         '';
       };
 
-      fakestat = mkOption {
+      fakestat = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Return fake data on stat() calls. If `true`,
           always do so. If `false`, only do so for
@@ -149,9 +149,9 @@ in
         '';
       };
 
-      inumcalc = mkOption {
+      inumcalc = lib.mkOption {
         default = "compat";
-        type = types.strMatching "compat|md5";
+        type = lib.types.strMatching "compat|md5";
         description = ''
           Inode calculation method. `compat` is
           computationally less expensive, but `md5` greatly
@@ -160,9 +160,9 @@ in
         '';
       };
 
-      mountPoint = mkOption {
+      mountPoint = lib.mkOption {
         default = "/afs";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Mountpoint of the AFS file tree, conventionally
           `/afs`. When set to a different value, only
@@ -171,29 +171,29 @@ in
       };
 
       packages = {
-        module = mkOption {
+        module = lib.mkOption {
           default = config.boot.kernelPackages.openafs;
-          defaultText = literalExpression "config.boot.kernelPackages.openafs";
-          type = types.package;
+          defaultText = lib.literalExpression "config.boot.kernelPackages.openafs";
+          type = lib.types.package;
           description = "OpenAFS kernel module package. MUST match the userland package!";
         };
-        programs = mkOption {
+        programs = lib.mkOption {
           default = getBin pkgs.openafs;
-          defaultText = literalExpression "getBin pkgs.openafs";
-          type = types.package;
+          defaultText = lib.literalExpression "getBin pkgs.openafs";
+          type = lib.types.package;
           description = "OpenAFS programs package. MUST match the kernel module package!";
         };
       };
 
-      sparse = mkOption {
+      sparse = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Minimal cell list in /afs.";
       };
 
-      startDisconnected = mkOption {
+      startDisconnected = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Start up in disconnected mode.  You need to execute
           `fs disco online` (as root) to switch to
@@ -206,7 +206,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -255,16 +255,16 @@ in
         ${openafsBin}/sbin/afsd \
           -mountdir ${cfg.mountPoint} \
           -confdir ${afsConfig} \
-          ${optionalString (!cfg.cache.diskless) "-cachedir ${cfg.cache.directory}"} \
+          ${lib.optionalString (!cfg.cache.diskless) "-cachedir ${cfg.cache.directory}"} \
           -blocks ${toString cfg.cache.blocks} \
           -chunksize ${toString cfg.cache.chunksize} \
-          ${optionalString cfg.cache.diskless "-memcache"} \
+          ${lib.optionalString cfg.cache.diskless "-memcache"} \
           -inumcalc ${cfg.inumcalc} \
           ${if cfg.fakestat then "-fakestat-all" else "-fakestat"} \
           ${if cfg.sparse then "-dynroot-sparse" else "-dynroot"} \
-          ${optionalString cfg.afsdb "-afsdb"}
+          ${lib.optionalString cfg.afsdb "-afsdb"}
         ${openafsBin}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
-        ${optionalString cfg.startDisconnected "${openafsBin}/bin/fs discon offline"}
+        ${lib.optionalString cfg.startDisconnected "${openafsBin}/bin/fs discon offline"}
       '';
 
       # Doing this in preStop, because after these commands AFS is basically

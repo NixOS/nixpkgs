@@ -7,7 +7,6 @@
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "ElmExtraction";
   repo = "coq-elm-extraction";
@@ -16,8 +15,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
-    with versions;
-    switch
+    lib.versions.switch
       [
         coq.coq-version
         metacoq.version
@@ -25,8 +23,8 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (range "8.17" "8.20")
-            (range "1.3.1" "1.3.2")
+            (lib.versions.range "8.17" "8.20")
+            (lib.versions.range "1.3.1" "1.3.2")
           ];
           out = "0.1.0";
         }

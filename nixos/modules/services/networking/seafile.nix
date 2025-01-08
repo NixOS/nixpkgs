@@ -62,17 +62,17 @@ in
 
   ###### Interface
 
-  options.services.seafile = with lib; {
-    enable = mkEnableOption "Seafile server";
+  options.services.seafile = {
+    enable = lib.mkEnableOption "Seafile server";
 
-    ccnetSettings = mkOption {
-      type = types.submodule {
+    ccnetSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
           General = {
-            SERVICE_URL = mkOption {
-              type = types.singleLineStr;
+            SERVICE_URL = lib.mkOption {
+              type = lib.types.singleLineStr;
               example = "https://www.example.com";
               description = ''
                 Seahub public URL.
@@ -89,21 +89,21 @@ in
       '';
     };
 
-    seafileSettings = mkOption {
-      type = types.submodule {
+    seafileSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
           fileserver = {
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               default = 8082;
               description = ''
                 The tcp port used by seafile fileserver.
               '';
             };
-            host = mkOption {
-              type = types.singleLineStr;
+            host = lib.mkOption {
+              type = lib.types.singleLineStr;
               default = "ipv4:127.0.0.1";
               example = "unix:/run/seafile/server.sock";
               description = ''
@@ -127,8 +127,8 @@ in
       '';
     };
 
-    seahubAddress = mkOption {
-      type = types.singleLineStr;
+    seahubAddress = lib.mkOption {
+      type = lib.types.singleLineStr;
       default = "unix:/run/seahub/gunicorn.sock";
       example = "[::1]:8083";
       description = ''
@@ -140,8 +140,8 @@ in
       '';
     };
 
-    workers = mkOption {
-      type = types.int;
+    workers = lib.mkOption {
+      type = lib.types.int;
       default = 4;
       example = 10;
       description = ''
@@ -149,48 +149,48 @@ in
       '';
     };
 
-    adminEmail = mkOption {
+    adminEmail = lib.mkOption {
       example = "john@example.com";
-      type = types.singleLineStr;
+      type = lib.types.singleLineStr;
       description = ''
         Seafile Seahub Admin Account Email.
       '';
     };
 
-    initialAdminPassword = mkOption {
+    initialAdminPassword = lib.mkOption {
       example = "someStrongPass";
-      type = types.singleLineStr;
+      type = lib.types.singleLineStr;
       description = ''
         Seafile Seahub Admin Account initial password.
         Should be changed via Seahub web front-end.
       '';
     };
 
-    seahubPackage = mkPackageOption pkgs "seahub" { };
+    seahubPackage = lib.mkPackageOption pkgs "seahub" { };
 
-    user = mkOption {
-      type = types.singleLineStr;
+    user = lib.mkOption {
+      type = lib.types.singleLineStr;
       default = defaultUser;
       description = "User account under which seafile runs.";
     };
 
-    group = mkOption {
-      type = types.singleLineStr;
+    group = lib.mkOption {
+      type = lib.types.singleLineStr;
       default = defaultUser;
       description = "Group under which seafile runs.";
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "${seafRoot}/data";
       description = "Path in which to store user data";
     };
 
     gc = {
-      enable = mkEnableOption "automatic garbage collection on stored data blocks";
+      enable = lib.mkEnableOption "automatic garbage collection on stored data blocks";
 
-      dates = mkOption {
-        type = types.listOf types.singleLineStr;
+      dates = lib.mkOption {
+        type = lib.types.listOf lib.types.singleLineStr;
         default = [ "Sun 03:00:00" ];
         description = ''
           When to run garbage collection on stored data blocks.
@@ -198,9 +198,9 @@ in
         '';
       };
 
-      randomizedDelaySec = mkOption {
+      randomizedDelaySec = lib.mkOption {
         default = "0";
-        type = types.singleLineStr;
+        type = lib.types.singleLineStr;
         example = "45min";
         description = ''
           Add a randomized delay before each garbage collection.
@@ -210,9 +210,9 @@ in
         '';
       };
 
-      persistent = mkOption {
+      persistent = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         example = false;
         description = ''
           Takes a boolean argument. If true, the time when the service
@@ -227,12 +227,12 @@ in
       };
     };
 
-    seahubExtraConf = mkOption {
+    seahubExtraConf = lib.mkOption {
       default = "";
       example = ''
         CSRF_TRUSTED_ORIGINS = ["https://example.com"]
       '';
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Extra config to append to `seahub_settings.py` file.
         Refer to <https://manual.seafile.com/config/seahub_settings_py/>

@@ -10,7 +10,7 @@ let
     maintainers
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -19,12 +19,12 @@ let
 in
 {
   options.networking.stevenblack = {
-    enable = mkEnableOption "the stevenblack hosts file blocklist";
+    enable = lib.mkEnableOption "the stevenblack hosts file blocklist";
 
-    package = mkPackageOption pkgs "stevenblack-blocklist" { };
+    package = lib.mkPackageOption pkgs "stevenblack-blocklist" { };
 
-    block = mkOption {
-      type = types.listOf (
+    block = lib.mkOption {
+      type = lib.types.listOf (
         types.enum [
           "fakenews"
           "gambling"
@@ -37,7 +37,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     networking.hostFiles = map (x: "${getOutput x cfg.package}/hosts") ([ "ads" ] ++ cfg.block);
   };
 

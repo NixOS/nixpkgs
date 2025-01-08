@@ -4,7 +4,7 @@ let
   inherit (lib)
     types
     literalExpression
-    mkOption
+    lib.mkOption
     ;
 
   format = pkgs.formats.toml { };
@@ -19,24 +19,24 @@ let
     {
       freeformType = format.type;
       options = {
-        apiBaseUrl = mkOption {
+        apiBaseUrl = lib.mkOption {
           description = ''
             API base URL that the agent will connect to.
 
             When using Hercules CI Enterprise, set this to the URL where your
             Hercules CI server is reachable.
           '';
-          type = types.str;
+          type = lib.types.str;
           default = "https://hercules-ci.com";
         };
-        baseDirectory = mkOption {
-          type = types.path;
+        baseDirectory = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/hercules-ci-agent";
           description = ''
             State directory (secrets, work directory, etc) for agent
           '';
         };
-        concurrentTasks = mkOption {
+        concurrentTasks = lib.mkOption {
           description = ''
             Number of tasks to perform simultaneously.
 
@@ -54,13 +54,13 @@ let
             because each split of resources causes inefficiencies; particularly with regards
             to build latency because of extra downloads.
           '';
-          type = types.either types.ints.positive (types.enum [ "auto" ]);
+          type = lib.types.either types.ints.positive (types.enum [ "auto" ]);
           default = "auto";
           defaultText = lib.literalMD ''
             `"auto"`, meaning equal to the number of CPU cores.
           '';
         };
-        labels = mkOption {
+        labels = lib.mkOption {
           description = ''
             A key-value map of user data.
 
@@ -71,7 +71,7 @@ let
             involving arrays of non-primitive types may not be representable currently.
           '';
           type = format.type;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             {
               agent.source = "..."; # One of "nixpkgs", "flake", "override"
               lib.version = "...";
@@ -79,25 +79,25 @@ let
             }
           '';
         };
-        workDirectory = mkOption {
+        workDirectory = lib.mkOption {
           description = ''
             The directory in which temporary subdirectories are created for task state. This includes sources for Nix evaluation.
           '';
-          type = types.path;
+          type = lib.types.path;
           default = config.baseDirectory + "/work";
-          defaultText = literalExpression ''baseDirectory + "/work"'';
+          defaultText = lib.literalExpression ''baseDirectory + "/work"'';
         };
-        staticSecretsDirectory = mkOption {
+        staticSecretsDirectory = lib.mkOption {
           description = ''
             This is the default directory to look for statically configured secrets like `cluster-join-token.key`.
 
             See also `clusterJoinTokenPath` and `binaryCachesPath` for fine-grained configuration.
           '';
-          type = types.path;
+          type = lib.types.path;
           default = config.baseDirectory + "/secrets";
-          defaultText = literalExpression ''baseDirectory + "/secrets"'';
+          defaultText = lib.literalExpression ''baseDirectory + "/secrets"'';
         };
-        clusterJoinTokenPath = mkOption {
+        clusterJoinTokenPath = lib.mkOption {
           description = ''
             Location of the cluster-join-token.key file.
 
@@ -110,11 +110,11 @@ let
 
             The contents of the file are used for authentication between the agent and the API.
           '';
-          type = types.path;
+          type = lib.types.path;
           default = config.staticSecretsDirectory + "/cluster-join-token.key";
-          defaultText = literalExpression ''staticSecretsDirectory + "/cluster-join-token.key"'';
+          defaultText = lib.literalExpression ''staticSecretsDirectory + "/cluster-join-token.key"'';
         };
-        binaryCachesPath = mkOption {
+        binaryCachesPath = lib.mkOption {
           description = ''
             Path to a JSON file containing binary cache secret keys.
 
@@ -124,11 +124,11 @@ let
 
             The format is described on <https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/>.
           '';
-          type = types.path;
+          type = lib.types.path;
           default = config.staticSecretsDirectory + "/binary-caches.json";
-          defaultText = literalExpression ''staticSecretsDirectory + "/binary-caches.json"'';
+          defaultText = lib.literalExpression ''staticSecretsDirectory + "/binary-caches.json"'';
         };
-        secretsJsonPath = mkOption {
+        secretsJsonPath = lib.mkOption {
           description = ''
             Path to a JSON file containing secrets for effects.
 
@@ -138,9 +138,9 @@ let
 
             The format is described on <https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/>.
           '';
-          type = types.path;
+          type = lib.types.path;
           default = config.staticSecretsDirectory + "/secrets.json";
-          defaultText = literalExpression ''staticSecretsDirectory + "/secrets.json"'';
+          defaultText = lib.literalExpression ''staticSecretsDirectory + "/secrets.json"'';
         };
       };
       config = {

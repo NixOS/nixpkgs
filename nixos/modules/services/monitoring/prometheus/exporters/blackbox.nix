@@ -10,7 +10,7 @@ let
   logPrefix = "services.prometheus.exporter.blackbox";
   cfg = config.services.prometheus.exporters.blackbox;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     concatStringsSep
     escapeShellArg
@@ -51,14 +51,14 @@ in
 {
   port = 9115;
   extraOpts = {
-    configFile = mkOption {
-      type = types.path;
+    configFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to configuration file.
       '';
     };
-    enableConfigCheck = mkOption {
-      type = types.bool;
+    enableConfigCheck = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to run a correctness check for the configuration file. This depends
@@ -79,8 +79,8 @@ in
         ExecStart = ''
           ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
             --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-            --config.file ${escapeShellArg adjustedConfigFile} \
-            ${concatStringsSep " \\\n  " cfg.extraFlags}
+            --config.file ${lib.escapeShellArg adjustedConfigFile} \
+            ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };

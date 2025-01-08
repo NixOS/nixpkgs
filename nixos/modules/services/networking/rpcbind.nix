@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
 
   ###### interface
@@ -10,8 +8,8 @@ with lib;
 
     services.rpcbind = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable `rpcbind`, an ONC RPC directory service
@@ -28,7 +26,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.rpcbind.enable {
+  config = lib.mkIf config.services.rpcbind.enable {
     environment.systemPackages = [ pkgs.rpcbind ];
 
     systemd.packages = [ pkgs.rpcbind ];

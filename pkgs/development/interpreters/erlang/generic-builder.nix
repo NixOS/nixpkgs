@@ -250,7 +250,6 @@ stdenv.mkDerivation (
     };
 
     meta =
-      with lib;
       (
         {
           homepage = "https://www.erlang.org/";

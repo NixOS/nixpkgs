@@ -13,7 +13,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -65,64 +65,64 @@ in
 
   options = {
     services.xserver.desktopManager.budgie = {
-      enable = mkEnableOption "the Budgie desktop";
+      enable = lib.mkEnableOption "the Budgie desktop";
 
-      sessionPath = mkOption {
+      sessionPath = lib.mkOption {
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = literalExpression "[ pkgs.gpaste ]";
+        example = lib.literalExpression "[ pkgs.gpaste ]";
       };
 
-      extraGSettingsOverrides = mkOption {
+      extraGSettingsOverrides = lib.mkOption {
         description = "Additional GSettings overrides.";
-        type = types.lines;
+        type = lib.types.lines;
         default = "";
       };
 
-      extraGSettingsOverridePackages = mkOption {
+      extraGSettingsOverridePackages = lib.mkOption {
         description = "List of packages for which GSettings are overridden.";
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
         default = [ ];
       };
 
-      extraPlugins = mkOption {
+      extraPlugins = lib.mkOption {
         description = "Extra plugins for the Budgie desktop";
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = literalExpression "[ pkgs.budgie-analogue-clock-applet ]";
+        example = lib.literalExpression "[ pkgs.budgie-analogue-clock-applet ]";
       };
     };
 
-    environment.budgie.excludePackages = mkOption {
+    environment.budgie.excludePackages = lib.mkOption {
       description = "Which packages Budgie should exclude from the default environment.";
-      type = types.listOf types.package;
+      type = lib.types.listOf lib.types.package;
       default = [ ];
-      example = literalExpression "[ pkgs.mate-terminal ]";
+      example = lib.literalExpression "[ pkgs.mate-terminal ]";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.displayManager.sessionPackages = with pkgs; [
       budgie-desktop
     ];
 
     services.xserver.displayManager.lightdm.greeters.slick = {
-      enable = mkDefault true;
-      theme = mkDefault {
+      enable = lib.mkDefault true;
+      theme = lib.mkDefault {
         name = "Qogir";
         package = pkgs.qogir-theme;
       };
-      iconTheme = mkDefault {
+      iconTheme = lib.mkDefault {
         name = "Qogir";
         package = pkgs.qogir-icon-theme;
       };
-      cursorTheme = mkDefault {
+      cursorTheme = lib.mkDefault {
         name = "Qogir";
         package = pkgs.qogir-icon-theme;
       };
@@ -187,7 +187,7 @@ in
       ++ cfg.sessionPath;
 
     # Both budgie-desktop-view and nemo defaults to this emulator.
-    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
+    programs.gnome-terminal.enable = lib.mkDefault (notExcluded pkgs.gnome-terminal);
 
     # Fonts.
     fonts.packages = [
@@ -195,15 +195,15 @@ in
       pkgs.hack-font
     ];
     fonts.fontconfig.defaultFonts = {
-      sansSerif = mkDefault [ "Noto Sans" ];
-      monospace = mkDefault [ "Hack" ];
+      sansSerif = lib.mkDefault [ "Noto Sans" ];
+      monospace = lib.mkDefault [ "Hack" ];
     };
 
     # Qt application style.
     qt = {
-      enable = mkDefault true;
-      style = mkDefault "gtk2";
-      platformTheme = mkDefault "gtk2";
+      enable = lib.mkDefault true;
+      style = lib.mkDefault "gtk2";
+      platformTheme = lib.mkDefault "gtk2";
     };
 
     environment.pathsToLink = [
@@ -221,48 +221,48 @@ in
     security.pam.services.budgie-screensaver = { };
 
     # Required by Budgie's Polkit Dialog.
-    security.polkit.enable = mkDefault true;
+    security.polkit.enable = lib.mkDefault true;
 
     # Required by Budgie Panel plugins and/or Budgie Control Center panels.
-    networking.networkmanager.enable = mkDefault true; # for BCC's Network panel.
+    networking.networkmanager.enable = lib.mkDefault true; # for BCC's Network panel.
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
     programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
-    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
+    hardware.bluetooth.enable = lib.mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
 
-    xdg.portal.enable = mkDefault true; # for BCC's Applications panel.
+    xdg.portal.enable = lib.mkDefault true; # for BCC's Applications panel.
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
     ];
-    xdg.portal.configPackages = mkDefault [ pkgs.budgie-desktop ];
+    xdg.portal.configPackages = lib.mkDefault [ pkgs.budgie-desktop ];
 
-    services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
+    services.geoclue2.enable = lib.mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
-    services.libinput.enable = mkDefault true; # for BCC's Mouse panel.
-    services.colord.enable = mkDefault true; # for BCC's Color panel.
-    services.gnome.at-spi2-core.enable = mkDefault true; # for BCC's A11y panel.
-    services.accounts-daemon.enable = mkDefault true; # for BCC's Users panel.
-    services.udisks2.enable = mkDefault true; # for BCC's Details panel.
+    services.libinput.enable = lib.mkDefault true; # for BCC's Mouse panel.
+    services.colord.enable = lib.mkDefault true; # for BCC's Color panel.
+    services.gnome.at-spi2-core.enable = lib.mkDefault true; # for BCC's A11y panel.
+    services.accounts-daemon.enable = lib.mkDefault true; # for BCC's Users panel.
+    services.udisks2.enable = lib.mkDefault true; # for BCC's Details panel.
 
     # For BCC's Online Accounts panel.
-    services.gnome.gnome-online-accounts.enable = mkDefault true;
+    services.gnome.gnome-online-accounts.enable = lib.mkDefault true;
 
     # For BCC's Printers panel.
-    services.printing.enable = mkDefault true;
+    services.printing.enable = lib.mkDefault true;
     services.system-config-printer.enable = config.services.printing.enable;
 
     # For BCC's Sharing panel.
-    services.dleyna-renderer.enable = mkDefault true;
-    services.dleyna-server.enable = mkDefault true;
-    services.gnome.gnome-user-share.enable = mkDefault true;
-    services.gnome.rygel.enable = mkDefault true;
+    services.dleyna-renderer.enable = lib.mkDefault true;
+    services.dleyna-server.enable = lib.mkDefault true;
+    services.gnome.gnome-user-share.enable = lib.mkDefault true;
+    services.gnome.rygel.enable = lib.mkDefault true;
 
     # Other default services.
-    services.gnome.evolution-data-server.enable = mkDefault true;
-    services.gnome.glib-networking.enable = mkDefault true;
-    services.gnome.gnome-keyring.enable = mkDefault true;
-    services.gnome.gnome-settings-daemon.enable = mkDefault true;
-    services.gvfs.enable = mkDefault true;
+    services.gnome.evolution-data-server.enable = lib.mkDefault true;
+    services.gnome.glib-networking.enable = lib.mkDefault true;
+    services.gnome.gnome-keyring.enable = lib.mkDefault true;
+    services.gnome.gnome-settings-daemon.enable = lib.mkDefault true;
+    services.gvfs.enable = lib.mkDefault true;
 
     # Register packages for DBus.
     services.dbus.packages = [

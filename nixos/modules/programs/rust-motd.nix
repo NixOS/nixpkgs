@@ -153,7 +153,7 @@ in
     security.pam.services.sshd.text = lib.mkIf cfg.enableMotdInSSHD (
       lib.mkDefault (
         lib.mkAfter ''
-          session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
+          session lib.optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
         ''
       )
     );

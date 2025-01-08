@@ -12,7 +12,7 @@ let
     mapAttrsToList
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkOverride
     mkPackageOption
     nameValuePair
@@ -29,12 +29,12 @@ let
     }:
     {
       options = {
-        enable = mkEnableOption "fedimintd";
+        enable = lib.mkEnableOption "fedimintd";
 
-        package = mkPackageOption pkgs "fedimint" { };
+        package = lib.mkPackageOption pkgs "fedimint" { };
 
-        environment = mkOption {
-          type = types.attrsOf types.str;
+        environment = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           description = "Extra Environment variables to pass to the fedimintd.";
           default = {
             RUST_BACKTRACE = "1";
@@ -46,23 +46,23 @@ let
         };
 
         p2p = {
-          openFirewall = mkOption {
-            type = types.bool;
+          openFirewall = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Opens port in firewall for fedimintd's p2p port";
           };
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 8173;
             description = "Port to bind on for p2p connections from peers";
           };
-          bind = mkOption {
-            type = types.str;
+          bind = lib.mkOption {
+            type = lib.types.str;
             default = "0.0.0.0";
             description = "Address to bind on for p2p connections from peers";
           };
-          url = mkOption {
-            type = types.str;
+          url = lib.mkOption {
+            type = lib.types.str;
             example = "fedimint://p2p.myfedimint.com:8173";
             description = ''
               Public address for p2p connections from peers
@@ -70,52 +70,52 @@ let
           };
         };
         api = {
-          openFirewall = mkOption {
-            type = types.bool;
+          openFirewall = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = "Opens port in firewall for fedimintd's api port";
           };
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 8174;
             description = "Port to bind on for API connections relied by the reverse proxy/tls terminator.";
           };
-          bind = mkOption {
-            type = types.str;
+          bind = lib.mkOption {
+            type = lib.types.str;
             default = "127.0.0.1";
             description = "Address to bind on for API connections relied by the reverse proxy/tls terminator.";
           };
-          url = mkOption {
-            type = types.str;
+          url = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Public URL of the API address of the reverse proxy/tls terminator. Usually starting with `wss://`.
             '';
           };
         };
         bitcoin = {
-          network = mkOption {
-            type = types.str;
+          network = lib.mkOption {
+            type = lib.types.str;
             default = "signet";
             example = "bitcoin";
             description = "Bitcoin network to participate in.";
           };
           rpc = {
-            url = mkOption {
-              type = types.str;
+            url = lib.mkOption {
+              type = lib.types.str;
               default = "http://127.0.0.1:38332";
               example = "signet";
               description = "Bitcoin node (bitcoind/electrum/esplora) address to connect to";
             };
 
-            kind = mkOption {
-              type = types.str;
+            kind = lib.mkOption {
+              type = lib.types.str;
               default = "bitcoind";
               example = "electrum";
               description = "Kind of a bitcoin node.";
             };
 
-            secretFile = mkOption {
-              type = types.nullOr types.path;
+            secretFile = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
               default = null;
               description = ''
                 If set the URL specified in `bitcoin.rpc.url` will get the content of this file added
@@ -129,14 +129,14 @@ let
           };
         };
 
-        consensus.finalityDelay = mkOption {
-          type = types.ints.unsigned;
+        consensus.finalityDelay = lib.mkOption {
+          type = lib.types.ints.unsigned;
           default = 10;
           description = "Consensus peg-in finality delay.";
         };
 
-        dataDir = mkOption {
-          type = types.path;
+        dataDir = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/fedimintd-${name}/";
           readOnly = true;
           description = ''
@@ -147,26 +147,26 @@ let
         };
 
         nginx = {
-          enable = mkOption {
-            type = types.bool;
+          enable = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Whether to configure nginx for fedimintd
             '';
           };
-          fqdn = mkOption {
-            type = types.str;
+          fqdn = lib.mkOption {
+            type = lib.types.str;
             example = "api.myfedimint.com";
             description = "Public domain of the API address of the reverse proxy/tls terminator.";
           };
-          path = mkOption {
-            type = types.str;
+          path = lib.mkOption {
+            type = lib.types.str;
             example = "/";
             default = "/ws/";
             description = "Path to host the API on and forward to the daemon's api port";
           };
-          config = mkOption {
-            type = types.submodule (
+          config = lib.mkOption {
+            type = lib.types.submodule (
               recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
                 inherit config lib;
               }) { }
@@ -180,8 +180,8 @@ let
 in
 {
   options = {
-    services.fedimintd = mkOption {
-      type = types.attrsOf (types.submodule fedimintdOpts);
+    services.fedimintd = lib.mkOption {
+      type = lib.types.attrsOf (types.submodule fedimintdOpts);
       default = { };
       description = "Specification of one or more fedimintd instances.";
     };

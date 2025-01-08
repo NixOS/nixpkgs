@@ -19,19 +19,19 @@ in
       package = lib.mkPackageOption pkgs "workout-tracker" { };
 
       address = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Web interface address.";
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 8080;
         description = "Web interface port.";
       };
 
       environmentFile = lib.mkOption {
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/workout-tracker.env";
         description = ''
@@ -43,7 +43,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = types.attrsOf types.str;
+        type = lib.types.attrsOf lib.types.str;
 
         default = { };
         description = ''

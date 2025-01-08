@@ -7,30 +7,30 @@ testModuleArgs@{
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   inherit (types) either str functionTo;
 in
 {
   options = {
-    testScript = mkOption {
+    testScript = lib.mkOption {
       type = either str (functionTo str);
       description = ''
         A series of python declarations and statements that you write to perform
         the test.
       '';
     };
-    testScriptString = mkOption {
+    testScriptString = lib.mkOption {
       type = str;
       readOnly = true;
       internal = true;
     };
 
-    includeTestScriptReferences = mkOption {
-      type = types.bool;
+    includeTestScriptReferences = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       internal = true;
     };
-    withoutTestScriptReferences = mkOption {
+    withoutTestScriptReferences = lib.mkOption {
       type = moduleType;
       description = ''
         A parallel universe where the testScript is invalid and has no references.

@@ -151,7 +151,6 @@ in
   };
 
   meta =
-    with lib;
     (super.nvim-treesitter.meta or { })
     // {
       license = lib.licenses.asl20;

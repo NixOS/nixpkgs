@@ -8,9 +8,9 @@
 let
   inherit (lib)
     mkIf
-    mkOption
+    lib.mkOption
     types
-    optionalAttrs
+    lib.optionalAttrs
     ;
   inherit (lib.types)
     nullOr
@@ -21,7 +21,7 @@ let
     ;
   cfg = config.services.nbd;
   iniFields =
-    with types;
+    with lib.types;
     attrsOf (oneOf [
       bool
       int
@@ -76,13 +76,13 @@ in
       server = {
         enable = lib.mkEnableOption "the Network Block Device (nbd) server";
 
-        listenPort = mkOption {
-          type = types.port;
+        listenPort = lib.mkOption {
+          type = lib.types.port;
           default = 10809;
           description = "Port to listen on. The port is NOT automatically opened in the firewall.";
         };
 
-        extraOptions = mkOption {
+        extraOptions = lib.mkOption {
           type = iniFields;
           default = {
             allowlist = false;
@@ -93,18 +93,18 @@ in
           '';
         };
 
-        exports = mkOption {
+        exports = lib.mkOption {
           description = "Files or block devices to make available over the network.";
           default = { };
           type = attrsOf (submodule {
             options = {
-              path = mkOption {
+              path = lib.mkOption {
                 type = str;
                 description = "File or block device to export.";
                 example = "/dev/sdb1";
               };
 
-              allowAddresses = mkOption {
+              allowAddresses = lib.mkOption {
                 type = nullOr (listOf str);
                 default = null;
                 example = [
@@ -114,7 +114,7 @@ in
                 description = "IPs and subnets that are authorized to connect for this device. If not specified, the server will allow all connections.";
               };
 
-              extraOptions = mkOption {
+              extraOptions = lib.mkOption {
                 type = iniFields;
                 default = {
                   flush = true;
@@ -129,7 +129,7 @@ in
           });
         };
 
-        listenAddress = mkOption {
+        listenAddress = lib.mkOption {
           type = nullOr str;
           description = "Address to listen on. If not specified, the server will listen on all interfaces.";
           default = null;
@@ -139,7 +139,7 @@ in
     };
   };
 
-  config = mkIf cfg.server.enable {
+  config = lib.mkIf cfg.server.enable {
     assertions = [
       {
         assertion = !(cfg.server.exports ? "generic");

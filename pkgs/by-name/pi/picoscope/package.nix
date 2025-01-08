@@ -43,7 +43,7 @@ let
       autoPatchelfHook,
       dpkg,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "libpicoipp";
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
@@ -79,7 +79,7 @@ let
       version,
       sha256,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "lib${name}";
       inherit version;
       src = fetchurl { inherit url sha256; };
@@ -92,7 +92,6 @@ let
          runHook postInstall
       '';
       meta =
-        with lib;
         shared_meta lib
         // {
           description = "library for picotech oscilloscope ${name} series";
@@ -157,7 +156,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta =
-    with lib;
     shared_meta lib
     // {
       description = "Oscilloscope application that works with all PicoScope models";

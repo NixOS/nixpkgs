@@ -3,7 +3,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   mergeHook = pkgs.writeScript "rdnssd-merge-hook" ''
     #! ${pkgs.runtimeShell} -e
@@ -16,8 +15,8 @@ in
 
   options = {
 
-    services.rdnssd.enable = mkOption {
-      type = types.bool;
+    services.rdnssd.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       #default = config.networking.enableIPv6;
       description = ''
@@ -33,7 +32,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.rdnssd.enable {
+  config = lib.mkIf config.services.rdnssd.enable {
 
     assertions = [{
       assertion = config.networking.resolvconf.enable;

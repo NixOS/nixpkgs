@@ -115,7 +115,7 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   # grafted in the file system at path `target', `mode' is a string containing
   # the permissions that will be set (ex. "755"), `user' and `group' are the
   # user and group name that will be set as owner of the files.
-  # `mode', `user', and `group' are optional.
+  # `mode', `user', and `group' are lib.optional.
   # When setting one of `user' or `group', the other needs to be set too.
   contents ? []
 

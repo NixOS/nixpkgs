@@ -61,14 +61,14 @@ in
 
           options = {
             timeout = lib.mkOption {
-              type = types.ints.unsigned;
+              type = lib.types.ints.unsigned;
               default = 15;
               description = ''
                 The WDT timeout before reset.
               '';
             };
             interval = lib.mkOption {
-              type = types.ints.unsigned;
+              type = lib.types.ints.unsigned;
               default = 5;
               description = ''
                 The kick interval, i.e. how often {manpage}`watchdogd(8)` should reset the WDT timer.
@@ -76,7 +76,7 @@ in
             };
 
             safe-exit = lib.mkOption {
-              type = types.bool;
+              type = lib.types.bool;
               default = true;
               description = ''
                 With {var}`safeExit` enabled, the daemon will ask the driver to disable the WDT before exiting.

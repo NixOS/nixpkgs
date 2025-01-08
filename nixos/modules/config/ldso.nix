@@ -9,9 +9,9 @@ let
   inherit (lib)
     last
     splitString
-    mkOption
+    lib.mkOption
     types
-    optionals
+    lib.optionals
     ;
 
   libDir = pkgs.stdenv.hostPlatform.libDir;
@@ -25,16 +25,16 @@ let
 in
 {
   options = {
-    environment.ldso = mkOption {
-      type = types.nullOr types.path;
+    environment.ldso = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         The executable to link into the normal FHS location of the ELF loader.
       '';
     };
 
-    environment.ldso32 = mkOption {
-      type = types.nullOr types.path;
+    environment.ldso32 = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         The executable to link into the normal FHS location of the 32-bit ELF loader.
@@ -64,7 +64,7 @@ in
             "L+ /${libDir}/${ldsoBasename} - - - - ${config.environment.ldso}"
           ]
       )
-      ++ optionals pkgs.stdenv.hostPlatform.isx86_64 (
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 (
         if isNull config.environment.ldso32 then
           [
             "r /${libDir32}/${ldsoBasename32} - - - - -"

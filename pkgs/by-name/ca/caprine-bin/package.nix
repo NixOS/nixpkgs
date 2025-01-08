@@ -6,7 +6,7 @@
 let
   pname = "caprine";
   version = "2.59.1";
-  metaCommon = with lib; {
+  metaCommon = {
     description = "Elegant Facebook Messenger desktop app";
     homepage = "https://sindresorhus.com/caprine";
     license = lib.licenses.mit;

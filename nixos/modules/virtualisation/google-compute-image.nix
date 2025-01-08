@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.virtualisation.googleComputeImage;
   defaultConfigFile = pkgs.writeText "configuration.nix" ''
@@ -38,8 +37,8 @@ in
   ];
 
   options = {
-    virtualisation.googleComputeImage.configFile = mkOption {
-      type = with types; nullOr str;
+    virtualisation.googleComputeImage.configFile = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
@@ -49,26 +48,26 @@ in
       '';
     };
 
-    virtualisation.googleComputeImage.compressionLevel = mkOption {
-      type = types.int;
+    virtualisation.googleComputeImage.compressionLevel = lib.mkOption {
+      type = lib.types.int;
       default = 6;
       description = ''
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
-    virtualisation.googleComputeImage.efi = mkEnableOption "EFI booting";
+    virtualisation.googleComputeImage.efi = lib.mkEnableOption "EFI booting";
   };
 
   #### implementation
   config = {
     boot.initrd.availableKernelModules = [ "nvme" ];
-    boot.loader.grub = mkIf cfg.efi {
-      device = mkForce "nodev";
+    boot.loader.grub = lib.mkIf cfg.efi {
+      device = lib.mkForce "nodev";
       efiSupport = true;
       efiInstallAsRemovable = true;
     };
 
-    fileSystems."/boot" = mkIf cfg.efi {
+    fileSystems."/boot" = lib.mkIf cfg.efi {
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };

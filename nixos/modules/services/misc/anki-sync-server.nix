@@ -4,18 +4,18 @@
   pkgs,
   ...
 }:
-with lib; let
+let
   cfg = config.services.anki-sync-server;
   name = "anki-sync-server";
-  specEscape = replaceStrings ["%"] ["%%"];
+  specEscape = lib.replaceStrings ["%"] ["%%"];
   usersWithIndexes =
-    lists.imap1 (i: user: {
+    lib.lists.imap1 (i: user: {
       i = i;
       user = user;
     })
     cfg.users;
-  usersWithIndexesFile = filter (x: x.user.passwordFile != null) usersWithIndexes;
-  usersWithIndexesNoFile = filter (x: x.user.passwordFile == null && x.user.password != null) usersWithIndexes;
+  usersWithIndexesFile = lib.filter (x: x.user.passwordFile != null) usersWithIndexes;
+  usersWithIndexesNoFile = lib.filter (x: x.user.passwordFile == null && x.user.password != null) usersWithIndexes;
   anki-sync-server-run = pkgs.writeShellScript "anki-sync-server-run" ''
     # When services.anki-sync-server.users.passwordFile is set,
     # each password file is passed as a systemd credential, which is mounted in
@@ -23,32 +23,32 @@ with lib; let
     # the credential files to pass them as environment variables to the Anki
     # sync server.
     ${
-      concatMapStringsSep
+      lib.concatMapStringsSep
       "\n"
       (x: ''
-        read -r pass < "''${CREDENTIALS_DIRECTORY}/"${escapeShellArg x.user.username}
-        export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:"$pass"
+        read -r pass < "''${CREDENTIALS_DIRECTORY}/"${lib.escapeShellArg x.user.username}
+        export SYNC_USER${toString x.i}=${lib.escapeShellArg x.user.username}:"$pass"
       '')
       usersWithIndexesFile
     }
     # For users where services.anki-sync-server.users.password isn't set,
     # export passwords in environment variables in plaintext.
     ${
-      concatMapStringsSep
+      lib.concatMapStringsSep
       "\n"
-      (x: ''export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}'')
+      (x: ''export SYNC_USER${toString x.i}=${lib.escapeShellArg x.user.username}:${lib.escapeShellArg x.user.password}'')
       usersWithIndexesNoFile
     }
     exec ${lib.getExe cfg.package}
   '';
 in {
   options.services.anki-sync-server = {
-    enable = mkEnableOption "anki-sync-server";
+    enable = lib.mkEnableOption "anki-sync-server";
 
-    package = mkPackageOption pkgs "anki-sync-server" { };
+    package = lib.mkPackageOption pkgs "anki-sync-server" { };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "::1";
       description = ''
         IP address anki-sync-server listens to.
@@ -56,34 +56,34 @@ in {
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 27701;
       description = "Port number anki-sync-server listens to.";
     };
 
-    baseDirectory = mkOption {
-      type = types.str;
+    baseDirectory = lib.mkOption {
+      type = lib.types.str;
       default = "%S/%N";
       description = "Base directory where user(s) synchronized data will be stored.";
     };
 
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
 
-    users = mkOption {
-      type = with types;
+    users = lib.mkOption {
+      type = with lib.types;
         listOf (submodule {
           options = {
-            username = mkOption {
+            username = lib.mkOption {
               type = str;
               description = "User name accepted by anki-sync-server.";
             };
-            password = mkOption {
+            password = lib.mkOption {
               type = nullOr str;
               default = null;
               description = ''
@@ -94,7 +94,7 @@ in {
                 a more secure option.
               '';
             };
-            passwordFile = mkOption {
+            passwordFile = lib.mkOption {
               type = nullOr path;
               default = null;
               description = ''
@@ -109,14 +109,14 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (builtins.length usersWithIndexesFile) + (builtins.length usersWithIndexesNoFile) > 0;
         message = "At least one username-password pair must be set.";
       }
     ];
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.port];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [cfg.port];
 
     systemd.services.anki-sync-server = {
       description = "anki-sync-server: Anki sync server built into Anki";

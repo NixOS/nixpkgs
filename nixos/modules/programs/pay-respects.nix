@@ -10,8 +10,8 @@ let
     maintainers
     mkEnableOption
     mkIf
-    mkOption
-    optionalString
+    lib.mkOption
+    lib.optionalString
     types
     ;
   inherit (types) str;
@@ -31,9 +31,9 @@ in
 {
   options = {
     programs.pay-respects = {
-      enable = mkEnableOption "pay-respects, an app which corrects your previous console command";
+      enable = lib.mkEnableOption "pay-respects, an app which corrects your previous console command";
 
-      alias = mkOption {
+      alias = lib.mkOption {
         default = "f";
         type = str;
         description = ''
@@ -44,13 +44,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.pay-respects ];
 
     programs = {
       bash.interactiveShellInit = initScript "bash";
-      fish.interactiveShellInit = optionalString config.programs.fish.enable (initScript "fish");
-      zsh.interactiveShellInit = optionalString config.programs.zsh.enable (initScript "zsh");
+      fish.interactiveShellInit = lib.optionalString config.programs.fish.enable (initScript "fish");
+      zsh.interactiveShellInit = lib.optionalString config.programs.zsh.enable (initScript "zsh");
     };
   };
   meta.maintainers = with lib.maintainers; [ sigmasquadron ];

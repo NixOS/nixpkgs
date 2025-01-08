@@ -21,7 +21,7 @@ let
     flatten
     ;
   inherit (lib.modules) mkIf;
-  inherit (lib.options) literalExpression mkOption;
+  inherit (lib.options) literalExpression lib.mkOption;
   inherit (lib.strings) hasInfix replaceStrings;
   inherit (lib.trivial) flip pipe;
 
@@ -115,10 +115,10 @@ in
   meta.maintainers = [ lib.maintainers.majiir ];
 
   options.networking.wireguard = {
-    useNetworkd = mkOption {
+    useNetworkd = lib.mkOption {
       default = config.networking.useNetworkd;
-      defaultText = literalExpression "config.networking.useNetworkd";
-      type = types.bool;
+      defaultText = lib.literalExpression "config.networking.useNetworkd";
+      type = lib.types.bool;
       description = ''
         Whether to use networkd as the network configuration backend for
         Wireguard instead of the legacy script-based system.
@@ -132,7 +132,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && cfg.useNetworkd) {
+  config = lib.mkIf (cfg.enable && cfg.useNetworkd) {
 
     # TODO: Some of these options may be possible to support in networkd.
     #

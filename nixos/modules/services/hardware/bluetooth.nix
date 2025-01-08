@@ -12,16 +12,16 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRenamedOptionModule
     mkRemovedOptionModule
     concatStringsSep
     escapeShellArgs
     literalExpression
-    optional
-    optionals
-    optionalAttrs
+    lib.optional
+    lib.optionals
+    lib.optionalAttrs
     recursiveUpdate
     types
     ;
@@ -38,8 +38,8 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "hardware" "bluetooth" "config" ] [ "hardware" "bluetooth" "settings" ])
-    (mkRemovedOptionModule [ "hardware" "bluetooth" "extraConfig" ] ''
+    (lib.mkRenamedOptionModule [ "hardware" "bluetooth" "config" ] [ "hardware" "bluetooth" "settings" ])
+    (lib.mkRemovedOptionModule [ "hardware" "bluetooth" "extraConfig" ] ''
       Use hardware.bluetooth.settings instead.
 
       This is part of the general move to use structured settings instead of raw
@@ -53,25 +53,25 @@ in
   options = {
 
     hardware.bluetooth = {
-      enable = mkEnableOption "support for Bluetooth";
+      enable = lib.mkEnableOption "support for Bluetooth";
 
-      hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
+      hsphfpd.enable = lib.mkEnableOption "support for hsphfpd[-prototype] implementation";
 
-      powerOnBoot = mkOption {
-        type = types.bool;
+      powerOnBoot = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to power up the default Bluetooth controller on boot.";
       };
 
-      package = mkPackageOption pkgs "bluez" { };
+      package = lib.mkPackageOption pkgs "bluez" { };
 
-      disabledPlugins = mkOption {
-        type = types.listOf types.str;
+      disabledPlugins = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Built-in plugins to disable";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = cfgFmt.type;
         default = { };
         example = {
@@ -85,7 +85,7 @@ in
         '';
       };
 
-      input = mkOption {
+      input = lib.mkOption {
         type = cfgFmt.type;
         default = { };
         example = {
@@ -100,7 +100,7 @@ in
         '';
       };
 
-      network = mkOption {
+      network = lib.mkOption {
         type = cfgFmt.type;
         default = { };
         example = {
@@ -118,8 +118,8 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ package ] ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ package ] ++ lib.optional cfg.hsphfpd.enable pkgs.hsphfpd;
 
     environment.etc."bluetooth/input.conf".source = cfgFmt.generate "input.conf" cfg.input;
     environment.etc."bluetooth/network.conf".source = cfgFmt.generate "network.conf" cfg.network;
@@ -127,7 +127,7 @@ in
       recursiveUpdate defaults cfg.settings
     );
     services.udev.packages = [ package ];
-    services.dbus.packages = [ package ] ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
+    services.dbus.packages = [ package ] ++ lib.optional cfg.hsphfpd.enable pkgs.hsphfpd;
     systemd.packages = [ package ];
 
     systemd.services =
@@ -141,14 +141,14 @@ in
             args = [
               "-f"
               "/etc/bluetooth/main.conf"
-            ] ++ optional hasDisabledPlugins "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
+            ] ++ lib.optional hasDisabledPlugins "--noplugin=${lib.concatStringsSep "," cfg.disabledPlugins}";
           in
           {
             wantedBy = [ "bluetooth.target" ];
             aliases = [ "dbus-org.bluez.service" ];
             serviceConfig.ExecStart = [
               ""
-              "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs args}"
+              "${package}/libexec/bluetooth/bluetoothd ${lib.escapeShellArgs args}"
             ];
             # restarting can leave people without a mouse/keyboard
             unitConfig.X-RestartIfChanged = false;
@@ -169,7 +169,7 @@ in
       {
         obex.aliases = [ "dbus-org.bluez.obex.service" ];
       }
-      // optionalAttrs cfg.hsphfpd.enable {
+      // lib.optionalAttrs cfg.hsphfpd.enable {
         telephony_client = {
           wantedBy = [ "default.target" ];
 

@@ -1,24 +1,23 @@
 { config, pkgs, lib, modulesPath, ... }:
-with lib;
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     (modulesPath + "/virtualisation/digital-ocean-init.nix")
   ];
-  options.virtualisation.digitalOcean = with types; {
-    setRootPassword = mkOption {
+  options.virtualisation.digitalOcean = with lib.types; {
+    setRootPassword = lib.mkOption {
       type = bool;
       default = false;
       example = true;
       description = "Whether to set the root password from the Digital Ocean metadata";
     };
-    setSshKeys = mkOption {
+    setSshKeys = lib.mkOption {
       type = bool;
       default = true;
       example = true;
       description = "Whether to fetch ssh keys from Digital Ocean";
     };
-    seedEntropy = mkOption {
+    seedEntropy = lib.mkOption {
       type = bool;
       default = true;
       example = true;
@@ -30,7 +29,7 @@ with lib;
       cfg = config.virtualisation.digitalOcean;
       hostName = config.networking.hostName;
       doMetadataFile = "/run/do-metadata/v1.json";
-    in mkMerge [{
+    in lib.mkMerge [{
       fileSystems."/" = lib.mkDefault {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
@@ -44,12 +43,12 @@ with lib;
         loader.grub.devices = ["/dev/vda"];
       };
       services.openssh = {
-        enable = mkDefault true;
-        settings.PasswordAuthentication = mkDefault false;
+        enable = lib.mkDefault true;
+        settings.PasswordAuthentication = lib.mkDefault false;
       };
-      services.do-agent.enable = mkDefault true;
+      services.do-agent.enable = lib.mkDefault true;
       networking = {
-        hostName = mkDefault ""; # use Digital Ocean metadata server
+        hostName = lib.mkDefault ""; # use Digital Ocean metadata server
       };
 
       /* Check for and wait for the metadata server to become reachable.
@@ -84,15 +83,15 @@ with lib;
         unitConfig = {
           ConditionPathExists = "!${doMetadataFile}";
           After = [ "network-pre.target" ] ++
-            optional config.networking.dhcpcd.enable "dhcpcd.service" ++
-            optional config.systemd.network.enable "systemd-networkd.service";
+            lib.optional config.networking.dhcpcd.enable "dhcpcd.service" ++
+            lib.optional config.systemd.network.enable "systemd-networkd.service";
         };
       };
 
       /* Fetch the root password from the digital ocean metadata.
        * There is no specific route for this, so we use jq to get
        * it from the One Big JSON metadata blob */
-      systemd.services.digitalocean-set-root-password = mkIf cfg.setRootPassword {
+      systemd.services.digitalocean-set-root-password = lib.mkIf cfg.setRootPassword {
         path = [ pkgs.shadow pkgs.jq ];
         description = "Set root password provided by Digitalocean";
         wantedBy = [ "multi-user.target" ];
@@ -104,7 +103,7 @@ with lib;
           '';
         unitConfig = {
           ConditionPathExists = "!/etc/do-metadata/set-root-password";
-          Before = optional config.services.openssh.enable "sshd.service";
+          Before = lib.optional config.services.openssh.enable "sshd.service";
           After = [ "digitalocean-metadata.service" ];
           Requires = [ "digitalocean-metadata.service" ];
         };
@@ -116,7 +115,7 @@ with lib;
       /* Set the hostname from Digital Ocean, unless the user configured it in
        * the NixOS configuration. The cached metadata file isn't used here
        * because the hostname is a mutable part of the droplet. */
-      systemd.services.digitalocean-set-hostname = mkIf (hostName == "") {
+      systemd.services.digitalocean-set-hostname = lib.mkIf (hostName == "") {
         path = [ pkgs.curl pkgs.nettools ];
         description = "Set hostname provided by Digitalocean";
         wantedBy = [ "network.target" ];
@@ -139,7 +138,7 @@ with lib;
       };
 
       /* Fetch the ssh keys for root from Digital Ocean */
-      systemd.services.digitalocean-ssh-keys = mkIf cfg.setSshKeys {
+      systemd.services.digitalocean-ssh-keys = lib.mkIf cfg.setSshKeys {
         description = "Set root ssh keys provided by Digital Ocean";
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.jq ];
@@ -155,7 +154,7 @@ with lib;
         };
         unitConfig = {
           ConditionPathExists = "!/root/.ssh/authorized_keys";
-          Before = optional config.services.openssh.enable "sshd.service";
+          Before = lib.optional config.services.openssh.enable "sshd.service";
           After = [ "digitalocean-metadata.service" ];
           Requires = [ "digitalocean-metadata.service" ];
         };
@@ -164,7 +163,7 @@ with lib;
       /* Initialize the RNG by running the entropy-seed script from the
        * Digital Ocean metadata
        */
-      systemd.services.digitalocean-entropy-seed = mkIf cfg.seedEntropy {
+      systemd.services.digitalocean-entropy-seed = lib.mkIf cfg.seedEntropy {
         description = "Run the kernel RNG entropy seeding script from the Digital Ocean vendor data";
         wantedBy = [ "network.target" ];
         path = [ pkgs.jq pkgs.mpack ];

@@ -6,8 +6,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.rtorrent;
@@ -18,18 +16,18 @@ in
   meta.maintainers = with lib.maintainers; [ thiagokokada ];
 
   options.services.rtorrent = {
-    enable = mkEnableOption "rtorrent";
+    enable = lib.mkEnableOption "rtorrent";
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/rtorrent";
       description = ''
         The directory where rtorrent stores its data files.
       '';
     };
 
-    dataPermissions = mkOption {
-      type = types.str;
+    dataPermissions = lib.mkOption {
+      type = lib.types.str;
       default = "0750";
       example = "0755";
       description = ''
@@ -37,51 +35,51 @@ in
       '';
     };
 
-    downloadDir = mkOption {
-      type = types.str;
+    downloadDir = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.dataDir}/download";
-      defaultText = literalExpression ''"''${config.${opt.dataDir}}/download"'';
+      defaultText = lib.literalExpression ''"''${config.${opt.dataDir}}/download"'';
       description = ''
         Where to put downloaded files.
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "rtorrent";
       description = ''
         User account under which rtorrent runs.
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "rtorrent";
       description = ''
         Group under which rtorrent runs.
       '';
     };
 
-    package = mkPackageOption pkgs "rtorrent" { };
+    package = lib.mkPackageOption pkgs "rtorrent" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 50000;
       description = ''
         The rtorrent port.
       '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to open the firewall for the port in {option}`services.rtorrent.port`.
       '';
     };
 
-    rpcSocket = mkOption {
-      type = types.str;
+    rpcSocket = lib.mkOption {
+      type = lib.types.str;
       readOnly = true;
       default = "/run/rtorrent/rpc.sock";
       description = ''
@@ -89,8 +87,8 @@ in
       '';
     };
 
-    configText = mkOption {
-      type = types.lines;
+    configText = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completely.
@@ -98,13 +96,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.groups = mkIf (cfg.group == "rtorrent") {
+    users.groups = lib.mkIf (cfg.group == "rtorrent") {
       rtorrent = { };
     };
 
-    users.users = mkIf (cfg.user == "rtorrent") {
+    users.users = lib.mkIf (cfg.user == "rtorrent") {
       rtorrent = {
         group = cfg.group;
         shell = pkgs.bashInteractive;
@@ -114,9 +112,9 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall) [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
 
-    services.rtorrent.configText = mkBefore ''
+    services.rtorrent.configText = lib.mkBefore ''
       # Instance layout (base paths)
       method.insert = cfg.basedir, private|const|string, (cat,"${cfg.dataDir}/")
       method.insert = cfg.watch,   private|const|string, (cat,(cfg.basedir),"watch/")

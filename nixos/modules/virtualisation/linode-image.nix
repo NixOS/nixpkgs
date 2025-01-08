@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.virtualisation.linodeImage;
   defaultConfigFile = pkgs.writeText "configuration.nix" ''
@@ -37,8 +36,8 @@ in
 
   options = {
 
-    virtualisation.linodeImage.configFile = mkOption {
-      type = with types; nullOr str;
+    virtualisation.linodeImage.configFile = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
@@ -48,8 +47,8 @@ in
       '';
     };
 
-    virtualisation.linodeImage.compressionLevel = mkOption {
-      type = types.ints.between 1 9;
+    virtualisation.linodeImage.compressionLevel = lib.mkOption {
+      type = lib.types.ints.between 1 9;
       default = 6;
       description = ''
         GZIP compression level of the resulting disk image (1-9).

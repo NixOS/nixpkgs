@@ -33,40 +33,39 @@ let
   };
 
 in
-with lib;
 {
 
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
-  options = with types; {
+  options = {
     services.hardware.lcd = {
-      serverHost = mkOption {
-        type = str;
+      serverHost = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Host on which LCDd is listening.";
       };
 
-      serverPort = mkOption {
-        type = int;
+      serverPort = lib.mkOption {
+        type = lib.types.int;
         default = 13666;
         description = "Port on which LCDd is listening.";
       };
 
       server = {
-        enable = mkOption {
-          type = bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Enable the LCD panel server (LCDd)";
         };
 
-        openPorts = mkOption {
-          type = bool;
+        openPorts = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Open the ports in the firewall";
         };
 
-        usbPermissions = mkOption {
-          type = bool;
+        usbPermissions = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Set group-write permissions on a USB device.
@@ -87,46 +86,46 @@ with lib;
           '';
         };
 
-        usbVid = mkOption {
-          type = str;
+        usbVid = lib.mkOption {
+          type = lib.types.str;
           default = "";
           description = "The vendor ID of the USB device to claim.";
         };
 
-        usbPid = mkOption {
-          type = str;
+        usbPid = lib.mkOption {
+          type = lib.types.str;
           default = "";
           description = "The product ID of the USB device to claim.";
         };
 
-        usbGroup = mkOption {
-          type = str;
+        usbGroup = lib.mkOption {
+          type = lib.types.str;
           default = "dialout";
           description = "The group to use for settings permissions. This group must exist or you will have to create it.";
         };
 
-        extraConfig = mkOption {
-          type = lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           description = "Additional configuration added verbatim to the server config.";
         };
       };
 
       client = {
-        enable = mkOption {
-          type = bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Enable the LCD panel client (LCDproc)";
         };
 
-        extraConfig = mkOption {
-          type = lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           description = "Additional configuration added verbatim to the client config.";
         };
 
-        restartForever = mkOption {
-          type = bool;
+        restartForever = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Try restarting the client forever.";
         };
@@ -134,17 +133,17 @@ with lib;
     };
   };
 
-  config = mkIf (cfg.server.enable || cfg.client.enable) {
-    networking.firewall.allowedTCPPorts = mkIf (cfg.server.enable && cfg.server.openPorts) [
+  config = lib.mkIf (cfg.server.enable || cfg.client.enable) {
+    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.server.enable && cfg.server.openPorts) [
       cfg.serverPort
     ];
 
-    services.udev.extraRules = mkIf (cfg.server.enable && cfg.server.usbPermissions) ''
+    services.udev.extraRules = lib.mkIf (cfg.server.enable && cfg.server.usbPermissions) ''
       ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="${cfg.server.usbVid}", ATTRS{idProduct}=="${cfg.server.usbPid}", MODE="660", GROUP="${cfg.server.usbGroup}"
     '';
 
     systemd.services = {
-      lcdd = mkIf cfg.server.enable {
+      lcdd = lib.mkIf cfg.server.enable {
         description = "LCDproc - server";
         wantedBy = [ "lcd.target" ];
         serviceConfig = serviceCfg // {
@@ -153,7 +152,7 @@ with lib;
         };
       };
 
-      lcdproc = mkIf cfg.client.enable {
+      lcdproc = lib.mkIf cfg.client.enable {
         description = "LCDproc - client";
         after = [ "lcdd.service" ];
         wantedBy = [ "lcd.target" ];

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption;
+  inherit (lib) mkIf lib.mkOption;
   inherit (lib.types) nullOr path bool listOf str;
   keysPath = "/var/lib/yggdrasil/keys.json";
 
@@ -22,7 +22,7 @@ in
     services.yggdrasil = {
       enable = lib.mkEnableOption "the yggdrasil system service";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         example = {
@@ -59,7 +59,7 @@ in
         '';
       };
 
-      configFile = mkOption {
+      configFile = lib.mkOption {
         type = nullOr path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
@@ -74,14 +74,14 @@ in
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         type = nullOr str;
         default = null;
         example = "wheel";
         description = "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
-      openMulticastPort = mkOption {
+      openMulticastPort = lib.mkOption {
         type = bool;
         default = false;
         description = ''
@@ -96,7 +96,7 @@ in
         '';
       };
 
-      denyDhcpcdInterfaces = mkOption {
+      denyDhcpcdInterfaces = lib.mkOption {
         type = listOf str;
         default = [ ];
         example = [ "tap*" ];
@@ -118,7 +118,7 @@ in
         restarted. Keys are stored at ${keysPath}
       '';
 
-      extraArgs = mkOption {
+      extraArgs = lib.mkOption {
         type = listOf str;
         default = [ ];
         example = [ "-loglevel" "info" ];
@@ -128,7 +128,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let
       binYggdrasil = "${cfg.package}/bin/yggdrasil";
       binHjson = "${pkgs.hjson-go}/bin/hjson-cli";
@@ -226,7 +226,7 @@ in
       };
 
       networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
-      networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
+      networking.firewall.allowedUDPPorts = lib.mkIf cfg.openMulticastPort [ 9001 ];
 
       # Make yggdrasilctl available on the command line.
       environment.systemPackages = [ cfg.package ];

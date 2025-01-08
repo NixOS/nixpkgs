@@ -9,8 +9,8 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    optionalString
+    lib.mkOption
+    lib.optionalString
     types
     ;
 
@@ -25,23 +25,23 @@ in
   ###### interface
   options = {
     services.bird2 = {
-      enable = mkEnableOption "BIRD Internet Routing Daemon";
-      config = mkOption {
-        type = types.lines;
+      enable = lib.mkEnableOption "BIRD Internet Routing Daemon";
+      config = lib.mkOption {
+        type = lib.types.lines;
         description = ''
           BIRD Internet Routing Daemon configuration file.
           <http://bird.network.cz/>
         '';
       };
-      autoReload = mkOption {
-        type = types.bool;
+      autoReload = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether bird2 should be automatically reloaded when the configuration changes.
         '';
       };
-      checkConfig = mkOption {
-        type = types.bool;
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether the config should be checked at build time.
@@ -50,8 +50,8 @@ in
           the included files before checking.
         '';
       };
-      preCheckConfig = mkOption {
-        type = types.lines;
+      preCheckConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           echo "cost 100;" > include.conf
@@ -73,13 +73,13 @@ in
   ];
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.bird ];
 
     environment.etc."bird/bird2.conf".source = pkgs.writeTextFile {
       name = "bird2";
       text = cfg.config;
-      checkPhase = optionalString cfg.checkConfig ''
+      checkPhase = lib.optionalString cfg.checkConfig ''
         ln -s $out bird2.conf
         ${cfg.preCheckConfig}
         ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf

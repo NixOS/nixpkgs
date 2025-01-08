@@ -9,16 +9,16 @@ let
     maintainers
     mapAttrs'
     mkEnableOption
-    mkOption
+    lib.mkOption
     nameValuePair
-    optionalString
+    lib.optionalString
     types
     ;
   mkSystemdService =
     name: cfg:
     nameValuePair "gitwatch-${name}" (
       let
-        getvar = flag: var: optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
+        getvar = flag: var: lib.optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
         branch = getvar "-b" "branch";
         remote = getvar "-r" "remote";
       in
@@ -44,7 +44,7 @@ let
     );
 in
 {
-  options.services.gitwatch = mkOption {
+  options.services.gitwatch = lib.mkOption {
     description = ''
       A set of git repositories to watch for. See
       [gitwatch](https://github.com/gitwatch/gitwatch) for more.
@@ -66,25 +66,25 @@ in
       };
     };
     type =
-      with types;
+      with lib.types;
       attrsOf (submodule {
         options = {
-          enable = mkEnableOption "watching for repo";
-          path = mkOption {
+          enable = lib.mkEnableOption "watching for repo";
+          path = lib.mkOption {
             description = "The path to repo in local machine";
             type = str;
           };
-          user = mkOption {
+          user = lib.mkOption {
             description = "The name of services's user";
             type = str;
             default = "root";
           };
-          remote = mkOption {
+          remote = lib.mkOption {
             description = "Optional url of remote repository";
             type = nullOr str;
             default = null;
           };
-          branch = mkOption {
+          branch = lib.mkOption {
             description = "Optional branch in remote repository";
             type = nullOr str;
             default = null;

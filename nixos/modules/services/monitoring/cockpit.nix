@@ -2,14 +2,14 @@
 
 let
   cfg = config.services.cockpit;
-  inherit (lib) types mkEnableOption mkOption mkIf literalMD mkPackageOption;
+  inherit (lib) types mkEnableOption lib.mkOption mkIf literalMD mkPackageOption;
   settingsFormat = pkgs.formats.ini {};
 in {
   options = {
     services.cockpit = {
-      enable = mkEnableOption "Cockpit";
+      enable = lib.mkEnableOption "Cockpit";
 
-      package = mkPackageOption pkgs "Cockpit" {
+      package = lib.mkPackageOption pkgs "Cockpit" {
         default = [ "cockpit" ];
       };
 
@@ -25,20 +25,20 @@ in {
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         description = "Port where cockpit will listen.";
-        type = types.port;
+        type = lib.types.port;
         default = 9090;
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         description = "Open port for cockpit.";
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # expose cockpit-bridge system-wide
     environment.systemPackages = [ cfg.package ];
@@ -51,7 +51,7 @@ in {
 
     security.pam.services.cockpit = {};
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.packages = [ cfg.package ];
     systemd.sockets.cockpit.wantedBy = [ "multi-user.target" ];

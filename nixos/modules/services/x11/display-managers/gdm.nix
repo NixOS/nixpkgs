@@ -321,7 +321,7 @@ in
     security.pam.services = {
       gdm-launch-environment.text = ''
         auth     required       pam_succeed_if.so audit quiet_success user = gdm
-        auth     optional       pam_permit.so
+        auth     lib.optional       pam_permit.so
 
         account  required       pam_succeed_if.so audit quiet_success user = gdm
         account  sufficient     pam_unix.so
@@ -330,9 +330,9 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
-        session  optional       pam_keyinit.so force revoke
-        session  optional       pam_permit.so
+        session  lib.optional       ${config.systemd.package}/lib/security/pam_systemd.so
+        session  lib.optional       pam_keyinit.so force revoke
+        session  lib.optional       pam_permit.so
       '';
 
       gdm-password.text = ''
@@ -347,7 +347,7 @@ in
         auth      required      pam_succeed_if.so uid >= 1000 quiet
         ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
-          auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
+          auth       lib.optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
         auth      required      pam_permit.so
 
@@ -355,7 +355,7 @@ in
 
         password  requisite     pam_unix.so nullok yescrypt
 
-        session   optional      pam_keyinit.so revoke
+        session   lib.optional      pam_keyinit.so revoke
         session   include       login
       '';
 
@@ -371,7 +371,7 @@ in
         auth       required                    pam_env.so
         ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
-          auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
+          auth       lib.optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
 
         account    include                     login

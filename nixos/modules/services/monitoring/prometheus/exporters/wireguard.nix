@@ -9,18 +9,18 @@
 let
   cfg = config.services.prometheus.exporters.wireguard;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mkRenamedOptionModule
     mkEnableOption
-    optionalString
+    lib.optionalString
     escapeShellArg
     ;
 in
 {
   port = 9586;
   imports = [
-    (mkRenamedOptionModule [ "addr" ] [ "listenAddress" ])
+    (lib.mkRenamedOptionModule [ "addr" ] [ "listenAddress" ])
     ({
       options.warnings = options.warnings;
       options.assertions = options.assertions;
@@ -29,8 +29,8 @@ in
   extraOpts = {
     verbose = mkEnableOption "verbose logging mode for prometheus-wireguard-exporter";
 
-    wireguardConfig = mkOption {
-      type = with types; nullOr (either path str);
+    wireguardConfig = lib.mkOption {
+      type = with lib.types; nullOr (either path str);
       default = null;
 
       description = ''
@@ -44,8 +44,8 @@ in
       '';
     };
 
-    singleSubnetPerField = mkOption {
-      type = types.bool;
+    singleSubnetPerField = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         By default, all allowed IPs and subnets are comma-separated in the
@@ -55,8 +55,8 @@ in
       '';
     };
 
-    withRemoteIp = mkOption {
-      type = types.bool;
+    withRemoteIp = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
@@ -73,10 +73,10 @@ in
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
           -p ${toString cfg.port} \
           -l ${cfg.listenAddress} \
-          ${optionalString cfg.verbose "-v true"} \
-          ${optionalString cfg.singleSubnetPerField "-s true"} \
-          ${optionalString cfg.withRemoteIp "-r true"} \
-          ${optionalString (cfg.wireguardConfig != null) "-n ${escapeShellArg cfg.wireguardConfig}"}
+          ${lib.optionalString cfg.verbose "-v true"} \
+          ${lib.optionalString cfg.singleSubnetPerField "-s true"} \
+          ${lib.optionalString cfg.withRemoteIp "-r true"} \
+          ${lib.optionalString (cfg.wireguardConfig != null) "-n ${lib.escapeShellArg cfg.wireguardConfig}"}
       '';
       RestrictAddressFamilies = [
         # Need AF_NETLINK to collect data

@@ -1,17 +1,13 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
-  inherit (lib.options) showOption showFiles;
-
   cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
 
-  mkPhpIni = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {} " = ";
+  mkPhpIni = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault {} " = ";
   };
   mkPhpPackage = cfg: cfg.phpPackage.buildEnv {
     extraConfig = mkPhpIni cfg.phpOptions;
@@ -19,18 +15,18 @@ let
 
   # "you're escaped" -> "'you\'re escaped'"
   # https://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.single
-  toPhpString = s: "'${escape [ "'" "\\" ] s}'";
+  toPhpString = s: "'${lib.escape [ "'" "\\" ] s}'";
 
   dokuwikiAclAuthConfig = hostName: cfg: let
     inherit (cfg) acl;
-    acl_gen = concatMapStringsSep "\n" (l: "${l.page} \t ${l.actor} \t ${toString l.level}");
+    acl_gen = lib.concatMapStringsSep "\n" (l: "${l.page} \t ${l.actor} \t ${toString l.level}");
   in pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
     # <?php exit()?>
     #
     # Access Control Lists
     #
-    ${if isString acl then acl else acl_gen acl}
+    ${if lib.isString acl then acl else acl_gen acl}
   '';
 
   mergeConfig = cfg: {
@@ -45,37 +41,37 @@ let
   };
 
   mkPhpValue = v: let
-    isHasAttr = s: isAttrs v && hasAttr s v;
+    isHasAttr = s: lib.isAttrs v && lib.hasAttr s v;
   in
-    if isString v then toPhpString v
+    if lib.isString v then toPhpString v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && strings.isConvertibleWithToString v then toPhpString (concatMapStringsSep "," toString v)
-    else if isInt v then toString v
-    else if isBool v then toString (if v then 1 else 0)
+    else if lib.isList v && lib.strings.isConvertibleWithToString v then toPhpString (lib.concatMapStringsSep "," toString v)
+    else if lib.isInt v then toString v
+    else if lib.isBool v then toString (if v then 1 else 0)
     else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString (toString v._file)}))"
     else if isHasAttr "_raw" then v._raw
     else abort "The dokuwiki localConf value ${lib.generators.toPretty {} v} can not be encoded."
   ;
 
-  mkPhpAttrVals = v: flatten (mapAttrsToList mkPhpKeyVal v);
+  mkPhpAttrVals = v: lib.flatten (lib.mapAttrsToList mkPhpKeyVal v);
   mkPhpKeyVal = k: v: let
-    values = if (isAttrs v && (hasAttr "_file" v || hasAttr "_raw" v )) || !isAttrs v then
+    values = if (lib.isAttrs v && (lib.hasAttr "_file" v || lib.hasAttr "_raw" v )) || !lib.isAttrs v then
       [" = ${mkPhpValue v};"]
     else
       mkPhpAttrVals v;
-  in map (e: "[${toPhpString k}]${e}") (flatten values);
+  in map (e: "[${toPhpString k}]${e}") (lib.flatten values);
 
   dokuwikiLocalConfig = hostName: cfg: let
     conf_gen = c: map (v: "$conf${v}") (mkPhpAttrVals c);
   in writePhpFile "local-${hostName}.php" ''
-    ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
+    ${lib.concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
   '';
 
   dokuwikiPluginsLocalConfig = hostName: cfg: let
     pc = cfg.pluginsConfig;
-    pc_gen = pc: concatStringsSep "\n" (mapAttrsToList (n: v: "$plugins['${n}'] = ${boolToString v};") pc);
+    pc_gen = pc: lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "$plugins['${n}'] = ${lib.boolToString v};") pc);
   in writePhpFile "plugins.local-${hostName}.php" ''
-    ${if isString pc then pc else pc_gen pc}
+    ${if lib.isString pc then pc else pc_gen pc}
   '';
 
 
@@ -93,14 +89,14 @@ let
   aclOpts = { ... }: {
     options = {
 
-      page = mkOption {
-        type = types.str;
+      page = lib.mkOption {
+        type = lib.types.str;
         description = "Page or namespace to restrict";
         example = "start";
       };
 
-      actor = mkOption {
-        type = types.str;
+      actor = lib.mkOption {
+        type = lib.types.str;
         description = "User or group to restrict";
         example = "@external";
       };
@@ -114,9 +110,9 @@ let
           "upload" = 8;
           "delete" = 16;
         };
-      in mkOption {
-        type = types.enum ((attrValues available) ++ (attrNames available));
-        apply = x: if isInt x then x else available.${x};
+      in lib.mkOption {
+        type = lib.types.enum ((lib.attrValues available) ++ (lib.attrNames available));
+        apply = x: if lib.isInt x then x else available.${x};
         description = ''
           Permission level to restrict the actor(s) to.
           See <https://www.dokuwiki.org/acl#background_info> for explanation
@@ -130,20 +126,20 @@ let
     {
 
       options = {
-        enable = mkEnableOption "DokuWiki web application";
+        enable = lib.mkEnableOption "DokuWiki web application";
 
-        package = mkPackageOption pkgs "dokuwiki" { };
+        package = lib.mkPackageOption pkgs "dokuwiki" { };
 
-        stateDir = mkOption {
-          type = types.path;
+        stateDir = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/dokuwiki/${name}/data";
           description = "Location of the DokuWiki state directory.";
         };
 
-        acl = mkOption {
-          type = with types; nullOr (listOf (submodule aclOpts));
+        acl = lib.mkOption {
+          type = with lib.types; nullOr (listOf (submodule aclOpts));
           default = null;
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [
               {
                 page = "start";
@@ -167,8 +163,8 @@ let
           '';
         };
 
-        aclFile = mkOption {
-          type = with types; nullOr str;
+        aclFile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = if (config.mergedConfig.useacl && config.acl == null) then "/var/lib/dokuwiki/${name}/acl.auth.php" else null;
           description = ''
             Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
@@ -179,8 +175,8 @@ let
           example = "/var/lib/dokuwiki/${name}/acl.auth.php";
         };
 
-        pluginsConfig = mkOption {
-          type = with types; attrsOf bool;
+        pluginsConfig = lib.mkOption {
+          type = with lib.types; attrsOf bool;
           default = {
             authad = false;
             authldap = false;
@@ -192,8 +188,8 @@ let
           '';
         };
 
-        usersFile = mkOption {
-          type = with types; nullOr str;
+        usersFile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = if config.mergedConfig.useacl then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
           description = ''
             Location of the dokuwiki users file. List of users. Format:
@@ -209,8 +205,8 @@ let
           example = "/var/lib/dokuwiki/${name}/users.auth.php";
         };
 
-        plugins = mkOption {
-          type = types.listOf types.path;
+        plugins = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
           default = [];
           description = ''
                 List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
@@ -219,7 +215,7 @@ let
                 These plugins need to be packaged before use, see example.
                 :::
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
                 let
                   plugin-icalevents = pkgs.stdenv.mkDerivation rec {
                     name = "icalevents";
@@ -236,8 +232,8 @@ let
           '';
         };
 
-        templates = mkOption {
-          type = types.listOf types.path;
+        templates = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
           default = [];
           description = ''
                 List of path(s) to respective template(s) which are copied from the 'tpl' directory.
@@ -246,7 +242,7 @@ let
                 These templates need to be packaged before use, see example.
                 :::
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
                 let
                   template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
                   name = "bootstrap3";
@@ -264,8 +260,8 @@ let
           '';
         };
 
-        poolConfig = mkOption {
-          type = with types; attrsOf (oneOf [ str int bool ]);
+        poolConfig = lib.mkOption {
+          type = with lib.types; attrsOf (oneOf [ str int bool ]);
           default = {
             "pm" = "dynamic";
             "pm.max_children" = 32;
@@ -280,18 +276,18 @@ let
           '';
         };
 
-        phpPackage = mkPackageOption pkgs "php" {
+        phpPackage = lib.mkPackageOption pkgs "php" {
           default = "php81";
           example = "php82";
         };
 
-        phpOptions = mkOption {
-          type = types.attrsOf types.str;
+        phpOptions = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           default = {};
           description = ''
             Options for PHP's php.ini file for this dokuwiki site.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
           {
             "opcache.interned_strings_buffer" = "8";
             "opcache.max_accelerated_files" = "10000";
@@ -302,8 +298,8 @@ let
           '';
         };
 
-        settings = mkOption {
-          type = types.attrsOf types.anything;
+        settings = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
           default = {
             useacl = true;
             superuser = "admin";
@@ -316,7 +312,7 @@ let
             loaded from a file using `._file` or obtained from any
             PHP function calls using `._raw`.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               title = "My Wiki";
               userewrite = 1;
@@ -329,10 +325,10 @@ let
           '';
         };
 
-        mergedConfig = mkOption {
+        mergedConfig = lib.mkOption {
           readOnly = true;
           default = mergeConfig config;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             {
               useacl = true;
             }
@@ -349,14 +345,14 @@ in
   options = {
     services.dokuwiki = {
 
-      sites = mkOption {
-        type = types.attrsOf (types.submodule siteOpts);
+      sites = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule siteOpts);
         default = {};
         description = "Specification of one or more DokuWiki sites to serve";
       };
 
-      webserver = mkOption {
-        type = types.enum [ "nginx" "caddy" ];
+      webserver = lib.mkOption {
+        type = lib.types.enum [ "nginx" "caddy" ];
         default = "nginx";
         description = ''
           Whether to use nginx or caddy for virtual host management.
@@ -373,17 +369,17 @@ in
   };
 
   # implementation
-  config = mkIf (eachSite != {}) (mkMerge [{
+  config = lib.mkIf (eachSite != {}) (lib.mkMerge [{
 
-    services.phpfpm.pools = mapAttrs' (hostName: cfg: (
-      nameValuePair "dokuwiki-${hostName}" {
+    services.phpfpm.pools = lib.mapAttrs' (hostName: cfg: (
+      lib.nameValuePair "dokuwiki-${hostName}" {
         inherit user;
         group = webserver.group;
 
         phpPackage = mkPhpPackage cfg;
-        phpEnv = optionalAttrs (cfg.usersFile != null) {
+        phpEnv = lib.optionalAttrs (cfg.usersFile != null) {
           DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
-        } // optionalAttrs (cfg.mergedConfig.useacl) {
+        } // lib.optionalAttrs (cfg.mergedConfig.useacl) {
           DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig hostName cfg}" else "${toString cfg.aclFile}";
         };
 
@@ -397,7 +393,7 @@ in
   }
 
   {
-    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
+    systemd.tmpfiles.rules = lib.flatten (lib.mapAttrsToList (hostName: cfg: [
       "d ${cfg.stateDir}/attic 0750 ${user} ${webserver.group} - -"
       "d ${cfg.stateDir}/cache 0750 ${user} ${webserver.group} - -"
       "d ${cfg.stateDir}/index 0750 ${user} ${webserver.group} - -"
@@ -419,11 +415,11 @@ in
     };
   }
 
-  (mkIf (cfg.webserver == "nginx") {
+  (lib.mkIf (cfg.webserver == "nginx") {
     services.nginx = {
       enable = true;
-      virtualHosts = mapAttrs (hostName: cfg: {
-        serverName = mkDefault hostName;
+      virtualHosts = lib.mapAttrs (hostName: cfg: {
+        serverName = lib.mkDefault hostName;
         root = "${pkg hostName cfg}/share/dokuwiki";
 
         locations = {
@@ -471,11 +467,11 @@ in
     };
   })
 
-  (mkIf (cfg.webserver == "caddy") {
+  (lib.mkIf (cfg.webserver == "caddy") {
     services.caddy = {
       enable = true;
-      virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair hostName {
+      virtualHosts = lib.mapAttrs' (hostName: cfg: (
+        lib.nameValuePair hostName {
           extraConfig = ''
             root * ${pkg hostName cfg}/share/dokuwiki
             file_server

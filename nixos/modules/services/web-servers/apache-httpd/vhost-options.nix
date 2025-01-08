@@ -7,7 +7,7 @@
 let
   inherit (lib)
     literalExpression
-    mkOption
+    lib.mkOption
     nameValuePair
     types
     ;
@@ -15,14 +15,14 @@ in
 {
   options = {
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = name;
       description = "Canonical hostname for the server.";
     };
 
-    serverAliases = mkOption {
-      type = types.listOf types.str;
+    serverAliases = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "www.example.org"
@@ -34,22 +34,22 @@ in
       '';
     };
 
-    listen = mkOption {
+    listen = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         listOf (submodule ({
           options = {
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               description = "Port to listen on";
             };
-            ip = mkOption {
-              type = types.str;
+            ip = lib.mkOption {
+              type = lib.types.str;
               default = "*";
               description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
             };
-            ssl = mkOption {
-              type = types.bool;
+            ssl = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = "Whether to enable SSL (https) support.";
             };
@@ -82,8 +82,8 @@ in
       '';
     };
 
-    listenAddresses = mkOption {
-      type = with types; nonEmptyListOf str;
+    listenAddresses = lib.mkOption {
+      type = with lib.types; nonEmptyListOf str;
 
       description = ''
         Listen addresses for this virtual host.
@@ -94,14 +94,14 @@ in
       example = [ "127.0.0.1" ];
     };
 
-    enableSSL = mkOption {
-      type = types.bool;
+    enableSSL = lib.mkOption {
+      type = lib.types.bool;
       visible = false;
       default = false;
     };
 
-    addSSL = mkOption {
-      type = types.bool;
+    addSSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable HTTPS in addition to plain HTTP. This will set defaults for
@@ -110,8 +110,8 @@ in
       '';
     };
 
-    onlySSL = mkOption {
-      type = types.bool;
+    onlySSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable HTTPS and reject plain HTTP connections. This will set
@@ -119,8 +119,8 @@ in
       '';
     };
 
-    forceSSL = mkOption {
-      type = types.bool;
+    forceSSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to add a separate nginx server block that permanently redirects (301)
@@ -130,8 +130,8 @@ in
       '';
     };
 
-    enableACME = mkOption {
-      type = types.bool;
+    enableACME = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to ask Let's Encrypt to sign a certificate for this vhost.
@@ -139,8 +139,8 @@ in
       '';
     };
 
-    useACMEHost = mkOption {
-      type = types.nullOr types.str;
+    useACMEHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         A host of an existing Let's Encrypt certificate to use.
@@ -151,8 +151,8 @@ in
       '';
     };
 
-    acmeRoot = mkOption {
-      type = types.nullOr types.str;
+    acmeRoot = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "/var/lib/acme/acme-challenge";
       description = ''
         Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
@@ -160,27 +160,27 @@ in
       '';
     };
 
-    sslServerCert = mkOption {
-      type = types.path;
+    sslServerCert = lib.mkOption {
+      type = lib.types.path;
       example = "/var/host.cert";
       description = "Path to server SSL certificate.";
     };
 
-    sslServerKey = mkOption {
-      type = types.path;
+    sslServerKey = lib.mkOption {
+      type = lib.types.path;
       example = "/var/host.key";
       description = "Path to server SSL certificate key.";
     };
 
-    sslServerChain = mkOption {
-      type = types.nullOr types.path;
+    sslServerChain = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/var/ca.pem";
       description = "Path to server SSL chain file.";
     };
 
-    http2 = mkOption {
-      type = types.bool;
+    http2 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. *However, if you use the prefork mpm, there will
@@ -188,15 +188,15 @@ in
       '';
     };
 
-    adminAddr = mkOption {
-      type = types.nullOr types.str;
+    adminAddr = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "admin@example.org";
       description = "E-mail address of the server administrator.";
     };
 
-    documentRoot = mkOption {
-      type = types.nullOr types.path;
+    documentRoot = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/data/webserver/docs";
       description = ''
@@ -205,8 +205,8 @@ in
       '';
     };
 
-    servedDirs = mkOption {
-      type = types.listOf types.attrs;
+    servedDirs = lib.mkOption {
+      type = lib.types.listOf types.attrs;
       default = [ ];
       example = [
         {
@@ -219,8 +219,8 @@ in
       '';
     };
 
-    servedFiles = mkOption {
-      type = types.listOf types.attrs;
+    servedFiles = lib.mkOption {
+      type = lib.types.listOf types.attrs;
       default = [ ];
       example = [
         {
@@ -239,8 +239,8 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         <Directory /home>
@@ -254,8 +254,8 @@ in
       '';
     };
 
-    enableUserDir = mkOption {
-      type = types.bool;
+    enableUserDir = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable serving {file}`~/public_html` as
@@ -263,8 +263,8 @@ in
       '';
     };
 
-    globalRedirect = mkOption {
-      type = types.nullOr types.str;
+    globalRedirect = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "http://newserver.example.org/";
       description = ''
@@ -273,8 +273,8 @@ in
       '';
     };
 
-    logFormat = mkOption {
-      type = types.str;
+    logFormat = lib.mkOption {
+      type = lib.types.str;
       default = "common";
       example = "combined";
       description = ''
@@ -282,8 +282,8 @@ in
       '';
     };
 
-    robotsEntries = mkOption {
-      type = types.lines;
+    robotsEntries = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "Disallow: /foo/";
       description = ''
@@ -291,10 +291,10 @@ in
       '';
     };
 
-    locations = mkOption {
-      type = with types; attrsOf (submodule (import ./location-options.nix));
+    locations = lib.mkOption {
+      type = with lib.types; attrsOf (submodule (import ./location-options.nix));
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

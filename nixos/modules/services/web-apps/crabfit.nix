@@ -10,7 +10,7 @@ let
     literalExpression
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     ;
 
@@ -26,12 +26,12 @@ in
 
 {
   options.services.crabfit = {
-    enable = mkEnableOption "Crab Fit, a meeting scheduler based on peoples' availability";
+    enable = lib.mkEnableOption "Crab Fit, a meeting scheduler based on peoples' availability";
 
     frontend = {
-      package = mkPackageOption pkgs "crabfit-frontend" { };
+      package = lib.mkPackageOption pkgs "crabfit-frontend" { };
 
-      finalDrv = mkOption {
+      finalDrv = lib.mkOption {
         readOnly = true;
         type = package;
         default = cfg.frontend.package.override {
@@ -39,7 +39,7 @@ in
           frontend_url = cfg.frontend.host;
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           cfg.package.override {
             api_url = "https://''${cfg.api.host}";
             frontend_url = cfg.frontend.host;
@@ -51,7 +51,7 @@ in
         '';
       };
 
-      environment = mkOption {
+      environment = lib.mkOption {
         type = attrsOf str;
         default = { };
         description = ''
@@ -59,14 +59,14 @@ in
         '';
       };
 
-      host = mkOption {
+      host = lib.mkOption {
         type = str;
         description = ''
           The hostname of the frontend.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         type = port;
         default = 3001;
         description = ''
@@ -76,9 +76,9 @@ in
     };
 
     api = {
-      package = mkPackageOption pkgs "crabfit-api" { };
+      package = lib.mkPackageOption pkgs "crabfit-api" { };
 
-      environment = mkOption {
+      environment = lib.mkOption {
         type = attrsOf str;
         default = { };
         description = ''
@@ -86,14 +86,14 @@ in
         '';
       };
 
-      host = mkOption {
+      host = lib.mkOption {
         type = str;
         description = ''
           The hostname of the API.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         type = port;
         default = 3000;
         description = ''
@@ -103,7 +103,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services = {
       crabfit-api = {
         description = "The API for Crab Fit.";

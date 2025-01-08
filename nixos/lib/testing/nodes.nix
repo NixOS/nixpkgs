@@ -13,10 +13,10 @@ let
     mapAttrs
     mkDefault
     mkIf
-    mkOption
+    lib.mkOption
     mkForce
-    optional
-    optionalAttrs
+    lib.optional
+    lib.optionalAttrs
     types
     ;
 
@@ -60,7 +60,7 @@ let
         { options, ... }:
         {
           key = "nodes.nix-pkgs";
-          config = optionalAttrs (!config.node.pkgsReadOnly) (
+          config = lib.optionalAttrs (!config.node.pkgsReadOnly) (
             mkIf (!options.nixpkgs.pkgs.isDefined) {
               # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
               nixpkgs.system = guestSystem;
@@ -77,14 +77,14 @@ in
 {
 
   options = {
-    node.type = mkOption {
-      type = types.raw;
+    node.type = lib.mkOption {
+      type = lib.types.raw;
       default = baseOS.type;
       internal = true;
     };
 
-    nodes = mkOption {
-      type = types.lazyAttrsOf config.node.type;
+    nodes = lib.mkOption {
+      type = lib.types.lazyAttrsOf config.node.type;
       visible = "shallow";
       description = ''
         An attribute set of NixOS configuration modules.
@@ -97,48 +97,48 @@ in
       '';
     };
 
-    defaults = mkOption {
+    defaults = lib.mkOption {
       description = ''
         NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes).
       '';
-      type = types.deferredModule;
+      type = lib.types.deferredModule;
       default = { };
     };
 
-    extraBaseModules = mkOption {
+    extraBaseModules = lib.mkOption {
       description = ''
         NixOS configuration that, like [{option}`defaults`](#test-opt-defaults), is applied to all [{option}`nodes`](#test-opt-nodes) and can not be undone with [`specialisation.<name>.inheritParentConfig`](https://search.nixos.org/options?show=specialisation.%3Cname%3E.inheritParentConfig&from=0&size=50&sort=relevance&type=packages&query=specialisation).
       '';
-      type = types.deferredModule;
+      type = lib.types.deferredModule;
       default = { };
     };
 
-    node.pkgs = mkOption {
+    node.pkgs = lib.mkOption {
       description = ''
         The Nixpkgs to use for the nodes.
 
         Setting this will make the `nixpkgs.*` options read-only, to avoid mistakenly testing with a Nixpkgs configuration that diverges from regular use.
       '';
-      type = types.nullOr types.pkgs;
+      type = lib.types.nullOr types.pkgs;
       default = null;
       defaultText = literalMD ''
         `null`, so construct `pkgs` according to the `nixpkgs.*` options as usual.
       '';
     };
 
-    node.pkgsReadOnly = mkOption {
+    node.pkgsReadOnly = lib.mkOption {
       description = ''
         Whether to make the `nixpkgs.*` options read-only. This is only relevant when [`node.pkgs`](#test-opt-node.pkgs) is set.
 
         Set this to `false` when any of the [`nodes`](#test-opt-nodes) needs to configure any of the `nixpkgs.*` options. This will slow down evaluation of your test a bit.
       '';
-      type = types.bool;
+      type = lib.types.bool;
       default = config.node.pkgs != null;
-      defaultText = literalExpression ''node.pkgs != null'';
+      defaultText = lib.literalExpression ''node.pkgs != null'';
     };
 
-    node.specialArgs = mkOption {
-      type = types.lazyAttrsOf types.raw;
+    node.specialArgs = lib.mkOption {
+      type = lib.types.lazyAttrsOf types.raw;
       default = { };
       description = ''
         An attribute set of arbitrary values that will be made available as module arguments during the resolution of module `imports`.
@@ -147,7 +147,7 @@ in
       '';
     };
 
-    nodesCompat = mkOption {
+    nodesCompat = lib.mkOption {
       internal = true;
       description = ''
         Basically `_module.args.nodes`, but with backcompat and warnings added.
@@ -172,7 +172,7 @@ in
 
     passthru.nodes = config.nodesCompat;
 
-    defaults = mkIf config.node.pkgsReadOnly {
+    defaults = lib.mkIf config.node.pkgsReadOnly {
       nixpkgs.pkgs = config.node.pkgs;
       imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
     };

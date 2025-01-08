@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-with lib;
+
 let
   cfg = config.services.rss-bridge;
 
@@ -28,7 +28,7 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "rss-bridge" "whitelist" ]
       [ "services" "rss-bridge" "config" "system" "enabled_bridges" ]
     )
@@ -36,26 +36,26 @@ in
 
   options = {
     services.rss-bridge = {
-      enable = mkEnableOption "rss-bridge";
+      enable = lib.mkEnableOption "rss-bridge";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nginx";
         description = ''
           User account under which both the service and the web-application run.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nginx";
         description = ''
           Group under which the web-application run.
         '';
       };
 
-      pool = mkOption {
-        type = types.str;
+      pool = lib.mkOption {
+        type = lib.types.str;
         default = poolName;
         description = ''
           Name of existing phpfpm pool that is used to run web-application.
@@ -64,8 +64,8 @@ in
         '';
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/rss-bridge";
         description = ''
           Location in which cache directory will be created.
@@ -73,36 +73,36 @@ in
         '';
       };
 
-      virtualHost = mkOption {
-        type = types.nullOr types.str;
+      virtualHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "rss-bridge";
         description = ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
 
-      config = mkOption {
-        type = types.submodule {
+      config = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = (pkgs.formats.ini { }).type;
           options = {
             system = {
-              enabled_bridges = mkOption {
-                type = with types; nullOr (either str (listOf str));
+              enabled_bridges = lib.mkOption {
+                type = with lib.types; nullOr (either str (listOf str));
                 description = "Only enabled bridges are available for feed production";
                 default = null;
               };
             };
             FileCache = {
-              path = mkOption {
-                type = types.str;
+              path = lib.mkOption {
+                type = lib.types.str;
                 description = "Directory where to store cache files (if cache.type = \"file\").";
                 default = "${cfg.dataDir}/cache/";
-                defaultText = options.literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
+                defaultText = lib.options.literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
               };
             };
           };
         };
-        example = options.literalExpression ''
+        example = lib.options.literalExpression ''
           {
             system.enabled_bridges = [ "*" ];
             error = {
@@ -123,11 +123,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.phpfpm.pools = mkIf (cfg.pool == poolName) {
+  config = lib.mkIf cfg.enable {
+    services.phpfpm.pools = lib.mkIf (cfg.pool == poolName) {
       ${poolName} = {
         user = cfg.user;
-        settings = mapAttrs (name: mkDefault) {
+        settings = lib.mapAttrs (name: lib.mkDefault) {
           "listen.owner" = cfg.user;
           "listen.group" = cfg.user;
           "listen.mode" = "0600";
@@ -150,7 +150,7 @@ in
       };
     };
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
+    services.nginx = lib.mkIf (cfg.virtualHost != null) {
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {

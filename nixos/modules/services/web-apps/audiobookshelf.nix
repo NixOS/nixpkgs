@@ -5,58 +5,56 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.audiobookshelf;
 in
 {
   options = {
     services.audiobookshelf = {
-      enable = mkEnableOption "Audiobookshelf, self-hosted audiobook and podcast server";
+      enable = lib.mkEnableOption "Audiobookshelf, self-hosted audiobook and podcast server";
 
-      package = mkPackageOption pkgs "audiobookshelf" { };
+      package = lib.mkPackageOption pkgs "audiobookshelf" { };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         description = "Path to Audiobookshelf config and metadata inside of /var/lib.";
         default = "audiobookshelf";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      host = mkOption {
+      host = lib.mkOption {
         description = "The host Audiobookshelf binds to.";
         default = "127.0.0.1";
         example = "0.0.0.0";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         description = "The TCP port Audiobookshelf will listen on.";
         default = 8000;
-        type = types.port;
+        type = lib.types.port;
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         description = "User account under which Audiobookshelf runs.";
         default = "audiobookshelf";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         description = "Group under which Audiobookshelf runs.";
         default = "audiobookshelf";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         description = "Open ports in the firewall for the Audiobookshelf web interface.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.audiobookshelf = {
       description = "Audiobookshelf is a self-hosted audiobook and podcast server";
 
@@ -74,7 +72,7 @@ in
       };
     };
 
-    users.users = mkIf (cfg.user == "audiobookshelf") {
+    users.users = lib.mkIf (cfg.user == "audiobookshelf") {
       audiobookshelf = {
         isSystemUser = true;
         group = cfg.group;
@@ -82,11 +80,11 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "audiobookshelf") {
+    users.groups = lib.mkIf (cfg.group == "audiobookshelf") {
       audiobookshelf = { };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

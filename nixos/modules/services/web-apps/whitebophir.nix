@@ -5,33 +5,31 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.whitebophir;
 in
 {
   options = {
     services.whitebophir = {
-      enable = mkEnableOption "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under {file}`/var/lib/whitebophir`)";
+      enable = lib.mkEnableOption "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under {file}`/var/lib/whitebophir`)";
 
-      package = mkPackageOption pkgs "whitebophir" { };
+      package = lib.mkPackageOption pkgs "whitebophir" { };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5001;
         description = "Port to bind to.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.whitebophir = {
       description = "Whitebophir Service";
       wantedBy = [ "multi-user.target" ];

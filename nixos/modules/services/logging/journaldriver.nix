@@ -16,14 +16,13 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.services.journaldriver;
 in
 {
   options.services.journaldriver = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable journaldriver to forward journald logs to
@@ -31,16 +30,16 @@ in
       '';
     };
 
-    logLevel = mkOption {
-      type = types.str;
+    logLevel = lib.mkOption {
+      type = lib.types.str;
       default = "info";
       description = ''
         Log level at which journaldriver logs its own output.
       '';
     };
 
-    logName = mkOption {
-      type = with types; nullOr str;
+    logName = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       description = ''
         Configures the name of the target log in Stackdriver Logging.
@@ -50,8 +49,8 @@ in
       '';
     };
 
-    googleCloudProject = mkOption {
-      type = with types; nullOr str;
+    googleCloudProject = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       description = ''
         Configures the name of the Google Cloud project to which to
@@ -62,8 +61,8 @@ in
       '';
     };
 
-    logStream = mkOption {
-      type = with types; nullOr str;
+    logStream = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       description = ''
         Configures the name of the Stackdriver Logging log stream into
@@ -74,8 +73,8 @@ in
       '';
     };
 
-    applicationCredentials = mkOption {
-      type = with types; nullOr path;
+    applicationCredentials = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = ''
         Path to the service account private key (in JSON-format) used
@@ -88,7 +87,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.journaldriver = {
       description = "Stackdriver Logging journal forwarder";
       script = "${pkgs.journaldriver}/bin/journaldriver";

@@ -116,7 +116,7 @@ in
         listOf (submodule {
           options = {
             users = lib.mkOption {
-              type = with types; listOf (either str int);
+              type = with lib.types; listOf (either str int);
               description = ''
                 The usernames / UIDs this rule should apply for.
               '';
@@ -124,7 +124,7 @@ in
             };
 
             groups = lib.mkOption {
-              type = with types; listOf (either str int);
+              type = with lib.types; listOf (either str int);
               description = ''
                 The groups / GIDs this rule should apply for.
               '';
@@ -132,7 +132,7 @@ in
             };
 
             host = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "ALL";
               description = ''
                 For what host this rule should apply.
@@ -140,7 +140,7 @@ in
             };
 
             runAs = lib.mkOption {
-              type = with types; str;
+              type = with lib.types; str;
               default = "ALL:ALL";
               description = ''
                 Under which user/group the specified command is allowed to run.
@@ -156,13 +156,13 @@ in
                 The commands for which the rule should apply.
               '';
               type =
-                with types;
+                with lib.types;
                 listOf (
                   either str (submodule {
 
                     options = {
                       command = lib.mkOption {
-                        type = with types; str;
+                        type = with lib.types; str;
                         description = ''
                           A command being either just a path to a binary to allow any arguments,
                           the full command with arguments pre-set or with `""` used as the argument,
@@ -172,7 +172,7 @@ in
 
                       options = lib.mkOption {
                         type =
-                          with types;
+                          with lib.types;
                           listOf (enum [
                             "NOPASSWD"
                             "PASSWD"

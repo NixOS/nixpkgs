@@ -28,12 +28,12 @@ in
   meta.maintainers = with lib.maintainers; [ colinsane ];
 
   options = {
-    services.buffyboard = with lib; {
-      enable = mkEnableOption "buffyboard framebuffer keyboard (on-screen keyboard)";
-      package = mkPackageOption pkgs "buffybox" { };
+    services.buffyboard = {
+      enable = lib.mkEnableOption "buffyboard framebuffer keyboard (on-screen keyboard)";
+      package = lib.mkPackageOption pkgs "buffybox" { };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           Extra CLI arguments to pass to buffyboard.
@@ -46,7 +46,7 @@ in
         ];
       };
 
-      configFile = mkOption {
+      configFile = lib.mkOption {
         type = lib.types.path;
         default = ini.generate "buffyboard.conf" (lib.filterAttrsRecursive (_: v: v != null) cfg.settings);
         defaultText = lib.literalExpression ''ini.generate "buffyboard.conf" cfg.settings'';
@@ -59,33 +59,33 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Settings to include in /etc/buffyboard.conf.
-          Every option here is strictly optional:
+          Every option here is strictly lib.optional:
           Buffyboard will use its own baked-in defaults for those options left unset.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = ini.type;
 
-          options.input.pointer = mkOption {
-            type = types.nullOr types.bool;
+          options.input.pointer = lib.mkOption {
+            type = lib.types.nullOr lib.types.bool;
             default = null;
             description = ''
               Enable or disable the use of a hardware mouse or other pointing device.
             '';
           };
-          options.input.touchscreen = mkOption {
-            type = types.nullOr types.bool;
+          options.input.touchscreen = lib.mkOption {
+            type = lib.types.nullOr lib.types.bool;
             default = null;
             description = ''
               Enable or disable the use of the touchscreen.
             '';
           };
 
-          options.theme.default = mkOption {
-            type = types.either types.str (
-              types.enum [
+          options.theme.default = lib.mkOption {
+            type = lib.types.either lib.types.str (
+              lib.types.enum [
                 null
                 "adwaita-dark"
                 "breezy-dark"
@@ -101,8 +101,8 @@ in
               Selects the default theme on boot. Can be changed at runtime to the alternative theme.
             '';
           };
-          options.quirks.fbdev_force_refresh = mkOption {
-            type = types.nullOr types.bool;
+          options.quirks.fbdev_force_refresh = lib.mkOption {
+            type = lib.types.nullOr lib.types.bool;
             default = null;
             description = ''
               If true and using the framebuffer backend, this triggers a display refresh after every draw operation.
@@ -119,7 +119,7 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services.buffyboard = {
       # upstream provides the service (including systemd hardening): we just configure it to start by default
-      # and override ExecStart so as to optionally pass extra arguments
+      # and override ExecStart so as to lib.optionally pass extra arguments
       serviceConfig.ExecStart = [
         "" # clear default ExecStart
         (utils.escapeSystemdExecArgs (

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   xcfg = config.services.xserver;
@@ -21,15 +19,15 @@ in
 
   options = {
 
-    services.xserver.desktopManager.lumina.enable = mkOption {
-      type = types.bool;
+    services.xserver.desktopManager.lumina.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Enable the Lumina desktop manager";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.displayManager.sessionPackages = [
       pkgs.lumina.lumina

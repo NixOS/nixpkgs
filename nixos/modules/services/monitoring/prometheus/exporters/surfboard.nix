@@ -8,13 +8,13 @@
 
 let
   cfg = config.services.prometheus.exporters.surfboard;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9239;
   extraOpts = {
-    modemAddress = mkOption {
-      type = types.str;
+    modemAddress = lib.mkOption {
+      type = lib.types.str;
       default = "192.168.100.1";
       description = ''
         The hostname or IP of the cable modem.
@@ -29,7 +29,7 @@ in
         ${pkgs.prometheus-surfboard-exporter}/bin/surfboard_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --modem-address ${cfg.modemAddress} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

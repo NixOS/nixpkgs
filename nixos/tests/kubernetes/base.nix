@@ -52,8 +52,8 @@ let
         mkMerge [
           {
             boot.postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
-            virtualisation.memorySize = mkDefault 1536;
-            virtualisation.diskSize = mkDefault 4096;
+            virtualisation.memorySize = lib.mkDefault 1536;
+            virtualisation.diskSize = lib.mkDefault 4096;
             networking = {
               inherit domain extraHosts;
               primaryIPAddress = mkForce machine.ip;
@@ -66,7 +66,7 @@ let
 
                 extraCommands = concatMapStrings (node: ''
                   iptables -A INPUT -s ${node.networking.primaryIPAddress} -j ACCEPT
-                '') (attrValues nodes);
+                '') (lib.attrValues nodes);
               };
             };
             programs.bash.completion.enable = true;

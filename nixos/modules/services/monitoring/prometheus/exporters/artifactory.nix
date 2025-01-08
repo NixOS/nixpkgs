@@ -8,28 +8,28 @@
 
 let
   cfg = config.services.prometheus.exporters.artifactory;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9531;
   extraOpts = {
-    scrapeUri = mkOption {
-      type = types.str;
+    scrapeUri = lib.mkOption {
+      type = lib.types.str;
       default = "http://localhost:8081/artifactory";
       description = ''
         URI on which to scrape JFrog Artifactory.
       '';
     };
 
-    artiUsername = mkOption {
-      type = types.str;
+    artiUsername = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Username for authentication against JFrog Artifactory API.
       '';
     };
 
-    artiPassword = mkOption {
-      type = types.str;
+    artiPassword = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Password for authentication against JFrog Artifactory API.
@@ -37,8 +37,8 @@ in
       '';
     };
 
-    artiAccessToken = mkOption {
-      type = types.str;
+    artiAccessToken = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Access token for authentication against JFrog Artifactory API.
@@ -52,7 +52,7 @@ in
         ${pkgs.prometheus-artifactory-exporter}/bin/artifactory_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --artifactory.scrape-uri ${cfg.scrapeUri} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       Environment = [
         "ARTI_USERNAME=${cfg.artiUsername}"

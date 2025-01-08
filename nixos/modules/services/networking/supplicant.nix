@@ -1,7 +1,5 @@
 { config, lib, utils, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.networking.supplicant;
@@ -13,30 +11,30 @@ let
   serviceName = iface: "supplicant-${if (iface=="WLAN") then "wlan@" else (
                                      if (iface=="LAN") then "lan@" else (
                                      if (iface=="DBUS") then "dbus"
-                                     else (replaceStrings [" "] ["-"] iface)))}";
+                                     else (lib.replaceStrings [" "] ["-"] iface)))}";
 
   # TODO: Use proper privilege separation for wpa_supplicant
   supplicantService = iface: suppl:
     let
       deps = (if (iface=="WLAN"||iface=="LAN") then ["sys-subsystem-net-devices-%i.device"] else (
              if (iface=="DBUS") then ["dbus.service"]
-             else (map subsystemDevice (splitString " " iface))))
-             ++ optional (suppl.bridge!="") (subsystemDevice suppl.bridge);
+             else (map subsystemDevice (lib.splitString " " iface))))
+             ++ lib.optional (suppl.bridge!="") (subsystemDevice suppl.bridge);
 
-      ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
-      driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
-      bridgeArg = optionalString (suppl.bridge!="") "-b${suppl.bridge}";
-      extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceStrings [" "] ["-"] iface}" ''
-        ${optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
-        ${optionalString suppl.configFile.writable "update_config=1"}
+      ifaceArg = lib.concatStringsSep " -N " (map (i: "-i${i}") (lib.splitString " " iface));
+      driverArg = lib.optionalString (suppl.driver != null) "-D${suppl.driver}";
+      bridgeArg = lib.optionalString (suppl.bridge!="") "-b${suppl.bridge}";
+      extraConfFile = pkgs.writeText "supplicant-extra-conf-${lib.replaceStrings [" "] ["-"] iface}" ''
+        ${lib.optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
+        ${lib.optionalString suppl.configFile.writable "update_config=1"}
         ${suppl.extraConf}
       '';
-      confArgs = escapeShellArgs
+      confArgs = lib.escapeShellArgs
         (if suppl.configFile.path == null
          then [ "-c${extraConfFile}" ]
          else [ "-c${suppl.configFile.path}" "-I${extraConfFile}" ]);
     in
-      { description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
+      { description = "Supplicant ${iface}${lib.optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
         wantedBy = [ "multi-user.target" ] ++ deps;
         wants = [ "network.target" ];
         bindsTo = deps;
@@ -46,10 +44,10 @@ let
         path = [ pkgs.coreutils ];
 
         preStart = ''
-          ${optionalString (suppl.configFile.path!=null && suppl.configFile.writable) ''
+          ${lib.optionalString (suppl.configFile.path!=null && suppl.configFile.writable) ''
             (umask 077 && touch -a "${suppl.configFile.path}")
           ''}
-          ${optionalString suppl.userControlled.enable ''
+          ${lib.optionalString suppl.userControlled.enable ''
             install -dm770 -g "${suppl.userControlled.group}" "${suppl.userControlled.socketDir}"
           ''}
         '';
@@ -67,16 +65,16 @@ in
 
   options = {
 
-    networking.supplicant = mkOption {
-      type = with types; attrsOf (submodule {
+    networking.supplicant = lib.mkOption {
+      type = with lib.types; attrsOf (submodule {
         options = {
 
           configFile = {
 
-            path = mkOption {
-              type = types.nullOr types.path;
+            path = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
               default = null;
-              example = literalExpression "/etc/wpa_supplicant.conf";
+              example = lib.literalExpression "/etc/wpa_supplicant.conf";
               description = ''
                 External `wpa_supplicant.conf` configuration file.
                 The configuration options defined declaratively within `networking.supplicant` have
@@ -84,8 +82,8 @@ in
               '';
             };
 
-            writable = mkOption {
-              type = types.bool;
+            writable = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Whether the configuration file at `configFile.path` should be written to by
@@ -95,8 +93,8 @@ in
 
           };
 
-          extraConf = mkOption {
-            type = types.lines;
+          extraConf = lib.mkOption {
+            type = lib.types.lines;
             default = "";
             example = ''
               ap_scan=1
@@ -121,29 +119,29 @@ in
             '';
           };
 
-          extraCmdArgs = mkOption {
-            type = types.str;
+          extraCmdArgs = lib.mkOption {
+            type = lib.types.str;
             default = "";
             example = "-e/run/wpa_supplicant/entropy.bin";
             description = "Command line arguments to add when executing `wpa_supplicant`.";
           };
 
-          driver = mkOption {
-            type = types.nullOr types.str;
+          driver = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = "nl80211,wext";
             description = "Force a specific wpa_supplicant driver.";
           };
 
-          bridge = mkOption {
-            type = types.str;
+          bridge = lib.mkOption {
+            type = lib.types.str;
             default = "";
             description = "Name of the bridge interface that wpa_supplicant should listen at.";
           };
 
           userControlled = {
 
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
@@ -153,14 +151,14 @@ in
               '';
             };
 
-            socketDir = mkOption {
-              type = types.str;
+            socketDir = lib.mkOption {
+              type = lib.types.str;
               default = "/run/wpa_supplicant";
               description = "Directory of sockets for controlling wpa_supplicant.";
             };
 
-            group = mkOption {
-              type = types.str;
+            group = lib.mkOption {
+              type = lib.types.str;
               default = "wheel";
               example = "network";
               description = "Members of this group can control wpa_supplicant.";
@@ -172,7 +170,7 @@ in
 
       default = { };
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "wlan0 wlan1" = {
             configFile.path = "/etc/wpa_supplicant.conf";
             userControlled.group = "network";
@@ -210,27 +208,27 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg != {}) {
+  config = lib.mkIf (cfg != {}) {
 
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
-    systemd.services = mapAttrs' (n: v: nameValuePair (serviceName n) (supplicantService n v)) cfg;
+    systemd.services = lib.mapAttrs' (n: v: lib.nameValuePair (serviceName n) (supplicantService n v)) cfg;
 
     services.udev.packages = [
       (pkgs.writeTextFile {
         name = "99-zzz-60-supplicant.rules";
         destination = "/etc/udev/rules.d/99-zzz-60-supplicant.rules";
         text = ''
-          ${flip (concatMapStringsSep "\n") (filter (n: n!="WLAN" && n!="LAN" && n!="DBUS") (attrNames cfg)) (iface:
-            flip (concatMapStringsSep "\n") (splitString " " iface) (i: ''
-              ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceStrings [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
+          ${lib.flip (lib.concatMapStringsSep "\n") (lib.filter (n: n!="WLAN" && n!="LAN" && n!="DBUS") (lib.attrNames cfg)) (iface:
+            lib.flip (lib.concatMapStringsSep "\n") (lib.splitString " " iface) (i: ''
+              ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${lib.replaceStrings [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
 
-          ${optionalString (hasAttr "WLAN" cfg) ''
+          ${lib.optionalString (lib.hasAttr "WLAN" cfg) ''
             ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
           ''}
-          ${optionalString (hasAttr "LAN" cfg) ''
+          ${lib.optionalString (lib.hasAttr "LAN" cfg) ''
             ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
           ''}
         '';

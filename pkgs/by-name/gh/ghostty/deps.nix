@@ -10,9 +10,6 @@
   name ? "zig-packages",
 }:
 
-with builtins;
-with lib;
-
 let
   unpackZigArtifact =
     { name, artifact }:
@@ -44,11 +41,11 @@ let
       hash,
     }:
     let
-      parts = splitString "#" url;
-      url_base = elemAt parts 0;
-      url_without_query = elemAt (splitString "?" url_base) 0;
-      rev_base = elemAt parts 1;
-      rev = if match "^[a-fA-F0-9]{40}$" rev_base != null then rev_base else "refs/heads/${rev_base}";
+      parts = lib.splitString "#" url;
+      url_base = lib.elemAt parts 0;
+      url_without_query = lib.elemAt (lib.splitString "?" url_base) 0;
+      rev_base = lib.elemAt parts 1;
+      rev = if lib.match "^[a-fA-F0-9]{40}$" rev_base != null then rev_base else "refs/heads/${rev_base}";
     in
     fetchgit {
       inherit name rev hash;
@@ -63,9 +60,9 @@ let
       hash,
     }:
     let
-      parts = splitString "://" url;
-      proto = elemAt parts 0;
-      path = elemAt parts 1;
+      parts = lib.splitString "://" url;
+      proto = lib.elemAt parts 0;
+      path = lib.elemAt parts 1;
       fetcher = {
         "git+http" = fetchGitZig {
           inherit name hash;

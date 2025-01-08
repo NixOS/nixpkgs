@@ -9,7 +9,7 @@ let
   cfg = config.services.auto-epp;
   format = pkgs.formats.ini { };
 
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   options = {
@@ -18,13 +18,13 @@ in
 
       package = lib.mkPackageOption pkgs "auto-epp" { };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = format.type;
           options = {
             Settings = {
-              epp_state_for_AC = mkOption {
-                type = types.str;
+              epp_state_for_AC = lib.mkOption {
+                type = lib.types.str;
                 default = "balance_performance";
                 description = ''
                   energy_performance_preference when on plugged in
@@ -36,8 +36,8 @@ in
                 '';
               };
 
-              epp_state_for_BAT = mkOption {
-                type = types.str;
+              epp_state_for_BAT = lib.mkOption {
+                type = lib.types.str;
                 default = "power";
                 description = ''
                   `energy_performance_preference` when on battery

@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }@host:
 
-with lib;
-
 let
 
-  configurationPrefix = optionalString (versionAtLeast config.system.stateVersion "22.05") "nixos-";
+  configurationPrefix = lib.optionalString (lib.versionAtLeast config.system.stateVersion "22.05") "nixos-";
   configurationDirectoryName = "${configurationPrefix}containers";
   configurationDirectory = "/etc/${configurationDirectoryName}";
   stateDirectory = "/var/lib/${configurationPrefix}containers";
@@ -21,19 +19,19 @@ let
         ''
         echo "Bringing ${name} up"
         ip link set dev ${name} up
-        ${optionalString (cfg.localAddress != null) ''
+        ${lib.optionalString (cfg.localAddress != null) ''
           echo "Setting ip for ${name}"
           ip addr add ${cfg.localAddress} dev ${name}
         ''}
-        ${optionalString (cfg.localAddress6 != null) ''
+        ${lib.optionalString (cfg.localAddress6 != null) ''
           echo "Setting ip6 for ${name}"
           ip -6 addr add ${cfg.localAddress6} dev ${name}
         ''}
-        ${optionalString (cfg.hostAddress != null) ''
+        ${lib.optionalString (cfg.hostAddress != null) ''
           echo "Setting route to host for ${name}"
           ip route add ${cfg.hostAddress} dev ${name}
         ''}
-        ${optionalString (cfg.hostAddress6 != null) ''
+        ${lib.optionalString (cfg.hostAddress6 != null) ''
           echo "Setting route6 to host for ${name}"
           ip -6 route add ${cfg.hostAddress6} dev ${name}
         ''}
@@ -70,7 +68,7 @@ let
           fi
         fi
 
-        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList renderExtraVeth cfg.extraVeths)}
 
         # Start the regular stage 2 script.
         # We source instead of exec to not lose an early stop signal, which is
@@ -138,7 +136,7 @@ let
         extraFlags+=("--network-namespace-path=$NETWORK_NAMESPACE_PATH")
       fi
 
-      extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
+      extraFlags+=(${lib.escapeShellArgs (lib.mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
       for iface in $INTERFACES; do
         extraFlags+=("--network-interface=$iface")
@@ -150,7 +148,7 @@ let
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
-      ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
+      ${lib.optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
         if [ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]; then
           extraFlags+=("--personality=x86")
         fi
@@ -176,7 +174,7 @@ let
         --bind-ro=/nix/var/nix/daemon-socket \
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
-        ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
+        ${lib.optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
@@ -185,12 +183,12 @@ let
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
-        ${optionalString cfg.ephemeral "--ephemeral"} \
-        ${optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
-          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"''
+        ${lib.optionalString cfg.ephemeral "--ephemeral"} \
+        ${lib.optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
+          ''--capability="${lib.concatStringsSep "," cfg.additionalCapabilities}"''
         } \
-        ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
-          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
+        ${lib.optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
+          ''--tmpfs=${lib.concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -206,8 +204,8 @@ let
         ip link del dev "vb-$INSTANCE" 2> /dev/null || true
       fi
 
-      ${concatStringsSep "\n" (
-        mapAttrsToList (name: cfg:
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (name: cfg:
           "ip link del dev ${name} 2> /dev/null || true "
         ) cfg.extraVeths
       )}
@@ -235,16 +233,16 @@ let
             echo "Bring ${name} up"
             ip link set dev "${name}" up
             # Set IPs and routes for ${name}
-            ${optionalString (cfg.hostAddress != null) ''
+            ${lib.optionalString (cfg.hostAddress != null) ''
               ip addr add ${cfg.hostAddress} dev "${name}"
             ''}
-            ${optionalString (cfg.hostAddress6 != null) ''
+            ${lib.optionalString (cfg.hostAddress6 != null) ''
               ip -6 addr add ${cfg.hostAddress6} dev "${name}"
             ''}
-            ${optionalString (cfg.localAddress != null) ''
+            ${lib.optionalString (cfg.localAddress != null) ''
               ip route add ${cfg.localAddress} dev "${name}"
             ''}
-            ${optionalString (cfg.localAddress6 != null) ''
+            ${lib.optionalString (cfg.localAddress6 != null) ''
               ip -6 route add ${cfg.localAddress6} dev "${name}"
             ''}
           '';
@@ -262,7 +260,7 @@ let
             ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
           fi
         fi
-        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList renderExtraVeth cfg.extraVeths)}
       ''
   );
 
@@ -311,40 +309,40 @@ let
   bindMountOpts = { name, ... }: {
 
     options = {
-      mountPoint = mkOption {
+      mountPoint = lib.mkOption {
         example = "/mnt/usb";
-        type = types.str;
+        type = lib.types.str;
         description = "Mount point on the container file system.";
       };
-      hostPath = mkOption {
+      hostPath = lib.mkOption {
         default = null;
         example = "/home/alice";
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = "Location of the host path to be mounted.";
       };
-      isReadOnly = mkOption {
+      isReadOnly = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Determine whether the mounted path will be accessed in read-only mode.";
       };
     };
 
     config = {
-      mountPoint = mkDefault name;
+      mountPoint = lib.mkDefault name;
     };
 
   };
 
   allowedDeviceOpts = { ... }: {
     options = {
-      node = mkOption {
+      node = lib.mkOption {
         example = "/dev/net/tun";
-        type = types.str;
+        type = lib.types.str;
         description = "Path to device node";
       };
-      modifier = mkOption {
+      modifier = lib.mkOption {
         example = "rw";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Device node access modifier. Takes a combination
           `r` (read), `w` (write), and
@@ -360,11 +358,11 @@ let
                    mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
                in flagPrefix + mountstr ;
 
-  mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
+  mkBindFlags = bs: lib.concatMapStrings mkBindFlag (lib.attrValues bs);
 
   networkOptions = {
-    hostBridge = mkOption {
-      type = types.nullOr types.str;
+    hostBridge = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "br0";
       description = ''
@@ -373,20 +371,20 @@ let
       '';
     };
 
-    forwardPorts = mkOption {
-      type = types.listOf (types.submodule {
+    forwardPorts = lib.mkOption {
+      type = lib.types.listOf (lib.types.submodule {
         options = {
-          protocol = mkOption {
-            type = types.str;
+          protocol = lib.mkOption {
+            type = lib.types.str;
             default = "tcp";
             description = "The protocol specifier for port forwarding between host and container";
           };
-          hostPort = mkOption {
-            type = types.int;
+          hostPort = lib.mkOption {
+            type = lib.types.int;
             description = "Source port of the external interface on host";
           };
-          containerPort = mkOption {
-            type = types.nullOr types.int;
+          containerPort = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
             default = null;
             description = "Target port of container";
           };
@@ -403,8 +401,8 @@ let
     };
 
 
-    hostAddress = mkOption {
-      type = types.nullOr types.str;
+    hostAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "10.231.136.1";
       description = ''
@@ -413,8 +411,8 @@ let
       '';
     };
 
-    hostAddress6 = mkOption {
-      type = types.nullOr types.str;
+    hostAddress6 = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "fc00::1";
       description = ''
@@ -423,8 +421,8 @@ let
       '';
     };
 
-    localAddress = mkOption {
-      type = types.nullOr types.str;
+    localAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "10.231.136.2";
       description = ''
@@ -435,8 +433,8 @@ let
       '';
     };
 
-    localAddress6 = mkOption {
-      type = types.nullOr types.str;
+    localAddress6 = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "fc00::2";
       description = ''
@@ -468,8 +466,8 @@ in
 {
   options = {
 
-    boot.isContainer = mkOption {
-      type = types.bool;
+    boot.isContainer = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether this NixOS machine is a lightweight container running
@@ -477,8 +475,8 @@ in
       '';
     };
 
-    boot.enableContainers = mkOption {
-      type = types.bool;
+    boot.enableContainers = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to enable support for NixOS containers. Defaults to true
@@ -486,12 +484,12 @@ in
       '';
     };
 
-    containers = mkOption {
-      type = types.attrsOf (types.submodule (
+    containers = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule (
         { config, options, name, ... }:
         {
           options = {
-            config = mkOption {
+            config = lib.mkOption {
               description = ''
                 A specification of the desired configuration of this
                 container, as a NixOS module.
@@ -510,14 +508,14 @@ in
                             else { localSystem = host.pkgs.stdenv.hostPlatform; }
                           ;
                           boot.isContainer = true;
-                          networking.hostName = mkDefault name;
+                          networking.hostName = lib.mkDefault name;
                           networking.useDHCP = false;
                           assertions = [
                             {
                               assertion =
                                 (builtins.compareVersions kernelVersion "5.8" <= 0)
                                 -> config.privateNetwork
-                                -> stringLength name <= 11;
+                                -> lib.stringLength name <= 11;
                               message = ''
                                 Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
                                 not be longer than 11 characters, because the container's interface name is derived from it.
@@ -546,8 +544,8 @@ in
               };
             };
 
-            path = mkOption {
-              type = types.path;
+            path = lib.mkOption {
+              type = lib.types.path;
               example = "/nix/var/nix/profiles/per-container/webserver";
               description = ''
                 As an alternative to specifying
@@ -557,8 +555,8 @@ in
               '';
             };
 
-            additionalCapabilities = mkOption {
-              type = types.listOf types.str;
+            additionalCapabilities = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
               description = ''
@@ -568,10 +566,10 @@ in
               '';
             };
 
-            nixpkgs = mkOption {
-              type = types.path;
+            nixpkgs = lib.mkOption {
+              type = lib.types.path;
               default = pkgs.path;
-              defaultText = literalExpression "pkgs.path";
+              defaultText = lib.literalExpression "pkgs.path";
               description = ''
                 A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
 
@@ -583,8 +581,8 @@ in
               '';
             };
 
-            specialArgs = mkOption {
-              type = types.attrsOf types.unspecified;
+            specialArgs = lib.mkOption {
+              type = lib.types.attrsOf lib.types.unspecified;
               default = {};
               description = ''
                 A set of special arguments to be passed to NixOS modules.
@@ -593,8 +591,8 @@ in
               '';
             };
 
-            ephemeral = mkOption {
-              type = types.bool;
+            ephemeral = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Runs container in ephemeral mode with the empty root filesystem at boot.
@@ -612,8 +610,8 @@ in
               '';
             };
 
-            enableTun = mkOption {
-              type = types.bool;
+            enableTun = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Allows the container to create and setup tunnel interfaces
@@ -622,8 +620,8 @@ in
               '';
             };
 
-            privateNetwork = mkOption {
-              type = types.bool;
+            privateNetwork = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Whether to give the container its own private virtual
@@ -636,8 +634,8 @@ in
               '';
             };
 
-            networkNamespace = mkOption {
-              type = types.nullOr types.path;
+            networkNamespace = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
               default = null;
               description = ''
                 Takes the path to a file representing a kernel network namespace that the container
@@ -650,8 +648,8 @@ in
               '';
             };
 
-            interfaces = mkOption {
-              type = types.listOf types.str;
+            interfaces = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               example = [ "eth1" "eth2" ];
               description = ''
@@ -659,8 +657,8 @@ in
               '';
             };
 
-            macvlans = mkOption {
-              type = types.listOf types.str;
+            macvlans = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               example = [ "eth1" "eth2" ];
               description = ''
@@ -670,24 +668,24 @@ in
               '';
             };
 
-            extraVeths = mkOption {
-              type = with types; attrsOf (submodule { options = networkOptions; });
+            extraVeths = lib.mkOption {
+              type = with lib.types; attrsOf (submodule { options = networkOptions; });
               default = {};
               description = ''
                 Extra veth-pairs to be created for the container.
               '';
             };
 
-            autoStart = mkOption {
-              type = types.bool;
+            autoStart = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Whether the container is automatically started at boot-time.
               '';
             };
 
-            restartIfChanged = mkOption {
-              type = types.bool;
+            restartIfChanged = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Whether the container should be restarted during a NixOS
@@ -695,8 +693,8 @@ in
               '';
             };
 
-            timeoutStartSec = mkOption {
-              type = types.str;
+            timeoutStartSec = lib.mkOption {
+              type = lib.types.str;
               default = "1min";
               description = ''
                 Time for the container to start. In case of a timeout,
@@ -706,10 +704,10 @@ in
                '';
             };
 
-            bindMounts = mkOption {
-              type = with types; attrsOf (submodule bindMountOpts);
+            bindMounts = lib.mkOption {
+              type = with lib.types; attrsOf (submodule bindMountOpts);
               default = {};
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 { "/home" = { hostPath = "/home/alice";
                               isReadOnly = false; };
                 }
@@ -720,8 +718,8 @@ in
                 '';
             };
 
-            allowedDevices = mkOption {
-              type = with types; listOf (submodule allowedDeviceOpts);
+            allowedDevices = lib.mkOption {
+              type = with lib.types; listOf (submodule allowedDeviceOpts);
               default = [];
               example = [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               description = ''
@@ -729,8 +727,8 @@ in
               '';
             };
 
-            tmpfs = mkOption {
-              type = types.listOf types.str;
+            tmpfs = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               example = [ "/var" ];
               description = ''
@@ -741,8 +739,8 @@ in
               '';
             };
 
-            extraFlags = mkOption {
-              type = types.listOf types.str;
+            extraFlags = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               example = [ "--drop-capability=CAP_SYS_CHROOT" ];
               description = ''
@@ -752,14 +750,14 @@ in
             };
 
             # Removed option. See `checkAssertion` below for the accompanying error message.
-            pkgs = mkOption { visible = false; };
+            pkgs = lib.mkOption { visible = false; };
           } // networkOptions;
 
           config = let
             # Throw an error when removed option `pkgs` is used.
             # Because this is a submodule we cannot use `mkRemovedOptionModule` or option `assertions`.
             optionPath = "containers.${name}.pkgs";
-            files = showFiles options.pkgs.files;
+            files = lib.showFiles options.pkgs.files;
             checkAssertion = if options.pkgs.isDefined then throw ''
               The option definition `${optionPath}' in ${files} no longer has any effect; please remove it.
 
@@ -774,12 +772,12 @@ in
             else null;
           in {
             path = builtins.seq checkAssertion
-              mkIf options.config.isDefined config.config.system.build.toplevel;
+              lib.mkIf options.config.isDefined config.config.system.build.toplevel;
           };
         }));
 
       default = {};
-      example = literalExpression
+      example = lib.literalExpression
         ''
           { webserver =
               { path = "/nix/var/nix/profiles/webserver";
@@ -807,18 +805,18 @@ in
   };
 
 
-  config = mkMerge [
+  config = lib.mkMerge [
     {
-      warnings = optional (!config.boot.enableContainers && config.containers != {})
+      warnings = lib.optional (!config.boot.enableContainers && config.containers != {})
         "containers.<name> is used, but boot.enableContainers is false. To use containers.<name>, set boot.enableContainers to true.";
 
       assertions = let
-        mapper = name: cfg: optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != []))
+        mapper = name: cfg: lib.optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != []))
           "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
-      in mkMerge (mapAttrsToList mapper config.containers);
+      in lib.mkMerge (lib.mapAttrsToList mapper config.containers);
     }
 
-    (mkIf (config.boot.enableContainers) (let
+    (lib.mkIf (config.boot.enableContainers) (let
       unit = {
         description = "Container '%i'";
 
@@ -843,19 +841,19 @@ in
       };
     in {
       warnings =
-        (optional (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "22.05") ''
+        (lib.optional (config.virtualisation.containers.enable && lib.versionOlder config.system.stateVersion "22.05") ''
           Enabling both boot.enableContainers & virtualisation.containers on system.stateVersion < 22.05 is unsupported.
         '');
 
       systemd.targets.multi-user.wants = [ "machines.target" ];
 
-      systemd.services = listToAttrs (filter (x: x.value != null) (
+      systemd.services = lib.listToAttrs (lib.filter (x: x.value != null) (
         # The generic container template used by imperative containers
         [{ name = "container@"; value = unit; }]
         # declarative containers
-        ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
+        ++ (lib.mapAttrsToList (name: cfg: lib.nameValuePair "container@${name}" (let
             containerConfig = cfg // (
-            optionalAttrs cfg.enableTun
+            lib.optionalAttrs cfg.enableTun
               {
                 allowedDevices = cfg.allowedDevices
                   ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
@@ -864,7 +862,7 @@ in
               }
             );
           in
-            recursiveUpdate unit {
+            lib.recursiveUpdate unit {
               preStart = preStartScript containerConfig;
               script = startScript containerConfig;
               postStart = postStartScript containerConfig;
@@ -875,7 +873,7 @@ in
                   (builtins.attrValues cfg.bindMounts);
               environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
             } // (
-            optionalAttrs containerConfig.autoStart
+            lib.optionalAttrs containerConfig.autoStart
               {
                 wantedBy = [ "machines.target" ];
                 wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
@@ -895,54 +893,54 @@ in
       # configuration.
       environment.etc =
         let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
-        in mapAttrs' (name: cfg: nameValuePair "${configurationDirectoryName}/${name}.conf"
+        in lib.mapAttrs' (name: cfg: lib.nameValuePair "${configurationDirectoryName}/${name}.conf"
         { text =
             ''
               SYSTEM_PATH=${cfg.path}
-              ${optionalString cfg.privateNetwork ''
+              ${lib.optionalString cfg.privateNetwork ''
                 PRIVATE_NETWORK=1
-                ${optionalString (cfg.hostBridge != null) ''
+                ${lib.optionalString (cfg.hostBridge != null) ''
                   HOST_BRIDGE=${cfg.hostBridge}
                 ''}
-                ${optionalString (length cfg.forwardPorts > 0) ''
-                  HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
+                ${lib.optionalString (lib.length cfg.forwardPorts > 0) ''
+                  HOST_PORT=${lib.concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
                 ''}
-                ${optionalString (cfg.hostAddress != null) ''
+                ${lib.optionalString (cfg.hostAddress != null) ''
                   HOST_ADDRESS=${cfg.hostAddress}
                 ''}
-                ${optionalString (cfg.hostAddress6 != null) ''
+                ${lib.optionalString (cfg.hostAddress6 != null) ''
                   HOST_ADDRESS6=${cfg.hostAddress6}
                 ''}
-                ${optionalString (cfg.localAddress != null) ''
+                ${lib.optionalString (cfg.localAddress != null) ''
                   LOCAL_ADDRESS=${cfg.localAddress}
                 ''}
-                ${optionalString (cfg.localAddress6 != null) ''
+                ${lib.optionalString (cfg.localAddress6 != null) ''
                   LOCAL_ADDRESS6=${cfg.localAddress6}
                 ''}
               ''}
-              ${optionalString (cfg.networkNamespace != null) ''
+              ${lib.optionalString (cfg.networkNamespace != null) ''
                 NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
               ''}
               INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"
-              ${optionalString cfg.autoStart ''
+              ${lib.optionalString cfg.autoStart ''
                 AUTO_START=1
               ''}
               EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts +
-                optionalString (cfg.extraFlags != [])
-                  (" " + concatStringsSep " " cfg.extraFlags)}"
+                lib.optionalString (cfg.extraFlags != [])
+                  (" " + lib.concatStringsSep " " cfg.extraFlags)}"
             '';
         }) config.containers;
 
       # Generate /etc/hosts entries for the containers.
-      networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
+      networking.extraHosts = lib.concatStrings (lib.mapAttrsToList (name: cfg: lib.optionalString (cfg.localAddress != null)
         ''
-          ${head (splitString "/" cfg.localAddress)} ${name}.containers
+          ${lib.head (lib.splitString "/" cfg.localAddress)} ${name}.containers
         '') config.containers);
 
       networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
 
-      services.udev.extraRules = optionalString config.networking.networkmanager.enable ''
+      services.udev.extraRules = lib.optionalString config.networking.networkmanager.enable ''
         # Don't manage interfaces created by nixos-container.
         ENV{INTERFACE}=="v[eb]-*", ENV{NM_UNMANAGED}="1"
       '';

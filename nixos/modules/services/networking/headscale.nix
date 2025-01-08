@@ -490,69 +490,69 @@ in
     };
   };
 
-  imports = with lib; [
-    (mkRenamedOptionModule
+  imports = [
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "derp" "autoUpdate" ]
       [ "services" "headscale" "settings" "derp" "auto_update_enable" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "derp" "paths" ]
       [ "services" "headscale" "settings" "derp" "paths" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "derp" "updateFrequency" ]
       [ "services" "headscale" "settings" "derp" "update_frequency" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "derp" "urls" ]
       [ "services" "headscale" "settings" "derp" "urls" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
       [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "logLevel" ]
       [ "services" "headscale" "settings" "log" "level" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "openIdConnect" "clientId" ]
       [ "services" "headscale" "settings" "oidc" "client_id" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "openIdConnect" "clientSecretFile" ]
       [ "services" "headscale" "settings" "oidc" "client_secret_path" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "openIdConnect" "issuer" ]
       [ "services" "headscale" "settings" "oidc" "issuer" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "serverUrl" ]
       [ "services" "headscale" "settings" "server_url" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "tls" "certFile" ]
       [ "services" "headscale" "settings" "tls_cert_path" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "tls" "keyFile" ]
       [ "services" "headscale" "settings" "tls_key_path" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "tls" "letsencrypt" "challengeType" ]
       [ "services" "headscale" "settings" "tls_letsencrypt_challenge_type" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "tls" "letsencrypt" "hostname" ]
       [ "services" "headscale" "settings" "tls_letsencrypt_hostname" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "headscale" "tls" "letsencrypt" "httpListen" ]
       [ "services" "headscale" "settings" "tls_letsencrypt_listen" ]
     )
 
-    (mkRemovedOptionModule [ "services" "headscale" "openIdConnect" "domainMap" ] ''
+    (lib.mkRemovedOptionModule [ "services" "headscale" "openIdConnect" "domainMap" ] ''
       Headscale no longer uses domain_map. If you're using an old version of headscale you can still set this option via services.headscale.settings.oidc.domain_map.
     '')
   ];

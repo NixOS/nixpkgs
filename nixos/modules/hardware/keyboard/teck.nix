@@ -12,10 +12,10 @@ let
 in
 {
   options.hardware.keyboard.teck = {
-    enable = mkEnableOption "non-root access to the firmware of TECK keyboards";
+    enable = lib.mkEnableOption "non-root access to the firmware of TECK keyboards";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.teck-udev-rules ];
   };
 }

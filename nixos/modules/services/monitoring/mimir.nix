@@ -11,7 +11,7 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -21,9 +21,9 @@ let
 in
 {
   options.services.mimir = {
-    enable = mkEnableOption "mimir";
+    enable = lib.mkEnableOption "mimir";
 
-    configuration = mkOption {
+    configuration = lib.mkOption {
       type = (pkgs.formats.json { }).type;
       default = { };
       description = ''
@@ -31,18 +31,18 @@ in
       '';
     };
 
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Specify a configuration file that Mimir should use.
       '';
     };
 
-    package = mkPackageOption pkgs "mimir" { };
+    package = lib.mkPackageOption pkgs "mimir" { };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--config.expand-env=true" ];
       description = ''
@@ -52,7 +52,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # for mimirtool
     environment.systemPackages = [ cfg.package ];
 
@@ -83,7 +83,7 @@ in
               cfg.configFile;
         in
         {
-          ExecStart = "${cfg.package}/bin/mimir --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+          ExecStart = "${cfg.package}/bin/mimir --config.file=${conf} ${lib.escapeShellArgs cfg.extraFlags}";
           DynamicUser = true;
           Restart = "always";
           ProtectSystem = "full";

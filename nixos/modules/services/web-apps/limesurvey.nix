@@ -13,14 +13,14 @@ let
     mkForce
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkPackageOption
     ;
   inherit (lib)
     literalExpression
     mapAttrs
-    optional
-    optionalString
+    lib.optional
+    lib.optionalString
     types
     ;
 
@@ -32,7 +32,7 @@ let
   stateDir = "/var/lib/limesurvey";
 
   configType =
-    with types;
+    with lib.types;
     oneOf [
       (attrsOf configType)
       str
@@ -65,12 +65,12 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption "Limesurvey web application";
+    enable = lib.mkEnableOption "Limesurvey web application";
 
-    package = mkPackageOption pkgs "limesurvey" { };
+    package = lib.mkPackageOption pkgs "limesurvey" { };
 
-    encryptionKey = mkOption {
-      type = types.nullOr types.str;
+    encryptionKey = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       visible = false;
       description = ''
@@ -79,8 +79,8 @@ in
       '';
     };
 
-    encryptionNonce = mkOption {
-      type = types.nullOr types.str;
+    encryptionNonce = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       visible = false;
       description = ''
@@ -89,8 +89,8 @@ in
       '';
     };
 
-    encryptionKeyFile = mkOption {
-      type = types.nullOr types.path;
+    encryptionKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         32-byte key used to encrypt variables in the database.
@@ -99,8 +99,8 @@ in
       '';
     };
 
-    encryptionNonceFile = mkOption {
-      type = types.nullOr types.path;
+    encryptionNonceFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         24-byte used to encrypt variables in the database.
@@ -110,8 +110,8 @@ in
     };
 
     database = {
-      type = mkOption {
-        type = types.enum [
+      type = lib.mkOption {
+        type = lib.types.enum [
           "mysql"
           "pgsql"
           "odbc"
@@ -122,8 +122,8 @@ in
         description = "Database engine to use.";
       };
 
-      dbEngine = mkOption {
-        type = types.enum [
+      dbEngine = lib.mkOption {
+        type = lib.types.enum [
           "MyISAM"
           "InnoDB"
         ];
@@ -131,33 +131,33 @@ in
         description = "Database storage engine to use.";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Database host address.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
-        defaultText = literalExpression "3306";
+        defaultText = lib.literalExpression "3306";
         description = "Database host port.";
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "limesurvey";
         description = "Database name.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "limesurvey";
         description = "Database user.";
       };
 
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/limesurvey-dbpassword";
         description = ''
@@ -166,8 +166,8 @@ in
         '';
       };
 
-      socket = mkOption {
-        type = types.nullOr types.path;
+      socket = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default =
           if mysqlLocal then
             "/run/mysqld/mysqld.sock"
@@ -175,14 +175,14 @@ in
             "/run/postgresql"
           else
             null;
-        defaultText = literalExpression "/run/mysqld/mysqld.sock";
+        defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
         description = "Path to the unix socket file to use for authentication.";
       };
 
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = cfg.database.type == "mysql";
-        defaultText = literalExpression "true";
+        defaultText = lib.literalExpression "true";
         description = ''
           Create the database and database user locally.
           This currently only applies if database type "mysql" is selected.
@@ -190,9 +190,9 @@ in
       };
     };
 
-    virtualHost = mkOption {
-      type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-      example = literalExpression ''
+    virtualHost = lib.mkOption {
+      type = lib.types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+      example = lib.literalExpression ''
         {
           hostName = "survey.example.org";
           adminAddr = "webmaster@example.org";
@@ -206,9 +206,9 @@ in
       '';
     };
 
-    poolConfig = mkOption {
+    poolConfig = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         attrsOf (oneOf [
           str
           int
@@ -228,7 +228,7 @@ in
       '';
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       type = configType;
       default = { };
       description = ''
@@ -241,7 +241,7 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -288,9 +288,9 @@ in
             "${cfg.database.type}:dbname=${cfg.database.name};host=${
               if pgsqlLocal then cfg.database.socket else cfg.database.host
             };port=${toString cfg.database.port}"
-            + optionalString mysqlLocal ";socket=${cfg.database.socket}";
+            + lib.optionalString mysqlLocal ";socket=${cfg.database.socket}";
           username = cfg.database.user;
-          password = mkIf (
+          password = lib.mkIf (
             cfg.database.passwordFile != null
           ) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
           tablePrefix = "limesurvey_";
@@ -304,16 +304,16 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
-        force_ssl = mkIf (
+        force_ssl = lib.mkIf (
           cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL
         ) "on";
         config.defaultlang = "en";
       };
     };
 
-    services.mysql = mkIf mysqlLocal {
+    services.mysql = lib.mkIf mysqlLocal {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
@@ -363,9 +363,9 @@ in
 
     services.httpd = {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
+      adminAddr = lib.mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+      virtualHosts.${cfg.virtualHost.hostName} = lib.mkMerge [
         cfg.virtualHost
         {
           documentRoot = mkForce "${cfg.package}/share/limesurvey";
@@ -413,7 +413,7 @@ in
     systemd.services.limesurvey-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.service";
       environment.DBENGINE = "${cfg.database.dbEngine}";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
@@ -443,8 +443,8 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service"
-      ++ optional pgsqlLocal "postgresql.service";
+      lib.optional mysqlLocal "mysql.service"
+      ++ lib.optional pgsqlLocal "postgresql.service";
 
     users.users.${user} = {
       group = group;

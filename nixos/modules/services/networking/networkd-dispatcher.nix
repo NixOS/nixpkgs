@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.networkd-dispatcher;
@@ -17,13 +15,13 @@ in
   options = {
     services.networkd-dispatcher = {
 
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         Networkd-dispatcher service for systemd-networkd connection status
         change. See [upstream instructions](https://gitlab.com/craftyguy/networkd-dispatcher)
         for usage
       '';
 
-      rules = mkOption {
+      rules = lib.mkOption {
         default = { };
         example = lib.literalExpression ''
           { "restart-tor" = {
@@ -44,12 +42,12 @@ in
           [upstream instructions](https://gitlab.com/craftyguy/networkd-dispatcher)
           for an introduction and example scripts.
         '';
-        type = types.attrsOf (
-          types.submodule {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
             options = {
-              onState = mkOption {
-                type = types.listOf (
-                  types.enum [
+              onState = lib.mkOption {
+                type = lib.types.listOf (
+                  lib.types.enum [
                     "routable"
                     "dormant"
                     "no-carrier"
@@ -67,8 +65,8 @@ in
                   for a description of the specific state type.
                 '';
               };
-              script = mkOption {
-                type = types.lines;
+              script = lib.mkOption {
+                type = lib.types.lines;
                 description = ''
                   Shell commands executed on specified operational states.
                 '';
@@ -78,19 +76,19 @@ in
         );
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           Extra arguments to pass to the networkd-dispatcher command.
         '';
-        apply = escapeShellArgs;
+        apply = lib.escapeShellArgs;
       };
 
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       packages = [ pkgs.networkd-dispatcher ];

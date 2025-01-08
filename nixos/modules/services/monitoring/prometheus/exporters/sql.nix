@@ -8,15 +8,15 @@
 let
   cfg = config.services.prometheus.exporters.sql;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     mapAttrs
     mapAttrsToList
     concatStringsSep
     ;
   cfgOptions = {
-    options = with types; {
-      jobs = mkOption {
+    options = with lib.types; {
+      jobs = lib.mkOption {
         type = attrsOf (submodule jobOptions);
         default = { };
         description = "An attrset of metrics scraping jobs to run.";
@@ -24,46 +24,46 @@ let
     };
   };
   jobOptions = {
-    options = with types; {
-      interval = mkOption {
+    options = with lib.types; {
+      interval = lib.mkOption {
         type = str;
         description = ''
           How often to run this job, specified in
           [Go duration](https://golang.org/pkg/time/#ParseDuration) format.
         '';
       };
-      connections = mkOption {
+      connections = lib.mkOption {
         type = listOf str;
         description = "A list of connection strings of the SQL servers to scrape metrics from";
       };
-      startupSql = mkOption {
+      startupSql = lib.mkOption {
         type = listOf str;
         default = [ ];
         description = "A list of SQL statements to execute once after making a connection.";
       };
-      queries = mkOption {
+      queries = lib.mkOption {
         type = attrsOf (submodule queryOptions);
         description = "SQL queries to run.";
       };
     };
   };
   queryOptions = {
-    options = with types; {
-      help = mkOption {
+    options = with lib.types; {
+      help = lib.mkOption {
         type = nullOr str;
         default = null;
         description = "A human-readable description of this metric.";
       };
-      labels = mkOption {
+      labels = lib.mkOption {
         type = listOf str;
         default = [ ];
         description = "A set of columns that will be used as Prometheus labels.";
       };
-      query = mkOption {
+      query = lib.mkOption {
         type = str;
         description = "The SQL query to run.";
       };
-      values = mkOption {
+      values = lib.mkOption {
         type = listOf str;
         description = "A set of columns that will be used as values of this metric.";
       };
@@ -87,15 +87,15 @@ let
 in
 {
   extraOpts = {
-    configFile = mkOption {
-      type = with types; nullOr path;
+    configFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = ''
         Path to configuration file.
       '';
     };
-    configuration = mkOption {
-      type = with types; nullOr (submodule cfgOptions);
+    configuration = lib.mkOption {
+      type = with lib.types; nullOr (submodule cfgOptions);
       default = null;
       description = ''
         Exporter configuration as nix attribute set. Mutually exclusive with 'configFile' option.
@@ -110,7 +110,7 @@ in
         ${pkgs.prometheus-sql-exporter}/bin/sql_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           -config.file ${configFile} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data

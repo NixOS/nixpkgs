@@ -8,10 +8,10 @@ let
   cfg = config.services.openwebrx;
 in
 {
-  options.services.openwebrx = with lib; {
-    enable = mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
+  options.services.openwebrx = {
+    enable = lib.mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
 
-    package = mkPackageOption pkgs "openwebrx" { };
+    package = lib.mkPackageOption pkgs "openwebrx" { };
   };
 
   config = lib.mkIf cfg.enable {

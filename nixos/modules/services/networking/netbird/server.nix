@@ -5,8 +5,8 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
-    optionalAttrs
+    lib.mkOption
+    lib.optionalAttrs
     ;
 
   inherit (lib.types) str;
@@ -29,38 +29,38 @@ in
   ];
 
   options.services.netbird.server = {
-    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
+    enable = lib.mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
 
     enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
 
-    domain = mkOption {
+    domain = lib.mkOption {
       type = str;
       description = "The domain under which the netbird server runs.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.netbird.server = {
       dashboard = {
-        domain = mkDefault cfg.domain;
-        enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
+        domain = lib.mkDefault cfg.domain;
+        enable = lib.mkDefault cfg.enable;
+        enableNginx = lib.mkDefault cfg.enableNginx;
 
         managementServer = "https://${cfg.domain}";
       };
 
       management =
         {
-          domain = mkDefault cfg.domain;
-          enable = mkDefault cfg.enable;
-          enableNginx = mkDefault cfg.enableNginx;
+          domain = lib.mkDefault cfg.domain;
+          enable = lib.mkDefault cfg.enable;
+          enableNginx = lib.mkDefault cfg.enableNginx;
         }
         // (optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
           turnPort = config.services.coturn.tls-listening-port;
           # We cannot merge a list of attrsets so we have to redefine the whole list
           settings = {
-            TURNConfig.Turns = mkDefault [
+            TURNConfig.Turns = lib.mkDefault [
               {
                 Proto = "udp";
                 URI = "turn:${turnDomain}:${builtins.toString turnPort}";
@@ -75,13 +75,13 @@ in
         });
 
       signal = {
-        domain = mkDefault cfg.domain;
-        enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
+        domain = lib.mkDefault cfg.domain;
+        enable = lib.mkDefault cfg.enable;
+        enableNginx = lib.mkDefault cfg.enableNginx;
       };
 
       coturn = {
-        domain = mkDefault cfg.domain;
+        domain = lib.mkDefault cfg.domain;
       };
     };
   };

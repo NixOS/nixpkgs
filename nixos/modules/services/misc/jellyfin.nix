@@ -11,7 +11,7 @@ let
     getExe
     maintainers
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     ;
   inherit (lib.types) str path bool;
@@ -20,23 +20,23 @@ in
 {
   options = {
     services.jellyfin = {
-      enable = mkEnableOption "Jellyfin Media Server";
+      enable = lib.mkEnableOption "Jellyfin Media Server";
 
-      package = mkPackageOption pkgs "jellyfin" { };
+      package = lib.mkPackageOption pkgs "jellyfin" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         type = str;
         default = "jellyfin";
         description = "User account under which Jellyfin runs.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         type = str;
         default = "jellyfin";
         description = "Group under which jellyfin runs.";
       };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         type = path;
         default = "/var/lib/jellyfin";
         description = ''
@@ -45,7 +45,7 @@ in
         '';
       };
 
-      configDir = mkOption {
+      configDir = lib.mkOption {
         type = path;
         default = "${cfg.dataDir}/config";
         defaultText = "\${cfg.dataDir}/config";
@@ -55,7 +55,7 @@ in
         '';
       };
 
-      cacheDir = mkOption {
+      cacheDir = lib.mkOption {
         type = path;
         default = "/var/cache/jellyfin";
         description = ''
@@ -64,7 +64,7 @@ in
         '';
       };
 
-      logDir = mkOption {
+      logDir = lib.mkOption {
         type = path;
         default = "${cfg.dataDir}/log";
         defaultText = "\${cfg.dataDir}/log";
@@ -74,7 +74,7 @@ in
         '';
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         type = bool;
         default = false;
         description = ''
@@ -86,7 +86,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd = {
       tmpfiles.settings.jellyfinDirs = {
         "${cfg.dataDir}"."d" = {
@@ -175,18 +175,18 @@ in
       };
     };
 
-    users.users = mkIf (cfg.user == "jellyfin") {
+    users.users = lib.mkIf (cfg.user == "jellyfin") {
       jellyfin = {
         inherit (cfg) group;
         isSystemUser = true;
       };
     };
 
-    users.groups = mkIf (cfg.group == "jellyfin") {
+    users.groups = lib.mkIf (cfg.group == "jellyfin") {
       jellyfin = { };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       # from https://jellyfin.org/docs/general/networking/index.html
       allowedTCPPorts = [
         8096

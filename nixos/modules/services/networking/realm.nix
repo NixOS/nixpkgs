@@ -11,7 +11,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     mkIf
     types
     getExe
@@ -23,10 +23,10 @@ in
 
   options = {
     services.realm = {
-      enable = mkEnableOption "A simple, high performance relay server written in rust";
-      package = mkPackageOption pkgs "realm" { };
-      config = mkOption {
-        type = types.submodule {
+      enable = lib.mkEnableOption "A simple, high performance relay server written in rust";
+      package = lib.mkPackageOption pkgs "realm" { };
+      config = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = configFormat.type;
         };
         default = { };
@@ -37,7 +37,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.realm = {
       serviceConfig = {
         DynamicUser = true;

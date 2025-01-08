@@ -97,7 +97,7 @@ in
             type = lib.types.str;
             example = "example.com";
             description = ''
-              The domain name of the server, with optional explicit port.
+              The domain name of the server, with lib.optional explicit port.
               This is used by remote servers to connect to this server.
               This is also the last part of your UserID.
             '';

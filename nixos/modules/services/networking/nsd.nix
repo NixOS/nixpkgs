@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.nsd;
 
@@ -20,7 +18,7 @@ let
     ipv6 = cfg.ipv6;
     ratelimit = cfg.ratelimit.enable;
     rootServer = cfg.rootServer;
-    zoneStats = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
+    zoneStats = lib.length (lib.collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
   mkZoneFileName = name: if name == "." then "root" else name;
@@ -28,10 +26,10 @@ let
   # replaces include: directives for keys with fake keys for nsd-checkconf
   injectFakeKeys =
     keys:
-    concatStrings (
-      mapAttrsToList (keyName: keyOptions: ''
+    lib.concatStrings (
+      lib.mapAttrsToList (keyName: keyOptions: ''
         fakeKey="$(${pkgs.bind}/bin/tsig-keygen -a ${
-          escapeShellArgs [
+          lib.escapeShellArgs [
             keyOptions.algorithm
             keyName
           ]
@@ -43,7 +41,7 @@ let
   nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
 
-    paths = [ configFile ] ++ mapAttrsToList (name: zone: writeZoneData name zone.data) zoneConfigs;
+    paths = [ configFile ] ++ lib.mapAttrsToList (name: zone: writeZoneData name zone.data) zoneConfigs;
 
     postBuild = ''
       echo "checking zone files"
@@ -142,18 +140,18 @@ let
       server-key-file:   "${cfg.remoteControl.serverKeyFile}"
       server-cert-file:  "${cfg.remoteControl.serverCertFile}"
 
-    ${concatStrings (mapAttrsToList zoneConfigFile zoneConfigs)}
+    ${lib.concatStrings (lib.mapAttrsToList zoneConfigFile zoneConfigs)}
 
     ${cfg.extraConfig}
   '';
 
   yesOrNo = b: if b then "yes" else "no";
-  maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
-  maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
-  forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
+  maybeString = prefix: x: lib.optionalString (x != null) ''${prefix} "${x}"'';
+  maybeToString = prefix: x: lib.optionalString (x != null) ''${prefix} ${toString x}'';
+  forEach = pre: l: lib.concatMapStrings (x: pre + x + "\n") l;
 
-  keyConfigFile = concatStrings (
-    mapAttrsToList (keyName: keyOptions: ''
+  keyConfigFile = lib.concatStrings (
+    lib.mapAttrsToList (keyName: keyOptions: ''
       key:
         name:      "${keyName}"
         algorithm: "${keyOptions.algorithm}"
@@ -161,8 +159,8 @@ let
     '') cfg.keys
   );
 
-  copyKeys = concatStrings (
-    mapAttrsToList (keyName: keyOptions: ''
+  copyKeys = lib.concatStrings (
+    lib.mapAttrsToList (keyName: keyOptions: ''
       secret=$(cat "${keyOptions.keyFile}")
       dest="${stateDir}/private/${keyName}"
       install -m 0400 -o "${username}" -g "${username}" <(echo "  secret: \"$secret\"") "$dest"
@@ -201,22 +199,22 @@ let
       !(zone ? children) || zone.children == null || zone.children == { }
     # leaf -> actual zone
     then
-      listToAttrs [ (nameValuePair name (parent // zone)) ]
+      lib.listToAttrs [ (lib.nameValuePair name (parent // zone)) ]
 
     # fork -> pattern
     else
-      zipAttrsWith (name: head) (
-        mapAttrsToList (
+      lib.zipAttrsWith (name: lib.head) (
+        lib.mapAttrsToList (
           name: child: zoneConfigs' (parent // zone // { children = { }; }) name child
         ) zone.children
       );
 
   # options are ordered alphanumerically
-  zoneOptions = types.submodule {
+  zoneOptions = lib.types.submodule {
     options = {
 
-      allowAXFRFallback = mkOption {
-        type = types.bool;
+      allowAXFRFallback = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           If NSD as secondary server should be allowed to AXFR if the primary
@@ -224,8 +222,8 @@ let
         '';
       };
 
-      allowNotify = mkOption {
-        type = types.listOf types.str;
+      allowNotify = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
           "192.0.2.0/24 NOKEY"
@@ -243,7 +241,7 @@ let
           * `10.0.0.0&255.255.255.0`: via subnet mask
           * `10.0.0.1-10.0.0.254`: via range
 
-          A optional port number could be added with a '@':
+          A lib.optional port number could be added with a '@':
           * `2001:1234::1@1234`
 
           `<key-name | NOKEY | BLOCKED>`
@@ -253,14 +251,14 @@ let
         '';
       };
 
-      children = mkOption {
+      children = lib.mkOption {
         # TODO: This relies on the fact that `types.anything` doesn't set any
         # values of its own to any defaults, because in the above zoneConfigs',
         # values from children override ones from parents, but only if the
         # attributes are defined. Because of this, we can't replace the element
         # type here with `zoneConfigs`, since that would set all the attributes
         # to default values, breaking the parent inheriting function.
-        type = types.attrsOf types.anything;
+        type = lib.types.attrsOf lib.types.anything;
         default = { };
         description = ''
           Children zones inherit all options of their parents. Attributes
@@ -272,8 +270,8 @@ let
         '';
       };
 
-      data = mkOption {
-        type = types.lines;
+      data = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           The actual zone data. This is the content of your zone file.
@@ -281,27 +279,27 @@ let
         '';
       };
 
-      dnssec = mkEnableOption "DNSSEC";
+      dnssec = lib.mkEnableOption "DNSSEC";
 
       dnssecPolicy = {
-        algorithm = mkOption {
-          type = types.str;
+        algorithm = lib.mkOption {
+          type = lib.types.str;
           default = "RSASHA256";
           description = "Which algorithm to use for DNSSEC";
         };
-        keyttl = mkOption {
-          type = types.str;
+        keyttl = lib.mkOption {
+          type = lib.types.str;
           default = "1h";
           description = "TTL for dnssec records";
         };
-        coverage = mkOption {
-          type = types.str;
+        coverage = lib.mkOption {
+          type = lib.types.str;
           default = "1y";
           description = ''
             The length of time to ensure that keys will be correct; no action will be taken to create new keys to be activated after this time.
           '';
         };
-        zsk = mkOption {
+        zsk = lib.mkOption {
           type = keyPolicy;
           default = {
             keySize = 2048;
@@ -311,7 +309,7 @@ let
           };
           description = "Key policy for zone signing keys";
         };
-        ksk = mkOption {
+        ksk = lib.mkOption {
           type = keyPolicy;
           default = {
             keySize = 4096;
@@ -323,8 +321,8 @@ let
         };
       };
 
-      maxRefreshSecs = mkOption {
-        type = types.nullOr types.int;
+      maxRefreshSecs = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Limit refresh time for secondary zones. This is the timer which
@@ -334,16 +332,16 @@ let
         '';
       };
 
-      minRefreshSecs = mkOption {
-        type = types.nullOr types.int;
+      minRefreshSecs = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Limit refresh time for secondary zones.
         '';
       };
 
-      maxRetrySecs = mkOption {
-        type = types.nullOr types.int;
+      maxRetrySecs = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Limit retry time for secondary zones. This is the timeout after
@@ -352,16 +350,16 @@ let
         '';
       };
 
-      minRetrySecs = mkOption {
-        type = types.nullOr types.int;
+      minRetrySecs = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Limit retry time for secondary zones.
         '';
       };
 
-      multiMasterCheck = mkOption {
-        type = types.bool;
+      multiMasterCheck = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If enabled, checks all masters for the last zone version.
@@ -370,8 +368,8 @@ let
         '';
       };
 
-      notify = mkOption {
-        type = types.listOf types.str;
+      notify = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
           "10.0.0.1@3721 my_key"
@@ -383,7 +381,7 @@ let
 
           Format: `<ip> <key-name | NOKEY>`
 
-          `<ip>` a plain IPv4/IPv6 address with on optional port number (ip@port)
+          `<ip>` a plain IPv4/IPv6 address with on lib.optional port number (ip@port)
 
           `<key-name | NOKEY>`
           - `<key-name>` sign notifies with the specified key
@@ -391,28 +389,28 @@ let
         '';
       };
 
-      notifyRetry = mkOption {
-        type = types.int;
+      notifyRetry = lib.mkOption {
+        type = lib.types.int;
         default = 5;
         description = ''
           Specifies the number of retries for failed notifies. Set this along with notify.
         '';
       };
 
-      outgoingInterface = mkOption {
-        type = types.nullOr types.str;
+      outgoingInterface = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "2000::1@1234";
         description = ''
           This address will be used for zone-transfer requests if configured
           as a secondary server or notifications in case of a primary server.
-          Supply either a plain IPv4 or IPv6 address with an optional port
+          Supply either a plain IPv4 or IPv6 address with an lib.optional port
           number (ip@port).
         '';
       };
 
-      provideXFR = mkOption {
-        type = types.listOf types.str;
+      provideXFR = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
           "192.0.2.0/24 NOKEY"
@@ -424,17 +422,17 @@ let
         '';
       };
 
-      requestXFR = mkOption {
-        type = types.listOf types.str;
+      requestXFR = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           Format: `[AXFR|UDP] <ip-address> <key-name | NOKEY>`
         '';
       };
 
-      rrlWhitelist = mkOption {
+      rrlWhitelist = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           listOf (enum [
             "nxdomain"
             "error"
@@ -453,8 +451,8 @@ let
         '';
       };
 
-      zoneStats = mkOption {
-        type = types.nullOr types.str;
+      zoneStats = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "%s";
         description = ''
@@ -468,37 +466,37 @@ let
     };
   };
 
-  keyPolicy = types.submodule {
+  keyPolicy = lib.types.submodule {
     options = {
-      keySize = mkOption {
-        type = types.int;
+      keySize = lib.mkOption {
+        type = lib.types.int;
         description = "Key size in bits";
       };
-      prePublish = mkOption {
-        type = types.str;
+      prePublish = lib.mkOption {
+        type = lib.types.str;
         description = "How long in advance to publish new keys";
       };
-      postPublish = mkOption {
-        type = types.str;
+      postPublish = lib.mkOption {
+        type = lib.types.str;
         description = "How long after deactivation to keep a key in the zone";
       };
-      rollPeriod = mkOption {
-        type = types.str;
+      rollPeriod = lib.mkOption {
+        type = lib.types.str;
         description = "How frequently to change keys";
       };
     };
   };
 
-  dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
+  dnssecZones = (lib.filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
 
   dnssec = dnssecZones != { };
 
   dnssecTools = pkgs.bind.override { enablePython = true; };
 
-  signZones = optionalString dnssec ''
+  signZones = lib.optionalString dnssec ''
     install -m 0600 -o "${username}" -g "${username}" -d "${stateDir}/dnssec"
 
-    ${concatStrings (mapAttrsToList signZone dnssecZones)}
+    ${lib.concatStrings (lib.mapAttrsToList signZone dnssecZones)}
   '';
   signZone = name: zone: ''
     ${dnssecTools}/bin/dnssec-keymgr -g ${dnssecTools}/bin/dnssec-keygen -s ${dnssecTools}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
@@ -527,44 +525,44 @@ in
   # options are ordered alphanumerically
   options.services.nsd = {
 
-    enable = mkEnableOption "NSD authoritative DNS server";
+    enable = lib.mkEnableOption "NSD authoritative DNS server";
 
-    bind8Stats = mkEnableOption "BIND8 like statistics";
+    bind8Stats = lib.mkEnableOption "BIND8 like statistics";
 
-    dnssecInterval = mkOption {
-      type = types.str;
+    dnssecInterval = lib.mkOption {
+      type = lib.types.str;
       default = "1h";
       description = ''
         How often to check whether dnssec key rollover is required
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Extra nsd config.
       '';
     };
 
-    hideVersion = mkOption {
-      type = types.bool;
+    hideVersion = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether NSD should answer VERSION.BIND and VERSION.SERVER CHAOS class queries.
       '';
     };
 
-    identity = mkOption {
-      type = types.str;
+    identity = lib.mkOption {
+      type = lib.types.str;
       default = "unidentified server";
       description = ''
         Identify the server (CH TXT ID.SERVER entry).
       '';
     };
 
-    interfaces = mkOption {
-      type = types.listOf types.str;
+    interfaces = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [
         "127.0.0.0"
         "::1"
@@ -574,8 +572,8 @@ in
       '';
     };
 
-    ipFreebind = mkOption {
-      type = types.bool;
+    ipFreebind = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to bind to nonlocal addresses and interfaces that are down.
@@ -583,74 +581,74 @@ in
       '';
     };
 
-    ipTransparent = mkOption {
-      type = types.bool;
+    ipTransparent = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Allow binding to non local addresses.
       '';
     };
 
-    ipv4 = mkOption {
-      type = types.bool;
+    ipv4 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to listen on IPv4 connections.
       '';
     };
 
-    ipv4EDNSSize = mkOption {
-      type = types.int;
+    ipv4EDNSSize = lib.mkOption {
+      type = lib.types.int;
       default = 4096;
       description = ''
         Preferred EDNS buffer size for IPv4.
       '';
     };
 
-    ipv6 = mkOption {
-      type = types.bool;
+    ipv6 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to listen on IPv6 connections.
       '';
     };
 
-    ipv6EDNSSize = mkOption {
-      type = types.int;
+    ipv6EDNSSize = lib.mkOption {
+      type = lib.types.int;
       default = 4096;
       description = ''
         Preferred EDNS buffer size for IPv6.
       '';
     };
 
-    logTimeAscii = mkOption {
-      type = types.bool;
+    logTimeAscii = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Log time in ascii, if false then in unix epoch seconds.
       '';
     };
 
-    nsid = mkOption {
-      type = types.nullOr types.str;
+    nsid = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         NSID identity (hex string, or "ascii_somestring").
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 53;
       description = ''
         Port the service should bind do.
       '';
     };
 
-    reuseport = mkOption {
-      type = types.bool;
+    reuseport = lib.mkOption {
+      type = lib.types.bool;
       default = pkgs.stdenv.hostPlatform.isLinux;
-      defaultText = literalExpression "pkgs.stdenv.hostPlatform.isLinux";
+      defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isLinux";
       description = ''
         Whether to enable SO_REUSEPORT on all used sockets. This lets multiple
         processes bind to the same port. This speeds up operation especially
@@ -659,8 +657,8 @@ in
       '';
     };
 
-    rootServer = mkOption {
-      type = types.bool;
+    rootServer = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether this server will be a root server (a DNS root server, you
@@ -668,18 +666,18 @@ in
       '';
     };
 
-    roundRobin = mkEnableOption "round robin rotation of records";
+    roundRobin = lib.mkEnableOption "round robin rotation of records";
 
-    serverCount = mkOption {
-      type = types.int;
+    serverCount = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = ''
         Number of NSD servers to fork. Put the number of CPUs to use here.
       '';
     };
 
-    statistics = mkOption {
-      type = types.nullOr types.int;
+    statistics = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         Statistics are produced every number of seconds. Prints to log.
@@ -687,16 +685,16 @@ in
       '';
     };
 
-    tcpCount = mkOption {
-      type = types.int;
+    tcpCount = lib.mkOption {
+      type = lib.types.int;
       default = 100;
       description = ''
         Maximum number of concurrent TCP connections per server.
       '';
     };
 
-    tcpQueryCount = mkOption {
-      type = types.int;
+    tcpQueryCount = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       description = ''
         Maximum number of queries served on a single TCP connection.
@@ -704,24 +702,24 @@ in
       '';
     };
 
-    tcpTimeout = mkOption {
-      type = types.int;
+    tcpTimeout = lib.mkOption {
+      type = lib.types.int;
       default = 120;
       description = ''
         TCP timeout in seconds.
       '';
     };
 
-    verbosity = mkOption {
-      type = types.int;
+    verbosity = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       description = ''
         Verbosity level.
       '';
     };
 
-    version = mkOption {
-      type = types.nullOr types.str;
+    version = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The version string replied for CH TXT version.server and version.bind
@@ -730,24 +728,24 @@ in
       '';
     };
 
-    xfrdReloadTimeout = mkOption {
-      type = types.int;
+    xfrdReloadTimeout = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = ''
         Number of seconds between reloads triggered by xfrd.
       '';
     };
 
-    zonefilesCheck = mkOption {
-      type = types.bool;
+    zonefilesCheck = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to check mtime of all zone files on start and sighup.
       '';
     };
 
-    zonefilesWrite = mkOption {
-      type = types.int;
+    zonefilesWrite = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       description = ''
         Write changed secondary zones to their zonefile every N seconds.
@@ -757,21 +755,21 @@ in
       '';
     };
 
-    keys = mkOption {
-      type = types.attrsOf (
-        types.submodule {
+    keys = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule {
           options = {
 
-            algorithm = mkOption {
-              type = types.str;
+            algorithm = lib.mkOption {
+              type = lib.types.str;
               default = "hmac-sha256";
               description = ''
                 Authentication algorithm for this key.
               '';
             };
 
-            keyFile = mkOption {
-              type = types.path;
+            keyFile = lib.mkOption {
+              type = lib.types.path;
               description = ''
                 Path to the file which contains the actual base64 encoded
                 key. The key will be copied into "${stateDir}/private" before
@@ -784,7 +782,7 @@ in
         }
       );
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "tsig.example.org" = {
             algorithm = "hmac-md5";
             keyFile = "/path/to/my/key";
@@ -798,26 +796,26 @@ in
 
     ratelimit = {
 
-      enable = mkEnableOption "ratelimit capabilities";
+      enable = lib.mkEnableOption "ratelimit capabilities";
 
-      ipv4PrefixLength = mkOption {
-        type = types.nullOr types.int;
+      ipv4PrefixLength = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           IPv4 prefix length. Addresses are grouped by netblock.
         '';
       };
 
-      ipv6PrefixLength = mkOption {
-        type = types.nullOr types.int;
+      ipv6PrefixLength = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           IPv6 prefix length. Addresses are grouped by netblock.
         '';
       };
 
-      ratelimit = mkOption {
-        type = types.int;
+      ratelimit = lib.mkOption {
+        type = lib.types.int;
         default = 200;
         description = ''
           Max qps allowed from any query source.
@@ -826,8 +824,8 @@ in
         '';
       };
 
-      slip = mkOption {
-        type = types.nullOr types.int;
+      slip = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Number of packets that get discarded before replying a SLIP response.
@@ -835,8 +833,8 @@ in
         '';
       };
 
-      size = mkOption {
-        type = types.int;
+      size = lib.mkOption {
+        type = lib.types.int;
         default = 1000000;
         description = ''
           Size of the hashtable. More buckets use more memory but lower
@@ -844,8 +842,8 @@ in
         '';
       };
 
-      whitelistRatelimit = mkOption {
-        type = types.int;
+      whitelistRatelimit = lib.mkOption {
+        type = lib.types.int;
         default = 2000;
         description = ''
           Max qps allowed from whitelisted sources.
@@ -858,10 +856,10 @@ in
 
     remoteControl = {
 
-      enable = mkEnableOption "remote control via nsd-control";
+      enable = lib.mkEnableOption "remote control via nsd-control";
 
-      controlCertFile = mkOption {
-        type = types.path;
+      controlCertFile = lib.mkOption {
+        type = lib.types.path;
         default = "/etc/nsd/nsd_control.pem";
         description = ''
           Path to the client certificate signed with the server certificate.
@@ -869,8 +867,8 @@ in
         '';
       };
 
-      controlKeyFile = mkOption {
-        type = types.path;
+      controlKeyFile = lib.mkOption {
+        type = lib.types.path;
         default = "/etc/nsd/nsd_control.key";
         description = ''
           Path to the client private key, which is used by nsd-control
@@ -878,8 +876,8 @@ in
         '';
       };
 
-      interfaces = mkOption {
-        type = types.listOf types.str;
+      interfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "127.0.0.1"
           "::1"
@@ -889,16 +887,16 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8952;
         description = ''
           Port number for remote control operations (uses TLS over TCP).
         '';
       };
 
-      serverCertFile = mkOption {
-        type = types.path;
+      serverCertFile = lib.mkOption {
+        type = lib.types.path;
         default = "/etc/nsd/nsd_server.pem";
         description = ''
           Path to the server self signed certificate, which is used by the server
@@ -906,8 +904,8 @@ in
         '';
       };
 
-      serverKeyFile = mkOption {
-        type = types.path;
+      serverKeyFile = lib.mkOption {
+        type = lib.types.path;
         default = "/etc/nsd/nsd_server.key";
         description = ''
           Path to the server private key, which is used by the server
@@ -917,10 +915,10 @@ in
 
     };
 
-    zones = mkOption {
-      type = types.attrsOf zoneOptions;
+    zones = lib.mkOption {
+      type = lib.types.attrsOf zoneOptions;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "serverGroup1" = {
             provideXFR = [ "10.1.2.3 NOKEY" ];
             children = {
@@ -962,9 +960,9 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    assertions = singleton {
+    assertions = lib.singleton {
       assertion = zoneConfigs ? "." -> cfg.rootServer;
       message =
         "You have a root zone configured. If this is really what you "
@@ -1023,7 +1021,7 @@ in
       '';
     };
 
-    systemd.timers.nsd-dnssec = mkIf dnssec {
+    systemd.timers.nsd-dnssec = lib.mkIf dnssec {
       description = "Automatic DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -1034,7 +1032,7 @@ in
       };
     };
 
-    systemd.services.nsd-dnssec = mkIf dnssec {
+    systemd.services.nsd-dnssec = lib.mkIf dnssec {
       description = "DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];

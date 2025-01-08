@@ -1,13 +1,11 @@
 { config, options, lib, utils, pkgs, ... }:
 
-with lib;
-
 let
   luks = config.boot.initrd.luks;
   clevis = config.boot.initrd.clevis;
   systemd = config.boot.initrd.systemd;
   kernelPackages = config.boot.kernelPackages;
-  defaultPrio = (mkOptionDefault {}).priority;
+  defaultPrio = (lib.mkOptionDefault {}).priority;
 
   commonFunctions = ''
     die() {
@@ -124,7 +122,7 @@ let
     # For YubiKey salt storage
     mkdir -p /crypt-storage
 
-    ${optionalString luks.gpgSupport ''
+    ${lib.optionalString luks.gpgSupport ''
     export GPG_TTY=$(tty)
     export GNUPGHOME=/crypt-ramfs/.gnupg
 
@@ -146,17 +144,17 @@ let
   openCommand = name: dev: assert name == dev.name;
   let
     csopen = "cryptsetup luksOpen ${dev.device} ${dev.name}"
-           + optionalString dev.allowDiscards " --allow-discards"
-           + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
-           + optionalString (dev.header != null) " --header=${dev.header}";
-    cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
-    fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
+           + lib.optionalString dev.allowDiscards " --allow-discards"
+           + lib.optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
+           + lib.optionalString (dev.header != null) " --header=${dev.header}";
+    cschange = "cryptsetup luksChangeKey ${dev.device} ${lib.optionalString (dev.header != null) "--header=${dev.header}"}";
+    fido2luksCredentials = dev.fido2.credentials ++ lib.optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
-    # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
+    # Wait for luksRoot (and lib.optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
     wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
 
-    ${optionalString (dev.header != null) ''
+    ${lib.optionalString (dev.header != null) ''
       wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
     ''}
 
@@ -226,8 +224,8 @@ let
         ${if (dev.keyFile != null) then ''
         if wait_target "key file" ${dev.keyFile}; then
             ${csopen} --key-file=${dev.keyFile} \
-              ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
-              ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
+              ${lib.optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
+              ${lib.optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
             cs_status=$?
             if [ $cs_status -ne 0 ]; then
               echo "Key File ${dev.keyFile} failed!"
@@ -252,7 +250,7 @@ let
         ''}
     }
 
-    ${optionalString (luks.yubikeySupport && (dev.yubikey != null)) ''
+    ${lib.optionalString (luks.yubikeySupport && (dev.yubikey != null)) ''
     # YubiKey
     rbtohex() {
         ( od -An -vtx1 | tr -d ' \n' )
@@ -287,7 +285,7 @@ let
         response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
 
         for try in $(seq 3); do
-            ${optionalString dev.yubikey.twoFactor ''
+            ${lib.optionalString dev.yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
             k_user=
             while true; do
@@ -345,7 +343,7 @@ let
         echo "ok"
 
         new_iterations="$iterations"
-        ${optionalString (dev.yubikey.iterationStep > 0) ''
+        ${lib.optionalString (dev.yubikey.iterationStep > 0) ''
         new_iterations="$(($new_iterations + ${toString dev.yubikey.iterationStep}))"
         ''}
 
@@ -389,7 +387,7 @@ let
     }
     ''}
 
-    ${optionalString (luks.gpgSupport && (dev.gpgCard != null)) ''
+    ${lib.optionalString (luks.gpgSupport && (dev.gpgCard != null)) ''
 
     do_open_gpg_card() {
         # Make all of these local to this function
@@ -454,7 +452,7 @@ let
     }
     ''}
 
-    ${optionalString (luks.fido2Support && fido2luksCredentials != []) ''
+    ${lib.optionalString (luks.fido2Support && fido2luksCredentials != []) ''
 
     open_with_hardware() {
       local passsphrase
@@ -465,12 +463,12 @@ let
           read -rsp "FIDO2 salt for ${dev.device}: " passphrase
           echo
         ''}
-        ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
+        ${lib.optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
           echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          fido2luks open${lib.optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -513,32 +511,32 @@ let
     done
   '';
 
-  preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
-  postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
+  preLVM = lib.filterAttrs (n: v: v.preLVM) luks.devices;
+  postLVM = lib.filterAttrs (n: v: !v.preLVM) luks.devices;
 
 
   stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatLines (lib.mapAttrsToList (n: v: let
     opts = v.crypttabExtraOpts
-      ++ optional v.allowDiscards "discard"
-      ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
-      ++ optional (v.header != null) "header=${v.header}"
-      ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
-      ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
-      ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
-      ++ optional (v.tryEmptyPassphrase) "try-empty-password=true"
+      ++ lib.optional v.allowDiscards "discard"
+      ++ lib.optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
+      ++ lib.optional (v.header != null) "header=${v.header}"
+      ++ lib.optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
+      ++ lib.optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
+      ++ lib.optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
+      ++ lib.optional (v.tryEmptyPassphrase) "try-empty-password=true"
     ;
   in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
 
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
+    (lib.mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
   ];
 
   options = {
 
-    boot.initrd.luks.mitigateDMAAttacks = mkOption {
-      type = types.bool;
+    boot.initrd.luks.mitigateDMAAttacks = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
@@ -550,8 +548,8 @@ in
       '';
     };
 
-    boot.initrd.luks.cryptoModules = mkOption {
-      type = types.listOf types.str;
+    boot.initrd.luks.cryptoModules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
@@ -563,8 +561,8 @@ in
       '';
     };
 
-    boot.initrd.luks.forceLuksSupportInInitrd = mkOption {
-      type = types.bool;
+    boot.initrd.luks.forceLuksSupportInInitrd = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       internal = true;
       description = ''
@@ -573,8 +571,8 @@ in
       '';
     };
 
-    boot.initrd.luks.reusePassphrases = mkOption {
-      type = types.bool;
+    boot.initrd.luks.reusePassphrases = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         When opening a new LUKS device try reusing last successful
@@ -589,7 +587,7 @@ in
       '';
     };
 
-    boot.initrd.luks.devices = mkOption {
+    boot.initrd.luks.devices = lib.mkOption {
       default = { };
       example = { luksroot.device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
       description = ''
@@ -599,37 +597,37 @@ in
         {file}`/dev/mapper/«name»`.
       '';
 
-      type = with types; attrsOf (submodule (
+      type = with lib.types; attrsOf (submodule (
         { config, name, ... }: { options = {
 
-          name = mkOption {
+          name = lib.mkOption {
             visible = false;
             default = name;
             example = "luksroot";
-            type = types.str;
+            type = lib.types.str;
             description = "Name of the unencrypted device in {file}`/dev/mapper`.";
           };
 
-          device = mkOption {
+          device = lib.mkOption {
             example = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08";
-            type = types.str;
+            type = lib.types.str;
             description = "Path of the underlying encrypted block device.";
           };
 
-          header = mkOption {
+          header = lib.mkOption {
             default = null;
             example = "/root/header.img";
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
             description = ''
               The name of the file or block device that
               should be used as header for the encrypted device.
             '';
           };
 
-          keyFile = mkOption {
+          keyFile = lib.mkOption {
             default = null;
             example = "/dev/sdb1";
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
             description = ''
               The name of the file (can be a raw device or a partition) that
               should be used as the decryption key for the encrypted device. If
@@ -637,29 +635,29 @@ in
             '';
           };
 
-          tryEmptyPassphrase = mkOption {
+          tryEmptyPassphrase = lib.mkOption {
             default = false;
-            type = types.bool;
+            type = lib.types.bool;
             description = ''
               If keyFile fails then try an empty passphrase first before
               prompting for password.
             '';
           };
 
-          keyFileTimeout = mkOption {
+          keyFileTimeout = lib.mkOption {
             default = null;
             example = 5;
-            type = types.nullOr types.int;
+            type = lib.types.nullOr lib.types.int;
             description = ''
               The amount of time in seconds for a keyFile to appear before
               timing out and trying passwords.
             '';
           };
 
-          keyFileSize = mkOption {
+          keyFileSize = lib.mkOption {
             default = null;
             example = 4096;
-            type = types.nullOr types.int;
+            type = lib.types.nullOr lib.types.int;
             description = ''
               The size of the key file. Use this if only the beginning of the
               key file should be used as a key (often the case if a raw device
@@ -669,10 +667,10 @@ in
             '';
           };
 
-          keyFileOffset = mkOption {
+          keyFileOffset = lib.mkOption {
             default = null;
             example = 4096;
-            type = types.nullOr types.int;
+            type = lib.types.nullOr lib.types.int;
             description = ''
               The offset of the key file. Use this in combination with
               `keyFileSize` to use part of a file as key file
@@ -683,15 +681,15 @@ in
           };
 
           # FIXME: get rid of this option.
-          preLVM = mkOption {
+          preLVM = lib.mkOption {
             default = true;
-            type = types.bool;
+            type = lib.types.bool;
             description = "Whether the luksOpen will be attempted before LVM scan or after it.";
           };
 
-          allowDiscards = mkOption {
+          allowDiscards = lib.mkOption {
             default = false;
-            type = types.bool;
+            type = lib.types.bool;
             description = ''
               Whether to allow TRIM requests to the underlying device. This option
               has security implications; please read the LUKS documentation before
@@ -701,9 +699,9 @@ in
             '';
           };
 
-          bypassWorkqueues = mkOption {
+          bypassWorkqueues = lib.mkOption {
             default = false;
-            type = types.bool;
+            type = lib.types.bool;
             description = ''
               Whether to bypass dm-crypt's internal read and write workqueues.
               Enabling this should improve performance on SSDs; see
@@ -712,9 +710,9 @@ in
             '';
           };
 
-          fallbackToPassword = mkOption {
+          fallbackToPassword = lib.mkOption {
             default = false;
-            type = types.bool;
+            type = lib.types.bool;
             description = ''
               Whether to fallback to interactive passphrase prompt if the keyfile
               cannot be found. This will prevent unattended boot should the keyfile
@@ -722,28 +720,28 @@ in
             '';
           };
 
-          gpgCard = mkOption {
+          gpgCard = lib.mkOption {
             default = null;
             description = ''
               The option to use this LUKS device with a GPG encrypted luks password by the GPG Smartcard.
               If null (the default), GPG-Smartcard will be disabled for this device.
             '';
 
-            type = with types; nullOr (submodule {
+            type = with lib.types; nullOr (submodule {
               options = {
-                gracePeriod = mkOption {
+                gracePeriod = lib.mkOption {
                   default = 10;
-                  type = types.int;
+                  type = lib.types.int;
                   description = "Time in seconds to wait for the GPG Smartcard.";
                 };
 
-                encryptedPass = mkOption {
-                  type = types.path;
+                encryptedPass = lib.mkOption {
+                  type = lib.types.path;
                   description = "Path to the GPG encrypted passphrase.";
                 };
 
-                publicKey = mkOption {
-                  type = types.path;
+                publicKey = lib.mkOption {
+                  type = lib.types.path;
                   description = "Path to the Public Key.";
                 };
               };
@@ -751,17 +749,17 @@ in
           };
 
           fido2 = {
-            credential = mkOption {
+            credential = lib.mkOption {
               default = null;
               example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = "The FIDO2 credential ID.";
             };
 
-            credentials = mkOption {
+            credentials = lib.mkOption {
               default = [];
               example = [ "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2" ];
-              type = types.listOf types.str;
+              type = lib.types.listOf lib.types.str;
               description = ''
                 List of FIDO2 credential IDs.
 
@@ -769,15 +767,15 @@ in
               '';
             };
 
-            gracePeriod = mkOption {
+            gracePeriod = lib.mkOption {
               default = 10;
-              type = types.int;
+              type = lib.types.int;
               description = "Time in seconds to wait for the FIDO2 key.";
             };
 
-            passwordLess = mkOption {
+            passwordLess = lib.mkOption {
               default = false;
-              type = types.bool;
+              type = lib.types.bool;
               description = ''
                 Defines whatever to use an empty string as a default salt.
 
@@ -786,48 +784,48 @@ in
             };
           };
 
-          yubikey = mkOption {
+          yubikey = lib.mkOption {
             default = null;
             description = ''
               The options to use for this LUKS device in YubiKey-PBA.
               If null (the default), YubiKey-PBA will be disabled for this device.
             '';
 
-            type = with types; nullOr (submodule {
+            type = with lib.types; nullOr (submodule {
               options = {
-                twoFactor = mkOption {
+                twoFactor = lib.mkOption {
                   default = true;
-                  type = types.bool;
+                  type = lib.types.bool;
                   description = "Whether to use a passphrase and a YubiKey (true), or only a YubiKey (false).";
                 };
 
-                slot = mkOption {
+                slot = lib.mkOption {
                   default = 2;
-                  type = types.int;
+                  type = lib.types.int;
                   description = "Which slot on the YubiKey to challenge.";
                 };
 
-                saltLength = mkOption {
+                saltLength = lib.mkOption {
                   default = 16;
-                  type = types.int;
+                  type = lib.types.int;
                   description = "Length of the new salt in byte (64 is the effective maximum).";
                 };
 
-                keyLength = mkOption {
+                keyLength = lib.mkOption {
                   default = 64;
-                  type = types.int;
+                  type = lib.types.int;
                   description = "Length of the LUKS slot key derived with PBKDF2 in byte.";
                 };
 
-                iterationStep = mkOption {
+                iterationStep = lib.mkOption {
                   default = 0;
-                  type = types.int;
+                  type = lib.types.int;
                   description = "How much the iteration count for PBKDF2 is increased at each successful authentication.";
                 };
 
-                gracePeriod = mkOption {
+                gracePeriod = lib.mkOption {
                   default = 10;
-                  type = types.int;
+                  type = lib.types.int;
                   description = "Time in seconds to wait for the YubiKey.";
                 };
 
@@ -836,24 +834,24 @@ in
                    Options related to the storing the salt.
                 */
                 storage = {
-                  device = mkOption {
+                  device = lib.mkOption {
                     default = "/dev/sda1";
-                    type = types.path;
+                    type = lib.types.path;
                     description = ''
                       An unencrypted device that will temporarily be mounted in stage-1.
                       Must contain the current salt to create the challenge for this LUKS device.
                     '';
                   };
 
-                  fsType = mkOption {
+                  fsType = lib.mkOption {
                     default = "vfat";
-                    type = types.str;
+                    type = lib.types.str;
                     description = "The filesystem of the unencrypted device.";
                   };
 
-                  path = mkOption {
+                  path = lib.mkOption {
                     default = "/crypt-storage/default";
-                    type = types.str;
+                    type = lib.types.str;
                     description = ''
                       Absolute path of the salt on the unencrypted device with
                       that device's root directory as "/".
@@ -864,8 +862,8 @@ in
             });
           };
 
-          preOpenCommands = mkOption {
-            type = types.lines;
+          preOpenCommands = lib.mkOption {
+            type = lib.types.lines;
             default = "";
             example = ''
               mkdir -p /tmp/persistent
@@ -877,8 +875,8 @@ in
             '';
           };
 
-          postOpenCommands = mkOption {
-            type = types.lines;
+          postOpenCommands = lib.mkOption {
+            type = lib.types.lines;
             default = "";
             example = ''
               umount /tmp/persistent
@@ -888,8 +886,8 @@ in
             '';
           };
 
-          crypttabExtraOpts = mkOption {
-            type = with types; listOf singleLineStr;
+          crypttabExtraOpts = lib.mkOption {
+            type = with lib.types; listOf singleLineStr;
             default = [];
             example = [ "_netdev" ];
             visible = false;
@@ -901,32 +899,32 @@ in
           };
         };
 
-        config = mkIf (clevis.enable && (hasAttr name clevis.devices)) {
-          preOpenCommands = mkIf (!systemd.enable) ''
+        config = lib.mkIf (clevis.enable && (hasAttr name clevis.devices)) {
+          preOpenCommands = lib.mkIf (!systemd.enable) ''
             mkdir -p /clevis-${name}
             mount -t ramfs none /clevis-${name}
             clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
           '';
           keyFile = "/clevis-${name}/decrypted";
           fallbackToPassword = !systemd.enable;
-          postOpenCommands = mkIf (!systemd.enable) ''
+          postOpenCommands = lib.mkIf (!systemd.enable) ''
             umount /clevis-${name}
           '';
         };
       }));
     };
 
-    boot.initrd.luks.gpgSupport = mkOption {
+    boot.initrd.luks.gpgSupport = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Enables support for authenticating with a GPG encrypted password.
       '';
     };
 
-    boot.initrd.luks.yubikeySupport = mkOption {
+    boot.initrd.luks.yubikeySupport = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
             Enables support for authenticating with a YubiKey on LUKS devices.
             See the NixOS wiki for information on how to properly setup a LUKS device
@@ -934,9 +932,9 @@ in
           '';
     };
 
-    boot.initrd.luks.fido2Support = mkOption {
+    boot.initrd.luks.fido2Support = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Enables support for authenticating with FIDO2 devices.
       '';
@@ -944,7 +942,7 @@ in
 
   };
 
-  config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
+  config = lib.mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
 
     assertions =
       [ { assertion = !(luks.gpgSupport && luks.yubikeySupport);
@@ -959,25 +957,25 @@ in
           message = "FIDO2 and YubiKey may not be used at the same time.";
         }
 
-        { assertion = any (dev: dev.bypassWorkqueues) (attrValues luks.devices)
-                      -> versionAtLeast kernelPackages.kernel.version "5.9";
+        { assertion = lib.any (dev: dev.bypassWorkqueues) (lib.attrValues luks.devices)
+                      -> lib.versionAtLeast kernelPackages.kernel.version "5.9";
           message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
         }
 
-        { assertion = !config.boot.initrd.systemd.enable -> all (x: x.keyFileTimeout == null) (attrValues luks.devices);
+        { assertion = !config.boot.initrd.systemd.enable -> lib.all (x: x.keyFileTimeout == null) (lib.attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.keyFileTimeout is only supported for systemd initrd";
         }
 
-        { assertion = config.boot.initrd.systemd.enable -> all (dev: !dev.fallbackToPassword) (attrValues luks.devices);
+        { assertion = config.boot.initrd.systemd.enable -> lib.all (dev: !dev.fallbackToPassword) (lib.attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.fallbackToPassword is implied by systemd stage 1.";
         }
-        { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
+        { assertion = config.boot.initrd.systemd.enable -> lib.all (dev: dev.preLVM) (lib.attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
         }
         { assertion = config.boot.initrd.systemd.enable -> options.boot.initrd.luks.reusePassphrases.highestPrio == defaultPrio;
           message = "boot.initrd.luks.reusePassphrases has no effect with systemd stage 1.";
         }
-        { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
+        { assertion = config.boot.initrd.systemd.enable -> lib.all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (lib.attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
         }
         # TODO
@@ -999,7 +997,7 @@ in
       ];
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
-    boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
+    boot.blacklistedKernelModules = lib.optionals luks.mitigateDMAAttacks
       ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
@@ -1007,7 +1005,7 @@ in
       ++ luks.cryptoModules
       # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
       # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-      ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
+      ++ (lib.optional (builtins.elem "xts" luks.cryptoModules) "ecb");
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = let
@@ -1017,12 +1015,12 @@ in
         strip -s "$out/bin/pbkdf2-sha512"
       '';
     in
-    mkIf (!config.boot.initrd.systemd.enable) ''
+    lib.mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
       copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
-      ${optionalString luks.yubikeySupport ''
+      ${lib.optionalString luks.yubikeySupport ''
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykchalresp
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykinfo
         copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
@@ -1040,41 +1038,41 @@ in
         chmod +x $out/bin/openssl-wrap
       ''}
 
-      ${optionalString luks.fido2Support ''
+      ${lib.optionalString luks.fido2Support ''
         copy_bin_and_libs ${pkgs.fido2luks}/bin/fido2luks
       ''}
 
 
-      ${optionalString luks.gpgSupport ''
+      ${lib.optionalString luks.gpgSupport ''
         copy_bin_and_libs ${pkgs.gnupg}/bin/gpg
         copy_bin_and_libs ${pkgs.gnupg}/bin/gpg-agent
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
-        ${concatMapStringsSep "\n" (x:
-          optionalString (x.gpgCard != null)
+        ${lib.concatMapStringsSep "\n" (x:
+          lib.optionalString (x.gpgCard != null)
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
               cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
               cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
-          ) (attrValues luks.devices)
+          ) (lib.attrValues luks.devices)
         }
       ''}
     '';
 
-    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       $out/bin/cryptsetup --version
-      ${optionalString luks.yubikeySupport ''
+      ${lib.optionalString luks.yubikeySupport ''
         $out/bin/ykchalresp -V
         $out/bin/ykinfo -V
         $out/bin/openssl-wrap version
       ''}
-      ${optionalString luks.gpgSupport ''
+      ${lib.optionalString luks.gpgSupport ''
         $out/bin/gpg --version
         $out/bin/gpg-agent --version
         $out/bin/scdaemon --version
       ''}
-      ${optionalString luks.fido2Support ''
+      ${lib.optionalString luks.fido2Support ''
         $out/bin/fido2luks --version
       ''}
     '';
@@ -1101,22 +1099,22 @@ in
     services.lvm.enable = true;
     boot.initrd.services.lvm.enable = true;
 
-    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) postCommands;
-    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands);
-    boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands);
+    boot.initrd.preFailCommands = lib.mkIf (!config.boot.initrd.systemd.enable) postCommands;
+    boot.initrd.preLVMCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + lib.concatStrings (lib.mapAttrsToList openCommand preLVM) + postCommands);
+    boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + lib.concatStrings (lib.mapAttrsToList openCommand postLVM) + postCommands);
 
-    boot.initrd.systemd.services = let devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices; in
-      mkIf (clevis.enable && systemd.enable) (
-        (mapAttrs'
-          (name: _: nameValuePair "cryptsetup-clevis-${name}" {
+    boot.initrd.systemd.services = let devicesWithClevis = lib.filterAttrs (device: _: (lib.hasAttr device clevis.devices)) luks.devices; in
+      lib.mkIf (clevis.enable && systemd.enable) (
+        (lib.mapAttrs'
+          (name: _: lib.nameValuePair "cryptsetup-clevis-${name}" {
             wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
             before = [
               "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
               "initrd-switch-root.target"
               "shutdown.target"
             ];
-            wants = [ "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
-            after = [ "systemd-modules-load.service" "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
+            wants = [ "systemd-udev-settle.service" ] ++ lib.optional clevis.useTang "network-online.target";
+            after = [ "systemd-modules-load.service" "systemd-udev-settle.service" ] ++ lib.optional clevis.useTang "network-online.target";
             script = ''
               mkdir -p /clevis-${name}
               mount -t ramfs none /clevis-${name}

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.jibri;
 
@@ -16,7 +14,7 @@ let
   # from an attribute name, which may not be a valid bash identifier.
   toVarName =
     s:
-    "XMPP_PASSWORD_" + stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
+    "XMPP_PASSWORD_" + lib.stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
 
   defaultJibriConfig = {
     id = "";
@@ -26,7 +24,7 @@ let
       http.external-api-port = 2222;
       http.internal-api-port = 3333;
 
-      xmpp.environments = flip mapAttrsToList cfg.xmppEnvironments (
+      xmpp.environments = lib.flip lib.mapAttrsToList cfg.xmppEnvironments (
         name: env: {
           inherit name;
 
@@ -71,7 +69,7 @@ let
       "--enabled"
       "--disable-infobars"
       "--autoplay-policy=no-user-gesture-required"
-    ] ++ lists.optional cfg.ignoreCert "--ignore-certificate-errors";
+    ] ++ lib.lists.optional cfg.ignoreCert "--ignore-certificate-errors";
 
     stats.enable-stats-d = true;
     webhook.subscribers = [ ];
@@ -85,13 +83,13 @@ let
     };
   };
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
-  jibriConfig = recursiveUpdate defaultJibriConfig cfg.config;
+  jibriConfig = lib.recursiveUpdate defaultJibriConfig cfg.config;
   configFile = format.generate "jibri.conf" { jibri = jibriConfig; };
 in
 {
-  options.services.jibri = with types; {
-    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`";
-    config = mkOption {
+  options.services.jibri = with lib.types; {
+    enable = lib.mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`";
+    config = lib.mkOption {
       type = format.type;
       default = { };
       description = ''
@@ -101,8 +99,8 @@ in
       '';
     };
 
-    finalizeScript = mkOption {
-      type = types.path;
+    finalizeScript = lib.mkOption {
+      type = lib.types.path;
       default = pkgs.writeScript "finalize_recording.sh" ''
         #!/bin/sh
 
@@ -115,7 +113,7 @@ in
 
         exit 0
       '';
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         pkgs.writeScript "finalize_recording.sh" ''''''
         #!/bin/sh
 
@@ -129,7 +127,7 @@ in
         exit 0
         '''''';
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         pkgs.writeScript "finalize_recording.sh" ''''''
         #!/bin/sh
         RECORDINGS_DIR=$1
@@ -142,7 +140,7 @@ in
       '';
     };
 
-    ignoreCert = mkOption {
+    ignoreCert = lib.mkOption {
       type = bool;
       default = false;
       example = true;
@@ -152,11 +150,11 @@ in
       '';
     };
 
-    xmppEnvironments = mkOption {
+    xmppEnvironments = lib.mkOption {
       description = ''
         XMPP servers to connect to.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         "jitsi-meet" = {
           xmppServerHosts = [ "localhost" ];
           xmppDomain = config.services.jitsi-meet.hostName;
@@ -190,54 +188,54 @@ in
           { name, ... }:
           {
             options = {
-              xmppServerHosts = mkOption {
+              xmppServerHosts = lib.mkOption {
                 type = listOf str;
                 example = [ "xmpp.example.org" ];
                 description = ''
                   Hostnames of the XMPP servers to connect to.
                 '';
               };
-              xmppDomain = mkOption {
+              xmppDomain = lib.mkOption {
                 type = str;
                 example = "xmpp.example.org";
                 description = ''
                   The base XMPP domain.
                 '';
               };
-              control.muc.domain = mkOption {
+              control.muc.domain = lib.mkOption {
                 type = str;
                 description = ''
                   The domain part of the MUC to connect to for control.
                 '';
               };
-              control.muc.roomName = mkOption {
+              control.muc.roomName = lib.mkOption {
                 type = str;
                 default = "JibriBrewery";
                 description = ''
                   The room name of the MUC to connect to for control.
                 '';
               };
-              control.muc.nickname = mkOption {
+              control.muc.nickname = lib.mkOption {
                 type = str;
                 default = "jibri";
                 description = ''
                   The nickname for this Jibri instance in the MUC.
                 '';
               };
-              control.login.domain = mkOption {
+              control.login.domain = lib.mkOption {
                 type = str;
                 description = ''
                   The domain part of the JID for this Jibri instance.
                 '';
               };
-              control.login.username = mkOption {
+              control.login.username = lib.mkOption {
                 type = str;
                 default = "jvb";
                 description = ''
                   User part of the JID.
                 '';
               };
-              control.login.passwordFile = mkOption {
+              control.login.passwordFile = lib.mkOption {
                 type = str;
                 example = "/run/keys/jibri-xmpp1";
                 description = ''
@@ -245,28 +243,28 @@ in
                 '';
               };
 
-              call.login.domain = mkOption {
+              call.login.domain = lib.mkOption {
                 type = str;
                 example = "recorder.xmpp.example.org";
                 description = ''
                   The domain part of the JID for the recorder.
                 '';
               };
-              call.login.username = mkOption {
+              call.login.username = lib.mkOption {
                 type = str;
                 default = "recorder";
                 description = ''
                   User part of the JID for the recorder.
                 '';
               };
-              call.login.passwordFile = mkOption {
+              call.login.passwordFile = lib.mkOption {
                 type = str;
                 example = "/run/keys/jibri-recorder-xmpp1";
                 description = ''
                   File containing the password for the user.
                 '';
               };
-              disableCertificateVerification = mkOption {
+              disableCertificateVerification = lib.mkOption {
                 type = bool;
                 default = false;
                 description = ''
@@ -274,7 +272,7 @@ in
                 '';
               };
 
-              stripFromRoomDomain = mkOption {
+              stripFromRoomDomain = lib.mkOption {
                 type = str;
                 default = "0";
                 example = "conference.";
@@ -282,7 +280,7 @@ in
                   The prefix to strip from the room's JID domain to derive the call URL.
                 '';
               };
-              usageTimeout = mkOption {
+              usageTimeout = lib.mkOption {
                 type = str;
                 default = "0";
                 example = "1 hour";
@@ -295,10 +293,10 @@ in
 
             config =
               let
-                nick = mkDefault (
+                nick = lib.mkDefault (
                   builtins.replaceStrings [ "." ] [ "-" ] (
                     config.networking.hostName
-                    + optionalString (config.networking.domain != null) ".${config.networking.domain}"
+                    + lib.optionalString (config.networking.domain != null) ".${config.networking.domain}"
                   )
                 );
               in
@@ -312,7 +310,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.jibri = { };
     users.groups.plugdev = { };
     users.users.jibri = {
@@ -397,8 +395,8 @@ in
       ];
 
       script =
-        (concatStrings (
-          mapAttrsToList (name: env: ''
+        (lib.concatStrings (
+          lib.mapAttrsToList (name: env: ''
             export ${toVarName "${name}_control"}=$(cat ${env.control.login.passwordFile})
             export ${toVarName "${name}_call"}=$(cat ${env.call.login.passwordFile})
           '') cfg.xmppEnvironments

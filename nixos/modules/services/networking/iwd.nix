@@ -10,7 +10,7 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     recursiveUpdate
     ;
@@ -29,11 +29,11 @@ let
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption "iwd";
+    enable = lib.mkEnableOption "iwd";
 
-    package = mkPackageOption pkgs "iwd" { };
+    package = lib.mkPackageOption pkgs "iwd" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = ini.type;
       default = { };
 
@@ -53,7 +53,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !config.networking.wireless.enable;

@@ -16,14 +16,14 @@ in
       package = lib.mkPackageOption pkgs "open-webui" { };
 
       stateDir = lib.mkOption {
-        type = types.path;
+        type = lib.types.path;
         default = "/var/lib/open-webui";
         example = "/home/foo";
         description = "State directory of Open-WebUI.";
       };
 
       host = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
         description = ''
@@ -32,7 +32,7 @@ in
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 8080;
         example = 11111;
         description = ''
@@ -41,7 +41,7 @@ in
       };
 
       environment = lib.mkOption {
-        type = types.attrsOf types.str;
+        type = lib.types.attrsOf lib.types.str;
         default = {
           SCARF_NO_ANALYTICS = "True";
           DO_NOT_TRACK = "True";
@@ -72,7 +72,7 @@ in
       };
 
       openFirewall = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the firewall for Open-WebUI.

@@ -21,8 +21,8 @@ let
     mergeEqualOption
     mkIf
     mkMerge
-    mkOption
-    mkOptionType
+    lib.mkOption
+    lib.mkOptionType
     singleton
     toList
     types
@@ -39,7 +39,7 @@ let
 
 in rec {
 
-  unitOption = mkOptionType {
+  unitOption = lib.mkOptionType {
     name = "systemd option";
     merge = loc: defs:
       let
@@ -52,9 +52,9 @@ in rec {
 
   sharedOptions = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         If set to false, this unit will be a symlink to
         /dev/null. This is primarily useful to prevent specific
@@ -74,9 +74,9 @@ in rec {
       '';
     };
 
-    overrideStrategy = mkOption {
+    overrideStrategy = lib.mkOption {
       default = "asDropinIfExists";
-      type = types.enum [ "asDropinIfExists" "asDropin" ];
+      type = lib.types.enum [ "asDropinIfExists" "asDropin" ];
       description = ''
         Defines how unit configuration is provided for systemd:
 
@@ -90,9 +90,9 @@ in rec {
       '';
     };
 
-    requiredBy = mkOption {
+    requiredBy = lib.mkOption {
       default = [];
-      type = types.listOf unitNameType;
+      type = lib.types.listOf unitNameType;
       description = ''
         Units that require (i.e. depend on and need to go down with) this unit.
         As discussed in the `wantedBy` option description this also creates
@@ -100,18 +100,18 @@ in rec {
       '';
     };
 
-    upheldBy = mkOption {
+    upheldBy = lib.mkOption {
       default = [];
-      type = types.listOf unitNameType;
+      type = lib.types.listOf unitNameType;
       description = ''
         Keep this unit running as long as the listed units are running. This is a continuously
         enforced version of wantedBy.
       '';
     };
 
-    wantedBy = mkOption {
+    wantedBy = lib.mkOption {
       default = [];
-      type = types.listOf unitNameType;
+      type = lib.types.listOf unitNameType;
       description = ''
         Units that want (i.e. depend on) this unit. The default method for
         starting a unit by default at boot time is to set this option to
@@ -127,9 +127,9 @@ in rec {
       '';
     };
 
-    aliases = mkOption {
+    aliases = lib.mkOption {
       default = [];
-      type = types.listOf unitNameType;
+      type = lib.types.listOf unitNameType;
       description = "Aliases of that unit.";
     };
 
@@ -137,13 +137,13 @@ in rec {
 
   concreteUnitOptions = sharedOptions // {
 
-    text = mkOption {
-      type = types.nullOr types.str;
+    text = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Text of this systemd unit.";
     };
 
-    unit = mkOption {
+    unit = lib.mkOption {
       internal = true;
       description = "The generated unit.";
     };
@@ -153,101 +153,101 @@ in rec {
   commonUnitOptions = {
     options = sharedOptions // {
 
-      description = mkOption {
+      description = lib.mkOption {
         default = "";
-        type = types.singleLineStr;
+        type = lib.types.singleLineStr;
         description = "Description of this unit used in systemd messages and progress indicators.";
       };
 
-      documentation = mkOption {
+      documentation = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = "A list of URIs referencing documentation for this unit or its configuration.";
       };
 
-      requires = mkOption {
+      requires = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           Start the specified units when this unit is started, and stop
           this unit when the specified units are stopped or fail.
         '';
       };
 
-      wants = mkOption {
+      wants = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           Start the specified units when this unit is started.
         '';
       };
 
-      upholds = mkOption {
+      upholds = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           Keeps the specified running while this unit is running. A continuous version of `wants`.
         '';
       };
 
-      after = mkOption {
+      after = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           If the specified units are started at the same time as
           this unit, delay this unit until they have started.
         '';
       };
 
-      before = mkOption {
+      before = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           If the specified units are started at the same time as
           this unit, delay them until this unit has started.
         '';
       };
 
-      bindsTo = mkOption {
+      bindsTo = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           Like ‘requires’, but in addition, if the specified units
           unexpectedly disappear, this unit will be stopped as well.
         '';
       };
 
-      partOf = mkOption {
+      partOf = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           If the specified units are stopped or restarted, then this
           unit is stopped or restarted as well.
         '';
       };
 
-      conflicts = mkOption {
+      conflicts = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           If the specified units are started, then this unit is stopped
           and vice versa.
         '';
       };
 
-      requisite = mkOption {
+      requisite = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           Similar to requires. However if the units listed are not started,
           they will not be started and the transaction will fail.
         '';
       };
 
-      unitConfig = mkOption {
+      unitConfig = lib.mkOption {
         default = {};
         example = { RequiresMountsFor = "/data"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Unit]` section of the unit.  See
@@ -255,26 +255,26 @@ in rec {
         '';
       };
 
-      onFailure = mkOption {
+      onFailure = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           A list of one or more units that are activated when
           this unit enters the "failed" state.
         '';
       };
 
-      onSuccess = mkOption {
+      onSuccess = lib.mkOption {
         default = [];
-        type = types.listOf unitNameType;
+        type = lib.types.listOf unitNameType;
         description = ''
           A list of one or more units that are activated when
           this unit enters the "inactive" state.
         '';
       };
 
-      startLimitBurst = mkOption {
-         type = types.int;
+      startLimitBurst = lib.mkOption {
+         type = lib.types.int;
          description = ''
            Configure unit start rate limiting. Units which are started
            more than startLimitBurst times within an interval time
@@ -282,8 +282,8 @@ in rec {
          '';
       };
 
-      startLimitIntervalSec = mkOption {
-         type = types.int;
+      startLimitIntervalSec = lib.mkOption {
+         type = lib.types.int;
          description = ''
            Configure unit start rate limiting. Units which are started
            more than startLimitBurst times within an interval time
@@ -300,9 +300,9 @@ in rec {
     ];
 
     options = {
-      restartTriggers = mkOption {
+      restartTriggers = lib.mkOption {
         default = [];
-        type = types.listOf types.unspecified;
+        type = lib.types.listOf types.unspecified;
         description = ''
           An arbitrary list of items such as derivations.  If any item
           in the list changes between reconfigurations, the service will
@@ -310,9 +310,9 @@ in rec {
         '';
       };
 
-      reloadTriggers = mkOption {
+      reloadTriggers = lib.mkOption {
         default = [];
-        type = types.listOf unitOption;
+        type = lib.types.listOf unitOption;
         description = ''
           An arbitrary list of items such as derivations.  If any item
           in the list changes between reconfigurations, the service will
@@ -327,16 +327,16 @@ in rec {
   serviceOptions = { name, config, ... }: {
     options = {
 
-      environment = mkOption {
+      environment = lib.mkOption {
         default = {};
-        type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+        type = with lib.types; attrsOf (nullOr (oneOf [ str path package ]));
         example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
         description = "Environment variables passed to the service's processes.";
       };
 
-      path = mkOption {
+      path = lib.mkOption {
         default = [];
-        type = with types; listOf (oneOf [ package str ]);
+        type = with lib.types; listOf (oneOf [ package str ]);
         description = ''
           Packages added to the service's {env}`PATH`
           environment variable.  Both the {file}`bin`
@@ -345,12 +345,12 @@ in rec {
         '';
       };
 
-      serviceConfig = mkOption {
+      serviceConfig = lib.mkOption {
         default = {};
         example =
           { RestartSec = 5;
           };
-        type = types.addCheck (types.attrsOf unitOption) checkService;
+        type = lib.types.addCheck (types.attrsOf unitOption) checkService;
         description = ''
           Each attribute in this set specifies an option in the
           `[Service]` section of the unit.  See
@@ -358,22 +358,22 @@ in rec {
         '';
       };
 
-      enableStrictShellChecks = mkOption {
-        type = types.bool;
+      enableStrictShellChecks = lib.mkOption {
+        type = lib.types.bool;
         description = "Enable running shellcheck on the generated scripts for this unit.";
         # The default gets set in systemd-lib.nix because we don't have access to
         # the full NixOS config here.
-        defaultText = literalExpression "config.systemd.enableStrictShellChecks";
+        defaultText = lib.literalExpression "config.systemd.enableStrictShellChecks";
       };
 
-      script = mkOption {
-        type = types.lines;
+      script = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Shell commands executed as the service's main process.";
       };
 
-      scriptArgs = mkOption {
-        type = types.str;
+      scriptArgs = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "%i";
         description = ''
@@ -382,8 +382,8 @@ in rec {
         '';
       };
 
-      preStart = mkOption {
-        type = types.lines;
+      preStart = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Shell commands executed before the service's main process
@@ -391,8 +391,8 @@ in rec {
         '';
       };
 
-      postStart = mkOption {
-        type = types.lines;
+      postStart = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Shell commands executed after the service's main process
@@ -400,8 +400,8 @@ in rec {
         '';
       };
 
-      reload = mkOption {
-        type = types.lines;
+      reload = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Shell commands executed when the service's main process
@@ -409,16 +409,16 @@ in rec {
         '';
       };
 
-      preStop = mkOption {
-        type = types.lines;
+      preStop = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Shell commands executed to stop the service.
         '';
       };
 
-      postStop = mkOption {
-        type = types.lines;
+      postStop = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Shell commands executed after the service's main process
@@ -426,8 +426,8 @@ in rec {
         '';
       };
 
-      jobScripts = mkOption {
-        type = with types; coercedTo path singleton (listOf path);
+      jobScripts = lib.mkOption {
+        type = with lib.types; coercedTo path singleton (listOf path);
         internal = true;
         description = "A list of all job script derivations of this unit.";
         default = [];
@@ -435,8 +435,8 @@ in rec {
 
     };
 
-    config = mkMerge [
-      (mkIf (config.preStart != "") rec {
+    config = lib.mkMerge [
+      (lib.mkIf (config.preStart != "") rec {
         jobScripts = makeJobScript {
           name = "${name}-pre-start";
           text = config.preStart;
@@ -444,7 +444,7 @@ in rec {
         };
         serviceConfig.ExecStartPre = [ jobScripts ];
       })
-      (mkIf (config.script != "") rec {
+      (lib.mkIf (config.script != "") rec {
         jobScripts = makeJobScript {
           name = "${name}-start";
           text = config.script;
@@ -452,7 +452,7 @@ in rec {
         };
         serviceConfig.ExecStart = jobScripts + " " + config.scriptArgs;
       })
-      (mkIf (config.postStart != "") rec {
+      (lib.mkIf (config.postStart != "") rec {
         jobScripts = makeJobScript {
           name = "${name}-post-start";
           text = config.postStart;
@@ -460,7 +460,7 @@ in rec {
         };
         serviceConfig.ExecStartPost = [ jobScripts ];
       })
-      (mkIf (config.reload != "") rec {
+      (lib.mkIf (config.reload != "") rec {
         jobScripts = makeJobScript {
           name = "${name}-reload";
           text = config.reload;
@@ -468,7 +468,7 @@ in rec {
         };
         serviceConfig.ExecReload = jobScripts;
       })
-      (mkIf (config.preStop != "") rec {
+      (lib.mkIf (config.preStop != "") rec {
         jobScripts = makeJobScript {
           name = "${name}-pre-stop";
           text = config.preStop;
@@ -476,7 +476,7 @@ in rec {
         };
         serviceConfig.ExecStop = jobScripts;
       })
-      (mkIf (config.postStop != "") rec {
+      (lib.mkIf (config.postStop != "") rec {
         jobScripts = makeJobScript {
           name = "${name}-post-stop";
           text = config.postStop;
@@ -495,8 +495,8 @@ in rec {
     ];
 
     options = {
-      restartIfChanged = mkOption {
-        type = types.bool;
+      restartIfChanged = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether the service should be restarted during a NixOS
@@ -504,8 +504,8 @@ in rec {
         '';
       };
 
-      reloadIfChanged = mkOption {
-        type = types.bool;
+      reloadIfChanged = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether the service should be reloaded during a NixOS
@@ -520,8 +520,8 @@ in rec {
         '';
       };
 
-      stopIfChanged = mkOption {
-        type = types.bool;
+      stopIfChanged = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           If set, a changed unit is restarted by calling
@@ -535,8 +535,8 @@ in rec {
         '';
       };
 
-      notSocketActivated = mkOption {
-        type = types.bool;
+      notSocketActivated = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If set, a changed unit is never assumed to be
@@ -547,8 +547,8 @@ in rec {
         '';
       };
 
-      startAt = mkOption {
-        type = with types; either str (listOf str);
+      startAt = lib.mkOption {
+        type = with lib.types; either str (listOf str);
         default = [];
         example = "Sun 14:00:00";
         description = ''
@@ -574,9 +574,9 @@ in rec {
   socketOptions = {
     options = {
 
-      listenStreams = mkOption {
+      listenStreams = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [ "0.0.0.0:993" "/run/my-socket" ];
         description = ''
           For each item in this list, a `ListenStream`
@@ -584,9 +584,9 @@ in rec {
         '';
       };
 
-      listenDatagrams = mkOption {
+      listenDatagrams = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [ "0.0.0.0:993" "/run/my-socket" ];
         description = ''
           For each item in this list, a `ListenDatagram`
@@ -594,10 +594,10 @@ in rec {
         '';
       };
 
-      socketConfig = mkOption {
+      socketConfig = lib.mkOption {
         default = {};
         example = { ListenStream = "/run/my-socket"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Socket]` section of the unit.  See
@@ -626,10 +626,10 @@ in rec {
   timerOptions = {
     options = {
 
-      timerConfig = mkOption {
+      timerConfig = lib.mkOption {
         default = {};
         example = { OnCalendar = "Sun 14:00:00"; Unit = "foo.service"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Timer]` section of the unit.  See
@@ -659,10 +659,10 @@ in rec {
   pathOptions = {
     options = {
 
-      pathConfig = mkOption {
+      pathConfig = lib.mkOption {
         default = {};
         example = { PathChanged = "/some/path"; Unit = "changedpath.service"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Path]` section of the unit.  See
@@ -691,39 +691,39 @@ in rec {
   mountOptions = {
     options = {
 
-      what = mkOption {
+      what = lib.mkOption {
         example = "/dev/sda1";
-        type = types.str;
+        type = lib.types.str;
         description = "Absolute path of device node, file or other resource. (Mandatory)";
       };
 
-      where = mkOption {
+      where = lib.mkOption {
         example = "/mnt";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Absolute path of a directory of the mount point.
           Will be created if it doesn't exist. (Mandatory)
         '';
       };
 
-      type = mkOption {
+      type = lib.mkOption {
         default = "";
         example = "ext4";
-        type = types.str;
+        type = lib.types.str;
         description = "File system type.";
       };
 
-      options = mkOption {
+      options = lib.mkOption {
         default = "";
         example = "noatime";
-        type = types.commas;
+        type = lib.types.commas;
         description = "Options used to mount the file system.";
       };
 
-      mountConfig = mkOption {
+      mountConfig = lib.mkOption {
         default = {};
         example = { DirectoryMode = "0775"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Mount]` section of the unit.  See
@@ -751,19 +751,19 @@ in rec {
   automountOptions = {
     options = {
 
-      where = mkOption {
+      where = lib.mkOption {
         example = "/mnt";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Absolute path of a directory of the mount point.
           Will be created if it doesn't exist. (Mandatory)
         '';
       };
 
-      automountConfig = mkOption {
+      automountConfig = lib.mkOption {
         default = {};
         example = { DirectoryMode = "0775"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Automount]` section of the unit.  See
@@ -791,10 +791,10 @@ in rec {
   sliceOptions = {
     options = {
 
-      sliceConfig = mkOption {
+      sliceConfig = lib.mkOption {
         default = {};
         example = { MemoryMax = "2G"; };
-        type = types.attrsOf unitOption;
+        type = lib.types.attrsOf unitOption;
         description = ''
           Each attribute in this set specifies an option in the
           `[Slice]` section of the unit.  See

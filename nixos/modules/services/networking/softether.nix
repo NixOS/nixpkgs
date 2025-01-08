@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.softether;
 
@@ -16,25 +14,25 @@ in
 
     services.softether = {
 
-      enable = mkEnableOption "SoftEther VPN services";
+      enable = lib.mkEnableOption "SoftEther VPN services";
 
-      package = mkPackageOption pkgs "softether" { };
+      package = lib.mkPackageOption pkgs "softether" { };
 
-      vpnserver.enable = mkEnableOption "SoftEther VPN Server";
+      vpnserver.enable = lib.mkEnableOption "SoftEther VPN Server";
 
-      vpnbridge.enable = mkEnableOption "SoftEther VPN Bridge";
+      vpnbridge.enable = lib.mkEnableOption "SoftEther VPN Bridge";
 
       vpnclient = {
-        enable = mkEnableOption "SoftEther VPN Client";
-        up = mkOption {
-          type = types.lines;
+        enable = lib.mkEnableOption "SoftEther VPN Client";
+        up = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           description = ''
             Shell commands executed when the Virtual Network Adapter(s) is/are starting.
           '';
         };
-        down = mkOption {
-          type = types.lines;
+        down = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           description = ''
             Shell commands executed when the Virtual Network Adapter(s) is/are shutting down.
@@ -42,8 +40,8 @@ in
         };
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/softether";
         description = ''
           Data directory for SoftEther VPN.
@@ -56,9 +54,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
 
-    mkMerge [{
+    lib.mkMerge [{
       environment.systemPackages = [ package ];
 
       systemd.services.softether-init = {
@@ -81,7 +79,7 @@ in
       };
     }
 
-    (mkIf cfg.vpnserver.enable {
+    (lib.mkIf cfg.vpnserver.enable {
       systemd.services.vpnserver = {
         description = "SoftEther VPN Server";
         after = [ "softether-init.service" ];
@@ -102,7 +100,7 @@ in
       };
     })
 
-    (mkIf cfg.vpnbridge.enable {
+    (lib.mkIf cfg.vpnbridge.enable {
       systemd.services.vpnbridge = {
         description = "SoftEther VPN Bridge";
         after = [ "softether-init.service" ];
@@ -123,7 +121,7 @@ in
       };
     })
 
-    (mkIf cfg.vpnclient.enable {
+    (lib.mkIf cfg.vpnclient.enable {
       systemd.services.vpnclient = {
         description = "SoftEther VPN Client";
         after = [ "softether-init.service" ];

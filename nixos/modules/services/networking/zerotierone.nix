@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.zerotierone;
 
@@ -15,12 +13,12 @@ let
   localConfFilePath = "/var/lib/zerotier-one/local.conf";
 in
 {
-  options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
+  options.services.zerotierone.enable = lib.mkEnableOption "ZeroTierOne";
 
-  options.services.zerotierone.joinNetworks = mkOption {
+  options.services.zerotierone.joinNetworks = lib.mkOption {
     default = [ ];
     example = [ "a8a2c3c10c1a68de" ];
-    type = types.listOf types.str;
+    type = lib.types.listOf lib.types.str;
     description = ''
       List of ZeroTier Network IDs to join on startup.
       Note that networks are only ever joined, but not automatically left after removing them from the list.
@@ -28,17 +26,17 @@ in
     '';
   };
 
-  options.services.zerotierone.port = mkOption {
+  options.services.zerotierone.port = lib.mkOption {
     default = 9993;
-    type = types.port;
+    type = lib.types.port;
     description = ''
       Network port used by ZeroTier.
     '';
   };
 
-  options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
+  options.services.zerotierone.package = lib.mkPackageOption pkgs "zerotierone" { };
 
-  options.services.zerotierone.localConf = mkOption {
+  options.services.zerotierone.localConf = lib.mkOption {
     default = { };
     description = ''
       Optional configuration to be written to the Zerotier JSON-based local.conf.
@@ -51,7 +49,7 @@ in
     type = settingsFormat.type;
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
 
@@ -72,7 +70,7 @@ in
             rm ${localConfFilePath}
           fi
         ''
-        + (concatMapStrings (netId: ''
+        + (lib.concatMapStrings (netId: ''
           touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
         '') cfg.joinNetworks)
         + lib.optionalString (cfg.localConf != { }) ''

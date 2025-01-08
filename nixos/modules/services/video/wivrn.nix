@@ -9,9 +9,9 @@ let
     mkIf
     mkEnableOption
     mkPackageOption
-    mkOption
-    optionalString
-    optionalAttrs
+    lib.mkOption
+    lib.optionalString
+    lib.optionalAttrs
     isDerivation
     recursiveUpdate
     getExe
@@ -47,7 +47,7 @@ let
     else
       cfg.config.json.application
   );
-  applicationPackage = mkIf applicationCheck applicationAttr;
+  applicationPackage = lib.mkIf applicationCheck applicationAttr;
   applicationPackageExe = getExe applicationAttr;
   serverPackageExe = getExe cfg.package;
 
@@ -62,10 +62,10 @@ let
 
   # Manage config file
   applicationUpdate = recursiveUpdate cfg.config.json (
-    optionalAttrs applicationCheck { application = applicationConcat; }
+    lib.optionalAttrs applicationCheck { application = applicationConcat; }
   );
   configFile = configFormat.generate "config.json" applicationUpdate;
-  enabledConfig = optionalString cfg.config.enable "-f ${configFile}";
+  enabledConfig = lib.optionalString cfg.config.enable "-f ${configFile}";
 
   # Manage server executables and flags
   serverExec = builtins.concatStringsSep " " (
@@ -88,9 +88,9 @@ in
 {
   options = {
     services.wivrn = {
-      enable = mkEnableOption "WiVRn, an OpenXR streaming application";
+      enable = lib.mkEnableOption "WiVRn, an OpenXR streaming application";
 
-      package = mkPackageOption pkgs "wivrn" { };
+      package = lib.mkPackageOption pkgs "wivrn" { };
 
       openFirewall = mkEnableOption "the default ports in the firewall for the WiVRn server";
 
@@ -104,8 +104,8 @@ in
 
       autoStart = mkEnableOption "starting the service by default";
 
-      monadoEnvironment = mkOption {
-        type = types.attrs;
+      monadoEnvironment = lib.mkOption {
+        type = lib.types.attrs;
         description = "Environment variables to be passed to the Monado environment.";
         default = {
           XRT_COMPOSITOR_LOG = "debug";
@@ -114,29 +114,29 @@ in
         };
       };
 
-      extraServerFlags = mkOption {
-        type = types.listOf types.str;
+      extraServerFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "Flags to add to the wivrn service.";
         default = [ ];
         example = ''[ "--no-publish-service" ]'';
       };
 
-      extraApplicationFlags = mkOption {
-        type = types.listOf types.str;
+      extraApplicationFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "Flags to add to the wivrn-application service. This is NOT the WiVRn startup application.";
         default = [ ];
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         description = "Packages to add to the wivrn-application service $PATH.";
         default = [ ];
-        example = literalExpression "[ pkgs.bash pkgs.procps ]";
+        example = lib.literalExpression "[ pkgs.bash pkgs.procps ]";
       };
 
       config = {
-        enable = mkEnableOption "configuration for WiVRn";
-        json = mkOption {
+        enable = lib.mkEnableOption "configuration for WiVRn";
+        json = lib.mkOption {
           type = configFormat.type;
           description = ''
             Configuration for WiVRn. The attributes are serialized to JSON in config.json. If a config or certain attributes are not provided, the server will default to stock values.
@@ -147,7 +147,7 @@ in
             See https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md
           '';
           default = { };
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               scale = 0.5;
               bitrate = 100000000;
@@ -169,7 +169,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !applicationCheck || isDerivation applicationAttr;
@@ -208,10 +208,10 @@ in
             RestrictNamespaces = true;
             RestrictSUIDSGID = true;
           };
-          wantedBy = mkIf cfg.autoStart [ "default.target" ];
+          wantedBy = lib.mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [ cfg.package ];
         };
-        wivrn-application = mkIf applicationCheck {
+        wivrn-application = lib.mkIf applicationCheck {
           description = "WiVRn application service";
           requires = [ "wivrn.service" ];
           serviceConfig = {
@@ -236,7 +236,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 9757 ];
       allowedUDPPorts = [ 9757 ];
     };
@@ -247,7 +247,7 @@ in
         applicationPackage
       ];
       pathsToLink = [ "/share/openxr" ];
-      etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
+      etc."xdg/openxr/1/active_runtime.json" = lib.mkIf cfg.defaultRuntime {
         source = "${cfg.package}/share/openxr/1/openxr_wivrn.json";
       };
     };

@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.json;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     escapeShellArg
     concatStringsSep
@@ -19,8 +19,8 @@ in
 {
   port = 7979;
   extraOpts = {
-    configFile = mkOption {
-      type = types.path;
+    configFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to configuration file.
       '';
@@ -30,14 +30,14 @@ in
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-json-exporter}/bin/json_exporter \
-          --config.file ${escapeShellArg cfg.configFile} \
+          --config.file ${lib.escapeShellArg cfg.configFile} \
           --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };
   imports = [
-    (mkRemovedOptionModule [ "url" ] ''
+    (lib.mkRemovedOptionModule [ "url" ] ''
       This option was removed. The URL of the endpoint serving JSON
       must now be provided to the exporter by prometheus via the url
       parameter `target'.

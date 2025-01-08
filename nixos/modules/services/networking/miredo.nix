@@ -5,16 +5,14 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.miredo;
   pidFile = "/run/miredo.pid";
   miredoConf = pkgs.writeText "miredo.conf" ''
     InterfaceName ${cfg.interfaceName}
     ServerAddress ${cfg.serverAddress}
-    ${optionalString (cfg.bindAddress != null) "BindAddress ${cfg.bindAddress}"}
-    ${optionalString (cfg.bindPort != null) "BindPort ${cfg.bindPort}"}
+    ${lib.optionalString (cfg.bindAddress != null) "BindAddress ${cfg.bindAddress}"}
+    ${lib.optionalString (cfg.bindPort != null) "BindPort ${cfg.bindPort}"}
   '';
 in
 {
@@ -25,13 +23,13 @@ in
 
     services.miredo = {
 
-      enable = mkEnableOption "the Miredo IPv6 tunneling service";
+      enable = lib.mkEnableOption "the Miredo IPv6 tunneling service";
 
-      package = mkPackageOption pkgs "miredo" { };
+      package = lib.mkPackageOption pkgs "miredo" { };
 
-      serverAddress = mkOption {
+      serverAddress = lib.mkOption {
         default = "teredo.remlab.net";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The hostname or primary IPv4 address of the Teredo server.
           This setting is required if Miredo runs as a Teredo client.
@@ -40,26 +38,26 @@ in
         '';
       };
 
-      interfaceName = mkOption {
+      interfaceName = lib.mkOption {
         default = "teredo";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Name of the network tunneling interface.
         '';
       };
 
-      bindAddress = mkOption {
+      bindAddress = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           Depending on the local firewall/NAT rules, you might need to force
           Miredo to use a fixed UDP port and or IPv4 address.
         '';
       };
 
-      bindPort = mkOption {
+      bindPort = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           Depending on the local firewall/NAT rules, you might need to force
           Miredo to use a fixed UDP port and or IPv4 address.
@@ -70,7 +68,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.miredo = {
       wantedBy = [ "multi-user.target" ];

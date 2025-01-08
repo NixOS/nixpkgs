@@ -7,7 +7,7 @@ in
 {
   options = {
     virtualisation.rosetta.enable = lib.mkOption {
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable [Rosetta](https://developer.apple.com/documentation/apple-silicon/about-the-rosetta-translation-environment) support.
@@ -20,7 +20,7 @@ in
     };
 
     virtualisation.rosetta.mountPoint = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       default = "/run/rosetta";
       internal = true;
       description = ''
@@ -31,7 +31,7 @@ in
     };
 
     virtualisation.rosetta.mountTag = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       default = "rosetta";
       description = ''
         The VirtioFS mount tag for the Rosetta runtime, exposed by the host's virtualisation software.

@@ -1,20 +1,19 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.tinc;
 
   mkValueString = value:
     if value == true then "yes"
     else if value == false then "no"
-    else generators.mkValueStringDefault { } value;
+    else lib.generators.mkValueStringDefault { } value;
 
-  toTincConf = generators.toKeyValue {
+  toTincConf = lib.generators.toKeyValue {
     listsAsDuplicateKeys = true;
-    mkKeyValue = generators.mkKeyValueDefault { inherit mkValueString; } "=";
+    mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } "=";
   };
 
-  tincConfType = with types;
+  tincConfType = with lib.types;
     let
       valueType = oneOf [ bool str int ];
     in
@@ -22,13 +21,13 @@ let
 
   addressSubmodule = {
     options = {
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         description = "The external IP address or hostname where the host can be reached.";
       };
 
-      port = mkOption {
-        type = types.nullOr types.port;
+      port = lib.mkOption {
+        type = lib.types.nullOr lib.types.port;
         default = null;
         description = ''
           The port where the host can be reached.
@@ -41,8 +40,8 @@ let
 
   subnetSubmodule = {
     options = {
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The subnet of this host.
 
@@ -57,8 +56,8 @@ let
         '';
       };
 
-      prefixLength = mkOption {
-        type = with types; nullOr (addCheck int (n: n >= 0 && n <= 128));
+      prefixLength = lib.mkOption {
+        type = with lib.types; nullOr (addCheck int (n: n >= 0 && n <= 128));
         default = null;
         description = ''
           The prefix length of the subnet.
@@ -69,8 +68,8 @@ let
         '';
       };
 
-      weight = mkOption {
-        type = types.ints.unsigned;
+      weight = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 10;
         description = ''
           Indicates the priority over identical Subnets owned by different nodes.
@@ -86,8 +85,8 @@ let
 
   hostSubmodule = { config, ... }: {
     options = {
-      addresses = mkOption {
-        type = types.listOf (types.submodule addressSubmodule);
+      addresses = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule addressSubmodule);
         default = [ ];
         description = ''
           The external address where the host can be reached. This will set this
@@ -97,8 +96,8 @@ let
         '';
       };
 
-      subnets = mkOption {
-        type = types.listOf (types.submodule subnetSubmodule);
+      subnets = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule subnetSubmodule);
         default = [ ];
         description = ''
           The subnets which this tinc daemon will serve. This will set this
@@ -111,8 +110,8 @@ let
         '';
       };
 
-      rsaPublicKey = mkOption {
-        type = types.str;
+      rsaPublicKey = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Legacy RSA public key of the host in PEM format, including start and
@@ -125,9 +124,9 @@ let
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
-        type = types.submodule { freeformType = tincConfType; };
+        type = lib.types.submodule { freeformType = tincConfType; };
         description = ''
           Configuration for this host.
 
@@ -138,11 +137,11 @@ let
     };
 
     config.settings = {
-      Address = mkDefault (map
+      Address = lib.mkDefault (map
         (address: "${address.address} ${toString address.port}")
         config.addresses);
 
-      Subnet = mkDefault (map
+      Subnet = lib.mkDefault (map
         (subnet:
           if subnet.prefixLength == null then "${subnet.address}#${toString subnet.weight}"
           else "${subnet.address}/${toString subnet.prefixLength}#${toString subnet.weight}")
@@ -159,14 +158,14 @@ in
 
     services.tinc = {
 
-      networks = mkOption {
+      networks = lib.mkOption {
         default = { };
-        type = with types; attrsOf (submodule ({ config, ... }: {
+        type = with lib.types; attrsOf (submodule ({ config, ... }: {
           options = {
 
-            extraConfig = mkOption {
+            extraConfig = lib.mkOption {
               default = "";
-              type = types.lines;
+              type = lib.types.lines;
               description = ''
                 Extra lines to add to the tinc service configuration file.
 
@@ -175,9 +174,9 @@ in
               '';
             };
 
-            name = mkOption {
+            name = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The name of the node which is used as an identifier when communicating
                 with the remote nodes in the mesh. If null then the hostname of the system
@@ -186,25 +185,25 @@ in
               '';
             };
 
-            ed25519PrivateKeyFile = mkOption {
+            ed25519PrivateKeyFile = lib.mkOption {
               default = null;
-              type = types.nullOr types.path;
+              type = lib.types.nullOr lib.types.path;
               description = ''
                 Path of the private ed25519 keyfile.
               '';
             };
 
-            rsaPrivateKeyFile = mkOption {
+            rsaPrivateKeyFile = lib.mkOption {
               default = null;
-              type = types.nullOr types.path;
+              type = lib.types.nullOr lib.types.path;
               description = ''
                 Path of the private RSA keyfile.
               '';
             };
 
-            debugLevel = mkOption {
+            debugLevel = lib.mkOption {
               default = 0;
-              type = types.addCheck types.int (l: l >= 0 && l <= 5);
+              type = lib.types.addCheck types.int (l: l >= 0 && l <= 5);
               description = ''
                 The amount of debugging information to add to the log. 0 means little
                 logging while 5 is the most logging. {command}`man tincd` for
@@ -212,9 +211,9 @@ in
               '';
             };
 
-            hosts = mkOption {
+            hosts = lib.mkOption {
               default = { };
-              type = types.attrsOf types.lines;
+              type = lib.types.attrsOf types.lines;
               description = ''
                 The name of the host in the network as well as the configuration for that host.
                 This name should only contain alphanumerics and underscores.
@@ -224,9 +223,9 @@ in
               '';
             };
 
-            hostSettings = mkOption {
+            hostSettings = lib.mkOption {
               default = { };
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 {
                   host1 = {
                     addresses = [
@@ -248,42 +247,42 @@ in
                   };
                 }
               '';
-              type = types.attrsOf (types.submodule hostSubmodule);
+              type = lib.types.attrsOf (types.submodule hostSubmodule);
               description = ''
                 The name of the host in the network as well as the configuration for that host.
                 This name should only contain alphanumerics and underscores.
               '';
             };
 
-            interfaceType = mkOption {
+            interfaceType = lib.mkOption {
               default = "tun";
-              type = types.enum [ "tun" "tap" ];
+              type = lib.types.enum [ "tun" "tap" ];
               description = ''
                 The type of virtual interface used for the network connection.
               '';
             };
 
-            listenAddress = mkOption {
+            listenAddress = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The ip address to listen on for incoming connections.
               '';
             };
 
-            bindToAddress = mkOption {
+            bindToAddress = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The ip address to bind to (both listen on and send packets from).
               '';
             };
 
-            package = mkPackageOption pkgs "tinc_pre" { };
+            package = lib.mkPackageOption pkgs "tinc_pre" { };
 
-            chroot = mkOption {
+            chroot = lib.mkOption {
               default = false;
-              type = types.bool;
+              type = lib.types.bool;
               description = ''
                 Change process root directory to the directory where the config file is located (/etc/tinc/netname/), for added security.
                 The chroot is performed after all the initialization is done, after writing pid files and opening network sockets.
@@ -292,10 +291,10 @@ in
               '';
             };
 
-            settings = mkOption {
+            settings = lib.mkOption {
               default = { };
-              type = types.submodule { freeformType = tincConfType; };
-              example = literalExpression ''
+              type = lib.types.submodule { freeformType = tincConfType; };
+              example = lib.literalExpression ''
                 {
                   Interface = "custom.interface";
                   DirectOnly = true;
@@ -320,12 +319,12 @@ in
               config.hostSettings;
 
             settings = {
-              DeviceType = mkDefault config.interfaceType;
-              Name = mkDefault (if config.name == null then "$HOST" else config.name);
-              Ed25519PrivateKeyFile = mkIf (config.ed25519PrivateKeyFile != null) (mkDefault config.ed25519PrivateKeyFile);
-              PrivateKeyFile = mkIf (config.rsaPrivateKeyFile != null) (mkDefault config.rsaPrivateKeyFile);
-              ListenAddress = mkIf (config.listenAddress != null) (mkDefault config.listenAddress);
-              BindToAddress = mkIf (config.bindToAddress != null) (mkDefault config.bindToAddress);
+              DeviceType = lib.mkDefault config.interfaceType;
+              Name = lib.mkDefault (if config.name == null then "$HOST" else config.name);
+              Ed25519PrivateKeyFile = lib.mkIf (config.ed25519PrivateKeyFile != null) (mkDefault config.ed25519PrivateKeyFile);
+              PrivateKeyFile = lib.mkIf (config.rsaPrivateKeyFile != null) (mkDefault config.rsaPrivateKeyFile);
+              ListenAddress = lib.mkIf (config.listenAddress != null) (mkDefault config.listenAddress);
+              BindToAddress = lib.mkIf (config.bindToAddress != null) (mkDefault config.bindToAddress);
             };
           };
         }));
@@ -342,11 +341,11 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.networks != { }) (
+  config = lib.mkIf (cfg.networks != { }) (
     let
-      etcConfig = foldr (a: b: a // b) { }
-        (flip mapAttrsToList cfg.networks (network: data:
-          flip mapAttrs' data.hosts (host: text: nameValuePair
+      etcConfig = lib.foldr (a: b: a // b) { }
+        (lib.flip lib.mapAttrsToList cfg.networks (network: data:
+          lib.flip lib.mapAttrs' data.hosts (host: text: lib.nameValuePair
             ("tinc/${network}/hosts/${host}")
             ({ mode = "0644"; user = "tinc-${network}"; inherit text; })
           ) // {
@@ -362,20 +361,20 @@ in
     in {
       environment.etc = etcConfig;
 
-      systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
+      systemd.services = lib.flip lib.mapAttrs' cfg.networks (network: data: lib.nameValuePair
         ("tinc.${network}")
-        (let version = getVersion data.package; in {
+        (let version = lib.getVersion data.package; in {
           description = "Tinc Daemon - ${network}";
           wantedBy = [ "multi-user.target" ];
           path = [ data.package ];
-          reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
-          restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
+          reloadTriggers = lib.mkIf (lib.versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
+          restartTriggers = lib.mkIf (lib.versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
           serviceConfig = {
             Type = "simple";
             Restart = "always";
             RestartSec = "3";
-            ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
-            ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
+            ExecReload = lib.mkIf (lib.versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
+            ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${lib.optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
           };
           preStart = ''
             mkdir -p /etc/tinc/${network}/hosts
@@ -409,8 +408,8 @@ in
           nativeBuildInputs = [ pkgs.makeWrapper ];
           buildCommand = ''
             mkdir -p $out/bin
-            ${concatStringsSep "\n" (mapAttrsToList (network: data:
-              optionalString (versionAtLeast data.package.version "1.1pre") ''
+            ${lib.concatStringsSep "\n" (lib.mapAttrsToList (network: data:
+              lib.optionalString (lib.versionAtLeast data.package.version "1.1pre") ''
                 makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
                   --add-flags "--pidfile=/run/tinc.${network}.pid" \
                   --add-flags "--config=/etc/tinc/${network}"
@@ -419,15 +418,15 @@ in
         };
       in [ cli-wrappers ];
 
-      users.users = flip mapAttrs' cfg.networks (network: _:
-        nameValuePair ("tinc-${network}") ({
+      users.users = lib.flip lib.mapAttrs' cfg.networks (network: _:
+        lib.nameValuePair ("tinc-${network}") ({
           description = "Tinc daemon user for ${network}";
           isSystemUser = true;
           group = "tinc-${network}";
         })
       );
-      users.groups = flip mapAttrs' cfg.networks (network: _:
-        nameValuePair "tinc-${network}" {}
+      users.groups = lib.flip lib.mapAttrs' cfg.networks (network: _:
+        lib.nameValuePair "tinc-${network}" {}
       );
     });
 

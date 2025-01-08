@@ -56,12 +56,12 @@ in
         description = ''
           AppArmor policies.
         '';
-        type = types.attrsOf (
+        type = lib.types.attrsOf (
           types.submodule {
             options = {
               state = lib.mkOption {
                 description = "How strictly this policy should be enforced";
-                type = types.enum [
+                type = lib.types.enum [
                   "disable"
                   "complain"
                   "enforce"
@@ -73,12 +73,12 @@ in
 
               profile = lib.mkOption {
                 description = "The profile file contents. Incompatible with path.";
-                type = types.lines;
+                type = lib.types.lines;
               };
 
               path = lib.mkOption {
                 description = "A path of a profile file to include. Incompatible with profile.";
-                type = types.nullOr types.path;
+                type = lib.types.nullOr lib.types.path;
                 default = null;
               };
             };
@@ -87,7 +87,7 @@ in
         default = { };
       };
       includes = lib.mkOption {
-        type = types.attrsOf types.lines;
+        type = lib.types.attrsOf types.lines;
         default = { };
         description = ''
           List of paths to be added to AppArmor's searched paths
@@ -96,7 +96,7 @@ in
         apply = lib.mapAttrs pkgs.writeText;
       };
       packages = lib.mkOption {
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         description = "List of packages to be added to AppArmor's include path";
       };

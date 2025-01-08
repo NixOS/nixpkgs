@@ -52,7 +52,6 @@ stdenv.mkDerivation (
 )
 // {
   meta =
-    with lib;
     let
       pos = builtins.unsafeGetAttrPos "pname" args;
     in

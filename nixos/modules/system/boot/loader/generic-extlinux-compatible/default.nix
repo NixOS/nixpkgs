@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   blCfg = config.boot.loader;
   dtCfg = config.hardware.deviceTree;
@@ -17,9 +15,9 @@ in
 {
   options = {
     boot.loader.generic-extlinux-compatible = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to generate an extlinux-compatible configuration file
           under `/boot/extlinux.conf`.  For instance,
@@ -30,9 +28,9 @@ in
         '';
       };
 
-      useGenerationDeviceTree = mkOption {
+      useGenerationDeviceTree = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to generate Device Tree-related directives in the
           extlinux configuration.
@@ -45,16 +43,16 @@ in
         '';
       };
 
-      configurationLimit = mkOption {
+      configurationLimit = lib.mkOption {
         default = 20;
         example = 10;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Maximum number of configurations in the boot menu.
         '';
       };
 
-      mirroredBoots = mkOption {
+      mirroredBoots = lib.mkOption {
         default = [ { path = "/boot"; } ];
         example = [
           { path = "/boot1"; }
@@ -64,11 +62,11 @@ in
           Mirror the boot configuration to multiple paths.
         '';
 
-        type = with types; listOf (submodule {
+        type = with lib.types; listOf (submodule {
           options = {
-            path = mkOption {
+            path = lib.mkOption {
               example = "/boot1";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 The path to the boot directory where the extlinux-compatible
                 configuration files will be written.
@@ -78,8 +76,8 @@ in
         });
       };
 
-      populateCmd = mkOption {
-        type = types.str;
+      populateCmd = lib.mkOption {
+        type = lib.types.str;
         readOnly = true;
         description = ''
           Contains the builder command used to populate an image,
@@ -99,11 +97,11 @@ in
     installBootLoader = pkgs.writeScript "install-extlinux-conf.sh" (''
       #!${pkgs.runtimeShell}
       set -e
-    '' + flip concatMapStrings cfg.mirroredBoots (args: ''
+    '' + lib.flip lib.concatMapStrings cfg.mirroredBoots (args: ''
       ${builder} ${builderArgs} -d '${args.path}' -c "$@"
     ''));
   in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       system.build.installBootLoader = installBootLoader;
       system.boot.loader.id = "generic-extlinux-compatible";
 

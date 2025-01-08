@@ -11,7 +11,7 @@ let
   inherit (lib)
     mkDefault
     mkIf
-    mkOption
+    lib.mkOption
     stringAfter
     types
     ;
@@ -23,7 +23,7 @@ in
   options = {
     nix = {
       channel = {
-        enable = mkOption {
+        enable = lib.mkOption {
           description = ''
             Whether the `nix-channel` command and state files are made available on the machine.
 
@@ -34,13 +34,13 @@ in
 
             Disabling this option will not remove the state files from the system.
           '';
-          type = types.bool;
+          type = lib.types.bool;
           default = true;
         };
       };
 
-      nixPath = mkOption {
-        type = types.listOf types.str;
+      nixPath = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default =
           if cfg.channel.enable
           then [
@@ -67,16 +67,16 @@ in
     };
 
     system = {
-      defaultChannel = mkOption {
+      defaultChannel = lib.mkOption {
         internal = true;
-        type = types.str;
+        type = lib.types.str;
         default = "https://nixos.org/channels/nixos-24.11";
         description = "Default NixOS channel to which the root user is subscribed.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.extraInit =
       mkIf cfg.channel.enable ''
@@ -85,7 +85,7 @@ in
         fi
       '';
 
-    environment.extraSetup = mkIf (!cfg.channel.enable) ''
+    environment.extraSetup = lib.mkIf (!cfg.channel.enable) ''
       rm --force $out/bin/nix-channel
     '';
 
@@ -99,7 +99,7 @@ in
       ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
     ];
 
-    system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable)
+    system.activationScripts.no-nix-channel = lib.mkIf (!cfg.channel.enable)
       (stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh));
   };
 }

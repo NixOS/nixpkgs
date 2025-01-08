@@ -909,23 +909,23 @@ let
          "${domain} ${type} ${item} ${toString value}\n")
          limits);
 
-  limitsType = with lib.types; listOf (submodule ({ ... }: {
+  limitsType = lib.types.listOf (lib.types.submodule ({ ... }: {
     options = {
       domain = lib.mkOption {
         description = "Username, groupname, or wildcard this limit applies to";
         example = "@wheel";
-        type = str;
+        type = lib.types.str;
       };
 
       type = lib.mkOption {
         description = "Type of this limit";
-        type = enum [ "-" "hard" "soft" ];
+        type = lib.types.enum [ "-" "hard" "soft" ];
         default = "-";
       };
 
       item = lib.mkOption {
         description = "Item this limit applies to";
-        type = enum [
+        type = lib.types.enum [
           "core"
           "data"
           "fsize"
@@ -949,7 +949,7 @@ let
 
       value = lib.mkOption {
         description = "Value of this limit";
-        type = oneOf [ str int ];
+        type = lib.types.oneOf [ lib.types.str lib.types.int ];
       };
     };
   }));
@@ -963,7 +963,7 @@ let
       value.source = pkgs.writeText "${name}.pam" service.text;
     };
 
-  optionalSudoConfigForSSHAgentAuth = lib.optionalString
+  lib.optionalSudoConfigForSSHAgentAuth = lib.optionalString
     (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable) ''
     # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so and libpam_rssh.so can do their magic.
     Defaults env_keep+=SSH_AUTH_SOCK
@@ -1661,9 +1661,9 @@ in
       lib.concatMapStrings
         (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
         (lib.attrNames config.security.pam.services) +
-      (with lib; pipe config.security.pam.services [
+      (lib.pipe config.security.pam.services [
         lib.attrValues
-        (catAttrs "rules")
+        (lib.catAttrs "rules")
         (lib.concatMap lib.attrValues)
         (lib.concatMap lib.attrValues)
         (lib.filter (rule: rule.enable))
@@ -1675,10 +1675,10 @@ in
         ))
         lib.unique
         (map (module: "mr ${module},"))
-        concatLines
+        lib.concatLines
       ]);
 
-    security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;
-    security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;
+    security.sudo.extraConfig = lib.optionalSudoConfigForSSHAgentAuth;
+    security.sudo-rs.extraConfig = lib.optionalSudoConfigForSSHAgentAuth;
   };
 }

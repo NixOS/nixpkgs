@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.pdnsd;
   pdnsd = pkgs.pdnsd;
@@ -29,16 +27,16 @@ in
 {
   options = {
     services.pdnsd = {
-      enable = mkEnableOption "pdnsd";
+      enable = lib.mkEnableOption "pdnsd";
 
-      cacheDir = mkOption {
-        type = types.str;
+      cacheDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/cache/pdnsd";
         description = "Directory holding the pdnsd cache";
       };
 
-      globalConfig = mkOption {
-        type = types.lines;
+      globalConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Global configuration that should be added to the global directory
@@ -46,8 +44,8 @@ in
         '';
       };
 
-      serverConfig = mkOption {
-        type = types.lines;
+      serverConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Server configuration that should be added to the server directory
@@ -55,8 +53,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration directives that should be added to
@@ -66,7 +64,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.${pdnsdUser} = {
       uid = config.ids.uids.pdnsd;
       group = pdnsdGroup;

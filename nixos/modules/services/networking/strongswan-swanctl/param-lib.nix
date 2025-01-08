@@ -1,7 +1,5 @@
 lib:
 
-with lib;
-
 rec {
   paramsToConf = cfg: ps: mkConf 0 (paramsToRenderedStrings cfg ps);
 
@@ -20,7 +18,7 @@ rec {
   #   }''
   mkConf =
     indent: ps:
-    concatMapStringsSep "\n" (
+    lib.concatMapStringsSep "\n" (
       name:
       let
         value = ps.${name};
@@ -28,14 +26,14 @@ rec {
       in
       indentation
       + (
-        if isAttrs value then
+        if lib.isAttrs value then
           "${name} {\n" + mkConf (indent + 2) value + "\n" + indentation + "}"
         else
           "${name} = ${value}"
       )
-    ) (attrNames ps);
+    ) (lib.attrNames ps);
 
-  replicate = n: c: concatStrings (builtins.genList (_x: c) n);
+  replicate = n: c: lib.concatStrings (builtins.genList (_x: c) n);
 
   # `paramsToRenderedStrings cfg ps` converts the NixOS configuration `cfg`
   # (typically the "config" argument of a NixOS module) and the set of
@@ -48,18 +46,18 @@ rec {
       (mapParamsRecursive (
         path: name: param:
         let
-          value = attrByPath path null cfg;
+          value = lib.attrByPath path null cfg;
         in
-        optionalAttrs (value != null) (param.render name value)
+        lib.optionalAttrs (value != null) (param.render name value)
       ) ps)
     );
 
   filterEmptySets =
     set:
-    filterAttrs (n: v: (v != null)) (
-      mapAttrs (
+    lib.filterAttrs (n: v: (v != null)) (
+      lib.mapAttrs (
         name: value:
-        if isAttrs value then
+        if lib.isAttrs value then
           let
             value' = filterEmptySets value;
           in
@@ -80,7 +78,7 @@ rec {
         let
           g =
             name: value:
-            if isAttrs value && cond value then
+            if lib.isAttrs value && cond value then
               { ${name} = recurse (path ++ [ name ]) value; }
             else
               f (path ++ [ name ]) name value;
@@ -89,7 +87,7 @@ rec {
     in
     recurse [ ] set;
 
-  mapAttrs'' = f: set: foldl' (a: b: a // b) { } (map (attr: f attr set.${attr}) (attrNames set));
+  mapAttrs'' = f: set: lib.foldl' (a: b: a // b) { } (map (attr: f attr set.${attr}) (lib.attrNames set));
 
   # Extract the options from the given set of parameters.
   paramsToOptions = ps: mapParamsRecursive (_path: name: param: { ${name} = param.option; }) ps;

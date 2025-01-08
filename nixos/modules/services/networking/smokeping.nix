@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
 
   cfg = config.services.smokeping;
@@ -48,7 +47,7 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "smokeping" "port" ] ''
+    (lib.mkRemovedOptionModule [ "services" "smokeping" "port" ] ''
       The smokeping web service is now served by nginx.
       In order to change the port, you need to change the nginx configuration under `services.nginx.virtualHosts.smokeping.listen.*.port`.
     '')
@@ -56,10 +55,10 @@ in
 
   options = {
     services.smokeping = {
-      enable = mkEnableOption "smokeping service";
+      enable = lib.mkEnableOption "smokeping service";
 
-      alertConfig = mkOption {
-        type = types.lines;
+      alertConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           to = root@localhost
           from = smokeping@localhost
@@ -76,23 +75,23 @@ in
         '';
         description = "Configuration for alerts.";
       };
-      cgiUrl = mkOption {
-        type = types.str;
+      cgiUrl = lib.mkOption {
+        type = lib.types.str;
         default = "http://${cfg.hostName}/smokeping.cgi";
-        defaultText = literalExpression ''"http://''${hostName}/smokeping.cgi"'';
+        defaultText = lib.literalExpression ''"http://''${hostName}/smokeping.cgi"'';
         example = "https://somewhere.example.com/smokeping.cgi";
         description = "URL to the smokeping cgi.";
       };
-      config = mkOption {
-        type = types.nullOr types.lines;
+      config = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Full smokeping config supplied by the user. Overrides
           and replaces any other configuration supplied.
         '';
       };
-      databaseConfig = mkOption {
-        type = types.lines;
+      databaseConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           step     = 300
           pings    = 20
@@ -123,22 +122,22 @@ in
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
       };
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Any additional customization not already included.";
       };
-      hostName = mkOption {
-        type = types.str;
+      hostName = lib.mkOption {
+        type = lib.types.str;
         default = config.networking.fqdn;
-        defaultText = literalExpression "config.networking.fqdn";
+        defaultText = lib.literalExpression "config.networking.fqdn";
         example = "somewhere.example.com";
         description = "DNS name for the urls generated in the cgi.";
       };
-      imgUrl = mkOption {
-        type = types.str;
+      imgUrl = lib.mkOption {
+        type = lib.types.str;
         default = "cache";
-        defaultText = literalExpression ''"cache"'';
+        defaultText = lib.literalExpression ''"cache"'';
         example = "https://somewhere.example.com/cache";
         description = ''
           Base url for images generated in the cgi.
@@ -147,34 +146,34 @@ in
           the GUI port via SSH.
         '';
       };
-      linkStyle = mkOption {
-        type = types.enum [ "original" "absolute" "relative" ];
+      linkStyle = lib.mkOption {
+        type = lib.types.enum [ "original" "absolute" "relative" ];
         default = "relative";
         example = "absolute";
         description = "DNS name for the urls generated in the cgi.";
       };
-      mailHost = mkOption {
-        type = types.str;
+      mailHost = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "localhost";
         description = "Use this SMTP server to send alerts";
       };
-      owner = mkOption {
-        type = types.str;
+      owner = lib.mkOption {
+        type = lib.types.str;
         default = "nobody";
         example = "Bob Foobawr";
         description = "Real name of the owner of the instance";
       };
-      ownerEmail = mkOption {
-        type = types.str;
+      ownerEmail = lib.mkOption {
+        type = lib.types.str;
         default = "no-reply@${cfg.hostName}";
-        defaultText = literalExpression ''"no-reply@''${hostName}"'';
+        defaultText = lib.literalExpression ''"no-reply@''${hostName}"'';
         example = "no-reply@yourdomain.com";
         description = "Email contact for owner";
       };
-      package = mkPackageOption pkgs "smokeping" { };
-      host = mkOption {
-        type = types.nullOr types.str;
+      package = lib.mkPackageOption pkgs "smokeping" { };
+      host = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "localhost";
         example = "192.0.2.1"; # rfc5737 example IP for documentation
         description = ''
@@ -184,8 +183,8 @@ in
           which makes it bind to all interfaces.
         '';
       };
-      presentationConfig = mkOption {
-        type = types.lines;
+      presentationConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           + charts
           menu = Charts
@@ -225,19 +224,19 @@ in
         '';
         description = "presentation graph style";
       };
-      presentationTemplate = mkOption {
-        type = types.str;
+      presentationTemplate = lib.mkOption {
+        type = lib.types.str;
         default = "${pkgs.smokeping}/etc/basepage.html.dist";
-        defaultText = literalExpression ''"''${pkgs.smokeping}/etc/basepage.html.dist"'';
+        defaultText = lib.literalExpression ''"''${pkgs.smokeping}/etc/basepage.html.dist"'';
         description = "Default page layout for the web UI.";
       };
-      probeConfig = mkOption {
-        type = types.lines;
+      probeConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           + FPing
           binary = ${config.security.wrapperDir}/fping
         '';
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           '''
             + FPing
             binary = ''${config.security.wrapperDir}/fping
@@ -245,20 +244,20 @@ in
         '';
         description = "Probe configuration";
       };
-      sendmail = mkOption {
-        type = types.nullOr types.path;
+      sendmail = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/wrappers/bin/sendmail";
         description = "Use this sendmail compatible script to deliver alerts";
       };
-      smokeMailTemplate = mkOption {
-        type = types.str;
+      smokeMailTemplate = lib.mkOption {
+        type = lib.types.str;
         default = "${cfg.package}/etc/smokemail.dist";
-        defaultText = literalExpression ''"''${package}/etc/smokemail.dist"'';
+        defaultText = lib.literalExpression ''"''${package}/etc/smokemail.dist"'';
         description = "Specify the smokemail template for alerts.";
       };
-      targetConfig = mkOption {
-        type = types.lines;
+      targetConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           probe = FPing
           menu = Top
@@ -275,13 +274,13 @@ in
         '';
         description = "Target configuration";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "smokeping";
         description = "User that runs smokeping and (optionally) thttpd. A group of the same name will be created as well.";
       };
-      webService = mkOption {
-        type = types.bool;
+      webService = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Enable a smokeping web interface";
       };
@@ -289,7 +288,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !(cfg.sendmail != null && cfg.mailHost != "");
@@ -315,7 +314,7 @@ in
       home = smokepingHome;
     };
 
-    users.users.${config.services.nginx.user} = mkIf cfg.webService {
+    users.users.${config.services.nginx.user} = lib.mkIf cfg.webService {
       extraGroups = [
         cfg.user ## user == group in this module
       ];
@@ -350,15 +349,15 @@ in
     ];
 
     # use nginx to serve the smokeping web service
-    services.fcgiwrap.instances.smokeping = mkIf cfg.webService {
+    services.fcgiwrap.instances.smokeping = lib.mkIf cfg.webService {
       process.user = cfg.user;
       process.group = cfg.user;
       socket = { inherit (config.services.nginx) user group; };
     };
-    services.nginx = mkIf cfg.webService {
+    services.nginx = lib.mkIf cfg.webService {
       enable = true;
       virtualHosts."smokeping" = {
-        serverName = mkDefault cfg.host;
+        serverName = lib.mkDefault cfg.host;
         locations."/" = {
           root = smokepingHome;
           index = "smokeping.fcgi";

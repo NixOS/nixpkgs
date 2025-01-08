@@ -10,14 +10,14 @@ let
     imports = [
       {
         options.test-helpers = {
-          rclone = mkOption { type = types.str; };
-          upload-sample = mkOption { type = types.str; };
-          check-sample = mkOption { type = types.str; };
-          init = mkOption { type = types.str; default = ""; };
-          extraTests = mkOption { type = types.either types.str (types.functionTo types.str); default = ""; };
+          rclone = lib.mkOption { type = lib.types.str; };
+          upload-sample = lib.mkOption { type = lib.types.str; };
+          check-sample = lib.mkOption { type = lib.types.str; };
+          init = lib.mkOption { type = lib.types.str; default = ""; };
+          extraTests = lib.mkOption { type = lib.types.either types.str (types.functionTo types.str); default = ""; };
         };
-        options.adminuser = mkOption { type = types.str; };
-        options.adminpass = mkOption { type = types.str; };
+        options.adminuser = lib.mkOption { type = lib.types.str; };
+        options.adminpass = lib.mkOption { type = lib.types.str; };
       }
     ];
 

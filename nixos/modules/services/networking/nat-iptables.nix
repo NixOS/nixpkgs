@@ -5,11 +5,8 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
-
-with lib;
 
 let
   cfg = config.networking.nat;
@@ -19,7 +16,7 @@ let
   dest = mkDest cfg.externalIP;
   destIPv6 = mkDest cfg.externalIPv6;
 
-  # Whether given IP (plus optional port) is an IPv6.
+  # Whether given IP (plus lib.optional port) is an IPv6.
   isIPv6 = ip: builtins.length (lib.splitString ":" ip) > 2;
 
   helpers = import ./helpers.nix { inherit config lib; };
@@ -53,30 +50,30 @@ let
     ''
       # We can't match on incoming interface in POSTROUTING, so
       # mark packets coming from the internal interfaces.
-      ${concatMapStrings (iface: ''
+      ${lib.concatMapStrings (iface: ''
         ${iptables} -w -t nat -A nixos-nat-pre \
           -i '${iface}' -j MARK --set-mark 1
         ${iptables} -w -t filter -A nixos-filter-forward \
           -i '${iface}' ${
-            optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
+            lib.optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
           } -j ACCEPT
       '') cfg.internalInterfaces}
 
       # NAT the marked packets.
-      ${optionalString (cfg.internalInterfaces != [ ]) ''
+      ${lib.optionalString (cfg.internalInterfaces != [ ]) ''
         ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1 \
-          ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
+          ${lib.optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
       ''}
 
       # NAT packets coming from the internal IPs.
-      ${concatMapStrings (range: ''
+      ${lib.concatMapStrings (range: ''
         ${iptables} -w -t nat -A nixos-nat-post \
           -s '${range}' ${
-            optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
+            lib.optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
           } ${dest}
         ${iptables} -w -t filter -A nixos-filter-forward \
           -s '${range}' ${
-            optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
+            lib.optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
           } -j ACCEPT
       '') internalIPs}
 
@@ -85,28 +82,28 @@ let
         -m state --state ESTABLISHED,RELATED -j ACCEPT
 
       # NAT from external ports to internal ports.
-      ${concatMapStrings (fwd: ''
+      ${lib.concatMapStrings (fwd: ''
         ${iptables} -w -t nat -A nixos-nat-pre \
           -i ${toString cfg.externalInterface} -p ${fwd.proto} \
           ${
-            optionalString (externalIp != null) "-d ${externalIp}"
+            lib.optionalString (externalIp != null) "-d ${externalIp}"
           } --dport ${builtins.toString fwd.sourcePort} \
           -j DNAT --to-destination ${fwd.destination}
         ${iptables} -w -t filter -A nixos-filter-forward \
           -i ${toString cfg.externalInterface} -p ${fwd.proto} \
           --dport ${builtins.toString fwd.sourcePort} -j ACCEPT
 
-        ${concatMapStrings (
+        ${lib.concatMapStrings (
           loopbackip:
           let
             matchIP = if isIPv6 fwd.destination then "[[]([0-9a-fA-F:]+)[]]" else "([0-9.]+)";
             m = builtins.match "${matchIP}:([0-9-]+)" fwd.destination;
-            destinationIP = if m == null then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
+            destinationIP = if m == null then throw "bad ip:ports `${fwd.destination}'" else lib.elemAt m 0;
             destinationPorts =
               if m == null then
                 throw "bad ip:ports `${fwd.destination}'"
               else
-                builtins.replaceStrings [ "-" ] [ ":" ] (elemAt m 1);
+                builtins.replaceStrings [ "-" ] [ ":" ] (lib.elemAt m 1);
           in
           ''
             # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
@@ -116,7 +113,7 @@ let
               -j DNAT --to-destination ${fwd.destination}
 
             # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
-            ${concatMapStrings (range: ''
+            ${lib.concatMapStrings (range: ''
               ${iptables} -w -t nat -A nixos-nat-pre \
                 -d ${loopbackip} -p ${fwd.proto} -s '${range}' \
                 --dport ${builtins.toString fwd.sourcePort} \
@@ -129,7 +126,7 @@ let
                 -d ${destinationIP} -p ${fwd.proto} \
                 -s '${range}' --dport ${destinationPorts} -j ACCEPT
             '') internalIPs}
-            ${concatMapStrings (iface: ''
+            ${lib.concatMapStrings (iface: ''
               ${iptables} -w -t nat -A nixos-nat-pre \
                 -d ${loopbackip} -p ${fwd.proto} -i '${iface}' \
                 --dport ${builtins.toString fwd.sourcePort} \
@@ -159,19 +156,19 @@ let
       iptables = "iptables";
       inherit dest;
       inherit (cfg) internalIPs;
-      forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
+      forwardPorts = lib.filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
       externalIp = cfg.externalIP;
     }}
 
-    ${optionalString cfg.enableIPv6 (mkSetupNat {
+    ${lib.optionalString cfg.enableIPv6 (mkSetupNat {
       iptables = "ip6tables";
       dest = destIPv6;
       internalIPs = cfg.internalIPv6s;
-      forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
+      forwardPorts = lib.filter (x: isIPv6 x.destination) cfg.forwardPorts;
       externalIp = cfg.externalIPv6;
     })}
 
-    ${optionalString (cfg.dmzHost != null) ''
+    ${lib.optionalString (cfg.dmzHost != null) ''
       iptables -w -t nat -A nixos-nat-pre \
         -i ${toString cfg.externalInterface} -j DNAT \
         --to-destination ${cfg.dmzHost}
@@ -192,8 +189,8 @@ in
 
   options = {
 
-    networking.nat.extraCommands = mkOption {
-      type = types.lines;
+    networking.nat.extraCommands = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "iptables -A INPUT -p icmp -j ACCEPT";
       description = ''
@@ -204,8 +201,8 @@ in
       '';
     };
 
-    networking.nat.extraStopCommands = mkOption {
-      type = types.lines;
+    networking.nat.extraStopCommands = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = "iptables -D INPUT -p icmp -j ACCEPT || true";
       description = ''
@@ -218,16 +215,16 @@ in
 
   };
 
-  config = mkIf (!config.networking.nftables.enable) (mkMerge [
-    ({ networking.firewall.extraCommands = mkBefore flushNat; })
-    (mkIf config.networking.nat.enable {
+  config = lib.mkIf (!config.networking.nftables.enable) (lib.mkMerge [
+    ({ networking.firewall.extraCommands = lib.mkBefore flushNat; })
+    (lib.mkIf config.networking.nat.enable {
 
-      networking.firewall = mkIf config.networking.firewall.enable {
+      networking.firewall = lib.mkIf config.networking.firewall.enable {
         extraCommands = setupNat;
         extraStopCommands = flushNat;
       };
 
-      systemd.services = mkIf (!config.networking.firewall.enable) {
+      systemd.services = lib.mkIf (!config.networking.firewall.enable) {
         nat = {
           description = "Network Address Translation";
           wantedBy = [ "network.target" ];

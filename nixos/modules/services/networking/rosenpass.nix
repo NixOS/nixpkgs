@@ -15,7 +15,7 @@ let
     flatten
     getExe
     mkIf
-    optional
+    lib.optional
     ;
 
   cfg = config.services.rosenpass;
@@ -27,7 +27,7 @@ in
     let
       inherit (lib)
         literalExpression
-        mkOption
+        lib.mkOption
         ;
       inherit (lib.types)
         enum
@@ -43,35 +43,35 @@ in
 
       package = lib.mkPackageOption pkgs "rosenpass" { };
 
-      defaultDevice = mkOption {
+      defaultDevice = lib.mkOption {
         type = nullOr str;
         description = "Name of the network interface to use for all peers by default.";
         example = "wg0";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = submodule {
           freeformType = settingsFormat.type;
 
           options = {
-            public_key = mkOption {
+            public_key = lib.mkOption {
               type = path;
               description = "Path to a file containing the public key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
             };
 
-            secret_key = mkOption {
+            secret_key = lib.mkOption {
               type = path;
               description = "Path to a file containing the secret key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
             };
 
-            listen = mkOption {
+            listen = lib.mkOption {
               type = listOf str;
               description = "List of local endpoints to listen for connections.";
               default = [ ];
-              example = literalExpression "[ \"0.0.0.0:10000\" ]";
+              example = lib.literalExpression "[ \"0.0.0.0:10000\" ]";
             };
 
-            verbosity = mkOption {
+            verbosity = lib.mkOption {
               type = enum [
                 "Verbose"
                 "Quiet"
@@ -86,32 +86,32 @@ in
                   freeformType = settingsFormat.type;
 
                   options = {
-                    public_key = mkOption {
+                    public_key = lib.mkOption {
                       type = path;
                       description = "Path to a file containing the public key of the remote Rosenpass peer.";
                     };
 
-                    endpoint = mkOption {
+                    endpoint = lib.mkOption {
                       type = nullOr str;
                       default = null;
                       description = "Endpoint of the remote Rosenpass peer.";
                     };
 
-                    device = mkOption {
+                    device = lib.mkOption {
                       type = str;
                       default = cfg.defaultDevice;
-                      defaultText = literalExpression "config.${opt.defaultDevice}";
+                      defaultText = lib.literalExpression "config.${opt.defaultDevice}";
                       description = "Name of the local WireGuard interface to use for this peer.";
                     };
 
-                    peer = mkOption {
+                    peer = lib.mkOption {
                       type = str;
                       description = "WireGuard public key corresponding to the remote Rosenpass peer.";
                     };
                   };
                 };
               in
-              mkOption {
+              lib.mkOption {
                 type = listOf peer;
                 description = "List of peers to exchange keys with.";
                 default = [ ];
@@ -123,7 +123,7 @@ in
       };
     };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     warnings =
       let
         # NOTE: In the descriptions below, we tried to refer to e.g.
@@ -160,7 +160,7 @@ in
             key,
             ...
           }:
-          filter (x: x != null) (flatten (concatMap (x: (map key (peer x))) (attrValues root)));
+          filter (x: x != null) (flatten (concatMap (x: (map key (peer x))) (lib.attrValues root)));
         configuredKeys = flatten (map extract relevantExtractions);
         itemize = xs: concatLines (map (x: " - ${x}") xs);
         descriptions = map (x: "`${x.description}`");
@@ -177,7 +177,7 @@ in
         ${itemize (descriptions relevantExtractions)}
         ${unusual}
       '')
-      ++ optional (relevantExtractions == [ ]) ''
+      ++ lib.optional (relevantExtractions == [ ]) ''
         You have configured Rosenpass, but you have not configured Wireguard via any of:
         ${itemize (descriptions extractions)}
         ${unusual}

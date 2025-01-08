@@ -12,22 +12,22 @@ let
 
   inherit (lib)
     getExe
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     types
     mkIf
-    optional
+    lib.optional
     mkMerge
     singleton
     ;
 in
 {
   options.services.wakapi = {
-    enable = mkEnableOption "Wakapi";
-    package = mkPackageOption pkgs "wakapi" { };
+    enable = lib.mkEnableOption "Wakapi";
+    package = lib.mkPackageOption pkgs "wakapi" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       inherit (settingsFormat) type;
       default = { };
       description = ''
@@ -37,30 +37,30 @@ in
       '';
     };
 
-    passwordSalt = mkOption {
-      type = types.nullOr types.str;
+    passwordSalt = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The password salt to use for Wakapi.
       '';
     };
-    passwordSaltFile = mkOption {
-      type = types.nullOr types.path;
+    passwordSaltFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         The path to a file containing the password salt to use for Wakapi.
       '';
     };
 
-    smtpPassword = mkOption {
-      type = types.nullOr types.str;
+    smtpPassword = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The password used for the smtp mailed to used by Wakapi.
       '';
     };
-    smtpPasswordFile = mkOption {
-      type = types.nullOr types.path;
+    smtpPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         The path to a file containing the password for the smtp mailer used by Wakapi.
@@ -76,8 +76,8 @@ in
         :::
       '';
 
-      dialect = mkOption {
-        type = types.nullOr (
+      dialect = lib.mkOption {
+        type = lib.types.nullOr (
           types.enum [
             "postgres"
             "sqlite3"
@@ -96,8 +96,8 @@ in
         '';
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = cfg.settings.db.name or "wakapi";
         defaultText = ''
           Database name from settings if {option}`services.wakatime.settings.db.name`
@@ -108,8 +108,8 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = cfg.settings.db.user or "wakapi";
         defaultText = ''
           User from settings if {option}`services.wakatime.settings.db.user`
@@ -122,15 +122,15 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.wakapi = {
       description = "Wakapi (self-hosted WakaTime-compatible backend)";
       wants = [
         "network-online.target"
-      ] ++ optional (cfg.database.dialect == "postgres") "postgresql.service";
+      ] ++ lib.optional (cfg.database.dialect == "postgres") "postgresql.service";
       after = [
         "network-online.target"
-      ] ++ optional (cfg.database.dialect == "postgres") "postgresql.service";
+      ] ++ lib.optional (cfg.database.dialect == "postgres") "postgresql.service";
       wantedBy = [ "multi-user.target" ];
 
       script = ''
@@ -138,9 +138,9 @@ in
       '';
 
       serviceConfig = {
-        Environment = mkMerge [
-          (mkIf (cfg.passwordSalt != null) "WAKAPI_PASSWORD_SALT=${cfg.passwordSalt}")
-          (mkIf (cfg.smtpPassword != null) "WAKAPI_MAIL_SMTP_PASS=${cfg.smtpPassword}")
+        Environment = lib.mkMerge [
+          (lib.mkIf (cfg.passwordSalt != null) "WAKAPI_PASSWORD_SALT=${cfg.passwordSalt}")
+          (lib.mkIf (cfg.smtpPassword != null) "WAKAPI_MAIL_SMTP_PASS=${cfg.smtpPassword}")
         ];
 
         EnvironmentFile =
@@ -213,11 +213,11 @@ in
       groups.wakapi = { };
     };
 
-    services.postgresql = mkIf (cfg.database.createLocally && cfg.database.dialect == "postgres") {
+    services.postgresql = lib.mkIf (cfg.database.createLocally && cfg.database.dialect == "postgres") {
       enable = true;
 
       ensureDatabases = singleton cfg.database.name;
-      ensureUsers = singleton {
+      ensureUsers = lib.singleton {
         name = cfg.settings.db.user;
         ensureDBOwnership = true;
       };

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.mirakurun;
   mirakurun = pkgs.mirakurun;
@@ -29,10 +27,10 @@ in
 {
   options = {
     services.mirakurun = {
-      enable = mkEnableOption "the Mirakurun DVR Tuner Server";
+      enable = lib.mkEnableOption "the Mirakurun DVR Tuner Server";
 
-      port = mkOption {
-        type = with types; nullOr port;
+      port = lib.mkOption {
+        type = with lib.types; nullOr port;
         default = 40772;
         description = ''
           Port to listen on. If `null`, it won't listen on
@@ -40,8 +38,8 @@ in
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for Mirakurun.
@@ -54,8 +52,8 @@ in
         '';
       };
 
-      unixSocket = mkOption {
-        type = with types; nullOr path;
+      unixSocket = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = "/var/run/mirakurun/mirakurun.sock";
         description = ''
           Path to unix socket to listen on. If `null`, it
@@ -63,8 +61,8 @@ in
         '';
       };
 
-      allowSmartCardAccess = mkOption {
-        type = types.bool;
+      allowSmartCardAccess = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Install polkit rules to allow Mirakurun to access smart card readers
@@ -72,10 +70,10 @@ in
         '';
       };
 
-      serverSettings = mkOption {
+      serverSettings = lib.mkOption {
         type = settingsFmt.type;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             highWaterMark = 25165824;
             overflowTimeLimit = 30000;
@@ -89,10 +87,10 @@ in
         '';
       };
 
-      tunerSettings = mkOption {
-        type = with types; nullOr settingsFmt.type;
+      tunerSettings = lib.mkOption {
+        type = with lib.types; nullOr settingsFmt.type;
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             {
               name = "tuner-name";
@@ -110,10 +108,10 @@ in
         '';
       };
 
-      channelSettings = mkOption {
-        type = with types; nullOr settingsFmt.type;
+      channelSettings = lib.mkOption {
+        type = with lib.types; nullOr settingsFmt.type;
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             {
               name = "channel";
@@ -133,17 +131,17 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ mirakurun ] ++ optional cfg.allowSmartCardAccess polkitRule;
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ mirakurun ] ++ lib.optional cfg.allowSmartCardAccess polkitRule;
     environment.etc = {
       "mirakurun/server.yml".source = settingsFmt.generate "server.yml" cfg.serverSettings;
-      "mirakurun/tuners.yml" = mkIf (cfg.tunerSettings != null) {
+      "mirakurun/tuners.yml" = lib.mkIf (cfg.tunerSettings != null) {
         source = settingsFmt.generate "tuners.yml" cfg.tunerSettings;
         mode = "0644";
         user = username;
         group = groupname;
       };
-      "mirakurun/channels.yml" = mkIf (cfg.channelSettings != null) {
+      "mirakurun/channels.yml" = lib.mkIf (cfg.channelSettings != null) {
         source = settingsFmt.generate "channels.yml" cfg.channelSettings;
         mode = "0644";
         user = username;
@@ -151,8 +149,8 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = mkIf (cfg.port != null) [ cfg.port ];
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = lib.mkIf (cfg.port != null) [ cfg.port ];
     };
 
     users.users.mirakurun = {
@@ -165,9 +163,9 @@ in
     };
 
     services.mirakurun.serverSettings = {
-      logLevel = mkDefault 2;
-      path = mkIf (cfg.unixSocket != null) cfg.unixSocket;
-      port = mkIf (cfg.port != null) cfg.port;
+      logLevel = lib.mkDefault 2;
+      path = lib.mkIf (cfg.unixSocket != null) cfg.unixSocket;
+      port = lib.mkIf (cfg.port != null) cfg.port;
     };
 
     systemd.tmpfiles.settings."10-mirakurun"."/etc/mirakurun".d = {
@@ -208,8 +206,8 @@ in
             [
               "server"
             ]
-            ++ optional (cfg.tunerSettings != null) "tuners"
-            ++ optional (cfg.channelSettings != null) "channels";
+            ++ lib.optional (cfg.tunerSettings != null) "tuners"
+            ++ lib.optional (cfg.channelSettings != null) "channels";
         in
         (map getconf targets);
     };

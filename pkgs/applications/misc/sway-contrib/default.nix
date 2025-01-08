@@ -84,7 +84,6 @@ in
     '';
 
     meta =
-      with lib;
       meta
       // {
         description = "Helper for screenshots within sway";
@@ -114,7 +113,6 @@ in
       '';
 
       meta =
-        with lib;
         meta
         // {
           description = "It makes inactive sway windows transparent";

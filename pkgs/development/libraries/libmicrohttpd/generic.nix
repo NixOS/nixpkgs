@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta =
-    with lib;
     {
       description = "Embeddable HTTP server library";
 

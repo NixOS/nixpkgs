@@ -1,12 +1,9 @@
 {
   config,
   lib,
-  options,
   pkgs,
   ...
 }:
-
-with lib;
 
 let
   cfg = config.services.coder;
@@ -15,10 +12,10 @@ in
 {
   options = {
     services.coder = {
-      enable = mkEnableOption "Coder service";
+      enable = lib.mkEnableOption "Coder service";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "coder";
         description = ''
           User under which the coder service runs.
@@ -30,8 +27,8 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "coder";
         description = ''
           Group under which the coder service runs.
@@ -43,26 +40,26 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "coder" { };
+      package = lib.mkPackageOption pkgs "coder" { };
 
-      homeDir = mkOption {
-        type = types.str;
+      homeDir = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Home directory for coder user.
         '';
         default = "/var/lib/coder";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Listen address.
         '';
         default = "127.0.0.1:3000";
       };
 
-      accessUrl = mkOption {
-        type = types.nullOr types.str;
+      accessUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         description = ''
           Access URL should be a external IP address or domain with DNS records pointing to Coder.
         '';
@@ -70,8 +67,8 @@ in
         example = "https://coder.example.com";
       };
 
-      wildcardAccessUrl = mkOption {
-        type = types.nullOr types.str;
+      wildcardAccessUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         description = ''
           If you are providing TLS certificates directly to the Coder server, you must use a single certificate for the root and wildcard domains.
         '';
@@ -80,8 +77,8 @@ in
       };
 
       environment = {
-        extra = mkOption {
-          type = types.attrs;
+        extra = lib.mkOption {
+          type = lib.types.attrs;
           description = "Extra environment variables to pass run Coder's server with. See Coder documentation.";
           default = { };
           example = {
@@ -89,56 +86,56 @@ in
             CODER_OAUTH2_GITHUB_ALLOWED_ORGS = "your-org";
           };
         };
-        file = mkOption {
-          type = types.nullOr types.path;
+        file = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           description = "Systemd environment file to add to Coder.";
           default = null;
         };
       };
 
       database = {
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Create the database and database user locally.
           '';
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "/run/postgresql";
           description = ''
             Hostname hosting the database.
           '';
         };
 
-        database = mkOption {
-          type = types.str;
+        database = lib.mkOption {
+          type = lib.types.str;
           default = "coder";
           description = ''
             Name of database.
           '';
         };
 
-        username = mkOption {
-          type = types.str;
+        username = lib.mkOption {
+          type = lib.types.str;
           default = "coder";
           description = ''
             Username for accessing the database.
           '';
         };
 
-        password = mkOption {
-          type = types.nullOr types.str;
+        password = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             Password for accessing the database.
           '';
         };
 
-        sslmode = mkOption {
-          type = types.nullOr types.str;
+        sslmode = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = "disable";
           description = ''
             Password for accessing the database.
@@ -146,16 +143,16 @@ in
         };
       };
 
-      tlsCert = mkOption {
-        type = types.nullOr types.path;
+      tlsCert = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         description = ''
           The path to the TLS certificate.
         '';
         default = null;
       };
 
-      tlsKey = mkOption {
-        type = types.nullOr types.path;
+      tlsKey = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         description = ''
           The path to the TLS key.
         '';
@@ -164,7 +161,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion =
@@ -183,12 +180,12 @@ in
         CODER_ACCESS_URL = cfg.accessUrl;
         CODER_WILDCARD_ACCESS_URL = cfg.wildcardAccessUrl;
         CODER_PG_CONNECTION_URL = "user=${cfg.database.username} ${
-          optionalString (cfg.database.password != null) "password=${cfg.database.password}"
+          lib.optionalString (cfg.database.password != null) "password=${cfg.database.password}"
         } database=${cfg.database.database} host=${cfg.database.host} ${
-          optionalString (cfg.database.sslmode != null) "sslmode=${cfg.database.sslmode}"
+          lib.optionalString (cfg.database.sslmode != null) "sslmode=${cfg.database.sslmode}"
         }";
         CODER_ADDRESS = cfg.listenAddress;
-        CODER_TLS_ENABLE = optionalString (cfg.tlsCert != null) "1";
+        CODER_TLS_ENABLE = lib.optionalString (cfg.tlsCert != null) "1";
         CODER_TLS_CERT_FILE = cfg.tlsCert;
         CODER_TLS_KEY_FILE = cfg.tlsKey;
       };
@@ -225,10 +222,10 @@ in
       ];
     };
 
-    users.groups = optionalAttrs (cfg.group == name) {
+    users.groups = lib.optionalAttrs (cfg.group == name) {
       "${cfg.group}" = { };
     };
-    users.users = optionalAttrs (cfg.user == name) {
+    users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
         description = "Coder service user";
         group = cfg.group;

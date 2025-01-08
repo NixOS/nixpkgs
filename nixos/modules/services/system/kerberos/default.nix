@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   cfg = config.services.kerberos_server;
   inherit (config.security.krb5) package;
 
@@ -30,7 +30,7 @@ in
     services.kerberos_server = {
       enable = lib.mkEnableOption "the kerberos authentication server";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         description = ''
           Settings for the kerberos server of choice.

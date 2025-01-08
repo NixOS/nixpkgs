@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.peroxide;
   settingsFormat = pkgs.formats.yaml { };
@@ -14,15 +12,15 @@ let
 in
 {
   options.services.peroxide = {
-    enable = mkEnableOption "peroxide";
+    enable = lib.mkEnableOption "peroxide";
 
-    package = mkPackageOption pkgs "peroxide" {
+    package = lib.mkPackageOption pkgs "peroxide" {
       default = [ "peroxide" ];
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       # https://github.com/sirupsen/logrus#level-logging
-      type = types.enum [
+      type = lib.types.enum [
         "Panic"
         "Fatal"
         "Error"
@@ -36,25 +34,25 @@ in
       description = "Only log messages of this priority or higher.";
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
-          UserPortImap = mkOption {
-            type = types.port;
+          UserPortImap = lib.mkOption {
+            type = lib.types.port;
             default = 1143;
             description = "The port on which to listen for IMAP connections.";
           };
 
-          UserPortSmtp = mkOption {
-            type = types.port;
+          UserPortSmtp = lib.mkOption {
+            type = lib.types.port;
             default = 1025;
             description = "The port on which to listen for SMTP connections.";
           };
 
-          ServerAddress = mkOption {
-            type = types.str;
+          ServerAddress = lib.mkOption {
+            type = lib.types.str;
             default = "[::0]";
             example = "localhost";
             description = "The address on which to listen for connections.";
@@ -70,14 +68,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.peroxide.settings = {
       # peroxide deletes the cache directory on startup, which requires write
       # permission on the parent directory, so we can't use
       # /var/cache/peroxide
       CacheDir = "/var/cache/peroxide/cache";
-      X509Key = mkDefault "/var/lib/${stateDir}/key.pem";
-      X509Cert = mkDefault "/var/lib/${stateDir}/cert.pem";
+      X509Key = lib.mkDefault "/var/lib/${stateDir}/key.pem";
+      X509Cert = lib.mkDefault "/var/lib/${stateDir}/cert.pem";
       CookieJar = "/var/lib/${stateDir}/cookies.json";
       CredentialsStore = "/var/lib/${stateDir}/credentials.json";
     };

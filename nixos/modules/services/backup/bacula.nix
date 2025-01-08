@@ -14,9 +14,9 @@ let
     literalExpression
     mapAttrsToList
     mkIf
-    mkOption
-    optional
-    optionalString
+    lib.mkOption
+    lib.optional
+    lib.optionalString
     types
     ;
   libDir = "/var/lib/bacula";
@@ -24,17 +24,17 @@ let
   yes_no = bool: if bool then "yes" else "no";
   tls_conf =
     tls_cfg:
-    optionalString tls_cfg.enable (
+    lib.optionalString tls_cfg.enable (
       concatStringsSep "\n" (
         [ "TLS Enable = yes;" ]
-        ++ optional (tls_cfg.require != null) "TLS Require = ${yes_no tls_cfg.require};"
-        ++ optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
+        ++ lib.optional (tls_cfg.require != null) "TLS Require = ${yes_no tls_cfg.require};"
+        ++ lib.optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
         ++ [ ''TLS Key = "${tls_cfg.key}";'' ]
-        ++ optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${yes_no tls_cfg.verifyPeer};"
-        ++ optional (
+        ++ lib.optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${yes_no tls_cfg.verifyPeer};"
+        ++ lib.optional (
           tls_cfg.allowedCN != [ ]
-        ) "TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};"
-        ++ optional (
+        ) "TLS Allowed CN = ${lib.concatStringsSep " " (tls_cfg.allowedCN)};"
+        ++ lib.optional (
           tls_cfg.caCertificateFile != null
         ) ''TLS CA Certificate File = "${tls_cfg.caCertificateFile}";''
       )
@@ -51,7 +51,7 @@ let
       ${tls_conf fd_cfg.tls}
     }
 
-    ${concatStringsSep "\n" (
+    ${lib.concatStringsSep "\n" (
       mapAttrsToList (name: value: ''
         Director {
           Name = "${name}";
@@ -80,11 +80,11 @@ let
       ${tls_conf sd_cfg.tls}
     }
 
-    ${concatStringsSep "\n" (
+    ${lib.concatStringsSep "\n" (
       mapAttrsToList (name: value: ''
         Autochanger {
           Name = "${name}";
-          Device = ${concatStringsSep ", " (map (a: "\"${a}\"") value.devices)};
+          Device = ${lib.concatStringsSep ", " (map (a: "\"${a}\"") value.devices)};
           Changer Device =  ${value.changerDevice};
           Changer Command = ${value.changerCommand};
           ${value.extraAutochangerConfig}
@@ -92,7 +92,7 @@ let
       '') sd_cfg.autochanger
     )}
 
-    ${concatStringsSep "\n" (
+    ${lib.concatStringsSep "\n" (
       mapAttrsToList (name: value: ''
         Device {
           Name = "${name}";
@@ -103,7 +103,7 @@ let
       '') sd_cfg.device
     )}
 
-    ${concatStringsSep "\n" (
+    ${lib.concatStringsSep "\n" (
       mapAttrsToList (name: value: ''
         Director {
           Name = "${name}";
@@ -160,16 +160,16 @@ let
     { ... }:
     {
       options = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Specifies if TLS should be enabled.
             If this set to `false` TLS will be completely disabled, even if ${tlsLink "tls.require" submodulePath} is true.
           '';
         };
-        require = mkOption {
-          type = types.nullOr types.bool;
+        require = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
           default = null;
           description = ''
             Require TLS or TLS-PSK encryption.
@@ -181,8 +181,8 @@ let
             component will refuse any connection request that does not use TLS.
           '';
         };
-        certificate = mkOption {
-          type = types.nullOr types.path;
+        certificate = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           description = ''
             The full path to the PEM encoded TLS certificate.
@@ -193,15 +193,15 @@ let
             `false` in the corresponding server context.
           '';
         };
-        key = mkOption {
-          type = types.path;
+        key = lib.mkOption {
+          type = lib.types.path;
           description = ''
             The path of a PEM encoded TLS private key.
             It must correspond to the TLS certificate.
           '';
         };
-        verifyPeer = mkOption {
-          type = types.nullOr types.bool;
+        verifyPeer = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
           default = null;
           description = ''
             Verify peer certificate.
@@ -216,8 +216,8 @@ let
             Standard from Bacula is `true`.
           '';
         };
-        allowedCN = mkOption {
-          type = types.listOf types.str;
+        allowedCN = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           description = ''
             Common name attribute of allowed peer certificates.
@@ -227,8 +227,8 @@ let
             CN list will not be checked if ${tlsLink "tls.verifyPeer" submodulePath} is false.
           '';
         };
-        caCertificateFile = mkOption {
-          type = types.nullOr types.path;
+        caCertificateFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           description = ''
             The path specifying a PEM encoded TLS CA certificate(s).
@@ -245,8 +245,8 @@ let
     { ... }:
     {
       options = {
-        password = mkOption {
-          type = types.str;
+        password = lib.mkOption {
+          type = lib.types.str;
           # TODO: required?
           description = ''
             Specifies the password that must be supplied for the default Bacula
@@ -265,8 +265,8 @@ let
           '';
         };
 
-        monitor = mkOption {
-          type = types.enum [
+        monitor = lib.mkOption {
+          type = lib.types.enum [
             "no"
             "yes"
           ];
@@ -284,8 +284,8 @@ let
           '';
         };
 
-        tls = mkOption {
-          type = types.submodule (tlsOptions "${submodulePath}.director.<name>");
+        tls = lib.mkOption {
+          type = lib.types.submodule (tlsOptions "${submodulePath}.director.<name>");
           description = ''
             TLS Options for the Director in this Configuration.
           '';
@@ -297,8 +297,8 @@ let
     { ... }:
     {
       options = {
-        changerDevice = mkOption {
-          type = types.str;
+        changerDevice = lib.mkOption {
+          type = lib.types.str;
           description = ''
             The specified name-string must be the generic SCSI device name of the
             autochanger that corresponds to the normal read/write Archive Device
@@ -310,14 +310,14 @@ let
             `/dev/sg0` for the Changer Device name.  Depending
             on your exact configuration, and the number of autochangers or the
             type of autochanger, what you specify here can vary. This directive
-            is optional. See the Using AutochangersAutochangersChapter chapter of
+            is lib.optional. See the Using AutochangersAutochangersChapter chapter of
             this manual for more details of using this and the following
             autochanger directives.
           '';
         };
 
-        changerCommand = mkOption {
-          type = types.str;
+        changerCommand = lib.mkOption {
+          type = lib.types.str;
           description = ''
             The name-string specifies an external program to be called that will
             automatically change volumes as required by Bacula. Normally, this
@@ -339,14 +339,14 @@ let
           default = "/etc/bacula/mtx-changer %c %o %S %a %d";
         };
 
-        devices = mkOption {
+        devices = lib.mkOption {
           description = "";
-          type = types.listOf types.str;
+          type = lib.types.listOf lib.types.str;
         };
 
-        extraAutochangerConfig = mkOption {
+        extraAutochangerConfig = lib.mkOption {
           default = "";
-          type = types.lines;
+          type = lib.types.lines;
           description = ''
             Extra configuration to be passed in Autochanger directive.
           '';
@@ -361,9 +361,9 @@ let
     { ... }:
     {
       options = {
-        archiveDevice = mkOption {
+        archiveDevice = lib.mkOption {
           # TODO: required?
-          type = types.str;
+          type = lib.types.str;
           description = ''
             The specified name-string gives the system file name of the storage
             device managed by this storage daemon. This will usually be the
@@ -378,9 +378,9 @@ let
           '';
         };
 
-        mediaType = mkOption {
+        mediaType = lib.mkOption {
           # TODO: required?
-          type = types.str;
+          type = lib.types.str;
           description = ''
             The specified name-string names the type of media supported by this
             device, for example, `DLT7000`. Media type names are
@@ -416,9 +416,9 @@ let
           '';
         };
 
-        extraDeviceConfig = mkOption {
+        extraDeviceConfig = lib.mkOption {
           default = "";
-          type = types.lines;
+          type = lib.types.lines;
           description = ''
             Extra configuration to be passed in Device directive.
           '';
@@ -438,18 +438,18 @@ in
 {
   options = {
     services.bacula-fd = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the Bacula File Daemon.
         '';
       };
 
-      name = mkOption {
+      name = lib.mkOption {
         default = "${config.networking.hostName}-fd";
-        defaultText = literalExpression ''"''${config.networking.hostName}-fd"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${config.networking.hostName}-fd"'';
+        type = lib.types.str;
         description = ''
           The client name that must be used by the Director when connecting.
           Generally, it is a good idea to use a name related to the machine so
@@ -458,9 +458,9 @@ in
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 9102;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           This specifies the port number on which the Client listens for
           Director connections. It must agree with the FDPort specified in
@@ -468,16 +468,16 @@ in
         '';
       };
 
-      director = mkOption {
+      director = lib.mkOption {
         default = { };
         description = ''
           This option defines director resources in Bacula File Daemon.
         '';
-        type = types.attrsOf (types.submodule (directorOptions "services.bacula-fd"));
+        type = lib.types.attrsOf (types.submodule (directorOptions "services.bacula-fd"));
       };
 
-      tls = mkOption {
-        type = types.submodule (tlsOptions "services.bacula-fd");
+      tls = lib.mkOption {
+        type = lib.types.submodule (tlsOptions "services.bacula-fd");
         default = { };
         description = ''
           TLS Options for the File Daemon.
@@ -485,9 +485,9 @@ in
         '';
       };
 
-      extraClientConfig = mkOption {
+      extraClientConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration to be passed in Client directive.
         '';
@@ -497,9 +497,9 @@ in
         '';
       };
 
-      extraMessagesConfig = mkOption {
+      extraMessagesConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
@@ -510,59 +510,59 @@ in
     };
 
     services.bacula-sd = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Bacula Storage Daemon.
         '';
       };
 
-      name = mkOption {
+      name = lib.mkOption {
         default = "${config.networking.hostName}-sd";
-        defaultText = literalExpression ''"''${config.networking.hostName}-sd"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${config.networking.hostName}-sd"'';
+        type = lib.types.str;
         description = ''
           Specifies the Name of the Storage daemon.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 9103;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           Specifies port number on which the Storage daemon listens for
           Director connections.
         '';
       };
 
-      director = mkOption {
+      director = lib.mkOption {
         default = { };
         description = ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
-        type = types.attrsOf (types.submodule (directorOptions "services.bacula-sd"));
+        type = lib.types.attrsOf (types.submodule (directorOptions "services.bacula-sd"));
       };
 
-      device = mkOption {
+      device = lib.mkOption {
         default = { };
         description = ''
           This option defines Device resources in Bacula Storage Daemon.
         '';
-        type = types.attrsOf (types.submodule deviceOptions);
+        type = lib.types.attrsOf (types.submodule deviceOptions);
       };
 
-      autochanger = mkOption {
+      autochanger = lib.mkOption {
         default = { };
         description = ''
           This option defines Autochanger resources in Bacula Storage Daemon.
         '';
-        type = types.attrsOf (types.submodule autochangerOptions);
+        type = lib.types.attrsOf (types.submodule autochangerOptions);
       };
 
-      extraStorageConfig = mkOption {
+      extraStorageConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration to be passed in Storage directive.
         '';
@@ -572,9 +572,9 @@ in
         '';
       };
 
-      extraMessagesConfig = mkOption {
+      extraMessagesConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
@@ -582,8 +582,8 @@ in
           console = all
         '';
       };
-      tls = mkOption {
-        type = types.submodule (tlsOptions "services.bacula-sd");
+      tls = lib.mkOption {
+        type = lib.types.submodule (tlsOptions "services.bacula-sd");
         default = { };
         description = ''
           TLS Options for the Storage Daemon.
@@ -594,27 +594,27 @@ in
     };
 
     services.bacula-dir = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Bacula Director Daemon.
         '';
       };
 
-      name = mkOption {
+      name = lib.mkOption {
         default = "${config.networking.hostName}-dir";
-        defaultText = literalExpression ''"''${config.networking.hostName}-dir"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${config.networking.hostName}-dir"'';
+        type = lib.types.str;
         description = ''
           The director name used by the system administrator. This directive is
           required.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 9101;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           Specify the port (a positive integer) on which the Director daemon
           will listen for Bacula Console connections. This same port number
@@ -625,17 +625,17 @@ in
         '';
       };
 
-      password = mkOption {
+      password = lib.mkOption {
         # TODO: required?
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specifies the password that must be supplied for a Director.
         '';
       };
 
-      extraMessagesConfig = mkOption {
+      extraMessagesConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
@@ -644,9 +644,9 @@ in
         '';
       };
 
-      extraDirectorConfig = mkOption {
+      extraDirectorConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration to be passed in Director directive.
         '';
@@ -656,9 +656,9 @@ in
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra configuration for Bacula Director Daemon.
         '';
@@ -667,8 +667,8 @@ in
         '';
       };
 
-      tls = mkOption {
-        type = types.submodule (tlsOptions "services.bacula-dir");
+      tls = lib.mkOption {
+        type = lib.types.submodule (tlsOptions "services.bacula-dir");
         default = { };
         description = ''
           TLS Options for the Director.
@@ -678,7 +678,7 @@ in
     };
   };
 
-  config = mkIf (fd_cfg.enable || sd_cfg.enable || dir_cfg.enable) {
+  config = lib.mkIf (fd_cfg.enable || sd_cfg.enable || dir_cfg.enable) {
     systemd.slices.system-bacula = {
       description = "Bacula Backup System Slice";
       documentation = [
@@ -687,7 +687,7 @@ in
       ];
     };
 
-    systemd.services.bacula-fd = mkIf fd_cfg.enable {
+    systemd.services.bacula-fd = lib.mkIf fd_cfg.enable {
       after = [ "network.target" ];
       description = "Bacula File Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -701,7 +701,7 @@ in
       };
     };
 
-    systemd.services.bacula-sd = mkIf sd_cfg.enable {
+    systemd.services.bacula-sd = lib.mkIf sd_cfg.enable {
       after = [ "network.target" ];
       description = "Bacula Storage Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -717,7 +717,7 @@ in
 
     services.postgresql.enable = lib.mkIf dir_cfg.enable true;
 
-    systemd.services.bacula-dir = mkIf dir_cfg.enable {
+    systemd.services.bacula-dir = lib.mkIf dir_cfg.enable {
       after = [
         "network.target"
         "postgresql.service"

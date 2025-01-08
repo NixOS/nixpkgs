@@ -7,7 +7,7 @@ let
     literalExpression
     mkDefault
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     mkMerge
@@ -132,7 +132,7 @@ let
       });
 
   configFile = pipe cfg.settings [
-    (filterAttrsRecursive (_: v: v != null))
+    (lib.filterAttrsRecursive (_: v: v != null))
     (generators.toKeyValue { })
     (pkgs.writeText "movim-env")
   ];
@@ -149,102 +149,102 @@ in
 {
   options.services = {
     movim = {
-      enable = mkEnableOption "a Movim instance";
-      package = mkPackageOption pkgs "movim" { };
+      enable = lib.mkEnableOption "a Movim instance";
+      package = lib.mkPackageOption pkgs "movim" { };
       phpPackage = mkPackageOption pkgs "php" { };
 
-      phpCfg = mkOption {
-        type = with types; attrsOf (oneOf [ int str bool ]);
-        defaultText = literalExpression (generators.toPretty { } defaultPHPCfg);
+      phpCfg = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ int str bool ]);
+        defaultText = lib.literalExpression (generators.toPretty { } defaultPHPCfg);
         default = { };
         description = "Extra PHP INI options such as `memory_limit`, `max_execution_time`, etc.";
       };
 
-      user = mkOption {
-        type = types.nonEmptyStr;
+      user = lib.mkOption {
+        type = lib.types.nonEmptyStr;
         default = "movim";
         description = "User running Movim service";
       };
 
-      group = mkOption {
-        type = types.nonEmptyStr;
+      group = lib.mkOption {
+        type = lib.types.nonEmptyStr;
         default = "movim";
         description = "Group running Movim service";
       };
 
-      dataDir = mkOption {
-        type = types.nonEmptyStr;
+      dataDir = lib.mkOption {
+        type = lib.types.nonEmptyStr;
         default = "/var/lib/movim";
         description = "State directory of the `movim` user which holds the application’s state & data.";
       };
 
-      logDir = mkOption {
-        type = types.nonEmptyStr;
+      logDir = lib.mkOption {
+        type = lib.types.nonEmptyStr;
         default = "/var/log/movim";
         description = "Log directory of the `movim` user which holds the application’s logs.";
       };
 
-      runtimeDir = mkOption {
-        type = types.nonEmptyStr;
+      runtimeDir = lib.mkOption {
+        type = lib.types.nonEmptyStr;
         default = "/run/movim";
         description = "Runtime directory of the `movim` user which holds the application’s caches & temporary files.";
       };
 
-      domain = mkOption {
-        type = types.nonEmptyStr;
+      domain = lib.mkOption {
+        type = lib.types.nonEmptyStr;
         description = "Fully-qualified domain name (FQDN) for the Movim instance.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
         description = "Movim daemon port.";
       };
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Debugging logs.";
       };
 
-      verbose = mkOption {
-        type = types.bool;
+      verbose = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Verbose logs.";
       };
 
-      minifyStaticFiles = mkOption {
-        type = with types; either bool (submodule {
+      minifyStaticFiles = lib.mkOption {
+        type = with lib.types; either bool (submodule {
           options = {
-            script = mkOption {
-              type = types.submodule {
+            script = lib.mkOption {
+              type = lib.types.submodule {
                 options = {
-                  enable = mkEnableOption "Script minification";
-                  package = mkPackageOption pkgs "esbuild" { };
-                  target = mkOption {
-                    type = with types; nullOr nonEmptyStr;
+                  enable = lib.mkEnableOption "Script minification";
+                  package = lib.mkPackageOption pkgs "esbuild" { };
+                  target = lib.mkOption {
+                    type = with lib.types; nullOr nonEmptyStr;
                     default = null;
                   };
                 };
               };
             };
-            style = mkOption {
-              type = types.submodule {
+            style = lib.mkOption {
+              type = lib.types.submodule {
                 options = {
-                  enable = mkEnableOption "Script minification";
-                  package = mkPackageOption pkgs "lightningcss" { };
-                  target = mkOption {
-                    type = with types; nullOr nonEmptyStr;
+                  enable = lib.mkEnableOption "Script minification";
+                  package = lib.mkPackageOption pkgs "lightningcss" { };
+                  target = lib.mkOption {
+                    type = with lib.types; nullOr nonEmptyStr;
                     default = null;
                   };
                 };
               };
             };
-            svg = mkOption {
-              type = types.submodule {
+            svg = lib.mkOption {
+              type = lib.types.submodule {
                 options = {
-                  enable = mkEnableOption "SVG minification";
-                  package = mkPackageOption pkgs "scour" { };
+                  enable = lib.mkEnableOption "SVG minification";
+                  package = lib.mkPackageOption pkgs "scour" { };
                 };
               };
             };
@@ -254,23 +254,23 @@ in
         description = "Do minification on public static files";
       };
 
-      precompressStaticFiles = mkOption {
-        type = with types; submodule {
+      precompressStaticFiles = lib.mkOption {
+        type = with lib.types; submodule {
           options = {
             brotli = {
-              enable = mkEnableOption "Brotli precompression";
-              package = mkPackageOption pkgs "brotli" { };
-              compressionLevel = mkOption {
-                type = types.ints.between 0 11;
+              enable = lib.mkEnableOption "Brotli precompression";
+              package = lib.mkPackageOption pkgs "brotli" { };
+              compressionLevel = lib.mkOption {
+                type = lib.types.ints.between 0 11;
                 default = 11;
                 description = "Brotli compression level";
               };
             };
             gzip = {
-              enable = mkEnableOption "Gzip precompression";
-              package = mkPackageOption pkgs "gzip" { };
-              compressionLevel = mkOption {
-                type = types.ints.between 1 9;
+              enable = lib.mkEnableOption "Gzip precompression";
+              package = lib.mkPackageOption pkgs "gzip" { };
+              compressionLevel = lib.mkOption {
+                type = lib.types.ints.between 1 9;
                 default = 9;
                 description = "Gzip compression level";
               };
@@ -284,71 +284,71 @@ in
         description = "Aggressively precompress static files";
       };
 
-      podConfig = mkOption {
-        type = types.submodule {
+      podConfig = lib.mkOption {
+        type = lib.types.submodule {
           options = {
-            info = mkOption {
-              type = with types; nullOr str;
+            info = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "Content of the info box on the login page";
             };
 
-            description = mkOption {
-              type = with types; nullOr str;
+            description = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "General description of the instance";
             };
 
-            timezone = mkOption {
-              type = with types; nullOr str;
+            timezone = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "The server timezone";
             };
 
-            restrictsuggestions = mkOption {
-              type = with types; nullOr bool;
+            restrictsuggestions = lib.mkOption {
+              type = with lib.types; nullOr bool;
               default = null;
               description = "Only suggest chatrooms, Communities and other contents that are available on the user XMPP server and related services";
             };
 
-            chatonly = mkOption {
-              type = with types; nullOr bool;
+            chatonly = lib.mkOption {
+              type = with lib.types; nullOr bool;
               default = null;
               description = "Disable all the social feature (Communities, Blog…) and keep only the chat ones";
             };
 
-            disableregistration = mkOption {
-              type = with types; nullOr bool;
+            disableregistration = lib.mkOption {
+              type = with lib.types; nullOr bool;
               default = null;
               description = "Remove the XMPP registration flow and buttons from the interface";
             };
 
-            loglevel = mkOption {
-              type = with types; nullOr (ints.between 0 3);
+            loglevel = lib.mkOption {
+              type = with lib.types; nullOr (ints.between 0 3);
               default = null;
               description = "The server loglevel";
             };
 
-            locale = mkOption {
-              type = with types; nullOr str;
+            locale = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "The server main locale";
             };
 
-            xmppdomain = mkOption {
-              type = with types; nullOr str;
+            xmppdomain = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "The default XMPP server domain";
             };
 
-            xmppdescription = mkOption {
-              type = with types; nullOr str;
+            xmppdescription = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "The default XMPP server description";
             };
 
-            xmppwhitelist = mkOption {
-              type = with types; nullOr str;
+            xmppwhitelist = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = "The allowlisted XMPP servers";
             };
@@ -361,47 +361,47 @@ in
         '';
       };
 
-      settings = mkOption {
-        type = with types; attrsOf (nullOr (oneOf [ int str bool ]));
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf (nullOr (oneOf [ int str bool ]));
         default = { };
         description = ".env settings for Movim. Secrets should use `secretFile` option instead. `null`s will be culled.";
       };
 
-      secretFile = mkOption {
-        type = with types; nullOr path;
+      secretFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         description = "The secret file to be sourced for the .env settings.";
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [ "mysql" "postgresql" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "mysql" "postgresql" ];
           example = "mysql";
           default = "postgresql";
           description = "Database engine to use.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "movim";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "movim";
           description = "Database username.";
         };
 
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "local database using UNIX socket authentication";
         };
       };
 
-      nginx = mkOption {
-        type = with types; nullOr (submodule
+      nginx = lib.mkOption {
+        type = with lib.types; nullOr (submodule
           (import ../web-servers/nginx/vhost-options.nix {
             inherit config lib;
           }));
@@ -423,20 +423,20 @@ in
         '';
       };
 
-      poolConfig = mkOption {
-        type = with types; attrsOf (oneOf [ int str bool ]);
+      poolConfig = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ int str bool ]);
         default = { };
         description = "Options for Movim’s PHP-FPM pool.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     users = {
       users = {
-        movim = mkIf (cfg.user == "movim") {
+        movim = lib.mkIf (cfg.user == "movim") {
           isSystemUser = true;
           group = cfg.group;
         };
@@ -450,7 +450,7 @@ in
 
     services = {
       movim = {
-        settings = mkMerge [
+        settings = lib.mkMerge [
           {
             DAEMON_URL = "//${cfg.domain}";
             DAEMON_PORT = cfg.port;
@@ -458,7 +458,7 @@ in
             DAEMON_DEBUG = cfg.debug;
             DAEMON_VERBOSE = cfg.verbose;
           }
-          (mkIf cfg.database.createLocally {
+          (lib.mkIf cfg.database.createLocally {
             DB_DRIVER = {
               "postgresql" = "pgsql";
               "mysql" = "mysql";
@@ -484,17 +484,17 @@ in
         };
       };
 
-      nginx = mkIf (cfg.nginx != null)
+      nginx = lib.mkIf (cfg.nginx != null)
         {
           enable = true;
-          recommendedOptimisation = mkDefault true;
+          recommendedOptimisation = lib.mkDefault true;
           recommendedProxySettings = true;
           # TODO: recommended cache options already in Nginx⁇
           appendHttpConfig = /* nginx */ ''
             fastcgi_cache_path /tmp/nginx_cache levels=1:2 keys_zone=nginx_cache:100m inactive=60m;
             fastcgi_cache_key "$scheme$request_method$host$request_uri";
           '';
-          virtualHosts."${cfg.domain}" = mkMerge [
+          virtualHosts."${cfg.domain}" = lib.mkMerge [
             cfg.nginx
             {
               root = lib.mkForce "${package}/share/php/movim/public";
@@ -569,12 +569,12 @@ in
             }
           ];
         }
-      // lib.optionalAttrs (cfg.precompressStaticFiles.gzip.enable) { recommendedGzipSettings = mkDefault true; }
-      // lib.optionalAttrs (cfg.precompressStaticFiles.brotli.enable) { recommendedBrotliSettings = mkDefault true; };
+      // lib.optionalAttrs (cfg.precompressStaticFiles.gzip.enable) { recommendedGzipSettings = lib.mkDefault true; }
+      // lib.optionalAttrs (cfg.precompressStaticFiles.brotli.enable) { recommendedBrotliSettings = lib.mkDefault true; };
 
-      mysql = mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
-        enable = mkDefault true;
-        package = mkDefault pkgs.mariadb;
+      mysql = lib.mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = cfg.database.user;
@@ -582,8 +582,8 @@ in
         }];
       };
 
-      postgresql = mkIf (cfg.database.createLocally && cfg.database.type == "postgresql") {
-        enable = mkDefault true;
+      postgresql = lib.mkIf (cfg.database.createLocally && cfg.database.type == "postgresql") {
+        enable = lib.mkDefault true;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = cfg.database.user;

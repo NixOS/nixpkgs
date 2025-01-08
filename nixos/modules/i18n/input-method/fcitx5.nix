@@ -133,7 +133,7 @@ in
       ];
     environment.etc =
       let
-        optionalFile =
+        lib.optionalFile =
           p: f: v:
           lib.optionalAttrs (v != { }) {
             "xdg/fcitx5/${p}".text = f v;
@@ -143,7 +143,7 @@ in
         (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
         (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
         (lib.concatMapAttrs (
-          name: value: optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
+          name: value: lib.optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
         ) cfg.settings.addons)
       ];
 

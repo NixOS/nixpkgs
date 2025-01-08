@@ -6,11 +6,11 @@
 }:
 
 let
-  inherit (lib.attrsets) optionalAttrs;
+  inherit (lib.attrsets) lib.optionalAttrs;
   inherit (lib.generators) toINIWithGlobalSection;
-  inherit (lib.lists) optional;
+  inherit (lib.lists) lib.optional;
   inherit (lib.modules) mkIf mkRemovedOptionModule;
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption lib.mkOption;
   inherit (lib.strings) escape;
   inherit (lib.types)
     attrsOf
@@ -50,16 +50,16 @@ in
 {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "davfs2" "extraConfig" ] ''
+    (lib.mkRemovedOptionModule [ "services" "davfs2" "extraConfig" ] ''
       The option extraConfig got removed, please migrate to
       services.davfs2.settings instead.
     '')
   ];
 
   options.services.davfs2 = {
-    enable = mkEnableOption "davfs2";
+    enable = lib.mkEnableOption "davfs2";
 
-    davUser = mkOption {
+    davUser = lib.mkOption {
       type = str;
       default = "davfs2";
       description = ''
@@ -68,7 +68,7 @@ in
       '';
     };
 
-    davGroup = mkOption {
+    davGroup = lib.mkOption {
       type = str;
       default = "davfs2";
       description = ''
@@ -78,7 +78,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = submodule {
         freeformType =
           let
@@ -91,7 +91,7 @@ in
           attrsOf (attrsOf (oneOf (valueTypes ++ [ (attrsOf (oneOf valueTypes)) ])));
       };
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           globalSection = {
             proxy = "foo.bar:8080";
@@ -114,7 +114,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.davfs2 ];
     environment.etc."davfs2/davfs2.conf".source = configFile;
@@ -126,11 +126,11 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.davGroup == "davfs2") {
+    users.groups = lib.optionalAttrs (cfg.davGroup == "davfs2") {
       davfs2.gid = config.ids.gids.davfs2;
     };
 
-    users.users = optionalAttrs (cfg.davUser == "davfs2") {
+    users.users = lib.optionalAttrs (cfg.davUser == "davfs2") {
       davfs2 = {
         createHome = false;
         group = cfg.davGroup;

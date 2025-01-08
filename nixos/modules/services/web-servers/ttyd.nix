@@ -10,9 +10,9 @@ let
   cfg = config.services.ttyd;
 
   inherit (lib)
-    optionals
+    lib.optionals
     types
-    mkOption
+    lib.mkOption
     ;
 
   # Command line arguments for the ttyd daemon
@@ -21,11 +21,11 @@ let
       "--port"
       (toString cfg.port)
     ]
-    ++ optionals (cfg.socket != null) [
+    ++ lib.optionals (cfg.socket != null) [
       "--interface"
       cfg.socket
     ]
-    ++ optionals (cfg.interface != null) [
+    ++ lib.optionals (cfg.interface != null) [
       "--interface"
       cfg.interface
     ]
@@ -43,25 +43,25 @@ let
       "--terminal-type"
       cfg.terminalType
     ]
-    ++ optionals cfg.checkOrigin [ "--check-origin" ]
-    ++ optionals cfg.writeable [ "--writable" ] # the typo is correct
+    ++ lib.optionals cfg.checkOrigin [ "--check-origin" ]
+    ++ lib.optionals cfg.writeable [ "--writable" ] # the typo is correct
     ++ [
       "--max-clients"
       (toString cfg.maxClients)
     ]
-    ++ optionals (cfg.indexFile != null) [
+    ++ lib.optionals (cfg.indexFile != null) [
       "--index"
       cfg.indexFile
     ]
-    ++ optionals cfg.enableIPv6 [ "--ipv6" ]
-    ++ optionals cfg.enableSSL [
+    ++ lib.optionals cfg.enableIPv6 [ "--ipv6" ]
+    ++ lib.optionals cfg.enableSSL [
       "--ssl"
       "--ssl-cert"
       cfg.certFile
       "--ssl-key"
       cfg.keyFile
     ]
-    ++ optionals (cfg.enableSSL && cfg.caFile != null) [
+    ++ lib.optionals (cfg.enableSSL && cfg.caFile != null) [
       "--ssl-ca"
       cfg.caFile
     ]
@@ -80,34 +80,34 @@ in
     services.ttyd = {
       enable = lib.mkEnableOption ("ttyd daemon");
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 7681;
         description = "Port to listen on (use 0 for random port)";
       };
 
-      socket = mkOption {
-        type = types.nullOr types.path;
+      socket = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/var/run/ttyd.sock";
         description = "UNIX domain socket path to bind.";
       };
 
-      interface = mkOption {
-        type = types.nullOr types.str;
+      interface = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "eth0";
         description = "Network interface to bind.";
       };
 
-      username = mkOption {
-        type = types.nullOr types.str;
+      username = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Username for basic http authentication.";
       };
 
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         apply = value: if value == null then null else toString value;
         description = ''
@@ -117,14 +117,14 @@ in
         '';
       };
 
-      signal = mkOption {
-        type = types.ints.u8;
+      signal = lib.mkOption {
+        type = lib.types.ints.u8;
         default = 1;
         description = "Signal to send to the command on session close.";
       };
 
-      entrypoint = mkOption {
-        type = types.listOf types.str;
+      entrypoint = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "${pkgs.shadow}/bin/login" ];
         defaultText = lib.literalExpression ''
           [ "''${pkgs.shadow}/bin/login" ]
@@ -136,22 +136,22 @@ in
         apply = lib.escapeShellArgs;
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         # `login` needs to be run as root
         default = "root";
         description = "Which unix user ttyd should run as.";
       };
 
-      writeable = mkOption {
-        type = types.nullOr types.bool;
+      writeable = lib.mkOption {
+        type = lib.types.nullOr lib.types.bool;
         default = null; # null causes an eval error, forcing the user to consider attack surface
         example = true;
         description = "Allow clients to write to the TTY.";
       };
 
-      clientOptions = mkOption {
-        type = types.attrsOf types.str;
+      clientOptions = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         example = lib.literalExpression ''
           {
@@ -165,50 +165,50 @@ in
         '';
       };
 
-      terminalType = mkOption {
-        type = types.str;
+      terminalType = lib.mkOption {
+        type = lib.types.str;
         default = "xterm-256color";
         description = "Terminal type to report.";
       };
 
-      checkOrigin = mkOption {
-        type = types.bool;
+      checkOrigin = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to allow a websocket connection from a different origin.";
       };
 
-      maxClients = mkOption {
-        type = types.int;
+      maxClients = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         description = "Maximum clients to support (0, no limit)";
       };
 
-      indexFile = mkOption {
-        type = types.nullOr types.path;
+      indexFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "Custom index.html path";
       };
 
-      enableIPv6 = mkOption {
-        type = types.bool;
+      enableIPv6 = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether or not to enable IPv6 support.";
       };
 
-      enableSSL = mkOption {
-        type = types.bool;
+      enableSSL = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether or not to enable SSL (https) support.";
       };
 
-      certFile = mkOption {
-        type = types.nullOr types.path;
+      certFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "SSL certificate file path.";
       };
 
-      keyFile = mkOption {
-        type = types.nullOr types.path;
+      keyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         apply = value: if value == null then null else toString value;
         description = ''
@@ -218,14 +218,14 @@ in
         '';
       };
 
-      caFile = mkOption {
-        type = types.nullOr types.path;
+      caFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "SSL CA file path for client certificate verification.";
       };
 
-      logLevel = mkOption {
-        type = types.int;
+      logLevel = lib.mkOption {
+        type = lib.types.int;
         default = 7;
         description = "Set log level.";
       };

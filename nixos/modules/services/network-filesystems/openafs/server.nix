@@ -13,10 +13,10 @@ let
     concatStringsSep
     literalExpression
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
-    optionalString
+    lib.optionalString
     types
     ;
 
@@ -28,16 +28,16 @@ let
     ''
     + (optionalString cfg.roles.database.enable ''
       bnode simple vlserver 1
-      parm ${openafsSrv}/libexec/openafs/vlserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.vlserverArgs}
+      parm ${openafsSrv}/libexec/openafs/vlserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.vlserverArgs}
       end
       bnode simple ptserver 1
-      parm ${openafsSrv}/libexec/openafs/ptserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.ptserverArgs}
+      parm ${openafsSrv}/libexec/openafs/ptserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.ptserverArgs}
       end
     '')
     + (optionalString cfg.roles.fileserver.enable ''
       bnode dafs dafs 1
-      parm ${openafsSrv}/libexec/openafs/dafileserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.fileserverArgs}
-      parm ${openafsSrv}/libexec/openafs/davolserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.volserverArgs}
+      parm ${openafsSrv}/libexec/openafs/dafileserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.fileserverArgs}
+      parm ${openafsSrv}/libexec/openafs/davolserver ${lib.optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.volserverArgs}
       parm ${openafsSrv}/libexec/openafs/salvageserver ${cfg.roles.fileserver.salvageserverArgs}
       parm ${openafsSrv}/libexec/openafs/dasalvager ${cfg.roles.fileserver.salvagerArgs}
       end
@@ -46,7 +46,7 @@ let
       (cfg.roles.database.enable && cfg.roles.backup.enable && (!cfg.roles.backup.enableFabs))
       ''
         bnode simple buserver 1
-        parm ${openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${optionalString useBuCellServDB "-cellservdb /etc/openafs/backup/"}
+        parm ${openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${lib.optionalString useBuCellServDB "-cellservdb /etc/openafs/backup/"}
         end
       ''
     )
@@ -62,7 +62,7 @@ let
 
   netInfo =
     if (cfg.advertisedAddresses != [ ]) then
-      pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
+      pkgs.writeText "NetInfo" ((lib.concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
     else
       null;
 
@@ -100,9 +100,9 @@ in
 
     services.openafsServer = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to enable the OpenAFS server. An OpenAFS server needs a
           complex setup. So, be aware that enabling this service and setting
@@ -114,67 +114,67 @@ in
         '';
       };
 
-      advertisedAddresses = mkOption {
-        type = types.listOf types.str;
+      advertisedAddresses = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "List of IP addresses this server is advertised under. See NetInfo(5)";
       };
 
-      cellName = mkOption {
+      cellName = lib.mkOption {
         default = "";
-        type = types.str;
+        type = lib.types.str;
         description = "Cell name, this server will serve.";
         example = "grand.central.org";
       };
 
-      cellServDB = mkOption {
+      cellServDB = lib.mkOption {
         default = [ ];
-        type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
+        type = with lib.types; listOf (submodule [ { options = cellServDBConfig; } ]);
         description = "Definition of all cell-local database server machines.";
       };
 
-      package = mkPackageOption pkgs "openafs" { };
+      package = lib.mkPackageOption pkgs "openafs" { };
 
       roles = {
         fileserver = {
-          enable = mkOption {
+          enable = lib.mkOption {
             default = true;
-            type = types.bool;
+            type = lib.types.bool;
             description = "Fileserver role, serves files and volumes from its local storage.";
           };
 
-          fileserverArgs = mkOption {
+          fileserverArgs = lib.mkOption {
             default = "-vattachpar 128 -vhashsize 11 -L -rxpck 400 -cb 1000000";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the dafileserver process. See its man page.";
           };
 
-          volserverArgs = mkOption {
+          volserverArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the davolserver process. See its man page.";
             example = "-sync never";
           };
 
-          salvageserverArgs = mkOption {
+          salvageserverArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the salvageserver process. See its man page.";
             example = "-showlog";
           };
 
-          salvagerArgs = mkOption {
+          salvagerArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the dasalvager process. See its man page.";
             example = "-showlog -showmounts";
           };
         };
 
         database = {
-          enable = mkOption {
+          enable = lib.mkOption {
             default = true;
-            type = types.bool;
+            type = lib.types.bool;
             description = ''
               Database server role, maintains the Volume Location Database,
               Protection Database (and Backup Database, see
@@ -187,23 +187,23 @@ in
             '';
           };
 
-          vlserverArgs = mkOption {
+          vlserverArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the vlserver process. See its man page.";
             example = "-rxbind";
           };
 
-          ptserverArgs = mkOption {
+          ptserverArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the ptserver process. See its man page.";
             example = "-restricted -default_access S---- S-M---";
           };
         };
 
         backup = {
-          enable = mkEnableOption ''
+          enable = lib.mkEnableOption ''
             the backup server role. When using OpenAFS built-in buserver, use in conjunction with the
             `database` role to maintain the Backup
             Database. Normally only used in conjunction with tape storage
@@ -218,16 +218,16 @@ in
             pre-existing backup solutions for handling them
           '';
 
-          buserverArgs = mkOption {
+          buserverArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = "Arguments to the buserver process. See its man page.";
             example = "-p 8";
           };
 
-          cellServDB = mkOption {
+          cellServDB = lib.mkOption {
             default = [ ];
-            type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
+            type = with lib.types; listOf (submodule [ { options = cellServDBConfig; } ]);
             description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
@@ -235,9 +235,9 @@ in
             '';
           };
 
-          fabsArgs = mkOption {
+          fabsArgs = lib.mkOption {
             default = "";
-            type = types.str;
+            type = lib.types.str;
             description = ''
               Arguments to the fabsys process. See
               {manpage}`fabsys_server(1)` and
@@ -245,13 +245,13 @@ in
             '';
           };
 
-          fabsExtraConfig = mkOption {
+          fabsExtraConfig = lib.mkOption {
             default = { };
-            type = types.attrs;
+            type = lib.types.attrs;
             description = ''
               Additional configuration parameters for the FABS backup server.
             '';
-            example = literalExpression ''
+            example = lib.literalExpression ''
               {
                 afs.localauth = true;
                 afs.keytab = config.sops.secrets.fabsKeytab.path;
@@ -261,18 +261,18 @@ in
         };
       };
 
-      dottedPrincipals = mkOption {
+      dottedPrincipals = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If enabled, allow principal names containing (.) dots. Enabling
           this has security implications!
         '';
       };
 
-      udpPacketSize = mkOption {
+      udpPacketSize = lib.mkOption {
         default = 1310720;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           UDP packet size to use in Bytes. Higher values can speed up
           communications. The default of 1 MB is a sufficient in most
@@ -286,7 +286,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -335,8 +335,8 @@ in
         ];
         preStart = ''
           mkdir -m 0755 -p /var/openafs
-          ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-          ${optionalString useBuCellServDB "cp ${buCellServDB}"}
+          ${lib.optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
+          ${lib.optionalString useBuCellServDB "cp ${buCellServDB}"}
         '';
         serviceConfig = {
           ExecStart = "${openafsBin}/bin/bosserver -nofork";

@@ -42,7 +42,7 @@ let
 
         # The FQDN, domain name, and hostname detection should work as expected:
         assert "${fqdn}" == machine.succeed("hostname --fqdn").strip()
-        assert "${optionalString (domain != null) domain}" == machine.succeed("dnsdomainname").strip()
+        assert "${lib.optionalString (domain != null) domain}" == machine.succeed("dnsdomainname").strip()
         assert (
             "${hostName}"
             == machine.succeed(
@@ -57,7 +57,7 @@ let
         assert "localhost" == machine.succeed("getent hosts ::1 | awk '{print $2}'").strip()
 
         # 127.0.0.2 should resolve back to the FQDN and hostname:
-        fqdn_and_host_name = "${optionalString (domain != null) "${hostName}.${domain} "}${hostName}"
+        fqdn_and_host_name = "${lib.optionalString (domain != null) "${hostName}.${domain} "}${hostName}"
         assert (
             fqdn_and_host_name
             == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2,$3}'").strip()

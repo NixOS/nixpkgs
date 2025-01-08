@@ -1,7 +1,5 @@
 { lib, pkgs, ... }:
 
-with lib;
-
 let
 
   makeScript =
@@ -47,15 +45,15 @@ let
           next if $key eq 'LOCALE_ARCHIVE';
           delete $ENV{$key};
       }
-      ${concatStrings (
-        mapAttrsToList (n: v: ''
+      ${lib.concatStrings (
+        lib.mapAttrsToList (n: v: ''
           $ENV{'${n}'} = '${v}';
         '') service.environment
       )}
 
       # Run the ExecStartPre program.  FIXME: this could be a list.
       my $preStart = <<END_CMD;
-      ${concatStringsSep "\n" (service.serviceConfig.ExecStartPre or [ ])}
+      ${lib.concatStringsSep "\n" (service.serviceConfig.ExecStartPre or [ ])}
       END_CMD
       if (defined $preStart && $preStart ne "\n") {
           print STDERR "running ExecStartPre: $preStart\n";
@@ -82,7 +80,7 @@ let
 
       # Run the ExecStartPost program.
       my $postStart = <<END_CMD;
-      ${concatStringsSep "\n" (service.serviceConfig.ExecStartPost or [ ])}
+      ${lib.concatStringsSep "\n" (service.serviceConfig.ExecStartPost or [ ])}
       END_CMD
       if (defined $postStart && $postStart ne "\n") {
           print STDERR "running ExecStartPost: $postStart\n";
@@ -110,7 +108,7 @@ let
   opts =
     { config, name, ... }:
     {
-      options.runner = mkOption {
+      options.runner = lib.mkOption {
         internal = true;
         description = ''
           A script that runs the service outside of systemd,
@@ -125,8 +123,8 @@ in
 
 {
   options = {
-    systemd.services = mkOption {
-      type = with types; attrsOf (submodule opts);
+    systemd.services = lib.mkOption {
+      type = with lib.types; attrsOf (submodule opts);
     };
   };
 }

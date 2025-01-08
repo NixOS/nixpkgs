@@ -6,11 +6,11 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
 in
 {
   options = {
-    interactive = mkOption {
+    interactive = lib.mkOption {
       description = ''
         Tests [can be run interactively](#sec-running-nixos-tests-interactively)
         using the program in the test derivation's `.driverInteractive` attribute.

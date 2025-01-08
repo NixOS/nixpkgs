@@ -10,7 +10,7 @@ let
 
   inherit (lib)
     escapeShellArgs
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     types
@@ -23,22 +23,22 @@ let
 in
 
 {
-  options.services.wyoming.faster-whisper = with types; {
-    package = mkPackageOption pkgs "wyoming-faster-whisper" { };
+  options.services.wyoming.faster-whisper = with lib.types; {
+    package = lib.mkPackageOption pkgs "wyoming-faster-whisper" { };
 
-    servers = mkOption {
+    servers = lib.mkOption {
       default = { };
       description = ''
         Attribute set of faster-whisper instances to spawn.
       '';
-      type = types.attrsOf (
+      type = lib.types.attrsOf (
         types.submodule (
           { ... }:
           {
             options = {
-              enable = mkEnableOption "Wyoming faster-whisper server";
+              enable = lib.mkEnableOption "Wyoming faster-whisper server";
 
-              model = mkOption {
+              model = lib.mkOption {
                 type = str;
                 default = "tiny-int8";
                 example = "Systran/faster-distil-whisper-small.en";
@@ -49,7 +49,7 @@ in
                 '';
               };
 
-              uri = mkOption {
+              uri = lib.mkOption {
                 type = strMatching "^(tcp|unix)://.*$";
                 example = "tcp://0.0.0.0:10300";
                 description = ''
@@ -57,9 +57,9 @@ in
                 '';
               };
 
-              device = mkOption {
+              device = lib.mkOption {
                 # https://opennmt.net/CTranslate2/python/ctranslate2.models.Whisper.html#
-                type = types.enum [
+                type = lib.types.enum [
                   "cpu"
                   "cuda"
                   "auto"
@@ -70,7 +70,7 @@ in
                 '';
               };
 
-              language = mkOption {
+              language = lib.mkOption {
                 type = enum [
                   # https://github.com/home-assistant/addons/blob/master/whisper/config.yaml#L20
                   "auto"
@@ -180,7 +180,7 @@ in
                 '';
               };
 
-              beamSize = mkOption {
+              beamSize = lib.mkOption {
                 type = ints.unsigned;
                 default = 1;
                 example = 5;
@@ -190,7 +190,7 @@ in
                 apply = toString;
               };
 
-              extraArgs = mkOption {
+              extraArgs = lib.mkOption {
                 type = listOf str;
                 default = [ ];
                 description = ''

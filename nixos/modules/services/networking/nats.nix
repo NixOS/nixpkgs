@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.nats;
@@ -32,42 +30,42 @@ in
 
   options = {
     services.nats = {
-      enable = mkEnableOption "NATS messaging system";
+      enable = lib.mkEnableOption "NATS messaging system";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nats";
         description = "User account under which NATS runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nats";
         description = "Group under which NATS runs.";
       };
 
-      serverName = mkOption {
+      serverName = lib.mkOption {
         default = "nats";
         example = "n1-c3";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Name of the NATS server, must be unique if clustered.
         '';
       };
 
-      jetstream = mkEnableOption "JetStream";
+      jetstream = lib.mkEnableOption "JetStream";
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 4222;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           Port on which to listen.
         '';
       };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         default = "/var/lib/nats";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           The NATS data directory. Only used if JetStream is enabled, for
           storing stream metadata and messages.
@@ -79,10 +77,10 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         type = format.type;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             jetstream = {
               max_mem = "1G";
@@ -101,11 +99,11 @@ in
 
   ### Implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nats.settings = {
       server_name = cfg.serverName;
       port = cfg.port;
-      jetstream = optionalAttrs cfg.jetstream { store_dir = cfg.dataDir; };
+      jetstream = lib.optionalAttrs cfg.jetstream { store_dir = cfg.dataDir; };
     };
 
     systemd.services.nats = {
@@ -113,8 +111,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      serviceConfig = mkMerge [
-        (mkIf (cfg.dataDir == "/var/lib/nats") {
+      serviceConfig = lib.mkMerge [
+        (lib.mkIf (cfg.dataDir == "/var/lib/nats") {
           StateDirectory = "nats";
           StateDirectoryMode = "0750";
         })
@@ -165,7 +163,7 @@ in
       ];
     };
 
-    users.users = mkIf (cfg.user == "nats") {
+    users.users = lib.mkIf (cfg.user == "nats") {
       nats = {
         description = "NATS daemon user";
         isSystemUser = true;
@@ -174,7 +172,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "nats") { nats = { }; };
+    users.groups = lib.mkIf (cfg.group == "nats") { nats = { }; };
   };
 
 }

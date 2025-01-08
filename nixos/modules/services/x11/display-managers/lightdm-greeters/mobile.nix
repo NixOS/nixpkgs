@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
@@ -14,14 +13,14 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.mobile = {
-      enable = mkEnableOption "lightdm-mobile-greeter as the lightdm greeter";
+      enable = lib.mkEnableOption "lightdm-mobile-greeter as the lightdm greeter";
     };
   };
 
-  config = mkIf (ldmcfg.enable && cfg.enable) {
+  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
-    services.xserver.displayManager.lightdm.greeter = mkDefault {
+    services.xserver.displayManager.lightdm.greeter = lib.mkDefault {
       package = pkgs.lightdm-mobile-greeter.xgreeters;
       name = "lightdm-mobile-greeter";
     };

@@ -5,33 +5,31 @@
   ...
 }:
 
-with lib;
-
 {
   options = {
     services.xl2tpd = {
-      enable = mkEnableOption "xl2tpd, the Layer 2 Tunnelling Protocol Daemon";
+      enable = lib.mkEnableOption "xl2tpd, the Layer 2 Tunnelling Protocol Daemon";
 
-      serverIp = mkOption {
-        type = types.str;
+      serverIp = lib.mkOption {
+        type = lib.types.str;
         description = "The server-side IP address.";
         default = "10.125.125.1";
       };
 
-      clientIpRange = mkOption {
-        type = types.str;
+      clientIpRange = lib.mkOption {
+        type = lib.types.str;
         description = "The range from which client IPs are drawn.";
         default = "10.125.125.2-11";
       };
 
-      extraXl2tpOptions = mkOption {
-        type = types.lines;
+      extraXl2tpOptions = lib.mkOption {
+        type = lib.types.lines;
         description = "Adds extra lines to the xl2tpd configuration file.";
         default = "";
       };
 
-      extraPppdOptions = mkOption {
-        type = types.lines;
+      extraPppdOptions = lib.mkOption {
+        type = lib.types.lines;
         description = "Adds extra lines to the pppd options file.";
         default = "";
         example = ''
@@ -42,7 +40,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.xl2tpd.enable {
+  config = lib.mkIf config.services.xl2tpd.enable {
     systemd.services.xl2tpd =
       let
         cfg = config.services.xl2tpd;

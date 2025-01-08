@@ -80,7 +80,7 @@ in
           - ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64: The base64-encoded RSA PEM PKCS1 of the
             RS256 JWT secret. Generate it with `openssl genrsa -traditional 4096 | base64 -w0`.
         '';
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
       };
 
@@ -88,7 +88,7 @@ in
         description = ''
           The group under which attic runs.
         '';
-        type = types.str;
+        type = lib.types.str;
         default = "atticd";
       };
 
@@ -96,7 +96,7 @@ in
         description = ''
           The user under which attic runs.
         '';
-        type = types.str;
+        type = lib.types.str;
         default = "atticd";
       };
 

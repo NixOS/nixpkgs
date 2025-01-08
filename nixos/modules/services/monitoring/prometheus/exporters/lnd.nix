@@ -8,28 +8,28 @@
 
 let
   cfg = config.services.prometheus.exporters.lnd;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9092;
   extraOpts = {
-    lndHost = mkOption {
-      type = types.str;
+    lndHost = lib.mkOption {
+      type = lib.types.str;
       default = "localhost:10009";
       description = ''
         lnd instance gRPC address:port.
       '';
     };
 
-    lndTlsPath = mkOption {
-      type = types.path;
+    lndTlsPath = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to lnd TLS certificate.
       '';
     };
 
-    lndMacaroonDir = mkOption {
-      type = types.path;
+    lndMacaroonDir = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to lnd macaroons.
       '';
@@ -43,7 +43,7 @@ in
         --lnd.host=${cfg.lndHost} \
         --lnd.tlspath=${cfg.lndTlsPath} \
         --lnd.macaroondir=${cfg.lndMacaroonDir} \
-        ${concatStringsSep " \\\n  " cfg.extraFlags}
+        ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     LogsDirectory = "prometheus-lnd-exporter";
     ReadOnlyPaths = [

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.clight;
 
@@ -14,46 +12,46 @@ let
     v:
     if builtins.isFloat v then
       toString v
-    else if isInt v then
+    else if lib.isInt v then
       toString v
-    else if isBool v then
-      boolToString v
-    else if isString v then
-      ''"${escape [ ''"'' ] v}"''
-    else if isList v then
-      "[ " + concatMapStringsSep ", " toConf v + " ]"
-    else if isAttrs v then
+    else if lib.isBool v then
+      lib.boolToString v
+    else if lib.isString v then
+      ''"${lib.escape [ ''"'' ] v}"''
+    else if lib.isList v then
+      "[ " + lib.concatMapStringsSep ", " toConf v + " ]"
+    else if lib.isAttrs v then
       "\n{\n" + convertAttrs v + "\n}"
     else
       abort "clight.toConf: unexpected type (v = ${v})";
 
-  getSep = v: if isAttrs v then ":" else "=";
+  getSep = v: if lib.isAttrs v then ":" else "=";
 
   convertAttrs =
     attrs:
-    concatStringsSep "\n" (
-      mapAttrsToList (name: value: "${toString name} ${getSep value} ${toConf value};") attrs
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: "${toString name} ${getSep value} ${toConf value};") attrs
     );
 
   clightConf = pkgs.writeText "clight.conf" (
-    convertAttrs (filterAttrs (_: value: value != null) cfg.settings)
+    convertAttrs (lib.filterAttrs (_: value: value != null) cfg.settings)
   );
 in
 {
   options.services.clight = {
-    enable = mkEnableOption "clight";
+    enable = lib.mkEnableOption "clight";
 
     temperature = {
-      day = mkOption {
-        type = types.int;
+      day = lib.mkOption {
+        type = lib.types.int;
         default = 5500;
         description = ''
           Colour temperature to use during the day, between
           `1000` and `25000` K.
         '';
       };
-      night = mkOption {
-        type = types.int;
+      night = lib.mkOption {
+        type = lib.types.int;
         default = 3700;
         description = ''
           Colour temperature to use at night, between
@@ -65,7 +63,7 @@ in
     settings =
       let
         validConfigTypes =
-          with types;
+          with lib.types;
           oneOf [
             int
             str
@@ -73,14 +71,14 @@ in
             float
           ];
         collectionTypes =
-          with types;
+          with lib.types;
           oneOf [
             validConfigTypes
             (listOf validConfigTypes)
           ];
       in
-      mkOption {
-        type = with types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
+      lib.mkOption {
+        type = with lib.types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
         default = { };
         example = {
           captures = 20;
@@ -99,7 +97,7 @@ in
       };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       let
         inRange =
@@ -135,9 +133,9 @@ in
             night
           ];
       }
-      // (optionalAttrs (config.location.provider == "manual") {
-        daytime.latitude = mkDefault config.location.latitude;
-        daytime.longitude = mkDefault config.location.longitude;
+      // (lib.optionalAttrs (config.location.provider == "manual") {
+        daytime.latitude = lib.mkDefault config.location.latitude;
+        daytime.longitude = lib.mkDefault config.location.longitude;
       });
 
     services.geoclue2.appConfig.clightc = {

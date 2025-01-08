@@ -2,19 +2,18 @@
 let
   cfg = config.services.mullvad-vpn;
 in
-with lib;
 {
   options.services.mullvad-vpn = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         This option enables Mullvad VPN daemon.
       '';
     };
 
-    enableExcludeWrapper = mkOption {
-      type = types.bool;
+    enableExcludeWrapper = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         This option activates the wrapper that allows the use of mullvad-exclude.
@@ -22,7 +21,7 @@ with lib;
       '';
     };
 
-    package = mkPackageOption pkgs "mullvad" {
+    package = lib.mkPackageOption pkgs "mullvad" {
       example = "mullvad-vpn";
       extraDescription = ''
         `pkgs.mullvad` only provides the CLI tool, `pkgs.mullvad-vpn` provides both the CLI and the GUI.
@@ -30,13 +29,13 @@ with lib;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
     environment.systemPackages = [ cfg.package ];
 
     # See https://github.com/NixOS/nixpkgs/issues/176603
-    security.wrappers.mullvad-exclude = mkIf cfg.enableExcludeWrapper {
+    security.wrappers.mullvad-exclude = lib.mkIf cfg.enableExcludeWrapper {
       setuid = true;
       owner = "root";
       group = "root";

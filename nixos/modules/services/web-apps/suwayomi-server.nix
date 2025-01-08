@@ -8,7 +8,7 @@
 let
   cfg = config.services.suwayomi-server;
   inherit (lib)
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkIf
     types
@@ -19,12 +19,12 @@ in
 {
   options = {
     services.suwayomi-server = {
-      enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi";
+      enable = lib.mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi";
 
       package = lib.mkPackageOption pkgs "suwayomi-server" { };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/suwayomi-server";
         example = "/var/data/mangas";
         description = ''
@@ -32,8 +32,8 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "suwayomi";
         example = "root";
         description = ''
@@ -41,8 +41,8 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "suwayomi";
         example = "medias";
         description = ''
@@ -50,21 +50,21 @@ in
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the firewall for the port in {option}`services.suwayomi-server.settings.server.port`.
         '';
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = format.type;
           options = {
             server = {
-              ip = mkOption {
-                type = types.str;
+              ip = lib.mkOption {
+                type = lib.types.str;
                 default = "0.0.0.0";
                 example = "127.0.0.1";
                 description = ''
@@ -72,8 +72,8 @@ in
                 '';
               };
 
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 8080;
                 example = 4567;
                 description = ''
@@ -86,8 +86,8 @@ in
                 Enabling this option is useful when hosting on a public network/the Internet
               '';
 
-              basicAuthUsername = mkOption {
-                type = types.nullOr types.str;
+              basicAuthUsername = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
                   The username value that you have to provide when authenticating.
@@ -95,8 +95,8 @@ in
               };
 
               # NOTE: this is not a real upstream option
-              basicAuthPasswordFile = mkOption {
-                type = types.nullOr types.path;
+              basicAuthPasswordFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 example = "/var/secrets/suwayomi-server-password";
                 description = ''
@@ -104,16 +104,16 @@ in
                 '';
               };
 
-              downloadAsCbz = mkOption {
-                type = types.bool;
+              downloadAsCbz = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Download chapters as `.cbz` files.
                 '';
               };
 
-              extensionRepos = mkOption {
-                type = types.listOf types.str;
+              extensionRepos = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 example = [
                   "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
@@ -123,8 +123,8 @@ in
                 '';
               };
 
-              localSourcePath = mkOption {
-                type = types.path;
+              localSourcePath = lib.mkOption {
+                type = lib.types.path;
                 default = cfg.dataDir;
                 defaultText = lib.literalExpression "suwayomi-server.dataDir";
                 example = "/var/data/local_mangas";
@@ -133,8 +133,8 @@ in
                 '';
               };
 
-              systemTrayEnabled = mkOption {
-                type = types.bool;
+              systemTrayEnabled = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to enable a system tray icon, if possible.
@@ -157,7 +157,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -170,13 +170,13 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.server.port ];
 
-    users.groups = mkIf (cfg.group == "suwayomi") {
+    users.groups = lib.mkIf (cfg.group == "suwayomi") {
       suwayomi = { };
     };
 
-    users.users = mkIf (cfg.user == "suwayomi") {
+    users.users = lib.mkIf (cfg.user == "suwayomi") {
       suwayomi = {
         group = cfg.group;
         # Need to set the user home because the package writes to ~/.local/Tachidesk
@@ -231,7 +231,7 @@ in
           Type = "simple";
           Restart = "on-failure";
 
-          StateDirectory = mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
+          StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
         };
       };
   };

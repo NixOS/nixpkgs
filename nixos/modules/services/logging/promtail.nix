@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with lib;
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.promtail;
 
@@ -16,10 +16,10 @@ let
                    else prettyJSON cfg.configuration;
 
 in {
-  options.services.promtail = with types; {
-    enable = mkEnableOption "the Promtail ingresser";
+  options.services.promtail = {
+    enable = lib.mkEnableOption "the Promtail ingresser";
 
-    configuration = mkOption {
+    configuration = lib.mkOption {
       type = (pkgs.formats.json {}).type;
       description = ''
         Specify the configuration for Promtail in Nix.
@@ -27,8 +27,8 @@ in {
       '';
     };
 
-    configFile = mkOption {
-      type = nullOr path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Config file path for Promtail.
@@ -36,8 +36,8 @@ in {
       '';
     };
 
-    extraFlags = mkOption {
-      type = listOf str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "--server.http-listen-port=3101" ];
       description = ''
@@ -47,8 +47,8 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    services.promtail.configuration.positions.filename = mkDefault "/var/cache/promtail/positions.yaml";
+  config = lib.mkIf cfg.enable {
+    services.promtail.configuration.positions.filename = lib.mkDefault "/var/cache/promtail/positions.yaml";
 
     systemd.services.promtail = {
       description = "Promtail log ingress";
@@ -63,7 +63,7 @@ in {
         Restart = "on-failure";
         TimeoutStopSec = 10;
 
-        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${configFile} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${configFile} ${lib.escapeShellArgs cfg.extraFlags}";
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -94,7 +94,7 @@ in {
         PrivateUsers = true;
 
         SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
-      } // (optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) { # FIXME: figure out why this breaks on aarch64
+      } // (lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) { # FIXME: figure out why this breaks on aarch64
         SystemCallFilter = "@system-service";
       });
     };

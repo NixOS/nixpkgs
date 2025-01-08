@@ -5,45 +5,43 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.plausible;
 
 in
 {
   options.services.plausible = {
-    enable = mkEnableOption "plausible";
+    enable = lib.mkEnableOption "plausible";
 
-    package = mkPackageOption pkgs "plausible" { };
+    package = lib.mkPackageOption pkgs "plausible" { };
 
     database = {
       clickhouse = {
-        setup = mkEnableOption "creating a clickhouse instance" // {
+        setup = lib.mkEnableOption "creating a clickhouse instance" // {
           default = true;
         };
-        url = mkOption {
+        url = lib.mkOption {
           default = "http://localhost:8123/default";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             The URL to be used to connect to `clickhouse`.
           '';
         };
       };
       postgres = {
-        setup = mkEnableOption "creating a postgresql instance" // {
+        setup = lib.mkEnableOption "creating a postgresql instance" // {
           default = true;
         };
-        dbname = mkOption {
+        dbname = lib.mkOption {
           default = "plausible";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             Name of the database to use.
           '';
         };
-        socket = mkOption {
+        socket = lib.mkOption {
           default = "/run/postgresql";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             Path to the UNIX domain-socket to communicate with `postgres`.
           '';
@@ -52,9 +50,9 @@ in
     };
 
     server = {
-      disableRegistration = mkOption {
+      disableRegistration = lib.mkOption {
         default = true;
-        type = types.enum [
+        type = lib.types.enum [
           true
           false
           "invite_only"
@@ -63,8 +61,8 @@ in
           Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
       };
-      secretKeybaseFile = mkOption {
-        type = types.either types.path types.str;
+      secretKeybaseFile = lib.mkOption {
+        type = lib.types.either lib.types.path lib.types.str;
         description = ''
           Path to the secret used by the `phoenix`-framework. Instructions
           how to generate one are documented in the
@@ -72,22 +70,22 @@ in
           framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
         '';
       };
-      listenAddress = mkOption {
+      listenAddress = lib.mkOption {
         default = "127.0.0.1";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The IP address on which the server is listening.
         '';
       };
-      port = mkOption {
+      port = lib.mkOption {
         default = 8000;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           Port where the service should be available.
         '';
       };
-      baseUrl = mkOption {
-        type = types.str;
+      baseUrl = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Public URL where plausible is available.
 
@@ -100,46 +98,46 @@ in
     };
 
     mail = {
-      email = mkOption {
+      email = lib.mkOption {
         default = "hello@plausible.local";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The email id to use for as *from* address of all communications
           from Plausible.
         '';
       };
       smtp = {
-        hostAddr = mkOption {
+        hostAddr = lib.mkOption {
           default = "localhost";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             The host address of your smtp server.
           '';
         };
-        hostPort = mkOption {
+        hostPort = lib.mkOption {
           default = 25;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             The port of your smtp server.
           '';
         };
-        user = mkOption {
+        user = lib.mkOption {
           default = null;
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
           description = ''
             The username/email in case SMTP auth is enabled.
           '';
         };
-        passwordFile = mkOption {
+        passwordFile = lib.mkOption {
           default = null;
-          type = with types; nullOr (either str path);
+          type = with lib.types; nullOr (either str path);
           description = ''
             The path to the file with the password in case SMTP auth is enabled.
           '';
         };
-        enableSSL = mkEnableOption "SSL when connecting to the SMTP server";
-        retries = mkOption {
-          type = types.ints.unsigned;
+        enableSSL = lib.mkEnableOption "SSL when connecting to the SMTP server";
+        retries = lib.mkOption {
+          type = lib.types.ints.unsigned;
           default = 2;
           description = ''
             Number of retries to make until mailer gives up.
@@ -150,28 +148,28 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ]
+    (lib.mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ]
       "Plausible uses no distributed Erlang features, so this option is no longer necessary and was removed"
     )
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "plausible"
       "adminUser"
       "name"
     ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "plausible"
       "adminUser"
       "email"
     ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "plausible"
       "adminUser"
       "passwordFile"
     ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "plausible"
       "adminUser"
@@ -179,32 +177,32 @@ in
     ] "Admin user is now created using first start wizard")
   ];
 
-  config = mkIf cfg.enable {
-    services.postgresql = mkIf cfg.database.postgres.setup {
+  config = lib.mkIf cfg.enable {
+    services.postgresql = lib.mkIf cfg.database.postgres.setup {
       enable = true;
     };
 
-    services.clickhouse = mkIf cfg.database.clickhouse.setup {
+    services.clickhouse = lib.mkIf cfg.database.clickhouse.setup {
       enable = true;
     };
 
     environment.systemPackages = [ cfg.package ];
 
-    systemd.services = mkMerge [
+    systemd.services = lib.mkMerge [
       {
         plausible = {
           inherit (cfg.package.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
           after =
-            optional cfg.database.clickhouse.setup "clickhouse.service"
-            ++ optionals cfg.database.postgres.setup [
+            lib.optional cfg.database.clickhouse.setup "clickhouse.service"
+            ++ lib.optionals cfg.database.postgres.setup [
               "postgresql.service"
               "plausible-postgres.service"
             ];
           requires =
-            optional cfg.database.clickhouse.setup "clickhouse.service"
-            ++ optionals cfg.database.postgres.setup [
+            lib.optional cfg.database.clickhouse.setup "clickhouse.service"
+            ++ lib.optionals cfg.database.postgres.setup [
               "postgresql.service"
               "plausible-postgres.service"
             ];
@@ -245,8 +243,8 @@ in
               ERL_EPMD_ADDRESS = "127.0.0.1";
 
               DISABLE_REGISTRATION =
-                if isBool cfg.server.disableRegistration then
-                  boolToString cfg.server.disableRegistration
+                if lib.isBool cfg.server.disableRegistration then
+                  lib.boolToString cfg.server.disableRegistration
                 else
                   cfg.server.disableRegistration;
 
@@ -263,15 +261,15 @@ in
               SMTP_HOST_ADDR = cfg.mail.smtp.hostAddr;
               SMTP_HOST_PORT = toString cfg.mail.smtp.hostPort;
               SMTP_RETRIES = toString cfg.mail.smtp.retries;
-              SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
+              SMTP_HOST_SSL_ENABLED = lib.boolToString cfg.mail.smtp.enableSSL;
 
               SELFHOST = "true";
             }
-            // (optionalAttrs (cfg.mail.smtp.user != null) {
+            // (lib.optionalAttrs (cfg.mail.smtp.user != null) {
               SMTP_USER_NAME = cfg.mail.smtp.user;
             });
 
-          path = [ cfg.package ] ++ optional cfg.database.postgres.setup config.services.postgresql.package;
+          path = [ cfg.package ] ++ lib.optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
             # Elixir does not start up if `RELEASE_COOKIE` is not set,
             # even though we set `RELEASE_DISTRIBUTION=none` so the cookie should be unused.
@@ -309,7 +307,7 @@ in
           };
         };
       }
-      (mkIf cfg.database.postgres.setup {
+      (lib.mkIf cfg.database.postgres.setup {
         # `plausible' requires the `citext'-extension.
         plausible-postgres = {
           after = [ "postgresql.service" ];

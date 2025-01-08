@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   generationsDirBuilder = pkgs.substituteAll {
@@ -19,9 +17,9 @@ in
 
     boot.loader.generationsDir = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to create symlinks to the system generations under
           `/boot`.  When enabled,
@@ -30,7 +28,7 @@ in
           point to the current generation's kernel image, initial RAM
           disk, and other bootstrap files.
 
-          This optional is not necessary with boot loaders such as GNU GRUB
+          This lib.optional is not necessary with boot loaders such as GNU GRUB
           for which the menu is updated to point to the latest bootstrap
           files.  However, it is needed for U-Boot on platforms where the
           boot command line is stored in flash memory rather than in a
@@ -38,9 +36,9 @@ in
         '';
       };
 
-      copyKernels = mkOption {
+      copyKernels = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
@@ -52,7 +50,7 @@ in
   };
 
 
-  config = mkIf config.boot.loader.generationsDir.enable {
+  config = lib.mkIf config.boot.loader.generationsDir.enable {
 
     system.build.installBootLoader = generationsDirBuilder;
     system.boot.loader.id = "generationsDir";

@@ -104,7 +104,6 @@ let
         '';
 
         meta =
-          with lib;
           {
             homepage = "https://www.indilib.org/";
             description = "Third party drivers for the INDI astronomical software suite";

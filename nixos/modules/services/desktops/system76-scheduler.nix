@@ -17,9 +17,9 @@ let
   inherit (lib)
     boolToString
     types
-    mkOption
+    lib.mkOption
     literalExpression
-    optional
+    lib.optional
     mkIf
     mkMerge
     ;
@@ -38,7 +38,7 @@ let
     optionSpecs: defaults:
     lib.genAttrs (attrNames optionSpecs) (
       name:
-      mkOption (
+      lib.mkOption (
         optionSpecs.${name}
         // {
           default = optionSpecs.${name}.default or defaults.${name} or null;
@@ -85,12 +85,12 @@ let
         "rr"
         "fifo"
       ]);
-      example = literalExpression "\"batch\"";
+      example = lib.literalExpression "\"batch\"";
       description = "CPU scheduler class.";
     };
     prio = {
       type = nullOr (ints.between 1 99);
-      example = literalExpression "49";
+      example = lib.literalExpression "49";
       description = "CPU scheduler priority.";
     };
     ioClass = {
@@ -99,18 +99,18 @@ let
         "best-effort"
         "realtime"
       ]);
-      example = literalExpression "\"best-effort\"";
+      example = lib.literalExpression "\"best-effort\"";
       description = "IO scheduler class.";
     };
     ioPrio = {
       type = nullOr (ints.between 0 7);
-      example = literalExpression "4";
+      example = lib.literalExpression "4";
       description = "IO scheduler priority.";
     };
     matchers = {
       type = nullOr (listOf str);
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           "include cgroup=\"/user.slice/*.service\" parent=\"systemd\""
           "emacs"
@@ -137,7 +137,7 @@ let
       ++ (optional (a.class != null) "sched=${prioToString a.class a.prio}")
       ++ (optional (a.ioClass != null) "io=${prioToString a.ioClass a.ioPrio}")
       ++ (optional ((builtins.length a.matchers) != 0) (
-        "{\n${concatStringsSep "\n" (map (m: "  ${indent}${m}") a.matchers)}\n${indent}}"
+        "{\n${lib.concatStringsSep "\n" (map (m: "  ${indent}${m}") a.matchers)}\n${indent}}"
       ))
     );
 
@@ -147,14 +147,14 @@ in
     services.system76-scheduler = {
       enable = lib.mkEnableOption "system76-scheduler";
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default = pkgs.system76-scheduler;
-        defaultText = literalExpression "pkgs.system76-scheduler";
+        defaultText = lib.literalExpression "pkgs.system76-scheduler";
         description = "Which System76-Scheduler package to use.";
       };
 
-      useStockConfig = mkOption {
+      useStockConfig = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -167,7 +167,7 @@ in
 
       settings = {
         cfsProfiles = {
-          enable = mkOption {
+          enable = lib.mkOption {
             type = bool;
             default = true;
             description = "Tweak CFS latency parameters when going on/off battery";
@@ -190,26 +190,26 @@ in
         };
 
         processScheduler = {
-          enable = mkOption {
+          enable = lib.mkOption {
             type = bool;
             default = true;
             description = "Tweak scheduling of individual processes in real time.";
           };
 
-          useExecsnoop = mkOption {
+          useExecsnoop = lib.mkOption {
             type = bool;
             default = true;
             description = "Use execsnoop (otherwise poll the precess list periodically).";
           };
 
-          refreshInterval = mkOption {
+          refreshInterval = lib.mkOption {
             type = int;
             default = 60;
             description = "Process list poll interval, in seconds";
           };
 
           foregroundBoost = {
-            enable = mkOption {
+            enable = lib.mkOption {
               type = bool;
               default = true;
               description = ''
@@ -232,7 +232,7 @@ in
           };
 
           pipewireBoost = {
-            enable = mkOption {
+            enable = lib.mkOption {
               type = bool;
               default = true;
               description = "Boost Pipewire client priorities.";
@@ -246,14 +246,14 @@ in
         };
       };
 
-      assignments = mkOption {
-        type = types.attrsOf (
+      assignments = lib.mkOption {
+        type = lib.types.attrsOf (
           types.submodule {
             options = schedulerProfile { };
           }
         );
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             nix-builds = {
               nice = 15;
@@ -268,10 +268,10 @@ in
         description = "Process profile assignments.";
       };
 
-      exceptions = mkOption {
-        type = types.listOf str;
+      exceptions = lib.mkOption {
+        type = lib.types.listOf str;
         default = [ ];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             "include descends=\"schedtool\""
             "schedtool"
@@ -282,7 +282,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
 
@@ -303,8 +303,8 @@ in
       };
     };
 
-    environment.etc = mkMerge [
-      (mkIf cfg.useStockConfig {
+    environment.etc = lib.mkMerge [
+      (lib.mkIf cfg.useStockConfig {
         # No custom settings: just use stock configuration with a fix for Pipewire
         "system76-scheduler/config.kdl".source = "${cfg.package}/data/config.kdl";
         "system76-scheduler/process-scheduler/00-dist.kdl".source = "${cfg.package}/data/pop_os.kdl";
@@ -356,9 +356,9 @@ in
 
       {
         "system76-scheduler/process-scheduler/02-config.kdl".text =
-          "exceptions {\n${concatStringsSep "\n" (map (e: "  ${e}") cfg.exceptions)}\n}\n"
+          "exceptions {\n${lib.concatStringsSep "\n" (map (e: "  ${e}") cfg.exceptions)}\n}\n"
           + "assignments {\n"
-          + (concatStringsSep "\n" (
+          + (lib.concatStringsSep "\n" (
             map (name: schedulerProfileToString name cfg.assignments.${name} "  ") (attrNames cfg.assignments)
           ))
           + "\n}\n";

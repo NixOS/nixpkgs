@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.redsocks;
 in
@@ -8,26 +7,26 @@ in
   ##### interface
   options = {
     services.redsocks = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable redsocks.";
       };
 
-      log_debug = mkOption {
-        type = types.bool;
+      log_debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Log connection progress.";
       };
 
-      log_info = mkOption {
-        type = types.bool;
+      log_info = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Log start and end of client sessions.";
       };
 
-      log = mkOption {
-        type = types.str;
+      log = lib.mkOption {
+        type = lib.types.str;
         default = "stderr";
         description = ''
             Where to send logs.
@@ -40,8 +39,8 @@ in
           '';
       };
 
-      chroot = mkOption {
-        type = with types; nullOr str;
+      chroot = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = ''
             Chroot under which to run redsocks. Log file is opened before
@@ -49,7 +48,7 @@ in
           '';
       };
 
-      redsocks = mkOption {
+      redsocks = lib.mkOption {
         description = ''
             Local port to proxy associations to be performed.
 
@@ -66,9 +65,9 @@ in
             doNotRedirect = [ "-d 1.2.0.0/16" ];
           }
         ];
-        type = types.listOf (types.submodule { options = {
-          ip = mkOption {
-            type = types.str;
+        type = lib.types.listOf (lib.types.submodule { options = {
+          ip = lib.mkOption {
+            type = lib.types.str;
             default = "127.0.0.1";
             description = ''
                 IP on which redsocks should listen. Defaults to 127.0.0.1 for
@@ -76,33 +75,33 @@ in
               '';
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 12345;
             description = "Port on which redsocks should listen.";
           };
 
-          proxy = mkOption {
-            type = types.str;
+          proxy = lib.mkOption {
+            type = lib.types.str;
             description = ''
                 Proxy through which redsocks should forward incoming traffic.
                 Example: "example.org:8080"
               '';
           };
 
-          type = mkOption {
-            type = types.enum [ "socks4" "socks5" "http-connect" "http-relay" ];
+          type = lib.mkOption {
+            type = lib.types.enum [ "socks4" "socks5" "http-connect" "http-relay" ];
             description = "Type of proxy.";
           };
 
-          login = mkOption {
-            type = with types; nullOr str;
+          login = lib.mkOption {
+            type = with lib.types; nullOr str;
             default = null;
             description = "Login to send to proxy.";
           };
 
-          password = mkOption {
-            type = with types; nullOr str;
+          password = lib.mkOption {
+            type = with lib.types; nullOr str;
             default = null;
             description = ''
                 Password to send to proxy. WARNING, this will end up
@@ -111,8 +110,8 @@ in
               '';
           };
 
-          disclose_src = mkOption {
-            type = types.enum [ "false" "X-Forwarded-For" "Forwarded_ip"
+          disclose_src = lib.mkOption {
+            type = lib.types.enum [ "false" "X-Forwarded-For" "Forwarded_ip"
                                 "Forwarded_ipport" ];
             default = "false";
             description = ''
@@ -126,14 +125,14 @@ in
               '';
           };
 
-          redirectInternetOnly = mkOption {
-            type = types.bool;
+          redirectInternetOnly = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Exclude all non-globally-routable IPs from redsocks";
           };
 
-          doNotRedirect = mkOption {
-            type = with types; listOf str;
+          doNotRedirect = lib.mkOption {
+            type = with lib.types; listOf str;
             default = [];
             description = ''
                 Iptables filters that if matched will get the packet off of
@@ -142,8 +141,8 @@ in
             example = [ "-d 1.2.3.4" ];
           };
 
-          redirectCondition = mkOption {
-            type = with types; either bool str;
+          redirectCondition = lib.mkOption {
+            type = with lib.types; either bool str;
             default = false;
             description = ''
                 Conditions to make outbound packets go through this redsocks
@@ -170,19 +169,19 @@ in
 
   ##### implementation
   config = let
-    redsocks_blocks = concatMapStrings (block:
-      let proxy = splitString ":" block.proxy; in
+    redsocks_blocks = lib.concatMapStrings (block:
+      let proxy = lib.splitString ":" block.proxy; in
       ''
         redsocks {
           local_ip = ${block.ip};
           local_port = ${toString block.port};
 
-          ip = ${elemAt proxy 0};
-          port = ${elemAt proxy 1};
+          ip = ${lib.elemAt proxy 0};
+          port = ${lib.elemAt proxy 1};
           type = ${block.type};
 
-          ${optionalString (block.login != null) "login = \"${block.login}\";"}
-          ${optionalString (block.password != null) "password = \"${block.password}\";"}
+          ${lib.optionalString (block.login != null) "login = \"${block.login}\";"}
+          ${lib.optionalString (block.password != null) "password = \"${block.password}\";"}
 
           disclose_src = ${block.disclose_src};
         }
@@ -199,7 +198,7 @@ in
 
           user = redsocks;
           group = redsocks;
-          ${optionalString (cfg.chroot != null) "chroot = ${cfg.chroot};"}
+          ${lib.optionalString (cfg.chroot != null) "chroot = ${cfg.chroot};"}
         }
 
         ${redsocks_blocks}
@@ -215,14 +214,14 @@ in
       "-d 240.168.0.0/4"
     ];
     redCond = block:
-      optionalString (isString block.redirectCondition) block.redirectCondition;
-    iptables = concatImapStrings (idx: block:
+      lib.optionalString (lib.isString block.redirectCondition) block.redirectCondition;
+    iptables = lib.concatImapStrings (idx: block:
       let chain = "REDSOCKS${toString idx}"; doNotRedirect =
-        concatMapStringsSep "\n"
+        lib.concatMapStringsSep "\n"
           (f: "ip46tables -t nat -A ${chain} ${f} -j RETURN 2>/dev/null || true")
-          (block.doNotRedirect ++ (optionals block.redirectInternetOnly internetOnly));
+          (block.doNotRedirect ++ (lib.optionals block.redirectInternetOnly internetOnly));
       in
-      optionalString (block.redirectCondition != false)
+      lib.optionalString (block.redirectCondition != false)
         ''
           ip46tables -t nat -F ${chain} 2>/dev/null || true
           ip46tables -t nat -N ${chain} 2>/dev/null || true
@@ -235,7 +234,7 @@ in
         ''
     ) cfg.redsocks;
   in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       users.groups.redsocks = {};
       users.users.redsocks = {
         description = "Redsocks daemon";
@@ -253,9 +252,9 @@ in
       networking.firewall.extraCommands = iptables;
 
       networking.firewall.extraStopCommands =
-        concatImapStringsSep "\n" (idx: block:
+        lib.concatImapStringsSep "\n" (idx: block:
           let chain = "REDSOCKS${toString idx}"; in
-          optionalString (block.redirectCondition != false)
+          lib.optionalString (block.redirectCondition != false)
             "ip46tables -t nat -D OUTPUT -p tcp ${redCond block} -j ${chain} 2>/dev/null || true"
         ) cfg.redsocks;
     };

@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkOption types literalExpression;
+  inherit (lib) lib.mkOption types literalExpression;
 
   cfg = config.services.hedgedoc;
 
@@ -47,12 +47,12 @@ in
     package = lib.mkPackageOption pkgs "hedgedoc" { };
     enable = lib.mkEnableOption "the HedgeDoc Markdown Editor";
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          domain = mkOption {
-            type = with types; nullOr str;
+          domain = lib.mkOption {
+            type = with lib.types; nullOr str;
             default = null;
             example = "hedgedoc.org";
             description = ''
@@ -62,8 +62,8 @@ in
               a reverse proxy.
             '';
           };
-          urlPath = mkOption {
-            type = with types; nullOr str;
+          urlPath = lib.mkOption {
+            type = with lib.types; nullOr str;
             default = null;
             example = "hedgedoc";
             description = ''
@@ -73,23 +73,23 @@ in
               `www.example.com/hedgedoc`
             '';
           };
-          host = mkOption {
-            type = with types; nullOr str;
+          host = lib.mkOption {
+            type = with lib.types; nullOr str;
             default = "localhost";
             description = ''
               Address to listen on.
             '';
           };
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 3000;
             example = 80;
             description = ''
               Port to listen on.
             '';
           };
-          path = mkOption {
-            type = with types; nullOr path;
+          path = lib.mkOption {
+            type = with lib.types; nullOr path;
             default = null;
             example = "/run/hedgedoc/hedgedoc.sock";
             description = ''
@@ -100,8 +100,8 @@ in
               :::
             '';
           };
-          protocolUseSSL = mkOption {
-            type = types.bool;
+          protocolUseSSL = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             example = true;
             description = ''
@@ -115,10 +115,10 @@ in
               :::
             '';
           };
-          allowOrigin = mkOption {
-            type = with types; listOf str;
+          allowOrigin = lib.mkOption {
+            type = with lib.types; listOf str;
             default = with cfg.settings; [ host ] ++ lib.optionals (domain != null) [ domain ];
-            defaultText = literalExpression ''
+            defaultText = lib.literalExpression ''
               with config.services.hedgedoc.settings; [ host ] ++ lib.optionals (domain != null) [ domain ]
             '';
             example = [
@@ -129,19 +129,19 @@ in
               List of domains to whitelist.
             '';
           };
-          db = mkOption {
-            type = types.attrs;
+          db = lib.mkOption {
+            type = lib.types.attrs;
             default = {
               dialect = "sqlite";
               storage = "/var/lib/${name}/db.sqlite";
             };
-            defaultText = literalExpression ''
+            defaultText = lib.literalExpression ''
               {
                 dialect = "sqlite";
                 storage = "/var/lib/hedgedoc/db.sqlite";
               }
             '';
-            example = literalExpression ''
+            example = lib.literalExpression ''
               db = {
                 username = "hedgedoc";
                 database = "hedgedoc";
@@ -162,8 +162,8 @@ in
               :::
             '';
           };
-          useSSL = mkOption {
-            type = types.bool;
+          useSSL = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Enable to use SSL server.
@@ -180,8 +180,8 @@ in
               :::
             '';
           };
-          uploadsPath = mkOption {
-            type = types.path;
+          uploadsPath = lib.mkOption {
+            type = lib.types.path;
             default = "/var/lib/${name}/uploads";
             defaultText = "/var/lib/hedgedoc/uploads";
             description = ''
@@ -190,8 +190,8 @@ in
           };
 
           # Declared because we change the default to false.
-          allowGravatar = mkOption {
-            type = types.bool;
+          allowGravatar = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             example = true;
             description = ''
@@ -212,8 +212,8 @@ in
       '';
     };
 
-    environmentFile = mkOption {
-      type = with types; nullOr path;
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       example = "/var/lib/hedgedoc/hedgedoc.env";
       description = ''

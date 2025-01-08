@@ -10,11 +10,11 @@ let
   stateDir = "/var/lib/podgrab";
 in
 {
-  options.services.podgrab = with lib; {
-    enable = mkEnableOption "Podgrab, a self-hosted podcast manager";
+  options.services.podgrab = {
+    enable = lib.mkEnableOption "Podgrab, a self-hosted podcast manager";
 
-    passwordFile = mkOption {
-      type = with types; nullOr str;
+    passwordFile = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "/run/secrets/password.env";
       description = ''
@@ -23,28 +23,28 @@ in
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       example = 4242;
       description = "The port on which Podgrab will listen for incoming HTTP traffic.";
     };
 
-    dataDirectory = mkOption {
-      type = types.path;
+    dataDirectory = lib.mkOption {
+      type = lib.types.path;
       default = "${stateDir}/data";
       example = "/mnt/podcasts";
       description = "Directory to store downloads.";
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "podgrab";
       description = "User under which Podgrab runs, and which owns the download directory.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "podgrab";
       description = "Group under which Podgrab runs, and which owns the download directory.";
     };

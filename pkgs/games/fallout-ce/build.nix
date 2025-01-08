@@ -77,7 +77,6 @@ stdenv.mkDerivation {
   '';
 
   meta =
-    with lib;
     {
       license = lib.licenses.sustainableUse;
       maintainers = with lib.maintainers; [ hughobrien ];

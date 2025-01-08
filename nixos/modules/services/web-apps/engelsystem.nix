@@ -11,7 +11,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRenamedOptionModule
     types
@@ -21,25 +21,25 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "engelsystem" "config" ]
       [ "services" "engelsystem" "settings" ]
     )
   ];
 
   options.services.engelsystem = {
-    enable = mkEnableOption "engelsystem, an online tool for coordinating volunteers and shifts on large events";
+    enable = lib.mkEnableOption "engelsystem, an online tool for coordinating volunteers and shifts on large events";
 
-    package = mkPackageOption pkgs "engelsystem" { };
+    package = lib.mkPackageOption pkgs "engelsystem" { };
 
-    domain = mkOption {
-      type = types.str;
+    domain = lib.mkOption {
+      type = lib.types.str;
       example = "engelsystem.example.com";
       description = "Domain to serve on.";
     };
 
-    createDatabase = mkOption {
-      type = types.bool;
+    createDatabase = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to create a local database automatically.
@@ -47,8 +47,8 @@ in
       '';
     };
 
-    settings = mkOption {
-      type = types.attrs;
+    settings = lib.mkOption {
+      type = lib.types.attrs;
       default = {
         database = {
           host = "localhost";
@@ -93,11 +93,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # create database
-    services.mysql = mkIf cfg.createDatabase {
+    services.mysql = lib.mkIf cfg.createDatabase {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureUsers = [
         {
           name = "engelsystem";

@@ -8,12 +8,11 @@ let
   cfg = config.services.hitch;
   ocspDir = lib.optionalString cfg.ocsp-stapling.enabled "/var/cache/hitch/ocsp";
   hitchConfig =
-    with lib;
     pkgs.writeText "hitch.conf" (
-      concatStringsSep "\n" [
+      lib.concatStringsSep "\n" [
         ("backend = \"${cfg.backend}\"")
-        (concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
-        (concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
+        (lib.concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
+        (lib.concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
         ("ciphers = \"${cfg.ciphers}\"")
         ("ocsp-dir = \"${ocspDir}\"")
         "user = \"${cfg.user}\""
@@ -22,64 +21,63 @@ let
       ]
     );
 in
-with lib;
 {
   options = {
     services.hitch = {
-      enable = mkEnableOption "Hitch Server";
+      enable = lib.mkEnableOption "Hitch Server";
 
-      backend = mkOption {
-        type = types.str;
+      backend = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The host and port Hitch connects to when receiving
           a connection in the form [HOST]:PORT
         '';
       };
 
-      ciphers = mkOption {
-        type = types.str;
+      ciphers = lib.mkOption {
+        type = lib.types.str;
         default = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
         description = "The list of ciphers to use";
       };
 
-      frontend = mkOption {
-        type = types.either types.str (types.listOf types.str);
+      frontend = lib.mkOption {
+        type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
         default = "[127.0.0.1]:443";
         description = ''
           The port and interface of the listen endpoint in the
           form [HOST]:PORT[+CERT].
         '';
-        apply = toList;
+        apply = lib.toList;
       };
 
-      pem-files = mkOption {
-        type = types.listOf types.path;
+      pem-files = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = "PEM files to use";
       };
 
       ocsp-stapling = {
-        enabled = mkOption {
-          type = types.bool;
+        enabled = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to enable OCSP Stapling";
         };
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "hitch";
         description = "The user to run as";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "hitch";
         description = "The group to run as";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Additional configuration lines";
       };
@@ -87,7 +85,7 @@ with lib;
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.hitch = {
       description = "Hitch";
@@ -97,7 +95,7 @@ with lib;
         ''
           ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
         ''
-        + (optionalString cfg.ocsp-stapling.enabled ''
+        + (lib.optionalString cfg.ocsp-stapling.enabled ''
           mkdir -p ${ocspDir}
           chown -R hitch:hitch ${ocspDir}
         '');

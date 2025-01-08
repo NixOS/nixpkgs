@@ -11,7 +11,7 @@
   In the below test setup we are trying to implement all of those use cases.
 
   Another aspect that we cover is access to the local control UNIX socket. It
-  can optionally be enabled and users can optionally be in a group to gain
+  can lib.optionally be enabled and users can lib.optionally be in a group to gain
   access. Users that are not in the group (except for root) should not have
   access to that socket. Also, when there is no socket configured, users
   shouldn't be able to access the control socket at all. Not even root.

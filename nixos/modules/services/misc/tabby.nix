@@ -15,7 +15,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "settings"
       "indexInterval"
     ] "These options are now managed within the tabby WebGUI")
@@ -27,7 +27,7 @@ in
       package = lib.mkPackageOption pkgs "tabby" { };
 
       host = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "127.0.0.1";
         description = ''
           Specifies the hostname on which the tabby server HTTP interface listens.
@@ -35,7 +35,7 @@ in
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 11029;
         description = ''
           Specifies the bind port on which the tabby server HTTP interface listens.
@@ -43,7 +43,7 @@ in
       };
 
       model = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "TabbyML/StarCoder-1B";
         description = ''
           Specify the model that tabby will use to generate completions.
@@ -74,7 +74,7 @@ in
       };
 
       acceleration = lib.mkOption {
-        type = types.nullOr (
+        type = lib.types.nullOr (
           types.enum [
             "cpu"
             "rocm"
@@ -107,7 +107,7 @@ in
       };
 
       usageCollection = lib.mkOption {
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable sending anonymous usage data.

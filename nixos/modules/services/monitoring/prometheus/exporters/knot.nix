@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.knot;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     literalExpression
     concatStringsSep
@@ -18,25 +18,25 @@ in
 {
   port = 9433;
   extraOpts = {
-    knotLibraryPath = mkOption {
-      type = types.nullOr types.str;
+    knotLibraryPath = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      example = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
+      example = lib.literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = ''
         Path to the library of `knot-dns`.
       '';
     };
 
-    knotSocketPath = mkOption {
-      type = types.str;
+    knotSocketPath = lib.mkOption {
+      type = lib.types.str;
       default = "/run/knot/knot.sock";
       description = ''
         Socket path of {manpage}`knotd(8)`.
       '';
     };
 
-    knotSocketTimeout = mkOption {
-      type = types.ints.positive;
+    knotSocketTimeout = lib.mkOption {
+      type = lib.types.ints.positive;
       default = 2000;
       description = ''
         Timeout in seconds.
@@ -55,7 +55,7 @@ in
           --knot-socket-path ${cfg.knotSocketPath} \
           --knot-socket-timeout ${toString cfg.knotSocketTimeout} \
           ${lib.optionalString (cfg.knotLibraryPath != null) "--knot-library-path ${cfg.knotLibraryPath}"} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       SupplementaryGroups = [
         "knot"

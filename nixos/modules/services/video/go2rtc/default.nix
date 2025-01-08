@@ -10,7 +10,7 @@ let
   inherit (lib)
     literalExpression
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -25,12 +25,12 @@ in
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.go2rtc = with types; {
-    enable = mkEnableOption "go2rtc streaming server";
+  options.services.go2rtc = with lib.types; {
+    enable = lib.mkEnableOption "go2rtc streaming server";
 
-    package = mkPackageOption pkgs "go2rtc" { };
+    package = lib.mkPackageOption pkgs "go2rtc" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = ''
         go2rtc configuration as a Nix attribute set.
@@ -42,7 +42,7 @@ in
         options = {
           # https://github.com/AlexxIT/go2rtc/blob/v1.5.0/README.md#module-api
           api = {
-            listen = mkOption {
+            listen = lib.mkOption {
               type = str;
               default = ":1984";
               example = "127.0.0.1:1984";
@@ -54,10 +54,10 @@ in
 
           # https://github.com/AlexxIT/go2rtc/blob/v1.5.0/README.md#source-ffmpeg
           ffmpeg = {
-            bin = mkOption {
+            bin = lib.mkOption {
               type = path;
               default = lib.getExe pkgs.ffmpeg-headless;
-              defaultText = literalExpression "lib.getExe pkgs.ffmpeg-headless";
+              defaultText = lib.literalExpression "lib.getExe pkgs.ffmpeg-headless";
               description = ''
                 The ffmpeg package to use for transcoding.
               '';
@@ -68,10 +68,10 @@ in
           rtsp = {
           };
 
-          streams = mkOption {
+          streams = lib.mkOption {
             type = attrsOf (either str (listOf str));
             default = { };
-            example = literalExpression ''
+            example = lib.literalExpression ''
               {
                 cam1 = "onvif://admin:password@192.168.1.123:2020";
                 cam2 = "tcp://192.168.1.123:12345";

@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.services.timesyncd;
 in
@@ -9,16 +7,16 @@ in
 
   options = {
 
-    services.timesyncd = with types; {
-      enable = mkOption {
+    services.timesyncd = with lib.types; {
+      enable = lib.mkOption {
         default = !config.boot.isContainer;
-        defaultText = literalExpression "!config.boot.isContainer";
+        defaultText = lib.literalExpression "!config.boot.isContainer";
         type = bool;
         description = ''
           Enables the systemd NTP client daemon.
         '';
       };
-      servers = mkOption {
+      servers = lib.mkOption {
         default = null;
         type = nullOr (listOf str);
         description = ''
@@ -31,9 +29,9 @@ in
           See man:timesyncd.conf(5) for details.
         '';
       };
-      fallbackServers = mkOption {
+      fallbackServers = lib.mkOption {
         default = config.networking.timeServers;
-        defaultText = literalExpression "config.networking.timeServers";
+        defaultText = lib.literalExpression "config.networking.timeServers";
         type = nullOr (listOf str);
         description = ''
           The set of fallback NTP servers from which to synchronise.
@@ -45,7 +43,7 @@ in
           See man:timesyncd.conf(5) for details.
         '';
       };
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
         type = lines;
         example = ''
@@ -60,7 +58,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
 
@@ -91,7 +89,7 @@ in
           # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
           #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
           #  - https://github.com/systemd/systemd/issues/12131
-          (lib.optionalString (versionOlder config.system.stateVersion "19.09") ''
+          (lib.optionalString (lib.versionOlder config.system.stateVersion "19.09") ''
             if [ -L /var/lib/systemd/timesync ]; then
               rm /var/lib/systemd/timesync
               mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
@@ -104,11 +102,11 @@ in
       ''
         [Time]
       ''
-      + optionalString (cfg.servers != null) ''
-        NTP=${concatStringsSep " " cfg.servers}
+      + lib.optionalString (cfg.servers != null) ''
+        NTP=${lib.concatStringsSep " " cfg.servers}
       ''
-      + optionalString (cfg.fallbackServers != null) ''
-        FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+      + lib.optionalString (cfg.fallbackServers != null) ''
+        FallbackNTP=${lib.concatStringsSep " " cfg.fallbackServers}
       ''
       + cfg.extraConfig;
 

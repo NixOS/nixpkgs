@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.rutorrent;
 
@@ -26,43 +24,43 @@ let
     _cloudflare = [ python3 ];
   };
 
-  getPluginDependencies = dependencies: concatMap (p: attrByPath [ p ] [ ] dependencies);
+  getPluginDependencies = dependencies: lib.concatMap (p: lib.attrByPath [ p ] [ ] dependencies);
 
 in
 {
   options = {
     services.rutorrent = {
-      enable = mkEnableOption "ruTorrent";
+      enable = lib.mkEnableOption "ruTorrent";
 
-      hostName = mkOption {
-        type = types.str;
+      hostName = lib.mkOption {
+        type = lib.types.str;
         description = "FQDN for the ruTorrent instance.";
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/rutorrent";
         description = "Storage path of ruTorrent.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "rutorrent";
         description = ''
           User which runs the ruTorrent service.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "rutorrent";
         description = ''
           Group which runs the ruTorrent service.
         '';
       };
 
-      rpcSocket = mkOption {
-        type = types.str;
+      rpcSocket = lib.mkOption {
+        type = lib.types.str;
         default = config.services.rtorrent.rpcSocket;
         defaultText = "config.services.rtorrent.rpcSocket";
         description = ''
@@ -70,19 +68,19 @@ in
         '';
       };
 
-      plugins = mkOption {
-        type = with types; listOf (either str package);
+      plugins = lib.mkOption {
+        type = with lib.types; listOf (either str package);
         default = [ "httprpc" ];
-        example = literalExpression ''[ "httprpc" "data" "diskspace" "edit" "erasedata" "theme" "trafic" ]'';
+        example = lib.literalExpression ''[ "httprpc" "data" "diskspace" "edit" "erasedata" "theme" "trafic" ]'';
         description = ''
           List of plugins to enable. See the list of <link xlink:href="https://github.com/Novik/ruTorrent/wiki/Plugins#currently-there-are-the-following-plugins">available plugins</link>. Note: the <literal>unpack</literal> plugin needs the nonfree <literal>unrar</literal> package.
           You need to either enable one of the <literal>rpc</literal> or <literal>httprpc</literal> plugin or enable the <xref linkend="opt-services.rutorrent.nginx.exposeInsecureRPC2mount"/> option.
         '';
       };
 
-      poolSettings = mkOption {
+      poolSettings = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             str
             int
@@ -102,8 +100,8 @@ in
       };
 
       nginx = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable nginx virtual host management.
@@ -112,8 +110,8 @@ in
           '';
         };
 
-        exposeInsecureRPC2mount = mkOption {
-          type = types.bool;
+        exposeInsecureRPC2mount = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             If you do not enable one of the <literal>rpc</literal> or <literal>httprpc</literal> plugins you need to expose an RPC mount through scgi using this option.
@@ -124,22 +122,22 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       assertions =
         let
-          usedRpcPlugins = intersectLists cfg.plugins [
+          usedRpcPlugins = lib.intersectLists cfg.plugins [
             "httprpc"
             "rpc"
           ];
         in
         [
           {
-            assertion = (length usedRpcPlugins < 2);
+            assertion = (lib.length usedRpcPlugins < 2);
             message = "Please specify only one of httprpc or rpc plugins";
           }
           {
-            assertion = !(length usedRpcPlugins > 0 && cfg.nginx.exposeInsecureRPC2mount);
+            assertion = !(lib.length usedRpcPlugins > 0 && cfg.nginx.exposeInsecureRPC2mount);
             message = "Please do not use exposeInsecureRPC2mount if you use one of httprpc or rpc plugins";
           }
         ];
@@ -149,7 +147,7 @@ in
           nginxVhostCfg = config.services.nginx.virtualHosts."${cfg.hostName}";
         in
         [ ]
-        ++ (optional
+        ++ (lib.optional
           (
             cfg.nginx.exposeInsecureRPC2mount
             && (nginxVhostCfg.basicAuth == { } || nginxVhostCfg.basicAuthFile == null)
@@ -247,9 +245,9 @@ in
 
                 cp -r ${pkgs.rutorrent}/php ${cfg.dataDir}/
 
-                ${optionalString (cfg.plugins != [ ])
+                ${lib.optionalString (cfg.plugins != [ ])
                   ''cp -r ${
-                    concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins
+                    lib.concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins
                   } ${cfg.dataDir}/plugins/''
                 }
 
@@ -280,7 +278,7 @@ in
       };
     }
 
-    (mkIf cfg.nginx.enable (mkMerge [
+    (lib.mkIf cfg.nginx.enable (lib.mkMerge [
       {
         services = {
           phpfpm.pools.rutorrent =
@@ -290,7 +288,7 @@ in
                 user = cfg.user;
                 group = config.services.rtorrent.group;
                 settings =
-                  mapAttrs (name: mkDefault) {
+                  lib.mapAttrs (name: lib.mkDefault) {
                     "listen.owner" = config.services.nginx.user;
                     "listen.group" = config.services.nginx.group;
                   }
@@ -328,7 +326,7 @@ in
         };
       }
 
-      (mkIf cfg.nginx.exposeInsecureRPC2mount {
+      (lib.mkIf cfg.nginx.exposeInsecureRPC2mount {
         services.nginx.virtualHosts."${cfg.hostName}".locations."/RPC2" = {
           extraConfig = ''
             include ${pkgs.nginx}/conf/scgi_params;

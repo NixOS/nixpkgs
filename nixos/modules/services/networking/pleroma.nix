@@ -9,32 +9,32 @@ let
 in
 {
   options = {
-    services.pleroma = with lib; {
-      enable = mkEnableOption "pleroma";
+    services.pleroma = {
+      enable = lib.mkEnableOption "pleroma";
 
-      package = mkPackageOption pkgs "pleroma" { };
+      package = lib.mkPackageOption pkgs "pleroma" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "pleroma";
         description = "User account under which pleroma runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "pleroma";
         description = "Group account under which pleroma runs.";
       };
 
-      stateDir = mkOption {
-        type = types.str;
+      stateDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/pleroma";
         readOnly = true;
         description = "Directory where the pleroma service will save the uploads and static files.";
       };
 
-      configs = mkOption {
-        type = with types; listOf str;
+      configs = lib.mkOption {
+        type = with lib.types; listOf str;
         description = ''
           Pleroma public configuration.
 
@@ -57,8 +57,8 @@ in
         '';
       };
 
-      secretConfigFile = mkOption {
-        type = types.str;
+      secretConfigFile = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/pleroma/secrets.exs";
         description = ''
           Path to the file containing your secret pleroma configuration.

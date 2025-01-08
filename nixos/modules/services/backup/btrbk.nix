@@ -18,9 +18,9 @@ let
     mapAttrs'
     mapAttrsToList
     mkIf
-    mkOption
-    optional
-    optionalString
+    lib.mkOption
+    lib.optional
+    lib.optionalString
     sortOn
     types
     ;
@@ -144,7 +144,7 @@ in
 
   options = {
     services.btrbk = {
-      extraPackages = mkOption {
+      extraPackages = lib.mkOption {
         description = ''
           Extra packages for btrbk, like compression utilities for `stream_compress`.
 
@@ -153,40 +153,40 @@ in
           depending on configured compression method in
           `services.btrbk.instances.<name>.settings` option.
         '';
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = literalExpression "[ pkgs.xz ]";
+        example = lib.literalExpression "[ pkgs.xz ]";
       };
-      niceness = mkOption {
+      niceness = lib.mkOption {
         description = "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
-        type = types.ints.between (-20) 19;
+        type = lib.types.ints.between (-20) 19;
         default = 10;
       };
-      ioSchedulingClass = mkOption {
+      ioSchedulingClass = lib.mkOption {
         description = "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
-        type = types.enum [
+        type = lib.types.enum [
           "idle"
           "best-effort"
           "realtime"
         ];
         default = "best-effort";
       };
-      instances = mkOption {
+      instances = lib.mkOption {
         description = "Set of btrbk instances. The instance named `btrbk` is the default one.";
         type =
-          with types;
+          with lib.types;
           attrsOf (submodule {
             options = {
-              onCalendar = mkOption {
-                type = types.nullOr types.str;
+              onCalendar = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = "daily";
                 description = ''
                   How often this btrbk instance is started. See systemd.time(7) for more information about the format.
                   Setting it to null disables the timer, thus this instance can only be started manually.
                 '';
               };
-              snapshotOnly = mkOption {
-                type = types.bool;
+              snapshotOnly = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to run in snapshot only mode. This skips backup creation and deletion steps.
@@ -196,8 +196,8 @@ in
                   See also `snapshot` subcommand in {manpage}`btrbk(1)`.
                 '';
               };
-              settings = mkOption {
-                type = types.submodule {
+              settings = lib.mkOption {
+                type = lib.types.submodule {
                   freeformType =
                     let
                       t = types.attrsOf (
@@ -206,12 +206,12 @@ in
                     in
                     t;
                   options = {
-                    stream_compress = mkOption {
+                    stream_compress = lib.mkOption {
                       description = ''
                         Compress the btrfs send stream before transferring it from/to remote locations using a
                         compression command.
                       '';
-                      type = types.enum [
+                      type = lib.types.enum [
                         "gzip"
                         "pigz"
                         "bzip2"
@@ -249,17 +249,17 @@ in
           });
         default = { };
       };
-      sshAccess = mkOption {
+      sshAccess = lib.mkOption {
         description = "SSH keys that should be able to make or push snapshots on this system remotely with btrbk";
         type =
-          with types;
+          with lib.types;
           listOf (submodule {
             options = {
-              key = mkOption {
+              key = lib.mkOption {
                 type = str;
                 description = "SSH public key allowed to login as user `btrbk` to run remote backups.";
               };
-              roles = mkOption {
+              roles = lib.mkOption {
                 type = listOf (enum [
                   "info"
                   "source"
@@ -283,14 +283,14 @@ in
     };
 
   };
-  config = mkIf (sshEnabled || serviceEnabled) {
+  config = lib.mkIf (sshEnabled || serviceEnabled) {
 
     environment.systemPackages = [ pkgs.btrbk ] ++ cfg.extraPackages;
 
-    security.sudo.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
-    security.sudo-rs.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
+    security.sudo.extraRules = lib.mkIf (sudo_doas == "sudo") [ sudoRule ];
+    security.sudo-rs.extraRules = lib.mkIf (sudo_doas == "sudo") [ sudoRule ];
 
-    security.doas = mkIf (sudo_doas == "doas") {
+    security.doas = lib.mkIf (sudo_doas == "doas") {
       extraRules =
         let
           doasCmdNoPass = cmd: {
@@ -335,7 +335,7 @@ in
           sudo_doas_flag = "--${sudo_doas}";
         in
         ''command="${pkgs.util-linux}/bin/ionice -t -c ${toString ioniceClass} ${
-          optionalString (cfg.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString cfg.niceness}"
+          lib.optionalString (cfg.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString cfg.niceness}"
         } ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh ${sudo_doas_flag} ${options}" ${v.key}''
       ) cfg.sshAccess;
     };
@@ -357,7 +357,7 @@ in
         path =
           [ "/run/wrappers" ]
           ++ cfg.extraPackages
-          ++ optional (instance.settings.stream_compress != "no") (
+          ++ lib.optional (instance.settings.stream_compress != "no") (
             getAttr instance.settings.stream_compress streamCompressMap
           );
         serviceConfig = {
@@ -385,7 +385,7 @@ in
           Persistent = true;
         };
       };
-    }) (filterAttrs (name: instance: instance.onCalendar != null) cfg.instances);
+    }) (lib.filterAttrs (name: instance: instance.onCalendar != null) cfg.instances);
   };
 
 }

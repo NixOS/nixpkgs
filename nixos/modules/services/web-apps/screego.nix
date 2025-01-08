@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkOption types mkIf;
+  inherit (lib) lib.mkOption types mkIf;
   cfg = config.services.screego;
   defaultSettings = {
     SCREEGO_SERVER_ADDRESS = "127.0.0.1:5050";
@@ -25,15 +25,15 @@ in
 
     enable = lib.mkEnableOption "screego screen-sharing server for developers";
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Open the firewall port(s).
       '';
     };
 
-    environmentFile = mkOption {
+    environmentFile = lib.mkOption {
       default = null;
       description = ''
         Environment file (see {manpage}`systemd.exec(5)` "EnvironmentFile="
@@ -41,11 +41,11 @@ in
         used to safely include secrets in the configuration.
       '';
       example = "/run/secrets/screego-envfile";
-      type = with types; nullOr path;
+      type = with lib.types; nullOr path;
     };
 
     settings = lib.mkOption {
-      type = types.attrsOf types.str;
+      type = lib.types.attrsOf lib.types.str;
       description = ''
         Screego settings passed as Nix attribute set, they will be merged with
         the defaults. Settings will be passed as environment variables.

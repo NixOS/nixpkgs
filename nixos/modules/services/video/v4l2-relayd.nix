@@ -17,9 +17,9 @@ let
     makeSearchPathOutput
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     nameValuePair
-    optionals
+    lib.optionals
     types
     ;
   inherit (utils) escapeSystemdPath;
@@ -42,25 +42,25 @@ let
     { name, ... }:
     {
       options = {
-        enable = mkEnableOption "this v4l2-relayd instance";
+        enable = lib.mkEnableOption "this v4l2-relayd instance";
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = name;
           description = ''
             The name of the instance.
           '';
         };
 
-        cardLabel = mkOption {
-          type = types.str;
+        cardLabel = lib.mkOption {
+          type = lib.types.str;
           description = ''
             The name the camera will show up as.
           '';
         };
 
-        extraPackages = mkOption {
-          type = with types; listOf package;
+        extraPackages = lib.mkOption {
+          type = with lib.types; listOf package;
           default = [ ];
           description = ''
             Extra packages to add to {env}`GST_PLUGIN_PATH` for the instance.
@@ -68,39 +68,39 @@ let
         };
 
         input = {
-          pipeline = mkOption {
-            type = types.str;
+          pipeline = lib.mkOption {
+            type = lib.types.str;
             description = ''
               The gstreamer-pipeline to use for the input-stream.
             '';
           };
 
-          format = mkOption {
-            type = types.str;
+          format = lib.mkOption {
+            type = lib.types.str;
             default = "YUY2";
             description = ''
               The video-format to read from input-stream.
             '';
           };
 
-          width = mkOption {
-            type = types.ints.positive;
+          width = lib.mkOption {
+            type = lib.types.ints.positive;
             default = 1280;
             description = ''
               The width to read from input-stream.
             '';
           };
 
-          height = mkOption {
-            type = types.ints.positive;
+          height = lib.mkOption {
+            type = lib.types.ints.positive;
             default = 720;
             description = ''
               The height to read from input-stream.
             '';
           };
 
-          framerate = mkOption {
-            type = types.ints.positive;
+          framerate = lib.mkOption {
+            type = lib.types.ints.positive;
             default = 30;
             description = ''
               The framerate to read from input-stream.
@@ -109,8 +109,8 @@ let
         };
 
         output = {
-          format = mkOption {
-            type = types.str;
+          format = lib.mkOption {
+            type = lib.types.str;
             default = "YUY2";
             description = ''
               The video-format to write to output-stream.
@@ -126,10 +126,10 @@ in
 
   options.services.v4l2-relayd = {
 
-    instances = mkOption {
-      type = with types; attrsOf (submodule instanceOpts);
+    instances = lib.mkOption {
+      type = with lib.types; attrsOf (submodule instanceOpts);
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           example = {
             cardLabel = "Example card";
@@ -184,14 +184,14 @@ in
                 "appsrc name=appsrc ${appsrcOptions}"
                 "videoconvert"
               ]
-              ++ optionals (instance.input.format != instance.output.format) [
+              ++ lib.optionals (instance.input.format != instance.output.format) [
                 "video/x-raw,format=${instance.output.format}"
                 "queue"
               ]
               ++ [ "v4l2sink name=v4l2sink device=$(cat $V4L2_DEVICE_FILE)" ];
           in
           ''
-            exec ${pkgs.v4l2-relayd}/bin/v4l2-relayd -i "${instance.input.pipeline}" -o "${concatStringsSep " ! " outputPipeline}"
+            exec ${pkgs.v4l2-relayd}/bin/v4l2-relayd -i "${instance.input.pipeline}" -o "${lib.concatStringsSep " ! " outputPipeline}"
           '';
 
         preStart = ''
@@ -214,12 +214,12 @@ in
           ) instances
         );
 
-      enabledInstances = attrValues (filterAttrs (n: v: v.enable) cfg.instances);
+      enabledInstances = attrValues (lib.filterAttrs (n: v: v.enable) cfg.instances);
 
     in
     {
 
-      boot = mkIf ((length enabledInstances) > 0) {
+      boot = lib.mkIf ((length enabledInstances) > 0) {
         extraModulePackages = [ kernelPackages.v4l2loopback ];
         kernelModules = [ "v4l2loopback" ];
       };

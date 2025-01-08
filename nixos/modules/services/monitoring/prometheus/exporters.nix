@@ -2,8 +2,8 @@
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
-    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-    optional types mkOptionDefault flip attrNames xor;
+    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge lib.mkOption
+    lib.optional types lib.mkOptionDefault flip attrNames xor;
 
   cfg = config.services.prometheus.exporters;
 
@@ -16,7 +16,7 @@ let
   #                                configure the exporter with, which
   #                                are appended to the default options
   #
-  #  Note that `extraOpts` is optional, but a script for the exporter's
+  #  Note that `extraOpts` is lib.optional, but a script for the exporter's
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
@@ -134,39 +134,39 @@ let
   );
 
   mkExporterOpts = ({ name, port }: {
-    enable = mkEnableOption "the prometheus ${name} exporter";
-    port = mkOption {
-      type = types.port;
+    enable = lib.mkEnableOption "the prometheus ${name} exporter";
+    port = lib.mkOption {
+      type = lib.types.port;
       default = port;
       description = ''
         Port to listen on.
       '';
     };
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
       description = ''
         Address to listen on.
       '';
     };
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Extra commandline options to pass to the ${name} exporter.
       '';
     };
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Open port in firewall for incoming connections.
       '';
     };
-    firewallFilter = mkOption {
-      type = types.nullOr types.str;
+    firewallFilter = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
       description = ''
@@ -175,10 +175,10 @@ let
         is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
-    firewallRules = mkOption {
-      type = types.nullOr types.lines;
+    firewallRules = lib.mkOption {
+      type = lib.types.nullOr types.lines;
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         iifname "eth0" tcp dport ${toString port} counter accept
       '';
       description = ''
@@ -186,15 +186,15 @@ let
         when {option}`services.prometheus.exporters.${name}.openFirewall` is true.
       '';
     };
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "${name}-exporter";
       description = ''
         User name under which the ${name} exporter shall be run.
       '';
     };
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "${name}-exporter";
       description = ''
         Group under which the ${name} exporter shall be run.
@@ -203,15 +203,15 @@ let
   });
 
   mkSubModule = { name, port, extraOpts, imports }: {
-    ${name} = mkOption {
-      type = types.submodule [{
+    ${name} = lib.mkOption {
+      type = lib.types.submodule [{
         inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
       } ({ config, ... }: mkIf config.openFirewall {
-        firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
-        firewallRules = mkDefault ''tcp dport ${toString config.port} accept comment "${name}-exporter"'';
+        firewallFilter = lib.mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+        firewallRules = lib.mkDefault ''tcp dport ${toString config.port} accept comment "${name}-exporter"'';
       })];
       internal = true;
       default = {};
@@ -235,51 +235,51 @@ let
     mkIf conf.enable {
       warnings = conf.warnings or [];
       assertions = conf.assertions or [];
-      users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
+      users.users."${name}-exporter" = (lib.mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
         description = "Prometheus ${name} exporter service user";
         isSystemUser = true;
         inherit (conf) group;
       });
-      users.groups = mkMerge [
-        (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
+      users.groups = lib.mkMerge [
+        (lib.mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
           "${name}-exporter" = {};
         })
-        (mkIf (name == "smartctl") {
+        (lib.mkIf (name == "smartctl") {
           "smartctl-exporter-access" = {};
         })
       ];
-      services.udev.extraRules = mkIf (name == "smartctl") ''
+      services.udev.extraRules = lib.mkIf (name == "smartctl") ''
         ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
       '';
-      networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
+      networking.firewall.extraCommands = lib.mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
-      networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
-      systemd.services."prometheus-${name}-exporter" = mkMerge ([{
+      networking.firewall.extraInputRules = lib.mkIf (conf.openFirewall && nftables) conf.firewallRules;
+      systemd.services."prometheus-${name}-exporter" = lib.mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig.Restart = mkDefault "always";
-        serviceConfig.PrivateTmp = mkDefault true;
-        serviceConfig.WorkingDirectory = mkDefault /tmp;
-        serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-        serviceConfig.User = mkDefault conf.user;
+        serviceConfig.Restart = lib.mkDefault "always";
+        serviceConfig.PrivateTmp = lib.mkDefault true;
+        serviceConfig.WorkingDirectory = lib.mkDefault /tmp;
+        serviceConfig.DynamicUser = lib.mkDefault enableDynamicUser;
+        serviceConfig.User = lib.mkDefault conf.user;
         serviceConfig.Group = conf.group;
         # Hardening
-        serviceConfig.CapabilityBoundingSet = mkDefault [ "" ];
+        serviceConfig.CapabilityBoundingSet = lib.mkDefault [ "" ];
         serviceConfig.DeviceAllow = [ "" ];
         serviceConfig.LockPersonality = true;
         serviceConfig.MemoryDenyWriteExecute = true;
         serviceConfig.NoNewPrivileges = true;
-        serviceConfig.PrivateDevices = mkDefault true;
-        serviceConfig.ProtectClock = mkDefault true;
+        serviceConfig.PrivateDevices = lib.mkDefault true;
+        serviceConfig.ProtectClock = lib.mkDefault true;
         serviceConfig.ProtectControlGroups = true;
         serviceConfig.ProtectHome = true;
         serviceConfig.ProtectHostname = true;
         serviceConfig.ProtectKernelLogs = true;
         serviceConfig.ProtectKernelModules = true;
         serviceConfig.ProtectKernelTunables = true;
-        serviceConfig.ProtectSystem = mkDefault "strict";
+        serviceConfig.ProtectSystem = lib.mkDefault "strict";
         serviceConfig.RemoveIPC = true;
         serviceConfig.RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
         serviceConfig.RestrictNamespaces = true;
@@ -292,8 +292,8 @@ let
 in
 {
 
-  options.services.prometheus.exporters = mkOption {
-    type = types.submodule {
+  options.services.prometheus.exporters = lib.mkOption {
+    type = lib.types.submodule {
       options = (mkSubModules);
       imports = [
         ../../../misc/assertions.nix
@@ -309,7 +309,7 @@ in
     };
     description = "Prometheus exporter configuration";
     default = {};
-    example = literalExpression ''
+    example = lib.literalExpression ''
       {
         node = {
           enable = true;
@@ -320,7 +320,7 @@ in
     '';
   };
 
-  config = mkMerge ([{
+  config = lib.mkMerge ([{
     assertions = [ {
       assertion = cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (
         !(lib.hasPrefix "/tmp/" cfg.ipmi.configFile)
@@ -437,18 +437,18 @@ in
       '';
     })) ++ config.services.prometheus.exporters.assertions;
     warnings = [
-      (mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+      (lib.mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
           Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
           `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
           Consider using `services.prometheus.exporters.idrac.configuration` instead.
         ''
       )
     ] ++ config.services.prometheus.exporters.warnings;
-  }]  ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
-    hardware.rtl-sdr.enable = mkDefault true;
-  })] ++ [(mkIf config.services.postfix.enable {
-    services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
-  })] ++ [(mkIf config.services.prometheus.exporters.deluge.enable {
+  }]  ++ [(lib.mkIf config.services.prometheus.exporters.rtl_433.enable {
+    hardware.rtl-sdr.enable = lib.mkDefault true;
+  })] ++ [(lib.mkIf config.services.postfix.enable {
+    services.prometheus.exporters.postfix.group = lib.mkDefault config.services.postfix.setgidGroup;
+  })] ++ [(lib.mkIf config.services.prometheus.exporters.deluge.enable {
     system.activationScripts = {
       deluge-exported.text = ''
       mkdir -p /etc/deluge-exporter

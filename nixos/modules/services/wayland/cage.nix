@@ -5,32 +5,30 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.cage;
 in
 {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage.enable = lib.mkEnableOption "cage kiosk service";
 
-  options.services.cage.user = mkOption {
-    type = types.str;
+  options.services.cage.user = lib.mkOption {
+    type = lib.types.str;
     default = "demo";
     description = ''
       User to log-in as.
     '';
   };
 
-  options.services.cage.extraArguments = mkOption {
-    type = types.listOf types.str;
+  options.services.cage.extraArguments = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
     default = [ ];
-    defaultText = literalExpression "[]";
+    defaultText = lib.literalExpression "[]";
     description = "Additional command line arguments to pass to Cage.";
     example = [ "-d" ];
   };
 
-  options.services.cage.environment = mkOption {
-    type = types.attrsOf types.str;
+  options.services.cage.environment = lib.mkOption {
+    type = lib.types.attrsOf lib.types.str;
     default = { };
     example = {
       WLR_LIBINPUT_NO_DEVICES = "1";
@@ -38,18 +36,18 @@ in
     description = "Additional environment variables to pass to Cage.";
   };
 
-  options.services.cage.program = mkOption {
-    type = types.path;
+  options.services.cage.program = lib.mkOption {
+    type = lib.types.path;
     default = "${pkgs.xterm}/bin/xterm";
-    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+    defaultText = lib.literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
     description = ''
       Program to run in cage.
     '';
   };
 
-  options.services.cage.package = mkPackageOption pkgs "cage" { };
+  options.services.cage.package = lib.mkPackageOption pkgs "cage" { };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # The service is partially based off of the one provided in the
     # cage wiki at
@@ -77,7 +75,7 @@ in
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/cage \
-            ${escapeShellArgs cfg.extraArguments} \
+            ${lib.escapeShellArgs cfg.extraArguments} \
             -- ${cfg.program}
         '';
         User = cfg.user;
@@ -113,7 +111,7 @@ in
       session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
-    hardware.graphics.enable = mkDefault true;
+    hardware.graphics.enable = lib.mkDefault true;
 
     systemd.targets.graphical.wants = [ "cage-tty1.service" ];
 

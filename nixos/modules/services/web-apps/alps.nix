@@ -5,33 +5,31 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.alps;
 in
 {
   options.services.alps = {
-    enable = mkEnableOption "alps";
+    enable = lib.mkEnableOption "alps";
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 1323;
       description = ''
         TCP port the service should listen on.
       '';
     };
 
-    bindIP = mkOption {
+    bindIP = lib.mkOption {
       default = "[::]";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         The IP the service should listen on.
       '';
     };
 
-    theme = mkOption {
-      type = types.enum [
+    theme = lib.mkOption {
+      type = lib.types.enum [
         "alps"
         "sourcehut"
       ];
@@ -42,16 +40,16 @@ in
     };
 
     imaps = {
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 993;
         description = ''
           The IMAPS server port.
         '';
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "[::1]";
         example = "mail.example.org";
         description = ''
@@ -61,16 +59,16 @@ in
     };
 
     smtps = {
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 465;
         description = ''
           The SMTPS server port.
         '';
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = cfg.imaps.host;
         defaultText = "services.alps.imaps.host";
         example = "mail.example.org";
@@ -80,15 +78,15 @@ in
       };
     };
 
-    package = mkOption {
+    package = lib.mkOption {
       internal = true;
-      type = types.package;
+      type = lib.types.package;
       default = pkgs.alps;
     };
 
-    args = mkOption {
+    args = lib.mkOption {
       internal = true;
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [
         "-addr"
         "${cfg.bindIP}:${toString cfg.port}"
@@ -100,7 +98,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.alps = {
       description = "alps is a simple and extensible webmail.";
       documentation = [ "https://git.sr.ht/~migadu/alps" ];
@@ -112,7 +110,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/alps ${escapeShellArgs cfg.args}";
+        ExecStart = "${cfg.package}/bin/alps ${lib.escapeShellArgs cfg.args}";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         DynamicUser = true;

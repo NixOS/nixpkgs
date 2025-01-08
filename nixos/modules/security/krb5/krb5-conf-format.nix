@@ -14,7 +14,7 @@ let
     isBool
     isList
     mapAttrsToList
-    mkOption
+    lib.mkOption
     singleton
     splitString
     ;
@@ -56,11 +56,11 @@ rec {
     let
       aclEntry = submodule {
         options = {
-          principal = mkOption {
+          principal = lib.mkOption {
             type = str;
             description = "Which principal the rule applies to";
           };
-          access = mkOption {
+          access = lib.mkOption {
             type = either (listOf (enum [
               "add"
               "cpw"
@@ -72,7 +72,7 @@ rec {
             default = "all";
             description = "The changes the principal is allowed to make.";
           };
-          target = mkOption {
+          target = lib.mkOption {
             type = str;
             default = "*";
             description = "The principals that 'access' applies to.";
@@ -85,7 +85,7 @@ rec {
         {
           freeformType = sectionType;
           options = {
-            acl = mkOption {
+            acl = lib.mkOption {
               type = listOf aclEntry;
               default = [
                 {
@@ -109,21 +109,21 @@ rec {
       freeformType = attrsOf sectionType;
       options =
         {
-          include = mkOption {
+          include = lib.mkOption {
             default = [ ];
             description = ''
               Files to include in the Kerberos configuration.
             '';
             type = coercedTo path singleton (listOf path);
           };
-          includedir = mkOption {
+          includedir = lib.mkOption {
             default = [ ];
             description = ''
               Directories containing files to include in the Kerberos configuration.
             '';
             type = coercedTo path singleton (listOf path);
           };
-          module = mkOption {
+          module = lib.mkOption {
             default = [ ];
             description = ''
               Modules to obtain Kerberos configuration from.
@@ -133,7 +133,7 @@ rec {
 
         }
         // (lib.optionalAttrs enableKdcACLEntries {
-          realms = mkOption {
+          realms = lib.mkOption {
             type = attrsOf realm;
             description = ''
               The realm(s) to serve keys for.
@@ -162,7 +162,7 @@ rec {
         in
         concatStringsSep "\n" (
           filter (x: x != "") [
-            (concatStringsSep "\n" (mapAttrsToList formatSection sections))
+            (lib.concatStringsSep "\n" (mapAttrsToList formatSection sections))
             (concatMapStringsSep "\n" (m: "module ${m}") module)
             (concatMapStringsSep "\n" (i: "include ${i}") include)
             (concatMapStringsSep "\n" (i: "includedir ${i}") includedir)
@@ -171,7 +171,7 @@ rec {
 
       formatSection = name: section: ''
         [${name}]
-        ${indent (concatStringsSep "\n" (mapAttrsToList formatRelation section))}
+        ${indent (lib.concatStringsSep "\n" (mapAttrsToList formatRelation section))}
       '';
 
       formatRelation =
@@ -179,7 +179,7 @@ rec {
         if isAttrs relation then
           ''
             ${name} = {
-            ${indent (concatStringsSep "\n" (mapAttrsToList formatValue relation))}
+            ${indent (lib.concatStringsSep "\n" (mapAttrsToList formatValue relation))}
             }''
         else if isList relation then
           concatMapStringsSep "\n" (formatRelation name) relation

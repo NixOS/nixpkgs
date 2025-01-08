@@ -9,7 +9,7 @@
 let
   inherit (lib)
     getExe
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -19,8 +19,8 @@ let
 in
 {
   port = 10029;
-  extraOpts = with types; {
-    databasePath = mkOption {
+  extraOpts = with lib.types; {
+    databasePath = lib.mkOption {
       type = path;
       default = "/var/lib/rasdaemon/ras-mc_event.db";
       description = ''
@@ -28,7 +28,7 @@ in
       '';
     };
 
-    enabledCollectors = mkOption {
+    enabledCollectors = lib.mkOption {
       type = listOf (enum [
         "aer"
         "mce"

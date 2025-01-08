@@ -6,8 +6,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.gocd-server;
   opt = options.services.gocd-server;
@@ -15,27 +13,27 @@ in
 {
   options = {
     services.gocd-server = {
-      enable = mkEnableOption "gocd-server";
+      enable = lib.mkEnableOption "gocd-server";
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "gocd-server";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           User the Go.CD server should execute under.
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "gocd-server";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           If the default user "gocd-server" is configured then this is the primary group of that user.
         '';
       };
 
-      extraGroups = mkOption {
+      extraGroups = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [
           "wheel"
           "docker"
@@ -45,40 +43,40 @@ in
         '';
       };
 
-      listenAddress = mkOption {
+      listenAddress = lib.mkOption {
         default = "0.0.0.0";
         example = "localhost";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specifies the bind address on which the Go.CD server HTTP interface listens.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 8153;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           Specifies port number on which the Go.CD server HTTP interface listens.
         '';
       };
 
-      sslPort = mkOption {
+      sslPort = lib.mkOption {
         default = 8154;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Specifies port number on which the Go.CD server HTTPS interface listens.
         '';
       };
 
-      workDir = mkOption {
+      workDir = lib.mkOption {
         default = "/var/lib/go-server";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specifies the working directory in which the Go.CD server java archive resides.
         '';
       };
 
-      packages = mkOption {
+      packages = lib.mkOption {
         default = [
           pkgs.stdenv
           pkgs.jre
@@ -86,31 +84,31 @@ in
           config.programs.ssh.package
           pkgs.nix
         ];
-        defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
-        type = types.listOf types.package;
+        defaultText = lib.literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
+        type = lib.types.listOf lib.types.package;
         description = ''
           Packages to add to PATH for the Go.CD server's process.
         '';
       };
 
-      initialJavaHeapSize = mkOption {
+      initialJavaHeapSize = lib.mkOption {
         default = "512m";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specifies the initial java heap memory size for the Go.CD server's java process.
         '';
       };
 
-      maxJavaHeapMemory = mkOption {
+      maxJavaHeapMemory = lib.mkOption {
         default = "1024m";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specifies the java maximum heap memory size for the Go.CD server's java process.
         '';
       };
 
-      startupOptions = mkOption {
-        type = types.listOf types.str;
+      startupOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "-Xms${cfg.initialJavaHeapSize}"
           "-Xmx${cfg.maxJavaHeapMemory}"
@@ -125,7 +123,7 @@ in
           "--add-opens=java.base/java.lang=ALL-UNNAMED"
           "--add-opens=java.base/java.util=ALL-UNNAMED"
         ];
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           [
             "-Xms''${config.${opt.initialJavaHeapSize}}"
             "-Xmx''${config.${opt.maxJavaHeapMemory}}"
@@ -148,9 +146,9 @@ in
         '';
       };
 
-      extraOptions = mkOption {
+      extraOptions = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [
           "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
@@ -167,9 +165,9 @@ in
         '';
       };
 
-      environment = mkOption {
+      environment = lib.mkOption {
         default = { };
-        type = with types; attrsOf str;
+        type = with lib.types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the gocd-server process.
           As a base environment, gocd-server receives NIX_PATH from
@@ -180,12 +178,12 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    users.groups = optionalAttrs (cfg.group == "gocd-server") {
+  config = lib.mkIf cfg.enable {
+    users.groups = lib.optionalAttrs (cfg.group == "gocd-server") {
       gocd-server.gid = config.ids.gids.gocd-server;
     };
 
-    users.users = optionalAttrs (cfg.user == "gocd-server") {
+    users.users = lib.optionalAttrs (cfg.user == "gocd-server") {
       gocd-server = {
         description = "gocd-server user";
         createHome = true;
@@ -218,8 +216,8 @@ in
 
       script = ''
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
-        ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
-                               ${concatStringsSep " " cfg.extraOptions}  \
+        ${pkgs.jre}/bin/java -server ${lib.concatStringsSep " " cfg.startupOptions} \
+                               ${lib.concatStringsSep " " cfg.extraOptions}  \
                               -jar ${pkgs.gocd-server}/go-server/lib/go.jar
       '';
 

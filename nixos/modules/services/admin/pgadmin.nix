@@ -180,7 +180,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       requires = [ "network.target" ];
-      # we're adding this optionally so just in case there's any race it'll be caught
+      # we're adding this lib.optionally so just in case there's any race it'll be caught
       # in case postgres doesn't start, pgadmin will just start normally
       wants = [ "postgresql.service" ];
 

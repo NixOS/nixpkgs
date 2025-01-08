@@ -6,8 +6,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.quassel;
   opt = options.services.quassel;
@@ -23,28 +21,28 @@ in
 
     services.quassel = {
 
-      enable = mkEnableOption "the Quassel IRC client daemon";
+      enable = lib.mkEnableOption "the Quassel IRC client daemon";
 
-      certificateFile = mkOption {
-        type = types.nullOr types.str;
+      certificateFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Path to the certificate used for SSL connections with clients.
         '';
       };
 
-      requireSSL = mkOption {
-        type = types.bool;
+      requireSSL = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Require SSL for connections from clients.
         '';
       };
 
-      package = mkPackageOption pkgs "quasselDaemon" { };
+      package = lib.mkPackageOption pkgs "quasselDaemon" { };
 
-      interfaces = mkOption {
-        type = types.listOf types.str;
+      interfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "127.0.0.1" ];
         description = ''
           The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]`,
@@ -53,28 +51,28 @@ in
         '';
       };
 
-      portNumber = mkOption {
-        type = types.port;
+      portNumber = lib.mkOption {
+        type = lib.types.port;
         default = 4242;
         description = ''
           The port number the Quassel daemon will be listening to.
         '';
       };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         default = "/home/${user}/.config/quassel-irc.org";
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           "/home/''${config.${opt.user}}/.config/quassel-irc.org"
         '';
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The directory holding configuration files, the SQlite database and the SSL Cert.
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
         '';
@@ -86,7 +84,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.requireSSL -> cfg.certificateFile != null;
@@ -94,7 +92,7 @@ in
       }
     ];
 
-    users.users = optionalAttrs (cfg.user == null) {
+    users.users = lib.optionalAttrs (cfg.user == null) {
       quassel = {
         name = "quassel";
         description = "Quassel IRC client daemon";
@@ -103,7 +101,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.user == null) {
+    users.groups = lib.optionalAttrs (cfg.user == null) {
       quassel = {
         name = "quassel";
         gid = config.ids.gids.quassel;
@@ -120,19 +118,19 @@ in
       wantedBy = [ "multi-user.target" ];
       after =
         [ "network.target" ]
-        ++ optional config.services.postgresql.enable "postgresql.service"
-        ++ optional config.services.mysql.enable "mysql.service";
+        ++ lib.optional config.services.postgresql.enable "postgresql.service"
+        ++ lib.optional config.services.mysql.enable "mysql.service";
 
       serviceConfig = {
-        ExecStart = concatStringsSep " " (
+        ExecStart = lib.concatStringsSep " " (
           [
             "${quassel}/bin/quasselcore"
-            "--listen=${concatStringsSep "," cfg.interfaces}"
+            "--listen=${lib.concatStringsSep "," cfg.interfaces}"
             "--port=${toString cfg.portNumber}"
             "--configdir=${cfg.dataDir}"
           ]
-          ++ optional cfg.requireSSL "--require-ssl"
-          ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}"
+          ++ lib.optional cfg.requireSSL "--require-ssl"
+          ++ lib.optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}"
         );
         User = user;
       };

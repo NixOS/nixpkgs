@@ -10,7 +10,7 @@ let
   inherit (lib)
     types
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkEnableOption
     ;
@@ -33,10 +33,10 @@ let
 in
 {
   options.services.swapspace = {
-    enable = mkEnableOption "Swapspace, a dynamic swap space manager";
-    package = mkPackageOption pkgs "swapspace" { };
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    enable = lib.mkEnableOption "Swapspace, a dynamic swap space manager";
+    package = lib.mkPackageOption pkgs "swapspace" { };
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "-P"
@@ -44,64 +44,64 @@ in
       ];
       description = "Any extra arguments to pass to swapspace";
     };
-    installWrapper = mkOption {
-      type = types.bool;
+    installWrapper = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         This will add swapspace wrapped with the generated config, to environment.systemPackages
       '';
     };
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         options = {
-          swappath = mkOption {
-            type = types.str;
+          swappath = lib.mkOption {
+            type = lib.types.str;
             default = "/var/lib/swapspace";
             description = "Location where swapspace may create and delete swapfiles";
           };
-          lower_freelimit = mkOption {
-            type = types.ints.between 0 99;
+          lower_freelimit = lib.mkOption {
+            type = lib.types.ints.between 0 99;
             default = 20;
             description = "Lower free-space threshold: if the percentage of free space drops below this number, additional swapspace is allocated";
           };
-          upper_freelimit = mkOption {
-            type = types.ints.between 0 100;
+          upper_freelimit = lib.mkOption {
+            type = lib.types.ints.between 0 100;
             default = 60;
             description = "Upper free-space threshold: if the percentage of free space exceeds this number, swapspace will attempt to free up swapspace";
           };
-          freetarget = mkOption {
-            type = types.ints.between 2 99;
+          freetarget = lib.mkOption {
+            type = lib.types.ints.between 2 99;
             default = 30;
             description = ''
               Percentage of free space swapspace should aim for when adding swapspace.
               This should fall somewhere between lower_freelimit and upper_freelimit.
             '';
           };
-          min_swapsize = mkOption {
-            type = types.str;
+          min_swapsize = lib.mkOption {
+            type = lib.types.str;
             default = "4m";
             description = "Smallest allowed size for individual swapfiles";
           };
-          max_swapsize = mkOption {
-            type = types.str;
+          max_swapsize = lib.mkOption {
+            type = lib.types.str;
             default = "2t";
             description = "Greatest allowed size for individual swapfiles";
           };
-          cooldown = mkOption {
-            type = types.ints.unsigned;
+          cooldown = lib.mkOption {
+            type = lib.types.ints.unsigned;
             default = 600;
             description = ''
               Duration (roughly in seconds) of the moratorium on swap allocation that is instated if disk space runs out, or the cooldown time after a new swapfile is successfully allocated before swapspace will consider deallocating swap space again.
               The default cooldown period is about 10 minutes.
             '';
           };
-          buffer_elasticity = mkOption {
-            type = types.ints.between 0 100;
+          buffer_elasticity = lib.mkOption {
+            type = lib.types.ints.between 0 100;
             default = 30;
             description = ''Percentage of buffer space considered to be "free"'';
           };
-          cache_elasticity = mkOption {
-            type = types.ints.between 0 100;
+          cache_elasticity = lib.mkOption {
+            type = lib.types.ints.between 0 100;
             default = 80;
             description = ''Percentage of cache space considered to be "free"'';
           };
@@ -115,7 +115,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ (if cfg.installWrapper then userWrapper else cfg.package) ];
     systemd.packages = [ cfg.package ];
     systemd.services.swapspace = {

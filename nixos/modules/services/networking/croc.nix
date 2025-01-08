@@ -13,7 +13,7 @@ in
   options.services.croc = {
     enable = lib.mkEnableOption "croc relay";
     ports = lib.mkOption {
-      type = with types; listOf port;
+      type = with lib.types; listOf port;
       default = [
         9009
         9010
@@ -24,7 +24,7 @@ in
       description = "Ports of the relay.";
     };
     pass = lib.mkOption {
-      type = with types; either path str;
+      type = with lib.types; either path str;
       default = "pass123";
       description = "Password or passwordfile for the relay.";
     };

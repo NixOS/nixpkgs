@@ -11,13 +11,13 @@ let
   inherit (lib)
     concatStringsSep
     escapeShellArgs
-    optionalString
+    lib.optionalString
     literalExpression
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
-    mkOptionDefault
+    lib.mkOption
+    lib.mkOptionDefault
     types
     ;
 
@@ -52,7 +52,7 @@ let
       browser = """${cfg.browser}"""
       dhcp-dns = """${cfg.dhcp-dns}"""
       socks5-addr = """${cfg.socks5-addr}"""
-      ${optionalString cfg.bindInterface ''
+      ${lib.optionalString cfg.bindInterface ''
         bind-device = """${cfg.interface}"""
       ''}
     ''}
@@ -64,20 +64,20 @@ in
 
   options = {
     programs.captive-browser = {
-      enable = mkEnableOption "captive browser, a dedicated Chrome instance to log into captive portals without messing with DNS settings";
+      enable = lib.mkEnableOption "captive browser, a dedicated Chrome instance to log into captive portals without messing with DNS settings";
 
-      package = mkPackageOption pkgs "captive-browser" { };
+      package = lib.mkPackageOption pkgs "captive-browser" { };
 
-      interface = mkOption {
-        type = types.str;
+      interface = lib.mkOption {
+        type = lib.types.str;
         description = "your public network interface (wlp3s0, wlan0, eth0, ...)";
       };
 
       # the options below are the same as in "captive-browser.toml"
-      browser = mkOption {
-        type = types.str;
+      browser = lib.mkOption {
+        type = lib.types.str;
         default = browserDefault pkgs.chromium;
-        defaultText = literalExpression (browserDefault "\${pkgs.chromium}");
+        defaultText = lib.literalExpression (browserDefault "\${pkgs.chromium}");
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
           When browser exits, the proxy exits. An extra env var PROXY is available.
@@ -92,8 +92,8 @@ in
         '';
       };
 
-      dhcp-dns = mkOption {
-        type = types.str;
+      dhcp-dns = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The shell (/bin/sh) command executed to obtain the DHCP
           DNS server address. The first match of an IPv4 regex is used.
@@ -101,15 +101,15 @@ in
         '';
       };
 
-      socks5-addr = mkOption {
-        type = types.str;
+      socks5-addr = lib.mkOption {
+        type = lib.types.str;
         default = "localhost:1666";
         description = "the listen address for the SOCKS5 proxy server";
       };
 
-      bindInterface = mkOption {
+      bindInterface = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Binds `captive-browser` to the network interface declared in
           `cfg.interface`. This can be used to avoid collisions
@@ -121,7 +121,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       (pkgs.runCommand "captive-browser-desktop-item" { } ''
         install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
@@ -132,9 +132,9 @@ in
     programs.captive-browser.dhcp-dns =
       let
         iface =
-          prefixes: optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
+          prefixes: lib.optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
       in
-      mkOptionDefault (
+      lib.mkOptionDefault (
         if config.networking.networkmanager.enable then
           "${pkgs.networkmanager}/bin/nmcli dev show ${iface [ ]} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
         else if config.networking.dhcpcd.enable then
@@ -156,7 +156,7 @@ in
       source = "${pkgs.busybox}/bin/udhcpc";
     };
 
-    security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
+    security.wrappers.captive-browser = lib.mkIf requiresSetcapWrapper {
       owner = "root";
       group = "root";
       capabilities = "cap_net_raw+p";

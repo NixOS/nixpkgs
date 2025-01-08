@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.mjpg-streamer;
@@ -18,18 +16,18 @@ in
 
     services.mjpg-streamer = {
 
-      enable = mkEnableOption "mjpg-streamer webcam streamer";
+      enable = lib.mkEnableOption "mjpg-streamer webcam streamer";
 
-      inputPlugin = mkOption {
-        type = types.str;
+      inputPlugin = lib.mkOption {
+        type = lib.types.str;
         default = "input_uvc.so";
         description = ''
           Input plugin. See plugins documentation for more information.
         '';
       };
 
-      outputPlugin = mkOption {
-        type = types.str;
+      outputPlugin = lib.mkOption {
+        type = lib.types.str;
         default = "output_http.so -w @www@ -n -p 5050";
         description = ''
           Output plugin. `@www@` is substituted for default mjpg-streamer www directory.
@@ -37,14 +35,14 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "mjpg-streamer";
         description = "mjpg-streamer user name.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "video";
         description = "mjpg-streamer group name.";
       };
@@ -53,9 +51,9 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == "mjpg-streamer") {
+    users.users = lib.optionalAttrs (cfg.user == "mjpg-streamer") {
       mjpg-streamer = {
         uid = config.ids.uids.mjpg-streamer;
         group = cfg.group;

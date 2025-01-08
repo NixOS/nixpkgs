@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.xserver.wacom;
@@ -19,8 +17,8 @@ in
 
     services.xserver.wacom = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the Wacom touchscreen/digitizer/tablet.
@@ -37,7 +35,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.xf86_input_wacom ]; # provides xsetwacom
 

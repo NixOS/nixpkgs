@@ -16,8 +16,8 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
-    optionalAttrs
+    lib.mkOption
+    lib.optionalAttrs
     types
     mkPackageOption
     ;
@@ -52,7 +52,7 @@ let
     in
     pkgs.writeText filename ''
       <?php
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: "\$${k} = ${toStr k v};") settings)}
+      ${lib.concatStringsSep "\n" (mapAttrsToList (k: v: "\$${k} = ${toStr k v};") settings)}
     '';
 
   # see https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/install/install.forced.sample.php for all possible values
@@ -73,27 +73,27 @@ let
       force_install_createuser = false;
       force_install_dolibarrlogin = null;
     }
-    // optionalAttrs (cfg.database.passwordFile != null) {
+    // lib.optionalAttrs (cfg.database.passwordFile != null) {
       force_install_databasepass = ''file_get_contents("${cfg.database.passwordFile}")'';
     };
 in
 {
   # interface
   options.services.dolibarr = {
-    enable = mkEnableOption "dolibarr";
+    enable = lib.mkEnableOption "dolibarr";
 
-    package = mkPackageOption pkgs "dolibarr" { };
+    package = lib.mkPackageOption pkgs "dolibarr" { };
 
-    domain = mkOption {
-      type = types.str;
+    domain = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         Domain name of your server.
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "dolibarr";
       description = ''
         User account under which dolibarr runs.
@@ -106,8 +106,8 @@ in
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "dolibarr";
       description = ''
         Group account under which dolibarr runs.
@@ -120,8 +120,8 @@ in
       '';
     };
 
-    stateDir = mkOption {
-      type = types.str;
+    stateDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/dolibarr";
       description = ''
         State and configuration directory dolibarr will use.
@@ -129,42 +129,42 @@ in
     };
 
     database = {
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Database host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3306;
         description = "Database host port.";
       };
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "dolibarr";
         description = "Database name.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "dolibarr";
         description = "Database username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/dolibarr-dbpassword";
         description = "Database password file.";
       };
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Create the database and database user locally.";
       };
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         (attrsOf (oneOf [
           bool
           int
@@ -174,8 +174,8 @@ in
       description = "Dolibarr settings, see <https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/conf/conf.php.example> for details.";
     };
 
-    nginx = mkOption {
-      type = types.nullOr (
+    nginx = lib.mkOption {
+      type = lib.types.nullOr (
         types.submodule (
           lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
             # enable encryption by default,
@@ -205,9 +205,9 @@ in
       '';
     };
 
-    poolConfig = mkOption {
+    poolConfig = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         attrsOf (oneOf [
           str
           int
@@ -229,7 +229,7 @@ in
   };
 
   # implementation
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
     {
 
       assertions = [
@@ -250,15 +250,15 @@ in
         dolibarr_main_db_name = cfg.database.name;
         dolibarr_main_db_prefix = "llx_";
         dolibarr_main_db_user = cfg.database.user;
-        dolibarr_main_db_pass = mkIf (cfg.database.passwordFile != null) ''
+        dolibarr_main_db_pass = lib.mkIf (cfg.database.passwordFile != null) ''
           file_get_contents("${cfg.database.passwordFile}")
         '';
         dolibarr_main_db_type = "mysqli";
-        dolibarr_main_db_character_set = mkDefault "utf8";
-        dolibarr_main_db_collation = mkDefault "utf8_unicode_ci";
+        dolibarr_main_db_character_set = lib.mkDefault "utf8";
+        dolibarr_main_db_collation = lib.mkDefault "utf8_unicode_ci";
 
         # Authentication settings
-        dolibarr_main_authentication = mkDefault "dolibarr";
+        dolibarr_main_authentication = lib.mkDefault "dolibarr";
 
         # Security settings
         dolibarr_main_prod = true;
@@ -278,9 +278,9 @@ in
         "L '${cfg.stateDir}/install.forced.php' - ${cfg.user} ${cfg.group} - ${mkConfigFile "install.forced.php" install}"
       ];
 
-      services.mysql = mkIf cfg.database.createLocally {
-        enable = mkDefault true;
-        package = mkDefault pkgs.mariadb;
+      services.mysql = lib.mkIf cfg.database.createLocally {
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [
           {
@@ -292,8 +292,8 @@ in
         ];
       };
 
-      services.nginx.enable = mkIf (cfg.nginx != null) true;
-      services.nginx.virtualHosts."${cfg.domain}" = mkIf (cfg.nginx != null) (
+      services.nginx.enable = lib.mkIf (cfg.nginx != null) true;
+      services.nginx.virtualHosts."${cfg.domain}" = lib.mkIf (cfg.nginx != null) (
         lib.mkMerge [
           cfg.nginx
           ({
@@ -309,7 +309,7 @@ in
         ]
       );
 
-      systemd.services."phpfpm-dolibarr".after = mkIf cfg.database.createLocally [ "mysql.service" ];
+      systemd.services."phpfpm-dolibarr".after = lib.mkIf cfg.database.createLocally [ "mysql.service" ];
       services.phpfpm.pools.dolibarr = {
         inherit (cfg) user group;
         phpPackage = pkgs.php.buildEnv {
@@ -359,17 +359,17 @@ in
         };
       };
 
-      users.users.dolibarr = mkIf (cfg.user == "dolibarr") {
+      users.users.dolibarr = lib.mkIf (cfg.user == "dolibarr") {
         isSystemUser = true;
         group = cfg.group;
       };
 
-      users.groups = optionalAttrs (cfg.group == "dolibarr") {
+      users.groups = lib.optionalAttrs (cfg.group == "dolibarr") {
         dolibarr = { };
       };
     }
-    (mkIf (cfg.nginx != null) {
-      users.users."${config.services.nginx.group}".extraGroups = mkIf (cfg.nginx != null) [ cfg.group ];
+    (lib.mkIf (cfg.nginx != null) {
+      users.users."${config.services.nginx.group}".extraGroups = lib.mkIf (cfg.nginx != null) [ cfg.group ];
     })
   ]);
 }

@@ -5,17 +5,17 @@ let
   inherit (lib.attrsets) hasAttr;
   inherit (lib.meta) getExe';
   inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib.options) mkEnableOption lib.mkOption;
   inherit (lib.types) nonEmptyStr nullOr;
 
   options.services.tsmBackup = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       automatic backups with the
       IBM Storage Protect (Tivoli Storage Manager, TSM) client.
       This also enables
       {option}`programs.tsmClient.enable`
     '';
-    command = mkOption {
+    command = lib.mkOption {
       type = nonEmptyStr;
       default = "backup";
       example = "incr";
@@ -24,7 +24,7 @@ let
         `dsmc` executable to start the backup.
       '';
     };
-    servername = mkOption {
+    servername = lib.mkOption {
       type = nonEmptyStr;
       example = "mainTsmServer";
       description = ''
@@ -41,7 +41,7 @@ let
         `dsmc`.
       '';
     };
-    autoTime = mkOption {
+    autoTime = lib.mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "12:00";
@@ -76,10 +76,10 @@ in
 
   inherit options;
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     inherit assertions;
     programs.tsmClient.enable = true;
-    programs.tsmClient.servers.${cfg.servername}.passworddir = mkDefault "/var/lib/tsm-backup/password";
+    programs.tsmClient.servers.${cfg.servername}.passworddir = lib.mkDefault "/var/lib/tsm-backup/password";
     systemd.services.tsm-backup = {
       description = "IBM Storage Protect (Tivoli Storage Manager) Backup";
       # DSM_LOG needs a trailing slash to have it treated as a directory.
@@ -115,7 +115,7 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
       };
-      startAt = mkIf (cfg.autoTime != null) cfg.autoTime;
+      startAt = lib.mkIf (cfg.autoTime != null) cfg.autoTime;
     };
   };
 

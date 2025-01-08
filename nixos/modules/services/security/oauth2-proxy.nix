@@ -251,7 +251,7 @@ in
 
     redirectURL = lib.mkOption {
       # XXX: jml suspects this is always necessary, but the command-line
-      # doesn't require it so making it optional.
+      # doesn't require it so making it lib.optional.
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
@@ -548,7 +548,7 @@ in
     # XXX: Is this mandatory? Is it part of another group? Is it part of the provider specification?
     scope = lib.mkOption {
       # XXX: jml suspects this is always necessary, but the command-line
-      # doesn't require it so making it optional.
+      # doesn't require it so making it lib.optional.
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''

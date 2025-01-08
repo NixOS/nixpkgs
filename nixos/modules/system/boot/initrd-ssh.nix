@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.boot.initrd.network.ssh;
@@ -24,8 +22,8 @@ in
 {
 
   options.boot.initrd.network.ssh = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Start SSH service during initrd boot. It can be used to debug failing
@@ -37,16 +35,16 @@ in
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 22;
       description = ''
         Port on which SSH initrd service should listen.
       '';
     };
 
-    shell = mkOption {
-      type = types.nullOr types.str;
+    shell = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       defaultText = ''"/bin/ash"'';
       description = ''
@@ -54,8 +52,8 @@ in
       '';
     };
 
-    hostKeys = mkOption {
-      type = types.listOf (types.either types.str types.path);
+    hostKeys = lib.mkOption {
+      type = lib.types.listOf (lib.types.either lib.types.str lib.types.path);
       default = [ ];
       example = [
         "/etc/secrets/initrd/ssh_host_rsa_key"
@@ -87,8 +85,8 @@ in
       '';
     };
 
-    ignoreEmptyHostKeys = mkOption {
-      type = types.bool;
+    ignoreEmptyHostKeys = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Allow leaving {option}`config.boot.initrd.network.ssh.hostKeys` empty,
@@ -96,10 +94,10 @@ in
       '';
     };
 
-    authorizedKeys = mkOption {
-      type = types.listOf types.str;
+    authorizedKeys = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
-      defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
+      defaultText = lib.literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
       description = ''
         Authorized keys for the root user on initrd.
         You can combine the `authorizedKeys` and `authorizedKeyFiles` options.
@@ -110,18 +108,18 @@ in
       ];
     };
 
-    authorizedKeyFiles = mkOption {
-      type = types.listOf types.path;
+    authorizedKeyFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
       default = config.users.users.root.openssh.authorizedKeys.keyFiles;
-      defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keyFiles";
+      defaultText = lib.literalExpression "config.users.users.root.openssh.authorizedKeys.keyFiles";
       description = ''
         Authorized keys taken from files for the root user on initrd.
         You can combine the `authorizedKeyFiles` and `authorizedKeys` options.
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = "Verbatim contents of {file}`sshd_config`.";
     };
@@ -131,7 +129,7 @@ in
     map
       (
         opt:
-        mkRemovedOptionModule
+        lib.mkRemovedOptionModule
           (
             [
               "boot"
@@ -161,13 +159,13 @@ in
       # as an awful hack we drop the first character of the hash.
       initrdKeyPath =
         path:
-        if isString path then
+        if lib.isString path then
           path
         else
           let
             name = builtins.baseNameOf path;
           in
-          builtins.unsafeDiscardStringContext ("/etc/ssh/" + substring 1 (stringLength name) name);
+          builtins.unsafeDiscardStringContext ("/etc/ssh/" + lib.substring 1 (lib.stringLength name) name);
 
       sshdCfg = config.services.openssh;
 
@@ -180,19 +178,19 @@ in
           AuthorizedKeysFile %h/.ssh/authorized_keys %h/.ssh/authorized_keys2 /etc/ssh/authorized_keys.d/%u
           ChallengeResponseAuthentication no
 
-          ${flip concatMapStrings cfg.hostKeys (path: ''
+          ${lib.flip lib.concatMapStrings cfg.hostKeys (path: ''
             HostKey ${initrdKeyPath path}
           '')}
 
         ''
         + lib.optionalString (sshdCfg.settings.KexAlgorithms != null) ''
-          KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+          KexAlgorithms ${lib.concatStringsSep "," sshdCfg.settings.KexAlgorithms}
         ''
         + lib.optionalString (sshdCfg.settings.Ciphers != null) ''
-          Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+          Ciphers ${lib.concatStringsSep "," sshdCfg.settings.Ciphers}
         ''
         + lib.optionalString (sshdCfg.settings.Macs != null) ''
-          MACs ${concatStringsSep "," sshdCfg.settings.Macs}
+          MACs ${lib.concatStringsSep "," sshdCfg.settings.Macs}
         ''
         + ''
 
@@ -209,14 +207,14 @@ in
               ''
           }
 
-          ${optionalString (!config.boot.initrd.systemd.enable) ''
+          ${lib.optionalString (!config.boot.initrd.systemd.enable) ''
             SshdSessionPath /bin/sshd-session
           ''}
 
           ${cfg.extraConfig}
         '';
     in
-    mkIf enabled {
+    lib.mkIf enabled {
       assertions = [
         {
           assertion = cfg.authorizedKeys != [ ] || cfg.authorizedKeyFiles != [ ];
@@ -237,25 +235,25 @@ in
         Please set 'boot.initrd.systemd.users.root.shell' instead of 'boot.initrd.network.ssh.shell'
       '';
 
-      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${package}/bin/sshd
         copy_bin_and_libs ${package}/libexec/sshd-session
         cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         # sshd requires a host key to check config, so we pass in the test's
         tmpkey="$(mktemp initrd-ssh-testkey.XXXXXXXXXX)"
         cp "${../../../tests/initrd-network-ssh/ssh_host_ed25519_key}" "$tmpkey"
         # keys from Nix store are world-readable, which sshd doesn't like
         chmod 600 "$tmpkey"
-        echo -n ${escapeShellArg sshdConfig} |
+        echo -n ${lib.escapeShellArg sshdConfig} |
           $out/bin/sshd -t -f /dev/stdin \
           -h "$tmpkey"
         rm "$tmpkey"
       '';
 
-      boot.initrd.network.postCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.network.postCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         echo '${shell}' > /etc/shells
         echo 'root:x:0:0:root:/root:${shell}' > /etc/passwd
         echo 'sshd:x:1:1:sshd:/var/empty:/bin/nologin' >> /etc/passwd
@@ -265,24 +263,24 @@ in
         touch /var/log/lastlog
 
         mkdir -p /etc/ssh
-        echo -n ${escapeShellArg sshdConfig} > /etc/ssh/sshd_config
+        echo -n ${lib.escapeShellArg sshdConfig} > /etc/ssh/sshd_config
 
         echo "export PATH=$PATH" >> /etc/profile
         echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /etc/profile
 
         mkdir -p /root/.ssh
-        ${concatStrings (
+        ${lib.concatStrings (
           map (key: ''
-            echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
+            echo ${lib.escapeShellArg key} >> /root/.ssh/authorized_keys
           '') cfg.authorizedKeys
         )}
-        ${concatStrings (
+        ${lib.concatStrings (
           map (keyFile: ''
             cat ${keyFile} >> /root/.ssh/authorized_keys
           '') cfg.authorizedKeyFiles
         )}
 
-        ${flip concatMapStrings cfg.hostKeys (path: ''
+        ${lib.flip lib.concatMapStrings cfg.hostKeys (path: ''
           # keys from Nix store are world-readable, which sshd doesn't like
           chmod 0600 "${initrdKeyPath path}"
         '')}
@@ -290,7 +288,7 @@ in
         /bin/sshd -e
       '';
 
-      boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         # Stop sshd cleanly before stage 2.
         #
         # If you want to keep it around to debug post-mount SSH issues,
@@ -301,12 +299,12 @@ in
         fi
       '';
 
-      boot.initrd.secrets = listToAttrs (
-        map (path: nameValuePair (initrdKeyPath path) path) cfg.hostKeys
+      boot.initrd.secrets = lib.listToAttrs (
+        map (path: lib.nameValuePair (initrdKeyPath path) path) cfg.hostKeys
       );
 
       # Systemd initrd stuff
-      boot.initrd.systemd = mkIf config.boot.initrd.systemd.enable {
+      boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
         users.sshd = {
           uid = 1;
           group = "sshd";
@@ -315,13 +313,13 @@ in
           gid = 1;
         };
 
-        users.root.shell = mkIf (
+        users.root.shell = lib.mkIf (
           config.boot.initrd.network.ssh.shell != null
         ) config.boot.initrd.network.ssh.shell;
 
         contents = {
           "/etc/ssh/sshd_config".text = sshdConfig;
-          "/etc/ssh/authorized_keys.d/root".text = concatStringsSep "\n" (
+          "/etc/ssh/authorized_keys.d/root".text = lib.concatStringsSep "\n" (
             config.boot.initrd.network.ssh.authorizedKeys
             ++ (map (file: lib.fileContents file) config.boot.initrd.network.ssh.authorizedKeyFiles)
           );
@@ -344,7 +342,7 @@ in
           # Keys from Nix store are world-readable, which sshd doesn't
           # like. If this were a real nix store and not the initrd, we
           # neither would nor could do this
-          preStart = flip concatMapStrings cfg.hostKeys (path: ''
+          preStart = lib.flip lib.concatMapStrings cfg.hostKeys (path: ''
             /bin/chmod 0600 "${initrdKeyPath path}"
           '');
           unitConfig.DefaultDependencies = false;

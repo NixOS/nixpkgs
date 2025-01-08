@@ -9,7 +9,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -20,12 +20,12 @@ let
 in
 {
   options.services.monado = {
-    enable = mkEnableOption "Monado user service";
+    enable = lib.mkEnableOption "Monado user service";
 
-    package = mkPackageOption pkgs "monado" { };
+    package = lib.mkPackageOption pkgs "monado" { };
 
-    defaultRuntime = mkOption {
-      type = types.bool;
+    defaultRuntime = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         Whether to enable Monado as the default OpenXR runtime on the system.
 
@@ -36,8 +36,8 @@ in
       example = true;
     };
 
-    forceDefaultRuntime = mkOption {
-      type = types.bool;
+    forceDefaultRuntime = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         Whether to ensure that Monado is the active runtime set for the current
         user.
@@ -51,11 +51,11 @@ in
 
     highPriority =
       mkEnableOption "high priority capability for monado-service"
-      // mkOption { default = true; };
+      // lib.mkOption { default = true; };
   };
 
-  config = mkIf cfg.enable {
-    security.wrappers."monado-service" = mkIf cfg.highPriority {
+  config = lib.mkIf cfg.enable {
+    security.wrappers."monado-service" = lib.mkIf cfg.highPriority {
       setuid = false;
       owner = "root";
       group = "root";
@@ -77,12 +77,12 @@ in
         environment = {
           # Default options
           # https://gitlab.freedesktop.org/monado/monado/-/blob/4548e1738591d0904f8db4df8ede652ece889a76/src/xrt/targets/service/monado.in.service#L12
-          XRT_COMPOSITOR_LOG = mkDefault "debug";
-          XRT_PRINT_OPTIONS = mkDefault "on";
-          IPC_EXIT_ON_DISCONNECT = mkDefault "off";
+          XRT_COMPOSITOR_LOG = lib.mkDefault "debug";
+          XRT_PRINT_OPTIONS = lib.mkDefault "on";
+          IPC_EXIT_ON_DISCONNECT = lib.mkDefault "off";
         };
 
-        preStart = mkIf cfg.forceDefaultRuntime ''
+        preStart = lib.mkIf cfg.forceDefaultRuntime ''
           XDG_CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
           targetDir="$XDG_CONFIG_HOME/openxr/1"
           activeRuntimePath="$targetDir/active_runtime.json"
@@ -129,7 +129,7 @@ in
 
     hardware.graphics.extraPackages = [ pkgs.monado-vulkan-layers ];
 
-    environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
+    environment.etc."xdg/openxr/1/active_runtime.json" = lib.mkIf cfg.defaultRuntime {
       source = runtimeManifest;
     };
   };

@@ -10,7 +10,7 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     getExe
     ;
@@ -22,11 +22,11 @@ let
 in
 {
   options.services.opentelemetry-collector = {
-    enable = mkEnableOption "Opentelemetry Collector";
+    enable = lib.mkEnableOption "Opentelemetry Collector";
 
-    package = mkPackageOption pkgs "opentelemetry-collector" { };
+    package = lib.mkPackageOption pkgs "opentelemetry-collector" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
       description = ''
@@ -36,8 +36,8 @@ in
       '';
     };
 
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Specify a path to a configuration file that Opentelemetry Collector should use.
@@ -45,7 +45,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = ((cfg.settings == { }) != (cfg.configFile == null));

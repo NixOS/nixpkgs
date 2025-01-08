@@ -5,26 +5,24 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.grocy;
 in
 {
   options.services.grocy = {
-    enable = mkEnableOption "grocy";
+    enable = lib.mkEnableOption "grocy";
 
-    package = mkPackageOption pkgs "grocy" { };
+    package = lib.mkPackageOption pkgs "grocy" { };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       description = ''
         FQDN for the grocy instance.
       '';
     };
 
-    nginx.enableSSL = mkOption {
-      type = types.bool;
+    nginx.enableSSL = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether or not to enable SSL (with ACME and let's encrypt)
@@ -32,9 +30,9 @@ in
       '';
     };
 
-    phpfpm.settings = mkOption {
+    phpfpm.settings = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         attrsOf (oneOf [
           int
           str
@@ -58,8 +56,8 @@ in
       '';
     };
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/grocy";
       description = ''
         Home directory of the `grocy` user which contains
@@ -68,8 +66,8 @@ in
     };
 
     settings = {
-      currency = mkOption {
-        type = types.str;
+      currency = lib.mkOption {
+        type = lib.types.str;
         default = "USD";
         example = "EUR";
         description = ''
@@ -77,8 +75,8 @@ in
         '';
       };
 
-      culture = mkOption {
-        type = types.enum [
+      culture = lib.mkOption {
+        type = lib.types.enum [
           "de"
           "en"
           "da"
@@ -103,16 +101,16 @@ in
       };
 
       calendar = {
-        showWeekNumber = mkOption {
+        showWeekNumber = lib.mkOption {
           default = true;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             Show the number of the weeks in the calendar views.
           '';
         };
-        firstDayOfWeek = mkOption {
+        firstDayOfWeek = lib.mkOption {
           default = null;
-          type = types.nullOr (types.enum (range 0 6));
+          type = lib.types.nullOr (lib.types.enum (lib.range 0 6));
           description = ''
             Which day of the week (0=Sunday, 1=Monday etc.) should be the
             first day.
@@ -122,13 +120,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."grocy/config.php".text = ''
       <?php
       Setting('CULTURE', '${cfg.settings.culture}');
       Setting('CURRENCY', '${cfg.settings.currency}');
       Setting('CALENDAR_FIRST_DAY_OF_WEEK', '${toString cfg.settings.calendar.firstDayOfWeek}');
-      Setting('CALENDAR_SHOW_WEEK_OF_YEAR', ${boolToString cfg.settings.calendar.showWeekNumber});
+      Setting('CALENDAR_SHOW_WEEK_OF_YEAR', ${lib.boolToString cfg.settings.calendar.showWeekNumber});
     '';
 
     users.users.grocy = {
@@ -176,7 +174,7 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts."${cfg.hostName}" = mkMerge [
+      virtualHosts."${cfg.hostName}" = lib.mkMerge [
         {
           root = "${cfg.package}/public";
           locations."/".extraConfig = ''
@@ -202,7 +200,7 @@ in
             try_files $uri /index.php;
           '';
         }
-        (mkIf cfg.nginx.enableSSL {
+        (lib.mkIf cfg.nginx.enableSSL {
           enableACME = true;
           forceSSL = true;
         })
@@ -211,7 +209,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     doc = ./grocy.md;
   };
 }

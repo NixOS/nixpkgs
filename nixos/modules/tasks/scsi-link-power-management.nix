@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 let
 
   cfg = config.powerManagement.scsiLinkPolicy;
@@ -22,9 +20,9 @@ in
 
   options = {
 
-    powerManagement.scsiLinkPolicy = mkOption {
+    powerManagement.scsiLinkPolicy = lib.mkOption {
       default = null;
-      type = types.nullOr (types.enum allowedValues);
+      type = lib.types.nullOr (lib.types.enum allowedValues);
       description = ''
         SCSI link power management policy. The kernel default is
         "max_performance".
@@ -38,10 +36,10 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg != null) {
+  config = lib.mkIf (cfg != null) {
 
-    assertions = singleton {
-      assertion = (cfg == "med_power_with_dipm") -> versionAtLeast kernel.version "4.15";
+    assertions = lib.singleton {
+      assertion = (cfg == "med_power_with_dipm") -> lib.versionAtLeast kernel.version "4.15";
       message = "med_power_with_dipm is not supported for kernels older than 4.15";
     };
 

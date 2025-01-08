@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta =
-    with lib;
     src.meta
     // {
       description = "Trivial implementation of libpulse PulseAudio library API";

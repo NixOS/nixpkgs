@@ -57,8 +57,8 @@ let
 
 in
 {
-  options.services.librenms = with lib; {
-    enable = mkEnableOption "LibreNMS network monitoring system";
+  options.services.librenms = {
+    enable = lib.mkEnableOption "LibreNMS network monitoring system";
 
     package = lib.mkPackageOption pkgs "librenms" { };
 
@@ -72,41 +72,41 @@ in
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "librenms";
       description = ''
         Name of the LibreNMS user.
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "librenms";
       description = ''
         Name of the LibreNMS group.
       '';
     };
 
-    hostname = mkOption {
-      type = types.str;
+    hostname = lib.mkOption {
+      type = lib.types.str;
       default = config.networking.fqdnOrHostName;
-      defaultText = literalExpression "config.networking.fqdnOrHostName";
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       description = ''
         The hostname to serve LibreNMS on.
       '';
     };
 
-    pollerThreads = mkOption {
-      type = types.int;
+    pollerThreads = lib.mkOption {
+      type = lib.types.int;
       default = 16;
       description = ''
         Amount of threads of the cron-poller.
       '';
     };
 
-    enableOneMinutePolling = mkOption {
-      type = types.bool;
+    enableOneMinutePolling = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enables the [1-Minute Polling](https://docs.librenms.org/Support/1-Minute-Polling/).
@@ -114,8 +114,8 @@ in
       '';
     };
 
-    enableLocalBilling = mkOption {
-      type = types.bool;
+    enableLocalBilling = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Enable billing Cron-Jobs on the local instance. Enabled by default, but you may disable it
@@ -124,8 +124,8 @@ in
       '';
     };
 
-    useDistributedPollers = mkOption {
-      type = types.bool;
+    useDistributedPollers = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enables [distributed pollers](https://docs.librenms.org/Extensions/Distributed-Poller/)
@@ -137,8 +137,8 @@ in
     };
 
     distributedPoller = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Configure this LibreNMS instance as a [distributed poller](https://docs.librenms.org/Extensions/Distributed-Poller/).
@@ -147,16 +147,16 @@ in
         '';
       };
 
-      name = mkOption {
-        type = types.nullOr types.str;
+      name = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Custom name of this poller.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "0";
         example = "1,2";
         description = ''
@@ -164,8 +164,8 @@ in
         '';
       };
 
-      distributedBilling = mkOption {
-        type = types.bool;
+      distributedBilling = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable distributed billing on this poller.
@@ -176,30 +176,30 @@ in
         '';
       };
 
-      memcachedHost = mkOption {
-        type = types.str;
+      memcachedHost = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Hostname or IP of the `memcached` server.
         '';
       };
 
-      memcachedPort = mkOption {
-        type = types.port;
+      memcachedPort = lib.mkOption {
+        type = lib.types.port;
         default = 11211;
         description = ''
           Port of the `memcached` server.
         '';
       };
 
-      rrdcachedHost = mkOption {
-        type = types.str;
+      rrdcachedHost = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Hostname or IP of the `rrdcached` server.
         '';
       };
 
-      rrdcachedPort = mkOption {
-        type = types.port;
+      rrdcachedPort = lib.mkOption {
+        type = lib.types.port;
         default = 42217;
         description = ''
           Port of the `memcached` server.
@@ -207,8 +207,8 @@ in
       };
     };
 
-    poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+    poolConfig = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -223,14 +223,14 @@ in
       '';
     };
 
-    nginx = mkOption {
-      type = types.submodule (
-        recursiveUpdate
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
+        lib.recursiveUpdate
           (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
           { }
       );
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           serverAliases = [
             "librenms.''${config.networking.domain}"
@@ -247,16 +247,16 @@ in
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/librenms";
       description = ''
         Path of the LibreNMS state directory.
       '';
     };
 
-    logDir = mkOption {
-      type = types.path;
+    logDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/log/librenms";
       description = ''
         Path of the LibreNMS logging directory.
@@ -264,15 +264,15 @@ in
     };
 
     database = {
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to create a local database automatically.
         '';
       };
 
-      host = mkOption {
+      host = lib.mkOption {
         default = "localhost";
         description = ''
           Hostname or IP of the MySQL/MariaDB server.
@@ -280,8 +280,8 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3306;
         description = ''
           Port of the MySQL/MariaDB server.
@@ -289,16 +289,16 @@ in
         '';
       };
 
-      database = mkOption {
-        type = types.str;
+      database = lib.mkOption {
+        type = lib.types.str;
         default = "librenms";
         description = ''
           Name of the database on the MySQL/MariaDB server.
         '';
       };
 
-      username = mkOption {
-        type = types.str;
+      username = lib.mkOption {
+        type = lib.types.str;
         default = "librenms";
         description = ''
           Name of the user on the MySQL/MariaDB server.
@@ -306,8 +306,8 @@ in
         '';
       };
 
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/secrets/mysql.pass";
         description = ''
@@ -317,8 +317,8 @@ in
         '';
       };
 
-      socket = mkOption {
-        type = types.nullOr types.str;
+      socket = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/run/mysqld/mysqld.sock";
         description = ''
@@ -328,8 +328,8 @@ in
       };
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.str;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         File containing env-vars to be substituted into the final config. Useful for secrets.
@@ -337,8 +337,8 @@ in
       '';
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = { };
       };
@@ -356,8 +356,8 @@ in
       };
     };
 
-    extraConfig = mkOption {
-      type = types.nullOr types.str;
+    extraConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Additional config for LibreNMS that will be appended to the `config.php`. See

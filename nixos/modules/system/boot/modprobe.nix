@@ -5,27 +5,25 @@
   ...
 }:
 
-with lib;
-
 {
 
   ###### interface
 
   options = {
     boot.modprobeConfig.enable =
-      mkEnableOption "modprobe config. This is useful for systems like containers which do not require a kernel"
+      lib.mkEnableOption "modprobe config. This is useful for systems like containers which do not require a kernel"
       // {
         default = true;
       };
 
     boot.modprobeConfig.useUbuntuModuleBlacklist =
-      mkEnableOption "Ubuntu distro's module blacklist"
+      lib.mkEnableOption "Ubuntu distro's module blacklist"
       // {
         default = true;
       };
 
-    boot.blacklistedKernelModules = mkOption {
-      type = types.listOf types.str;
+    boot.blacklistedKernelModules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "cirrusfb"
@@ -37,7 +35,7 @@ with lib;
       '';
     };
 
-    boot.extraModprobeConfig = mkOption {
+    boot.extraModprobeConfig = lib.mkOption {
       default = "";
       example = ''
         options parport_pc io=0x378 irq=7 dma=1
@@ -48,23 +46,23 @@ with lib;
         specify module options.  See
         {manpage}`modprobe.d(5)` for details.
       '';
-      type = types.lines;
+      type = lib.types.lines;
     };
 
   };
 
   ###### implementation
 
-  config = mkIf config.boot.modprobeConfig.enable {
+  config = lib.mkIf config.boot.modprobeConfig.enable {
 
     environment.etc."modprobe.d/ubuntu.conf" =
-      mkIf config.boot.modprobeConfig.useUbuntuModuleBlacklist
+      lib.mkIf config.boot.modprobeConfig.useUbuntuModuleBlacklist
         {
           source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
         };
 
     environment.etc."modprobe.d/nixos.conf".text = ''
-      ${flip concatMapStrings config.boot.blacklistedKernelModules (name: ''
+      ${lib.flip lib.concatMapStrings config.boot.blacklistedKernelModules (name: ''
         blacklist ${name}
       '')}
       ${config.boot.extraModprobeConfig}
@@ -76,7 +74,7 @@ with lib;
 
     environment.systemPackages = [ pkgs.kmod ];
 
-    system.activationScripts.modprobe = stringAfter [ "specialfs" ] ''
+    system.activationScripts.modprobe = lib.stringAfter [ "specialfs" ] ''
       # Allow the kernel to find our wrapped modprobe (which searches
       # in the right location in the Nix store for kernel modules).
       # We need this when the kernel (or some module) auto-loads a

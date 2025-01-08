@@ -1,51 +1,49 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.snowflake-proxy;
 in
 {
   options = {
     services.snowflake-proxy = {
-      enable = mkEnableOption "snowflake-proxy, a system to defeat internet censorship";
+      enable = lib.mkEnableOption "snowflake-proxy, a system to defeat internet censorship";
 
-      broker = mkOption {
+      broker = lib.mkOption {
         description = "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
       };
 
-      capacity = mkOption {
+      capacity = lib.mkOption {
         description = "Limits the amount of maximum concurrent clients allowed.";
-        type = with types; nullOr int;
+        type = with lib.types; nullOr int;
         default = null;
       };
 
-      relay = mkOption {
+      relay = lib.mkOption {
         description = "websocket relay URL (default \"wss://snowflake.bamsoftware.com/\")";
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
       };
 
-      stun = mkOption {
+      stun = lib.mkOption {
         description = "STUN broker URL (default \"stun:stun.stunprotocol.org:3478\")";
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.snowflake-proxy = {
       wantedBy = [ "network-online.target" ];
       serviceConfig = {
         ExecStart =
-          "${pkgs.snowflake}/bin/proxy " + concatStringsSep " " (
-            optional (cfg.broker != null) "-broker ${cfg.broker}"
-            ++ optional (cfg.capacity != null) "-capacity ${builtins.toString cfg.capacity}"
-            ++ optional (cfg.relay != null) "-relay ${cfg.relay}"
-            ++ optional (cfg.stun != null) "-stun ${cfg.stun}"
+          "${pkgs.snowflake}/bin/proxy " + lib.concatStringsSep " " (
+            lib.optional (cfg.broker != null) "-broker ${cfg.broker}"
+            ++ lib.optional (cfg.capacity != null) "-capacity ${builtins.toString cfg.capacity}"
+            ++ lib.optional (cfg.relay != null) "-relay ${cfg.relay}"
+            ++ lib.optional (cfg.stun != null) "-stun ${cfg.stun}"
           );
 
         # Security Hardening

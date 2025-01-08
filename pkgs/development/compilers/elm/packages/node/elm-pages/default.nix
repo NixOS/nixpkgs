@@ -57,15 +57,14 @@ nodePkgs."elm-pages".overrideAttrs (old: {
   '';
 
   meta =
-    with lib;
     nodePkgs."elm-pages".meta
     // {
       description = "Statically typed site generator for Elm";
       homepage = "https://github.com/dillonkearns/elm-pages";
       license = lib.licenses.bsd3;
       maintainers = [
-        maintainers.turbomack
-        maintainers.jali-clarke
+        lib.maintainers.turbomack
+        lib.maintainers.jali-clarke
       ];
     };
 })

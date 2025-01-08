@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   cfg = config.services.rustus;
 in
@@ -13,10 +12,10 @@ in
 
   options.services.rustus = {
 
-    enable = mkEnableOption "TUS protocol implementation in Rust";
+    enable = lib.mkEnableOption "TUS protocol implementation in Rust";
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       description = ''
         The host that rustus will connect to.
       '';
@@ -24,8 +23,8 @@ in
       example = "127.0.0.1";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       description = ''
         The port that rustus will connect to.
       '';
@@ -33,8 +32,8 @@ in
       example = 1081;
     };
 
-    log_level = mkOption {
-      type = types.enum [
+    log_level = lib.mkOption {
+      type = lib.types.enum [
         "DEBUG"
         "INFO"
         "ERROR"
@@ -46,8 +45,8 @@ in
       example = "ERROR";
     };
 
-    max_body_size = mkOption {
-      type = types.str;
+    max_body_size = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Maximum body size in bytes
       '';
@@ -55,24 +54,24 @@ in
       example = "100000000";
     };
 
-    url = mkOption {
-      type = types.str;
+    url = lib.mkOption {
+      type = lib.types.str;
       description = ''
         url path for uploads
       '';
       default = "/files";
     };
 
-    disable_health_access_logs = mkOption {
-      type = types.bool;
+    disable_health_access_logs = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         disable access log for /health endpoint
       '';
       default = false;
     };
 
-    cors = mkOption {
-      type = types.listOf types.str;
+    cors = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = ''
         list of origins allowed to upload
       '';
@@ -83,9 +82,9 @@ in
       ];
     };
 
-    tus_extensions = mkOption {
-      type = types.listOf (
-        types.enum [
+    tus_extensions = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.enum [
           "getting"
           "creation"
           "termination"
@@ -109,8 +108,8 @@ in
       ];
     };
 
-    remove_parts = mkOption {
-      type = types.bool;
+    remove_parts = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         remove parts files after successful concatenation
       '';
@@ -231,11 +230,11 @@ in
           RUSTUS_DATA_DIR = cfg.storage.data_dir;
           RUSTUS_DIR_STRUCTURE = cfg.storage.dir_structure;
           RUSTUS_FORCE_FSYNC = if cfg.storage.force_sync then "true" else "false";
-          RUSTUS_S3_URL = mkIf isHybridS3 cfg.storage.s3_url;
-          RUSTUS_S3_BUCKET = mkIf isHybridS3 cfg.storage.s3_bucket;
-          RUSTUS_S3_REGION = mkIf isHybridS3 cfg.storage.s3_region;
-          RUSTUS_S3_ACCESS_KEY_PATH = mkIf isHybridS3 "%d/S3_ACCESS_KEY_PATH";
-          RUSTUS_S3_SECRET_KEY_PATH = mkIf isHybridS3 "%d/S3_SECRET_KEY_PATH";
+          RUSTUS_S3_URL = lib.mkIf isHybridS3 cfg.storage.s3_url;
+          RUSTUS_S3_BUCKET = lib.mkIf isHybridS3 cfg.storage.s3_bucket;
+          RUSTUS_S3_REGION = lib.mkIf isHybridS3 cfg.storage.s3_region;
+          RUSTUS_S3_ACCESS_KEY_PATH = lib.mkIf isHybridS3 "%d/S3_ACCESS_KEY_PATH";
+          RUSTUS_S3_SECRET_KEY_PATH = lib.mkIf isHybridS3 "%d/S3_SECRET_KEY_PATH";
           RUSTUS_INFO_STORAGE = cfg.info_storage.type;
           RUSTUS_INFO_DIR = cfg.info_storage.dir;
         };

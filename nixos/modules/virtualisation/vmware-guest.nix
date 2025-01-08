@@ -11,10 +11,10 @@ let
     maintainers
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkRenamedOptionModule
-    optionals
-    optionalString
+    lib.optionals
+    lib.optionalString
     types
     ;
   cfg = config.virtualisation.vmware.guest;
@@ -22,7 +22,7 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
+    (lib.mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
   ];
 
   meta = {
@@ -30,24 +30,24 @@ in
   };
 
   options.virtualisation.vmware.guest = {
-    enable = mkEnableOption "VMWare Guest Support";
-    headless = mkOption {
-      type = types.bool;
+    enable = lib.mkEnableOption "VMWare Guest Support";
+    headless = lib.mkOption {
+      type = lib.types.bool;
       default = !config.services.xserver.enable;
-      defaultText = literalExpression "!config.services.xserver.enable";
+      defaultText = lib.literalExpression "!config.services.xserver.enable";
       description = "Whether to disable X11-related features.";
     };
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = if cfg.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;
-      defaultText = literalExpression "if config.virtualisation.vmware.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;";
-      example = literalExpression "pkgs.open-vm-tools";
+      defaultText = lib.literalExpression "if config.virtualisation.vmware.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;";
+      example = lib.literalExpression "pkgs.open-vm-tools";
       description = "Package providing open-vm-tools.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;
@@ -56,7 +56,7 @@ in
     ];
 
     boot.initrd.availableKernelModules = [ "mptspi" ];
-    boot.initrd.kernelModules = optionals pkgs.stdenv.hostPlatform.isx86 [ "vmw_pvscsi" ];
+    boot.initrd.kernelModules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ cfg.package ];
 
@@ -69,7 +69,7 @@ in
     };
 
     # Mount the vmblock for drag-and-drop and copy-and-paste.
-    systemd.mounts = mkIf (!cfg.headless) [
+    systemd.mounts = lib.mkIf (!cfg.headless) [
       {
         description = "VMware vmblock fuse mount";
         documentation = [
@@ -84,7 +84,7 @@ in
       }
     ];
 
-    security.wrappers.vmware-user-suid-wrapper = mkIf (!cfg.headless) {
+    security.wrappers.vmware-user-suid-wrapper = lib.mkIf (!cfg.headless) {
       setuid = true;
       owner = "root";
       group = "root";
@@ -93,10 +93,10 @@ in
 
     environment.etc.vmware-tools.source = "${cfg.package}/etc/vmware-tools/*";
 
-    services.xserver = mkIf (!cfg.headless) {
-      modules = optionals pkgs.stdenv.hostPlatform.isx86 [ xf86inputvmmouse ];
+    services.xserver = lib.mkIf (!cfg.headless) {
+      modules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [ xf86inputvmmouse ];
 
-      config = optionalString (pkgs.stdenv.hostPlatform.isx86) ''
+      config = lib.optionalString (pkgs.stdenv.hostPlatform.isx86) ''
         Section "InputClass"
           Identifier "VMMouse"
           MatchDevicePath "/dev/input/event*"

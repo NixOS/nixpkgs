@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.owamp;
 in
@@ -15,12 +13,12 @@ in
   ###### interface
 
   options = {
-    services.owamp.enable = mkEnableOption "OWAMP server";
+    services.owamp.enable = lib.mkEnableOption "OWAMP server";
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.owamp = {
       group = "owamp";
       description = "Owamp daemon";

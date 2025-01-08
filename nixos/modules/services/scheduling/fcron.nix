@@ -5,19 +5,17 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.fcron;
 
-  queuelen = optionalString (cfg.queuelen != null) "-q ${toString cfg.queuelen}";
+  queuelen = lib.optionalString (cfg.queuelen != null) "-q ${toString cfg.queuelen}";
 
   # Duplicate code, also found in cron.nix. Needs deduplication.
   systemCronJobs = ''
     SHELL=${pkgs.bash}/bin/bash
     PATH=${config.system.path}/bin:${config.system.path}/sbin
-    ${optionalString (config.services.cron.mailto != null) ''
+    ${lib.optionalString (config.services.cron.mailto != null) ''
       MAILTO="${config.services.cron.mailto}"
     ''}
     NIX_CONF_DIR=/etc/nix
@@ -25,7 +23,7 @@ let
   '';
 
   allowdeny = target: users: {
-    source = pkgs.writeText "fcron.${target}" (concatStringsSep "\n" users);
+    source = pkgs.writeText "fcron.${target}" (lib.concatStringsSep "\n" users);
     target = "fcron.${target}";
     mode = "644";
     gid = config.ids.gids.fcron;
@@ -41,14 +39,14 @@ in
 
     services.fcron = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the {command}`fcron` daemon.";
       };
 
-      allow = mkOption {
-        type = types.listOf types.str;
+      allow = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "all" ];
         description = ''
           Users allowed to use fcrontab and fcrondyn (one name per
@@ -56,26 +54,26 @@ in
         '';
       };
 
-      deny = mkOption {
-        type = types.listOf types.str;
+      deny = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Users forbidden from using fcron.";
       };
 
-      maxSerialJobs = mkOption {
-        type = types.int;
+      maxSerialJobs = lib.mkOption {
+        type = lib.types.int;
         default = 1;
         description = "Maximum number of serial jobs which can run simultaneously.";
       };
 
-      queuelen = mkOption {
-        type = types.nullOr types.int;
+      queuelen = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = "Number of jobs the serial queue and the lavg queue can contain.";
       };
 
-      systab = mkOption {
-        type = types.lines;
+      systab = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''The "system" crontab contents.'';
       };
@@ -85,11 +83,11 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.fcron.systab = systemCronJobs;
 
-    environment.etc = listToAttrs (
+    environment.etc = lib.listToAttrs (
       map
         (x: {
           name = x.target;

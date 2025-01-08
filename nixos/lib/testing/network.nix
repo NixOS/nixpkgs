@@ -10,9 +10,9 @@ let
     head
     listToAttrs
     mkDefault
-    mkOption
+    lib.mkOption
     nameValuePair
-    optionalString
+    lib.optionalString
     range
     toLower
     types
@@ -74,16 +74,16 @@ let
       );
 
       networkConfig = {
-        networking.hostName = mkDefault config.virtualisation.test.nodeName;
+        networking.hostName = lib.mkDefault config.virtualisation.test.nodeName;
 
         networking.interfaces = listToAttrs ipInterfaces;
 
         networking.primaryIPAddress =
-          optionalString (ipInterfaces != [ ])
+          lib.optionalString (ipInterfaces != [ ])
             (head (head ipInterfaces).value.ipv4.addresses).address;
 
         networking.primaryIPv6Address =
-          optionalString (ipInterfaces != [ ])
+          lib.optionalString (ipInterfaces != [ ])
             (head (head ipInterfaces).value.ipv6.addresses).address;
 
         # Put the IP addresses of all VMs in this machine's
@@ -96,15 +96,15 @@ let
           let
             config = nodes.${m'};
             hostnames =
-              optionalString (
+              lib.optionalString (
                 config.networking.domain != null
               ) "${config.networking.hostName}.${config.networking.domain} "
               + "${config.networking.hostName}\n";
           in
-          optionalString (
+          lib.optionalString (
             config.networking.primaryIPAddress != ""
           ) "${config.networking.primaryIPAddress} ${hostnames}"
-          + optionalString (config.networking.primaryIPv6Address != "") (
+          + lib.optionalString (config.networking.primaryIPv6Address != "") (
             "${config.networking.primaryIPv6Address} ${hostnames}"
           )
         );
@@ -127,7 +127,7 @@ let
     regular@{ config, name, ... }:
     {
       options = {
-        virtualisation.test.nodeName = mkOption {
+        virtualisation.test.nodeName = lib.mkOption {
           internal = true;
           default = name;
           # We need to force this in specilisations, otherwise it'd be
@@ -136,9 +136,9 @@ let
             The `name` in `nodes.<name>`; stable across `specialisations`.
           '';
         };
-        virtualisation.test.nodeNumber = mkOption {
+        virtualisation.test.nodeNumber = lib.mkOption {
           internal = true;
-          type = types.int;
+          type = lib.types.int;
           readOnly = true;
           default = nodeNumbers.${config.virtualisation.test.nodeName};
           description = ''
@@ -148,11 +148,11 @@ let
 
         # specialisations override the `name` module argument,
         # so we push the real `virtualisation.test.nodeName`.
-        specialisation = mkOption {
-          type = types.attrsOf (
+        specialisation = lib.mkOption {
+          type = lib.types.attrsOf (
             types.submodule {
-              options.configuration = mkOption {
-                type = types.submoduleWith {
+              options.configuration = lib.mkOption {
+                type = lib.types.submoduleWith {
                   modules = [
                     {
                       config.virtualisation.test.nodeName =

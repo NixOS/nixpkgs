@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.squid;
@@ -82,7 +80,7 @@ let
 
     # Squid normally listens to port 3128
     http_port ${
-      optionalString (cfg.proxyAddress != null) "${cfg.proxyAddress}:"
+      lib.optionalString (cfg.proxyAddress != null) "${cfg.proxyAddress}:"
     }${toString cfg.proxyPort}
 
     # Leave coredumps in the first cache dir
@@ -105,28 +103,28 @@ in
 
     services.squid = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to run squid web proxy.";
       };
 
-      package = mkPackageOption pkgs "squid" { };
+      package = lib.mkPackageOption pkgs "squid" { };
 
-      proxyAddress = mkOption {
-        type = types.nullOr types.str;
+      proxyAddress = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "IP address on which squid will listen.";
       };
 
-      proxyPort = mkOption {
-        type = types.int;
+      proxyPort = lib.mkOption {
+        type = lib.types.int;
         default = 3128;
         description = "TCP port on which squid will listen.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Squid configuration. Contents will be added
@@ -134,8 +132,8 @@ in
         '';
       };
 
-      configText = mkOption {
-        type = types.nullOr types.lines;
+      configText = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Verbatim contents of squid.conf. If null (default), use the
@@ -147,7 +145,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.squid = {
       isSystemUser = true;

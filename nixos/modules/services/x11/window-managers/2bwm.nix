@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.xserver.windowManager."2bwm";
@@ -18,14 +16,14 @@ in
   ###### interface
 
   options = {
-    services.xserver.windowManager."2bwm".enable = mkEnableOption "2bwm";
+    services.xserver.windowManager."2bwm".enable = lib.mkEnableOption "2bwm";
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton {
+    services.xserver.windowManager.session = lib.singleton {
       name = "2bwm";
       start = ''
         ${pkgs._2bwm}/bin/2bwm &

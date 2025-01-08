@@ -12,7 +12,7 @@ let
     concatStringsSep
     concatMapStringsSep
     escapeShellArgs
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkIf
     mkPackageOption
@@ -28,7 +28,7 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "wyoming"
       "openwakeword"
@@ -38,12 +38,12 @@ in
 
   meta.buildDocsInSandbox = false;
 
-  options.services.wyoming.openwakeword = with types; {
-    enable = mkEnableOption "Wyoming openWakeWord server";
+  options.services.wyoming.openwakeword = with lib.types; {
+    enable = lib.mkEnableOption "Wyoming openWakeWord server";
 
-    package = mkPackageOption pkgs "wyoming-openwakeword" { };
+    package = lib.mkPackageOption pkgs "wyoming-openwakeword" { };
 
-    uri = mkOption {
+    uri = lib.mkOption {
       type = strMatching "^(tcp|unix)://.*$";
       default = "tcp://0.0.0.0:10400";
       example = "tcp://192.0.2.1:5000";
@@ -52,7 +52,7 @@ in
       '';
     };
 
-    customModelsDirectories = mkOption {
+    customModelsDirectories = lib.mkOption {
       type = listOf types.path;
       default = [ ];
       description = ''
@@ -60,7 +60,7 @@ in
       '';
     };
 
-    preloadModels = mkOption {
+    preloadModels = lib.mkOption {
       type = listOf str;
       default = [
         "ok_nabu"
@@ -78,7 +78,7 @@ in
       '';
     };
 
-    threshold = mkOption {
+    threshold = lib.mkOption {
       type = float;
       default = 0.5;
       description = ''
@@ -90,7 +90,7 @@ in
       apply = toString;
     };
 
-    triggerLevel = mkOption {
+    triggerLevel = lib.mkOption {
       type = int;
       default = 1;
       description = ''
@@ -101,7 +101,7 @@ in
       apply = toString;
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -111,7 +111,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services."wyoming-openwakeword" = {
       description = "Wyoming openWakeWord server";
       wants = [

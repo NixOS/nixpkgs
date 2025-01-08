@@ -8,7 +8,7 @@ let
   cfg = config.services.suricata;
   inherit (lib)
     mkEnableOption
-    mkOption
+    lib.mkOption
     types
     literalExpression
     ;
@@ -23,99 +23,99 @@ in
 {
   freeformType = yaml.type;
   options = {
-    vars = mkOption {
-      type = types.nullOr (
+    vars = lib.mkOption {
+      type = lib.types.nullOr (
         types.submodule {
           options = {
-            address-groups = mkOption {
+            address-groups = lib.mkOption {
               type = (
                 types.submodule {
                   options = {
-                    HOME_NET = mkOption {
+                    HOME_NET = lib.mkOption {
                       default = "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]";
                       description = ''
                         HOME_NET variable.
                       '';
                     };
-                    EXTERNAL_NET = mkOption {
+                    EXTERNAL_NET = lib.mkOption {
                       default = "!$HOME_NET";
                       description = ''
                         EXTERNAL_NET variable.
                       '';
                     };
-                    HTTP_SERVERS = mkOption {
+                    HTTP_SERVERS = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         HTTP_SERVERS variable.
                       '';
                     };
-                    SMTP_SERVERS = mkOption {
+                    SMTP_SERVERS = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         SMTP_SERVERS variable.
                       '';
                     };
-                    SQL_SERVERS = mkOption {
+                    SQL_SERVERS = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         SQL_SERVERS variable.
                       '';
                     };
-                    DNS_SERVERS = mkOption {
+                    DNS_SERVERS = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         DNS_SERVERS variable.
                       '';
                     };
-                    TELNET_SERVERS = mkOption {
+                    TELNET_SERVERS = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         TELNET_SERVERS variable.
                       '';
                     };
-                    AIM_SERVERS = mkOption {
+                    AIM_SERVERS = lib.mkOption {
                       default = "$EXTERNAL_NET";
                       description = ''
                         AIM_SERVERS variable.
                       '';
                     };
-                    DC_SERVERS = mkOption {
+                    DC_SERVERS = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         DC_SERVERS variable.
                       '';
                     };
-                    DNP3_SERVER = mkOption {
+                    DNP3_SERVER = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         DNP3_SERVER variable.
                       '';
                     };
-                    DNP3_CLIENT = mkOption {
+                    DNP3_CLIENT = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         DNP3_CLIENT variable.
                       '';
                     };
-                    MODBUS_CLIENT = mkOption {
+                    MODBUS_CLIENT = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         MODBUS_CLIENT variable
                       '';
                     };
-                    MODBUS_SERVER = mkOption {
+                    MODBUS_SERVER = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         MODBUS_SERVER variable.
                       '';
                     };
-                    ENIP_CLIENT = mkOption {
+                    ENIP_CLIENT = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         ENIP_CLIENT variable.
                       '';
                     };
-                    ENIP_SERVER = mkOption {
+                    ENIP_SERVER = lib.mkOption {
                       default = "$HOME_NET";
                       description = ''
                         ENIP_SERVER variable.
@@ -149,8 +149,8 @@ in
               '';
             };
 
-            port-groups = mkOption {
-              type = with types; nullOr (attrsOf str);
+            port-groups = lib.mkOption {
+              type = with lib.types; nullOr (attrsOf str);
               default = {
                 HTTP_PORTS = "80";
                 SHELLCODE_PORTS = "!80";
@@ -177,15 +177,15 @@ in
       '';
     };
 
-    stats = mkOption {
+    stats = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (submodule {
           options = {
-            enable = mkEnableOption "suricata global stats";
+            enable = lib.mkEnableOption "suricata global stats";
 
-            interval = mkOption {
-              type = types.str;
+            interval = lib.mkOption {
+              type = lib.types.str;
               default = "8";
               description = ''
                 The interval field (in seconds) controls the interval at
@@ -193,16 +193,16 @@ in
               '';
             };
 
-            decoder-events = mkOption {
-              type = types.bool;
+            decoder-events = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Add decode events to stats
               '';
             };
 
-            decoder-events-prefix = mkOption {
-              type = types.str;
+            decoder-events-prefix = lib.mkOption {
+              type = lib.types.str;
               default = "decoder.event";
               description = ''
                 Decoder event prefix in stats. Has been 'decoder' before, but that leads
@@ -210,8 +210,8 @@ in
               '';
             };
 
-            stream-events = mkOption {
-              type = types.bool;
+            stream-events = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Add stream events as stats.
@@ -225,17 +225,17 @@ in
       '';
     };
 
-    plugins = mkOption {
-      type = with types; nullOr (listOf path);
+    plugins = lib.mkOption {
+      type = with lib.types; nullOr (listOf path);
       default = null;
       description = ''
         Plugins -- Experimental -- specify the filename for each plugin shared object.
       '';
     };
 
-    outputs = mkOption {
+    outputs = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (
           listOf (
             attrsOf (submodule {
@@ -247,7 +247,7 @@ in
           )
         );
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           {
             fast = {
@@ -286,8 +286,8 @@ in
       '';
     };
 
-    "default-log-dir" = mkOption {
-      type = types.str;
+    "default-log-dir" = lib.mkOption {
+      type = lib.types.str;
       default = "/var/log/suricata";
       description = ''
         The default logging directory. Any log or output file will be placed here if it's
@@ -297,8 +297,8 @@ in
     };
 
     logging = {
-      "default-log-level" = mkOption {
-        type = types.enum [
+      "default-log-level" = lib.mkOption {
+        type = lib.types.enum [
           "error"
           "warning"
           "notice"
@@ -315,8 +315,8 @@ in
         '';
       };
 
-      "default-log-format" = mkOption {
-        type = types.nullOr types.str;
+      "default-log-format" = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The default output format. Optional parameter, should default to
@@ -325,8 +325,8 @@ in
         '';
       };
 
-      "default-output-filter" = mkOption {
-        type = types.nullOr types.str;
+      "default-output-filter" = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           A regex to filter output.  Can be overridden in an output section.
@@ -334,8 +334,8 @@ in
         '';
       };
 
-      "stacktrace-on-signal" = mkOption {
-        type = types.nullOr types.str;
+      "stacktrace-on-signal" = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Requires libunwind to be available when Suricata is configured and built.
@@ -351,8 +351,8 @@ in
         file = {
           enable = mkDisableOption "logging to file";
 
-          level = mkOption {
-            type = types.enum [
+          level = lib.mkOption {
+            type = lib.types.enum [
               "error"
               "warning"
               "notice"
@@ -367,24 +367,24 @@ in
             '';
           };
 
-          filename = mkOption {
-            type = types.str;
+          filename = lib.mkOption {
+            type = lib.types.str;
             default = "suricata.log";
             description = ''
               Filename of the logfile.
             '';
           };
 
-          format = mkOption {
-            type = types.nullOr types.str;
+          format = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               Logformat for logs written to the logfile.
             '';
           };
 
-          type = mkOption {
-            type = types.nullOr types.str;
+          type = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               Type of logfile.
@@ -392,26 +392,26 @@ in
           };
         };
         syslog = {
-          enable = mkEnableOption "logging to syslog";
+          enable = lib.mkEnableOption "logging to syslog";
 
-          facility = mkOption {
-            type = types.str;
+          facility = lib.mkOption {
+            type = lib.types.str;
             default = "local5";
             description = ''
               Facility to log to.
             '';
           };
 
-          format = mkOption {
-            type = types.nullOr types.str;
+          format = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               Logformat for logs send to syslog.
             '';
           };
 
-          type = mkOption {
-            type = types.nullOr types.str;
+          type = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               Type of logs send to syslog.
@@ -421,15 +421,15 @@ in
       };
     };
 
-    "af-packet" = mkOption {
+    "af-packet" = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (
           listOf (submodule {
             freeformType = yaml.type;
             options = {
-              interface = mkOption {
-                type = types.str;
+              interface = lib.mkOption {
+                type = lib.types.str;
                 default = null;
                 description = ''
                   af-packet capture interface, see [upstream docs reagrding tuning](https://docs.suricata.io/en/latest/performance/tuning-considerations.html#af-packet).
@@ -444,15 +444,15 @@ in
       '';
     };
 
-    "af-xdp" = mkOption {
+    "af-xdp" = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (
           listOf (submodule {
             freeformType = yaml.type;
             options = {
-              interface = mkOption {
-                type = types.str;
+              interface = lib.mkOption {
+                type = lib.types.str;
                 default = null;
                 description = ''
                   af-xdp capture interface, see [upstream docs](https://docs.suricata.io/en/latest/capture-hardware/af-xdp.html).
@@ -468,27 +468,27 @@ in
       '';
     };
 
-    "dpdk" = mkOption {
+    "dpdk" = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (submodule {
           options = {
-            eal-params.proc-type = mkOption {
-              type = with types; nullOr str;
+            eal-params.proc-type = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = ''
                 dpdk eal-params.proc-type, see [data plane development kit docs](https://doc.dpdk.org/guides/linux_gsg/linux_eal_parameters.html#multiprocessing-related-options).
               '';
             };
-            interfaces = mkOption {
+            interfaces = lib.mkOption {
               type =
-                with types;
+                with lib.types;
                 nullOr (
                   listOf (submodule {
                     freeformType = yaml.type;
                     options = {
-                      interface = mkOption {
-                        type = types.str;
+                      interface = lib.mkOption {
+                        type = lib.types.str;
                         default = null;
                         description = ''
                           See upstream docs: [docs/capture-hardware/dpdk](https://docs.suricata.io/en/suricata-7.0.7/capture-hardware/dpdk.html) and [docs/configuration/suricata-yaml.html#data-plane-development-kit-dpdk](https://docs.suricata.io/en/suricata-7.0.7/configuration/suricata-yaml.html#data-plane-development-kit-dpdk).
@@ -513,15 +513,15 @@ in
       '';
     };
 
-    "pcap" = mkOption {
+    "pcap" = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (
           listOf (submodule {
             freeformType = yaml.type;
             options = {
-              interface = mkOption {
-                type = types.str;
+              interface = lib.mkOption {
+                type = lib.types.str;
                 default = null;
                 description = ''
                   pcap capture interface, see [upstream docs](https://docs.suricata.io/en/latest/manpages/suricata.html).
@@ -536,8 +536,8 @@ in
       '';
     };
 
-    "pcap-file".checksum-checks = mkOption {
-      type = types.enum [
+    "pcap-file".checksum-checks = lib.mkOption {
+      type = lib.types.enum [
         "yes"
         "no"
         "auto"
@@ -553,13 +553,13 @@ in
       '';
     };
 
-    "app-layer" = mkOption {
+    "app-layer" = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (submodule {
           options = {
-            "error-policy" = mkOption {
-              type = types.enum [
+            "error-policy" = lib.mkOption {
+              type = lib.types.enum [
                 "drop-flow"
                 "pass-flow"
                 "bypass"
@@ -575,15 +575,15 @@ in
                 "ignore" (the default).
               '';
             };
-            protocols = mkOption {
+            protocols = lib.mkOption {
               type =
-                with types;
+                with lib.types;
                 nullOr (
                   attrsOf (submodule {
                     freeformType = yaml.type;
                     options = {
-                      enabled = mkOption {
-                        type = types.enum [
+                      enabled = lib.mkOption {
+                        type = lib.types.enum [
                           "yes"
                           "no"
                           "detection-only"
@@ -612,20 +612,20 @@ in
     };
 
     "run-as" = {
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "suricata";
         description = "Run Suricata with a specific user-id.";
       };
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "suricata";
         description = "Run Suricata with a specific group-id.";
       };
     };
 
-    "host-mode" = mkOption {
-      type = types.enum [
+    "host-mode" = lib.mkOption {
+      type = lib.types.enum [
         "router"
         "sniffer-only"
         "auto"
@@ -639,20 +639,20 @@ in
       '';
     };
 
-    "unix-command" = mkOption {
+    "unix-command" = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (submodule {
           options = {
-            enabled = mkOption {
-              type = types.either types.bool (types.enum [ "auto" ]);
+            enabled = lib.mkOption {
+              type = lib.types.either types.bool (types.enum [ "auto" ]);
               default = "auto";
               description = ''
                 Enable unix-command socket.
               '';
             };
-            filename = mkOption {
-              type = types.path;
+            filename = lib.mkOption {
+              type = lib.types.path;
               default = "/run/suricata/suricata-command.socket";
               description = ''
                 Filename for unix-command socket.
@@ -671,8 +671,8 @@ in
       '';
     };
 
-    "exception-policy" = mkOption {
-      type = types.enum [
+    "exception-policy" = lib.mkOption {
+      type = lib.types.enum [
         "auto"
         "drop-packet"
         "drop-flow"
@@ -695,40 +695,40 @@ in
       '';
     };
 
-    "default-rule-path" = mkOption {
-      type = types.path;
+    "default-rule-path" = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/suricata/rules";
       description = "Path in which suricata-update managed rules are stored by default.";
     };
 
-    "rule-files" = mkOption {
-      type = types.listOf types.str;
+    "rule-files" = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "suricata.rules" ];
       description = "Files to load suricata-update managed rules, relative to 'default-rule-path'.";
     };
 
-    "classification-file" = mkOption {
-      type = types.str;
+    "classification-file" = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/suricata/rules/classification.config";
       description = "Suricata classification configuration file.";
     };
 
-    "reference-config-file" = mkOption {
-      type = types.str;
+    "reference-config-file" = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.package}/etc/suricata/reference.config";
       defaultText = "\${config.services.suricata.package}/etc/suricata/reference.config";
       description = "Suricata reference configuration file.";
     };
 
-    "threshold-file" = mkOption {
-      type = types.str;
+    "threshold-file" = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.package}/etc/suricata/threshold.config";
       defaultText = "\${config.services.suricata.package}/etc/suricata/threshold.config";
       description = "Suricata threshold configuration file.";
     };
 
-    includes = mkOption {
-      type = with types; nullOr (listOf path);
+    includes = lib.mkOption {
+      type = with lib.types; nullOr (listOf path);
       default = null;
       description = ''
         Files to include in the suricata configuration. See

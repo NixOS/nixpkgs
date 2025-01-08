@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.tmate-ssh-server;
 
@@ -16,12 +15,12 @@ let
 in
 {
   options.services.tmate-ssh-server = {
-    enable = mkEnableOption "tmate ssh server";
+    enable = lib.mkEnableOption "tmate ssh server";
 
-    package = mkPackageOption pkgs "tmate-ssh-server" { };
+    package = lib.mkPackageOption pkgs "tmate-ssh-server" { };
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       description = "External host name";
       defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName";
       default =
@@ -31,36 +30,36 @@ in
           domain;
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       description = "Listen port for the ssh server";
       default = 2222;
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Whether to automatically open the specified ports in the firewall.";
     };
 
-    advertisedPort = mkOption {
-      type = types.port;
+    advertisedPort = lib.mkOption {
+      type = lib.types.port;
       description = "External port advertised to clients";
     };
 
-    keysDir = mkOption {
-      type = with types; nullOr str;
+    keysDir = lib.mkOption {
+      type = with lib.types; nullOr str;
       description = "Directory containing ssh keys, defaulting to auto-generation";
       default = null;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.port ];
 
     services.tmate-ssh-server = {
-      advertisedPort = mkDefault cfg.port;
+      advertisedPort = lib.mkDefault cfg.port;
     };
 
     environment.systemPackages =
@@ -93,7 +92,7 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/tmate-ssh-server -h ${cfg.host} -p ${toString cfg.port} -q ${toString cfg.advertisedPort} -k ${keysDir}";
       };
-      preStart = mkIf (cfg.keysDir == null) ''
+      preStart = lib.mkIf (cfg.keysDir == null) ''
         if [[ ! -d ${defaultKeysDir} ]]
         then
           mkdir -p ${defaultKeysDir}

@@ -158,7 +158,7 @@ in
         default = [];
         description = ''
           List of database names and their initial schemas that should be used to create databases on the first startup
-          of MySQL. The schema attribute is optional: If not specified, an empty database is created.
+          of MySQL. The schema attribute is lib.optional: If not specified, an empty database is created.
         '';
         example = lib.literalExpression ''
           [

@@ -18,7 +18,7 @@ let
     flip
     foldr
     types
-    mkOption
+    lib.mkOption
     escapeShellArg
     concatMapStringsSep
     sourceFilesBySuffices
@@ -50,8 +50,8 @@ let
   testOptionsDoc = let
       eval = nixos-lib.evalTest {
         # Avoid evaluating a NixOS config prototype.
-        config.node.type = types.deferredModule;
-        options._module.args = mkOption { internal = true; };
+        config.node.type = lib.types.deferredModule;
+        options._module.args = lib.mkOption { internal = true; };
       };
     in buildPackages.nixosOptionsDoc {
       inherit (eval) options;
@@ -86,7 +86,7 @@ let
     substituteInPlace ./configuration/configuration.md \
       --replace-fail \
           '@MODULE_CHAPTERS@' \
-          ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          ${lib.escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
     substituteInPlace ./nixos-options.md \
       --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
@@ -125,7 +125,7 @@ in rec {
       nixos-render-docs -j $NIX_BUILD_CORES manual html \
         --manpage-urls ${manpageUrls} \
         --redirects ${./redirects.json} \
-        --revision ${escapeShellArg revision} \
+        --revision ${lib.escapeShellArg revision} \
         --generator "nixos-render-docs ${pkgs.lib.version}" \
         --stylesheet style.css \
         --stylesheet highlightjs/mono-blue.css \
@@ -210,7 +210,7 @@ in rec {
       # Generate manpages.
       mkdir -p $out/share/man/man5
       nixos-render-docs -j $NIX_BUILD_CORES options manpage \
-        --revision ${escapeShellArg revision} \
+        --revision ${lib.escapeShellArg revision} \
         ${optionsJSON}/${common.outputPath}/options.json \
         $out/share/man/man5/configuration.nix.5
     '';

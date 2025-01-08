@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.smartctl;
 
-  inherit (lib) mkOption types literalExpression;
+  inherit (lib) lib.mkOption types literalExpression;
 
   args = lib.escapeShellArgs (
     [
@@ -25,10 +25,10 @@ in
   port = 9633;
 
   extraOpts = {
-    devices = mkOption {
-      type = types.listOf types.str;
+    devices = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
       description = ''
@@ -37,8 +37,8 @@ in
       '';
     };
 
-    maxInterval = mkOption {
-      type = types.str;
+    maxInterval = lib.mkOption {
+      type = lib.types.str;
       default = "60s";
       example = "2m";
       description = ''

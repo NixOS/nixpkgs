@@ -13,9 +13,9 @@ let
     mapAttrsToList
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionalAttrs
+    lib.optionalAttrs
     types
     mkDefault
     ;
@@ -23,7 +23,7 @@ let
 
   configEnv = concatMapAttrs (
     name: value:
-    optionalAttrs (value != null) {
+    lib.optionalAttrs (value != null) {
       ${name} = if isBool value then boolToString value else toString value;
     }
   ) cfg.settings;
@@ -44,10 +44,10 @@ in
         ;
     in
     {
-      enable = mkEnableOption "your_spotify";
+      enable = lib.mkEnableOption "your_spotify";
 
       enableLocalDB = mkEnableOption "a local mongodb instance";
-      nginxVirtualHost = mkOption {
+      nginxVirtualHost = lib.mkOption {
         type = nullOr str;
         default = null;
         description = ''
@@ -57,14 +57,14 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "your_spotify" { };
+      package = lib.mkPackageOption pkgs "your_spotify" { };
 
-      clientPackage = mkOption {
+      clientPackage = lib.mkOption {
         type = package;
         description = "Client package to use.";
       };
 
-      spotifySecretFile = mkOption {
+      spotifySecretFile = lib.mkOption {
         type = path;
         description = ''
           A file containing the secret key of your Spotify application.
@@ -72,7 +72,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Your Spotify Configuration. Refer to [Your Spotify](https://github.com/Yooooomi/your_spotify) for definitions and values.
         '';
@@ -83,10 +83,10 @@ in
             SPOTIFY_PUBLIC = "spotify_client_id";
           }
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = types.attrsOf types.str;
           options = {
-            CLIENT_ENDPOINT = mkOption {
+            CLIENT_ENDPOINT = lib.mkOption {
               type = str;
               description = ''
                 The endpoint of your web application.
@@ -94,7 +94,7 @@ in
               '';
               example = "https://your_spotify.example.org";
             };
-            API_ENDPOINT = mkOption {
+            API_ENDPOINT = lib.mkOption {
               type = str;
               description = ''
                 The endpoint of your server
@@ -105,19 +105,19 @@ in
               '';
               example = "https://localhost:3000";
             };
-            SPOTIFY_PUBLIC = mkOption {
+            SPOTIFY_PUBLIC = lib.mkOption {
               type = str;
               description = ''
                 The public client ID of your Spotify application.
                 Refer to: [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application)
               '';
             };
-            MONGO_ENDPOINT = mkOption {
+            MONGO_ENDPOINT = lib.mkOption {
               type = str;
               description = ''The endpoint of the Mongo database.'';
               default = "mongodb://localhost:27017/your_spotify";
             };
-            PORT = mkOption {
+            PORT = lib.mkOption {
               type = port;
               description = "The port of the api server";
               default = 3000;
@@ -127,8 +127,8 @@ in
       };
     };
 
-  config = mkIf cfg.enable {
-    services.your_spotify.clientPackage = mkDefault (
+  config = lib.mkIf cfg.enable {
+    services.your_spotify.clientPackage = lib.mkDefault (
       cfg.package.client.override { apiEndpoint = cfg.settings.API_ENDPOINT; }
     );
     systemd.services.your_spotify = {
@@ -183,7 +183,7 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
-    services.nginx = mkIf (cfg.nginxVirtualHost != null) {
+    services.nginx = lib.mkIf (cfg.nginxVirtualHost != null) {
       enable = true;
       virtualHosts.${cfg.nginxVirtualHost} = {
         root = cfg.clientPackage;
@@ -194,7 +194,7 @@ in
         '';
       };
     };
-    services.mongodb = mkIf cfg.enableLocalDB {
+    services.mongodb = lib.mkIf cfg.enableLocalDB {
       enable = true;
     };
   };

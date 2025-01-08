@@ -1,7 +1,7 @@
 # Some tests to ensure sudo is working properly.
 { pkgs, ... }:
 let
-  inherit (pkgs.lib) mkIf optionalString;
+  inherit (pkgs.lib) mkIf lib.optionalString;
   password = "helloworld";
 in
 import ./make-test-python.nix (

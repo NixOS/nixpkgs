@@ -76,11 +76,11 @@ let
     ${cfg.osd.extraConfig}
   '';
 
-  optionalDir = lib.optionals cfg.dir.enable [ "xtreemfs-dir.service" ];
+  lib.optionalDir = lib.optionals cfg.dir.enable [ "xtreemfs-dir.service" ];
 
   systemdOptionalDependencies = {
-    after = [ "network.target" ] ++ optionalDir;
-    wantedBy = [ "multi-user.target" ] ++ optionalDir;
+    after = [ "network.target" ] ++ lib.optionalDir;
+    wantedBy = [ "multi-user.target" ] ++ lib.optionalDir;
   };
 
 in

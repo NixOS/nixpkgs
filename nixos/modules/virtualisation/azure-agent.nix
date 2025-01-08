@@ -1,7 +1,6 @@
 { lib, ... }:
 
-with lib;
-warn
+lib.warn
   ''
     `virtualisation.azure.agent` provided by `azure-agent.nix` module has been replaced
     by `services.waagent` options, and will be removed in a future release.
@@ -9,7 +8,7 @@ warn
   {
 
     imports = [
-      (mkRenamedOptionModule
+      (lib.mkRenamedOptionModule
         [
           "virtualisation"
           "azure"
@@ -22,7 +21,7 @@ warn
           "enable"
         ]
       )
-      (mkRenamedOptionModule
+      (lib.mkRenamedOptionModule
         [
           "virtualisation"
           "azure"
@@ -37,7 +36,7 @@ warn
           "Verbose"
         ]
       )
-      (mkRenamedOptionModule
+      (lib.mkRenamedOptionModule
         [
           "virtualisation"
           "azure"

@@ -13,11 +13,11 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkRemovedOptionModule
-    optionalString
-    optionals
+    lib.optionalString
+    lib.optionals
     types
     ;
 in
@@ -27,12 +27,12 @@ in
   };
 
   options.services.earlyoom = {
-    enable = mkEnableOption "early out of memory killing";
+    enable = lib.mkEnableOption "early out of memory killing";
 
-    package = mkPackageOption pkgs "earlyoom" { };
+    package = lib.mkPackageOption pkgs "earlyoom" { };
 
-    freeMemThreshold = mkOption {
-      type = types.ints.between 1 100;
+    freeMemThreshold = lib.mkOption {
+      type = lib.types.ints.between 1 100;
       default = 10;
       description = ''
         Minimum available memory (in percent).
@@ -47,8 +47,8 @@ in
       '';
     };
 
-    freeMemKillThreshold = mkOption {
-      type = types.nullOr (types.ints.between 1 100);
+    freeMemKillThreshold = lib.mkOption {
+      type = lib.types.nullOr (types.ints.between 1 100);
       default = null;
       description = ''
         Minimum available memory (in percent) before sending SIGKILL.
@@ -58,8 +58,8 @@ in
       '';
     };
 
-    freeSwapThreshold = mkOption {
-      type = types.ints.between 1 100;
+    freeSwapThreshold = lib.mkOption {
+      type = lib.types.ints.between 1 100;
       default = 10;
       description = ''
         Minimum free swap space (in percent) before sending SIGTERM.
@@ -68,8 +68,8 @@ in
       '';
     };
 
-    freeSwapKillThreshold = mkOption {
-      type = types.nullOr (types.ints.between 1 100);
+    freeSwapKillThreshold = lib.mkOption {
+      type = lib.types.nullOr (types.ints.between 1 100);
       default = null;
       description = ''
         Minimum free swap space (in percent) before sending SIGKILL.
@@ -79,16 +79,16 @@ in
       '';
     };
 
-    enableDebugInfo = mkOption {
-      type = types.bool;
+    enableDebugInfo = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable debugging messages.
       '';
     };
 
-    enableNotifications = mkOption {
-      type = types.bool;
+    enableNotifications = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Send notifications about killed processes via the system d-bus.
@@ -105,10 +105,10 @@ in
       '';
     };
 
-    killHook = mkOption {
-      type = types.nullOr types.path;
+    killHook = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         pkgs.writeShellScript "earlyoom-kill-hook" '''
           echo "Process $EARLYOOM_NAME ($EARLYOOM_PID) was killed" >> /path/to/log
         '''
@@ -127,15 +127,15 @@ in
       '';
     };
 
-    reportInterval = mkOption {
-      type = types.int;
+    reportInterval = lib.mkOption {
+      type = lib.types.int;
       default = 3600;
       example = 0;
       description = "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
     };
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "-g"
@@ -146,20 +146,20 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "earlyoom" "useKernelOOMKiller" ] ''
+    (lib.mkRemovedOptionModule [ "services" "earlyoom" "useKernelOOMKiller" ] ''
       This option is deprecated and ignored by earlyoom since 1.2.
     '')
-    (mkRemovedOptionModule [ "services" "earlyoom" "notificationsCommand" ] ''
+    (lib.mkRemovedOptionModule [ "services" "earlyoom" "notificationsCommand" ] ''
       This option was removed in earlyoom 1.6, but was reimplemented in 1.7
       and is available as the new option `services.earlyoom.killHook`.
     '')
-    (mkRemovedOptionModule [ "services" "earlyoom" "ignoreOOMScoreAdjust" ] ''
+    (lib.mkRemovedOptionModule [ "services" "earlyoom" "ignoreOOMScoreAdjust" ] ''
       This option is deprecated and ignored by earlyoom since 1.7.
     '')
   ];
 
-  config = mkIf cfg.enable {
-    services.systembus-notify.enable = mkDefault cfg.enableNotifications;
+  config = lib.mkIf cfg.enable {
+    services.systembus-notify.enable = lib.mkDefault cfg.enableNotifications;
 
     systemd.packages = [ cfg.package ];
 
@@ -167,7 +167,7 @@ in
       overrideStrategy = "asDropin";
 
       wantedBy = [ "multi-user.target" ];
-      path = optionals cfg.enableNotifications [ pkgs.dbus ];
+      path = lib.optionals cfg.enableNotifications [ pkgs.dbus ];
 
       # We setup `EARLYOOM_ARGS` via drop-ins, so disable the default import
       # from /etc/default/earlyoom.
@@ -177,10 +177,10 @@ in
         lib.cli.toGNUCommandLineShell { } {
           m =
             "${toString cfg.freeMemThreshold}"
-            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}";
+            + lib.optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}";
           s =
             "${toString cfg.freeSwapThreshold}"
-            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}";
+            + lib.optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}";
           r = "${toString cfg.reportInterval}";
           d = cfg.enableDebugInfo;
           n = cfg.enableNotifications;

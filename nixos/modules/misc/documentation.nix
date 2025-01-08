@@ -16,12 +16,12 @@ let
     mapAttrs
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
-    optional
-    optionalAttrs
-    optionals
+    lib.optional
+    lib.optionalAttrs
+    lib.optionals
     partition
     removePrefix
     types
@@ -48,7 +48,7 @@ let
     in
       {
         lazy = p.right;
-        eager = p.wrong ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+        eager = p.wrong ++ lib.optionals cfg.nixos.includeAllModules (extraModules ++ modules);
       };
 
   manual = import ../../doc/manual rec {
@@ -78,7 +78,7 @@ let
               guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
             in if isAttrs value then
               scrubDerivations wholeName value
-              // optionalAttrs (isDerivation value) {
+              // lib.optionalAttrs (isDerivation value) {
                 outPath = guard "\${${wholeName}}";
                 drvPath = guard value.drvPath;
               }
@@ -186,10 +186,10 @@ in
     ./meta.nix
     ../config/system-path.nix
     ../system/etc/etc.nix
-    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
-    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
-    (mkRemovedOptionModule
+    (lib.mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
+    (lib.mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (lib.mkRemovedOptionModule
       [ "documentation" "nixos" "options" "allowDocBook" ]
       "DocBook option documentation is no longer supported")
   ];
@@ -198,8 +198,8 @@ in
 
     documentation = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to install documentation of packages from
@@ -210,8 +210,8 @@ in
         # which is at ../../../doc/multiple-output.chapter.md
       };
 
-      man.enable = mkOption {
-        type = types.bool;
+      man.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to install manual pages.
@@ -219,8 +219,8 @@ in
         '';
       };
 
-      man.generateCaches = mkOption {
-        type = types.bool;
+      man.generateCaches = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to generate the manual page index caches.
@@ -231,8 +231,8 @@ in
         '';
       };
 
-      info.enable = mkOption {
-        type = types.bool;
+      info.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to install info pages and the {command}`info` command.
@@ -240,8 +240,8 @@ in
         '';
       };
 
-      doc.enable = mkOption {
-        type = types.bool;
+      doc.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to install documentation distributed in packages' `/share/doc`.
@@ -250,8 +250,8 @@ in
         '';
       };
 
-      dev.enable = mkOption {
-        type = types.bool;
+      dev.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to install documentation targeted at developers.
@@ -264,8 +264,8 @@ in
         '';
       };
 
-      nixos.enable = mkOption {
-        type = types.bool;
+      nixos.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to install NixOS's own documentation.
@@ -278,16 +278,16 @@ in
         '';
       };
 
-      nixos.extraModules = mkOption {
-        type = types.listOf types.raw;
+      nixos.extraModules = lib.mkOption {
+        type = lib.types.listOf types.raw;
         default = [];
         description = ''
           Modules for which to show options even when not imported.
         '';
       };
 
-      nixos.options.splitBuild = mkOption {
-        type = types.bool;
+      nixos.options.splitBuild = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to split the option docs build into a cacheable and an uncacheable part.
@@ -296,8 +296,8 @@ in
         '';
       };
 
-      nixos.options.warningsAreErrors = mkOption {
-        type = types.bool;
+      nixos.options.warningsAreErrors = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Treat warning emitted during the option documentation build (eg for missing option
@@ -305,8 +305,8 @@ in
         '';
       };
 
-      nixos.includeAllModules = mkOption {
-        type = types.bool;
+      nixos.includeAllModules = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether the generated NixOS's documentation should include documentation for all
@@ -316,14 +316,14 @@ in
         '';
       };
 
-      nixos.extraModuleSources = mkOption {
-        type = types.listOf (types.either types.path types.str);
+      nixos.extraModuleSources = lib.mkOption {
+        type = lib.types.listOf (types.either types.path types.str);
         default = [ ];
         description = ''
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
         '';
@@ -333,7 +333,7 @@ in
 
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
     {
       assertions = [
         {
@@ -347,15 +347,15 @@ in
 
     # The actual implementation for this lives in man-db.nix or mandoc.nix,
     # depending on which backend is active.
-    (mkIf cfg.man.enable {
+    (lib.mkIf cfg.man.enable {
       environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
+      environment.extraOutputsToInstall = [ "man" ] ++ lib.optional cfg.dev.enable "devman";
     })
 
-    (mkIf cfg.info.enable {
+    (lib.mkIf cfg.info.enable {
       environment.systemPackages = [ pkgs.texinfoInteractive ];
       environment.pathsToLink = [ "/share/info" ];
-      environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable "devinfo";
+      environment.extraOutputsToInstall = [ "info" ] ++ lib.optional cfg.dev.enable "devinfo";
       environment.extraSetup = ''
         if [ -w $out/share/info ]; then
           shopt -s nullglob
@@ -366,7 +366,7 @@ in
       '';
     })
 
-    (mkIf cfg.doc.enable {
+    (lib.mkIf cfg.doc.enable {
       environment.pathsToLink = [
         "/share/doc"
 
@@ -374,15 +374,15 @@ in
         "/share/gtk-doc"
         "/share/devhelp"
       ];
-      environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
+      environment.extraOutputsToInstall = [ "doc" ] ++ lib.optional cfg.dev.enable "devdoc";
     })
 
-    (mkIf cfg.nixos.enable {
+    (lib.mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
       environment.systemPackages = []
-        ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
-        ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
+        ++ lib.optional cfg.man.enable manual.nixos-configuration-reference-manpage
+        ++ lib.optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
     })
 
   ]);

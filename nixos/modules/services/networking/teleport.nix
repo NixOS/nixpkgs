@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.services.teleport;
   settingsYaml = pkgs.formats.yaml { };
@@ -9,16 +7,16 @@ in
 {
   options = {
     services.teleport = with lib.types; {
-      enable = mkEnableOption "the Teleport service";
+      enable = lib.mkEnableOption "the Teleport service";
 
-      package = mkPackageOption pkgs "teleport" {
+      package = lib.mkPackageOption pkgs "teleport" {
         example = "teleport_11";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsYaml.type;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             teleport = {
               nodename = "client";
@@ -45,7 +43,7 @@ in
         '';
       };
 
-      insecure.enable = mkEnableOption ''
+      insecure.enable = lib.mkEnableOption ''
         starting teleport in insecure mode.
 
         This is dangerous!
@@ -56,19 +54,19 @@ in
       '';
 
       diag = {
-        enable = mkEnableOption ''
+        enable = lib.mkEnableOption ''
           endpoints for monitoring purposes.
 
           See <https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/>
         '';
 
-        addr = mkOption {
+        addr = lib.mkOption {
           type = str;
           default = "127.0.0.1";
           description = "Metrics and diagnostics address.";
         };
 
-        port = mkOption {
+        port = lib.mkOption {
           type = port;
           default = 3000;
           description = "Metrics and diagnostics port.";
@@ -77,7 +75,7 @@ in
     };
   };
 
-  config = mkIf config.services.teleport.enable {
+  config = lib.mkIf config.services.teleport.enable {
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.teleport = {
@@ -87,9 +85,9 @@ in
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/teleport start \
-            ${optionalString cfg.insecure.enable "--insecure"} \
-            ${optionalString cfg.diag.enable "--diag-addr=${cfg.diag.addr}:${toString cfg.diag.port}"} \
-            ${optionalString (cfg.settings != { }) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}
+            ${lib.optionalString cfg.insecure.enable "--insecure"} \
+            ${lib.optionalString cfg.diag.enable "--diag-addr=${cfg.diag.addr}:${toString cfg.diag.port}"} \
+            ${lib.optionalString (cfg.settings != { }) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitNOFILE = 65536;

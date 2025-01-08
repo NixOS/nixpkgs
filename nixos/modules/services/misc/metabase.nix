@@ -3,8 +3,8 @@
 let
   cfg = config.services.metabase;
 
-  inherit (lib) mkEnableOption mkIf mkOption;
-  inherit (lib) optional optionalAttrs types;
+  inherit (lib) mkEnableOption mkIf lib.mkOption;
+  inherit (lib) lib.optional lib.optionalAttrs types;
 
   dataDir = "/var/lib/metabase";
 
@@ -13,19 +13,19 @@ in {
   options = {
 
     services.metabase = {
-      enable = mkEnableOption "Metabase service";
+      enable = lib.mkEnableOption "Metabase service";
 
       listen = {
-        ip = mkOption {
-          type = types.str;
+        ip = lib.mkOption {
+          type = lib.types.str;
           default = "0.0.0.0";
           description = ''
             IP address that Metabase should listen on.
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 3000;
           description = ''
             Listen port for Metabase.
@@ -34,24 +34,24 @@ in {
       };
 
       ssl = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable SSL (https) support.
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 8443;
           description = ''
             Listen port over SSL (https) for Metabase.
           '';
         };
 
-        keystore = mkOption {
-          type = types.nullOr types.path;
+        keystore = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = "${dataDir}/metabase.jks";
           example = "/etc/secrets/keystore.jks";
           description = ''
@@ -61,8 +61,8 @@ in {
 
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for Metabase.
@@ -72,7 +72,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.metabase = {
       description = "Metabase server";
@@ -84,7 +84,7 @@ in {
         MB_DB_FILE = "${dataDir}/metabase.db";
         MB_JETTY_HOST = cfg.listen.ip;
         MB_JETTY_PORT = toString cfg.listen.port;
-      } // optionalAttrs (cfg.ssl.enable) {
+      } // lib.optionalAttrs (cfg.ssl.enable) {
         MB_JETTY_SSL = true;
         MB_JETTY_SSL_PORT = toString cfg.ssl.port;
         MB_JETTY_SSL_KEYSTORE = cfg.ssl.keystore;
@@ -96,8 +96,8 @@ in {
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.listen.port ] ++ optional cfg.ssl.enable cfg.ssl.port;
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.listen.port ] ++ lib.optional cfg.ssl.enable cfg.ssl.port;
     };
 
   };

@@ -1,7 +1,5 @@
 { config, lib, utils, pkgs, ... }:
 
-with lib;
-
 let
 
   # Abbreviations.
@@ -34,8 +32,8 @@ let
     ];
 
   xrandrOptions = {
-    output = mkOption {
-      type = types.str;
+    output = lib.mkOption {
+      type = lib.types.str;
       example = "DVI-0";
       description = ''
         The output name of the monitor, as shown by
@@ -43,16 +41,16 @@ let
       '';
     };
 
-    primary = mkOption {
-      type = types.bool;
+    primary = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether this head is treated as the primary monitor,
       '';
     };
 
-    monitorConfig = mkOption {
-      type = types.lines;
+    monitorConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         DisplaySize 408 306
@@ -72,39 +70,39 @@ let
       name = "multihead${toString num}";
       inherit config;
     };
-  in imap1 mkHead cfg.xrandrHeads;
+  in lib.imap1 mkHead cfg.xrandrHeads;
 
   xrandrDeviceSection = let
-    monitors = forEach xrandrHeads (h: ''
+    monitors = lib.forEach xrandrHeads (h: ''
       Option "monitor-${h.config.output}" "${h.name}"
     '');
-  in concatStrings monitors;
+  in lib.concatStrings monitors;
 
   # Here we chain every monitor from the left to right, so we have:
   # m4 right of m3 right of m2 right of m1   .----.----.----.----.
   # Which will end up in reverse ----------> | m1 | m2 | m3 | m4 |
   #                                          `----^----^----^----'
   xrandrMonitorSections = let
-    mkMonitor = previous: current: singleton {
+    mkMonitor = previous: current: lib.singleton {
       inherit (current) name;
       value = ''
         Section "Monitor"
           Identifier "${current.name}"
-          ${optionalString (current.config.primary) ''
+          ${lib.optionalString (current.config.primary) ''
           Option "Primary" "true"
           ''}
-          ${optionalString (previous != []) ''
-          Option "RightOf" "${(head previous).name}"
+          ${lib.optionalString (previous != []) ''
+          Option "RightOf" "${(lib.head previous).name}"
           ''}
           ${current.config.monitorConfig}
         EndSection
       '';
     } ++ previous;
-    monitors = reverseList (foldl mkMonitor [] xrandrHeads);
-  in concatMapStrings (getAttr "value") monitors;
+    monitors = lib.reverseList (lib.foldl mkMonitor [] xrandrHeads);
+  in lib.concatMapStrings (lib.getAttr "value") monitors;
 
   configFile = pkgs.runCommand "xserver.conf"
-    { fontpath = optionalString (cfg.fontPath != null)
+    { fontpath = lib.optionalString (cfg.fontPath != null)
         ''FontPath "${cfg.fontPath}"'';
       inherit (cfg) config;
       preferLocalBuild = true;
@@ -121,7 +119,7 @@ let
           fi
         done
 
-        ${concatMapStrings (m: ''
+        ${lib.concatMapStrings (m: ''
         echo "  ModulePath \"${m}/lib/xorg/modules\"" >> "$out"
         '') cfg.modules}
 
@@ -133,7 +131,7 @@ let
       ''; # */
 
   prefixStringLines = prefix: str:
-    concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
+    lib.concatMapStringsSep "\n" (line: prefix + line) (lib.splitString "\n" str);
 
   indent = prefixStringLines "  ";
 
@@ -164,14 +162,14 @@ in
     [ ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
-      (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
+      (lib.mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
         "See the 16.09 release notes for more information.")
-      (mkRemovedOptionModule
+      (lib.mkRemovedOptionModule
         [ "services" "xserver" "startDbusSession" ]
         "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
+      (lib.mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
-      (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
+      (lib.mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
       (lib.mkRenamedOptionModuleWith {
         sinceRelease = 2311;
@@ -207,31 +205,31 @@ in
 
     services.xserver = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the X server.
         '';
       };
 
-      autorun = mkOption {
-        type = types.bool;
+      autorun = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to start the X server automatically.
         '';
       };
 
-      excludePackages = mkOption {
+      excludePackages = lib.mkOption {
         default = [];
-        example = literalExpression "[ pkgs.xterm ]";
-        type = types.listOf types.package;
+        example = lib.literalExpression "[ pkgs.xterm ]";
+        type = lib.types.listOf lib.types.package;
         description = "Which X11 packages to exclude from the default environment";
       };
 
-      exportConfiguration = mkOption {
-        type = types.bool;
+      exportConfiguration = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to symlink the X server configuration under
@@ -239,34 +237,34 @@ in
         '';
       };
 
-      enableTCP = mkOption {
-        type = types.bool;
+      enableTCP = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to allow the X server to accept TCP connections.
         '';
       };
 
-      autoRepeatDelay = mkOption {
-        type = types.nullOr types.int;
+      autoRepeatDelay = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Sets the autorepeat delay (length of time in milliseconds that a key must be depressed before autorepeat starts).
         '';
       };
 
-      autoRepeatInterval = mkOption {
-        type = types.nullOr types.int;
+      autoRepeatInterval = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Sets the autorepeat interval (length of time in milliseconds that should elapse between autorepeat-generated keystrokes).
         '';
       };
 
-      inputClassSections = mkOption {
-        type = types.listOf types.lines;
+      inputClassSections = lib.mkOption {
+        type = lib.types.listOf lib.types.lines;
         default = [];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
               MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
@@ -279,15 +277,15 @@ in
         description = "Content of additional InputClass sections of the X server configuration file.";
       };
 
-      modules = mkOption {
-        type = types.listOf types.path;
+      modules = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
-        example = literalExpression "[ pkgs.xf86_input_wacom ]";
+        example = lib.literalExpression "[ pkgs.xf86_input_wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
-      resolutions = mkOption {
-        type = types.listOf types.attrs;
+      resolutions = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
         default = [];
         example = [ { x = 1600; y = 1200; } { x = 1024; y = 786; } ];
         description = ''
@@ -297,19 +295,19 @@ in
         '';
       };
 
-      videoDrivers = mkOption {
-        type = types.listOf types.str;
+      videoDrivers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia"
           "amdgpu"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
-        relatedPackages = concatLists
-          (mapAttrsToList (n: v:
-            optional (hasPrefix "xf86video" n) {
+        relatedPackages = lib.concatLists
+          (lib.mapAttrsToList (n: v:
+            lib.optional (lib.hasPrefix "xf86video" n) {
               path  = [ "xorg" n ];
-              title = removePrefix "xf86video" n;
+              title = lib.removePrefix "xf86video" n;
             }) pkgs.xorg);
         description = ''
           The names of the video drivers the configuration
@@ -323,8 +321,8 @@ in
         '';
       };
 
-      videoDriver = mkOption {
-        type = types.nullOr types.str;
+      videoDriver = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "i810";
         description = ''
@@ -334,8 +332,8 @@ in
         '';
       };
 
-      drivers = mkOption {
-        type = types.listOf types.attrs;
+      drivers = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
         internal = true;
         description = ''
           A list of attribute sets specifying drivers to be loaded by
@@ -343,8 +341,8 @@ in
         '';
       };
 
-      dpi = mkOption {
-        type = types.nullOr types.int;
+      dpi = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Force global DPI resolution to use for X server. It's recommended to
@@ -353,8 +351,8 @@ in
         '';
       };
 
-      updateDbusEnvironment = mkOption {
-        type = types.bool;
+      updateDbusEnvironment = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to update the DBus activation environment after launching the
@@ -363,16 +361,16 @@ in
       };
 
       xkb = {
-        layout = mkOption {
-          type = types.str;
+        layout = lib.mkOption {
+          type = lib.types.str;
           default = "us";
           description = ''
             X keyboard layout, or multiple keyboard layouts separated by commas.
           '';
         };
 
-        model = mkOption {
-          type = types.str;
+        model = lib.mkOption {
+          type = lib.types.str;
           default = "pc104";
           example = "presario";
           description = ''
@@ -380,8 +378,8 @@ in
           '';
         };
 
-        options = mkOption {
-          type = types.commas;
+        options = lib.mkOption {
+          type = lib.types.commas;
           default = "terminate:ctrl_alt_bksp";
           example = "grp:caps_toggle,grp_led:scroll";
           description = ''
@@ -389,8 +387,8 @@ in
           '';
         };
 
-        variant = mkOption {
-          type = types.str;
+        variant = lib.mkOption {
+          type = lib.types.str;
           default = "";
           example = "colemak";
           description = ''
@@ -398,18 +396,18 @@ in
           '';
         };
 
-        dir = mkOption {
-          type = types.path;
+        dir = lib.mkOption {
+          type = lib.types.path;
           default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-          defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
+          defaultText = lib.literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
           description = ''
             Path used for -xkbdir xserver parameter.
           '';
         };
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         description = ''
           The contents of the configuration file of the X server
           ({file}`xorg.conf`).
@@ -423,22 +421,22 @@ in
         '';
       };
 
-      filesSection = mkOption {
-        type = types.lines;
+      filesSection = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''FontPath "/path/to/my/fonts"'';
         description = "Contents of the first `Files` section of the X server configuration file.";
       };
 
-      deviceSection = mkOption {
-        type = types.lines;
+      deviceSection = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "VideoRAM 131072";
         description = "Contents of the first Device section of the X server configuration file.";
       };
 
-      screenSection = mkOption {
-        type = types.lines;
+      screenSection = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           Option "RandRRotation" "on"
@@ -446,37 +444,37 @@ in
         description = "Contents of the first Screen section of the X server configuration file.";
       };
 
-      monitorSection = mkOption {
-        type = types.lines;
+      monitorSection = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "HorizSync 28-49";
         description = "Contents of the first Monitor section of the X server configuration file.";
       };
 
-      enableTearFree = mkEnableOption "the TearFree option in the first Device section";
+      enableTearFree = lib.mkEnableOption "the TearFree option in the first Device section";
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Additional contents (sections) included in the X server configuration file";
       };
 
-      xrandrHeads = mkOption {
+      xrandrHeads = lib.mkOption {
         default = [];
         example = [
           "HDMI-0"
           { output = "DVI-0"; primary = true; }
           { output = "DVI-1"; monitorConfig = "Option \"Rotate\" \"left\""; }
         ];
-        type = with types; listOf (coercedTo str (output: {
+        type = with lib.types; listOf (coercedTo str (output: {
           inherit output;
         }) (submodule { options = xrandrOptions; }));
         # Set primary to true for the first head if no other has been set
         # primary already.
         apply = heads: let
-          hasPrimary = any (x: x.primary) heads;
-          firstPrimary = head heads // { primary = true; };
-          newHeads = singleton firstPrimary ++ tail heads;
+          hasPrimary = lib.any (x: x.primary) heads;
+          firstPrimary = lib.head heads // { primary = true; };
+          newHeads = lib.singleton firstPrimary ++ lib.tail heads;
         in if heads != [] && !hasPrimary then newHeads else heads;
         description = ''
           Multiple monitor configuration, just specify a list of XRandR
@@ -504,9 +502,9 @@ in
         '';
       };
 
-      serverFlagsSection = mkOption {
+      serverFlagsSection = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example =
           ''
           Option "BlankTime" "0"
@@ -517,8 +515,8 @@ in
         description = "Contents of the ServerFlags section of the X server configuration file.";
       };
 
-      moduleSection = mkOption {
-        type = types.lines;
+      moduleSection = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
           ''
@@ -528,8 +526,8 @@ in
         description = "Contents of the Module section of the X server configuration file.";
       };
 
-      serverLayoutSection = mkOption {
-        type = types.lines;
+      serverLayoutSection = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
           ''
@@ -538,22 +536,22 @@ in
         description = "Contents of the ServerLayout section of the X server configuration file.";
       };
 
-      extraDisplaySettings = mkOption {
-        type = types.lines;
+      extraDisplaySettings = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "Virtual 2048 2048";
         description = "Lines to be added to every Display subsection of the Screen section.";
       };
 
-      defaultDepth = mkOption {
-        type = types.int;
+      defaultDepth = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         example = 8;
         description = "Default colour depth.";
       };
 
-      fontPath = mkOption {
-        type = types.nullOr types.str;
+      fontPath = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "unix/:7100";
         description = ''
@@ -563,20 +561,20 @@ in
         '';
       };
 
-      tty = mkOption {
-        type = types.nullOr types.int;
+      tty = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = 7;
         description = "Virtual console for the X server.";
       };
 
-      display = mkOption {
-        type = types.nullOr types.int;
+      display = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = 0;
         description = "Display number for the X server.";
       };
 
-      virtualScreen = mkOption {
-        type = types.nullOr types.attrs;
+      virtualScreen = lib.mkOption {
+        type = lib.types.nullOr lib.types.attrs;
         default = null;
         example = { x = 2048; y = 2048; };
         description = ''
@@ -584,8 +582,8 @@ in
         '';
       };
 
-      logFile = mkOption {
-        type = types.nullOr types.str;
+      logFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "/dev/null";
         example = "/var/log/Xorg.0.log";
         description = ''
@@ -597,8 +595,8 @@ in
         '';
       };
 
-      verbose = mkOption {
-        type = types.nullOr types.int;
+      verbose = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = 3;
         example = 7;
         description = ''
@@ -606,8 +604,8 @@ in
         '';
       };
 
-      enableCtrlAltBackspace = mkOption {
-        type = types.bool;
+      enableCtrlAltBackspace = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the DontZap option, which binds Ctrl+Alt+Backspace
@@ -616,16 +614,16 @@ in
         '';
       };
 
-      terminateOnReset = mkOption {
-        type = types.bool;
+      terminateOnReset = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to terminate X upon server reset.
         '';
       };
 
-      upscaleDefaultCursor = mkOption {
-        type = types.bool;
+      upscaleDefaultCursor = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Upscale the default X cursor to be more visible on high-density displays.
@@ -640,7 +638,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.displayManager.enable = true;
 
     services.xserver.displayManager.lightdm.enable =
@@ -652,27 +650,27 @@ in
                     || dmConf.startx.enable
                     || config.services.greetd.enable
                     || config.services.displayManager.ly.enable);
-      in mkIf (default) (mkDefault true);
+      in lib.mkIf (default) (lib.mkDefault true);
 
-    services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+    services.xserver.videoDrivers = lib.mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     # FIXME: somehow check for unknown driver names.
-    services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
+    services.xserver.drivers = lib.flip lib.concatMap cfg.videoDrivers (name:
       let driver =
-        attrByPath [name]
+        lib.attrByPath [name]
           (if xorg ? ${"xf86video" + name}
            then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
-      in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
+      in lib.optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
-      (let primaryHeads = filter (x: x.primary) cfg.xrandrHeads; in {
-        assertion = length primaryHeads < 2;
+      (let primaryHeads = lib.filter (x: x.primary) cfg.xrandrHeads; in {
+        assertion = lib.length primaryHeads < 2;
         message = "Only one head is allowed to be primary in "
                 + "‘services.xserver.xrandrHeads’, but there are "
-                + "${toString (length primaryHeads)} heads set to primary: "
-                + concatMapStringsSep ", " (x: x.output) primaryHeads;
+                + "${toString (lib.length primaryHeads)} heads set to primary: "
+                + lib.concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
       {
         assertion = cfg.upscaleDefaultCursor -> cfg.dpi != null;
@@ -681,7 +679,7 @@ in
     ];
 
     environment.etc =
-      (optionalAttrs cfg.exportConfiguration
+      (lib.optionalAttrs cfg.exportConfiguration
         {
           "X11/xorg.conf".source = "${configFile}";
           # -xkbdir command line option does not seems to be passed to xkbcomp.
@@ -708,7 +706,7 @@ in
         pkgs.xterm
         xorg.xf86inputevdev.out # get evdev.4 man page
       ] config.services.xserver.excludePackages
-      ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
+      ++ lib.optional (lib.elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];
 
@@ -742,28 +740,28 @@ in
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkb.dir}"
-      ] ++ optional (cfg.display != null) ":${toString cfg.display}"
-        ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
-        ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
-        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
-        ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
-        ++ optional (!cfg.enableTCP) "-nolisten tcp"
-        ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
-        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
-        ++ optional cfg.terminateOnReset "-terminate";
+      ] ++ lib.optional (cfg.display != null) ":${toString cfg.display}"
+        ++ lib.optional (cfg.tty     != null) "vt${toString cfg.tty}"
+        ++ lib.optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
+        ++ lib.optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
+        ++ lib.optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
+        ++ lib.optional (!cfg.enableTCP) "-nolisten tcp"
+        ++ lib.optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
+        ++ lib.optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
+        ++ lib.optional cfg.terminateOnReset "-terminate";
 
     services.xserver.modules =
-      concatLists (catAttrs "modules" cfg.drivers) ++
+      lib.concatLists (lib.catAttrs "modules" cfg.drivers) ++
       [ xorg.xorgserver.out
         xorg.xf86inputevdev.out
       ];
 
-    system.checks = singleton (pkgs.runCommand "xkb-validated" {
+    system.checks = lib.singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg.xkb) dir model layout variant options;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
-      ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+      ${lib.optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
         "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
       }
       XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
@@ -788,7 +786,7 @@ in
         EndSection
 
         # Additional "InputClass" sections
-        ${flip (concatMapStringsSep "\n") cfg.inputClassSections (inputClassSection: ''
+        ${lib.flip (lib.concatMapStringsSep "\n") cfg.inputClassSections (inputClassSection: ''
           Section "InputClass"
           ${indent inputClassSection}
           EndSection
@@ -800,40 +798,40 @@ in
         ${indent cfg.serverLayoutSection}
           # Reference the Screen sections for each driver.  This will
           # cause the X server to try each in turn.
-          ${flip concatMapStrings (filter (d: d.display) cfg.drivers) (d: ''
+          ${lib.flip lib.concatMapStrings (lib.filter (d: d.display) cfg.drivers) (d: ''
             Screen "Screen-${d.name}[0]"
           '')}
         EndSection
 
         # For each supported driver, add a "Device" and "Screen"
         # section.
-        ${flip concatMapStrings cfg.drivers (driver: ''
+        ${lib.flip lib.concatMapStrings cfg.drivers (driver: ''
 
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName or driver.name}"
-          ${indent (optionalString cfg.enableTearFree ''Option "TearFree" "true"'')}
+          ${indent (lib.optionalString cfg.enableTearFree ''Option "TearFree" "true"'')}
           ${indent cfg.deviceSection}
           ${indent (driver.deviceSection or "")}
           ${indent xrandrDeviceSection}
           EndSection
-          ${optionalString driver.display ''
+          ${lib.optionalString driver.display ''
 
             Section "Screen"
               Identifier "Screen-${driver.name}[0]"
               Device "Device-${driver.name}[0]"
-              ${optionalString (cfg.monitorSection != "") ''
+              ${lib.optionalString (cfg.monitorSection != "") ''
                 Monitor "Monitor[0]"
               ''}
 
             ${indent cfg.screenSection}
             ${indent (driver.screenSection or "")}
 
-              ${optionalString (cfg.defaultDepth != 0) ''
+              ${lib.optionalString (cfg.defaultDepth != 0) ''
                 DefaultDepth ${toString cfg.defaultDepth}
               ''}
 
-              ${optionalString
+              ${lib.optionalString
                 (
                   driver.name != "virtualbox"
                   &&
@@ -847,14 +845,14 @@ in
                     ''
                       SubSection "Display"
                         Depth ${toString depth}
-                        ${optionalString (cfg.resolutions != [])
-                          "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
+                        ${lib.optionalString (cfg.resolutions != [])
+                          "Modes ${lib.concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
                       ${indent cfg.extraDisplaySettings}
-                        ${optionalString (cfg.virtualScreen != null)
+                        ${lib.optionalString (cfg.virtualScreen != null)
                           "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
                       EndSubSection
                     '';
-                in concatMapStrings f [8 16 24]
+                in lib.concatMapStrings f [8 16 24]
               )}
 
             EndSection

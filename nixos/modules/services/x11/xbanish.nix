@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xbanish;
 
@@ -14,17 +12,17 @@ in
 {
   options.services.xbanish = {
 
-    enable = mkEnableOption "xbanish";
+    enable = lib.mkEnableOption "xbanish";
 
-    arguments = mkOption {
+    arguments = lib.mkOption {
       description = "Arguments to pass to xbanish command";
       default = "";
       example = "-d -i shift";
-      type = types.str;
+      type = lib.types.str;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.xbanish = {
       description = "xbanish hides the mouse pointer";
       wantedBy = [ "graphical-session.target" ];

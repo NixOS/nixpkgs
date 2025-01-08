@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.virtualisation.azureImage;
 in
@@ -29,8 +28,8 @@ in
   ];
 
   options.virtualisation.azureImage = {
-    bootSize = mkOption {
-      type = types.int;
+    bootSize = lib.mkOption {
+      type = lib.types.int;
       default = 256;
       description = ''
         ESP partition size. Unit is MB.
@@ -38,17 +37,17 @@ in
       '';
     };
 
-    contents = mkOption {
-      type = with types; listOf attrs;
+    contents = lib.mkOption {
+      type = with lib.types; listOf attrs;
       default = [ ];
       description = ''
         Extra contents to add to the image.
       '';
     };
 
-    vmGeneration = mkOption {
+    vmGeneration = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         enum [
           "v1"
           "v2"

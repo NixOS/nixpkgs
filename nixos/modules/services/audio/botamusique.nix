@@ -25,26 +25,26 @@ in
           freeformType = format.type;
           options = {
             server.host = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "localhost";
               example = "mumble.example.com";
               description = "Hostname of the mumble server to connect to.";
             };
 
             server.port = lib.mkOption {
-              type = types.port;
+              type = lib.types.port;
               default = 64738;
               description = "Port of the mumble server to connect to.";
             };
 
             bot.username = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "botamusique";
               description = "Name the bot should appear with.";
             };
 
             bot.comment = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "Hi, I'm here to play radio, local music or youtube/soundcloud music. Have fun!";
               description = "Comment displayed for the bot.";
             };

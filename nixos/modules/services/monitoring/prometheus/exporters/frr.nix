@@ -8,7 +8,7 @@
 let
   cfg = config.services.prometheus.exporters.frr;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     concatStringsSep
     concatMapStringsSep
@@ -17,16 +17,16 @@ in
 {
   port = 9342;
   extraOpts = {
-    enabledCollectors = mkOption {
-      type = types.listOf types.str;
+    enabledCollectors = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "vrrp" ];
       description = ''
         Collectors to enable. The collectors listed here are enabled in addition to the default ones.
       '';
     };
-    disabledCollectors = mkOption {
-      type = types.listOf types.str;
+    disabledCollectors = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "bfd" ];
       description = ''
@@ -42,7 +42,7 @@ in
         ${lib.getExe pkgs.prometheus-frr-exporter} \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
-          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${lib.concatStringsSep " " cfg.extraFlags}
       '';
     };
   };

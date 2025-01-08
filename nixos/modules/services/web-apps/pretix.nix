@@ -21,10 +21,10 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionals
-    optionalString
+    lib.optionals
+    lib.optionalString
     recursiveUpdate
     types
     ;
@@ -32,7 +32,7 @@ let
   filterRecursiveNull =
     o:
     if isAttrs o then
-      mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
+      mapAttrs (_: v: filterRecursiveNull v) (lib.filterAttrs (_: v: v != null) o)
     else if isList o then
       map filterRecursiveNull (filter (v: v != null) o)
     else
@@ -67,28 +67,28 @@ in
   };
 
   options.services.pretix = {
-    enable = mkEnableOption "Pretix, a ticket shop application for conferences, festivals, concerts, etc";
+    enable = lib.mkEnableOption "Pretix, a ticket shop application for conferences, festivals, concerts, etc";
 
-    package = mkPackageOption pkgs "pretix" { };
+    package = lib.mkPackageOption pkgs "pretix" { };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "pretix";
       description = ''
         Group under which pretix should run.
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "pretix";
       description = ''
         User under which pretix should run.
       '';
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/keys/pretix-secrets.env";
       description = ''
@@ -98,10 +98,10 @@ in
       '';
     };
 
-    plugins = mkOption {
-      type = types.listOf types.package;
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with config.services.pretix.package.plugins; [
           passbook
           pages
@@ -112,8 +112,8 @@ in
       '';
     };
 
-    gunicorn.extraArgs = mkOption {
-      type = with types; listOf str;
+    gunicorn.extraArgs = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [
         "--name=pretix"
       ];
@@ -132,8 +132,8 @@ in
     };
 
     celery = {
-      extraArgs = mkOption {
-        type = with types; listOf str;
+      extraArgs = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [ ];
         description = ''
           Extra arguments to pass to celery.
@@ -145,8 +145,8 @@ in
     };
 
     nginx = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         example = false;
         description = ''
@@ -154,8 +154,8 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         example = "talks.example.com";
         description = ''
           The domain name under which to set up the virtual host.
@@ -163,8 +163,8 @@ in
       };
     };
 
-    database.createLocally = mkOption {
-      type = types.bool;
+    database.createLocally = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       example = false;
       description = ''
@@ -174,53 +174,53 @@ in
       '';
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
           pretix = {
-            instance_name = mkOption {
-              type = types.str;
+            instance_name = lib.mkOption {
+              type = lib.types.str;
               example = "tickets.example.com";
               description = ''
                 The name of this installation.
               '';
             };
 
-            url = mkOption {
-              type = types.str;
+            url = lib.mkOption {
+              type = lib.types.str;
               example = "https://tickets.example.com";
               description = ''
                 The installation’s full URL, without a trailing slash.
               '';
             };
 
-            cachedir = mkOption {
-              type = types.path;
+            cachedir = lib.mkOption {
+              type = lib.types.path;
               default = "/var/cache/pretix";
               description = ''
                 Directory for storing temporary files.
               '';
             };
 
-            datadir = mkOption {
-              type = types.path;
+            datadir = lib.mkOption {
+              type = lib.types.path;
               default = "/var/lib/pretix";
               description = ''
                 Directory for storing user uploads and similar data.
               '';
             };
 
-            logdir = mkOption {
-              type = types.path;
+            logdir = lib.mkOption {
+              type = lib.types.path;
               default = "/var/log/pretix";
               description = ''
                 Directory for storing log files.
               '';
             };
 
-            currency = mkOption {
-              type = types.str;
+            currency = lib.mkOption {
+              type = lib.types.str;
               default = "EUR";
               example = "USD";
               description = ''
@@ -228,8 +228,8 @@ in
               '';
             };
 
-            registration = mkOption {
-              type = types.bool;
+            registration = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               example = true;
               description = ''
@@ -239,8 +239,8 @@ in
           };
 
           database = {
-            backend = mkOption {
-              type = types.enum [
+            backend = lib.mkOption {
+              type = lib.types.enum [
                 "sqlite3"
                 "postgresql"
               ];
@@ -252,10 +252,10 @@ in
               '';
             };
 
-            host = mkOption {
-              type = with types; nullOr str;
+            host = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = if cfg.settings.database.backend == "postgresql" then "/run/postgresql" else null;
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 if config.services.pretix.settings..database.backend == "postgresql" then "/run/postgresql"
                 else null
               '';
@@ -264,16 +264,16 @@ in
               '';
             };
 
-            name = mkOption {
-              type = types.str;
+            name = lib.mkOption {
+              type = lib.types.str;
               default = "pretix";
               description = ''
                 Database name.
               '';
             };
 
-            user = mkOption {
-              type = types.str;
+            user = lib.mkOption {
+              type = lib.types.str;
               default = "pretix";
               description = ''
                 Database username.
@@ -282,16 +282,16 @@ in
           };
 
           mail = {
-            from = mkOption {
-              type = types.str;
+            from = lib.mkOption {
+              type = lib.types.str;
               example = "tickets@example.com";
               description = ''
                 E-Mail address used in the `FROM` header of outgoing mails.
               '';
             };
 
-            host = mkOption {
-              type = types.str;
+            host = lib.mkOption {
+              type = lib.types.str;
               default = "localhost";
               example = "mail.example.com";
               description = ''
@@ -299,8 +299,8 @@ in
               '';
             };
 
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               default = 25;
               example = 587;
               description = ''
@@ -310,10 +310,10 @@ in
           };
 
           celery = {
-            backend = mkOption {
-              type = types.str;
+            backend = lib.mkOption {
+              type = lib.types.str;
               default = "redis+socket://${config.services.redis.servers.pretix.unixSocket}?virtual_host=1";
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=1
               '';
               description = ''
@@ -321,10 +321,10 @@ in
               '';
             };
 
-            broker = mkOption {
-              type = types.str;
+            broker = lib.mkOption {
+              type = lib.types.str;
               default = "redis+socket://${config.services.redis.servers.pretix.unixSocket}?virtual_host=2";
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=2
               '';
               description = ''
@@ -334,10 +334,10 @@ in
           };
 
           redis = {
-            location = mkOption {
-              type = with types; nullOr str;
+            location = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = "unix://${config.services.redis.servers.pretix.unixSocket}?db=0";
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 "unix://''${config.services.redis.servers.pretix.unixSocket}?db=0"
               '';
               description = ''
@@ -345,8 +345,8 @@ in
               '';
             };
 
-            sessions = mkOption {
-              type = types.bool;
+            sessions = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               example = false;
               description = ''
@@ -356,8 +356,8 @@ in
           };
 
           memcached = {
-            location = mkOption {
-              type = with types; nullOr str;
+            location = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               example = "127.0.0.1:11211";
               description = ''
@@ -369,10 +369,10 @@ in
           };
 
           tools = {
-            pdftk = mkOption {
-              type = types.path;
+            pdftk = lib.mkOption {
+              type = lib.types.path;
               default = getExe pkgs.pdftk;
-              defaultText = literalExpression ''
+              defaultText = lib.literalExpression ''
                 lib.getExe pkgs.pdftk
               '';
               description = ''
@@ -392,7 +392,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # https://docs.pretix.eu/en/latest/admin/installation/index.html
 
     environment.systemPackages = [
@@ -400,7 +400,7 @@ in
         cd ${cfg.settings.pretix.datadir}
         sudo=exec
         if [[ "$USER" != ${cfg.user} ]]; then
-          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} ${optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
+          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} ${lib.optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
         fi
         export PRETIX_CONFIG_FILE=${configFile}
         $sudo ${getExe' pythonEnv "pretix-manage"} "$@"
@@ -417,12 +417,12 @@ in
     };
 
     services = {
-      nginx = mkIf cfg.nginx.enable {
+      nginx = lib.mkIf cfg.nginx.enable {
         enable = true;
-        recommendedGzipSettings = mkDefault true;
-        recommendedOptimisation = mkDefault true;
-        recommendedProxySettings = mkDefault true;
-        recommendedTlsSettings = mkDefault true;
+        recommendedGzipSettings = lib.mkDefault true;
+        recommendedOptimisation = lib.mkDefault true;
+        recommendedProxySettings = lib.mkDefault true;
+        recommendedTlsSettings = lib.mkDefault true;
         upstreams.pretix.servers."unix:/run/pretix/pretix.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
           # https://docs.pretix.eu/en/latest/admin/installation/manual_smallscale.html#ssl
@@ -457,7 +457,7 @@ in
         };
       };
 
-      postgresql = mkIf (cfg.database.createLocally && cfg.settings.database.backend == "postgresql") {
+      postgresql = lib.mkIf (cfg.database.createLocally && cfg.settings.database.backend == "postgresql") {
         enable = true;
         ensureUsers = [
           {
@@ -478,7 +478,7 @@ in
           serviceConfig = {
             User = "pretix";
             Group = "pretix";
-            EnvironmentFile = optionals (cfg.environmentFile != null) [
+            EnvironmentFile = lib.optionals (cfg.environmentFile != null) [
               cfg.environmentFile
             ];
             StateDirectory = [
@@ -488,7 +488,7 @@ in
             CacheDirectory = "pretix";
             LogsDirectory = "pretix";
             WorkingDirectory = cfg.settings.pretix.datadir;
-            SupplementaryGroups = optionals withRedis [
+            SupplementaryGroups = lib.optionals withRedis [
               "redis-pretix"
             ];
             AmbientCapabilities = "";
@@ -583,7 +583,7 @@ in
           };
         };
 
-        nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];
+        nginx.serviceConfig.SupplementaryGroups = lib.mkIf cfg.nginx.enable [ "pretix" ];
       };
 
     systemd.sockets.pretix-web.socketConfig = {

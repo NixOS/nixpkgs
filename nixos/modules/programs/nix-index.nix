@@ -8,20 +8,20 @@ let
   cfg = config.programs.nix-index;
 in
 {
-  options.programs.nix-index = with lib; {
-    enable = mkEnableOption "nix-index, a file database for nixpkgs";
+  options.programs.nix-index = {
+    enable = lib.mkEnableOption "nix-index, a file database for nixpkgs";
 
-    package = mkPackageOption pkgs "nix-index" { };
+    package = lib.mkPackageOption pkgs "nix-index" { };
 
-    enableBashIntegration = mkEnableOption "Bash integration" // {
+    enableBashIntegration = lib.mkEnableOption "Bash integration" // {
       default = true;
     };
 
-    enableZshIntegration = mkEnableOption "Zsh integration" // {
+    enableZshIntegration = lib.mkEnableOption "Zsh integration" // {
       default = true;
     };
 
-    enableFishIntegration = mkEnableOption "Fish integration" // {
+    enableFishIntegration = lib.mkEnableOption "Fish integration" // {
       default = true;
     };
   };

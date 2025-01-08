@@ -9,7 +9,7 @@
 let
   cfg = config.services.prometheus.exporters.dovecot;
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     escapeShellArg
     concatStringsSep
@@ -18,15 +18,15 @@ in
 {
   port = 9166;
   extraOpts = {
-    telemetryPath = mkOption {
-      type = types.str;
+    telemetryPath = lib.mkOption {
+      type = lib.types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
-    socketPath = mkOption {
-      type = types.path;
+    socketPath = lib.mkOption {
+      type = lib.types.path;
       default = "/var/run/dovecot/stats";
       example = "/var/run/dovecot2/old-stats";
       description = ''
@@ -73,8 +73,8 @@ in
         ```
       '';
     };
-    scopes = mkOption {
-      type = types.listOf types.str;
+    scopes = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "user" ];
       example = [
         "user"
@@ -92,9 +92,9 @@ in
         ${pkgs.prometheus-dovecot-exporter}/bin/dovecot_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
-          --dovecot.socket-path ${escapeShellArg cfg.socketPath} \
-          --dovecot.scopes ${concatStringsSep "," cfg.scopes} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          --dovecot.socket-path ${lib.escapeShellArg cfg.socketPath} \
+          --dovecot.scopes ${lib.concatStringsSep "," cfg.scopes} \
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data

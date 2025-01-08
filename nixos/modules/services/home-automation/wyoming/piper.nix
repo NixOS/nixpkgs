@@ -10,7 +10,7 @@ let
 
   inherit (lib)
     escapeShellArgs
-    mkOption
+    lib.mkOption
     mkEnableOption
     mkPackageOption
     types
@@ -25,24 +25,24 @@ in
 {
   meta.buildDocsInSandbox = false;
 
-  options.services.wyoming.piper = with types; {
-    package = mkPackageOption pkgs "wyoming-piper" { };
+  options.services.wyoming.piper = with lib.types; {
+    package = lib.mkPackageOption pkgs "wyoming-piper" { };
 
-    servers = mkOption {
+    servers = lib.mkOption {
       default = { };
       description = ''
         Attribute set of piper instances to spawn.
       '';
-      type = types.attrsOf (
+      type = lib.types.attrsOf (
         types.submodule (
           { ... }:
           {
             options = {
-              enable = mkEnableOption "Wyoming Piper server";
+              enable = lib.mkEnableOption "Wyoming Piper server";
 
               piper = mkPackageOption pkgs "piper-tts" { };
 
-              voice = mkOption {
+              voice = lib.mkOption {
                 type = str;
                 example = "en-us-ryan-medium";
                 description = ''
@@ -51,7 +51,7 @@ in
                 '';
               };
 
-              uri = mkOption {
+              uri = lib.mkOption {
                 type = strMatching "^(tcp|unix)://.*$";
                 example = "tcp://0.0.0.0:10200";
                 description = ''
@@ -59,7 +59,7 @@ in
                 '';
               };
 
-              speaker = mkOption {
+              speaker = lib.mkOption {
                 type = ints.unsigned;
                 default = 0;
                 description = ''
@@ -68,7 +68,7 @@ in
                 apply = toString;
               };
 
-              noiseScale = mkOption {
+              noiseScale = lib.mkOption {
                 type = float;
                 default = 0.667;
                 description = ''
@@ -77,7 +77,7 @@ in
                 apply = toString;
               };
 
-              noiseWidth = mkOption {
+              noiseWidth = lib.mkOption {
                 type = float;
                 default = 0.333;
                 description = ''
@@ -86,7 +86,7 @@ in
                 apply = toString;
               };
 
-              lengthScale = mkOption {
+              lengthScale = lib.mkOption {
                 type = float;
                 default = 1.0;
                 description = ''
@@ -95,7 +95,7 @@ in
                 apply = toString;
               };
 
-              extraArgs = mkOption {
+              extraArgs = lib.mkOption {
                 type = listOf str;
                 default = [ ];
                 description = ''

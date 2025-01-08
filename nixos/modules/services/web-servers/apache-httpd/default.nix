@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.httpd;
@@ -26,30 +24,30 @@ let
 
   mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = pkg; };
 
-  vhosts = attrValues cfg.virtualHosts;
+  vhosts = lib.attrValues cfg.virtualHosts;
 
   # certName is used later on to determine systemd service names.
   acmeEnabledVhosts = map (hostOpts: hostOpts // {
     certName = if hostOpts.useACMEHost != null then hostOpts.useACMEHost else hostOpts.hostName;
-  }) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
+  }) (lib.filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
-  vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
-  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
-  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
+  vhostCertNames = lib.unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = lib.filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = lib.filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkListenInfo = hostOpts:
     if hostOpts.listen != [] then
       hostOpts.listen
     else
-      optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) (map (addr: { ip = addr; port = 443; ssl = true; }) hostOpts.listenAddresses) ++
-      optionals (!hostOpts.onlySSL) (map (addr: { ip = addr; port = 80; ssl = false; }) hostOpts.listenAddresses)
+      lib.optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) (map (addr: { ip = addr; port = 443; ssl = true; }) hostOpts.listenAddresses) ++
+      lib.optionals (!hostOpts.onlySSL) (map (addr: { ip = addr; port = 80; ssl = false; }) hostOpts.listenAddresses)
     ;
 
-  listenInfo = unique (concatMap mkListenInfo vhosts);
+  listenInfo = lib.unique (lib.concatMap mkListenInfo vhosts);
 
-  enableHttp2 = any (vhost: vhost.http2) vhosts;
-  enableSSL = any (listen: listen.ssl) listenInfo;
-  enableUserDir = any (vhost: vhost.enableUserDir) vhosts;
+  enableHttp2 = lib.any (vhost: vhost.http2) vhosts;
+  enableSSL = lib.any (listen: listen.ssl) listenInfo;
+  enableUserDir = lib.any (vhost: vhost.enableUserDir) vhosts;
 
   # NOTE: generally speaking order of modules is very important
   modules =
@@ -62,12 +60,12 @@ let
       "mpm_${cfg.mpm}"
     ]
     ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
-    ++ optional enableHttp2 "http2"
-    ++ optional enableSSL "ssl"
-    ++ optional enableUserDir "userdir"
-    ++ optional cfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
-    ++ optional cfg.enablePHP { name = phpModuleName; path = "${php}/modules/lib${phpModuleName}.so"; }
-    ++ optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
+    ++ lib.optional enableHttp2 "http2"
+    ++ lib.optional enableSSL "ssl"
+    ++ lib.optional enableUserDir "userdir"
+    ++ lib.optional cfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
+    ++ lib.optional cfg.enablePHP { name = phpModuleName; path = "${php}/modules/lib${phpModuleName}.so"; }
+    ++ lib.optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
     ++ cfg.extraModules;
 
   loggingConf = (if cfg.logFormat != "none" then ''
@@ -143,8 +141,8 @@ let
   mkVHostConf = hostOpts:
     let
       adminAddr = if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr;
-      listen = filter (listen: !listen.ssl) (mkListenInfo hostOpts);
-      listenSSL = filter (listen: listen.ssl) (mkListenInfo hostOpts);
+      listen = lib.filter (listen: !listen.ssl) (mkListenInfo hostOpts);
+      listenSSL = lib.filter (listen: listen.ssl) (mkListenInfo hostOpts);
 
       useACME = hostOpts.enableACME || hostOpts.useACMEHost != null;
       sslCertDir =
@@ -156,7 +154,7 @@ let
       sslServerKey = if useACME then "${sslCertDir}/key.pem" else hostOpts.sslServerKey;
       sslServerChain = if useACME then "${sslCertDir}/chain.pem" else hostOpts.sslServerChain;
 
-      acmeChallenge = optionalString (useACME && hostOpts.acmeRoot != null) ''
+      acmeChallenge = lib.optionalString (useACME && hostOpts.acmeRoot != null) ''
         Alias /.well-known/acme-challenge/ "${hostOpts.acmeRoot}/.well-known/acme-challenge/"
         <Directory "${hostOpts.acmeRoot}">
             AllowOverride None
@@ -166,11 +164,11 @@ let
         </Directory>
       '';
     in
-      optionalString (listen != []) ''
-        <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
+      lib.optionalString (listen != []) ''
+        <VirtualHost ${lib.concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
-            ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
+            ${lib.concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
+            ${lib.optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             <IfModule mod_ssl.c>
                 SSLEngine off
             </IfModule>
@@ -185,16 +183,16 @@ let
             '' else mkVHostCommonConf hostOpts}
         </VirtualHost>
       '' +
-      optionalString (listenSSL != []) ''
-        <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
+      lib.optionalString (listenSSL != []) ''
+        <VirtualHost ${lib.concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
-            ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
+            ${lib.concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
+            ${lib.optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             SSLEngine on
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
-            ${optionalString (sslServerChain != null) "SSLCertificateChainFile ${sslServerChain}"}
-            ${optionalString hostOpts.http2 "Protocols h2 h2c http/1.1"}
+            ${lib.optionalString (sslServerChain != null) "SSLCertificateChainFile ${sslServerChain}"}
+            ${lib.optionalString hostOpts.http2 "Protocols h2 h2c http/1.1"}
             ${acmeChallenge}
             ${mkVHostCommonConf hostOpts}
         </VirtualHost>
@@ -208,35 +206,35 @@ let
         else pkgs.emptyDirectory
       ;
 
-      mkLocations = locations: concatStringsSep "\n" (map (config: ''
+      mkLocations = locations: lib.concatStringsSep "\n" (map (config: ''
         <Location ${config.location}>
-          ${optionalString (config.proxyPass != null) ''
+          ${lib.optionalString (config.proxyPass != null) ''
             <IfModule mod_proxy.c>
                 ProxyPass ${config.proxyPass}
                 ProxyPassReverse ${config.proxyPass}
             </IfModule>
           ''}
-          ${optionalString (config.index != null) ''
+          ${lib.optionalString (config.index != null) ''
             <IfModule mod_dir.c>
                 DirectoryIndex ${config.index}
             </IfModule>
           ''}
-          ${optionalString (config.alias != null) ''
+          ${lib.optionalString (config.alias != null) ''
             <IfModule mod_alias.c>
                 Alias "${config.alias}"
             </IfModule>
           ''}
           ${config.extraConfig}
         </Location>
-      '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
+      '') (lib.sortProperties (lib.mapAttrsToList (k: v: v // { location = k; }) locations)));
     in
       ''
-        ${optionalString cfg.logPerVirtualHost ''
+        ${lib.optionalString cfg.logPerVirtualHost ''
           ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
           CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
         ''}
 
-        ${optionalString (hostOpts.robotsEntries != "") ''
+        ${lib.optionalString (hostOpts.robotsEntries != "") ''
           Alias /robots.txt ${pkgs.writeText "robots.txt" hostOpts.robotsEntries}
         ''}
 
@@ -248,7 +246,7 @@ let
             Require all granted
         </Directory>
 
-        ${optionalString hostOpts.enableUserDir ''
+        ${lib.optionalString hostOpts.enableUserDir ''
           UserDir public_html
           UserDir disabled root
           <Directory "/home/*/public_html">
@@ -263,7 +261,7 @@ let
           </Directory>
         ''}
 
-        ${optionalString (hostOpts.globalRedirect != null && hostOpts.globalRedirect != "") ''
+        ${lib.optionalString (hostOpts.globalRedirect != null && hostOpts.globalRedirect != "") ''
           RedirectPermanent / ${hostOpts.globalRedirect}
         ''}
 
@@ -276,7 +274,7 @@ let
                     AllowOverride All
                 </Directory>
               '';
-          in concatMapStrings makeDirConf hostOpts.servedDirs
+          in lib.concatMapStrings makeDirConf hostOpts.servedDirs
         }
 
         ${mkLocations hostOpts.locations}
@@ -293,7 +291,7 @@ let
 
     PidFile ${runtimeDir}/httpd.pid
 
-    ${optionalString (cfg.mpm != "prefork") ''
+    ${lib.optionalString (cfg.mpm != "prefork") ''
       # mod_cgid requires this.
       ScriptSock ${runtimeDir}/cgisock
     ''}
@@ -305,8 +303,8 @@ let
 
     ${let
         toStr = listen: "Listen ${listen.ip}:${toString listen.port} ${if listen.ssl then "https" else "http"}";
-        uniqueListen = uniqList {inputList = map toStr listenInfo;};
-      in concatStringsSep "\n" uniqueListen
+        uniqueListen = lib.uniqList {inputList = map toStr listenInfo;};
+      in lib.concatStringsSep "\n" uniqueListen
     }
 
     User ${cfg.user}
@@ -314,11 +312,11 @@ let
 
     ${let
         mkModule = module:
-          if isString module then { name = module; path = "${pkg}/modules/mod_${module}.so"; }
-          else if isAttrs module then { inherit (module) name path; }
+          if lib.isString module then { name = module; path = "${pkg}/modules/mod_${module}.so"; }
+          else if lib.isAttrs module then { inherit (module) name path; }
           else throw "Expecting either a string or attribute set including a name and path.";
       in
-        concatMapStringsSep "\n" (module: "LoadModule ${module.name}_module ${module.path}") (unique (map mkModule modules))
+        lib.concatMapStringsSep "\n" (module: "LoadModule ${module.name}_module ${module.path}") (lib.unique (map mkModule modules))
     }
 
     AddHandler type-map var
@@ -340,7 +338,7 @@ let
 
     ${sslConf}
 
-    ${optionalString cfg.package.luaSupport luaSetPaths}
+    ${lib.optionalString cfg.package.luaSupport luaSetPaths}
 
     # Fascist default - deny access to everything.
     <Directory />
@@ -358,7 +356,7 @@ let
 
     ${cfg.extraConfig}
 
-    ${concatMapStringsSep "\n" mkVHostConf vhosts}
+    ${lib.concatMapStringsSep "\n" mkVHostConf vhosts}
   '';
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -380,24 +378,24 @@ in
 {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
-    (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
-    (mkRenamedOptionModule [ "services" "httpd" "multiProcessingModule" ] [ "services" "httpd" "mpm" ])
+    (lib.mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
+    (lib.mkRenamedOptionModule [ "services" "httpd" "multiProcessingModule" ] [ "services" "httpd" "mpm" ])
 
     # virtualHosts options
-    (mkRemovedOptionModule [ "services" "httpd" "documentRoot" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "enableSSL" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "enableUserDir" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "globalRedirect" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "hostName" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "listen" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "robotsEntries" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "servedDirs" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "servedFiles" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "serverAliases" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "sslServerCert" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "sslServerChain" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
-    (mkRemovedOptionModule [ "services" "httpd" "sslServerKey" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "documentRoot" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "enableSSL" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "enableUserDir" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "globalRedirect" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "hostName" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "listen" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "robotsEntries" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "servedDirs" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "servedFiles" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "serverAliases" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "sslServerCert" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "sslServerChain" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (lib.mkRemovedOptionModule [ "services" "httpd" "sslServerKey" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
   ];
 
   # interface
@@ -406,23 +404,23 @@ in
 
     services.httpd = {
 
-      enable = mkEnableOption "the Apache HTTP Server";
+      enable = lib.mkEnableOption "the Apache HTTP Server";
 
-      package = mkPackageOption pkgs "apacheHttpd" { };
+      package = lib.mkPackageOption pkgs "apacheHttpd" { };
 
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = confFile;
-        defaultText = literalExpression "confFile";
-        example = literalExpression ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
+        defaultText = lib.literalExpression "confFile";
+        example = lib.literalExpression ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
         description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Configuration lines appended to the generated Apache
@@ -431,10 +429,10 @@ in
         '';
       };
 
-      extraModules = mkOption {
-        type = types.listOf types.unspecified;
+      extraModules = lib.mkOption {
+        type = lib.types.listOf lib.types.unspecified;
         default = [];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             "proxy_connect"
             { name = "jk"; path = "''${pkgs.apacheHttpdPackages.mod_jk}/modules/mod_jk.so"; }
@@ -449,15 +447,15 @@ in
         '';
       };
 
-      adminAddr = mkOption {
-        type = types.nullOr types.str;
+      adminAddr = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         example = "admin@example.org";
         default = null;
         description = "E-mail address of the server administrator.";
       };
 
-      logFormat = mkOption {
-        type = types.str;
+      logFormat = lib.mkOption {
+        type = lib.types.str;
         default = "common";
         example = "combined";
         description = ''
@@ -466,8 +464,8 @@ in
         '';
       };
 
-      logPerVirtualHost = mkOption {
-        type = types.bool;
+      logPerVirtualHost = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           If enabled, each virtual host gets its own
@@ -477,8 +475,8 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "wwwrun";
         description = ''
           User account under which httpd children processes run.
@@ -491,37 +489,37 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "wwwrun";
         description = ''
           Group under which httpd children processes run.
         '';
       };
 
-      logDir = mkOption {
-        type = types.path;
+      logDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/log/httpd";
         description = ''
           Directory for Apache's log files. It is created automatically.
         '';
       };
 
-      virtualHosts = mkOption {
-        type = with types; attrsOf (submodule (import ./vhost-options.nix));
+      virtualHosts = lib.mkOption {
+        type = with lib.types; attrsOf (submodule (import ./vhost-options.nix));
         default = {
           localhost = {
             documentRoot = "${pkg}/htdocs";
           };
         };
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             localhost = {
               documentRoot = "''${package.out}/htdocs";
             };
           }
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "foo.example.com" = {
               forceSSL = true;
@@ -540,16 +538,16 @@ in
         '';
       };
 
-      enableMellon = mkEnableOption "the mod_auth_mellon module";
+      enableMellon = lib.mkEnableOption "the mod_auth_mellon module";
 
-      enablePHP = mkEnableOption "the PHP module";
+      enablePHP = lib.mkEnableOption "the PHP module";
 
-      phpPackage = mkPackageOption pkgs "php" { };
+      phpPackage = lib.mkPackageOption pkgs "php" { };
 
-      enablePerl = mkEnableOption "the Perl module (mod_perl)";
+      enablePerl = lib.mkEnableOption "the Perl module (mod_perl)";
 
-      phpOptions = mkOption {
-        type = types.lines;
+      phpOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
           ''
@@ -560,8 +558,8 @@ in
         '';
       };
 
-      mpm = mkOption {
-        type = types.enum [ "event" "prefork" "worker" ];
+      mpm = lib.mkOption {
+        type = lib.types.enum [ "event" "prefork" "worker" ];
         default = "event";
         example = "worker";
         description = ''
@@ -575,15 +573,15 @@ in
           '';
       };
 
-      maxClients = mkOption {
-        type = types.int;
+      maxClients = lib.mkOption {
+        type = lib.types.int;
         default = 150;
         example = 8;
         description = "Maximum number of httpd processes (prefork)";
       };
 
-      maxRequestsPerChild = mkOption {
-        type = types.int;
+      maxRequestsPerChild = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         example = 500;
         description = ''
@@ -591,14 +589,14 @@ in
         '';
       };
 
-      sslCiphers = mkOption {
-        type = types.str;
+      sslCiphers = lib.mkOption {
+        type = lib.types.str;
         default = "HIGH:!aNULL:!MD5:!EXP";
         description = "Cipher Suite available for negotiation in SSL proxy handshake.";
       };
 
-      sslProtocols = mkOption {
-        type = types.str;
+      sslProtocols = lib.mkOption {
+        type = lib.types.str;
         default = "All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1";
         example = "All -SSLv2 -SSLv3";
         description = "Allowed SSL/TLS protocol versions.";
@@ -609,7 +607,7 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -651,9 +649,9 @@ in
     warnings =
       mapAttrsToList (name: hostOpts: ''
         Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
-      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != []) cfg.virtualHosts);
+      '') (lib.filterAttrs (name: hostOpts: hostOpts.servedFiles != []) cfg.virtualHosts);
 
-    users.users = optionalAttrs (cfg.user == "wwwrun") {
+    users.users = lib.optionalAttrs (cfg.user == "wwwrun") {
       wwwrun = {
         group = cfg.group;
         description = "Apache httpd user";
@@ -661,7 +659,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "wwwrun") {
+    users.groups = lib.optionalAttrs (cfg.group == "wwwrun") {
       wwwrun.gid = config.ids.gids.wwwrun;
     };
 
@@ -669,10 +667,10 @@ in
       acmePairs = map (hostOpts: let
         hasRoot = hostOpts.acmeRoot != null;
       in nameValuePair hostOpts.hostName {
-        group = mkDefault cfg.group;
+        group = lib.mkDefault cfg.group;
         # if acmeRoot is null inherit config.security.acme
         # Since config.security.acme.certs.<cert>.webroot's own default value
-        # should take precedence set priority higher than mkOptionDefault
+        # should take precedence set priority higher than lib.mkOptionDefault
         webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
         # Also nudge dnsProvider to null in case it is inherited
         dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
@@ -691,8 +689,8 @@ in
       pkg
     ];
 
-    services.logrotate = optionalAttrs (cfg.logFormat != "none") {
-      enable = mkDefault true;
+    services.logrotate = lib.optionalAttrs (cfg.logFormat != "none") {
+      enable = lib.mkDefault true;
       settings.httpd = {
         files = "${cfg.logDir}/*.log";
         su = "${cfg.user} ${cfg.group}";
@@ -709,7 +707,7 @@ in
       ''
         ; Don't advertise PHP
         expose_php = off
-      '' + optionalString (config.time.timeZone != null) ''
+      '' + lib.optionalString (config.time.timeZone != null) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"
@@ -759,8 +757,8 @@ in
         path = [ pkg pkgs.coreutils pkgs.gnugrep ];
 
         environment =
-          optionalAttrs cfg.enablePHP { PHPRC = phpIni; }
-          // optionalAttrs cfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
+          lib.optionalAttrs cfg.enablePHP { PHPRC = phpIni; }
+          // lib.optionalAttrs cfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
 
         preStart =
           ''

@@ -15,46 +15,46 @@ in
     let
       inherit (lib)
         mkEnableOption
-        mkOption
+        lib.mkOption
         mkPackageOption
         types
         ;
     in
     {
-      enable = mkEnableOption "ZITADEL, a user and identity access management platform";
+      enable = lib.mkEnableOption "ZITADEL, a user and identity access management platform";
 
-      package = mkPackageOption pkgs "ZITADEL" { default = [ "zitadel" ]; };
+      package = lib.mkPackageOption pkgs "ZITADEL" { default = [ "zitadel" ]; };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "zitadel";
         description = "The user to run ZITADEL under.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "zitadel";
         description = "The group to run ZITADEL under.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open the port specified in `listenPort` in the firewall.
         '';
       };
 
-      masterKeyFile = mkOption {
-        type = types.path;
+      masterKeyFile = lib.mkOption {
+        type = lib.types.path;
         description = ''
           Path to a file containing a master encryption key for ZITADEL. The
           key must be 32 bytes.
         '';
       };
 
-      tlsMode = mkOption {
-        type = types.enum [
+      tlsMode = lib.mkOption {
+        type = lib.types.enum [
           "external"
           "enabled"
           "disabled"
@@ -73,25 +73,25 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
-            Port = mkOption {
-              type = types.port;
+            Port = lib.mkOption {
+              type = lib.types.port;
               default = 8080;
               description = "The port that ZITADEL listens on.";
             };
 
             TLS = {
-              KeyPath = mkOption {
-                type = types.nullOr types.path;
+              KeyPath = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = "Path to the TLS certificate private key.";
               };
-              Key = mkOption {
-                type = types.nullOr types.str;
+              Key = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
                   The TLS certificate private key, as a base64-encoded string.
@@ -102,13 +102,13 @@ in
                   if this is undesired.
                 '';
               };
-              CertPath = mkOption {
-                type = types.nullOr types.path;
+              CertPath = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = "Path to the TLS certificate.";
               };
-              Cert = mkOption {
-                type = types.nullOr types.str;
+              Cert = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
                   The TLS certificate, as a base64-encoded string.
@@ -141,8 +141,8 @@ in
         '';
       };
 
-      extraSettingsPaths = mkOption {
-        type = types.listOf types.path;
+      extraSettingsPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           A list of paths to extra settings files. These will override the
@@ -151,7 +151,7 @@ in
         '';
       };
 
-      steps = mkOption {
+      steps = lib.mkOption {
         type = settingsFormat.type;
         default = { };
         example = lib.literalExpression ''
@@ -173,8 +173,8 @@ in
         '';
       };
 
-      extraStepsPaths = mkOption {
-        type = types.listOf types.path;
+      extraStepsPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           A list of paths to extra steps files. These will override the values

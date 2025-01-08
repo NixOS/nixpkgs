@@ -7,8 +7,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.virtualisation.vswitch;
 
@@ -16,8 +14,8 @@ in
 {
 
   options.virtualisation.vswitch = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable Open vSwitch. A configuration daemon (ovs-server)
@@ -25,8 +23,8 @@ in
       '';
     };
 
-    resetOnStart = mkOption {
-      type = types.bool;
+    resetOnStart = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to reset the Open vSwitch configuration database to a default
@@ -34,10 +32,10 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "openvswitch" { };
+    package = lib.mkPackageOption pkgs "openvswitch" { };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let
 
       # Where the communication sockets live
@@ -48,7 +46,7 @@ in
         name = "vswitch.db";
         dontUnpack = true;
         buildPhase = "true";
-        buildInputs = with pkgs; [
+        buildInputs = [
           cfg.package
         ];
         installPhase = "mkdir -p $out";
@@ -78,7 +76,7 @@ in
           mkdir -p ${runDir}
           mkdir -p /var/db/openvswitch
           chmod +w /var/db/openvswitch
-          ${optionalString cfg.resetOnStart "rm -f /var/db/openvswitch/conf.db"}
+          ${lib.optionalString cfg.resetOnStart "rm -f /var/db/openvswitch/conf.db"}
           if [[ ! -e /var/db/openvswitch/conf.db ]]; then
             ${cfg.package}/bin/ovsdb-tool create \
               "/var/db/openvswitch/conf.db" \
@@ -140,7 +138,7 @@ in
   );
 
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "vswitch" "ipsec" ] ''
+    (lib.mkRemovedOptionModule [ "virtualisation" "vswitch" "ipsec" ] ''
       OpenVSwitch IPSec functionality has been removed, because it depended on racoon,
       which was removed from nixpkgs, because it was abanoded upstream.
     '')

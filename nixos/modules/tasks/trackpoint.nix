@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 {
   ###### interface
 
@@ -9,45 +7,45 @@ with lib;
 
     hardware.trackpoint = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable sensitivity and speed configuration for trackpoints.
         '';
       };
 
-      sensitivity = mkOption {
+      sensitivity = lib.mkOption {
         default = 128;
         example = 255;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Configure the trackpoint sensitivity. By default, the kernel
           configures 128.
         '';
       };
 
-      speed = mkOption {
+      speed = lib.mkOption {
         default = 97;
         example = 255;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Configure the trackpoint speed. By default, the kernel
           configures 97.
         '';
       };
 
-      emulateWheel = mkOption {
+      emulateWheel = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable scrolling while holding the middle mouse button.
         '';
       };
 
-      fakeButtons = mkOption {
+      fakeButtons = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Switch to "bare" PS/2 mouse support in case Trackpoint buttons are not recognized
           properly. This can happen for example on models like the L430, T450, T450s, on
@@ -55,9 +53,9 @@ with lib;
         '';
       };
 
-      device = mkOption {
+      device = lib.mkOption {
         default = "TPPS/2 IBM TrackPoint";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           The device name of the trackpoint. You can check with xinput.
           Some newer devices (example x1c6) use "TPPS/2 Elan TrackPoint".
@@ -74,8 +72,8 @@ with lib;
     let
       cfg = config.hardware.trackpoint;
     in
-    mkMerge [
-      (mkIf cfg.enable {
+    lib.mkMerge [
+      (lib.mkIf cfg.enable {
         services.udev.extraRules = ''
           ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="${cfg.device}", ATTR{device/speed}="${toString cfg.speed}", ATTR{device/sensitivity}="${toString cfg.sensitivity}"
         '';
@@ -96,7 +94,7 @@ with lib;
         };
       })
 
-      (mkIf (cfg.emulateWheel) {
+      (lib.mkIf (cfg.emulateWheel) {
         services.xserver.inputClassSections = [
           ''
             Identifier "Trackpoint Wheel Emulation"
@@ -116,7 +114,7 @@ with lib;
         ];
       })
 
-      (mkIf cfg.fakeButtons {
+      (lib.mkIf cfg.fakeButtons {
         boot.extraModprobeConfig = "options psmouse proto=bare";
       })
     ];

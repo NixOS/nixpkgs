@@ -12,7 +12,7 @@ let
 in
 {
   options.hardware.keyboard.zsa = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       udev rules for keyboards from ZSA like the ErgoDox EZ, Planck EZ and Moonlander Mark I.
       You need it when you want to flash a new configuration on the keyboard
       or use their live training in the browser.
@@ -20,7 +20,7 @@ in
     '';
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.zsa-udev-rules ];
   };
 }

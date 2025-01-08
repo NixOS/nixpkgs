@@ -8,7 +8,7 @@
 let
   pname = "losslesscut";
   version = "3.61.1";
-  metaCommon = with lib; {
+  metaCommon = {
     description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://mifi.no/losslesscut/";
     license = lib.licenses.gpl2Only;

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.jboss;
@@ -36,50 +34,50 @@ in
 
     services.jboss = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable JBoss. WARNING : this package is outdated and is known to have vulnerabilities.";
       };
 
-      tempDir = mkOption {
+      tempDir = lib.mkOption {
         default = "/tmp";
-        type = types.str;
+        type = lib.types.str;
         description = "Location where JBoss stores its temp files";
       };
 
-      logDir = mkOption {
+      logDir = lib.mkOption {
         default = "/var/log/jboss";
-        type = types.str;
+        type = lib.types.str;
         description = "Location of the logfile directory of JBoss";
       };
 
-      serverDir = mkOption {
+      serverDir = lib.mkOption {
         description = "Location of the server instance files";
         default = "/var/jboss/server";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      deployDir = mkOption {
+      deployDir = lib.mkOption {
         description = "Location of the deployment files";
         default = "/nix/var/nix/profiles/default/server/default/deploy/";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      libUrl = mkOption {
+      libUrl = lib.mkOption {
         default = "file:///nix/var/nix/profiles/default/server/default/lib";
         description = "Location where the shared library JARs are stored";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "nobody";
         description = "User account under which jboss runs.";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      useJK = mkOption {
-        type = types.bool;
+      useJK = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to use to connector to the Apache HTTP server";
       };
@@ -90,7 +88,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.jboss.enable {
+  config = lib.mkIf config.services.jboss.enable {
     systemd.services.jboss = {
       description = "JBoss server";
       script = "${jbossService}/bin/control start";

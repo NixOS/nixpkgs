@@ -16,9 +16,9 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     nameValuePair
-    optional
+    lib.optional
     types
     ;
 
@@ -29,21 +29,21 @@ let
     {
       options = {
 
-        listen = mkOption {
+        listen = lib.mkOption {
           description = ''
             Address and port to listen on (can be HOST:PORT, unix:PATH).
           '';
-          type = types.str;
+          type = lib.types.str;
         };
 
-        target = mkOption {
+        target = lib.mkOption {
           description = ''
             Address to forward connections to (can be HOST:PORT or unix:PATH).
           '';
-          type = types.str;
+          type = lib.types.str;
         };
 
-        keystore = mkOption {
+        keystore = lib.mkOption {
           description = ''
             Path to keystore (combined PEM with cert/key, or PKCS12 keystore).
 
@@ -51,104 +51,104 @@ let
 
             Specify this or `cert` and `key`.
           '';
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
 
-        cert = mkOption {
+        cert = lib.mkOption {
           description = ''
             Path to certificate (PEM with certificate chain).
 
             Not required if `keystore` is set.
           '';
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
 
-        key = mkOption {
+        key = lib.mkOption {
           description = ''
             Path to certificate private key (PEM with private key).
 
             Not required if `keystore` is set.
           '';
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
 
-        cacert = mkOption {
+        cacert = lib.mkOption {
           description = ''
             Path to CA bundle file (PEM/X509). Uses system trust store if `null`.
           '';
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
         };
 
-        disableAuthentication = mkOption {
+        disableAuthentication = lib.mkOption {
           description = ''
             Disable client authentication, no client certificate will be required.
           '';
-          type = types.bool;
+          type = lib.types.bool;
           default = false;
         };
 
-        allowAll = mkOption {
+        allowAll = lib.mkOption {
           description = ''
             If true, allow all clients, do not check client cert subject.
           '';
-          type = types.bool;
+          type = lib.types.bool;
           default = false;
         };
 
-        allowCN = mkOption {
+        allowCN = lib.mkOption {
           description = ''
             Allow client if common name appears in the list.
           '';
-          type = types.listOf types.str;
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        allowOU = mkOption {
+        allowOU = lib.mkOption {
           description = ''
             Allow client if organizational unit name appears in the list.
           '';
-          type = types.listOf types.str;
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        allowDNS = mkOption {
+        allowDNS = lib.mkOption {
           description = ''
             Allow client if DNS subject alternative name appears in the list.
           '';
-          type = types.listOf types.str;
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        allowURI = mkOption {
+        allowURI = lib.mkOption {
           description = ''
             Allow client if URI subject alternative name appears in the list.
           '';
-          type = types.listOf types.str;
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        extraArguments = mkOption {
+        extraArguments = lib.mkOption {
           description = "Extra arguments to pass to `ghostunnel server`";
-          type = types.separatedString " ";
+          type = lib.types.separatedString " ";
           default = "";
         };
 
-        unsafeTarget = mkOption {
+        unsafeTarget = lib.mkOption {
           description = ''
             If set, does not limit target to localhost, 127.0.0.1, [::1], or UNIX sockets.
 
             This is meant to protect against accidental unencrypted traffic on
             untrusted networks.
           '';
-          type = types.bool;
+          type = lib.types.bool;
           default = false;
         };
 
         # Definitions to apply at the root of the NixOS configuration.
-        atRoot = mkOption {
+        atRoot = lib.mkOption {
           internal = true;
         };
       };
@@ -156,7 +156,7 @@ let
       # Clients should not be authenticated with the public root certificates
       # (afaict, it doesn't make sense), so we only provide that default when
       # client cert auth is disabled.
-      config.cacert = mkIf config.disableAuthentication (mkDefault null);
+      config.cacert = lib.mkIf config.disableAuthentication (mkDefault null);
 
       config.atRoot = {
         assertions = [
@@ -190,29 +190,29 @@ let
             AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
             DynamicUser = true;
             LoadCredential =
-              optional (config.keystore != null) "keystore:${config.keystore}"
-              ++ optional (config.cert != null) "cert:${config.cert}"
-              ++ optional (config.key != null) "key:${config.key}"
-              ++ optional (config.cacert != null) "cacert:${config.cacert}";
+              lib.optional (config.keystore != null) "keystore:${config.keystore}"
+              ++ lib.optional (config.cert != null) "cert:${config.cert}"
+              ++ lib.optional (config.key != null) "key:${config.key}"
+              ++ lib.optional (config.cacert != null) "cacert:${config.cacert}";
           };
           script = concatStringsSep " " (
             [ "${mainCfg.package}/bin/ghostunnel" ]
-            ++ optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
-            ++ optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
-            ++ optional (config.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
-            ++ optional (config.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
+            ++ lib.optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
+            ++ lib.optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
+            ++ lib.optional (config.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
+            ++ lib.optional (config.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
             ++ [
               "server"
               "--listen ${config.listen}"
               "--target ${config.target}"
             ]
-            ++ optional config.allowAll "--allow-all"
-            ++ map (v: "--allow-cn=${escapeShellArg v}") config.allowCN
-            ++ map (v: "--allow-ou=${escapeShellArg v}") config.allowOU
-            ++ map (v: "--allow-dns=${escapeShellArg v}") config.allowDNS
-            ++ map (v: "--allow-uri=${escapeShellArg v}") config.allowURI
-            ++ optional config.disableAuthentication "--disable-authentication"
-            ++ optional config.unsafeTarget "--unsafe-target"
+            ++ lib.optional config.allowAll "--allow-all"
+            ++ map (v: "--allow-cn=${lib.escapeShellArg v}") config.allowCN
+            ++ map (v: "--allow-ou=${lib.escapeShellArg v}") config.allowOU
+            ++ map (v: "--allow-dns=${lib.escapeShellArg v}") config.allowDNS
+            ++ map (v: "--allow-uri=${lib.escapeShellArg v}") config.allowURI
+            ++ lib.optional config.disableAuthentication "--disable-authentication"
+            ++ lib.optional config.unsafeTarget "--unsafe-target"
             ++ [ config.extraArguments ]
           );
         };
@@ -223,22 +223,22 @@ in
 {
 
   options = {
-    services.ghostunnel.enable = mkEnableOption "ghostunnel";
+    services.ghostunnel.enable = lib.mkEnableOption "ghostunnel";
 
-    services.ghostunnel.package = mkPackageOption pkgs "ghostunnel" { };
+    services.ghostunnel.package = lib.mkPackageOption pkgs "ghostunnel" { };
 
-    services.ghostunnel.servers = mkOption {
+    services.ghostunnel.servers = lib.mkOption {
       description = ''
         Server mode ghostunnels (TLS listener -> plain TCP/UNIX target)
       '';
-      type = types.attrsOf (types.submodule module);
+      type = lib.types.attrsOf (types.submodule module);
       default = { };
     };
   };
 
-  config = mkIf mainCfg.enable {
-    assertions = lib.mkMerge (map (v: v.atRoot.assertions) (attrValues mainCfg.servers));
-    systemd = lib.mkMerge (map (v: v.atRoot.systemd) (attrValues mainCfg.servers));
+  config = lib.mkIf mainCfg.enable {
+    assertions = lib.mkMerge (map (v: v.atRoot.assertions) (lib.attrValues mainCfg.servers));
+    systemd = lib.mkMerge (map (v: v.atRoot.systemd) (lib.attrValues mainCfg.servers));
   };
 
   meta.maintainers = with lib.maintainers; [

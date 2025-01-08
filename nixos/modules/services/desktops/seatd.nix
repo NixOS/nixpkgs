@@ -7,26 +7,26 @@
 
 let
   cfg = config.services.seatd;
-  inherit (lib) mkEnableOption mkOption types;
+  inherit (lib) mkEnableOption lib.mkOption types;
 in
 {
   meta.maintainers = with lib.maintainers; [ sinanmohd ];
 
   options.services.seatd = {
-    enable = mkEnableOption "seatd";
+    enable = lib.mkEnableOption "seatd";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "root";
       description = "User to own the seatd socket";
     };
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "seat";
       description = "Group to own the seatd socket";
     };
-    logLevel = mkOption {
-      type = types.enum [
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
         "debug"
         "info"
         "error"

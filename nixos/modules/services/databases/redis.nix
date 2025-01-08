@@ -64,7 +64,7 @@ in {
             enable = lib.mkEnableOption "Redis server";
 
             user = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = redisName name;
               defaultText = lib.literalExpression ''
                 if name == "" then "redis" else "redis-''${name}"
@@ -80,7 +80,7 @@ in {
             };
 
             group = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = config.user;
               defaultText = lib.literalExpression "config.user";
               description = ''
@@ -94,7 +94,7 @@ in {
             };
 
             port = lib.mkOption {
-              type = types.port;
+              type = lib.types.port;
               default = if name == "" then 6379 else 0;
               defaultText = lib.literalExpression ''if name == "" then 6379 else 0'';
               description = ''
@@ -104,7 +104,7 @@ in {
             };
 
             openFirewall = lib.mkOption {
-              type = types.bool;
+              type = lib.types.bool;
               default = false;
               description = ''
                 Whether to open ports in the firewall for the server.
@@ -112,14 +112,14 @@ in {
             };
 
             extraParams = lib.mkOption {
-              type = with types; listOf str;
+              type = with lib.types; listOf str;
               default = [];
               description = "Extra parameters to append to redis-server invocation";
               example = [ "--sentinel" ];
             };
 
             bind = lib.mkOption {
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               default = "127.0.0.1";
               description = ''
                 The IP interface to bind to.
@@ -129,7 +129,7 @@ in {
             };
 
             unixSocket = lib.mkOption {
-              type = with types; nullOr path;
+              type = with lib.types; nullOr path;
               default = "/run/${redisName name}/redis.sock";
               defaultText = lib.literalExpression ''
                 if name == "" then "/run/redis/redis.sock" else "/run/redis-''${name}/redis.sock"
@@ -138,46 +138,46 @@ in {
             };
 
             unixSocketPerm = lib.mkOption {
-              type = types.int;
+              type = lib.types.int;
               default = 660;
               description = "Change permissions for the socket";
               example = 600;
             };
 
             logLevel = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "notice"; # debug, verbose, notice, warning
               example = "debug";
               description = "Specify the server verbosity level, options: debug, verbose, notice, warning.";
             };
 
             logfile = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "/dev/null";
               description = "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
               example = "/var/log/redis.log";
             };
 
             syslog = lib.mkOption {
-              type = types.bool;
+              type = lib.types.bool;
               default = true;
               description = "Enable logging to the system logger.";
             };
 
             databases = lib.mkOption {
-              type = types.int;
+              type = lib.types.int;
               default = 16;
               description = "Set the number of databases.";
             };
 
             maxclients = lib.mkOption {
-              type = types.int;
+              type = lib.types.int;
               default = 10000;
               description = "Set the max number of connected clients at the same time.";
             };
 
             save = lib.mkOption {
-              type = with types; listOf (listOf int);
+              type = with lib.types; listOf (listOf int);
               default = [ [900 1] [300 10] [60 10000] ];
               description = ''
                 The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.
@@ -187,7 +187,7 @@ in {
             };
 
             slaveOf = lib.mkOption {
-              type = with types; nullOr (submodule ({ ... }: {
+              type = with lib.types; nullOr (submodule ({ ... }: {
                 options = {
                   ip = lib.mkOption {
                     type = str;
@@ -209,7 +209,7 @@ in {
             };
 
             masterAuth = lib.mkOption {
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               default = null;
               description = ''If the master is password protected (using the requirePass configuration)
               it is possible to tell the slave to authenticate before starting the replication synchronization
@@ -218,7 +218,7 @@ in {
             };
 
             requirePass = lib.mkOption {
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               default = null;
               description = ''
                 Password for database (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE).
@@ -228,40 +228,40 @@ in {
             };
 
             requirePassFile = lib.mkOption {
-              type = with types; nullOr path;
+              type = with lib.types; nullOr path;
               default = null;
               description = "File with password for the database.";
               example = "/run/keys/redis-password";
             };
 
             appendOnly = lib.mkOption {
-              type = types.bool;
+              type = lib.types.bool;
               default = false;
               description = "By default data is only periodically persisted to disk, enable this option to use an append-only file for improved persistence.";
             };
 
             appendFsync = lib.mkOption {
-              type = types.str;
+              type = lib.types.str;
               default = "everysec"; # no, always, everysec
               description = "How often to fsync the append-only log, options: no, always, everysec.";
             };
 
             slowLogLogSlowerThan = lib.mkOption {
-              type = types.int;
+              type = lib.types.int;
               default = 10000;
               description = "Log queries whose execution take longer than X in milliseconds.";
               example = 1000;
             };
 
             slowLogMaxLen = lib.mkOption {
-              type = types.int;
+              type = lib.types.int;
               default = 128;
               description = "Maximum number of items to keep in slow log.";
             };
 
             settings = lib.mkOption {
               # TODO: this should be converted to freeformType
-              type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+              type = with lib.types; attrsOf (oneOf [ bool int str (listOf str) ]);
               default = {};
               description = ''
                 Redis configuration. Refer to

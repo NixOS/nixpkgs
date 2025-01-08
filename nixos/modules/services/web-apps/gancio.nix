@@ -10,11 +10,11 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     literalExpression
     mkIf
-    optional
+    lib.optional
     mapAttrsToList
     concatStringsSep
     concatMapStringsSep
@@ -25,35 +25,35 @@ let
 in
 {
   options.services.gancio = {
-    enable = mkEnableOption "Gancio, a shared agenda for local communities";
+    enable = lib.mkEnableOption "Gancio, a shared agenda for local communities";
 
-    package = mkPackageOption pkgs "gancio" { };
+    package = lib.mkPackageOption pkgs "gancio" { };
 
-    plugins = mkOption {
-      type = with types; listOf package;
+    plugins = lib.mkOption {
+      type = with lib.types; listOf package;
       default = [ ];
-      example = literalExpression "[ pkgs.gancioPlugins.telegram-bridge ]";
+      example = lib.literalExpression "[ pkgs.gancioPlugins.telegram-bridge ]";
       description = ''
         Paths of gancio plugins to activate (linked under $WorkingDirectory/plugins/).
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       description = "The user (and PostgreSQL database name) used to run the gancio server";
       default = "gancio";
     };
 
-    settings = mkOption rec {
-      type = types.submodule {
+    settings = lib.mkOption rec {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          hostname = mkOption {
-            type = types.str;
+          hostname = lib.mkOption {
+            type = lib.types.str;
             description = "The domain name under which the server is reachable.";
           };
-          baseurl = mkOption {
-            type = types.str;
+          baseurl = lib.mkOption {
+            type = lib.types.str;
             default = "http${
               lib.optionalString config.services.nginx.virtualHosts."${cfg.settings.hostname}".enableACME "s"
             }://${cfg.settings.hostname}";
@@ -62,8 +62,8 @@ in
             description = "The full URL under which the server is reachable.";
           };
           server = {
-            socket = mkOption {
-              type = types.path;
+            socket = lib.mkOption {
+              type = lib.types.path;
               readOnly = true;
               default = "/run/gancio/socket";
               description = ''
@@ -72,8 +72,8 @@ in
             };
           };
           db = {
-            dialect = mkOption {
-              type = types.enum [
+            dialect = lib.mkOption {
+              type = lib.types.enum [
                 "sqlite"
                 "postgres"
               ];
@@ -82,43 +82,43 @@ in
                 The database dialect to use
               '';
             };
-            storage = mkOption {
+            storage = lib.mkOption {
               description = ''
                 Location for the SQLite database.
               '';
               readOnly = true;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               default = if cfg.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null;
               defaultText = ''
                 if cfg.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null
               '';
             };
-            host = mkOption {
+            host = lib.mkOption {
               description = ''
                 Connection string for the PostgreSQL database
               '';
               readOnly = true;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               default = if cfg.settings.db.dialect == "postgres" then "/run/postgresql" else null;
               defaultText = ''
                 if cfg.settings.db.dialect == "postgres" then "/run/postgresql" else null
               '';
             };
-            database = mkOption {
+            database = lib.mkOption {
               description = ''
                 Name of the PostgreSQL database
               '';
               readOnly = true;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               default = if cfg.settings.db.dialect == "postgres" then cfg.user else null;
               defaultText = ''
                 if cfg.settings.db.dialect == "postgres" then cfg.user else null
               '';
             };
           };
-          log_level = mkOption {
+          log_level = lib.mkOption {
             description = "Gancio log level.";
-            type = types.enum [
+            type = lib.types.enum [
               "debug"
               "info"
               "warning"
@@ -127,10 +127,10 @@ in
             default = "info";
           };
           # FIXME upstream proper journald logging
-          log_path = mkOption {
+          log_path = lib.mkOption {
             description = "Directory Gancio logs into";
             readOnly = true;
-            type = types.str;
+            type = lib.types.str;
             default = "/var/log/gancio";
           };
         };
@@ -140,8 +140,8 @@ in
       '';
     };
 
-    userLocale = mkOption {
-      type = with types; attrsOf (attrsOf (attrsOf str));
+    userLocale = lib.mkOption {
+      type = with lib.types; attrsOf (attrsOf (attrsOf str));
       default = { };
       example = {
         en.register.description = "My new registration page description";
@@ -152,8 +152,8 @@ in
       '';
     };
 
-    nginx = mkOption {
-      type = types.submodule (
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
         lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
           # enable encryption by default,
           # as sensitive login credentials should not be transmitted in clear text.
@@ -170,7 +170,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     users.users.gancio = lib.mkIf (cfg.user == "gancio") {
@@ -204,7 +204,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-        ] ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.service";
+        ] ++ lib.optional (cfg.settings.db.dialect == "postgres") "postgresql.service";
 
         environment = {
           NODE_ENV = "production";
@@ -215,7 +215,7 @@ in
           ln -sf ${configFile} config.json
 
           rm -f user_locale/*
-          ${concatStringsSep "\n" (
+          ${lib.concatStringsSep "\n" (
             mapAttrsToList (
               l: c: "ln -sf ${settingsFormat.generate "gancio-${l}-locale.json" c} user_locale/${l}.json"
             ) cfg.userLocale
@@ -251,7 +251,7 @@ in
         };
       };
 
-    services.postgresql = mkIf (cfg.settings.db.dialect == "postgres") {
+    services.postgresql = lib.mkIf (cfg.settings.db.dialect == "postgres") {
       enable = true;
       ensureDatabases = [ cfg.user ];
       ensureUsers = [
@@ -264,7 +264,7 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts."${cfg.settings.hostname}" = mkMerge [
+      virtualHosts."${cfg.settings.hostname}" = lib.mkMerge [
         cfg.nginx
         {
           locations = {

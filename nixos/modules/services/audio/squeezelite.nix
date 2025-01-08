@@ -9,8 +9,8 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    optionalString
+    lib.mkOption
+    lib.optionalString
     types
     ;
 
@@ -25,13 +25,13 @@ in
   ###### interface
 
   options.services.squeezelite = {
-    enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
+    enable = lib.mkEnableOption "Squeezelite, a software Squeezebox emulator";
 
     pulseAudio = mkEnableOption "pulseaudio support";
 
-    extraArguments = mkOption {
+    extraArguments = lib.mkOption {
       default = "";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Additional command line arguments to pass to Squeezelite.
       '';
@@ -40,7 +40,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.squeezelite = {
       wantedBy = [ "multi-user.target" ];
       after = [

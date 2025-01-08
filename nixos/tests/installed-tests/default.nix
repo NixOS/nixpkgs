@@ -50,7 +50,7 @@ let
             {
               imports = [
                 testConfig
-              ] ++ optional withX11 ../common/x11.nix;
+              ] ++ lib.optional withX11 ../common/x11.nix;
 
               environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
 
@@ -63,15 +63,15 @@ let
             };
 
           testScript =
-            optionalString withX11 ''
+            lib.optionalString withX11 ''
               machine.wait_for_x()
             ''
-            + optionalString (preTestScript != "") ''
+            + lib.optionalString (preTestScript != "") ''
               ${preTestScript}
             ''
             + ''
               machine.succeed(
-                  "gnome-desktop-testing-runner ${escapeShellArgs testRunnerFlags} -d '${tested.installedTests}/share'"
+                  "gnome-desktop-testing-runner ${lib.escapeShellArgs testRunnerFlags} -d '${tested.installedTests}/share'"
               )
             '';
         }

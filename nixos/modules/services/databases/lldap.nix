@@ -11,13 +11,13 @@ let
   format = pkgs.formats.toml { };
 in
 {
-  options.services.lldap = with lib; {
-    enable = mkEnableOption "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
+  options.services.lldap = {
+    enable = lib.mkEnableOption "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
 
-    package = mkPackageOption pkgs "lldap" { };
+    package = lib.mkPackageOption pkgs "lldap" { };
 
-    environment = mkOption {
-      type = with types; attrsOf str;
+    environment = lib.mkOption {
+      type = with lib.types; attrsOf str;
       default = { };
       example = {
         LLDAP_JWT_SECRET_FILE = "/run/lldap/jwt_secret";
@@ -29,15 +29,15 @@ in
       '';
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Environment file as defined in {manpage}`systemd.exec(5)` passed to the service.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Free-form settings written directly to the `lldap_config.toml` file.
         Refer to <https://github.com/lldap/lldap/blob/main/lldap_config.docker_template.toml> for supported values.
@@ -45,59 +45,59 @@ in
 
       default = { };
 
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          ldap_host = mkOption {
-            type = types.str;
+          ldap_host = lib.mkOption {
+            type = lib.types.str;
             description = "The host address that the LDAP server will be bound to.";
             default = "::";
           };
 
-          ldap_port = mkOption {
-            type = types.port;
+          ldap_port = lib.mkOption {
+            type = lib.types.port;
             description = "The port on which to have the LDAP server.";
             default = 3890;
           };
 
-          http_host = mkOption {
-            type = types.str;
+          http_host = lib.mkOption {
+            type = lib.types.str;
             description = "The host address that the HTTP server will be bound to.";
             default = "::";
           };
 
-          http_port = mkOption {
-            type = types.port;
+          http_port = lib.mkOption {
+            type = lib.types.port;
             description = "The port on which to have the HTTP server, for user login and administration.";
             default = 17170;
           };
 
-          http_url = mkOption {
-            type = types.str;
+          http_url = lib.mkOption {
+            type = lib.types.str;
             description = "The public URL of the server, for password reset links.";
             default = "http://localhost";
           };
 
-          ldap_base_dn = mkOption {
-            type = types.str;
+          ldap_base_dn = lib.mkOption {
+            type = lib.types.str;
             description = "Base DN for LDAP.";
             example = "dc=example,dc=com";
           };
 
-          ldap_user_dn = mkOption {
-            type = types.str;
+          ldap_user_dn = lib.mkOption {
+            type = lib.types.str;
             description = "Admin username";
             default = "admin";
           };
 
-          ldap_user_email = mkOption {
-            type = types.str;
+          ldap_user_email = lib.mkOption {
+            type = lib.types.str;
             description = "Admin email.";
             default = "admin@example.com";
           };
 
-          database_url = mkOption {
-            type = types.str;
+          database_url = lib.mkOption {
+            type = lib.types.str;
             description = "Database URL.";
             default = "sqlite://./users.db?mode=rwc";
             example = "postgres://postgres-user:password@postgres-server/my-database";

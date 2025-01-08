@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.hardware.uni-sync;
 in
@@ -12,12 +11,12 @@ in
   meta.maintainers = with lib.maintainers; [ yunfachi ];
 
   options.hardware.uni-sync = {
-    enable = mkEnableOption "udev rules and software for Lian Li Uni Controllers";
-    package = mkPackageOption pkgs "uni-sync" { };
+    enable = lib.mkEnableOption "udev rules and software for Lian Li Uni Controllers";
+    package = lib.mkPackageOption pkgs "uni-sync" { };
 
-    devices = mkOption {
+    devices = lib.mkOption {
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           {
             device_id = "VID:1111/PID:11111/SN:1111111111";
@@ -53,23 +52,23 @@ in
         ]
       '';
       description = "List of controllers with their configurations.";
-      type = types.listOf (
-        types.submodule {
+      type = lib.types.listOf (
+        lib.types.submodule {
           options = {
-            device_id = mkOption {
-              type = types.str;
+            device_id = lib.mkOption {
+              type = lib.types.str;
               example = "VID:1111/PID:11111/SN:1111111111";
               description = "Unique device ID displayed at each startup.";
             };
-            sync_rgb = mkOption {
-              type = types.bool;
+            sync_rgb = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               example = true;
               description = "Enable ARGB header sync.";
             };
-            channels = mkOption {
+            channels = lib.mkOption {
               default = [ ];
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 [
                   {
                     mode = "PWM";
@@ -89,11 +88,11 @@ in
                 ]
               '';
               description = "List of channels connected to the controller.";
-              type = types.listOf (
-                types.submodule {
+              type = lib.types.listOf (
+                lib.types.submodule {
                   options = {
-                    mode = mkOption {
-                      type = types.enum [
+                    mode = lib.mkOption {
+                      type = lib.types.enum [
                         "Manual"
                         "PWM"
                       ];
@@ -101,8 +100,8 @@ in
                       example = "PWM";
                       description = "\"PWM\" to enable PWM sync. \"Manual\" to set speed.";
                     };
-                    speed = mkOption {
-                      type = types.int;
+                    speed = lib.mkOption {
+                      type = lib.types.int;
                       default = "50";
                       example = "100";
                       description = "Fan speed as percentage (clamped between 0 and 100).";
@@ -117,8 +116,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.etc."uni-sync/uni-sync.json".text = mkIf (cfg.devices != [ ]) (
+  config = lib.mkIf cfg.enable {
+    environment.etc."uni-sync/uni-sync.json".text = lib.mkIf (cfg.devices != [ ]) (
       builtins.toJSON { configs = cfg.devices; }
     );
 

@@ -10,7 +10,7 @@ let
     escapeShellArgs
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -25,10 +25,10 @@ let
 in
 {
   options.services.loki = {
-    enable = mkEnableOption "loki";
+    enable = lib.mkEnableOption "loki";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "loki";
       description = ''
         User under which the Loki service runs.
@@ -37,23 +37,23 @@ in
 
     package = lib.mkPackageOption pkgs "grafana-loki" { };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "loki";
       description = ''
         Group under which the Loki service runs.
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/loki";
       description = ''
         Specify the directory for Loki.
       '';
     };
 
-    configuration = mkOption {
+    configuration = lib.mkOption {
       type = (pkgs.formats.json { }).type;
       default = { };
       description = ''
@@ -61,16 +61,16 @@ in
       '';
     };
 
-    configFile = mkOption {
-      type = types.nullOr types.path;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Specify a configuration file that Loki should use.
       '';
     };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--server.http-listen-port=3101" ];
       description = ''
@@ -80,7 +80,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (
@@ -136,7 +136,7 @@ in
               '';
         in
         {
-          ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+          ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${lib.escapeShellArgs cfg.extraFlags}";
           User = cfg.user;
           Restart = "always";
           PrivateTmp = true;

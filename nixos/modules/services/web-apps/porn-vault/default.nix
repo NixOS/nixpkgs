@@ -13,7 +13,7 @@ let
     mkIf
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     getExe
     literalExpression
     types
@@ -50,7 +50,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = configFormat.type;
         description = ''
           Configuration for Porn-Vault. The attributes are serialized to JSON in config.json.
@@ -93,7 +93,7 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
-      wantedBy = mkIf cfg.autoStart [ "multi-user.target" ];
+      wantedBy = lib.mkIf cfg.autoStart [ "multi-user.target" ];
       wants = [ "network.target" ];
     };
 

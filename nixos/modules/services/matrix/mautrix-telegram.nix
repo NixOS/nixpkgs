@@ -106,7 +106,7 @@ in
           `MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN`,
           `MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN`,
           `MAUTRIX_TELEGRAM_TELEGRAM_API_ID`,
-          `MAUTRIX_TELEGRAM_TELEGRAM_API_HASH` and optionally
+          `MAUTRIX_TELEGRAM_TELEGRAM_API_HASH` and lib.optionally
           `MAUTRIX_TELEGRAM_TELEGRAM_BOT_TOKEN`.
 
           These environment variables can also be used to set other options by

@@ -11,19 +11,19 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     mkIf
     types
     ;
 in
 {
   options.services.technitium-dns-server = {
-    enable = mkEnableOption "Technitium DNS Server";
+    enable = lib.mkEnableOption "Technitium DNS Server";
 
-    package = mkPackageOption pkgs "technitium-dns-server" { };
+    package = lib.mkPackageOption pkgs "technitium-dns-server" { };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to open ports in the firewall.
@@ -32,16 +32,16 @@ in
       '';
     };
 
-    firewallUDPPorts = mkOption {
-      type = with types; listOf int;
+    firewallUDPPorts = lib.mkOption {
+      type = with lib.types; listOf int;
       default = [ 53 ];
       description = ''
         List of UDP ports to open in firewall.
       '';
     };
 
-    firewallTCPPorts = mkOption {
-      type = with types; listOf int;
+    firewallTCPPorts = lib.mkOption {
+      type = with lib.types; listOf int;
       default = [
         53
         5380 # web interface HTTP
@@ -54,7 +54,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.technitium-dns-server = {
       description = "Technitium DNS Server";
       wantedBy = [ "multi-user.target" ];
@@ -99,7 +99,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedUDPPorts = cfg.firewallUDPPorts;
       allowedTCPPorts = cfg.firewallTCPPorts;
     };

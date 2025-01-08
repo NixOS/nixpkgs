@@ -6,7 +6,7 @@ let
 
   # Use only for **internal** options.
   # This is not exactly user-friendly.
-  kdeConfigurationType = with types;
+  kdeConfigurationType = with lib.types;
     let
       valueTypes = (oneOf [
         bool
@@ -27,9 +27,9 @@ let
       };
 
   inherit (lib)
-    getBin optionalAttrs literalExpression
+    getBin lib.optionalAttrs literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption mkPackageOption types;
+    mkDefault mkIf mkMerge lib.mkOption mkPackageOption types;
 
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
@@ -81,28 +81,28 @@ in
 {
   options = {
     services.xserver.desktopManager.plasma5 = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
-      phononBackend = mkOption {
-        type = types.enum [ "gstreamer" "vlc" ];
+      phononBackend = lib.mkOption {
+        type = lib.types.enum [ "gstreamer" "vlc" ];
         default = "vlc";
         example = "gstreamer";
         description = "Phonon audio backend to install.";
       };
 
-      useQtScaling = mkOption {
-        type = types.bool;
+      useQtScaling = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable HiDPI scaling in Qt.";
       };
 
-      runUsingSystemd = mkOption {
+      runUsingSystemd = lib.mkOption {
         description = "Use systemd to manage the Plasma session";
-        type = types.bool;
+        type = lib.types.bool;
         default = true;
       };
 
@@ -112,29 +112,29 @@ in
       };
 
       # Internally allows configuring kdeglobals globally
-      kdeglobals = mkOption {
+      kdeglobals = lib.mkOption {
         internal = true;
         default = {};
         type = kdeConfigurationType;
       };
 
       # Internally allows configuring kwin globally
-      kwinrc = mkOption {
+      kwinrc = lib.mkOption {
         internal = true;
         default = {};
         type = kdeConfigurationType;
       };
 
-      mobile.enable = mkOption {
-        type = types.bool;
+      mobile.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable support for running the Plasma Mobile shell.
         '';
       };
 
-      mobile.installRecommendedSoftware = mkOption {
-        type = types.bool;
+      mobile.installRecommendedSoftware = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Installs software recommended for use with Plasma Mobile, but which
@@ -142,32 +142,32 @@ in
         '';
       };
 
-      bigscreen.enable = mkOption {
-        type = types.bool;
+      bigscreen.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable support for running the Plasma Bigscreen session.
         '';
       };
     };
-    environment.plasma5.excludePackages = mkOption {
+    environment.plasma5.excludePackages = lib.mkOption {
         description = "List of default packages to exclude from the configuration";
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         default = [];
-        example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
+        example = lib.literalExpression "[ pkgs.plasma5Packages.oxygen ]";
       };
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
-    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "supportDDC" ] "DDC/CI is no longer supported upstream.")
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "excludePackages" ] [ "environment" "plasma5" "excludePackages" ])
+    (lib.mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
+    (lib.mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "supportDDC" ] "DDC/CI is no longer supported upstream.")
+    (lib.mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "excludePackages" ] [ "environment" "plasma5" "excludePackages" ])
   ];
 
-  config = mkMerge [
+  config = lib.mkMerge [
     # Common Plasma dependencies
-    (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
+    (lib.mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
 
       security.wrappers = {
         kwin_wayland = {
@@ -176,7 +176,7 @@ in
           capabilities = "cap_sys_nice+ep";
           source = "${getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
         };
-      } // optionalAttrs (!cfg.runUsingSystemd) {
+      } // lib.optionalAttrs (!cfg.runUsingSystemd) {
         start_kdeinit = {
           setuid = true;
           owner = "root";
@@ -274,7 +274,7 @@ in
 
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ];
-          optionalPackages = [
+          lib.optionalPackages = [
             pkgs.aha # needed by kinfocenter for fwupd support
             plasma-browser-integration
             konsole
@@ -283,7 +283,7 @@ in
           ];
         in
         requiredPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages
+        ++ utils.removePackagesByName lib.optionalPackages config.environment.plasma5.excludePackages
 
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") pkgs.plasma5Packages.phonon-backend-gstreamer
@@ -314,7 +314,7 @@ in
       environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
       environment.sessionVariables = {
-        PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+        PLASMA_USE_QT_SCALING = lib.mkIf cfg.useQtScaling "1";
 
         # Needed for things that depend on other store.kde.org packages to install correctly,
         # notably Plasma look-and-feel packages (a.k.a. Global Themes)
@@ -336,19 +336,19 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
-      programs.ssh.askPassword = mkDefault "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
+      programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-qt;
+      programs.ssh.askPassword = lib.mkDefault "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
       programs.dconf.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
-      services.power-profiles-daemon.enable = mkDefault true;
-      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
+      services.power-profiles-daemon.enable = lib.mkDefault true;
+      services.system-config-printer.enable = lib.mkIf config.services.printing.enable (mkDefault true);
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.libinput.enable = mkDefault true;
+      services.libinput.enable = lib.mkDefault true;
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [
@@ -358,10 +358,10 @@ in
       ];
 
       # Enable screen reader by default
-      services.orca.enable = mkDefault true;
+      services.orca.enable = lib.mkDefault true;
 
       services.displayManager.sddm = {
-        theme = mkDefault "breeze";
+        theme = lib.mkDefault "breeze";
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
@@ -369,7 +369,7 @@ in
       security.pam.services.login.kwallet.enable = true;
 
       systemd.user.services = {
-        plasma-early-setup = mkIf cfg.runUsingSystemd {
+        plasma-early-setup = lib.mkIf cfg.runUsingSystemd {
           description = "Early Plasma setup";
           wantedBy = [ "graphical-session-pre.target" ];
           serviceConfig.Type = "oneshot";
@@ -381,9 +381,9 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
-      xdg.portal.configPackages = mkDefault [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
+      xdg.portal.configPackages = lib.mkDefault [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
-      services.pipewire.enable = mkDefault true;
+      services.pipewire.enable = lib.mkDefault true;
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
@@ -392,16 +392,16 @@ in
       programs.chromium.enablePlasmaBrowserIntegration = true;
     })
 
-    (mkIf (cfg.kwinrc != {}) {
+    (lib.mkIf (cfg.kwinrc != {}) {
       environment.etc."xdg/kwinrc".text = lib.generators.toINI {} cfg.kwinrc;
     })
 
-    (mkIf (cfg.kdeglobals != {}) {
+    (lib.mkIf (cfg.kdeglobals != {}) {
       environment.etc."xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
     })
 
     # Plasma Desktop
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
 
       # Seed our configuration into nixos-generate-config
       system.nixos-generate-config.desktopConfiguration = [
@@ -416,7 +416,7 @@ in
       # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
       # many tiny bugs.
       # See: https://github.com/NixOS/nixpkgs/issues/143272
-      services.displayManager.defaultSession = mkDefault "plasma";
+      services.displayManager.defaultSession = lib.mkDefault "plasma";
 
       environment.systemPackages =
         with pkgs.plasma5Packages;
@@ -437,7 +437,7 @@ in
             kio-admin
             kio-extras
           ];
-          optionalPackages = [
+          lib.optionalPackages = [
             ark
             elisa
             gwenview
@@ -445,7 +445,7 @@ in
             khelpcenter
             print-manager
           ];
-      in requiredPackages ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages;
+      in requiredPackages ++ utils.removePackagesByName lib.optionalPackages config.environment.plasma5.excludePackages;
 
       systemd.user.services = {
         plasma-run-with-systemd = {
@@ -463,7 +463,7 @@ in
     })
 
     # Plasma Mobile
-    (mkIf cfg.mobile.enable {
+    (lib.mkIf cfg.mobile.enable {
       assertions = [
         {
           # The user interface breaks without NetworkManager
@@ -545,7 +545,7 @@ in
     })
 
     # Plasma Bigscreen
-    (mkIf cfg.bigscreen.enable {
+    (lib.mkIf cfg.bigscreen.enable {
       environment.systemPackages =
         with pkgs.plasma5Packages;
         [

@@ -596,7 +596,7 @@ in {
         };
 
         user = lib.mkOption {
-          description = "Used for optionally authenticating with Elasticsearch.";
+          description = "Used for lib.optionally authenticating with Elasticsearch.";
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "elasticsearch-mastodon";
@@ -604,7 +604,7 @@ in {
 
         passwordFile = lib.mkOption {
           description = ''
-            Path to file containing password for optionally authenticating with Elasticsearch.
+            Path to file containing password for lib.optionally authenticating with Elasticsearch.
           '';
           type = lib.types.nullOr lib.types.path;
           default = null;

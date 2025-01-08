@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.sslh;
   user = "sslh";
@@ -12,21 +10,21 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "sslh" "listenAddress" ] [ "services" "sslh" "listenAddresses" ])
-    (mkRenamedOptionModule [ "services" "sslh" "timeout" ] [ "services" "sslh" "settings" "timeout" ])
-    (mkRenamedOptionModule [ "services" "sslh" "transparent" ] [ "services" "sslh" "settings" "transparent" ])
-    (mkRemovedOptionModule [ "services" "sslh" "appendConfig" ] "Use services.sslh.settings instead")
-    (mkChangedOptionModule [ "services" "sslh" "verbose" ] [ "services" "sslh" "settings" "verbose-connections" ]
+    (lib.mkRenamedOptionModule [ "services" "sslh" "listenAddress" ] [ "services" "sslh" "listenAddresses" ])
+    (lib.mkRenamedOptionModule [ "services" "sslh" "timeout" ] [ "services" "sslh" "settings" "timeout" ])
+    (lib.mkRenamedOptionModule [ "services" "sslh" "transparent" ] [ "services" "sslh" "settings" "transparent" ])
+    (lib.mkRemovedOptionModule [ "services" "sslh" "appendConfig" ] "Use services.sslh.settings instead")
+    (lib.mkChangedOptionModule [ "services" "sslh" "verbose" ] [ "services" "sslh" "settings" "verbose-connections" ]
       (config: if config.services.sslh.verbose then 1 else 0))
   ];
 
   meta.buildDocsInSandbox = false;
 
   options.services.sslh = {
-    enable = mkEnableOption "sslh, protocol demultiplexer";
+    enable = lib.mkEnableOption "sslh, protocol demultiplexer";
 
-    method = mkOption {
-      type = types.enum [ "fork" "select" "ev" ];
+    method = lib.mkOption {
+      type = lib.types.enum [ "fork" "select" "ev" ];
       default = "fork";
       description = ''
         The method to use for handling connections:
@@ -44,30 +42,30 @@ in
       '';
     };
 
-    listenAddresses = mkOption {
-      type = with types; coercedTo str singleton (listOf str);
+    listenAddresses = lib.mkOption {
+      type = with lib.types; coercedTo str singleton (listOf str);
       default = [ "0.0.0.0" "[::]" ];
       description = "Listening addresses or hostnames.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 443;
       description = "Listening port.";
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = configFormat.type;
 
-        options.timeout = mkOption {
-          type = types.ints.unsigned;
+        options.timeout = lib.mkOption {
+          type = lib.types.ints.unsigned;
           default = 2;
           description = "Timeout in seconds.";
         };
 
-        options.transparent = mkOption {
-          type = types.bool;
+        options.transparent = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether the services behind sslh (Apache, sshd and so on) will see the
@@ -76,8 +74,8 @@ in
           '';
         };
 
-        options.verbose-connections = mkOption {
-          type = types.ints.between 0 4;
+        options.verbose-connections = lib.mkOption {
+          type = lib.types.ints.between 0 4;
           default = 0;
           description = ''
             Where to log connections information. Possible values are:
@@ -90,8 +88,8 @@ in
           '';
         };
 
-        options.numeric = mkOption {
-          type = types.bool;
+        options.numeric = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to disable reverse DNS lookups, thus keeping IP
@@ -99,8 +97,8 @@ in
           '';
         };
 
-        options.protocols = mkOption {
-          type = types.listOf configFormat.type;
+        options.protocols = lib.mkOption {
+          type = lib.types.listOf configFormat.type;
           default = [
             { name = "ssh";     host = "localhost"; port =  "22"; service= "ssh"; }
             { name = "openvpn"; host = "localhost"; port = "1194"; }
@@ -133,8 +131,8 @@ in
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       systemd.services.sslh = {
         description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
         after = [ "network.target" ];
@@ -168,7 +166,7 @@ in
 
     # code from https://github.com/yrutschle/sslh#transparent-proxy-support
     # the only difference is using iptables mark 0x2 instead of 0x1 to avoid conflicts with nixos/nat module
-    (mkIf (cfg.enable && cfg.settings.transparent) {
+    (lib.mkIf (cfg.enable && cfg.settings.transparent) {
       # Set route_localnet = 1 on all interfaces so that ssl can use "localhost" as destination
       boot.kernel.sysctl."net.ipv4.conf.default.route_localnet" = 1;
       boot.kernel.sysctl."net.ipv4.conf.all.route_localnet"     = 1;
@@ -195,28 +193,28 @@ in
 
         preStart = ''
           # Cleanup old iptables entries which might be still there
-          ${concatMapStringsSep "\n" ({table, command}: "while iptables -w -t ${table} -D ${command} 2>/dev/null; do echo; done") iptablesCommands}
-          ${concatMapStringsSep "\n" ({table, command}:       "iptables -w -t ${table} -A ${command}"                           ) iptablesCommands}
+          ${lib.concatMapStringsSep "\n" ({table, command}: "while iptables -w -t ${table} -D ${command} 2>/dev/null; do echo; done") iptablesCommands}
+          ${lib.concatMapStringsSep "\n" ({table, command}:       "iptables -w -t ${table} -A ${command}"                           ) iptablesCommands}
 
           # Configure routing for those marked packets
           ip rule  add fwmark 0x2 lookup 100
           ip route add local 0.0.0.0/0 dev lo table 100
 
-        '' + optionalString config.networking.enableIPv6 ''
-          ${concatMapStringsSep "\n" ({table, command}: "while ip6tables -w -t ${table} -D ${command} 2>/dev/null; do echo; done") ip6tablesCommands}
-          ${concatMapStringsSep "\n" ({table, command}:       "ip6tables -w -t ${table} -A ${command}"                           ) ip6tablesCommands}
+        '' + lib.optionalString config.networking.enableIPv6 ''
+          ${lib.concatMapStringsSep "\n" ({table, command}: "while ip6tables -w -t ${table} -D ${command} 2>/dev/null; do echo; done") ip6tablesCommands}
+          ${lib.concatMapStringsSep "\n" ({table, command}:       "ip6tables -w -t ${table} -A ${command}"                           ) ip6tablesCommands}
 
           ip -6 rule  add fwmark 0x2 lookup 100
           ip -6 route add local ::/0 dev lo table 100
         '';
 
         postStop = ''
-          ${concatMapStringsSep "\n" ({table, command}: "iptables -w -t ${table} -D ${command}") iptablesCommands}
+          ${lib.concatMapStringsSep "\n" ({table, command}: "iptables -w -t ${table} -D ${command}") iptablesCommands}
 
           ip rule  del fwmark 0x2 lookup 100
           ip route del local 0.0.0.0/0 dev lo table 100
-        '' + optionalString config.networking.enableIPv6 ''
-          ${concatMapStringsSep "\n" ({table, command}: "ip6tables -w -t ${table} -D ${command}") ip6tablesCommands}
+        '' + lib.optionalString config.networking.enableIPv6 ''
+          ${lib.concatMapStringsSep "\n" ({table, command}: "ip6tables -w -t ${table} -D ${command}") ip6tablesCommands}
 
           ip -6 rule  del fwmark 0x2 lookup 100
           ip -6 route del local ::/0 dev lo table 100

@@ -9,7 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     types
     literalExpression
     mkIf
@@ -29,12 +29,12 @@ in
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption "miniflux";
+      enable = lib.mkEnableOption "miniflux";
 
-      package = mkPackageOption pkgs "miniflux" { };
+      package = lib.mkPackageOption pkgs "miniflux" { };
 
-      createDatabaseLocally = mkOption {
-        type = types.bool;
+      createDatabaseLocally = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether a PostgreSQL database should be automatically created and
@@ -43,14 +43,14 @@ in
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             str
             int
           ]);
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             CLEANUP_FREQUENCY = 48;
             LISTEN_ADDR = "localhost:8080";
@@ -66,8 +66,8 @@ in
         '';
       };
 
-      adminCredentialsFile = mkOption {
-        type = types.nullOr types.path;
+      adminCredentialsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           File containing the ADMIN_USERNAME and
@@ -79,7 +79,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
@@ -87,7 +87,7 @@ in
       }
     ];
     services.miniflux.config = {
-      LISTEN_ADDR = mkDefault defaultAddress;
+      LISTEN_ADDR = lib.mkDefault defaultAddress;
       DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
       RUN_MIGRATIONS = 1;
       CREATE_ADMIN = lib.mkDefault 1;

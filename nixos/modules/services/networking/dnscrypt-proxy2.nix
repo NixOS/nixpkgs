@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 
 let
   cfg = config.services.dnscrypt-proxy2;
@@ -12,14 +11,14 @@ in
 
 {
   options.services.dnscrypt-proxy2 = {
-    enable = mkEnableOption "dnscrypt-proxy2";
+    enable = lib.mkEnableOption "dnscrypt-proxy2";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Attrset that is converted and passed as TOML config file.
         For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           sources.public-resolvers = {
             urls = [ "https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md" ];
@@ -29,27 +28,27 @@ in
           };
         }
       '';
-      type = types.attrs;
+      type = lib.types.attrs;
       default = { };
     };
 
-    upstreamDefaults = mkOption {
+    upstreamDefaults = lib.mkOption {
       description = ''
         Whether to base the config declared in {option}`services.dnscrypt-proxy2.settings` on the upstream example config (<https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>)
 
         Disable this if you want to declare your dnscrypt config from scratch.
       '';
-      type = types.bool;
+      type = lib.types.bool;
       default = true;
     };
 
-    configFile = mkOption {
+    configFile = lib.mkOption {
       description = ''
         Path to TOML config file. See: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>
         If this option is set, it will override any configuration done in options.services.dnscrypt-proxy2.settings.
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
-      type = types.path;
+      type = lib.types.path;
       default =
         pkgs.runCommand "dnscrypt-proxy.toml"
           {
@@ -70,11 +69,11 @@ in
             }
             ${pkgs.buildPackages.remarshal}/bin/json2toml < config.json > $out
           '';
-      defaultText = literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
+      defaultText = lib.literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
 

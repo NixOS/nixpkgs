@@ -28,22 +28,22 @@ in
 
     boot.growPartition = true;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) {
+    fileSystems."/" = lib.mkIf (!cfg.zfs.enable) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+    fileSystems."/boot" = lib.mkIf (cfg.efi || cfg.zfs.enable) {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };
 
-    services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
+    services.zfs.expandOnBoot = lib.mkIf cfg.zfs.enable "all";
 
-    boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
+    boot.zfs.devNodes = lib.mkIf cfg.zfs.enable "/dev/";
 
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
@@ -94,7 +94,7 @@ in
     services.udev.packages = [ pkgs.amazon-ec2-utils ];
 
     # Force getting the hostname from EC2.
-    networking.hostName = mkDefault "";
+    networking.hostName = lib.mkDefault "";
 
     # Always include cryptsetup so that Charon can use it.
     environment.systemPackages = [ pkgs.cryptsetup ];

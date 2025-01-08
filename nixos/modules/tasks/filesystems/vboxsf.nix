@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   inInitrd = config.boot.initrd.supportedFilesystems.vboxsf or false;
@@ -18,11 +16,11 @@ let
 in
 
 {
-  config = mkIf (config.boot.supportedFilesystems.vboxsf or false) {
+  config = lib.mkIf (config.boot.supportedFilesystems.vboxsf or false) {
 
     system.fsPackages = [ package ];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "vboxsf" ];
+    boot.initrd.kernelModules = lib.mkIf inInitrd [ "vboxsf" ];
 
   };
 }

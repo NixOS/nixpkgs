@@ -19,8 +19,8 @@ srv:
 
 let
   inherit (lib) types;
-  inherit (lib.attrsets) mapAttrs optionalAttrs;
-  inherit (lib.lists) optional;
+  inherit (lib.attrsets) mapAttrs lib.optionalAttrs;
+  inherit (lib.lists) lib.optional;
   inherit (lib.modules)
     mkBefore
     mkDefault
@@ -28,8 +28,8 @@ let
     mkIf
     mkMerge
     ;
-  inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.strings) concatStringsSep hasSuffix optionalString;
+  inherit (lib.options) mkEnableOption lib.mkOption;
+  inherit (lib.strings) concatStringsSep hasSuffix lib.optionalString;
   inherit (config.services) postgresql;
   redis = config.services.redis.servers."sourcehut-${srvsrht}";
   inherit (config.users) users;
@@ -51,16 +51,16 @@ let
       {
         after =
           [ "network.target" ]
-          ++ optional cfg.postgresql.enable "postgresql.service"
-          ++ optional cfg.redis.enable "redis-sourcehut-${srvsrht}.service";
+          ++ lib.optional cfg.postgresql.enable "postgresql.service"
+          ++ lib.optional cfg.redis.enable "redis-sourcehut-${srvsrht}.service";
         requires =
-          optional cfg.postgresql.enable "postgresql.service"
-          ++ optional cfg.redis.enable "redis-sourcehut-${srvsrht}.service";
+          lib.optional cfg.postgresql.enable "postgresql.service"
+          ++ lib.optional cfg.redis.enable "redis-sourcehut-${srvsrht}.service";
         path = [ pkgs.gawk ];
         environment.HOME = runDir;
         serviceConfig = {
-          User = mkDefault srvCfg.user;
-          Group = mkDefault srvCfg.group;
+          User = lib.mkDefault srvCfg.user;
+          Group = lib.mkDefault srvCfg.group;
           RuntimeDirectory = [
             "sourcehut/${serviceName}"
             # Used by *srht-keys which reads ../config.ini
@@ -81,7 +81,7 @@ let
           MountAPIVFS = true;
           # config.ini is looked up in there, before /etc/srht/config.ini
           # Note that it fails to be set in ExecStartPre=
-          WorkingDirectory = mkDefault ("-" + runDir);
+          WorkingDirectory = lib.mkDefault ("-" + runDir);
           BindReadOnlyPaths =
             [
               builtins.storeDir
@@ -90,8 +90,8 @@ let
               "/run/current-system"
               "/run/systemd"
             ]
-            ++ optional cfg.postgresql.enable "/run/postgresql"
-            ++ optional cfg.redis.enable "/run/redis-sourcehut-${srvsrht}";
+            ++ lib.optional cfg.postgresql.enable "/run/postgresql"
+            ++ lib.optional cfg.redis.enable "/run/redis-sourcehut-${srvsrht}";
           # LoadCredential= are unfortunately not available in ExecStartPre=
           # Hence this one is run as root (the +) with RootDirectoryStartOnly=
           # to reach credentials wherever they are.
@@ -103,7 +103,7 @@ let
                 set -x
                 # Replace values beginning with a '<' by the content of the file whose name is after.
                 gawk '{ if (match($0,/^([^=]+=)<(.+)/,m)) { getline f < m[2]; print m[1] f } else print $0 }' ${configIni} |
-                ${optionalString (!allowStripe) "gawk '!/^stripe-secret-key=/' |"}
+                ${lib.optionalString (!allowStripe) "gawk '!/^stripe-secret-key=/' |"}
                 install -o ${srvCfg.user} -g root -m 400 /dev/stdin ${runDir}/config.ini
               ''
             )
@@ -119,7 +119,7 @@ let
           NoNewPrivileges = true;
           PrivateDevices = true;
           PrivateMounts = true;
-          PrivateNetwork = mkDefault false;
+          PrivateNetwork = lib.mkDefault false;
           PrivateUsers = true;
           ProcSubset = "pid";
           ProtectClock = true;
@@ -160,18 +160,18 @@ in
 {
   options.services.sourcehut.${srv} =
     {
-      enable = mkEnableOption "${srv} service";
+      enable = lib.mkEnableOption "${srv} service";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = srvsrht;
         description = ''
           User for ${srv}.sr.ht.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = srvsrht;
         description = ''
           Group for ${srv}.sr.ht.
@@ -180,8 +180,8 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = port;
         description = ''
           Port on which the "${srv}" backend should listen.
@@ -189,8 +189,8 @@ in
       };
 
       redis = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "unix:///run/redis-sourcehut-${srvsrht}/redis.sock?db=0";
           example = "redis://shared.wireguard:6379/0";
           description = ''
@@ -203,8 +203,8 @@ in
       };
 
       postgresql = {
-        database = mkOption {
-          type = types.str;
+        database = lib.mkOption {
+          type = lib.types.str;
           default = "${srv}.sr.ht";
           description = ''
             PostgreSQL database name for the ${srv}.sr.ht service,
@@ -214,8 +214,8 @@ in
       };
 
       gunicorn = {
-        extraArgs = mkOption {
-          type = with types; listOf str;
+        extraArgs = lib.mkOption {
+          type = with lib.types; listOf str;
           default = [
             "--timeout 120"
             "--workers 1"
@@ -225,10 +225,10 @@ in
         };
       };
     }
-    // optionalAttrs webhooks {
+    // lib.optionalAttrs webhooks {
       webhooks = {
-        extraArgs = mkOption {
-          type = with types; listOf str;
+        extraArgs = lib.mkOption {
+          type = with lib.types; listOf str;
           default = [
             "--loglevel DEBUG"
             "--pool eventlet"
@@ -236,8 +236,8 @@ in
           ];
           description = "Extra arguments passed to the Celery responsible for webhooks.";
         };
-        celeryConfig = mkOption {
-          type = types.lines;
+        celeryConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           description = "Content of the `celeryconfig.py` used by the Celery responsible for webhooks.";
         };
@@ -251,8 +251,8 @@ in
         users = {
           "${srvCfg.user}" = {
             isSystemUser = true;
-            group = mkDefault srvCfg.group;
-            description = mkDefault "sourcehut user for ${srv}.sr.ht";
+            group = lib.mkDefault srvCfg.group;
+            description = lib.mkDefault "sourcehut user for ${srv}.sr.ht";
           };
         };
         groups =
@@ -260,28 +260,28 @@ in
             "${srvCfg.group}" = { };
           }
           //
-            optionalAttrs
+            lib.optionalAttrs
               (cfg.postgresql.enable && hasSuffix "0" (postgresql.settings.unix_socket_permissions or ""))
               {
                 "postgres".members = [ srvCfg.user ];
               }
-          // optionalAttrs (cfg.redis.enable && hasSuffix "0" (redis.settings.unixsocketperm or "")) {
+          // lib.optionalAttrs (cfg.redis.enable && hasSuffix "0" (redis.settings.unixsocketperm or "")) {
             "redis-sourcehut-${srvsrht}".members = [ srvCfg.user ];
           };
       };
 
-      services.nginx = mkIf cfg.nginx.enable {
-        virtualHosts."${srv}.${cfg.settings."sr.ht".global-domain}" = mkMerge [
+      services.nginx = lib.mkIf cfg.nginx.enable {
+        virtualHosts."${srv}.${cfg.settings."sr.ht".global-domain}" = lib.mkMerge [
           {
-            forceSSL = mkDefault true;
+            forceSSL = lib.mkDefault true;
             locations."/".proxyPass = "http://${cfg.listenAddress}:${toString srvCfg.port}";
             locations."/static" = {
               root = "${pkgs.sourcehut.${srvsrht}}/${pkgs.sourcehut.python.sitePackages}/${srvsrht}";
-              extraConfig = mkDefault ''
+              extraConfig = lib.mkDefault ''
                 expires 30d;
               '';
             };
-            locations."/query" = mkIf (cfg.settings.${iniKey} ? api-origin) {
+            locations."/query" = lib.mkIf (cfg.settings.${iniKey} ? api-origin) {
               proxyPass = cfg.settings.${iniKey}.api-origin;
               extraConfig = ''
                 add_header 'Access-Control-Allow-Origin' '*';
@@ -303,7 +303,7 @@ in
         ];
       };
 
-      services.postgresql = mkIf cfg.postgresql.enable {
+      services.postgresql = lib.mkIf cfg.postgresql.enable {
         authentication = ''
           local ${srvCfg.postgresql.database} ${srvCfg.user} trust
         '';
@@ -316,23 +316,23 @@ in
         }) [ srvCfg.user ];
       };
 
-      services.sourcehut.settings = mkMerge [
+      services.sourcehut.settings = lib.mkMerge [
         {
-          "${srv}.sr.ht".origin = mkDefault "https://${srv}.${cfg.settings."sr.ht".global-domain}";
+          "${srv}.sr.ht".origin = lib.mkDefault "https://${srv}.${cfg.settings."sr.ht".global-domain}";
         }
 
-        (mkIf cfg.postgresql.enable {
+        (lib.mkIf cfg.postgresql.enable {
           "${srv}.sr.ht".connection-string =
             mkDefault "postgresql:///${srvCfg.postgresql.database}?user=${srvCfg.user}&host=/run/postgresql";
         })
       ];
 
-      services.redis.servers."sourcehut-${srvsrht}" = mkIf cfg.redis.enable {
+      services.redis.servers."sourcehut-${srvsrht}" = lib.mkIf cfg.redis.enable {
         enable = true;
         databases = 3;
         syslog = true;
         # TODO: set a more informed value
-        save = mkDefault [
+        save = lib.mkDefault [
           [
             1800
             10
@@ -349,21 +349,21 @@ in
         };
       };
 
-      systemd.services = mkMerge [
+      systemd.services = lib.mkMerge [
         {
           "${srvsrht}" = baseService srvsrht { allowStripe = srv == "meta"; } (mkMerge [
             {
               description = "sourcehut ${srv}.sr.ht website service";
-              before = optional cfg.nginx.enable "nginx.service";
-              wants = optional cfg.nginx.enable "nginx.service";
+              before = lib.optional cfg.nginx.enable "nginx.service";
+              wants = lib.optional cfg.nginx.enable "nginx.service";
               wantedBy = [ "multi-user.target" ];
-              path = optional cfg.postgresql.enable postgresql.package;
+              path = lib.optional cfg.postgresql.enable postgresql.package;
               # Beware: change in credentials' content will not trigger restart.
               restartTriggers = [ configIni ];
               serviceConfig = {
                 Type = "simple";
-                Restart = mkDefault "always";
-                #RestartSec = mkDefault "2min";
+                Restart = lib.mkDefault "always";
+                #RestartSec = lib.mkDefault "2min";
                 StateDirectory = [ "sourcehut/${srvsrht}" ];
                 StateDirectoryMode = "2750";
                 ExecStart =
@@ -389,7 +389,7 @@ in
                     echo ${version} >${stateDir}/db
                   fi
 
-                  ${optionalString cfg.settings.${iniKey}.migrate-on-upgrade ''
+                  ${lib.optionalString cfg.settings.${iniKey}.migrate-on-upgrade ''
                     if [ "$(cat ${stateDir}/db)" != "${version}" ]; then
                       # Manage schema migrations using alembic
                       ${package}/bin/${srvsrht}-migrate -a upgrade head
@@ -410,7 +410,7 @@ in
           ]);
         }
 
-        (mkIf webhooks {
+        (lib.mkIf webhooks {
           "${srvsrht}-webhooks" = baseService "${srvsrht}-webhooks" { } {
             description = "sourcehut ${srv}.sr.ht webhooks service";
             after = [ "${srvsrht}.service" ];
@@ -461,7 +461,7 @@ in
               partOf = [ "${srvsrht}.service" ];
               serviceConfig = {
                 Type = "simple";
-                Restart = mkDefault "always";
+                Restart = lib.mkDefault "always";
               };
             }
             extraService

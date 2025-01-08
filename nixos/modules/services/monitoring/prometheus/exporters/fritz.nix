@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   cfg = config.services.prometheus.exporters.fritz;
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "fritz-exporter.yaml" cfg.settings;
@@ -15,28 +15,28 @@ in
   port = 9787;
 
   extraOpts = {
-    settings = mkOption {
+    settings = lib.mkOption {
       description = "Configuration settings for fritz-exporter.";
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = yaml.type;
 
         options = {
           # Pull existing port option into config file.
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = cfg.port;
             internal = true;
             visible = false;
           };
           # Pull existing listen address option into config file.
-          listen_address = mkOption {
-            type = types.str;
+          listen_address = lib.mkOption {
+            type = lib.types.str;
             default = cfg.listenAddress;
             internal = true;
             visible = false;
           };
-          log_level = mkOption {
-            type = types.enum [
+          log_level = lib.mkOption {
+            type = lib.types.enum [
               "DEBUG"
               "INFO"
               "WARNING"
@@ -48,44 +48,44 @@ in
               Log level to use for the exporter.
             '';
           };
-          devices = mkOption {
+          devices = lib.mkOption {
             default = [ ];
             description = "Fritz!-devices to monitor using the exporter.";
             type =
-              with types;
+              with lib.types;
               listOf (submodule {
                 freeformType = yaml.type;
 
                 options = {
-                  name = mkOption {
-                    type = types.str;
+                  name = lib.mkOption {
+                    type = lib.types.str;
                     default = "";
                     description = ''
                       Name to use for the device.
                     '';
                   };
-                  hostname = mkOption {
-                    type = types.str;
+                  hostname = lib.mkOption {
+                    type = lib.types.str;
                     default = "fritz.box";
                     description = ''
                       Hostname under which the target device is reachable.
                     '';
                   };
-                  username = mkOption {
-                    type = types.str;
+                  username = lib.mkOption {
+                    type = lib.types.str;
                     description = ''
                       Username to authenticate with the target device.
                     '';
                   };
-                  password_file = mkOption {
-                    type = types.path;
+                  password_file = lib.mkOption {
+                    type = lib.types.path;
                     description = ''
                       Path to a file which contains the password to authenticate with the target device.
                       Needs to be readable by the user the exporter runs under.
                     '';
                   };
-                  host_info = mkOption {
-                    type = types.bool;
+                  host_info = lib.mkOption {
+                    type = lib.types.bool;
                     description = ''
                       Enable extended host info for this device. *Warning*: This will heavily increase scrape time.
                     '';

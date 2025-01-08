@@ -5,7 +5,7 @@ let
     boolToString
     mkDefault
     mkIf
-    optional
+    lib.optional
     readFile
   ;
 in
@@ -39,8 +39,8 @@ in
   # Allow root logins only using SSH keys
   # and disable password authentication in general
   services.openssh.enable = true;
-  services.openssh.settings.PermitRootLogin = mkDefault "prohibit-password";
-  services.openssh.settings.PasswordAuthentication = mkDefault false;
+  services.openssh.settings.PermitRootLogin = lib.mkDefault "prohibit-password";
+  services.openssh.settings.PasswordAuthentication = lib.mkDefault false;
 
   # enable OS Login. This also requires setting enable-oslogin=TRUE metadata on
   # instance or project level
@@ -51,13 +51,13 @@ in
   services.udev.path = [ pkgs.google-guest-configs ];
 
   # Force getting the hostname from Google Compute.
-  networking.hostName = mkDefault "";
+  networking.hostName = lib.mkDefault "";
 
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
 
   # Rely on GCP's firewall instead
-  networking.firewall.enable = mkDefault false;
+  networking.firewall.enable = lib.mkDefault false;
 
   # Configure default metadata hostnames
   networking.extraHosts = ''
@@ -75,20 +75,20 @@ in
   systemd.services.google-guest-agent = {
     wantedBy = [ "multi-user.target" ];
     restartTriggers = [ config.environment.etc."default/instance_configs.cfg".source ];
-    path = optional config.users.mutableUsers pkgs.shadow;
+    path = lib.optional config.users.mutableUsers pkgs.shadow;
   };
   systemd.services.google-startup-scripts.wantedBy = [ "multi-user.target" ];
   systemd.services.google-shutdown-scripts.wantedBy = [ "multi-user.target" ];
 
-  security.sudo.extraRules = mkIf config.users.mutableUsers [
+  security.sudo.extraRules = lib.mkIf config.users.mutableUsers [
     { groups = [ "google-sudoers" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
   ];
 
-  security.sudo-rs.extraRules = mkIf config.users.mutableUsers [
+  security.sudo-rs.extraRules = lib.mkIf config.users.mutableUsers [
     { groups = [ "google-sudoers" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
   ];
 
-  users.groups.google-sudoers = mkIf config.users.mutableUsers { };
+  users.groups.google-sudoers = lib.mkIf config.users.mutableUsers { };
 
   boot.extraModprobeConfig = readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
 

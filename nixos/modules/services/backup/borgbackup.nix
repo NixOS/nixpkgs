@@ -153,10 +153,10 @@ let
     }:
     pkgs.runCommand "${name}-wrapper" {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-    } (with lib; ''
+    } ''
       makeWrapper "${original}" "$out/bin/${name}" \
         ${lib.concatStringsSep " \\\n " (lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
-    '');
+    '';
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
     original = lib.getExe config.services.borgbackup.package;
@@ -444,9 +444,9 @@ in {
           };
 
           compression = lib.mkOption {
-            # "auto" is optional,
+            # "auto" is lib.optional,
             # compression mode must be given,
-            # compression level is optional
+            # compression level is lib.optional
             type = lib.types.strMatching "none|(auto,)?(lz4|zstd|zlib|lzma)(,[[:digit:]]{1,2})?";
             description = ''
               Compression method to use. Refer to

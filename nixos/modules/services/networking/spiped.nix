@@ -1,25 +1,23 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.spiped;
 in
 {
   options = {
     services.spiped = {
-      enable = mkOption {
-        type        = types.bool;
+      enable = lib.mkOption {
+        type        = lib.types.bool;
         default     = false;
         description = "Enable the spiped service module.";
       };
 
-      config = mkOption {
-        type = types.attrsOf (types.submodule (
+      config = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule (
           {
             options = {
-              encrypt = mkOption {
-                type    = types.bool;
+              encrypt = lib.mkOption {
+                type    = lib.types.bool;
                 default = false;
                 description = ''
                   Take unencrypted connections from the
@@ -28,8 +26,8 @@ in
                 '';
               };
 
-              decrypt = mkOption {
-                type    = types.bool;
+              decrypt = lib.mkOption {
+                type    = lib.types.bool;
                 default = false;
                 description = ''
                   Take encrypted connections from the
@@ -38,8 +36,8 @@ in
                 '';
               };
 
-              source = mkOption {
-                type    = types.str;
+              source = lib.mkOption {
+                type    = lib.types.str;
                 description = ''
                   Address on which spiped should listen for incoming
                   connections.  Must be in one of the following formats:
@@ -54,13 +52,13 @@ in
                 '';
               };
 
-              target = mkOption {
-                type    = types.str;
+              target = lib.mkOption {
+                type    = lib.types.str;
                 description = "Address to which spiped should connect.";
               };
 
-              keyfile = mkOption {
-                type    = types.path;
+              keyfile = lib.mkOption {
+                type    = lib.types.path;
                 description = ''
                   Name of a file containing the spiped key.
                   As the daemon runs as the `spiped` user,
@@ -70,8 +68,8 @@ in
                 '';
               };
 
-              timeout = mkOption {
-                type = types.int;
+              timeout = lib.mkOption {
+                type = lib.types.int;
                 default = 5;
                 description = ''
                   Timeout, in seconds, after which an attempt to connect to
@@ -80,16 +78,16 @@ in
                 '';
               };
 
-              maxConns = mkOption {
-                type = types.int;
+              maxConns = lib.mkOption {
+                type = lib.types.int;
                 default = 100;
                 description = ''
                   Limit on the number of simultaneous connections allowed.
                 '';
               };
 
-              waitForDNS = mkOption {
-                type = types.bool;
+              waitForDNS = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Wait for DNS. Normally when `spiped` is
@@ -103,14 +101,14 @@ in
                 '';
               };
 
-              disableKeepalives = mkOption {
-                type = types.bool;
+              disableKeepalives = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = "Disable transport layer keep-alives.";
               };
 
-              weakHandshake = mkOption {
-                type = types.bool;
+              weakHandshake = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Use fast/weak handshaking: This reduces the CPU time spent
@@ -119,16 +117,16 @@ in
                 '';
               };
 
-              resolveRefresh = mkOption {
-                type = types.int;
+              resolveRefresh = lib.mkOption {
+                type = lib.types.int;
                 default = 60;
                 description = ''
                   Resolution refresh time for the target socket, in seconds.
                 '';
               };
 
-              disableReresolution = mkOption {
-                type = types.bool;
+              disableReresolution = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = "Disable target address re-resolution.";
               };
@@ -138,7 +136,7 @@ in
 
         default = {};
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             pipe1 =
               { keyfile = "/var/lib/spiped/pipe1.key";
@@ -165,8 +163,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = mapAttrsToList (name: c: {
+  config = lib.mkIf cfg.enable {
+    assertions = lib.mapAttrsToList (name: c: {
       assertion = (c.encrypt -> !c.decrypt) || (c.decrypt -> c.encrypt);
       message   = "A pipe must either encrypt or decrypt";
     }) cfg.config;
@@ -193,17 +191,17 @@ in
     };
 
     # Setup spiped config files
-    environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"
-      { text = concatStringsSep " "
+    environment.etc = lib.mapAttrs' (name: cfg: lib.nameValuePair "spiped/${name}.spec"
+      { text = lib.concatStringsSep " "
           [ (if cfg.encrypt then "-e" else "-d")        # Mode
             "-s ${cfg.source}"                          # Source
             "-t ${cfg.target}"                          # Target
             "-k ${cfg.keyfile}"                         # Keyfile
             "-n ${toString cfg.maxConns}"               # Max number of conns
             "-o ${toString cfg.timeout}"                # Timeout
-            (optionalString cfg.waitForDNS "-D")        # Wait for DNS
-            (optionalString cfg.weakHandshake "-f")     # No PFS
-            (optionalString cfg.disableKeepalives "-j") # Keepalives
+            (lib.optionalString cfg.waitForDNS "-D")        # Wait for DNS
+            (lib.optionalString cfg.weakHandshake "-f")     # No PFS
+            (lib.optionalString cfg.disableKeepalives "-j") # Keepalives
             (if cfg.disableReresolution then "-R"
               else "-r ${toString cfg.resolveRefresh}")
           ];

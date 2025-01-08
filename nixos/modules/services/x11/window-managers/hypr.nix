@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.hypr;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.hypr.enable = mkEnableOption "hypr";
+    services.xserver.windowManager.hypr.enable = lib.mkEnableOption "hypr";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "hypr";
       start = ''
         ${pkgs.hypr}/bin/Hypr &

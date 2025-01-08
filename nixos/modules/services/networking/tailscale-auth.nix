@@ -12,39 +12,39 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
   cfg = config.services.tailscaleAuth;
 in
 {
   options.services.tailscaleAuth = {
-    enable = mkEnableOption "tailscale.nginx-auth, to authenticate users via tailscale";
+    enable = lib.mkEnableOption "tailscale.nginx-auth, to authenticate users via tailscale";
 
-    package = mkPackageOption pkgs "tailscale-nginx-auth" { };
+    package = lib.mkPackageOption pkgs "tailscale-nginx-auth" { };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "tailscale-nginx-auth";
       description = "User which runs tailscale-nginx-auth";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "tailscale-nginx-auth";
       description = "Group which runs tailscale-nginx-auth";
     };
 
-    socketPath = mkOption {
+    socketPath = lib.mkOption {
       default = "/run/tailscale-nginx-auth/tailscale-nginx-auth.sock";
-      type = types.path;
+      type = lib.types.path;
       description = ''
         Path of the socket listening to authorization requests.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.tailscale.enable = true;
 
     users.users.${cfg.user} = {

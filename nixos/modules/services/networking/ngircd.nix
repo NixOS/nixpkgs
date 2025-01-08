@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.ngircd;
 
@@ -26,19 +24,19 @@ in
 {
   options = {
     services.ngircd = {
-      enable = mkEnableOption "the ngircd IRC server";
+      enable = lib.mkEnableOption "the ngircd IRC server";
 
-      config = mkOption {
+      config = lib.mkOption {
         description = "The ngircd configuration (see ngircd.conf(5)).";
 
-        type = types.lines;
+        type = lib.types.lines;
       };
 
-      package = mkPackageOption pkgs "ngircd" { };
+      package = lib.mkPackageOption pkgs "ngircd" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     #!!! TODO: Use ExecReload (see https://github.com/NixOS/nixpkgs/issues/1988)
     systemd.services.ngircd = {
       description = "The ngircd IRC server";

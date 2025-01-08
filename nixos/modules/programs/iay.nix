@@ -10,28 +10,28 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optionalString
+    lib.optionalString
     types
     ;
 in
 {
   options.programs.iay = {
-    enable = mkEnableOption "iay, a minimalistic shell prompt";
-    package = mkPackageOption pkgs "iay" { };
+    enable = lib.mkEnableOption "iay, a minimalistic shell prompt";
+    package = lib.mkPackageOption pkgs "iay" { };
 
-    minimalPrompt = mkOption {
-      type = types.bool;
+    minimalPrompt = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Use minimal one-liner prompt.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.bash.promptInit = ''
       if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then
-        PS1='$(iay ${optionalString cfg.minimalPrompt "-m"})'
+        PS1='$(iay ${lib.optionalString cfg.minimalPrompt "-m"})'
       fi
     '';
 
@@ -39,7 +39,7 @@ in
       if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then
         autoload -Uz add-zsh-hook
         _iay_prompt() {
-          PROMPT="$(iay -z ${optionalString cfg.minimalPrompt "-m"})"
+          PROMPT="$(iay -z ${lib.optionalString cfg.minimalPrompt "-m"})"
         }
         add-zsh-hook precmd _iay_prompt
       fi

@@ -10,7 +10,7 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -32,11 +32,11 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.music-assistant = {
-    enable = mkEnableOption "Music Assistant";
+    enable = lib.mkEnableOption "Music Assistant";
 
-    package = mkPackageOption pkgs "music-assistant" { };
+    package = lib.mkPackageOption pkgs "music-assistant" { };
 
-    extraOptions = mkOption {
+    extraOptions = lib.mkOption {
       type = listOf str;
       default = [
         "--config"
@@ -51,7 +51,7 @@ in
       '';
     };
 
-    providers = mkOption {
+    providers = lib.mkOption {
       type = listOf (enum cfg.package.providerNames);
       default = [ ];
       example = [
@@ -64,7 +64,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.music-assistant = {
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];

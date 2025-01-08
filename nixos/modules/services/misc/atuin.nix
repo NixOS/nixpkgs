@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkOption types mkIf;
+  inherit (lib) lib.mkOption types mkIf;
   cfg = config.services.atuin;
 in
 {
@@ -15,51 +15,51 @@ in
 
       package = lib.mkPackageOption pkgs "atuin" { };
 
-      openRegistration = mkOption {
-        type = types.bool;
+      openRegistration = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Allow new user registrations with the atuin server.";
       };
 
-      path = mkOption {
-        type = types.str;
+      path = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "A path to prepend to all the routes of the server.";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "The host address the atuin server should listen on.";
       };
 
-      maxHistoryLength = mkOption {
-        type = types.int;
+      maxHistoryLength = lib.mkOption {
+        type = lib.types.int;
         default = 8192;
         description = "The max length of each history item the atuin server should store.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8888;
         description = "The port the atuin server should listen on.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the atuin server.";
       };
 
       database = {
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Create the database and database user locally.";
         };
 
-        uri = mkOption {
-          type = types.nullOr types.str;
+        uri = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = "postgresql:///atuin?host=/run/postgresql";
           example = "postgresql://atuin@localhost:5432/atuin";
           description = ''
@@ -71,7 +71,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.database.createLocally -> config.services.postgresql.enable;
@@ -79,7 +79,7 @@ in
       }
     ];
 
-    services.postgresql = mkIf cfg.database.createLocally {
+    services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
       ensureUsers = [
         {
@@ -153,6 +153,6 @@ in
         };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
   };
 }

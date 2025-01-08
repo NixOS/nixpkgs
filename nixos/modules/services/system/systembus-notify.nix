@@ -13,7 +13,7 @@ let
 in
 {
   options.services.systembus-notify = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       System bus notification support
 
       WARNING: enabling this option (while convenient) should *not* be done on a
@@ -22,7 +22,7 @@ in
     '';
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd = {
       packages = with pkgs; [ systembus-notify ];
 

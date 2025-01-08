@@ -10,7 +10,7 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -22,10 +22,10 @@ in
 
   options = {
     xdg.terminal-exec = {
-      enable = mkEnableOption "xdg-terminal-exec, the [proposed](https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/46) Default Terminal Execution Specification";
-      package = mkPackageOption pkgs "xdg-terminal-exec" { };
-      settings = mkOption {
-        type = with types; attrsOf (listOf str);
+      enable = lib.mkEnableOption "xdg-terminal-exec, the [proposed](https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/46) Default Terminal Execution Specification";
+      package = lib.mkPackageOption pkgs "xdg-terminal-exec" { };
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf (listOf str);
         default = { };
         description = ''
           Configuration options for the Default Terminal Execution Specification.
@@ -47,7 +47,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
 

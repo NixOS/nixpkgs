@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (lib) literalExpression mkOption types;
+  inherit (lib) literalExpression lib.mkOption types;
   cfg = config.security.dhparams;
   opt = options.security.dhparams;
 
@@ -19,18 +19,18 @@ let
   paramsSubmodule =
     { name, config, ... }:
     {
-      options.bits = mkOption {
+      options.bits = lib.mkOption {
         type = bitType;
         default = cfg.defaultBitSize;
-        defaultText = literalExpression "config.${opt.defaultBitSize}";
+        defaultText = lib.literalExpression "config.${opt.defaultBitSize}";
         description = ''
           The bit size for the prime that is used during a Diffie-Hellman
           key exchange.
         '';
       };
 
-      options.path = mkOption {
-        type = types.path;
+      options.path = lib.mkOption {
+        type = lib.types.path;
         readOnly = true;
         description = ''
           The resulting path of the generated Diffie-Hellman parameters
@@ -53,17 +53,17 @@ in
 {
   options = {
     security.dhparams = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to generate new DH params and clean up old DH params.
         '';
       };
 
-      params = mkOption {
+      params = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           let
             coerce = bits: { inherit bits; };
           in
@@ -102,8 +102,8 @@ in
         '';
       };
 
-      stateful = mkOption {
-        type = types.bool;
+      stateful = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether generation of Diffie-Hellman parameters should be stateful or
@@ -120,7 +120,7 @@ in
         '';
       };
 
-      defaultBitSize = mkOption {
+      defaultBitSize = lib.mkOption {
         type = bitType;
         default = 2048;
         description = ''
@@ -130,8 +130,8 @@ in
         '';
       };
 
-      path = mkOption {
-        type = types.str;
+      path = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/dhparams";
         description = ''
           Path to the directory in which Diffie-Hellman parameters will be

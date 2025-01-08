@@ -1,26 +1,23 @@
 { config, lib, pkgs, utils, ... }:
 
-with utils;
-with lib;
-
 let
 
   cfg = config.networking;
-  interfaces = attrValues cfg.interfaces;
+  interfaces = lib.attrValues cfg.interfaces;
 
-  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches)
-    ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
-    ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
+  slaves = lib.concatMap (i: i.interfaces) (lib.attrValues cfg.bonds)
+    ++ lib.concatMap (i: i.interfaces) (lib.attrValues cfg.bridges)
+    ++ lib.concatMap (i: lib.attrNames (lib.filterAttrs (_: config: config.type != "internal") i.interfaces)) (lib.attrValues cfg.vswitches)
+    ++ lib.concatMap (i: [i.interface]) (lib.attrValues cfg.macvlans)
+    ++ lib.concatMap (i: [i.interface]) (lib.attrValues cfg.vlans);
 
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
-    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+    "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device";
 
   interfaceIps = i:
     i.ipv4.addresses
-    ++ optionals cfg.enableIPv6 i.ipv6.addresses;
+    ++ lib.optionals cfg.enableIPv6 i.ipv6.addresses;
 
   destroyBond = i: ''
     while true; do
@@ -40,30 +37,30 @@ let
   # Should be removed in the release after next
   bondDeprecation = rec {
     deprecated = [ "lacp_rate" "miimon" "mode" "xmit_hash_policy" ];
-    filterDeprecated = bond: (filterAttrs (attrName: attr:
-                         elem attrName deprecated && attr != null) bond);
+    filterDeprecated = bond: (lib.filterAttrs (attrName: attr:
+                         lib.elem attrName deprecated && attr != null) bond);
   };
 
   bondWarnings =
     let oneBondWarnings = bondName: bond:
-          mapAttrsToList (bondText bondName) (bondDeprecation.filterDeprecated bond);
+          lib.mapAttrsToList (bondText bondName) (bondDeprecation.filterDeprecated bond);
         bondText = bondName: optName: _:
           "${bondName}.${optName} is deprecated, use ${bondName}.driverOptions";
     in {
-      warnings = flatten (mapAttrsToList oneBondWarnings cfg.bonds);
+      warnings = lib.flatten (lib.mapAttrsToList oneBondWarnings cfg.bonds);
     };
 
   normalConfig = {
     systemd.network.links = let
-      createNetworkLink = i: nameValuePair "40-${i.name}" {
+      createNetworkLink = i: lib.nameValuePair "40-${i.name}" {
         matchConfig.OriginalName = i.name;
-        linkConfig = optionalAttrs (i.macAddress != null) {
+        linkConfig = lib.optionalAttrs (i.macAddress != null) {
           MACAddress = i.macAddress;
-        } // optionalAttrs (i.mtu != null) {
+        } // lib.optionalAttrs (i.mtu != null) {
           MTUBytes = toString i.mtu;
         };
       };
-    in listToAttrs (map createNetworkLink interfaces);
+    in lib.listToAttrs (map createNetworkLink interfaces);
     systemd.services =
       let
 
@@ -71,15 +68,15 @@ let
           # Use systemd service if we manage device creation, else
           # trust udev when not in a container
           if (dev == null || dev == "lo") then []
-          else if (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
-             (hasAttr dev cfg.bridges) ||
-             (hasAttr dev cfg.bonds) ||
-             (hasAttr dev cfg.macvlans) ||
-             (hasAttr dev cfg.sits) ||
-             (hasAttr dev cfg.vlans) ||
-             (hasAttr dev cfg.vswitches)
+          else if (lib.hasAttr dev (lib.filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
+             (lib.hasAttr dev cfg.bridges) ||
+             (lib.hasAttr dev cfg.bonds) ||
+             (lib.hasAttr dev cfg.macvlans) ||
+             (lib.hasAttr dev cfg.sits) ||
+             (lib.hasAttr dev cfg.vlans) ||
+             (lib.hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
-          else optional (!config.boot.isContainer) (subsystemDevice dev);
+          else lib.optional (!config.boot.isContainer) (subsystemDevice dev);
 
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
@@ -98,9 +95,9 @@ let
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
             # exclude bridges from the partOf relationship to fix container networking bug #47210
-            partOf = map (i: "network-addresses-${i.name}.service") (filter (i: !(hasAttr i.name cfg.bridges)) interfaces);
+            partOf = map (i: "network-addresses-${i.name}.service") (lib.filter (i: !(lib.hasAttr i.name cfg.bridges)) interfaces);
             conflicts = [ "shutdown.target" ];
-            wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
+            wantedBy = [ "multi-user.target" ] ++ lib.optional hasDefaultGatewaySet "network-online.target";
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -115,46 +112,46 @@ let
 
             script =
               ''
-                ${optionalString config.networking.resolvconf.enable ''
+                ${lib.optionalString config.networking.resolvconf.enable ''
                   # Set the static DNS configuration, if given.
                   ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                  ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
+                  ${lib.optionalString (cfg.nameservers != [] && cfg.domain != null) ''
                     domain ${cfg.domain}
                   ''}
-                  ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
-                  ${flip concatMapStrings cfg.nameservers (ns: ''
+                  ${lib.optionalString (cfg.search != []) ("search " + lib.concatStringsSep " " cfg.search)}
+                  ${lib.flip lib.concatMapStrings cfg.nameservers (ns: ''
                     nameserver ${ns}
                   '')}
                   EOF
                 ''}
 
                 # Set the default gateway.
-                ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
-                  ${optionalString (cfg.defaultGateway.interface != null) ''
-                    ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${optionalString (cfg.defaultGateway.metric != null)
+                ${lib.optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
+                  ${lib.optionalString (cfg.defaultGateway.interface != null) ''
+                    ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${lib.optionalString (cfg.defaultGateway.metric != null)
                       "metric ${toString cfg.defaultGateway.metric}"
                     } proto static
                   ''}
-                  ip route replace default ${optionalString (cfg.defaultGateway.metric != null)
+                  ip route replace default ${lib.optionalString (cfg.defaultGateway.metric != null)
                       "metric ${toString cfg.defaultGateway.metric}"
                     } via "${cfg.defaultGateway.address}" ${
-                    optionalString (cfg.defaultGatewayWindowSize != null)
+                    lib.optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
-                    optionalString (cfg.defaultGateway.interface != null)
+                    lib.optionalString (cfg.defaultGateway.interface != null)
                       "dev ${cfg.defaultGateway.interface}"} proto static
                 ''}
-                ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
-                  ${optionalString (cfg.defaultGateway6.interface != null) ''
-                    ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${optionalString (cfg.defaultGateway6.metric != null)
+                ${lib.optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
+                  ${lib.optionalString (cfg.defaultGateway6.interface != null) ''
+                    ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${lib.optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } proto static
                   ''}
-                  ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
+                  ip -6 route replace default ${lib.optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } via "${cfg.defaultGateway6.address}" ${
-                    optionalString (cfg.defaultGatewayWindowSize != null)
+                    lib.optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
-                    optionalString (cfg.defaultGateway6.interface != null)
+                    lib.optionalString (cfg.defaultGateway6.interface != null)
                       "dev ${cfg.defaultGateway6.interface}"} proto static
                 ''}
               '';
@@ -172,7 +169,7 @@ let
           let
             ips = interfaceIps i;
           in
-          nameValuePair "network-addresses-${i.name}"
+          lib.nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
             wantedBy = [
               "network-setup.service"
@@ -196,7 +193,7 @@ let
 
                 ip link set dev "${i.name}" up
 
-                ${flip concatMapStrings ips (ip:
+                ${lib.flip lib.concatMapStrings ips (ip:
                   let
                     cidr = "${ip.address}/${toString ip.prefixLength}";
                   in
@@ -215,11 +212,11 @@ let
                 state="/run/nixos/network/routes/${i.name}"
                 mkdir -p $(dirname "$state")
 
-                ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
+                ${lib.flip lib.concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
                     cidr = "${route.address}/${toString route.prefixLength}";
-                    via = optionalString (route.via != null) ''via "${route.via}"'';
-                    options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                    via = lib.optionalString (route.via != null) ''via "${route.via}"'';
+                    options = lib.concatStrings (lib.mapAttrsToList (name: val: "${name} ${val} ") route.options);
                     type = toString route.type;
                   in
                   ''
@@ -255,10 +252,10 @@ let
             '';
           };
 
-        createTunDevice = i: nameValuePair "${i.name}-netdev"
+        createTunDevice = i: lib.nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
-            bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
-            after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
+            bindsTo = lib.optional (!config.boot.isContainer) "dev-net-tun.device";
+            after = lib.optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             before = [ "network-setup.service" ];
             path = [ pkgs.iproute2 ];
@@ -274,15 +271,15 @@ let
             '';
           };
 
-        createBridgeDevice = n: v: nameValuePair "${n}-netdev"
+        createBridgeDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency v.interfaces);
+            deps = lib.concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
-            bindsTo = deps ++ optional v.rstp "mstpd.service";
-            partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
-            after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
+            bindsTo = deps ++ lib.optional v.rstp "mstpd.service";
+            partOf = [ "network-setup.service" ] ++ lib.optional v.rstp "mstpd.service";
+            after = [ "network-pre.target" ] ++ deps ++ lib.optional v.rstp "mstpd.service"
               ++ map (i: "network-addresses-${i}.service") v.interfaces;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -297,16 +294,16 @@ let
               ip link add name "${n}" type bridge
 
               # Enslave child interfaces
-              ${flip concatMapStrings v.interfaces (i: ''
+              ${lib.flip lib.concatMapStrings v.interfaces (i: ''
                 ip link set dev "${i}" master "${n}"
                 ip link set dev "${i}" up
               '')}
               # Save list of enslaved interfaces
-              echo "${flip concatMapStrings v.interfaces (i: ''
+              echo "${lib.flip lib.concatMapStrings v.interfaces (i: ''
                 ${i}
               '')}" > /run/${n}.interfaces
 
-              ${optionalString config.virtualisation.libvirtd.enable ''
+              ${lib.optionalString config.virtualisation.libvirtd.enable ''
                   # Enslave dynamically added interfaces which may be lost on nixos-rebuild
                   #
                   # if `libvirtd.service` is not running, do not use `virsh` which would try activate it via 'libvirtd.socket' and thus start it out-of-order.
@@ -324,7 +321,7 @@ let
                 ''}
 
               # Enable stp on the interface
-              ${optionalString v.rstp ''
+              ${lib.optionalString v.rstp ''
                 echo 2 >/sys/class/net/${n}/bridge/stp_state
               ''}
 
@@ -342,12 +339,12 @@ let
               done
 
               # Enslave child interfaces (new list of interfaces)
-              ${flip concatMapStrings v.interfaces (i: ''
+              ${lib.flip lib.concatMapStrings v.interfaces (i: ''
                 ip link set dev "${i}" master "${n}"
                 ip link set dev "${i}" up
               '')}
               # Save list of enslaved interfaces
-              echo "${flip concatMapStrings v.interfaces (i: ''
+              echo "${lib.flip lib.concatMapStrings v.interfaces (i: ''
                 ${i}
               '')}" > /run/${n}.interfaces
 
@@ -357,10 +354,10 @@ let
             reloadIfChanged = true;
           });
 
-        createVswitchDevice = n: v: nameValuePair "${n}-netdev"
+        createVswitchDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency (attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces)));
-            internalConfigs = map (i: "network-addresses-${i}.service") (attrNames (filterAttrs (_: config: config.type == "internal") v.interfaces));
+            deps = lib.concatLists (map deviceDependency (lib.attrNames (lib.filterAttrs (_: config: config.type != "internal") v.interfaces)));
+            internalConfigs = map (i: "network-addresses-${i}.service") (lib.attrNames (lib.filterAttrs (_: config: config.type == "internal") v.interfaces));
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
@@ -379,14 +376,14 @@ let
             preStart = ''
               echo "Resetting Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
-                        -- set bridge ${n} protocols=${concatStringsSep "," v.supportedOpenFlowVersions}
+                        -- set bridge ${n} protocols=${lib.concatStringsSep "," v.supportedOpenFlowVersions}
             '';
             script = ''
               echo "Configuring Open vSwitch ${n}..."
-              ovs-vsctl ${concatStrings (mapAttrsToList (name: config: " -- add-port ${n} ${name}" + optionalString (config.vlan != null) " tag=${toString config.vlan}") v.interfaces)} \
-                ${concatStrings (mapAttrsToList (name: config: optionalString (config.type != null) " -- set interface ${name} type=${config.type}") v.interfaces)} \
-                ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
-                ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
+              ovs-vsctl ${lib.concatStrings (lib.mapAttrsToList (name: config: " -- add-port ${n} ${name}" + lib.optionalString (config.vlan != null) " tag=${toString config.vlan}") v.interfaces)} \
+                ${lib.concatStrings (lib.mapAttrsToList (name: config: lib.optionalString (config.type != null) " -- set interface ${name} type=${config.type}") v.interfaces)} \
+                ${lib.concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
+                ${lib.concatMapStrings (x: " -- " + x) (lib.splitString "\n" v.extraOvsctlCmds)}
 
 
               echo "Adding OpenFlow rules for Open vSwitch ${n}..."
@@ -403,9 +400,9 @@ let
             '';
           });
 
-        createBondDevice = n: v: nameValuePair "${n}-netdev"
+        createBondDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency v.interfaces);
+            deps = lib.concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bond Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -422,18 +419,18 @@ let
 
               echo "Creating new bond ${n}..."
               ip link add name "${n}" type bond \
-              ${let opts = (mapAttrs (const toString)
+              ${let opts = (lib.mapAttrs (lib.const toString)
                              (bondDeprecation.filterDeprecated v))
                            // v.driverOptions;
-                 in concatStringsSep "\n"
-                      (mapAttrsToList (set: val: "  ${set} ${val} \\") opts)}
+                 in lib.concatStringsSep "\n"
+                      (lib.mapAttrsToList (set: val: "  ${set} ${val} \\") opts)}
 
               # !!! There must be a better way to wait for the interface
               while [ ! -d "/sys/class/net/${n}" ]; do sleep 0.1; done;
 
               # Bring up the bond and enslave the specified interfaces
               ip link set dev "${n}" up
-              ${flip concatMapStrings v.interfaces (i: ''
+              ${lib.flip lib.concatMapStrings v.interfaces (i: ''
                 ip link set dev "${i}" down
                 ip link set dev "${i}" master "${n}"
               '')}
@@ -441,7 +438,7 @@ let
             postStop = destroyBond n;
           });
 
-        createMacvlanDevice = n: v: nameValuePair "${n}-netdev"
+        createMacvlanDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.interface;
           in
@@ -457,7 +454,7 @@ let
               # Remove Dead Interfaces
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add link "${v.interface}" name "${n}" type macvlan \
-                ${optionalString (v.mode != null) "mode ${v.mode}"}
+                ${lib.optionalString (v.mode != null) "mode ${v.mode}"}
               ip link set dev "${n}" up
             '';
             postStop = ''
@@ -465,17 +462,17 @@ let
             '';
           });
 
-        createFouEncapsulation = n: v: nameValuePair "${n}-fou-encap"
+        createFouEncapsulation = n: v: lib.nameValuePair "${n}-fou-encap"
           (let
             # if we have a device to bind to we can wait for its addresses to be
             # configured, otherwise external sequencing is required.
-            deps = optionals (v.local != null && v.local.dev != null)
+            deps = lib.optionals (v.local != null && v.local.dev != null)
               (deviceDependency v.local.dev ++ [ "network-addresses-${v.local.dev}.service" ]);
             fouSpec = "port ${toString v.port} ${
               if v.protocol != null then "ipproto ${toString v.protocol}" else "gue"
             } ${
-              optionalString (v.local != null) "local ${escapeShellArg v.local.address} ${
-                optionalString (v.local.dev != null) "dev ${escapeShellArg v.local.dev}"
+              lib.optionalString (v.local != null) "local ${lib.escapeShellArg v.local.address} ${
+                lib.optionalString (v.local.dev != null) "dev ${lib.escapeShellArg v.local.dev}"
               }"
             }";
           in
@@ -497,7 +494,7 @@ let
             '';
           });
 
-        createSitDevice = n: v: nameValuePair "${n}-netdev"
+        createSitDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.dev;
           in
@@ -513,13 +510,13 @@ let
               # Remove Dead Interfaces
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add name "${n}" type sit \
-                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
-                ${optionalString (v.local != null) "local \"${v.local}\""} \
-                ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
-                ${optionalString (v.dev != null) "dev \"${v.dev}\""} \
-                ${optionalString (v.encapsulation != null)
+                ${lib.optionalString (v.remote != null) "remote \"${v.remote}\""} \
+                ${lib.optionalString (v.local != null) "local \"${v.local}\""} \
+                ${lib.optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
+                ${lib.optionalString (v.dev != null) "dev \"${v.dev}\""} \
+                ${lib.optionalString (v.encapsulation != null)
                   "encap ${v.encapsulation.type} encap-dport ${toString v.encapsulation.port} ${
-                    optionalString (v.encapsulation.sourcePort != null)
+                    lib.optionalString (v.encapsulation.sourcePort != null)
                       "encap-sport ${toString v.encapsulation.sourcePort}"
                   }"}
               ip link set dev "${n}" up
@@ -529,7 +526,7 @@ let
             '';
           });
 
-        createGreDevice = n: v: nameValuePair "${n}-netdev"
+        createGreDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.dev;
             ttlarg = if lib.hasPrefix "ip6" v.type then "hoplimit" else "ttl";
@@ -546,10 +543,10 @@ let
               # Remove Dead Interfaces
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add name "${n}" type ${v.type} \
-                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
-                ${optionalString (v.local != null) "local \"${v.local}\""} \
-                ${optionalString (v.ttl != null) "${ttlarg} ${toString v.ttl}"} \
-                ${optionalString (v.dev != null) "dev \"${v.dev}\""}
+                ${lib.optionalString (v.remote != null) "remote \"${v.remote}\""} \
+                ${lib.optionalString (v.local != null) "local \"${v.local}\""} \
+                ${lib.optionalString (v.ttl != null) "${ttlarg} ${toString v.ttl}"} \
+                ${lib.optionalString (v.dev != null) "dev \"${v.dev}\""}
               ip link set dev "${n}" up
             '';
             postStop = ''
@@ -557,7 +554,7 @@ let
             '';
           });
 
-        createVlanDevice = n: v: nameValuePair "${n}-netdev"
+        createVlanDevice = n: v: lib.nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.interface;
           in
@@ -586,17 +583,17 @@ let
             '';
           });
 
-      in listToAttrs (
+      in lib.listToAttrs (
            map configureAddrs interfaces ++
-           map createTunDevice (filter (i: i.virtual) interfaces))
-         // mapAttrs' createBridgeDevice cfg.bridges
-         // mapAttrs' createVswitchDevice cfg.vswitches
-         // mapAttrs' createBondDevice cfg.bonds
-         // mapAttrs' createMacvlanDevice cfg.macvlans
-         // mapAttrs' createFouEncapsulation cfg.fooOverUDP
-         // mapAttrs' createSitDevice cfg.sits
-         // mapAttrs' createGreDevice cfg.greTunnels
-         // mapAttrs' createVlanDevice cfg.vlans
+           map createTunDevice (lib.filter (i: i.virtual) interfaces))
+         // lib.mapAttrs' createBridgeDevice cfg.bridges
+         // lib.mapAttrs' createVswitchDevice cfg.vswitches
+         // lib.mapAttrs' createBondDevice cfg.bonds
+         // lib.mapAttrs' createMacvlanDevice cfg.macvlans
+         // lib.mapAttrs' createFouEncapsulation cfg.fooOverUDP
+         // lib.mapAttrs' createSitDevice cfg.sits
+         // lib.mapAttrs' createGreDevice cfg.greTunnels
+         // lib.mapAttrs' createVlanDevice cfg.vlans
          // {
            network-setup = networkSetup;
            network-local-commands = networkLocalCommands;
@@ -613,11 +610,11 @@ let
 in
 
 {
-  config = mkMerge [
+  config = lib.mkMerge [
     bondWarnings
-    (mkIf (!cfg.useNetworkd) normalConfig)
+    (lib.mkIf (!cfg.useNetworkd) normalConfig)
     { # Ensure slave interfaces are brought up
-      networking.interfaces = genAttrs slaves (i: {});
+      networking.interfaces = lib.genAttrs slaves (i: {});
     }
   ];
 }

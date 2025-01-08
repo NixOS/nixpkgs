@@ -1722,7 +1722,7 @@ let
 
             inherit (snakeoil.peer0) privateKey;
 
-            peers = singleton {
+            peers = lib.singleton {
               allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
 
               inherit (snakeoil.peer1) publicKey;
@@ -1765,13 +1765,13 @@ mapAttrs
     {
       name = "prometheus-${exporter}-exporter";
 
-      nodes.${nodeName} = mkMerge [{
+      nodes.${nodeName} = lib.mkMerge [{
         services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
       } testConfig.metricProvider or { }];
 
       testScript = ''
         ${nodeName}.start()
-        ${concatStringsSep "\n" (map (line:
+        ${lib.concatStringsSep "\n" (map (line:
           if builtins.any (b: b) [
             (builtins.match "^[[:space:]]*$" line != null)
             (builtins.substring 0 1 line == "#")

@@ -8,21 +8,21 @@
 
 let
   cfg = config.services.prometheus.exporters.fritzbox;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) lib.mkOption types concatStringsSep;
 in
 {
   port = 9133;
   extraOpts = {
-    gatewayAddress = mkOption {
-      type = types.str;
+    gatewayAddress = lib.mkOption {
+      type = lib.types.str;
       default = "fritz.box";
       description = ''
         The hostname or IP of the FRITZ!Box.
       '';
     };
 
-    gatewayPort = mkOption {
-      type = types.int;
+    gatewayPort = lib.mkOption {
+      type = lib.types.int;
       default = 49000;
       description = ''
         The port of the FRITZ!Box UPnP service.
@@ -36,7 +36,7 @@ in
           -listen-address ${cfg.listenAddress}:${toString cfg.port} \
           -gateway-address ${cfg.gatewayAddress} \
           -gateway-port ${toString cfg.gatewayPort} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };

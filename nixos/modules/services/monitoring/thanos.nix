@@ -17,24 +17,24 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
+    lib.mkOption
     mkPackageOption
-    optional
-    optionalAttrs
-    optionalString
+    lib.optional
+    lib.optionalAttrs
+    lib.optionalString
     types
     ;
 
   cfg = config.services.thanos;
 
-  nullOpt = type: description: mkOption {
-    type = types.nullOr type;
+  nullOpt = type: description: lib.mkOption {
+    type = lib.types.nullOr type;
     default = null;
     description = description;
   };
 
-  optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
-  flagToArgs   = opt: v  : optional v            "--${opt}";
+  optionToArgs = opt: v  : lib.optional (v != null)  ''--${opt}="${toString v}"'';
+  flagToArgs   = opt: v  : lib.optional v            "--${opt}";
   listToArgs   = opt: vs : map               (v: ''--${opt}="${v}"'') vs;
   attrsToArgs  = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
 
@@ -51,8 +51,8 @@ let
 
   mkFlagParam = description: {
     toArgs = flagToArgs;
-    option = mkOption {
-      type = types.bool;
+    option = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = description;
     };
@@ -60,8 +60,8 @@ let
 
   mkListParam = opt: description: {
     toArgs = _opt: listToArgs opt;
-    option = mkOption {
-      type = types.listOf types.str;
+    option = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = description;
     };
@@ -69,8 +69,8 @@ let
 
   mkAttrsParam = opt: description: {
     toArgs = _opt: attrsToArgs opt;
-    option = mkOption {
-      type = types.attrsOf types.str;
+    option = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = {};
       description = description;
     };
@@ -78,8 +78,8 @@ let
 
   mkStateDirParam = opt: default: description: {
     toArgs = _opt: stateDir: optionToArgs opt "/var/lib/${stateDir}";
-    option = mkOption {
-      type = types.str;
+    option = lib.mkOption {
+      type = lib.types.str;
       inherit default;
       description = description;
     };
@@ -93,7 +93,7 @@ let
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
     (let args = cfg.${cmd}.arguments;
-     in optionalString (length args != 0) (" \\\n  " +
+     in lib.optionalString (length args != 0) (" \\\n  " +
          concatStringsSep " \\\n  " args));
 
   argumentsOf = cmd: concatLists (collect isList
@@ -102,8 +102,8 @@ let
           v = getAttrFromPath path cfg.${cmd};
       in param.toArgs opt v)));
 
-  mkArgumentsOption = cmd: mkOption {
-    type = types.listOf types.str;
+  mkArgumentsOption = cmd: lib.mkOption {
+    type = lib.types.listOf lib.types.str;
     default = argumentsOf cmd;
     defaultText = literalMD ''
       calculated from `config.services.thanos.${cmd}`
@@ -141,11 +141,11 @@ let
     tracing = cfg: {
       tracing.config-file = {
         toArgs = _opt: path: optionToArgs "tracing.config-file" path;
-        option = mkOption {
-          type = with types; nullOr str;
+        option = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = if cfg.tracing.config == null then null
                     else toString (toYAML "tracing.yaml" cfg.tracing.config);
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
           '';
@@ -206,11 +206,11 @@ let
 
       objstore.config-file = {
         toArgs = _opt: path: optionToArgs "objstore.config-file" path;
-        option = mkOption {
-          type = with types; nullOr str;
+        option = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = if cfg.objstore.config == null then null
                     else toString (toYAML "objstore.yaml" cfg.objstore.config);
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
           '';
@@ -249,10 +249,10 @@ let
 
       tsdb.path = {
         toArgs = optionToArgs;
-        option = mkOption {
-          type = types.str;
+        option = lib.mkOption {
+          type = lib.types.str;
           default = "/var/lib/${config.services.prometheus.stateDir}/data";
-          defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
+          defaultText = lib.literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
           description = ''
             Data directory of TSDB.
           '';
@@ -688,55 +688,55 @@ in {
 
   options.services.thanos = {
 
-    package = mkPackageOption pkgs "thanos" {};
+    package = lib.mkPackageOption pkgs "thanos" {};
 
     sidecar = paramsToOptions params.sidecar // {
-      enable = mkEnableOption "the Thanos sidecar for Prometheus server";
+      enable = lib.mkEnableOption "the Thanos sidecar for Prometheus server";
       arguments = mkArgumentsOption "sidecar";
     };
 
     store = paramsToOptions params.store // {
-      enable = mkEnableOption "the Thanos store node giving access to blocks in a bucket provider";
+      enable = lib.mkEnableOption "the Thanos store node giving access to blocks in a bucket provider";
       arguments = mkArgumentsOption "store";
     };
 
     query = paramsToOptions params.query // {
-      enable = mkEnableOption ("the Thanos query node exposing PromQL enabled Query API " +
+      enable = lib.mkEnableOption ("the Thanos query node exposing PromQL enabled Query API " +
          "with data retrieved from multiple store nodes");
       arguments = mkArgumentsOption "query";
     };
 
     query-frontend = paramsToOptions params.query-frontend // {
-      enable = mkEnableOption ("the Thanos query frontend implements a service deployed in front of queriers to
+      enable = lib.mkEnableOption ("the Thanos query frontend implements a service deployed in front of queriers to
           improve query parallelization and caching.");
       arguments = mkArgumentsOption "query-frontend";
     };
 
     rule = paramsToOptions params.rule // {
-      enable = mkEnableOption ("the Thanos ruler service which evaluates Prometheus rules against" +
+      enable = lib.mkEnableOption ("the Thanos ruler service which evaluates Prometheus rules against" +
         " given Query nodes, exposing Store API and storing old blocks in bucket");
       arguments = mkArgumentsOption "rule";
     };
 
     compact = paramsToOptions params.compact // {
-      enable = mkEnableOption "the Thanos compactor which continuously compacts blocks in an object store bucket";
+      enable = lib.mkEnableOption "the Thanos compactor which continuously compacts blocks in an object store bucket";
       arguments = mkArgumentsOption "compact";
     };
 
     downsample = paramsToOptions params.downsample // {
-      enable = mkEnableOption "the Thanos downsampler which continuously downsamples blocks in an object store bucket";
+      enable = lib.mkEnableOption "the Thanos downsampler which continuously downsamples blocks in an object store bucket";
       arguments = mkArgumentsOption "downsample";
     };
 
     receive = paramsToOptions params.receive // {
-      enable = mkEnableOption ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb");
+      enable = lib.mkEnableOption ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb");
       arguments = mkArgumentsOption "receive";
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
 
-    (mkIf cfg.sidecar.enable {
+    (lib.mkIf cfg.sidecar.enable {
       assertions = [
         {
           assertion = config.services.prometheus.enable;
@@ -764,7 +764,7 @@ in {
       };
     })
 
-    (mkIf cfg.store.enable (mkMerge [
+    (lib.mkIf cfg.store.enable (mkMerge [
       (assertRelativeStateDir "store")
       {
         systemd.services.thanos-store = {
@@ -781,7 +781,7 @@ in {
       }
     ]))
 
-    (mkIf cfg.query.enable {
+    (lib.mkIf cfg.query.enable {
       systemd.services.thanos-query = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
@@ -794,7 +794,7 @@ in {
       };
     })
 
-    (mkIf cfg.query-frontend.enable {
+    (lib.mkIf cfg.query-frontend.enable {
       systemd.services.thanos-query-frontend = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
@@ -807,7 +807,7 @@ in {
       };
     })
 
-    (mkIf cfg.rule.enable (mkMerge [
+    (lib.mkIf cfg.rule.enable (mkMerge [
       (assertRelativeStateDir "rule")
       {
         systemd.services.thanos-rule = {
@@ -824,7 +824,7 @@ in {
       }
     ]))
 
-    (mkIf cfg.compact.enable (mkMerge [
+    (lib.mkIf cfg.compact.enable (mkMerge [
       (assertRelativeStateDir "compact")
       {
         systemd.services.thanos-compact =
@@ -839,11 +839,11 @@ in {
               ExecStart = thanos "compact";
               ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             };
-          } // optionalAttrs (!wait) { inherit (cfg.compact) startAt; };
+          } // lib.optionalAttrs (!wait) { inherit (cfg.compact) startAt; };
       }
     ]))
 
-    (mkIf cfg.downsample.enable (mkMerge [
+    (lib.mkIf cfg.downsample.enable (mkMerge [
       (assertRelativeStateDir "downsample")
       {
         systemd.services.thanos-downsample = {
@@ -860,7 +860,7 @@ in {
       }
     ]))
 
-    (mkIf cfg.receive.enable (mkMerge [
+    (lib.mkIf cfg.receive.enable (mkMerge [
       (assertRelativeStateDir "receive")
       {
         systemd.services.thanos-receive = {

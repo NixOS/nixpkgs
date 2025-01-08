@@ -14,7 +14,7 @@ let
     maintainers
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -30,14 +30,14 @@ in
 
   options.services.dnsproxy = {
 
-    enable = mkEnableOption "dnsproxy";
+    enable = lib.mkEnableOption "dnsproxy";
 
-    package = mkPackageOption pkgs "dnsproxy" { };
+    package = lib.mkPackageOption pkgs "dnsproxy" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = yaml.type;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           bootstrap = [
             "8.8.8.8:53"
@@ -61,8 +61,8 @@ in
       '';
     };
 
-    flags = mkOption {
-      type = types.listOf types.str;
+    flags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--upstream=1.1.1.1:53" ];
       description = ''
@@ -75,7 +75,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.dnsproxy = {
       description = "Simple DNS proxy with DoH, DoT, DoQ and DNSCrypt support";
       after = [
@@ -84,7 +84,7 @@ in
       ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} ${escapeShellArgs finalFlags}";
+        ExecStart = "${getExe cfg.package} ${lib.escapeShellArgs finalFlags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;

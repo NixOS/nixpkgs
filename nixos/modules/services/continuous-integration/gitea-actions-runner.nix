@@ -14,12 +14,12 @@ let
     escapeShellArg
     hasInfix
     hasSuffix
-    optionalAttrs
-    optionals
+    lib.optionalAttrs
+    lib.optionals
     literalExpression
     mapAttrs'
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     mkIf
     nameValuePair
@@ -39,7 +39,7 @@ let
   # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
   hasDockerScheme =
     instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
-  wantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
+  wantsContainerRuntime = any hasDockerScheme (lib.attrValues cfg.instances);
 
   hasHostScheme = instance: any (label: hasSuffix ":host" label) instance.labels;
 
@@ -57,27 +57,27 @@ in
     hexa
   ];
 
-  options.services.gitea-actions-runner = with types; {
-    package = mkPackageOption pkgs "gitea-actions-runner" { };
+  options.services.gitea-actions-runner = with lib.types; {
+    package = lib.mkPackageOption pkgs "gitea-actions-runner" { };
 
-    instances = mkOption {
+    instances = lib.mkOption {
       default = { };
       description = ''
         Gitea Actions Runner instances.
       '';
       type = attrsOf (submodule {
         options = {
-          enable = mkEnableOption "Gitea Actions Runner instance";
+          enable = lib.mkEnableOption "Gitea Actions Runner instance";
 
-          name = mkOption {
+          name = lib.mkOption {
             type = str;
-            example = literalExpression "config.networking.hostName";
+            example = lib.literalExpression "config.networking.hostName";
             description = ''
               The name identifying the runner instance towards the Gitea/Forgejo instance.
             '';
           };
 
-          url = mkOption {
+          url = lib.mkOption {
             type = str;
             example = "https://forge.example.com";
             description = ''
@@ -85,7 +85,7 @@ in
             '';
           };
 
-          token = mkOption {
+          token = lib.mkOption {
             type = nullOr str;
             default = null;
             description = ''
@@ -93,7 +93,7 @@ in
             '';
           };
 
-          tokenFile = mkOption {
+          tokenFile = lib.mkOption {
             type = nullOr (either str path);
             default = null;
             description = ''
@@ -103,9 +103,9 @@ in
             '';
           };
 
-          labels = mkOption {
+          labels = lib.mkOption {
             type = listOf str;
-            example = literalExpression ''
+            example = lib.literalExpression ''
               [
                 # provide a debian base with nodejs for actions
                 "debian-latest:docker://node:18-bullseye"
@@ -123,20 +123,20 @@ in
               that follows the filesystem hierarchy standard.
             '';
           };
-          settings = mkOption {
+          settings = lib.mkOption {
             description = ''
               Configuration for `act_runner daemon`.
               See https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml for an example configuration
             '';
 
-            type = types.submodule {
+            type = lib.types.submodule {
               freeformType = settingsFormat.type;
             };
 
             default = { };
           };
 
-          hostPackages = mkOption {
+          hostPackages = lib.mkOption {
             type = listOf package;
             default = with pkgs; [
               bash
@@ -148,7 +148,7 @@ in
               nodejs
               wget
             ];
-            defaultText = literalExpression ''
+            defaultText = lib.literalExpression ''
               with pkgs; [
                 bash
                 coreutils
@@ -170,10 +170,10 @@ in
     };
   };
 
-  config = mkIf (cfg.instances != { }) {
+  config = lib.mkIf (cfg.instances != { }) {
     assertions = [
       {
-        assertion = any tokenXorTokenFile (attrValues cfg.instances);
+        assertion = any tokenXorTokenFile (lib.attrValues cfg.instances);
         message = "Instances of gitea-actions-runner can have `token` or `tokenFile`, not both.";
       }
       {
@@ -201,20 +201,20 @@ in
               [
                 "network-online.target"
               ]
-              ++ optionals (wantsDocker) [
+              ++ lib.optionals (wantsDocker) [
                 "docker.service"
               ]
-              ++ optionals (wantsPodman) [
+              ++ lib.optionals (wantsPodman) [
                 "podman.service"
               ];
             wantedBy = [
               "multi-user.target"
             ];
             environment =
-              optionalAttrs (instance.token != null) {
+              lib.optionalAttrs (instance.token != null) {
                 TOKEN = "${instance.token}";
               }
-              // optionalAttrs (wantsPodman) {
+              // lib.optionalAttrs (wantsPodman) {
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }
               // {
@@ -245,7 +245,7 @@ in
 
                     # force reregistration on changed labels
                     export LABELS_FILE="$INSTANCE_DIR/.labels"
-                    export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
+                    export LABELS_WANTED="$(echo ${lib.escapeShellArg (lib.concatStringsSep "\n" instance.labels)} | sort)"
                     export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
                     if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
@@ -254,10 +254,10 @@ in
 
                       # perform the registration
                       ${cfg.package}/bin/act_runner register --no-interactive \
-                        --instance ${escapeShellArg instance.url} \
+                        --instance ${lib.escapeShellArg instance.url} \
                         --token "$TOKEN" \
-                        --name ${escapeShellArg instance.name} \
-                        --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
+                        --name ${lib.escapeShellArg instance.name} \
+                        --labels ${lib.escapeShellArg (lib.concatStringsSep "," instance.labels)} \
                         --config ${configFile}
 
                       # and write back the configured labels
@@ -268,14 +268,14 @@ in
                 ];
                 ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
                 SupplementaryGroups =
-                  optionals (wantsDocker) [
+                  lib.optionals (wantsDocker) [
                     "docker"
                   ]
-                  ++ optionals (wantsPodman) [
+                  ++ lib.optionals (wantsPodman) [
                     "podman"
                   ];
               }
-              // optionalAttrs (instance.tokenFile != null) {
+              // lib.optionalAttrs (instance.tokenFile != null) {
                 EnvironmentFile = instance.tokenFile;
               };
           };

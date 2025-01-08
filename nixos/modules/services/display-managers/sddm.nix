@@ -25,13 +25,13 @@ let
     getExe
     attrNames
     getAttr
-    optionalAttrs
-    optionalString
+    lib.optionalAttrs
+    lib.optionalString
     mkRemovedOptionModule
     mkRenamedOptionModule
     mkIf
     mkEnableOption
-    mkOption
+    lib.mkOption
     mkPackageOption
     types
     ;
@@ -59,13 +59,13 @@ let
           Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
 
           # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-          DefaultSession = optionalString (
+          DefaultSession = lib.optionalString (
             config.services.displayManager.defaultSession != null
           ) "${config.services.displayManager.defaultSession}.desktop";
 
           DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
         }
-        // optionalAttrs (cfg.wayland.enable && cfg.wayland.compositor == "kwin") {
+        // lib.optionalAttrs (cfg.wayland.enable && cfg.wayland.compositor == "kwin") {
           GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
           InputMethod = ""; # needed if we are using --inputmethod with kwin
         };
@@ -76,7 +76,7 @@ let
           ThemeDir = "/run/current-system/sw/share/sddm/themes";
           FacesDir = "/run/current-system/sw/share/sddm/faces";
         }
-        // optionalAttrs (cfg.theme == "breeze") {
+        // lib.optionalAttrs (cfg.theme == "breeze") {
           CursorTheme = "breeze_cursors";
           CursorSize = 24;
         };
@@ -94,7 +94,7 @@ let
       };
 
     }
-    // optionalAttrs xcfg.enable {
+    // lib.optionalAttrs xcfg.enable {
       X11 = {
         MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
         ServerPath = toString xserverWrapper;
@@ -107,7 +107,7 @@ let
         EnableHiDPI = cfg.enableHidpi;
       };
     }
-    // optionalAttrs dmcfg.autoLogin.enable {
+    // lib.optionalAttrs dmcfg.autoLogin.enable {
       Autologin = {
         User = dmcfg.autoLogin.user;
         Session = autoLoginSessionName;
@@ -150,70 +150,70 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "autoLogin" "minimumUid" ]
       [ "services" "displayManager" "sddm" "autoLogin" "minimumUid" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "autoLogin" "relogin" ]
       [ "services" "displayManager" "sddm" "autoLogin" "relogin" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "autoNumlock" ]
       [ "services" "displayManager" "sddm" "autoNumlock" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "enable" ]
       [ "services" "displayManager" "sddm" "enable" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "enableHidpi" ]
       [ "services" "displayManager" "sddm" "enableHidpi" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "extraPackages" ]
       [ "services" "displayManager" "sddm" "extraPackages" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "package" ]
       [ "services" "displayManager" "sddm" "package" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "settings" ]
       [ "services" "displayManager" "sddm" "settings" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "setupScript" ]
       [ "services" "displayManager" "sddm" "setupScript" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "stopScript" ]
       [ "services" "displayManager" "sddm" "stopScript" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "theme" ]
       [ "services" "displayManager" "sddm" "theme" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "displayManager" "sddm" "wayland" "enable" ]
       [ "services" "displayManager" "sddm" "wayland" "enable" ]
     )
 
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "displayManager"
       "sddm"
       "themes"
     ] "Set the option `services.displayManager.sddm.package' instead.")
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "displayManager" "sddm" "autoLogin" "enable" ]
       [ "services" "displayManager" "autoLogin" "enable" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "displayManager" "sddm" "autoLogin" "user" ]
       [ "services" "displayManager" "autoLogin" "user" ]
     )
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "displayManager"
       "sddm"
@@ -224,25 +224,25 @@ in
   options = {
 
     services.displayManager.sddm = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable sddm as the display manager.
         '';
       };
 
-      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] { };
+      package = lib.mkPackageOption pkgs [ "plasma5Packages" "sddm" ] { };
 
-      enableHidpi = mkOption {
-        type = types.bool;
+      enableHidpi = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable automatic HiDPI mode.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = iniFmt.type;
         default = { };
         example = {
@@ -256,16 +256,16 @@ in
         '';
       };
 
-      theme = mkOption {
-        type = types.str;
+      theme = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Greeter theme to use.
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         defaultText = "[]";
         description = ''
@@ -273,16 +273,16 @@ in
         '';
       };
 
-      autoNumlock = mkOption {
-        type = types.bool;
+      autoNumlock = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable numlock at login.
         '';
       };
 
-      setupScript = mkOption {
-        type = types.str;
+      setupScript = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = ''
           # workaround for using NVIDIA Optimus without Bumblebee
@@ -295,8 +295,8 @@ in
         '';
       };
 
-      stopScript = mkOption {
-        type = types.str;
+      stopScript = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           A script to execute when stopping the display server.
@@ -305,8 +305,8 @@ in
 
       # Configuration for automatic login specific to SDDM
       autoLogin = {
-        relogin = mkOption {
-          type = types.bool;
+        relogin = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             If true automatic login will kick in again on session exit (logout), otherwise it
@@ -314,8 +314,8 @@ in
           '';
         };
 
-        minimumUid = mkOption {
-          type = types.ints.u16;
+        minimumUid = lib.mkOption {
+          type = lib.types.ints.u16;
           default = 1000;
           description = ''
             Minimum user ID for auto-login user.
@@ -325,16 +325,16 @@ in
 
       # Experimental Wayland support
       wayland = {
-        enable = mkEnableOption "experimental Wayland support";
+        enable = lib.mkEnableOption "experimental Wayland support";
 
-        compositor = mkOption {
+        compositor = lib.mkOption {
           description = "The compositor to use: ${lib.concatStringsSep ", " (builtins.attrNames compositorCmds)}";
-          type = types.enum (builtins.attrNames compositorCmds);
+          type = lib.types.enum (builtins.attrNames compositorCmds);
           default = "weston";
         };
 
-        compositorCommand = mkOption {
-          type = types.str;
+        compositorCommand = lib.mkOption {
+          type = lib.types.str;
           internal = true;
           default = compositorCmds.${cfg.wayland.compositor};
           description = "Command used to start the selected compositor";
@@ -343,7 +343,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -375,7 +375,7 @@ in
 
       sddm-greeter.text = ''
         auth     required       pam_succeed_if.so audit quiet_success user = sddm
-        auth     optional       pam_permit.so
+        auth     lib.optional       pam_permit.so
 
         account  required       pam_succeed_if.so audit quiet_success user = sddm
         account  sufficient     pam_unix.so
@@ -384,9 +384,9 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = sddm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
-        session  optional       pam_keyinit.so force revoke
-        session  optional       pam_permit.so
+        session  lib.optional       ${config.systemd.package}/lib/security/pam_systemd.so
+        session  lib.optional       pam_keyinit.so force revoke
+        session  lib.optional       pam_permit.so
       '';
 
       sddm-autologin.text = ''

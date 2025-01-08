@@ -7,7 +7,7 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) lib.mkOption types;
   copyChannel = true;
   cfg = config.openstackImage;
   imageBootMode = if config.openstack.efi then "uefi" else "legacy-bios";
@@ -43,14 +43,14 @@ in
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   options.openstackImage = {
-    ramMB = mkOption {
-      type = types.int;
+    ramMB = lib.mkOption {
+      type = lib.types.int;
       default = (3 * 1024);
       description = "RAM allocation for build VM";
     };
 
-    format = mkOption {
-      type = types.enum [
+    format = lib.mkOption {
+      type = lib.types.enum [
         "raw"
         "qcow2"
       ];
@@ -74,7 +74,7 @@ in
       };
     };
 
-    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # Use a priority just below lib.mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
     virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
     virtualisation.diskSizeAutoSupported = false;

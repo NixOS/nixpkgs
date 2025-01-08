@@ -1,7 +1,5 @@
 { config, lib, options, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.gitea;
   opt = options.services.gitea;
@@ -17,91 +15,91 @@ let
     RUN_MODE = prod
     WORK_PATH = ${cfg.stateDir}
 
-    ${generators.toINI {} cfg.settings}
+    ${lib.generators.toINI {} cfg.settings}
 
-    ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
+    ${lib.optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
 in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "gitea" "cookieSecure" ] [ "services" "gitea" "settings" "session" "COOKIE_SECURE" ])
-    (mkRenamedOptionModule [ "services" "gitea" "disableRegistration" ] [ "services" "gitea" "settings" "service" "DISABLE_REGISTRATION" ])
-    (mkRenamedOptionModule [ "services" "gitea" "domain" ] [ "services" "gitea" "settings" "server" "DOMAIN" ])
-    (mkRenamedOptionModule [ "services" "gitea" "httpAddress" ] [ "services" "gitea" "settings" "server" "HTTP_ADDR" ])
-    (mkRenamedOptionModule [ "services" "gitea" "httpPort" ] [ "services" "gitea" "settings" "server" "HTTP_PORT" ])
-    (mkRenamedOptionModule [ "services" "gitea" "log" "level" ] [ "services" "gitea" "settings" "log" "LEVEL" ])
-    (mkRenamedOptionModule [ "services" "gitea" "log" "rootPath" ] [ "services" "gitea" "settings" "log" "ROOT_PATH" ])
-    (mkRenamedOptionModule [ "services" "gitea" "rootUrl" ] [ "services" "gitea" "settings" "server" "ROOT_URL" ])
-    (mkRenamedOptionModule [ "services" "gitea" "ssh" "clonePort" ] [ "services" "gitea" "settings" "server" "SSH_PORT" ])
-    (mkRenamedOptionModule [ "services" "gitea" "staticRootPath" ] [ "services" "gitea" "settings" "server" "STATIC_ROOT_PATH" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "cookieSecure" ] [ "services" "gitea" "settings" "session" "COOKIE_SECURE" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "disableRegistration" ] [ "services" "gitea" "settings" "service" "DISABLE_REGISTRATION" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "domain" ] [ "services" "gitea" "settings" "server" "DOMAIN" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "httpAddress" ] [ "services" "gitea" "settings" "server" "HTTP_ADDR" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "httpPort" ] [ "services" "gitea" "settings" "server" "HTTP_PORT" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "log" "level" ] [ "services" "gitea" "settings" "log" "LEVEL" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "log" "rootPath" ] [ "services" "gitea" "settings" "log" "ROOT_PATH" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "rootUrl" ] [ "services" "gitea" "settings" "server" "ROOT_URL" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "ssh" "clonePort" ] [ "services" "gitea" "settings" "server" "SSH_PORT" ])
+    (lib.mkRenamedOptionModule [ "services" "gitea" "staticRootPath" ] [ "services" "gitea" "settings" "server" "STATIC_ROOT_PATH" ])
 
-    (mkChangedOptionModule [ "services" "gitea" "enableUnixSocket" ] [ "services" "gitea" "settings" "server" "PROTOCOL" ] (
+    (lib.mkChangedOptionModule [ "services" "gitea" "enableUnixSocket" ] [ "services" "gitea" "settings" "server" "PROTOCOL" ] (
       config: if config.services.gitea.enableUnixSocket then "http+unix" else "http"
     ))
 
-    (mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ] "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted")
+    (lib.mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ] "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted")
   ];
 
   options = {
     services.gitea = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Enable Gitea Service.";
       };
 
-      package = mkPackageOption pkgs "gitea" { };
+      package = lib.mkPackageOption pkgs "gitea" { };
 
-      useWizard = mkOption {
+      useWizard = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Do not generate a configuration and use gitea' installation wizard instead. The first registered user will be administrator.";
       };
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         default = "/var/lib/gitea";
-        type = types.str;
+        type = lib.types.str;
         description = "Gitea data directory.";
       };
 
-      customDir = mkOption {
+      customDir = lib.mkOption {
         default = "${cfg.stateDir}/custom";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/custom"'';
+        type = lib.types.str;
         description = "Gitea custom directory. Used for config, custom templates and other options.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "gitea";
         description = "User account under which gitea runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "gitea";
         description = "Group under which gitea runs.";
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [ "sqlite3" "mysql" "postgres" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "sqlite3" "mysql" "postgres" ];
           example = "mysql";
           default = "sqlite3";
           description = "Database engine to use.";
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
           description = "Database host address.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = if usePostgresql then pg.settings.port else 3306;
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             if config.${opt.database.type} != "postgresql"
             then 3306
             else 5432
@@ -109,20 +107,20 @@ in
           description = "Database host port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "gitea";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "gitea";
           description = "Database user.";
         };
 
-        password = mkOption {
-          type = types.str;
+        password = lib.mkOption {
+          type = lib.types.str;
           default = "";
           description = ''
             The password corresponding to {option}`database.user`.
@@ -131,8 +129,8 @@ in
           '';
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/gitea-dbpassword";
           description = ''
@@ -141,31 +139,31 @@ in
           '';
         };
 
-        socket = mkOption {
-          type = types.nullOr types.path;
+        socket = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
-          defaultText = literalExpression "null";
+          defaultText = lib.literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
-        path = mkOption {
-          type = types.str;
+        path = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/data/gitea.db";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
           description = "Path to the sqlite3 database file.";
         };
 
-        createDatabase = mkOption {
-          type = types.bool;
+        createDatabase = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to create a local database automatically.";
         };
       };
 
       dump = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable a timer that runs gitea dump to generate backup-files of the
@@ -173,8 +171,8 @@ in
           '';
         };
 
-        interval = mkOption {
-          type = types.str;
+        interval = lib.mkOption {
+          type = lib.types.str;
           default = "04:31";
           example = "hourly";
           description = ''
@@ -185,21 +183,21 @@ in
           '';
         };
 
-        backupDir = mkOption {
-          type = types.str;
+        backupDir = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/dump";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the dump files.";
         };
 
-        type = mkOption {
-          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" "tar.zst" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" "tar.zst" ];
           default = "zip";
           description = "Archive format used to store the dump file.";
         };
 
-        file = mkOption {
-          type = types.nullOr types.str;
+        file = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = "Filename to be used for the dump. If `null` a default name is chosen by gitea.";
           example = "gitea-dump";
@@ -207,61 +205,61 @@ in
       };
 
       lfs = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Enables git-lfs support.";
         };
 
-        contentDir = mkOption {
-          type = types.str;
+        contentDir = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/data/lfs";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
           description = "Where to store LFS files.";
         };
       };
 
-      appName = mkOption {
-        type = types.str;
+      appName = lib.mkOption {
+        type = lib.types.str;
         default = "gitea: Gitea Service";
         description = "Application name.";
       };
 
-      repositoryRoot = mkOption {
-        type = types.str;
+      repositoryRoot = lib.mkOption {
+        type = lib.types.str;
         default = "${cfg.stateDir}/repositories";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
-      camoHmacKeyFile = mkOption {
-        type = types.nullOr types.str;
+      camoHmacKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/var/lib/secrets/gitea/camoHmacKey";
         description = "Path to a file containing the camo HMAC key.";
       };
 
-      mailerPasswordFile = mkOption {
-        type = types.nullOr types.str;
+      mailerPasswordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/var/lib/secrets/gitea/mailpw";
         description = "Path to a file containing the SMTP password.";
       };
 
-      metricsTokenFile = mkOption {
-        type = types.nullOr types.str;
+      metricsTokenFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/var/lib/secrets/gitea/metrics_token";
         description = "Path to a file containing the metrics authentication token.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = {};
         description = ''
           Gitea configuration. Refer to <https://docs.gitea.io/en-us/config-cheat-sheet/>
           for details on supported values.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "cron.sync_external_users" = {
               RUN_AT_START = true;
@@ -279,72 +277,72 @@ in
             };
           }
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
           options = {
             log = {
-              ROOT_PATH = mkOption {
+              ROOT_PATH = lib.mkOption {
                 default = "${cfg.stateDir}/log";
-                defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
-                type = types.str;
+                defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/log"'';
+                type = lib.types.str;
                 description = "Root path for log files.";
               };
-              LEVEL = mkOption {
+              LEVEL = lib.mkOption {
                 default = "Info";
-                type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
+                type = lib.types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
                 description = "General log level.";
               };
             };
 
             server = {
-              PROTOCOL = mkOption {
-                type = types.enum [ "http" "https" "fcgi" "http+unix" "fcgi+unix" ];
+              PROTOCOL = lib.mkOption {
+                type = lib.types.enum [ "http" "https" "fcgi" "http+unix" "fcgi+unix" ];
                 default = "http";
                 description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
               };
 
-              HTTP_ADDR = mkOption {
-                type = types.either types.str types.path;
+              HTTP_ADDR = lib.mkOption {
+                type = lib.types.either lib.types.str lib.types.path;
                 default = if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0";
-                defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
+                defaultText = lib.literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
                 description = "Listen address. Must be a path when using a unix socket.";
               };
 
-              HTTP_PORT = mkOption {
-                type = types.port;
+              HTTP_PORT = lib.mkOption {
+                type = lib.types.port;
                 default = 3000;
                 description = "Listen port. Ignored when using a unix socket.";
               };
 
-              DOMAIN = mkOption {
-                type = types.str;
+              DOMAIN = lib.mkOption {
+                type = lib.types.str;
                 default = "localhost";
                 description = "Domain name of your server.";
               };
 
-              ROOT_URL = mkOption {
-                type = types.str;
+              ROOT_URL = lib.mkOption {
+                type = lib.types.str;
                 default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
-                defaultText = literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
+                defaultText = lib.literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
                 description = "Full public URL of gitea server.";
               };
 
-              STATIC_ROOT_PATH = mkOption {
-                type = types.either types.str types.path;
+              STATIC_ROOT_PATH = lib.mkOption {
+                type = lib.types.either lib.types.str lib.types.path;
                 default = cfg.package.data;
-                defaultText = literalExpression "config.${opt.package}.data";
+                defaultText = lib.literalExpression "config.${opt.package}.data";
                 example = "/var/lib/gitea/data";
                 description = "Upper level of template and static files path.";
               };
 
-              DISABLE_SSH = mkOption {
-                type = types.bool;
+              DISABLE_SSH = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = "Disable external SSH feature.";
               };
 
-              SSH_PORT = mkOption {
-                type = types.port;
+              SSH_PORT = lib.mkOption {
+                type = lib.types.port;
                 default = 22;
                 example = 2222;
                 description = ''
@@ -356,7 +354,7 @@ in
             };
 
             service = {
-              DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
+              DISABLE_REGISTRATION = lib.mkEnableOption "the registration lock" // {
                 description = ''
                   By default any user can create an account on this `gitea` instance.
                   This can be disabled by using this option.
@@ -370,8 +368,8 @@ in
             };
 
             session = {
-              COOKIE_SECURE = mkOption {
-                type = types.bool;
+              COOKIE_SECURE = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Marks session cookies as "secure" as a hint for browsers to only send
@@ -383,15 +381,15 @@ in
         };
       };
 
-      extraConfig = mkOption {
-        type = with types; nullOr str;
+      extraConfig = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = "Configuration lines appended to the generated gitea configuration file.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       { assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
@@ -409,20 +407,20 @@ in
     services.gitea.settings = {
       "cron.update_checker".ENABLED = lib.mkDefault false;
 
-      database = mkMerge [
+      database = lib.mkMerge [
         {
           DB_TYPE = cfg.database.type;
         }
-        (mkIf (useMysql || usePostgresql) {
+        (lib.mkIf (useMysql || usePostgresql) {
           HOST = if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port;
           NAME = cfg.database.name;
           USER = cfg.database.user;
           PASSWD = "#dbpass#";
         })
-        (mkIf useSqlite {
+        (lib.mkIf useSqlite {
           PATH = cfg.database.path;
         })
-        (mkIf usePostgresql {
+        (lib.mkIf usePostgresql {
           SSL_MODE = "disable";
         })
       ];
@@ -431,12 +429,12 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = mkIf cfg.lfs.enable {
+      server = lib.mkIf cfg.lfs.enable {
         LFS_START_SERVER = true;
         LFS_JWT_SECRET = "#lfsjwtsecret#";
       };
 
-      camo = mkIf (cfg.camoHmacKeyFile != null) {
+      camo = lib.mkIf (cfg.camoHmacKeyFile != null) {
         HMAC_KEY = "#hmackey#";
       };
 
@@ -450,11 +448,11 @@ in
         INSTALL_LOCK = true;
       };
 
-      mailer = mkIf (cfg.mailerPasswordFile != null) {
+      mailer = lib.mkIf (cfg.mailerPasswordFile != null) {
         PASSWD = "#mailerpass#";
       };
 
-      metrics = mkIf (cfg.metricsTokenFile != null) {
+      metrics = lib.mkIf (cfg.metricsTokenFile != null) {
         TOKEN = "#metricstoken#";
       };
 
@@ -462,15 +460,15 @@ in
         JWT_SECRET = "#oauth2jwtsecret#";
       };
 
-      lfs = mkIf cfg.lfs.enable {
+      lfs = lib.mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
 
       packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
     };
 
-    services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
-      enable = mkDefault true;
+    services.postgresql = lib.optionalAttrs (usePostgresql && cfg.database.createDatabase) {
+      enable = lib.mkDefault true;
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -480,9 +478,9 @@ in
       ];
     };
 
-    services.mysql = optionalAttrs (useMysql && cfg.database.createDatabase) {
-      enable = mkDefault true;
-      package = mkDefault pkgs.mariadb;
+    services.mysql = lib.optionalAttrs (useMysql && cfg.database.createDatabase) {
+      enable = lib.mkDefault true;
+      package = lib.mkDefault pkgs.mariadb;
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -522,8 +520,8 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
-      requires = optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      requires = lib.optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ lib.optional (cfg.database.createDatabase && useMysql) "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
@@ -544,7 +542,7 @@ in
         replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
         # copy custom configuration and generate random secrets if needed
-        ${optionalString (!cfg.useWizard) ''
+        ${lib.optionalString (!cfg.useWizard) ''
           function gitea_setup {
             cp -f '${configFile}' '${runConfig}'
 
@@ -663,7 +661,7 @@ in
       };
     };
 
-    users.users = mkIf (cfg.user == "gitea") {
+    users.users = lib.mkIf (cfg.user == "gitea") {
       gitea = {
         description = "Gitea Service";
         home = cfg.stateDir;
@@ -673,16 +671,16 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "gitea") {
+    users.groups = lib.mkIf (cfg.group == "gitea") {
       gitea = {};
     };
 
     warnings =
-      optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
-      optional (cfg.extraConfig != null) ''
+      lib.optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
+      lib.optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
       '' ++
-      optional (lib.getName cfg.package == "forgejo") ''
+      lib.optional (lib.getName cfg.package == "forgejo") ''
         Running forgejo via services.gitea.package is no longer supported.
         Please use services.forgejo instead.
         See https://nixos.org/manual/nixos/unstable/#module-forgejo for migration instructions.
@@ -690,12 +688,12 @@ in
 
     # Create database passwordFile default when password is configured.
     services.gitea.database.passwordFile =
-      mkDefault (toString (pkgs.writeTextFile {
+      lib.mkDefault (toString (pkgs.writeTextFile {
         name = "gitea-database-password";
         text = cfg.database.password;
       }));
 
-    systemd.services.gitea-dump = mkIf cfg.dump.enable {
+    systemd.services.gitea-dump = lib.mkIf cfg.dump.enable {
        description = "gitea dump";
        after = [ "gitea.service" ];
        path = [ cfg.package ];
@@ -710,12 +708,12 @@ in
        serviceConfig = {
          Type = "oneshot";
          User = cfg.user;
-         ExecStart = "${exe} dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+         ExecStart = "${exe} dump --type ${cfg.dump.type}" + lib.optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
          WorkingDirectory = cfg.dump.backupDir;
        };
     };
 
-    systemd.timers.gitea-dump = mkIf cfg.dump.enable {
+    systemd.timers.gitea-dump = lib.mkIf cfg.dump.enable {
       description = "Update timer for gitea-dump";
       partOf = [ "gitea-dump.service" ];
       wantedBy = [ "timers.target" ];

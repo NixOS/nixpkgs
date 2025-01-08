@@ -5,15 +5,15 @@ let
 
   zoneType = lib.types.submodule ({ config, ... }: {
     freeformType = toml.type;
-    options = with lib; {
-      zone = mkOption {
-        type = types.str;
+    options = {
+      zone = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Zone name, like "example.com", "localhost", or "0.0.127.in-addr.arpa".
         '';
       };
-      zone_type = mkOption {
-        type = types.enum [ "Primary" "Secondary" "Hint" "Forward" ];
+      zone_type = lib.mkOption {
+        type = lib.types.enum [ "Primary" "Secondary" "Hint" "Forward" ];
         default = "Primary";
         description = ''
           One of:
@@ -27,10 +27,10 @@ let
           <https://bind9.readthedocs.io/en/v9_18_4/reference.html#type>
         '';
       };
-      file = mkOption {
-        type = types.either types.path types.str;
+      file = lib.mkOption {
+        type = lib.types.either lib.types.path lib.types.str;
         default = "${config.zone}.zone";
-        defaultText = literalExpression ''"''${config.zone}.zone"'';
+        defaultText = lib.literalExpression ''"''${config.zone}.zone"'';
         description = ''
           Path to the .zone file.
           If not fully-qualified, this path will be interpreted relative to the `directory` option.
@@ -43,26 +43,26 @@ in
 {
   meta.maintainers = with lib.maintainers; [ colinsane ];
 
-  imports = with lib; [
-    (mkRenamedOptionModule [ "services" "trust-dns" "enable" ] [ "services" "hickory-dns" "enable" ])
-    (mkRenamedOptionModule [ "services" "trust-dns" "package" ] [ "services" "hickory-dns" "package" ])
-    (mkRenamedOptionModule [ "services" "trust-dns" "settings" ] [ "services" "hickory-dns" "settings" ])
-    (mkRenamedOptionModule [ "services" "trust-dns" "quiet" ] [ "services" "hickory-dns" "quiet" ])
-    (mkRenamedOptionModule [ "services" "trust-dns" "debug" ] [ "services" "hickory-dns" "debug" ])
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "trust-dns" "enable" ] [ "services" "hickory-dns" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "trust-dns" "package" ] [ "services" "hickory-dns" "package" ])
+    (lib.mkRenamedOptionModule [ "services" "trust-dns" "settings" ] [ "services" "hickory-dns" "settings" ])
+    (lib.mkRenamedOptionModule [ "services" "trust-dns" "quiet" ] [ "services" "hickory-dns" "quiet" ])
+    (lib.mkRenamedOptionModule [ "services" "trust-dns" "debug" ] [ "services" "hickory-dns" "debug" ])
   ];
 
   options = {
-    services.hickory-dns = with lib; {
-      enable = mkEnableOption "hickory-dns";
-      package = mkPackageOption pkgs "hickory-dns" {
+    services.hickory-dns = {
+      enable = lib.mkEnableOption "hickory-dns";
+      package = lib.mkPackageOption pkgs "hickory-dns" {
         extraDescription = ''
           ::: {.note}
           The package must provide `meta.mainProgram` which names the server binary; any other utilities (client, resolver) are not needed.
           :::
         '';
       };
-      quiet = mkOption {
-        type = types.bool;
+      quiet = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Log ERROR level messages only.
@@ -70,8 +70,8 @@ in
           If neither `quiet` nor `debug` are enabled, logging defaults to the INFO level.
         '';
       };
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Log DEBUG, INFO, WARN and ERROR messages.
@@ -79,8 +79,8 @@ in
           If neither `quiet` nor `debug` are enabled, logging defaults to the INFO level.
         '';
       };
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = toml.generate "hickory-dns.toml" (
           lib.filterAttrsRecursive (_: v: v != null) cfg.settings
         );
@@ -95,49 +95,49 @@ in
           If manually specified, then the options in `settings` are ignored.
         '';
       };
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Settings for hickory-dns. The options enumerated here are not exhaustive.
           Refer to upstream documentation for all available options:
           - [Example settings](https://github.com/hickory-dns/hickory-dns/blob/main/tests/test-data/test_configs/example.toml)
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = toml.type;
           options = {
-            listen_addrs_ipv4 = mkOption {
-              type = types.listOf types.str;
+            listen_addrs_ipv4 = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [ "0.0.0.0" ];
               description = ''
                 List of ipv4 addresses on which to listen for DNS queries.
               '';
             };
-            listen_addrs_ipv6 = mkOption {
-              type = types.listOf types.str;
+            listen_addrs_ipv6 = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = lib.optional config.networking.enableIPv6 "::0";
-              defaultText = literalExpression ''lib.optional config.networking.enableIPv6 "::0"'';
+              defaultText = lib.literalExpression ''lib.optional config.networking.enableIPv6 "::0"'';
               description = ''
                 List of ipv6 addresses on which to listen for DNS queries.
               '';
             };
-            listen_port = mkOption {
-              type = types.port;
+            listen_port = lib.mkOption {
+              type = lib.types.port;
               default = 53;
               description = ''
                 Port to listen on (applies to all listen addresses).
               '';
             };
-            directory = mkOption {
-              type = types.str;
+            directory = lib.mkOption {
+              type = lib.types.str;
               default = "/var/lib/hickory-dns";
               description = ''
                 The directory in which hickory-dns should look for .zone files,
                 whenever zones aren't specified by absolute path.
               '';
             };
-            zones = mkOption {
+            zones = lib.mkOption {
               description = "List of zones to serve.";
               default = [];
-              type = types.listOf (types.coercedTo types.str (zone: { inherit zone; }) zoneType);
+              type = lib.types.listOf (lib.types.coercedTo lib.types.str (zone: { inherit zone; }) zoneType);
             };
           };
         };

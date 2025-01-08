@@ -5,28 +5,26 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.webhook;
   defaultUser = "webhook";
 
   hookFormat = pkgs.formats.json { };
 
-  hookType = types.submodule (
+  hookType = lib.types.submodule (
     { name, ... }:
     {
       freeformType = hookFormat.type;
       options = {
-        id = mkOption {
-          type = types.str;
+        id = lib.mkOption {
+          type = lib.types.str;
           default = name;
           description = ''
             The ID of your hook. This value is used to create the HTTP endpoint (`protocol://yourserver:port/prefix/''${id}`).
           '';
         };
-        execute-command = mkOption {
-          type = types.str;
+        execute-command = lib.mkOption {
+          type = lib.types.str;
           description = "The command that should be executed when the hook is triggered.";
         };
       };
@@ -34,8 +32,8 @@ let
   );
 
   hookFiles =
-    mapAttrsToList (name: hook: hookFormat.generate "webhook-${name}.json" [ hook ]) cfg.hooks
-    ++ mapAttrsToList (
+    lib.mapAttrsToList (name: hook: hookFormat.generate "webhook-${name}.json" [ hook ]) cfg.hooks
+    ++ lib.mapAttrsToList (
       name: hook: pkgs.writeText "webhook-${name}.json.tmpl" "[${hook}]"
     ) cfg.hooksTemplated;
 
@@ -43,14 +41,14 @@ in
 {
   options = {
     services.webhook = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         [Webhook](https://github.com/adnanh/webhook), a server written in Go that allows you to create HTTP endpoints (hooks),
         which execute configured commands for any person or service that knows the URL
       '';
 
-      package = mkPackageOption pkgs "webhook" { };
-      user = mkOption {
-        type = types.str;
+      package = lib.mkPackageOption pkgs "webhook" { };
+      user = lib.mkOption {
+        type = lib.types.str;
         default = defaultUser;
         description = ''
           Webhook will be run under this user.
@@ -58,8 +56,8 @@ in
           If set, you must create this user yourself!
         '';
       };
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = defaultUser;
         description = ''
           Webhook will be run under this group.
@@ -67,8 +65,8 @@ in
           If set, you must create this group yourself!
         '';
       };
-      ip = mkOption {
-        type = types.str;
+      ip = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = ''
           The IP webhook should serve hooks on.
@@ -76,37 +74,37 @@ in
           The default means it can be reached on any interface if `openFirewall = true`.
         '';
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9000;
         description = "The port webhook should be reachable from.";
       };
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the configured port in the firewall for external ingress traffic.
           Preferably the Webhook server is instead put behind a reverse proxy.
         '';
       };
-      enableTemplates = mkOption {
-        type = types.bool;
+      enableTemplates = lib.mkOption {
+        type = lib.types.bool;
         default = cfg.hooksTemplated != { };
-        defaultText = literalExpression "hooksTemplated != {}";
+        defaultText = lib.literalExpression "hooksTemplated != {}";
         description = ''
           Enable the generated hooks file to be parsed as a Go template.
           See [the documentation](https://github.com/adnanh/webhook/blob/master/docs/Templates.md) for more information.
         '';
       };
-      urlPrefix = mkOption {
-        type = types.str;
+      urlPrefix = lib.mkOption {
+        type = lib.types.str;
         default = "hooks";
         description = ''
           The URL path prefix to use for served hooks (`protocol://yourserver:port/''${prefix}/hook-id`).
         '';
       };
-      hooks = mkOption {
-        type = types.attrsOf hookType;
+      hooks = lib.mkOption {
+        type = lib.types.attrsOf hookType;
         default = { };
         example = {
           echo = {
@@ -128,8 +126,8 @@ in
           [project homepage]: https://github.com/adnanh/webhook#configuration
         '';
       };
-      hooksTemplated = mkOption {
-        type = types.attrsOf types.str;
+      hooksTemplated = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         example = {
           echo-template = ''
@@ -149,13 +147,13 @@ in
           done by default if this option is set.
         '';
       };
-      verbose = mkOption {
-        type = types.bool;
+      verbose = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to show verbose output.";
       };
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-secure" ];
         description = ''
@@ -165,15 +163,15 @@ in
           [parameters]: https://github.com/adnanh/webhook/blob/master/docs/Webhook-Parameters.md
         '';
       };
-      environment = mkOption {
-        type = types.attrsOf types.str;
+      environment = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         default = { };
         description = "Extra environment variables passed to webhook.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       let
         overlappingHooks = builtins.intersectAttrs cfg.hooks cfg.hooksTemplated;
@@ -185,11 +183,11 @@ in
         }
         {
           assertion = overlappingHooks == { };
-          message = "`services.webhook.hooks` and `services.webhook.hooksTemplated` have overlapping attribute(s): ${concatStringsSep ", " (builtins.attrNames overlappingHooks)}";
+          message = "`services.webhook.hooks` and `services.webhook.hooksTemplated` have overlapping attribute(s): ${lib.concatStringsSep ", " (builtins.attrNames overlappingHooks)}";
         }
       ];
 
-    users.users = mkIf (cfg.user == defaultUser) {
+    users.users = lib.mkIf (cfg.user == defaultUser) {
       ${defaultUser} = {
         isSystemUser = true;
         group = cfg.group;
@@ -197,11 +195,11 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.user == defaultUser && cfg.group == defaultUser) {
+    users.groups = lib.mkIf (cfg.user == defaultUser && cfg.group == defaultUser) {
       ${defaultUser} = { };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.services.webhook = {
       description = "Webhook service";
@@ -219,16 +217,16 @@ in
               "-urlprefix"
               cfg.urlPrefix
             ]
-            ++ concatMap (hook: [
+            ++ lib.concatMap (hook: [
               "-hooks"
               hook
             ]) hookFiles
-            ++ optional cfg.enableTemplates "-template"
-            ++ optional cfg.verbose "-verbose"
+            ++ lib.optional cfg.enableTemplates "-template"
+            ++ lib.optional cfg.verbose "-verbose"
             ++ cfg.extraArgs;
         in
         ''
-          ${cfg.package}/bin/webhook ${escapeShellArgs args}
+          ${cfg.package}/bin/webhook ${lib.escapeShellArgs args}
         '';
       serviceConfig = {
         Restart = "on-failure";

@@ -4,13 +4,13 @@
 # type*. When the user logs in, the display manager starts the
 # *session script* ("xsession" below) to launch the selected session
 # type. The session type defines two things: the *desktop manager*
-# (e.g., KDE, Gnome or a plain xterm), and optionally the *window
+# (e.g., KDE, Gnome or a plain xterm), and lib.optionally the *window
 # manager* (e.g. kwin or twm).
 
 { config, lib, options, pkgs, ... }:
 
 let
-  inherit (lib) mkOption types literalExpression optionalString;
+  inherit (lib) lib.mkOption types literalExpression lib.optionalString;
 
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
@@ -68,14 +68,14 @@ let
           source ~/.xprofile
       fi
 
-      ${optionalString config.services.displayManager.logToJournal ''
+      ${lib.optionalString config.services.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
           export _DID_SYSTEMD_CAT=1
           exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
         fi
       ''}
 
-      ${optionalString config.services.displayManager.logToFile ''
+      ${lib.optionalString config.services.displayManager.logToFile ''
         exec &> >(tee ~/.xsession-errors)
       ''}
 
@@ -88,7 +88,7 @@ let
       fi
 
       # Import environment variables into the systemd user environment.
-      ${optionalString (cfg.displayManager.importedVariables != []) (
+      ${lib.optionalString (cfg.displayManager.importedVariables != []) (
         "/run/current-system/systemd/bin/systemctl --user import-environment "
           + toString (lib.unique cfg.displayManager.importedVariables)
       )}
@@ -135,27 +135,27 @@ in
 
     services.xserver.displayManager = {
 
-      xauthBin = mkOption {
+      xauthBin = lib.mkOption {
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
-        defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
+        defaultText = lib.literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
         description = "Path to the {command}`xauth` program used by display managers.";
       };
 
-      xserverBin = mkOption {
-        type = types.path;
+      xserverBin = lib.mkOption {
+        type = lib.types.path;
         description = "Path to the X server used by display managers.";
       };
 
-      xserverArgs = mkOption {
-        type = types.listOf types.str;
+      xserverArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
       };
 
-      setupCommands = mkOption {
-        type = types.lines;
+      setupCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Shell commands executed just after the X server has started.
@@ -165,8 +165,8 @@ in
         '';
       };
 
-      sessionCommands = mkOption {
-        type = types.lines;
+      sessionCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
           ''
@@ -178,10 +178,10 @@ in
         '';
       };
 
-      session = mkOption {
+      session = lib.mkOption {
         default = [];
-        type = types.listOf types.attrs;
-        example = literalExpression
+        type = lib.types.listOf types.attrs;
+        example = lib.literalExpression
           ''
             [ { manage = "desktop";
                 name = "xterm";
@@ -208,8 +208,8 @@ in
         '';
       };
 
-      importedVariables = mkOption {
-        type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
+      importedVariables = lib.mkOption {
+        type = lib.types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
         visible = false;
         description = ''
           Environment variables to import into the systemd user environment.
@@ -263,7 +263,7 @@ in
           # Start the desktop manager.
           ${dm.start}
 
-          ${optionalString cfg.updateDbusEnvironment ''
+          ${lib.optionalString cfg.updateDbusEnvironment ''
             ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
           ''}
 
@@ -278,10 +278,10 @@ in
         lib.concatLists (
             lib.mapCartesianProduct
             ({dm, wm}: let
-              sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
+              sessionName = "${dm.name}${lib.optionalString (wm.name != "none") ("+" + wm.name)}";
               prettyName =
                 if dm.name != "none" then
-                  "${dm.prettyName or dm.name}${optionalString (wm.name != "none") (" (" + (wm.prettyName or wm.name) + ")")}"
+                  "${dm.prettyName or dm.name}${lib.optionalString (wm.name != "none") (" (" + (wm.prettyName or wm.name) + ")")}"
                 else
                   (wm.prettyName or wm.name);
               script = xsession dm wm;

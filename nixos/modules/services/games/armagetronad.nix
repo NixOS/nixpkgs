@@ -5,29 +5,14 @@
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    mkOption
-    mkMerge
-    literalExpression
-    ;
-  inherit (lib)
-    mapAttrsToList
-    filterAttrs
-    unique
-    recursiveUpdate
-    types
-    ;
 
   mkValueStringArmagetron =
-    with lib;
     v:
-    if isInt v then
+    if lib.isInt v then
       toString v
-    else if isFloat v then
+    else if lib.isFloat v then
       toString v
-    else if isString v then
+    else if lib.isString v then
       v
     else if true == v then
       "1"
@@ -54,13 +39,13 @@ in
 {
   options = {
     services.armagetronad = {
-      servers = mkOption {
+      servers = lib.mkOption {
         description = "Armagetron server definitions.";
         default = { };
-        type = types.attrsOf (
-          types.submodule {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
             options = {
-              enable = mkEnableOption "armagetronad";
+              enable = lib.mkEnableOption "armagetronad";
 
               package = lib.mkPackageOption pkgs "armagetronad-dedicated" {
                 example = ''
@@ -71,36 +56,36 @@ in
                 '';
               };
 
-              host = mkOption {
-                type = types.str;
+              host = lib.mkOption {
+                type = lib.types.str;
                 default = "0.0.0.0";
                 description = "Host to listen on. Used for SERVER_IP.";
               };
 
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 4534;
                 description = "Port to listen on. Used for SERVER_PORT.";
               };
 
-              dns = mkOption {
-                type = types.nullOr types.str;
+              dns = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = "DNS address to use for this server. Optional.";
               };
 
-              openFirewall = mkOption {
-                type = types.bool;
+              openFirewall = lib.mkOption {
+                type = lib.types.bool;
                 default = true;
                 description = "Set to true to open the configured UDP port for Armagetron Advanced.";
               };
 
-              name = mkOption {
-                type = types.str;
+              name = lib.mkOption {
+                type = lib.types.str;
                 description = "The name of this server.";
               };
 
-              settings = mkOption {
+              settings = lib.mkOption {
                 type = settingsFormat.type;
                 default = { };
                 description = ''
@@ -111,14 +96,14 @@ in
                   This attrset is used to populate `settings_custom.cfg`; see:
                   <https://wiki.armagetronad.org/index.php/Configuration_Files>
                 '';
-                example = literalExpression ''
+                example = lib.literalExpression ''
                   {
                     CYCLE_RUBBER = 40;
                   }
                 '';
               };
 
-              roundSettings = mkOption {
+              roundSettings = lib.mkOption {
                 type = settingsFormat.type;
                 default = { };
                 description = ''
@@ -129,7 +114,7 @@ in
                   This attrset is used to populate `everytime.cfg`; see:
                   <https://wiki.armagetronad.org/index.php/Configuration_Files>
                 '';
-                example = literalExpression ''
+                example = lib.literalExpression ''
                   {
                     SAY = [
                       "Hosted on NixOS"
@@ -146,9 +131,9 @@ in
     };
   };
 
-  config = mkIf (enabledServers != { }) {
-    systemd.tmpfiles.settings = mkMerge (
-      mapAttrsToList (
+  config = lib.mkIf (enabledServers != { }) {
+    systemd.tmpfiles.settings = lib.mkMerge (
+      lib.mapAttrsToList (
         serverName: serverCfg:
         let
           serverId = nameToId serverName;
@@ -225,8 +210,8 @@ in
       ) enabledServers
     );
 
-    systemd.services = mkMerge (
-      mapAttrsToList (
+    systemd.services = lib.mkMerge (
+      lib.mapAttrsToList (
         serverName: serverCfg:
         let
           serverId = nameToId serverName;
@@ -275,14 +260,14 @@ in
       ) enabledServers
     );
 
-    networking.firewall.allowedUDPPorts = unique (
-      mapAttrsToList (serverName: serverCfg: serverCfg.port) (
-        filterAttrs (serverName: serverCfg: serverCfg.openFirewall) enabledServers
+    networking.firewall.allowedUDPPorts = lib.unique (
+      lib.mapAttrsToList (serverName: serverCfg: serverCfg.port) (
+        lib.filterAttrs (serverName: serverCfg: serverCfg.openFirewall) enabledServers
       )
     );
 
-    users.users = mkMerge (
-      mapAttrsToList (serverName: serverCfg: {
+    users.users = lib.mkMerge (
+      lib.mapAttrsToList (serverName: serverCfg: {
         ${nameToId serverName} = {
           group = nameToId serverName;
           description = "Armagetron Advanced dedicated user for server ${serverName}";
@@ -291,8 +276,8 @@ in
       }) enabledServers
     );
 
-    users.groups = mkMerge (
-      mapAttrsToList (serverName: serverCfg: {
+    users.groups = lib.mkMerge (
+      lib.mapAttrsToList (serverName: serverCfg: {
         ${nameToId serverName} = { };
       }) enabledServers
     );

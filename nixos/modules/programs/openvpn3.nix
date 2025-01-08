@@ -12,7 +12,7 @@ let
   inherit (lib)
     mkEnableOption
     mkPackageOption
-    mkOption
+    lib.mkOption
     literalExpression
     max
     options
@@ -22,24 +22,24 @@ let
 in
 {
   options.programs.openvpn3 = {
-    enable = mkEnableOption "the openvpn3 client";
-    package = mkPackageOption pkgs "openvpn3" { };
-    netcfg = mkOption {
+    enable = lib.mkEnableOption "the openvpn3 client";
+    package = lib.mkPackageOption pkgs "openvpn3" { };
+    netcfg = lib.mkOption {
       description = "Network configuration";
       default = { };
       type = submodule {
         options = {
-          settings = mkOption {
+          settings = lib.mkOption {
             description = "Options stored in {file}`/etc/openvpn3/netcfg.json` configuration file";
             default = { };
             type = submodule {
               freeformType = json.type;
               options = {
-                systemd_resolved = mkOption {
+                systemd_resolved = lib.mkOption {
                   type = bool;
                   description = "Whether to use systemd-resolved integration";
                   default = config.services.resolved.enable;
-                  defaultText = literalExpression "config.services.resolved.enable";
+                  defaultText = lib.literalExpression "config.services.resolved.enable";
                   example = false;
                 };
               };
@@ -48,30 +48,30 @@ in
         };
       };
     };
-    log-service = mkOption {
+    log-service = lib.mkOption {
       description = "Log service configuration";
       default = { };
       type = submodule {
         options = {
-          settings = mkOption {
+          settings = lib.mkOption {
             description = "Options stored in {file}`/etc/openvpn3/log-service.json` configuration file";
             default = { };
             type = submodule {
               freeformType = json.type;
               options = {
-                journald = mkOption {
+                journald = lib.mkOption {
                   description = "Use systemd-journald";
                   type = bool;
                   default = true;
                   example = false;
                 };
-                log_dbus_details = mkOption {
+                log_dbus_details = lib.mkOption {
                   description = "Add D-Bus details in log file/syslog";
                   type = bool;
                   default = true;
                   example = false;
                 };
-                log_level = mkOption {
+                log_level = lib.mkOption {
                   description = "How verbose should the logging be";
                   type = (ints.between 0 7) // {
                     merge = _loc: defs: lists.foldl max 0 (options.getValues defs);
@@ -79,7 +79,7 @@ in
                   default = 3;
                   example = 6;
                 };
-                timestamp = mkOption {
+                timestamp = lib.mkOption {
                   description = "Add timestamp log file";
                   type = bool;
                   default = false;

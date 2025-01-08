@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.pixiecore;
 in
@@ -15,42 +13,42 @@ in
 
   options = {
     services.pixiecore = {
-      enable = mkEnableOption "Pixiecore";
+      enable = lib.mkEnableOption "Pixiecore";
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports (67, 69, 4011 UDP and 'port', 'statusPort' TCP) in the firewall for Pixiecore.
         '';
       };
 
-      mode = mkOption {
+      mode = lib.mkOption {
         description = "Which mode to use";
         default = "boot";
-        type = types.enum [
+        type = lib.types.enum [
           "api"
           "boot"
           "quick"
         ];
       };
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Log more things that aren't directly related to booting a recognized client";
       };
 
-      dhcpNoBind = mkOption {
-        type = types.bool;
+      dhcpNoBind = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Handle DHCP traffic without binding to the DHCP server port";
       };
 
-      quick = mkOption {
+      quick = lib.mkOption {
         description = "Which quick option to use";
         default = "xyz";
-        type = types.enum [
+        type = lib.types.enum [
           "arch"
           "centos"
           "coreos"
@@ -61,57 +59,57 @@ in
         ];
       };
 
-      kernel = mkOption {
-        type = types.str or types.path;
+      kernel = lib.mkOption {
+        type = lib.types.str or lib.types.path;
         default = "";
         description = "Kernel path. Ignored unless mode is set to 'boot'";
       };
 
-      initrd = mkOption {
-        type = types.str or types.path;
+      initrd = lib.mkOption {
+        type = lib.types.str or lib.types.path;
         default = "";
         description = "Initrd path. Ignored unless mode is set to 'boot'";
       };
 
-      cmdLine = mkOption {
-        type = types.str;
+      cmdLine = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Kernel commandline arguments. Ignored unless mode is set to 'boot'";
       };
 
-      listen = mkOption {
-        type = types.str;
+      listen = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = "IPv4 address to listen on";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 80;
         description = "Port to listen on for HTTP";
       };
 
-      statusPort = mkOption {
-        type = types.port;
+      statusPort = lib.mkOption {
+        type = lib.types.port;
         default = 80;
         description = "HTTP port for status information (can be the same as --port)";
       };
 
-      apiServer = mkOption {
-        type = types.str;
+      apiServer = lib.mkOption {
+        type = lib.types.str;
         example = "http://localhost:8080";
         description = "URI to connect to the API. Ignored unless mode is set to 'api'";
       };
 
-      extraArguments = mkOption {
-        type = types.listOf types.str;
+      extraArguments = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Additional command line arguments to pass to Pixiecore";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.pixiecore = { };
     users.users.pixiecore = {
       description = "Pixiecore daemon user";
@@ -119,7 +117,7 @@ in
       isSystemUser = true;
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [
         cfg.port
         cfg.statusPort
@@ -139,7 +137,7 @@ in
       serviceConfig = {
         User = "pixiecore";
         Restart = "always";
-        AmbientCapabilities = [ "cap_net_bind_service" ] ++ optional cfg.dhcpNoBind "cap_net_raw";
+        AmbientCapabilities = [ "cap_net_bind_service" ] ++ lib.optional cfg.dhcpNoBind "cap_net_raw";
         ExecStart =
           let
             argString =
@@ -148,8 +146,8 @@ in
                   "boot"
                   cfg.kernel
                 ]
-                ++ optional (cfg.initrd != "") cfg.initrd
-                ++ optionals (cfg.cmdLine != "") [
+                ++ lib.optional (cfg.initrd != "") cfg.initrd
+                ++ lib.optionals (cfg.cmdLine != "") [
                   "--cmdline"
                   cfg.cmdLine
                 ]
@@ -167,12 +165,12 @@ in
           ''
             ${pkgs.pixiecore}/bin/pixiecore \
               ${lib.escapeShellArgs argString} \
-              ${optionalString cfg.debug "--debug"} \
-              ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} \
+              ${lib.optionalString cfg.debug "--debug"} \
+              ${lib.optionalString cfg.dhcpNoBind "--dhcp-no-bind"} \
               --listen-addr ${lib.escapeShellArg cfg.listen} \
               --port ${toString cfg.port} \
               --status-port ${toString cfg.statusPort} \
-              ${escapeShellArgs cfg.extraArguments}
+              ${lib.escapeShellArgs cfg.extraArguments}
           '';
       };
     };

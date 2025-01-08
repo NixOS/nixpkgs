@@ -5,16 +5,13 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.vdirsyncer;
 
   toIniJson =
-    with generators;
-    toINI {
-      mkKeyValue = mkKeyValueDefault {
+    lib.generators.toINI {
+      mkKeyValue = lib.mkKeyValueDefault {
         mkValueString = builtins.toJSON;
       } "=";
     };
@@ -32,8 +29,8 @@ let
                 if cfg'.config.statusPath == null then "/var/lib/vdirsyncer/${name}" else cfg'.config.statusPath;
             };
           }
-          // (mapAttrs' (name: nameValuePair "pair ${name}") cfg'.config.pairs)
-          // (mapAttrs' (name: nameValuePair "storage ${name}") cfg'.config.storages)
+          // (lib.mapAttrs' (name: lib.nameValuePair "pair ${name}") cfg'.config.pairs)
+          // (lib.mapAttrs' (name: lib.nameValuePair "storage ${name}") cfg'.config.storages)
         )
       );
 
@@ -43,13 +40,13 @@ let
         User = if cfg'.user == null then "vdirsyncer" else cfg'.user;
         Group = if cfg'.group == null then "vdirsyncer" else cfg'.group;
       }
-      // (optionalAttrs (cfg'.user == null) {
+      // (lib.optionalAttrs (cfg'.user == null) {
         DynamicUser = true;
       })
-      // (optionalAttrs (cfg'.additionalGroups != [ ]) {
+      // (lib.optionalAttrs (cfg'.additionalGroups != [ ]) {
         SupplementaryGroups = cfg'.additionalGroups;
       })
-      // (optionalAttrs (cfg'.config.statusPath == null) {
+      // (lib.optionalAttrs (cfg'.config.statusPath == null) {
         StateDirectory = "vdirsyncer/${name}";
         StateDirectoryMode = "0700";
       });
@@ -80,22 +77,22 @@ in
 {
   options = {
     services.vdirsyncer = {
-      enable = mkEnableOption "vdirsyncer";
+      enable = lib.mkEnableOption "vdirsyncer";
 
-      package = mkPackageOption pkgs "vdirsyncer" { };
+      package = lib.mkPackageOption pkgs "vdirsyncer" { };
 
-      jobs = mkOption {
+      jobs = lib.mkOption {
         description = "vdirsyncer job configurations";
-        type = types.attrsOf (
-          types.submodule {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
             options = {
-              enable = (mkEnableOption "this vdirsyncer job") // {
+              enable = (lib.mkEnableOption "this vdirsyncer job") // {
                 default = true;
                 example = false;
               };
 
-              user = mkOption {
-                type = types.nullOr types.str;
+              user = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
                   User account to run vdirsyncer as, otherwise as a systemd
@@ -103,28 +100,28 @@ in
                 '';
               };
 
-              group = mkOption {
-                type = types.nullOr types.str;
+              group = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = "group to run vdirsyncer as";
               };
 
-              additionalGroups = mkOption {
-                type = types.listOf types.str;
+              additionalGroups = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 description = "additional groups to add the dynamic user to";
               };
 
-              forceDiscover = mkOption {
-                type = types.bool;
+              forceDiscover = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Run `yes | vdirsyncer discover` prior to `vdirsyncer sync`
                 '';
               };
 
-              timerConfig = mkOption {
-                type = types.attrs;
+              timerConfig = lib.mkOption {
+                type = lib.types.attrs;
                 default = {
                   OnBootSec = "1h";
                   OnUnitActiveSec = "6h";
@@ -132,31 +129,31 @@ in
                 description = "systemd timer configuration";
               };
 
-              configFile = mkOption {
-                type = types.nullOr types.path;
+              configFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = "existing configuration file";
               };
 
               config = {
-                statusPath = mkOption {
-                  type = types.nullOr types.str;
+                statusPath = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
                   default = null;
-                  defaultText = literalExpression "/var/lib/vdirsyncer/\${attrName}";
+                  defaultText = lib.literalExpression "/var/lib/vdirsyncer/\${attrName}";
                   description = "vdirsyncer's status path";
                 };
 
-                general = mkOption {
-                  type = types.attrs;
+                general = lib.mkOption {
+                  type = lib.types.attrs;
                   default = { };
                   description = "general configuration";
                 };
 
-                pairs = mkOption {
-                  type = types.attrsOf types.attrs;
+                pairs = lib.mkOption {
+                  type = lib.types.attrsOf lib.types.attrs;
                   default = { };
                   description = "vdirsyncer pair configurations";
-                  example = literalExpression ''
+                  example = lib.literalExpression ''
                     {
                       my_contacts = {
                         a = "my_cloud_contacts";
@@ -169,11 +166,11 @@ in
                   '';
                 };
 
-                storages = mkOption {
-                  type = types.attrsOf types.attrs;
+                storages = lib.mkOption {
+                  type = lib.types.attrsOf lib.types.attrs;
                   default = { };
                   description = "vdirsyncer storage configurations";
-                  example = literalExpression ''
+                  example = lib.literalExpression ''
                     {
                       my_cloud_contacts = {
                         type = "carddav";
@@ -199,18 +196,18 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.services = mapAttrs' (
+  config = lib.mkIf cfg.enable {
+    systemd.services = lib.mapAttrs' (
       name: cfg':
-      nameValuePair "vdirsyncer@${name}" (
-        foldr recursiveUpdate { } [
+      lib.nameValuePair "vdirsyncer@${name}" (
+        lib.foldr lib.recursiveUpdate { } [
           commonUnitConfig
           (userUnitConfig name cfg')
           {
             description = "synchronize calendars and contacts (${name})";
             environment.VDIRSYNCER_CONFIG = toConfigFile name cfg';
             serviceConfig.ExecStart =
-              (optional cfg'.forceDiscover (
+              (lib.optional cfg'.forceDiscover (
                 pkgs.writeShellScript "vdirsyncer-discover-yes" ''
                   set -e
                   yes | ${cfg.package}/bin/vdirsyncer discover
@@ -220,11 +217,11 @@ in
           }
         ]
       )
-    ) (filterAttrs (name: cfg': cfg'.enable) cfg.jobs);
+    ) (lib.filterAttrs (name: cfg': cfg'.enable) cfg.jobs);
 
-    systemd.timers = mapAttrs' (
+    systemd.timers = lib.mapAttrs' (
       name: cfg':
-      nameValuePair "vdirsyncer@${name}" {
+      lib.nameValuePair "vdirsyncer@${name}" {
         wantedBy = [ "timers.target" ];
         description = "synchronize calendars and contacts (${name})";
         inherit (cfg') timerConfig;

@@ -10,7 +10,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -18,10 +18,10 @@ let
 in
 {
   options.services.imaginary = {
-    enable = mkEnableOption "imaginary image processing microservice";
+    enable = lib.mkEnableOption "imaginary image processing microservice";
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         Bind address. Corresponds to the `-a` flag.
@@ -30,22 +30,22 @@ in
       example = "[::1]";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8088;
       description = "Bind port. Corresponds to the `-p` flag.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Command line arguments passed to the imaginary executable, stripped of
         the prefix `-`. See upstream's
         [README](https://github.com/h2non/imaginary#command-line-usage) for all
         options.
       '';
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType =
-          with types;
+          with lib.types;
           attrsOf (oneOf [
             bool
             int
@@ -54,8 +54,8 @@ in
           ]);
 
         options = {
-          return-size = mkOption {
-            type = types.bool;
+          return-size = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = "Return the image size in the HTTP headers.";
           };
@@ -64,7 +64,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !lib.hasAttr "a" cfg.settings;

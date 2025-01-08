@@ -5,11 +5,9 @@
   ...
 }:
 
-with lib;
-
 {
 
-  config = mkIf config.boot.isContainer {
+  config = lib.mkIf config.boot.isContainer {
 
     # Disable some features that are not useful in a container.
 
@@ -17,16 +15,16 @@ with lib;
     boot.kernel.enable = false;
     boot.modprobeConfig.enable = false;
 
-    console.enable = mkDefault false;
+    console.enable = lib.mkDefault false;
 
-    nix.optimise.automatic = mkDefault false; # the store is host managed
-    powerManagement.enable = mkDefault false;
-    documentation.nixos.enable = mkDefault false;
+    nix.optimise.automatic = lib.mkDefault false; # the store is host managed
+    powerManagement.enable = lib.mkDefault false;
+    documentation.nixos.enable = lib.mkDefault false;
 
-    networking.useHostResolvConf = mkDefault true;
+    networking.useHostResolvConf = lib.mkDefault true;
 
     # Containers should be light-weight, so start sshd on demand.
-    services.openssh.startWhenNeeded = mkDefault true;
+    services.openssh.startWhenNeeded = lib.mkDefault true;
 
     # containers do not need to setup devices
     services.udev.enable = false;

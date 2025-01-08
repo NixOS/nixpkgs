@@ -584,33 +584,33 @@ in
         {
           instagram = {
             settings = {
-              network.mode = mkDefault "instagram";
+              network.mode = lib.mkDefault "instagram";
 
               appservice = {
-                id = mkDefault "instagram";
-                port = mkDefault 29320;
+                id = lib.mkDefault "instagram";
+                port = lib.mkDefault 29320;
                 bot = {
-                  username = mkDefault "instagrambot";
-                  displayname = mkDefault "Instagram bridge bot";
-                  avatar = mkDefault "mxc://maunium.net/JxjlbZUlCPULEeHZSwleUXQv";
+                  username = lib.mkDefault "instagrambot";
+                  displayname = lib.mkDefault "Instagram bridge bot";
+                  avatar = lib.mkDefault "mxc://maunium.net/JxjlbZUlCPULEeHZSwleUXQv";
                 };
-                username_template = mkDefault "instagram_{{.}}";
+                username_template = lib.mkDefault "instagram_{{.}}";
               };
             };
           };
           facebook = {
             settings = {
-              network.mode = mkDefault "facebook";
+              network.mode = lib.mkDefault "facebook";
 
               appservice = {
-                id = mkDefault "facebook";
-                port = mkDefault 29321;
+                id = lib.mkDefault "facebook";
+                port = lib.mkDefault 29321;
                 bot = {
-                  username = mkDefault "facebookbot";
-                  displayname = mkDefault "Facebook bridge bot";
-                  avatar = mkDefault "mxc://maunium.net/ygtkteZsXnGJLJHRchUwYWak";
+                  username = lib.mkDefault "facebookbot";
+                  displayname = lib.mkDefault "Facebook bridge bot";
+                  avatar = lib.mkDefault "mxc://maunium.net/ygtkteZsXnGJLJHRchUwYWak";
                 };
-                username_template = mkDefault "facebook_{{.}}";
+                username_template = lib.mkDefault "facebook_{{.}}";
               };
             };
           };

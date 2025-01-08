@@ -11,14 +11,13 @@ let
   format = pkgs.formats.yaml { };
 
   autheliaOpts =
-    with lib;
     { name, ... }:
     {
       options = {
-        enable = mkEnableOption "Authelia instance";
+        enable = lib.mkEnableOption "Authelia instance";
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = name;
           description = ''
             Name is used as a suffix for the service name, user, and group.
@@ -27,21 +26,21 @@ let
           '';
         };
 
-        package = mkPackageOption pkgs "authelia" { };
+        package = lib.mkPackageOption pkgs "authelia" { };
 
-        user = mkOption {
+        user = lib.mkOption {
           default = "authelia-${name}";
-          type = types.str;
+          type = lib.types.str;
           description = "The name of the user for this authelia instance.";
         };
 
-        group = mkOption {
+        group = lib.mkOption {
           default = "authelia-${name}";
-          type = types.str;
+          type = lib.types.str;
           description = "The name of the group for this authelia instance.";
         };
 
-        secrets = mkOption {
+        secrets = lib.mkOption {
           description = ''
             It is recommended you keep your secrets separate from the configuration.
             It's especially important to keep the raw secrets out of your nix configuration,
@@ -51,9 +50,9 @@ let
             https://www.authelia.com/configuration/methods/secrets/
           '';
           default = { };
-          type = types.submodule {
+          type = lib.types.submodule {
             options = {
-              manual = mkOption {
+              manual = lib.mkOption {
                 default = false;
                 example = true;
                 description = ''
@@ -62,36 +61,36 @@ let
                   to run at all.
                   If a user wants to set these values themselves and bypass the validation they can set this value to true.
                 '';
-                type = types.bool;
+                type = lib.types.bool;
               };
 
               # required
-              jwtSecretFile = mkOption {
-                type = types.nullOr types.path;
+              jwtSecretFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = ''
                   Path to your JWT secret used during identity verificaton.
                 '';
               };
 
-              oidcIssuerPrivateKeyFile = mkOption {
-                type = types.nullOr types.path;
+              oidcIssuerPrivateKeyFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = ''
                   Path to your private key file used to encrypt OIDC JWTs.
                 '';
               };
 
-              oidcHmacSecretFile = mkOption {
-                type = types.nullOr types.path;
+              oidcHmacSecretFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = ''
                   Path to your HMAC secret used to sign OIDC JWTs.
                 '';
               };
 
-              sessionSecretFile = mkOption {
-                type = types.nullOr types.path;
+              sessionSecretFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = ''
                   Path to your session secret. Only used when redis is used as session storage.
@@ -99,8 +98,8 @@ let
               };
 
               # required
-              storageEncryptionKeyFile = mkOption {
-                type = types.nullOr types.path;
+              storageEncryptionKeyFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = ''
                   Path to your storage encryption key.
@@ -110,8 +109,8 @@ let
           };
         };
 
-        environmentVariables = mkOption {
-          type = types.attrsOf types.str;
+        environmentVariables = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           description = ''
             Additional environment variables to provide to authelia.
             If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
@@ -122,7 +121,7 @@ let
           default = { };
         };
 
-        settings = mkOption {
+        settings = lib.mkOption {
           description = ''
             Your Authelia config.yml as a Nix attribute set.
             There are several values that are defined and documented in nix such as `default_2fa_method`,
@@ -139,11 +138,11 @@ let
               server.disable_healthcheck = true;
             }
           '';
-          type = types.submodule {
+          type = lib.types.submodule {
             freeformType = format.type;
             options = {
-              theme = mkOption {
-                type = types.enum [
+              theme = lib.mkOption {
+                type = lib.types.enum [
                   "light"
                   "dark"
                   "grey"
@@ -154,8 +153,8 @@ let
                 description = "The theme to display.";
               };
 
-              default_2fa_method = mkOption {
-                type = types.enum [
+              default_2fa_method = lib.mkOption {
+                type = lib.types.enum [
                   ""
                   "totp"
                   "webauthn"
@@ -169,8 +168,8 @@ let
               };
 
               server = {
-                address = mkOption {
-                  type = types.str;
+                address = lib.mkOption {
+                  type = lib.types.str;
                   default = "tcp://:9091/";
                   example = "unix:///var/run/authelia.sock?path=authelia&umask=0117";
                   description = "The address to listen on.";
@@ -178,8 +177,8 @@ let
               };
 
               log = {
-                level = mkOption {
-                  type = types.enum [
+                level = lib.mkOption {
+                  type = lib.types.enum [
                     "trace"
                     "debug"
                     "info"
@@ -191,8 +190,8 @@ let
                   description = "Level of verbosity for logs.";
                 };
 
-                format = mkOption {
-                  type = types.enum [
+                format = lib.mkOption {
+                  type = lib.types.enum [
                     "json"
                     "text"
                   ];
@@ -201,15 +200,15 @@ let
                   description = "Format the logs are written as.";
                 };
 
-                file_path = mkOption {
-                  type = types.nullOr types.path;
+                file_path = lib.mkOption {
+                  type = lib.types.nullOr lib.types.path;
                   default = null;
                   example = "/var/log/authelia/authelia.log";
                   description = "File path where the logs will be written. If not set logs are written to stdout.";
                 };
 
-                keep_stdout = mkOption {
-                  type = types.bool;
+                keep_stdout = lib.mkOption {
+                  type = lib.types.bool;
                   default = false;
                   example = true;
                   description = "Whether to also log to stdout when a `file_path` is defined.";
@@ -218,15 +217,15 @@ let
 
               telemetry = {
                 metrics = {
-                  enabled = mkOption {
-                    type = types.bool;
+                  enabled = lib.mkOption {
+                    type = lib.types.bool;
                     default = false;
                     example = true;
                     description = "Enable Metrics.";
                   };
 
-                  address = mkOption {
-                    type = types.str;
+                  address = lib.mkOption {
+                    type = lib.types.str;
                     default = "tcp://127.0.0.1:9959";
                     example = "tcp://0.0.0.0:8888";
                     description = "The address to listen on for metrics. This should be on a different port to the main `server.port` value.";
@@ -237,8 +236,8 @@ let
           };
         };
 
-        settingsFiles = mkOption {
-          type = types.listOf types.path;
+        settingsFiles = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
           default = [ ];
           example = [
             "/etc/authelia/config.yml"
@@ -276,10 +275,9 @@ let
 in
 {
   options.services.authelia.instances =
-    with lib;
-    mkOption {
+    lib.mkOption {
       default = { };
-      type = types.attrsOf (types.submodule autheliaOpts);
+      type = lib.types.attrsOf (lib.types.submodule autheliaOpts);
       description = ''
         Multi-domain protection currently requires multiple instances of Authelia.
         If you don't require multiple instances of Authelia you can define just the one.

@@ -10,37 +10,37 @@ let
 in
 {
   documentation = {
-    enable = mkDefault false;
-    doc.enable = mkDefault false;
-    info.enable = mkDefault false;
-    man.enable = mkDefault false;
-    nixos.enable = mkDefault false;
+    enable = lib.mkDefault false;
+    doc.enable = lib.mkDefault false;
+    info.enable = lib.mkDefault false;
+    man.enable = lib.mkDefault false;
+    nixos.enable = lib.mkDefault false;
   };
 
   environment = {
     # Perl is a default package.
-    defaultPackages = mkDefault [ ];
-    stub-ld.enable = mkDefault false;
+    defaultPackages = lib.mkDefault [ ];
+    stub-ld.enable = lib.mkDefault false;
   };
 
   programs = {
     # The lessopen package pulls in Perl.
-    less.lessopen = mkDefault null;
-    command-not-found.enable = mkDefault false;
+    less.lessopen = lib.mkDefault null;
+    command-not-found.enable = lib.mkDefault false;
   };
 
   # This pulls in nixos-containers which depends on Perl.
-  boot.enableContainers = mkDefault false;
+  boot.enableContainers = lib.mkDefault false;
 
   services = {
-    logrotate.enable = mkDefault false;
-    udisks2.enable = mkDefault false;
+    logrotate.enable = lib.mkDefault false;
+    udisks2.enable = lib.mkDefault false;
   };
 
   xdg = {
-    autostart.enable = mkDefault false;
-    icons.enable = mkDefault false;
-    mime.enable = mkDefault false;
-    sounds.enable = mkDefault false;
+    autostart.enable = lib.mkDefault false;
+    icons.enable = lib.mkDefault false;
+    mime.enable = lib.mkDefault false;
+    sounds.enable = lib.mkDefault false;
   };
 }

@@ -15,19 +15,19 @@ let
     getExe
     mapAttrs'
     mkIf
-    mkOption
+    lib.mkOption
     nameValuePair
     types
     ;
 
   isNonNull = v: v != null;
   genCliFlags =
-    settings: concatStringsSep " " (cli.toGNUCommandLine { } (filterAttrs (const isNonNull) settings));
+    settings: concatStringsSep " " (cli.toGNUCommandLine { } (lib.filterAttrs (const isNonNull) settings));
 in
 {
-  options.services.mailpit.instances = mkOption {
+  options.services.mailpit.instances = lib.mkOption {
     default = { };
-    type = types.attrsOf (
+    type = lib.types.attrsOf (
       types.submodule {
         freeformType = types.attrsOf (
           types.oneOf [
@@ -37,8 +37,8 @@ in
           ]
         );
         options = {
-          database = mkOption {
-            type = types.nullOr types.str;
+          database = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             example = "mailpit.db";
             description = ''
@@ -48,8 +48,8 @@ in
               state directory then.
             '';
           };
-          max = mkOption {
-            type = types.ints.unsigned;
+          max = lib.mkOption {
+            type = lib.types.ints.unsigned;
             default = 500;
             description = ''
               Maximum number of emails to keep. If the number is exceeded, old emails
@@ -58,16 +58,16 @@ in
               Set to `0` to never prune old emails.
             '';
           };
-          listen = mkOption {
+          listen = lib.mkOption {
             default = "127.0.0.1:8025";
-            type = types.str;
+            type = lib.types.str;
             description = ''
               HTTP bind interface and port for UI.
             '';
           };
-          smtp = mkOption {
+          smtp = lib.mkOption {
             default = "127.0.0.1:1025";
-            type = types.str;
+            type = lib.types.str;
             description = ''
               SMTP bind interface and port.
             '';
@@ -84,7 +84,7 @@ in
     '';
   };
 
-  config = mkIf (instances != { }) {
+  config = lib.mkIf (instances != { }) {
     systemd.services = mapAttrs' (
       name: cfg:
       nameValuePair "mailpit-${name}" {

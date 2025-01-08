@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.sabnzbd;
-  inherit (pkgs) sabnzbd;
 
 in
 
@@ -15,30 +12,30 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkEnableOption "the sabnzbd server";
+      enable = lib.mkEnableOption "the sabnzbd server";
 
-      package = mkPackageOption pkgs "sabnzbd" { };
+      package = lib.mkPackageOption pkgs "sabnzbd" { };
 
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/sabnzbd/sabnzbd.ini";
         description = "Path to config file.";
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "sabnzbd";
-        type = types.str;
+        type = lib.types.str;
         description = "User to run the service as";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "sabnzbd";
         description = "Group to run the service as";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for the sabnzbd web interface
@@ -50,8 +47,8 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-    users.users = mkIf (cfg.user == "sabnzbd") {
+  config = lib.mkIf cfg.enable {
+    users.users = lib.mkIf (cfg.user == "sabnzbd") {
       sabnzbd = {
         uid = config.ids.uids.sabnzbd;
         group = cfg.group;
@@ -59,7 +56,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "sabnzbd") {
+    users.groups = lib.mkIf (cfg.group == "sabnzbd") {
       sabnzbd.gid = config.ids.gids.sabnzbd;
     };
 
@@ -77,7 +74,7 @@ in
         };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 8080 ];
     };
   };

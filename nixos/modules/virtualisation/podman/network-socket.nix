@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -19,8 +19,8 @@ in
   ];
 
   options.virtualisation.podman.networkSocket = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Make the Podman and Docker compatibility API available over the network
@@ -35,38 +35,38 @@ in
       '';
     };
 
-    server = mkOption {
-      type = types.enum [ ];
+    server = lib.mkOption {
+      type = lib.types.enum [ ];
       description = ''
         Choice of TLS proxy server.
       '';
       example = "ghostunnel";
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to open the port in the firewall.
       '';
     };
 
-    tls.cacert = mkOption {
-      type = types.path;
+    tls.cacert = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to CA certificate to use for client authentication.
       '';
     };
 
-    tls.cert = mkOption {
-      type = types.path;
+    tls.cert = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to certificate describing the server.
       '';
     };
 
-    tls.key = mkOption {
-      type = types.path;
+    tls.key = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to the private key corresponding to the server certificate.
 
@@ -75,15 +75,15 @@ in
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 2376;
       description = ''
         TCP port number for receiving TLS connections.
       '';
     };
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
       description = ''
         Interface address for receiving TLS connections.

@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.invoiceplane;
   eachSite = cfg.sites;
@@ -24,7 +22,7 @@ let
       DB_USERNAME=${cfg.database.user}
       # NOTE: file_get_contents adds newline at the end of returned string
       DB_PASSWORD=${
-        optionalString (
+        lib.optionalString (
           cfg.database.passwordFile != null
         ) "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")"
       }
@@ -41,24 +39,24 @@ let
 
   mkPhpValue =
     v:
-    if isString v then
-      escapeShellArg v
+    if lib.isString v then
+      lib.escapeShellArg v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && strings.isConvertibleWithToString v then
-      escapeShellArg (concatMapStringsSep "," toString v)
-    else if isInt v then
+    else if lib.isList v && lib.strings.isConvertibleWithToString v then
+      lib.escapeShellArg (lib.concatMapStringsSep "," toString v)
+    else if lib.isInt v then
       toString v
-    else if isBool v then
-      boolToString v
+    else if lib.isBool v then
+      lib.boolToString v
     else
       abort "The Invoiceplane config value ${lib.generators.toPretty { } v} can not be encoded.";
 
   extraConfig =
     hostName: cfg:
     let
-      settings = mapAttrsToList (k: v: "${k}=${mkPhpValue v}") cfg.settings;
+      settings = lib.mapAttrsToList (k: v: "${k}=${mkPhpValue v}") cfg.settings;
     in
-    pkgs.writeText "extraConfig.php" (concatStringsSep "\n" settings);
+    pkgs.writeText "extraConfig.php" (lib.concatStringsSep "\n" settings);
 
   pkg =
     hostName: cfg:
@@ -90,7 +88,7 @@ let
         ln -s ${extraConfig hostName cfg} $out/extraConfig.php
 
         # symlink additional templates
-        ${concatMapStringsSep "\n" (
+        ${lib.concatMapStringsSep "\n" (
           template: "cp -r ${template}/. $out/application/views/invoice_templates/pdf/"
         ) cfg.invoiceTemplates}
       '';
@@ -101,10 +99,10 @@ let
     {
       options = {
 
-        enable = mkEnableOption "InvoicePlane web application";
+        enable = lib.mkEnableOption "InvoicePlane web application";
 
-        stateDir = mkOption {
-          type = types.path;
+        stateDir = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/invoiceplane/${name}";
           description = ''
             This directory is used for uploads of attachments and cache.
@@ -114,32 +112,32 @@ let
         };
 
         database = {
-          host = mkOption {
-            type = types.str;
+          host = lib.mkOption {
+            type = lib.types.str;
             default = "localhost";
             description = "Database host address.";
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 3306;
             description = "Database host port.";
           };
 
-          name = mkOption {
-            type = types.str;
+          name = lib.mkOption {
+            type = lib.types.str;
             default = "invoiceplane";
             description = "Database name.";
           };
 
-          user = mkOption {
-            type = types.str;
+          user = lib.mkOption {
+            type = lib.types.str;
             default = "invoiceplane";
             description = "Database user.";
           };
 
-          passwordFile = mkOption {
-            type = types.nullOr types.path;
+          passwordFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
             example = "/run/keys/invoiceplane-dbpassword";
             description = ''
@@ -148,15 +146,15 @@ let
             '';
           };
 
-          createLocally = mkOption {
-            type = types.bool;
+          createLocally = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Create the database and database user locally.";
           };
         };
 
-        invoiceTemplates = mkOption {
-          type = types.listOf types.path;
+        invoiceTemplates = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
           default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
@@ -165,7 +163,7 @@ let
             These templates need to be packaged before use, see example.
             :::
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             let
               # Let's package an example template
               template-vtdirektmarketing = pkgs.stdenv.mkDerivation {
@@ -187,9 +185,9 @@ let
           '';
         };
 
-        poolConfig = mkOption {
+        poolConfig = lib.mkOption {
           type =
-            with types;
+            with lib.types;
             attrsOf (oneOf [
               str
               int
@@ -209,15 +207,15 @@ let
           '';
         };
 
-        settings = mkOption {
-          type = types.attrsOf types.anything;
+        settings = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
           default = { };
           description = ''
             Structural InvoicePlane configuration. Refer to
             <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
             for details and supported values.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               SETUP_COMPLETED = true;
               DISABLE_SETUP = true;
@@ -227,8 +225,8 @@ let
         };
 
         cron = {
-          enable = mkOption {
-            type = types.bool;
+          enable = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Enable cron service which periodically runs Invoiceplane tasks.
@@ -237,8 +235,8 @@ let
               on how to configure it.
             '';
           };
-          key = mkOption {
-            type = types.str;
+          key = lib.mkOption {
+            type = lib.types.str;
             description = "Cron key taken from the administration page.";
           };
         };
@@ -250,17 +248,17 @@ in
 {
   # interface
   options = {
-    services.invoiceplane = mkOption {
-      type = types.submodule {
+    services.invoiceplane = lib.mkOption {
+      type = lib.types.submodule {
 
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
+        options.sites = lib.mkOption {
+          type = lib.types.attrsOf (lib.types.submodule siteOpts);
           default = { };
           description = "Specification of one or more InvoicePlane sites to serve";
         };
 
-        options.webserver = mkOption {
-          type = types.enum [
+        options.webserver = lib.mkOption {
+          type = lib.types.enum [
             "caddy"
             "nginx"
           ];
@@ -278,11 +276,11 @@ in
   };
 
   # implementation
-  config = mkIf (eachSite != { }) (mkMerge [
+  config = lib.mkIf (eachSite != { }) (lib.mkMerge [
     {
 
-      assertions = flatten (
-        mapAttrsToList (hostName: cfg: [
+      assertions = lib.flatten (
+        lib.mapAttrsToList (hostName: cfg: [
           {
             assertion = cfg.database.createLocally -> cfg.database.user == user;
             message = ''services.invoiceplane.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
@@ -298,11 +296,11 @@ in
         ]) eachSite
       );
 
-      services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
+      services.mysql = lib.mkIf (lib.any (v: v.database.createLocally) (lib.attrValues eachSite)) {
         enable = true;
-        package = mkDefault pkgs.mariadb;
-        ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-        ensureUsers = mapAttrsToList (hostName: cfg: {
+        package = lib.mkDefault pkgs.mariadb;
+        ensureDatabases = lib.mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
+        ensureUsers = lib.mapAttrsToList (hostName: cfg: {
           name = cfg.database.user;
           ensurePermissions = {
             "${cfg.database.name}.*" = "ALL PRIVILEGES";
@@ -312,9 +310,9 @@ in
 
       services.phpfpm = {
         phpPackage = pkgs.php81;
-        pools = mapAttrs' (
+        pools = lib.mapAttrs' (
           hostName: cfg:
-          (nameValuePair "invoiceplane-${hostName}" {
+          (lib.nameValuePair "invoiceplane-${hostName}" {
             inherit user;
             group = webserver.group;
             settings = {
@@ -329,8 +327,8 @@ in
 
     {
 
-      systemd.tmpfiles.rules = flatten (
-        mapAttrsToList (hostName: cfg: [
+      systemd.tmpfiles.rules = lib.flatten (
+        lib.mapAttrsToList (hostName: cfg: [
           "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
           "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
           "d ${cfg.stateDir}/logs 0750 ${user} ${webserver.group} - -"
@@ -345,8 +343,8 @@ in
 
       systemd.services.invoiceplane-config = {
         serviceConfig.Type = "oneshot";
-        script = concatStrings (
-          mapAttrsToList (hostName: cfg: ''
+        script = lib.concatStrings (
+          lib.mapAttrsToList (hostName: cfg: ''
             mkdir -p ${cfg.stateDir}/logs \
                      ${cfg.stateDir}/uploads
             if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
@@ -367,10 +365,10 @@ in
 
       # Cron service implementation
 
-      systemd.timers = mapAttrs' (
+      systemd.timers = lib.mapAttrs' (
         hostName: cfg:
-        (nameValuePair "invoiceplane-cron-${hostName}" (
-          mkIf cfg.cron.enable {
+        (lib.nameValuePair "invoiceplane-cron-${hostName}" (
+          lib.mkIf cfg.cron.enable {
             wantedBy = [ "timers.target" ];
             timerConfig = {
               OnBootSec = "5m";
@@ -381,10 +379,10 @@ in
         ))
       ) eachSite;
 
-      systemd.services = mapAttrs' (
+      systemd.services = lib.mapAttrs' (
         hostName: cfg:
-        (nameValuePair "invoiceplane-cron-${hostName}" (
-          mkIf cfg.cron.enable {
+        (lib.nameValuePair "invoiceplane-cron-${hostName}" (
+          lib.mkIf cfg.cron.enable {
             serviceConfig = {
               Type = "oneshot";
               User = user;
@@ -396,12 +394,12 @@ in
 
     }
 
-    (mkIf (cfg.webserver == "caddy") {
+    (lib.mkIf (cfg.webserver == "caddy") {
       services.caddy = {
         enable = true;
-        virtualHosts = mapAttrs' (
+        virtualHosts = lib.mapAttrs' (
           hostName: cfg:
-          (nameValuePair "http://${hostName}" {
+          (lib.nameValuePair "http://${hostName}" {
             extraConfig = ''
               root * ${pkg hostName cfg}
               file_server
@@ -412,12 +410,12 @@ in
       };
     })
 
-    (mkIf (cfg.webserver == "nginx") {
+    (lib.mkIf (cfg.webserver == "nginx") {
       services.nginx = {
         enable = true;
-        virtualHosts = mapAttrs' (
+        virtualHosts = lib.mapAttrs' (
           hostName: cfg:
-          (nameValuePair hostName {
+          (lib.nameValuePair hostName {
             root = pkg hostName cfg;
             extraConfig = ''
               index index.php index.html index.htm;

@@ -12,7 +12,7 @@ let
 in
 {
   options.hardware.keyboard.uhk = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       non-root access to the firmware of UHK keyboards.
       You need it when you want to flash a new firmware on the keyboard.
       Access to the keyboard is granted to users in the "input" group.
@@ -21,7 +21,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.uhk-udev-rules ];
   };
 }

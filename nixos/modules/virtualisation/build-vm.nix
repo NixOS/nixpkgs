@@ -7,7 +7,7 @@
 let
 
   inherit (lib)
-    mkOption
+    lib.mkOption
     ;
 
   vmVariant = extendModules {
@@ -31,7 +31,7 @@ in
 {
   options = {
 
-    virtualisation.vmVariant = mkOption {
+    virtualisation.vmVariant = lib.mkOption {
       description = ''
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm`.
       '';
@@ -40,7 +40,7 @@ in
       visible = "shallow";
     };
 
-    virtualisation.vmVariantWithBootLoader = mkOption {
+    virtualisation.vmVariantWithBootLoader = lib.mkOption {
       description = ''
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm-with-bootloader`.
       '';

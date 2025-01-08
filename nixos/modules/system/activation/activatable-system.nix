@@ -8,7 +8,7 @@
 
 let
   inherit (lib)
-    mkOption
+    lib.mkOption
     types
     ;
 
@@ -20,8 +20,8 @@ let
 in
 {
   options = {
-    system.activatable = mkOption {
-      type = types.bool;
+    system.activatable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to add the activation script to the system profile.
@@ -42,8 +42,8 @@ in
         a discussion.
       '';
     };
-    system.build.separateActivationScript = mkOption {
-      type = types.package;
+    system.build.separateActivationScript = lib.mkOption {
+      type = lib.types.package;
       description = ''
         A separate activation script package that's not part of the system profile.
 

@@ -18,14 +18,14 @@ in
   ###### interface
   options = {
     services.xserver.windowManager.katriawm = {
-      enable = mkEnableOption "katriawm";
-      package = mkPackageOption pkgs "katriawm" { };
+      enable = lib.mkEnableOption "katriawm";
+      package = lib.mkPackageOption pkgs "katriawm" { };
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "katriawm";
       start = ''
         ${cfg.package}/bin/katriawm &

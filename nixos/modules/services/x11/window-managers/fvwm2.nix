@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.fvwm2;
   fvwm2 = pkgs.fvwm2.override { enableGestures = cfg.gestures; };
@@ -15,7 +13,7 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "xserver" "windowManager" "fvwm" ]
       [ "services" "xserver" "windowManager" "fvwm2" ]
     )
@@ -25,11 +23,11 @@ in
 
   options = {
     services.xserver.windowManager.fvwm2 = {
-      enable = mkEnableOption "Fvwm2 window manager";
+      enable = lib.mkEnableOption "Fvwm2 window manager";
 
-      gestures = mkOption {
+      gestures = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether or not to enable libstroke for gesture support";
       };
     };
@@ -37,8 +35,8 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "fvwm2";
       start = ''
         ${fvwm2}/bin/fvwm &

@@ -9,7 +9,7 @@ let
   inherit (lib)
     getExe
     mkIf
-    mkOption
+    lib.mkOption
     mkEnableOption
     types
     ;
@@ -23,50 +23,50 @@ let
 in
 {
   options.services.mollysocket = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       [MollySocket](https://github.com/mollyim/mollysocket) for getting Signal
       notifications via UnifiedPush
     '';
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = ''
         Configuration for MollySocket. Available options are listed
         [here](https://github.com/mollyim/mollysocket#configuration).
       '';
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          host = mkOption {
+          host = lib.mkOption {
             default = "127.0.0.1";
             description = "Listening address of the web server";
-            type = types.str;
+            type = lib.types.str;
           };
 
-          port = mkOption {
+          port = lib.mkOption {
             default = 8020;
             description = "Listening port of the web server";
-            type = types.port;
+            type = lib.types.port;
           };
 
-          allowed_endpoints = mkOption {
+          allowed_endpoints = lib.mkOption {
             default = [ "*" ];
             description = "List of UnifiedPush servers";
             example = [ "https://ntfy.sh" ];
-            type = with types; listOf str;
+            type = with lib.types; listOf str;
           };
 
-          allowed_uuids = mkOption {
+          allowed_uuids = lib.mkOption {
             default = [ "*" ];
             description = "UUIDs of Signal accounts that may use this server";
             example = [ "abcdef-12345-tuxyz-67890" ];
-            type = with types; listOf str;
+            type = with lib.types; listOf str;
           };
         };
       };
     };
 
-    environmentFile = mkOption {
+    environmentFile = lib.mkOption {
       default = null;
       description = ''
         Environment file (see {manpage}`systemd.exec(5)` "EnvironmentFile="
@@ -74,18 +74,18 @@ in
         used to safely include secrets in the configuration.
       '';
       example = "/run/secrets/mollysocket";
-      type = with types; nullOr path;
+      type = with lib.types; nullOr path;
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       default = "info";
       description = "Set the {env}`RUST_LOG` environment variable";
       example = "debug";
-      type = types.str;
+      type = lib.types.str;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       package
     ];

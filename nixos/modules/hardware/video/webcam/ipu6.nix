@@ -10,8 +10,8 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkOption
-    optional
+    lib.mkOption
+    lib.optional
     types
     ;
 
@@ -22,10 +22,10 @@ in
 
   options.hardware.ipu6 = {
 
-    enable = mkEnableOption "support for Intel IPU6/MIPI cameras";
+    enable = lib.mkEnableOption "support for Intel IPU6/MIPI cameras";
 
-    platform = mkOption {
-      type = types.enum [
+    platform = lib.mkOption {
+      type = lib.types.enum [
         "ipu6"
         "ipu6ep"
         "ipu6epmtl"
@@ -40,7 +40,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # Module is upstream as of 6.10,
     # but still needs various out-of-tree i2c and the `intel-ipu6-psys` kernel driver
@@ -56,20 +56,20 @@ in
     '';
 
     services.v4l2-relayd.instances.ipu6 = {
-      enable = mkDefault true;
+      enable = lib.mkDefault true;
 
-      cardLabel = mkDefault "Intel MIPI Camera";
+      cardLabel = lib.mkDefault "Intel MIPI Camera";
 
       extraPackages =
         with pkgs.gst_all_1;
         [ ]
-        ++ optional (cfg.platform == "ipu6") icamerasrc-ipu6
-        ++ optional (cfg.platform == "ipu6ep") icamerasrc-ipu6ep
-        ++ optional (cfg.platform == "ipu6epmtl") icamerasrc-ipu6epmtl;
+        ++ lib.optional (cfg.platform == "ipu6") icamerasrc-ipu6
+        ++ lib.optional (cfg.platform == "ipu6ep") icamerasrc-ipu6ep
+        ++ lib.optional (cfg.platform == "ipu6epmtl") icamerasrc-ipu6epmtl;
 
       input = {
         pipeline = "icamerasrc";
-        format = mkIf (cfg.platform != "ipu6") (mkDefault "NV12");
+        format = lib.mkIf (cfg.platform != "ipu6") (mkDefault "NV12");
       };
     };
   };

@@ -22,44 +22,44 @@ in
     doc = ./filesender.md;
   };
 
-  options.services.filesender = with lib; {
-    enable = mkEnableOption "FileSender";
-    package = mkPackageOption pkgs "filesender" { };
-    user = mkOption {
+  options.services.filesender = {
+    enable = lib.mkEnableOption "FileSender";
+    package = lib.mkPackageOption pkgs "filesender" { };
+    user = lib.mkOption {
       description = "User under which filesender runs.";
-      type = types.str;
+      type = lib.types.str;
       default = "filesender";
     };
     database = {
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Create the PostgreSQL database and database user locally.
         '';
       };
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         default = "/run/postgresql";
         description = "Database hostname.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5432;
         description = "Database port.";
       };
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "filesender";
         description = "Database name.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "filesender";
         description = "Database user.";
       };
-      passwordFile = mkOption {
-        type = types.nullOr types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/filesender-dbpassword";
         description = ''
@@ -68,34 +68,34 @@ in
         '';
       };
     };
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          site_url = mkOption {
-            type = types.str;
+          site_url = lib.mkOption {
+            type = lib.types.str;
             description = "Site URL. Used in emails, to build URLs for logging in, logging out, build URL for upload endpoint for web workers, to include scripts etc.";
           };
-          admin = mkOption {
-            type = types.commas;
+          admin = lib.mkOption {
+            type = lib.types.commas;
             description = ''
               UIDs (as per the configured saml_uid_attribute) of FileSender administrators.
               Accounts with these UIDs can access the Admin page through the web UI.
             '';
           };
-          admin_email = mkOption {
-            type = types.commas;
+          admin_email = lib.mkOption {
+            type = lib.types.commas;
             description = ''
               Email address of FileSender administrator(s).
               Emails regarding disk full etc. are sent here.
               You should use a role-address here.
             '';
           };
-          storage_filesystem_path = mkOption {
-            type = types.nullOr types.str;
+          storage_filesystem_path = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             description = "When using storage type filesystem this is the absolute path to the file system where uploaded files are stored until they expire. Your FileSender storage root.";
           };
-          log_facilities = mkOption {
+          log_facilities = lib.mkOption {
             type = format.type;
             default = [ { type = "error_log"; } ];
             description = "Defines where FileSender logging is sent. You can sent logging to a file, to syslog or to the default PHP log facility (as configured through your webserver's PHP module). The directive takes an array of one or more logging targets. Logging can be sent to multiple targets simultaneously. Each logging target is a list containing the name of the logging target and a number of attributes which vary per log target. See below for the exact definiation of each log target.";
@@ -109,19 +109,19 @@ in
         for available options.
       '';
     };
-    configureNginx = mkOption {
-      type = types.bool;
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Configure nginx as a reverse proxy for FileSender.";
     };
-    localDomain = mkOption {
-      type = types.str;
+    localDomain = lib.mkOption {
+      type = lib.types.str;
       example = "filesender.example.org";
       description = "The domain serving your FileSender instance.";
     };
-    poolSettings = mkOption {
+    poolSettings = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         attrsOf (oneOf [
           str
           int

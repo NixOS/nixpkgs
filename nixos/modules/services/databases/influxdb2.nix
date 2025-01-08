@@ -24,9 +24,9 @@ let
     mkEnableOption
     mkPackageOption
     mkIf
-    mkOption
+    lib.mkOption
     nameValuePair
-    optional
+    lib.optional
     subtractLists
     types
     unique
@@ -62,8 +62,8 @@ let
   ];
 
   # Determines whether at least one active api token is defined
-  anyAuthDefined = flip any (attrValues cfg.provision.organizations) (
-    o: o.present && flip any (attrValues o.auths) (a: a.present && a.tokenFile != null)
+  anyAuthDefined = flip any (lib.attrValues cfg.provision.organizations) (
+    o: o.present && flip any (lib.attrValues o.auths) (a: a.present && a.tokenFile != null)
   );
 
   provisionState = pkgs.writeText "provision_state.json" (
@@ -112,9 +112,9 @@ let
     if test -e "$STATE_DIRECTORY/.first_startup"; then
       influx setup \
         --configs-path /dev/null \
-        --org ${escapeShellArg cfg.provision.initialSetup.organization} \
-        --bucket ${escapeShellArg cfg.provision.initialSetup.bucket} \
-        --username ${escapeShellArg cfg.provision.initialSetup.username} \
+        --org ${lib.escapeShellArg cfg.provision.initialSetup.organization} \
+        --bucket ${lib.escapeShellArg cfg.provision.initialSetup.bucket} \
+        --username ${lib.escapeShellArg cfg.provision.initialSetup.username} \
         --password "$(< "$CREDENTIALS_DIRECTORY/admin-password")" \
         --token "$(< "$CREDENTIALS_DIRECTORY/admin-token")" \
         --retention ${toString cfg.provision.initialSetup.retention}s \
@@ -145,22 +145,22 @@ let
     in
     {
       options = {
-        present = mkOption {
+        present = lib.mkOption {
           description = "Whether to ensure that this organization is present or absent.";
-          type = types.bool;
+          type = lib.types.bool;
           default = true;
         };
 
-        description = mkOption {
+        description = lib.mkOption {
           description = "Optional description for the organization.";
           default = null;
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
         };
 
-        buckets = mkOption {
+        buckets = lib.mkOption {
           description = "Buckets to provision in this organization.";
           default = { };
-          type = types.attrsOf (
+          type = lib.types.attrsOf (
             types.submodule (
               bucketSubmod:
               let
@@ -168,20 +168,20 @@ let
               in
               {
                 options = {
-                  present = mkOption {
+                  present = lib.mkOption {
                     description = "Whether to ensure that this bucket is present or absent.";
-                    type = types.bool;
+                    type = lib.types.bool;
                     default = true;
                   };
 
-                  description = mkOption {
+                  description = lib.mkOption {
                     description = "Optional description for the bucket.";
                     default = null;
-                    type = types.nullOr types.str;
+                    type = lib.types.nullOr lib.types.str;
                   };
 
-                  retention = mkOption {
-                    type = types.ints.unsigned;
+                  retention = lib.mkOption {
+                    type = lib.types.ints.unsigned;
                     default = 0;
                     description = "The duration in seconds for which the bucket will retain data (0 is infinite).";
                   };
@@ -191,10 +191,10 @@ let
           );
         };
 
-        auths = mkOption {
+        auths = lib.mkOption {
           description = "API tokens to provision for the user in this organization.";
           default = { };
-          type = types.attrsOf (
+          type = lib.types.attrsOf (
             types.submodule (
               authSubmod:
               let
@@ -202,21 +202,21 @@ let
               in
               {
                 options = {
-                  id = mkOption {
+                  id = lib.mkOption {
                     description = "A unique identifier for this authentication token. Since influx doesn't store names for tokens, this will be hashed and appended to the description to identify the token.";
                     readOnly = true;
                     default = builtins.substring 0 32 (builtins.hashString "sha256" "${org}:${auth}");
                     defaultText = "<a hash derived from org and name>";
-                    type = types.str;
+                    type = lib.types.str;
                   };
 
-                  present = mkOption {
+                  present = lib.mkOption {
                     description = "Whether to ensure that this user is present or absent.";
-                    type = types.bool;
+                    type = lib.types.bool;
                     default = true;
                   };
 
-                  description = mkOption {
+                  description = lib.mkOption {
                     description = ''
                       Optional description for the API token.
                       Note that the actual token will always be created with a descriptionregardless
@@ -224,28 +224,28 @@ let
                       to later identify the token to track whether it has already been created.
                     '';
                     default = null;
-                    type = types.nullOr types.str;
+                    type = lib.types.nullOr lib.types.str;
                   };
 
-                  tokenFile = mkOption {
-                    type = types.nullOr types.path;
+                  tokenFile = lib.mkOption {
+                    type = lib.types.nullOr lib.types.path;
                     default = null;
                     description = "The token value. If not given, influx will automatically generate one.";
                   };
 
-                  operator = mkOption {
+                  operator = lib.mkOption {
                     description = "Grants all permissions in all organizations.";
                     default = false;
-                    type = types.bool;
+                    type = lib.types.bool;
                   };
 
-                  allAccess = mkOption {
+                  allAccess = lib.mkOption {
                     description = "Grants all permissions in the associated organization.";
                     default = false;
-                    type = types.bool;
+                    type = lib.types.bool;
                   };
 
-                  readPermissions = mkOption {
+                  readPermissions = lib.mkOption {
                     description = ''
                       The read permissions to include for this token. Access is usually granted only
                       for resources in the associated organization.
@@ -261,10 +261,10 @@ let
                       more granular access permissions.
                     '';
                     default = [ ];
-                    type = types.listOf (types.enum validPermissions);
+                    type = lib.types.listOf (types.enum validPermissions);
                   };
 
-                  writePermissions = mkOption {
+                  writePermissions = lib.mkOption {
                     description = ''
                       The read permissions to include for this token. Access is usually granted only
                       for resources in the associated organization.
@@ -280,19 +280,19 @@ let
                       more granular access permissions.
                     '';
                     default = [ ];
-                    type = types.listOf (types.enum validPermissions);
+                    type = lib.types.listOf (types.enum validPermissions);
                   };
 
-                  readBuckets = mkOption {
+                  readBuckets = lib.mkOption {
                     description = "The organization's buckets which should be allowed to be read";
                     default = [ ];
-                    type = types.listOf types.str;
+                    type = lib.types.listOf lib.types.str;
                   };
 
-                  writeBuckets = mkOption {
+                  writeBuckets = lib.mkOption {
                     description = "The organization's buckets which should be allowed to be written";
                     default = [ ];
-                    type = types.listOf types.str;
+                    type = lib.types.listOf lib.types.str;
                   };
                 };
               }
@@ -306,58 +306,58 @@ in
 {
   options = {
     services.influxdb2 = {
-      enable = mkEnableOption "the influxdb2 server";
+      enable = lib.mkEnableOption "the influxdb2 server";
 
-      package = mkPackageOption pkgs "influxdb2" { };
+      package = lib.mkPackageOption pkgs "influxdb2" { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         description = ''configuration options for influxdb2, see <https://docs.influxdata.com/influxdb/v2.0/reference/config-options> for details.'';
         type = format.type;
       };
 
       provision = {
-        enable = mkEnableOption "initial database setup and provisioning";
+        enable = lib.mkEnableOption "initial database setup and provisioning";
 
         initialSetup = {
-          organization = mkOption {
-            type = types.str;
+          organization = lib.mkOption {
+            type = lib.types.str;
             example = "main";
             description = "Primary organization name";
           };
 
-          bucket = mkOption {
-            type = types.str;
+          bucket = lib.mkOption {
+            type = lib.types.str;
             example = "example";
             description = "Primary bucket name";
           };
 
-          username = mkOption {
-            type = types.str;
+          username = lib.mkOption {
+            type = lib.types.str;
             default = "admin";
             description = "Primary username";
           };
 
-          retention = mkOption {
-            type = types.ints.unsigned;
+          retention = lib.mkOption {
+            type = lib.types.ints.unsigned;
             default = 0;
             description = "The duration in seconds for which the bucket will retain data (0 is infinite).";
           };
 
-          passwordFile = mkOption {
-            type = types.path;
+          passwordFile = lib.mkOption {
+            type = lib.types.path;
             description = "Password for primary user. Don't use a file from the nix store!";
           };
 
-          tokenFile = mkOption {
-            type = types.path;
+          tokenFile = lib.mkOption {
+            type = lib.types.path;
             description = "API Token to set for the admin user. Don't use a file from the nix store!";
           };
         };
 
-        organizations = mkOption {
+        organizations = lib.mkOption {
           description = "Organizations to provision.";
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               myorg = {
                 description = "My organization";
@@ -373,19 +373,19 @@ in
             }
           '';
           default = { };
-          type = types.attrsOf organizationSubmodule;
+          type = lib.types.attrsOf organizationSubmodule;
         };
 
-        users = mkOption {
+        users = lib.mkOption {
           description = "Users to provision.";
           default = { };
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               # admin = {}; /* The initialSetup.username will automatically be added. */
               myuser.passwordFile = "/run/secrets/myuser_password";
             }
           '';
-          type = types.attrsOf (
+          type = lib.types.attrsOf (
             types.submodule (
               userSubmod:
               let
@@ -394,16 +394,16 @@ in
               in
               {
                 options = {
-                  present = mkOption {
+                  present = lib.mkOption {
                     description = "Whether to ensure that this user is present or absent.";
-                    type = types.bool;
+                    type = lib.types.bool;
                     default = true;
                   };
 
-                  passwordFile = mkOption {
+                  passwordFile = lib.mkOption {
                     description = "Password for the user. If unset, the user will not be able to log in until a password is set by an operator! Don't use a file from the nix store!";
                     default = null;
-                    type = types.nullOr types.path;
+                    type = lib.types.nullOr lib.types.path;
                   };
                 };
               }
@@ -414,7 +414,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       [
         {
@@ -464,7 +464,7 @@ in
         )
       );
 
-    services.influxdb2.provision = mkIf cfg.provision.enable {
+    services.influxdb2.provision = lib.mkIf cfg.provision.enable {
       organizations.${cfg.provision.initialSetup.organization} = {
         buckets.${cfg.provision.initialSetup.bucket} = {
           inherit (cfg.provision.initialSetup) retention;
@@ -495,7 +495,7 @@ in
         LimitNOFILE = 65536;
         KillMode = "control-group";
         Restart = "on-failure";
-        LoadCredential = mkIf cfg.provision.enable [
+        LoadCredential = lib.mkIf cfg.provision.enable [
           "admin-password:${cfg.provision.initialSetup.passwordFile}"
           "admin-token:${cfg.provision.initialSetup.tokenFile}"
         ];
@@ -508,7 +508,7 @@ in
             [ provisioningScript ]
             ++
               # Only the restarter runs with elevated privileges
-              optional anyAuthDefined "+${restarterScript}"
+              lib.optional anyAuthDefined "+${restarterScript}"
           ));
       };
 
@@ -529,7 +529,7 @@ in
                   # For each contained token that has a token file
                   (
                     _: org:
-                    flip mapAttrsToList (filterAttrs (_: x: x.tokenFile != null) org.auths)
+                    flip mapAttrsToList (lib.filterAttrs (_: x: x.tokenFile != null) org.auths)
                       # Collect id -> tokenFile for the mapping
                       (_: auth: nameValuePair auth.id auth.tokenFile)
                   )
