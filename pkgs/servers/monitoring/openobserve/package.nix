@@ -11,6 +11,7 @@
   zlib,
   zstd,
   buildNpmPackage,
+  gitUpdater,
 }:
 
 let
@@ -97,6 +98,10 @@ rustPlatform.buildRustPackage {
     "--skip=tests::e2e_test"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "rc";
+  };
 
   meta = {
     description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
