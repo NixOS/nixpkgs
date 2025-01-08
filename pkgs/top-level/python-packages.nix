@@ -10920,6 +10920,8 @@ self: super: with self; {
 
   podcats = callPackage ../development/python-modules/podcats { };
 
+  podgen = callPackage ../development/python-modules/podgen { };
+
   podman = callPackage ../development/python-modules/podman { };
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
