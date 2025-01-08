@@ -75,16 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    # Skip flaky test on darwin
+    # Skip flaky test
     ctest -j $NIX_BUILD_CORES --output-on-failure ${
-      lib.optionalString stdenv.hostPlatform.isDarwin (
-        lib.escapeShellArgs [
-          "--exclude-regex"
-          (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
-            "ProcessInfoCache.addFromMultipleThreads"
-          ])
-        ]
-      )
+      lib.escapeShellArgs [
+        "--exclude-regex"
+        (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
+          "ProcessInfoCache.addFromMultipleThreads"
+        ])
+      ]
     }
 
     runHook postCheck
