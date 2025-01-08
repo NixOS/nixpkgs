@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a0XJq8M1yw4GmD5ndIAJtmHFKqS0rYdvYIxK7t7oyZw=";
   };
 

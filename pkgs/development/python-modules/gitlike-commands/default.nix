@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "gitlike-commands";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z0l8nCKov1iMJvI3YTHvg0ey+oPju3rgaKtmk6OX44g=";
   };
 

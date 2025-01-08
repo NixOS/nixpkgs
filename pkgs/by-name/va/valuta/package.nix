@@ -12,6 +12,7 @@
   libsoup_3,
   libadwaita,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -55,6 +56,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple application for converting currencies, with support for various APIs";

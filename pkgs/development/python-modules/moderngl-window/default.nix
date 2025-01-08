@@ -36,17 +36,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "moderngl_window";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WXHQVJJCE+7FQJjRgjnmpoGGnF20OQ6/X6Fnrzsp2fA=";
   };
 
-  pythonRelaxDeps = [ "pillow" ];
+  pythonRelaxDeps = [
+    "numpy" # https://github.com/moderngl/moderngl-window/issues/193
+  ];
 
   build-system = [
     setuptools
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     moderngl
     numpy
     pillow

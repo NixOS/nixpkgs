@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
 

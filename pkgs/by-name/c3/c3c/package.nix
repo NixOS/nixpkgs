@@ -18,7 +18,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2OxUHnmFtT/TunfO+fOBOrkaHKlnqpO1wJWs79wkvAY=";
   };
 

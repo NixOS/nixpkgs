@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GN66AC/afsSTonx7en2cUDQMAAgROJ392LzglVJsx+o=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory

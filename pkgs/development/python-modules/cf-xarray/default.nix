@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lAVH2QGdMyU5A6QTLKujeAh8n1AkCsAtdyKQEqLahTk=";
   };
 

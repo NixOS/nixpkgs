@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tbHW3x+vwFz0nqFGWvgxjhw8XH6/YKz1uagU339SZyk=";
   };
 

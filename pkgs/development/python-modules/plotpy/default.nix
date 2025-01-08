@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kMVq8X6XP18B5x35BTuC7Q5uFFwds1JxCaxlDuD/UfE=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = "gomplate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PupwL0VzZiWz+96Mv1o6QSmj7iLyvVIQMcdRlGqmpRs=";
   };
 

@@ -3,8 +3,6 @@
   callPackage,
   sasl,
   boost,
-  Security,
-  CoreFoundation,
   cctools,
   avxSupport ? stdenv.hostPlatform.avxSupport,
   nixosTests,
@@ -16,8 +14,6 @@ let
     inherit
       sasl
       boost
-      Security
-      CoreFoundation
       cctools
       stdenv
       ;

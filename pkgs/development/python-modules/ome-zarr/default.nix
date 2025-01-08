@@ -11,24 +11,30 @@
   numpy,
   requests,
   scikit-image,
+  setuptools,
   toolz,
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.9.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.10.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YOG9+ONf2OnkSZBL/Vb8Inebx4XDSGJb2fqypaWebhY=";
+    tag = "v${version}";
+    hash = "sha256-USWMae7sBY6P/Sf4418ne/y8gZlz6mcYhSfJtlxJvGI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     dask
     distributed
@@ -81,12 +87,12 @@ buildPythonPackage rec {
     "ome_zarr.utils"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
     changelog = "https://github.com/ome/ome-zarr-py/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.bcdarwin ];
     mainProgram = "ome_zarr";
   };
 }

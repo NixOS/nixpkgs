@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qk2RUGutzxpoEriTa08W2aDQ1c4y2DzNHMx4K1IW5RQ=";
   };
 

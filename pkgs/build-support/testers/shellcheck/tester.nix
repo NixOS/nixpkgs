@@ -2,6 +2,7 @@
 {
   lib,
   stdenv,
+  runCommand,
   shellcheck,
 }:
 
@@ -10,7 +11,7 @@
 # Tests: ./tests.nix
 { src }:
 let
-  inherit (lib) fileset pathType isPath;
+  inherit (lib) pathType isPath;
 in
 stdenv.mkDerivation {
   name = "run-shellcheck";
@@ -18,10 +19,10 @@ stdenv.mkDerivation {
     if
       isPath src && pathType src == "regular" # note that for strings this would have been IFD, which we prefer to avoid
     then
-      fileset.toSource {
-        root = dirOf src;
-        fileset = src;
-      }
+      runCommand "testers-shellcheck-src" { } ''
+        mkdir $out
+        cp ${src} $out
+      ''
     else
       src;
   nativeBuildInputs = [ shellcheck ];

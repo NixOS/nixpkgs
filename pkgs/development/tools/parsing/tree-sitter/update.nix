@@ -89,6 +89,9 @@ let
     "go-tree-sitter"
     # kotlin bindings to the Tree-sitter parsing library
     "kotlin-tree-sitter"
+    # not ready to be used
+    "zig-tree-sitter"
+
 
     # Non-grammar repositories
     ".github"
@@ -458,6 +461,10 @@ let
     "tree-sitter-twig" = {
       orga = "kaermorchen";
       repo = "tree-sitter-twig";
+    };
+    "tree-sitter-hyprlang" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-hyprlang";
     };
   };
 

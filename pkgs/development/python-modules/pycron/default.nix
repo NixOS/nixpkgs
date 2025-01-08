@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "pycron";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t53u18lCk6tF4Hr/BrEM2gWG+QOFIEkjyEKNXIr3ibs=";
   };
 

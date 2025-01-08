@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-go";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GF7J21Y27LmKuDjuk2omQo2xV5pDo2GQXyu9SLwG0fs=";
   };
 

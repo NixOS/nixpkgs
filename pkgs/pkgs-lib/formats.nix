@@ -310,6 +310,39 @@ rec {
 
   };
 
+  /* dzikoysk's CDN format, see https://github.com/dzikoysk/cdn
+
+    The result is almost identical to YAML when there are no nested properties,
+    but differs enough in the other case to warrant a separate format.
+    (see https://github.com/dzikoysk/cdn#supported-formats)
+
+    Currently used by Panda, Reposilite, and FunnyGuilds (as per the repo's readme).
+  */
+  cdn = {}: json {} // {
+    type = let
+      valueType = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ]) // {
+        description = "CDN value";
+      };
+    in valueType;
+
+    generate = name: value: pkgs.callPackage ({ runCommand, json2cdn }: runCommand name {
+      nativeBuildInputs = [ json2cdn ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+      preferLocalBuild = true;
+    } ''
+      json2cdn "$valuePath" > $out
+    '') {};
+  };
+
   /* For configurations of Elixir project, like config.exs or runtime.exs
 
     Most Elixir project are configured using the [Config] Elixir DSL

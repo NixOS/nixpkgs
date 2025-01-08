@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lUxID4D9wxKvDF3epEznTof9lHYKFniTDYv7/gvW7Z4=";
   };
 

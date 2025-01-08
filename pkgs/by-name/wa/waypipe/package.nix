@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   scdoc,
-  mesa,
+  libgbm,
   lz4,
   zstd,
   ffmpeg,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # Optional dependencies:
-    mesa
+    libgbm
     lz4
     zstd
     ffmpeg

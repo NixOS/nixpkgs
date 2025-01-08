@@ -114,7 +114,8 @@ attrs
 
           # this needs to be before TMPDIR is changed, so the output isn't deleted
           # if it uses mktemp
-          depsFile=$(realpath "''${1:-${lib.escapeShellArg defaultDepsFile}}")
+          ${lib.toShellVars { inherit defaultDepsFile; }}
+          depsFile=$(realpath "''${1:-$defaultDepsFile}")
 
           export TMPDIR
           TMPDIR=$(mktemp -d -t fetch-deps-${lib.escapeShellArg finalPackage.name}.XXXXXX)

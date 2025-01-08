@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F97g5AhyXXYEICb/0RcfVPype8PVfFAKFEX0Xyg1QoI=";
   };
 

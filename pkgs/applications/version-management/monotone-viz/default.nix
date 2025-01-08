@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --with-lablgtk-dir=$(echo ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2)"
+    appendToVar configureFlags "--with-lablgtk-dir=$(echo ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2)"
   '';
 
   postInstall = ''

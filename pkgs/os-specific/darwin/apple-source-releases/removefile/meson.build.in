@@ -14,15 +14,6 @@ library(
     'removefile',
     c_args : [
         '-D__DARWIN_NOW_CANCELABLE=1',
-        # Define these flags for the 10.12 SDK assuming that users on older systems can’t encounter dataless files.
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/stat.h#L520
-        '-DSF_DATALESS=0x40000000',
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/resource.h#L598
-        '-DIOPOL_TYPE_VFS_MATERIALIZE_DATALESS_FILES=3',
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/resource.h#L640
-        '-DIOPOL_MATERIALIZE_DATALESS_FILES_OFF=1',
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L562
-        # '-DATTR_CMNEXT_LINKID=0x00000010',
     ],
     install : true,
     sources : [

@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/xtensor-stack/xsimd/issues/1030
       ./disable-test_error_gamma.patch
+
+      # https://github.com/xtensor-stack/xsimd/issues/1063
+      ./relax-asin-precision.diff
     ];
 
   # strictDeps raises the chance that xsimd will be able to be cross compiled

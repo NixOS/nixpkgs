@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake-parquet";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
   };
 

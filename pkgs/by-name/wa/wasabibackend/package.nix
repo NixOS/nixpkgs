@@ -15,7 +15,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "zkSNACKs";
     repo = "WalletWasabi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha512-JuCl3SyejzwUd2n8Fy7EdxUuO4bIcGb8yMWZQOhZzsY4fvg9prFOnVZEquxahD0a41MLKHRNA1R2N3NMapcc0A==";
   };
 

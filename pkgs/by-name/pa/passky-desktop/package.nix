@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Rabbit-Company";
     repo = "Passky-Desktop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-QQ0+qIkDPNCHeWmcF6FkbDrrt/r3fIkNi0dv6XlV1rc=";
   };
 

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "Chleba";
     repo = "netscanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/8UhnJ4ZPaJ+CQPCeKr1uH0Iw6A4/DARiSukK6+ZZeY=";
   };
 

@@ -82,6 +82,7 @@ let
     ghc983
     ghc984
     ghc9101
+    ghc9121
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -262,6 +263,7 @@ let
       nixosTests = {
         inherit (packagePlatforms pkgs.nixosTests)
           agda
+          kmonad
           xmonad
           xmonad-xdg-autostart
           ;

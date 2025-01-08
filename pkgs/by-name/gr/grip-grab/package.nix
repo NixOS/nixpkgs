@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "grip-grab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e7duLL4tjW+11jXUqU6sqoKTAPGkH81iDCfjtNcnd4I=";
   };
 

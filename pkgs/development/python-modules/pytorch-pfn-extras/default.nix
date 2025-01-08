@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6KHVsUHN2KDKAaMdhBpZgTq0XILWUsHJPgeRD0m9m20=";
   };
 

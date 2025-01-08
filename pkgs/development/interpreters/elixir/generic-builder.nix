@@ -16,6 +16,7 @@
   version,
   erlang ? inputs.erlang,
   minimumOTPVersion,
+  maximumOTPVersion ? null,
   sha256 ? null,
   rev ? "v${version}",
   src ? fetchFromGitHub {
@@ -28,14 +29,37 @@
 
 let
   inherit (lib)
-    getVersion
-    versionAtLeast
-    optional
+    assertMsg
     concatStringsSep
+    getVersion
+    optional
+    optionalString
+    toInt
+    versions
+    versionAtLeast
+    versionOlder
     ;
 
+  compatibilityMsg = ''
+    Unsupported elixir and erlang OTP combination.
+
+    elixir ${version}
+    erlang OTP ${getVersion erlang} is not >= ${minimumOTPVersion} ${
+      optionalString (maximumOTPVersion != null) "and <= ${maximumOTPVersion}"
+    }
+
+    See https://hexdocs.pm/elixir/${version}/compatibility-and-deprecations.html
+  '';
+
+  maxShiftMajor = builtins.toString ((toInt (versions.major maximumOTPVersion)) + 1);
+  maxAssert =
+    if (maximumOTPVersion == null) then
+      true
+    else
+      versionOlder (versions.major (getVersion erlang)) maxShiftMajor;
 in
-assert versionAtLeast (getVersion erlang) minimumOTPVersion;
+assert assertMsg (versionAtLeast (getVersion erlang) minimumOTPVersion) compatibilityMsg;
+assert assertMsg maxAssert compatibilityMsg;
 
 stdenv.mkDerivation ({
   pname = "${baseName}";
@@ -96,7 +120,7 @@ stdenv.mkDerivation ({
       with hot code upgrades.
     '';
 
-    license = licenses.epl10;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = teams.beam.members;
   };

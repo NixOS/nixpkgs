@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
   pythonOlder,
 
@@ -27,14 +25,14 @@
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.2.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HtZfpMVz/7VMVrFg48IkitK6P3tA+swOeaLLiKguXXk=";
+    tag = "v${version}";
+    hash = "sha256-9OpDsjFEeJGtbti4Q9HHl78XaGf8M3lG4ukvHCMzyMU=";
     fetchSubmodules = true;
   };
 
@@ -48,13 +46,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ eigen ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
-    (darwinMinVersionHook "10.13")
-
-    apple-sdk_11
-  ];
 
   dontUseCmakeBuildDir = true;
 
@@ -85,7 +76,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";
-    changelog = "https://github.com/wjakob/nanobind/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/wjakob/nanobind/blob/${src.tag}/docs/changelog.rst";
     description = "Tiny and efficient C++/Python bindings";
     longDescription = ''
       nanobind is a small binding library that exposes C++ types in Python and

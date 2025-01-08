@@ -19,20 +19,20 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20241212.2";
-    hash = "sha256-3i2+zs75Fq3wV894AkWyhj0uSw8BDDBjU/Y0+IBpnNE=";
+    tag = "r20241223";
+    hash = "sha256-7fMSpTKEEjSXfYotZ/qxX1m+i8GheCLboo+XoA3gTbc=";
   };
 
   gradleBuildTask = ":desktopApp:createDistributable";
 
-  gradleUpdateTask = gradleBuildTask;
+  gradleUpdateTask = finalAttrs.gradleBuildTask;
 
   desktopItems = [
     (makeDesktopItem {
@@ -60,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     useBwrap = false;
   };
 
-  doCheck = false;
+  passthru.updateScript = ./update.sh;
 
-  __darwinAllowLocalNetworking = true;
+  doCheck = false;
 
   gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
 

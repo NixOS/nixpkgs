@@ -5,6 +5,7 @@
   fetchFromGitHub,
   git,
   zsh,
+  zlib,
   runtimeShell,
 }:
 stdenv.mkDerivation rec {
@@ -18,11 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_LDFLAGS = "-liconv";
-  };
+  env.NIX_LDFLAGS = toString (
+    [
+      # required by libgit2.a
+      "-lz"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-liconv"
+  );
 
-  buildInputs = [ (callPackage ./romkatv_libgit2.nix { }) ];
+  buildInputs = [
+    zlib
+    (callPackage ./romkatv_libgit2.nix { })
+  ];
 
   postPatch = ''
     sed -i '1i GITSTATUS_AUTO_INSTALL=''${GITSTATUS_AUTO_INSTALL-0}' gitstatus.plugin.sh
@@ -103,7 +111,7 @@ stdenv.mkDerivation rec {
     # run zsh as a full-fledged independent process and then wait for it to
     # exit. (The "exit" statements in the zshrc ensure that zsh will exit
     # almost immediately after starting.)
-    ZDOTDIR=. zsh -i &
+    ZDOTDIR=. zsh -d -i &
     wait $!
   '';
 

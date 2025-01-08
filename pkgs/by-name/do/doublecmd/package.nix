@@ -8,7 +8,7 @@
   glib,
   lazarus,
   libX11,
-  libqt5pas,
+  libqtpas,
   wrapQtAppsHook,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
     libX11
-    libqt5pas
+    libqtpas
   ];
 
   env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";

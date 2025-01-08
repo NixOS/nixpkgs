@@ -2,20 +2,23 @@
   rustPlatform,
   fetchFromSourcehut,
   lib,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flirt";
-  version = "0.2.1";
+  version = "0.3";
 
   src = fetchFromSourcehut {
     owner = "~hadronized";
     repo = "flirt";
     rev = "v${version}";
-    hash = "sha256-LCwSETvXHAUbe4QIeGpT7vVbuZl1SDfIehVG8svkmHM=";
+    hash = "sha256-xhNo85xwcVI4qliHU4/uNEvS7rW5avKOv8fMfRrvqD0=";
   };
 
-  cargoHash = "sha256-EquriyhfbYyi87TP3zuLiCXDV7baDRaTRuZd7Yht/UA=";
+  cargoHash = "sha256-9DmTSx1sKINnvJv3px8UKaa5j8AUnJiYB1lwnBR+xn8=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "FiLe InteRacT, the file interaction tool for your command line";

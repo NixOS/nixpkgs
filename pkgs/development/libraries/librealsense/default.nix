@@ -8,7 +8,7 @@
 , ninja
 , pkg-config
 , gcc
-, mesa
+, libgbm
 , gtk3
 , glfw
 , libGLU
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     nlohmann_json
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
-    ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
+    ++ lib.optionals enableGUI [ libgbm gtk3 glfw libGLU curl ];
 
   patches = [
     ./py_pybind11_no_external_download.patch

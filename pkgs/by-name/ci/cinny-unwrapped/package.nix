@@ -10,6 +10,7 @@
   pango,
   stdenv,
   olm,
+  nodejs_20,
 }:
 
 buildNpmPackage rec {
@@ -23,12 +24,11 @@ buildNpmPackage rec {
     hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
   };
 
-  npmDepsHash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
+  # canvas, a transitive dependency of cinny, fails to build with Node 22
+  # https://github.com/Automattic/node-canvas/issues/2448
+  nodejs = nodejs_20;
 
-  # Fix error: no member named 'aligned_alloc' in the global namespace
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
-  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+  npmDepsHash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
 
   nativeBuildInputs = [
     python3

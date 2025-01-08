@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  apple-sdk_11,
   pandoc,
   testers,
   lsd,
@@ -27,8 +25,6 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     pandoc
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1

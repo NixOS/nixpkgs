@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "limo";
-  version = "1.0.9";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "limo-app";
     repo = "limo";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-ytSlR6JhR7qYT/jCbTthHWc+YOX4AbJs9a4GRdgHj5c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KQD7U9sHHsxKIzMbrYqhTBUfFZpsoqiSxz5zMNIxU4o=";
   };
 
   patches = lib.optionals (!withUnrar) [

@@ -21,7 +21,6 @@
   installShellFiles,
   writeSupport ? stdenv.hostPlatform.isLinux,
   shadowSupport ? stdenv.hostPlatform.isLinux,
-  memstreamHook,
   gitUpdater,
 }:
 
@@ -126,8 +125,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals systemdSupport [ systemd ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+    ++ lib.optionals systemdSupport [ systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 

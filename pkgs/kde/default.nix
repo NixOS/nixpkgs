@@ -5,6 +5,7 @@
   fetchurl,
   libsForQt5,
   qt6Packages,
+  stdenv,
   cmark,
   gpgme,
   taglib,
@@ -40,7 +41,10 @@ let
       ) allUrls;
     in
     (
-      qt6Packages
+      # This removes reference to deprecated `qt6Packages.stdenv`
+      # so when a KDE package asks for a stdenv, it won't trigger
+      # an eval warning
+      (lib.removeAttrs qt6Packages [ "stdenv" ])
       // frameworks
       // gear
       // plasma

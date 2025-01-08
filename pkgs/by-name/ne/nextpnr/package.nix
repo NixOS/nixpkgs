@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   boost,
   python3,
@@ -53,6 +54,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = main_src.name;
 
+  patches = [
+    (fetchpatch {
+      name = "boost-1_85-fixes.patch";
+      url = "https://github.com/YosysHQ/nextpnr/commit/f085950383155a745cf2e3c0f28c468d01ff5fd7.patch";
+      hash = "sha256-ihN3S4eeBQSrKbHrGinE/SlIY3QDytYCaO9Mtu36n6c=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     python3
@@ -91,7 +100,7 @@ stdenv.mkDerivation rec {
       enableGui && stdenv.hostPlatform.isDarwin
     ) "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
-  patchPhase = with builtins; ''
+  postPatch = ''
     # use PyPy for icestorm if enabled
     substituteInPlace ./ice40/CMakeLists.txt \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'

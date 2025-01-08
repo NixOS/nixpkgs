@@ -1,38 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, mesa
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  freetype,
+  libglvnd,
+  libgbm,
+  curl,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libjack2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tonelib-noisereducer";
-  version = "1.2.0";
+  version = "2.0";
 
   src = fetchurl {
-    url = "https://tonelib.net/download/221222/ToneLib-NoiseReducer-amd64.deb";
-    sha256 = "sha256-27JuFVmamIUUKRrpjlsE0E6x+5X9RutNGPiDf5dxitI=";
+    url = "https://tonelib.vip/download/24-12-01/ToneLib-NoiseReducer-amd64.deb";
+    hash = "sha256-R+JXoc6waKGPMaghlJ8BkLumDcjC7Oq0jx8tFjAKegE=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
-
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    alsa-lib
-    freetype
-    libglvnd
-    mesa
-  ] ++ runtimeDependencies;
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+  ];
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -43,18 +38,28 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  unpackCmd = "dpkg -x $curSrc source";
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    alsa-lib
+    freetype
+    libglvnd
+    libgbm
+  ] ++ runtimeDependencies;
 
   installPhase = ''
-    mv usr $out
- '';
+    runHook preInstall
 
-  meta = with lib; {
+    cp -r usr $out
+
+    runHook postInstall
+  '';
+
+  meta = {
     description = "ToneLib NoiseReducer – two-unit noise reduction rack effect plugin";
     homepage = "https://tonelib.net/tl-noisereducer.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ orivej ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-NoiseReducer";
   };

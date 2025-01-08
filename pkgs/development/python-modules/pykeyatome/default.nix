@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jugla";
     repo = "pyKeyAtome";
-    rev = "refs/tags/V${version}";
+    tag = "V${version}";
     hash = "sha256-zRXUjekawf2/zTSlXqHVB02dDkb6HbU4NN6UBgl2rtg=";
   };
 

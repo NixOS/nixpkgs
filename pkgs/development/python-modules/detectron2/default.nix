@@ -60,7 +60,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "detectron2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1w6cgvc8r2lwr72yxicls650jr46nriv1csivp2va9k1km8jx2sf";
   };
 

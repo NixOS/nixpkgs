@@ -18,19 +18,12 @@ let
     libcublas
     ;
   inherit (lib) getDev getLib getOutput;
-  fs = lib.fileset;
 in
 backendStdenv.mkDerivation {
   pname = "saxpy";
   version = "unstable-2023-07-11";
 
-  src = fs.toSource {
-    root = ./.;
-    fileset = fs.unions [
-      ./CMakeLists.txt
-      ./saxpy.cu
-    ];
-  };
+  src = ./src;
 
   __structuredAttrs = true;
   strictDeps = true;

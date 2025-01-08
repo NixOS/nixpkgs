@@ -6,7 +6,7 @@
 , libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
 , qt5
-, libdrm, mesa
+, libdrm, libgbm
 , vulkan-loader
 , nss, nspr
 , patchelf, makeWrapper
@@ -24,7 +24,7 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.0.3495.23";
+  version = "7.0.3495.27";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -34,8 +34,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-mnu76Lu4xKaA0mZYto3wOYZl65i6SDU56Lo3dH59mtM=";
-      x86_64-linux = "sha256-FtCmtwipbEyhTmt/d5tSEc7MKrrPssiSWzcC7AYy3tg=";
+      aarch64-linux = "sha256-AX6PCYPpz5z9bUZqdfoTqtW9USLQRh8YgITk7DdJkUU=";
+      x86_64-linux = "sha256-pZgmRLwx64m9SwYX2cTwYEkHLYFQgIFblW9dSiYxXv8=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     qt5.qtbase
     freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
-    libdrm mesa vulkan-loader
+    libdrm libgbm vulkan-loader
     wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio

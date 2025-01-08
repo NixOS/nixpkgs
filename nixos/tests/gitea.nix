@@ -36,7 +36,6 @@ let
       meta.maintainers = with maintainers; [
         aanderse
         kolaente
-        ma27
       ];
 
       nodes = {

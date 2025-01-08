@@ -11,6 +11,7 @@
 , libxfce4ui
 , libxfce4util
 , libxfce4windowing
+, perl
 , tzdata
 , vala
 , wayland
@@ -26,6 +27,7 @@ mkXfceDerivation {
 
   nativeBuildInputs = [
     gobject-introspection
+    perl
     vala
   ];
 

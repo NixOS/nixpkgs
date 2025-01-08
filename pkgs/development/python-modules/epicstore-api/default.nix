@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SD4RK";
     repo = "epicstore_api";
-    rev = "refs/tags/v_${version}";
+    tag = "v_${version}";
     hash = "sha256-9Gh9bsNgZx/SinKr7t1dvqrOUP+z4Gs8BFMLYtboFmg=";
   };
 

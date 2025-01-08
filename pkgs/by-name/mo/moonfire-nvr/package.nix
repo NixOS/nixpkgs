@@ -19,7 +19,7 @@ let
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kh+SPM08pnVFxKSZ6Gb2LP7Wa8j0VopknZK2urMIFNk=";
   };
   ui = stdenv.mkDerivation (finalAttrs: {

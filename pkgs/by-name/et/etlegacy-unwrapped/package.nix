@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "etlegacy";
     repo = "etlegacy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k1H3irA9UVOICY3keKGVJMtBczW/b5ObyNvB7fGAcFA=";
   };
 

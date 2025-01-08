@@ -1,0 +1,29 @@
+diff --git a/include/file_matcher.hpp b/include/file_matcher.hpp
+index c10c7be405..b67baec0ef 100644
+--- a/include/file_matcher.hpp
++++ b/include/file_matcher.hpp
+@@ -47,7 +47,7 @@
+         }
+ 
+         std::string error;
+-        std::string pattern = ".*.{}$"_format(extension);
++        std::string pattern = fmt::format(".*.{}$", extension);
+         file_include_list_.Add(pattern, &error);
+         file_include_list_empty_ = false;
+         Ensures(error.empty());
+@@ -62,7 +62,7 @@
+         }
+ 
+         std::string error;
+-        std::string pattern = ".*\\.{}$"_format(extension);
++        std::string pattern = fmt::format(".*\\.{}$", extension);
+         file_exclude_list_.Add(pattern, &error);
+         file_exclude_list_empty_ = false;
+         Ensures(error.empty());
+@@ -243,4 +243,4 @@
+ };
+ 
+ 
+-} // namespace torrenttools
+\ No newline at end of file
++} // namespace torrenttools

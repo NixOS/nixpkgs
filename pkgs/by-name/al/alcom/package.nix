@@ -24,7 +24,7 @@ let
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-jkhjJTb/U2dXj/vyaip+gWoqIOdfFKSExeDl0T11DE4=";
   };

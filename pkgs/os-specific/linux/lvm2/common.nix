@@ -6,7 +6,7 @@
 , coreutils
 , libuuid
 , libaio
-, substituteAll
+, replaceVars
 , enableCmdlib ? false
 , enableDmeventd ? false
 , udevSupport ? !stdenv.hostPlatform.isStatic, udev
@@ -91,15 +91,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     # fixes paths to and checks for tools
-    (substituteAll (let
+    (replaceVars ./fix-blkdeactivate.patch (let
       optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
     in {
-      src = ./fix-blkdeactivate.patch;
       inherit coreutils;
       util_linux = optionalTool enableUtilLinux util-linux;
       mdadm = optionalTool enableMdadm mdadm;
       multipath_tools = optionalTool enableMultipath multipath-tools;
       vdo = optionalTool enableVDO vdo;
+      SBINDIR = null; # part of original source code in the patch's context
     }))
     ./fix-stdio-usage.patch
   ];

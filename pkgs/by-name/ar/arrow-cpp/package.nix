@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   fixDarwinDylibNames,
   autoconf,
   aws-sdk-cpp,
@@ -92,6 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
+
+  patches = [
+    # fixes build with libcxx-19 (llvm-19) remove on update
+    (fetchpatch {
+      name = "libcxx-19-fixes.patch";
+      url = "https://github.com/apache/arrow/commit/29e8ea011045ba4318a552567a26b2bb0a7d3f05.patch";
+      relative = "cpp";
+      includes = [ "src/arrow/buffer_test.cc" ];
+      hash = "sha256-ZHkznOilypi1J22d56PhLlw/hbz8RqwsOGDMqI1NsMs=";
+    })
+  ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt

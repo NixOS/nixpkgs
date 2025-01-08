@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sa4bXZiY5yd0wynUjdLnuuX7Ee0w4APd1G/oGy5AUDk=";
   };
 

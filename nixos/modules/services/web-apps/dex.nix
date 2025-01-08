@@ -12,7 +12,12 @@ let
   fixClient =
     client:
     if client ? secretFile then
-      ((builtins.removeAttrs client [ "secretFile" ]) // { secret = client.secretFile; })
+      (
+        (builtins.removeAttrs client [ "secretFile" ])
+        // {
+          secret = client.secretFile;
+        }
+      )
     else
       client;
   filteredSettings = mapAttrs (
@@ -32,6 +37,11 @@ let
       '') secretFiles
     )
   );
+
+  restartTriggers =
+    [ ]
+    ++ (optionals (cfg.environmentFile != null) [ cfg.environmentFile ])
+    ++ (filter (file: builtins.typeOf file == "path") secretFiles);
 in
 {
   options.services.dex = {
@@ -90,6 +100,7 @@ in
         "networking.target"
       ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
       path = with pkgs; [ replace-secret ];
+      restartTriggers = restartTriggers;
       serviceConfig =
         {
           ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";

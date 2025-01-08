@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8QLOAjQpiNtbd+YSHfqcBVdtMSGJFRevOcacZErKuso=";
   };
 

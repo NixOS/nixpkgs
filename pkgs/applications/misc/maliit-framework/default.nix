@@ -31,7 +31,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
 
@@ -67,9 +67,9 @@ mkDerivation rec {
     wayland-scanner
   ];
 
-  preConfigure = ''
-    cmakeFlags+="-DQT5_PLUGINS_INSTALL_DIR=$out/$qtPluginPrefix"
-  '';
+  cmakeFlags = [
+    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/$qtPluginPrefix"
+  ];
 
   meta = with lib; {
     description = "Core libraries of Maliit and server";

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost186, # (boost181) breaks on darwin
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost186 ];
+  buildInputs = [ boost ];
 
   # Required by RQuantLib, may be beneficial for others too
   cmakeFlags = [ "-DQL_HIGH_RESOLUTION_DATE=ON" ];

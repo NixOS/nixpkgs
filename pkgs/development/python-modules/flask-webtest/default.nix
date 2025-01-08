@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "level12";
     repo = "flask-webtest";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4USNT6HYh49v+euCePYkL1gR6Ul8C0+/xanuYGxKpfM=";
   };
 

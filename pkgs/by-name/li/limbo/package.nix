@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "limbo";
-  version = "0.0.9";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "limbo";
     tag = "v${version}";
-    hash = "sha256-cUGakjq6PFUKSMPKGL1CcYUjDMzdTUWUqMs0J8ZNaeQ=";
+    hash = "sha256-bX56aiL7Eqa3jLd1u9h6u583q0S9VZfJ+cVPB+8R1eU=";
   };
 
-  cargoHash = "sha256-pXMfAMD8ThMQvYRLTYuPimPoN42OXOL8Li0LsoQ/13A=";
+  cargoHash = "sha256-GspyWOxwAQvjNzN0yZvj3WpADR3VUO0MjSKiq9wbLOw=";
 
   cargoBuildFlags = [
     "-p"
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Interactive SQL shell for Limbo";
     homepage = "https://github.com/tursodatabase/limbo";
-    changelog = "https://github.com/tursodatabase/limbo/releases/tag/${src.tag}";
+    changelog = "https://github.com/tursodatabase/limbo/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "limbo";

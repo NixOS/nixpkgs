@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ot+2hxipeZ5eI6nPJ8XGE8gFMNQoblUq+koAFZpZDv4=";
   };
 

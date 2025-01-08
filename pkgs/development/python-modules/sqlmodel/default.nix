@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-y6lY6DlfdCF5dliRkiU6r+ny/a9ssDtqRmF+/rcKFkg=";
   };
 

@@ -8,7 +8,6 @@
   pkg-config,
   rustPlatform,
   rustc,
-  apple-sdk_11,
   curl,
   freetype,
   libGLU,
@@ -86,9 +85,6 @@ stdenv.mkDerivation rec {
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         libX11
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        apple-sdk_11
       ]
     );
 

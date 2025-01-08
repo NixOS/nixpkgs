@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jdEJdUFIyM7TTKUHY8epjyZCGolH8nrr7FCyfw+x56s=";
   };
 

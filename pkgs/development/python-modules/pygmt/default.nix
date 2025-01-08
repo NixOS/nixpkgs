@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DO9KUlmt5EV+ioOSQ/BOcx4pP409f94dzmFwqK2MwMY=";
   };
 

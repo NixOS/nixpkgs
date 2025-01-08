@@ -37,7 +37,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5gq1kXVNAMH/AeovpUStcZffXN4GfXj3wJ7lW4qebRM=";
   };
 

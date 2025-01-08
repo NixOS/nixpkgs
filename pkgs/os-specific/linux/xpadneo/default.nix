@@ -10,20 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpadneo";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = "xpadneo";
-    rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-pX9zpAGnhDLKUAKOQ5iqtK8cKEkjCqDa5v3MwYViWX4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-evmjQrQPHe8F+6w12bnUv6P4QKGkm63cmP1HEv6equw=";
   };
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
-
-  patches = [ ./xpadneo-0.9.6-kernel-6.12.patch ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ bluez ];

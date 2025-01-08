@@ -30,13 +30,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx-greemdev";
-  version = "1.2.76";
+  version = "1.2.78";
 
   src = fetchFromGitHub {
     owner = "GreemDev";
     repo = "Ryujinx";
     rev = version;
-    hash = "sha256-RQbFN+XMEZtouUB7cvO3OdanUm6Is9V2L6q7dqzGQY4=";
+    hash = "sha256-kAF5Klve4132wSlFdkRqlpISpozRpZfCizEX1KvHc4I=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin [

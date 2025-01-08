@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
-    rev = "refs/tags/flowMC-${version}";
+    tag = "flowMC-${version}";
     hash = "sha256-unvbNs0AOzW4OI+9y6KxoBC5yEjEz+q0PZblQLXCC/Y=";
   };
 

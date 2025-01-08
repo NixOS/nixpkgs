@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-withings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0UWwiLSTXcNDS30NWsKI1f/kTczdYXwRZr+JREU0NCM=";
   };
 

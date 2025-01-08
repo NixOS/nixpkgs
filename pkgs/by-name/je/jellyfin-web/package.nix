@@ -3,13 +3,12 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_20,
   nix-update-script,
   pkg-config,
   xcbuild,
   pango,
   giflib,
-  apple-sdk_11,
-  darwinMinVersionHook,
   jellyfin,
 }:
 buildNpmPackage rec {
@@ -24,6 +23,8 @@ buildNpmPackage rec {
       rev = "v${version}";
       hash = "sha256-xmy2cr6MJSen6Pok3Wde4mBcu5pM4qtGEBfqMpGdAxY=";
     };
+
+  nodejs = nodejs_20; # does not build with 22
 
   postPatch = ''
     substituteInPlace webpack.common.js \
@@ -45,10 +46,6 @@ buildNpmPackage rec {
     [ pango ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
-      apple-sdk_11
-      # node-canvas builds code that requires aligned_alloc,
-      # which on Darwin requires at least the 10.15 SDK
-      (darwinMinVersionHook "10.15")
     ];
 
   installPhase = ''

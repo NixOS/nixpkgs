@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "hexbytes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8st1nQiGApt+aNl8/cftYk0ZzA+MxbLyGi53UWUlAjM=";
   };
 

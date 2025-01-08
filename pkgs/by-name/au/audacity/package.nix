@@ -52,7 +52,6 @@
   wavpack,
   wxGTK32,
   gtk3,
-  apple-sdk_11,
   libpng,
   libjpeg,
 }:
@@ -144,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
       libpng
       libjpeg
     ];

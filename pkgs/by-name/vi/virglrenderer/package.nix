@@ -10,7 +10,7 @@
   libepoxy,
   libX11,
   libdrm,
-  mesa,
+  libgbm,
   vaapiSupport ? true,
   libva,
   gitUpdater,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libepoxy
     libX11
     libdrm
-    mesa
+    libgbm
   ] ++ lib.optionals vaapiSupport [ libva ];
 
   nativeBuildInputs = [

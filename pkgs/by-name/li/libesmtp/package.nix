@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl ];
 
+  mesonFlags = lib.optional (stdenv.hostPlatform.libc == "glibc") "-Dc_args=-D_DEFAULT_SOURCE";
+
   src = fetchFromGitHub {
     owner = "libesmtp";
     repo = pname;

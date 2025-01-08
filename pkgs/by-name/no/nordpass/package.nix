@@ -27,7 +27,7 @@
   at-spi2-atk,
   at-spi2-core,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   harfbuzz,
   libsecret,
@@ -64,7 +64,7 @@ let
     libpng
     libsecret
     libxkbcommon
-    mesa
+    libgbm
     nspr
     nss_latest
     pango

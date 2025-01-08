@@ -64,7 +64,8 @@
   libxshmfence,
   libGLU,
   libGL,
-  mesa,
+  dri-pkgconfig-stub,
+  libgbm,
   pciutils,
   protobuf,
   speechd-minimal,
@@ -350,7 +351,7 @@ let
         libxshmfence
         libGLU
         libGL
-        mesa # required for libgbm
+        libgbm
         pciutils
         protobuf
         speechd-minimal
@@ -407,7 +408,8 @@ let
         libxshmfence
         libGLU
         libGL
-        mesa # required for libgbm
+        dri-pkgconfig-stub
+        libgbm
         pciutils
         protobuf
         speechd-minimal

@@ -22,7 +22,7 @@
   wayland-scanner,
   libffi,
   libcap,
-  mesa,
+  libgbm,
   curl,
   pcre,
   pcre2,
@@ -68,6 +68,10 @@ stdenv'.mkDerivation rec {
     # fix(upnp): support newer miniupnpc library (#2782)
     # Manually cherry-picked on to 0.23.1.
     ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
+
+    # port of https://github.com/LizardByte/Sunshine/commit/e90b71ce62b7744bb18ffc7823b1e895786ffb0a
+    # remove on update
+    ./boost-186.patch
   ];
 
   # build webui
@@ -135,7 +139,7 @@ stdenv'.mkDerivation rec {
       libva
       libvdpau
       numactl
-      mesa
+      libgbm
       amf-headers
       svt-av1
       libappindicator
@@ -151,7 +155,7 @@ stdenv'.mkDerivation rec {
 
   runtimeDependencies = [
     avahi
-    mesa
+    libgbm
     xorg.libXrandr
     libxcb
     libglvnd

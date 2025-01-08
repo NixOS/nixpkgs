@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchurl,
   apple-sdk,
+  apple-sdk_14,
   cctools,
   darwin,
   libtapi,
@@ -32,23 +33,11 @@ let
     hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
   };
 
-  dyld = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "dyld";
-    rev = "dyld-1162";
-    hash = "sha256-uyFg8QnnP6NWv5lAOTCiFZ0SnFOA/aO/kpjkyvILVsk=";
-  };
+  dyld = apple-sdk_14.sourceRelease "dyld";
 
   libdispatchPrivate = apple-sdk.sourceRelease "libdispatch";
 
-  # First version with all the required definitions. This is used in preference to darwin.xnu to make it easier
-  # to support Linux and because the version of darwin.xnu available on x86_64-darwin in the 10.12 SDK is too old.
-  xnu = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "xnu";
-    rev = "xnu-6153.11.26";
-    hash = "sha256-dcnGcp7bIjQxeAn5pXt+mHSYEXb2Ad9Smhd/WUG4kb4=";
-  };
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "ld64-deps-private-headers";
@@ -167,15 +156,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      libtapi
-      llvm
-      openssl
-      xar
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.dyld ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libdispatch ];
+  buildInputs = [
+    libtapi
+    llvm
+    openssl
+    xar
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libdispatch ];
 
   # Note for overrides: ld64 cannot be built as a debug build because of UB in its iteration implementations,
   # which trigger libc++ debug assertions due to trying to take the address of the first element of an emtpy vector.

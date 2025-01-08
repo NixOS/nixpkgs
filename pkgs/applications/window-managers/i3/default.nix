@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "i3";
     repo = "i3";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-2tuhfB/SMN+osCBfZtw/yDPhNNEhBH4Qo6dexpqVWYk=";
   };
 

@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vimeo";
     repo = "psalm";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-ecORCwTnTKzy/pgfODu9W9I/5xL+8Fo4OgZ5LsYDYLQ=";
   };
 

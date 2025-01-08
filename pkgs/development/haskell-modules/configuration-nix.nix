@@ -255,7 +255,7 @@ self: super: builtins.intersectAttrs super {
   jni = overrideCabal (drv: {
     preConfigure = ''
       local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
-      configureFlags+=" --extra-lib-dir=''${libdir[0]}"
+      appendToVar configureFlags "--extra-lib-dir=''${libdir[0]}"
     '';
   }) super.jni;
 
@@ -1478,7 +1478,14 @@ self: super: builtins.intersectAttrs super {
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
   pvar = dontCheck super.pvar;
 
-  kmonad = enableSeparateBinOutput super.kmonad;
+  kmonad = lib.pipe super.kmonad [
+    enableSeparateBinOutput
+    (overrideCabal (drv: {
+      passthru = lib.recursiveUpdate
+        drv.passthru or { }
+        { tests.nixos = pkgs.nixosTests.kmonad; };
+    }))
+  ];
 
   xmobar = enableSeparateBinOutput super.xmobar;
 

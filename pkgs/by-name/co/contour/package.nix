@@ -20,7 +20,6 @@
   yaml-cpp,
   ncurses,
   file,
-  apple-sdk_11,
   libutil,
   sigtool,
   nixosTests,
@@ -73,7 +72,6 @@ stdenv.mkDerivation (final: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
       libutil
     ];
 

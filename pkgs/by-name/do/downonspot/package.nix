@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oSumAtrIX";
     repo = "DownOnSpot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h/BKVFzvPq9FhX4wZzlIzoegK8nPEt+mR7oKpRC5eV0=";
   };
 

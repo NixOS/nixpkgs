@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "webrtc-noise-gain";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
   };
 

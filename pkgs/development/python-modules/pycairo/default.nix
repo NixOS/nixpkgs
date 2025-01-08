@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pycairo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P9AC8+WlokAxoy6KTJqAz7kOYK/FQVjIKWuj8jQw2OA=";
   };
 

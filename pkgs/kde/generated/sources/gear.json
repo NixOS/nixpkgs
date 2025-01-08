@@ -145,9 +145,9 @@
     "hash": "sha256-8DxiNzcvpAyHWmnfl4N1wIR48jn8veBI/bRkMbLn4OQ="
   },
   "dolphin": {
-    "version": "24.12.0",
-    "url": "mirror://kde/stable/release-service/24.12.0/src/dolphin-24.12.0.tar.xz",
-    "hash": "sha256-Qh8C+WmbYJ1+ZuCq6fof1zW6CpKlb+vnWIDsvrjfxRM="
+    "version": "24.12.0.1",
+    "url": "mirror://kde/stable/release-service/24.12.0/src/dolphin-24.12.0.1.tar.xz",
+    "hash": "sha256-OdakLHkAIaDEShi3T6tjOHQGNyfUZ5V0amZQYM9Fk6M="
   },
   "dolphin-plugins": {
     "version": "24.12.0",

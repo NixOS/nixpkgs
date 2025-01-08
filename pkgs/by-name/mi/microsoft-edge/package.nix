@@ -38,7 +38,7 @@
   libXScrnSaver,
   libxshmfence,
   libXtst,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -142,7 +142,7 @@ let
       libXScrnSaver
       libxshmfence
       libXtst
-      mesa
+      libgbm
       nspr
       nss
       opusWithCustomModes
@@ -168,11 +168,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "131.0.2903.86";
+  version = "131.0.2903.112";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-THhE5R/++/WllfPZPmM0gcYIHw/ZVNFcwIBm6iPdrPM=";
+    hash = "sha256-4qQNcoBXOS4Uz+MR4jItOgcnMKqB6J541cvrb5md/oc=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly

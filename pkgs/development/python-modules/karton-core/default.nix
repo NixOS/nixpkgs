@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KaEXBNGcJN88gIv7suKcr1pK4ih/QbByxEy3nZFlIgk=";
   };
 

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.11.3";
+  version = "2025.1.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -10,6 +10,32 @@
     "abode" =
       ps: with ps; [
         jaraco-abode
+      ];
+    "acaia" =
+      ps: with ps; [
+        aioacaia
+        aioesphomeapi
+        aioruuvigateway
+        aioshelly
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pyserial
+        pyspeex-noise
+        pyudev
+        zeroconf
       ];
     "accuweather" =
       ps: with ps; [
@@ -207,11 +233,9 @@
       [
         adb-shell
         androidtv
-        pure-python-adb
       ]
       ++ adb-shell.optional-dependencies.async
-      ++ androidtv.optional-dependencies.async
-      ++ pure-python-adb.optional-dependencies.async;
+      ++ androidtv.optional-dependencies.async;
     "androidtv_remote" =
       ps: with ps; [
         androidtvremote2
@@ -471,6 +495,8 @@
       ];
     "backup" =
       ps: with ps; [
+        aiohasupervisor
+        cronsim
         securetar
       ];
     "baf" =
@@ -750,6 +776,7 @@
     "caldav" =
       ps: with ps; [
         caldav
+        icalendar
       ];
     "calendar" =
       ps: with ps; [
@@ -770,6 +797,7 @@
     "cast" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -784,6 +812,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
         zeroconf
       ];
     "ccm15" =
@@ -834,6 +863,7 @@
     "cloud" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -843,6 +873,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "cloudflare" =
       ps: with ps; [
@@ -885,7 +916,7 @@
       ];
     "compensation" =
       ps: with ps; [
-        numpy_1
+        numpy
       ];
     "concord232" =
       ps: with ps; [
@@ -908,6 +939,9 @@
         hassil
         home-assistant-intents
       ];
+    "cookidoo" =
+      ps: with ps; [
+      ]; # missing inputs: cookidoo-api
     "coolmaster" =
       ps: with ps; [
         pycoolmasternet-async
@@ -1004,6 +1038,7 @@
         bluetooth-auto-recovery
         bluetooth-data-tools
         cached-ipaddress
+        cronsim
         dbus-fast
         fnv-hash-fast
         go2rtc-client
@@ -1015,7 +1050,7 @@
         home-assistant-intents
         ifaddr
         mutagen
-        numpy_1
+        numpy
         pillow
         psutil-home-assistant
         pymicro-vad
@@ -1212,9 +1247,6 @@
         aiohasupervisor
         paho-mqtt_1
       ];
-    "dte_energy_bridge" =
-      ps: with ps; [
-      ];
     "dublin_bus_transport" =
       ps: with ps; [
       ];
@@ -1249,10 +1281,12 @@
     "dynalite" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         dynalite-devices
         dynalite-panel
         home-assistant-frontend
         pillow
+        securetar
       ];
     "eafm" =
       ps: with ps; [
@@ -1297,8 +1331,12 @@
         aioecowitt
       ];
     "eddystone_temperature" =
-      ps: with ps; [
-      ]; # missing inputs: beacontools
+      ps:
+      with ps;
+      [
+        beacontools
+      ]
+      ++ beacontools.optional-dependencies.scan;
     "edimax" =
       ps: with ps; [
         pyedimax
@@ -1315,6 +1353,9 @@
       ps: with ps; [
         pythonegardia
       ];
+    "eheimdigital" =
+      ps: with ps; [
+      ]; # missing inputs: eheimdigital
     "eight_sleep" =
       ps: with ps; [
       ];
@@ -1787,8 +1828,10 @@
     "frontend" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         home-assistant-frontend
         pillow
+        securetar
       ];
     "frontier_silicon" =
       ps: with ps; [
@@ -1861,7 +1904,9 @@
     "generic" =
       ps: with ps; [
         av
+        numpy
         pillow
+        pyturbojpeg
       ];
     "generic_hygrostat" =
       ps: with ps; [
@@ -2095,6 +2140,9 @@
     "harmony" =
       ps: with ps; [
         aioharmony
+      ];
+    "harvey" =
+      ps: with ps; [
       ];
     "hassio" =
       ps: with ps; [
@@ -2568,12 +2616,14 @@
     "insteon" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         home-assistant-frontend
         insteon-frontend-home-assistant
         pillow
         pyinsteon
         pyserial
         pyudev
+        securetar
       ];
     "integration" =
       ps: with ps; [
@@ -2617,7 +2667,7 @@
       ];
     "iqvia" =
       ps: with ps; [
-        numpy_1
+        numpy
         pyiqvia
       ];
     "irish_rail_transport" =
@@ -2626,7 +2676,6 @@
     "iron_os" =
       ps: with ps; [
         aioesphomeapi
-        aiogithubapi
         aioruuvigateway
         aioshelly
         bleak
@@ -2689,6 +2738,10 @@
     "itunes" =
       ps: with ps; [
       ];
+    "ituran" =
+      ps: with ps; [
+        pyituran
+      ];
     "izone" =
       ps: with ps; [
         python-izone
@@ -2714,7 +2767,8 @@
       ];
     "jvc_projector" =
       ps: with ps; [
-      ]; # missing inputs: pyjvcprojector
+        pyjvcprojector
+      ];
     "kaiterra" =
       ps: with ps; [
       ]; # missing inputs: kaiterra-async-client
@@ -2826,9 +2880,11 @@
     "knx" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         home-assistant-frontend
         knx-frontend
         pillow
+        securetar
         xknx
         xknxproject
       ];
@@ -2886,12 +2942,13 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pylamarzocco
         pymicro-vad
         pyserial
         pyspeex-noise
         pyudev
         zeroconf
-      ]; # missing inputs: lmcloud
+      ];
     "lametric" =
       ps: with ps; [
         demetriek
@@ -2923,10 +2980,12 @@
     "lcn" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         home-assistant-frontend
         lcn-frontend
         pillow
         pypck
+        securetar
       ];
     "ld2410_ble" =
       ps: with ps; [
@@ -3086,8 +3145,7 @@
       ];
     "livisi" =
       ps: with ps; [
-        aiolivisi
-      ];
+      ]; # missing inputs: livisi
     "llamalab_automate" =
       ps: with ps; [
       ];
@@ -3115,10 +3173,12 @@
     "logbook" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         fnv-hash-fast
         home-assistant-frontend
         pillow
         psutil-home-assistant
+        securetar
         sqlalchemy
       ];
     "logentries" =
@@ -3140,6 +3200,7 @@
     "loqed" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -3150,6 +3211,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "lovelace" =
       ps: with ps; [
@@ -3431,6 +3493,7 @@
     "mobile_app" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -3442,6 +3505,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "mochad" =
       ps: with ps; [
@@ -3584,6 +3648,10 @@
       ps: with ps; [
         mullvad-api
       ];
+    "music_assistant" =
+      ps: with ps; [
+        music-assistant-client
+      ];
     "mutesync" =
       ps: with ps; [
         mutesync
@@ -3591,8 +3659,10 @@
     "my" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         home-assistant-frontend
         pillow
+        securetar
       ];
     "myq" =
       ps: with ps; [
@@ -3631,6 +3701,9 @@
       ps: with ps; [
         aionanoleaf
       ];
+    "nasweb" =
+      ps: with ps; [
+      ]; # missing inputs: webio-api
     "neato" =
       ps: with ps; [
         pybotvac
@@ -3651,6 +3724,7 @@
     "netatmo" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -3661,6 +3735,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "netdata" =
       ps: with ps; [
@@ -3721,8 +3796,7 @@
       ];
     "niko_home_control" =
       ps: with ps; [
-        niko-home-control
-      ];
+      ]; # missing inputs: nhc
     "nilu" =
       ps: with ps; [
         niluclient
@@ -3754,6 +3828,10 @@
     "nobo_hub" =
       ps: with ps; [
         pynobo
+      ];
+    "nordpool" =
+      ps: with ps; [
+        pynordpool
       ];
     "norway_air" =
       ps: with ps; [
@@ -3835,6 +3913,9 @@
       ps: with ps; [
         defusedxml
       ];
+    "ohme" =
+      ps: with ps; [
+      ]; # missing inputs: ohme
     "ollama" =
       ps: with ps; [
         ha-ffmpeg
@@ -4027,6 +4108,7 @@
     "owntracks" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -4038,6 +4120,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "p1_monitor" =
       ps: with ps; [
@@ -4062,12 +4145,17 @@
     "panel_custom" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         home-assistant-frontend
         pillow
+        securetar
       ];
     "pcs_lighting" =
       ps: with ps; [
       ];
+    "peblar" =
+      ps: with ps; [
+      ]; # missing inputs: peblar
     "peco" =
       ps: with ps; [
         peco
@@ -4137,6 +4225,7 @@
     "plaato" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -4147,6 +4236,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "plant" =
       ps: with ps; [
@@ -4181,6 +4271,10 @@
       ];
     "portlandgeneral" =
       ps: with ps; [
+      ];
+    "powerfox" =
+      ps: with ps; [
+        powerfox
       ];
     "powerwall" =
       ps: with ps; [
@@ -4371,6 +4465,7 @@
     "rachio" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -4381,6 +4476,7 @@
         python-matter-server
         pyturbojpeg
         rachiopy
+        securetar
       ];
     "radarr" =
       ps: with ps; [
@@ -4475,6 +4571,7 @@
     "recovery_mode" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -4486,6 +4583,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "recswitch" =
       ps: with ps; [
@@ -4956,9 +5054,6 @@
     "simu" =
       ps: with ps; [
       ];
-    "simulated" =
-      ps: with ps; [
-      ];
     "sinch" =
       ps: with ps; [
       ]; # missing inputs: clx-sdk-xms
@@ -4972,6 +5067,10 @@
     "sky_hub" =
       ps: with ps; [
         pyskyqhub
+      ];
+    "sky_remote" =
+      ps: with ps; [
+        skyboxremote
       ];
     "skybeacon" =
       ps:
@@ -4995,7 +5094,12 @@
       ];
     "slide" =
       ps: with ps; [
-      ]; # missing inputs: goslide-api
+        goslide-api
+      ];
+    "slide_local" =
+      ps: with ps; [
+        goslide-api
+      ];
     "slimproto" =
       ps: with ps; [
         aioslimproto
@@ -5024,6 +5128,7 @@
     "smartthings" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -5035,6 +5140,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "smarttub" =
       ps: with ps; [
@@ -5233,10 +5339,6 @@
       ps: with ps; [
         pymodbus
       ]; # missing inputs: pystiebeleltron
-    "stookalert" =
-      ps: with ps; [
-        stookalert
-      ];
     "stookwijzer" =
       ps: with ps; [
         stookwijzer
@@ -5244,7 +5346,7 @@
     "stream" =
       ps: with ps; [
         av
-        numpy_1
+        numpy
         pyturbojpeg
       ];
     "streamlabswater" =
@@ -5435,8 +5537,7 @@
       ];
     "tedee" =
       ps: with ps; [
-        pytedee-async
-      ];
+      ]; # missing inputs: aiotedee
     "telegram" =
       ps:
       with ps;
@@ -5470,7 +5571,7 @@
       ];
     "tensorflow" =
       ps: with ps; [
-        numpy_1
+        numpy
         pillow
         pycocotools
         tensorflow
@@ -5650,6 +5751,7 @@
     "toon" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -5659,6 +5761,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
         toonapi
       ];
     "torque" =
@@ -5679,8 +5782,12 @@
       ps:
       with ps;
       [
+        av
+        ha-ffmpeg
         ifaddr
+        numpy
         python-kasa
+        pyturbojpeg
       ]
       ++ python-kasa.optional-dependencies.speedups;
     "tplink_lte" =
@@ -5745,7 +5852,7 @@
       ]; # missing inputs: TravisPy
     "trend" =
       ps: with ps; [
-        numpy_1
+        numpy
       ];
     "triggercmd" =
       ps: with ps; [
@@ -5867,7 +5974,7 @@
       ];
     "utility_meter" =
       ps: with ps; [
-        croniter
+        cronsim
       ];
     "uvc" =
       ps: with ps; [
@@ -6017,6 +6124,9 @@
       ps: with ps; [
         waterfurnace
       ];
+    "watergate" =
+      ps: with ps; [
+      ]; # missing inputs: watergate-local-api
     "watson_iot" =
       ps: with ps; [
       ]; # missing inputs: ibmiotf
@@ -6091,6 +6201,7 @@
       ps: with ps; [
         aiohasupervisor
         aiowithings
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -6100,6 +6211,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
       ];
     "wiz" =
       ps: with ps; [
@@ -6212,6 +6324,7 @@
     "yale" =
       ps: with ps; [
         aiohasupervisor
+        cronsim
         ha-ffmpeg
         hass-nabucasa
         hassil
@@ -6221,6 +6334,7 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
+        securetar
         yalexs
         yalexs-ble
       ];
@@ -6306,7 +6420,7 @@
       ];
     "zabbix" =
       ps: with ps; [
-        py-zabbix
+        zabbix-utils
       ];
     "zamg" =
       ps: with ps; [
@@ -6379,6 +6493,7 @@
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
     "abode"
+    "acaia"
     "accuweather"
     "acmeda"
     "adax"
@@ -6541,7 +6656,6 @@
     "drop_connect"
     "dsmr"
     "dsmr_reader"
-    "dte_energy_bridge"
     "duckdns"
     "duke_energy"
     "dunehd"
@@ -6755,11 +6869,13 @@
     "israel_rail"
     "ista_ecotrend"
     "isy994"
+    "ituran"
     "izone"
     "jellyfin"
     "jewish_calendar"
     "juicenet"
     "justnimbus"
+    "jvc_projector"
     "kaleidescape"
     "keenetic_ndms2"
     "kegtron"
@@ -6774,6 +6890,7 @@
     "kostal_plenticore"
     "kraken"
     "kulersky"
+    "lamarzocco"
     "lametric"
     "landisgyr_heat_meter"
     "lastfm"
@@ -6796,7 +6913,6 @@
     "linkplay"
     "litejet"
     "litterrobot"
-    "livisi"
     "local_calendar"
     "local_file"
     "local_ip"
@@ -6866,6 +6982,7 @@
     "mqtt_room"
     "mqtt_statestream"
     "mullvad"
+    "music_assistant"
     "mutesync"
     "my"
     "myq"
@@ -6895,6 +7012,7 @@
     "nmap_tracker"
     "no_ip"
     "nobo_hub"
+    "nordpool"
     "notify"
     "notify_events"
     "notion"
@@ -6953,6 +7071,7 @@
     "plugwise"
     "point"
     "poolsense"
+    "powerfox"
     "powerwall"
     "private_ble_device"
     "profiler"
@@ -7056,11 +7175,12 @@
     "simplefin"
     "simplepush"
     "simplisafe"
-    "simulated"
     "siren"
+    "sky_remote"
     "skybell"
     "slack"
     "sleepiq"
+    "slide_local"
     "slimproto"
     "sma"
     "smappee"
@@ -7099,7 +7219,6 @@
     "statsd"
     "steam_online"
     "steamist"
-    "stookalert"
     "stookwijzer"
     "stream"
     "streamlabswater"
@@ -7132,7 +7251,6 @@
     "tautulli"
     "tcp"
     "technove"
-    "tedee"
     "telegram"
     "telegram_bot"
     "tellduslive"

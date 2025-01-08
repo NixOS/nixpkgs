@@ -22,7 +22,7 @@
   libunwind,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   nspr,
   nss,
   openssl,
@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
       gdk-pixbuf
       glib
       gtk3
-      mesa
+      libgbm
       nss
       nspr
       libdrm

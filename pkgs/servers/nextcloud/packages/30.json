@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-sLXfAkykRU8y1XuxLUQBQt5oSPVJLwNtUDl9+7j4PV8=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v15.0.3/bookmarks-15.0.3.tar.gz",
-    "version": "15.0.3",
+    "hash": "sha256-T/B+L2dhCyUCMYEyUQDMOCeMOBASIW7/A7RPtCol5Kc=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v15.0.4/bookmarks-15.0.4.tar.gz",
+    "version": "15.0.4",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-HWe9YFSJuV6AFvLy+QO8kioK+VnUESaHUwxdfNPNue8=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.0.6/calendar-v5.0.6.tar.gz",
-    "version": "5.0.6",
+    "hash": "sha256-P536HKK0dX6LYX4GXu8hgOrbGnsJ8bY3Ou7aR2Hh51k=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.0.8/calendar-v5.0.8.tar.gz",
+    "version": "5.0.8",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-M3AC9KT3aMpDYeGgfqVWdI4Lngg/yw/36HSBS3N+G5c=",
+    "hash": "sha256-Slk10WZfUQGsYnruBR5APSiuBd3jh3WG1GIqKhTUdfU=",
     "url": "https://github.com/nextcloud-releases/contacts/releases/download/v6.1.2/contacts-v6.1.2.tar.gz",
-    "version": "6.1.1",
+    "version": "6.1.2",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "cospend": {
-    "hash": "sha256-N2Vj5LTJpXEedKZljJGJfPSikh6qNBh8OKN7Ne3gt3o=",
-    "url": "https://github.com/julien-nc/cospend-nc/releases/download/v2.0.0/cospend-2.0.0.tar.gz",
-    "version": "2.0.0",
+    "hash": "sha256-3Jbti6plql9O9kknhZOlpqDtwPI0SYlnXP1qr0ZNpDA=",
+    "url": "https://github.com/julien-nc/cospend-nc/releases/download/v3.0.7/cospend-3.0.7.tar.gz",
+    "version": "3.0.7",
     "description": "# Nextcloud Cospend 💰\n\nNextcloud Cospend is a group/shared budget manager. It was inspired by the great [IHateMoney](https://github.com/spiral-project/ihatemoney/).\n\nYou can use it when you share a house, when you go on vacation with friends, whenever you share expenses with a group of people.\n\nIt lets you create projects with members and bills. Each member has a balance computed from the project bills. Balances are not an absolute amount of money at members disposal but rather a relative information showing if a member has spent more for the group than the group has spent for her/him, independently of exactly who spent money for whom. This way you can see who owes the group and who the group owes. Ultimately you can ask for a settlement plan telling you which payments to make to reset members balances.\n\nProject members are independent from Nextcloud users. Projects can be shared with other Nextcloud users or via public links.\n\n[MoneyBuster](https://gitlab.com/eneiluj/moneybuster) Android client is [available in F-Droid](https://f-droid.org/packages/net.eneiluj.moneybuster/) and on the [Play store](https://play.google.com/store/apps/details?id=net.eneiluj.moneybuster).\n\n[PayForMe](https://github.com/mayflower/PayForMe) iOS client is currently under developpement!\n\nThe private and public APIs are documented using [the Nextcloud OpenAPI extractor](https://github.com/nextcloud/openapi-extractor/). This documentation can be accessed directly in Nextcloud. All you need is to install Cospend (>= v1.6.0) and use the [the OCS API Viewer app](https://apps.nextcloud.com/apps/ocs_api_viewer) to browse the OpenAPI documentation.\n\n## Features\n\n* ✎ Create/edit/delete projects, members, bills, bill categories, currencies\n* ⚖ Check member balances\n* 🗠 Display project statistics\n* ♻ Display settlement plan\n* Move bills from one project to another\n* Move bills to trash before actually deleting them\n* Archive old projects before deleting them\n* 🎇 Automatically create reimbursement bills from settlement plan\n* 🗓 Create recurring bills (day/week/month/year)\n* 📊 Optionally provide custom amount for each member in new bills\n* 🔗 Link personal files to bills (picture of physical receipt for example)\n* 👩 Public links for people outside Nextcloud (can be password protected)\n* 👫 Share projects with Nextcloud users/groups/circles\n* 🖫 Import/export projects as csv (compatible with csv files from IHateMoney and SplitWise)\n* 🔗 Generate link/QRCode to easily add projects in MoneyBuster\n* 🗲 Implement Nextcloud notifications and activity stream\n\nThis app usually support the 2 or 3 last major versions of Nextcloud.\n\nThis app is under development.\n\n🌍 Help us to translate this app on [Nextcloud-Cospend/MoneyBuster Crowdin project](https://crowdin.com/project/moneybuster).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://github.com/julien-nc/cospend-nc/blob/master/CONTRIBUTING.md).\n\n## Documentation\n\n* [User documentation](https://github.com/julien-nc/cospend-nc/blob/master/docs/user.md)\n* [Admin documentation](https://github.com/julien-nc/cospend-nc/blob/master/docs/admin.md)\n* [Developer documentation](https://github.com/julien-nc/cospend-nc/blob/master/docs/dev.md)\n* [CHANGELOG](https://github.com/julien-nc/cospend-nc/blob/master/CHANGELOG.md#change-log)\n* [AUTHORS](https://github.com/julien-nc/cospend-nc/blob/master/AUTHORS.md#authors)\n\n## Known issues\n\n* It does not make you rich\n\nAny feedback will be appreciated.\n\n\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
     "homepage": "https://github.com/julien-nc/cospend-nc",
     "licenses": [
@@ -53,7 +53,7 @@
     "hash": "sha256-BiUu//ouJiQt/BhrDBH16yGHoH4Kzb260A7ALIqSyEk=",
     "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.14.2/deck-v1.14.2.tar.gz",
     "version": "1.14.2",
-    "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
+    "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
       "agpl"
@@ -100,9 +100,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-drHfR9EagYg1zUyrk7i841PDOTZZNJmRJFLA5ft6TTs=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v18.0.7/groupfolders-v18.0.7.tar.gz",
-    "version": "18.0.7",
+    "hash": "sha256-+AhyN/GfGpom+pdFDnYt90j66bWKCWntSsE/kOo4sB8=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v18.0.8/groupfolders-v18.0.8.tar.gz",
+    "version": "18.0.8",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-m3S4PWNsToqP0QodpJopt0A7nBVB/3vvZA92C9viiNk=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v4.0.7/mail-stable4.0.tar.gz",
-    "version": "4.0.7",
+    "hash": "sha256-l0GrQzJWyz16gYL6vZWwDgrnEm1xW1xGnPfycsz4mkU=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v4.1.1/mail-v4.1.1.tar.gz",
+    "version": "4.1.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -150,8 +150,8 @@
     ]
   },
   "maps": {
-    "hash": "sha256-Rsg+26VNEX4lAHESfWQgbxvsAO/krvrml8pqBGfDXts=",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.5.0-1-nightly/maps-1.5.0-1-nightly.tar.gz",
+    "hash": "sha256-CsffBLHjgL/DeXo8ryGKFzvQ/RA4V7hfuFdllDfL0yg=",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.5.0/maps-1.5.0.tar.gz",
     "version": "1.5.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -180,9 +180,9 @@
     ]
   },
   "news": {
-    "hash": "sha256-J4d98sk8YqU/mgMjVMU3FZ6rq2uzopljoHFQsuZ5ztA=",
-    "url": "https://github.com/nextcloud/news/releases/download/25.1.0/news.tar.gz",
-    "version": "25.1.0",
+    "hash": "sha256-LnOu1zhD9sWlM81iQSdlClLRVyZFF3DLH6zrx1NYsr8=",
+    "url": "https://github.com/nextcloud/news/releases/download/25.1.2/news.tar.gz",
+    "version": "25.1.2",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -230,9 +230,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-7KSQDY2LXMWEbo3PFH3VMfq819swNnxCT5kiFvHI83s=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.5/polls-v7.2.5.tar.gz",
-    "version": "7.2.5",
+    "hash": "sha256-l0oK9go7NVkTJCyC1sagWwZpa/R5ZQsXTOishNSpYuw=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.6/polls-v7.2.6.tar.gz",
+    "version": "7.2.6",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -280,9 +280,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-VIqW/F+wU4HmLVBcFpICEUaugU8BkDmOAjolbHdJ6VY=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v20.1.0/spreed-v20.1.0.tar.gz",
-    "version": "20.1.0",
+    "hash": "sha256-S5bl2wiuEiS4e1cnt5/R6zgFslDEnoEd9Bkl9H9ufE4=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v20.1.1/spreed-v20.1.1.tar.gz",
+    "version": "20.1.1",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

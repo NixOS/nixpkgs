@@ -51,18 +51,17 @@ in
   };
 
 }
-// lib.optionalAttrs (!self.features.with_cublas) {
-  # https://localai.io/features/embeddings/#bert-embeddings
-  bert =
+// lib.optionalAttrs (!self.features.with_cublas && !self.features.with_clblas) {
+  # https://localai.io/features/embeddings/#llamacpp-embeddings
+  llamacpp-embeddings =
     let
       model = "embedding";
       model-configs.${model} = {
-        # Note: q4_0 and q4_1 models can not be loaded
         parameters.model = fetchurl {
-          url = "https://huggingface.co/skeskinen/ggml/resolve/main/all-MiniLM-L6-v2/ggml-model-f16.bin";
-          hash = "sha256-nBlbJFOk/vYKT2vjqIo5IRNmIU32SYpP5IhcniIxT1A=";
+          url = "https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q4_K_M-GGUF/resolve/main/llama-3.2-1b-instruct-q4_k_m.gguf";
+          sha256 = "1d0e9419ec4e12aef73ccf4ffd122703e94c48344a96bc7c5f0f2772c2152ce3";
         };
-        backend = "bert-embeddings";
+        backend = "llama-cpp";
         embeddings = true;
       };
 
@@ -74,7 +73,7 @@ in
       };
     in
     testers.runNixOSTest {
-      name = self.name + "-bert";
+      name = self.name + "-llamacpp-embeddings";
       nodes.machine = {
         imports = [ common-config ];
         virtualisation.cores = 2;
@@ -103,8 +102,6 @@ in
         '';
     };
 
-}
-// lib.optionalAttrs (!self.features.with_cublas && !self.features.with_clblas) {
   # https://localai.io/docs/getting-started/manual/
   llama =
     let
@@ -118,7 +115,7 @@ in
           # https://ai.meta.com/blog/meta-llama-3-1/
           model = fetchurl {
             url = "https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf";
-            hash = "sha256-8r4+GiOcEsnz8BqWKxH7KAf4Ay/bY7ClUC6kLd71XkQ=";
+            sha256 = "f2be3e1a239c12c9f3f01a962b11fb2807f8032fdb63b0a5502ea42ddef55e44";
           };
           # defaults from:
           # https://deepinfra.com/meta-llama/Meta-Llama-3.1-8B-Instruct

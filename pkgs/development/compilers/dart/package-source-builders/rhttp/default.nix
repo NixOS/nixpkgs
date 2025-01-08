@@ -18,6 +18,7 @@ let
       {
         _0_9_1 = "sha256-Gl3ArdSuw3/yi/JX6oloKJqerSJjTfK8HXRNei/LO+4=";
         _0_9_6 = "sha256-a11UxG8nbIng+6uOWq/BZxdtRmRINl/7UOc6ap2mgrk=";
+        _0_9_8 = "sha256-/1qj0N83wgkPSQnGb3CHTS/ox6OpJCKF5mVpuKTqUBQ=";
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'rhttp': '${version}'

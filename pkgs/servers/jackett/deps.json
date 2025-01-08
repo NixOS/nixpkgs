@@ -106,8 +106,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Cryptography.Internal",
-    "version": "8.0.10",
-    "hash": "sha256-zR9xbcGD4yU/oo/c9dQ4AKTMFT+HSBsfu0oNV6bjPNo="
+    "version": "8.0.11",
+    "hash": "sha256-xEIbxQbMcTvkzNw7KKeYOK9wNMShbTAzhx7DR8QMrvM="
   },
   {
     "pname": "Microsoft.AspNetCore.DataProtection",
@@ -116,8 +116,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.DataProtection",
-    "version": "8.0.10",
-    "hash": "sha256-JYzSF9NxaGA0tXobfaV2ODQdcVCbQBGtcILCRUgcKiY="
+    "version": "8.0.11",
+    "hash": "sha256-hetvscFzzsXkbUfUTXdwoOQFMp5lU4P3klOiOqjWtGc="
   },
   {
     "pname": "Microsoft.AspNetCore.DataProtection.Abstractions",
@@ -126,8 +126,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.DataProtection.Abstractions",
-    "version": "8.0.10",
-    "hash": "sha256-Fa3PLGFHOvIvAkpTRls1iESyg9ZxqY1/I5Q4elmA2SE="
+    "version": "8.0.11",
+    "hash": "sha256-7I7SHhed3s2fGArGUwlc0Jc0MIl4/sgd+E5qZ18Mx2o="
   },
   {
     "pname": "Microsoft.AspNetCore.Diagnostics",
@@ -226,8 +226,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.JsonPatch",
-    "version": "8.0.10",
-    "hash": "sha256-1MUbEqkePx6A4JkUu7bffBuuYmiP8BVTmJ3aDqwa8nk="
+    "version": "8.0.11",
+    "hash": "sha256-7n0O/CWYMjWyicwPZgUUh+YTmdNNZA02rWhBHAzPDPU="
   },
   {
     "pname": "Microsoft.AspNetCore.Localization",
@@ -281,8 +281,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
-    "version": "8.0.10",
-    "hash": "sha256-PYFjjSZjehd9R3J6wUK+OKfvTzMw6IqC+gJKocfXJbs="
+    "version": "8.0.11",
+    "hash": "sha256-oaSZize0xvrX1qf45gjMmXHipD21tBGTp2pkr7ReS5U="
   },
   {
     "pname": "Microsoft.AspNetCore.Mvc.Razor",
@@ -906,18 +906,18 @@
   },
   {
     "pname": "NLog",
-    "version": "5.3.2",
-    "hash": "sha256-b/y/IFUSe7qsSeJ8JVB0VFmJlkviFb8h934ktnn9Fgc="
+    "version": "5.3.4",
+    "hash": "sha256-Cwr1Wu9VbOcRz3GdVKkt7lIpNwC1E4Hdb0g+qEkEr3k="
   },
   {
     "pname": "NLog.Extensions.Logging",
-    "version": "5.3.11",
-    "hash": "sha256-DP3R51h+9kk06N63U+1C4/JCZTFiADeYTROToAA2R0g="
+    "version": "5.3.15",
+    "hash": "sha256-otzOJncsEmzeGkJ9yxuwQgYFlKIG9ALX+DaKJ/Jhux4="
   },
   {
     "pname": "NLog.Web.AspNetCore",
-    "version": "5.3.11",
-    "hash": "sha256-6bMYbKyNWtb0tn8k3418mWBuogofIAfwT9NHSopUu58="
+    "version": "5.3.15",
+    "hash": "sha256-JaxCAfsgYM8N7bmAciDowSdOxtMS3eoMszODqWPcqao="
   },
   {
     "pname": "NUnit",
@@ -936,13 +936,13 @@
   },
   {
     "pname": "Polly",
-    "version": "8.4.2",
-    "hash": "sha256-cuaH3SdTEdwLA1VddtY6CsmHTiDuYk0dVJ79r/6jSpQ="
+    "version": "8.5.0",
+    "hash": "sha256-oXIqYMkFXoF/9y704LJSX5Non9mry19OSKA7JFviu5Q="
   },
   {
     "pname": "Polly.Core",
-    "version": "8.4.2",
-    "hash": "sha256-4fn5n6Bu29uqWg8ciii3MDsi9bO2/moPa9B3cJ9Ihe8="
+    "version": "8.5.0",
+    "hash": "sha256-vN/OoQi5F8+oKNO46FwjPcKrgfhGMGjAQ2yCQUlHtOc="
   },
   {
     "pname": "SharpZipLib",

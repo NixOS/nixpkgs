@@ -45,7 +45,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "aiosonic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wBYGiSTSRhi11uqTyGgF1YpnBVoDraCr2GKC8VkQEWc=";
   };
 

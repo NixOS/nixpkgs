@@ -55,6 +55,10 @@ stdenv.mkDerivation rec {
   ];
   sourceRoot = "torrenttools";
 
+  patches = [
+    ./fmt-9.patch
+  ];
+
   postUnpack = ''
     cp -pr cliprogress torrenttools/external/cliprogress
     cp -pr dottorrent torrenttools/external/dottorrent

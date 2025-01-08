@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpolkitagent";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fhG6YqByDW0DAixXXX6AwTJOH3MqDlQ2XrVvpusZ3Ek=";
   };
 

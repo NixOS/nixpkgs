@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   buildPackages,
   bison,
   flex,
@@ -18,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.11.0";
+  version = "6.12.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-H3lTmKBK6qzQao9qziz9kTwz+llTypnaroO7XFNGEcM=";
+    hash = "sha256-u9FB73tdASfMIVKEO6YfJ03DKBT6Pg8T59B6CAvvU9k=";
   };
 
   patches = [
@@ -32,19 +31,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
     })
     (fetchurl {
-      name = "musl-msghdr.patch";
-      url = "https://lore.kernel.org/netdev/20240712191209.31324-2-contact@hacktivis.me/raw";
-      hash = "sha256-X5BYSZBxcvdjtX1069a1GfcpdoVd0loSAe4xTpbCipA=";
-    })
-    (fetchurl {
       name = "musl-basename.patch";
       url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
       hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
-    })
-    (fetchpatch {
-      name = "musl-mst.patch";
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=6a77abab92516e65f07f8657fc4e384c4541ce0e";
-      hash = "sha256-19FzTDvgnmqVFBykVgXl4VIsHs8Cy9NWGOLpxifxVlI=";
     })
   ];
 

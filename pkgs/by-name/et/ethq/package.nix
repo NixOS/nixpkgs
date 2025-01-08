@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "isc-projects";
     repo = "ethq";
-    rev = "refs/tags/v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-ye5ep9EM9Sq/NqNZHENPmFZefVBx1BGrPm3YEG1NcSc=";
   };
 

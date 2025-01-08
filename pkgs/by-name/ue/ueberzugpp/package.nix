@@ -94,14 +94,6 @@ stdenv.mkDerivation rec {
       "-DENABLE_X11=OFF"
     ];
 
-  # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
-  preBuild =
-    lib.optionalString
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0")
-      ''
-        export MACOSX_DEPLOYMENT_TARGET=10.14
-      '';
-
   meta = with lib; {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";

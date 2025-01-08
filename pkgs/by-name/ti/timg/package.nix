@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timg";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rTqToWgCPQeRYnMUmhPd/lJPX6L9PstFs1NczyecaB0=";
+    hash = "sha256-D5pQozxy5eSKVaV5qhoneG/b2yKcPQWD8OHs8MsGL1w=";
   };
 
   buildInputs = [

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NB5eo+6IwIxhQX1lwJzPOZ0pSeFVo7LYIEEmDqE4A7Y=";
   };
 

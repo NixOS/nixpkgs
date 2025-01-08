@@ -28,7 +28,6 @@
   spirv-tools,
   gtest,
   glew,
-  apple-sdk_11,
 }:
 let
   clientExecutable = "TaterClient-DDNet";
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
-    rev = "refs/tags/V${finalAttrs.version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-hGbeIhtAZcgaPCsDUmZqq8mLGi1yVvauha4wGMBbmBc=";
   };
 

@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-webmail";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k557FWKGq2MXODVxVzOetC5kkwTNYOoLO8msCOabais=";
   };
   postConfigure = ''

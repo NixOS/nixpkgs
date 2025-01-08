@@ -1,8 +1,11 @@
-{ lib
-, mkXfceDerivation
-, libxfce4util
-, gobject-introspection
-, vala
+{
+  lib,
+  mkXfceDerivation,
+  gobject-introspection,
+  perl,
+  vala,
+  libxfce4util,
+  glib,
 }:
 
 mkXfceDerivation {
@@ -12,9 +15,15 @@ mkXfceDerivation {
 
   sha256 = "sha256-U+Sk7ubBr1ZD1GLQXlxrx0NQdhV/WpVBbnLcc94Tjcw=";
 
-  nativeBuildInputs = [ gobject-introspection vala ];
+  nativeBuildInputs = [
+    gobject-introspection
+    perl
+    vala
+  ];
 
   buildInputs = [ libxfce4util ];
+
+  propagatedBuildInputs = [ glib ];
 
   meta = with lib; {
     description = "Simple client-server configuration storage and query system for Xfce";

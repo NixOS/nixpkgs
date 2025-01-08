@@ -2,6 +2,7 @@
   lib,
   gcc14Stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   cairo,
   expat,
@@ -32,14 +33,23 @@
 
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bXWLq/0Ji13CM4uX4tnBgWpvRysh4H3N1OC1t6d1Sfc=";
+    hash = "sha256-IRZ5NrKFwBVueYrZYUQfpTwp2rZHgAkPwgvdnfVBF8E=";
   };
+
+  patches = [
+    # FIXME: remove in next release
+    (fetchpatch2 {
+      name = "fix-hypr-wayland-scanner-0.4.4-build.patch";
+      url = "https://github.com/hyprwm/hyprpaper/commit/505e447b6c48e6b49f3aecf5da276f3cc5780054.patch?full_index=1";
+      hash = "sha256-Vk2P2O4XQiCYqV0KbK/ADe8KPmaTs3Mg7JRJ3cGW9lM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

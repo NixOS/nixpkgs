@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "evdenis";
     repo = "cvehound";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UvjmlAm/8B4KfE9grvvgn37Rui+ZRfs2oTLqYYgqcUQ=";
   };
 

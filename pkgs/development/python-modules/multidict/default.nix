@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rvL1XzMNBVBlElE5wznecL3Ku9h4tG9VeqGRd04iPXw=";
   };
 

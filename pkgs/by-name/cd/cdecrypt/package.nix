@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VitaSmith";
     repo = "cdecrypt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PyT60RDyp1/Co/7WHC0+KrsnrDeTJ605x1pt4OmlGYg=";
   };
 

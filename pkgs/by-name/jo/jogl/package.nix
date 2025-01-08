@@ -10,8 +10,7 @@
   xcbuild,
   udev,
   xorg,
-  mesa,
-  darwin,
+  libgbm,
   coreutils,
 }:
 
@@ -78,22 +77,17 @@ stdenv.mkDerivation {
       xcbuild
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXt
-      xorg.libXxf86vm
-      xorg.libXrender
-      mesa
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.AppKit
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXt
+    xorg.libXxf86vm
+    xorg.libXrender
+    libgbm
+  ];
 
   env = {
     SOURCE_LEVEL = "1.8";

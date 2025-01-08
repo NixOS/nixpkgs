@@ -11,7 +11,7 @@
   lib,
   libGLU,
   libGL,
-  mesa,
+  libgbm,
   opencl-clhpp,
   pkg-config,
   stdenv,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     libGLU
     opencl-clhpp
     SDL2
-    mesa
+    libgbm
   ];
 
   meta = with lib; {

@@ -15,7 +15,7 @@ let
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PfUlo9ua4SVcQJTfmSVoEXHH1MUJ8A/w3kJHFpEzll8=";
   };
 

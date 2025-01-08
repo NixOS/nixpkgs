@@ -110,7 +110,7 @@ buildFHSEnv {
       libGL
       libudev0-shim
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango

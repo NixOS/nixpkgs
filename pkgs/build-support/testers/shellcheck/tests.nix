@@ -6,9 +6,6 @@
   testers,
   runCommand,
 }:
-let
-  inherit (lib) fileset;
-in
 lib.recurseIntoAttrs {
 
   example-dir =
@@ -16,12 +13,7 @@ lib.recurseIntoAttrs {
       {
         failure = testers.testBuildFailure (
           testers.shellcheck {
-            src = fileset.toSource {
-              root = ./.;
-              fileset = fileset.unions [
-                ./example.sh
-              ];
-            };
+            src = ./src;
           }
         );
       }
@@ -37,7 +29,7 @@ lib.recurseIntoAttrs {
       {
         failure = testers.testBuildFailure (
           testers.shellcheck {
-            src = ./example.sh;
+            src = ./src/example.sh;
           }
         );
       }

@@ -67,8 +67,8 @@ in
 , glib
 , gnum4
 , gtk3
-, icu72
 , icu73
+, icu74
 , libGL
 , libGLU
 , libevent
@@ -268,6 +268,34 @@ buildStdenv.mkDerivation {
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
   ]
+  ++ lib.optionals ((lib.versionAtLeast version "129" && lib.versionOlder version "134") || lib.versionOlder version "128.6.0") [
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
+  ]
+  ++ [
+    # LLVM 19 turned on WASM reference types by default, exposing a bug
+    # that broke the Mozilla WASI build. Supposedly, it has been fixed
+    # upstream in LLVM, but the build fails in the same way for us even
+    # with LLVM 19 versions that contain the upstream patch.
+    #
+    # Apply the temporary patch Mozilla used to work around this bug
+    # for now until someone can investigate what’s going on here.
+    #
+    # TODO: Please someone figure out what’s up with this.
+    #
+    # See: <https://bugzilla.mozilla.org/show_bug.cgi?id=1905251>
+    # See: <https://github.com/llvm/llvm-project/pull/97451>
+    (fetchpatch {
+      name = "wasi-sdk-disable-reference-types.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
+      hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
+    })
+    # Fix for missing vector header on macOS
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1939405
+    ./firefox-mac-missing-vector-header.patch
+  ]
   ++ extraPatches;
 
   postPatch = ''
@@ -406,7 +434,7 @@ buildStdenv.mkDerivation {
   ]
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
-     "--enable-lto=cross" # Cross-Language LTO
+     "--enable-lto=cross,full" # Cross-Language LTO
      "--enable-linker=lld"
   ]
   ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
@@ -500,11 +528,9 @@ buildStdenv.mkDerivation {
     ++ lib.optional  sndioSupport sndio
     ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ))
-  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
   # icu74 fails to build on 127 and older
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
-  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
+  ++ [ (if (lib.versionAtLeast version "134") then icu74 else icu73) ]
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optional  jemallocSupport jemalloc
   ++ extraBuildInputs;

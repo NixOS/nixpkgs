@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "tag-expressions";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-etJKAOamCq63HsUqJMPBnmn0YFO3ZHOvs3/rDHN7YPU=";
   };
 

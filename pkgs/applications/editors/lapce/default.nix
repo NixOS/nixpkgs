@@ -19,7 +19,6 @@
   wayland,
   gobject-introspection,
   xorg,
-  apple-sdk_11,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vBBYNHgZiW5JfGeUG6YZObf4oK0hHxTbsZNTfnIX95Y=";
   };
 
@@ -94,7 +93,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      apple-sdk_11
     ];
 
   postInstall =

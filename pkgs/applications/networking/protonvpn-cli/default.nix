@@ -18,7 +18,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "protonvpn";
     repo = "linux-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-KhfogC23i7THe6YZJ6Sy1+q83vZupHsS69NurHCeo8I=";
   };
 

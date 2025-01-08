@@ -5,6 +5,7 @@
 # this file.
 
 { lib
+, config
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
@@ -27,7 +28,6 @@ makeScopeWithSplicing' {
     inherit (self) callPackage;
     noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
   in (noExtraAttrs qt6) // {
-  inherit stdenv;
 
   # LIBRARIES
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
@@ -55,6 +55,9 @@ makeScopeWithSplicing' {
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+
   libquotient = callPackage ../development/libraries/libquotient { };
   mlt = pkgs.mlt.override {
     qt = qt6;
@@ -85,6 +88,8 @@ makeScopeWithSplicing' {
   qtstyleplugin-kvantum = kdePackages.callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
+
+  qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
 
   quazip = callPackage ../development/libraries/quazip { };
 
@@ -120,4 +125,7 @@ makeScopeWithSplicing' {
 
   xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
+} // lib.optionalAttrs config.allowAliases {
+  # when removing, don't forget to remove a workaround in `pkgs/kde/default.nix`
+  stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }

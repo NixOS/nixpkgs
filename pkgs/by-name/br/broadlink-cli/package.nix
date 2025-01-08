@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mjg59";
     repo = "python-broadlink";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-fqhi4K8Ceh8Rs0ExteCfAuVfEamFjMCjCFm6DRAJDmI=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wmwXw1o+pRsRjA7ai9x5o1el7mNBqM6xlGrvw0IqfMo=";
   };
 

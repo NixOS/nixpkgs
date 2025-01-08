@@ -33,6 +33,10 @@ assert enableQt -> qwt != null;
     sha256 = "1zlh44w67py416hkvw6nrfmjickc2d43v51vcli5p374d5sw84ql";
   };
 
+  patches = [
+    ./gcc-14-fixes.diff
+  ];
+
   postPatch = ''
     substituteInPlace linux/qphotorec.desktop \
       --replace "/usr" "$out"

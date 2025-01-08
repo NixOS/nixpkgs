@@ -7,11 +7,11 @@
 
 let
   pname = "upscayl";
-  version = "2.11.5";
+  version = "2.15.0";
 
   src = fetchurl {
     url = "https://github.com/upscayl/upscayl/releases/download/v${version}/upscayl-${version}-linux.AppImage";
-    hash = "sha256-owxSm8t7rHM5ywJPp8sJQ5aAyNKgrbyJY6qFp78/UhM=";
+    hash = "sha256-ZFlFfliby5nneepELc5gi6zaM5FrcBmohit8YlKqgik=";
   };
 
   appimageContents = appimageTools.extractType2 {

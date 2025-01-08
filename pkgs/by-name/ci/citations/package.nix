@@ -19,6 +19,7 @@
   testers,
   wrapGAppsHook4,
   clippy,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,9 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/PATH=/d' ../src/meson.build
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "citations --help";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "citations --help";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

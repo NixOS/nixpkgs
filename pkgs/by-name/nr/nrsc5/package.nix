@@ -44,6 +44,10 @@ stdenv.mkDerivation {
     sed -i '/GIT_REPOSITORY/d' CMakeLists.txt
     sed -i '/GIT_TAG/d' CMakeLists.txt
     sed -i "s:set (FAAD2_PREFIX .*):set (FAAD2_PREFIX \"$srcRoot/faad2-prefix\"):" CMakeLists.txt
+    # see https://github.com/dsvensson/faad2/pull/2
+    substituteInPlace $faadSrc/libfaad/pns.c \
+      --replace-fail 'r1_dep = __r1;' 'r1_dep = *__r1;' \
+      --replace-fail 'r2_dep = __r2;' 'r2_dep = *__r2;'
   '';
 
   nativeBuildInputs = [

@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "exo";
-  version = "0-unstable-2024-12-07";
+  version = "0-unstable-2024-12-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "db9de97fa6ecef51d1b7eec6758b55c402da786e";
-    hash = "sha256-1tChxxP8saeBjLsOpL8GYCNyhlXkN2Mg2LruyB3K3/g=";
+    rev = "a174c78004e5fc62220dd4e9734e8ad4eaa75e39";
+    hash = "sha256-q68dcAz4QPS5mSuHSlQ3BnXkPzOi+2X2XgKLZs6SKhE=";
   };
 
   build-system = with python3Packages; [ setuptools ];

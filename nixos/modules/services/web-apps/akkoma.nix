@@ -323,6 +323,7 @@ let
         cd "${cfg.package}"
 
         RUNTIME_DIRECTORY="''${RUNTIME_DIRECTORY:-/run/akkoma}"
+        CACHE_DIRECTORY="''${CACHE_DIRECTORY:-/var/cache/akkoma}" \
         AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
@@ -500,8 +501,8 @@ in {
 
       extraPackages = mkOption {
         type = with types; listOf package;
-        default = with pkgs; [ exiftool ffmpeg-headless graphicsmagick-imagemagick-compat ];
-        defaultText = literalExpression "with pkgs; [ exiftool ffmpeg-headless graphicsmagick-imagemagick-compat ]";
+        default = with pkgs; [ exiftool ffmpeg-headless imagemagick ];
+        defaultText = literalExpression "with pkgs; [ exiftool ffmpeg-headless imagemagick ]";
         example = literalExpression "with pkgs; [ exiftool ffmpeg-full imagemagick ]";
         description = ''
           List of extra packages to include in the executable search path of the service unit.

@@ -17,7 +17,7 @@
   libdrm,
   libudev0-shim,
   libxkbcommon,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
     gtk3
     libdrm
     libxkbcommon
-    mesa
+    libgbm
     nspr
     nss
     pango

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "be1";
     repo = "qspeakers";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-ab3+lw3F0CU8OLa7V4itPZsWKCV+6DoUvmFEqhAdklw=";
   };
 

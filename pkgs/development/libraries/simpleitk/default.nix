@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SimpleITK";
     repo = "SimpleITK";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/FV5NAM9DJ54Vg6/5yn9DCybry+a8lS3fQ3HWLOeOTA=";
   };
 

@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orhun/git-cliff";
     changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [
+      siraben
+      matthiasbeyer
+    ];
     mainProgram = "git-cliff";
   };
 }

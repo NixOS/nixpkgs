@@ -44,7 +44,7 @@
   e2fsprogs,
   krb5,
   libdrm,
-  mesa,
+  libgbm,
   unzip,
   copyDesktopItems,
   libxshmfence,
@@ -145,7 +145,7 @@ let
       e2fsprogs
       krb5
       libdrm
-      mesa
+      libgbm
       libxshmfence
       libxkbcommon
       libGL

@@ -18,6 +18,7 @@
   cloudpickle,
   dm-tree,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -50,6 +51,11 @@ buildPythonPackage rec {
     dm-tree
     pytestCheckHook
   ];
+
+  # AttributeError: module 'unittest' has no attribute 'makeSuite'
+  # https://github.com/google-deepmind/chex/issues/371
+  # TODO: re-enable at next release
+  doCheck = pythonOlder "3.13";
 
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";

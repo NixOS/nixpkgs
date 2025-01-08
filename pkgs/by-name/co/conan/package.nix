@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1KKXOvoSAemzafWvBoYFtxqgSObHcXe3GVPgG25VNm0=";
   };
 

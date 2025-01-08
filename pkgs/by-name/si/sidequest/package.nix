@@ -14,7 +14,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  mesa,
+  libgbm,
   nss,
   nspr,
   libdrm,
@@ -72,7 +72,7 @@ let
           gdk-pixbuf
           glib
           gtk3
-          mesa
+          libgbm
           nss
           nspr
           libdrm

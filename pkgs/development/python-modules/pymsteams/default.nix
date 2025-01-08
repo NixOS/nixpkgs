@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pymsteams";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rveachkc";
     repo = "pymsteams";
-    rev = "refs/tags/${version}";
-    hash = "sha256-suPCAzjQp46+kKFiCtm65lxBbsn78Owq4dVmWCdhIpA=";
+    tag = version;
+    hash = "sha256-SXFJrhT/5Jf3OVUnVfayNk4BvQ2YFZ6SDTADDQOo3Go=";
   };
 
   build-system = [ setuptools ];

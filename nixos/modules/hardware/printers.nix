@@ -28,6 +28,7 @@ let
       );
     in
     ''
+      # shellcheck disable=SC2016
       ${pkgs.cups}/bin/lpadmin ${args} -E
     '';
 

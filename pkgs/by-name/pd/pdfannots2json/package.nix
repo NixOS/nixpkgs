@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "mgmeyers";
     repo = "pdfannots2json";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qk4OSws/6SevN/Q0lsyxw+fZkm2uy1WwOYYL7CB7QUk=";
   };
 

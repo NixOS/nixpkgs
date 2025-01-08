@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.esedb";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IDLarSiI7GHjOOLibk2s/KqKwmozgIHdSfClPQXOsXI=";
   };
 

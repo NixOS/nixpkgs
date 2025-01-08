@@ -39,6 +39,7 @@
   xorg,
   xorgserver,
   xxHash,
+  clang,
 }:
 
 let
@@ -75,13 +76,13 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.2.1";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     rev = "v${version}";
-    hash = "sha256-TdRQcl0o9L37JXWxoWkAw9sAH5eWpynWkCwo1tBwa9s=";
+    hash = "sha256-YLz2Ex3gHabicPbGj5BFP1pwU/8K/bu4R7cWi1Fu2oM=";
   };
 
   patches = [
@@ -92,11 +93,14 @@ buildPythonApplication rec {
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace xpra/platform/posix/features.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+
+    patchShebangs --build fs/bin/build_cuda_kernels.py
   '';
 
   INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [
+    clang
     gobject-introspection
     pkg-config
     wrapGAppsHook3

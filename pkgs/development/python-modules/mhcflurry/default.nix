@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dxCGCPnk1IFKg8ZVqMJsojQL0KlNirKlHJoaaOYIzMU=";
   };
 

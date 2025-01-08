@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "ntopng";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-8PG18mOV/6EcBpKt9kLyI40OLDnpnc2b4IUu9JbK/Co=";
     fetchSubmodules = true;
   };

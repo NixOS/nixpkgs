@@ -165,6 +165,7 @@ buildPythonApplication rec {
 
   meta = {
     description = "Interactive terminal multitool for tabular data";
+    mainProgram = "visidata";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       raskin

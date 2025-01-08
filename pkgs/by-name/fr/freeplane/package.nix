@@ -7,6 +7,7 @@
   jdk17,
   gradle_8,
   which,
+  copyDesktopItems,
 }:
 
 let
@@ -31,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     jdk
     gradle
+    copyDesktopItems
   ];
 
   mitmCache = gradle.fetchDeps {

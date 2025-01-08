@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tethik";
     repo = "flask-session-captcha";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2JPJx8yQIl0bbcbshONJtja7BnSiieHzHi64A6jLpc0=";
   };
 

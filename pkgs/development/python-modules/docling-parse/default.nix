@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-parse";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pZJ7lneg4ftAoWS5AOflkkKCwZGF4TJIuqDjq4W4VBw=";
   };
 

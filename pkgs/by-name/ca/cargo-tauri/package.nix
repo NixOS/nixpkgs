@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
-    rev = "refs/tags/tauri-v${version}";
+    tag = "tauri-v${version}";
     hash = "sha256-HPmViOowP1xAjDJ89YS0BTjNnKI1P0L777ywkqAhhc4=";
   };
 

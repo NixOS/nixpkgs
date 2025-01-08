@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YqfkmYclPZu6Mc2bFYxtiuH7uvfa3V4YlD0aHuKn1hw=";
   };
   nativeBuildInputs = [ makeWrapper ];

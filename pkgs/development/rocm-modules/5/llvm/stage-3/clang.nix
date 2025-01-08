@@ -40,7 +40,10 @@ wrapCCWith rec {
     '';
 
     passthru.isClang = true;
+    passthru.isROCm = true;
   });
+
+  gccForLibs = stdenv.cc.cc;
 
   extraPackages = [
     llvm

@@ -97,9 +97,6 @@ stdenv.mkDerivation rec {
     sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConscript
     export TAR=noop
     substituteInPlace SConscript --replace "env['CCVERSION']" "env['CC']"
-
-    sconsFlags+=" udevdir=$out/lib/udev"
-    sconsFlags+=" python_libdir=$out/${python3Packages.python.sitePackages}"
   '';
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds
@@ -110,6 +107,8 @@ stdenv.mkDerivation rec {
     "gpsd_group=${gpsdGroup}"
     "systemd=yes"
     "xgps=${if guiSupport then "True" else "False"}"
+    "udevdir=${placeholder "out"}/lib/udev"
+    "python_libdir=${placeholder "out"}/${python3Packages.python.sitePackages}"
   ];
 
   preCheck = ''

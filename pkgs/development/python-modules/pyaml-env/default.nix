@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkaranasou";
     repo = "pyaml_env";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xSu+dksSVugShJwOqedXBrXIKaH0G5JAsynauOuP3OA=";
   };
 

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gIYqWRJI/IZwEyc1Fke/CD8PPoSZvwtvOT0rnK+LFIo=";
   };
 

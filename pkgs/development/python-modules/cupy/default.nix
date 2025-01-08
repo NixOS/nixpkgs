@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
     fetchSubmodules = true;
   };

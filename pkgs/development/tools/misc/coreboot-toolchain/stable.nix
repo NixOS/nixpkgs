@@ -22,17 +22,17 @@
     };
   }
   {
-    name = "gcc-14.1.0.tar.xz";
+    name = "gcc-14.2.0.tar.xz";
     archive = fetchurl {
-      sha256 = "0h3889kkfp9bzw8km9w1ssh5qjskg6yw02q8v3lkvzksk1acd0z2";
-      url = "mirror://gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz";
+      sha256 = "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7";
+      url = "mirror://gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.xz";
     };
   }
   {
-    name = "binutils-2.42.tar.xz";
+    name = "binutils-2.43.1.tar.xz";
     archive = fetchurl {
-      sha256 = "0058hngi16793aja9ih623mfr98dcarmf549nw38nxzwslgx9r7n";
-      url = "mirror://gnu/binutils/binutils-2.42.tar.xz";
+      sha256 = "1z9d2f0894xvjlfnvni4wbxnqgqd42j9x8wpnwc13if4lc145xqk";
+      url = "mirror://gnu/binutils/binutils-2.43.1.tar.xz";
     };
   }
   {

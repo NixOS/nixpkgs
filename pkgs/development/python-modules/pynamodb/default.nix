@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pynamodb";
     repo = "PynamoDB";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OcrES+1F95KjhRXpEukzbuDfTXU4hyJqxGjD1xMcdKE=";
   };
 

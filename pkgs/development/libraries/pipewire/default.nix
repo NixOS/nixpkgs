@@ -58,9 +58,16 @@
   libselinux,
 }:
 
+let
+  webrtc-audio-processings = lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    webrtc-audio-processing_1
+    webrtc-audio-processing
+  ];
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.2.6";
+  version = "1.2.7";
 
   outputs = [
     "out"
@@ -76,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-AmrbA1YQBeETLC9u9rQ2f85rG9TASvcbCZ/Xlz7ICdY=";
+    sha256 = "sha256-TV+2nz44a742bUfGnWt7zJAnO15eED5kAwyAgE5CQZ0=";
   };
 
   patches = [
@@ -133,12 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
           udev
         ]
     )
-    ++ (
-      if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then
-        [ webrtc-audio-processing_1 ]
-      else
-        [ webrtc-audio-processing ]
-    )
+    ++ lib.take 1 webrtc-audio-processings
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ldacbt) ldacbt
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
@@ -164,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "installed_tests" true)
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
     (lib.mesonOption "libjack-path" "${placeholder "jack"}/lib")
+    (lib.mesonEnable "echo-cancel-webrtc" (webrtc-audio-processings != [ ]))
     (lib.mesonEnable "libcamera" true)
     (lib.mesonEnable "libffado" ffadoSupport)
     (lib.mesonEnable "roc" rocSupport)

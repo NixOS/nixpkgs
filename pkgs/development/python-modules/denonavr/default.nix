@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ol-iver";
     repo = "denonavr";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9nY1z6CX8uha/m3OOUyadrKmpbUsgL16CB2ySElOTck=";
   };
 
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ol-iver/denonavr";
     changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ ];
   };
 }

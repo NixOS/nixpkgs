@@ -11,13 +11,9 @@
   makeWrapper,
   perl,
   substituteAll,
-  substitute,
   cudd,
   fetchurl,
   nix-update-script,
-  apple-sdk,
-  apple-sdk_10_15,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
-    rev = "refs/tags/cbmc-${finalAttrs.version}";
+    tag = "cbmc-${finalAttrs.version}";
     hash = "sha256-PZZnseOE3nodE0zwyG+82gm55BO4rsCcP4T+fZq7L6I=";
   };
 
@@ -51,14 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [ cadical ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (darwinMinVersionHook "10.15")
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "10.15") [
-      apple-sdk_10_15
-    ];
+  buildInputs = [ cadical ];
 
   # do not download sources
   # link existing cadical instead

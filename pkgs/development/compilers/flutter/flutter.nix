@@ -61,11 +61,12 @@ let
     name = "flutter-${version}-unwrapped";
     inherit src patches version;
 
-    buildInputs = [ git ];
     nativeBuildInputs = [
       makeWrapper
       jq
+      git
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    strictDeps = true;
 
     preConfigure = ''
       if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
@@ -76,6 +77,7 @@ let
 
     postPatch = ''
       patchShebangs --build ./bin/
+      patchShebangs packages/flutter_tools/bin
     '';
 
     buildPhase = ''

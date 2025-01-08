@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bitbrute";
     repo = "evillimiter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h6BReZcDW2UYaYYVQVgV0T91/+CsGuZf+J+boUhjCtA=";
   };
 

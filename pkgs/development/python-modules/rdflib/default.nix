@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "rdflib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/jRUV7H6JBWBv/gphjLjjifbEwMSxWke5STqkeSzwoE=";
   };
 

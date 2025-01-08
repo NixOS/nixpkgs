@@ -57,6 +57,8 @@ let
 
             inHydra = true;
           };
+
+          __allowFileset = false;
         };
       };
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };

@@ -17,9 +17,7 @@ let
       || (stdenv.cc.isGNU && stdenv.hostPlatform.isLinux)
     );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
-  emulator = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-    stdenv.hostPlatform.emulator buildPackages
-  );
+  emulator = stdenv.hostPlatform.emulator buildPackages;
   isCxx = stdenv.cc.libcxx != null;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";

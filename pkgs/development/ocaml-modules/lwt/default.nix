@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.8.0";
+  version = "5.9.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "lwt";
     rev = version;
-    hash = "sha256-GX5CSJuTajvZJ0TgG95aHeOCBi2B9Aw2URLZRCdp91A=";
+    hash = "sha256-xYF+f489RI/nY0J48qW0jtq5GEnk68QnwxzBV2TLmLk=";
   };
 
   nativeBuildInputs = [ cppo ];

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "findimports";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-W4GKnIYOh3bk18yviL7GfMyXoWNLFWWDhKur9id1a78=";
   };
 

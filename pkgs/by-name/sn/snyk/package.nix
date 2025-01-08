@@ -5,6 +5,7 @@
   stdenv,
   testers,
   snyk,
+  nodejs_20,
 }:
 
 let
@@ -17,7 +18,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AO36b3VWdklfMjSEE3JMZUVS1KmBSra2xX6hqlf3OUM=";
   };
 
@@ -28,11 +29,7 @@ buildNpmPackage {
       --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
   '';
 
-  env.NIX_CFLAGS_COMPILE =
-    # Fix error: no member named 'aligned_alloc' in the global namespace
-    lib.optionalString (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-    ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+  nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
 

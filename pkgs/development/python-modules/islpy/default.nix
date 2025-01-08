@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ixw9U4WqcXBW6KGBOsUImjsxmvG5XKCv4jCbTjJ4pjg=";
   };
 

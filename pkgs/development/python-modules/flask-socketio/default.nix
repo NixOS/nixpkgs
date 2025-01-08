@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-owlgbw0QBUz2wCBxd1rjMI+4nPVTZ6JgmU2tL+vIj5g=";
   };
 

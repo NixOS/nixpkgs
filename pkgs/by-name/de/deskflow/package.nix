@@ -32,20 +32,22 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deskflow";
-  version = "1.17.2";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CHlvL/MC9clFrMxlfIXaCFoTkcLS7QsYK7MXMFW0188=";
+    tag = "v${version}";
+    hash = "sha256-FdpDaJ+pphy2+8prlKst0DjmdbcZOmNp+lKN5xdnvC8=";
   };
 
   postPatch = ''
     substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
       --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
     substituteInPlace src/lib/gui/tls/TlsCertificate.cpp \
-      --replace-fail "\"openssl\"" "\"${lib.getBin openssl}/bin/openssl\""
+      --replace-fail '"openssl"' '"${lib.getBin openssl}/bin/openssl"'
+    substituteInPlace deploy/linux/deploy.cmake \
+      --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
   '';
 
   nativeBuildInputs = [
@@ -114,5 +116,9 @@ stdenv.mkDerivation rec {
       licenses.openssl
     ];
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "CVE-2021-42072"
+      "CVE-2021-42073"
+    ];
   };
 }

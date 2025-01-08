@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = "goaccess";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZOngDAHA88YQvkx2pk5ZSpBzxqelvCIR4z5hiFmfGyc=";
   };
 

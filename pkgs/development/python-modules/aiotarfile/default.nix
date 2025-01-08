@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhelmot";
     repo = "aiotarfile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DslG+XxIYb04I3B7m0fmRmE3hFCczF039QhSVdHGPL8=";
   };
   passthru.updateScript = nix-update-script { };

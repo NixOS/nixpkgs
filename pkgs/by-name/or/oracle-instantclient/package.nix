@@ -5,6 +5,7 @@
   autoPatchelfHook,
   fixDarwinDylibNames,
   unzip,
+  _7zz,
   libaio,
   makeWrapper,
   odbcSupport ? true,
@@ -32,6 +33,7 @@ let
       x86_64-linux = "21.10.0.0.0";
       aarch64-linux = "19.10.0.0.0";
       x86_64-darwin = "19.8.0.0.0";
+      aarch64-darwin = "23.3.0.23.09";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
@@ -40,6 +42,7 @@ let
       x86_64-linux = "2110000";
       aarch64-linux = "191000";
       x86_64-darwin = "198000";
+      aarch64-darwin = "233023";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
@@ -67,11 +70,25 @@ let
         tools = "sha256-1xFFGZapFq9ogGQ6ePSv4PrXl5qOAgRZWAp4mJ5uxdU=";
         odbc = "sha256-S6+5P4daK/+nXwoHmOkj4DIkHtwdzO5GOkCCI612bRY=";
       };
+      aarch64-darwin = {
+        basic = "sha256-G83bWDhw9wwjLVee24oy/VhJcCik7/GtKOzgOXuo1/4=";
+        sdk = "sha256-PerfzgietrnAkbH9IT7XpmaFuyJkPHx0vl4FCtjPzLs=";
+        sqlplus = "sha256-khOjmaExAb3rzWEwJ/o4XvRMQruiMw+UgLFtsOGn1nY=";
+        tools = "sha256-gA+SbgXXpY12TidpnjBzt0oWQ5zLJg6wUpzpSd/N5W4=";
+        odbc = "sha256-JzoSdH7mJB709cdXELxWzpgaNTjOZhYH/wLkdzKA2N0=";
+      };
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
   # rels per component and architecture, optional
-  rels = { }.${stdenv.hostPlatform.system} or { };
+  rels =
+    {
+      aarch64-darwin = {
+        basic = "1";
+        tools = "1";
+      };
+    }
+    .${stdenv.hostPlatform.system} or { };
 
   # convert platform to oracle architecture names
   arch =
@@ -79,6 +96,7 @@ let
       x86_64-linux = "linux.x64";
       aarch64-linux = "linux.arm64";
       x86_64-darwin = "macos.x64";
+      aarch64-darwin = "macos.arm64";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
@@ -87,15 +105,20 @@ let
       x86_64-linux = "linux";
       aarch64-linux = "linux";
       x86_64-darwin = "mac";
+      aarch64-darwin = "mac";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
+
+  suffix =
+    {
+      aarch64-darwin = ".dmg";
+    }
+    .${stdenv.hostPlatform.system} or "dbru.zip";
 
   # calculate the filename of a single zip file
   srcFilename =
     component: arch: version: rel:
-    "instantclient-${component}-${arch}-${version}"
-    + (optionalString (rel != "") "-${rel}")
-    + "dbru.zip"; # ¯\_(ツ)_/¯
+    "instantclient-${component}-${arch}-${version}" + (optionalString (rel != "") "-${rel}") + suffix;
 
   # fetcher for the non clickthrough artifacts
   fetcher =
@@ -111,6 +134,8 @@ let
     (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or "")
   ) components;
 
+  isDarwinAarch64 = stdenv.hostPlatform.system == "aarch64-darwin";
+
   pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
 in
@@ -118,14 +143,16 @@ stdenv.mkDerivation {
   inherit pname version srcs;
 
   buildInputs =
-    [ (lib.getLib stdenv.cc.cc) ]
+    [
+      (lib.getLib stdenv.cc.cc)
+    ]
     ++ optional stdenv.hostPlatform.isLinux libaio
     ++ optional odbcSupport unixODBC;
 
   nativeBuildInputs =
     [
       makeWrapper
-      unzip
+      (if isDarwinAarch64 then _7zz else unzip)
     ]
     ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -136,7 +163,7 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  unpackCmd = "unzip $curSrc";
+  unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
@@ -174,6 +201,7 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
     maintainers = with maintainers; [ dylanmtaylor ];
     hydraPlatforms = [ ];

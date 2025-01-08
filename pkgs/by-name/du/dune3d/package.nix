@@ -13,7 +13,6 @@
   libspnav,
   libuuid,
   libxml2,
-  llvmPackages_17,
   meson,
   ninja,
   opencascade-occt_7_6,
@@ -24,10 +23,9 @@
 }:
 
 let
-  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   opencascade-occt = opencascade-occt_7_6;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dune3d";
   version = "1.2.0";
 

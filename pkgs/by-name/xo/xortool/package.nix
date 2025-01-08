@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hellman";
     repo = "xortool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xxaWhGUh/r34eS2TJt8c3Q795OsZOoQLXQllJGJTjqY=";
   };
 

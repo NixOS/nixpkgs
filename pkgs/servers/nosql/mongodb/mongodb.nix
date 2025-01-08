@@ -16,8 +16,6 @@
   openssl,
   libpcap,
   curl,
-  Security,
-  CoreFoundation,
   cctools,
   xz,
 }:
@@ -102,8 +100,6 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      CoreFoundation
       cctools
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux net-snmp
@@ -153,14 +149,14 @@ stdenv.mkDerivation rec {
 
   preBuild =
     ''
-      sconsFlags+=" CC=$CC"
-      sconsFlags+=" CXX=$CXX"
+      appendToVar sconsFlags "CC=$CC"
+      appendToVar sconsFlags "CXX=$CXX"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      sconsFlags+=" AR=$AR"
+      appendToVar sconsFlags "AR=$AR"
     ''
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
+      appendToVar sconsFlags "CCFLAGS=-march=armv8-a+crc"
     '';
 
   preInstall = ''

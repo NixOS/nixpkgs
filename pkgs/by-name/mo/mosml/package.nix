@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+
   src = fetchFromGitHub {
     owner = "kfl";
     repo = "mosml";

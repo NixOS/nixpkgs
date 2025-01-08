@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
-    rev = "refs/tags/fritzexporter-v${version}";
+    tag = "fritzexporter-v${version}";
     hash = "sha256-qqvvoOQRFNl9IUjaBc/qzg9AevT5c2JDsfDVAZW6d6E=";
   };
 

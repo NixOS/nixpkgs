@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "riverloopsec";
     repo = "killerbee";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WM0Z6sd8S71F8FfhhoUq3MSD/2uvRTY/FsBP7VGGtb0=";
   };
 
@@ -27,10 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     rangeparser
     scapy
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "killerbee" ];
 

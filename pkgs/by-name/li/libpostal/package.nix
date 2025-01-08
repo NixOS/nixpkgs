@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
   };
 

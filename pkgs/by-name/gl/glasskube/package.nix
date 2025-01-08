@@ -12,7 +12,7 @@ let
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-456kMO7KappYI2FuHA8g+uhkJNCGCxb/9zmleZqu6SQ=";
   };
   web-bundle = buildNpmPackage rec {

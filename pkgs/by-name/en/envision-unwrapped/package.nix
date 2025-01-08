@@ -1,5 +1,6 @@
 {
   appstream-glib,
+  applyPatches,
   cairo,
   cargo,
   desktop-file-utils,
@@ -25,6 +26,7 @@
   rustc,
   stdenv,
   vte-gtk4,
+  versionCheckHook,
   wrapGAppsHook4,
   zlib,
 }:
@@ -40,11 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
   };
 
+  patches = [
+    ./support-headless-cli.patch
+  ];
+
   strictDeps = true;
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-kNZucZKzxFHzDAIGE1PFfuBq1rSVkb2Gpk23MEgohME=";
+    inherit (finalAttrs) pname version;
+    # TODO: Use srcOnly instead
+    src = applyPatches {
+      inherit (finalAttrs) src patches;
+    };
+    hash = "sha256-zWaw6K2H67PEmFISDNce5jDUXKV39qu35SO+Ai0DP90=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustPlatform.cargoSetupHook
     rustc
+    versionCheckHook
     wrapGAppsHook4
   ];
 

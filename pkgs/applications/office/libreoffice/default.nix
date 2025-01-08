@@ -461,7 +461,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-ant-home=${getLib ant}/lib/ant"
+    "--with-ant-home=${ant.home}"
 
     # Without these, configure does not finish
     "--without-junit"

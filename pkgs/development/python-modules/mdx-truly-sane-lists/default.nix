@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "radude";
     repo = "mdx_truly_sane_lists";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hPnqF1UA4peW8hzeFiMlsBPfodC1qJXETGoq2yUm7d4=";
   };
 

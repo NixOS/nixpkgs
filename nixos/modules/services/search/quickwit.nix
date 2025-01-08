@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.quickwit;
 
@@ -19,7 +16,7 @@ in
 {
 
   options.services.quickwit = {
-    enable = mkEnableOption "Quickwit";
+    enable = lib.mkEnableOption "Quickwit";
 
     package = lib.mkPackageOption pkgs "Quickwit" {
       default = [ "quickwit" ];
@@ -83,7 +80,7 @@ in
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/quickwit";
-      apply = converge (removeSuffix "/");
+      apply = lib.converge (lib.removeSuffix "/");
       description = ''
         Data directory for Quickwit. If you change this, you need to
         manually create the directory. You also need to create the
@@ -130,7 +127,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.quickwit = {
       description = "Quickwit";
       wantedBy = [ "multi-user.target" ];
@@ -143,7 +140,7 @@ in
         {
           ExecStart = ''
             ${cfg.package}/bin/quickwit run --config ${quickwitYml} \
-            ${escapeShellArgs cfg.extraFlags}
+            ${lib.escapeShellArgs cfg.extraFlags}
           '';
           User = cfg.user;
           Group = cfg.group;
@@ -186,7 +183,7 @@ in
             "@chown"
           ];
         }
-        // (optionalAttrs (usingDefaultDataDir) {
+        // (lib.optionalAttrs (usingDefaultDataDir) {
           StateDirectory = "quickwit";
           StateDirectoryMode = "0700";
         });

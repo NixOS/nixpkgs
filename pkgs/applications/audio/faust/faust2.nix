@@ -6,7 +6,7 @@
   makeWrapper,
   pkg-config,
   cmake,
-  llvm,
+  llvm_18,  # does not build with 19+ due to API changes
   emscripten,
   openssl,
   libsndfile,
@@ -64,7 +64,7 @@ let
         which
       ];
       buildInputs = [
-        llvm
+        llvm_18
         emscripten
         openssl
         libsndfile

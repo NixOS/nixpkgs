@@ -40,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "refs/tags/weblate-${version}";
+    tag = "weblate-${version}";
     hash = "sha256-Kmna23jhhFRJ0ExplYNPFEaIAJxmwHU2azivfKHHnjs=";
   };
 

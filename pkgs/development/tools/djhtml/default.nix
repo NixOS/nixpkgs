@@ -12,7 +12,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rtts";
     repo = "djhtml";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-W93J3UFUrCqT718zoGcu96ORYFt0NLyYP7iVWbr8FYo=";
   };
 

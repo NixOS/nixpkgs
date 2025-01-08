@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trickest";
     repo = "trickest-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9RZmLs95dHZw5hgob5+iogxb6DV0FqVaY+PavGFpXj4=";
   };
 

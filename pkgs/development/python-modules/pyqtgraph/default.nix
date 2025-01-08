@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
-    rev = "refs/tags/pyqtgraph-${version}";
+    tag = "pyqtgraph-${version}";
     hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 

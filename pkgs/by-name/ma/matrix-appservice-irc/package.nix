@@ -19,7 +19,7 @@ let
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Uq1sd1ZXv1JGjvCXHxBsNKvmdjMf4y4MVlOnCas4u/w=";
   };
 

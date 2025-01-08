@@ -28,13 +28,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-mongodb==${version}";
+    tag = "langchain-mongodb==${version}";
     hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     langchain-core

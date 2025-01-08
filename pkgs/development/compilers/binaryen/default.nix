@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "119";
+  version = "120_b";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-JYXtN3CW4qm/nnjGRvv3GxQ0x9O9wHtNYQLqHIYTTOA=";
+    hash = "sha256-gdqjsAQp4NTHROAf6i44GjkbtNyLPQZ153k3veK7eYs=";
   };
 
   nativeBuildInputs = [

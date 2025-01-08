@@ -9,7 +9,7 @@
 
 let
   pname = "wasilibc";
-  version = "21";
+  version = "22-unstable-2024-10-16";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "refs/tags/wasi-sdk-${version}";
-    hash = "sha256-1LsMpO29y79twVrUsuM/JvC7hK8O6Yey4Ard/S3Mvvc=";
+    rev = "98897e29fcfc81e2b12e487e4154ac99188330c4";
+    hash = "sha256-NFKhMJj/quvN3mR7lmxzA9w46KhX92iG0rQA9qDeS8I=";
     fetchSubmodules = true;
   };
 

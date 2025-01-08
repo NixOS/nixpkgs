@@ -17,7 +17,6 @@
   libGL,
   vulkan-loader,
   libxkbcommon,
-  apple-sdk_11,
 
   withX11 ? !stdenv.hostPlatform.isDarwin,
   libX11,
@@ -81,7 +80,6 @@ rustPlatform.buildRustPackage rec {
     rlinkLibs
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.libutil
-      apple-sdk_11 # Needs _NSPasteboardTypeFileURL, can be removed once x86_64-darwin defaults to a higher SDK
     ];
 
   outputs = [

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "pytest-textual-snapshot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C8vL2kLOvVcDlTtNiG/pf7PwHzb/F0sWdkEcLvdGrd8=";
   };
 

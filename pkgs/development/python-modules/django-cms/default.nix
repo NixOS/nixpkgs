@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-cms";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2vA1teV6IkjtDo44uwEts1OGsBZ4dXRFGrasAHmgnRA=";
   };
 
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     });
   };
 
-  pythonImportCheck = [ "cms" ];
+  pythonImportsCheck = [ "cms" ];
 
   meta = {
     description = "Lean enterprise content management powered by Django";

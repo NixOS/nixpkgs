@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jmakhack";
     repo = "myanimelist-cli";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EmdkPpYEUIk9hr6rbnixjvznKSEnTCSMZz/17BfHGCk=";
   };
 

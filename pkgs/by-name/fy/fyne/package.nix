@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "fyne";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DSJZMsvAs1hB1nv5B36yjSSSdw/VaextWw8lchCQ38E=";
   };
 

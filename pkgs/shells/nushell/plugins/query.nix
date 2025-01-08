@@ -14,7 +14,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_query";
   inherit (nushell) version src;
-  cargoHash = "sha256-xztQzfe/ZjG3YvQMDN3ADtWIcjUr3thPxbPjOKKvB9Q=";
+  cargoHash = "sha256-OuunFi3zUIgxWol30btAR71TU7Jc++IhlZuM56KpM/Q=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs =

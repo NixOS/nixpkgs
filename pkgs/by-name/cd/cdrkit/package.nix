@@ -1,60 +1,62 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   cmake,
   libcap,
   zlib,
   bzip2,
   perl,
+  quilt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdrkit";
-  version = "1.1.11";
+  version = "1.1.11-3.5";
 
-  src = fetchurl {
-    url = "http://cdrkit.org/releases/cdrkit-${version}.tar.gz";
-    sha256 = "1nj7iv3xrq600i37na9a5idd718piiiqbs4zxvpjs66cdrsk1h6i";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "cdrkit";
+    rev = "debian/9%${finalAttrs.version}";
+    hash = "sha256-T7WhztbpVvGegF6rTHGTkEALq+mcAtTerzDQ3f6Cq78=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    quilt
+  ];
   buildInputs = [
     zlib
     bzip2
     perl
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
-  hardeningDisable = [ "format" ];
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isMusl [
       "-D__THROW="
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=int-conversion"
-      "-Wno-error=implicit-function-declaration"
     ]
   );
 
-  # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
-  patches = [
-    ./include-path.patch
-    ./cdrkit-1.1.9-efi-boot.patch
-    ./cdrkit-1.1.11-fno-common.patch
-  ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace libusal/scsi-mac-iokit.c \
-      --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
-    substituteInPlace genisoimage/sha256.c \
-      --replace "<endian.h>" "<machine/endian.h>"
-    substituteInPlace genisoimage/sha512.c \
-      --replace "<endian.h>" "<machine/endian.h>"
-    substituteInPlace genisoimage/sha256.h \
-      --replace "__THROW" ""
-    substituteInPlace genisoimage/sha512.h \
-      --replace "__THROW" ""
-  '';
+  postPatch =
+    ''
+      QUILT_PATCHES=debian/patches quilt push -a
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace libusal/scsi-mac-iokit.c \
+        --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
+      substituteInPlace genisoimage/sha256.c \
+        --replace "<endian.h>" "<machine/endian.h>"
+      substituteInPlace genisoimage/sha512.c \
+        --replace "<endian.h>" "<machine/endian.h>"
+      substituteInPlace genisoimage/sha256.h \
+        --replace "__THROW" ""
+      substituteInPlace genisoimage/sha512.h \
+        --replace "__THROW" ""
+    '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace include/xconfig.h.in \
@@ -94,4 +96,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

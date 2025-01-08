@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cIsI4TNYuLK0fpUg9lnbl5KSBtzQoT/pTByI9hiy/7o=";
   };
 

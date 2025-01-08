@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Xx3rd+FwelE7yjW4dXTAEzCMVa25ojXuhOLjqc6H57c=";
   };
 

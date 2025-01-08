@@ -34,6 +34,7 @@ let
           flask = super.flask.overridePythonAttrs (oldAttrs: rec {
             version = "2.2.5";
             format = "setuptools";
+            pyproject = null;
             src = fetchPypi {
               pname = "Flask";
               inherit version;

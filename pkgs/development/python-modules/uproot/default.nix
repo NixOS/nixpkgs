@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a5gCsv8iBUUASHCJIpxFbgBXTSm/KJOTt6fvSvP/Lio=";
   };
 

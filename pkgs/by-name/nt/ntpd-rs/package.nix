@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  apple-sdk_11,
   ntpd-rs,
   installShellFiles,
   pandoc,
@@ -19,13 +18,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-usLtf4qwKkn+lEYSQWCa1ap9h/52YYMVFDkpFJVD00k=";
   };
 
   cargoHash = "sha256-ZB18YbCdJpuu7qTXdHgs2IgDCoc3Hs/aDn4dzXmKI8c=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   nativeBuildInputs = [
     pandoc

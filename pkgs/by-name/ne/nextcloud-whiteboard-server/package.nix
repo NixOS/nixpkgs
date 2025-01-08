@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "whiteboard";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-27w8FZz9PbVdYV7yR5iRXi5edw7U/3bLVYfdRa8yPzo=";
   };
 

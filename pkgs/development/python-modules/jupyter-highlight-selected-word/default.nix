@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcb91";
     repo = "jupyter_highlight_selected_word";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KgM//SIfES46uZySwNR4ZOcolnJORltvThsmEvxXoIs=";
   };
 

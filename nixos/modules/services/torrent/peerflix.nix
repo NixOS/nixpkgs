@@ -5,9 +5,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.peerflix;
   opt = options.services.peerflix;
@@ -25,29 +22,29 @@ in
   ###### interface
 
   options.services.peerflix = {
-    enable = mkOption {
+    enable = lib.mkOption {
       description = "Whether to enable peerflix service.";
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    stateDir = mkOption {
+    stateDir = lib.mkOption {
       description = "Peerflix state directory.";
       default = "/var/lib/peerflix";
-      type = types.path;
+      type = lib.types.path;
     };
 
-    downloadDir = mkOption {
+    downloadDir = lib.mkOption {
       description = "Peerflix temporary download directory.";
       default = "${cfg.stateDir}/torrents";
-      defaultText = literalExpression ''"''${config.${opt.stateDir}}/torrents"'';
-      type = types.path;
+      defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/torrents"'';
+      type = lib.types.path;
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - peerflix - - -"
     ];

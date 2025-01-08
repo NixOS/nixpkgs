@@ -74,13 +74,11 @@ stdenv.mkDerivation {
       ];
     in
     ''
-      pushd $out/bin
       for f in clerk clerk_rating_client; do
-        wrapProgram $f \
+        wrapProgram $out/bin/$f \
           --prefix PATH : "${binPath}" \
           --set PERL5LIB $PERL5LIB
       done
-      popd
     '';
 
   passthru.updateScript = unstableGitUpdater {

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DqoEtL0uyLsP/2PJdOpAmXryEZQDlyGWPQHThF+3gJA=";
   };
 

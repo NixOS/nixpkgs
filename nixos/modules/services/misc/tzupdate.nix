@@ -28,7 +28,7 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
-        timedatectl set-timezone $(${lib.getExe pkgs.tzupdate} --print-only)
+        timedatectl set-timezone "$(${lib.getExe pkgs.tzupdate} --print-only)"
       '';
 
       serviceConfig = {

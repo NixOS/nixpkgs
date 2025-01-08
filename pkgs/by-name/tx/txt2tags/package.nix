@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "txt2tags";
     repo = "txt2tags";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PwPGJJg79ny13gEb1WmgIVHcXQppI/j5mhIyOZjR19k=";
   };
 

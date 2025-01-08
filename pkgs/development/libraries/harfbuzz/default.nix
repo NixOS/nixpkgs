@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "10.0.1";
+  version = "10.1.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-sssTvTUZBMuQOPkH3A3uCuBxJwYSQv41VrJ5XE6XSPw=";
+    hash = "sha256-bONSDy0ImjPO8PxIMhM0uOC3IUH2p2Nxmqrs0neey4I=";
   };
 
   postPatch =

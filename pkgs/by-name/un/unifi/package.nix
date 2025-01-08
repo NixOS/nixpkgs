@@ -4,6 +4,7 @@
   dpkg,
   fetchurl,
   nixosTests,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,18 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  postInstall =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      ''
+        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/x86_64/libubnt_sdnotify_jni.so"
+      ''
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      ''
+        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/aarch64/libubnt_sdnotify_jni.so"
+      ''
+    else
+      null;
 
   passthru.tests = {
     unifi = nixosTests.unifi;

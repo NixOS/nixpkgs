@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "akx";
     repo = "sensirion-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VeUfrQ/1Hqs9yueUKcv/ZpCDEEy84VDcZpuTT4fXSGw=";
   };
 

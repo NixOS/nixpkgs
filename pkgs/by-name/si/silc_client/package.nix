@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
-
-  preConfigure = lib.optionalString enablePlugin ''
-    configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"
-  '';
+  configureFlags =
+    [
+      "--with-ncurses=${ncurses.dev}"
+    ]
+    ++ lib.optionals enablePlugin [
+      "--with-silc-plugin=${placeholder "out"}/lib/irssi"
+    ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

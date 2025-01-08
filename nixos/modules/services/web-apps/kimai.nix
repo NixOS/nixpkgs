@@ -238,6 +238,7 @@ in
       services.phpfpm.pools = mapAttrs' (
         hostName: cfg:
         (nameValuePair "kimai-${hostName}" {
+          phpPackage = cfg.package.php;
           inherit user;
           group = webserver.group;
           settings = {
@@ -335,7 +336,7 @@ in
 
         (mapAttrs' (
           hostName: cfg:
-          (nameValuePair "phpfpm-kimai-${hostName}.service" {
+          (nameValuePair "phpfpm-kimai-${hostName}" {
             serviceConfig = {
               EnvironmentFile = [ cfg.environmentFile ];
             };

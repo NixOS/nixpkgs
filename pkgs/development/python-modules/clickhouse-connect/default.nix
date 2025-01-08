@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Jx+lbCs1zsU11D76COIiMxwqHlYKC1DOMegM4RsQkVg=";
   };
 

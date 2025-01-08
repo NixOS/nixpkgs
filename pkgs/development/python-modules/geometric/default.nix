@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "leeping";
     repo = "geomeTRIC";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DmrKLVQrPQDzTMxqEImnvRr3Wb2R3+hxtDVCN9XUcFM=";
   };
 

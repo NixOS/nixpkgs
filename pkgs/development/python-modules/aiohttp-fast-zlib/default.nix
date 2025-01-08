@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fvZVviKN/CL42Zmmm6k/JNdeAljRoqN63rlduNJVr98=";
   };
 

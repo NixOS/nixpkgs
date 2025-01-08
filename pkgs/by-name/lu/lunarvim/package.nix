@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LunarVim";
     repo = "LunarVim";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-uuXaDvZ9VaRJlZrdu28gawSOJFVSo5XX+JG53IB+Ijw=";
   };
 

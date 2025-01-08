@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "--enable-man-pages"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=implicit-function-declaration";
+
   meta = with lib; {
     homepage = "http://www.liblogging.org/";
     description = "Lightweight signal-safe logging library";

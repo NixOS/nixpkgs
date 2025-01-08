@@ -26,7 +26,6 @@
 , skopeo
 , stdenv
 , storeDir ? builtins.storeDir
-, substituteAll
 , symlinkJoin
 , tarsum
 , util-linux

@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WRR4YyA4HaYoyOZSt/RYivhH2E/20DKLXExWg2yOL48=";
   };
 

@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-hcPUvTYgtAHntdWEeHoFIIKylMTE7us1g9dwnZP9BMI=";
   };
 
+  patches = [
+    # expose error function used by dependents
+    ./expose-error.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     gettext

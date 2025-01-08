@@ -3,7 +3,7 @@
   fetchFromGitLab,
   buildGoModule,
   nixosTests,
-  postgresql_17,
+  postgresql,
   makeWrapper,
 }:
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/pg_dump_anon \
-      --prefix PATH : ${lib.makeBinPath [ postgresql_17 ]}
+      --prefix PATH : ${lib.makeBinPath [ postgresql ]}
   '';
 
   meta = with lib; {

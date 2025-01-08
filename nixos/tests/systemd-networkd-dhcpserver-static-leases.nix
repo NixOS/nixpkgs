@@ -73,6 +73,7 @@ import ./make-test-python.nix (
       start_all()
 
       with subtest("check router network configuration"):
+        router.systemctl("start systemd-networkd-wait-online.service")
         router.wait_for_unit("systemd-networkd-wait-online.service")
         eth1_status = router.succeed("networkctl status eth1")
         assert "Network File: /etc/systemd/network/01-eth1.network" in eth1_status, \
@@ -80,6 +81,7 @@ import ./make-test-python.nix (
         assert "10.0.0.1" in eth1_status, "Did not find expected router IPv4"
 
       with subtest("check client network configuration"):
+        client.systemctl("start systemd-networkd-wait-online.service")
         client.wait_for_unit("systemd-networkd-wait-online.service")
         eth1_status = client.succeed("networkctl status eth1")
         assert "Network File: /etc/systemd/network/40-eth1.network" in eth1_status, \

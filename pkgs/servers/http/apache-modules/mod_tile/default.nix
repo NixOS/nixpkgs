@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JC275LKsCeEo5DcIX0X7kcLoijQJqfJvBvw8xi2gwpk=";
   };
 

@@ -18,9 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-TmfLAkiofrQNWYBhIlY4zafbZPgFftISCGloO/rlEG4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     numpy
     scipy
     torch

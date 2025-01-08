@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O0GRk81at8bgv+/4au8A55dZK2A28+ghy3sitAAZQBI=";
   };
 

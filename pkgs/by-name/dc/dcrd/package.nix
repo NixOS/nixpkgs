@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
-    rev = "refs/tags/release-v${version}";
+    tag = "release-v${version}";
     hash = "sha256-nSocqwXgJhvfbdElddbb1gGxoygmtVtK6DbiSuMxYew=";
   };
 

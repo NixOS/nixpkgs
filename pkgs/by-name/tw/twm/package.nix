@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = "twm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SiwLqUq/gC8Tr31jjblLc9YP4yBi9HL38W83kgh7eJI=";
   };
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
-    changelog = "https://github.com/vinnymeller/twm/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";

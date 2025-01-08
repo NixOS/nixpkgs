@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1IesoAK5Aq/JlM83WT0dodwmUvWv6RDqTyUg6LURle4=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "taskw-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tlidTt0TzWnvfajYiIfvRv7OfakHY6zWAicmAwq/Z8w=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7fRn7KvB7CEq8keVR8nrf6IY2G8omAQqNX+DPEf+7nc=";
   };
 

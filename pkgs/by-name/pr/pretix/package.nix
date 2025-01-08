@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch2,
   nodejs,
   python3,
   gettext,
@@ -14,16 +15,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "bleach";
-          inherit version;
-          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
-        };
-      });
-
       django = super.django_4;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
@@ -52,13 +43,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.10.0";
+  version = "2024.11.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MCiCr00N7894DjckAw3vpxdiNtlgzqivlbSY4A/327E=";
+    hash = "sha256-vmk7oW9foXkZdt3XOLJDbPldX2TruJOgd8mmi5tGqNw=";
   };
 
   npmDeps = buildNpmPackage {
@@ -66,7 +57,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-PPcA6TBsU/gGk4wII+w7VZOm65nS7qGjZ/UoQs31s9M=";
+    npmDepsHash = "sha256-4PrOrI2cykkuzob+DMeAu/GF5OMCho40G3BjCwVW/tE=";
 
     dontBuild = true;
 
@@ -88,6 +79,12 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    (fetchpatch2 {
+      # fix tests after 2025-01-01
+      url = "https://github.com/pretix/pretix/commit/5a5a551c21461d9ef36337480c9874d65a9fdba9.patch";
+      hash = "sha256-ZtSVI6nVlJtNrnBZ9ktIqFGtNf+oWtvNsgCWwOUwVug=";
+    })
   ];
 
   pythonRelaxDeps = [

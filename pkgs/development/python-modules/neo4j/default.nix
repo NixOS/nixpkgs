@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tocgH2LuZ56Yej0lRWYHUkR6aqviQwJqG5P2g4P1+uk=";
   };
 

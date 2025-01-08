@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "siemens";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-J64yy2G8+5uT31Vpwhge5R7ZqId+NzE5ykXBHjc0qgQ=";
   };
 

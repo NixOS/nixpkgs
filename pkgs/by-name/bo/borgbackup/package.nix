@@ -26,7 +26,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-n1hCM7Sp0t2bOJEzErEd1PS/Xc7c+KDmJ4PjQuuF140=";
   };
 

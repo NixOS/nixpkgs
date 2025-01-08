@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fMw93EmwO0wbIcGMr7csXkMRzgyQJNQzgLDZQqNB8Zc=";
   };
 
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     pytest-asyncio
     python-lsp-jsonrpc
-    ruff.bin
+    ruff
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];

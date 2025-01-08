@@ -52,13 +52,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.36";
+  version = "1.4.37";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u+ysAFi7I7nXIiAw7VCmHbqgtRoZgkPnRfy/Mnl1b2g=";
+    hash = "sha256-ZxQqRtJl4U33qSHbuYHN72r+VKx1ckfFH2iZQHl6qVE=";
   };
 
   nativeBuildInputs = [
@@ -124,11 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_CUPS=OFF"
       "-DWITH_ICON_CACHE=OFF"
     ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    "-DTARGET_OS_IPHONE=0"
-    "-DTARGET_OS_WATCH=0"
-  ]);
 
   dontWrapQtApps = true;
 

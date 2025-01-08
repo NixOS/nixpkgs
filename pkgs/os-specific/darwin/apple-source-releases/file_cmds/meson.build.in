@@ -13,43 +13,15 @@ cc = meson.get_compiler('c')
 
 core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
 
-libbsd = dependency('libbsd-overlay', required : false)
 bzip2 = dependency('bzip2')
 xz = dependency('liblzma')
+libmd = dependency('libmd')
 libxo = dependency('libxo')
 zlib = dependency('zlib')
 
 copyfile = cc.find_library('copyfile')
 removefile = cc.find_library('removefile')
 libutil = cc.find_library('util')
-
-
-# Compatibility tests
-utimensat_test = '''
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-int main(int argc, char* argv[]) {
-    return utimensat(AT_FDCWD, NULL, NULL, 0);
-}
-'''
-
-rpmatch_test = '''
-#include <stdlib.h>
-int main(int argc, char* argv[]) {
-    return rpmatch("NO");
-}
-'''
-
-has_utimensat = cc.compiles(utimensat_test, name : 'supports utimensat')
-utimensat_c_args = has_utimensat ? [ ] : [ '-include', 'time_compat.h', '-I' + meson.source_root() + '/compat' ]
-utimensat_sources = has_utimensat ? [ ] : [ 'compat/time_compat.c' ]
-
-has_rpmatch = cc.compiles(rpmatch_test, name : 'supports rpmatch')
-rpmatch_c_args = has_rpmatch ? [ ] : [ '-include', 'rpmatch_compat.h', '-I' + meson.source_root() + '/compat' ]
-rpmatch_sources = has_rpmatch ? [ ] : [ 'compat/rpmatch_compat.c' ]
-
-compat_link_args = not (has_utimensat and has_rpmatch) ? [ '-Wl,-undefined,dynamic_lookup' ] : [ ]
 
 
 # Binaries
@@ -107,14 +79,10 @@ install_man('cksum/sum.1')
 
 executable(
     'compress',
-    c_args : [ utimensat_c_args, rpmatch_c_args ],
     install : true,
-    link_args : compat_link_args,
     sources: [
         'compress/compress.c',
         'compress/zopen.c',
-        utimensat_sources,
-        rpmatch_sources,
     ]
 )
 install_man('compress/compress.1')
@@ -130,18 +98,11 @@ install_man('compress/zopen.3')
 
 executable(
     'cp',
-    c_args : [
-        utimensat_c_args,
-        rpmatch_c_args,
-    ],
     dependencies : [ copyfile ],
     install : true,
-    link_args : compat_link_args,
     sources: [
         'cp/cp.c',
         'cp/utils.c',
-        utimensat_sources,
-        rpmatch_sources,
     ]
 )
 install_man('cp/cp.1')
@@ -213,13 +174,10 @@ install_symlink(
 
 executable(
     'install-bin', # Meson reserves the name “install”, so use a different name and rename in install phase.
-    c_args : utimensat_c_args,
-    dependencies : [ copyfile ],
+    dependencies : [ copyfile, libmd ],
     install : true,
-    link_args : compat_link_args,
     sources: [
         'install/xinstall.c',
-        utimensat_sources,
     ],
 )
 install_man('install/install.1')
@@ -260,7 +218,7 @@ executable(
         # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/stat.h#L520
         '-DSF_DATALESS=0x40000000',
     ],
-    dependencies : [ libbsd, libutil ],
+    dependencies : [ libutil ],
     install : true,
     sources: [
         'ls/cmp.c',
@@ -297,17 +255,6 @@ install_man('mknod/mknod.8')
 
 executable(
     'mtree',
-    # Define these flags for the 10.12 SDK assuming that users on older systems can’t encounter dataless files.
-    c_args : [
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/stat.h#L520
-        '-DSF_DATALESS=0x40000000',
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/resource.h#L598
-        '-DIOPOL_TYPE_VFS_MATERIALIZE_DATALESS_FILES=3',
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/resource.h#L640
-        '-DIOPOL_MATERIALIZE_DATALESS_FILES_OFF=1',
-        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L562
-        '-DATTR_CMNEXT_LINKID=0x00000010',
-    ],
     dependencies : [ core_foundation, removefile ],
     install : true,
     sources: [
@@ -328,14 +275,10 @@ install_man('mtree/mtree.8')
 
 executable(
     'mv',
-    c_args : [ utimensat_c_args, rpmatch_c_args ],
     dependencies : [ copyfile ],
     install : true,
-    link_args : compat_link_args,
     sources: [
         'mv/mv.c',
-        utimensat_sources,
-        rpmatch_sources,
     ],
 )
 install_man('mv/mv.1')
@@ -375,13 +318,10 @@ install_man('pax/pax.1')
 
 executable(
     'rm',
-    c_args : rpmatch_c_args,
     dependencies : [ removefile ],
     install : true,
-    link_args : compat_link_args,
     sources: [
         'rm/rm.c',
-        rpmatch_sources,
     ],
 )
 install_man('rm/rm.1')
@@ -424,12 +364,9 @@ install_man('stat/readlink.1')
 
 executable(
     'touch',
-    c_args : utimensat_c_args,
     install : true,
-    link_args : compat_link_args,
     sources: [
         'touch/touch.c',
-        utimensat_sources,
     ],
 )
 install_man('touch/touch.1')

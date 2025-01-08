@@ -44,6 +44,19 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  android = {
+    members = [
+      numinit
+      hadilq
+      RossComputerGuy
+      adrian-gierakowski
+    ];
+    scope = "Maintain Android-related tooling in nixpkgs.";
+    githubTeams = [ "android" ];
+    shortName = "Android";
+    enableFeatureFreezePing = true;
+  };
+
   bazel = {
     members = [
       mboes
@@ -184,6 +197,7 @@ with lib.maintainers;
       siraben
       vbgl
       alizter
+      stepbrobd
     ];
     scope = "Maintain the Coq theorem prover and related packages.";
     shortName = "Coq";
@@ -478,7 +492,6 @@ with lib.maintainers;
     members = [
       cdepillabout
       maralorn
-      ncfavier
       sternenseemann
     ];
     githubTeams = [ "haskell" ];
@@ -804,6 +817,13 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  neovim = {
+    members = [ ];
+    githubTeams = [ "neovim" ];
+    scope = "Maintain the vim and neovim text editors and related packages.";
+    shortName = "Vim/Neovim";
+  };
+
   ngi = {
     members = [
       eljamm
@@ -1088,16 +1108,6 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
-  };
-
-  vim = {
-    members = [
-      figsoda
-      softinio
-      teto
-    ];
-    scope = "Maintain the vim and neovim text editors and related packages.";
-    shortName = "Vim/Neovim";
   };
 
   wdz = {

@@ -21,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "tiangolo";
       repo = "fastapi-cli";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-hUS9zkDJJB51X+e31RvyxcGAP8j4oulAPFAvEMPiIn8=";
     };
 

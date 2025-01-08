@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pawelzny";
     repo = "dotty_dict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kY7o9wgfsV7oc5twOeuhG47C0Js6JzCt02S9Sd8dSGc=";
   };
 

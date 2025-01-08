@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  installShellFiles,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -12,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "exercism";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7euitdo/rdeopnP7hHHxQ5lPh8wJVDaTneckeR5BEGo=";
   };
 
@@ -22,7 +23,16 @@ buildGoModule rec {
 
   subPackages = [ "./exercism" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    installShellCompletion --cmd exercism \
+      --bash shell/exercism_completion.bash \
+      --fish shell/exercism.fish \
+      --zsh shell/exercism_completion.zsh
+  '';
 
   meta = with lib; {
     inherit (src.meta) homepage;

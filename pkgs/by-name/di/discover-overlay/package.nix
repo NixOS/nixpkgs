@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trigg";
     repo = "Discover";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0b0uZDa9Q3pQ6X65C+E31dMpdTPt4vvHDEqFEtRoedg=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "akarneliuk";
     repo = "pygnmi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ncp/OwELy/QOvGhLUZW2qTQZsckWI4CGrlEAZ20RtQI=";
   };
 

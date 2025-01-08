@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "node-pre-gyp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O0PLEy2bEIrypaC+WyQJI5kfkqBBps029CujBKkzZ6o=";
   };
 

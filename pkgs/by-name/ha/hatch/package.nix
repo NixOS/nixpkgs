@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
-    rev = "refs/tags/hatch-v${version}";
+    tag = "hatch-v${version}";
     hash = "sha256-jD8mr0PXlGK9YkBPZhNTimuxmq6dJG7cfQP/UEmHTZY=";
   };
 

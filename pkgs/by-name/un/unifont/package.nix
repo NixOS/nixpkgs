@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "16.0.01";
+  version = "16.0.02";
 
   otf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.otf";
-    hash = "sha256-6jmg5hTnSGSQI5xXWeGgzYb9SeM1xLCNL9E+MTFH8CI=";
+    hash = "sha256-3oI6EOZeIkOt56mK+CuC68a71c89CqPjjtTMzTa8qzM=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    hash = "sha256-51YEW6CJPuLoNpsnr8AkNr7ZApnbThZyznZuBHDNmCU=";
+    hash = "sha256-AqP+EZlNPNrx1L1dK2tglzXmgj4BdkroO3BOAuwvZA0=";
   };
 
   nativeBuildInputs = [

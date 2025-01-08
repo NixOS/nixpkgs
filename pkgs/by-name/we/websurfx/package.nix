@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "neon-mmd";
     repo = "websurfx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NuhSpUe1PzJTBsX91LSOIh4N20eTs7MLl4ueIoGoC6o=";
   };
 

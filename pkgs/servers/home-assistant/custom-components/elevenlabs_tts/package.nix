@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "carleeno";
     repo = "elevenlabs_tts";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/hszK5J1iGB46WfmCCK9/F0JOR405gplMwVC4niAqig=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cAeLoDwAf56aWWKKUjOB0fpy7C3gBJchJJtQ6986thc=";
   };
 

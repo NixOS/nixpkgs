@@ -1,21 +1,23 @@
 {
   lib,
+  argcomplete,
   bleak,
   buildPythonPackage,
   dash-bootstrap-components,
+  dash,
   dotmap,
   fetchFromGitHub,
   hypothesis,
   packaging,
+  pandas-stubs,
+  pandas,
   parse,
-  pexpect,
   platformdirs,
   poetry-core,
   ppk2-api,
   print-color,
   protobuf,
   pyarrow,
-  pyparsing,
   pypubsub,
   pyqrcode,
   pyserial,
@@ -27,22 +29,21 @@
   riden,
   setuptools,
   tabulate,
-  timeago,
-  webencodings,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.5.5";
+  version = "2.5.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "Meshtastic-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-k+Hq3pIuh8lwyoCl1KyHLt2B3OrGzBC6XDauUfVEyd8=";
+    tag = version;
+    hash = "sha256-q5hGAe3kJk1E/u2l8uCMyHHVuQmlwODkyZDiqxFn3Bo=";
   };
 
   pythonRelaxDeps = [
@@ -54,36 +55,43 @@ buildPythonPackage rec {
 
   dependencies = [
     bleak
-    dotmap
     packaging
-    parse
-    pexpect
-    platformdirs
-    ppk2-api
-    print-color
     protobuf
-    pyarrow
-    pyparsing
     pypubsub
-    pyqrcode
     pyserial
     pyyaml
     requests
     setuptools
     tabulate
-    timeago
-    webencodings
   ];
 
   optional-dependencies = {
+    analysis = [
+      dash
+      dash-bootstrap-components
+      pandas
+      pandas-stubs
+    ];
+    cli = [
+      argcomplete
+      dotmap
+      print-color
+      pyqrcode
+      wcwidth
+    ];
+    powermon = [
+      parse
+      platformdirs
+      ppk2-api
+      pyarrow
+      riden
+    ];
     tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
-    dash-bootstrap-components
     hypothesis
     pytestCheckHook
-    riden
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
@@ -117,7 +125,7 @@ buildPythonPackage rec {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/Meshtastic-python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

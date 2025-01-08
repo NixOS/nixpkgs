@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-kinesis-client-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kSboeg/fdg7hbiWyPzAAsYo+0vbQDfRoeJYHlrrFNrA=";
   };
 

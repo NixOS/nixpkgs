@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2k7gFlBUevVnz2A5pvUE4eIGmXwEr5s4F8BbX6j5lzc=";
   };
 

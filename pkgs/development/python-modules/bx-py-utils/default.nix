@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VJ4510HLTqdRfeUEe2srT8+W9AaRpi+Mm6srZOOp0fc=";
   };
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     description = "Various Python utility functions";
     mainProgram = "publish";
     homepage = "https://github.com/boxine/bx_py_utils";
-    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

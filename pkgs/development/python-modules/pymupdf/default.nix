@@ -19,7 +19,6 @@
   jbig2dec,
   libjpeg_turbo,
   gumbo,
-  memstreamHook,
 
   # dependencies
   mupdf,
@@ -50,7 +49,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-M7Ca3nqnqeClp4MGJqTAVGZhAGRniregjRrjtAhRkBc=";
   };
 
@@ -75,7 +74,7 @@ buildPythonPackage rec {
     jbig2dec
     libjpeg_turbo
     gumbo
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+  ];
 
   propagatedBuildInputs = [ mupdf-cxx ];
 

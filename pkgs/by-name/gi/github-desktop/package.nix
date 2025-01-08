@@ -14,7 +14,7 @@
   libdrm,
   alsa-lib,
   cups,
-  mesa,
+  libgbm,
   systemd,
   openssl,
   libglvnd,
@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libdrm
     alsa-lib
     cups
-    mesa
+    libgbm
     openssl
   ];
 

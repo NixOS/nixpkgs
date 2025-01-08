@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia-lib";
     repo = "dahlia";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t8m/7TSzVvETvn3Jar29jCh55Ti+B0NA8Az/8GHwQAg=";
   };
 

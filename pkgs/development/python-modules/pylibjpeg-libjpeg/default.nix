@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g4dGIGHo0J+F0KTVA6yjgfwiYVn6iU69jgHhvEQGwOc=";
     fetchSubmodules = true;
   };

@@ -12,6 +12,7 @@
   libadwaita,
   glib,
   libgee,
+  wrapGAppsHook4,
 
   mangohud,
   mesa-demos,
@@ -21,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-EWpXikyO7N2NjONqnTx8+9w16Pt5ne7qX67bYirShjc=";
+    tag = finalAttrs.version;
+    hash = "sha256-L+wxRmpCAfrvLE9IHAT9g+F/clXlQAkLpbnMJwC8RxY=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     pkg-config
     makeBinaryWrapper
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -47,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  dontWrapGApps = true;
 
   postFixup =
     let
@@ -58,7 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapProgram $out/bin/mangojuice \
-        --prefix PATH : ${path}
+        --prefix PATH : ${path} \
+        "''${gappsWrapperArgs[@]}"
     '';
 
   passthru.updateScript = nix-update-script { };

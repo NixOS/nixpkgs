@@ -180,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     isLLVM = targetDir == "llvm";
     isClang = targetDir == "clang" || builtins.elem "clang" targetProjects;
+    isROCm = true;
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;

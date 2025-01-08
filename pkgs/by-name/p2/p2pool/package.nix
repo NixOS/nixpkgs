@@ -46,14 +46,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWITH_LTO=OFF" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
-      [
-        "-faligned-allocation"
-      ]
-  );
-
   installPhase = ''
     runHook preInstall
 

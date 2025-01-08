@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cmusphinx";
     repo = "pocketsphinx";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aCQpRmGHX08rA8UIt6Xf37XM34HysEzvcucLhL355k8=";
   };
 

@@ -35,7 +35,7 @@
   libXrender,
   libXScrnSaver,
   libXtst,
-  mesa,
+  libgbm,
   nspr,
   nss,
   openssl,
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXScrnSaver
     libXtst
-    mesa
+    libgbm
     nspr
     nss
     pango

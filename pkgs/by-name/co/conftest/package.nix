@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7R6qMjwPtlpnsm6xej7jQntv9709//q4VVbatuzLuwk=";
   };
   vendorHash = "sha256-QPFLHP4nyJqB7tVVk00J+V+1YXGSsRvCZ1aLEMg0kfc=";

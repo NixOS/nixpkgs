@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "megapixels";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitLab {
     owner = "megapixels-org";
     repo = "Megapixels";
     rev = finalAttrs.version;
-    hash = "sha256-odsOYrk//ZhodsumLpJjhPDcwF1gkE/no166u+IDxSY=";
+    hash = "sha256-ZXr0gmO72zKHwORn4p8zKuGcdICvb5+L/Q9d/ty8zwA=";
   };
 
   nativeBuildInputs = [

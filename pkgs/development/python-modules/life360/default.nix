@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pnbruckner";
     repo = "life360";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GkCs479lXcnCvb5guxyc+ZuZdiH4n8uD2VbkC+yijgg=";
   };
 

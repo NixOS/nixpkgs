@@ -9,17 +9,30 @@ let
   cfg = config.services.komga;
   inherit (lib) mkOption mkEnableOption maintainers;
   inherit (lib.types) port str bool;
+
+  settingsFormat = pkgs.formats.yaml { };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "komga"
+        "port"
+      ]
+      [
+        "services"
+        "komga"
+        "settings"
+        "server"
+        "port"
+      ]
+    )
+  ];
+
   options = {
     services.komga = {
       enable = mkEnableOption "Komga, a free and open source comics/mangas media server";
-
-      port = mkOption {
-        type = port;
-        default = 8080;
-        description = "The port that Komga will listen on.";
-      };
 
       user = mkOption {
         type = str;
@@ -39,10 +52,25 @@ in
         description = "State and configuration directory Komga will use.";
       };
 
+      settings = lib.mkOption {
+        inherit (settingsFormat) type;
+        default = { };
+        defaultText = lib.literalExpression ''
+          {
+            server.port = 8080;
+          }
+        '';
+        description = ''
+          Komga configuration.
+
+          See [documentation](https://komga.org/docs/installation/configuration).
+        '';
+      };
+
       openFirewall = mkOption {
         type = bool;
         default = false;
-        description = "Whether to open the firewall for the port in {option}`services.komga.port`.";
+        description = "Whether to open the firewall for the port in {option}`services.komga.settings.server.port`.";
       };
     };
   };
@@ -52,6 +80,16 @@ in
       inherit (lib) mkIf getExe;
     in
     mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = (cfg.settings.komga.config-dir or cfg.stateDir) == cfg.stateDir;
+          message = "You must use the `services.komga.stateDir` option to properly configure `komga.config-dir`.";
+        }
+      ];
+
+      services.komga.settings = {
+        server.port = lib.mkDefault 8080;
+      };
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
@@ -66,9 +104,17 @@ in
         };
       };
 
+      systemd.tmpfiles.settings."10-komga" = {
+        ${cfg.stateDir}.d = {
+          inherit (cfg) user group;
+        };
+        "${cfg.stateDir}/application.yml"."L+" = {
+          argument = builtins.toString (settingsFormat.generate "application.yml" cfg.settings);
+        };
+      };
+
       systemd.services.komga = {
         environment = {
-          SERVER_PORT = builtins.toString cfg.port;
           KOMGA_CONFIGDIR = cfg.stateDir;
         };
 

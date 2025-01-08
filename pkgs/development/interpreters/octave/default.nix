@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-lapack=lapack"
       (if use64BitIdx then "--enable-64" else "--disable-64")
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-link-all-dependencies" ]
     ++ lib.optionals enableReadline [ "--enable-readline" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
     ++ lib.optionals enableQt [ "--with-qt=5" ];

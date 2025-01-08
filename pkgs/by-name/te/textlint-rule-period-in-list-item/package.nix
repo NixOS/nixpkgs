@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "textlint-rule";
     repo = "textlint-rule-period-in-list-item";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hAkueH5q5s0kmvKZiOrCxtfmoHtHH0U8cVLhQ7eoqT0=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule that check with or without period in list item";
     homepage = "https://github.com/textlint-rule/textlint-rule-period-in-list-item";
-    changelog = "https://github.com/textlint-rule/textlint-rule-period-in-list-item/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-period-in-list-item/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

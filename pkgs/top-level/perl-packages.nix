@@ -5018,6 +5018,10 @@ with self; {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/Crypt-DES-2.07.tar.gz";
       hash = "sha256-LbHrtYN7TLIAUcDuW3M7RFPjE33wqSMGA0yGdiHt1+c=";
     };
+    patches = [
+      # add extra definitions in header to please -Werror=implicit-function-declaration
+      ../development/perl-modules/CryptDES-gcc14.patch
+    ];
     meta = {
       description = "Perl DES encryption module";
       license = with lib.licenses; [ bsdOriginalShortened ];
@@ -7196,17 +7200,29 @@ with self; {
 
   DBDmysql = buildPerlPackage {
     pname = "DBD-mysql";
-    version = "4.050";
+    version = "5.010";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DV/DVEEDEN/DBD-mysql-4.050.tar.gz";
-      hash = "sha256-T0hUH/FaCnQF92rcEPgWJ8M5lvv1bJXCbAlERMCSjXg=";
+      url = "mirror://cpan/authors/id/D/DV/DVEEDEN/DBD-mysql-5.010.tar.gz";
+      hash = "sha256-LKL/Odk+idT3RG5fD68DgF6RZ+6bigS6fLJG4stG7uc=";
     };
 
-    buildInputs = [ pkgs.libmysqlclient DevelChecklib TestDeep TestDistManifest TestPod ];
+    nativeBuildInputs = [
+      pkgs.mysql80 # for mysql_config
+    ];
+    buildInputs = [
+      DevelChecklib
+      TestDeep
+      TestDistManifest
+      TestPod
+      pkgs.libmysqlconnectorcpp
+      pkgs.libxcrypt
+      pkgs.openssl
+      pkgs.zstd
+    ];
     propagatedBuildInputs = [ DBI ];
 
-    doCheck = false;
+    doCheck = false; # require running database
 
   #  makeMakerFlags = "MYSQL_HOME=${mysql}";
     meta = {
@@ -8830,9 +8846,9 @@ with self; {
       hash = "sha256-F2+gJ3H1QqTvsdvCpMko6PQ5G/QHhHO9YEDY8RrbDsE=";
     };
     preCheck = if stdenv.hostPlatform.isCygwin then ''
-      sed -i"" -e "s@plan tests => 13@plan tests => 10@" t/env.t
-      sed -i"" -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
-      sed -i"" -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
+      sed -i -e "s@plan tests => 13@plan tests => 10@" t/env.t
+      sed -i -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
+      sed -i -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
     '' else null;
     meta = {
       description = "Determine the locale encoding";
@@ -15048,7 +15064,7 @@ with self; {
       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20230911.tar.gz";
       hash = "sha256-kecxcoK3JM+9LJtuZjDvFDKISLb8UgPv1w3sL7hyaMo=";
     };
-    propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNS ];
+    propagatedBuildInputs = [ CryptOpenSSLRSA CryptX MailAuthenticationResults MailTools NetDNS ];
     doCheck = false; # tries to access the domain name system
     buildInputs = [ NetDNSResolverMock TestRequiresInternet YAMLLibYAML ];
     meta = {
@@ -18724,10 +18740,10 @@ with self; {
 
   NetDNS = buildPerlPackage {
     pname = "Net-DNS";
-    version = "1.44";
+    version = "1.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.44.tar.gz";
-      hash = "sha256-E9ftxLjOoBMhR/qsNXH2s8cdHQz9hExTDFoET0o+wx4=";
+      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.48.tar.gz";
+      hash = "sha256-5V8+caMcK4VgJL9QYbEWCwP4edgBNUFPONgiBHaUR1M=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = [ "--noonline-tests" ];
@@ -18863,6 +18879,15 @@ with self; {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.500.tar.gz";
       hash = "sha256-VUU2M+P/JM4yWzS8LIFXuYWZYqMatc8ov3zMHJs6Pqo=";
     };
+    patches = [
+      # Fix use of function removed in Perl 5.38.0
+      # https://github.com/cfaerber/Net-IDN-Encode/pull/11
+      (fetchpatch2 {
+        name = "Net-IDN-Encode-use-uvchr_to_utf8_flags.patch";
+        url = "https://github.com/cfaerber/Net-IDN-Encode/commit/3ebe6f2e239b470efcb64a044edc8202798188af.diff";
+        hash = "sha256-t/BulZoyRvpi+TKNxKFxUS1y3X7bGi1sG7mG75nW/Gc=";
+      })
+    ];
     buildInputs = [ TestNoWarnings ];
     perlPreHook = "export LD=$CC";
     meta = {
@@ -24451,7 +24476,7 @@ with self; {
       perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
       self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
     in ''
-      sed -ie 's|"-I$(INST_ARCHLIB)"|"-I${perl_lib}" "-I${self_lib}"|g' Makefile
+      sed -i -e 's|"-I$(INST_ARCHLIB)"|"-I${perl_lib}" "-I${self_lib}"|g' Makefile
     '');
 
     # TermReadKey uses itself in the build process
@@ -27238,7 +27263,7 @@ with self; {
     };
     meta = {
       description = "Handy utf8 tests";
-      homepage = "https://github.com/2shortplanks/Test-utf8/tree";
+      homepage = "https://github.com/2shortplanks/Test-utf8";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28507,7 +28532,7 @@ with self; {
     };
     buildInputs = [ pkgs.xorg.libXext pkgs.xorg.libXScrnSaver pkgs.xorg.libX11 ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = "sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
+    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
     meta = {
       description = "Get the idle time of X11";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -28841,7 +28866,7 @@ with self; {
     postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
     '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
-      sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
+      sed -i -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '';
     makeMakerFlags = [ "EXPATLIBPATH=${pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat.dev}/include" ];
     propagatedBuildInputs = [ LWP ];

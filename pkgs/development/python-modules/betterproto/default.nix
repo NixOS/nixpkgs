@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
 

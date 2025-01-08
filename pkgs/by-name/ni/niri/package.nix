@@ -7,7 +7,7 @@
   libglvnd,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
   nix-update-script,
   pango,
   pipewire,
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qjf7alRbPPERfiZsM9EMKX+HwjESky1tieh5PJIkLwE=";
   };
 
@@ -39,13 +39,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libspa-0.8.0" = "sha256-kp5x5QhmgEqCrt7xDRfMFGoTK5IXOuvW2yOW02B8Ftk=";
-      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2hFavY3Y6aBPjo53o7GMjuvUKOcj+ZQiV0M1mpoH/Ck=";
 
   strictDeps = true;
 
@@ -60,7 +55,7 @@ rustPlatform.buildRustPackage rec {
       libglvnd # For libEGL
       libinput
       libxkbcommon
-      mesa # For libgbm
+      libgbm
       pango
       seatd
       wayland # For libwayland-client

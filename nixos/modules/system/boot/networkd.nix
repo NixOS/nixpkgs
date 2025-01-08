@@ -759,6 +759,8 @@ let
           "ManageTemporaryAddress"
           "AddPrefixRoute"
           "AutoJoin"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
@@ -875,6 +877,7 @@ let
           "DUIDType"
           "DUIDRawData"
           "IAID"
+          "RequestAddress"
           "RequestBroadcast"
           "RouteMetric"
           "RapidCommit"
@@ -889,6 +892,8 @@ let
           "FallbackLeaseLifetimeSec"
           "Label"
           "Use6RD"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -942,6 +947,8 @@ let
           "IAID"
           "UseDelegatedPrefix"
           "SendRelease"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -967,6 +974,8 @@ let
           "Token"
           "ManageTemporaryAddress"
           "RouteMetric"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
@@ -994,6 +1003,8 @@ let
           "UseRoutePrefix"
           "Token"
           "UsePREF64"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -2890,6 +2901,7 @@ let
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
+        notSocketActivated = true;
       };
 
       networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {

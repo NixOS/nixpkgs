@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AecHsUBtBleUkWuYMQ4Tx/PY8cs9j7JwqncBziJD0hA=";
   };
 

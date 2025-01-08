@@ -1672,6 +1672,22 @@ let
         };
       };
 
+      egirlcatnip.adwaita-github-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "adwaita-github-theme";
+          publisher = "egirlcatnip";
+          version = "1.0.5";
+          hash = "sha256-OvonS6137ICRUV5Tx4gD3we8nrza6ZgnRSs2SxFiCjU=";
+        };
+        meta = {
+          description = "Adwaita VS Code theme with Github syntax highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=egirlcatnip.adwaita-github-theme";
+          homepage = "https://github.com/egirlcatnip/adwaita-github-theme";
+          license = lib.licenses.gpl3;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       elixir-lsp.vscode-elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
@@ -2015,6 +2031,22 @@ let
           homepage = "https://github.com/garlicbreadcleric/vscode-pandoc-markdown";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.pandapip1 ];
+        };
+      };
+
+      geequlim.godot-tools = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "godot-tools";
+          publisher = "geequlim";
+          version = "2.3.0";
+          hash = "sha256-iuSec4PoVxyu1KB2jfCYOd98UrqQjH3q24zOR4VCPgs=";
+        };
+        meta = {
+          description = "VS Code extension for game development with Godot Engine and GDScript";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools";
+          homepage = "https://github.com/godotengine/godot-vscode-plugin";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ thtrf ];
         };
       };
 
@@ -4255,6 +4287,8 @@ let
         };
       };
 
+      saoudrizwan.claude-dev = callPackage ./saoudrizwan.claude-dev { };
+
       sainnhe.gruvbox-material = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox-material";
@@ -4313,8 +4347,8 @@ let
         mktplcRef = {
           name = "sas-lsp";
           publisher = "SAS";
-          version = "1.12.0";
-          hash = "sha256-go7H9DS1uJkzKowIQ2riSPOZRC737/Q0AWxzHIcBwg4=";
+          version = "1.13.0";
+          hash = "sha256-bcj9p/hvzZ1z03D1dXxiyPmGndh3pD7seI5VYHWsvzU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
@@ -5043,8 +5077,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.56";
-          hash = "sha256-4uze2hmTV8sNDSdlvwLf1Z/4dGn4pda0mT0FCg/xWqM=";
+          version = "0.0.61";
+          hash = "sha256-cKiIva4nzROp+bbwkMxBvguLMXVe/9uGcdhVhLxmae0=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5555,8 +5589,8 @@ let
         mktplcRef = {
           name = "pretty-ts-errors";
           publisher = "yoavbls";
-          version = "0.5.4";
-          hash = "sha256-SMEqbpKYNck23zgULsdnsw4PS20XMPUpJ5kYh1fpd14=";
+          version = "0.6.1";
+          hash = "sha256-LvX21nEjgayNd9q+uXkahmdYwzfWBZOhQaF+clFUUF4=";
         };
         meta = {
           description = "Make TypeScript errors prettier and human-readable in VSCode";

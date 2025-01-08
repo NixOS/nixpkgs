@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "jinja2-git";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZcKRLHcZ/rpiUyYK4ifDJaZriN+YyRF1RKCjIKum98U=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-bip39-bindings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3/KBPUFVFkJifunGWJeAHLnY08KVTb8BHCFzDqKWH18=";
   };
 

@@ -30,7 +30,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "pytest-jupyter";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-RTpXBbVCRj0oyZ1TXXDv3M7sAI4kA6f3ouzTr0rXjwY=";
     };
 

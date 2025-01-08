@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-licenses";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GAlwTVoVA+n9+EfhybmpKm16FoY9kFzrxy1ZQxS6A8E=";
   };
 

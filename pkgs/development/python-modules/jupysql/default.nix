@@ -134,6 +134,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ploomber/jupysql";
     changelog = "https://github.com/ploomber/jupysql/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pacien ];
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

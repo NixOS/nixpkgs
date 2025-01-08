@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-12-17";
+  version = "0-unstable-2024-12-27";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "13f395f20bd786d6c055b59ad19e9018d85bc139";
-    hash = "sha256-UnJi2HJQv6PCpBWLka9aIUMYjG0a+tgH6vM4ZZ9gi2E=";
+    rev = "93033c2c382aaff01b1aba6f5db7652c35708bf3";
+    hash = "sha256-MEOIu1CI/VTvd2cixa57Tv1xtBMXiMdD37ZYjAlg5S4=";
     fetchSubmodules = true;
   };
 

@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WSv65jEu/w6iNrL/f5PN147FBjmR0j30H1D39dd+KN8=";
   };
 

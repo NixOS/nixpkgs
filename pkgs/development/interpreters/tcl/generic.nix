@@ -12,6 +12,7 @@
   release,
   version,
   src,
+  extraPatch ? "",
   ...
 }:
 
@@ -27,13 +28,15 @@ let
 
     setOutputFlags = false;
 
-    postPatch = ''
-      substituteInPlace library/clock.tcl \
-        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
-        --replace "/usr/share/lib/zoneinfo" "" \
-        --replace "/usr/lib/zoneinfo" "" \
-        --replace "/usr/local/etc/zoneinfo" ""
-    '';
+    postPatch =
+      ''
+        substituteInPlace library/clock.tcl \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+          --replace "/usr/share/lib/zoneinfo" "" \
+          --replace "/usr/lib/zoneinfo" "" \
+          --replace "/usr/local/etc/zoneinfo" ""
+      ''
+      + extraPatch;
 
     nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
       # Only used to detect the presence of zlib. Could be replaced with a stub.
@@ -61,6 +64,10 @@ let
         "--enable-man-symlinks"
         # Don't install tzdata because NixOS already has a more up-to-date copy.
         "--with-tzdata=no"
+      ]
+      ++ lib.optionals (lib.versionOlder version "8.6") [
+        # configure check broke due to GCC 14
+        "ac_cv_header_stdc=yes"
       ]
       ++ lib.optionals (lib.versionAtLeast version "9.0") [
         # By default, tcl libraries get zipped and embedded into libtcl*.so,

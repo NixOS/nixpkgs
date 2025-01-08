@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1S55WVVHczYBDGwTxGZr+ND+e4a892jkTINlvIR2xgI=";
   };
 

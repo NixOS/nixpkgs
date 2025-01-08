@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GjB53bl2gh3SA+kqC9rrQ9I4rP0z69G/bamInmq8W+I=";
   };
 

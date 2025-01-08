@@ -46,11 +46,11 @@ buildGoModule rec {
     command = "notation version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to sign and verify OCI artifacts and container images";
     homepage = "https://notaryproject.dev/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "notation";
   };
 }

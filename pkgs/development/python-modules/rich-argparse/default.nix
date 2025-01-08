@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hamdanal";
     repo = "rich-argparse";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ae++npgZ8jZazwARwlPw73uhpQ8IT+7OekNl2vfu4Z0=";
   };
 

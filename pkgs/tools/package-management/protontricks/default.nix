@@ -24,7 +24,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dCb8mcwXoxD4abJjLEwk5tGp65XkvepmOX+Kc9Dl7fQ=";
   };
 

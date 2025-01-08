@@ -50,10 +50,6 @@ stdenv.mkDerivation rec {
     "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-faligned-allocation"
-  ]);
-
   passthru = {
     updateScript = nix-update-script { };
     tests =

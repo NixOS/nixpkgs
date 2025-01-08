@@ -12,7 +12,7 @@
   libbacktrace,
   libpcap,
   libwebp,
-  llvmPackages_17,
+  llvmPackages,
   lz4,
   makeWrapper,
   pkg-config,
@@ -37,7 +37,7 @@ let
     wrapQtAppsHook
     ;
 in
-llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.pcsx2) pname version src;
 
   patches = [

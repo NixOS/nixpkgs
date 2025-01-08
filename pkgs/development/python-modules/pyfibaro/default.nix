@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rappenze";
     repo = "pyfibaro";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7hn5iFuN86sdqLi5MIEwBYLYbPg7J1BbADHYdjYBCNA=";
   };
 

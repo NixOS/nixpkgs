@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   bison,
   cmake,
   pkg-config,
@@ -42,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.39-30";
+  version = "8.0.40-31";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ag+9tzmWpdF5vxWOFUsn65oJXIkb0HmoMbif7HcSoP8=";
+    hash = "sha256-ExhnDY4XbCTfdAGfdI9fIz4nh/hl3T1B1heQq1p3LE4=";
   };
 
   nativeBuildInputs = [
@@ -182,7 +183,13 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests.percona-server = nixosTests.mysql.percona-server_8_0;
+    tests.percona-server =
+      nixosTests.mysql."percona-server_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
+    updateScript = gitUpdater {
+      url = "https://github.com/percona/percona-server";
+      rev-prefix = "Percona-Server-";
+      allowedVersions = "${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\..+";
+    };
   };
 
   meta = with lib; {

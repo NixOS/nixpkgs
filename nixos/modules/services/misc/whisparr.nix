@@ -64,10 +64,10 @@ in
       whisparr = {
         group = cfg.group;
         home = cfg.dataDir;
-        uid = config.ids.uids.whisparr;
+        isSystemUser = true;
       };
     };
 
-    users.groups = lib.mkIf (cfg.group == "whisparr") { whisparr.gid = config.ids.gids.whisparr; };
+    users.groups.whisparr = lib.mkIf (cfg.group == "whisparr") { };
   };
 }

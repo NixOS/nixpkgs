@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/pyface";
     changelog = "https://github.com/enthought/pyface/releases/tag/${version}";
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsdOriginal;
   };
 }

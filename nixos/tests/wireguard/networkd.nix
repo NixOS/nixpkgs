@@ -39,6 +39,9 @@ import ../make-test-python.nix (
                 "fc00::2/128"
               ];
 
+              # !!! Don't do this with real keys. The /nix store is world-readable!
+              presharedKeyFile = toString (pkgs.writeText "presharedKey" wg-snakeoil-keys.presharedKey);
+
               inherit (wg-snakeoil-keys.peer1) publicKey;
             };
           };
@@ -69,6 +72,9 @@ import ../make-test-python.nix (
               endpoint = "192.168.0.1:23542";
               persistentKeepalive = 25;
 
+              # !!! Don't do this with real keys. The /nix store is world-readable!
+              presharedKeyFile = toString (pkgs.writeText "presharedKey" wg-snakeoil-keys.presharedKey);
+
               inherit (wg-snakeoil-keys.peer0) publicKey;
             };
           };
@@ -79,11 +85,18 @@ import ../make-test-python.nix (
     testScript = ''
       start_all()
 
-      peer0.wait_for_unit("systemd-networkd-wait-online.service")
-      peer1.wait_for_unit("systemd-networkd-wait-online.service")
+      peer0.systemctl("start network-online.target")
+      peer0.wait_for_unit("network-online.target")
+
+      peer1.systemctl("start network-online.target")
+      peer1.wait_for_unit("network-online.target")
 
       peer1.succeed("ping -c5 fc00::1")
       peer1.succeed("ping -c5 10.23.42.1")
+
+      with subtest("Has PSK set"):
+        peer0.succeed("wg | grep 'preshared key'")
+        peer1.succeed("wg | grep 'preshared key'")
     '';
   }
 )

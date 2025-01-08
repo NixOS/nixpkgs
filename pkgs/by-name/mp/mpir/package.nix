@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/wbhart/mpir/commit/bbc43ca6ae0bec4f64e69c9cd4c967005d6470eb.patch";
       hash = "sha256-vW+cDK5Hq2hKEyprOJaNbj0bT2FJmMcyZHPE8GUNUWc=";
     })
+    # https://github.com/wbhart/mpir/pull/299
+    (fetchpatch {
+      name = "gcc-14-fixes.patch";
+      url = "https://github.com/wbhart/mpir/commit/4ff3b770cbf86e29b75d12c13e8b854c74bccc5a.patch";
+      hash = "sha256-dCB2+1IYTGzHUQkDUF4gqvR1xoMPEYVPLGE+EP2wLL4=";
+    })
   ];
 
   configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];

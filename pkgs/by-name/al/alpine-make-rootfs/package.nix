@@ -16,13 +16,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "alpine-make-rootfs";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-rootfs";
     rev = "v${version}";
-    hash = "sha256-B5qYQ6ah4hFZfb3S5vwgevh7aEHI3YGLoA+IyipaDck=";
+    hash = "sha256-3j++mbQc6ozayZISgDFS9r35ovP0qLoflT6ahp8SUbc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

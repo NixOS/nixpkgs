@@ -47,7 +47,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6MGb6P3PYfnoztLdLhOm/smCjyWuV7ZGJtK40l4yFB0=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "version-schemes";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-B2wtLurzgk59kTooH51a2dewK7aEyA0dAm64Wp+tqhM=";
   };
 

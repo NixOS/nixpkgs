@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "paul-j-lucas";
     repo = "cdecl";
-    rev = "refs/tags/cdecl-${finalAttrs.version}";
+    tag = "cdecl-${finalAttrs.version}";
     hash = "sha256-GtNB55zFIpt6yYE3olC3yQr2RLsS9AMewzJKDcb67GM=";
   };
 

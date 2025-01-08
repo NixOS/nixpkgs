@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = "yte";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vHrYWdyWBqonCBWg1X+lTVlOHS30/yYqZ9sVK3/2n5o=";
   };
 

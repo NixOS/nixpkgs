@@ -6,6 +6,7 @@
 , callPackage
 , cmake
 , desktopToDarwinBundle
+, fetchpatch
 , fetchurl
 , fd
 , gettext
@@ -85,6 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   patches = [
+    (fetchpatch {
+      # fix typo in gobjectptr member function. remove on update
+      name = "gobjectptr-fix-member-name.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/eb6dadcf1a5c660167ba43f3606c8e7cc6529787.patch";
+      hash = "sha256-FvbJV/YrBwhHg0kFdbhyd/Y9g7YV2nPIrRqZt7yJ50Q=";
+    })
     (substituteAll {
       src = ./fix-python-paths.patch;
       # Python is used at run-time to execute scripts,

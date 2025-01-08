@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AYL7lcYYY7gK12Id94aHRWRlCiznnF4r+lpI5VFpAWY=";
   };
 

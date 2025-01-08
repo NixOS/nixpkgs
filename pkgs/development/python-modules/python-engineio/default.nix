@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qfFMpE0aW8/TUBaKcaD/qV+JaBEqNR3WZ+mhQQsXkdU=";
   };
 
