@@ -2656,7 +2656,7 @@ with pkgs;
 
   patool = with python3Packages; toPythonApplication patool;
 
-  pocket-casts = callPackage ../applications/audio/pocket-casts {
+  pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
     electron = electron_32;
   };
 
