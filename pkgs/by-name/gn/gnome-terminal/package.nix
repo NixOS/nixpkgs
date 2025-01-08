@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     desktop-file-utils
     wrapGAppsHook3
-    pcre2
     python3
   ];
 
@@ -67,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     vte
     libuuid
     nautilus # For extension
+    pcre2
   ];
 
   postPatch = ''
