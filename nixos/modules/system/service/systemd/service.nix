@@ -5,8 +5,8 @@ in
 {
   imports = [
     ../portable/service.nix
-    (lib.mkAliasOptionModule ["systemd" "service"] ["systemd" "services" ""])
-    (lib.mkAliasOptionModule ["systemd" "socket"] ["systemd" "sockets" ""])
+    (lib.mkAliasOptionModule [ "systemd" "service" ] [ "systemd" "services" "" ])
+    (lib.mkAliasOptionModule [ "systemd" "socket" ] [ "systemd" "sockets" "" ])
   ];
   options = {
     systemd.services = mkOption {
@@ -19,14 +19,14 @@ in
         This means that the module has not been combined with the system configuration yet, no values can be read from this option.
         What you can do instead is define a module that reads from the module arguments (such as `config`) that are available when the module is merged into the system configuration.
       '';
-      type =
-        types.lazyAttrsOf
-          (types.deferredModuleWith {
-            staticModules = [
-              # TODO: Add modules for the purpose of generating documentation?
-            ];
-          });
-      default = {};
+      type = types.lazyAttrsOf (
+        types.deferredModuleWith {
+          staticModules = [
+            # TODO: Add modules for the purpose of generating documentation?
+          ];
+        }
+      );
+      default = { };
     };
     systemd.sockets = mkOption {
       description = ''
@@ -35,18 +35,20 @@ in
         See {option}`systemd.services`.
       '';
       type = types.lazyAttrsOf types.deferredModule;
-      default = {};
+      default = { };
     };
 
     # Also import systemd logic into sub-services
     # extends the portable `services` option
     services = mkOption {
-      type = types.attrsOf (types.submoduleWith {
-        class = "service";
-        modules = [
-          ./service.nix
-        ];
-      });
+      type = types.attrsOf (
+        types.submoduleWith {
+          class = "service";
+          modules = [
+            ./service.nix
+          ];
+        }
+      );
     };
   };
   config = {

@@ -32,7 +32,9 @@ let
       };
       service3 = {
         process = {
-          executable = dummyPkg "cowsay-ng" // { meta.mainProgram = "cowsay"; };
+          executable = dummyPkg "cowsay-ng" // {
+            meta.mainProgram = "cowsay";
+          };
           args = [ "!" ];
         };
       };
@@ -43,12 +45,14 @@ let
     modules = [
       {
         options.services = mkOption {
-          type = types.attrsOf (types.submoduleWith {
-            class = "service";
-            modules = [
-              ./service.nix
-            ];
-          });
+          type = types.attrsOf (
+            types.submoduleWith {
+              class = "service";
+              modules = [
+                ./service.nix
+              ];
+            }
+          );
         };
       }
       exampleConfig

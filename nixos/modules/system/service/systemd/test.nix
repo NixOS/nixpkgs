@@ -1,54 +1,73 @@
 # Run:
 #   nix-build -A nixosTests.modularService
 
-{ evalSystem, runCommand, hello, ... }:
+{
+  evalSystem,
+  runCommand,
+  hello,
+  ...
+}:
 
 let
-  machine = evalSystem ({ lib, ... }: {
+  machine = evalSystem (
+    { lib, ... }:
+    {
 
-    # Test input
+      # Test input
 
-    system.services.foo = {
-      process = {
-        executable = hello;
-        args = [ "--greeting" "hoi" ];
-      };
-    };
-    system.services.bar = {
-      process = {
-        executable = hello;
-        args = [ "--greeting" "hoi" ];
-      };
-      systemd.service = {
-        serviceConfig.X-Bar = "lol crossbar whatever";
-      };
-      services.db = {
+      system.services.foo = {
         process = {
           executable = hello;
-          args = [ "--greeting" "Hi, I'm a database, would you believe it" ];
-        };
-        systemd.service = {
-          serviceConfig.RestartSec = "42";
+          args = [
+            "--greeting"
+            "hoi"
+          ];
         };
       };
-    };
+      system.services.bar = {
+        process = {
+          executable = hello;
+          args = [
+            "--greeting"
+            "hoi"
+          ];
+        };
+        systemd.service = {
+          serviceConfig.X-Bar = "lol crossbar whatever";
+        };
+        services.db = {
+          process = {
+            executable = hello;
+            args = [
+              "--greeting"
+              "Hi, I'm a database, would you believe it"
+            ];
+          };
+          systemd.service = {
+            serviceConfig.RestartSec = "42";
+          };
+        };
+      };
 
-    # irrelevant stuff
-    system.stateVersion = "25.05";
-    fileSystems."/".device = "/test/dummy";
-    boot.loader.grub.enable = false;
-  });
+      # irrelevant stuff
+      system.stateVersion = "25.05";
+      fileSystems."/".device = "/test/dummy";
+      boot.loader.grub.enable = false;
+    }
+  );
 
   inherit (machine.config.system.build) toplevel;
 in
-  runCommand "test-modular-service-systemd-units" {
+runCommand "test-modular-service-systemd-units"
+  {
     passthru = {
       inherit
         machine
         toplevel
         ;
     };
-  } ''
+  }
+  ''
     echo ${toplevel}/etc/systemd/system/foo.service:
     cat -n ${toplevel}/etc/systemd/system/foo.service
     (

@@ -1,15 +1,20 @@
-{ lib, config, options, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   pathOrStr = types.coercedTo types.path (x: "${x}") types.str;
   program =
-    types.coercedTo
-      (types.package // {
+    types.coercedTo (
+      types.package
+      // {
         # require mainProgram for this conversion
-        check = v: v.type or null == "derivation" && v?meta.mainProgram;
-      })
-      lib.getExe
-      pathOrStr
+        check = v: v.type or null == "derivation" && v ? meta.mainProgram;
+      }
+    ) lib.getExe pathOrStr
     // {
       description = "main program, path or command";
       descriptionClass = "conjunction";
@@ -18,11 +23,13 @@ in
 {
   options = {
     services = mkOption {
-      type = types.attrsOf (types.submoduleWith {
-        modules = [
-          ./service.nix
-        ];
-      });
+      type = types.attrsOf (
+        types.submoduleWith {
+          modules = [
+            ./service.nix
+          ];
+        }
+      );
       description = ''
         A collection of [modular services](https://nixos.org/manual/nixos/unstable/#modular-services) that are configured in one go.
 
@@ -44,7 +51,7 @@ in
         description = ''
           Arguments to pass to the `executable`.
         '';
-        default = [];
+        default = [ ];
       };
     };
   };
