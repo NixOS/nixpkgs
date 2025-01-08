@@ -10,7 +10,6 @@
   udev,
   cctools,
   apple-sdk_12,
-  darwinMinVersionHook,
 }:
 
 buildNpmPackage rec {
