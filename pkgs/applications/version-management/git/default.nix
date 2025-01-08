@@ -283,6 +283,7 @@ stdenv.mkDerivation (finalAttrs: {
        done
      '')
    + lib.optionalString osxkeychainSupport ''
+    ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
     # enable git-credential-osxkeychain on darwin if desired (default)
     mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
