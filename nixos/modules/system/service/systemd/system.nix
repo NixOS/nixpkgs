@@ -1,12 +1,21 @@
 {
   lib,
   config,
+  options,
   pkgs,
   ...
 }:
 
 let
-  inherit (lib) concatMapAttrs mkOption types;
+  inherit (lib)
+    concatMapAttrs
+    mkOption
+    types
+    concatLists
+    mapAttrsToList
+    ;
+
+  portable-lib = import ../portable/lib.nix { inherit lib; };
 
   dash =
     before: after:
@@ -57,6 +66,19 @@ in
 
   # Second half of the magic: siphon units that were defined in isolation to the system
   config = {
+
+    assertions = concatLists (
+      mapAttrsToList (
+        name: cfg: portable-lib.getAssertions (options.system.services.loc ++ [ name ]) cfg
+      ) config.system.services
+    );
+
+    warnings = concatLists (
+      mapAttrsToList (
+        name: cfg: portable-lib.getWarnings (options.system.services.loc ++ [ name ]) cfg
+      ) config.system.services
+    );
+
     systemd.services = concatMapAttrs (
       serviceName: topLevelService: makeUnits "services" serviceName topLevelService
     ) config.system.services;
