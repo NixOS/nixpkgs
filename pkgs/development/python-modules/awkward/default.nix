@@ -85,7 +85,17 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
   disabledTests = [
+    # jax.errors.UnexpectedTracerError: Encountered an unexpected tracer.
+    "test_recordarray_4"
+    "test_recordarray_5"
+    "test_recordarray_6"
+    "test_reducer"
+    "test_regular_array_2"
+    "test_regular_array_4"
+    "test_regular_array_5"
+
     # AssertionError: Regex pattern did not match.
+    # https://github.com/scikit-hep/awkward/issues/3362
     "test_serialise_with_nonserialisable_attrs"
     "test_serialise_with_nonserialisable_attrs"
   ];
