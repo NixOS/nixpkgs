@@ -328,7 +328,7 @@ in
           '';
         };
 
-        locations."~ \.php$" = {
+        locations."~ \\.php$" = {
           fastcgiParams = {
             SERVER_NAME = "$host";
           };
