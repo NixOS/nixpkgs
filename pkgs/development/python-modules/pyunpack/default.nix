@@ -45,6 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyunpack" ];
 
+  disabledTests = [
+    # pinning test of `--help` sensitive to python version
+    "test_help"
+  ];
+
   disabledTestPaths = [
     # unfree
     "tests/test_rar.py"
