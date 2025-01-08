@@ -1,6 +1,7 @@
 {
   fetchurl,
   fetchpatch,
+  stdenv,
   lib,
   substituteAll,
   aspellWithDicts,
@@ -79,6 +80,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool
     pkg-config
     wrapGAppsHook3
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [
@@ -140,9 +142,10 @@ python3.pkgs.buildPythonApplication rec {
 
     chmod -x ./scripts/sokSettings.py
 
-    patchShebangs .
+    patchShebangs --host Onboard/ onboard-settings onboard
 
     substituteInPlace setup.py \
+      --replace-fail "pkg-config" "${stdenv.cc.targetPrefix}pkg-config" \
       --replace "/etc" "$out/etc"
 
     substituteInPlace  ./Onboard/LanguageSupport.py \
@@ -177,10 +180,13 @@ python3.pkgs.buildPythonApplication rec {
 
   # setuptools to get distutils with python 3.12
   installPhase = ''
-    ${(python3.withPackages (p: [ p.setuptools ])).interpreter} setup.py install --prefix="$out"
-
+    runHook preInstall
+    ${
+      (python3.pythonOnBuildForHost.withPackages (p: [ p.setuptools ])).interpreter
+    } setup.py install --prefix="$out"
     cp onboard-default-settings.gschema.override.example $out/share/glib-2.0/schemas/10_onboard-default-settings.gschema.override
     glib-compile-schemas $out/share/glib-2.0/schemas/
+    runHook postInstall
   '';
 
   # Remove ubuntu icons.
