@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf-archive
     autoreconfHook
+    guile
     pkg-config
     texinfo
     makeWrapper
