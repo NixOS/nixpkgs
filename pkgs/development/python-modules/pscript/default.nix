@@ -36,6 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pscript" ];
 
+  disabledTests = [
+    # https://github.com/flexxui/pscript/issues/69
+    "test_async_and_await"
+  ];
+
   meta = with lib; {
     description = "Python to JavaScript compiler";
     homepage = "https://pscript.readthedocs.io";
