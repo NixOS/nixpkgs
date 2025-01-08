@@ -63,6 +63,9 @@ in
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
   # Jailbreaks & Version Updates
 
   hashable-time = doJailbreak super.hashable-time;

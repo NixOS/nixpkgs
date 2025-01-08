@@ -69,6 +69,9 @@ self: super:
   unix = null;
   xhtml = null;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
   #
   # Version deviations from Stackage LTS
   #
