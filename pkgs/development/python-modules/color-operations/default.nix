@@ -38,6 +38,8 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
+  pythonRelaxDeps = [ "numpy" ];
+
   nativeCheckInputs = [
     colormath
     pytestCheckHook
