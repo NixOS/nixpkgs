@@ -33,6 +33,13 @@ in lib.makeOverridable ({
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
   kernelPatches ? [],
+  # kernel image build targets like Image, bzImage, Image.gz, vmlinuz.efi
+  kernelTargets ? [],
+  # a list of install targets, e.g. :
+  # - uinstall for uImage, U-Boot wrapped image
+  # - zinstall for zImage, self-extracting images
+  # - install, the generic binary image
+  installTargets ? [],
   # The kernel .config file
   configfile,
   # Manually specified nixexpr representing the config
@@ -64,7 +71,9 @@ let
   # Shadow the un-defaulted parameter; don't want null.
   modDirVersion = modDirVersion_;
   inherit (lib)
-    hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
+    hasAttr getAttr optional optionals optionalString optionalAttrs genAttrs replaceStrings maintainers platforms;
+
+  targetsToOutput = genAttrs kernelTargets (target: replaceStrings ["."] ["-"] target);
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
@@ -128,10 +137,10 @@ let
       ++ optionals withRust [ rustc rust-bindgen ]
       ;
 
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ] ++ (lib.attrValues targetsToOutput); }) // {
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
-          moduleBuildDependencies stdenv;
+          moduleBuildDependencies stdenv targetsToOutput;
         inherit isZen isHardened isLibre withRust;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         baseVersion = lib.head (lib.splitString "-rc" version);
@@ -250,7 +259,7 @@ let
 
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
-        kernelConf.target
+      ] ++ kernelTargets ++ [
         "vmlinux"  # for "perf" and things like that
       ] ++ optional isModular "modules"
         ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
@@ -317,15 +326,14 @@ let
         export HOME=${installkernel}
       '';
 
-      # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
-      installTargets = [
-        (kernelConf.installTarget or (
-          /**/ if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then "uinstall"
-          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" || kernelConf.target == "vmlinuz.efi" then "zinstall"
-          else "install"))
-      ];
+      # Some image types need special install targets (e.g. uImage is installed with make uinstall)
+      installTargets = if installTargets == [ ] then [ "install" ] else installTargets;
 
-      postInstall = optionalString isModular ''
+      postInstall = (lib.concatStringsSep "\n" (lib.mapAttrsToList (target: output: ''
+        mkdir -p "''${${output}}"
+        moveToOutput "${target}" "''${${output}}"
+        ln -sf "''${${output}}/${target}" "$out/${target}"
+      '') targetsToOutput)) + (optionalString isModular ''
         mkdir -p $dev
         cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
@@ -395,7 +403,7 @@ let
 
         # Delete empty directories
         find -empty -type d -delete
-      '';
+      '');
 
       requiredSystemFeatures = [ "big-parallel" ];
 

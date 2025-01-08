@@ -1,3 +1,12 @@
+let
+  # Map of images representations to legacy Makefile targets.
+  defaultMapKernelToInstallTargets = {
+    "uImage" = "uinstall";
+    "zImage" = "zinstall";
+    "Image.gz" = "zinstall";
+    "vmlinuz.efi" = "zinstall";
+  };
+in
 { buildPackages
 , callPackage
 , perl
@@ -71,6 +80,12 @@ lib.makeOverridable ({ # The kernel source tarball.
 # easy overrides to stdenv.hostPlatform.linux-kernel members
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
+, kernelTargets ?
+    if stdenv.hostPlatform.isAarch64 then
+      ["Image" "vmlinuz.efi"]
+    else
+      [stdenv.hostPlatform.linux-kernel.target]
+, installTargets ? lib.unique (map (target: defaultMapKernelToInstallTargets.${target} or "install") kernelTargets)
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? {}
 
@@ -215,7 +230,7 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (basicArgs // {
-    inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile modDirVersion;
+    inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile modDirVersion kernelTargets installTargets;
     pos = builtins.unsafeGetAttrPos "version" args;
 
     config = {
