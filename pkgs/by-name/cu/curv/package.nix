@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   cmake,
+  git,
+  pkg-config,
   boost,
   eigen,
   glm,
@@ -17,19 +19,22 @@
 
 stdenv.mkDerivation rec {
   pname = "curv";
-  version = "0.5";
+  version = "0.5-unstable-2025-01-06";
 
-  src = fetchFromGitHub {
-    owner = "curv3d";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "doug-moen";
     repo = "curv";
-    tag = version;
-    hash = "sha256-m4p5uxRk6kEJUilmbQ1zJcQDRvRCV7pkxnqupZJxyjo=";
+    rev = "a496d98459b65d15feae8e69036944dafb7ec26e";
+    hash = "sha256-2pe76fBU78xRvHxol8O1xv0bBVwbpKDVPLQqqUCTO0Y=";
     fetchSubmodules = true;
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
+    git
+    pkg-config
   ];
 
   buildInputs =
