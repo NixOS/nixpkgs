@@ -39,11 +39,11 @@ jobs:
           # Fetches the merge commit and its parents
           fetch-depth: 2
 
-      - name: Checking out base branch
+      - name: Checking out target branch
         run: |
-          base=$(mktemp -d)
-          git worktree add "$base" "$(git rev-parse HEAD^1)"
-          echo "base=$base" >> "$GITHUB_ENV"
+          target=$(mktemp -d)
+          git worktree add "$target" "$(git rev-parse HEAD^1)"
+          echo "target=$target" >> "$GITHUB_ENV"
 
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
@@ -65,7 +65,7 @@ jobs:
           # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
           CLICOLOR_FORCE: 1
         run: |
-          if result/bin/nixpkgs-vet --base "$base" .; then
+          if result/bin/nixpkgs-vet --base "$target" .; then
             exit 0
           else
             exitCode=$?
