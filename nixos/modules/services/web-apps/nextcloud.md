@@ -245,7 +245,7 @@ that are managed by Nix. If you want automatic updates it is recommended that yo
 
 ## Known warnings {#module-services-nextcloud-known-warnings}
 
-### Failed to get an iterator for log entries: Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+### Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
 
 This is because
 
@@ -253,10 +253,10 @@ This is because
 * the Logreader application that allows reading logs in the admin panel is enabled
   by default and requires logs written to a file.
 
-The logreader application doesn't work, as it was the case before. The only change is that
-it complains loudly now. So nothing actionable here by default. Alternatively you can
+The logreader application doesn't work, as it was the case before.
+So nothing actionable here by default. Alternatively you can
 
-* disable the logreader application to shut up the "error".
+* disable the logreader application to shut up the "info".
 
   We can't really do that by default since whether apps are enabled/disabled is part
   of the application's state and tracked inside the database.
