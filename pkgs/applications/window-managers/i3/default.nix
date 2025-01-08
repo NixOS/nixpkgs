@@ -66,36 +66,27 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "mans" true)
   ];
 
-  buildInputs =
-    [
-      libxcb
-      xcbutilkeysyms
-      xcbutil
-      xcbutilwm
-      xcbutilxrm
-      libxkbcommon
-      libstartup_notification
-      libX11
-      pcre2
-      libev
-      yajl
-      xcb-util-cursor
-      perl
-      pango
-      perlPackages.AnyEventI3
-      perlPackages.X11XCB
-      perlPackages.IPCRun
-      perlPackages.ExtUtilsPkgConfig
-      perlPackages.InlineC
-    ]
-    ++ lib.optionals finalAttrs.doCheck [
-      xorgserver
-      xvfb-run
-      xdotool
-      xorg.setxkbmap
-      xorg.xrandr
-      which
-    ];
+  buildInputs = [
+    libxcb
+    xcbutilkeysyms
+    xcbutil
+    xcbutilwm
+    xcbutilxrm
+    libxkbcommon
+    libstartup_notification
+    libX11
+    pcre2
+    libev
+    yajl
+    xcb-util-cursor
+    perl
+    pango
+    perlPackages.AnyEventI3
+    perlPackages.X11XCB
+    perlPackages.IPCRun
+    perlPackages.ExtUtilsPkgConfig
+    perlPackages.InlineC
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -110,6 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # xvfb-run is available only on Linux
   doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+    xorgserver
+    xvfb-run
+    xdotool
+    xorg.setxkbmap
+    xorg.xrandr
+    which
+  ];
 
   checkPhase = ''
     runHook preCheck
