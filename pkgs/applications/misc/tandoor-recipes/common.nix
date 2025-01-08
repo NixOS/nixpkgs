@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "1.5.25";
+  version = "1.5.27";
 
   src = fetchFromGitHub {
     owner = "TandoorRecipes";
     repo = "recipes";
     rev = version;
-    hash = "sha256-Yw68wxLqoyPRQmP/krSaxByv24CKh7Y7O07NU+dL5mo=";
+    hash = "sha256-HP4gVk127hvvL337Cb4Wbvvf55RWY7u5RF/FKDCottw=";
   };
 
   yarnHash = "sha256-lU8QrTkI32XOHefIkj/0fa2UKhuZpQIT1wyweQnzXmQ=";
