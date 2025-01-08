@@ -488,12 +488,7 @@ in rec {
 
   };
 
-  stage2ServiceOptions = {
-    imports = [
-      stage2CommonUnitOptions
-      serviceOptions
-    ];
-
+  stage2ServiceRestartOptions = {config, ...}: {
     options = {
       restartIfChanged = mkOption {
         type = types.bool;
@@ -522,19 +517,31 @@ in rec {
 
       stopIfChanged = mkOption {
         type = types.bool;
-        default = true;
+        default = (builtins.hasAttr "ExecStop" config.serviceConfig)
+                  || (builtins.hasAttr "ExecStopPost" config.serviceConfig);
         description = ''
           If set, a changed unit is restarted by calling
           {command}`systemctl stop` in the old configuration,
           then {command}`systemctl start` in the new one.
           Otherwise, it is restarted in a single step using
           {command}`systemctl restart` in the new configuration.
-          The latter is less correct because it runs the
-          `ExecStop` commands from the new
-          configuration.
+
+          Merely restarting the unit is less correct if an
+          `ExecStop` or `ExecStopPost` is defined for the unit
+          because it runs these commands from the new configuration.
         '';
       };
+    };
+  };
 
+  stage2ServiceOptions = {
+    imports = [
+      stage2ServiceRestartOptions
+      stage2CommonUnitOptions
+      serviceOptions
+    ];
+
+    options = {
       notSocketActivated = mkOption {
         type = types.bool;
         default = false;
