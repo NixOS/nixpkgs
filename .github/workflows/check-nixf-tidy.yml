@@ -20,13 +20,13 @@ jobs:
           # Fetches the merge commit and its parents
           fetch-depth: 2
 
-      - name: Checking out base branch
+      - name: Checking out target branch
         run: |
-          base=$(mktemp -d)
-          baseRev=$(git rev-parse HEAD^1)
-          git worktree add "$base" "$baseRev"
-          echo "baseRev=$baseRev" >> "$GITHUB_ENV"
-          echo "base=$base" >> "$GITHUB_ENV"
+          target=$(mktemp -d)
+          targetRev=$(git rev-parse HEAD^1)
+          git worktree add "$target" "$targetRev"
+          echo "targetRev=$targetRev" >> "$GITHUB_ENV"
+          echo "target=$target" >> "$GITHUB_ENV"
 
       - name: Get Nixpkgs revision for nixf
         run: |
@@ -91,8 +91,8 @@ jobs:
                 continue
             esac
 
-            if [[ -n "$source" ]] && [[ "$(nixf_wrapper ${{ env.base }}/"$source")" != '[]' ]] 2>/dev/null; then
-              echo "Ignoring file $file because it doesn't pass nixf-tidy in the base commit"
+            if [[ -n "$source" ]] && [[ "$(nixf_wrapper ${{ env.target }}/"$source")" != '[]' ]] 2>/dev/null; then
+              echo "Ignoring file $file because it doesn't pass nixf-tidy in the target commit"
               echo # insert blank line
             else
               nixf_report="$(nixf_wrapper "$dest")"
@@ -119,7 +119,7 @@ jobs:
                 failedFiles+=("$dest")
               fi
             fi
-          done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
+          done < <(git diff -z --name-status ${{ env.targetRev }} -- '*.nix')
 
           if [[ -n "$DONT_REPORT_ERROR" ]]; then
             echo "Edited the PR but didn't change the base branch, only the description/title."
