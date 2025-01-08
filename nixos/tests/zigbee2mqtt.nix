@@ -25,7 +25,7 @@ import ./make-test-python.nix (
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_fails("systemctl status zigbee2mqtt.service")
       machine.succeed(
-          "journalctl -eu zigbee2mqtt | grep 'Error: Inappropriate ioctl for device, cannot set'"
+          "journalctl -eu zigbee2mqtt | grep 'No valid USB adapter found'"
       )
 
       machine.log(machine.succeed("systemd-analyze security zigbee2mqtt.service"))
