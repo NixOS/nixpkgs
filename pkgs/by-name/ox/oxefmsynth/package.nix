@@ -19,7 +19,7 @@ let
   };
   version = "1.3.5";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "oxefmsynth";
   inherit version;
 
