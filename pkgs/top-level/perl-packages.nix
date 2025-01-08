@@ -20764,15 +20764,16 @@ with self; {
   PerlMagick = ImageMagick; # added 2021-08-02
   ImageMagick = buildPerlPackage rec {
     pname = "Image-Magick";
-    version = "7.1.1-20";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      hash = "sha256-oMAwXQBxuV2FgPHBhUi+toNFPVnRLNjZqdP2q+ki6jg=";
-    };
+    inherit (pkgs.imagemagick) version src;
+    sourceRoot = "${src.name}/PerlMagick";
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
-        sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
+        pushd ..
+        chmod -R +rwX .
+        ./configure --with-perl
+        make perl-quantum-sources
+        popd
       '';
     meta = {
       description = "Objected-oriented Perl interface to ImageMagick. Use it to read, manipulate, or write an image or image sequence from within a Perl script";
