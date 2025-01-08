@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     pandoc
   ];
 
+  doCheck = true;
+
   passthru.updateScript = gitUpdater { };
 
   meta = {
