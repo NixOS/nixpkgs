@@ -19,31 +19,6 @@
 , ninja
 }:
 
-let
-  # Absolute path patched version of the upstream xsession
-  xsession = writeText "pantheon.desktop" ''
-    [Desktop Entry]
-    Name=Pantheon
-    Comment=This session provides elementary experience
-    Exec=${gnome-session}/bin/gnome-session --session=pantheon
-    TryExec=${wingpanel}/bin/io.elementary.wingpanel
-    Icon=
-    DesktopNames=Pantheon
-    Type=Application
-  '';
-
-  wayland-session = writeText "pantheon-wayland.desktop" ''
-    [Desktop Entry]
-    Name=Pantheon (Wayland)
-    Comment=This session provides elementary experience
-    Exec=${gnome-session}/bin/gnome-session --session=pantheon-wayland
-    TryExec=${wingpanel}/bin/io.elementary.wingpanel
-    Icon=
-    DesktopNames=Pantheon
-    Type=Application
-  '';
-in
-
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
   version = "8.0.1";
@@ -86,8 +61,9 @@ stdenv.mkDerivation rec {
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     # absolute path patched sessions
-    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
-    substitute ${wayland-session} $out/share/wayland-sessions/pantheon-wayland.desktop --subst-var out
+    substituteInPlace $out/share/{xsessions/pantheon.desktop,wayland-sessions/pantheon-wayland.desktop} \
+      --replace-fail "Exec=gnome-session" "Exec=${gnome-session}/bin/gnome-session" \
+      --replace-fail "TryExec=io.elementary.wingpanel" "TryExec=${wingpanel}/bin/io.elementary.wingpanel"
   '';
 
   passthru = {
