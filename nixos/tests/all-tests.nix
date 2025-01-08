@@ -87,6 +87,15 @@ let
     featureFlags.minimalModules = { };
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
+  evalSystem = module:
+    import ../lib/eval-config.nix {
+      system = null;
+      modules = [
+        ../modules/misc/nixpkgs/read-only.nix
+        { nixpkgs.pkgs = pkgs; }
+        module
+      ];
+    };
 
   inherit
     (rec {
@@ -807,6 +816,7 @@ in
   mjolnir = handleTest ./matrix/mjolnir.nix { };
   mobilizon = runTest ./mobilizon.nix;
   mod_perl = handleTest ./mod_perl.nix { };
+  modularService = pkgs.callPackage ../modules/system/service/systemd/test.nix { inherit evalSystem; };
   molly-brown = handleTest ./molly-brown.nix { };
   mollysocket = handleTest ./mollysocket.nix { };
   monado = handleTest ./monado.nix { };

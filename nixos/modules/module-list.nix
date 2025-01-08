@@ -1797,6 +1797,8 @@
   ./system/boot/tmp.nix
   ./system/boot/uvesafb.nix
   ./system/etc/etc-activation.nix
+  ./system/service/systemd/system.nix
+  ./system/service/systemd/user.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
