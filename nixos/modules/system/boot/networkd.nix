@@ -2902,6 +2902,7 @@ let
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
         notSocketActivated = true;
+        stopIfChanged = false;
       };
 
       networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
