@@ -69,7 +69,7 @@ in
   argparse = prev.argparse.overrideAttrs(oa: {
 
     doCheck = true;
-    checkInputs = [ final.busted ];
+    nativeCheckInputs = [ final.busted ];
 
     checkPhase = ''
       runHook preCheck
