@@ -6,25 +6,24 @@
   makeDesktopItem,
   copyDesktopItems,
   unzip,
+  zip,
   xdg-utils,
   gtk3,
   jdk,
-  gradle_8,
+  gradle,
   python3,
+  postgresql,
 }:
-let
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
-in
+
 stdenv.mkDerivation rec {
-  version = "5.13";
+  version = "6.0-alpha";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
-    rev = "v${version}";
-    hash = "sha256-inE2FXAaEEiq7343KwtjEiTEHLtn01AzP0foTpsLoAw=";
+    tag = "v${version}";
+    hash = "sha256-FTkBQcJ74lQ1lv84H6A69eS5UXpjZF0KIV2SvQqhKyc=";
     fetchSubmodules = true;
   };
 
@@ -49,13 +48,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Disable update check
-    substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
-      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+    substituteInPlace src/main/java/org/jabref/logic/preferences/JabRefCliPreferences.java \
+      --replace-fail 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
         'VERSION_CHECK_ENABLED, Boolean.FALSE'
 
     # Find OpenOffice/LibreOffice binary
     substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
       --replace '/usr' '/run/current-system/sw'
+
+    sed -i -e '/setOutputRedirector/d' src/main/java/org/jabref/logic/search/PostgreServer.java
   '';
 
   nativeBuildInputs = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     copyDesktopItems
     unzip
+    zip
   ];
 
   buildInputs = [
@@ -102,6 +104,30 @@ stdenv.mkDerivation rec {
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 
+    # Temp fix: openjfx doesn't build with webkit
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
+
+    # Use postgresql from nixpkgs since the bundled binary doesn't work on NixOS
+    rm $out/lib/embedded-postgres-binaries-*.jar
+
+    PG_VER=$(sed -n -E "s/.*embedded-postgres-binaries-bom:(.*)'/\1/p" build.gradle)
+    ARCH1=${if stdenv.isAarch64 then "arm64v8" else "amd64"}
+    ARCH2=${if stdenv.isAarch64 then "arm_64" else "x86_64"}
+    mkdir postgresql
+    cd postgresql
+    ln -s ${postgresql}/{lib,share} ./
+    mkdir -p bin
+    ln -s ${postgresql}/bin/{postgres,initdb} ./bin
+    # Wrap pg_ctl to workaround https://github.com/NixOS/nixpkgs/issues/83770
+    # Use custom wrap to workaround https://github.com/NixOS/nixpkgs/issues/330471
+    echo -e '#!/usr/bin/env bash\n${postgresql}/bin/pg_ctl "-o \"-k /tmp\"" "$@"' > ./bin/pg_ctl
+    chmod +x ./bin/pg_ctl
+
+    tar -cJf postgres-linux-$ARCH2.txz *
+    zip embedded-postgres-binaries-linux-$ARCH-$PG_VER.jar postgres-linux-$ARCH2.txz
+    cd ..
+    mv postgresql/embedded-postgres-binaries-linux-$ARCH-$PG_VER.jar $out/lib
+
     runHook postInstall
   '';
 
@@ -111,7 +137,12 @@ stdenv.mkDerivation rec {
     # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
     makeWrapper ${jdk}/bin/java $out/bin/JabRef \
       "''${gappsWrapperArgs[@]}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          xdg-utils
+          postgresql
+        ]
+      } \
       --add-flags "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main" \
       --add-flags "$DEFAULT_JVM_OPTS"
 
