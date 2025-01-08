@@ -43,6 +43,10 @@ buildGoModule {
     "-X main.version=${version} -X main.commit=v${version}"
   ];
 
+  subPackages = [
+    "cmd/pinact"
+  ];
+
   meta = {
     inherit mainProgram;
     description = "Pin GitHub Actions versions";
