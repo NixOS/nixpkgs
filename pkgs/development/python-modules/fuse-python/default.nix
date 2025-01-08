@@ -4,21 +4,30 @@
   buildPythonPackage,
   fetchPypi,
   pkg-config,
+  setuptools,
   fuse,
 }:
 
 buildPythonPackage rec {
   pname = "fuse-python";
   version = "1.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MhiAY2UkCM1HKuu2+S0135LIu0IAk3H4yJJ7s35r3Rs=";
   };
 
-  buildInputs = [ fuse ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'pkg-config' "${stdenv.cc.targetPrefix}pkg-config"
+  '';
+
   nativeBuildInputs = [ pkg-config ];
+
+  build-system = [ setuptools ];
+
+  buildInputs = [ fuse ];
 
   # no tests implemented
   doCheck = false;
