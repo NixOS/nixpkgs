@@ -8,8 +8,12 @@ in
 
 self: super: {
 
-  # Should be llvmPackages_6 which has been removed from nixpkgs
-  llvmPackages = null;
+  # Should be llvmPackages_6 which has been removed from nixpkgs,
+  # create attribute set to prevent eval errors.
+  llvmPackages = {
+    llvm = null;
+    clang = null;
+  };
 
   # Disable GHC 8.6.x core libraries.
   array = null;
