@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-codspeed";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "pytest-codspeed";
     tag = "v${version}";
-    hash = "sha256-A8H8gx+g2Fcf+aapahnAiVBt5vUzPc1SW4scOmSjI0g=";
+    hash = "sha256-JmOKIuSL2xRubMeBlA6Wx+3Oer8jVubA+9UYhaRcYWs=";
   };
 
   build-system = [ hatchling ];
