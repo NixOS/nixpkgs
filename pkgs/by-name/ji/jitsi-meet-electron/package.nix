@@ -91,6 +91,8 @@ buildNpmPackage rec {
         -c.electronVersion=${electron.version}
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   installPhase = ''
     runHook preInstall
 
