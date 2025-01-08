@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2024.12.09.00";
+  version = "2025.01.06.00";
 
   outputs = [
     "out"
@@ -32,13 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2kn7RCFNpsfyXFWhV7ikXiCCLMND185JRyxAnNq/1ro=";
+    hash = "sha256-9JCyXFWglnIuDw5jSSqcnuMfQ2JXMdNwFVyyBccjoag=";
   };
 
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
-    ./increase-test-discovery-timeout.patch
-  ];
+  patches =
+    [
+      ./glog-0.7.patch
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
+      ./increase-test-discovery-timeout.patch
+    ];
 
   nativeBuildInputs = [
     cmake
