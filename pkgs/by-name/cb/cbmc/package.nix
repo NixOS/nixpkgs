@@ -2,10 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
   bison,
   cadical,
-  cbmc,
   cmake,
   flex,
   makeWrapper,
@@ -14,6 +12,7 @@
   cudd,
   nix-update-script,
   fetchpatch,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -109,10 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsat_impl=cadical"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = cbmc;
-    command = "cbmc --version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/cbmc";
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
