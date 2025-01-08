@@ -103,7 +103,10 @@ let
       nestedTypes = lib.optionalAttrs (freeformType != null) {
         inherit freeformType;
       };
-      # TODO: getSubOptions for documentation purposes, etc
+      # TODO: include `_freeformOptions`
+      getSubOptions = prefix: lib.mapAttrs (name: field:
+        mergeDefinitions (prefix ++ [ name ]) field.type [ ]
+      ) checkedFields;
     };
 
 in
