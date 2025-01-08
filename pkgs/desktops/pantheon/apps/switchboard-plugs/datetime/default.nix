@@ -12,6 +12,7 @@
   libgee,
   libical,
   granite7,
+  gettext,
   gtk4,
   libxml2,
   switchboard,
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja
