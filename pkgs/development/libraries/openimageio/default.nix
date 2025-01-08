@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.5.16.0";
+  version = "3.0.2.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
     rev = "v${version}";
-    hash = "sha256-hUCwlzQW5mJH5HYPbLWOcupc36nxM12CV0sakZhiGzo=";
+    hash = "sha256-h3w3drX9VtZfF/Eznl7/lJzZaB4TJT6WEeCUVyfWWgc=";
   };
 
   # Workaround broken zlib version detecion in CMake < 3.37.
