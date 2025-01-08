@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "radio-cli";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
