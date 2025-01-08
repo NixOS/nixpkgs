@@ -124,7 +124,7 @@ rec {
     - Ordering the dependent phases of `system.activationScripts`
     - Ordering the dependent phases of `system.userActivationScripts`
 
-    For further examples see: [NixOS activation script)(https://nixos.org/manual/nixos/stable/#sec-activation-script)
+    For further examples see: [NixOS activation script](https://nixos.org/manual/nixos/stable/#sec-activation-script)
 
   */
   textClosureList = predefined: arg:
