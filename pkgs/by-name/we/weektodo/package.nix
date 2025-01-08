@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "WeekToDo";
     longDescription = ''
-       WeekToDo is a Free and Open Source Minimalist Weekly Planner and To Do list App focused on privacy. Available for Windows, Mac, Linux or online.
+      WeekToDo is a Free and Open Source Minimalist Weekly Planner and To Do list App focused on privacy. Available for Windows, Mac, Linux or online.
     '';
     homepage = "https://weektodo.me/";
     license = lib.licenses.gpl3Only;
