@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multi-backend implementation of SYCL for CPUs and GPUs";
     mainProgram = "acpp";
     maintainers = with maintainers; [ yboettcher ];
+    broken = rocmSupport && !(lib.versionAtLeast rocmPackages.clr.version "6.3.1");
     license = licenses.bsd2;
   };
 })
