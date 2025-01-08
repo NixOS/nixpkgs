@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spral";
-  version = "2024.05.08";
+  version = "2025.01.08";
 
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
     rev = "v${version}";
-    hash = "sha256-1CdRwQ0LQrYcXvoGtGxR9Ug3Q2N4skXq8z+LdNpv8p4=";
+    hash = "sha256-tuhJClSjah/ud6PVr6biOq5KdKtspJ7hpWZ350yzz+U=";
   };
 
   postPatch =
