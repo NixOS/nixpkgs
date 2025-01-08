@@ -16,17 +16,17 @@ submodules.
 
 <!-- TODO: Link to more details on the record and submodule types -->
 
-Wildcard records can also be used to achieve the same thing, and may be
+Freeform records can also be used to achieve the same thing, and may be
 preferred in many scenarios due to their improved performance when
 compared to submodules and also the ability to declare "optional" fields.
 
-Wildcards records are used by simply passing `wildcard = types.anything`
+Freeform records are used by simply passing `freeformType = types.anything`
 to a record type definition.
 
-::: {#ex-wildcard-record .example}
-### Wildcard record
+::: {#ex-freeform-record .example}
+### Freeform record
 
-Most freeform submodules can also be represented as wildcard records.
+Most freeform submodules can also be represented as freeform records.
 
 The following example is equivalent to the first submodule example:
 
@@ -36,20 +36,16 @@ The following example is equivalent to the first submodule example:
   options.settings = lib.mkOption {
     type = lib.types.record {
 
-      wildcard = lib.types.str;
+      freeformType = lib.types.str;
 
       # We want this attribute to be checked for the correct type
-      fields.port = lib.mkOption {
-        type = lib.types.port;
-        # Declaring the option also allows defining a default value
-        default = 8080;
-      };
-
-      # We could use an "optional" field, instead of supplying a default
-      optionalFields.port = lib.mkOption {
-        type = lib.types.port;
-      };
-
+      fields = {
+        port = lib.mkField {
+          type = lib.types.port;
+          default = 8080;
+          # We could also set `optional = true` instead of setting a default:
+          # optional = true;
+        };
     };
   };
 }

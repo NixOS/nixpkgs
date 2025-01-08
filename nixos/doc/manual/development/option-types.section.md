@@ -490,18 +490,18 @@ Composed types are types that take a type as parameter. `listOf
 <!-- TODO: Add some examples!! -->
 
 Records are a simpler alternative to [submodules](#section-option-types-submodule).
-Rather than merging fully-fledged modules, a record consists only of "field" sub-options and an optional "wildcard" type, similar to a submodule's `freeformType`.
+Rather than merging fully-fledged modules, a record consists only of "fields" and an optional `freeformType`.
 
     ::: {.note}
     Because records are not implemented using the full module system, they can usually be evaluated significantly faster than submodules.
     :::
 
-### Record fields
+### Record fields {#section-option-types-record-fields}
 
-A record's sub-options are declared as `fields`, using `lib.mkField`. A field is very similar to an option.
+A record's fields are declared using `lib.mkField`. A field is very similar to an option.
 You can also use record or submodule type fields to implement _nested_ options.
 
-### Record optional fields
+### Record optional fields {#section-option-types-record-optional-fields}
 
 Normally, options and fields will always be present in the final value. When undefined they are present as a value that **throws**.
 
@@ -512,7 +512,7 @@ This means you can do things like `config.recordOption ? optionalField`.
     Optional fields should not define a `default`.
     :::
 
-### Freeform Records
+### Freeform Records {#section-option-types-record-freeform}
 
 Records can optionally be declared with a freeformType, which can be used to allow definitions that do not match the explicitly declared fields.
 Any definition that does not match a field will be checked against the freeformType, for example you could set `freeformType = types.anything`.
