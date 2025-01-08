@@ -12,8 +12,7 @@ on:
       - haskell-updates
       - python-updates
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   get-merge-commit:
@@ -23,7 +22,6 @@ jobs:
     name: Attributes
     runs-on: ubuntu-24.04
     needs: get-merge-commit
-    # Skip this and dependent steps if the PR can't be merged
     if: needs.get-merge-commit.outputs.mergedSha
     outputs:
       targetSha: ${{ steps.targetSha.outputs.targetSha }}
@@ -45,6 +43,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Evaluate the list of all attributes and get the systems matrix
         id: systems
@@ -71,6 +71,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
@@ -106,6 +108,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
         env:
@@ -145,6 +149,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Combine all output paths and eval stats
         run: |
