@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-shell";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-plugin-shell";
     tag = version;
-    hash = "sha256-ynbZCzic6bAIwtG0rGk4oMPc8pm59UFboNAGUb0qJnE=";
+    hash = "sha256-BntObwrW7xt1gYWpckLJF7GklkmUJMh8D1IUwCcOOl4=";
   };
 
   build-system = [ poetry-core ];
