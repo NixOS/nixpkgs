@@ -3,25 +3,22 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  openssl,
   testers,
   zizmor,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zizmor";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = "zizmor";
     tag = "v${version}";
-    hash = "sha256-95YtFlnC8xFBz1v+qC3rh7jEUp+4JBoMGgVQd/6IFwE=";
+    hash = "sha256-1NpwBjJlpaP3iyTfrgMwO/1qR74/MNBYjtf4+wCe4m8=";
   };
 
-  cargoHash = "sha256-imq7ElZcC9E4nDkHaaFiBf8r1VuMtw5zOn9O7EzIPkQ=";
-
-  buildInputs = [ openssl ];
+  cargoHash = "sha256-feAfHkcLvEdFblehPGtLO01Vl9QpOueuJrpEujlv4qY=";
 
   nativeBuildInputs = [ pkg-config ];
 
