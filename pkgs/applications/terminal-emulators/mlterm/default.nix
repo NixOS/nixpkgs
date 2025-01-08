@@ -101,13 +101,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
-  version = "3.9.3";
+  version = "3.9.3-unstable-2025-01-07";
 
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = "mlterm";
-    rev = finalAttrs.version;
-    sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
+    rev = "83962a55e42e6507c4ec94d905249782f394feb1";
+    hash = "sha256-qP4gxY7vws+45SJzch5jArxim+0sdob63o/nLCG4EF0=";
   };
 
   nativeBuildInputs =
