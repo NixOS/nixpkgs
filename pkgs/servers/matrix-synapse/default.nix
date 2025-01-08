@@ -57,6 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     # Don't force pillow to be 10.0.1 because we already have patched it, and
     # we don't use the pillow wheels.
     sed -i 's/Pillow = ".*"/Pillow = ">=5.4.0"/' pyproject.toml
+
+    # https://github.com/element-hq/synapse/pull/17878#issuecomment-2575412821
+    substituteInPlace tests/storage/databases/main/test_events_worker.py \
+      --replace-fail "def test_recovery" "def no_test_recovery"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
