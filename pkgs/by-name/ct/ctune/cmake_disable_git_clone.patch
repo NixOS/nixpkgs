@@ -1,0 +1,59 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1a30d61..bea8d7c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -50,13 +50,6 @@ include(FetchContent)
+ 
+ set(CMAKE_VERBOSE_MAKEFILE ON)
+ 
+-#========================================== PRE-CHECKS ============================================#
+-include(FindGit)
+-find_package(Git)
+-
+-if (NOT Git_FOUND)
+-    message(FATAL_ERROR "Required package 'Git' not found on system.")
+-endif ()
+ 
+ #======================================== LIB IMPORTS =============================================#
+ # ======= #
+@@ -68,28 +61,9 @@ include_directories(${OPENSSL_INCLUDE_DIR})
+ # ============== #
+ # JSON-C library #
+ # ============== #
+-set(JSONC_DOWNLOAD_PATH "${TEMP_DIR_PATH}/libjsonc")
+-set(JSONC_INSTALL_PATH "${CMAKE_EXTERNAL_OUTPUT_DIRECTORY}")
+-
+-add_custom_target(make-jsonc-install-dir ALL
+-        COMMAND ${CMAKE_COMMAND} -E make_directory ${JSONC_INSTALL_PATH}
+-)
+-
+-ExternalProject_Add(libjsonc
+-        PREFIX         "${JSONC_DOWNLOAD_PATH}"
+-        SOURCE_DIR     "${JSONC_DOWNLOAD_PATH}/src/libjsonc-build"
+-        GIT_REPOSITORY "https://github.com/json-c/json-c.git"
+-        CMAKE_ARGS     "-DBUILD_STATIC_LIBS=ON"
+-                       "-DBUILD_SHARED_LIBS=OFF"
+-                       "-DCMAKE_INSTALL_PREFIX:PATH=${JSONC_INSTALL_PATH}"
+-                       "-DHAVE_ARC4RANDOM=OFF"
+-                       "-DCMAKE_BUILD_TYPE=release"
+-)
+-
+-set(JSONC_LIBRARIES
+-        ${CMAKE_EXTERNAL_OUTPUT_DIRECTORY}/lib/libjson-c.a
+-        bsd
+-)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(JSONC REQUIRED json-c)
++include_directories(${JSONC_INCLUDE_DIRS})
+ 
+ # ============ #
+ # Curl library #
+@@ -408,7 +382,7 @@ add_subdirectory(docs)
+ #endforeach()
+ 
+ add_executable(ctune ${SOURCE_FILES})
+-add_dependencies(ctune ctune_logger libjsonc)
++add_dependencies(ctune ctune_logger)
+ include_directories(${CMAKE_EXTERNAL_OUTPUT_DIRECTORY}/include)
+ 
+ add_dependencies(ctune ${CTUNE_PLUGIN_LIST_AUDIO_PLAYER})
