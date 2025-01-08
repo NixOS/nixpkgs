@@ -1,9 +1,14 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, fetchurl
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  buildNpmPackage,
+  nix-update-script,
+  npm-lockfile-fix,
+  fetchNpmDeps,
+  diffutils,
+  jq,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -18,28 +23,82 @@ buildGoModule rec {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-5nUzUnVWVBnQErbMJeSe2ZxCcdcHSmT34JXjFlRMW/s=";
+    hash = "sha256-G9RYktnnVXdhNWp8q+bNbdlHB9ZOGtnESnZVOA7lDvE=";
+    postFetch = ''
+      cd $out/webapp
+
+      # Remove "+..." suffixes on versions.
+      ${lib.getExe jq} '
+        def desuffix(version): version | gsub("^(?<prefix>[^\\+]+)\\+.*$"; "\(.prefix)");
+        .packages |= map_values(if has("version") then .version = desuffix(.version) else . end)
+      ' < package-lock.json > package-lock.fixed.json
+      ${lib.getExe npm-lockfile-fix} package-lock.fixed.json
+
+      rm -f package-lock.json
+      mv package-lock.fixed.json package-lock.json
+    '';
   };
 
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
-  overrideModAttrs = (_: {
-    buildPhase = ''
-      make setup-go-work
-      go work vendor -e
-    '';
-  });
+  overrideModAttrs = (
+    _: {
+      buildPhase = ''
+        make setup-go-work
+        go work vendor -e
+      '';
+    }
+  );
 
-  webapp = fetchurl {
-    url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-yG5GDeuCHv95e+b2xi/UYiCGkV+I3aqj13Qh/YbyOWQ=";
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    sourceRoot = "${src.name}/webapp";
+    hash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+    makeCacheWritable = true;
+    forceGitDeps = true;
   };
 
-  # Makes nix-update-script pick up the fetchurl for the webapp.
-  # https://github.com/Mic92/nix-update/blob/1.3.1/nix_update/eval.py#L179
-  offlineCache = webapp;
+  webapp = buildNpmPackage rec {
+    pname = "mattermost-webapp";
+    inherit version src;
+
+    sourceRoot = "${src.name}/webapp";
+
+    # Remove deprecated image-webpack-loader causing build failures
+    # See: https://github.com/tcoopman/image-webpack-loader#deprecated
+    postPatch = ''
+      substituteInPlace channels/webpack.config.js \
+        --replace-fail 'options: {}' 'options: { disable: true }'
+    '';
+
+    npmDepsHash = npmDeps.hash;
+    makeCacheWritable = true;
+    forceGitDeps = true;
+
+    npmRebuildFlags = [ "--ignore-scripts" ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      npm run build --workspace=platform/types
+      npm run build --workspace=platform/client
+      npm run build --workspace=platform/components
+      npm run build --workspace=channels
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r channels/dist/* $out
+
+      runHook postInstall
+    '';
+  };
 
   vendorHash = "sha256-Gwv6clnq7ihoFC8ox8iEM5xp/us9jWUrcmqA9/XbxBE=";
 
@@ -64,16 +123,21 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    tar --strip 1 --directory $out -xf $webapp \
-      mattermost/{client,i18n,fonts,templates,config}
-
-    # For some reason a bunch of these files are executable
-    find $out/{client,i18n,fonts,templates,config} -type f -exec chmod -x {} \;
+    mkdir -p $out/{client,i18n,fonts,templates,config}
+    cp -r ${webapp}/* $out/client/
+    cp -r ${src}/server/i18n/* $out/i18n/
+    cp -r ${src}/server/fonts/* $out/fonts/
+    cp -r ${src}/server/templates/* $out/templates/
+    OUTPUT_CONFIG=$out/config/config.json \
+      go run -tags production ./scripts/config_generator
   '';
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^v(9\\.11\\.[0-9]+)$" ];
+      extraArgs = [
+        "--version-regex"
+        "^v(9\.11\.[0-9]+)$"
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
   };
@@ -81,8 +145,17 @@ buildGoModule rec {
   meta = with lib; {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [ agpl3Only asl20 ];
-    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
+    license = with licenses; [
+      agpl3Only
+      asl20
+    ];
+    maintainers = with maintainers; [
+      ryantm
+      numinit
+      kranzes
+      mgdelacroix
+      fsagbuya
+    ];
     mainProgram = "mattermost";
   };
 }
