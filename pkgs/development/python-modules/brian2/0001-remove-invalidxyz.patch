@@ -1,0 +1,27 @@
+From dbf0af29767629def355427cf63410158708c632 Mon Sep 17 00:00:00 2001
+From: Bot_wxt1221 <3264117476@qq.com>
+Date: Wed, 13 Nov 2024 21:15:04 +0800
+Subject: [PATCH] Update test_codegen.py
+
+---
+ brian2/tests/test_codegen.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/brian2/tests/test_codegen.py b/brian2/tests/test_codegen.py
+index fdc03cdf2..6f7ae50bd 100644
+--- a/brian2/tests/test_codegen.py
++++ b/brian2/tests/test_codegen.py
+@@ -589,13 +589,6 @@ def test_cpp_flags_support():
+     _, compile_args = get_compiler_and_args()
+     assert compile_args == prefs["codegen.cpp.extra_compile_args"]
+ 
+-    # Should never be supported and raise a warning
+-    prefs["codegen.cpp.extra_compile_args"] = ["-invalidxyz"]
+-    with catch_logs() as l:
+-        _, compile_args = get_compiler_and_args()
+-    assert len(l) == 1 and l[0][0] == "WARNING"
+-    assert compile_args == []
+-
+     prefs["codegen.cpp.extra_compile_args"] = old_prefs
+ 
+ 

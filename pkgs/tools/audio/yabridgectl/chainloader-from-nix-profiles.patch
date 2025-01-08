@@ -1,0 +1,72 @@
+diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
+index d948beff..9b3f9ffb 100644
+--- a/tools/yabridgectl/src/config.rs
++++ b/tools/yabridgectl/src/config.rs
+@@ -22,6 +22,7 @@ use serde_derive::{Deserialize, Serialize};
+ use std::collections::{BTreeMap, BTreeSet, HashSet};
+ use std::env;
+ use std::fs;
++use std::iter;
+ use std::path::{Path, PathBuf};
+ use which::which;
+ use xdg::BaseDirectories;
+@@ -225,34 +226,27 @@ impl Config {
+                 }
+             }
+             None => {
+-                // Search in the system library locations and in `~/.local/share/yabridge` if no
+-                // path was set explicitely. We'll also search through `/usr/local/lib` just in case
+-                // but since we advocate against installing yabridge there we won't list this path
+-                // in the error message when `libyabridge-chainloader-vst2.so` can't be found.
+-                let system_path = Path::new("/usr/lib");
++                // Search through NIX_PROFILES & data home directory if no path was set explicitly.
++                // NIX_PROFILES is iterated in reverse from the most specific (the user profile) to
++                // the least specific (the system profile).
++                let nix_profiles = env::var("NIX_PROFILES");
+                 let user_path = xdg_dirs.get_data_home();
+-                let lib_directories = [
+-                    system_path,
+-                    // Used on Debian based distros
+-                    Path::new("/usr/lib/x86_64-linux-gnu"),
+-                    // Used on Fedora
+-                    Path::new("/usr/lib64"),
+-                    Path::new("/usr/local/lib"),
+-                    Path::new("/usr/local/lib/x86_64-linux-gnu"),
+-                    Path::new("/usr/local/lib64"),
+-                    &user_path,
+-                ];
++                let lib_directories = nix_profiles.iter()
++                    .flat_map(|profiles| profiles.split(' ')
++                              .rev()
++                              .map(|profile| Path::new(profile).join("lib")))
++                    .chain(iter::once(user_path.clone()));
++
+                 let mut candidates = lib_directories
+-                    .iter()
+                     .map(|directory| directory.join(VST2_CHAINLOADER_NAME));
++
+                 match candidates.find(|directory| directory.exists()) {
+                     Some(candidate) => candidate,
+                     _ => {
+                         return Err(anyhow!(
+-                            "Could not find '{}' in either '{}' or '{}'. You can override the \
++                            "Could not find '{}' through 'NIX_PROFILES' or '{}'. You can override the \
+                              default search path using 'yabridgectl set --path=<path>'.",
+                             VST2_CHAINLOADER_NAME,
+-                            system_path.display(),
+                             user_path.display()
+                         ));
+                     }
+diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
+index e66ef0da..bfe9c8bf 100644
+--- a/tools/yabridgectl/src/main.rs
++++ b/tools/yabridgectl/src/main.rs
+@@ -134,7 +134,7 @@ fn main() -> Result<()> {
+                         .long_help(
+                             "Path to the directory containing \
+                              'libyabridge-chainloader-{clap,vst2,vst3}.so'. If this is not set, \
+-                             then yabridgectl will look in both '/usr/lib' and \
++                             then yabridgectl will look through 'NIX_PROFILES' and \
+                              '~/.local/share/yabridge' by default.",
+                         )
+                         .value_parser(parse_directory_path)

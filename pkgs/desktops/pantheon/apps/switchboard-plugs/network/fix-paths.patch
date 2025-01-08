@@ -1,0 +1,48 @@
+diff --git a/src/Views/VPNPage.vala b/src/Views/VPNPage.vala
+index 21488d1e..f9915e5d 100644
+--- a/src/Views/VPNPage.vala
++++ b/src/Views/VPNPage.vala
+@@ -279,7 +279,7 @@ public class Network.VPNPage : Network.Widgets.Page {
+     private void try_connection_editor (string args) {
+         try {
+             var appinfo = AppInfo.create_from_commandline (
+-                "nm-connection-editor %s".printf (args),
++                "@networkmanagerapplet@/bin/nm-connection-editor %s".printf (args),
+                 null,
+                 GLib.AppInfoCreateFlags.NONE
+             );
+diff --git a/src/Widgets/Page.vala b/src/Widgets/Page.vala
+index cbcc8357..c6276d5a 100644
+--- a/src/Widgets/Page.vala
++++ b/src/Widgets/Page.vala
+@@ -189,7 +189,7 @@ namespace Network.Widgets {
+         protected void edit_connections () {
+             try {
+                 var appinfo = AppInfo.create_from_commandline (
+-                    "nm-connection-editor", null, AppInfoCreateFlags.NONE
++                    "@networkmanagerapplet@/bin/nm-connection-editor", null, AppInfoCreateFlags.NONE
+                 );
+                 appinfo.launch (null, null);
+             } catch (Error e) {
+@@ -200,7 +200,7 @@ namespace Network.Widgets {
+         protected void open_advanced_settings () {
+             try {
+                 var appinfo = AppInfo.create_from_commandline (
+-                    "nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
++                    "@networkmanagerapplet@/bin/nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
+                 );
+ 
+                 appinfo.launch (null, null);
+diff --git a/src/Widgets/VPN/VPNInfoDialog.vala b/src/Widgets/VPN/VPNInfoDialog.vala
+index e647c43b..44ce61c6 100644
+--- a/src/Widgets/VPN/VPNInfoDialog.vala
++++ b/src/Widgets/VPN/VPNInfoDialog.vala
+@@ -70,7 +70,7 @@ public class Network.Widgets.VPNInfoDialog : Granite.MessageDialog {
+             if (response == 1) {
+                 try {
+                     var appinfo = AppInfo.create_from_commandline (
+-                        "nm-connection-editor --edit=%s".printf (connection.get_uuid ()),
++                        "@networkmanagerapplet@/bin/nm-connection-editor --edit=%s".printf (connection.get_uuid ()),
+                         null,
+                         GLib.AppInfoCreateFlags.NONE
+                     );
