@@ -31,13 +31,13 @@ jobs:
           # Fetches the merge commit and its parents
           fetch-depth: 2
 
-      - name: Checking out base branch
+      - name: Checking out target branch
         run: |
-          base=$(mktemp -d)
-          baseRev=$(git rev-parse HEAD^1)
-          git worktree add "$base" "$baseRev"
-          echo "baseRev=$baseRev" >> "$GITHUB_ENV"
-          echo "base=$base" >> "$GITHUB_ENV"
+          target=$(mktemp -d)
+          targetRev=$(git rev-parse HEAD^1)
+          git worktree add "$target" "$targetRev"
+          echo "targetRev=$targetRev" >> "$GITHUB_ENV"
+          echo "target=$target" >> "$GITHUB_ENV"
 
       - name: Get Nixpkgs revision for nixfmt
         run: |
@@ -85,12 +85,12 @@ jobs:
             esac
 
             # Ignore files that weren't already formatted
-            if [[ -n "$source" ]] && ! nixfmt --check ${{ env.base }}/"$source" 2>/dev/null; then
-              echo "Ignoring file $file because it's not formatted in the base commit"
+            if [[ -n "$source" ]] && ! nixfmt --check ${{ env.target }}/"$source" 2>/dev/null; then
+              echo "Ignoring file $file because it's not formatted in the target commit"
             elif ! nixfmt --check "$dest"; then
               unformattedFiles+=("$dest")
             fi
-          done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
+          done < <(git diff -z --name-status ${{ env.targetRev }} -- '*.nix')
 
           if (( "${#unformattedFiles[@]}" > 0 )); then
             echo "Some new/changed Nix files are not properly formatted"
