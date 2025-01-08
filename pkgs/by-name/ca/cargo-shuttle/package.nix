@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.49.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-97AiRgTPzkNsnxMTF0zleHVR6QYLyRlhguh2nz+duUM=";
+    hash = "sha256-D3o4GdGD/lP4bchjpyj684G1CDWMhnZHke131GAI1es=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eHmNGIcSXzFdfEHKKr0R+igtZbm8bPRFg2uhzJwKDhk=";
+  cargoHash = "sha256-hlYcDQi4wv43UBYSvnWUMunAKVCFVFA7hvxjaeGA2pA=";
 
   nativeBuildInputs = [ pkg-config ];
 
