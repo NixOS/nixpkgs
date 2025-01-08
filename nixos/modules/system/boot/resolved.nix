@@ -194,6 +194,7 @@ in
         wantedBy = [ "sysinit.target" ];
         aliases = [ "dbus-org.freedesktop.resolve1.service" ];
         restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+        stopIfChanged = false;
       };
 
       environment.etc =
