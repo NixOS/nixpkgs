@@ -13,6 +13,7 @@ rec {
 
   meta = with lib; {
     homepage = "https://tandoor.dev/";
+    changelog = "https://github.com/TandoorRecipes/recipes/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ jvanbruegge ];
   };
