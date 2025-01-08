@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/harry-cpp/code-nautilus";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ BerriJ ];
+    maintainers = with maintainers; [ berrij ];
   };
 
 }
