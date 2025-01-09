@@ -7,7 +7,7 @@ let
 
   text = ''
     #!/bin/bash
-    export "STORE_PATH"="$(dirname "$(readlink -f "$(which WarThunder)")")"
+    export "STORE_PATH"="echo $(dirname "$(dirname "$(readlink -f "$(which launcher)")")")"
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
     echo "Check for home directory, create if not present."
