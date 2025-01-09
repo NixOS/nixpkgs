@@ -4080,6 +4080,8 @@ self: super: with self; {
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
+  eheimdigital = callPackage ../development/python-modules/eheimdigital { };
+
   eigenpy = callPackage ../development/python-modules/eigenpy { };
 
   einops = callPackage ../development/python-modules/einops { };
