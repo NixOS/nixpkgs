@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.60.7";
+  version = "0.60.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     tag = "v${version}";
-    hash = "sha256-5mn1FDhaRoPEBEqumzu8fIHB8uKSG9aVO/shigBs4ag=";
+    hash = "sha256-o8g409R+3lXlwPiDFi9eCzTwcDcZhMEMcc8a1YvlomM=";
   };
 
   postPatch = ''
