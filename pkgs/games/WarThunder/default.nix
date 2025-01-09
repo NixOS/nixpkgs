@@ -109,6 +109,7 @@ desktopItem = makeDesktopItem rec {
   exec = "acesx86_64";
   icon = "launcher.ico";
   desktopName = "War Thunder";
+  terminal = true;
   categories = [ "Game" ];
 };
 
