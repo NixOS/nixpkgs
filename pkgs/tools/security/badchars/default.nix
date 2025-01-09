@@ -21,6 +21,8 @@ python3.pkgs.buildPythonApplication rec {
   # no tests are available and it can't be imported (it's only a script, not a module)
   doCheck = false;
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "HEX badchar generator for different programming languages";
     longDescription = ''
