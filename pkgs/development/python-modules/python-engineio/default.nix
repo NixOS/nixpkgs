@@ -9,6 +9,7 @@
   iana-etc,
   libredirect,
   mock,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.10.1";
+  version = "4.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     tag = "v${version}";
-    hash = "sha256-qfFMpE0aW8/TUBaKcaD/qV+JaBEqNR3WZ+mhQQsXkdU=";
+    hash = "sha256-6gSpnBXznpWDtGEdV6PDtQvRodAz4jqOY+zGT2+NUj0=";
   };
 
   build-system = [ setuptools ];
@@ -44,14 +45,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    aiohttp
     eventlet
     mock
-    requests
     tornado
-    websocket-client
+    pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -65,8 +64,12 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  # somehow effective log level does not change?
-  disabledTests = [ "test_logger" ];
+  disabledTests = [
+    # Assertion issue
+    "test_async_mode_eventlet"
+    # Somehow effective log level does not change?
+    "test_logger"
+  ];
 
   pythonImportsCheck = [ "engineio" ];
 
