@@ -1,14 +1,19 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellScript, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook }:
 
 let
-  acesx86_64 = writeShellScript  "acesx86_64" ''
+  acesx86_64 = writeShellApplication {
+  name = "acesx86_64";
+  runtimeInputs = [ bash ];
+
+  text = ''
     #!/bin/bash
     export ACES64_DIR=$HOME/.aces64
-    export STORE_PATH=$PWD
+    export "STORE_PATH"="$(dirname "$(readlink -f "$(which WarThunder)")")"
+    echo "$STORE_PATH"
 
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
 
-    cd $STORE_PATH
+    cd "$STORE_PATH"
 
     echo "Check for home directory, create if not present."
 
@@ -19,9 +24,9 @@ let
       echo "Directory created, linking contents from store."
 
         for file in "$STORE_PATH"/*; do
-          if [ -f "$file" ]; then
+          if [ ! -L "ACES64_DIR/$filename" ] || [ "$(readlink "$ACES64_DIR/$filename")" != "$file" ]; then
             filename=$(basename "$file")
-            ln -s $file/$ACES64_DIR
+            ln -s "$file" "$ACES64_DIR"
 
             echo "$filename linked, DEBUG::: validating results."
 
@@ -39,10 +44,10 @@ let
 
     echo "DEBUG::: Changing root directory to $ACES64_DIR"
 
-    cd $ACES64_DIR || { echo "cd command rejected, breaking"; exit 1; }
+    cd "$ACES64_DIR" || { echo "cd command rejected, breaking"; exit 1; }
     ./launcher
 
-    ''; in
+    '';}; in
 stdenv.mkDerivation rec {
   name = "WarThunder";
   pname = "War-Thunder";
@@ -86,11 +91,18 @@ stdenv.mkDerivation rec {
     mkdir -p $out/${pname}-${version}
     mkdir -p $out/share/icons
     mkdir -p $out/bin
+
+    if [ -f "${acesx86_64}/bin/acesx86_64" ]; then
+      install -m755 -D ${acesx86_64}/bin/acesx86_64 $out/bin/acesx86_64
+    else
+      echo "FATAL ERROR DEBUG::: acesx86_64 script not found at ${acesx86_64}, breaking."
+      exit 1
+    fi
+
     install -m755 -D launcher $out/${pname}-${version}/launcher
     install -m755 -D gaijin_selfupdater $out/${pname}-${version}/gaijin_selfupdater
     install -m755 -D bpreport $out/${pname}-${version}/bpreport
     install -m755 -D launcher.ico $out/share/icons/launcher.ico
-    install -m755 -D ${acesx86_64} $out/bin/acesx86_64
 
     cp ca-bundle.crt $out/${pname}-${version}/ca-bundle.crt
     cp launcherr.dat $out/${pname}-${version}/launcherr.dat
@@ -115,7 +127,7 @@ desktopItem = makeDesktopItem rec {
   icon = "launcher.ico";
   desktopName = "War Thunder";
   terminal = true;
-  categories = [ "Games" ];
+  categories = [ "Game" ];
 };
 
 
