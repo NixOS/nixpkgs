@@ -25,19 +25,6 @@ let
           hash = "sha256-3dmvFn2rxtR0SK8oiEHIVJhpJpX4Mm/6kZnIYNSDv90=";
         };
         patches = [ ];
-        nativeCheckInputs =
-          old.nativeCheckInputs
-          ++ (with self; [
-            trove-classifiers
-          ]);
-        disabledTests = old.disabledTests ++ [
-          # relies on git
-          "test_package_with_include"
-          # Nix changes timestamp
-          "test_dist_info_date_time_default_value"
-          "test_sdist_members_mtime_default"
-          "test_sdist_mtime_zero"
-        ];
       });
     }
     // (plugins self);

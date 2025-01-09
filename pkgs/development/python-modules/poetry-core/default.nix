@@ -10,12 +10,13 @@
   pytestCheckHook,
   setuptools,
   tomli-w,
+  trove-classifiers,
   virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.9.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = version;
-    hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
+    hash = "sha256-3dmvFn2rxtR0SK8oiEHIVJhpJpX4Mm/6kZnIYNSDv90=";
   };
 
   nativeCheckInputs = [
@@ -34,13 +35,19 @@ buildPythonPackage rec {
     pytestCheckHook
     setuptools
     tomli-w
+    trove-classifiers
     virtualenv
   ];
 
-  # Requires git history to work correctly
   disabledTests = [
+    # Requires git history to work correctly
     "default_with_excluded_data"
     "default_src_with_excluded_data"
+    "test_package_with_include"
+    # Nix changes timestamp
+    "test_dist_info_date_time_default_value"
+    "test_sdist_members_mtime_default"
+    "test_sdist_mtime_zero"
   ];
 
   pythonImportsCheck = [ "poetry.core" ];
@@ -55,6 +62,6 @@ buildPythonPackage rec {
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
