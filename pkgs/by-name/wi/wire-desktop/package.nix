@@ -33,7 +33,7 @@ let
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "3.37.3607";
+      x86_64-linux = "3.38.3638";
     }
     .${system} or throwSystem;
 
@@ -44,7 +44,7 @@ let
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "sha256-mckFxxrWnxeVGgJ//efPTdtHt5nVII1lXu/BT61TKxE=";
+      x86_64-linux = "sha256-JbJjB6gPmhdjRzPGIQu9joWjCOnqDaLt7iIG8ediMAQ=";
     }
     .${system} or throwSystem;
 
