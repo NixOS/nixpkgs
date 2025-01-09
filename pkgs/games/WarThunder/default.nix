@@ -65,7 +65,7 @@ desktopItem = makeDesktopItem rec {
 };
   acesx86_64 = writeShellApplication rec {
   name = "acesx86_64";
-  nativeBuildInputs = [ bash ];
+  nativeBuildInputs = [ ${pkgs.bash} ];
   text = ''
     #!/bin/bash
     export ACES64_DIR=$HOME/.aces64
