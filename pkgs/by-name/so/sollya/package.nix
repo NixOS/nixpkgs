@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     fplll
   ];
 
+  configureFlags = [
+    "--with-xml2-config=${lib.getExe' (lib.getDev libxml2) "xml2-config"}"
+  ];
+
   doCheck = true;
 
   meta = with lib; {
