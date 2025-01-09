@@ -6,6 +6,7 @@
   installShellFiles,
   iputils,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +42,8 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ping, but with a graph";
