@@ -7,7 +7,12 @@ let
 
   text = ''
     #!/bin/bash
-    export "STORE_PATH"="dirname $(dirname $(dirname "$(readlink -f "$(which launcher)")")")")"
+
+    get_store_path() \
+    {echo $(dirname "$(dirname "$(dirname "$(readlink -f "$(which launcher)")")")"""}
+    export STORE_PATH=$(get_store_path)
+
+
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
     echo "Check for home directory, create if not present."
