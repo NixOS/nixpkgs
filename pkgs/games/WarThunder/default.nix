@@ -66,8 +66,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-vqpx85ZT1AzKk7dkZvMDMJf9GWalDM/F2JhaiMybMoY=";
   };
 
-#### TODO acesx86_64, re-write shell wrapper
-####      GOAL: Shell wrapper needs to sym link all files in store path to the out path in users home directory, then run the launcher with NO arguments.
+  desktopItem = [(makeDesktopItem {
+    name = "War-Thunder";
+    exec = "acesx86_64";
+    icon = "launcher";
+    desktopName = "War Thunder";
+    genericName = "War Thunder";
+    categories = [ "Game" ];
+    })];
+
+
 
 
   sourceRoot = "./${pname}-${version}";
@@ -145,14 +153,6 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
   '';
 
 
-  desktopItem = (makeDesktopItem {
-    name = "War-Thunder";
-    exec = "acesx86_64";
-    icon = "launcher";
-    desktopName = "War Thunder";
-    genericName = "War Thunder";
-    categories = [ "Game" ];
-    });
 
 
   meta = with lib; {
