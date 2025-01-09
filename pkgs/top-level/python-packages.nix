@@ -9216,6 +9216,8 @@ self: super: with self; {
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
+  nhc = callPackage ../development/python-modules/nhc { };
+
   niaaml = callPackage ../development/python-modules/niaaml { };
 
   nianet = callPackage ../development/python-modules/nianet { };
