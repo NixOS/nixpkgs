@@ -14435,7 +14435,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  WarThunder = callPackage ../by-name/wa/WarThunder/package.nix {};
+  WarThunder = callPackage ../by-name/wa/WarThunder/default.nix {};
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     python = python3;
