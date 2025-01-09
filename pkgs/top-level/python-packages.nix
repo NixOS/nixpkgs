@@ -325,8 +325,6 @@ self: super: with self; {
 
   aiolimiter = callPackage ../development/python-modules/aiolimiter { };
 
-  aiolivisi = callPackage ../development/python-modules/aiolivisi { };
-
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
   aiomcache = callPackage ../development/python-modules/aiomcache { };
@@ -7539,6 +7537,8 @@ self: super: with self; {
   livelossplot = callPackage ../development/python-modules/livelossplot { };
 
   livereload = callPackage ../development/python-modules/livereload { };
+
+  livisi = callPackage ../development/python-modules/livisi { };
 
   lizard = callPackage ../development/python-modules/lizard { };
 
