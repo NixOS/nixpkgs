@@ -15538,6 +15538,8 @@ self: super: with self; {
 
   standard-chunk = callPackage ../development/python-modules/standard-chunk { };
 
+  standard-imghdr = callPackage ../development/python-modules/standard-imghdr { };
+
   standard-telnetlib = callPackage ../development/python-modules/standard-telnetlib { };
 
   stone = callPackage ../development/python-modules/stone { };
