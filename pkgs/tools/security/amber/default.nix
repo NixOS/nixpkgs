@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage secret values in-repo via public key cryptography";
     homepage = "https://github.com/fpco/amber";
     changelog = "https://github.com/fpco/amber/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "amber";
   };
 }
