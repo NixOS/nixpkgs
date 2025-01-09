@@ -829,6 +829,13 @@ in
     nvimRequireCheck = "crates";
   };
 
+  cspell-nvim = super.cspell-nvim.overrideAttrs {
+    dependencies = with self; [
+      none-ls-nvim
+      plenary-nvim
+    ];
+  };
+
   ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs {
     # drop Python 2 patches
     # https://github.com/JazzCore/ctrlp-cmatcher/pull/44
