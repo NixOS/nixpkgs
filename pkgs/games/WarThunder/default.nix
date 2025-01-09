@@ -112,10 +112,16 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
       --set-rpath ${libPath} gaijin_selfupdater
     echo "DEBUG::: Done, proceeding."
 
+    install -m755 -D launcher.ico $out/share/pixmaps/launcher.png
     echo "DEBUG::: Installing the fucking desktop file"
     mkdir -p "$out/share/applications"
-    cp -r "${desktopItem}/share/applications"* "$out/share/applications"
-    install -m755 -D launcher.ico $out/share/pixmaps/launcher.png
+    cp -rf "${desktopItem}/share/applications"* "$out/share/applications"
+    if [ ! -f $out/share/applications/WarThunder.desktop ]; then
+      echo "FATAL ERROR: DEBUG::: Fucking desktop file wasnt copied right again, breaking"
+      exit 1
+    else
+      echo "INFO: desktop file installed."
+    fi
   runHook postInstall
   '';
 
