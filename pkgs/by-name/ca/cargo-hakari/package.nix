@@ -2,20 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hakari";
-  version = "0.9.33";
+  version = "0.9.35";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
-    rev = "cargo-hakari-${version}";
-    sha256 = "sha256-oJZiGXsOl00Bim/olYYSqt/p3j6dTw25IURcwdXYrAo=";
+    tag = "cargo-hakari-${version}";
+    hash = "sha256-+IjtK4kSm2vThgIxDsBLpoh0j9cDhhEqI6Hr2BmC7hc=";
   };
 
-  cargoHash = "sha256-V9QmaZYBXj26HJrP8gABwhhUPwBxnyLoO4O45lnPyew=";
+  cargoHash = "sha256-xMgNk82U32AtMeZJ8v2M0faHLAPkXrdIJHwOJcqE9m8=";
 
   cargoBuildFlags = [
     "-p"
@@ -25,6 +27,14 @@ rustPlatform.buildRustPackage rec {
     "-p"
     "cargo-hakari"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Manage workspace-hack packages to speed up builds in large workspaces";
