@@ -3796,7 +3796,8 @@
       ];
     "niko_home_control" =
       ps: with ps; [
-      ]; # missing inputs: nhc
+        nhc
+      ];
     "nilu" =
       ps: with ps; [
         niluclient
@@ -7008,6 +7009,7 @@
     "nibe_heatpump"
     "nice_go"
     "nightscout"
+    "niko_home_control"
     "nina"
     "nmap_tracker"
     "no_ip"
