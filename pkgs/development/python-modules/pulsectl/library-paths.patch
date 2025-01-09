@@ -1,0 +1,22 @@
+diff --git a/pulsectl/_pulsectl.py b/pulsectl/_pulsectl.py
+index 4422ddf..3fb2f39 100644
+--- a/pulsectl/_pulsectl.py
++++ b/pulsectl/_pulsectl.py
+@@ -31,7 +31,7 @@ else:
+ 		if not hasattr(mono_time, 'ts'):
+ 			class timespec(Structure):
+ 				_fields_ = [('tv_sec', c_long), ('tv_nsec', c_long)]
+-			librt = CDLL('librt.so.1', use_errno=True)
++			librt = CDLL('@librt@', use_errno=True)
+ 			mono_time.get = librt.clock_gettime
+ 			mono_time.get.argtypes = [c_int, POINTER(timespec)]
+ 			mono_time.ts = timespec
+@@ -625,7 +625,7 @@ class LibPulse(object):
+ 
+ 
+ 	def __init__(self):
+-		p = CDLL(ctypes.util.find_library('libpulse') or 'libpulse.so.0')
++		p = CDLL('@libpulse@')
+ 
+ 		self.funcs = dict()
+ 		for k, spec in self.func_defs.items():

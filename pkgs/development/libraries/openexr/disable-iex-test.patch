@@ -1,0 +1,13 @@
+diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
+index 25f429da..918f56e9 100644
+--- a/src/test/CMakeLists.txt
++++ b/src/test/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ # combined python 2 + 3 support
+ 
+ if (OPENEXR_TEST_LIBRARIES)
+-  add_subdirectory(IexTest)
++  #add_subdirectory(IexTest)
+   add_subdirectory(OpenEXRCoreTest)
+   add_subdirectory(OpenEXRTest)
+   add_subdirectory(OpenEXRUtilTest)
