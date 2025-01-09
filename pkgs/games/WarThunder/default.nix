@@ -7,7 +7,7 @@ let
 
   text = ''
     #!/bin/bash
-    export "STORE_PATH"="$(dirname "$(readlink -f "$(which store_path.sg)")")"
+    export "STORE_PATH"="$(dirname "$(readlink -f "$(which store_path.sh)")")"
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
     echo "Check for home directory, create if not present."
