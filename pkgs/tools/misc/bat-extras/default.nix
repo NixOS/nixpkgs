@@ -103,6 +103,7 @@ let
       license = with licenses; [ mit ];
       maintainers = with maintainers; [ bbigras ];
       platforms = platforms.all;
+      # not compatible with bat 0.25.0
       broken = true;
     };
   };
