@@ -25,13 +25,8 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "heim-0.1.0-rc.1" = "sha256-TKEG0YxF44wLz+qxpS/VfRKucqyl97t3PDxjPajbD58=";
-      "sysinfo-0.15.1" = "sha256-faMxXEHL7DFQLYrAJ+yBL6yiepZotofPF2+SizGQj4A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xfp+nR4ihaTO4AZHizYg4qqf9MR030Qb5bN2nzhbytQ=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
 
