@@ -5,7 +5,6 @@
   fetchurl,
   libsForQt5,
   qt6Packages,
-  stdenv,
   cmark,
   gpgme,
   taglib,
