@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = let
     pkgs = import <nixpkgs> {};
-    libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr];
+    libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib glibc gtk3 xorg.libX11 xorg.libXrandr];
   in ''
     echo "DEBUG::: Running patchelf to link binaries"
     patchelf \
