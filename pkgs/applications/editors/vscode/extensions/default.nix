@@ -4511,7 +4511,7 @@ let
           description = "Visual Studio Code extension for SOPS support";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
-          license = lib.licenses.unfree;
+          license = lib.licenses.mit;
           maintainers = [ ];
         };
       };
