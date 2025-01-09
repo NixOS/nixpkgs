@@ -8,6 +8,8 @@ let
 
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
 
+    cd $STORE_PATH
+
     echo "Check for home directory, create if not present."
 
     if [ ! -d "$ACES64_DIR" ]; then
