@@ -7,7 +7,7 @@ let
 
   text = ''
     #!/bin/bash
-    export "STORE_PATH"="dirname $(dirname "$(readlink -f "$(which launcher)")")"
+    export "STORE_PATH"="dirname $(dirname $(dirname "$(readlink -f "$(which launcher)")")")")"
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
     echo "Check for home directory, create if not present."
@@ -35,7 +35,7 @@ let
     "$STORE_PATH"/War-Thunder-086d99e/gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
 
     install -m755 -D \
-    "$STORE_PATH"/War-Thunder-086d99e/bpreport "$ACES64_DIR/bpreport"
+    "$STORE_PATH"../War-Thunder-086d99e/bpreport "$ACES64_DIR/bpreport"
 
     cp ca-bundle.crt "$ACES64_DIR/ca-bundle.crt"
     cp launcherr.dat "$ACES64_DIR/launcherr.dat"
