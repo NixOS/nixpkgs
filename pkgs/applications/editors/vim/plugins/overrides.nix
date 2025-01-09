@@ -3708,6 +3708,13 @@ in
     ];
   };
 
+  zotcite = super.zotcite.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   zoxide-vim = super.zoxide-vim.overrideAttrs {
     buildInputs = [ zoxide ];
 
