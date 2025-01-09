@@ -1,0 +1,19 @@
+diff --git a/Makefile b/Makefile
+index 872af46..7eba8a1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -156,13 +156,7 @@ test:
+ 	# Compile and run the test suite through Valgrind to check for
+ 	# memory errors, then generate an HTML code coverage report
+ 	# using gcovr
+-	$(CC) $(CC_ARGS) -O0 $(DEBUG_FLAGS) $(PLAT_FLAGS) $(GCOVARGS) \
++	$(CC) $(CC_ARGS) -O0 $(DEBUG_FLAGS) $(PLAT_FLAGS) \
+ 	    $(shell find src tests -name *.c) \
+ 	    -Iinclude \
+ 	    -o $(NAME).tests
+-	# If Valgrind exits non-zero, try running 'gdb ./libcds.tests'
+-	# to debug the test suite
+-	valgrind ./$(NAME).tests --track-origins=yes --leak-check=full
+-	mkdir html || rm -rf html/*
+-	gcovr -r . --exclude=bench --html --html-details -o html/coverage.html
+-	$(BROWSER) html/coverage.html &

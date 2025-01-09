@@ -1,0 +1,20 @@
+--- a/src/fileformat/CMakeLists.txt	2016-05-26 11:31:23.000000000 +0200
++++ b/src/fileformat/CMakeLists.txt	2016-07-21 23:19:56.510958771 +0200
+@@ -53,13 +53,15 @@
+ if( OPENEXR_FOUND )
+     include_directories("${OPENEXR_INCLUDE_DIR}")
+ 
++    find_package (Threads)
++
+     add_executable(pfsinexr pfsinexr.cpp "${GETOPT_OBJECT}")
+-    target_link_libraries(pfsinexr pfs ${OPENEXR_LIBRARIES})
++    target_link_libraries(pfsinexr pfs ${OPENEXR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+     install (TARGETS pfsinexr DESTINATION bin)
+     install (FILES pfsinexr.1 DESTINATION ${MAN_DIR})
+ 
+     add_executable(pfsoutexr pfsoutexr.cpp "${GETOPT_OBJECT}")
+-    target_link_libraries(pfsoutexr pfs ${OPENEXR_LIBRARIES})
++    target_link_libraries(pfsoutexr pfs ${OPENEXR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+     install (TARGETS pfsoutexr DESTINATION bin)
+     install (FILES pfsoutexr.1 DESTINATION ${MAN_DIR})
+  endif( OPENEXR_FOUND )
