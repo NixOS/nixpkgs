@@ -1641,13 +1641,12 @@ final: prev:
   clangd_extensions-nvim = buildVimPlugin {
     pname = "clangd_extensions.nvim";
     version = "2024-10-05";
-    src = fetchFromGitHub {
-      owner = "p00f";
-      repo = "clangd_extensions.nvim";
+    src = fetchgit {
+      url = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
       rev = "8f7b72100883e0e34400d9518d40a03f21e4d0a6";
       sha256 = "1rlw3h9f9cnbniqqpv9fv2s63g7s4p8ag4n15xja1r4scfxhyrip";
     };
-    meta.homepage = "https://github.com/p00f/clangd_extensions.nvim/";
+    meta.homepage = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
   };
 
   clever-f-vim = buildVimPlugin {
@@ -17709,6 +17708,17 @@ final: prev:
     meta.homepage = "https://github.com/dstein64/vim-startuptime/";
   };
 
+  vim-stationeers-ic10-syntax = buildVimPlugin {
+    pname = "vim-stationeers-ic10-syntax";
+    version = "2025-01-08";
+    src = fetchgit {
+      url = "https://gitlab.com/LittleMorph/vim-ic10";
+      rev = "7c1f13b198cfe122fb52f6abfb8dc95d5ca51013";
+      sha256 = "0pxk1qq6niy9msm369w5xn2jcwpa8a30hpqk6hb1ag1v6244j3g1";
+    };
+    meta.homepage = "https://gitlab.com/LittleMorph/vim-ic10";
+  };
+
   vim-strip-trailing-whitespace = buildVimPlugin {
     pname = "vim-strip-trailing-whitespace";
     version = "2022-02-01";
@@ -19222,6 +19232,18 @@ final: prev:
       sha256 = "0iljm70cbmgpzraki4ccw7fhyzp467f8fr4wimzg4yam5354x1hh";
     };
     meta.homepage = "https://github.com/troydm/zoomwintab.vim/";
+  };
+
+  zotcite = buildVimPlugin {
+    pname = "zotcite";
+    version = "2024-11-21";
+    src = fetchFromGitHub {
+      owner = "jalvesaq";
+      repo = "zotcite";
+      rev = "a6d1eb8a8a8555aef814979a385d03165e2f8922";
+      sha256 = "11lnm75n4im2m3vg4av6sa2x2fw62ja1w4an9c6ccvrqy5fj2wgm";
+    };
+    meta.homepage = "https://github.com/jalvesaq/zotcite/";
   };
 
   zoxide-vim = buildVimPlugin {

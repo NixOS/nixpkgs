@@ -59,20 +59,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "es_client" ];
 
   disabledTests = [
-    # Tests require network access
+    # Tests require local Elasticsearch instance
     "test_bad_version_raises"
     "test_basic_operation"
-    "test_basic_operation"
     "test_client_info"
-    "test_logging_options_ecs"
-    "test_logging_options_json"
+    "test_client_info"
+    "test_exit_if_not_master"
     "test_multiple_hosts_raises"
-    "test_non_dict_passed"
     "test_skip_version_check"
-    # Test wants to handle credentials
-    "test_logging_options_from_config_file"
-    # es_client.exceptions.ConfigurationError: Must populate both username and password, or leave both empty
-    "test_exit_if_not_master "
+    "TestCLIExample"
   ];
 
   meta = with lib; {
