@@ -7,18 +7,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clash-rs";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${version}";
-    hash = "sha256-SJ3NhLiDA0iRgq9pKB/CeltPE2ewbY+z1NBQriebNi0=";
+    hash = "sha256-PaXcMJuenUrcCBdU3CZEIk9U5tZxSAVVtm9ttAldVLM=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-XZd3dah6c0jg5en/7fHAXz8iSb7AMJPvPZViXHTdEbw=";
+  cargoHash = "sha256-ynGp1MU0l48mD+gfsyOFNo4jJDiDWgoPLc02WblPjt4=";
 
   env = {
     PROTOC = "${protobuf}/bin/protoc";
