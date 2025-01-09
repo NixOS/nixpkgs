@@ -12,14 +12,6 @@ stdenv.mkDerivation rec {
 
 #### TODO acesx86_64, re-write shell wrapper
 ####      GOAL: Shell wrapper needs to sym link all files in store path to the out path in users home directory, then run the launcher with NO arguments.
-  acesx86_64 = writeShellApplication rec {
-  name = "acesx86_64";
-  text = ''
-    #!/bin/bash
-    export ACES64_DIR="\$HOME/.aces64"
-    STORE_PATH=\$(cat "\$HOME/.store_path.txt")
-
-    '';};
 
 
   sourceRoot = "./${pname}-${version}";
@@ -71,6 +63,48 @@ desktopItem = makeDesktopItem rec {
   desktopName = "War Thunder";
   categories = [ "Game" ];
 };
+  acesx86_64 = writeShellApplication rec {
+  name = "acesx86_64";
+  nativeBuildInputs = [ bash ];
+  text = ''
+    #!/bin/bash
+    export ACES64_DIR=$HOME/.aces64
+    export STORE_PATH=$PWD
+
+    echo "DEBUG::: STORE_PATH = $STORE_PATH"
+
+    echo "Check for home directory, create if not present."
+
+    if [ ! -d ""$ACES64_DIR" ]; then
+      echo "Directory not found."
+      mkdir -p "$ACES64_DIR"
+
+      echo "Directory created, linking contents from store."
+
+        for file in "$STORE_PATH"/*; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file")
+            ln -s "$file" "$ACES64_DIR/$file
+
+            echo "$file linked, DEBUG::: validating results."
+
+            if [ ! -e "$file" ]; then
+              echo "FATAL Error: Link creation for $file failure, breaking."
+              exit 1
+            else
+              echo "Linked $file is valid and exists, proceeding."
+          fi
+        done
+      else
+        echo "Directory already exists, no actions taken, proceeding."
+    fi
+
+    echo "DEBUG::: Changing root directory to $ACES64_DIR"
+
+    cd $ACES64_DIR || { echo "cd command rejected, breaking"; exit 1; }
+    ./launcher
+
+    '';};
 
 
 
