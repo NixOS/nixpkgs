@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
     echo "STORE_PATH=\"$out/${pname}-${version}\"" > $out/${pname}-${version}/store_path.txt
 
-    chmod +x "$out/${pname}-${version}/acesx86_64";
+    chmod +x "$out/bin/acesx86_64";
   runHook postInstall
   '';
 
