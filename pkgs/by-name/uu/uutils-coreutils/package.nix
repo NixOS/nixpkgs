@@ -4,9 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   cargo,
-  sphinx,
-  Security,
-  libiconv,
+  python3Packages,
   prefix ? "uutils-",
   buildMulticallBinary ? true,
 }:
@@ -30,17 +28,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    sphinx
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    libiconv
+    python3Packages.sphinx
   ];
 
   makeFlags =
     [
-      "CARGO=${cargo}/bin/cargo"
+      "CARGO=${lib.getExe cargo}"
       "PREFIX=${placeholder "out"}"
       "PROFILE=release"
       "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
