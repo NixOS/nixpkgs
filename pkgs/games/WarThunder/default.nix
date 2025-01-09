@@ -122,6 +122,8 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     else
       echo "INFO: desktop file installed."
     fi
+    echo "INFO: sym linking aces to WarThunder for purposes of desktop execution."
+    ln -s ${acesx86_64}/bin/acesx86_64 $out/bin/WarThunder
   runHook postInstall
   '';
 
