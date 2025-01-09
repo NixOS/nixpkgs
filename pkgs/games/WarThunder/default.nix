@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellScript, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellScript, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook }:
 
 let
   acesx86_64 = writeShellScript  "acesx86_64" ''
@@ -59,24 +59,25 @@ stdenv.mkDerivation rec {
   unpackPhase = false;
   dontConfigure = true;
   dontBuild = true;
+  buildInputs = [ autoPatchelfHook ];
 
-  patchPhase = let
-    pkgs = import <nixpkgs> {};
-    libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib glibc gtk3 xorg.libX11 xorg.libXrandr];
-  in ''
-    echo "DEBUG::: Running patchelf to link binaries"
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} launcher
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} bpreport
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} gaijin_selfupdater
-    mkdir -p $out/${pname}-${version}
-    echo "DEBUG::: Done, proceeding."
-  '';
+#  patchPhase = let
+#    pkgs = import <nixpkgs> {};
+#    libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.cc.lib remarkable2-#toolchain glib gtk3 xorg.libX11 xorg.libXrandr];
+#  in ''
+#    echo "DEBUG::: Running patchelf to link binaries"
+#    patchelf \
+#      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+#      --set-rpath ${libPath} launcher
+#    patchelf \
+#      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+#      --set-rpath ${libPath} bpreport
+#    patchelf \
+#      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+#      --set-rpath ${libPath} gaijin_selfupdater
+#    mkdir -p $out/${pname}-${version}
+#    echo "DEBUG::: Done, proceeding."
+#  '';
 
   installPhase = ''
   runHook preInstall
