@@ -5643,13 +5643,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  zenith = callPackage ../tools/system/zenith {
+  zenith = callPackage ../by-name/ze/zenith/package.nix {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
   # Nvidia support does not require any propietary libraries, so CI can build it.
   # Note that when enabling this unconditionally, non-nvidia users will always have an empty "GPU" section.
-  zenith-nvidia = callPackage ../tools/system/zenith {
+  zenith-nvidia = callPackage ../by-name/ze/zenith/package.nix {
     inherit (darwin.apple_sdk.frameworks) IOKit;
     nvidiaSupport = true;
   };
