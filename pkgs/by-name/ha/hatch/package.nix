@@ -74,6 +74,19 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d);
   '';
 
+  pytestFlagsArray = [
+    # AssertionError on the version metadata
+    # https://github.com/pypa/hatch/issues/1877
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
+    "--deselect=tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
+  ];
+
   disabledTests =
     [
       # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
@@ -117,14 +130,21 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
-    # At index 0 diff:
-    #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
-    # != call('test hatch-test.py3.10', shell=True)
-    "tests/cli/fmt/test_fmt.py"
-    "tests/cli/test/test_test.py"
-  ];
+  disabledTestPaths =
+    [
+      # ModuleNotFoundError: No module named 'hatchling.licenses.parse'
+      # https://github.com/pypa/hatch/issues/1850
+      "tests/backend/licenses/test_parse.py"
+      "tests/backend/licenses/test_supported.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
+      # At index 0 diff:
+      #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
+      # != call('test hatch-test.py3.10', shell=True)
+      "tests/cli/fmt/test_fmt.py"
+      "tests/cli/test/test_test.py"
+    ];
 
   passthru = {
     updateScript = nix-update-script {
