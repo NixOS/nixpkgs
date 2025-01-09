@@ -47,7 +47,7 @@ let
     echo "DEBUG::: Changing root directory to $ACES64_DIR"
 
     cd "$ACES64_DIR" || { echo "cd command rejected, breaking"; exit 1; }
-    ./launcher
+    bash  -c '$ACES64_DIR/launcher'
     '';}; in
 stdenv.mkDerivation rec {
   name = "WarThunder";
@@ -70,22 +70,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr ];
 
 #  patchPhase = let
-#    pkgs = import <nixpkgs> {};
-#    libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.cc.lib remarkable2-#toolchain glib gtk3 xorg.libX11 xorg.libXrandr];
-#  in ''
-#    echo "DEBUG::: Running patchelf to link binaries"
-#    patchelf \
-#      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-#      --set-rpath ${libPath} launcher
-#    patchelf \
-#      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-#      --set-rpath ${libPath} bpreport
-#    patchelf \
-#      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-#      --set-rpath ${libPath} gaijin_selfupdater
-#    mkdir -p $out/${pname}-${version}
-#    echo "DEBUG::: Done, proceeding."
-#  '';
+
+
+libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr];
+
 
   installPhase = ''
   runHook preInstall
@@ -103,7 +91,6 @@ stdenv.mkDerivation rec {
     install -m755 -D launcher $out/${pname}-${version}/launcher
     install -m755 -D gaijin_selfupdater $out/${pname}-${version}/gaijin_selfupdater
     install -m755 -D bpreport $out/${pname}-${version}/bpreport
-    install -m755 -D launcher.ico $out/share/icons/launcher.ico
 
     cp ca-bundle.crt $out/${pname}-${version}/ca-bundle.crt
     cp launcherr.dat $out/${pname}-${version}/launcherr.dat
@@ -114,19 +101,34 @@ stdenv.mkDerivation rec {
 
     echo "STORE_PATH=\"$out/${pname}-${version}\"" > $out/${pname}-${version}/store_path.txt
 
-    chmod +x "$out/bin/acesx86_64";
+    echo "DEBUG::: Running patchelf to link binaries"
+    patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath ${libPath} launcher
+    patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath ${libPath} bpreport
+    patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath ${libPath} gaijin_selfupdater
+    echo "DEBUG::: Done, proceeding."
 
+    echo "DEBUG::: Installing the fucking desktop file"
+    mkdir -p "$out/share/applications"
+    cp -r "${desktopItem}/share/applications"* "$out/share/applications"
+    install -m755 -D launcher.ico $out/share/icons/launcher.ico
   runHook postInstall
   '';
 
-  desktopItems = [(makeDesktopItem {
+
+  desktopItem = makeDesktopItem {
     name = "War Thunder";
     exec = "${acesx86_64}/bin/acesx86_64";
     icon = "launcher.ico";
     desktopName = "War Thunder";
     genericName = "War Thunder";
-    categories = [ "AudioVideo" "Network" ];
-  })];
+    categories = [ "Game" ];
+  };
 
   meta = with lib; {
     homepage = "https://warthunder.com/";
