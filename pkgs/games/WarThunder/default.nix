@@ -28,7 +28,6 @@ let
     fi
     echo "Installing launcher, bpreport, and selfupdater scripts to the user directory"
     install -m755 -D launcher "$ACES64_DIR/launcher"
-    install -m755 -D launcher "$out/bin/launcher"
     install -m755 -D gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
     install -m755 -D bpreport "$ACES64_DIR/bpreport"
 
@@ -125,6 +124,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     fi
     echo "INFO: sym linking aces to WarThunder for purposes of desktop execution."
     ln -s ${acesx86_64}/bin/acesx86_64 $out/bin/WarThunder
+    install -m755 -D launcher "$out/bin/launcher"
   runHook postInstall
   '';
 
