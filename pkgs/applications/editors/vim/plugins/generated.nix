@@ -2933,6 +2933,18 @@ final: prev:
     meta.homepage = "https://github.com/Decodetalkers/csharpls-extended-lsp.nvim/";
   };
 
+  cspell-nvim = buildVimPlugin {
+    pname = "cspell.nvim";
+    version = "2024-11-21";
+    src = fetchFromGitHub {
+      owner = "davidmh";
+      repo = "cspell.nvim";
+      rev = "be04e47348c04f89614d99cf73a7ce1165a2e3ec";
+      sha256 = "0cwfc7zqlfpz9x4s6xxv6dadh6xxyp19f595pjp9sp9sxb21r7hj";
+    };
+    meta.homepage = "https://github.com/davidmh/cspell.nvim/";
+  };
+
   csv-vim = buildVimPlugin {
     pname = "csv.vim";
     version = "2024-12-15";
