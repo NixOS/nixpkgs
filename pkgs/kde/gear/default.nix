@@ -242,7 +242,6 @@
   skanlite = callPackage ./skanlite { };
   skanpage = callPackage ./skanpage { };
   skladnik = callPackage ./skladnik { };
-  spectacle = callPackage ./spectacle { };
   step = callPackage ./step { };
   svgpart = callPackage ./svgpart { };
   sweeper = callPackage ./sweeper { };
