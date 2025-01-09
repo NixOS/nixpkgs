@@ -1,8 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter324,
-  pkg-config,
+  flutter327,
   webkitgtk_4_1,
   mpv,
   rustPlatform,
@@ -13,24 +12,37 @@
 }:
 let
   pname = "mangayomi";
-  version = "0.3.8";
+  version = "0.4.1";
+
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-TOCDGmJ5tlpcGS8NeVdIdx946rM1/ItQVY9OnDS6uZ0=";
+    hash = "sha256-3UOYYXwe24O3Tnt3yztqyCns4rzEBf1YXqqLwbSmkPA=";
   };
+
+  metaCommon = {
+    changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
+    description = "Read manga and stream anime from a variety of sources including BitTorrent";
+    homepage = "https://github.com/kodjodevf/mangayomi";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ aucub ];
+    platforms = lib.platforms.linux;
+  };
+
   rustDep = rustPlatform.buildRustPackage {
     inherit pname version src;
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-6Iraw5gtlVW3iSrT2zQh6JLubVTZy/y8/5quXKee2Ko=";
+    cargoHash = "sha256-5TgQiaWW3yECXkuuNBAH8tiLYuV6CrRHRRQTB/wqUzA=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
+
+    meta = metaCommon;
   };
 in
-flutter324.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit
     pname
     version
@@ -67,13 +79,12 @@ flutter324.buildFlutterApplication {
   gitHashes = {
     desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
     flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
-    media_kit_libs_windows_video = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
-    media_kit_native_event_loop = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
-    media_kit_video = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
+    media_kit_libs_windows_video = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
+    media_kit_video = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
+    media_kit = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     copyDesktopItems
   ];
 
@@ -105,18 +116,12 @@ flutter324.buildFlutterApplication {
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
+    --prefix LD_LIBRARY_PATH : $out/app/mangayomi/lib
   '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
-    changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
-    description = "Read manga and stream anime from a variety of sources including BitTorrent";
-    homepage = "https://github.com/kodjodevf/mangayomi";
+  meta = metaCommon // {
     mainProgram = "mangayomi";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
   };
 }
