@@ -63,9 +63,10 @@ desktopItem = makeDesktopItem rec {
   desktopName = "War Thunder";
   categories = [ "Game" ];
 };
-  acesx86_64 = writeShellApplication rec {
+  acesx86_64 = writeShellScript rec {
   name = "acesx86_64";
-  nativeBuildInputs = [ ${pkgs.bash} ];
+  nativeBuildInputs = [ pkgs.bash ];
+  destination = "$out/acesx86_64";
   text = ''
     #!/bin/bash
     export ACES64_DIR=$HOME/.aces64
