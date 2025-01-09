@@ -7,11 +7,23 @@ let
 
   text = ''
     #!/bin/bash
-    export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e
+    export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
     export "STORE_PATH"="$(dirname "$(readlink -f "$(which WarThunder)")")"
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
-    cd "$ACES64_DIR"
+    cd "$STORE_PATH/War-Thunder-086d99e"
+    echo "Installing launcher, bpreport, and selfupdater scripts to the user directory"
+    install -m755 -D launcher "$ACES64_DIR/launcher"
+    install -m755 -D gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
+    install -m755 -D bpreport "$ACES64_DIR/bpreport"
+
+    cp ca-bundle.crt "$ACES64_DIR/ca-bundle.crt"
+    cp launcherr.dat "$ACES64_DIR/launcherr.dat"
+    cp libsciter-gtk.so "$ACES64_DIR/libsciter-gtk.so"
+    cp libsteam_api.so "$ACES64_DIR/libsteam_api.so"
+    cp package.blk "$ACES64_DIR/package.blk"
+    cp yupartner.blk "$ACES64_DIR/yupartner.blk"
+
 
 
     echo "Check for home directory, create if not present."
@@ -19,34 +31,17 @@ let
     if [ ! -d "$ACES64_DIR" ]; then
       echo "Directory not found."
       mkdir -p "$ACES64_DIR"
+      cd "$ACES64_DIR"
+      echo "Directory created and CD'ed, linking contents from store."
 
-      echo "Directory created, linking contents from store."
-
-    for file in "$STORE_PATH"/*; do
-        filename=$(basename "$file")
-        dest="$ACES64_DIR/$filename"
-
-            if [ ! -L "$dest" ] || [ "$(readlink "$dest")" != "$file" ]; then
-
-            ln -s "$file" "$dest"
-
-            echo "$filename linked, DEBUG::: validating results."
-
-            if [ ! -e "$ACES64_DIR/$filename" ]; then
-              echo "FATAL Error: Link creation for $file failure, breaking."
-              exit 1
-            else
-              echo "Linked $file is valid and exists, proceeding."
-          fi
-        fi
-   done
       else
         echo "Directory already exists, no actions taken, proceeding."
     fi
 
-    echo "DEBUG::: Changing root directory to $ACES64_DIR"
-
     cd "$ACES64_DIR" || { echo "cd command rejected, breaking"; exit 1; }
+    echo "DEBUG::: Changing root directory to $ACES64_DIR"
+    echo "DEBUG::: Where the fuck am i. $PWD"
+
     bash  -c '$ACES64_DIR/launcher'
     '';}; in
 stdenv.mkDerivation rec {
