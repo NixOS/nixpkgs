@@ -7542,6 +7542,8 @@ self: super: with self; {
 
   livereload = callPackage ../development/python-modules/livereload { };
 
+  livisi = callPackage ../development/python-modules/livisi { };
+
   lizard = callPackage ../development/python-modules/lizard { };
 
   llama-cpp-python = callPackage ../development/python-modules/llama-cpp-python { };
