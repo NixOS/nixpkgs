@@ -29,13 +29,13 @@ let
     echo "Installing launcher, bpreport, and selfupdater scripts to the user directory"
 
     install -m755 -D \
-    ../War-Thunder-086d99e/launcher "$ACES64_DIR/launcher"
+    $STORE_PATH/../War-Thunder-086d99e/launcher "$ACES64_DIR/launcher"
 
     install -m755 -D \
-    ../War-Thunder-086d99e/gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
+    $STORE_PATH/../War-Thunder-086d99e/gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
 
     install -m755 -D \
-    ../War-Thunder-086d99e/bpreport "$ACES64_DIR/bpreport"
+    $STORE_PATH/../War-Thunder-086d99e/bpreport "$ACES64_DIR/bpreport"
 
     cp ca-bundle.crt "$ACES64_DIR/ca-bundle.crt"
     cp launcherr.dat "$ACES64_DIR/launcherr.dat"
