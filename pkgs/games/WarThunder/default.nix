@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook, copyDesktopItem }:
 
 let
   acesx86_64 = writeShellApplication {
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   unpackPhase = false;
   dontConfigure = true;
   dontBuild = true;
+  nativeBuildInputs = [ copyDesktopItem ];
   buildInputs = [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr ];
 
 #  patchPhase = let
@@ -138,7 +139,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     install -m755 -D launcher $out/bin
     install -m755 -D gaijin_selfupdater "$out/bin"
     install -m755 -D bpreport "$out/bin"
-    echo "INFO: Done."
+    echo "INFO: Done"
 
   runHook postInstall
   '';
@@ -146,7 +147,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
 
   desktopItem = makeDesktopItem {
     name = "War-Thunder";
-    exec = "${acesx86_64}/bin/acesx86_64";
+    exec = "acesx86_64";
     icon = "launcher";
     desktopName = "War Thunder";
     genericName = "War Thunder";
