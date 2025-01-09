@@ -145,7 +145,7 @@ def main() -> None:
             tic = time.time()
             driver.run_tests()
             toc = time.time()
-            logger.info(f"test script finished in {(toc-tic):.2f}s")
+            logger.info(f"test script finished in {(toc - tic):.2f}s")
 
 
 def generate_driver_symbols() -> None:
