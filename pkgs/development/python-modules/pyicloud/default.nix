@@ -14,7 +14,6 @@
   tzlocal,
   pytest-mock,
   pytestCheckHook,
-  future,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     certifi
     click
-    future
     keyring
     keyrings-alt
     pytz
