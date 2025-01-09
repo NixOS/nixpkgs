@@ -16647,6 +16647,12 @@
     githubId = 126072875;
     name = "nova madeline";
   };
+  novaviper = {
+    email = "coder.nova99@mailbox.org";
+    github = "novaviper";
+    githubId = 7191115;
+    name = "Nova Leary";
+  };
   novoxd = {
     email = "radnovox@gmail.com";
     github = "novoxd";
