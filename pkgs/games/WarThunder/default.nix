@@ -28,6 +28,7 @@ let
     fi
     echo "Installing launcher, bpreport, and selfupdater scripts to the user directory"
     install -m755 -D launcher "$ACES64_DIR/launcher"
+    install -m755 -D launcher "$out/bin/launcher"
     install -m755 -D gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
     install -m755 -D bpreport "$ACES64_DIR/bpreport"
 
