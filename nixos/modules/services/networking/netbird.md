@@ -2,7 +2,7 @@
 
 ## Quickstart {#module-services-netbird-quickstart}
 
-The absolute minimal configuration for the netbird daemon looks like this:
+The absolute minimal configuration for the Netbird client daemon looks like this:
 
 ```nix
 {
@@ -13,52 +13,76 @@ The absolute minimal configuration for the netbird daemon looks like this:
 This will set up a netbird service listening on the port `51820` associated to the
 `wt0` interface.
 
-It is strictly equivalent to setting:
+Which is equivalent to:
 
 ```nix
 {
-  services.netbird.tunnels.wt0.stateDir = "netbird";
+  services.netbird.clients.default = {
+    port = 51820;
+    interface = "wt0";
+    name = "netbird";
+    hardened = false;
+  };
 }
 ```
 
-The `enable` option is mainly kept for backward compatibility, as defining netbird
-tunnels through the `tunnels` option is more expressive.
+This will set up a `netbird.service` listening on the port `51820` associated to the
+`wt0` interface. There will also be `netbird-wt0` binary installed in addition to `netbird`.
+
+see [clients](#opt-services.netbird.clients) option documentation for more details.
 
 ## Multiple connections setup {#module-services-netbird-multiple-connections}
 
-Using the `services.netbird.tunnels` option, it is also possible to define more than
+Using the `services.netbird.clients` option, it is possible to define more than
 one netbird service running at the same time.
 
-The following configuration will start a netbird daemon using the interface `wt1` and
-the port 51830. Its configuration file will then be located at `/var/lib/netbird-wt1/config.json`.
+You must at least define a `port` for the service to listen on, the rest is optional:
 
 ```nix
 {
-  services.netbird.tunnels = {
-    wt1 = {
-      port = 51830;
+  services.netbird.clients.wt1.port = 51830;
+  services.netbird.clients.wt2.port = 51831;
+}
+```
+
+see [clients](#opt-services.netbird.clients) option documentation for more details.
+
+## Exposing services internally on the Netbird network {#module-services-netbird-firewall}
+
+You can easily expose services exclusively to Netbird network by combining
+[`networking.firewall.interfaces`](#opt-networking.firewall.interfaces) rules
+with [`interface`](#opt-services.netbird.clients._name_.interface) names:
+
+```nix
+{
+  services.netbird.clients.priv.port = 51819;
+  services.netbird.clients.work.port = 51818;
+  networking.firewall.interfaces = {
+    "${config.services.netbird.clients.priv.interface}" = {
+      allowedUDPPorts = [ 1234 ];
+    };
+    "${config.services.netbird.clients.work.interface}" = {
+      allowedTCPPorts = [ 8080 ];
     };
   };
 }
 ```
 
-To interact with it, you will need to specify the correct daemon address:
+### Additional customizations {#module-services-netbird-customization}
 
-```bash
-netbird --daemon-addr unix:///var/run/netbird-wt1/sock ...
-```
+Each Netbird client service by default:
 
-The address will by default be `unix:///var/run/netbird-<name>`.
+- runs in a [hardened](#opt-services.netbird.clients._name_.hardened) mode,
+- starts with the system,
+- [opens up a firewall](#opt-services.netbird.clients._name_.openFirewall) for direct (without TURN servers)
+  peer-to-peer communication,
+- can be additionally configured with environment variables,
+- automatically determines whether `netbird-ui-<name>` should be available,
 
-It is also possible to overwrite default options passed to the service, for
-example:
+[autoStart](#opt-services.netbird.clients._name_.autoStart) allows you to start the client (an actual systemd service)
+on demand, for example to connect to work-related or otherwise conflicting network only when required.
+See the option description for more information.
 
-```nix
-{
-  services.netbird.tunnels.wt1.environment = {
-    NB_DAEMON_ADDR = "unix:///var/run/toto.sock";
-  };
-}
-```
-
-This will set the socket to interact with the netbird service to `/var/run/toto.sock`.
+[environment](#opt-services.netbird.clients._name_.environment) allows you to pass additional configurations
+through environment variables, but special care needs to be taken for overriding config location and
+daemon address due [hardened](#opt-services.netbird.clients._name_.hardened) option.
