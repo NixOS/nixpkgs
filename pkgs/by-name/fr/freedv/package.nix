@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
   };
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
 
   cmakeFlags = [
-    "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
-    "-DUSE_STATIC_DEPS:BOOL=FALSE"
-    "-DUNITTEST=ON"
-    "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
+    (lib.cmakeBool "USE_INTERNAL_CODEC2" false)
+    (lib.cmakeBool "USE_STATIC_DEPS" false)
+    (lib.cmakeBool "UNITTEST" true)
+    (lib.cmakeBool "USE_PULSEAUDIO" pulseSupport)
   ];
 
   doCheck = true;
@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       mvs
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "freedv";
   };
 }
