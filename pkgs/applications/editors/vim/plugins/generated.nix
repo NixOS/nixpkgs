@@ -19234,6 +19234,18 @@ final: prev:
     meta.homepage = "https://github.com/troydm/zoomwintab.vim/";
   };
 
+  zotcite = buildVimPlugin {
+    pname = "zotcite";
+    version = "2024-11-21";
+    src = fetchFromGitHub {
+      owner = "jalvesaq";
+      repo = "zotcite";
+      rev = "a6d1eb8a8a8555aef814979a385d03165e2f8922";
+      sha256 = "11lnm75n4im2m3vg4av6sa2x2fw62ja1w4an9c6ccvrqy5fj2wgm";
+    };
+    meta.homepage = "https://github.com/jalvesaq/zotcite/";
+  };
+
   zoxide-vim = buildVimPlugin {
     pname = "zoxide.vim";
     version = "2023-10-23";
