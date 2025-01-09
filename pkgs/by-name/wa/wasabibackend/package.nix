@@ -9,14 +9,14 @@
   nixosTests,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "wasabibackend";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "zkSNACKs";
     repo = "WalletWasabi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vOvNumR/0agf9Mof0UD3KjJVgN18y6R/OrgLOXwL3K8=";
   };
 
@@ -59,4 +59,4 @@ buildDotnetModule rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
