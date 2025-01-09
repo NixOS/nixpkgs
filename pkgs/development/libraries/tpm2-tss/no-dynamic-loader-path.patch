@@ -1,0 +1,505 @@
+diff --git a/src/tss2-tcti/tctildr-dl.c b/src/tss2-tcti/tctildr-dl.c
+index d26219d2..92d2b6a3 100644
+--- a/src/tss2-tcti/tctildr-dl.c
++++ b/src/tss2-tcti/tctildr-dl.c
+@@ -88,14 +88,24 @@ handle_from_name(const char *file,
+     const char *formats[] = {
+         /* <name> */
+         "%s",
++        /* <name> */
++        "@PREFIX@" "%s",
+         /* libtss2-tcti-<name>.so.0 */
+         FMT_TCTI_PREFIX "%s" FMT_LIB_SUFFIX_0,
++        /* libtss2-tcti-<name>.so.0 */
++        "@PREFIX@" FMT_TCTI_PREFIX "%s" FMT_LIB_SUFFIX_0,
+         /* libtss2-tcti-<name>.so */
+         FMT_TCTI_PREFIX "%s" FMT_LIB_SUFFIX,
++        /* libtss2-tcti-<name>.so */
++        "@PREFIX@" FMT_TCTI_PREFIX "%s" FMT_LIB_SUFFIX,
+         /* libtss2-<name>.so.0 */
+         FMT_TSS_PREFIX "%s" FMT_LIB_SUFFIX_0,
++        /* libtss2-<name>.so.0 */
++        "@PREFIX@" FMT_TSS_PREFIX "%s" FMT_LIB_SUFFIX_0,
+         /* libtss2-<name>.so */
+         FMT_TSS_PREFIX "%s" FMT_LIB_SUFFIX,
++        /* libtss2-<name>.so */
++        "@PREFIX@" FMT_TSS_PREFIX "%s" FMT_LIB_SUFFIX,
+     };
+ 
+     if (handle == NULL) {
+diff --git a/test/unit/tctildr-dl.c b/test/unit/tctildr-dl.c
+index 135e1b14..7d654d1f 100644
+--- a/test/unit/tctildr-dl.c
++++ b/test/unit/tctildr-dl.c
+@@ -168,6 +168,10 @@ test_handle_from_name_second_dlopen_success (void **state)
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_A);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_B);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, TEST_HANDLE);
+@@ -186,10 +190,18 @@ test_handle_from_name_third_dlopen_success (void **state)
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_A);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_B);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_B);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_C);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, TEST_HANDLE);
+@@ -208,14 +220,26 @@ test_handle_from_name_fourth_dlopen_success (void **state)
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_A);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_B);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_B);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_C);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_C);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_D);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, TEST_HANDLE);
+@@ -234,18 +258,34 @@ test_handle_from_name_fifth_dlopen_success (void **state)
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_A);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_B);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_B);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_C);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_C);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_D);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" TEST_TCTI_TRY_D);
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, TEST_TCTI_TRY_E);
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, TEST_HANDLE);
+@@ -281,22 +321,42 @@ test_get_info_default_success (void **state)
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-default.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-default.so.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-default.so.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-default.so.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-default.so.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-default.so.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-default.so.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-default.so.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-default.so.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-tabrmd.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, HANDLE);
+@@ -321,22 +381,42 @@ test_get_info_default_info_fail (void **state)
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-default.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-default.so.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-default.so.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-default.so.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-default.so.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-default.so.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-default.so.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-default.so.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
+ 
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-default.so.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
++
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-tabrmd.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, HANDLE);
+@@ -483,120 +563,225 @@ test_tcti_fail_all (void **state)
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-default.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-default.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-default.so.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-default.so.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-default.so.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-default.so.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-default.so.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-default.so.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-default.so.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-default.so.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     /* Skip over libtss2-tcti-tabrmd.so */
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-tabrmd.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-tabrmd.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-tabrmd.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-tabrmd.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-tabrmd.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-tabrmd.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-tabrmd.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-tabrmd.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-tabrmd.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-tabrmd.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     /* Skip over libtss2-tcti-device.so, /dev/tpmrm0 */
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-device.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-device.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-device.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-device.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-device.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-device.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-device.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-device.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-device.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-device.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     /* Skip over libtss2-tcti-device.so, /dev/tpm0 */
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-device.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-device.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-device.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-device.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-device.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-device.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-device.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-device.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-device.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-device.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     /* Skip over libtss2-tcti-device.so, /dev/tcm0 */
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-device.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-device.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-device.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-device.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-device.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-device.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-device.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-device.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-device.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-device.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     /* Skip over libtss2-tcti-swtpm.so */
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-swtpm.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-swtpm.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-swtpm.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-swtpm.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-swtpm.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-swtpm.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-swtpm.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-swtpm.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-swtpm.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-swtpm.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     /* Skip over libtss2-tcti-mssim.so */
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-mssim.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-mssim.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-mssim.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-mssim.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-libtss2-tcti-mssim.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-libtss2-tcti-mssim.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-mssim.so.0.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-mssim.so.0.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-libtss2-tcti-mssim.so.0.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-libtss2-tcti-mssim.so.0.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     TSS2_RC r;
+     TSS2_TCTI_CONTEXT *tcti;
+@@ -619,18 +804,33 @@ test_info_from_name_handle_fail (void **state)
+     expect_string(__wrap_dlopen, filename, "foo");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "foo");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-foo.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-foo.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-foo.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-foo.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-foo.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-foo.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-foo.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-foo.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     TSS2_RC rc = info_from_name ("foo", &info, &data);
+     assert_int_equal (rc, TSS2_TCTI_RC_NOT_SUPPORTED);
+@@ -741,18 +941,33 @@ test_tctildr_get_info_from_name (void **state)
+     expect_string(__wrap_dlopen, filename, "foo");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "foo");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-foo.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-foo.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-tcti-foo.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-tcti-foo.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-foo.so.0");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-foo.so.0");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+     expect_string(__wrap_dlopen, filename, "libtss2-foo.so");
+     expect_value(__wrap_dlopen, flags, RTLD_NOW);
+     will_return(__wrap_dlopen, NULL);
++    expect_string(__wrap_dlopen, filename, "@PREFIX@" "libtss2-foo.so");
++    expect_value(__wrap_dlopen, flags, RTLD_NOW);
++    will_return(__wrap_dlopen, NULL);
+ 
+     TSS2_RC rc = tctildr_get_info ("foo", &info, &data);
+     assert_int_equal (rc, TSS2_TCTI_RC_NOT_SUPPORTED);
