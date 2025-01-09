@@ -1,9 +1,50 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellScript, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash }:
 
+let
+  acesx86_64 = writeShellScript  "acesx86_64" ''
+    #!/bin/bash
+    export ACES64_DIR=$HOME/.aces64
+    export STORE_PATH=$PWD
+
+    echo "DEBUG::: STORE_PATH = $STORE_PATH"
+
+    echo "Check for home directory, create if not present."
+
+    if [ ! -d "$ACES64_DIR" ]; then
+      echo "Directory not found."
+      mkdir -p "$ACES64_DIR"
+
+      echo "Directory created, linking contents from store."
+
+        for file in "$STORE_PATH"/*; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file")
+            ln -s "$filename" "$ACES64_DIR/$file"
+
+            echo "$filename linked, DEBUG::: validating results."
+
+            if [ ! -e "$ACES64_DIR/$filename" ]; then
+              echo "FATAL Error: Link creation for $filename failure, breaking."
+              exit 1
+            else
+              echo "Linked $filename is valid and exists, proceeding."
+          fi
+        fi
+   done
+      else
+        echo "Directory already exists, no actions taken, proceeding."
+    fi
+
+    echo "DEBUG::: Changing root directory to $ACES64_DIR"
+
+    cd $ACES64_DIR || { echo "cd command rejected, breaking"; exit 1; }
+    ./launcher
+
+    ''; in
 stdenv.mkDerivation rec {
   name = "WarThunder";
   pname = "War-Thunder";
-  version = "b1de644";
+  version = "086d99e";
 
   src = fetchurl {
     url = "https://github.com/Mephist0phel3s/War-Thunder/archive/refs/tags/086d99e.tar.gz";
@@ -38,11 +79,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+  runHook preInstall
     mkdir -p $out/${pname}-${version}
     install -m755 -D launcher $out/${pname}-${version}/launcher
     install -m755 -D gaijin_selfupdater $out/${pname}-${version}/gaijin_selfupdater
     install -m755 -D bpreport $out/${pname}-${version}/bpreport
     install -m755 -D launcher.ico $out/${pname}-${version}/launcher.ico
+    install -m755 -D ${acesx86_64} $out/${pname}-${version}/acesx86_64
 
     cp ca-bundle.crt $out/${pname}-${version}/ca-bundle.crt
     cp launcherr.dat $out/${pname}-${version}/launcherr.dat
@@ -54,7 +97,12 @@ stdenv.mkDerivation rec {
     echo "STORE_PATH=\"$out/${pname}-${version}\"" > $out/${pname}-${version}/store_path.txt
 
     chmod +x "$out/${pname}-${version}/acesx86_64";
+  runHook postInstall
   '';
+
+
+
+
 
 desktopItem = makeDesktopItem rec {
   name = "War Thunder";
@@ -63,49 +111,7 @@ desktopItem = makeDesktopItem rec {
   desktopName = "War Thunder";
   categories = [ "Game" ];
 };
-  acesx86_64 = writeShellScript rec {
-  name = "acesx86_64";
-  nativeBuildInputs = [ pkgs.bash ];
-  destination = "$out/acesx86_64";
-  text = ''
-    #!/bin/bash
-    export ACES64_DIR=$HOME/.aces64
-    export STORE_PATH=$PWD
 
-    echo "DEBUG::: STORE_PATH = $STORE_PATH"
-
-    echo "Check for home directory, create if not present."
-
-    if [ ! -d ""$ACES64_DIR" ]; then
-      echo "Directory not found."
-      mkdir -p "$ACES64_DIR"
-
-      echo "Directory created, linking contents from store."
-
-        for file in "$STORE_PATH"/*; do
-          if [ -f "$file" ]; then
-            filename=$(basename "$file")
-            ln -s "$file" "$ACES64_DIR/$file
-
-            echo "$file linked, DEBUG::: validating results."
-
-            if [ ! -e "$file" ]; then
-              echo "FATAL Error: Link creation for $file failure, breaking."
-              exit 1
-            else
-              echo "Linked $file is valid and exists, proceeding."
-          fi
-        done
-      else
-        echo "Directory already exists, no actions taken, proceeding."
-    fi
-
-    echo "DEBUG::: Changing root directory to $ACES64_DIR"
-
-    cd $ACES64_DIR || { echo "cd command rejected, breaking"; exit 1; }
-    ./launcher
-
-    '';};
 
 
 
