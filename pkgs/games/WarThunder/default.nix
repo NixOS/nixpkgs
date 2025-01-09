@@ -123,7 +123,6 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     install -m755 -D launcher.ico $out/share/pixmaps/launcher.png
     echo "DEBUG::: Installing the fucking desktop file"
     mkdir -p "$out/share/applications"
-    cp -rf "${desktopItem}/share/applications/War-Thunder.desktop" "$out/share/applications"
     if [ ! -f $out/share/applications/War-Thunder.desktop ]; then
       echo "FATAL ERROR: DEBUG::: Fucking desktop file wasnt copied right again, breaking"
       exit 1
