@@ -39,20 +39,30 @@ let
         ${cfg.down}
       '';
 
+      hasUpScript = (cfg.up != "");
+      hasDownScript = (cfg.down != "");
+
+
+      upScriptOption = optionalString (hasUpScript || cfg.updateResolvConf) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}";
+      downScriptOption = optionalString (hasDownScript || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
+
+      authUserPassUnsafeOption = optionalString (cfg.authUserPass != null) "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+            ${cfg.authUserPass.username}
+            ${cfg.authUserPass.password}
+      ''}";
+
+      authUserPassFileOption = optionalString (cfg.authUserPassFile != null) "auth-user-pass ${cfg.authUserPassFile}";
+
+      authUserPassOption = if (authUserPassFileOption != "") then authUserPassFileOption else authUserPassUnsafeOption;
+
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
           errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
+          ${optionalString (hasUpScript || hasDownScript || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
-          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
-          ${optionalString (cfg.authUserPass != null)
-              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-                ${cfg.authUserPass.username}
-                ${cfg.authUserPass.password}
-              ''}"}
+          ${upScriptOption}
+          ${downScriptOption}
+          ${authUserPassOption}
         '';
 
     in
@@ -180,6 +190,12 @@ in
               update resolv.conf with the DNS information provided by openvpn. The
               script will be run after the "up" commands and before the "down" commands.
             '';
+          };
+
+          authUserPassFile = mkOption {
+            default = null;
+            description = ''Specify a file path to use as `auth-user-pass ''${authUserPass}`. File will not be included in the nix store unless you specify it as a path `authUserFile = ./myauthfile`'';
+            type = types.nullOr types.path;
           };
 
           authUserPass = mkOption {
