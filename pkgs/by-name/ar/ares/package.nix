@@ -13,6 +13,7 @@
   libao,
   libicns,
   libpulseaudio,
+  librashader,
   openal,
   pkg-config,
   stdenv,
@@ -24,19 +25,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "136";
+  version = "141";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Hks/MWusPiBVdb5L+53qtR6VmXG/P4rDzsvHxLeA8Do=";
+    hash = "sha256-iNcoNdGw/DfYc9tsOGsPYoZLhVwNzJe8bVotx6Rl0j4=";
   };
 
   patches = [
     ./patches/001-dont-rebuild-on-install.patch
-    ./patches/002-fix-ruby.diff
-    ./patches/003-darwin-specific.patch
   ];
 
   nativeBuildInputs =
@@ -54,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       SDL2
       libao
+      librashader
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
@@ -68,7 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
       udev
     ];
 
-  appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
+  appendRunpaths = [
+    (lib.makeLibraryPath [
+      librashader
+      vulkan-loader
+    ])
+  ];
 
   makeFlags =
     lib.optionals stdenv.hostPlatform.isLinux [
