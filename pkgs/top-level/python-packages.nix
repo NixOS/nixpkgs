@@ -10560,6 +10560,8 @@ self: super: with self; {
 
   pygelf = callPackage ../development/python-modules/pygelf { };
 
+  pygerber = callPackage ../development/python-modules/pygerber { };
+
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
 
   pygnmi = callPackage ../development/python-modules/pygnmi { };
@@ -10705,6 +10707,8 @@ self: super: with self; {
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   pytask = callPackage ../development/python-modules/pytask { };
+
+  pytest-lsp = callPackage ../development/python-modules/pytest-lsp { };
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
 
