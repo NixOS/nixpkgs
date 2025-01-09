@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gallery-dl";
-  version = "1.28.2";
+  version = "1.28.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mikf";
     repo = "gallery-dl";
     rev = "v${version}";
-    hash = "sha256-AVycp24wGhit9JVE0b+didc2GRnB+EQNnJ3y9a5dMQw=";
+    hash = "sha256-OV+4BJmJNvkNmDsogI9V7SLmnc5HJkZd5xqsFoZCHEk=";
   };
 
   build-system = [ python3Packages.setuptools ];
