@@ -52,7 +52,9 @@ stdenv.mkDerivation rec {
     # for binary lookups.
     # TODO: Remove the legacy compatibility once nvidia-docker is removed
     # from NixOS.
-    ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch
+    (replaceVars ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
 
     # fix bogus struct declaration
     ./0003-nvc-fix-struct-declaration.patch
