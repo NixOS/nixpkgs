@@ -3145,7 +3145,8 @@
       ];
     "livisi" =
       ps: with ps; [
-      ]; # missing inputs: livisi
+        livisi
+      ];
     "llamalab_automate" =
       ps: with ps; [
       ];
@@ -6913,6 +6914,7 @@
     "linkplay"
     "litejet"
     "litterrobot"
+    "livisi"
     "local_calendar"
     "local_file"
     "local_ip"
