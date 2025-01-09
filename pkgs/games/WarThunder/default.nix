@@ -9,7 +9,7 @@ let
     #!/bin/bash
 
     get_store_path() \
-    {echo $(dirname "$(dirname "$(dirname "$(readlink -f "$(which launcher)")")")"""}
+    {dirname "$(dirname "$(readlink -f "$(which launcher)")")"}
     export STORE_PATH=$(get_store_path)
 
 
