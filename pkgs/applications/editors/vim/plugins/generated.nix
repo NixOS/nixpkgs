@@ -1641,13 +1641,12 @@ final: prev:
   clangd_extensions-nvim = buildVimPlugin {
     pname = "clangd_extensions.nvim";
     version = "2024-10-05";
-    src = fetchFromGitHub {
-      owner = "p00f";
-      repo = "clangd_extensions.nvim";
+    src = fetchgit {
+      url = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
       rev = "8f7b72100883e0e34400d9518d40a03f21e4d0a6";
       sha256 = "1rlw3h9f9cnbniqqpv9fv2s63g7s4p8ag4n15xja1r4scfxhyrip";
     };
-    meta.homepage = "https://github.com/p00f/clangd_extensions.nvim/";
+    meta.homepage = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
   };
 
   clever-f-vim = buildVimPlugin {
