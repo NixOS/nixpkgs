@@ -351,6 +351,11 @@ self: super: {
   # As well as deepseq < 1.5 (so it forbids GHC 9.8)
   hw-fingertree = doJailbreak super.hw-fingertree;
 
+  # Test suite is slow and sometimes comes up with counter examples.
+  # Upstream is aware (https://github.com/isovector/nspace/issues/1),
+  # if it's a bug, at least doesn't seem to be nixpkgs-specific.
+  nspace = dontCheck super.nspace;
+
   # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
   threadscope = overrideCabal (drv: {
     prePatch = drv.prePatch or "" + ''
