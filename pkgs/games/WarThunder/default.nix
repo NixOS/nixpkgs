@@ -145,14 +145,15 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
   '';
 
 
-  desktopItem = makeDesktopItem {
+  desktopItem = [(makeDesktopItem {
     name = "War-Thunder";
     exec = "acesx86_64";
     icon = "launcher";
     desktopName = "War Thunder";
     genericName = "War Thunder";
     categories = [ "Game" ];
-  };
+    })];
+
 
   meta = with lib; {
     homepage = "https://warthunder.com/";
