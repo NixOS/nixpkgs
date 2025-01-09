@@ -1,0 +1,10 @@
+--- a/eduvpn_common/loader.py
++++ b/eduvpn_common/loader.py
+@@ -22,6 +22,7 @@ def load_lib() -> CDLL:
+     :return: The Go shared library loaded with cdll.LoadLibrary from ctypes
+     :rtype: CDLL
+     """
++    return cdll.LoadLibrary("@libeduvpn-common@")
+     libfile = f"libeduvpn_common-{__version__}.so"
+ 
+     lib = None

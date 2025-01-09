@@ -1,0 +1,22 @@
+From 4f64ad191ec79b9f40843f88e3ac5910720636da Mon Sep 17 00:00:00 2001
+From: Changsheng Wu <Congee@users.noreply.github.com>
+Date: Fri, 9 Jun 2023 15:41:53 -0400
+Subject: [PATCH] Update Cargo.toml
+
+---
+ adapter/Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/adapter/Cargo.toml b/adapter/Cargo.toml
+index bc86723..f5f26ce 100644
+--- a/adapter/Cargo.toml
++++ b/adapter/Cargo.toml
+@@ -39,7 +39,7 @@ winapi = { version = "0.3.8", features = ["std", "wincon", "namedpipeapi"] }
+ winreg = "0.6.2"
+
+ [lib]
+-crate-type = ["staticlib"]
++crate-type = ["dylib", "rlib"]
+
+ [[bin]]
+ name = "codelldb"

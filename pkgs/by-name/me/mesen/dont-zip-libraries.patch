@@ -1,0 +1,74 @@
+diff --git a/UI/Config/ConfigManager.cs b/UI/Config/ConfigManager.cs
+index 56c1ff1..ed5fe8a 100644
+--- a/UI/Config/ConfigManager.cs
++++ b/UI/Config/ConfigManager.cs
+@@ -51,7 +51,6 @@ namespace Mesen.Config
+ 			} else {
+ 				homeFolder = DefaultDocumentsFolder;
+ 			}
+-			Program.ExtractNativeDependencies(homeFolder);
+ 			_homeFolder = homeFolder;
+ 			Config.Save();
+ 		}
+diff --git a/UI/Program.cs b/UI/Program.cs
+index dfc4ba3..632cef2 100644
+--- a/UI/Program.cs
++++ b/UI/Program.cs
+@@ -54,8 +54,6 @@ namespace Mesen
+ 			Environment.CurrentDirectory = ConfigManager.HomeFolder;
+ 
+ 			if(!File.Exists(ConfigManager.GetConfigFile())) {
+-				//Could not find configuration file, show wizard
+-				ExtractNativeDependencies(ConfigManager.HomeFolder);
+ 				App.ShowConfigWindow = true;
+ 				BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+ 				if(File.Exists(ConfigManager.GetConfigFile())) {
+@@ -68,9 +66,6 @@ namespace Mesen
+ 			//Start loading config file in a separate thread
+ 			Task.Run(() => ConfigManager.LoadConfig());
+ 
+-			//Extract core dll & other native dependencies
+-			ExtractNativeDependencies(ConfigManager.HomeFolder);
+-
+ 			if(CommandLineHelper.IsTestRunner(args)) {
+ 				return TestRunner.Run(args);
+ 			}
+@@ -147,7 +142,7 @@ namespace Mesen
+ 						libraryName = libraryName + ".dylib";
+ 					}
+ 				}
+-				return NativeLibrary.Load(Path.Combine(ConfigManager.HomeFolder, libraryName));
++				return NativeLibrary.Load(Path.Combine(AppContext.BaseDirectory, libraryName));
+ 			}
+ 			return IntPtr.Zero;
+ 		}
+diff --git a/UI/UI.csproj b/UI/UI.csproj
+index 053d495..2a0eb78 100644
+--- a/UI/UI.csproj
++++ b/UI/UI.csproj
+@@ -634,7 +634,6 @@
+     <EmbeddedResource Include="Debugger\Utilities\LuaScripts\NtscSafeArea.lua" />
+     <EmbeddedResource Include="Debugger\Utilities\LuaScripts\NesPianoRoll.lua" />
+     <EmbeddedResource Include="Debugger\Utilities\LuaScripts\ReverseMode.lua" />
+-    <EmbeddedResource Include="Dependencies.zip" />
+     <EmbeddedResource Include="Localization\resources.en.xml" WithCulture="false" Type="Non-Resx" />
+     <EmbeddedResource Include="Utilities\DipSwitchDefinitions.xml" />
+   </ItemGroup>
+@@ -644,16 +643,5 @@
+     </AvaloniaXaml>
+   </ItemGroup>
+ 
+-  <Target Name="PreBuildWindows" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='win-x64'">
+-    <Exec Command="cd $(OutDir)&#xD;&#xA;rd Dependencies /s /q&#xD;&#xA;md Dependencies&#xD;&#xA;xcopy /s $(ProjectDir)Dependencies\* Dependencies&#xD;&#xA;copy libHarfBuzzSharp.dll Dependencies&#xD;&#xA;copy libSkiaSharp.dll Dependencies&#xD;&#xA;copy MesenCore.dll Dependencies&#xD;&#xA;cd Dependencies&#xD;&#xA;del ..\Dependencies.zip&#xD;&#xA;powershell Compress-Archive -Path * -DestinationPath '..\Dependencies.zip' -Force&#xD;&#xA;copy ..\Dependencies.zip $(ProjectDir)" />
+-  </Target>
+-
+-	<Target Name="PreBuildLinux" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='linux-x64'">
+-    <Exec Command="cd $(OutDir)&#xD;&#xA;rm -rf Dependencies&#xD;&#xA;mkdir Dependencies&#xD;&#xA;cp -R $(ProjectDir)/Dependencies/* Dependencies&#xD;&#xA;cp libHarfBuzzSharp.so Dependencies&#xD;&#xA;cp libSkiaSharp.so Dependencies&#xD;&#xA;cp MesenCore.so Dependencies&#xD;&#xA;cd Dependencies&#xD;&#xA;rm ../Dependencies.zip&#xD;&#xA;zip -r ../Dependencies.zip *&#xD;&#xA;cp ../Dependencies.zip $(ProjectDir)" />
+-  </Target>
+-  
+-	<Target Name="PreBuildOsx" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='osx-x64' Or '$(RuntimeIdentifier)'=='osx-arm64'">
+-    <Exec Command="cp ./Assets/MesenIcon.icns $(OutDir)&#xD;&#xA;cd $(OutDir)&#xD;&#xA;rm -R Dependencies&#xD;&#xA;mkdir Dependencies&#xD;&#xA;cp -R $(ProjectDir)/Dependencies/* Dependencies&#xD;&#xA;cp libHarfBuzzSharp.dylib Dependencies&#xD;&#xA;cp libSkiaSharp.dylib Dependencies&#xD;&#xA;cp MesenCore.dylib Dependencies&#xD;&#xA;cd Dependencies&#xD;&#xA;rm ../Dependencies.zip&#xD;&#xA;zip -r ../Dependencies.zip *&#xD;&#xA;cp ../Dependencies.zip $(ProjectDir)" />
+-  </Target>
+ 
+ </Project>
+
