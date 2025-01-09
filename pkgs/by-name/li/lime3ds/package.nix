@@ -7,6 +7,7 @@
   cpp-jwt,
   doxygen,
   enet,
+  fetchpatch,
   fetchzip,
   fmt,
   ffmpeg_6-headless,
@@ -111,6 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals enableQtTranslations [ kdePackages.qttools ]
     ++ optionals enableCubeb [ cubeb ]
     ++ optional useDiscordRichPresence rapidjson;
+
+  patches = [
+    # Fix boost errors
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/Tatsh/tatsh-overlay/fa2f92b888f8c0aab70414ca560b823ffb33b122/games-emulation/lime3ds/files/lime3ds-0002-boost-fix.patch";
+      hash = "sha256-XJogqvQE7I5lVHtvQja0woVlO40blhFOqnoYftIQwJs=";
+    })
+  ];
 
   postPatch = ''
     # Fix file not found when looking in var/empty instead of opt

@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.41.0";
+  version = "0.44.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-T2gKvP3WyrGNOiCwiX93UjMuSTnnZ+nykEAFhq0BF4U=";
+    hash = "sha256-KaCQtORMJUM7/BLD+Jnbunhd/9/3NYWYx/XMYMo27hI=";
   };
 
   nativeBuildInputs = [
