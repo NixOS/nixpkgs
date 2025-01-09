@@ -113,7 +113,7 @@ desktopItem = makeDesktopItem rec {
   icon = "launcher.ico";
   desktopName = "War Thunder";
   terminal = true;
-  categories = [ "Game" ];
+  categories = [ "Games" ];
 };
 
 
