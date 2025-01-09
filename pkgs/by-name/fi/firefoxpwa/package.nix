@@ -153,7 +153,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      adamcstephens
       camillemndn
       pasqui23
     ];
