@@ -1,7 +1,7 @@
-import ./make-test-python.nix (
+import ../make-test-python.nix (
   { lib, pkgs, ... }:
   {
-    name = "freshrss";
+    name = "freshrss-extensions";
 
     nodes.machine =
       { pkgs, ... }:
