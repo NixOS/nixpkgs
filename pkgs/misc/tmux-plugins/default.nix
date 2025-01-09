@@ -882,6 +882,10 @@ in rec {
     };
   };
 
+  tmux-which-key = pkgs.callPackage ./tmux-which-key {
+    inherit mkTmuxPlugin;
+  };
+
   yank = mkTmuxPlugin {
     pluginName = "yank";
     version = "unstable-2023-07-19";
