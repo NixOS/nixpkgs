@@ -6,6 +6,7 @@
   cargo,
   python3Packages,
   versionCheckHook,
+  nix-update-script,
 
   prefix ? "uutils-",
   buildMulticallBinary ? true,
@@ -56,6 +57,10 @@ stdenv.mkDerivation rec {
     "${placeholder "out"}/bin/${prefix'}ls";
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
