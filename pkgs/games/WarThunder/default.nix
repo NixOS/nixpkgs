@@ -7,9 +7,8 @@ let
 
   text = ''
     #!/bin/bash
-    get_store_path() {dirname "$(dirname "$(readlink -f "$(which launcher)")")";}
-    export STORE_PATH=$(get_store_path)
 
+    STORE_PATH=$(dirname "$(dirname "$(readlink -f "$(which launcher)")")")
 
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
