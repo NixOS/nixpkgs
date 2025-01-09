@@ -941,7 +941,8 @@
       ];
     "cookidoo" =
       ps: with ps; [
-      ]; # missing inputs: cookidoo-api
+        cookidoo-api
+      ];
     "coolmaster" =
       ps: with ps; [
         pycoolmasternet-async
@@ -6618,6 +6619,7 @@
     "configurator"
     "control4"
     "conversation"
+    "cookidoo"
     "coolmaster"
     "counter"
     "cover"
