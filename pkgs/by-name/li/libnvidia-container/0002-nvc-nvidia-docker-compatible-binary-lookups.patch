@@ -9,7 +9,7 @@ This patch maintains compatibility with NixOS' `virtualisation.docker.enableNvid
  1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/src/nvc_info.c b/src/nvc_info.c
-index cf4b1905fd2127c28ee16649501be122d3be5261..2ab552860ef98879b76398a6f9be95f07b2c8a4a 100644
+index cf4b1905fd2127c28ee16649501be122d3be5261..a238fba3f4ff7786cd1a84b80b1f623553e2d377 100644
 --- a/src/nvc_info.c
 +++ b/src/nvc_info.c
 @@ -243,16 +243,28 @@ static int
@@ -31,7 +31,7 @@ index cf4b1905fd2127c28ee16649501be122d3be5261..2ab552860ef98879b76398a6f9be95f0
 +
 +        // TODO: Remove this patch once `virtualisation.docker.enableNvidia` is removed from NixOS.
 +        // It only exists to maintain compatibility with the old nvidia-docker package.
-+        int p_rv = snprintf(env, PATH_MAX, "/run/nvidia-docker/bin:/run/nvidia-docker/extras/bin:%s", os_path);
++        int p_rv = snprintf(env, PATH_MAX, "/run/nvidia-docker/bin:/run/nvidia-docker/extras/bin:@driverLink@/bin:%s", os_path);
 +        if (p_rv >= PATH_MAX) {
 +                error_setx(err, "PATH environment variable too long");
 +                return (-1);
