@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      libGLU
       libepoxy
-      libX11
     ]
     ++ lib.optionals vaapiSupport [ libva ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libX11
       libdrm
       libgbm
     ];
