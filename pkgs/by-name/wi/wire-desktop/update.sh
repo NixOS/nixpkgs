@@ -37,8 +37,11 @@ urlHashes=$(
   function entries () {
     local sep=''
     for url in $(jq --raw-output '.[].url' <<< "$latest"); do
-      printf '%s"%s": "%s"\n' "$sep" "$url" \
-        "$(nix-hash --to-sri --type sha256 $(nix-prefetch-url $url))"
+      hash=$(nix-hash --to-sri --type sha256 $(nix-prefetch-url $url))
+      if [ -z "$hash" ]; then
+        printf 'Failed to retrieve hash for %s\n' "$url" 2>&1
+      fi
+      printf '%s"%s": "%s"\n' "$sep" "$url" "$hash"
       sep=', '
     done
   }
