@@ -9244,8 +9244,6 @@ self: super: with self; {
 
   nikola = callPackage ../development/python-modules/nikola { };
 
-  niko-home-control = callPackage ../development/python-modules/niko-home-control { };
-
   nilearn = callPackage ../development/python-modules/nilearn { };
 
   niluclient = callPackage ../development/python-modules/niluclient { };
