@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.11.5";
+  version = "0.12.0-rc4";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HOR1n/q7rxrrQzpewHOb4Gdum9+66URKezvhsq8+wSs=";
+    sha256 = "sha256-OXie09kZhad2Wno+gucMm6Rfkix8Y+aTQqHc+pIlQm0=";
   };
 
   patches =
@@ -77,8 +77,10 @@ stdenv.mkDerivation rec {
       libsndfile
       libao
       libpulseaudio
-      alsa-lib
       python
+    ]
+    ++ lib.optionals withAlsa [
+      alsa-lib
     ]
     ++ lib.optionals withEspeak [
       espeak
@@ -121,7 +123,7 @@ stdenv.mkDerivation rec {
       "--with-pico"
     ];
 
-  postPatch = ''
+  postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
 
@@ -146,7 +148,9 @@ stdenv.mkDerivation rec {
       berce
       jtojnar
     ];
-    platforms = platforms.linux;
+    # TODO: remove checks for `withEspeak && espeak.mbrolaSupport` once PR #375038 is merged
+    # TODO: remove checks for `withPico` once PR #375450 is merged
+    platforms = if withAlsa || (withEspeak && espeak.mbrolaSupport) || withPico then platforms.linux else platforms.unix;
     mainProgram = "speech-dispatcher";
   };
 }
