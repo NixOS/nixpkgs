@@ -5,11 +5,12 @@
   pythonOlder,
   requests,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pymsteams";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,10 +19,13 @@ buildPythonPackage rec {
     owner = "rveachkc";
     repo = "pymsteams";
     tag = version;
-    hash = "sha256-SXFJrhT/5Jf3OVUnVfayNk4BvQ2YFZ6SDTADDQOo3Go=";
+    hash = "sha256-Ze25mcXCRaon6qzWzcltD8kwJTfrG2w5jMswXymmKo4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ requests ];
 
