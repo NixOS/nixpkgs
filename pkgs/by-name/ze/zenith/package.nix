@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  IOKit,
   nvidiaSupport ? false,
   makeWrapper,
 }:
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   buildFeatures = lib.optional nvidiaSupport "nvidia";
 
