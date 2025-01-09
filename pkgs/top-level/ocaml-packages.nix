@@ -1819,6 +1819,8 @@ let
 
     syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
 
+    systemd = callPackage ../development/ocaml-modules/systemd { };
+
     ### T ###
 
     taglib = callPackage ../development/ocaml-modules/taglib {
