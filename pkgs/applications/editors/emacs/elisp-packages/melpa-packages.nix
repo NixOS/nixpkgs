@@ -956,9 +956,12 @@ let
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
 
-        consult-gh = super.consult-gh.overrideAttrs (old: {
-          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
-        });
+        # needs network during compilation, also native-ice
+        consult-gh = ignoreCompilationError (
+          super.consult-gh.overrideAttrs (old: {
+            propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+          })
+        );
 
         consult-gh-forge = buildWithGit super.consult-gh-forge;
 
