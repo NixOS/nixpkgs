@@ -16,7 +16,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gdcm";
+  pname = if enablePython then "python-gdcm" else "gdcm";
   version = "3.0.24";
 
   src = fetchFromGitHub {
