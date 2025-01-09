@@ -42,7 +42,7 @@ let
     echo "DEBUG::: Changing root directory to $ACES64_DIR"
     echo "DEBUG::: Where the fuck am i. $PWD"
 
-    bash  -c '$ACES64_DIR/launcher'
+    bash "$ACES64_DIR/launcher"
     '';}; in
 stdenv.mkDerivation rec {
   name = "WarThunder";
