@@ -1,7 +1,7 @@
-import ./make-test-python.nix (
+import ../make-test-python.nix (
   { lib, pkgs, ... }:
   {
-    name = "freshrss";
+    name = "freshrss-none-auth";
     meta.maintainers = with lib.maintainers; [ mattchrist ];
 
     nodes.machine =
