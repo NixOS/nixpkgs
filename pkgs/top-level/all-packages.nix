@@ -3170,11 +3170,6 @@ with pkgs;
 
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
-  uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
-    inherit (python3Packages) sphinx;
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
   vorta = qt6Packages.callPackage ../applications/backup/vorta { };
