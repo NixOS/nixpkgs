@@ -155,7 +155,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/${name}.desktop $out/share/${name}.desktop
 
-
+'';
 
 
   meta = with lib; {
