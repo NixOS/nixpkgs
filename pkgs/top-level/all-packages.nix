@@ -17968,7 +17968,7 @@ with pkgs;
     inherit (python3Packages) supervisor;
   });
 
-  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService {
+  disnix-web-service = callPackage ../by-name/di/disnix-web-service/package.nix {
     jdk = jdk8;
   };
 
