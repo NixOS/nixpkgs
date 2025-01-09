@@ -9214,6 +9214,8 @@ self: super: with self; {
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
+  nhc = callPackage ../development/python-modules/nhc { };
+
   niaaml = callPackage ../development/python-modules/niaaml { };
 
   nianet = callPackage ../development/python-modules/nianet { };
@@ -9239,8 +9241,6 @@ self: super: with self; {
   nifty8 = callPackage ../development/python-modules/nifty8 { };
 
   nikola = callPackage ../development/python-modules/nikola { };
-
-  niko-home-control = callPackage ../development/python-modules/niko-home-control { };
 
   nilearn = callPackage ../development/python-modules/nilearn { };
 
