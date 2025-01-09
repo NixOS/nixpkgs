@@ -49,8 +49,6 @@ stdenv.mkDerivation {
       # hide really common warning that floods the logs:
       #   warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
       "-D_DEFAULT_SOURCE"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
       # error: call to undeclared function 'p9mbtowc'; ISO C99 and later do not support implicit function declarations
       "-Wno-error=implicit-function-declaration"
     ]
