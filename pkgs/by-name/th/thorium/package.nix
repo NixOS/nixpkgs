@@ -24,8 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/Applications
+
+    mkdir -p "$out/Applications"
     cp -r ./Thorium.app $out/Applications
+
+    mkdir -p "$out/bin"
+    ln -sr "$out/Applications/Thorium.app/Contents/MacOS/Thorium" "$out/bin/thorium"
+
     runHook postInstall
   '';
 
@@ -33,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Chromium fork for Linux, Windows, MacOS, Android, and Raspberry Pi named after radioactive element No. 90.";
     homepage = "https://thorium.rocks/";
     license = lib.licenses.bsd3;
+    mainProgram = "thorium";
     maintainers = [ lib.maintainers.quinneden ];
     platforms = [ "aarch64-darwin" ]; # Upstream issue with building on x86_64-darwin, latest version only aarch64-darwin currently.
-
     # undmg has a problem reading the dmg file during the unpack phase on systems other than aarch64-darwin.
     # TODO: another way to unpack with this dependency?
     badPlatforms = [
