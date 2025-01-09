@@ -4494,10 +4494,7 @@ self: super: with self; {
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
-  fastjet = toPythonModule (pkgs.fastjet.override {
-    withPython = true;
-    inherit (self) python;
-  });
+  fastjet = callPackage ../development/python-modules/fastjet { };
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
