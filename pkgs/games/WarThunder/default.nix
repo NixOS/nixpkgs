@@ -66,17 +66,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-vqpx85ZT1AzKk7dkZvMDMJf9GWalDM/F2JhaiMybMoY=";
   };
 
-  desktopItem = (makeDesktopItem {
-    name = "War-Thunder";
-    exec = "acesx86_64";
-    icon = "launcher";
-    desktopName = "War Thunder";
-    genericName = "War Thunder";
-    categories = [ "Game" ];
-    });
-
-
-
 
   sourceRoot = "./${pname}-${version}";
   unpackPhase = false;
@@ -151,6 +140,20 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
 
   runHook postInstall
   '';
+
+  postInstallPhase = let
+
+  desktopItem = makeDesktopItem {
+    name = "War-Thunder";
+    exec = "acesx86_64";
+    icon = "launcher";
+    desktopName = "War Thunder";
+    genericName = "War Thunder";
+    categories = [ "Game" ];
+    }; in ''
+
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/${name}.desktop $out/share/${name}.desktop
 
 
 
