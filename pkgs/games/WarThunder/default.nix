@@ -66,14 +66,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-vqpx85ZT1AzKk7dkZvMDMJf9GWalDM/F2JhaiMybMoY=";
   };
 
-  desktopItem = [(makeDesktopItem {
+  desktopItem = (makeDesktopItem {
     name = "War-Thunder";
     exec = "acesx86_64";
     icon = "launcher";
     desktopName = "War Thunder";
     genericName = "War Thunder";
     categories = [ "Game" ];
-    })];
+    });
 
 
 
