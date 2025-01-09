@@ -19,7 +19,7 @@ let
         for file in "$STORE_PATH"/*; do
           if [ -f "$file" ]; then
             filename=$(basename "$file")
-            ln -s "$filename" "$ACES64_DIR/$file"
+            ln -s $file $ACES64_DIR
 
             echo "$filename linked, DEBUG::: validating results."
 
