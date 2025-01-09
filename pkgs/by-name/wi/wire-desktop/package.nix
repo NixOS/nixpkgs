@@ -28,7 +28,7 @@ let
 
   version =
     let
-      x86_64-darwin = "3.37.5164";
+      x86_64-darwin = "3.38.5196";
     in
     {
       inherit x86_64-darwin;
@@ -39,7 +39,7 @@ let
 
   hash =
     let
-      x86_64-darwin = "sha256-xQ6EaZFE6qdpgFj1Lom37wT8URd5FsRwG89YeM/+U7k=";
+      x86_64-darwin = "sha256-AdimMmbkF2cNgidze1utBgAsK+hAKW+h3nWvV4qZsn4=";
     in
     {
       inherit x86_64-darwin;
