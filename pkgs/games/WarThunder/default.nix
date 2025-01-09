@@ -83,7 +83,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
   installPhase = let
 
   desktopItem = makeDesktopItem {
-    name = "War-Thunder";
+    name = "WarThunder";
     exec = "acesx86_64";
     icon = "launcher";
     desktopName = "War Thunder";
@@ -139,7 +139,9 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     install -m755 -D gaijin_selfupdater "$out/bin"
     install -m755 -D bpreport "$out/bin"
     echo "INFO: Done, installing desktop entry."
-    install -m755 -D ${desktopItem}/share/applications/${name}.desktop $out/share/${name}.desktop
+
+    install -m755 -D ${desktopItem}/share/applications/${name}.desktop $out/share/applications
+
     echo "INFO: Done"
 
   runHook postInstall
