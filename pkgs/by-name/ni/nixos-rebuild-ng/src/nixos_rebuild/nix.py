@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+import textwrap
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from importlib.resources import files
@@ -17,6 +19,7 @@ from .models import (
     Flake,
     Generation,
     GenerationJson,
+    ImageVariants,
     NRError,
     Profile,
     Remote,
@@ -261,6 +264,57 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     if r.returncode:
         return None
     return Path(r.stdout.strip())
+
+
+def get_build_image_variants(
+    build_attr: BuildAttr,
+    instantiate_flags: Args | None = None,
+) -> ImageVariants:
+    path = (
+        f'"{build_attr.path.resolve()}"'
+        if isinstance(build_attr.path, Path)
+        else build_attr.path
+    )
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import {path};
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              builtins.mapAttrs (n: v: v.passthru.filePath) set.{build_attr.to_attr("config.system.build.images")}
+            """),
+            *dict_to_flags(instantiate_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: ImageVariants = json.loads(r.stdout.strip())
+    return j
+
+
+def get_build_image_variants_flake(
+    flake: Flake,
+    eval_flags: Args | None = None,
+) -> ImageVariants:
+    r = run_wrapper(
+        [
+            "nix",
+            "eval",
+            "--json",
+            flake.to_attr("config.system.build.images"),
+            "--apply",
+            "builtins.mapAttrs (n: v: v.passthru.filePath)",
+            *dict_to_flags(eval_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: ImageVariants = json.loads(r.stdout.strip())
+    return j
 
 
 def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
