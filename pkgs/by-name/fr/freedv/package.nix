@@ -18,10 +18,6 @@
   wxGTK32,
   sioclient,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  AppKit,
-  AVFoundation,
-  Cocoa,
-  CoreMedia,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,24 +49,16 @@ stdenv.mkDerivation rec {
       darwin.autoSignDarwinBinariesHook
     ];
 
-  buildInputs =
-    [
-      codec2
-      libsamplerate
-      libsndfile
-      lpcnetfreedv
-      speexdsp
-      hamlib_4
-      wxGTK32
-      sioclient
-    ]
-    ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      AVFoundation
-      Cocoa
-      CoreMedia
-    ];
+  buildInputs = [
+    codec2
+    libsamplerate
+    libsndfile
+    lpcnetfreedv
+    speexdsp
+    hamlib_4
+    wxGTK32
+    sioclient
+  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
 
   cmakeFlags = [
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
