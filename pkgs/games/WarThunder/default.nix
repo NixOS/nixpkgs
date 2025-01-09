@@ -7,13 +7,12 @@ let
 
   text = ''
     #!/bin/bash
-    export ACES64_DIR=$HOME/.aces64
+    export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e
     export "STORE_PATH"="$(dirname "$(readlink -f "$(which WarThunder)")")"
     echo "$STORE_PATH"
-
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
+    cd "$ACES64_DIR"
 
-    cd "$STORE_PATH"
 
     echo "Check for home directory, create if not present."
 
@@ -23,18 +22,21 @@ let
 
       echo "Directory created, linking contents from store."
 
-        for file in "$STORE_PATH"/*; do
-          if [ ! -L "ACES64_DIR/$filename" ] || [ "$(readlink "$ACES64_DIR/$filename")" != "$file" ]; then
-            filename=$(basename "$file")
-            ln -s "$file" "$ACES64_DIR"
+    for file in "$STORE_PATH"/*; do
+        filename=$(basename "$file")
+        dest="$ACES64_DIR/$filename"
+
+            if [ ! -L "$dest" ] || [ "$(readlink "$dest")" != "$file" ]; then
+
+            ln -s "$file" "$dest"
 
             echo "$filename linked, DEBUG::: validating results."
 
             if [ ! -e "$ACES64_DIR/$filename" ]; then
-              echo "FATAL Error: Link creation for $filename failure, breaking."
+              echo "FATAL Error: Link creation for $file failure, breaking."
               exit 1
             else
-              echo "Linked $filename is valid and exists, proceeding."
+              echo "Linked $file is valid and exists, proceeding."
           fi
         fi
    done
@@ -46,7 +48,6 @@ let
 
     cd "$ACES64_DIR" || { echo "cd command rejected, breaking"; exit 1; }
     ./launcher
-
     '';}; in
 stdenv.mkDerivation rec {
   name = "WarThunder";
@@ -114,25 +115,18 @@ stdenv.mkDerivation rec {
     echo "STORE_PATH=\"$out/${pname}-${version}\"" > $out/${pname}-${version}/store_path.txt
 
     chmod +x "$out/bin/acesx86_64";
+
   runHook postInstall
   '';
 
-
-
-
-
-desktopItem = makeDesktopItem rec {
-  name = "War Thunder";
-  exec = "acesx86_64";
-  icon = "launcher.ico";
-  desktopName = "War Thunder";
-  terminal = true;
-  categories = [ "Game" ];
-};
-
-
-
-
+  desktopItems = [(makeDesktopItem {
+    name = "War Thunder";
+    exec = "${acesx86_64}/bin/acesx86_64";
+    icon = "launcher.ico";
+    desktopName = "War Thunder";
+    genericName = "War Thunder";
+    categories = [ "AudioVideo" "Network" ];
+  })];
 
   meta = with lib; {
     homepage = "https://warthunder.com/";
