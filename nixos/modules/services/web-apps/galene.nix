@@ -150,7 +150,8 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
-          ExecStart = ''${cfg.package}/bin/galene \
+          ExecStart = ''
+          ${cfg.package}/bin/galene \
           ${optionalString (cfg.insecure) "-insecure"} \
           -http ${cfg.httpAddress}:${toString cfg.httpPort} \
           -turn ${cfg.turnAddress} \
