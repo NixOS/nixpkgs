@@ -7,11 +7,25 @@ let
 
   text = ''
     #!/bin/bash
-    export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
     export "STORE_PATH"="$(dirname "$(readlink -f "$(which WarThunder)")")"
     echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
-    cd "$STORE_PATH/War-Thunder-086d99e"
+    echo "Check for home directory, create if not present."
+    export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
+
+    if [ ! -d "$HOME/.aces64/War-Thunder-086d99e" ]; then
+
+      echo "DEBUG::: Directory not found. Fuck."
+
+      mkdir -p "$$HOME/.aces64/War-Thunder-086d99e"
+      cd "$HOME/.aces64/War-Thunder-086d99e"
+
+      echo "DEBUG::: Directory created and CD'ed."
+      echo "DEBUG::: Setting Enviroment variables for runtime again."
+      export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
+      else
+        echo "DEBUG::: Directory exits, fucking good.."
+    fi
     echo "Installing launcher, bpreport, and selfupdater scripts to the user directory"
     install -m755 -D launcher "$ACES64_DIR/launcher"
     install -m755 -D gaijin_selfupdater "$ACES64_DIR/gaijin_selfupdater"
@@ -26,17 +40,7 @@ let
 
 
 
-    echo "Check for home directory, create if not present."
 
-    if [ ! -d "$ACES64_DIR" ]; then
-      echo "Directory not found."
-      mkdir -p "$ACES64_DIR"
-      cd "$ACES64_DIR"
-      echo "Directory created and CD'ed, linking contents from store."
-
-      else
-        echo "Directory already exists, no actions taken, proceeding."
-    fi
 
     cd "$ACES64_DIR" || { echo "cd command rejected, breaking"; exit 1; }
     echo "DEBUG::: Changing root directory to $ACES64_DIR"
