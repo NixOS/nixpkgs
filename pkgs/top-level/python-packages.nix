@@ -17924,6 +17924,8 @@ self: super: with self; {
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
+  watergate-local-api = callPackage ../development/python-modules/watergate-local-api { };
+
   watermark = callPackage ../development/python-modules/watermark { };
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
