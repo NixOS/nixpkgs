@@ -6232,7 +6232,8 @@
       ]; # missing inputs: pywmspro
     "wolflink" =
       ps: with ps; [
-      ]; # missing inputs: wolf-comm
+        wolf-comm
+      ];
     "workday" =
       ps: with ps; [
         holidays
@@ -7371,6 +7372,7 @@
     "withings"
     "wiz"
     "wled"
+    "wolflink"
     "workday"
     "worldclock"
     "ws66i"

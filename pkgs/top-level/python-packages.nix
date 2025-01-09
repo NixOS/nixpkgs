@@ -18100,6 +18100,8 @@ self: super: with self; {
 
   wn = callPackage ../development/python-modules/wn { };
 
+  wolf-comm = callPackage ../development/python-modules/wolf-comm { };
+
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };
