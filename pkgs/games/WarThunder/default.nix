@@ -7,8 +7,8 @@ let
 
   text = ''
     #!/bin/bash
-    export "STORE_PATH"="$(dirname "$(readlink -f "$(which acesx86_64)")")"
-    echo "$STORE_PATH/../War-Thunder-086d99e"
+    export "STORE_PATH"="$(dirname "$(readlink -f "$(which store_path.sg)")")"
+    echo "$STORE_PATH"
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
     echo "Check for home directory, create if not present."
     export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
@@ -130,12 +130,13 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     fi
     echo "INFO: sym linking aces to WarThunder for purposes of desktop execution."
     ln -s ${acesx86_64}/bin/acesx86_64 $out/bin/WarThunder
+
     touch store_path.sh
+
     chmod +x store_path.sh
-    cp store_path.sh $out/bin/store_path.sh
-    cp store_path.sh $out/${pname}-${version}/store_path
-    ln -sf $out/bin/store_path.sh $out/${pname}-${version}/store_path.sh
-    ln -sf launcher "$out/bin/launcher"
+    cp -f store_path.sh $out/${pname}-${version}/store_path
+    ln -sf $out/${pname}-${version}/store_path.sh $out/bin/store_path.sh
+
     install -m755 -D gaijin_selfupdater "$out/bin"
     install -m755 -D bpreport "$out/bin"
 
