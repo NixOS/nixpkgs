@@ -39,12 +39,12 @@ let
     install -m755 -D \
     "$STORE_PATH"/War-Thunder-086d99e/bpreport "$ACES64_DIR/bpreport"
 
-    cp ca-bundle.crt "$ACES64_DIR/ca-bundle.crt"
-    cp launcherr.dat "$ACES64_DIR/launcherr.dat"
-    cp libsciter-gtk.so "$ACES64_DIR/libsciter-gtk.so"
-    cp libsteam_api.so "$ACES64_DIR/libsteam_api.so"
-    cp package.blk "$ACES64_DIR/package.blk"
-    cp yupartner.blk "$ACES64_DIR/yupartner.blk"
+    cp -f "$STORE_PATH"/War-Thunder-086d99e/ca-bundle.crt "$ACES64_DIR/ca-bundle.crt"
+    cp -f "$STORE_PATH"/War-Thunder-086d99e/launcherr.dat "$ACES64_DIR/launcherr.dat"
+    cp -f "$STORE_PATH"/War-Thunder-086d99e/libsciter-gtk.so "$ACES64_DIR/libsciter-gtk.so"
+    cp -f "$STORE_PATH"/War-Thunder-086d99e/libsteam_api.so "$ACES64_DIR/libsteam_api.so"
+    cp -f "$STORE_PATH"/War-Thunder-086d99e/package.blk "$ACES64_DIR/package.blk"
+    cp -f "$STORE_PATH"/War-Thunder-086d99e/yupartner.blk "$ACES64_DIR/yupartner.blk"
 
 
 
