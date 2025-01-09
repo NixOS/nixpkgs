@@ -10,6 +10,7 @@
   gdb,
   glib,
   lttng-ust,
+  mesa,
   perl,
   pkg-config,
   python3,
@@ -60,8 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./2001-Mark-problematic-tests.patch
-
     (substituteAll {
       src = ./2002-Nixpkgs-versioned-QML-path.patch.in;
       name = "2002-Nixpkgs-versioned-QML-path.patch";
@@ -149,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     dpkg # `dpkg-architecture -qDEB_HOST_ARCH` response decides how tests are run
     gdb
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     xvfb-run
   ];
 

@@ -6,8 +6,6 @@
   bzip2,
   zstd,
   stdenv,
-  apple-sdk_15,
-  darwinMinVersionHook,
   rocksdb,
   nix-update-script,
   testers,
@@ -55,12 +53,7 @@ rustPlatform.buildRustPackage rec {
       zstd
     ]
     ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
-      (darwinMinVersionHook "10.15")
-    ];
+    ++ lib.optional enableLiburing liburing;
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
