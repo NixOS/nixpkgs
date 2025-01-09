@@ -33,12 +33,12 @@ let
 in
 ocamlPackages.buildDunePackage rec {
   pname = "satysfi";
-  version = "0.0.10";
+  version = "0.0.11";
   src = fetchFromGitHub {
     owner = "gfngfn";
     repo = "SATySFi";
-    rev = "v${version}";
-    hash = "sha256-qgVM7ExsKtzNQkZO+I+rcWLj4LSvKL5uyitH7Jg+ns0=";
+    tag = "v${version}";
+    hash = "sha256-eeeoUVTGId56SQvrmmMc7nwH/blrXgwcw3+0FLbvc34=";
     fetchSubmodules = true;
   };
 
