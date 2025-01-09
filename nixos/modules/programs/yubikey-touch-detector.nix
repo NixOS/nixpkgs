@@ -43,21 +43,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.packages = [ pkgs.yubikey-touch-detector ];
+    services.yubikey-touch-detector = cfg;
 
-    systemd.user.services.yubikey-touch-detector = {
-      path = [ pkgs.gnupg ];
-
-      environment = {
-        YUBIKEY_TOUCH_DETECTOR_LIBNOTIFY = builtins.toString cfg.libnotify;
-        YUBIKEY_TOUCH_DETECTOR_NOSOCKET = builtins.toString (!cfg.unixSocket);
-        YUBIKEY_TOUCH_DETECTOR_VERBOSE = builtins.toString cfg.verbose;
-      };
-
-      wantedBy = [ "graphical-session.target" ];
-    };
-    systemd.user.sockets.yubikey-touch-detector = {
-      wantedBy = [ "sockets.target" ];
-    };
+    warnings = [
+      ''
+        The module programs.yubikey-touch-detector is deprecated.
+        Please use services.yubikey-touch-detector instead.
+      ''
+    ];
   };
 }

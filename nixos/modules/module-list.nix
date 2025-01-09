@@ -870,6 +870,7 @@
   ./services/misc/weechat.nix
   ./services/misc/workout-tracker.nix
   ./services/misc/xmrig.nix
+  ./services/misc/yubikey-touch-detector.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
