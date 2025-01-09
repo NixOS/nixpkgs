@@ -14435,8 +14435,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  WarThunder = callPackage ../by-name/wa/WarThunder/default.nix {};
-
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     python = python3;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) ImageMagick;
@@ -15375,6 +15373,8 @@ with pkgs;
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
+
+  WarThunder = callPackage ../games/WarThunder { };
 
   pomodoro = callPackage ../applications/misc/pomodoro {
     inherit (darwin.apple_sdk.frameworks) Foundation;
