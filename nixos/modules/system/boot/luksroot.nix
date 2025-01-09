@@ -1115,8 +1115,8 @@ in
               "initrd-switch-root.target"
               "shutdown.target"
             ];
-            wants = [ "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
-            after = [ "systemd-modules-load.service" "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
+            wants = optional clevis.useTang "network-online.target";
+            after = [ "systemd-modules-load.service" "tpm2.target" ] ++ optional clevis.useTang "network-online.target";
             script = ''
               mkdir -p /clevis-${name}
               mount -t ramfs none /clevis-${name}
