@@ -106,8 +106,8 @@ stdenv.mkDerivation rec {
 
 desktopItem = makeDesktopItem rec {
   name = "War Thunder";
-  exec = "acesx86_64";
-  icon = "launcher.ico";
+  exec = "$HOME/.aces64/acesx86_64";
+  icon = "${pkgs.WarThunder}/launcher.ico";
   desktopName = "War Thunder";
   terminal = true;
   categories = [ "Game" ];
