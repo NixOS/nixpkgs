@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
   ipaexfont,
   junicode,
   lmodern,
@@ -29,6 +29,7 @@ let
     propagatedBuildInputs = [ ocamlPackages.biniou ];
     inherit (ocamlPackages.yojson) meta;
   };
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
 in
 ocamlPackages.buildDunePackage rec {
   pname = "satysfi";
