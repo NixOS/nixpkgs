@@ -17708,6 +17708,17 @@ final: prev:
     meta.homepage = "https://github.com/dstein64/vim-startuptime/";
   };
 
+  vim-stationeers-ic10-syntax = buildVimPlugin {
+    pname = "vim-stationeers-ic10-syntax";
+    version = "2025-01-08";
+    src = fetchgit {
+      url = "https://gitlab.com/LittleMorph/vim-ic10";
+      rev = "7c1f13b198cfe122fb52f6abfb8dc95d5ca51013";
+      sha256 = "0pxk1qq6niy9msm369w5xn2jcwpa8a30hpqk6hb1ag1v6244j3g1";
+    };
+    meta.homepage = "https://gitlab.com/LittleMorph/vim-ic10";
+  };
+
   vim-strip-trailing-whitespace = buildVimPlugin {
     pname = "vim-strip-trailing-whitespace";
     version = "2022-02-01";
