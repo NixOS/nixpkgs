@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   unpackPhase = false;
   dontConfigure = true;
   dontBuild = true;
-  buildInputs = [ autoPatchelfHook ];
+  buildInputs = [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr ];
 
 #  patchPhase = let
 #    pkgs = import <nixpkgs> {};
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
 
 desktopItem = makeDesktopItem rec {
   name = "War Thunder";
-  exec = "$HOME/.aces64/acesx86_64";
-  icon = "${pkgs.WarThunder}/launcher.ico";
+  exec = "War-Thunder/086d99e/acesx86_64";
+  icon = "launcher.ico";
   desktopName = "War Thunder";
   terminal = true;
   categories = [ "Game" ];
