@@ -6,13 +6,13 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncftp";
-  version = "3.2.6";
+  version = "3.2.7";
 
   src = fetchurl {
-    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.xz";
-    sha256 = "1389657cwgw5a3kljnqmhvfh4vr2gcr71dwz1mlhf22xq23hc82z";
+    url = "https://www.ncftp.com/public_ftp/ncftp/ncftp-${finalAttrs.version}-src.tar.xz";
+    hash = "sha256-1BxcTWYUqOri7U5NetprbTr8yftlpO2bhxE0S+8k9+g=";
   };
 
   buildInputs = [ ncurses ];
@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
     license = licenses.clArtistic;
+    mainProgram = "ncftp";
   };
-}
+})
