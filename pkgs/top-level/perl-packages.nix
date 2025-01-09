@@ -5018,10 +5018,6 @@ with self; {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/Crypt-DES-2.07.tar.gz";
       hash = "sha256-LbHrtYN7TLIAUcDuW3M7RFPjE33wqSMGA0yGdiHt1+c=";
     };
-    patches = [
-      # add extra definitions in header to please -Werror=implicit-function-declaration
-      ../development/perl-modules/CryptDES-gcc14.patch
-    ];
     meta = {
       description = "Perl DES encryption module";
       license = with lib.licenses; [ bsdOriginalShortened ];
