@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook, copyDesktopItem }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook, copyDesktopItems }:
 
 let
   acesx86_64 = writeShellApplication {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   unpackPhase = false;
   dontConfigure = true;
   dontBuild = true;
-  nativeBuildInputs = [ copyDesktopItem ];
+  nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr ];
 
 #  patchPhase = let
