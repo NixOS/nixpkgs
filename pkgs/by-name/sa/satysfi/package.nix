@@ -30,10 +30,12 @@ let
     inherit (ocamlPackages.yojson) meta;
   };
   ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-in
-ocamlPackages.buildDunePackage rec {
-  pname = "satysfi";
   version = "0.0.11";
+in
+ocamlPackages.buildDunePackage {
+  pname = "satysfi";
+  inherit version;
+
   src = fetchFromGitHub {
     owner = "gfngfn";
     repo = "SATySFi";
@@ -83,13 +85,13 @@ ocamlPackages.buildDunePackage rec {
       $out/share/satysfi/dist/fonts/Junicode.ttf
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gfngfn/SATySFi";
     description = "Statically-typed, functional typesetting system";
     changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.mt-caret ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ mt-caret ];
+    platforms = lib.platforms.all;
     mainProgram = "satysfi";
   };
 }
