@@ -50,9 +50,11 @@ buildDotnetModule rec {
   };
 
   meta = {
+    changelog = "https://github.com/WalletWasabi/WalletWasabi/releases/tag/${src.tag}";
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
     license = lib.licenses.mit;
+    mainProgram = "WasabiBackend";
     maintainers = with lib.maintainers; [
       mmahut
     ];
