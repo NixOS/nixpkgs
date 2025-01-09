@@ -135,7 +135,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     cp store_path.sh $out/bin/store_path.sh
     cp store_path.sh $out/${pname}-${version}/store_path
     ln -sf $out/bin/store_path.sh $out/${pname}-${version}/store_path.sh
-    install -m755 -D launcher "$out/bin/launcher"
+    ln -sf launcher "$out/bin/launcher"
     install -m755 -D gaijin_selfupdater "$out/bin"
     install -m755 -D bpreport "$out/bin"
 
