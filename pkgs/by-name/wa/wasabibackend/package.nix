@@ -14,7 +14,7 @@ buildDotnetModule (finalAttrs: {
   version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "zkSNACKs";
+    owner = "WalletWasabi";
     repo = "WalletWasabi";
     tag = "v${finalAttrs.version}";
     hash = "sha256-vOvNumR/0agf9Mof0UD3KjJVgN18y6R/OrgLOXwL3K8=";
