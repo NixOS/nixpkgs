@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
-    rev = "gping-v${version}";
-    hash = "sha256-JZMgbCwEGfngCQVmuZX1tu3he/f/TBLitcP/Ea3S6yI=";
+    tag = "gping-v${version}";
+    hash = "sha256-RTjYgsi3PmmPufdTcxZr+Laipa32Kkq1M1eHSAJVWZQ=";
   };
 
-  cargoHash = "sha256-I9rcC2sotrdHMCCiDgfycKRnJxZLuA5OLZPZC0zFiLc=";
+  cargoHash = "sha256-c1GCF7Nztv7EpnPGPMRKdAQmeauy6OfI97e0nZWXe7E=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,6 +28,13 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage gping.1
   '';
+
+  # Requires internet access
+  checkFlags = [
+    "--skip=test::tests::test_integration_any"
+    "--skip=test::tests::test_integration_ip6"
+    "--skip=test::tests::test_integration_ipv4"
+  ];
 
   doInstallCheck = true;
 
