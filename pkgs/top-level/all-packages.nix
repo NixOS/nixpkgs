@@ -13627,7 +13627,6 @@ with pkgs;
   };
 
   freedv = callPackage ../by-name/fr/freedv/package.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {
       freedvSupport = true;
     };
