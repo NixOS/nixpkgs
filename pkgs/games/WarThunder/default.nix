@@ -125,6 +125,9 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     echo "INFO: sym linking aces to WarThunder for purposes of desktop execution."
     ln -s ${acesx86_64}/bin/acesx86_64 $out/bin/WarThunder
     install -m755 -D launcher "$out/bin/launcher"
+    install -m755 -D gaijin_selfupdater $out/bin
+    install -m755 -D bpreport $out/bin
+
   runHook postInstall
   '';
 
