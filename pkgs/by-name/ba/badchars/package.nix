@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   python3,
 }:
 
