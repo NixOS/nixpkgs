@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "WarThunder";
   pname = "War-Thunder";
-  version = "086d99e";
+  version = "b1de644";
 
   src = fetchurl {
     url = "https://github.com/Mephist0phel3s/War-Thunder/archive/refs/tags/086d99e.tar.gz";
