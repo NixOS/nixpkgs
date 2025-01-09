@@ -17,7 +17,7 @@ let
 
       echo "DEBUG::: Directory not found. Fuck."
 
-      mkdir -p "$$HOME/.aces64/War-Thunder-086d99e"
+      mkdir -p "$HOME/.aces64/War-Thunder-086d99e"
       cd "$HOME/.aces64/War-Thunder-086d99e"
 
       echo "DEBUG::: Directory created and CD'ed."
@@ -128,7 +128,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
 
   desktopItem = makeDesktopItem {
     name = "War-Thunder";
-    exec = acesx86_64;
+    exec = "${acesx86_64}/bin/acesx86_64";
     icon = "launcher";
     desktopName = "War Thunder";
     genericName = "War Thunder";
