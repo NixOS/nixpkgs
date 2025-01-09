@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatch-vcs,
   hatchling,
   pythonOlder,
@@ -11,7 +11,7 @@
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "2.5.0";
+  version = "3.0.0";
 in
 
 buildPythonPackage {
@@ -20,10 +20,11 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "sphinx_autodoc_typehints";
-    inherit version;
-    hash = "sha256-JZ4QJrIY1WPXJ0P0F/zCWQapYUiX/jf5G9jX1Y90jDs=";
+  src = fetchFromGitHub {
+    owner = "tox-dev";
+    repo = "sphinx-autodoc-typehints";
+    tag = version;
+    hash = "sha256-v7gXUnSfp2TDljgG5z5PmY0Bewv9R8ZEzVH6epP/LBk=";
   };
 
   pythonRelaxDeps = [ "sphinx" ];
