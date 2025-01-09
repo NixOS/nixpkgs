@@ -80,7 +80,16 @@ stdenv.mkDerivation rec {
 libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr];
 
 
-  installPhase = ''
+  installPhase = let
+
+  desktopItem = makeDesktopItem {
+    name = "War-Thunder";
+    exec = "acesx86_64";
+    icon = "launcher";
+    desktopName = "War Thunder";
+    genericName = "War Thunder";
+    categories = [ "Game" ];
+    }; in ''
   runHook preInstall
     mkdir -p $out/${pname}-${version}
     mkdir -p $out/share/pixmaps
@@ -129,26 +138,12 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     install -m755 -D launcher $out/bin
     install -m755 -D gaijin_selfupdater "$out/bin"
     install -m755 -D bpreport "$out/bin"
+    echo "INFO: Done, installing desktop entry."
+    install -m755 -D ${desktopItem}/share/applications/${name}.desktop $out/share/${name}.desktop
     echo "INFO: Done"
 
   runHook postInstall
   '';
-
-  postInstallPhase = let
-
-  desktopItem = makeDesktopItem {
-    name = "War-Thunder";
-    exec = "acesx86_64";
-    icon = "launcher";
-    desktopName = "War Thunder";
-    genericName = "War Thunder";
-    categories = [ "Game" ];
-    }; in ''
-
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/${name}.desktop $out/share/${name}.desktop
-
-'';
 
 
   meta = with lib; {
