@@ -2642,6 +2642,8 @@ self: super: with self; {
 
   convertertools = callPackage ../development/python-modules/convertertools { };
 
+  cookidoo-api = callPackage ../development/python-modules/cookidoo-api { };
+
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
   cookies = callPackage ../development/python-modules/cookies { };
