@@ -5,6 +5,8 @@
   rustPlatform,
   cargo,
   python3Packages,
+  versionCheckHook,
+
   prefix ? "uutils-",
   buildMulticallBinary ? true,
 }:
@@ -43,6 +45,17 @@ stdenv.mkDerivation rec {
 
   # too many impure/platform-dependent tests
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram =
+    let
+      prefix' = lib.optionalString (prefix != null) prefix;
+    in
+    "${placeholder "out"}/bin/${prefix'}ls";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
