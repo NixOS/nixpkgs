@@ -17,10 +17,10 @@ Which is equivalent to:
 
 ```nix
 {
-  services.netbird.clients.default = {
+  services.netbird.clients.wt0 = {
     port = 51820;
-    interface = "wt0";
     name = "netbird";
+    interface = "wt0";
     hardened = false;
   };
 }
