@@ -82,11 +82,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
   runHook preInstall
     mkdir -p $out/${pname}-${version}
+    mkdir -p $out/share/icons
+    mkdir -p $out/bin
     install -m755 -D launcher $out/${pname}-${version}/launcher
     install -m755 -D gaijin_selfupdater $out/${pname}-${version}/gaijin_selfupdater
     install -m755 -D bpreport $out/${pname}-${version}/bpreport
-    install -m755 -D launcher.ico $out/${pname}-${version}/launcher.ico
-    install -m755 -D ${acesx86_64} $out/${pname}-${version}/acesx86_64
+    install -m755 -D launcher.ico $out/share/icons/launcher.ico
+    install -m755 -D ${acesx86_64} $out/bin/acesx86_64
 
     cp ca-bundle.crt $out/${pname}-${version}/ca-bundle.crt
     cp launcherr.dat $out/${pname}-${version}/launcherr.dat
@@ -107,7 +109,7 @@ stdenv.mkDerivation rec {
 
 desktopItem = makeDesktopItem rec {
   name = "War Thunder";
-  exec = "War-Thunder/086d99e/acesx86_64";
+  exec = "acesx86_64";
   icon = "launcher.ico";
   desktopName = "War Thunder";
   terminal = true;
