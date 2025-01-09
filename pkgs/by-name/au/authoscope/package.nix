@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
+  darwin,
   fetchFromGitHub,
   installShellFiles,
   libcap,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
-  Security,
   zlib,
 }:
 
@@ -17,9 +18,9 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
+    repo = "authoscope";
+    tag = "v${version}";
+    hash = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
   };
 
   cargoHash = "sha256-rSHuKy86iJNLAKSVcb7fn7A/cc75EOc97jGI14EaC6k=";
@@ -29,11 +30,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libcap
-    zlib
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs =
+    [
+      libcap
+      zlib
+      openssl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   postInstall = ''
     installManPage docs/${pname}.1
@@ -42,10 +47,13 @@ rustPlatform.buildRustPackage rec {
   # Tests requires access to httpin.org
   doCheck = false;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Scriptable network authentication cracker";
     homepage = "https://github.com/kpcyrd/authoscope";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/kpcyrd/authoscope/releases/tag/v${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

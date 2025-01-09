@@ -62,7 +62,6 @@
   libgbm,
   enableProprietaryCodecs ? true,
   # darwin
-  autoSignDarwinBinariesHook,
   bootstrap_cmds,
   cctools,
   xcbuild,
@@ -84,9 +83,6 @@ qtModule {
       which
       gn
       nodejs
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       bootstrap_cmds
@@ -124,6 +120,24 @@ qtModule {
       extraPrefix = "src/3rdparty/chromium/third_party/xnnpack/src/";
       hash = "sha256-GUESVNR88I1K2V5xr0e09ec4j2eselMhNN06+PCcINM=";
     })
+
+    # The latest version of Clang changed what macros it predefines on Apple
+    # targets, causing errors about predefined macros in zlib.
+    (fetchpatch {
+      url = "https://github.com/chromium/chromium/commit/2f39ac8d0a414dd65c0e1d5aae38c8f97aa06ae9.patch";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+      hash = "sha256-07hWANY9JGFmqvjdOD6SFmVI6sQRRyvW+7wxGZF5GVo=";
+    })
+
+    # The latest version of Clang changed what macros it predefines on Apple
+    # targets, causing errors about predefined macros in libpng.
+    (fetchpatch {
+      url = "https://github.com/chromium/chromium/commit/66defc14abe47c0494da9faebebfa0a5b6efcf38.patch";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+      hash = "sha256-FWIi1VsBZFqOoPIkPxPkcfexPkx1458rB5ldtA7T2uE=";
+    })
   ];
 
   postPatch =
@@ -148,6 +162,13 @@ qtModule {
         --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
         --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
         --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
+
+      substituteInPlace configure.cmake src/gn/CMakeLists.txt \
+        --replace "AppleClang" "Clang"
+
+      # Disable metal shader compilation, Xcode only
+      substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
+        --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -157,8 +178,6 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-        --replace "AppleClang" "Clang"
       substituteInPlace cmake/Functions.cmake \
         --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
     '';

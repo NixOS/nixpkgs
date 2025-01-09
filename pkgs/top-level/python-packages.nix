@@ -4634,7 +4634,11 @@ self: super: with self; {
 
   flake8-length = callPackage ../development/python-modules/flake8-length { };
 
+  flake8-class-newline = callPackage ../development/python-modules/flake8-class-newline { };
+
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
+
+  flake8-deprecated = callPackage ../development/python-modules/flake8-deprecated { };
 
   flake8-docstrings = callPackage ../development/python-modules/flake8-docstrings { };
 
@@ -7620,6 +7624,8 @@ self: super: with self; {
   llm = callPackage ../development/python-modules/llm { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
+
+  llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
   llmx = callPackage ../development/python-modules/llmx { };
 
@@ -11276,8 +11282,6 @@ self: super: with self; {
   py3rijndael = callPackage ../development/python-modules/py3rijndael { };
 
   py3status = callPackage ../development/python-modules/py3status { };
-
-  py3to2 = callPackage ../development/python-modules/3to2 { };
 
   py4j = callPackage ../development/python-modules/py4j { };
 
@@ -15540,6 +15544,8 @@ self: super: with self; {
   stookwijzer = callPackage ../development/python-modules/stookwijzer { };
 
   stopit = callPackage ../development/python-modules/stopit { };
+
+  stop-words = callPackage ../development/python-modules/stop-words { };
 
   stransi = callPackage ../development/python-modules/stransi { };
 

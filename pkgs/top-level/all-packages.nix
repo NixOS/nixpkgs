@@ -1944,10 +1944,6 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  authoscope = callPackage ../tools/security/authoscope {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   avahi = callPackage ../development/libraries/avahi { };
 
   avahi-compat = callPackage ../development/libraries/avahi {
@@ -14109,7 +14105,7 @@ with pkgs;
   jabref = callPackage ../applications/office/jabref {
     jdk = jdk21.override {
       enableJavaFX = true;
-      openjfx_jdk = openjfx23.override { withWebKit = true; };
+      openjfx_jdk = openjfx23;
     };
   };
 
@@ -14556,6 +14552,8 @@ with pkgs;
   rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
     x11Support = true;
   };
+
+  rquickshare-legacy = rquickshare.override { app-type = "legacy"; };
 
   seamly2d = libsForQt5.callPackage ../applications/graphics/seamly2d { };
 
