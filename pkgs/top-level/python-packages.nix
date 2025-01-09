@@ -125,6 +125,8 @@ self: super: with self; {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  agentops = callPackage ../development/python-modules/agentops { };
+
   aggregate6 = callPackage ../development/python-modules/aggregate6 { };
 
   ago = callPackage ../development/python-modules/ago { };
@@ -2728,6 +2730,10 @@ self: super: with self; {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
+  crewai = callPackage ../development/python-modules/crewai { };
+
+  crewai-tools = callPackage ../development/python-modules/crewai-tools { };
+
   criticality-score = callPackage ../development/python-modules/criticality-score { };
 
   crocoddyl = toPythonModule (pkgs.crocoddyl.override {
@@ -4124,6 +4130,8 @@ self: super: with self; {
 
   email-validator = callPackage ../development/python-modules/email-validator { };
 
+  embedchain = callPackage ../development/python-modules/embedchain { };
+
   embedding-reader = callPackage ../development/python-modules/embedding-reader { };
 
   embrace = callPackage ../development/python-modules/embrace { };
@@ -5351,6 +5359,8 @@ self: super: with self; {
   google-auth-oauthlib = callPackage ../development/python-modules/google-auth-oauthlib { };
 
   google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
+
+  google-cloud-aiplatform = callPackage ../development/python-modules/google-cloud-aiplatform { };
 
   google-cloud-appengine-logging = callPackage ../development/python-modules/google-cloud-appengine-logging { };
 
@@ -7084,9 +7094,13 @@ self: super: with self; {
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
 
+  langchain-cohere = callPackage ../development/python-modules/langchain-cohere { };
+
   langchain-community = callPackage ../development/python-modules/langchain-community { };
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
+
+  langchain-experimental = callPackage ../development/python-modules/langchain-experimental { };
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
 
@@ -8064,6 +8078,8 @@ self: super: with self; {
   meld3 = callPackage ../development/python-modules/meld3 { };
 
   melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
+
+  mem0ai = callPackage ../development/python-modules/mem0ai { };
 
   memestra = callPackage ../development/python-modules/memestra { };
 

@@ -101,6 +101,8 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'langchain-aws==(.*)' python3Packages.langchain-aws
       nix-update --commit --version-regex 'langchain-azure-dynamic-sessions==(.*)' python3Packages.langchain-azure-dynamic-sessions
       nix-update --commit --version-regex 'langchain-chroma==(.*)' python3Packages.langchain-chroma
+      nix-update --commit --version-regex 'langchain-cohere==(.*)' python3Packages.langchain-cohere
+      nix-update --commit --version-regex 'langchain-experimental==(.*)' python3Packages.langchain-experimental
       nix-update --commit --version-regex 'langchain-huggingface==(.*)' python3Packages.langchain-huggingface
       nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
       nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
