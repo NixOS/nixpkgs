@@ -6128,7 +6128,8 @@
       ];
     "watergate" =
       ps: with ps; [
-      ]; # missing inputs: watergate-local-api
+        watergate-local-api
+      ];
     "watson_iot" =
       ps: with ps; [
       ]; # missing inputs: ibmiotf
@@ -7346,6 +7347,7 @@
     "wallbox"
     "waqi"
     "water_heater"
+    "watergate"
     "watttime"
     "waze_travel_time"
     "weather"
