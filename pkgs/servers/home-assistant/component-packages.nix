@@ -1356,7 +1356,8 @@
       ];
     "eheimdigital" =
       ps: with ps; [
-      ]; # missing inputs: eheimdigital
+        eheimdigital
+      ];
     "eight_sleep" =
       ps: with ps; [
       ];
@@ -6676,6 +6677,7 @@
     "ecowitt"
     "edl21"
     "efergy"
+    "eheimdigital"
     "eight_sleep"
     "electrasmart"
     "elevenlabs"
