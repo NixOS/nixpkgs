@@ -73,7 +73,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
   installPhase = ''
   runHook preInstall
     mkdir -p $out/${pname}-${version}
-    mkdir -p $out/share/icons
+    mkdir -p $out/share/pixmaps
     mkdir -p $out/bin
 
     if [ -f "${acesx86_64}/bin/acesx86_64" ]; then
@@ -111,7 +111,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
     echo "DEBUG::: Installing the fucking desktop file"
     mkdir -p "$out/share/applications"
     cp -r "${desktopItem}/share/applications"* "$out/share/applications"
-    install -m755 -D launcher.ico $out/share/icons/launcher.ico
+    install -m755 -D launcher.ico $out/share/pixmaps/launcher.png
   runHook postInstall
   '';
 
@@ -119,7 +119,7 @@ libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib r
   desktopItem = makeDesktopItem {
     name = "War Thunder";
     exec = "${acesx86_64}/bin/acesx86_64";
-    icon = "launcher.ico";
+    icon = "launcher";
     desktopName = "War Thunder";
     genericName = "War Thunder";
     categories = [ "Game" ];
