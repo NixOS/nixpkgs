@@ -151,7 +151,12 @@ let
           test -e ${lib.escapeShellArg appimageName}
           appimage-exec.sh -x $out ${lib.escapeShellArg appimageName}
 
-          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,lib,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+
+          # For hardware panel support, Resolve requires the panel libraries to be unpacked to the
+          # library search path within the FHS environment.
+          tar xf $out/share/panels/dvpanel-framework-linux-x86_64.tgz -C $out/lib
+
           runHook postInstall
         '';
 
@@ -273,6 +278,19 @@ fhs = buildFHSEnv {
   '';
 };
 
+resolveUdev = runCommandLocal "davinci-resolve${lib.optionalString studioVariant "-studio"}-udev" {} ''
+  mkdir -p $out/etc/udev/rules.d
+  # follows the resolve install script, see scripts/post_install.sh
+  DVP_RULES=$out/etc/udev/rules.d/75-davincipanel.rules
+  DVK_RULES=$out/etc/udev/rules.d/75-davincikb.rules
+  SDX_RULES=$out/etc/udev/rules.d/75-sdx.rules
+  cat ${davinci}/share/etc/udev/rules.d/99-BlackmagicDevices.rules > $DVP_RULES
+  echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0777", GROUP="resolve"' >> $DVP_RULES
+  cat ${davinci}/share/etc/udev/rules.d/99-ResolveKeyboardHID.rules > $DVK_RULES
+  echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' > $SDX_RULES
+'';
+
+
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
 
 # creates a derivation that wraps the "path" command with arguments in "args" list to run inside the FHS
@@ -294,6 +312,8 @@ symlinkJoin {
   paths = [
     resolveWrapper
     resolveShellWrapper
+
+    resolveUdev
   ];
 
   passthru = {
@@ -332,6 +352,12 @@ symlinkJoin {
       editor and track-based audio post-processing tool. The main executable davinci-resolve{lib.optionalString studioVariant "-studio"}
       is wrapped in an FHS environment. For scripting and other purposes, the package provides the
       davinci-resolve${lib.optionalString studioVariant "-studio"}-shell command, which opens a shell within the FHS environment.
+
+      Using hardware hardware panels with Resolve requires a physical USB connection and setting `udev` rules via
+          services.udev.packages =
+            with pkgs; [
+              davinci-resolve${lib.optionalString studioVariant "-studio"}
+            ];
     '';
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = lib.licenses.unfree;
