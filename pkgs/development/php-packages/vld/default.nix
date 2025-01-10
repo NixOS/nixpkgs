@@ -2,6 +2,7 @@
   lib,
   buildPecl,
   fetchFromGitHub,
+  php,
 }:
 
 buildPecl {
@@ -23,5 +24,6 @@ buildPecl {
     homepage = "https://github.com/derickr/vld";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ gaelreyrol ];
+    broken = lib.versionOlder php.version "8.2";
   };
 }
