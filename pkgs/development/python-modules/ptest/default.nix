@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,13 @@ buildPythonPackage rec {
     repo = pname;
     rev = version + "-release";
     sha256 = "0v1zpfjagjlvdmgv6d502nmb7s996wadvpzg93i651s64rrlwq4s";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)-release"
+    ];
   };
 
   meta = with lib; {
