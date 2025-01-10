@@ -278,10 +278,12 @@ resolveUdev = runCommandLocal "davinci-resolve${lib.optionalString studioVariant
 '';
 
 resolveIcons = runCommandLocal "davinci-resolve${lib.optionalString studioVariant "-studio"}-icons" {} ''
-  mkdir -p $out/share/icons/hicolor/128x128/apps
+  mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/apps
   ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
   ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels.png
   ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor.png
+  ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test.png
+  ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test.png
 '';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
@@ -298,6 +300,8 @@ resolveShellWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVaria
 
 panelSetupWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
 
+rawSpeedTestWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
+
 remoteMonitorWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor" ["${davinci}/bin/DaVinci Remote Monitor"];
 
 in
@@ -311,6 +315,7 @@ symlinkJoin {
     resolveWrapper
     resolveShellWrapper
     panelSetupWrapper
+    rawSpeedTestWrapper
 
     resolveUdev
     resolveIcons
@@ -338,6 +343,19 @@ symlinkJoin {
       desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Control Panels Setup";
       exec = "${panelSetupWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
       icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
+      categories = [
+        "AudioVideo"
+        "AudioVideoEditing"
+        "Video"
+        "Graphics"
+      ];
+    })
+
+    (makeDesktopItem {
+      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test";
+      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Blackmagic RAW Speed Test";
+      exec = "${rawSpeedTestWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test";
+      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test";
       categories = [
         "AudioVideo"
         "AudioVideoEditing"
