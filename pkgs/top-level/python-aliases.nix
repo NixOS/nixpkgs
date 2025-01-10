@@ -584,6 +584,7 @@ mapAliases ({
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   qds-sdk = throw "qds-sdk was removed as it is unmaintained upstream and depends on the removed boto package"; # Added 2024-09-22
   qds_sdk = qds-sdk; # added 2023-10-21
+  qmk-dotty-dict = throw "qmk-dotty-dict has been removed. It is no longer needed since the fixes have been merged into dotty-dict."; # added 2025-01-01
   Quandl = quandl; # added 2023-02-19
   quamash = throw "'quamash' has been removed, since it is unmaintained and broken"; # added 2024-10-17
   querystring_parser = querystring-parser; # added 2024-01-07

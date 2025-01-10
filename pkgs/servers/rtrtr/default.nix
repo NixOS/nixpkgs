@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rtrtr";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-P9bofTmDpnNCVQAGeq9J2XqfNeula8nL1KoBIHMZNWg=";
+    hash = "sha256-c1jzUP7cYjqn49gbjXLWTge8ywHBI29gSnhzWDzNCV8=";
   };
 
-  cargoHash = "sha256-ToJLE4nqgTqg5D4Qh2zi+wjmcdwDo0aupoDwKJCTwnM=";
+  cargoHash = "sha256-2/pm/Tfn6UxFpHW6HW20yOxEtm6N3jOe8kk9k7OPppU=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];
