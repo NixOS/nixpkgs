@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "9.0.1";
+  version = "10.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cuMRdmfu32aVG7LZP0KWpWuUsHioqVkFoFJhH7PxuXM=";
+    hash = "sha256-/x0PwjRmiMYsAVFUcTasMOMiiW7YrzFu92AsR9qUJs8=";
   };
 
   propagatedBuildInputs = [ python-dateutil ];
