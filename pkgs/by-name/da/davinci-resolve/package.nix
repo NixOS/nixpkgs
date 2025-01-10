@@ -196,22 +196,28 @@ fhs = buildFHSEnv {
       fontconfig
       freetype
       glib
+      krb5  # for DaVinci Control Panels Setup
       libGL
       libGLU
       libarchive
       libcap
+      libdrm
+      libpng12
       librsvg
       libtool
+      libusb1
       libuuid
-      libxcrypt # provides libcrypt.so.1
+      libxcrypt  # provides libcrypt.so.1
       libxkbcommon
       nspr
+      nss
       ocl-icd
       opencl-headers
       python3
       python3.pkgs.numpy
       udev
-      xdg-utils # xdg-open needed to open URLs
+      xcb-util-cursor
+      xdg-utils  # xdg-open needed to open URLs
       xorg.libICE
       xorg.libSM
       xorg.libX11
@@ -222,6 +228,7 @@ fhs = buildFHSEnv {
       xorg.libXfixes
       xorg.libXi
       xorg.libXinerama
+      xorg.libxkbfile
       xorg.libXrandr
       xorg.libXrender
       xorg.libXt
@@ -273,6 +280,7 @@ resolveUdev = runCommandLocal "davinci-resolve${lib.optionalString studioVariant
 resolveIcons = runCommandLocal "davinci-resolve${lib.optionalString studioVariant "-studio"}-icons" {} ''
   mkdir -p $out/share/icons/hicolor/128x128/apps
   ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
+  ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels.png
 '';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
@@ -287,6 +295,8 @@ resolveWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-
 # in order to simplify running Resolve and related tools from the command line.
 resolveShellWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-shell" ["/usr/bin/env" "bash"];
 
+panelSetupWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
+
 in
 symlinkJoin {
 
@@ -296,6 +306,7 @@ symlinkJoin {
   paths = [
     resolveWrapper
     resolveShellWrapper
+    panelSetupWrapper
 
     resolveUdev
     resolveIcons
@@ -310,6 +321,19 @@ symlinkJoin {
       mimeTypes = ["application/x-resolveproj"];
       startupNotify = true;
       terminal = false;
+      categories = [
+        "AudioVideo"
+        "AudioVideoEditing"
+        "Video"
+        "Graphics"
+      ];
+    })
+
+    (makeDesktopItem {
+      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
+      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Control Panels Setup";
+      exec = "${panelSetupWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
+      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
       categories = [
         "AudioVideo"
         "AudioVideoEditing"
