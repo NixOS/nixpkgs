@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ptest";
-  version = "1.7.4";
+  version = "2.0.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KarlGong";
-    repo = pname;
-    rev = version + "-release";
-    sha256 = "0v1zpfjagjlvdmgv6d502nmb7s996wadvpzg93i651s64rrlwq4s";
+    repo = "ptest";
+    tag = "${version}-release";
+    hash = "sha256-lmiBqFWGfYdsBXCh6dQ9xed+HhpP6PWa9Csr68GtLxs=";
   };
 
   passthru.updateScript = nix-update-script {
