@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Oughie/clock-rs";
     license = licenses.asl20;
     mainProgram = "clock-rs";
-    maintainers = [ maintainers.Oughie ];
+    maintainers = [ maintainers.oughie ];
     platforms = platforms.all;
   };
 }
