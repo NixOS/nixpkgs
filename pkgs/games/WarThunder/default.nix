@@ -14,6 +14,14 @@ let
     echo "DEBUG::: STORE_PATH = $STORE_PATH"
     echo "Check for home directory, create if not present."
     export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
+    echo "DEBUG::: Print LD env variables prior to setting them."
+    echo $LD_LIBRARY_PATH
+    echo "DEBUG::: Print libPath inherited by drv on realization."
+    echo ${libPath}
+
+    echo "DEBUG::: Setting libPath for runtime enviroment.
+    export LD_LIBRARY_PATH="${libPath}:$LD_LIBRARY_PATH"
+    echo "DEBUG::: Print libPath: $LD_LIBRARY_PATH"
 
     if [ ! -d "$HOME/.aces64/War-Thunder-086d99e" ]; then
 
