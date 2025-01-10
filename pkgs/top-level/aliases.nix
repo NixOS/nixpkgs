@@ -457,6 +457,7 @@ mapAliases {
   gmtp = throw "'gmtp' has been removed due to lack of maintenance upstream. Consider using 'gnome-music' instead"; # Added 2024-09-14
   gnome-latex = throw "'gnome-latex' has been superseded by 'enter-tex'"; # Added 2024-09-18
   gnu-cobol = gnucobol; # Added 2024-09-17
+  gnupg1orig = throw "'gnupg1orig' has been removed due to lack of active upstream maintainance. Consider using 'gnupg' instead"; # Added 2025-01-11
   gnupg22 = throw "'gnupg22' is end-of-life. Consider using 'gnupg24' instead"; # Added 2025-01-05
   gogs = throw ''
     Gogs development has stalled. Also, it has several unpatched, critical vulnerabilities that
