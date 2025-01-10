@@ -6775,9 +6775,9 @@ with pkgs;
   cargo-rdme = callPackage ../by-name/ca/cargo-rdme/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-  };
+
+  cargo-udeps = callPackage ../development/tools/rust/cargo-udeps { };
+  
   cargo-vet = callPackage ../development/tools/rust/cargo-vet {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
