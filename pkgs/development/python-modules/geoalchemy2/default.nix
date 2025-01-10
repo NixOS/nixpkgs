@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     tag = version;
-    hash = "sha256-LjfCPSpKwcyjmGReTC4M58890ow3hbxlwl1f7iC9i6Y=";
+    hash = "sha256-MxoX5WGJATIvzfeuHFqYGlnaxPNzvqD/v82Zm4Iav1g=";
   };
 
   build-system = [
