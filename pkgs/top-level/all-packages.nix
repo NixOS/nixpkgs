@@ -9269,7 +9269,7 @@ with pkgs;
   #
   # `icuReal` is provided in case the upstream icu package is needed on Darwin instead of the fork.
   # Note that the versioned icu packages always correspond to the upstream versions.
-  icuReal = icu74;
+  icuReal = icu76;
   icu = if stdenv.hostPlatform.isDarwin then darwin.ICU else icuReal;
 
   idasen = with python3Packages; toPythonApplication idasen;
