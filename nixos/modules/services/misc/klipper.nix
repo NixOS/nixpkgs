@@ -209,6 +209,8 @@ in
           popd
         '';
 
+        restartTriggers = lib.optional (!cfg.mutableConfig) [ printerConfig ];
+
         serviceConfig =
           {
             ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${cfg.configDir}/printer.cfg";
