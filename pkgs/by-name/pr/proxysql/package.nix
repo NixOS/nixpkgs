@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
     rev = finalAttrs.version;
-    hash = "sha256-vFPTBSp5DPNRuhtSD34ah2074almS+jiYxBE1L9Pz6g=";
+    hash = "sha256-Ouz1SSc35gQaJcVQO95azkxNgLxuY712ELAwM5buEtY=";
   };
 
   patches = [
@@ -154,7 +154,18 @@ stdenv.mkDerivation (finalAttrs: {
               }
               {
                 f = "prometheus-cpp";
-                p = prometheus-cpp;
+                p = prometheus-cpp.overrideAttrs (
+                  finalAttrs: _: {
+                    version = "1.1.0";
+
+                    src = fetchFromGitHub {
+                      owner = "jupp0r";
+                      repo = "prometheus-cpp";
+                      tag = "v${finalAttrs.version}";
+                      hash = "sha256-qx6oBxd0YrUyFq+7ArnKBqOwrl5X8RS9nErhRDUJ7+8=";
+                    };
+                  }
+                );
               }
             ]
         )
