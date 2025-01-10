@@ -29,14 +29,14 @@
 }:
 buildPythonPackage rec {
   pname = "open-clip-torch";
-  version = "2.29.0";
+  version = "2.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
     tag = "v${version}";
-    hash = "sha256-X5nOWdGhIv+HiiauIezIkPh3G1Odtxr0HPygRp/D184=";
+    hash = "sha256-Ht59pYJfcBkfoWSTDipsoy/71pMzc5rlDD6xHgvUs1g=";
   };
 
   build-system = [ pdm-backend ];
