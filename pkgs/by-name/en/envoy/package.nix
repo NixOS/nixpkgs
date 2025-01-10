@@ -4,7 +4,12 @@
   bazel-gazelle,
   buildBazelPackage,
   fetchFromGitHub,
+  applyPatches,
   stdenv,
+  cacert,
+  cargo,
+  rustc,
+  rustPlatform,
   cmake,
   gn,
   go,
@@ -25,32 +30,66 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.31.1";
-    rev = "1f44388cee449c9dae8ae34c0b4f09036bcbf560";
-    hash = "sha256-XvlF3hMS2PH87HgFwKoFzxHDYgRjZmxn02L1aLwYOrY=";
+    version = "1.32.3";
+    rev = "58bd599ebd5918d4d005de60954fcd2cb00abd95";
+    hash = "sha256-5HpxcsAPoyVOJ3Aem+ZjSLa8Zu6s76iCMiWJbp8RjHc=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-9KXZdSvRfi5mWOSotG//+ljsx64I4bYwzbeQFuCIwDE=";
-      aarch64-linux = "sha256-knrCfUYUL+bYuHSNrNeX3SwoGDf2rLYNXuukEmj4BjA=";
+      x86_64-linux = "sha256-YFXNatolLM9DdwkMnc9SWsa6Z6/aGzqLmo/zKE7OFy0=";
+      aarch64-linux = "sha256-AjG1OBjPjiSwWCmIJgHevSQHx8+rzRgmLsw3JwwD0hk=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
 in
-buildBazelPackage {
+buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
   bazel = bazel_6;
-  src = fetchFromGitHub {
-    owner = "envoyproxy";
-    repo = "envoy";
-    inherit (srcVer) hash rev;
 
-    postFetch = ''
-      chmod -R +w $out
-      rm $out/.bazelversion
-      echo ${srcVer.rev} > $out/SOURCE_VERSION
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "envoyproxy";
+      repo = "envoy";
+      inherit (srcVer) hash rev;
+    };
+    patches = [
+      # use system Python, not bazel-fetched binary Python
+      ./0001-nixpkgs-use-system-Python.patch
+
+      # use system Go, not bazel-fetched binary Go
+      ./0002-nixpkgs-use-system-Go.patch
+
+      # use system C/C++ tools
+      ./0003-nixpkgs-use-system-C-C-toolchains.patch
+
+      # patch boringssl to work with GCC 14
+      # vendored patch from https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d
+      ./0004-nixpkgs-patch-boringssl-for-gcc14.patch
+
+      # update rust rules to work with rustc v1.83
+      # cherry-pick of https://github.com/envoyproxy/envoy/commit/019f589da2cc8da7673edd077478a100b4d99436
+      # drop with v1.33.x
+      ./0005-deps-Bump-rules_rust-0.54.1-37056.patch
+
+      # patch gcc flags to work with GCC 14
+      # (silences erroneus -Werror=maybe-uninitialized and others)
+      # cherry-pick of https://github.com/envoyproxy/envoy/commit/448e4e14f4f188687580362a861ae4a0dbb5b1fb
+      # drop with v1.33.x
+      ./0006-gcc-warnings.patch
+
+      # Remove "-Werror" from protobuf build
+      # This is fixed in protobuf v28 and later:
+      # https://github.com/protocolbuffers/protobuf/commit/f5a1b178ad52c3e64da40caceaa4ca9e51045cb4
+      # drop with v1.33.x
+      ./0007-protobuf-remove-Werror.patch
+    ];
+    postPatch = ''
+      chmod -R +w .
+      rm ./.bazelversion
+      echo ${srcVer.rev} > ./SOURCE_VERSION
     '';
   };
 
@@ -58,18 +97,23 @@ buildBazelPackage {
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
+
+    mkdir -p bazel/nix/
+    substitute ${./bazel_nix.BUILD.bazel} bazel/nix/BUILD.bazel \
+      --subst-var-by bash "$(type -p bash)"
+    ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
+    ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
+    ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
+    ln -sf "${rustPlatform.rustLibSrc}" bazel/nix/ruststd
+    substituteInPlace bazel/dependency_imports.bzl \
+      --replace-fail 'crate_universe_dependencies()' 'crate_universe_dependencies(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc")' \
+      --replace-fail 'crates_repository(' 'crates_repository(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc",'
+
+    substitute ${./rules_rust_extra.patch} bazel/nix/rules_rust_extra.patch \
+      --subst-var-by bash "$(type -p bash)"
+    cat bazel/nix/rules_rust_extra.patch bazel/rules_rust.patch > bazel/nix/rules_rust.patch
+    mv bazel/nix/rules_rust.patch bazel/rules_rust.patch
   '';
-
-  patches = [
-    # use system Python, not bazel-fetched binary Python
-    ./0001-nixpkgs-use-system-Python.patch
-
-    # use system Go, not bazel-fetched binary Go
-    ./0002-nixpkgs-use-system-Go.patch
-
-    # use system C/C++ tools
-    ./0003-nixpkgs-use-system-C-C-toolchains.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -79,14 +123,23 @@ buildBazelPackage {
     jdk
     ninja
     patchelf
+    cacert
   ];
 
   buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
     sha256 = depsHash;
+    env.CARGO_BAZEL_REPIN = true;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
+    postPatch = ''
+      ${postPatch}
+
+      substituteInPlace bazel/dependency_imports.bzl \
+        --replace-fail 'crate_universe_dependencies(' 'crate_universe_dependencies(bootstrap=True, ' \
+        --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
+    '';
     preInstall = ''
       # Strip out the path to the build location (by deleting the comment line).
       find $bazelOut/external -name requirements.bzl | while read requirements; do
@@ -113,6 +166,12 @@ buildBazelPackage {
 
       # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
       sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
+
+      # Install repinned rules_rust lockfile
+      cp source/extensions/dynamic_modules/sdk/rust/Cargo.Bazel.lock $bazelOut/external/Cargo.Bazel.lock
+
+      # Don't save cargo_bazel_bootstrap or the crate index cache
+      rm -rf $bazelOut/external/cargo_bazel_bootstrap $bazelOut/external/dynamic_modules_rust_sdk_crate_index/.cargo_home $bazelOut/external/dynamic_modules_rust_sdk_crate_index/splicing-output
     '';
   };
   buildAttrs = {
@@ -125,7 +184,7 @@ buildBazelPackage {
         file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
         patchelf \
           --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-          "$execbin"
+          "$execbin" || echo "$execbin"
       done
 
       ln -s ${bazel-gazelle}/bin $bazelOut/external/bazel_gazelle_go_repository_tools/bin
@@ -139,6 +198,9 @@ buildBazelPackage {
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
         $bazelOut/external/*_pip3/BUILD.bazel
+
+      # Install repinned rules_rust lockfile
+      cp $bazelOut/external/Cargo.Bazel.lock source/extensions/dynamic_modules/sdk/rust/Cargo.Bazel.lock
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy
@@ -156,11 +218,16 @@ buildBazelPackage {
       "--noexperimental_strict_action_env"
       "--cxxopt=-Wno-error"
       "--linkopt=-Wl,-z,noexecstack"
+      "--config=gcc"
+      "--verbose_failures"
 
       # Force use of system Java.
       "--extra_toolchains=@local_jdk//:all"
       "--java_runtime_version=local_jdk"
       "--tool_java_runtime_version=local_jdk"
+
+      # Force use of system Rust.
+      "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
 
       # undefined reference to 'grpc_core::*Metadata*::*Memento*
       #
@@ -172,7 +239,7 @@ buildBazelPackage {
 
       "--define=wasm=${wasmRuntime}"
     ]
-    ++ (lib.optionals stdenv.isAarch64 [
+    ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
       # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
       #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
       #       |         ^
@@ -181,6 +248,9 @@ buildBazelPackage {
 
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
+
+    # Force use of system Rust.
+    "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
 
     # https://github.com/bazelbuild/rules_go/issues/3844
     "--repo_env=GOPROXY=https://proxy.golang.org,direct"

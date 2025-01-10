@@ -3,7 +3,7 @@
   pkgs,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   setuptools,
   cryptography,
   pytestCheckHook,
@@ -12,12 +12,14 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "24.4";
+  version = "24.7";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rqhaKDOQEOj6bcRz3qZJ+a4yG1qTC9SUjuxMhZlnmwU=";
+  src = fetchFromGitLab {
+    owner = "kraxel";
+    repo = "virt-firmware";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uVLq4vbnvK1RCA3tpLgwKb/qzysLsOo3p/6gQ2Prmu0=";
   };
 
   build-system = [ setuptools ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "asgiref";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xepMbxglBpHL7mnJYlnvNUgixrFwf/Tc6b1zL4Wy+to=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, Carbon, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  Carbon,
+  Cocoa,
+}:
 
 stdenv.mkDerivation rec {
   pname = "khd";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ Carbon Cocoa ];
+  buildInputs = [
+    Carbon
+    Cocoa
+  ];
 
   buildPhase = ''
     make install

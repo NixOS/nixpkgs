@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DHPIPM_FIND_BLASFEO=ON"
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DTARGET=GENERIC" ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DTARGET=GENERIC" ];
 
   meta = {
     description = "High-performance interior-point-method QP and QCQP solvers";

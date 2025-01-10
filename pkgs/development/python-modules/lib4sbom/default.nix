@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "lib4sbom";
-  version = "0.7.4";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4sbom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Uqv6E9qMJRsfYICVAiZEQGlG/0w8aECuh8wMa85FnlE=";
+    tag = "v${version}";
+    hash = "sha256-OxYYHiV7TuPiLyd/rdrGfY3agv0vBcATaod37XYb7DY=";
   };
 
   build-system = [ setuptools ];

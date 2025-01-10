@@ -15,21 +15,21 @@
 , opencascade-occt
 , assimp
 , fontconfig
-, withManual ? !stdenv.isDarwin
+, withManual ? !stdenv.hostPlatform.isDarwin
 , withPythonBinding ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "2.5.0";
+  version = "2.5.1";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Mw40JyXZj+Q4a9dD5UnkUSdUfQGaV92gor8ynn86VJ8=";
+    tag = "v${version}";
+    hash = "sha256-S3eigdW6rkDRSm4uCCTFHx5fhJGNVWpAAAKboougr08=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     assimp
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     OpenGL
   ] ++ lib.optionals withPythonBinding [
@@ -80,5 +80,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin pbsds ];
     platforms = with platforms; unix;
     mainProgram = "f3d";
+    # error: use of undeclared identifier 'NSMenuItem'
+    # adding AppKit does not solve it
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
   };
 }

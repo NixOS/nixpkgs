@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libtool
-, libX11, libXt, libXpm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtool,
+  libX11,
+  libXt,
+  libXpm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rxvt";
@@ -12,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libtool libX11 libXt libXpm ];
+  buildInputs = [
+    libtool
+    libX11
+    libXt
+    libXpm
+  ];
 
   configurePhase = ''
     LIBTOOL=${libtool}/bin/libtool ./configure --prefix=$out --enable-everything --enable-smart-resize --enable-256-color

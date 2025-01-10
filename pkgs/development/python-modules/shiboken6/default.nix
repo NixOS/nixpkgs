@@ -13,31 +13,36 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.7.2";
+  version = "6.8.0.2";
 
   src = fetchurl {
     # https://download.qt.io/official_releases/QtForPython/shiboken6/
-    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-${finalAttrs.version}-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OisNDW54yapd3H8GyktvEaP+FFYLrrFI7qU7XZjjaMc=";
+    # FIXME: inconsistent version numbers in directory name and tarball?
+    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-6.8.0.2-src/pyside-setup-everywhere-src-6.8.0.tar.xz";
+    hash = "sha256-Ghohmo8yfjQNJYJ1+tOp8mG48EvFcEF0fnPdatJStOE=";
   };
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";
+  sourceRoot = "pyside-setup-everywhere-src-6.8.0/sources/shiboken6";
 
   patches = [ ./fix-include-qt-headers.patch ];
 
   nativeBuildInputs = [
     cmake
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
-  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    llvmPackages.llvm
-    llvmPackages.libclang
-    python.pkgs.qt6.qtbase
-    python.pkgs.ninja
-    python.pkgs.packaging
-    python.pkgs.setuptools
-  ];
+  buildInputs =
+    [
+      llvmPackages.llvm
+      llvmPackages.libclang
+      python.pkgs.qt6.qtbase
+      python.pkgs.ninja
+      python.pkgs.packaging
+      python.pkgs.setuptools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      python.pkgs.qt6.darwinVersionInputs
+    ];
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 

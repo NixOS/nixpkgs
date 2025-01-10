@@ -1,33 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  ansible-core,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  pyyaml,
+  subprocess-tee,
+
+  # tests
   coreutils,
+  ansible-core,
   flaky,
   pytest-mock,
   pytestCheckHook,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
-  subprocess-tee,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "24.9.0";
+  version = "24.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    pname = "ansible_compat";
-    inherit version;
-    hash = "sha256-xaQqVt0hJiXPyx0x5RpuD1JZNpG94f5KeIgeixt4prg=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible-compat";
+    tag = "v${version}";
+    hash = "sha256-cc97ENpoRoaYaGbnGeHU5z+ijCS8PLWtgXpQ0F3b5rk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -40,7 +44,7 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     substituteInPlace test/test_runtime.py \
-      --replace-fail "printenv" "${coreutils}/bin/printenv"
+      --replace-fail "printenv" "${lib.getExe' coreutils "printenv"}"
   '';
 
   nativeCheckInputs = [
@@ -52,14 +56,13 @@ buildPythonPackage rec {
 
   disabledTests = [
     # require network
+    "test_install_collection_from_disk"
+    "test_install_collection_git"
+    "test_load_plugins"
     "test_prepare_environment_with_collections"
     "test_prerun_reqs_v1"
     "test_prerun_reqs_v2"
-    "test_require_collection_wrong_version"
-    "test_require_collection"
-    "test_install_collection"
-    "test_install_collection_dest"
-    "test_upgrade_collection"
+    "test_require_collection_install"
     "test_require_collection_no_cache_dir"
     "test_runtime_has_playbook"
     "test_runtime_plugins"
@@ -68,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansible_compat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Function collection that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
     changelog = "https://github.com/ansible/ansible-compat/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dawidd6 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dawidd6 ];
   };
 }

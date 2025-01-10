@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool to losslessly compress JPEG and PNG images";
     longDescription = "A CLI tool for x86-64 Linux machines that simplifies the task of maximally, losslessly compressing JPEG and PNG images for use in production web environments";
     homepage = "https://github.com/Blobfolio/flaca";
+    changelog = "https://github.com/Blobfolio/flaca/releases/tag/v${version}";
     maintainers = with maintainers; [ zzzsy ];
     platforms = platforms.linux;
     license = licenses.wtfpl;

@@ -5,16 +5,16 @@
   distro,
   fetchFromGitHub,
   nix-update-script,
+  hypothesis,
   pytest-check,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "craft-platforms";
-  version = "0.2.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,18 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-platforms";
-    rev = "refs/tags/${version}";
-    hash = "sha256-chCPuncy+//Y5iohTh0d8qRNaEno6Sqze2Zoas3uwPQ=";
+    tag = version;
+    hash = "sha256-P7GC+t/rs49/a85Bxy6x4cRyCEaHG4b7SIb85sMj7Yk=";
   };
 
   postPatch = ''
     substituteInPlace craft_platforms/__init__.py --replace-fail "dev" "${version}"
   '';
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     annotated-types
@@ -41,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     pytest-check
   ];

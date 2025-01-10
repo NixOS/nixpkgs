@@ -1,7 +1,8 @@
-{ lib
-, llvmPackages
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  llvmPackages,
+  fetchFromGitHub,
+  cmake,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SHz+oOOkwvVZucJYFSyZc3MnOAy1VatspmZmOAXYAWA=";
   };
 
-  nativeBuildInputs = [ cmake llvmPackages.llvm ];
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.llvm
+  ];
 
   meta = with lib; {
     description = "WebAssembly Virtual Machine";

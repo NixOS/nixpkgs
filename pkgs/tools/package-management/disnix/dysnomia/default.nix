@@ -1,29 +1,43 @@
-{ lib, stdenv, fetchurl, netcat
+{
+  lib,
+  stdenv,
+  fetchurl,
+  netcat,
 
-# Optional packages
-, systemd ? null, ejabberd ? null, mariadb ? null, postgresql ? null, subversion ? null
-, mongodb ? null, mongodb-tools ? null, influxdb ? null, supervisor ? null, docker ? null
-, nginx ? null, s6-rc ? null, xinetd ? null
+  # Optional packages
+  systemd ? null,
+  ejabberd ? null,
+  mariadb ? null,
+  postgresql ? null,
+  subversion ? null,
+  mongodb ? null,
+  mongodb-tools ? null,
+  influxdb ? null,
+  supervisor ? null,
+  docker ? null,
+  nginx ? null,
+  s6-rc ? null,
+  xinetd ? null,
 
-# Configuration flags
-, enableApacheWebApplication ? false
-, enableAxis2WebService ? false
-, enableEjabberdDump ? false
-, enableMySQLDatabase ? false
-, enablePostgreSQLDatabase ? false
-, enableSubversionRepository ? false
-, enableTomcatWebApplication ? false
-, enableMongoDatabase ? false
-, enableInfluxDatabase ? false
-, enableSupervisordProgram ? false
-, enableDockerContainer ? false
-, enableNginxWebApplication ? false
-, enableXinetdService ? false
-, enableS6RCService ? false
-, enableLegacy ? false
-, catalinaBaseDir ? "/var/tomcat"
-, jobTemplate ? "systemd"
-, getopt
+  # Configuration flags
+  enableApacheWebApplication ? false,
+  enableAxis2WebService ? false,
+  enableEjabberdDump ? false,
+  enableMySQLDatabase ? false,
+  enablePostgreSQLDatabase ? false,
+  enableSubversionRepository ? false,
+  enableTomcatWebApplication ? false,
+  enableMongoDatabase ? false,
+  enableInfluxDatabase ? false,
+  enableSupervisordProgram ? false,
+  enableDockerContainer ? false,
+  enableNginxWebApplication ? false,
+  enableXinetdService ? false,
+  enableS6RCService ? false,
+  enableLegacy ? false,
+  catalinaBaseDir ? "/var/tomcat",
+  jobTemplate ? "systemd",
+  getopt,
 }:
 
 assert enableMySQLDatabase -> mariadb != null;
@@ -47,31 +61,38 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-     (if enableApacheWebApplication then "--with-apache" else "--without-apache")
-     (if enableAxis2WebService then "--with-axis2" else "--without-axis2")
-     (if enableEjabberdDump then "--with-ejabberd" else "--without-ejabberd")
-     (if enableMySQLDatabase then "--with-mysql" else "--without-mysql")
-     (if enablePostgreSQLDatabase then "--with-postgresql" else "--without-postgresql")
-     (if enableSubversionRepository then "--with-subversion" else "--without-subversion")
-     (if enableTomcatWebApplication then "--with-tomcat=${catalinaBaseDir}" else "--without-tomcat")
-     (if enableMongoDatabase then "--with-mongodb" else "--without-mongodb")
-     (if enableInfluxDatabase then "--with-influxdb" else "--without-influxdb")
-     (if enableSupervisordProgram then "--with-supervisord" else "--without-supervisord")
-     (if enableDockerContainer then "--with-docker" else "--without-docker")
-     (if enableNginxWebApplication then "--with-nginx" else "--without-nginx")
-     (if enableXinetdService then "--with-xinetd" else "--without-xinetd")
-     (if enableS6RCService then "--with-s6-rc" else "--without-s6-rc")
-     (if stdenv.isDarwin then "--with-launchd" else "--without-launchd")
-     "--with-job-template=${jobTemplate}"
-   ] ++ lib.optional enableLegacy "--enable-legacy";
+    (if enableApacheWebApplication then "--with-apache" else "--without-apache")
+    (if enableAxis2WebService then "--with-axis2" else "--without-axis2")
+    (if enableEjabberdDump then "--with-ejabberd" else "--without-ejabberd")
+    (if enableMySQLDatabase then "--with-mysql" else "--without-mysql")
+    (if enablePostgreSQLDatabase then "--with-postgresql" else "--without-postgresql")
+    (if enableSubversionRepository then "--with-subversion" else "--without-subversion")
+    (if enableTomcatWebApplication then "--with-tomcat=${catalinaBaseDir}" else "--without-tomcat")
+    (if enableMongoDatabase then "--with-mongodb" else "--without-mongodb")
+    (if enableInfluxDatabase then "--with-influxdb" else "--without-influxdb")
+    (if enableSupervisordProgram then "--with-supervisord" else "--without-supervisord")
+    (if enableDockerContainer then "--with-docker" else "--without-docker")
+    (if enableNginxWebApplication then "--with-nginx" else "--without-nginx")
+    (if enableXinetdService then "--with-xinetd" else "--without-xinetd")
+    (if enableS6RCService then "--with-s6-rc" else "--without-s6-rc")
+    (if stdenv.hostPlatform.isDarwin then "--with-launchd" else "--without-launchd")
+    "--with-job-template=${jobTemplate}"
+  ] ++ lib.optional enableLegacy "--enable-legacy";
 
-  buildInputs = [ getopt netcat ]
-    ++ lib.optional stdenv.isLinux systemd
+  buildInputs =
+    [
+      getopt
+      netcat
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux systemd
     ++ lib.optional enableEjabberdDump ejabberd
     ++ lib.optional enableMySQLDatabase mariadb.out
     ++ lib.optional enablePostgreSQLDatabase postgresql
     ++ lib.optional enableSubversionRepository subversion
-    ++ lib.optionals enableMongoDatabase [ mongodb mongodb-tools ]
+    ++ lib.optionals enableMongoDatabase [
+      mongodb
+      mongodb-tools
+    ]
     ++ lib.optional enableInfluxDatabase influxdb
     ++ lib.optional enableSupervisordProgram supervisor
     ++ lib.optional enableDockerContainer docker

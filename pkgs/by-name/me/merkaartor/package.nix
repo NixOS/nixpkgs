@@ -10,7 +10,7 @@
   qt5,
   withGeoimage ? true,
   exiv2,
-  withGpsdlib ? (!stdenv.isDarwin),
+  withGpsdlib ? (!stdenv.hostPlatform.isDarwin),
   gpsd,
   withLibproxy ? false,
   libproxy,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ZBAR" withZbar)
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/merkaartor.app $out/Applications
     # Prevent wrapping, otherwise plugins will not be loaded

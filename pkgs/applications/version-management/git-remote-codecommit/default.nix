@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3Packages, awscli }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  awscli,
+}:
 
 with python3Packages;
 
@@ -23,15 +28,20 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ botocore ];
 
-  nativeCheckInputs = [ pytest mock flake8 tox awscli ];
+  nativeCheckInputs = [
+    pytest
+    mock
+    flake8
+    tox
+    awscli
+  ];
 
   checkPhase = ''
     pytest
   '';
 
   meta = {
-    description =
-      "Git remote prefix to simplify pushing to and pulling from CodeCommit";
+    description = "Git remote prefix to simplify pushing to and pulling from CodeCommit";
     maintainers = [ lib.maintainers.zaninime ];
     homepage = "https://github.com/awslabs/git-remote-codecommit";
     license = lib.licenses.asl20;

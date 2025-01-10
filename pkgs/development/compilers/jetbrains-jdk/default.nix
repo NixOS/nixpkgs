@@ -1,63 +1,66 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jetbrains
-, jdk
-, git
-, autoconf
-, unzip
-, rsync
-, debugBuild ? false
-, withJcef ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jetbrains,
+  jdk,
+  git,
+  autoconf,
+  unzip,
+  rsync,
+  debugBuild ? false,
+  withJcef ? true,
 
-, libXdamage
-, libXxf86vm
-, libXrandr
-, libXi
-, libXcursor
-, libXrender
-, libX11
-, libXext
-, libxcb
-, nss
-, nspr
-, libdrm
-, mesa
-, wayland
-, udev
+  libXdamage,
+  libXxf86vm,
+  libXrandr,
+  libXi,
+  libXcursor,
+  libXrender,
+  libX11,
+  libXext,
+  libxcb,
+  nss,
+  nspr,
+  libdrm,
+  libgbm,
+  wayland,
+  udev,
 }:
 
 assert debugBuild -> withJcef;
 
 let
-  arch = {
-    "aarch64-linux" = "aarch64";
-    "x86_64-linux" = "x64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  arch =
+    {
+      "aarch64-linux" = "aarch64";
+      "x86_64-linux" = "x64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "21.0.3";
-  build = "509.11";
+  javaVersion = "21.0.4";
+  build = "598.4";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git checkout jbr-release-${javaVersion}b${build}
   # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-21.0.2+13";
+  openjdkTag = "jbr-21.0.4+8";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-zTstmrH4KteR40BVDRfxOrl8aUQ26acE+ywscBd8sw8=";
+    hash = "sha256-YF5Z1A4qmD9Z4TE6f2i8wv9ZD+NqHGY5Q0oIVQiC3Bg=";
   };
 
   BOOT_JDK = jdk.home;
   # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-  SOURCE_DATE_EPOCH = 1723453663;
+  SOURCE_DATE_EPOCH = 1726275531;
 
   patches = [ ];
 
@@ -81,7 +84,9 @@ jdk.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")}
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
+      if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
+    }
 
     runHook postBuild
   '';
@@ -99,7 +104,9 @@ jdk.overrideAttrs (oldAttrs: rec {
       mv build/linux-${cpu}-server-${buildType}/images/jdk/man build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir}
       rm -rf build/linux-${cpu}-server-${buildType}/images/jdk
       mv build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir} build/linux-${cpu}-server-${buildType}/images/jdk
-    '' + oldAttrs.installPhase + "runHook postInstall";
+    ''
+    + oldAttrs.installPhase
+    + "runHook postInstall";
 
   postInstall = lib.optionalString withJcef ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
@@ -109,10 +116,25 @@ jdk.overrideAttrs (oldAttrs: rec {
 
   postFixup = ''
     # Build the set of output library directories to rpath against
-    LIBDIRS="${lib.makeLibraryPath [
-      libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
-      nss nspr libdrm mesa wayland udev
-    ]}"
+    LIBDIRS="${
+      lib.makeLibraryPath [
+        libXdamage
+        libXxf86vm
+        libXrandr
+        libXi
+        libXcursor
+        libXrender
+        libX11
+        libXext
+        libxcb
+        nss
+        nspr
+        libdrm
+        libgbm
+        wayland
+        udev
+      ]
+    }"
     for output in $outputs; do
       if [ "$output" = debug ]; then continue; fi
       LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
@@ -129,7 +151,12 @@ jdk.overrideAttrs (oldAttrs: rec {
     done
   '';
 
-  nativeBuildInputs = [ git autoconf unzip rsync ] ++ oldAttrs.nativeBuildInputs;
+  nativeBuildInputs = [
+    git
+    autoconf
+    unzip
+    rsync
+  ] ++ oldAttrs.nativeBuildInputs;
 
   meta = with lib; {
     description = "OpenJDK fork to better support Jetbrains's products";
@@ -147,7 +174,7 @@ jdk.overrideAttrs (oldAttrs: rec {
     inherit (jdk.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
 
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
   passthru = oldAttrs.passthru // {

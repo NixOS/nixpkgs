@@ -52,15 +52,14 @@ stdenv.mkDerivation rec {
 
     for f in $out/share/applications/* ; do
       substituteInPlace $f \
-        --replace Qt4                   Qt5 \
-        --replace Exec=nmapsi4          Exec=$out/bin/nmapsi4 \
-        --replace "Exec=kdesu nmapsi4" "Exec=kdesu $out/bin/nmapsi4"
+        --replace Qt4                   Qt5
     done
   '';
 
   meta = {
     description = "Qt frontend for nmap";
     mainProgram = "nmapsi4";
+    changelog = "https://github.com/nmapsi4/nmapsi4/releases/tag/${src.rev}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;

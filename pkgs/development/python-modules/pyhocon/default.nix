@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chimpler";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xXx30uxJ8+KPVdYC6yRzEDJbwYSzIO/Gy1xrehvI5ZE=";
   };
 

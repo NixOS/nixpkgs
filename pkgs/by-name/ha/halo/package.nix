@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
   # official jre size is 500MB, but temurin-jre-bin is 100MB.
-, temurin-jre-bin
+  temurin-jre-bin,
 }:
 stdenv.mkDerivation rec {
   pname = "halo";
-  version = "2.19.2";
+  version = "2.20.13";
   src = fetchurl {
     url = "https://github.com/halo-dev/halo/releases/download/v${version}/halo-${version}.jar";
-    hash = "sha256-+mp195Yyj4O5k/WxnAllVHbeTt/ZzR7olPG27xfUrlQ=";
+    hash = "sha256-BcI5LHAKDpd68w/D7TKOS3ChthsiWislm3yKyd0cSkM=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +66,10 @@ stdenv.mkDerivation rec {
     description = "Self-hosted dynamic blogging program";
     maintainers = with lib.maintainers; [ yah ];
     license = lib.licenses.gpl3Only;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "halo";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };

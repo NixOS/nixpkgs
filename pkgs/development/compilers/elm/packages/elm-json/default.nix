@@ -1,11 +1,12 @@
-{ lib
-, curl
-, rustPlatform
-, fetchurl
-, openssl
-, stdenv
-, pkg-config
-, darwin
+{
+  lib,
+  curl,
+  rustPlatform,
+  fetchurl,
+  openssl,
+  stdenv,
+  pkg-config,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     curl
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   cargoHash = "sha256-8SOpL8nfhYen9vza0LYpB/5fgVmBwG7vGMmFOaJskIc=";
 

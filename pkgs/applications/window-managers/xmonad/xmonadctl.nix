@@ -1,7 +1,18 @@
-{ stdenv, lib, ghcWithPackages, haskellPackages, ... }:
+{
+  stdenv,
+  lib,
+  ghcWithPackages,
+  haskellPackages,
+  ...
+}:
 
-let xmonadctlEnv = ghcWithPackages (self: [ self.xmonad-contrib self.X11 ]);
-in stdenv.mkDerivation rec {
+let
+  xmonadctlEnv = ghcWithPackages (self: [
+    self.xmonad-contrib
+    self.X11
+  ]);
+in
+stdenv.mkDerivation rec {
   pname = "xmonadctl";
 
   inherit (haskellPackages.xmonad-contrib) src version;

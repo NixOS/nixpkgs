@@ -3,38 +3,36 @@
   buildPythonPackage,
   fetchFromGitHub,
   amaranth,
-  setuptools,
-  setuptools-scm,
+  pdm-backend,
   unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "amaranth-boards";
-  version = "0-unstable-2024-05-01";
+  version = "0-unstable-2024-12-21";
   pyproject = true;
-  # python setup.py --version
-  realVersion = "0.1.dev202+g${lib.substring 0 7 src.rev}";
+  # from `pdm show`
+  realVersion =
+    let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in
+    "${tag}1.dev1+g${rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
-    rev = "aba2300dc83216523e1c98fdb22471cb4bac5027";
+    rev = "9d97c4816288c9c2cc304d9280c2c63178d50d2f";
     # these files change depending on git branch status
     postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
-    hash = "sha256-jldXyMJtuSGcZKmtwpZBYrR/UBe4ufblPYRYpBmReM8=";
+    hash = "sha256-c+LUWNik95PO5oPM/Bjdxu8j9TD2Q8YSGtdNq1E+i4o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-  dependencies = [
-    setuptools
-    amaranth
-  ];
+  build-system = [ pdm-backend ];
+  dependencies = [ amaranth ];
 
   preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
   # no tests

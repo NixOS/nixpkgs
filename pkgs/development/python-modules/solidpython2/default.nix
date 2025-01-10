@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, ply
-, setuptools
-, poetry-core
-, withOpenSCAD ? false
-, openscad
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  ply,
+  setuptools,
+  poetry-core,
+  withOpenSCAD ? false,
+  openscad,
 }:
 buildPythonPackage rec {
   pname = "solidpython2";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   # - drop the openscad image geneneration tests, these don't work on the nix sandbox due to the need for xserver
   patches = [ ./difftool_tests.patch ];
 
-  propagatedBuildInputs = lib.optionals withOpenSCAD [openscad];
+  propagatedBuildInputs = lib.optionals withOpenSCAD [ openscad ];
 
   build-system = [
     poetry-core

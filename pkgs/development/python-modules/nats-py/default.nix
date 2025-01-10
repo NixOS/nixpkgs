@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r94dDXPpkLS1PsB9L4qlDw15tPa2vpxOS52eqJk2dNU=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   dependencies = [ ed25519 ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     nkeys = [ nkeys ];
     # fast_parse = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
       "test_ordered_consumer_larger_streams"
       "test_object_file_basics"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_subscribe_iterate_next_msg"
       "test_buf_size_force_flush_timeout"
     ];

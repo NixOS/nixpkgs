@@ -18,7 +18,9 @@
   packaging,
   pillow,
   platformdirs,
+  propcache,
   pydantic,
+  pydantic-extra-types,
   pyjwt,
   rich,
   typer,
@@ -38,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.0.2";
+  version = "7.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -46,8 +48,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3Dmim+wSAhco3KvtbAT/f/feNriaI22m0ml4L9SJFPs=";
+    tag = "v${version}";
+    hash = "sha256-y4rJoT70WiVS9Gs/U6FPOaGGubPI43x9tA2vcdiDBlw=";
   };
 
   build-system = [ poetry-core ];
@@ -68,7 +70,9 @@ buildPythonPackage rec {
     packaging
     pillow
     platformdirs
+    propcache
     pydantic
+    pydantic-extra-types
     pyjwt
     rich
     typer
@@ -88,6 +92,17 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    # https://127.0.0.1 vs https://127.0.0.1:0
+    "test_base_url"
+    "test_bootstrap"
+  ];
+
+  disabledTestPaths = [
+    # hangs the test suite
+    "tests/test_api_ws.py"
+  ];
 
   pythonImportsCheck = [ "uiprotect" ];
 

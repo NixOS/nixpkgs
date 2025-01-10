@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, AppKit
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  AppKit,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-i2Pp9sfTBth3DtrQ99Vw+KLnGECrkqtlRNAKiwSWf48=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Security
   ];

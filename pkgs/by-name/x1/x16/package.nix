@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, callPackage
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  callPackage,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
     emulator = finalAttrs.finalPackage;
     rom = callPackage ./rom.nix { };
-    run = (callPackage ./run.nix { }){
+    run = (callPackage ./run.nix { }) {
       inherit (finalAttrs.finalPackage) emulator rom;
     };
   };
@@ -57,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isAarch64; # ofborg fails to compile it
+    broken = stdenv.hostPlatform.isAarch64; # ofborg fails to compile it
   };
 })

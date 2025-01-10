@@ -7,20 +7,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.31.0";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ShczC0DvAO92apkNq5oyYRbkqGdqwl6vaCY1hn8O6so=";
+    tag = "v${version}";
+    hash = "sha256-RNQD862m1p8ooFbV8k7yDW9GzP5vPQ8hgerMpvDdXAs=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
-
+  build-system = with python3.pkgs; [ pdm-backend ];
 
   dependencies = with python3.pkgs; [
     appdirs

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "23.11.0";
+  version = "24.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qi0XftneKj7hdDiLY2hoRONRrPv49mfQlvlNkudH54Y=";
+    tag = "v${version}";
+    hash = "sha256-EJTzaoHBidnaHxFLw8FrjJITUxioRGEhl1yvm/QDpXc=";
   };
 
   nativeBuildInputs = [ setuptools ];

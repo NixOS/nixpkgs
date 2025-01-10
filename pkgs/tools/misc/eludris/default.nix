@@ -1,10 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, pkg-config
-, stdenv
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p eludris" ];
   cargoTestFlags = [ "-p eludris" ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {

@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   buildPythonPackage,
+  defusedxml,
   fetchFromGitHub,
   geopy,
   imageio,
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3SVpzWii9/ViJ7mbrqzKmN5FkOOYTeYdhJll6q/IseU=";
   };
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    defusedxml
     geopy
     imageio
     lxml

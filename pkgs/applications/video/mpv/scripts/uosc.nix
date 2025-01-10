@@ -9,14 +9,14 @@
 
 buildLua (finalAttrs: {
   pname = "uosc";
-  version = "5.5.0";
+  version = "5.6.2";
   scriptPath = "src/uosc";
 
   src = fetchFromGitHub {
     owner = "tomasklaen";
     repo = "uosc";
     rev = finalAttrs.version;
-    hash = "sha256-WFsqA5kGefQmvihLUuQBfMmKoUHiO7ofxpwISRygRm4=";
+    hash = "sha256-UbSEJGlLSX5wZpfj+Cb3LfWw17pnjxIJUNtP8dclKoU=";
   };
   passthru.updateScript = gitUpdater { };
 

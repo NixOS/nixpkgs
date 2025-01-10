@@ -41,14 +41,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "tree";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VvSJTuEYjIz/4TTibSLkbg65YmcYqHImTHOomeorMJc=";
   };
 
   patches = [
     patchCMakeAbseil
     patchCMakePybind
-  ] ++ (lib.optional stdenv.isDarwin ./0003-don-t-configure-apple.patch);
+  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./0003-don-t-configure-apple.patch);
 
   dontUseCmakeConfigure = true;
 

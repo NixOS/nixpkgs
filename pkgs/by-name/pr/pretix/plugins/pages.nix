@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pretix-plugin-build
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pretix-plugin-build,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pretix-pages";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-pages";
     rev = "v${version}";
-    hash = "sha256-u2POt3v0OpjbauDCX8Uclvqd1+jujvVrzUIYrvDv/qI=";
+    hash = "sha256-ZM38zHlFB5013PvoJwm7YC5/wHg2GZWmrhvreXuqNc8=";
   };
 
   build-system = [

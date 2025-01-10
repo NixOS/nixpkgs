@@ -6,7 +6,7 @@
   lib,
   libjpeg,
   numba,
-  opencv4,
+  opencv-python,
   pandas,
   pkg-config,
   pytorch-pfn-extras,
@@ -40,7 +40,6 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail "'assertpy'," "" \
       --replace-fail "'fastargs'," "" \
-      --replace-fail "'opencv-python'," "" \
       --replace-fail "'psutil'," "" \
   '';
 
@@ -48,7 +47,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg ];
   propagatedBuildInputs = [
-    opencv4
+    opencv-python
     numba
     pandas
     pytorch-pfn-extras
@@ -111,6 +110,6 @@ buildPythonPackage rec {
     ];
     # OSError: dlopen(libc.so.6, 0x0006): tried: '/usr/lib/libc.so.6' (no such file, not in dyld cache),
     # 'libc.so.6' (no such file), '/usr/local/lib/libc.so.6' (no such file), '/usr/lib/libc.so.6' (no such file, not in dyld cache)
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

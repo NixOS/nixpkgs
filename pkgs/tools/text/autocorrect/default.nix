@@ -1,14 +1,21 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, SystemConfiguration }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+  SystemConfiguration,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
-  version = "2.11.1";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "huacnlee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iBwF8rMm4MbHwJSDmENDgGJKCl05psStxsi6BIliZP0=";
+    sha256 = "sha256-12Ell1C5sKj+0HHmlZ3U2Vx5hXvMl/DqAXnfhcfLeF8=";
   };
 
   cargoLock = {
@@ -19,10 +26,19 @@ rustPlatform.buildRustPackage rec {
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
-  cargoBuildFlags = [ "-p" "autocorrect-cli" ];
-  cargoTestFlags = [ "-p" "autocorrect-cli" ];
+  cargoBuildFlags = [
+    "-p"
+    "autocorrect-cli"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "autocorrect-cli"
+  ];
 
   passthru.updateScript = ./update.sh;
 

@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, crystal, openssl }:
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  openssl,
+}:
 
 crystal.buildCrystalPackage rec {
   version = "0.19.0";

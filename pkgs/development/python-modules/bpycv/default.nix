@@ -8,7 +8,7 @@
   fetchFromGitHub,
   fetchPypi,
   minexr,
-  opencv4,
+  opencv-python,
   requests,
   runCommand,
   zcs,
@@ -29,13 +29,9 @@ buildPythonPackage rec {
     minexr
     zcs
     requests
-    opencv4
+    opencv-python
     boxx
   ];
-
-  postPatch = ''
-    sed -i 's/opencv-python//g' requirements.txt
-  '';
 
   # pythonImportsCheck = [ "bpycv" ]; # this import depends on bpy that is only available inside blender
   doCheck = false;
@@ -61,7 +57,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/DIYer22/bpycv";
     license = licenses.mit;
     maintainers = [ maintainers.lucasew ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     inherit (blender.meta) platforms;
   };
 }

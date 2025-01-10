@@ -66,8 +66,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Play audio files";
     homepage = "https://gitlab.gnome.org/GNOME/Incubator/decibels";
+    changelog = "https://gitlab.gnome.org/GNOME/Incubator/decibels/-/blob/main/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = lib.teams.gnome-circle.members;
     mainProgram = "org.gnome.Decibels";
     platforms = lib.platforms.linux;
   };

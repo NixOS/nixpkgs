@@ -7,6 +7,7 @@
 , flac
 , libogg
 , libvorbis
+, stdenv_32bit
 , iceSupport ? true, zeroc-ice
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
@@ -15,7 +16,7 @@
 }:
 
 let
-  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
+  generic = overrides: source: (overrides.stdenv or stdenv).mkDerivation (source // overrides // {
     pname = overrides.type;
     version = source.version;
 
@@ -38,7 +39,6 @@ let
 
     meta = with lib; {
       description = "Low-latency, high quality voice chat software";
-      mainProgram = "mumble-server";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
       maintainers = with maintainers; [ felixsinger lilacious ];
@@ -96,6 +96,17 @@ let
       ++ lib.optional iceSupport zeroc-ice;
   } source;
 
+  overlay = source: generic {
+    stdenv = stdenv_32bit;
+    type = "mumble-overlay";
+
+    configureFlags = [
+      "-D server=OFF"
+      "-D client=OFF"
+      "-D overlay=ON"
+    ];
+  } source;
+
   source = rec {
     version = "1.5.634";
 
@@ -107,8 +118,17 @@ let
       hash = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      (fetchpatch {
+        name = "GCC14.patch";
+        url = "https://github.com/mumble-voip/mumble/commit/56945a9dfb62d29dccfe561572ebf64500deaed1.patch";
+        hash = "sha256-Frct9XJ/ZuHPglx+GB9h3vVycR8YY039dStIbfkPPDk=";
+      })
+    ];
   };
 in {
-  mumble  = client source;
-  murmur  = server source;
+  mumble  = lib.recursiveUpdate (client source) {meta.mainProgram = "mumble";};
+  murmur  = lib.recursiveUpdate (server source) {meta.mainProgram = "mumble-server";};
+  overlay = overlay source;
 }

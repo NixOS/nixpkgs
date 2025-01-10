@@ -4,21 +4,31 @@
   fetchFromGitHub,
   pythonAtLeast,
   pytestCheckHook,
+  hatchling,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  pname = "coqpit";
-  version = "0.0.17";
-  format = "setuptools";
+  pname = "coqpit-config";
+  version = "0.1.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "coqui-ai";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FY3PYd8dY5HFKkhD6kBzPt0k1eFugdqsO3yIN4oDk3E=";
+    owner = "idiap";
+    repo = "coqui-ai-coqpit";
+    tag = "v${version}";
+    hash = "sha256-3LZxoj2aFTpezakBymogkNPCaEBBaaUmyIa742cSMgU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   pythonImportsCheck = [
     "coqpit"
@@ -35,7 +45,7 @@ buildPythonPackage rec {
     longDescription = ''
       Simple, light-weight and no dependency config handling through python data classes with to/from JSON serialization/deserialization.
     '';
-    homepage = "https://github.com/coqui-ai/coqpit";
+    homepage = "https://github.com/idiap/coqui-ai-coqpit";
     license = licenses.mit;
     maintainers = teams.tts.members;
   };

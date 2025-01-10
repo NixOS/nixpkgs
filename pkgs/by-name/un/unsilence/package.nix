@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, ffmpeg
-,
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  ffmpeg,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "unsilence";

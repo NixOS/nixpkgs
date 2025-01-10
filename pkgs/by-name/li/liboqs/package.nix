@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liboqs";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
     repo = "liboqs";
     rev = finalAttrs.version;
-    hash = "sha256-zsSKFUs75K0Byxh3KVCZ8lIOf/vpbyMJXfk6fa2u+aE=";
+    hash = "sha256-+Gx1JPrJoeMix9DIF0rJQTivxN1lgaCIYFvJ1pnYZzM=";
   };
 
   patches = [
@@ -41,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontFixCmake = true; # fix CMake file will give an error
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";

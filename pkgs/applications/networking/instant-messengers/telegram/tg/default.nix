@@ -1,11 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pythonOlder
-, fetchpatch
-, stdenv
-, libnotify
-, python-telegram
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  fetchpatch,
+  stdenv,
+  libnotify,
+  python-telegram,
 }:
 
 buildPythonApplication rec {
@@ -30,7 +31,7 @@ buildPythonApplication rec {
   ];
 
   # Fix notifications on platforms other than darwin by providing notify-send
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     sed -i 's|^NOTIFY_CMD = .*|NOTIFY_CMD = "${libnotify}/bin/notify-send {title} {message} -i {icon_path}"|' tg/config.py
   '';
 

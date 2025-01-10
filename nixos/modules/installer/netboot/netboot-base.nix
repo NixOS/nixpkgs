@@ -6,12 +6,13 @@
 with lib;
 
 {
-  imports =
-    [ ./netboot.nix
+  imports = [
+    ./netboot.nix
 
-      # Profiles of this basic netboot media
-      ../../profiles/all-hardware.nix
-      ../../profiles/base.nix
-      ../../profiles/installation-device.nix
-    ];
+    # Profiles of this basic netboot media
+    ../../profiles/base.nix
+    ../../profiles/installation-device.nix
+  ];
+
+  hardware.enableAllHardware = true;
 }

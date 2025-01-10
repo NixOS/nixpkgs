@@ -7,4 +7,11 @@ SDL2_image.overrideAttrs (oldAttrs: {
     inherit (oldAttrs.src) url;
     hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
   };
+
+  postPatch =
+    (oldAttrs.postPatch or "")
+    + ''
+      # allow newer autoreconf to run successfully
+      touch NEWS README AUTHORS ChangeLog
+    '';
 })

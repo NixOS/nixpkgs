@@ -1,4 +1,10 @@
-{ lib, fetchurl, callPackage, luajit, nixosTests }:
+{
+  lib,
+  fetchurl,
+  callPackage,
+  luajit,
+  nixosTests,
+}:
 
 callPackage (import ./common.nix rec {
   pname = "cgit";
@@ -13,7 +19,7 @@ callPackage (import ./common.nix rec {
   # IMPORTANT: Remember to check which git version cgit needs on every version
   # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.25.1.tar.xz";
+    url = "mirror://kernel/software/scm/git/git-2.25.1.tar.xz";
     sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
   };
 
@@ -24,4 +30,4 @@ callPackage (import ./common.nix rec {
   homepage = "https://git.zx2c4.com/cgit/about/";
   description = "Web frontend for git repositories";
   maintainers = with lib.maintainers; [ bjornfor ];
-}) {}
+}) { }

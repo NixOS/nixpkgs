@@ -1,34 +1,37 @@
-{ buildDotnetModule
-, darwin
-, dotnetCorePackages
-, fetchFromGitHub
-, fetchpatch
-, git
-, glibc
-, glibcLocales
-, lib
-, nixosTests
-, stdenv
-, which
-, buildPackages
-, runtimeShell
+{
+  bash,
+  buildDotnetModule,
+  coreutils,
+  darwin,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  fetchpatch,
+  git,
+  glibc,
+  glibcLocales,
+  lib,
+  nixosTests,
+  stdenv,
+  which,
+  buildPackages,
+  runtimeShell,
   # List of Node.js runtimes the package should support
-, nodeRuntimes ? [ "node20" ]
-, nodejs_20
+  nodeRuntimes ? [ "node20" ],
+  nodejs_20,
 }:
 
 # Node.js runtimes supported by upstream
 assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.319.1";
+  version = "2.321.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "v${version}";
-    hash = "sha256-cXOYW4py2RRJVUKrQBGf6LHNyc1sJ/bMR4hJxtDv3PU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KZ072v5kYlD78RGQl13Aj05DGzj2+r2akzyZ1aJn93A=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -49,7 +52,7 @@ buildDotnetModule rec {
       git config user.name "root"
       git add .
       git commit -m "Initial commit"
-      git checkout -b v${version}
+      git checkout -b v${finalAttrs.version}
     )
     mkdir -p $TMPDIR/bin
     cat > $TMPDIR/bin/git <<EOF
@@ -79,25 +82,21 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
-  ] ++ lib.optionals (nodeRuntimes == [ "node20" ]) [
-    # If the package is built without Node 16, make Node 20 the default internal version
-    # https://github.com/actions/runner/pull/2844
-    (fetchpatch {
-      name = "internal-node-20.patch";
-      url = "https://github.com/actions/runner/commit/acdc6ed.patch";
-      hash = "sha256-3/6yhhJPr9OMWBFc5/NU/DRtn76aTYvjsjQo2u9ZqnU=";
-    })
+    # Fix source path discovery in tests
+    ./patches/test-getsrcpath.patch
   ];
 
   postPatch = ''
     # Ignore changes to src/Runner.Sdk/BuildConstants.cs
     substituteInPlace src/dir.proj \
-      --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
-                'true'
+      --replace-fail 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+                     'true'
   '';
 
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
-  LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (
+    !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+  ) "${glibcLocales}/lib/locale/locale-archive";
 
   postConfigure = ''
     # Generate src/Runner.Sdk/BuildConstants.cs
@@ -106,23 +105,32 @@ buildDotnetModule rec {
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
       -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
-      -p:RunnerVersion="${version}" \
+      -p:RunnerVersion="${finalAttrs.version}" \
       src/dir.proj
   '';
 
-  nativeBuildInputs = [
-    which
-    git
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    darwin.autoSignDarwinBinariesHook
+  nativeBuildInputs =
+    [
+      which
+      git
+      # needed for `uname`
+      coreutils
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      darwin.autoSignDarwinBinariesHook
+    ];
+
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    bash
   ];
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
-  dotnetFlags = [ "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ];
+  dotnetFlags = [
+    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+  ];
 
   # As given here: https://github.com/actions/runner/blob/0befa62/src/dir.proj#L33-L41
   projectFile = [
@@ -134,7 +142,7 @@ buildDotnetModule rec {
     "src/Runner.Sdk/Runner.Sdk.csproj"
     "src/Runner.Plugins/Runner.Plugins.csproj"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   doCheck = true;
 
@@ -196,83 +204,90 @@ buildDotnetModule rec {
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
     ]
-    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+    ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
       "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
       "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
-    ]
-    ++ lib.optionals (!lib.elem "node16" nodeRuntimes) [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     ];
 
   testProjectFile = [ "src/Test/Test.csproj" ];
 
-  preCheck = ''
-    mkdir -p _layout/externals
-  '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
-    ln -s ${nodejs_20} _layout/externals/node20
-  '';
+  preCheck =
+    ''
+      mkdir -p _layout/externals
+    ''
+    + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
+      ln -s ${nodejs_20} _layout/externals/node20
+    '';
 
-  postInstall = ''
-    mkdir -p $out/bin
+  postInstall =
+    ''
+      mkdir -p $out/bin
 
-    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/lib/github-runner
-    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/github-runner
-    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/github-runner
-    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/github-runner/run-helper.sh
-    install -m755 src/Misc/layoutroot/config.sh                $out/lib/github-runner
-    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/github-runner
+      install -m755 src/Misc/layoutbin/runsvc.sh                 $out/lib/github-runner
+      install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/github-runner
+      install -m755 src/Misc/layoutroot/run.sh                   $out/lib/github-runner
+      install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/github-runner/run-helper.sh
+      install -m755 src/Misc/layoutroot/config.sh                $out/lib/github-runner
+      install -m755 src/Misc/layoutroot/env.sh                   $out/lib/github-runner
 
-    # env.sh is patched to not require any wrapping
-    ln -sr "$out/lib/github-runner/env.sh" "$out/bin/"
+      # env.sh is patched to not require any wrapping
+      ln -sr "$out/lib/github-runner/env.sh" "$out/bin/"
 
-    substituteInPlace $out/lib/github-runner/config.sh \
-      --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace $out/lib/github-runner/config.sh \
-      --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
-      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
-      --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
-  '' + ''
-    # Remove uneeded copy for run-helper template
-    substituteInPlace $out/lib/github-runner/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
-    substituteInPlace $out/lib/github-runner/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
+      substituteInPlace $out/lib/github-runner/config.sh \
+        --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace $out/lib/github-runner/config.sh \
+        --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
+        --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${finalAttrs.dotnet-runtime}/share/dotnet/shared/Microsoft.NETCore.App/${finalAttrs.dotnet-runtime.version}/' \
+        --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
+    ''
+    + ''
+      # Remove uneeded copy for run-helper template
+      substituteInPlace $out/lib/github-runner/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+      substituteInPlace $out/lib/github-runner/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
-    # Make paths absolute
-    substituteInPlace $out/lib/github-runner/runsvc.sh \
-      --replace './externals' "$out/lib/externals" \
-      --replace './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
+      # Make paths absolute
+      substituteInPlace $out/lib/github-runner/runsvc.sh \
+        --replace './externals' "$out/lib/externals" \
+        --replace './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
 
-    # The upstream package includes Node and expects it at the path
-    # externals/node$version. As opposed to the official releases, we don't
-    # link the Alpine Node flavors.
-    mkdir -p $out/lib/externals
-  '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
-    ln -s ${nodejs_20} $out/lib/externals/node20
-  '' + ''
-    # Install Nodejs scripts called from workflows
-    install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
-    mkdir -p $out/lib/github-runner/checkScripts
-    install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
-  '' + lib.optionalString stdenv.isLinux ''
-    # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
-    makeWrapperArgs=()
+      # The upstream package includes Node and expects it at the path
+      # externals/node$version. As opposed to the official releases, we don't
+      # link the Alpine Node flavors.
+      mkdir -p $out/lib/externals
+    ''
+    + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
+      ln -s ${nodejs_20} $out/lib/externals/node20
+    ''
+    + ''
+      # Install Nodejs scripts called from workflows
+      install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
+      mkdir -p $out/lib/github-runner/checkScripts
+      install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
+      makeWrapperArgs=()
 
-    # We don't wrap with libicu
-    substituteInPlace $out/lib/github-runner/config.sh \
-      --replace '$LDCONFIG_COMMAND -NXv ''${libpath//:/ }' 'echo libicu'
-  '' + ''
-    # XXX: Using the corresponding Nix argument does not work as expected:
-    #      https://github.com/NixOS/nixpkgs/issues/218449
-    # Common wrapper args for `executables`
-    makeWrapperArgs+=(
-      --run 'export RUNNER_ROOT="''${RUNNER_ROOT:-"$HOME/.github-runner"}"'
-      --run 'mkdir -p "$RUNNER_ROOT"'
-      --chdir "$out"
-    )
-  '';
+      # We don't wrap with libicu
+      substituteInPlace $out/lib/github-runner/config.sh \
+        --replace '$LDCONFIG_COMMAND -NXv ''${libpath//:/ }' 'echo libicu'
+    ''
+    + ''
+      # XXX: Using the corresponding Nix argument does not work as expected:
+      #      https://github.com/NixOS/nixpkgs/issues/218449
+      # Common wrapper args for `executables`
+      makeWrapperArgs+=(
+        --run 'export RUNNER_ROOT="''${RUNNER_ROOT:-"$HOME/.github-runner"}"'
+        --run 'mkdir -p "$RUNNER_ROOT"'
+        --chdir "$out"
+      )
+    '';
 
   # List of files to wrap
   executables = [
@@ -294,7 +309,7 @@ buildDotnetModule rec {
     $out/bin/Runner.Listener --help >/dev/null
 
     version=$($out/bin/Runner.Listener --version)
-    if [[ "$version" != "${version}" ]]; then
+    if [[ "$version" != "${finalAttrs.version}" ]]; then
       printf 'Unexpected version %s' "$version"
       exit 1
     fi
@@ -318,8 +333,18 @@ buildDotnetModule rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch kfollesdal aanderse zimbatm ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      veehaitch
+      kfollesdal
+      aanderse
+      zimbatm
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.pve;
@@ -124,25 +130,27 @@ in
     };
   };
   serviceOpts = {
-    serviceConfig = {
-      DynamicUser = cfg.environmentFile == null;
-      LoadCredential = "configFile:${computedConfigFile}";
-      ExecStart = ''
-        ${cfg.package}/bin/pve_exporter \
-          --${optionalString (!cfg.collectors.status) "no-"}collector.status \
-          --${optionalString (!cfg.collectors.version) "no-"}collector.version \
-          --${optionalString (!cfg.collectors.node) "no-"}collector.node \
-          --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
-          --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
-          --${optionalString (!cfg.collectors.config) "no-"}collector.config \
-          --${optionalString (!cfg.collectors.replication) "no-"}collector.replication \
-          ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
-          ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
-          --config.file %d/configFile \
-          --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
-      '';
-    } // optionalAttrs (cfg.environmentFile != null) {
-      EnvironmentFile = cfg.environmentFile;
-    };
+    serviceConfig =
+      {
+        DynamicUser = cfg.environmentFile == null;
+        LoadCredential = "configFile:${computedConfigFile}";
+        ExecStart = ''
+          ${cfg.package}/bin/pve_exporter \
+            --${optionalString (!cfg.collectors.status) "no-"}collector.status \
+            --${optionalString (!cfg.collectors.version) "no-"}collector.version \
+            --${optionalString (!cfg.collectors.node) "no-"}collector.node \
+            --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
+            --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
+            --${optionalString (!cfg.collectors.config) "no-"}collector.config \
+            --${optionalString (!cfg.collectors.replication) "no-"}collector.replication \
+            ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
+            ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
+            --config.file %d/configFile \
+            --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
+        '';
+      }
+      // optionalAttrs (cfg.environmentFile != null) {
+        EnvironmentFile = cfg.environmentFile;
+      };
   };
 }

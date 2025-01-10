@@ -219,7 +219,7 @@ let
           succeed(
               'echo \'${postData}\'> /tmp/data.json'
           )
-          succeed('sed -ie "s DATE $(date +%s) " /tmp/data.json')
+          succeed('sed -i -e "s DATE $(date +%s) " /tmp/data.json')
           succeed(
               "curl -sSfH 'Content-Type: application/json' -X POST --data @/tmp/data.json localhost:9103/collectd"
           )
@@ -356,10 +356,50 @@ let
       '';
     };
 
+    exportarr-sonarr = let apikey = "eccff6a992bc2e4b88e46d064b26bb4e"; in {
+      nodeName = "exportarr_sonarr";
+      exporterConfig = {
+        enable = true;
+        url = "http://127.0.0.1:8989";
+        apiKeyFile = pkgs.writeText "dummy-api-key" apikey;
+      };
+      metricProvider = {
+        services.sonarr.enable = true;
+        systemd.services.sonarr.serviceConfig.ExecStartPre =
+          let
+            sonarr_config = pkgs.writeText "config.xml" ''
+              <Config>
+                <LogLevel>info</LogLevel>
+                <EnableSsl>False</EnableSsl>
+                <Port>8989</Port>
+                <SslPort>9898</SslPort>
+                <UrlBase></UrlBase>
+                <BindAddress>*</BindAddress>
+                <ApiKey>${apikey}</ApiKey>
+                <AuthenticationMethod>None</AuthenticationMethod>
+                <UpdateMechanism>BuiltIn</UpdateMechanism>
+                <Branch>main</Branch>
+                <InstanceName>Sonarr</InstanceName>
+              </Config>
+            '';
+          in
+          [
+            ''${pkgs.coreutils}/bin/install -D -m 777 ${sonarr_config} -T /var/lib/sonarr/.config/NzbDrone/config.xml''
+          ];
+      };
+      exporterTest = ''
+        wait_for_unit("sonarr.service")
+        wait_for_open_port(8989)
+        wait_for_unit("prometheus-exportarr-sonarr-exporter.service")
+        wait_for_open_port(9708)
+        succeed("curl -sSf http://localhost:9708/metrics | grep sonarr_series_total")
+      '';
+    };
+
     fastly = {
       exporterConfig = {
         enable = true;
-        tokenPath = pkgs.writeText "token" "abc123";
+        environmentFile = pkgs.writeText "fastly-exporter-env" "FASTLY_API_TOKEN=abc123";
       };
 
       exporterTest = ''
@@ -597,6 +637,8 @@ let
             rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
             zmqpubrawblock=tcp://127.0.0.1:28332
             zmqpubrawtx=tcp://127.0.0.1:28333
+            # https://github.com/lightningnetwork/lnd/issues/9163
+            deprecatedrpc=warnings
           '';
           extraCmdlineOptions = [ "-regtest" ];
         };
@@ -758,6 +800,38 @@ let
         wait_for_open_port(9539)
         succeed(
             "curl -sSf http://localhost:9539/metrics | grep 'modemmanager_info'"
+        )
+      '';
+    };
+
+    mqtt = {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeText "mqtt-exporter-envfile" ''
+          MQTT_PASSWORD=testpassword
+        '';
+      };
+      metricProvider = {
+        services.mosquitto = {
+          enable = true;
+          listeners = [{
+            users.exporter = {
+              acl = [ "read #" ];
+              passwordFile = pkgs.writeText "mosquitto-password" "testpassword";
+            };
+          }];
+        };
+        systemd.services.prometheus-mqtt-exporter ={
+          wants = [ "mosquitto.service" ];
+          after = [ "mosquitto.service" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("mosquitto.service")
+        wait_for_unit("prometheus-mqtt-exporter.service")
+        wait_for_open_port(9000)
+        succeed(
+          "curl -sSf http://localhost:9000/metrics | grep '^python_info'"
         )
       '';
     };
@@ -1511,25 +1585,6 @@ let
       '';
     };
 
-    tor = {
-      exporterConfig = {
-        enable = true;
-      };
-      metricProvider = {
-        # Note: this does not connect the test environment to the Tor network.
-        # Client, relay, bridge or exit connectivity are disabled by default.
-        services.tor.enable = true;
-        services.tor.settings.ControlPort = 9051;
-      };
-      exporterTest = ''
-        wait_for_unit("tor.service")
-        wait_for_open_port(9051)
-        wait_for_unit("prometheus-tor-exporter.service")
-        wait_for_open_port(9130)
-        succeed("curl -sSf localhost:9130/metrics | grep 'tor_version{.\\+} 1'")
-      '';
-    };
-
     unpoller = {
       nodeName = "unpoller";
       exporterConfig.enable = true;
@@ -1627,7 +1682,7 @@ let
     varnish = {
       exporterConfig = {
         enable = true;
-        instance = "/var/spool/varnish/varnish";
+        instance = "/run/varnish/varnish";
         group = "varnish";
       };
       metricProvider = {
@@ -1636,6 +1691,7 @@ let
         ];
         services.varnish = {
           enable = true;
+          stateDir = "/run/varnish/varnish";
           config = ''
             vcl 4.0;
             backend default {

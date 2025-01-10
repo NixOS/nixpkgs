@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysnmp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AtQqXiy943cYhHDsyz9Yk5uA4xK7Q4p21CT3X3zYzrQ=";
   };
 

@@ -1,13 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, ant
-# executable fails to start for jdk > 17
-, jdk17
-, makeWrapper
-, strip-nondeterminism
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  # executable fails to start for jdk > 17
+  jdk17,
+  swt,
+  makeWrapper,
+  strip-nondeterminism,
 }:
-
+let
+  swt-jdk17 = swt.override { jdk = jdk17; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dataexplorer";
   version = "3.9.0";
@@ -40,12 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     ant -Dprefix=$out/share/ -f build/build.xml install
+    # Use SWT from nixpkgs
+    ln -sf '${swt-jdk17}/jars/swt.jar' "$out/share/DataExplorer/java/ext/swt.jar"
 
     # The sources contain a wrapper script in $out/share/DataExplorer/DataExplorer
     # but it hardcodes bash shebang and does not pin the java path.
     # So we create our own wrapper, using similar cmdline args as upstream.
     mkdir -p $out/bin
     makeWrapper ${jdk17}/bin/java $out/bin/DataExplorer \
+      --prefix LD_LIBRARY_PATH : '${swt-jdk17}/lib' \
       --add-flags "-Xms64m -Xmx3092m -jar $out/share/DataExplorer/DataExplorer.jar" \
       --set SWT_GTK3 0
 
@@ -76,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # contains RXTXcomm (JNI library with *.so files)
-      binaryBytecode    # contains thirdparty jar files, e.g. javax.json, org.glassfish.json
+      binaryNativeCode # contains RXTXcomm (JNI library with *.so files)
+      binaryBytecode # contains thirdparty jar files, e.g. javax.json, org.glassfish.json
     ];
   };
 })

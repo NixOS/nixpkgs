@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, qtbase
-, openrgb
-, glib
-, libgtop
-, lm_sensors
-, qmake
-, pkg-config
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  qtbase,
+  openrgb,
+  glib,
+  libgtop,
+  lm_sensors,
+  qmake,
+  pkg-config,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

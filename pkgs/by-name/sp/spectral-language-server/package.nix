@@ -1,12 +1,13 @@
-{ lib
-, buildNpmPackage
-, stdenv
-, fetchYarnDeps
-, yarnConfigHook
-, fetchFromGitHub
-, typescript
-, jq
-, fetchpatch
+{
+  lib,
+  buildNpmPackage,
+  stdenv,
+  fetchYarnDeps,
+  yarnConfigHook,
+  fetchFromGitHub,
+  typescript,
+  jq,
+  fetchpatch,
 }:
 let
   # Instead of the build script that spectral-language-server provides (ref: https://github.com/luizcorreia/spectral-language-server/blob/master/script/vscode-spectral-build.sh), we build vscode-spectral manually.
@@ -27,7 +28,11 @@ let
       hash = "sha256-am27A9VyFoXuOlgG9mnvNqV3Q7Bi7GJzDqqVFGDVWIA=";
     };
 
-    nativeBuildInputs = [ typescript jq yarnConfigHook ];
+    nativeBuildInputs = [
+      typescript
+      jq
+      yarnConfigHook
+    ];
 
     postPatch = ''
       cp server/tsconfig.json server/tsconfig.json.bak

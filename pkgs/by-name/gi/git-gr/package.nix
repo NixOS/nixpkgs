@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "9999years";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
   };
 
@@ -33,13 +33,11 @@ rustPlatform.buildRustPackage {
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs =
-    [installShellFiles]
-    ++ lib.optional stdenv.isLinux pkg-config;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
   buildInputs =
-    lib.optional stdenv.isLinux openssl
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optional stdenv.hostPlatform.isLinux openssl
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

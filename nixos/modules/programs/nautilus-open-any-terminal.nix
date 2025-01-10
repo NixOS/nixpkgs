@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.nautilus-open-any-terminal;
@@ -23,20 +28,28 @@ in
       nautilus-open-any-terminal
     ];
 
-    environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
+    environment.sessionVariables = lib.mkIf (!config.services.xserver.desktopManager.gnome.enable) {
+      NAUTILUS_4_EXTENSION_DIR = "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
+    };
+
     environment.pathsToLink = [
       "/share/nautilus-python/extensions"
     ];
 
     programs.dconf = lib.optionalAttrs (cfg.terminal != null) {
       enable = true;
-      profiles.user.databases = [{
-        settings."com/github/stunkymonkey/nautilus-open-any-terminal".terminal = cfg.terminal;
-        lockAll = true;
-      }];
+      profiles.user.databases = [
+        {
+          settings."com/github/stunkymonkey/nautilus-open-any-terminal".terminal = cfg.terminal;
+          lockAll = true;
+        }
+      ];
     };
   };
   meta = {
-    maintainers = with lib.maintainers; [ stunkymonkey linsui ];
+    maintainers = with lib.maintainers; [
+      stunkymonkey
+      linsui
+    ];
   };
 }

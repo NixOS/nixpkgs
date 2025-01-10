@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.40.0";
+  version = "0.42.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KaX1TNP6IP2wAijR2y9cqI+Pyc+Ygk3LqKwu5Yrv5LM=";
+    tag = version;
+    hash = "sha256-xIa7QeflS7JxkPoV8KqFfuLfHPpnrBGLeOFSa17IHyk=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     # socket.gaierror: [Errno -2] Name or service not known
     "test_async_get_local_ip"
     "test_get_local_ip"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_deferred_callback_url" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_deferred_callback_url" ];
 
   disabledTestPaths = [
     # Tries to bind to multicast socket and fails to find proper interface

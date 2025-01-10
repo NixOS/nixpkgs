@@ -6,6 +6,7 @@
   docutils,
   bzip2,
   zlib,
+  jitterentropy,
   darwin,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
 }:
@@ -50,13 +51,16 @@ let
           bzip2
           zlib
         ]
-        ++ lib.optionals stdenv.isDarwin (
+        ++ lib.optionals stdenv.hostPlatform.isDarwin (
           with darwin.apple_sdk.frameworks;
           [
             CoreServices
             Security
           ]
-        );
+        )
+        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+          jitterentropy
+        ];
 
       buildTargets =
         [ "cli" ]
@@ -75,12 +79,13 @@ let
           "--with-bzip2"
           "--with-zlib"
           "--with-rst2man"
+          "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
         ]
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "--cpu=aarch64"
+        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+          "--enable-modules=jitter_rng"
         ];
 
       configurePhase = ''
@@ -117,10 +122,8 @@ let
 in
 {
   botan3 = common {
-    version = "3.5.0";
-    hash = "sha256-Z+ja4cokaNkN5OYByH1fMf9JKzjoq4vL0C3fcQTtip8=";
-    # this patch fixes build errors on MacOS with SDK 10.12, recheck to remove this again
-    patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./botan3-macos.patch ];
+    version = "3.6.1";
+    hash = "sha256-fLhXXYjSMsdxdHadf54ku0REQWBYWYbuvWbnScuakIk=";
   };
 
   botan2 = common {

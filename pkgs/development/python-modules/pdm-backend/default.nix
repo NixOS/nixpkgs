@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.3.3";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gM8Sx6nMiq84e3sLJn35shF2jy6Ce1qPlERi2XpS89k=";
+    tag = version;
+    hash = "sha256-XbHlzt00R0kB8I6nRvteAgpFlUTAvBcF5iaQD5V30ok=";
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
     # tests require a configured git identity
     export HOME=$TMPDIR
+    git config --global user.name nixbld
     git config --global user.email nixbld@localhost
   '';
 

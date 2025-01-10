@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils, removeReferencesTo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  varnish,
+  docutils,
+  removeReferencesTo,
+}:
 let
-  common = { version, hash, extraNativeBuildInputs ? [] }:
+  common =
+    {
+      version,
+      hash,
+      extraNativeBuildInputs ? [ ],
+    }:
     stdenv.mkDerivation rec {
       pname = "${varnish.name}-modules";
       inherit version;
@@ -17,7 +31,7 @@ let
         docutils
         pkg-config
         removeReferencesTo
-        varnish.python  # use same python version as varnish server
+        varnish.python # use same python version as varnish server
       ];
 
       buildInputs = [ varnish ];
@@ -40,10 +54,6 @@ in
   modules15 = common {
     version = "0.15.1";
     hash = "sha256-Et/iWOk2FWJBDOpKjNXm4Nh5i1SU4zVPaID7kh+Uj9M=";
-  };
-  modules23 = common {
-    version = "0.23.0";
-    hash = "sha256-Dd1pLMmRC59iRRpReDeQJ8Sv00ojb8InvaMrb+iRv4I=";
   };
   modules24 = common {
     version = "0.24.0";

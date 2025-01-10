@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kdeplasma-addons";
 
-  extraBuildInputs = [qtwebengine];
+  extraBuildInputs = [ qtwebengine ];
 }

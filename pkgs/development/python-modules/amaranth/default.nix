@@ -21,20 +21,25 @@
 buildPythonPackage rec {
   pname = "amaranth";
   format = "pyproject";
-  version = "0.5.2";
+  version = "0.5.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pf9X1B60FgqTbSw7D80ERHp4GCvCe5lqrlS96xPXLNo=";
+    tag = "v${version}";
+    hash = "sha256-e4htbNq6OCy8ZTS1UnucbU987reukP4J1CbWhT39K6E=";
   };
 
-  nativeBuildInputs = [
-    git
-    pdm-backend
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "pdm-backend~=2.3.0" \
+        "pdm-backend>=2.3.0"
+  '';
+
+  nativeBuildInputs = [ git ];
+  build-system = [ pdm-backend ];
 
   dependencies =
     [

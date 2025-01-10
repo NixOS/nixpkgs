@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mk/MSEYj/poibXl+h318gN3rTuNC/ebhKYO3/ACA4II=";
+    hash = "sha256-Kv3xEYB6przlEUTzIbkLY654l9N8Gb3YsFqQRTKZpI8=";
   };
 
   build-system = [

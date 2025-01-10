@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, make
-, wrapGNUstepAppsHook
-, back
-, base
-, gui
+{
+  lib,
+  stdenv,
+  fetchurl,
+  make,
+  wrapGNUstepAppsHook,
+  back,
+  base,
+  gui,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,15 +18,26 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1fg7c3ihfgvl6n21rd17fs9ivx3l8ps874m80vz86n1callgs339";
   };
 
-  nativeBuildInputs = [ make wrapGNUstepAppsHook ];
-  buildInputs = [ back base gui ];
+  nativeBuildInputs = [
+    make
+    wrapGNUstepAppsHook
+  ];
+  buildInputs = [
+    back
+    base
+    gui
+  ];
 
   meta = {
     description = "Settings manager for the GNUstep environment and its applications";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "SystemPreferences";
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      matthewbauer
+      dblsaiko
+    ];
     platforms = lib.platforms.linux;
   };
 })

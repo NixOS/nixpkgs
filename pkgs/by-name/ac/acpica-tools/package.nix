@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
-  version = "20240827";
+  version = "R2024_12_12";
 
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
-    rev = "refs/tags/version-${version}";
-    hash = "sha256-RlhKBvydesUdBaFUHk3sSM6SRIZ7q5IqnibX+hps+Tc=";
+    tag = finalAttrs.version;
+    hash = "sha256-vxiWYUAEk54F1M0WrrMTHZ4DNJxxT/GaXetd5LjE808=";
   };
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
   buildFlags = [
     "acpibin"
@@ -42,15 +47,24 @@ stdenv.mkDerivation rec {
 
   # We can handle stripping ourselves.
   # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
-  INSTALLFLAGS = lib.optionals (!stdenv.isDarwin) "-m 555";
+  INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
-    license = with licenses; [ iasl gpl2Only bsd3 ];
-    maintainers = with maintainers; [ tadfisher felixsinger ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = with lib.licenses; [
+      iasl
+      gpl2Only
+      bsd3
+    ];
+    maintainers = with lib.maintainers; [
+      tadfisher
+      felixsinger
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

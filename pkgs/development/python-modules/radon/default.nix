@@ -45,7 +45,11 @@ buildPythonPackage rec {
     colorama
   ];
 
-  passthru.optional-dependencies = {
+  pythonRelaxDeps = [
+    "mando"
+  ];
+
+  optional-dependencies = {
     toml = [ tomli ];
   };
 

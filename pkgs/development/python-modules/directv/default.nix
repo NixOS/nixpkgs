@@ -32,6 +32,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    #  ValueError: Host '#' cannot contain '#' (at position 0)
+    "test_client_error"
+  ];
+
   pythonImportsCheck = [ "directv" ];
 
   meta = with lib; {

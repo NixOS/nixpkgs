@@ -6,6 +6,7 @@
   fetchFromGitHub,
   orjson,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "116";
+  version = "119";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,20 +22,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XtcAs+xKSTJcQN0mCj6ewkT7owvA7nlZ8PhWfL9NZh8=";
+    tag = "v${version}";
+    hash = "sha256-5138YzxutjyFsYyLGLTzeyCISuY8kV4WA0FLML+VeZQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov=pydeconz --cov-report term-missing" "" \
-      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "setuptools==75.6.0" "setuptools" \
       --replace-fail "wheel==" "wheel>="
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -44,6 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 

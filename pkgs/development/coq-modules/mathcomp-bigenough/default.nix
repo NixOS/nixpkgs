@@ -1,8 +1,17 @@
-{ coq, mkCoqDerivation, mathcomp, lib, version ? null }:
+{
+  coq,
+  mkCoqDerivation,
+  mathcomp,
+  lib,
+  version ? null,
+}:
 
 mkCoqDerivation {
 
-  namePrefix = [ "coq" "mathcomp" ];
+  namePrefix = [
+    "coq"
+    "mathcomp"
+  ];
   pname = "bigenough";
   owner = "math-comp";
 
@@ -11,10 +20,18 @@ mkCoqDerivation {
     "1.0.1".sha256 = "sha256:02f4dv4rz72liciwxb2k7acwx6lgqz4381mqyq5854p3nbyn06aw";
   };
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = range "8.10" "8.20"; out = "1.0.1"; }
-    { case = range "8.5"  "8.14"; out = "1.0.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.version [
+      {
+        case = range "8.10" "8.20";
+        out = "1.0.1";
+      }
+      {
+        case = range "8.5" "8.14";
+        out = "1.0.0";
+      }
+    ] null;
 
   propagatedBuildInputs = [ mathcomp.ssreflect ];
 

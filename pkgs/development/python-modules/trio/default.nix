@@ -18,7 +18,6 @@
 
   # tests
   astor,
-  coreutils,
   jedi,
   pyopenssl,
   pytestCheckHook,
@@ -36,7 +35,7 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.25.0";
+  version = "0.27.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,8 +43,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JQ493U4WINOG6ob4IzfNQt5Lgs3DmEM2BDwbae7Bvsw=";
+    tag = "v${version}";
+    hash = "sha256-VJVGMhoLISCtNh56E7ssKXBPh4/WvUbFyKUbnWvqd0s=";
   };
 
   build-system = [ setuptools ];
@@ -59,7 +58,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   # tests are failing on Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     astor
@@ -76,6 +75,11 @@ buildPythonPackage rec {
     # $out is first in path which causes "import file mismatch"
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   disabledTests = [

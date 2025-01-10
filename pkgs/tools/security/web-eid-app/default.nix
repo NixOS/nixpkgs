@@ -1,22 +1,23 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, gtest
-, pcsclite
-, pkg-config
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  pcsclite,
+  pkg-config,
+  qttools,
 }:
 
 mkDerivation rec {
   pname = "web-eid-app";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    hash = "sha256-CaMf7cRhZ8K6YAUG38B+ijNOKaOmaACqNabNfHZGT68=";
+    hash = "sha256-UqHT85zuoT/ISFP2qgG2J1518eGEvm5L96ntZ/lx9BE=";
     fetchSubmodules = true;
   };
 

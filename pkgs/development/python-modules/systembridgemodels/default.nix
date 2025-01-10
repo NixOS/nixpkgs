@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-models";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FjHDd7nI30ChaClL0b1ME9Zv+DV0BiMsfgGOKQF/qBk=";
   };
 

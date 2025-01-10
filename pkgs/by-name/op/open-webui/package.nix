@@ -2,24 +2,24 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  python3,
+  python312,
   nixosTests,
 }:
 let
   pname = "open-webui";
-  version = "0.3.21";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b+r+nEv+9IM56KkCi9tZqnEbyCX69mFhp0Be5/9lR9c=";
+    tag = "v${version}";
+    hash = "sha256-vlaJv4CbhjbJbiNZHKsedS2vBXp44oE/7ZALgkPASHI=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-LH07LzYZpVzRAvkjoTgt7LJdXZZoDMt//ZAl30z7AHw=";
+    npmDepsHash = "sha256-g47tK6BC6CE0hqdZbToQMB5QeNdufhO12xPrAjbfMTk=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -29,6 +29,8 @@ let
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
+    env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    env.NODE_OPTIONS = "--max-old-space-size=8192";
 
     installPhase = ''
       runHook preInstall
@@ -40,7 +42,7 @@ let
     '';
   };
 in
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
@@ -55,29 +57,30 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
-    # using `opencv4`
-    "opencv-python-headless"
-    # using `psycopg2` instead
-    "psycopg2-binary"
     "docker"
     "pytest"
     "pytest-docker"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python312.pkgs; [
+    aiocache
+    aiofiles
     aiohttp
     alembic
     anthropic
     apscheduler
     argon2-cffi
+    async-timeout
     authlib
     bcrypt
     beautifulsoup4
     black
     boto3
     chromadb
+    colbert-ai
     docx2txt
     duckduckgo-search
+    einops
     extract-msg
     fake-useragent
     fastapi
@@ -85,24 +88,36 @@ python3.pkgs.buildPythonApplication rec {
     flask
     flask-cors
     fpdf2
+    ftfy
+    google-api-python-client
+    google-auth-httplib2
+    google-auth-oauthlib
     google-generativeai
+    googleapis-common-protos
+    iso-639
     langchain
     langchain-chroma
     langchain-community
+    langdetect
     langfuse
+    ldap3
     markdown
     nltk
     openai
-    opencv4
+    opencv-python-headless
     openpyxl
+    opensearch-py
     pandas
     passlib
     peewee
     peewee-migrate
+    pgvector
     psutil
-    psycopg2
+    psycopg2-binary
     pydub
     pyjwt
+    pymdown-extensions
+    pymilvus
     pymongo
     pymysql
     pypandoc
@@ -114,11 +129,13 @@ python3.pkgs.buildPythonApplication rec {
     python-socketio
     pytube
     pyxlsb
+    qdrant-client
     rank-bm25
     rapidocr-onnxruntime
     redis
     requests
     sentence-transformers
+    soundfile
     tiktoken
     unstructured
     uvicorn
@@ -127,22 +144,28 @@ python3.pkgs.buildPythonApplication rec {
     youtube-transcript-api
   ];
 
-  build-system = with python3.pkgs; [ hatchling ];
+  build-system = with python312.pkgs; [ hatchling ];
 
   pythonImportsCheck = [ "open_webui" ];
 
   makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
 
-  passthru.tests = {
-    inherit (nixosTests) open-webui;
+  passthru = {
+    tests = {
+      inherit (nixosTests) open-webui;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
+    changelog = "https://github.com/open-webui/open-webui/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
-    changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ shivaraj-bh ];
     mainProgram = "open-webui";
+    maintainers = with lib.maintainers; [
+      drupol
+      shivaraj-bh
+    ];
   };
 }

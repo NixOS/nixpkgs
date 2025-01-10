@@ -23,7 +23,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "tabulate" ];
 
-
   build-system = [ poetry-core ];
 
   dependencies = [

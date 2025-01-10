@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "onecache";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-go/3HntSLzzTmHS9CxGPHT6mwXl+6LuWFmkGygGIjqU=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # test fails due to unknown reason on darwin
     "test_lru_and_ttl_refresh"
   ];

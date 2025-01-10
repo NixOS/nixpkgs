@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.13.5";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_trace";
     inherit version;
-    hash = "sha256-aJVMHEriU29cw3RzbQZc6WNwi9NcnZXvNuiz1L8HxqI=";
+    hash = "sha256-wgy+9eUr6MpiiiL+vmW49F/dpoW7Rv/KNvTs6keOxKM=";
   };
 
   build-system = [ setuptools ];

@@ -62,6 +62,7 @@ dotnetCheckHook() {
                 -p:ContinuousIntegrationBuild=true \
                 -p:Deterministic=true \
                 --configuration "$dotnetBuildType" \
+                --no-restore \
                 --no-build \
                 --logger "console;verbosity=normal" \
                 "${runtimeIdFlagsArray[@]}" \

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Brum3ns";
     repo = "firefly";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hhZw7u4NX+BvapUZv0k2Xu/UOdL7Pt8Idjat4aJzvIk=";
   };
 

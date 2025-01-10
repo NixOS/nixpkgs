@@ -1,4 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ptime, tyxml }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ptime,
+  tyxml,
+}:
 
 buildDunePackage (rec {
   pname = "junit";

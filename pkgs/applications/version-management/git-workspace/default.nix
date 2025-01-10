@@ -13,26 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-workspace";
-  version = "1.5.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qAJv4iCw9gkO9yPVQUqla7UWpNkPjPBa4IGQfOyd8k0=";
+    sha256 = "sha256-sS452PCX2G49Q5tnScG+ySkUAhFctGsGZrMvQXL7WkY=";
   };
 
-  cargoHash = "sha256-p+mZN0TXxntT22vp6uBRc6kBTzVN3/Oy7D4v3ihwV8Y=";
+  cargoHash = "sha256-OrAZ4SGhqP+cGYB2gUIh6rON67hBRmgnq1nn9cEUAU0=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = git-workspace; };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Sync personal and work git repositories from multiple providers";

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "tools-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KB+tfuz0ZnoQcMX3H+IZXjcmPZ4x2ecl8ofz1/3r0/8=";
+    tag = "v${version}";
+    hash = "sha256-r7+RYGoq3LJYN1jYfwzb1r3fc/kL+CPd4pmGATFq8Pw=";
   };
 
   nativeBuildInputs = [

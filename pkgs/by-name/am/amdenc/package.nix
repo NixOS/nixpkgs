@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
   ];
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   installPhase = ''
     runHook preInstall

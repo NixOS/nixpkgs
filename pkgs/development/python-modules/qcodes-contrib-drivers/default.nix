@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-/W5oC5iqYifMR3/s7aSQ2yTJNmkemkc0KVxIU0Es3zY=";
   };
 
@@ -50,11 +50,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qcodes_contrib_drivers" ];
 
   disabledTests =
-    lib.optionals (stdenv.isDarwin) [
+    lib.optionals (stdenv.hostPlatform.isDarwin) [
       # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
       "test_stability_diagram_external"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # AssertionError: assert ['outp:trig4:...9999996', ...] == ['outp:trig4:...t 0.266', ...]
       "test_stability_diagram_external"
     ];

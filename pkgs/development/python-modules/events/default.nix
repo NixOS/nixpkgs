@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "events";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GGhIKHbJ31IN0Uoe689X9V/MZvtseE47qx2CmM4MYUs=";
   };
 

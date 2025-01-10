@@ -1,38 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, doxygen
-, graphviz
-, boost
-, cgal_5
-, gdal
-, glew
-, gmp
-, libGL
-, libGLU
-, libSM
-, mpfr
-, proj
-, python3
-, qtxmlpatterns
-, qwt
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doxygen,
+  graphviz,
+  boost,
+  cgal,
+  gdal,
+  glew,
+  gmp,
+  libGL,
+  libGLU,
+  libSM,
+  mpfr,
+  proj,
+  python3,
+  qtxmlpatterns,
+  qwt,
+  wrapQtAppsHook,
 }:
 
 let
-  python = python3.withPackages (ps: with ps; [
-    numpy
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      numpy
+    ]
+  );
   boost' = boost.override {
     enablePython = true;
     inherit python;
   };
-  cgal = cgal_5.override {
+  cgal' = cgal.override {
     boost = boost';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
   version = "2.5";
 
@@ -60,7 +64,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost'
-    cgal
+    cgal'
     gdal
     glew
     gmp
@@ -80,6 +84,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gplates.org";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
+    broken = stdenv.hostPlatform.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
   };
 })

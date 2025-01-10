@@ -60,7 +60,9 @@ buildPythonPackage (
         setuptools
       ]
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ libsForQt5.qtdeclarative ]
-      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+        autoSignDarwinBinariesHook
+      ];
 
     buildInputs =
       [

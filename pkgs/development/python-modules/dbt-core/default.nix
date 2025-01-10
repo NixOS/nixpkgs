@@ -29,28 +29,31 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.6";
+  version = "1.8.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Zd1qPTfJgoGpkrMSt0K1jAdYAxICdru9vIXXqbmZryo=";
+    tag = "v${version}";
+    hash = "sha256-BoCp3aNVR7Bvjda5YLwRAwvZub4sqNJLRoEQ+tePP5g=";
   };
 
   sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
+    "protobuf"
     "agate"
     "click"
+    "dbt-common"
     "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
     "pathspec"
+    "protobuf"
     "urllib3"
   ];
 

@@ -1,6 +1,6 @@
---- a/libgnucash/app-utils/gnc-quotes.cpp	2023-09-23 07:04:21.000000000 +0900
-+++ b/libgnucash/app-utils/gnc-quotes.cpp	2023-09-25 11:58:46.482696433 +0900
-@@ -125,7 +125,6 @@
+--- a/libgnucash/app-utils/gnc-quotes.cpp      2023-09-23 07:04:21.000000000 +0900
++++ b/libgnucash/app-utils/gnc-quotes.cpp      2023-09-25 11:58:46.482696433 +0900
+@@ -129,7 +129,6 @@
  
  class GncFQQuoteSource final : public GncQuoteSource
  {
@@ -8,12 +8,12 @@
      std::string c_fq_wrapper;
      std::string m_version;
      StrVec m_sources;
-@@ -148,13 +147,12 @@
+@@ -152,13 +151,12 @@
  static const std::string empty_string{};
  
  GncFQQuoteSource::GncFQQuoteSource() :
 -c_cmd{bp::search_path("perl")},
- m_version{}, m_sources{}, m_api_key{}
+ m_version{}, m_sources{}, m_env{boost::this_process::environment()}
  {
      char *bindir = gnc_path_get_bindir();
      c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
@@ -23,7 +23,7 @@
      auto [rv, sources, errors] = run_cmd(args, empty_string);
      if (rv)
      {
-@@ -200,7 +198,7 @@
+@@ -192,7 +190,7 @@
  QuoteResult
  GncFQQuoteSource::get_quotes(const std::string& json_str) const
  {
@@ -32,21 +32,12 @@
      return run_cmd(args, json_str);
  }
  
-@@ -218,7 +216,7 @@
+@@ -209,7 +207,7 @@
+ 
          auto input_buf = bp::buffer (json_string);
  	bp::child process;
- 	if (m_api_key.empty())
--	    process = bp::child(c_cmd, args,
-+	    process = bp::child(c_fq_wrapper, args,
- 				bp::std_out > out_buf,
- 				bp::std_err > err_buf,
- 				bp::std_in < input_buf,
-@@ -227,7 +225,7 @@
- #endif
- 				svc);
- 	else
--	    process = bp::child(c_cmd, args,
-+	    process = bp::child(c_fq_wrapper, args,
- 				bp::std_out > out_buf,
- 				bp::std_err > err_buf,
- 				bp::std_in < input_buf,
+-        process = bp::child(c_cmd, args,
++        process = bp::child(c_fq_wrapper, args,
+                             bp::std_out > out_buf,
+                             bp::std_err > err_buf,
+                             bp::std_in < input_buf,

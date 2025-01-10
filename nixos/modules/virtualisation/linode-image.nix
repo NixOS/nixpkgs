@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -12,17 +17,25 @@ let
   '';
 in
 {
-  imports = [ ./linode-config.nix ];
+  imports = [
+    ./linode-config.nix
+    ./disk-size-option.nix
+    ../image/file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "linodeImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
-    virtualisation.linodeImage.diskSize = mkOption {
-      type = with types; either (enum (singleton "auto")) ints.positive;
-      default = "auto";
-      example = 1536;
-      description = ''
-        Size of disk image in MB.
-      '';
-    };
 
     virtualisation.linodeImage.configFile = mkOption {
       type = with types; nullOr str;
@@ -45,19 +58,23 @@ in
   };
 
   config = {
+    system.nixos.tags = [ "linode" ];
+    image.extension = "img.gz";
+    system.build.image = config.system.build.linodeImage;
     system.build.linodeImage = import ../../lib/make-disk-image.nix {
       name = "linode-image";
+      baseName = config.image.baseName;
       # NOTE: Linode specifically requires images to be `gzip`-ed prior to upload
       # See: https://www.linode.com/docs/products/tools/images/guides/upload-an-image/#requirements-and-considerations
       postVM = ''
         ${pkgs.gzip}/bin/gzip -${toString cfg.compressionLevel} -c -- $diskImage > \
-        $out/nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img.gz
+        $out/${config.image.fileName}
         rm $diskImage
       '';
       format = "raw";
       partitionTableType = "none";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
-      inherit (cfg) diskSize;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
   };

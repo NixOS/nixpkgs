@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     ++
     # There are no docker images available for the aarch64 architecutre
     # which are required for tests.
-    lib.optionals stdenv.isAarch64 [
+    lib.optionals stdenv.hostPlatform.isAarch64 [
       "test_arch"
       "test_restricted_arch"
     ];

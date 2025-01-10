@@ -7,13 +7,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,14 +22,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vincegio";
     repo = "airthings-ble";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pk/S0ufzirH4Xny0+nFVH366d0imqB2K6NvkGP7jAU4=";
+    tag = version;
+    hash = "sha256-m2jsXLrj2yS2Wi2dSwyxBv/nXmU738gd5iJ1JVfakUg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -38,7 +34,10 @@ buildPythonPackage rec {
     bleak-retry-connector
   ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "airthings_ble" ];
 

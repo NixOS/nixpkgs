@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, glib
-, gtk3
-, nemo
-, file-roller
-, cinnamon-translations
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  glib,
+  gtk3,
+  nemo,
+  file-roller,
+  cinnamon-translations,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nemo-fileroller";
-  version = "6.2.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = version;
-    hash = "sha256-qghGgd+OWYiXvcGUfgiQT6rR4mJPAOfOtYB3lWLg4iA=";
+    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
   };
 
   sourceRoot = "${src.name}/nemo-fileroller";

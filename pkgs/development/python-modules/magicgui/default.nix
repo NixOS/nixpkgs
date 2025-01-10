@@ -1,37 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  pytestCheckHook,
-  typing-extensions,
-  qtpy,
-  pyside2,
-  psygnal,
   docstring-parser,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   napari, # a reverse-dependency, for tests
+  psygnal,
+  pyside2,
+  pytestCheckHook,
+  pythonOlder,
+  superqt,
+  typing-extensions,
 }:
+
 buildPythonPackage rec {
   pname = "magicgui";
-  version = "0.5.1";
+  version = "0.10.0";
+  pyproject = true;
 
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "napari";
+    owner = "pyapp-kit";
     repo = "magicgui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fVfBQaaT8/lUGqZRXjOPgvkC01Izb8Sxqn7RCqnW9bo=";
+    tag = "v${version}";
+    hash = "sha256-taPnP9uB1y9hNqG/3MF3ZTc0q94+8WUx4E6+TQsJnIU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     typing-extensions
-    qtpy
+    superqt
     pyside2
     psygnal
     docstring-parser
   ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = false; # Reports "Fatal Python error"
@@ -43,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Build GUIs from python functions, using magic.  (napari/magicgui)";
     homepage = "https://github.com/napari/magicgui";
+    changelog = "https://github.com/pyapp-kit/magicgui/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

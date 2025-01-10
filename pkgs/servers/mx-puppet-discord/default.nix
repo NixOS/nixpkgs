@@ -44,10 +44,10 @@ in myNodePackages.package.override {
     description = "Discord puppeting bridge for matrix";
     license = licenses.asl20;
     homepage = "https://gitlab.com/mx-puppet/discord/mx-puppet-discord";
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = [];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "mx-puppet-discord";
   };
 }

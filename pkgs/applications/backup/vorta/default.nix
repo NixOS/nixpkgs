@@ -1,24 +1,25 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
-, borgbackup
-, qtbase
-, qtwayland
-, stdenv
-, makeFontsConf
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  borgbackup,
+  qtbase,
+  qtwayland,
+  stdenv,
+  makeFontsConf,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.9.1";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
-    rev = "v${version}";
-    hash = "sha256-wGlnldS2p92NAYAyRPqKjSneIlbdsOiJ0N42n/mMGFI=";
+    tag = "v${version}";
+    hash = "sha256-VhM782mFWITA0VlKw0sBIu/UxUqlFLgq5XVdCpQggCw=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
@@ -62,28 +63,34 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  preCheck = let
-    fontsConf = makeFontsConf {
-      fontDirectories = [ ];
-    };
-  in ''
-    export HOME=$(mktemp -d)
-    export FONTCONFIG_FILE=${fontsConf};
-    # For tests/test_misc.py::test_autostart
-    mkdir -p $HOME/.config/autostart
-    export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
-    export QT_QPA_PLATFORM=offscreen
-  '';
+  preCheck =
+    let
+      fontsConf = makeFontsConf {
+        fontDirectories = [ ];
+      };
+    in
+    ''
+      export HOME=$(mktemp -d)
+      export FONTCONFIG_FILE=${fontsConf};
+      # For tests/test_misc.py::test_autostart
+      mkdir -p $HOME/.config/autostart
+      export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
+      export QT_QPA_PLATFORM=offscreen
+    '';
 
-  disabledTestPaths = [
-    # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)
-    "tests/test_excludes.py"
-    "tests/integration"
-    "tests/unit"
-  ];
+  disabledTestPaths =
+    [
+      # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)    "tests/test_excludes.py"
+      "tests/integration"
+      "tests/unit"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Darwin-only test
+      "tests/network_manager/test_darwin.py"
+    ];
 
   meta = with lib; {
-    changelog = "https://github.com/borgbase/vorta/releases/tag/${src.rev}";
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v${version}";
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
     license = licenses.gpl3Only;

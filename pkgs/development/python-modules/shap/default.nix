@@ -13,7 +13,6 @@
   matplotlib,
   numba,
   numpy,
-  oldest-supported-numpy,
   opencv4,
   pandas,
   pyspark,
@@ -31,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.45.1";
+  version = "0.46.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,17 +38,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-REMAubT9WRe0exfhO4UCLt3FFQHq4HApHnI6i2F/V1o=";
+    tag = "v${version}";
+    hash = "sha256-qW36/Xw5oaYKmaMfE5euzkED9CKkjl2O55aO0OpCkfI=";
   };
 
-  nativeBuildInputs = [
-    oldest-supported-numpy
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0" "numpy"
+  '';
+
+  build-system = [
+    numpy
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     numba
     numpy
@@ -60,7 +64,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     plots = [
       matplotlib
       ipython

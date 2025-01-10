@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 let
   version = "1.9.0";
@@ -13,7 +14,7 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "fangfrisch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-B2fVXVYzrtWMh/WjgFBOqrq8Jt+jqudbtpY/w4rJG08=";
   };
 

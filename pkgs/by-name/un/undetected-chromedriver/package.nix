@@ -6,10 +6,9 @@
   python3,
 
   testers,
-  undetected-chromedriver,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "undetected-chromedriver";
   inherit (chromedriver) version;
 
@@ -34,11 +33,11 @@ stdenv.mkDerivation {
     install -D -m 0555 chromedriver $out/bin/undetected-chromedriver
   '';
 
-  passthru.tests.version = testers.testVersion { package = undetected-chromedriver; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = chromedriver.meta // {
     description = "Custom Selenium ChromeDriver that passes all bot mitigation systems";
     mainProgram = "undetected-chromedriver";
     maintainers = with lib.maintainers; [ paveloom ];
   };
-}
+})

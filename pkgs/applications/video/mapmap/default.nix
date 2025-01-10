@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, qttools
-, qtmultimedia
-, liblo
-, gst_all_1
-, qmake
-, pkg-config
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qttools,
+  qtmultimedia,
+  liblo,
+  gst_all_1,
+  qmake,
+  pkg-config,
+  wrapQtAppsHook,
 }:
 
 with stdenv;
@@ -71,7 +73,7 @@ mkDerivation rec {
     description = "Open source video mapping software";
     homepage = "https://github.com/mapmapteam/mapmap";
     license = licenses.gpl3;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "mapmap";
   };

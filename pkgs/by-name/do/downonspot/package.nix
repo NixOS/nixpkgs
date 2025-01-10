@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, makeWrapper
-, alsa-lib
-, lame
-, openssl
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  makeWrapper,
+  alsa-lib,
+  lame,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oSumAtrIX";
     repo = "DownOnSpot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h/BKVFzvPq9FhX4wZzlIzoegK8nPEt+mR7oKpRC5eV0=";
   };
 

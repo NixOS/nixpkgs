@@ -1,76 +1,77 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, certifi
-, urllib3
+  # dependencies
+  certifi,
+  urllib3,
 
-# optional-dependencies
-, aiohttp
-, anthropic
-, asyncpg
-, apache-beam
-, bottle
-, celery
-, celery-redbeat
-, chalice
-, clickhouse-driver
-, django
-, falcon
-, fastapi
-, flask
-, blinker
-, markupsafe
-, grpcio
-, protobuf
-, httpx
-, huey
-, huggingface-hub
-, langchain
-, loguru
-, openai
-, tiktoken
-, pure-eval
-, executing
-, asttokens
-, pymongo
-, pyspark
-, quart
-, rq
-, sanic
-, sqlalchemy
-, starlette
-, tornado
+  # optional-dependencies
+  aiohttp,
+  anthropic,
+  asyncpg,
+  apache-beam,
+  bottle,
+  celery,
+  celery-redbeat,
+  chalice,
+  clickhouse-driver,
+  django,
+  falcon,
+  fastapi,
+  flask,
+  blinker,
+  markupsafe,
+  grpcio,
+  protobuf,
+  httpx,
+  huey,
+  huggingface-hub,
+  langchain,
+  loguru,
+  openai,
+  tiktoken,
+  pure-eval,
+  executing,
+  asttokens,
+  pymongo,
+  pyspark,
+  quart,
+  rq,
+  sanic,
+  sqlalchemy,
+  starlette,
+  tornado,
 
-# checks
-, ipdb
-, jsonschema
-, pip
-, pyrsistent
-, pysocks
-, pytest-asyncio
-, pytestCheckHook
-, pytest-forked
-, pytest-localserver
-, pytest-xdist
-, pytest-watch
-, responses
+  # checks
+  ipdb,
+  jsonschema,
+  pip,
+  pyrsistent,
+  pysocks,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-forked,
+  pytest-localserver,
+  pytest-xdist,
+  pytest-watch,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VrrzM81O3tG2GveP8Eq9kxVPSok7JIj3XjGOauGIlxY=";
+    tag = version;
+    hash = "sha256-jrApaDZ+R/bMOqOuQZguP9ySt6nKJeJYNpJTNTxq3no=";
   };
 
   postPatch = ''

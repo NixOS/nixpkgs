@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-tailscale";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-47n/BjTHkw0rT8xTHGZOMNwZTy0nDuoHsTJrRyr8qjc=";
   };
 

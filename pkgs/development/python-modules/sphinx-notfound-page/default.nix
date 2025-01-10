@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonImportsCheckHook,
   pythonOlder,
   # documentation build dependencies
   sphinxHook,
@@ -32,13 +31,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-notfound-page";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tG71UuYbdlWNgq6Y5xRH3aWc9/eTr/RlsRNWSUjrbBE=";
   };
 
   nativeBuildInputs = [
     flit-core
-    pythonImportsCheckHook
     sphinxHook
     sphinx-prompt
     sphinx-rtd-theme

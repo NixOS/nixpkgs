@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     typescript
     fixup-yarn-lock
     makeWrapper
-  ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   # disable code signing on macos
   # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CSC_IDENTITY_AUTO_DISCOVERY=false
   '';
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p "$out/share/mqtt-explorer"/{app,icons/hicolor}
 
       cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/share/mqtt-explorer/app"
@@ -122,13 +122,13 @@ stdenv.mkDerivation rec {
 
       makeWrapper '${electron}/bin/electron' "$out/bin/mqtt-explorer" \
         --add-flags "$out/share/mqtt-explorer/app/resources/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
         --set-default ELECTRON_IS_DEV 0 \
         --inherit-argv0
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
       mv "build/mac/MQTT Explorer.app" $out/Applications
 

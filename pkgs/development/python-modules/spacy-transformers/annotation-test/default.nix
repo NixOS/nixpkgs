@@ -17,7 +17,6 @@ stdenv.mkDerivation {
 
   dontConfigure = true;
   dontBuild = true;
-  doCheck = true;
 
   nativeCheckInputs = [
     pytest

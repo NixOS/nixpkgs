@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -46,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gsettings = lib.getExe' glib "gsettings";
       dbusLaunch = lib.getExe' dbus "dbus-launch";
       bash = lib.getExe bash;

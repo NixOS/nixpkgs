@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, accountsservice
-, dbus
-, desktop-file-utils
-, fwupd
-, gdk-pixbuf
-, geoclue2
-, gexiv2
-, glib
-, gobject-introspection
-, gtk3
-, granite
-, libgee
-, packagekit
-, systemd
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  accountsservice,
+  dbus,
+  desktop-file-utils,
+  fwupd,
+  gdk-pixbuf,
+  geoclue2,
+  gexiv2,
+  glib,
+  gobject-introspection,
+  gtk3,
+  granite,
+  libgee,
+  packagekit,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "8.1.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
-    sha256 = "sha256-w5dRQPRsM52wqusTLLPmKmVwoBFS+pHOokfDmCDxVWM=";
+    sha256 = "sha256-HOmV3RBVn8xah/Bzt7OOXVE145uwn1SEFzvcVSLMHtE=";
   };
 
   nativeBuildInputs = [

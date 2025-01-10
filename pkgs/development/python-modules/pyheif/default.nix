@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "carsales";
     repo = "pyheif";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-7De8ekDceSkUcOgK7ppKad5W5qE0yxdS4kbgYVjxTGg=";
   };
 

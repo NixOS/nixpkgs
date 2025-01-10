@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "channels";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "channels";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JUU1N+Sc7t//0vEdkgQy20iVKgHr4Ys+XnLgqPMcKM8=";
+    tag = version;
+    hash = "sha256-JkmS+QVF1MTdLID+c686Fd8L3kA+AIr7sLCaAoABh+s=";
   };
 
   build-system = [ setuptools ];

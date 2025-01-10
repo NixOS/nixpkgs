@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = "mqttui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JxaXiQj/dGSUhqyDtNij3JKT5NtEkyMta6rLGHmcLrU=";
   };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
     description = "Terminal client for MQTT";

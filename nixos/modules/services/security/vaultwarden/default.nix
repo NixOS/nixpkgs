@@ -1,41 +1,72 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.vaultwarden;
   user = config.users.users.vaultwarden.name;
   group = config.users.groups.vaultwarden.name;
 
-  StateDirectory = if lib.versionOlder config.system.stateVersion "24.11" then "bitwarden_rs" else "vaultwarden";
+  StateDirectory =
+    if lib.versionOlder config.system.stateVersion "24.11" then "bitwarden_rs" else "vaultwarden";
 
   dataDir = "/var/lib/${StateDirectory}";
 
   # Convert name from camel case (e.g. disable2FARemember) to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
-  nameToEnvVar = name:
+  nameToEnvVar =
+    name:
     let
       parts = builtins.split "([A-Z0-9]+)" name;
-      partsToEnvVar = parts: lib.foldl' (key: x: let last = lib.stringLength key - 1; in
-        if lib.isList x then key + lib.optionalString (key != "" && lib.substring last 1 key != "_") "_" + lib.head x
-        else if key != "" && lib.elem (lib.substring 0 1 x) lib.lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
-          lib.substring 0 last key + lib.optionalString (lib.substring (last - 1) 1 key != "_") "_" + lib.substring last 1 key + lib.toUpper x
-        else key + lib.toUpper x) "" parts;
-    in if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
+      partsToEnvVar =
+        parts:
+        lib.foldl' (
+          key: x:
+          let
+            last = lib.stringLength key - 1;
+          in
+          if lib.isList x then
+            key + lib.optionalString (key != "" && lib.substring last 1 key != "_") "_" + lib.head x
+          else if key != "" && lib.elem (lib.substring 0 1 x) lib.lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
+            lib.substring 0 last key
+            + lib.optionalString (lib.substring (last - 1) 1 key != "_") "_"
+            + lib.substring last 1 key
+            + lib.toUpper x
+          else
+            key + lib.toUpper x
+        ) "" parts;
+    in
+    if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
 
   # Due to the different naming schemes allowed for config keys,
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
-        ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
-      }) cfg.config;
-    in { DATA_FOLDER = dataDir; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+      configEnv = lib.concatMapAttrs (
+        name: value:
+        lib.optionalAttrs (value != null) {
+          ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
+        }
+      ) cfg.config;
+    in
+    {
+      DATA_FOLDER = dataDir;
+    }
+    // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
-    } // configEnv;
+    }
+    // configEnv;
 
-  configFile = pkgs.writeText "vaultwarden.env" (lib.concatStrings (lib.mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
+  configFile = pkgs.writeText "vaultwarden.env" (
+    lib.concatStrings (lib.mapAttrsToList (name: value: "${name}=${value}\n") configEnv)
+  );
 
   vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
-in {
+in
+{
   imports = [
     (lib.mkRenamedOptionModule [ "services" "bitwarden_rs" ] [ "services" "vaultwarden" ])
   ];
@@ -44,7 +75,11 @@ in {
     enable = lib.mkEnableOption "vaultwarden";
 
     dbBackend = lib.mkOption {
-      type = lib.types.enum [ "sqlite" "mysql" "postgresql" ];
+      type = lib.types.enum [
+        "sqlite"
+        "mysql"
+        "postgresql"
+      ];
       default = "sqlite";
       description = ''
         Which database backend vaultwarden will be using.
@@ -61,7 +96,15 @@ in {
     };
 
     config = lib.mkOption {
-      type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (oneOf [
+            bool
+            int
+            str
+          ])
+        );
       default = {
         ROCKET_ADDRESS = "::1"; # default to localhost
         ROCKET_PORT = 8222;
@@ -269,6 +312,9 @@ in {
   meta = {
     # uses attributes of the linked package
     buildDocsInSandbox = false;
-    maintainers = with lib.maintainers; [ dotlambda SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      SuperSandro2000
+    ];
   };
 }

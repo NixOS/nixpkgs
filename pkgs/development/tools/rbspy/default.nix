@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, ruby
-, which
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  ruby,
+  which,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.25.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6J+/clldoMSTcZXM4N8THZ3fk2NE9VQ2XyDIzVej6OY=";
+    tag = "v${version}";
+    hash = "sha256-6tCTrplzoiimKvXEIXd2gUOXzcZ/eQ22npBqbVv0Nv0=";
   };
 
-  cargoHash = "sha256-u42FDaSpunkj5u1zYtk27tKunW4ZzsNgYCmrSnuAe5k=";
+  cargoHash = "sha256-J+3v7O38+MhCoq1UKf0Sqaomw/SSu+JK3sWWv9rB6FI=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage rec {
       --replace /usr/bin/which '${which}/bin/which'
     substituteInPlace src/sampler/mod.rs \
       --replace /usr/bin/which '${which}/bin/which'
+    substituteInPlace src/core/ruby_spy.rs \
+      --replace /usr/bin/ruby '${ruby}/bin/ruby'
   '';
 
   checkFlags = [
@@ -44,10 +47,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_sample_subprocesses"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
+
+  nativeCheckInputs = [
     ruby
     which
-  ] ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+  ];
 
   passthru.updateScript = nix-update-script { };
 

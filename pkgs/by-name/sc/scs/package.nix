@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cvxgrp";
     repo = "scs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Y28LrYUuDaXPO8sce1pJIfG3A03rw7BumVgxCIKRn+U=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace "gcc" "cc"
   '';
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     blas

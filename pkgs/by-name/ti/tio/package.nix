@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tio";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/eXy1roYmeZaQlY4PjBchwRR7JwyTvVIqDmmf6upJqA=";
+    hash = "sha256-8BeTC3rlDK6xmfguNlKQg48L03knU7sb1t8F1oLIi8s=";
   };
 
   strictDeps = true;

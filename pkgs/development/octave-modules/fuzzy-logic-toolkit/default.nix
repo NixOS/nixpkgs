@@ -1,6 +1,7 @@
-{ buildOctavePackage
-, lib
-, fetchFromGitHub
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildOctavePackage rec {
@@ -10,7 +11,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "lmarkowsky";
     repo = "fuzzy-logic-toolkit";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-lnYzX4rq3j7rrbD8m0EnrWpbMJD6tqtMVCYu4mlLFCM=";
   };
 

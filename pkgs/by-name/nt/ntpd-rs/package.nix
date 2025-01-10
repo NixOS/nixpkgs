@@ -5,7 +5,6 @@
   fetchFromGitHub,
   ntpd-rs,
   installShellFiles,
-  darwin,
   pandoc,
   nixosTests,
   nix-update-script,
@@ -14,18 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.2.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
-    rev = "v${version}";
-    hash = "sha256-Yf1cPv4SpmbL3o9uf3fJ/n0/ZW0wdhW/bbe2hRxDdyY=";
+    tag = "v${version}";
+    hash = "sha256-usLtf4qwKkn+lEYSQWCa1ap9h/52YYMVFDkpFJVD00k=";
   };
 
-  cargoHash = "sha256-H3pK/MSv7/YDEtnW2mi2xt5x2t3ugCc4IN43wohM4Ig=";
+  cargoHash = "sha256-ZB18YbCdJpuu7qTXdHgs2IgDCoc3Hs/aDn4dzXmKI8c=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Security ];
   nativeBuildInputs = [
     pandoc
     installShellFiles
@@ -60,7 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
-      nixos = lib.optionalAttrs stdenv.isLinux nixosTests.ntpd-rs;
+      nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.ntpd-rs;
       version = testers.testVersion {
         package = ntpd-rs;
         inherit version;
@@ -74,7 +72,6 @@ rustPlatform.buildRustPackage rec {
     description = "Full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
     changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
-    mainProgram = "ntp-ctl";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -83,7 +80,8 @@ rustPlatform.buildRustPackage rec {
       fpletz
       getchoo
     ];
+    mainProgram = "ntp-ctl";
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

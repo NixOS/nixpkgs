@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, groff
-, makeWrapper
-, ncurses
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  groff,
+  makeWrapper,
+  ncurses,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
     # never built on Hydra: https://hydra.nixos.org/job/nixpkgs/trunk/jove.x86_64-darwin
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

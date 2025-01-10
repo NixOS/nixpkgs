@@ -1,30 +1,62 @@
-{ lib, rustPlatform, fetchgit
-, pkg-config, protobuf, python3, wayland-scanner
-, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
-, pkgsCross
+{
+  lib,
+  rustPlatform,
+  fetchgit,
+  fetchpatch,
+  pkg-config,
+  protobuf,
+  python3,
+  wayland-scanner,
+  libcap,
+  libdrm,
+  libepoxy,
+  minijail,
+  virglrenderer,
+  wayland,
+  wayland-protocols,
+  pkgsCross,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "127.0";
+  version = "130.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "8fdfed12c960850e9d5e809cfd2a40ce3bdd98d6";
-    hash = "sha256-W0zLYM91xoq9vURgYs2noc9F9RtvoXztIIHMx0HVK5g=";
+    rev = "9d42f918373f962b7d035ff52a1629e184cb496e";
+    hash = "sha256-h8nAZ4kTidblKNvugEEZUorBthjGi0FmImcBwYy4EHQ=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "cross-domain.patch";
+      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/60053cdf0b360a03084292b39120365fff65d410%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-U5eOxuAtVLjJ+8h16lmbJYNxsP/AOEv/1ec4WlUxP2E=";
+    })
+  ];
+
   separateDebugInfo = true;
 
-  cargoHash = "sha256-nEJBRlwMqTahaIC9WdtoxGLVfc+U9sJ0ilzLhavcbD0=";
+  cargoHash = "sha256-FvDJhmrSBShxRTpc23C0jEk9YRbtGyYgC1Z8ekxNnb8=";
 
   nativeBuildInputs = [
-    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
+    pkg-config
+    protobuf
+    python3
+    rustPlatform.bindgenHook
+    wayland-scanner
   ];
 
   buildInputs = [
-    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    libcap
+    libdrm
+    libepoxy
+    minijail
+    virglrenderer
+    wayland
+    wayland-protocols
   ];
 
   preConfigure = ''
@@ -49,6 +81,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "crosvm";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.bsd3;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

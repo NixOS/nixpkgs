@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "sendgrid-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wcQLdU80pcyEplzL8lnehtToqYiTrX1n5TjmK5zturE=";
   };
 

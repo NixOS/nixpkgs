@@ -1,41 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gtest
-, withDocs ? true
-, doxygen
-, graphviz-nox
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  withDocs ? true,
+  doxygen,
+  graphviz-nox,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R+StDJVqT0ktbr4cQBwEAPmju+pmBvxonezsIsPwmgc=";
+    hash = "sha256-kraflUsnsUBCwCN8vEVaPExSBF0cMdser2UwXpAGhlw=";
   };
 
   patches = [
     ./0001-Do-not-require-wget-and-unzip.patch
   ];
 
-  cmakeFlags = lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
-  # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)
-  ++ lib.optional (finalAttrs.finalPackage.doCheck) "-DBUILD_TESTING=ON"
-  ++ lib.optional withDocs "-DBUILD_DOCUMENTATION=ON";
+  cmakeFlags =
+    lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
+    # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)
+    ++ lib.optional (finalAttrs.finalPackage.doCheck) "-DBUILD_TESTING=ON"
+    ++ lib.optional withDocs "-DBUILD_DOCUMENTATION=ON";
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals withDocs [
-    doxygen
-    graphviz-nox
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals withDocs [
+      doxygen
+      graphviz-nox
+    ];
 
   doCheck = true;
 

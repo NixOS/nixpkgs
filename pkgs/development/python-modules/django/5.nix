@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.1";
+  version = "5.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-4w5MSu3xdF9Pl0iRcD6bOgUF0tLMiZdCWt3JKsx/Rqc=";
+    hash = "sha256-rE/aErydql5UjS/IiLpDtA3YOsAa+0uRyo40RsjCGLc=";
   };
 
   patches =
@@ -114,7 +114,10 @@ buildPythonPackage rec {
     tzdata
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
+    # pywatchman depends on folly which does not support 32bits
+    && !stdenv.hostPlatform.is32bit;
 
   preCheck = ''
     # make sure the installed library gets imported

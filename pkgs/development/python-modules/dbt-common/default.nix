@@ -1,42 +1,60 @@
 {
   lib,
-  agate,
+  fetchFromGitHub,
   buildPythonPackage,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  agate,
   colorama,
   deepdiff,
-  fetchPypi,
-  hatchling,
   isodate,
   jinja2,
   jsonschema,
   mashumaro,
   pathspec,
   protobuf,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  pytest-mock,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.8.0";
+  version = "1.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "dbt_common";
-    inherit version;
-    hash = "sha256-ehZ+a3zznnWMY9NJx9LfRtkV1vHiIH0HEhsYWfMbmb4=";
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-common";
+    # Unfortunately, upstream doesn't tag commits on GitHub, and the pypi source
+    # doesn't include tests. TODO: Write an update script that will detect the
+    # version from `dbt_common/__about__.py`.
+    rev = "5a401a9e8dd46e4582ac4edd2883e34714e77530";
+    hash = "sha256-SIMg6ewnE6kY+drqcPlYrxt1XlWBurZU62FI/QnHAHY=";
   };
+
+  patches = [
+    # https://github.com/dbt-labs/dbt-common/pull/211
+    ./protobuf_5.patch
+  ];
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "agate" ];
+  pythonRelaxDeps = [
+    "agate"
+    "deepdiff"
+  ];
 
   dependencies = [
     agate
@@ -53,13 +71,17 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ mashumaro.optional-dependencies.msgpack;
 
-  # Upstream stopped to tag the source fo rnow
-  doCheck = false;
-
   nativeCheckInputs = [
-    pytest-mock
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # Assertion errors (TODO: Notify upstream)
+    "test_create_print_json"
+    "test_events"
+    "test_extra_dict_on_event"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];

@@ -45,7 +45,7 @@ buildPythonPackage rec {
     export LOCAL_PATH="$PWD/.storage"
   '';
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # very flaky, sandbox issues?
     # libcloud.storage.types.ContainerDoesNotExistError
     # sqlite3.OperationalError: attempt to write a readonly database

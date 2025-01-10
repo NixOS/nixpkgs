@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome-shell, gettext, jq, intltool }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  glib,
+  gnome-shell,
+  gettext,
+  jq,
+  intltool,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
@@ -19,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    glib gettext jq intltool
+    glib
+    gettext
+    jq
+    intltool
   ];
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];

@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   setuptools,
   ipywidgets,
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxcalc";
     repo = "pyzx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4yc4P2v2L/F/A1A9z41ow2KA0aUA+3SJyC+wyMWzhwM=";
   };
 
@@ -39,7 +38,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonRelaxDeps = [ "ipywidgets" ];
+  pythonRelaxDeps = [
+    "ipywidgets"
+    "lark"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   disabledTestPaths = [

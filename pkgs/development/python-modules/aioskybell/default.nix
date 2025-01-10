@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "aioskybell";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5F0B5z0pJLKJPzKIowE07vEgmNXnDVEeGFbPGnJ6H9I=";
   };
 
@@ -45,6 +45,13 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-freezegun
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # aiohttp compat issues
+    "test_get_devices"
+    "test_errors"
+    "test_async_change_setting"
   ];
 
   pythonImportsCheck = [ "aioskybell" ];

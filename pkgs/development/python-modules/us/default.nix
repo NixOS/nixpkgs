@@ -6,27 +6,26 @@
   pytestCheckHook,
   pythonOlder,
   pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "us";
-  version = "3.1.1";
-  format = "setuptools";
+  version = "3.2.0";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40eWPo0kocp0N69EP6aFkXdoR7UMhlDY7w61NILnBcI=";
+    hash = "sha256-yyI+hTk9zFFx6tDdISutxH+WZ7I3AP6j5+pfMQ1UUzg=";
   };
 
-  postPatch = ''
-    # Upstream spins jellyfish
-    substituteInPlace setup.py \
-      --replace "jellyfish==" "jellyfish>="
-  '';
-
-  propagatedBuildInputs = [ jellyfish ];
+  propagatedBuildInputs = [
+    jellyfish
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -35,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "us" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for easily working with US and state metadata";
     mainProgram = "states";
     longDescription = ''
@@ -45,7 +44,7 @@ buildPythonPackage rec {
       census, congressional districts, counties, and census tracts.
     '';
     homepage = "https://github.com/unitedstates/python-us/";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

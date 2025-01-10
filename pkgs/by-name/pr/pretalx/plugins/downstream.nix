@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pretalx-downstream";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-downstream";
     rev = "v${version}";
-    hash = "sha256-xpacfU655vg6g1rD4uteeizj+Bll4fgI0AEddaGiCLE=";
+    hash = "sha256-Q9519jNKQUeNCHg3ivjYyQm1ePMxp/bhtcJAselQiiM=";
   };
 
   build-system = [ setuptools ];

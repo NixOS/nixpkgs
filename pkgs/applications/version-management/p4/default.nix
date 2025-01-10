@@ -1,15 +1,16 @@
-{ stdenv
-, fetchurl
-, fetchzip
-, lib
-, emptyDirectory
-, linkFarm
-, jam
-, openssl
-, CoreServices
-, Foundation
-, Security
-, testers
+{
+  stdenv,
+  fetchurl,
+  fetchzip,
+  lib,
+  emptyDirectory,
+  linkFarm,
+  jam,
+  openssl,
+  CoreServices,
+  Foundation,
+  Security,
+  testers,
 }:
 
 let
@@ -28,7 +29,10 @@ let
       # We only want to keep the contrib directory as the other files conflict
       # with p4's own zlib files. (For the same reason, we can't use the
       # cone-based Git sparse checkout, either.)
-      { name = "contrib"; path = "${src}/contrib"; }
+      {
+        name = "contrib";
+        path = "${src}/contrib";
+      }
     ];
 in
 stdenv.mkDerivation (finalAttrs: rec {
@@ -41,13 +45,27 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
   };
 
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+    # same error as https://github.com/pocoproject/poco/issues/4586
+    substituteInPlace zlib/zutil.h \
+      --replace-fail '#if defined(MACOS) || defined(TARGET_OS_MAC)' '#if defined(MACOS)'
+  '';
+
   nativeBuildInputs = [ jam ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreServices
+    Foundation
+    Security
+  ];
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   jamFlags =
     [
@@ -57,29 +75,44 @@ stdenv.mkDerivation (finalAttrs: rec {
       "-sSSLINCDIR=${lib.getDev opensslStatic}/include"
       "-sSSLLIBDIR=${lib.getLib opensslStatic}/lib"
     ]
-    ++ lib.optionals stdenv.cc.isClang [ "-sOSCOMP=clang" "-sCLANGVER=${stdenv.cc.cc.version}" ]
-    ++ lib.optionals stdenv.cc.isGNU [ "-sOSCOMP=gcc" "-sGCCVER=${stdenv.cc.cc.version}" ]
-    ++ lib.optionals stdenv.isLinux [ "-sOSVER=26" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.cc.isClang [
+      "-sOSCOMP=clang"
+      "-sCLANGVER=${stdenv.cc.cc.version}"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-sOSCOMP=gcc"
+      "-sGCCVER=${stdenv.cc.cc.version}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-sOSVER=1013"
-      "-sMACOSX_SDK=${emptyDirectory}"
       "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
   CCFLAGS =
     # The file contrib/optimizations/slide_hash_neon.h is missing from the
     # upstream distribution. It comes from the Android/Chromium sources.
-    lib.optionals stdenv.isAarch64 [ "-I${androidZlibContrib}" ];
+    lib.optionals stdenv.hostPlatform.isAarch64 [ "-I${androidZlibContrib}" ];
 
   "C++FLAGS" =
     # Avoid a compilation error that only occurs for 4-byte longs.
-    lib.optionals stdenv.isi686 [ "-Wno-narrowing" ]
+    lib.optionals stdenv.hostPlatform.isi686 [ "-Wno-narrowing" ]
     # See the "Header dependency changes" section of
     # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
     # information on why we need to include these.
-    ++ lib.optionals
-      (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
-      [ "-include" "limits" "-include" "thread" ];
+    ++
+      lib.optionals
+        (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
+        [
+          "-include"
+          "limits"
+          "-include"
+          "thread"
+        ];
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export MACOSX_SDK=$SDKROOT
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -108,6 +141,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.bsd2;
     mainProgram = "p4";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ corngood impl ];
+    maintainers = with maintainers; [
+      corngood
+      impl
+    ];
   };
 })

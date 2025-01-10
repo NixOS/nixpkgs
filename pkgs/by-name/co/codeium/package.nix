@@ -1,37 +1,48 @@
-{ stdenv, lib, fetchurl, gzip, autoPatchelfHook }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gzip,
+  autoPatchelfHook,
+  versionCheckHook,
+}:
 let
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  plat = {
-    x86_64-linux = "linux_x64";
-    aarch64-linux = "linux_arm";
-    x86_64-darwin = "macos_x64";
-    aarch64-darwin = "macos_arm";
+  plat =
+    {
+      x86_64-linux = "linux_x64";
+      aarch64-linux = "linux_arm";
+      x86_64-darwin = "macos_x64";
+      aarch64-darwin = "macos_arm";
 
-  }.${system} or throwSystem;
+    }
+    .${system} or throwSystem;
 
-  hash = {
-    x86_64-linux = "sha256-xOP9NOcuBRrX998jF4dTpUtS9jPux4jHu057sPPjGWA=";
-    aarch64-linux = "sha256-RVy/k1nUbT0MGIuSnEJZqGM+kQhBEUSD/D2uk5ZmYzs=";
-    x86_64-darwin = "sha256-MtUAO6xvSDcLokjmW1CAOC8+3pTMFy1yteKmb/WUpGs=";
-    aarch64-darwin = "sha256-OZf74uvuka4S8JKYcGM1f8T2RrdTxelLMmx74Ee83ek=";
-  }.${system} or throwSystem;
+  hash =
+    {
+      x86_64-linux = "sha256-/VkobDCai9+Lac0TCzm9gg/pNFDA1T2OJiad3qdz/2o=";
+      aarch64-linux = "sha256-glJRQIFSs5D7b3BVblaL0o8Rndh3QuCup45AfRWymG0=";
+      x86_64-darwin = "sha256-TBCgbaJ5Yyp+I8VCljYf3tlNnVaLkfwusJMlfY+Rggo=";
+      aarch64-darwin = "sha256-MfJ/zIfmKJN4Fe6a50NwAqvetxB/W+BriQ+5mEIhWMg=";
+    }
+    .${system} or throwSystem;
 
   bin = "$out/bin/codeium_language_server";
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "codeium";
-  version = "1.16.11";
+  version = "1.30.18";
   src = fetchurl {
     name = "${finalAttrs.pname}-${finalAttrs.version}.gz";
     url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${finalAttrs.version}/language_server_${plat}.gz";
     inherit hash;
   };
 
-  nativeBuildInputs = [ gzip ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ gzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -44,6 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x ${bin}
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/codeium_language_server";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
 
@@ -62,8 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = homepage;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ anpin ];
-    mainProgram = "codeium";
-    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "codeium_language_server";
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

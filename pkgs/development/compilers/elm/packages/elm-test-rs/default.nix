@@ -14,13 +14,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mpizenberg";
     repo = "elm-test-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l3RV+j3wAQ88QGNXLILp7YiUpdk7bkN25Y723pDZw48=";
   };
 
   buildInputs =
-    lib.optionals (!stdenv.isDarwin) [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security

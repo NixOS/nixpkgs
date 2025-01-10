@@ -21,25 +21,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GQLkt/CJf/QI8emvlW8xSRziGnncwfMSxBccW0Bb8I0=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     marshmallow
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sqlalchemy = [
       flask-sqlalchemy
       marshmallow-sqlalchemy
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.sqlalchemy;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.sqlalchemy;
 
   pythonImportsCheck = [ "flask_marshmallow" ];
 

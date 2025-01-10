@@ -21,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oIDVjJwapHun0Rk04zOZ4IjAh7qZ2k0BXK6zqFmtVds=";
   };
 
   propagatedBuildInputs = [ mbstrdecoder ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     datetime = [
       python-dateutil
       pytz
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "typepy" ];
 

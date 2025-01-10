@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8aps8aNgXw+XbDgtCvWw+Ij1Cm1N0G+wcL35ySkofOk=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     traitlets
   ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       rich
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-console-scripts
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

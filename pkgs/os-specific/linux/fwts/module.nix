@@ -1,4 +1,9 @@
-{ lib, stdenv, fwts, kernel }:
+{
+  lib,
+  stdenv,
+  fwts,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwts-efi-runtime";

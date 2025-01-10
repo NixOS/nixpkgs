@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-transformers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+KCRbjY4P52SWawU1NoMoe+HOV7iujFkwqVe87fWVTE=";
   };
 
@@ -33,7 +33,6 @@ buildPythonPackage rec {
     setuptools
     cython
   ];
-
 
   dependencies = [
     spacy

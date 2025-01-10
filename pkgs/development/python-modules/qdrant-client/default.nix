@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.11.1";
+  version = "1.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NIGmQMtGvm6zifYJIMFx+d9w9IZmQUAqieBo/3JmYbM=";
+    tag = "v${version}";
+    hash = "sha256-rElbGIXnhkHaAvtneEMhyyhySFlT4UT/vhhIlRD3xT0=";
   };
 
   build-system = [ poetry-core ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fastembed = [ fastembed ];
   };
 

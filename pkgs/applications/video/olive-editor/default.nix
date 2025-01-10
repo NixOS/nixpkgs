@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, which
-, frei0r
-, opencolorio
-, ffmpeg_6
-, CoreFoundation
-, cmake
-, wrapQtAppsHook
-, openimageio
-, openexr_3
-, portaudio
-, imath
-, qtwayland
-, qtmultimedia
-, qttools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  which,
+  frei0r,
+  opencolorio,
+  ffmpeg_6,
+  CoreFoundation,
+  cmake,
+  wrapQtAppsHook,
+  openimageio,
+  openexr_3,
+  portaudio,
+  imath,
+  qtwayland,
+  qtmultimedia,
+  qttools,
 }:
 
 let
@@ -24,10 +25,12 @@ let
   # we patch support for 2.3+, but 2.5 fails
   openimageio' = openimageio.overrideAttrs (old: rec {
     version = "2.4.15.0";
-    src = (old.src.override {
-      rev = "v${version}";
-      hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
-    });
+    src = (
+      old.src.override {
+        rev = "v${version}";
+        hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
+      }
+    );
   });
 in
 
@@ -80,7 +83,7 @@ stdenv.mkDerivation {
     qtwayland
     qtmultimedia
     qttools
-  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
 
   meta = with lib; {
     description = "Professional open-source NLE video editor";
@@ -90,7 +93,7 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.balsoft ];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "olive-editor";
   };
 }

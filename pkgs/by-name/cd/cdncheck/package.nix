@@ -11,14 +11,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cdncheck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1TYUSWbcWnRsOM8ctY1g9CmFSAXiK9NmN5ZDaKeJIgw=";
   };
 
   vendorHash = "sha256-0fiZJeBvxUib8a9CeTmYottOp+15YEdTVYhdzKSSCrk=";
 
   subPackages = [ "cmd/cdncheck/" ];
-
 
   ldflags = [
     "-s"

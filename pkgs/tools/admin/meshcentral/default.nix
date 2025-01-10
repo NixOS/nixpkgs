@@ -1,27 +1,31 @@
-{ lib
-, fetchzip
-, fetchYarnDeps
-, yarn2nix-moretea
-, nodejs_18
-, dos2unix
+{
+  lib,
+  fetchzip,
+  fetchpatch,
+  fetchYarnDeps,
+  yarn2nix-moretea,
+  nodejs_18,
+  dos2unix,
 }:
 
 yarn2nix-moretea.mkYarnPackage {
-  version = "1.1.30";
+  version = "1.1.35";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.30.tgz";
-    sha256 = "1jdnjmwwi8ipqrxb43sas46n2hvr2fsccckknqlfzkfv0lkak07q";
+    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.35.tgz";
+    sha256 = "0y0c6r8bijkz2pwc9mgkkg3fi7sbaawcarvcjf47xa5zkl65a2qf";
   };
 
-  patches = [ ./fix-js-include-paths.patch ];
+  patches = [
+    ./fix-js-include-paths.patch
+  ];
 
   packageJSON = ./package.json;
   yarnLock = ./yarn.lock;
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = "sha256-1xDex/BIq1P+LbCuZfLRTckAU6RjF4XU73ZpEd1qncA=";
+    hash = "sha256-wK3w5y0Ic9g6iBOUG7KseA1lPW2wzPMbJqb0YWiZJTM=";
   };
 
   # Tarball has CRLF line endings. This makes patching difficult, so let's convert them.

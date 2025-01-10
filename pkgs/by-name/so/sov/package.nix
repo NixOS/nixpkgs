@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch2
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, freetype
-, libglvnd
-, libxkbcommon
-, wayland
-, wayland-protocols
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  freetype,
+  gitUpdater,
+  libglvnd,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,11 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  strictDeps = true;
-
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -55,14 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+  strictDeps = true;
+
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    description = "Workspace overview app for sway";
     homepage = "https://github.com/milgra/sov";
+    description = "Workspace overview app for sway";
     license = lib.licenses.gpl3Only;
     mainProgram = "sov";
     maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    inherit (wayland.meta) platforms;
+    # sys/timerfd.h header inexistent
+    broken = stdenv.isDarwin;
   };
 })

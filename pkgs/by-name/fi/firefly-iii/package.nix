@@ -1,40 +1,35 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, nodejs
-, fetchNpmDeps
-, buildPackages
-, php83
-, nixosTests
-, nix-update-script
-, dataDir ? "/var/lib/firefly-iii"
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  nodejs,
+  fetchNpmDeps,
+  buildPackages,
+  php83,
+  nixosTests,
+  nix-update-script,
+  dataDir ? "/var/lib/firefly-iii",
 }:
 
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.1.19";
-  phpPackage = php83;
-  npmDepsHash = "sha256-/oz0raI0/AV5NamvMWxlUdiQbVsSKHRplsw2/KrMOwg=";
+  version = "6.1.25";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
-    rev = "v${version}";
-    hash = "sha256-SIvYRmCCzQI+qUr5aA78NQLLmO+EPO1ZEL7vcqJ5puw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-6DZwTk67bKvgB+Zf7aPakrWWYCAjkYggrRiaFKgsMkk=";
   };
-in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit pname src version;
-
-  buildInputs = [ phpPackage ];
+  buildInputs = [ php83 ];
 
   nativeBuildInputs = [
     nodejs
     nodejs.python
     buildPackages.npmHooks.npmConfigHook
-    phpPackage.composerHooks.composerInstallHook
-    phpPackage.packages.composer-local-repo-plugin
+    php83.composerHooks.composerInstallHook
+    php83.packages.composer-local-repo-plugin
   ];
 
   composerNoDev = true;
@@ -43,15 +38,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   composerStrictValidation = true;
   strictDeps = true;
 
-  vendorHash = "sha256-qps/dWubCVqqvzgSizJJvx2MUzRZKiMeQCnWz08Ft+E=";
+  vendorHash = "sha256-5uUjb5EPcoEBuFbWGb1EIC/U/VaSUsRp09S9COIx25E=";
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    name = "${pname}-npm-deps";
-    hash = npmDepsHash;
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-npm-deps";
+    hash = "sha256-j49iltvW7xGOCV+FIB4f+ECfQo50U+wTugyaK9JGN3A=";
   };
 
-  composerRepository = phpPackage.mkComposerRepository {
+  composerRepository = php83.mkComposerRepository {
     inherit (finalAttrs)
       pname
       src
@@ -70,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit phpPackage;
+    phpPackage = php83;
     tests = nixosTests.firefly-iii;
     updateScript = nix-update-script { };
   };
@@ -83,10 +78,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/firefly-iii/firefly-iii/releases/tag/v${version}";
+    changelog = "https://github.com/firefly-iii/firefly-iii/releases/tag/v${finalAttrs.version}";
     description = "Firefly III: a personal finances manager";
     homepage = "https://github.com/firefly-iii/firefly-iii";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.savyajha lib.maintainers.patrickdag ];
+    maintainers = [
+      lib.maintainers.savyajha
+      lib.maintainers.patrickdag
+    ];
+    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 })

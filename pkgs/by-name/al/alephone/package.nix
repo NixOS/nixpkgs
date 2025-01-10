@@ -28,7 +28,6 @@
   unzip,
   zlib,
   zziplib,
-  alephone,
   testers,
 }:
 
@@ -94,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version =
     # test that the version is correct
-    testers.testVersion { package = alephone; };
+    testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
@@ -112,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       version,
       zip,
       meta,
-      icon ? alephone.icons + "/alephone.png",
+      icon ? finalAttrs.finalPackage.icons + "/alephone.png",
       ...
     }@extraArgs:
     stdenv.mkDerivation (
@@ -142,14 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
           mkdir -p $out/bin $out/data/$pname $out/share/applications
           cp -a * $out/data/$pname
           cp $desktopItem/share/applications/* $out/share/applications
-          makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
+          makeWrapper ${finalAttrs.finalPackage}/bin/alephone $out/bin/$pname \
             --add-flags $out/data/$pname
         '';
       }
       // extraArgs
       // {
         meta =
-          alephone.meta
+          finalAttrs.finalPackage.meta
           // {
             license = lib.licenses.free;
             mainProgram = pname;

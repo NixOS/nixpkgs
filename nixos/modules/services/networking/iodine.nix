@@ -1,19 +1,33 @@
 # NixOS module for iodine, ip over dns daemon
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.iodine;
 
   iodinedUser = "iodined";
 
-  /* is this path made unreadable by ProtectHome = true ? */
+  # is this path made unreadable by ProtectHome = true ?
   isProtected = x: lib.hasPrefix "/root" x || lib.hasPrefix "/home" x;
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "iodined" "enable" ] [ "services" "iodine" "server" "enable" ])
-    (lib.mkRenamedOptionModule [ "services" "iodined" "domain" ] [ "services" "iodine" "server" "domain" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "iodined" "enable" ]
+      [ "services" "iodine" "server" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "iodined" "domain" ]
+      [ "services" "iodine" "server" "domain" ]
+    )
     (lib.mkRenamedOptionModule [ "services" "iodined" "ip" ] [ "services" "iodine" "server" "ip" ])
-    (lib.mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "iodined" "extraConfig" ]
+      [ "services" "iodine" "server" "extraConfig" ]
+    )
     (lib.mkRemovedOptionModule [ "services" "iodined" "client" ] "")
   ];
 
@@ -23,7 +37,7 @@ in
 
     services.iodine = {
       clients = lib.mkOption {
-        default = {};
+        default = { };
         description = ''
           Each attribute of this option defines a systemd service that
           runs iodine. Many or none may be defined.
@@ -42,38 +56,36 @@ in
           }
         '';
         type = lib.types.attrsOf (
-          lib.types.submodule (
-            {
-              options = {
-                server = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                  description = "Hostname of server running iodined";
-                  example = "tunnel.mydomain.com";
-                };
-
-                relay = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                  description = "DNS server to use as an intermediate relay to the iodined server";
-                  example = "8.8.8.8";
-                };
-
-                extraConfig = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                  description = "Additional command line parameters";
-                  example = "-l 192.168.1.10 -p 23";
-                };
-
-                passwordFile = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                  description = "Path to a file containing the password.";
-                };
+          lib.types.submodule ({
+            options = {
+              server = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                description = "Hostname of server running iodined";
+                example = "tunnel.mydomain.com";
               };
-            }
-          )
+
+              relay = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                description = "DNS server to use as an intermediate relay to the iodined server";
+                example = "8.8.8.8";
+              };
+
+              extraConfig = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                description = "Additional command line parameters";
+                example = "-l 192.168.1.10 -p 23";
+              };
+
+              passwordFile = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                description = "Path to a file containing the password.";
+              };
+            };
+          })
         );
       };
 
@@ -117,72 +129,78 @@ in
 
   ### implementation
 
-  config = lib.mkIf (cfg.server.enable || cfg.clients != {}) {
+  config = lib.mkIf (cfg.server.enable || cfg.clients != { }) {
     environment.systemPackages = [ pkgs.iodine ];
     boot.kernelModules = [ "tun" ];
 
     systemd.services =
       let
-        createIodineClientService = name: cfg:
-          {
-            description = "iodine client - ${name}";
-            after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
-            script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${lib.optionalString (cfg.passwordFile != "") "< \"${builtins.toString cfg.passwordFile}\""} ${cfg.relay} ${cfg.server}";
-            serviceConfig = {
-              RestartSec = "30s";
-              Restart = "always";
+        createIodineClientService = name: cfg: {
+          description = "iodine client - ${name}";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${
+            lib.optionalString (cfg.passwordFile != "") "< \"${builtins.toString cfg.passwordFile}\""
+          } ${cfg.relay} ${cfg.server}";
+          serviceConfig = {
+            RestartSec = "30s";
+            Restart = "always";
 
-              # hardening :
-              # Filesystem access
-              ProtectSystem = "strict";
-              ProtectHome = if isProtected cfg.passwordFile then "read-only" else "true" ;
-              PrivateTmp = true;
-              ReadWritePaths = "/dev/net/tun";
-              PrivateDevices = false;
-              ProtectKernelTunables = true;
-              ProtectKernelModules = true;
-              ProtectControlGroups = true;
-              # Caps
-              NoNewPrivileges = true;
-              # Misc.
-              LockPersonality = true;
-              RestrictRealtime = true;
-              PrivateMounts = true;
-              MemoryDenyWriteExecute = true;
-            };
-          };
-      in
-        lib.listToAttrs (
-          lib.mapAttrsToList
-            (name: value: lib.nameValuePair "iodine-${name}" (createIodineClientService name value))
-            cfg.clients
-        ) // {
-          iodined = lib.mkIf (cfg.server.enable) {
-            description = "iodine, ip over dns server daemon";
-            after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
-            script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${lib.optionalString (cfg.server.passwordFile != "") "< \"${builtins.toString cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
-            serviceConfig = {
-              # Filesystem access
-              ProtectSystem = "strict";
-              ProtectHome = if isProtected cfg.server.passwordFile then "read-only" else "true" ;
-              PrivateTmp = true;
-              ReadWritePaths = "/dev/net/tun";
-              PrivateDevices = false;
-              ProtectKernelTunables = true;
-              ProtectKernelModules = true;
-              ProtectControlGroups = true;
-              # Caps
-              NoNewPrivileges = true;
-              # Misc.
-              LockPersonality = true;
-              RestrictRealtime = true;
-              PrivateMounts = true;
-              MemoryDenyWriteExecute = true;
-            };
+            # hardening :
+            # Filesystem access
+            ProtectSystem = "strict";
+            ProtectHome = if isProtected cfg.passwordFile then "read-only" else "true";
+            PrivateTmp = true;
+            ReadWritePaths = "/dev/net/tun";
+            PrivateDevices = false;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            # Caps
+            NoNewPrivileges = true;
+            # Misc.
+            LockPersonality = true;
+            RestrictRealtime = true;
+            PrivateMounts = true;
+            MemoryDenyWriteExecute = true;
           };
         };
+      in
+      lib.listToAttrs (
+        lib.mapAttrsToList (
+          name: value: lib.nameValuePair "iodine-${name}" (createIodineClientService name value)
+        ) cfg.clients
+      )
+      // {
+        iodined = lib.mkIf (cfg.server.enable) {
+          description = "iodine, ip over dns server daemon";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${
+            lib.optionalString (
+              cfg.server.passwordFile != ""
+            ) "< \"${builtins.toString cfg.server.passwordFile}\""
+          } ${cfg.server.ip} ${cfg.server.domain}";
+          serviceConfig = {
+            # Filesystem access
+            ProtectSystem = "strict";
+            ProtectHome = if isProtected cfg.server.passwordFile then "read-only" else "true";
+            PrivateTmp = true;
+            ReadWritePaths = "/dev/net/tun";
+            PrivateDevices = false;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            # Caps
+            NoNewPrivileges = true;
+            # Misc.
+            LockPersonality = true;
+            RestrictRealtime = true;
+            PrivateMounts = true;
+            MemoryDenyWriteExecute = true;
+          };
+        };
+      };
 
     users.users.${iodinedUser} = {
       uid = config.ids.uids.iodined;

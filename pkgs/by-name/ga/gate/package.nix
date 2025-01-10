@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 let
   pname = "gate";
-  version = "0.40.0";
+  version = "0.42.0";
 in
 buildGoModule {
   inherit pname version;
@@ -13,13 +14,16 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "minekube";
     repo = "gate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zEbkt38/K4LVLVXXqaLU83mX94vI/dbZ+JqOjn2u0/c=";
+    tag = "v${version}";
+    hash = "sha256-a2rt+V6y8lyBMSG49eWLTPeLZKIjq+a5NBL+agIL1dg=";
   };
 
-  vendorHash = "sha256-W3YBIbxblxO5Rirso+b20h4cwUzfj8rG/Owh1KyJ0mM=";
+  vendorHash = "sha256-5s96L9KWeiS//21mQMn8ka82Uk4rMbq/8I+l67HTSA8=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "High-Performance, Low-Memory, Lightweight, Extensible Minecraft Reverse Proxy";
@@ -34,4 +38,3 @@ buildGoModule {
     mainProgram = "gate";
   };
 }
-

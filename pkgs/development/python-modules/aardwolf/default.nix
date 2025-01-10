@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4kJsW0uwWfcgVruEdDw3QhbzfPDuLjmK+YvcLrgF4SI=";
   };
 
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     tqdm
     unicrypto
     winsspi
-  ] ++ lib.optionals (stdenv.isDarwin) [ iconv ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;

@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, pkgs
-, buildPackages
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkgs,
+  buildPackages,
+  fixDarwinDylibNames,
 }:
 stdenv.mkDerivation rec {
   pname = "build2-bootstrap";

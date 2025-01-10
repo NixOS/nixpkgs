@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, alsa-lib
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {

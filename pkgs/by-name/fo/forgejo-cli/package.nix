@@ -7,11 +7,9 @@
   oniguruma,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 let
-  version = "0.1.1";
+  version = "0.2.0";
 in
 rustPlatform.buildRustPackage {
   pname = "forgejo-cli";
@@ -22,30 +20,23 @@ rustPlatform.buildRustPackage {
     owner = "Cyborus";
     repo = "forgejo-cli";
     rev = "v${version}";
-    hash = "sha256-367O4SpGA0gWM/IIJjIbCoi4+N/Vl58T5Jw/NVsE+7o=";
+    hash = "sha256-rHyPncAARIPakkv2/CD1/aF2G5AS9bb3T2x8QCQWl5o=";
   };
 
-  cargoHash = "sha256-F7UBLqMXYS8heJs1mdmiFTHUfgoMKEb+KV4tiDsIRDY=";
+  cargoHash = "sha256-kIOEUDJg7/08L9c/qt7NrT8U+xN3Ya5PBWPWmWj0Yx8=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      oniguruma
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    libgit2
+    oniguruma
+    openssl
+    zlib
+  ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    BUILD_TYPE = "nixpkgs";
   };
 
   meta = {

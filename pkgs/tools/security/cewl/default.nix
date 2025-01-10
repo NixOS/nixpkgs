@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, bundlerEnv }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bundlerEnv,
+}:
 
 let
   rubyEnv = bundlerEnv {

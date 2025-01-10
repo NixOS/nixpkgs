@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, buildExamples ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  buildExamples ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.1";
+  version = "1.6.3";
   pname = "nanoflann";
 
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-likFHzaP/1yYfr6+rDWM2+YEKOk5G5P8UFC3xb2bEOo=";
+    hash = "sha256-vtf/dkgvpeLvwtM5KMd23pOn1rye5tAJapYTAiDu9Ow=";
   };
 
   nativeBuildInputs = [ cmake ];

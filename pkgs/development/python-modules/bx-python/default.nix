@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   numpy,
+  pyparsing,
   cython,
   zlib,
   python-lzo,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZpZjh7OXdUY7rd692h7VYHzC3qCrDKFme6r+wuG7GP4=";
+    tag = "v${version}";
+    hash = "sha256-I5yc8i9xoievaZbgwHSQQSVvs1VnNa66Q883T4dCYYw=";
   };
 
   postPatch = ''
@@ -37,7 +38,10 @@ buildPythonPackage rec {
 
   buildInputs = [ zlib ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    pyparsing
+  ];
 
   nativeCheckInputs = [
     python-lzo

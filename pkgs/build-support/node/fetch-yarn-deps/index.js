@@ -42,7 +42,7 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${url}`))
 				resolve()
 			})
-                        res.on('error', e => reject(e))
+			res.on('error', e => reject(e))
 		})
 		get(url)
 	})
@@ -88,13 +88,14 @@ const isGitUrl = pattern => {
 }
 
 const downloadPkg = (pkg, verbose) => {
-	const fileMarker = '@file:'
-	const split = pkg.key.split(fileMarker)
-	if (split.length == 2) {
-		console.info(`ignoring lockfile entry "${split[0]}" which points at path "${split[1]}"`)
-		return
-	} else if (split.length > 2) {
-		throw new Error(`The lockfile entry key "${pkg.key}" contains "${fileMarker}" more than once. Processing is not implemented.`)
+	for (let marker of ['@file:', '@link:']) {
+		const split = pkg.key.split(marker)
+		if (split.length == 2) {
+			console.info(`ignoring lockfile entry "${split[0]}" which points at path "${split[1]}"`)
+			return
+		} else if (split.length > 2) {
+			throw new Error(`The lockfile entry key "${pkg.key}" contains "${marker}" more than once. Processing is not implemented.`)
+		}
 	}
 
 	if (pkg.resolved === undefined) {

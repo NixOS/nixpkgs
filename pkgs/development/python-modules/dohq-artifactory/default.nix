@@ -1,26 +1,26 @@
 {
-  lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, setuptools
-, requests
-, python-dateutil
-, pyjwt
-, pytestCheckHook
-, responses
-, nix-update-script
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  setuptools,
+  requests,
+  python-dateutil,
+  pyjwt,
+  pytestCheckHook,
+  responses,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "dohq-artifactory";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "devopshq";
     repo = "artifactory";
     rev = version;
-    hash = "sha256-gccVwshGBgbhTSX4o0vANIRct1isqDj+gWeZZxExj9Q=";
+    hash = "sha256-lMT1b6JUDT01fJzQrVc0lMqeGrJnvk6ms4KIYtfTQps=";
   };
 
   # https://github.com/devopshq/artifactory/issues/430

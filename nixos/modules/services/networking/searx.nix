@@ -138,7 +138,7 @@ in
 
           ::: {.note}
           For available settings, see the SearXNG
-          [schema file](https://github.com/searxng/searxng/blob/master/searx/botdetection/limiter.toml).
+          [schema file](https://github.com/searxng/searxng/blob/master/searx/limiter.toml).
           :::
         '';
       };

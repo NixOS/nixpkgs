@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "2.5.1-unstable-2024-09-06";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "6f009ca13fab71e53f118179742cc2bb40455721";
-    hash = "sha256-McP/Rdxss93YHZcPSSWaRjyGgUiQJ3mZXgzcHWldORU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wbeWxAeKyqjEPemc2e5n357gwq83pQlASOvMd0ZCE7g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_SHARED_LIBS=ON"
     "-DMANIFOLD_TEST=ON"
     "-DMANIFOLD_CROSS_SECTION=ON"
@@ -50,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       hzeller
       pca006132
     ];
+    platforms = lib.platforms.unix;
   };
 })

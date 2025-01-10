@@ -1,4 +1,9 @@
-{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
+{
+  lib,
+  bundlerEnv,
+  ruby,
+  bundlerUpdateScript,
+}:
 
 bundlerEnv {
   inherit ruby;
@@ -8,11 +13,11 @@ bundlerEnv {
   passthru.updateScript = bundlerUpdateScript "teamocil";
 
   meta = with lib; {
-    description     = "Simple tool used to automatically create windows and panes in tmux with YAML files";
-    homepage        = "https://github.com/remiprev/teamocil";
-    license         = licenses.mit;
-    platforms       = platforms.all;
-    maintainers     = with maintainers; [
+    description = "Simple tool used to automatically create windows and panes in tmux with YAML files";
+    homepage = "https://github.com/remiprev/teamocil";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       zachcoyle
       nicknovitski
     ];

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   cython,
+  pkgconfig,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.39.0";
+  version = "0.41.0";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -21,18 +22,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "uharfbuzz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-I4fCaomq26FdkpiJdj+zyrbdqdynnD2hIutYTuTFvQs=";
+    hash = "sha256-N/Vprr1lJmDLUzf+aX374YbJhDuHOpPzNeYXpLOANeI=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 36.4, < 72.2" setuptools
+  '';
+
+  build-system = [
     cython
+    pkgconfig
     setuptools
     setuptools-scm
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

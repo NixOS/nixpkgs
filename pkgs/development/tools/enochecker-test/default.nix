@@ -1,22 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pythonOlder,
 
-, certifi
-, charset-normalizer
-, enochecker-core
-, exceptiongroup
-, idna
-, iniconfig
-, jsons
-, packaging
-, pluggy
-, pytest
-, requests
-, tomli
-, typish
-, urllib3
+  certifi,
+  charset-normalizer,
+  enochecker-core,
+  exceptiongroup,
+  idna,
+  iniconfig,
+  jsons,
+  packaging,
+  pluggy,
+  pytest,
+  requests,
+  tomli,
+  typish,
+  urllib3,
 }:
 
 buildPythonApplication rec {

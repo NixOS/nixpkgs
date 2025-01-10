@@ -10,6 +10,7 @@
   numpy,
   nvidia-ml-py,
   psutil,
+  pydantic,
   pynvml,
   pytestCheckHook,
   pythonOlder,
@@ -38,7 +39,7 @@ in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.44.1";
+  version = "1.5.49";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -46,12 +47,11 @@ buildPythonPackage rec {
     owner = "plasma-umass";
     repo = "scalene";
     rev = "v${version}";
-    hash = "sha256-XMz+gwiNaKiKplD4kOE1yhcg+dkzjEdDYjW0JsDEMQE=";
+    hash = "sha256-Ivce90+W9NBMQjebj3zCB5eqDJydT8OTPYy4fjbybgI=";
   };
 
   patches = [
     ./01-manifest-no-git.patch
-    ./02-pyproject-unpin-setuptools.patch
   ];
 
   prePatch = ''
@@ -59,8 +59,8 @@ buildPythonPackage rec {
     mkdir vendor/printf
     cp ${printf-src}/printf.c vendor/printf/printf.cpp
     cp -r ${printf-src}/* vendor/printf
-    sed -i"" 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
-    sed -i"" 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
   '';
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ buildPythonPackage rec {
     jinja2
     numpy
     psutil
+    pydantic
     pynvml
     rich
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];

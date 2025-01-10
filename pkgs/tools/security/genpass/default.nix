@@ -1,9 +1,8 @@
-{ lib, stdenv
-, fetchgit
-, rustPlatform
-, CoreFoundation
-, libiconv
-, Security
+{
+  lib,
+  fetchgit,
+  rustPlatform,
+  zlib,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "genpass";
@@ -17,7 +16,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ls3tzZ+gtZQlObmbtwJDq6N/f5nY+Ps7RL5R/fR5Vgg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+  buildInputs = [
+    zlib
+  ];
 
   meta = with lib; {
     description = "Simple yet robust commandline random password generator";

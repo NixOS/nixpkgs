@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  snakemake,
   snakemake-interface-storage-plugins,
   snakemake-interface-common,
   sysrsync,
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9A2W+V0d9K1Ei4WXqIZfIcOYsWgpGVP7P/ANy8jOGu0=";
   };
 

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "types-requests";
-  version = "2.32.0.20240914";
+  version = "2.32.0.20241016";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KFDheNs5Gdm/gJ5DTu9luknQ5+M6yS1Yj0peKV//1AU=";
+    hash = "sha256-DZytLydRXQ4+PacTShtvKPuXEp2GuGfyTZxyZFJjTZU=";
   };
 
   build-system = [ setuptools ];

@@ -1,21 +1,28 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubie";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "sha256-9tBPV0VR1bZUgYDD6T+hthPIzN9aGAyi1sUyeaynOQA=";
+    sha256 = "sha256-h4GaOZ9wHhRq8/GRKrXkH7fJPpOdYmwZ2nQPsVzt66U=";
   };
 
-  cargoHash = "sha256-Igq4vjIyixpAhFd1wZqrVXCUmJdetUn6uM1eIX/0CiM=";
+  cargoHash = "sha256-dtl1YCMZdNtgaR8TxT3UZ7+CYREzpjaxmT80C1VTTa8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     installShellCompletion completion/kubie.bash

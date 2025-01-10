@@ -2,19 +2,18 @@
 
 alephone.makeWrapper rec {
   pname = "marathon-eternal";
-  version = "1.2.0";
+  version = "1.2.1";
   desktopName = "Marathon-Eternal";
 
   zip = fetchurl {
-    url = "http://eternal.bungie.org/files/_releases/EternalXv120.zip";
-    hash = "sha256-k3F2G2Jc+XhvhidqsX39UqFCfpPo+3Lv+oj1dDXoO+M=";
+    url = "https://eternal.bungie.org/files/_releases/EternalXv121.zip";
+    hash = "sha256-8smVdL7CYbrIzCqu3eqk6KQempKLWuEJ9qWStdWkYWo=";
   };
 
-  sourceRoot = "Eternal 1.2.0";
+  sourceRoot = "Eternal 1.2.1";
 
   meta = {
-    description =
-      "Picking up from the end of the Marathon trilogy, you find yourself suddenly ninety-four years in the future, in the year 2905";
+    description = "Picking up from the end of the Marathon trilogy, you find yourself suddenly ninety-four years in the future, in the year 2905";
     homepage = "http://eternal.bungie.org/";
   };
 

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, lomiri-api
-, lomiri-indicator-network
-, pkg-config
-, qtbase
-, qtdeclarative
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  lomiri-api,
+  lomiri-indicator-network,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake, alsa-lib, udev, qtbase, qtsvg, qttools }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  alsa-lib,
+  udev,
+  qtbase,
+  qtsvg,
+  qttools,
+}:
 
 mkDerivation rec {
   pname = "qastools";
@@ -12,7 +22,13 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ alsa-lib udev qtbase qtsvg qttools ];
+  buildInputs = [
+    alsa-lib
+    udev
+    qtbase
+    qtsvg
+    qttools
+  ];
 
   meta = with lib; {
     description = "Collection of desktop applications for ALSA configuration";

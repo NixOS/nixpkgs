@@ -1,4 +1,13 @@
-{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre, version, hash, udev }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre,
+  version,
+  hash,
+  udev,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "papermc";
@@ -22,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe jre} "$out/bin/minecraft-server" \
       --append-flags "-jar $out/share/papermc/papermc.jar nogui" \
-      ${lib.optionalString stdenvNoCC.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
+      ${lib.optionalString stdenvNoCC.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
 
     runHook postInstall
   '';
@@ -45,7 +54,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ aaronjanse neonfuz MayNiklas ];
+    maintainers = with lib.maintainers; [
+      aaronjanse
+      neonfuz
+      MayNiklas
+    ];
     mainProgram = "minecraft-server";
   };
 })

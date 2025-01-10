@@ -1,27 +1,30 @@
-{ lib
-, flutter322
-, mpv-unwrapped
-, xdg-user-dirs
-, patchelf
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  flutter327,
+  mpv-unwrapped,
+  patchelf,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 let
-  version = "0.9.9-beta";
+  version = "0.9.12-beta";
 in
-flutter322.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-cCXDvsXgA/B274pQzyQRzmzz0QvqcFMLQrUjDU/B08Y=";
+    hash = "sha256-hY+1BMQEACrpjKZnVwPqWY5M4m4U/Ys/bcqhGMeCE6U=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [ patchelf copyDesktopItems ];
+  nativeBuildInputs = [
+    patchelf
+    copyDesktopItems
+  ];
   buildInputs = [ mpv-unwrapped ];
 
   gitHashes = {
@@ -33,32 +36,32 @@ flutter322.buildFlutterApplication {
   };
 
   postFixup = ''
-    patchelf $out/app/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${lib.makeLibraryPath [ mpv-unwrapped ]}
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${
+      lib.makeLibraryPath [ mpv-unwrapped ]
+    }
   '';
 
   postInstall = ''
     install -Dm644 $src/assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
-  '';
-
-  desktopItems = [(makeDesktopItem {
-    name = "Finamp";
-    desktopName = "Finamp";
-    genericName = "Music Player";
-    exec = "finamp";
-    icon = "finamp";
-    startupWMClass = "finamp";
-    comment = "An open source Jellyfin music player";
-    categories = [
-      "AudioVideo"
-      "Audio"
-      "Player"
-      "Music"
-    ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Finamp";
+      desktopName = "Finamp";
+      genericName = "Music Player";
+      exec = "finamp";
+      icon = "finamp";
+      startupWMClass = "finamp";
+      comment = "An open source Jellyfin music player";
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "Player"
+        "Music"
+      ];
+    })
+  ];
 
   meta = {
     description = "Open source Jellyfin music player";

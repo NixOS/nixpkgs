@@ -1,6 +1,13 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config
-, qttools, qtx11extras, drumstick
-, docbook-xsl-nons
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  qttools,
+  qtx11extras,
+  drumstick,
+  docbook-xsl-nons,
 }:
 
 mkDerivation rec {
@@ -12,9 +19,17 @@ mkDerivation rec {
     sha256 = "sha256-+NjTcszb1KXGynIcCf4IEDvN4f8pgXtR1TksxGR5ZHQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qttools docbook-xsl-nons ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    docbook-xsl-nons
+  ];
 
-  buildInputs = [ drumstick qtx11extras ];
+  buildInputs = [
+    drumstick
+    qtx11extras
+  ];
 
   postInstall = ''
     # vmpk drumstickLocales looks here:

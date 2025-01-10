@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gmpxx
-, flint
-, arb
-, nauty
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmpxx,
+  flint,
+  arb,
+  nauty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "normaliz";
-  version = "3.10.3";
+  version = "3.10.4";
 
   src = fetchFromGitHub {
     owner = "normaliz";
     repo = "normaliz";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9jN3EbYfWmir+pa4XuJpeT7CnQdhVU9pP8G11npIG00=";
+    hash = "sha256-qmbLgjAkLrW8rqFthK3H4n63zLVJ33Pe82V7yU1StOo=";
   };
 
   buildInputs = [
@@ -26,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     nauty
   ];
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

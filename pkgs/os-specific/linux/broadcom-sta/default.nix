@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch2,
   kernel,
 }:
 
@@ -66,7 +67,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset;
+  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset ++ [
+    # Fix for Kernel 6.12 and later (5f60d5f6bbc1)
+    (fetchpatch2 {
+      url = "https://gist.githubusercontent.com/joanbm/20db669eed4d8367a457780747be8cb9/raw/5536ba1354b6b97013530e7345d3bf29e92225b1/broadcom-wl-fix-linux-6.12.patch";
+      hash = "sha256-Y5VgWp0m5tNp8lxDhIg7IodbqyUsJVHHiVIFgP9ioHE=";
+    })
+  ];
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 

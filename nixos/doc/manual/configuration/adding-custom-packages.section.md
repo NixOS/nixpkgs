@@ -90,16 +90,30 @@ Hello, world!
 
 Most pre-built executables will not work on NixOS. There are two notable
 exceptions: flatpaks and AppImages. For flatpaks see the [dedicated
-section](#module-services-flatpak). AppImages will not run "as-is" on NixOS.
-First you need to install `appimage-run`: add to `/etc/nixos/configuration.nix`
+section](#module-services-flatpak). AppImages can run "as-is" on NixOS.
+
+First you need to enable AppImage support: add to `/etc/nixos/configuration.nix`
 
 ```nix
 {
-  environment.systemPackages = [ pkgs.appimage-run ];
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
 }
 ```
 
-Then instead of running the AppImage "as-is", run `appimage-run foo.appimage`.
+Then you can run the AppImage "as-is" or with `appimage-run foo.appimage`.
+
+If there are shared libraries missing add them with
+
+```nix
+{
+  programs.appimage.package = pkgs.appimage-run.override {
+    extraPkgs = pkgs: [
+      # missing libraries here, e.g.: `pkgs.libepoxy`
+    ];
+  }
+}
+```
 
 To make other pre-built executables work on NixOS, you need to package them
 with Nix and special helpers like `autoPatchelfHook` or `buildFHSEnv`. See

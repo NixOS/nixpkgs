@@ -11,7 +11,6 @@
   requests,
   setuptools,
   setuptools-scm,
-  sphinx-rtd-theme,
   stripe,
   suds-community,
   xmltodict,
@@ -27,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-payments";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/XsqtExnNtUGqI40XvvcO/nGq56gbC/mPdtHv1QQyGo=";
   };
 

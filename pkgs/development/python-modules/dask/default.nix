@@ -34,22 +34,19 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.8.1";
+    version = "2024.12.1";
     pyproject = true;
-
-    disabled = pythonOlder "3.10";
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
-      rev = "refs/tags/${version}";
-      hash = "sha256-ztB5T8VFc1WoQB7lWQlonAyq7duqft9OE5FYvmjZd48=";
+      tag = version;
+      hash = "sha256-QqvdldAHW2UYt1NXfk3Aa+oe97e+OpRbF8d6eKV3OJ4=";
     };
 
     build-system = [ setuptools ];
@@ -67,10 +64,15 @@ let
 
     optional-dependencies = lib.fix (self: {
       array = [ numpy ];
-      complete = [
-        pyarrow
-        lz4
-      ] ++ self.array ++ self.dataframe ++ self.distributed ++ self.diagnostics;
+      complete =
+        [
+          pyarrow
+          lz4
+        ]
+        ++ self.array
+        ++ self.dataframe
+        ++ self.distributed
+        ++ self.diagnostics;
       dataframe = [
         # dask-expr -> circular dependency with dask-expr
         numpy
@@ -126,14 +128,14 @@ let
     ];
 
     disabledTests =
-      lib.optionals stdenv.isDarwin [
+      lib.optionals stdenv.hostPlatform.isDarwin [
         # Test requires features of python3Packages.psutil that are
         # blocked in sandboxed-builds
         "test_auto_blocksize_csv"
         # AttributeError: 'str' object has no attribute 'decode'
         "test_read_dir_nometa"
       ]
-      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
         # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
         "test_foldby_tree_reduction"
         "test_to_bag"

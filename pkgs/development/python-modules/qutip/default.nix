@@ -1,44 +1,56 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython_0,
+  oldest-supported-numpy,
+  setuptools,
+
+  # dependencies
+  numpy,
+  packaging,
+  scipy,
+
+  # tests
+  pytestCheckHook,
+  pytest-rerunfailures,
+  python,
+
+  # optional-dependencies
+  matplotlib,
+  ipython,
   cvxopt,
   cvxpy,
-  cython_0,
-  fetchFromGitHub,
-  ipython,
-  matplotlib,
-  numpy,
-  oldest-supported-numpy,
-  packaging,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  scipy,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.0.2";
+  version = "5.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lMPzgmUaoEQB5TzmqEJFiFTuS3AGpyMMjPHlPUKTLvk=";
+    owner = "qutip";
+    repo = "qutip";
+    tag = "v${version}";
+    hash = "sha256-8P95uAalMeGXWNG8J8Rf/eg0x1K62o9rKjmDrB8KGRo=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "numpy>=2.0.0" "numpy"
+  '';
+
+  build-system = [
     cython_0
-    setuptools
     oldest-supported-numpy
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     scipy
@@ -47,7 +59,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.
@@ -68,20 +80,30 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qutip" ];
 
-  passthru.optional-dependencies = {
+  pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Aborted
+    "--deselect=../tests/core/test_metrics.py::Test_hellinger_dist::test_monotonicity[25]"
+  ];
+
+  optional-dependencies = {
     graphics = [ matplotlib ];
     ipython = [ ipython ];
     semidefinite = [
-      cvxpy
       cvxopt
+      cvxpy
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
-    changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fabiangd ];
+    changelog = "https://github.com/qutip/qutip/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fabiangd ];
+    badPlatforms = [
+      # Tests fail at ~80%
+      # ../tests/test_animation.py::test_result_state Fatal Python error: Aborted
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

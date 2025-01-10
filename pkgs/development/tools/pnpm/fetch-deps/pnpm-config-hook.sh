@@ -22,11 +22,19 @@ pnpmConfigHook() {
 
     pnpm config set store-dir "$STORE_PATH"
 
-    echo "Installing dependencies"
-
     if [[ -n "$pnpmWorkspace" ]]; then
-        pnpmInstallFlags+=("--filter=$pnpmWorkspace")
+        echo "'pnpmWorkspace' is deprecated, please migrate to 'pnpmWorkspaces'."
+        exit 2
     fi
+
+    echo "Installing dependencies"
+    if [[ -n "$pnpmWorkspaces" ]]; then
+        local IFS=" "
+        for ws in $pnpmWorkspaces; do
+            pnpmInstallFlags+=("--filter=$ws")
+        done
+    fi
+
     runHook prePnpmInstall
 
     pnpm install \

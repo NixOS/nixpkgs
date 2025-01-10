@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, asciidoctor
-, buildah
-, buildah-unwrapped
-, cargo
-, libiconv
-, libkrun
-, makeWrapper
-, rustc
-, sigtool
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  asciidoctor,
+  buildah,
+  buildah-unwrapped,
+  cargo,
+  libiconv,
+  libkrun,
+  makeWrapper,
+  rustc,
+  sigtool,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,11 +36,13 @@ stdenv.mkDerivation rec {
     rustc
     asciidoctor
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [ sigtool ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  buildInputs = [ libkrun ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ libkrun ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -57,7 +60,7 @@ stdenv.mkDerivation rec {
 
   # It attaches entitlements with codesign and strip removes those,
   # voiding the entitlements and making it non-operational.
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     wrapProgram $out/bin/krunvm \

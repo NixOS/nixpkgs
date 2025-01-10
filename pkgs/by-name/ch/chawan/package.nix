@@ -11,25 +11,24 @@
 , zlib
 , unstableGitUpdater
 , libseccomp
-, substituteAll
+, replaceVars
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-09-03";
+  version = "0-unstable-2024-12-27";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "298684d174be90be57967f15c2f1bf0d24ba2446";
-    hash = "sha256-R/+qLoyewqoOfi264GvZUvpZbN5FX8LtGikQ3FxJEvw=";
+    rev = "93033c2c382aaff01b1aba6f5db7652c35708bf3";
+    hash = "sha256-MEOIu1CI/VTvd2cixa57Tv1xtBMXiMdD37ZYjAlg5S4=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Include chawan's man pages in mancha's search path
-    (substituteAll {
-      src = ./mancha-augment-path.diff;
+    (replaceVars ./mancha-augment-path.diff {
       out = placeholder "out";
     })
   ];
@@ -79,6 +78,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
-    broken = stdenv.isDarwin; # pending PR #292043
+    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }

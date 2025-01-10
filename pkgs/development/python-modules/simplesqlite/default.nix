@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "SimpleSQLite";
-  version = "1.5.2";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "SimpleSQLite";
-    rev = "v${version}";
-    hash = "sha256-Yr17T0/EwVaOjG+mzdxopivj0fuvQdZdX1bFj8vq0MM=";
+    tag = "v${version}";
+    hash = "sha256-jwty2c8xelLU/m73aodHBj9V9jSw6jjJI7HIzqDTy3A=";
   };
 
   nativeBuildInputs = [ setuptools ];

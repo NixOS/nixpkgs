@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H1JfdvxJvX5dmC9aTqIOkjAqFEL44KoUXEhoYj2uRY8=";
   };
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
 
   # k5test is marked as broken on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     k5test

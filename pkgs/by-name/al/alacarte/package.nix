@@ -17,14 +17,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "alacarte";
-  version = "3.52.0";
+  version = "3.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "alacarte";
     rev = version;
-    hash = "sha256-SkolSk6RireH3aKkRTUCib/nflqD02PR9uVtXePRHQY=";
+    hash = "sha256-btqSlO0vM4fmoBcxh3mshv0t2oZSxm8Vr26UvH5fVvE=";
   };
 
   format = "other";
@@ -61,6 +61,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/alacarte";
+    changelog = "https://gitlab.gnome.org/GNOME/alacarte/-/blob/${version}/NEWS?ref_type=tags";
     description = "Menu editor for GNOME using the freedesktop.org menu specification";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;

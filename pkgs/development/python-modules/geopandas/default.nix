@@ -13,6 +13,17 @@
   pyproj,
   rtree,
   shapely,
+
+  # optional-dependencies
+  folium,
+  geoalchemy2,
+  geopy,
+  mapclassify,
+  matplotlib,
+  psycopg,
+  pyarrow,
+  sqlalchemy,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
   };
 
@@ -39,12 +50,32 @@ buildPythonPackage rec {
     shapely
   ];
 
+  optional-dependencies = {
+    all = [
+      # prevent infinite recursion
+      (folium.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      geoalchemy2
+      geopy
+      # prevent infinite recursion
+      (mapclassify.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      matplotlib
+      psycopg
+      pyarrow
+      sqlalchemy
+      xyzservices
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ];
+  ] ++ optional-dependencies.all;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$(mktemp -d);

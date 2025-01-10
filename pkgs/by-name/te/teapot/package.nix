@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libtirpc
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libtirpc,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {

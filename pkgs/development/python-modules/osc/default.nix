@@ -49,7 +49,7 @@ buildPythonPackage rec {
   preCheck = "HOME=$TOP/tmp";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     mainProgram = "osc";

@@ -6,7 +6,7 @@
   fetchFromGitHub,
   fetchurl,
   linkFarm,
-  ffmpeg_6-headless,
+  ffmpeg-headless,
   numpy,
   pillow,
   pkg-config,
@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "12.3.0";
+  version = "13.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ezeYv55UzNnnYDjrMz5YS5g2pV6U/Fxx3e2bCoPP3eI=";
+    tag = "v${version}";
+    hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
   };
 
   build-system = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ffmpeg_6-headless ];
+  buildInputs = [ ffmpeg-headless ];
 
   preCheck =
     let
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   ];
 
   # `__darwinAllowLocalNetworking` doesn’t work for these; not sure why.
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/test_timeout.py"
   ];
 

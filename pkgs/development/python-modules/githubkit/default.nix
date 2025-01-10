@@ -17,22 +17,21 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.9";
+  version = "0.12.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aN8LTWDtzj04w0dQvUVMJ2QhHWaFK4ml1ZoLO2LmKTY=";
+    tag = "v${version}";
+    hash = "sha256-h2XoHb3ukh6MKQG2v0TZg81mcwNGk4cfK8CWjzhM8W4=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     hishel
@@ -41,7 +40,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       anyio
       pyjwt
@@ -59,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "githubkit" ];
 

@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchhg
-, pkg-config
-, meson
-, ninja
-, gtk3
-, json_c
-, libpulseaudio
-, wayland
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchhg,
+  pkg-config,
+  meson,
+  ninja,
+  gtk3,
+  json_c,
+  libpulseaudio,
+  wayland,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook3
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, cairo
-, gdk-pixbuf
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  cairo,
+  gdk-pixbuf,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,12 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wayland-scanner
+  ];
   buildInputs = [
     cairo
     gdk-pixbuf
@@ -37,6 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.isDarwin; # this should be enfoced by wayland platforms in the future
+    broken = stdenv.hostPlatform.isDarwin; # this should be enfoced by wayland platforms in the future
   };
 }

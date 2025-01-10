@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.net";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z9+gz6Sos0uluU5icXJN9OMmWFErVrJXBvoBcKv6Wwg=";
   };
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     python-dateutil
     pathvalidate
     jsonpickle
-  ] ++ lib.optionals stdenv.isDarwin [ ifconfig-parser ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
 
   pythonImportsCheck = [ "jaraco.net" ];
 
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     importlib-resources
     pyparsing
     requests-mock
-  ] ++ lib.optionals stdenv.isDarwin [ nettools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ nettools ];
 
   disabledTestPaths = [
     # doesn't actually contain tests

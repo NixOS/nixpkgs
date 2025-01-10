@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.20";
+  version = "26.4.21";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    hash = "sha256-R2YQtAuqPkOtcvjS5PPcqAqu153N2+0/WjZt96ZSI1A=";
+    hash = "sha256-mXnQOs2WNdXORBqcfQPgDoJjbyrpypGDOkgP09JZ9Qo=";
     fetchSubmodules = true;
   };
 
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

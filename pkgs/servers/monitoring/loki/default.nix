@@ -10,14 +10,14 @@
 }:
 
 buildGoModule rec {
-  version = "3.1.1";
+  version = "3.3.2";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-QOokLht/nIzQAzXQuJv5M4QTQD0Zhzf9+Q0ILl2Mds0=";
+    hash = "sha256-Xz8157x6cjKbQWyJUYPcOixYMfWr5QzVfxAXEFQxY9w=";
   };
 
   vendorHash = null;
@@ -34,9 +34,9 @@ buildGoModule rec {
   tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev ];
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
@@ -65,6 +65,6 @@ buildGoModule rec {
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
-    maintainers = with maintainers; [ willibutz globin mmahut emilylange ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ];
   };
 }

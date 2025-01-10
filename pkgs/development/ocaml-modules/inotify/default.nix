@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, lwt # optional lwt support
-, ounit2, fileutils # only for tests
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  lwt, # optional lwt support
+  ounit2,
+  fileutils, # only for tests
 }:
 
 buildDunePackage rec {
@@ -16,7 +20,10 @@ buildDunePackage rec {
 
   buildInputs = [ lwt ];
 
-  checkInputs = [ ounit2 fileutils ];
+  checkInputs = [
+    ounit2
+    fileutils
+  ];
 
   doCheck = true;
 

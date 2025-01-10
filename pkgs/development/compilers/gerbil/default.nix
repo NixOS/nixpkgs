@@ -1,4 +1,8 @@
-{ callPackage, fetchFromGitHub, gambit-support }:
+{
+  callPackage,
+  fetchFromGitHub,
+  gambit-support,
+}:
 
 callPackage ./build.nix rec {
   version = "0.18.1";

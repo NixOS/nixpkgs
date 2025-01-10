@@ -1,12 +1,18 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
-  version = "3.5.17";
+  version = "3.5.20";
 
   src = fetchurl {
     url = "https://maven.reposilite.com/releases/com/reposilite/reposilite/${finalAttrs.version}/reposilite-${finalAttrs.version}-all.jar";
-    hash = "sha256-O2dDkjypTLRu3tWRLEQQSwgX53doTsTxGSEfA2k0hlI=";
+    hash = "sha256-IdUHtulkSKvXatAs+BmzXgwv9oJz1XeRVtpEyIZ7BY4=";
   };
 
   dontUnpack = true;

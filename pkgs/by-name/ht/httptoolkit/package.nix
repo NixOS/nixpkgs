@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e+ngBZMwMTvwzY1K7IaxlNoRkZUPDdJvKxvxuCsc9pw=";
   };
 
@@ -29,7 +29,9 @@ buildNpmPackage rec {
     CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isLinux [ copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 
@@ -50,7 +52,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/httptoolkit
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/httptoolkit
 
@@ -60,11 +62,11 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/httptoolkit \
           --add-flags $out/share/httptoolkit/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"HTTP Toolkit.app" $out/Applications
 

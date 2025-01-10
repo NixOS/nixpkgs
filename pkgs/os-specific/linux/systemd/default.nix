@@ -4,6 +4,7 @@
 , lib
 , nixosTests
 , pkgsCross
+, testers
 , fetchFromGitHub
 , fetchzip
 , fetchpatch2
@@ -184,7 +185,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "256.4";
+  version = "256.8";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -202,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-dugBiRgDFpB0eKhhIT3LkA8FhClM0lvvwCMJ+dKtjPM=";
+    hash = "sha256-L/MCsCCMVvK7LgxlaLFpnmsJuTu33cPaiMxIpHU7Tzg=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -306,7 +307,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
     "trivialautovarinit"
     # breaks clang -target bpf; should be fixed to filter target?
-  ] ++ (lib.optional withLibBPF "zerocallusedregs");
+  ] ++ (lib.optionals withLibBPF ["zerocallusedregs" "shadowstack"]);
 
   nativeBuildInputs =
     [
@@ -777,7 +778,7 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
+    inherit withBootloader withCryptsetup withEfi withFido2 withHostnamed withImportd withKmod
       withLocaled withMachined withPortabled withTimedated withTpm2Tss withUtmp
       util-linux kmod kbd;
 
@@ -795,6 +796,7 @@ stdenv.mkDerivation (finalAttrs: {
             else "aarch64-multiplatform";
         in
         pkgsCross.${systemString}.systemd;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -830,6 +832,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ flokli kloenk ];
+    pkgConfigModules = [ "libsystemd" "libudev" "systemd" "udev" ];
     # See src/basic/missing_syscall_def.h
     platforms = with lib.platforms; lib.intersectLists linux
       (aarch ++ x86 ++ loongarch64 ++ m68k ++ mips ++ power ++ riscv ++ s390);

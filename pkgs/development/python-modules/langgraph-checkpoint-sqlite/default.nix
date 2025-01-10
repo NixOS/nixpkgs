@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "1.0.3";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpointsqlite==${version}";
-    hash = "sha256-/pHJtK691anqn2It4ZstCGXJS0JGtdKZvqS9f3ly+FQ=";
+    tag = "checkpointsqlite==${version}";
+    hash = "sha256-dh+cjcOp6rGFntz82VNfVyetcrQBdBFdXk5xFb0aR5c=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
@@ -33,6 +33,9 @@ buildPythonPackage rec {
     aiosqlite
     langgraph-checkpoint
   ];
+
+  # Checkpoint clients are lagging behind langgraph-checkpoint
+  pythonRelaxDeps = [ "langgraph-checkpoint" ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.sqlite" ];
 

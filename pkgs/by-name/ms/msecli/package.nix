@@ -16,7 +16,10 @@ let
     hash = "sha256-IszdD/9fAh+JA26bSR1roXSo8LDU/rf4CuRI3HjU1xc=";
   };
 
-  buildEnv = buildFHSEnv { name = "msecli-buildEnv"; };
+  buildEnv = buildFHSEnv {
+    pname = "msecli-buildEnv";
+    inherit version;
+  };
 in
 stdenv.mkDerivation {
   inherit pname version src;
@@ -39,7 +42,7 @@ stdenv.mkDerivation {
 
     # ignore the exit code as the installer
     # fails at optional steps due to read only FHS
-    ${buildEnv}/bin/${buildEnv.name} -c "./${src.name} --mode unattended --prefix bin || true"
+    ${buildEnv}/bin/${buildEnv.pname} -c "./${src.name} --mode unattended --prefix bin || true"
 
     runHook postbuild
   '';

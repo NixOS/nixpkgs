@@ -4,17 +4,21 @@
   buildPythonPackage,
   substituteAll,
   addDriverRunpath,
+  setuptools,
+  cudaPackages,
+  nvidia-ml-py,
 }:
 
 buildPythonPackage rec {
   pname = "nvidia-ml-py";
-  version = "12.555.43";
-  format = "setuptools";
+  version = "12.560.30";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-6efxLvHsI0uw3CLSvcdi/6+rOUvcRyoHpDd8lbv5Ov4=";
+    hash = "sha256-8CVNx0AGR2gKBy7gJQm/1GECtgvf7KMhV21NSBfn/pc=";
   };
 
   patches = [
@@ -24,16 +28,38 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [
+    setuptools
+  ];
+
   # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pynvml" ];
 
+  passthru.tests.tester-nvmlInit =
+    cudaPackages.writeGpuTestPython { libraries = [ nvidia-ml-py ]; }
+      ''
+        from pynvml import (
+          nvmlInit,
+          nvmlSystemGetDriverVersion,
+          nvmlDeviceGetCount,
+          nvmlDeviceGetHandleByIndex,
+          nvmlDeviceGetName,
+        )
+
+        nvmlInit()
+        print(f"Driver Version: {nvmlSystemGetDriverVersion()}")
+
+        for i in range(nvmlDeviceGetCount()):
+            handle = nvmlDeviceGetHandleByIndex(i)
+            print(f"Device {i} : {nvmlDeviceGetName(handle)}")
+      '';
+
   meta = {
     description = "Python Bindings for the NVIDIA Management Library";
     homepage = "https://pypi.org/project/nvidia-ml-py";
     license = lib.licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -6,19 +6,19 @@
   mock,
   pytest-cov-stub,
   pytest-xdist,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uvcclient";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ilZTRoSuoJMWlyRfvY/PpTBbr+d6wx+T3cVyW3ZkXlY=";
+    tag = "v${version}";
+    hash = "sha256-V7xIvZ9vIXHPpkEeJZ6QedWk+4ZVNwCzj5ffLyixFz4=";
   };
 
   build-system = [ poetry-core ];

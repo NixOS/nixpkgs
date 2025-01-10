@@ -9,7 +9,7 @@
   lapack,
   mpiSupport ? true,
   mpi, # generic mpi dependency
-  openssh, # required for openmpi tests
+  mpiCheckPhaseHook,
   petsc-withp4est ? false,
   hdf5-support ? false,
   hdf5,
@@ -41,22 +41,16 @@ stdenv.mkDerivation rec {
     python3
     gfortran
     pkg-config
-  ] ++ lib.optional mpiSupport mpi ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh;
+  ] ++ lib.optional mpiSupport mpi;
   buildInputs = [
     blas
     lapack
   ] ++ lib.optional hdf5-support hdf5 ++ lib.optional petsc-withp4est p4est ++ lib.optionals withParmetis [ metis parmetis ];
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config/install.py \
       --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
   '';
-
-  # Both OpenMPI and MPICH get confused by the sandbox environment and spew errors like this (both to stdout and stderr):
-  #     [hwloc/linux] failed to find sysfs cpu topology directory, aborting linux discovery.
-  #     [1684747490.391106] [localhost:14258:0]       tcp_iface.c:837  UCX  ERROR opendir(/sys/class/net) failed: No such file or directory
-  # These messages contaminate test output, which makes the quicktest suite to fail. The patch adds filtering for these messages.
-  patches = [ ./filter_mpi_warnings.patch ];
 
   configureFlags = [
     "--with-blas=1"
@@ -112,6 +106,7 @@ stdenv.mkDerivation rec {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
+  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
 
   passthru = {
     inherit mpiSupport;

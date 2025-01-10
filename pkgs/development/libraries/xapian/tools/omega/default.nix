@@ -6,11 +6,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-omega-${version}.tar.xz";
-    hash = "sha256-pbI4bhsE34TRFJqenFvPxeRyammmnaZBuGxo15ln2uQ=";
+    hash = "sha256-HRk7MoXsFQVXJXsEnuHYyUxAvN6QbOC6fxo4oamlpcE=";
   };
 
   buildInputs = [ xapian perl pcre2 zlib libmagic ];
   nativeBuildInputs = [ pkg-config ];
+
+  postInstall = ''
+    mkdir -p $out/share/omega
+    cp -r templates $out/share/omega
+  '';
 
   meta = with lib; {
     description = "Indexer and CGI search front-end built on Xapian library";

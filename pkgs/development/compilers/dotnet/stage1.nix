@@ -1,26 +1,41 @@
-{ stdenv
-, lib
-, callPackage
+{
+  stdenv,
+  lib,
+  callPackage,
 
-, releaseManifestFile
-, tarballHash
-, depsFile
-, bootstrapSdk
+  releaseManifestFile,
+  tarballHash,
+  depsFile,
+  bootstrapSdk,
+  fallbackTargetPackages,
 }@args:
 
 let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = callPackage ./stage0.nix args;
+  stage0 = callPackage ./stage0.nix (
+    args
+    // {
+      baseName = "dotnet-stage0";
+    }
+  );
 
-  vmr = (mkVMR {
-    inherit releaseManifestFile tarballHash;
-    dotnetSdk = stage0.sdk;
-  }).overrideAttrs (old: {
-    passthru = old.passthru or {} // {
-      inherit (stage0.vmr) fetch-deps;
-    };
-  });
+  vmr =
+    (mkVMR {
+      inherit releaseManifestFile tarballHash;
+      bootstrapSdk = stage0.sdk.unwrapped;
+    }).overrideAttrs
+      (old: {
+        passthru = old.passthru or { } // {
+          inherit (stage0.vmr) fetch-deps;
+        };
+      });
 
-in mkPackages { inherit vmr; } // { stage0 = lib.dontRecurseIntoAttrs stage0; }
+in
+mkPackages {
+  inherit vmr fallbackTargetPackages;
+}
+// {
+  stage0 = lib.dontRecurseIntoAttrs stage0;
+}

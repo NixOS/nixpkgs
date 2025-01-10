@@ -11,12 +11,13 @@ rec {
     x86-64-v3      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2"          "fma"        ];
     x86-64-v4      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2" "avx512" "fma"        ];
     # x86_64 Intel
-    nehalem        = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
-    westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
-    sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
-    ivybridge      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
-    haswell        = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2"          "fma"        ];
-    broadwell      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2"          "fma"        ];
+    nehalem        = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
+    westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
+    silvermont     = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
+    sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx"                              ];
+    ivybridge      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx"                              ];
+    haswell        = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2"          "fma"        ];
+    broadwell      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2"          "fma"        ];
     skylake        = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2"          "fma"        ];
     skylake-avx512 = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     cannonlake     = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
@@ -26,6 +27,8 @@ rec {
     cooperlake     = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     tigerlake      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     alderlake      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2"          "fma"        ];
+    sapphirerapids = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
+    emeraldrapids  = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     # x86_64 AMD
     btver1         = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
     btver2         = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -73,6 +76,8 @@ rec {
     cascadelake    = [ "cannonlake"     ] ++ inferiors.cannonlake;
     cooperlake     = [ "cascadelake"    ] ++ inferiors.cascadelake;
     tigerlake      = [ "icelake-server" ] ++ inferiors.icelake-server;
+    sapphirerapids = [ "tigerlake"      ] ++ inferiors.tigerlake;
+    emeraldrapids  = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
     # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
     alderlake      = [ ];

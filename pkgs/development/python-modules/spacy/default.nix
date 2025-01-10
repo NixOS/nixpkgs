@@ -1,18 +1,20 @@
 {
   lib,
   stdenv,
-  blis,
   buildPythonPackage,
   callPackage,
   catalogue,
   cymem,
   cython_0,
   fetchPypi,
+  git,
   hypothesis,
   jinja2,
   langcodes,
   mock,
   murmurhash,
+  nix-update,
+  nix,
   numpy,
   packaging,
   preshed,
@@ -23,6 +25,8 @@
   setuptools,
   spacy-legacy,
   spacy-loggers,
+  spacy-lookups-data,
+  spacy-transformers,
   srsly,
   thinc,
   tqdm,
@@ -30,28 +34,24 @@
   wasabi,
   weasel,
   writeScript,
-  nix,
-  git,
-  nix-update,
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.6";
+  version = "3.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9AZcCqxcSLv7L/4ZHVXMszv7AFN2r71MzW1ek0FRTjQ=";
+    hash = "sha256-galn3D1qWgqaslBVlIP+IJIwZYKpGS+Yvnpjvc4nl/c=";
   };
 
   postPatch = ''
-    # thinc version 8.3.0 had no functional changes
-    # also see https://github.com/explosion/spaCy/issues/13607
+    # unpin numpy, cannot use pythonRelaxDeps because it's in build-system
     substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "thinc>=8.2.2,<8.3.0" "thinc>=8.2.2,<8.4.0"
+      --replace-fail ",<2.1.0" ""
   '';
 
   build-system = [
@@ -59,8 +59,11 @@ buildPythonPackage rec {
     cython_0
     murmurhash
     numpy
+    preshed
     thinc
   ];
+
+  pythonRelaxDeps = [ "thinc" ];
 
   dependencies = [
     catalogue
@@ -89,6 +92,11 @@ buildPythonPackage rec {
     hypothesis
     mock
   ];
+
+  optional-dependencies = {
+    transformers = [ spacy-transformers ];
+    lookups = [ spacy-lookups-data ];
+  };
 
   # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
   preCheck = ''
@@ -128,10 +136,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
-    mainProgram = "spacy";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "spacy";
   };
 }

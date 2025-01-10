@@ -163,8 +163,6 @@ in
         ++ lib.optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
     in {
       "127.0.0.2" = hostnames;
-    } // lib.optionalAttrs cfg.enableIPv6 {
-      "::1" = hostnames;
     };
 
     networking.hostFiles = let

@@ -1,11 +1,11 @@
 {
   mkKdeDerivation,
-  _7zz
+  _7zz,
 }:
 mkKdeDerivation {
   pname = "katomic";
 
-  extraNativeBuildInputs = [_7zz];
+  extraNativeBuildInputs = [ _7zz ];
 
   meta.mainProgram = "katomic";
 }

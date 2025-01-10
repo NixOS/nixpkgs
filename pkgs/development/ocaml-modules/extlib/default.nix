@@ -1,4 +1,9 @@
-{ buildDunePackage, lib, fetchurl, cppo }:
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  cppo,
+}:
 
 buildDunePackage rec {
   pname = "extlib";

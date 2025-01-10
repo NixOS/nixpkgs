@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "21.5";
+  version = "21.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
+    tag = "v${version}";
+    hash = "sha256-iiKdEYCQgYehiyM6/rWrm76n6m2q7ok2OIfkkWztBSs=";
   };
 
   build-system = [
@@ -92,6 +92,7 @@ buildPythonPackage rec {
     "TestForum"
     "TestGame"
     "TestGet"
+    "TestGiftsWithRequest"
     "TestHTTP"
     "TestInline"
     "TestInput"

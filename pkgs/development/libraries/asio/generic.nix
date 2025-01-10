@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, boost, openssl
-, version, sha256, ...
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  openssl,
+  version,
+  sha256,
+  ...
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +26,7 @@ stdenv.mkDerivation {
     homepage = "http://asio.sourceforge.net/";
     description = "Cross-platform C++ library for network and low-level I/O programming";
     license = licenses.boost;
-    broken = stdenv.isDarwin && lib.versionOlder version "1.16.1";
+    broken = stdenv.hostPlatform.isDarwin && lib.versionOlder version "1.16.1";
     platforms = platforms.unix;
   };
 }

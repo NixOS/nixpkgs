@@ -49,7 +49,7 @@ buildPythonPackage rec {
       "test_client_connect_networking_error"
       "test_finalization_dropped_exception"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Failed: DID NOT RAISE <class 'ValueError'>
       "test_finalization_dropped_exception"
       # Timing related

@@ -59,7 +59,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "yapf";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       siddharthist
     ];
   };

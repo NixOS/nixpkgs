@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "otsaloma";
     repo = "gaupol";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lhNyeieeiBBm3rNDEU0BuWKeM6XYlOtv1voW8tR8cUM=";
   };
 

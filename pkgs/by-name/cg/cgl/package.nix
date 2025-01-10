@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, clp
-, coin-utils
-, osi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  clp,
+  coin-utils,
+  osi,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

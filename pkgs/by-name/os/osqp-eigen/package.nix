@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" true)
-    (lib.cmakeBool "OSQPEIGEN_RUN_Valgrind_tests" stdenv.isLinux)
+    (lib.cmakeBool "OSQPEIGEN_RUN_Valgrind_tests" stdenv.hostPlatform.isLinux)
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     osqp
   ];
   checkInputs = [ catch2 ];
-  nativeCheckInputs = lib.optional stdenv.isLinux valgrind;
+  nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux valgrind;
 
   doCheck = true;
 

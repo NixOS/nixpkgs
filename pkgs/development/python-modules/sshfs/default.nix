@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2024.6.0";
+  version = "2024.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8Vut/JDLmWrTys8aaIBRbaWlvGCg6edaXmMCFxjGhag=";
+    tag = version;
+    hash = "sha256-rRcXimthyFLBqt0nMEv7bisL+JNLLZuRH7BopSLM7QQ=";
   };
 
   build-system = [
@@ -41,8 +41,8 @@ buildPythonPackage rec {
     fido2 = [ asyncssh ] ++ asyncssh.optional-dependencies.fido2;
     gssapi = [ asyncssh ] ++ asyncssh.optional-dependencies.gssapi;
     libnacl = [ asyncssh ] ++ asyncssh.optional-dependencies.libnacl;
-    pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.python-pkcs11;
-    pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyopenssl;
+    pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.pkcs11;
+    pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyOpenSSL;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -59,7 +59,7 @@ buildPythonPackage rec {
       # Test requires network access
       "test_config_expansions"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Test fails with sandbox enabled
       "test_checksum"
     ];

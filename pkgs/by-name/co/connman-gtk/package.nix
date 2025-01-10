@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, intltool, pkg-config,
-gtk3, connman, openconnect, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  intltool,
+  pkg-config,
+  gtk3,
+  connman,
+  openconnect,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "connman-gtk";

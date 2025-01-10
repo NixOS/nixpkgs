@@ -1,31 +1,51 @@
-{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
-, pkg-config, openssl
-, libiconv, Security, CoreServices, SystemConfiguration
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
+  pkg-config,
+  openssl,
+  libiconv,
+  Security,
+  CoreServices,
+  SystemConfiguration,
+  dbBackend ? "sqlite",
+  libmysqlclient,
+  postgresql,
+}:
 
 let
-  webvault = callPackage ./webvault.nix {};
+  webvault = callPackage ./webvault.nix { };
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.32.0";
+  version = "1.32.7";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     rev = version;
-    hash = "sha256-y8+hkvUKj0leJJ5w72HOVDSOtKW6y2Y44VfOZSetn4M=";
+    hash = "sha256-mxZQ1San8zlyvZoBRF9Eb7/mbs374MOgC4baOCFyPoc=";
   };
 
-  cargoHash = "sha256-1Z0ba1FhxQ5qVpofi0XD1MYz02QCvdXGeuViW3lU6JQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OKfu+G+bS72HJDDLhRp9PMji/baBsh7JaYEZgQYdjTw=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+      CoreServices
+      SystemConfiguration
+    ]
     ++ lib.optional (dbBackend == "mysql") libmysqlclient
     ++ lib.optional (dbBackend == "postgresql") postgresql;
 
@@ -34,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     inherit webvault;
     tests = nixosTests.vaultwarden;
-    updateScript = callPackage ./update.nix {};
+    updateScript = callPackage ./update.nix { };
   };
 
   meta = with lib; {
@@ -42,7 +62,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dani-garcia/vaultwarden";
     changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ dotlambda SuperSandro2000 ];
+    maintainers = with maintainers; [
+      dotlambda
+      SuperSandro2000
+    ];
     mainProgram = "vaultwarden";
   };
 }

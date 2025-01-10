@@ -23,7 +23,7 @@ buildGoModule rec {
     sed -e '/^hooks:/,+2 d' -i plugin.yaml
   '';
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 

@@ -1,21 +1,27 @@
-{ lib
-, dbus
-, fetchFromGitHub
-, python3
+{
+  lib,
+  dbus,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "7.0.0";
+  version = "7.0.3";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AJ0ZWRxqhBJEics6XnIVWyf7pJI8MphQU4LRqSYYNSQ=";
+    tag = "v${version}";
+    hash = "sha256-ePQiP7NeRBPVHkd8rvbxno/NBX95e9d97F8TIazCUH4=";
   };
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   dependencies = with python3.pkgs; [
     dbus-python
@@ -56,7 +62,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://autosuspend.readthedocs.io";
     changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bzizou anthonyroussel ];
+    maintainers = with maintainers; [
+      bzizou
+      anthonyroussel
+    ];
     mainProgram = "autosuspend";
     platforms = platforms.linux;
   };

@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/swell-foop";
+    changelog = "https://gitlab.gnome.org/GNOME/swell-foop/-/tree/${version}?ref_type=tags";
     description = "Puzzle game, previously known as Same GNOME";
     mainProgram = "swell-foop";
     maintainers = teams.gnome.members;

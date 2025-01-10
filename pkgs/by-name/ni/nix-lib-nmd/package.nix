@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+}:
 
-let version = "0.5.0";
-in stdenv.mkDerivation {
+let
+  version = "0.5.0";
+in
+stdenv.mkDerivation {
   pname = "nix-lib-nmd";
   inherit version;
 

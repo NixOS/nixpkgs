@@ -1,31 +1,38 @@
-{ cmake
-, fetchFromGitHub
-, jazz2-content
-, lib
-, libopenmpt
-, libvorbis
-, openal
-, SDL2
-, stdenv
-, testers
-, zlib
+{
+  cmake,
+  fetchFromGitHub,
+  jazz2-content,
+  lib,
+  libopenmpt,
+  libvorbis,
+  openal,
+  SDL2,
+  stdenv,
+  testers,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "2.8.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     rev = finalAttrs.version;
-    hash = "sha256-qJVT7WCw3nfoLbSqLFfZCI5VLOuoD/iSVfC9B+XEhyg=";
+    hash = "sha256-t1bXREL/WWnYnSfCyAY5tus/Bq5V4HVHg9s7oltGoIg=";
   };
 
   patches = [ ./nocontent.patch ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libopenmpt libvorbis openal SDL2 zlib ];
+  buildInputs = [
+    libopenmpt
+    libvorbis
+    openal
+    SDL2
+    zlib
+  ];
 
   cmakeFlags = [
     "-DLIBOPENMPT_INCLUDE_DIR=${lib.getDev libopenmpt}/include/libopenmpt"

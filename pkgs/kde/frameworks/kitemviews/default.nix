@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kitemviews";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

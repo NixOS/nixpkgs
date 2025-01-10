@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xWEnPkQCwlEUhzSGyYv6GyxHiGIp1BAOh9rxAO4Edyg=";
+    pname = "azure_keyvault_certificates";
+    inherit version;
+    hash = "sha256-ndBPj/5AkViCgut1SAuzHlhN2ZQNCfnepn+sg2Ppflk=";
   };
 
   nativeBuildInputs = [ setuptools ];

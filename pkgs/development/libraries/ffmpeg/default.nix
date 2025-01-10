@@ -1,19 +1,16 @@
-{ callPackage, darwin }:
+{
+  callPackage,
+  darwin,
+  cudaPackages,
+}:
 
 let
   mkFFmpeg =
     initArgs: ffmpegVariant:
     callPackage ./generic.nix (
       {
-        inherit (darwin.apple_sdk.frameworks)
-          Accelerate
-          AppKit
-          AudioToolbox
-          AVFoundation
-          CoreImage
-          VideoToolbox
-          ;
         inherit (darwin) xcode;
+        inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
@@ -29,8 +26,8 @@ let
   };
 
   v7 = {
-    version = "7.0.2";
-    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
+    version = "7.1";
+    hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
   };
 in
 
@@ -50,11 +47,17 @@ rec {
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
 
-  # Please make sure this is updated to the latest version on the next major
-  # update to ffmpeg
-  # Packages which use ffmpeg as a library, should pin to the relevant major
-  # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  # Please make sure this is updated to new major versions once they
+  # build and work on all the major platforms. If absolutely necessary
+  # due to severe breaking changes, the bump can wait a little bit to
+  # give the most proactive users time to migrate, but don’t hold off
+  # for too long.
+  #
+  # Packages which depend on FFmpeg should generally use these
+  # unversioned aliases to allow for quicker migration to new releases,
+  # but can pin one of the versioned variants if they do not work with
+  # the current default version.
+  ffmpeg = ffmpeg_7;
+  ffmpeg-headless = ffmpeg_7-headless;
+  ffmpeg-full = ffmpeg_7-full;
 }

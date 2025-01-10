@@ -27,7 +27,6 @@
   pyyaml,
   redis,
   scikit-learn,
-  scikit-optimize,
   scipy,
   setuptools,
   shap,
@@ -38,30 +37,28 @@
   torchvision,
   tqdm,
   wandb,
-  wheel,
   xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZCK6otX90s8SB91TLkKwJ4net2dGmAKdIESeHXy87K0=";
+    tag = "v${version}";
+    hash = "sha256-wIgYExxJEWFxEadBuCsxEIcW2/J6EVybW1jp83gIMjY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     colorlog
     numpy
@@ -71,7 +68,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     integration = [
       botorch
       catboost
@@ -83,7 +80,6 @@ buildPythonPackage rec {
       # pytorch-ignite
       pytorch-lightning
       scikit-learn
-      scikit-optimize
       shap
       tensorflow
       torch
@@ -109,13 +105,16 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  nativeCheckInputs = [
-    fakeredis
-    moto
-    pytest-xdist
-    pytestCheckHook
-    scipy
-  ] ++ fakeredis.optional-dependencies.lua ++ passthru.optional-dependencies.optional;
+  nativeCheckInputs =
+    [
+      fakeredis
+      moto
+      pytest-xdist
+      pytestCheckHook
+      scipy
+    ]
+    ++ fakeredis.optional-dependencies.lua
+    ++ optional-dependencies.optional;
 
   pytestFlagsArray = [ "-m 'not integration'" ];
 

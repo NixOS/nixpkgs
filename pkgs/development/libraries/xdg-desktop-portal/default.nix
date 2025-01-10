@@ -1,41 +1,46 @@
-{ lib
-, fetchFromGitHub
-, flatpak
-, fuse3
-, bubblewrap
-, docbook_xml_dtd_412
-, docbook_xml_dtd_43
-, docbook_xsl
-, docutils
-, systemdMinimal
-, geoclue2
-, glib
-, gsettings-desktop-schemas
-, json-glib
-, libportal
-, libxml2
-, meson
-, ninja
-, nixosTests
-, pipewire
-, gdk-pixbuf
-, librsvg
-, gobject-introspection
-, python3
-, pkg-config
-, stdenv
-, runCommand
-, wrapGAppsHook3
-, xmlto
-, enableGeoLocation ? true
-, enableSystemd ? true
+{
+  lib,
+  fetchFromGitHub,
+  flatpak,
+  fuse3,
+  bubblewrap,
+  docbook_xml_dtd_412,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  docutils,
+  systemdMinimal,
+  geoclue2,
+  glib,
+  gsettings-desktop-schemas,
+  json-glib,
+  libportal,
+  libxml2,
+  meson,
+  ninja,
+  nixosTests,
+  pipewire,
+  gdk-pixbuf,
+  librsvg,
+  gobject-introspection,
+  python3,
+  pkg-config,
+  stdenv,
+  runCommand,
+  wrapGAppsHook3,
+  xmlto,
+  bash,
+  enableGeoLocation ? true,
+  enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
   version = "1.18.4";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [
+    "out"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -63,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
     ./trash-test.patch
+
+    # Install files required to be in XDG_DATA_DIR of the installed tests
+    # Merged PR https://github.com/flatpak/xdg-desktop-portal/pull/1444
+    ./installed-tests-share.patch
   ];
 
   nativeBuildInputs = [
@@ -78,29 +87,35 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
   ];
 
-  buildInputs = [
-    flatpak
-    fuse3
-    bubblewrap
-    glib
-    gsettings-desktop-schemas
-    json-glib
-    libportal
-    pipewire
+  buildInputs =
+    [
+      flatpak
+      fuse3
+      bubblewrap
+      glib
+      gsettings-desktop-schemas
+      json-glib
+      libportal
+      pipewire
 
-    # For icon validator
-    gdk-pixbuf
-    librsvg
+      # For icon validator
+      gdk-pixbuf
+      librsvg
 
-    # For document-fuse installed test.
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
-  ] ++ lib.optionals enableGeoLocation [
-    geoclue2
-  ] ++ lib.optionals enableSystemd [
-    systemdMinimal # libsystemd
-  ];
+      # For document-fuse installed test.
+      (python3.withPackages (
+        pp: with pp; [
+          pygobject3
+        ]
+      ))
+      bash
+    ]
+    ++ lib.optionals enableGeoLocation [
+      geoclue2
+    ]
+    ++ lib.optionals enableSystemd [
+      systemdMinimal # libsystemd
+    ];
 
   nativeCheckInputs = [
     gobject-introspection
@@ -110,16 +125,37 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.dbus-python
   ];
 
-  mesonFlags = [
-    "--sysconfdir=/etc"
-    "-Dinstalled-tests=true"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    (lib.mesonEnable "systemd" enableSystemd)
-  ] ++ lib.optionals (!enableGeoLocation) [
-    "-Dgeoclue=disabled"
-  ];
+  mesonFlags =
+    [
+      "--sysconfdir=/etc"
+      "-Dinstalled-tests=true"
+      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+      (lib.mesonEnable "systemd" enableSystemd)
+    ]
+    ++ lib.optionals (!enableGeoLocation) [
+      "-Dgeoclue=disabled"
+    ]
+    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+      "-Dpytest=disabled"
+    ];
+
+  strictDeps = true;
 
   doCheck = true;
+
+  postPatch = ''
+    # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+
+    # Disable test failing with libportal 0.9.0
+    ${
+      assert (lib.versionOlder finalAttrs.version "1.20.0");
+      "# TODO: Remove when updating to x-d-p 1.20.0"
+    }
+    substituteInPlace tests/test-portals.c \
+      --replace-fail 'g_test_add_func ("/portal/notification/bad-arg", test_notification_bad_arg);' ""
+  '';
 
   preCheck = ''
     # For test_trash_file
@@ -131,6 +167,23 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
     export TEST_IN_CI=1
   '';
+
+  postFixup =
+    let
+      documentFuse = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-document-fuse.py";
+      testPortals = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-portals";
+
+    in
+    ''
+      if [ -x '${documentFuse}' ] ; then
+        wrapGApp '${documentFuse}'
+        wrapGApp '${testPortals}'
+        # (xdg-desktop-portal:995): xdg-desktop-portal-WARNING **: 21:21:55.673: Failed to get GeoClue client: Timeout was reached
+        # xdg-desktop-portal:ERROR:../tests/location.c:22:location_cb: 'res' should be TRUE
+        # https://github.com/flatpak/xdg-desktop-portal/blob/1d6dfb57067dec182b546dfb60c87aa3452c77ed/tests/location.c#L21
+        rm $installedTests/share/installed-tests/xdg-desktop-portal/test-portals-location.test
+      fi
+    '';
 
   passthru = {
     tests = {

@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.3.3";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    hash = "sha256-eiAHtfZz1L4iolyaER2QZpGdhy3bkTWn3OwBIimb054=";
+    hash = "sha256-0n/yoTNWAAKWqYq4hMrz0XWSfPIXJ5Y/+Q+rOnR1RM8=";
   };
 
   postPatch = ''
     substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
     substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
     patchShebangs bin/rebar
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
     # (There are warnings, but no hard errors, and it produces an empty dylib.)
     substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'

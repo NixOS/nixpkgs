@@ -34,19 +34,21 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.0";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-BCqrJuy7R2jT3QmTvYwn8gHX7bc6Tq8HArK+F3PjBhw=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   dependencies = [
     jsonpatch
@@ -83,15 +85,25 @@ buildPythonPackage rec {
   '';
 
   passthru = {
+    # Updates to core tend to drive updates in everything else
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
       set -u -o pipefail +e
+      # Common core
       nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
       nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
       nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
       nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
+
+      # Extensions
+      nix-update --commit --version-regex 'langchain-aws==(.*)' python3Packages.langchain-aws
+      nix-update --commit --version-regex 'langchain-azure-dynamic-sessions==(.*)' python3Packages.langchain-azure-dynamic-sessions
+      nix-update --commit --version-regex 'langchain-chroma==(.*)' python3Packages.langchain-chroma
+      nix-update --commit --version-regex 'langchain-huggingface==(.*)' python3Packages.langchain-huggingface
+      nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
+      nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
     '';
   };
 
@@ -100,16 +112,31 @@ buildPythonPackage rec {
       # flaky, sometimes fail to strip uuid from AIMessageChunk before comparing to test value
       "test_map_stream"
       # Compares with machine-specific timings
-      "test_rate_limit_invoke"
-      "test_rate_limit_stream"
+      "test_rate_limit"
       # flaky: assert (1726352133.7419367 - 1726352132.2697523) < 1
       "test_benchmark_model"
 
       # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
       "test_chat_prompt_template_variable_names"
       "test_create_model_v2"
+
+      # Comparison with magic strings
+      "test_prompt_with_chat_model"
+      "test_prompt_with_chat_model_async"
+      "test_prompt_with_llm"
+      "test_prompt_with_llm_parser"
+      "test_prompt_with_llm_and_async_lambda"
+      "test_prompt_with_chat_model_and_parser"
+      "test_combining_sequences"
+
+      # AssertionError: assert [+ received] == [- snapshot]
+      "test_chat_input_schema"
+      # AssertionError: assert {'$defs': {'D...ype': 'array'} == {'$defs': {'D...ype': 'array'}
+      "test_schemas"
+      # AssertionError: assert [+ received] == [- snapshot]
+      "test_graph_sequence_map"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
       "test_queue_for_streaming_via_sync_call"
       "test_same_event_loop"
@@ -123,6 +150,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

@@ -7,32 +7,29 @@
   marshmallow,
   msgpack,
   pkgs,
-  pythonOlder,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
   redis,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiocache";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiocache";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yvXDNJL8uxReaU81klVWudJwh1hmvg5GeeILcNpm/YA=";
+    tag = "v${version}";
+    hash = "sha256-4QYCRXMWlt9fsiWgUTc2pKzXG7AG/zGmd4HT5ggIZNM=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=aiocache --cov=tests/ --cov-report term" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -46,6 +43,7 @@ buildPythonPackage rec {
     aiohttp
     marshmallow
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
@@ -57,10 +55,15 @@ buildPythonPackage rec {
     "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
   ];
 
-  disabledTests = [
-    # Test calls apache benchmark and fails, no usable output
-    "test_concurrency_error_rates"
-  ];
+  disabledTests =
+    [
+      # Test calls apache benchmark and fails, no usable output
+      "test_concurrency_error_rates"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/aio-libs/aiocache/issues/863
+      "test_cache_write_doesnt_wait_for_future"
+    ];
 
   disabledTestPaths = [
     # Benchmark and performance tests are not relevant for Nixpkgs

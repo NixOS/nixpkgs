@@ -1,4 +1,12 @@
-{ lib, stdenv, curl, fetchFromGitHub, cjson, olm, luaffi }:
+{
+  lib,
+  stdenv,
+  curl,
+  fetchFromGitHub,
+  cjson,
+  olm,
+  luaffi,
+}:
 
 stdenv.mkDerivation {
   pname = "weechat-matrix-bridge";
@@ -14,7 +22,12 @@ stdenv.mkDerivation {
     ./library-path.patch
   ];
 
-  buildInputs = [ curl cjson olm luaffi ];
+  buildInputs = [
+    curl
+    cjson
+    olm
+    luaffi
+  ];
 
   postPatch = ''
     substituteInPlace matrix.lua \
@@ -46,6 +59,6 @@ stdenv.mkDerivation {
 
     # As of 2019-06-30, all of the dependencies are available on macOS but the
     # package itself does not build.
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

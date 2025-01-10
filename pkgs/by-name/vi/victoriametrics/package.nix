@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.102.1";
+  version = "1.108.1";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     rev = "v${version}";
-    hash = "sha256-FFQiHPcvB3ht6NlaUWPAuEUswXYUzeRilAw4NQ9+8/o=";
+    hash = "sha256-UaWTBOlMf7SR3tBjeaNnokdSqtRrYm5rPQPi3UGxTvQ=";
   };
 
   vendorHash = null;
@@ -91,6 +91,7 @@ buildGoModule rec {
       ivan
       leona
       shawn8901
+      ryan4yin
     ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
     mainProgram = "victoria-metrics";

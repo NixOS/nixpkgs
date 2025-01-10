@@ -1,17 +1,27 @@
-{ stdenv, callPackage, fetchpatch
-, sasl, boost, Security, CoreFoundation, cctools
-, avxSupport ? stdenv.hostPlatform.avxSupport
+{
+  stdenv,
+  callPackage,
+  fetchpatch,
+  sasl,
+  boost,
+  cctools,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
-    inherit sasl boost Security CoreFoundation cctools stdenv;
+    inherit
+      sasl
+      boost
+      cctools
+      stdenv
+      ;
   };
 in
 buildMongoDB {
   inherit avxSupport;
-  version = "6.0.17";
-  sha256 = "sha256-rGGAu2B0gAAE/n0NSdVm7Me2YeChZhDGWehvzcBJTi8=";
+  version = "6.0.19";
+  sha256 = "sha256-qcf+6hMg0LASeOoZJPoRCQ9ajCJBqSsBDg2Wp+2SMKY=";
   patches = [
     # Patches a bug that it couldn't build MongoDB 6.0 on gcc 13 because a include in ctype.h was missing
     ./fix-gcc-13-ctype-6_0.patch
@@ -25,5 +35,5 @@ buildMongoDB {
     # Fix building with python 3.12 since the imp module was removed
     ./mongodb-python312.patch
   ];
-  # passthru.tests = { inherit (nixosTests) mongodb; }; # currently tests mongodb-5_0
+  # passthru.tests = { inherit (nixosTests) mongodb; }; # currently tests mongodb-7_0
 }

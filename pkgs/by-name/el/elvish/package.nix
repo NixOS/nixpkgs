@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, callPackage
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
 }:
 
 let
@@ -49,6 +50,6 @@ buildGoModule {
       status, it is already suitable for most daily interactive use.
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

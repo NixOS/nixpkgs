@@ -10,43 +10,43 @@
 
 let
   pname = "1password";
-  version = if channel == "stable" then "8.10.40" else "8.10.44-21.BETA";
+  version = if channel == "stable" then "8.10.54" else "8.10.56-1.BETA";
 
   sources = {
     stable = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-viY0SOUhrOvmue6Nolau356rIqwDo2nLzMilFFmNb9g=";
+        hash = "sha256-kpFO59DPBCgD3EdYxq1tom/5/misBsafbsJS+Wj2l3I=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-7lUZiS3TSsIVqPoN5A6YqyVaaaRI9BliT51FHkwOPyw=";
+        hash = "sha256-ZZKuPxshI9yLSUMccpXaQDbu8gTvFCaS68tqMstZHJE=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-xK/B8J3VP8y1xw3KorzZzPf/LjYmYdOIjDECMJnVv6I=";
+        hash = "sha256-Xha7aOuBvG+R1K48gdPj/v4URuIEYv2le+TCxwDnCwk=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-iqdK6K7dcypZFGseYal2KjOaqJtUjXeCzbDdx7pDv8A=";
+        hash = "sha256-ukfx7V8totRIyHpmjWDR2O9IDkAY3uq/0jtGPXiZ5Bw=";
       };
     };
     beta = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-enorJfbn+xJVy1fG3wjhO3LkSsMncHA9/yA13kG+h4Y=";
+        hash = "sha256-25vBmc3AJv4NTI2oOrnTR5pMBMK+wx1s/eg5g8jjtb8=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-EUnIIi6DB5kBVid9ExBpNApKItHnRKQziBy/GFt0xag=";
+        hash = "sha256-MLnXEqJM9E+2GAXlqX2dGUzFVk0xv5pmUzLdncakWf8=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-U14CjoUJUpd4wWidZz6xGErhHI/VPChqG8cwBTBYoYc=";
+        hash = "sha256-W7VA7DFpIY2D+0ZqNaLfOzTTqryqpA1iy0+yACNrPlg=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-DD1M2EFSHqG9OHX5Q/CmZLZIKYrBMS4cnX/6tLVi7H0=";
+        hash = "sha256-ZH7xuL0SrkncxI/ngDIYHf4bLwUyTQC4Ki3HgUVza+I=";
       };
     };
   };
@@ -61,12 +61,13 @@ let
 
   meta = {
     # Requires to be installed in "/Application" which is not possible for now (https://github.com/NixOS/nixpkgs/issues/254944)
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      khaneliman
       timstott
       savannidgerinel
       sebtm
@@ -76,7 +77,7 @@ let
   };
 
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
     inherit
       pname

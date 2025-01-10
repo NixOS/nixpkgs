@@ -1,7 +1,36 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch2, copyDesktopItems, makeDesktopItem, qmake
-, qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
-, ffmpeg_7, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
-, libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  qmake,
+  qtbase,
+  qtxmlpatterns,
+  qttools,
+  qtwebengine,
+  libGL,
+  fontconfig,
+  openssl,
+  poppler,
+  wrapQtAppsHook,
+  ffmpeg,
+  libva,
+  alsa-lib,
+  SDL,
+  x264,
+  libvpx,
+  libvorbis,
+  libtheora,
+  libogg,
+  libopus,
+  lame,
+  fdk_aac,
+  libass,
+  quazip,
+  libXext,
+  libXfixes,
+}:
 
 let
   importer = stdenv.mkDerivation {
@@ -23,41 +52,35 @@ let
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.0";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
+    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
   };
-
-  patches = [
-    # fix: Support FFmpeg 7.0
-    # https://github.com/OpenBoard-org/OpenBoard/pull/1017
-    (fetchpatch2 {
-      url = "https://github.com/OpenBoard-org/OpenBoard/commit/4f45b6c4016972cf5835f9188bda6197b1b4ed2f.patch?full_index=1";
-      hash = "sha256-MUJbHfOCMlRO4pg5scm+DrBsngZwB7UPuDJZss5x9Zs=";
-    })
-
-    # fix: Resolve FFmpeg 7.0 warnings
-    # https://github.com/OpenBoard-org/OpenBoard/pull/1017
-    (fetchpatch2 {
-      url = "https://github.com/OpenBoard-org/OpenBoard/commit/315bcac782e10cc6ceef1fc8b78fff40541ea38f.patch?full_index=1";
-      hash = "sha256-736eX+uXuZwHJxOXAgxs2/vjjD1JY9mMyj3rR45/7xk=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
-      --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+      --replace-fail '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace-fail '-lquazip5' '-lquazip1-qt5' \
+      --replace-fail '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+
+    substituteInPlace resources/etc/OpenBoard.config \
+      --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'EnableSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'HideCheckForSoftwareUpdate=false' 'HideCheckForSoftwareUpdate=true'
   '';
 
-  nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    copyDesktopItems
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     qtbase
@@ -68,7 +91,7 @@ in stdenv.mkDerivation (finalAttrs: {
     fontconfig
     openssl
     poppler
-    ffmpeg_7
+    ffmpeg
     libva
     alsa-lib
     SDL
@@ -127,8 +150,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Interactive whiteboard application";
+    homepage = "https://openboard.ch/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fufexan ];
+    maintainers = with maintainers; [
+      atinba
+      fufexan
+    ];
     platforms = platforms.linux;
     mainProgram = "OpenBoard";
   };

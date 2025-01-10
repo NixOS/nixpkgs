@@ -1,4 +1,8 @@
-{ lib, stdenv, nanopb }:
+{
+  lib,
+  stdenv,
+  nanopb,
+}:
 
 stdenv.mkDerivation {
   name = "nanopb-test-message-with-options";

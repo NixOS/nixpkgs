@@ -20,7 +20,7 @@
 
   # tests
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   coverage,
   mock,
   black,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pgmpy";
     repo = "pgmpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RusVREhEXYaJuQXTaCQ7EJgbo4+wLB3wXXCAc3sBGtU=";
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     # xdoctest
-    pytest-cov
+    pytest-cov-stub
     coverage
     mock
     black

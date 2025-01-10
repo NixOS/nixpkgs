@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
@@ -19,18 +19,19 @@
 
 buildPythonPackage rec {
   pname = "markupsafe";
-  version = "2.1.5";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "MarkupSafe";
-    inherit version;
-    hash = "sha256-0oPTeokLpMGuc/+t+ARkNcdue8Ike7tjwAvRpwnGVEs=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "markupsafe";
+    tag = version;
+    hash = "sha256-BqCkQqPhjEx3qB/k3d3fSirR/HDBa7e4kpx3/VSwXJM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://markupsafe.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
+    changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
       replaceStrings [ "." ] [ "-" ] version
     }";
     description = "Implements a XML/HTML/XHTML Markup safe string";

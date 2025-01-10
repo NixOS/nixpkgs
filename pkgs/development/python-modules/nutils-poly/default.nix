@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nutils";
     repo = "poly-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dxFv4Az3uz6Du5dk5KZJ+unVbt3aZjxXliAQZhmBWDM=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   build-system = [ rustPlatform.maturinBuildHook ];
 

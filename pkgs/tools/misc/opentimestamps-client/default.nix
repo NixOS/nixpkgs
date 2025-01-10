@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "opentimestamps";
     repo = "opentimestamps-client";
-    rev = "refs/tags/opentimestamps-client-v${version}";
+    tag = "opentimestamps-client-v${version}";
     hash = "sha256-0dWaXetRlF1MveBdJ0sAdqJ5HCdn08gkbX+nen/ygsQ=";
   };
 

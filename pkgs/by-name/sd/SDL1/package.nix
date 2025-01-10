@@ -16,11 +16,11 @@
 , pkg-config
 , stdenv
 # Boolean flags
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
 , libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
 , openglSupport ? libGLSupported
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
+, x11Support ? !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isAndroid
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -30,13 +30,13 @@ let
   inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   extraPropagatedBuildInputs = [ ]
     ++ lib.optionals x11Support [ libXext libICE libXrandr ]
-    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL ]
+    ++ lib.optionals (openglSupport && stdenv.hostPlatform.isLinux) [ libGL ]
     # libGLU doesn’t work with Android's SDL
-    ++ lib.optionals (openglSupport && stdenv.isLinux && (!stdenv.hostPlatform.isAndroid)) [ libGLU ]
-    ++ lib.optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
+    ++ lib.optionals (openglSupport && stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAndroid)) [ libGLU ]
+    ++ lib.optionals (openglSupport && stdenv.hostPlatform.isDarwin) [ OpenGL GLUT ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL";
@@ -51,14 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
   outputBin = "dev"; # sdl-config
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
   buildInputs =
     [ ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW && alsaSupport) [ audiofile ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
     "--disable-oss"
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
   #
   # Please try revert the change that introduced this comment when updating SDL.
-  ] ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-x11-shared"
     ++ lib.optional (!x11Support) "--without-x"
     ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
     ++ lib.optional stdenv.hostPlatform.isMusl "CFLAGS=-DICONV_INBUF_NONCONST";

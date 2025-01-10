@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "usb-monitor";
-  version = "1.21";
+  version = "1.23";
 
   src = fetchPypi {
     inherit version;
     pname = "usb_monitor";
-    hash = "sha256-M+BUmbNxQWcULFECexTnp55EZiJ6y3bYCEtSwqKldAk=";
+    hash = "sha256-7xZ30JLPduY0y2SHWI7fvZHB27FbNFAMczHMXnaXl88=";
   };
 
   dependencies = [ pyudev ];

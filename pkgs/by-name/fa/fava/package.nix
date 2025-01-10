@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "fava";
-  version = "1.28";
+  version = "1.29";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sWHVkR0/0VMGzH5OMxOCK4usf7G0odzMtr82ESRQhrk=";
+    hash = "sha256-UZZ142FchYXqPtHb6EWnKjV+xtJ0Gvu+SovTH6+kVn8=";
   };
 
   postPatch = ''

@@ -7,7 +7,7 @@
 , gst_all_1
 , libappindicator
 , libayatana-appindicator
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''

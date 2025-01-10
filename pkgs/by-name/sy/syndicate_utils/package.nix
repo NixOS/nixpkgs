@@ -5,7 +5,6 @@
   libxml2,
   libxslt,
   openssl,
-  pkg-config,
   postgresql,
   sqlite,
 }:

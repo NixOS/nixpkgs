@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gk-cli";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = (
     finalAttrs.passthru.sources.${stdenv.system}
@@ -50,47 +50,47 @@ stdenv.mkDerivation (finalAttrs: {
       {
         armv6l-linux = fetchzip {
           url = "${base_url}Linux_arm6.zip";
-          hash = "sha256-1e+TeZLSYZjlyHV+KzasysAiWREy6ayuvmllmfZ3f90=";
+          hash = "sha256-pnEFTkx1JSmQlniVCXvIB6xGD8XyDh9OLDU0V9AZBTs=";
           stripRoot = false;
         };
         armv7l-linux = fetchzip {
           url = "${base_url}Linux_arm7.zip";
-          hash = "sha256-phhfxDgfzHTVA5OexY6aTUNIuW/+3tn0Q2+el3Tu9Os=";
+          hash = "sha256-qj0++i698s4ELKHU9B2sGIqf9hUJip4+2Car+brkRkM=";
           stripRoot = false;
         };
         aarch64-linux = fetchzip {
           url = "${base_url}Linux_arm64.zip";
-          hash = "sha256-VvhbgvxCZBeJVYjjM/n6vr+xzQdolkZngzaU4Te3DbI=";
+          hash = "sha256-vHGhlRHbk2/s3YmBdOPDbalEydpQVFkHiCkBVywa4N0=";
           stripRoot = false;
         };
         x86_32-linux = fetchzip {
           url = "${base_url}Linux_i386.zip";
-          hash = "sha256-pTUNXRqWKPyyKMzJl+pIStVKpepcSX1ZdAxN39q2eZc=";
+          hash = "sha256-t+P9SpS9u/17kga74kbYjD6nkjiFusyIwCRGDnkP3tU=";
           stripRoot = false;
         };
         x86_64-linux = fetchzip {
           url = "${base_url}Linux_x86_64.zip";
-          hash = "sha256-bs/p15HaWV+XWuERmmih9n2lhI0OZivu97gnFiMCrzQ=";
+          hash = "sha256-O6T27edHi20ZFHiNaZKdk/5dtCn2Tpxm0PR934SRwFk=";
           stripRoot = false;
         };
         aarch64-darwin = fetchzip {
           url = "${base_url}macOS_arm64.zip";
-          hash = "sha256-BD9hefbkXbNzjdeoOqQ4RMgzIXdBt/3z1T0H55sTsP0=";
+          hash = "sha256-LW2K+aveJiyYqfga2jpF3DvvFeHJuozqbc/afgtq2Oc=";
           stripRoot = false;
         };
         x86_64-darwin = fetchzip {
           url = "${base_url}macOS_x86_64.zip";
-          hash = "sha256-6L0eghJwCLZKDh2G/IKv9g1whSWLQbpj+AozumUkm2M=";
+          hash = "sha256-1w8B4YWouVViTGoUh987pPQIoqdzB0S+M2bBiRI6Kfg=";
           stripRoot = false;
         };
         i686-windows = fetchzip {
           url = "${base_url}Windows_i386.zip";
-          hash = "sha256-ZxTOhJbPUjIoDwWIHrEKBBAd3LedJRwoolSZi0h79k8=";
+          hash = "sha256-t81/wK1weZ/uEZ5TzivylARTUqks9rLIG7WzeoWXb1k=";
           stripRoot = false;
         };
         x86_64-windows = fetchzip {
           url = "${base_url}Windows_x86_64.zip";
-          hash = "sha256-DWBzXQj1+/PKQzvI/R7gkLQz0rLz2h9x+nkPOXOtcyk=";
+          hash = "sha256-9yydDMI9Gz/OswRhJHF+2c3Ia0zDmXMbf7byj6PJe24=";
           stripRoot = false;
         };
       };

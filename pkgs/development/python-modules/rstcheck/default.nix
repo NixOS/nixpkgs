@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CB8UtYAJpPrUOGgHOIp9Ts0GaID6GdtKHWD/ihxRoNg=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
     "test_error_without_config_file_macos"
     "test_file_1_is_bad_without_config_macos"

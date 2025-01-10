@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, mkDerivation
-, qmake
-, qtbase
-, qtmultimedia
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  mkDerivation,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  stdenv,
 }:
 
 mkDerivation rec {
@@ -18,7 +19,10 @@ mkDerivation rec {
     sha256 = "sha256-RfZXHmWSjZBxNFwQ/bzHppsLS0LauURIdnkAzxAIBcU=";
   };
 
-  patches = if stdenv.isAarch64 then ./aarch64-flags.patch else null;
+  patches = lib.optionals stdenv.hostPlatform.isAarch64 [
+    # remove optimization flags with x86 only instruction sets
+    ./aarch64-flags.patch
+  ];
 
   installPhase = ''
     runHook preInstall

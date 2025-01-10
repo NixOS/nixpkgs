@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tBmsy0MuJu0Ei+4lUy/XfKoOU+OuH4xqmjPv/uKVuwg=";
+    tag = "v${version}";
+    hash = "sha256-cYlkMnZOa0J6dOiWsWZplk/MajVRiCYe8tK3641fD0w=";
   };
 
   build-system = [ setuptools ];

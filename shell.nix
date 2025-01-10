@@ -11,25 +11,23 @@
 #
 #     nix-shell --arg nixpkgs ./.
 #
-let
-  pinnedNixpkgs = builtins.fromJSON (builtins.readFile ci/pinned-nixpkgs.json);
-in
 {
   system ? builtins.currentSystem,
-
-  nixpkgs ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/${pinnedNixpkgs.rev}.tar.gz";
-    sha256 = pinnedNixpkgs.sha256;
-  },
+  nixpkgs ? null,
 }:
 let
-  pkgs = import nixpkgs {
-    inherit system;
-    config = { };
-    overlays = [ ];
-  };
+  inherit (import ./ci { inherit nixpkgs system; }) pkgs;
+
+  # For `nix-shell -A hello`
+  curPkgs = builtins.removeAttrs (import ./. { inherit system; }) [
+    # Although this is what anyone may expect from a `_type = "pkgs"`,
+    # this file is intended to produce a shell in the first place,
+    # and a `_type` tag could confuse some code.
+    "_type"
+  ];
 in
-pkgs.mkShellNoCC {
+curPkgs
+// pkgs.mkShellNoCC {
   packages = with pkgs; [
     # The default formatter for Nix code
     # See https://github.com/NixOS/nixfmt

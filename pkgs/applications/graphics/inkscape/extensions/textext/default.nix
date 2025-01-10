@@ -1,15 +1,16 @@
-{ lib
-, writeScript
-, fetchFromGitHub
-, substituteAll
-, inkscape
-, pdflatex
-, lualatex
-, python3
-, wrapGAppsHook3
-, gobject-introspection
-, gtk3
-, gtksourceview3
+{
+  lib,
+  writeScript,
+  fetchFromGitHub,
+  substituteAll,
+  inkscape,
+  pdflatex,
+  lualatex,
+  python3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk3,
+  gtksourceview3,
 }:
 
 let
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-JbI/ScCFCvHbK9JZzHuT67uSAL3546et+gtTkwRnCSE=";
   };
 

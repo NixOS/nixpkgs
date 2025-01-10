@@ -1,44 +1,48 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  cfg     = config.services.monero;
+  cfg = config.services.monero;
 
-  listToConf = option: list:
-    concatMapStrings (value: "${option}=${value}\n") list;
+  listToConf = option: list: lib.concatMapStrings (value: "${option}=${value}\n") list;
 
   login = (cfg.rpc.user != null && cfg.rpc.password != null);
 
-  configFile = with cfg; pkgs.writeText "monero.conf" ''
-    log-file=/dev/stdout
-    data-dir=${dataDir}
+  configFile =
+    with cfg;
+    pkgs.writeText "monero.conf" ''
+      log-file=/dev/stdout
+      data-dir=${dataDir}
 
-    ${optionalString mining.enable ''
-      start-mining=${mining.address}
-      mining-threads=${toString mining.threads}
-    ''}
+      ${lib.optionalString mining.enable ''
+        start-mining=${mining.address}
+        mining-threads=${toString mining.threads}
+      ''}
 
-    rpc-bind-ip=${rpc.address}
-    rpc-bind-port=${toString rpc.port}
-    ${optionalString login ''
-      rpc-login=${rpc.user}:${rpc.password}
-    ''}
-    ${optionalString rpc.restricted ''
-      restricted-rpc=1
-    ''}
+      rpc-bind-ip=${rpc.address}
+      rpc-bind-port=${toString rpc.port}
+      ${lib.optionalString login ''
+        rpc-login=${rpc.user}:${rpc.password}
+      ''}
+      ${lib.optionalString rpc.restricted ''
+        restricted-rpc=1
+      ''}
 
-    limit-rate-up=${toString limits.upload}
-    limit-rate-down=${toString limits.download}
-    max-concurrency=${toString limits.threads}
-    block-sync-size=${toString limits.syncSize}
+      limit-rate-up=${toString limits.upload}
+      limit-rate-down=${toString limits.download}
+      max-concurrency=${toString limits.threads}
+      block-sync-size=${toString limits.syncSize}
 
-    ${listToConf "add-peer" extraNodes}
-    ${listToConf "add-priority-node" priorityNodes}
-    ${listToConf "add-exclusive-node" exclusiveNodes}
+      ${listToConf "add-peer" extraNodes}
+      ${listToConf "add-priority-node" priorityNodes}
+      ${listToConf "add-exclusive-node" exclusiveNodes}
 
-    ${extraConfig}
-  '';
+      ${extraConfig}
+    '';
 
 in
 
@@ -50,34 +54,34 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon";
+      enable = lib.mkEnableOption "Monero node daemon";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/monero";
         description = ''
           The directory where Monero stores its data files.
         '';
       };
 
-      mining.enable = mkOption {
-        type = types.bool;
+      mining.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to mine monero.
         '';
       };
 
-      mining.address = mkOption {
-        type = types.str;
+      mining.address = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Monero address where to send mining rewards.
         '';
       };
 
-      mining.threads = mkOption {
-        type = types.addCheck types.int (x: x>=0);
+      mining.threads = lib.mkOption {
+        type = lib.types.addCheck lib.types.int (x: x >= 0);
         default = 0;
         description = ''
           Number of threads used for mining.
@@ -85,48 +89,48 @@ in
         '';
       };
 
-      rpc.user = mkOption {
-        type = types.nullOr types.str;
+      rpc.user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           User name for RPC connections.
         '';
       };
 
-      rpc.password = mkOption {
-        type = types.nullOr types.str;
+      rpc.password = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Password for RPC connections.
         '';
       };
 
-      rpc.address = mkOption {
-        type = types.str;
+      rpc.address = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = ''
           IP address the RPC server will bind to.
         '';
       };
 
-      rpc.port = mkOption {
-        type = types.port;
+      rpc.port = lib.mkOption {
+        type = lib.types.port;
         default = 18081;
         description = ''
           Port the RPC server will bind to.
         '';
       };
 
-      rpc.restricted = mkOption {
-        type = types.bool;
+      rpc.restricted = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to restrict RPC to view only commands.
         '';
       };
 
-      limits.upload = mkOption {
-        type = types.addCheck types.int (x: x>=-1);
+      limits.upload = lib.mkOption {
+        type = lib.types.addCheck lib.types.int (x: x >= -1);
         default = -1;
         description = ''
           Limit of the upload rate in kB/s.
@@ -134,8 +138,8 @@ in
         '';
       };
 
-      limits.download = mkOption {
-        type = types.addCheck types.int (x: x>=-1);
+      limits.download = lib.mkOption {
+        type = lib.types.addCheck lib.types.int (x: x >= -1);
         default = -1;
         description = ''
           Limit of the download rate in kB/s.
@@ -143,8 +147,8 @@ in
         '';
       };
 
-      limits.threads = mkOption {
-        type = types.addCheck types.int (x: x>=0);
+      limits.threads = lib.mkOption {
+        type = lib.types.addCheck lib.types.int (x: x >= 0);
         default = 0;
         description = ''
           Maximum number of threads used for a parallel job.
@@ -152,8 +156,8 @@ in
         '';
       };
 
-      limits.syncSize = mkOption {
-        type = types.addCheck types.int (x: x>=0);
+      limits.syncSize = lib.mkOption {
+        type = lib.types.addCheck lib.types.int (x: x >= 0);
         default = 0;
         description = ''
           Maximum number of blocks to sync at once.
@@ -161,16 +165,16 @@ in
         '';
       };
 
-      extraNodes = mkOption {
-        type = types.listOf types.str;
+      extraNodes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of additional peer IP addresses to add to the local list.
         '';
       };
 
-      priorityNodes = mkOption {
-        type = types.listOf types.str;
+      priorityNodes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of peer IP addresses to connect to and
@@ -178,8 +182,8 @@ in
         '';
       };
 
-      exclusiveNodes = mkOption {
-        type = types.listOf types.str;
+      exclusiveNodes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of peer IP addresses to connect to *only*.
@@ -187,8 +191,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra lines to be added verbatim to monerod configuration.
@@ -199,10 +203,9 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.monero = {
       isSystemUser = true;
@@ -216,23 +219,26 @@ in
 
     systemd.services.monero = {
       description = "monero daemon";
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        User  = "monero";
+        User = "monero";
         Group = "monero";
         ExecStart = "${pkgs.monero-cli}/bin/monerod --config-file=${configFile} --non-interactive";
         Restart = "always";
-        SuccessExitStatus = [ 0 1 ];
+        SuccessExitStatus = [
+          0
+          1
+        ];
       };
     };
 
-    assertions = singleton {
+    assertions = lib.singleton {
       assertion = cfg.mining.enable -> cfg.mining.address != "";
-      message   = ''
-       You need a Monero address to receive mining rewards:
-       specify one using option monero.mining.address.
+      message = ''
+        You need a Monero address to receive mining rewards:
+        specify one using option monero.mining.address.
       '';
     };
 
@@ -241,4 +247,3 @@ in
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }
-

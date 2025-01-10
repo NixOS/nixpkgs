@@ -11,8 +11,8 @@ let
   # debugging
   showLibs = pkg: old: { preCheck = "echo $CHEZSCHEMELIBDIRS"; };
   runTests = pkg: old: { doCheck = true; };
-  brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.isAarch64; };
-  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.isDarwin && stdenv.isx86_64; };
+  brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.hostPlatform.isAarch64; };
+  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; };
 in
 {
   chez-srfi = joinOverrides [
@@ -48,6 +48,13 @@ in
     # not a tar archive
     (pkg: old: removeAttrs old [ "unpackPhase" ])
   ];
+
+  machine-code = pkg: old: {
+    # fails on hydra with 'Log limit exceeded'
+    postPatch = ''
+      rm tests/all-a64.sps
+    '';
+  };
 
   # circular dependency on wak-trc-testing !?
   wak-foof-loop = skipTests;

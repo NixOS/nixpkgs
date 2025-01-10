@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, amoeba-data, alsa-lib, expat, freetype, gtk3, libvorbis, libGLU, xorg, pkg-config, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  amoeba-data,
+  alsa-lib,
+  expat,
+  freetype,
+  gtk3,
+  libvorbis,
+  libGLU,
+  xorg,
+  pkg-config,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "amoeba";
@@ -26,8 +40,19 @@ stdenv.mkDerivation rec {
     sed -i main/linux-config/linux-config.cpp -e 's|libgtk-x11-2.0.so.0|${gtk3}/lib/&|'
   '';
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ alsa-lib expat freetype gtk3 libvorbis libGLU xorg.libXxf86vm ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    alsa-lib
+    expat
+    freetype
+    gtk3
+    libvorbis
+    libGLU
+    xorg.libXxf86vm
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

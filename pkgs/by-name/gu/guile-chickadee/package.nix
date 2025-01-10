@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, makeWrapper
-, testers
-, guile
-, pkg-config
-, texinfo
-, freetype
-, libjpeg_turbo
-, libpng
-, libvorbis
-, mpg123
-, openal
-, readline
-, guile-opengl
-, guile-sdl2
-, guile-chickadee
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  makeWrapper,
+  testers,
+  guile,
+  pkg-config,
+  texinfo,
+  freetype,
+  libjpeg_turbo,
+  libpng,
+  libvorbis,
+  mpg123,
+  openal,
+  readline,
+  guile-opengl,
+  guile-sdl2,
+  guile-chickadee,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-chickadee";
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     command = "chickadee -v";
   };
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Game development toolkit for Guile Scheme with SDL2 and OpenGL";
@@ -75,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ chito ];
     mainProgram = "chickadee";
     platforms = guile.meta.platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

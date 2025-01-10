@@ -1,8 +1,13 @@
 {
-  lib, fetchFromGitLab, buildDunePackage
-, integers_stubs_js, ctypes, ppx_expect
-, js_of_ocaml-compiler
-, nodejs, stdenv
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  integers_stubs_js,
+  ctypes,
+  ppx_expect,
+  js_of_ocaml-compiler,
+  nodejs,
+  stdenv,
 }:
 
 buildDunePackage rec {
@@ -28,7 +33,7 @@ buildDunePackage rec {
     ctypes
     ppx_expect
   ];
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = {
     description = "Js_of_ocaml Javascript stubs for the OCaml ctypes library";

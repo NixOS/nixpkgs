@@ -1,51 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, postgresql
-, postgresqlTestHook
-, readline
-, testers
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestExtension,
+  testers,
+  buildPostgresqlExtension,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg_repack";
-  version = "1.5.0";
+  version = "1.5.2";
 
-  buildInputs = postgresql.buildInputs ++ [ postgresql ];
+  buildInputs = postgresql.buildInputs;
 
   src = fetchFromGitHub {
     owner = "reorg";
     repo = "pg_repack";
     rev = "ver_${finalAttrs.version}";
-    sha256 = "sha256-do80phyMxwcRIkYyUt9z02z7byNQhK+pbSaCUmzG+4c=";
+    sha256 = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
   };
-
-  installPhase = ''
-    install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack${postgresql.dlSuffix} -t $out/lib/
-    install -D lib/{pg_repack--${finalAttrs.version}.sql,pg_repack.control} -t $out/share/postgresql/extension
-  '';
 
   passthru.tests = {
     version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
-    extension = stdenv.mkDerivation {
-      name = "plpgsql-check-test";
-      dontUnpack = true;
-      doCheck = true;
-      buildInputs = [ postgresqlTestHook ];
-      nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.pg_repack ])) ];
-      postgresqlTestUserOptions = "LOGIN SUPERUSER";
-      failureHook = "postgresqlStop";
-      checkPhase = ''
-        runHook preCheck
-        psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION pg_repack;"
-        runHook postCheck
-      '';
-      installPhase = "touch $out";
+    extension = postgresqlTestExtension {
+      inherit (finalAttrs) finalPackage;
+      sql = "CREATE EXTENSION pg_repack;";
     };
   };
 

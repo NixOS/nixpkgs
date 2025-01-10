@@ -5,25 +5,31 @@
 }:
 buildGoModule rec {
   pname = "superfile";
-  version = "1.1.4";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
     rev = "v${version}";
-    hash = "sha256-ajLlXySf/YLHrwwacV5yIF8qU5pKvEoOwpDoxh49qaU=";
+    hash = "sha256-p5rTwGgiVdZoUWg6PYcmDlfED4/Z6+3lR4VBdWaaz9Q=";
   };
 
-  vendorHash = "sha256-vybe4KNj6ZhvXRTiN7e5+IhOewfK5L2jKPrcdCYGc4k=";
+  vendorHash = "sha256-MdOdQQZhiuOJtnj5n1uVbJV6KIs0aa1HLZpFmvxxsWY=";
 
-  ldflags = ["-s" "-w"];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
     changelog = "https://github.com/yorukot/superfile/blob/${src.rev}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [momeemt redyf];
+    maintainers = with maintainers; [
+      momeemt
+      redyf
+    ];
     mainProgram = "superfile";
   };
 }

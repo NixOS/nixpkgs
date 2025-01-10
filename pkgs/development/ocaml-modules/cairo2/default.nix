@@ -1,24 +1,39 @@
-{ stdenv, lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config, cairo
-, ApplicationServices }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  dune-configurator,
+  pkg-config,
+  cairo,
+  ApplicationServices,
+}:
 
 buildDunePackage rec {
   pname = "cairo2";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchurl {
     url = "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tbz";
-    sha256 = "sha256-QDVzUtcgXTpXNYVWQ4MMs0Xy24OP+dGaUyAYdg1GigU=";
+    sha256 = "sha256-JdxByUNtmrz1bKrZoQWUT/c0YEG4zGoqZUq4hItlc3I=";
   };
 
   minimalOCamlVersion = "4.02";
   useDune2 = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo dune-configurator ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = [
+    cairo
+    dune-configurator
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
-  doCheck = !(stdenv.isDarwin
-  # https://github.com/Chris00/ocaml-cairo/issues/19
-  || lib.versionAtLeast ocaml.version "4.10");
+  doCheck =
+    !(
+      stdenv.hostPlatform.isDarwin
+      # https://github.com/Chris00/ocaml-cairo/issues/19
+      || lib.versionAtLeast ocaml.version "4.10"
+    );
 
   meta = with lib; {
     homepage = "https://github.com/Chris00/ocaml-cairo";
@@ -30,6 +45,9 @@ buildDunePackage rec {
       and SVG file output.
     '';
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ jirkamarsik vbgl ];
+    maintainers = with maintainers; [
+      jirkamarsik
+      vbgl
+    ];
   };
 }

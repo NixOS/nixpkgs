@@ -1,29 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, R, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  R,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "plr";
-  version = "8.4.6";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL" src.rev)}";
 
   src = fetchFromGitHub {
     owner = "postgres-plr";
     repo = "plr";
-    rev = "REL${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-c+wKWL66pulihVQnhdbzivrZOMD1/FfOpb+vFoHgqVg=";
+    rev = "REL8_4_7";
+    sha256 = "sha256-PdvFEmtKfLT/xfaf6obomPR5hKC9F+wqpfi1heBphRk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ R postgresql ];
-  preBuild = ''
-    export USE_PGXS=1
-  '';
-  installPhase = ''
-    install -D plr${postgresql.dlSuffix} -t $out/lib/
-    install -D {plr--*.sql,plr.control} -t $out/share/postgresql/extension
-  '';
+  buildInputs = [ R ];
+
+  makeFlags = [ "USE_PGXS=1" ];
 
   meta = with lib; {
     description = "PL/R - R Procedural Language for PostgreSQL";
     homepage = "https://github.com/postgres-plr/plr";
+    changelog = "https://github.com/postgres-plr/plr/blob/${src.rev}/changelog.md";
     maintainers = with maintainers; [ qoelet ];
     platforms = postgresql.meta.platforms;
     license = licenses.gpl2Only;

@@ -97,7 +97,7 @@ buildPythonPackage rec {
     #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
   '';
 
-  passthru.tests = lib.optionalAttrs (!stdenv.isDarwin) {
+  passthru.tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
     kaleido = callPackage ./tests.nix { };
   };
 

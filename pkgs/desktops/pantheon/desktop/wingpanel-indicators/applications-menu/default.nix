@@ -13,12 +13,11 @@
 , libgee
 , gettext
 , gtk3
-, gnome-menus
 , json-glib
 , elementary-dock
 , bamf
 , switchboard-with-plugs
-, libsoup
+, libsoup_2_4
 , wingpanel
 , zeitgeist
 , bc
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup
+    libsoup_2_4
     switchboard-with-plugs
     wingpanel
     zeitgeist

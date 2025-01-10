@@ -10,31 +10,36 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "minidsp";
-  version = "0.1.9";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "mrene";
     repo = "minidsp-rs";
-    # v0.1.9 tag is out of date, cargo lock fixed in next commit on main
-    rev = "b03a95a05917f20b9c3153c03e4e99dd943d9f6f";
-    hash = "sha256-uZBrX3VCCpr7AY82PgR596mncL5wWDK7bpx2m/jCJBE=";
+    rev = "v${version}";
+    hash = "sha256-8bKP9/byVRKj1P1MP3ZVg8yw0WaNB0BcqarCti7B8CA=";
   };
 
-  cargoHash = "sha256-0PyojyimxnwEtHA98Npf4eHvycjuXdPrrIFilVuEnQk=";
+  cargoHash = "sha256-GUrYEFpTo83lKuDyENaVN3VhnZ2Y/igtsbEY7kNa1os=";
 
-  cargoBuildFlags = ["-p minidsp -p minidsp-daemon"];
+  cargoBuildFlags = [ "-p minidsp -p minidsp-daemon" ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [libusb1]
-    ++ lib.optionals stdenv.isDarwin [AppKit IOKit];
+    lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      IOKit
+    ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [pkg-config];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   meta = with lib; {
     description = "Control interface for some MiniDSP products";
     homepage = "https://github.com/mrene/minidsp-rs";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [maintainers.adamcstephens maintainers.mrene];
+    maintainers = [
+      maintainers.adamcstephens
+      maintainers.mrene
+    ];
   };
 }

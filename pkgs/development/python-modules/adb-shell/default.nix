@@ -1,5 +1,6 @@
 {
   lib,
+  pythonOlder,
   aiofiles,
   async-timeout,
   buildPythonPackage,
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiofiles
       async-timeout
@@ -42,11 +43,13 @@ buildPythonPackage rec {
     usb = [ libusb1 ];
   };
 
+  doCheck = pythonOlder "3.12"; # FIXME: tests are broken on 3.13
+
   nativeCheckInputs = [
     mock
     pycryptodome
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "adb_shell" ];
 

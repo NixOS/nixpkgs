@@ -1,12 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, inkscape
-, xcursorgen
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  inkscape,
+  xcursorgen,
 }:
 
 stdenvNoCC.mkDerivation {
-  pname   = "material-cursors";
+  pname = "material-cursors";
   version = "unstable-2023-11-30";
 
   src = fetchFromGitHub {

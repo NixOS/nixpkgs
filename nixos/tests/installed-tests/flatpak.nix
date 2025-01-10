@@ -9,10 +9,17 @@ makeInstalledTest {
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     xdg.portal.config.common.default = "gtk";
     services.flatpak.enable = true;
-    environment.systemPackages = with pkgs; [ gnupg ostree python3 ];
+    environment.systemPackages = with pkgs; [
+      gnupg
+      ostree
+      python3
+    ];
     virtualisation.memorySize = 2047;
     virtualisation.diskSize = 3072;
   };
 
-  testRunnerFlags = [ "--timeout" "3600" ];
+  testRunnerFlags = [
+    "--timeout"
+    "3600"
+  ];
 }

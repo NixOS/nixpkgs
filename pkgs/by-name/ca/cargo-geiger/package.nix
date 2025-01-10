@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
   # darwin dependencies
-, darwin
-, libiconv
-, curl
+  darwin,
+  libiconv,
+  curl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,11 +33,21 @@ rustPlatform.buildRustPackage rec {
     ./allow-warnings.patch
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation Security libiconv curl ]);
-  nativeBuildInputs = [ pkg-config ]
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreFoundation
+        Security
+        libiconv
+        curl
+      ]
+    );
+  nativeBuildInputs =
+    [ pkg-config ]
     # curl-sys wants to run curl-config on darwin
-    ++ lib.optionals stdenv.isDarwin [ curl.dev ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
   # skip tests with networking or other failures
   checkFlags = [
@@ -70,7 +81,15 @@ rustPlatform.buildRustPackage rec {
       dependency selection but it can not help you decide when and why unsafe
       code is appropriate.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ evanjs gepbird jk matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      evanjs
+      gepbird
+      jk
+      matthiasbeyer
+    ];
   };
 }

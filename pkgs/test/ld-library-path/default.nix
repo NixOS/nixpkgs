@@ -70,7 +70,8 @@ let
     '';
 
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "test-LD_LIBRARY_PATH";
   nativeBuildInputs = [ testProgram ];
 

@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gitlab-ci-pipelines-exporter";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-plrQPPclDaJiFHc1HNCk+bYiLO0fJX/HC/vTTO5eoy8=";
+    sha256 = "sha256-KbEmRMqv2IjJ/7sQHDfXtr92xNXmUCaD7fnJdq1FEtk=";
   };
 
   subPackages = [ "cmd/${pname}" ];
@@ -17,7 +21,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  vendorHash = "sha256-6l8jNQu+vI2SLPvKxl1o0XkqYbFyehqkrT75hEjIH/c=";
+  vendorHash = "sha256-DaNLahrmRTkI0QxEDLJH0juDbHXs2Y/t5JNx9ulcK84=";
   doCheck = true;
 
   meta = with lib; {
@@ -25,6 +29,9 @@ buildGoModule rec {
     mainProgram = "gitlab-ci-pipelines-exporter";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mmahut mvisonneau ];
+    maintainers = with maintainers; [
+      mmahut
+      mvisonneau
+    ];
   };
 }

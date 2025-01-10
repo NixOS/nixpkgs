@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.gamemode;
-  settingsFormat = pkgs.formats.ini { };
+  settingsFormat = pkgs.formats.ini { listsAsDuplicateKeys = true; };
   configFile = settingsFormat.generate "gamemode.ini" cfg.settings;
 in
 {
@@ -10,9 +15,11 @@ in
     programs.gamemode = {
       enable = lib.mkEnableOption "GameMode to optimise system performance on demand";
 
-      enableRenice = lib.mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness" // {
-        default = true;
-      };
+      enableRenice =
+        lib.mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness"
+        // {
+          default = true;
+        };
 
       settings = lib.mkOption {
         type = settingsFormat.type;
@@ -75,12 +82,14 @@ in
         #
         # This uses a link farm to make sure other wrapped executables
         # aren't included in PATH.
-        environment.PATH = lib.mkForce (pkgs.linkFarm "pkexec" [
-          {
-            name = "pkexec";
-            path = "${config.security.wrapperDir}/pkexec";
-          }
-        ]);
+        environment.PATH = lib.mkForce (
+          pkgs.linkFarm "pkexec" [
+            {
+              name = "pkexec";
+              path = "${config.security.wrapperDir}/pkexec";
+            }
+          ]
+        );
 
         serviceConfig.ExecStart = lib.mkIf cfg.enableRenice [
           "" # Tell systemd to clear the existing ExecStart list, to prevent appending to it.

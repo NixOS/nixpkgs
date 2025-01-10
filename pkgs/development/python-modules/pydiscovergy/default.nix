@@ -19,17 +19,19 @@ buildPythonPackage rec {
   version = "3.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "pydiscovergy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g6KWX7APdqB0dNe7p6WGualxSj5fiw+jRq+0qfqTs4w=";
   };
 
   postPatch = ''
     sed -i '/addopts =/d' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [ poetry-core ];

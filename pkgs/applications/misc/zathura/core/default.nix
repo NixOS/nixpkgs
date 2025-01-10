@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
+  fetchurl,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -15,6 +14,9 @@
   gtk,
   girara,
   gettext,
+  gnome,
+  libheif,
+  libjxl,
   libxml2,
   check,
   sqlite,
@@ -25,27 +27,17 @@
   file,
   librsvg,
   gtk-mac-integration,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.8";
+  version = "0.5.11";
 
-  src = fetchFromGitHub {
-    owner = "pwmt";
-    repo = "zathura";
-    rev = finalAttrs.version;
-    hash = "sha256-k6DEJpUA3s0mGxE38aYnX7uea98LrzevJhWW1abHo/c=";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
   };
-
-  patches = [
-    # https://github.com/pwmt/zathura/issues/664
-    (fetchpatch {
-      name = "fix-build-on-macos.patch";
-      url = "https://github.com/pwmt/zathura/commit/53f151f775091abec55ccc4b63893a8f9a668588.patch";
-      hash = "sha256-d8lRdlBN1Kfw/aTjz8x0gvTKy+SqSYWHLQCjV7hF5MI=";
-    })
-  ];
 
   outputs = [
     "bin"
@@ -79,20 +71,33 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs = [
-    gtk
-    girara
-    libintl
-    sqlite
-    glib
-    file
-    librsvg
-    check
-    json-glib
-    texlive.bin.core
-  ] ++ lib.optional stdenv.isLinux libseccomp ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+  buildInputs =
+    [
+      gtk
+      girara
+      libintl
+      sqlite
+      glib
+      file
+      librsvg
+      check
+      json-glib
+      texlive.bin.core
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
-  doCheck = !stdenv.isDarwin;
+  # add support for more image formats
+  env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+    extraLoaders = [
+      libheif.out
+      libjxl
+      librsvg
+      webp-pixbuf-loader
+    ];
+  };
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.updateScript = gitUpdater { };
 

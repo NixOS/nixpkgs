@@ -2,6 +2,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   isPy27,
+  setuptools,
   cython,
   portaudio,
   cffi,
@@ -12,22 +13,28 @@
 
 buildPythonPackage rec {
   pname = "rtmixer";
-  version = "0.1.4";
-  format = "setuptools";
+  version = "0.1.7";
+  pyproject = true;
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "python-rtmixer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-S8aVfxoG0o5GarDX5ZIDQ3GKOT32NtttQJ449FI9Fy0=";
+    tag = version;
+    hash = "sha256-K5w6XWnDdA5HrzDOMhqinlxrg/09AF6c5CWZEsfVHb4=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ portaudio ];
-  nativeBuildInputs = [ cython ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  buildInputs = [ portaudio ];
+
+  nativeBuildInputs = [
+    cython
+    cffi
+  ];
+
+  dependencies = [
     cffi
     pa-ringbuffer
     sounddevice

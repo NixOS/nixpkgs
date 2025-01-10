@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "kholidays";
 
-  extraNativeBuildInputs = [qttools];
-  extraBuildInputs = [qtdeclarative];
+  extraNativeBuildInputs = [ qttools ];
+  extraBuildInputs = [ qtdeclarative ];
 }

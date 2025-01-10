@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asteroid-team";
     repo = "torch-audiomentations";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0+5wc+mP4c221q6mdaqPalfumTOtdnkjnIPtLErOp9E=";
   };
 

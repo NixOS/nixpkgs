@@ -1,16 +1,19 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, algaeff
-, bwd
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  algaeff,
+  bwd,
 }:
 
 buildDunePackage rec {
   pname = "asai";
-  version = "0.3.0";
+  version = "0.3.1";
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = pname;
     rev = version;
-    hash = "sha256-Rp4TvSbRz+5+X4XJ1tKUDDgldpLzHHtaF7G7AG6HgKU=";
+    hash = "sha256-IpRLX7umpmlNt2uV2MB+YvjAvNk0+gl5plbBExVvcdM=";
   };
 
   propagatedBuildInputs = [

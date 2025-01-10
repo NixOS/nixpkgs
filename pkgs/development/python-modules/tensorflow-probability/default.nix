@@ -39,7 +39,7 @@
 }:
 
 let
-  version = "0.24.0";
+  version = "0.25.0";
   pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
@@ -49,7 +49,7 @@ let
       owner = "tensorflow";
       repo = "probability";
       rev = "refs/tags/v${version}";
-      hash = "sha256-V6aw4NtGOHlvcbgLWMH29x81eck1PyzV93ANelvpL4c=";
+      hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
     nativeBuildInputs = [
       absl-py
@@ -63,7 +63,7 @@ let
     bazel = bazel_6;
 
     bazelTargets = [ ":pip_pkg" ];
-    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
+    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
       sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";

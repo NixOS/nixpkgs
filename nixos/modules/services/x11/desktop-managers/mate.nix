@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -39,7 +45,7 @@ in
     };
 
     environment.mate.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";
@@ -56,10 +62,10 @@ in
       # Debugging
       environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-      environment.systemPackages = utils.removePackagesByName
-        (pkgs.mate.basePackages ++
-        pkgs.mate.extraPackages ++
-        [
+      environment.systemPackages = utils.removePackagesByName (
+        pkgs.mate.basePackages
+        ++ pkgs.mate.extraPackages
+        ++ [
           (pkgs.mate.caja-with-extensions.override {
             extensions = cfg.extraCajaExtensions;
           })
@@ -72,8 +78,8 @@ in
           pkgs.shared-mime-info
           pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           pkgs.yelp # for 'Contents' in 'Help' menus
-        ])
-        config.environment.mate.excludePackages;
+        ]
+      ) config.environment.mate.excludePackages;
 
       programs.dconf.enable = true;
       # Shell integration for VTE terminals

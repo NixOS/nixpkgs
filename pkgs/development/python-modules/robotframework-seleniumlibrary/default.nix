@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "robotframework-seleniumlibrary";
-  version = "6.5.0";
+  version = "6.6.1";
   pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-sB2lWFFpCGgF0XFes84fBBvR8GF+S8aWWJoih+xBmW8=";
+    tag = "v${version}";
+    sha256 = "sha256-ULY0FH1RFQIlhS45LU3vUKi6urZJHiDgi6NdqU5tV2g=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +45,8 @@ buildPythonPackage rec {
   preCheck = ''
     mkdir utest/output_dir
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.rev}/docs/SeleniumLibrary-${version}.rst";

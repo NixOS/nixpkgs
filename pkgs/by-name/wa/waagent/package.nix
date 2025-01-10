@@ -2,23 +2,24 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python39,
+  python3,
   bash,
+  gitUpdater,
+  nixosTests,
 }:
 
 let
-  # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
-  python = python39;
+  python = python3;
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.11.1.4";
+  version = "2.12.0.4";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5V9js9gGkIsdGYrQQK/V6tPfL9lh2Cht4llOKBVTyOM=";
+    tag = "v${version}";
+    hash = "sha256-L8W/ijBHkNukM2G9HBRVx2wFXzgkR8gbFBljNVPs6xA=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
@@ -64,6 +65,15 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = false;
 
+  passthru = {
+    tests = {
+      inherit (nixosTests) waagent;
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
+
   meta = {
     description = "Microsoft Azure Linux Agent (waagent)";
     mainProgram = "waagent";
@@ -72,6 +82,8 @@ python.pkgs.buildPythonApplication rec {
       manages Linux provisioning and VM interaction with the Azure
       Fabric Controller'';
     homepage = "https://github.com/Azure/WALinuxAgent";
+    maintainers = with lib.maintainers; [ codgician ];
     license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.linux;
   };
 }

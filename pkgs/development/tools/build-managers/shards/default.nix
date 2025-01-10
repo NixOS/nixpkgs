@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, crystal
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
 }:
 
 let

@@ -1,10 +1,10 @@
-{ lib
-, fetchzip
-, nixosTests
-, stdenv
-
-, mecab
-, postgresql
+{
+  lib,
+  fetchzip,
+  nixosTests,
+  stdenv,
+  mecab,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     substituteInPlace tsja.c --replace-fail /usr/local/lib/mecab ${mecab}/lib/mecab
   '';
 
-  buildInputs = [ mecab postgresql ];
+  buildInputs = [
+    mecab
+    postgresql
+  ];
 
   installPhase = ''
     mkdir -p $out/lib $out/share/postgresql/extension
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
     mv dbinit_libtsja.txt $out/share/postgresql/extension/libtsja_dbinit.sql
   '';
 
-  passthru.tests.tsja = nixosTests.tsja;
+  passthru.tests = nixosTests.postgresql.tsja.passthru.override postgresql;
 
   meta = with lib; {
     description = "PostgreSQL extension implementing Japanese text search";

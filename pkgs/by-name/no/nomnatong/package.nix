@@ -1,19 +1,20 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3Packages
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3Packages,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nomnatong";
-  version = "5.11";
+  version = "5.13";
 
   src = fetchFromGitHub {
     owner = "nomfoundation";
     repo = "font";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LaMggMZIehQynA6tokOte28bbV3H0kagJRsbE8ZczsM=";
+    hash = "sha256-OGJJpvjrHqP6P5eoazrezRVhQ9Hj3xDYi/pYTUG2edw=";
   };
 
   nativeBuildInputs = [

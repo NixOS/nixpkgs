@@ -1,31 +1,34 @@
-{ lib
-, fetchFromGitHub
-, python3
-, meson
-, ninja
-, pkg-config
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook4
-, glib
-, gtk4
-, librsvg
-, libadwaita
-, glib-networking
-, webkitgtk_6_0
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  pkgsCross,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  librsvg,
+  libadwaita,
+  glib-networking,
+  webkitgtk_6_0,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wike";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
     rev = version;
-    hash = "sha256-x6HYlpCj7poKWJWB2CnvN1aoTa7LmqYwbPa62WvSYsQ=";
+    hash = "sha256-Wx0jMO9a2K22zIU0B++0ZtPzLi+PrsJ5Sw8Sb8BODdU=";
   };
 
   nativeBuildInputs = [
@@ -52,24 +55,25 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-  '';
-
   # prevent double wrapping
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    patchShebangs --update $out/share/wike/wike-sp
   '';
+
+  passthru = {
+    tests.cross = pkgsCross.aarch64-multiplatform.wike;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Wikipedia Reader for the GNOME Desktop";
     homepage = "https://github.com/hugolabe/Wike";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ samalws ];
+    maintainers = with maintainers; [ samalws ] ++ lib.teams.gnome-circle.members;
     mainProgram = "wike";
   };
 }

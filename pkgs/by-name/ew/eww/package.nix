@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   wrapGAppsHook3,
   gtk3,
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-55lmQl5pJwrEj5RlSG8b0PqtZVrASxTmX4Qdk090DZo=";
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     wrapGAppsHook3
   ];
@@ -52,6 +54,13 @@ rustPlatform.buildRustPackage rec {
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd eww \
+      --bash <($out/bin/eww shell-completions --shell bash) \
+      --fish <($out/bin/eww shell-completions --shell fish) \
+      --zsh <($out/bin/eww shell-completions --shell zsh)
+  '';
+
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
@@ -72,6 +81,6 @@ rustPlatform.buildRustPackage rec {
       w-lfchen
     ];
     mainProgram = "eww";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

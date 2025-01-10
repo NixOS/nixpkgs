@@ -1,9 +1,14 @@
-{ lib,
+{
+  lib,
   stdenv,
-  writeShellScriptBin }:
-{ versions ? [ ] , xcodeBaseDir ? "/Applications/Xcode.app" }:
+  writeShellScriptBin,
+}:
+{
+  versions ? [ ],
+  xcodeBaseDir ? "/Applications/Xcode.app",
+}:
 
-assert stdenv.isDarwin;
+assert stdenv.hostPlatform.isDarwin;
 let
   xcodebuildPath = "${xcodeBaseDir}/Contents/Developer/usr/bin/xcodebuild";
 
@@ -31,11 +36,16 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/bin
     cd $out/bin
-    ${if versions == [ ] then ''
-    ln -s "${xcodebuildPath}"
-    '' else ''
-    ln -s "${xcodebuildWrapper}/bin/xcode-select"
-    ''}
+    ${
+      if versions == [ ] then
+        ''
+          ln -s "${xcodebuildPath}"
+        ''
+      else
+        ''
+          ln -s "${xcodebuildWrapper}/bin/xcode-select"
+        ''
+    }
     ln -s /usr/bin/security
     ln -s /usr/bin/codesign
     ln -s /usr/bin/xcrun

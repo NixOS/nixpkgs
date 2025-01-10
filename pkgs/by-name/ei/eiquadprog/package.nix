@@ -1,10 +1,12 @@
 {
   boost,
   cmake,
+  doxygen,
   eigen,
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
+  pkg-config,
   stdenv,
 }:
 
@@ -19,8 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VqRx06sCCZrnB+NWm6Z9OMKzjKQIydGgKQU6fMY7phk=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   nativeBuildInputs = [
     cmake
+    doxygen
+    pkg-config
     jrl-cmakemodules
   ];
   propagatedBuildInputs = [ eigen ];
@@ -34,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/stack-of-tasks/eiquadprog/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 })

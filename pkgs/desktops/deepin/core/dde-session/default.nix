@@ -4,8 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
+  libsForQt5,
   dtkcore,
   gsettings-qt,
   libsecret,
@@ -48,11 +47,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkcore
     gsettings-qt
     libsecret

@@ -13,7 +13,7 @@ let
     "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     # FreeBSD
-    "i686-freebsd" "x86_64-freebsd"
+    "i686-freebsd" "x86_64-freebsd" "aarch64-freebsd"
 
     # Genode
     "aarch64-genode" "i686-genode" "x86_64-genode"
@@ -55,7 +55,7 @@ let
     "wasm64-wasi" "wasm32-wasi"
 
     # Windows
-    "x86_64-windows" "i686-windows"
+    "aarch64-windows" "x86_64-windows" "i686-windows"
   ];
 
   allParsed = map parse.mkSystemFromString all;

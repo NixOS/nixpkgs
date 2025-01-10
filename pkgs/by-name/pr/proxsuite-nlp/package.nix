@@ -4,7 +4,6 @@
   eigenrand,
   example-robot-data,
   fetchFromGitHub,
-  fetchpatch,
   fmt,
   fontconfig,
   graphviz,
@@ -19,33 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite-nlp";
-  version = "0.7.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "proxsuite-nlp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aMTEjAu1ltjorx5vhz7klB0cGgdm+7STAPhi+NA6mnI=";
+    hash = "sha256-JWMvPIxmZ5vSVS3nSlhFyNu8hLSVTc7Hdvd4YmE/pI8=";
   };
 
   outputs = [
-    "doc"
     "out"
-  ];
-
-  patches = [
-    # Fix use of system jrl-cmakemodules
-    # This patch was merged upstream and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite-nlp/pull/106/commits/c653ab67860fdf7b53b1a919f0b8a7746eba016b.patch";
-      hash = "sha256-Kw2obJGOWms/Lr4cVkLFpaLTickCq5WQyDVbwi8Bd58=";
-    })
-    # Fix use of system EigenRand
-    # This patch was merged upstream and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite-nlp/pull/106/commits/25370417755f003708b5b2b81e253797e8d96928.patch";
-      hash = "sha256-PKijVmttt5JakF3X/GiVWptncxHJUbs/aikgwgB5NME=";
-    })
+    "doc"
   ];
 
   nativeBuildInputs = [

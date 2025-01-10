@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fNy1uN3oH54Wd9+EqYpiV0ot1MbSSC7TZoAARQeR81s=";
   };
 
@@ -40,13 +40,13 @@ buildPythonPackage rec {
 
   dependencies = [ djangorestframework ];
 
-  passthru.optional-dependencies.with_social = [ django-allauth ];
+  optional-dependencies.with_social = [ django-allauth ];
 
   nativeCheckInputs = [
     djangorestframework-simplejwt
     responses
     unittest-xml-reporting
-  ] ++ passthru.optional-dependencies.with_social;
+  ] ++ optional-dependencies.with_social;
 
   preCheck = ''
     # Test connects to graph.facebook.com

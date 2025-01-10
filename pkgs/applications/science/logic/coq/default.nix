@@ -5,7 +5,7 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
+{ lib, stdenv, fetchzip, fetchurl, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
 , ocamlPackages_4_14
@@ -62,7 +62,7 @@ let
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
-    { inherit lib stdenv fetchzip; }
+    { inherit lib stdenv fetchzip fetchurl; }
     { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
     args.version;
   version = fetched.version;
@@ -205,6 +205,9 @@ self = stdenv.mkDerivation {
     cp bin/votour $out/bin/
   '' + ''
     ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
+  '' + lib.optionalString (coqAtLeast "8.21") ''
+    ln -s $out/lib/rocq-runtime $OCAMLFIND_DESTDIR/rocq-runtime
+    ln -s $out/lib/rocq-core $OCAMLFIND_DESTDIR/rocq-core
   '' + lib.optionalString (coqAtLeast "8.14") ''
     ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
   '' + lib.optionalString buildIde ''
@@ -228,16 +231,17 @@ self = stdenv.mkDerivation {
     mainProgram = "coqide";
   };
 }; in
-if coqAtLeast "8.17" then self.overrideAttrs(_: {
+if coqAtLeast "8.17" then self.overrideAttrs(_: let
+  core-stdlib-package = if coqAtLeast "8.21" then "rocq-core" else "coq-stdlib"; in {
   buildPhase = ''
     runHook preBuild
     make dunestrap
-    dune build -p coq-core,coq-stdlib,coq,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    dune build -p coq-core${lib.optionalString (coqAtLeast "8.21") ",rocq-runtime"},${core-stdlib-package},coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out coq-core coq-stdlib coq coqide-server${lib.optionalString buildIde " coqide"}
+    dune install --prefix $out coq-core ${lib.optionalString (coqAtLeast "8.21") "rocq-runtime"} ${core-stdlib-package} coqide-server${lib.optionalString buildIde " coqide"}
     runHook postInstall
   '';
 }) else self

@@ -1,4 +1,4 @@
-preConfigurePhases="${preConfigurePhases:-} autoreconfPhase"
+appendToVar preConfigurePhases autoreconfPhase
 
 autoreconfPhase() {
     runHook preAutoreconf

@@ -6,7 +6,7 @@ This setup hook attempts to use [the `just` command runner](https://just.systems
 
 ## `buildPhase` {#just-hook-buildPhase}
 
-This phase attempts to invoke `just` with [the default recipe](https://just.systems/man/en/chapter_23.html).
+This phase attempts to invoke `just` with [the default recipe](https://just.systems/man/en/the-default-recipe.html).
 
 []{#just-hook-dontUseJustBuild} This behavior can be disabled by setting `dontUseJustBuild` to `true`.
 

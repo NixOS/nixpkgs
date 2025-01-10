@@ -1,8 +1,8 @@
 {
   schleuder-cli = {
-    dependencies = ["thor"];
-    groups = ["default"];
-    platforms = [];
+    dependencies = [ "thor" ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       fetchSubmodules = false;
       rev = "fd010d28b1503504056e714e03abf043b64794ea";
@@ -13,10 +13,10 @@
     version = "0.2.0";
   };
   thor = {
-    groups = ["default"];
-    platforms = [];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "1vq1fjp45az9hfp6fxljhdrkv75cvbab1jfrwcw738pnsiqk8zps";
       type = "gem";
     };

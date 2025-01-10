@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
         "subdir('ssids')" \
         ""
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Skipped test: lsmrt, segfault
       substituteInPlace tests/meson.build --replace-fail \
         "['lsmrt', files('lsmr.f90')]," \
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     blas
     lapack
     metis
-  ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 
-  LDFLAGS = lib.optionals stdenv.isDarwin [ "-lomp" ];
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [ "-lomp" ];
 
   doCheck = true;
 

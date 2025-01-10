@@ -25,13 +25,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EP99AswHmLO+8ZQAPjJyw/P9QqfDawy3AqyJR870Qms=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "protobuf>=4.22.0" "protobuf"
+      --replace-fail "protobuf>=4.22.0" "protobuf"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -51,6 +51,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = [
+    # pytest-httpx compat issue
+    "test_wrong_password_type"
   ];
 
   pythonImportsCheck = [ "devolo_plc_api" ];

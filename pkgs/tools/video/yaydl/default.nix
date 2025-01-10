@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yaydl";
-  version = "0.14.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "dertuxmalwieder";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-BH+SRr+RYfKsXrzpqggQDJSs+aWJRSi/5tDX5mjpDkk=";
+    sha256 = "sha256-mMV7fnl3tEM22LCTLXoXG9RQhPSQ7DXanSURdoa0+EI=";
   };
 
-  cargoHash = "sha256-q4gwa4KoWiQWKKI3sp00koiH9Ndj23a8F07e72xSF1M=";
+  cargoHash = "sha256-HsRg8SO9c9Fomeb5B+kOW3VDNIG4W+dagEwAoWqONyA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     wrapProgram $out/bin/yaydl \

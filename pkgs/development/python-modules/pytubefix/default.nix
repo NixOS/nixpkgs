@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FbmVQ+nt/WEwE5vRMo2610TO463CT8nCseqB30uXjSM=";
   };
 
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/JuanBindez/pytubefix";
     description = "Pytube fork with additional features and fixes";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ roshaen ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
   };
 }

@@ -1,5 +1,5 @@
 diff --git a/mk b/mk
-index a5baa0f8..37cac28e 100755
+index a5baa0f..4ed2350 100644
 --- a/mk
 +++ b/mk
 @@ -25,7 +25,7 @@ const rm = (x) => {
@@ -22,13 +22,40 @@ index a5baa0f8..37cac28e 100755
      },
    };
    wf('_/version.js', `D=${JSON.stringify(vi)}`);
-@@ -50,6 +50,9 @@ const incl = new RegExp('^$'
-   + '|^/style($|/(fonts|img)|.*\\.css$)');
+@@ -51,8 +51,7 @@ const incl = new RegExp('^$'
  const pkg = (x, y, f) => {
    rq('electron-packager')({
-+    asar: true,
-+    electronZipDir: "local-cache",
-+    electronVersion: "@electron_version@",
      dir: '.',
-     platform: x,
-     arch: y,
+-    platform: x,
+-    arch: y,
++    asar: true,
+     tmpdir: '/tmp/ridebuild',
+     out: `_/${pj.name}`,
+     overwrite: true,
+@@ -79,8 +78,8 @@ const pkg = (x, y, f) => {
+       ProductName: 'RIDE',
+       InternalName: 'RIDE',
+     },
+-  }).then(() => {
+-    const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
++  }).then(paths => {
++    const d = paths[0];
+     rm(`${d}/version`);
+     fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+     generateLicenses(`${d}/ThirdPartyNotices.txt`);
+@@ -88,6 +87,7 @@ const pkg = (x, y, f) => {
+   }, e => f(e));
+ };
+ 
++const self = (f) => { b(e => (e ? f(e) : pkg(undefined, undefined, f))); };
+ const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
+ const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
+ const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
+@@ -109,6 +109,7 @@ tasks.ma=ma; tasks.masarm = ma;
+ tasks.a = a; tasks.arm = a;
+ tasks.d = d; tasks.dist = d;
+ tasks.c = c; tasks.clean = c;
++tasks.self = self;
+ 
+ async.each(
+   process.argv.length > 2 ? process.argv.slice(2) : ['build'],

@@ -24,7 +24,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyclipper ];
 
-  doCheck = true;
   nativeCheckInputs = [
     dotmap
     matplotlib

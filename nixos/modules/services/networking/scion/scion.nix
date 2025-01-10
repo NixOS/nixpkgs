@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -42,9 +47,11 @@ in
       scion-daemon.enable = true;
       scion-router.enable = true;
       scion-control.enable = true;
+      scion-ip-gateway.enable = true;
     };
     assertions = [
-      { assertion = cfg.bypassBootstrapWarning == true;
+      {
+        assertion = cfg.bypassBootstrapWarning == true;
         message = ''
           SCION is a routing protocol and requires bootstrapping with a manual, imperative key signing ceremony. You may want to join an existing Isolation Domain (ISD) such as scionlab.org, or bootstrap your own. If you have completed and configured the public key infrastructure for SCION and are sure this process is complete, then add the following to your configuration:
 
@@ -56,4 +63,3 @@ in
     ];
   };
 }
-

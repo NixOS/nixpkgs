@@ -1,40 +1,51 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
 
-  checkedConfig = file:
+  checkedConfig =
+    file:
     if cfg.checkConfig then
       pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
         ln -s ${file} $out
         amtool check-config $out
-      '' else file;
+      ''
+    else
+      file;
 
-  alertmanagerYml = let
-    yml = if cfg.configText != null then
-        pkgs.writeText "alertmanager.yml" cfg.configText
-        else mkConfigFile;
-    in checkedConfig yml;
+  alertmanagerYml =
+    let
+      yml =
+        if cfg.configText != null then pkgs.writeText "alertmanager.yml" cfg.configText else mkConfigFile;
+    in
+    checkedConfig yml;
 
-  cmdlineArgs = cfg.extraFlags ++ [
-    "--config.file /tmp/alert-manager-substituted.yaml"
-    "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
-    "--log.level ${cfg.logLevel}"
-    "--storage.path /var/lib/alertmanager"
-    (toString (map (peer: "--cluster.peer ${peer}:9094") cfg.clusterPeers))
-    ] ++ (optional (cfg.webExternalUrl != null)
-      "--web.external-url ${cfg.webExternalUrl}"
-    ) ++ (optional (cfg.logFormat != null)
-      "--log.format ${cfg.logFormat}"
-  );
-in {
+  cmdlineArgs =
+    cfg.extraFlags
+    ++ [
+      "--config.file /tmp/alert-manager-substituted.yaml"
+      "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
+      "--log.level ${cfg.logLevel}"
+      "--storage.path /var/lib/alertmanager"
+      (toString (map (peer: "--cluster.peer ${peer}:9094") cfg.clusterPeers))
+    ]
+    ++ (lib.optional (cfg.webExternalUrl != null) "--web.external-url ${cfg.webExternalUrl}")
+    ++ (lib.optional (cfg.logFormat != null) "--log.format ${cfg.logFormat}");
+in
+{
   imports = [
-    (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting.")
-    (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
-    (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerURL" ] ''
+    (lib.mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ]
+      "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting."
+    )
+    (lib.mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ]
+      "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting."
+    )
+    (lib.mkRemovedOptionModule [ "services" "prometheus" "alertmanagerURL" ] ''
       Due to incompatibility, the alertmanagerURL option has been removed,
       please use 'services.prometheus.alertmanagers' instead.
     '')
@@ -42,31 +53,37 @@ in {
 
   options = {
     services.prometheus.alertmanager = {
-      enable = mkEnableOption "Prometheus Alertmanager";
+      enable = lib.mkEnableOption "Prometheus Alertmanager";
 
-      package = mkPackageOption pkgs "prometheus-alertmanager" { };
+      package = lib.mkPackageOption pkgs "prometheus-alertmanager" { };
 
-      configuration = mkOption {
-        type = types.nullOr types.attrs;
+      configuration = lib.mkOption {
+        type = lib.types.nullOr lib.types.attrs;
         default = null;
         description = ''
           Alertmanager configuration as nix attribute set.
+
+          The contents of the resulting config file are processed using envsubst.
+          `$` needs to be escaped as `$$` to be preserved.
         '';
       };
 
-      configText = mkOption {
-        type = types.nullOr types.lines;
+      configText = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Alertmanager configuration as YAML text. If non-null, this option
           defines the text that is written to alertmanager.yml. If null, the
           contents of alertmanager.yml is generated from the structured config
           options.
+
+          The contents of the resulting config file are processed using envsubst.
+          `$` needs to be escaped as `$$` to be preserved.
         '';
       };
 
-      checkConfig = mkOption {
-        type = types.bool;
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Check configuration with `amtool check-config`. The call to `amtool` is
@@ -79,24 +96,30 @@ in {
         '';
       };
 
-      logFormat = mkOption {
-        type = types.nullOr types.str;
+      logFormat = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           If set use a syslog logger or JSON logging.
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum ["debug" "info" "warn" "error" "fatal"];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [
+          "debug"
+          "info"
+          "warn"
+          "error"
+          "fatal"
+        ];
         default = "warn";
         description = ''
           Only log messages with the given severity or above.
         '';
       };
 
-      webExternalUrl = mkOption {
-        type = types.nullOr types.str;
+      webExternalUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The URL under which Alertmanager is externally reachable (for example, if Alertmanager is served via a reverse proxy).
@@ -106,8 +129,8 @@ in {
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Address to listen on for the web interface and API. Empty string will listen on all interfaces.
@@ -115,40 +138,40 @@ in {
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9093;
         description = ''
           Port to listen on for the web interface and API.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open port in firewall for incoming connections.
         '';
       };
 
-      clusterPeers = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      clusterPeers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
         description = ''
           Initial peers for HA cluster.
         '';
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
         description = ''
           Extra commandline options when launching the Alertmanager.
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/root/alertmanager.env";
         description = ''
@@ -161,29 +184,32 @@ in {
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
-      assertions = singleton {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      assertions = lib.singleton {
         assertion = cfg.configuration != null || cfg.configText != null;
-        message = "Can not enable alertmanager without a configuration. "
-         + "Set either the `configuration` or `configText` attribute.";
+        message =
+          "Can not enable alertmanager without a configuration. "
+          + "Set either the `configuration` or `configText` attribute.";
       };
     })
-    (mkIf cfg.enable {
-      networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+    (lib.mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
-        wants    = [ "network-online.target" ];
-        after    = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         preStart = ''
-           ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
-                                                    -i "${alertmanagerYml}"
+          ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
+                                                   -i "${alertmanagerYml}"
         '';
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/alertmanager" +
-            optionalString (length cmdlineArgs != 0) (" \\\n  " +
-              concatStringsSep " \\\n  " cmdlineArgs);
+          ExecStart =
+            "${cfg.package}/bin/alertmanager"
+            + lib.optionalString (lib.length cmdlineArgs != 0) (
+              " \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs
+            );
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
@@ -214,9 +240,13 @@ in {
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
 
-          Restart  = "always";
+          Restart = "always";
 
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

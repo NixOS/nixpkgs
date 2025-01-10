@@ -83,6 +83,7 @@ in
     systemd.services.teleport = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      path = with pkgs; [ getent shadow sudo ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/teleport start \

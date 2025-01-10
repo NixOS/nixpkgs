@@ -7,6 +7,8 @@ in
     services.bazarr = {
       enable = lib.mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
 
+      package = lib.mkPackageOption pkgs "bazarr" { };
+
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -35,7 +37,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.bazarr = {
-      description = "bazarr";
+      description = "Bazarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -46,12 +48,14 @@ in
         StateDirectory = "bazarr";
         SyslogIdentifier = "bazarr";
         ExecStart = pkgs.writeShellScript "start-bazarr" ''
-          ${pkgs.bazarr}/bin/bazarr \
+          ${cfg.package}/bin/bazarr \
             --config '/var/lib/${StateDirectory}' \
             --port ${toString cfg.listenPort} \
             --no-update True
         '';
         Restart = "on-failure";
+        KillSignal = "SIGINT";
+        SuccessExitStatus = "0 156";
       };
     };
 

@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kglobalaccel";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

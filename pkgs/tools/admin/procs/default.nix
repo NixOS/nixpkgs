@@ -1,29 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.14.6";
+  version = "0.14.8";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
     rev = "v${version}";
-    hash = "sha256-Dp0XdARZrDrZ9QOv+V2ZKYV7J89t135ie5LSWz/KKHY=";
+    hash = "sha256-ShkFUJqjBeaZm0pD1WrUNmHpGP75KnkeBveCFs8UFqE=";
   };
 
-  cargoHash = "sha256-EifER0wt2Nw7WrlVwc49tZHH/av4OkzTPYSzl9mVJI8=";
+  cargoHash = "sha256-KGeK6fKuVe78Q2k/gx3GNieTit0LxzGJQX5htas3QW0=";
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/procs --gen-completion $shell
+      ${stdenv.hostPlatform.emulator buildPackages} $out/bin/procs --gen-completion $shell
     done
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv Libsystem ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv Libsystem ];
 
   meta = with lib; {
     description = "Modern replacement for ps written in Rust";

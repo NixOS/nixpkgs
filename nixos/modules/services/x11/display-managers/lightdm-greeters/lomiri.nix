@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -17,6 +22,9 @@ in
   };
 
   config = lib.mkIf (ldmcfg.enable && cfg.enable) {
+    # Lomiri greeter == Lomiri shell in special mode, need some basics setup at least
+    services.desktopManager.lomiri.basics = true;
+
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     services.xserver.displayManager.lightdm.greeter = lib.mkDefault {

@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZjsBGtY6M5jIXylzg4k8U4krwqx5d5VuMiVHAeUIbXY=";
   };
 
@@ -38,5 +38,6 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     mainProgram = "zoraxy";
+    platforms = lib.platforms.linux;
   };
 }

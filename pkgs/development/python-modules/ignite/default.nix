@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J0xrqAGwH0bAs59T7zA8irMWOGbE2+Zd9kwqxYUYYMA=";
   };
 
@@ -97,6 +97,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bcdarwin ];
     # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

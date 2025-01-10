@@ -52,7 +52,7 @@ let
         pkg-config
         libsecret
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         darwin.apple_sdk.frameworks.AppKit
         darwin.apple_sdk.frameworks.Security
       ];
@@ -72,8 +72,7 @@ let
   };
 in
 vscode-utils.buildVscodeExtension {
-  inherit version vsix;
-  name = "${pname}-${version}";
+  inherit version vsix pname;
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;

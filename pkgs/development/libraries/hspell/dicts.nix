@@ -1,15 +1,33 @@
-{ lib, stdenv, hspell }:
+{
+  lib,
+  stdenv,
+  hspell,
+}:
 
 let
-  dict = variant: a: stdenv.mkDerivation ({
-    inherit (hspell) version src patches postPatch nativeBuildInputs;
-    buildFlags = [ variant ];
+  dict =
+    variant: a:
+    stdenv.mkDerivation (
+      {
+        inherit (hspell)
+          version
+          src
+          patches
+          postPatch
+          nativeBuildInputs
+          ;
+        buildFlags = [ variant ];
 
-    meta = hspell.meta // {
-      broken = true;
-      description = "${variant} Hebrew dictionary";
-    } // (lib.optionalAttrs (a ? meta) a.meta);
-  } // (removeAttrs a ["meta"]));
+        meta =
+          hspell.meta
+          // {
+            broken = true;
+            description = "${variant} Hebrew dictionary";
+          }
+          // (lib.optionalAttrs (a ? meta) a.meta);
+      }
+      // (removeAttrs a [ "meta" ])
+    );
 in
 {
   recurseForDerivations = true;

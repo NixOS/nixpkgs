@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, patch2pr
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  patch2pr,
 }:
 
 buildGoModule rec {
   pname = "patch2pr";
-  version = "0.27.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "bluekeyes";
     repo = "patch2pr";
     rev = "v${version}";
-    hash = "sha256-HKPw9yKJGakY2XTuMr2Beq+UxMnu/je3aEHsM1UR/Sk=";
+    hash = "sha256-DiPgfpXXp8uB3PTjtSIN+1eKLBqy0AcNVQDnBmHM2u4=";
   };
 
-  vendorHash = "sha256-1ufdkCvTi5hNlpwZZKrkfpoRhWUp7fwHuZ1BPbkkxkY=";
+  vendorHash = "sha256-nn/jCMLw77KOegcEOLCdZVc9wcmrMnVkEkmSUkNan2s=";
 
   ldflags = [
     "-X main.version=${version}"

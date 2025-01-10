@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   ]
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
-  ++ optionals (stdenv.isLinux) [
+  ++ optionals (stdenv.hostPlatform.isLinux) [
     util-linux
     libselinux
     libsepol

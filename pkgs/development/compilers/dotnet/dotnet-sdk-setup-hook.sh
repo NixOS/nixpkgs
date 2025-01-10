@@ -135,7 +135,7 @@ configureNuget() {
                         -s '/configuration/packageSourceMapping/packageSource[@key="_nix"]' -t elem -n package
                         -i \$prev -t attr -n pattern -v "$id")
                 done
-                cd - < /dev/null
+                cd - > /dev/null
             else
                 xmlConfigArgs+=(
                     "${xmlSourceConfigArgs[@]}"
@@ -198,5 +198,5 @@ configureNuget() {
 }
 
 if [[ -z ${dontConfigureNuget-} ]]; then
-    preConfigurePhases+=(configureNuget)
+    appendToVar preConfigurePhases configureNuget
 fi

@@ -10,10 +10,9 @@
   disableUpdateNotifier ? true,
 }:
 
-symlinkJoin rec {
+symlinkJoin {
   pname = "turbo";
   inherit (turbo-unwrapped) version;
-  name = "${pname}-${version}";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

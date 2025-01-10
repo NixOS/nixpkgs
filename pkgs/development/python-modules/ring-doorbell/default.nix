@@ -8,8 +8,8 @@
   fetchPypi,
   firebase-messaging,
   freezegun,
+  hatchling,
   oauthlib,
-  poetry-core,
   pytest-asyncio,
   pytest-freezer,
   pytest-mock,
@@ -18,11 +18,12 @@
   pythonOlder,
   pytz,
   typing-extensions,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.9.3";
+  version = "0.9.13";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,25 +31,23 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-jzhboyDq3PXkwKKrAehX1F1UEUo9qofb+Z4/W5vwjiU=";
+    hash = "sha256-M8lHODHdWXLvrDbQMeEgGaQMYCXicHTQta+XjJxSQlM=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiofiles
     aiohttp
     asyncclick
+    firebase-messaging
     oauthlib
     pytz
     typing-extensions
+    websockets
   ];
-
-  optional-dependencies = {
-    listen = [ firebase-messaging ];
-  };
 
   nativeCheckInputs = [
     aioresponses

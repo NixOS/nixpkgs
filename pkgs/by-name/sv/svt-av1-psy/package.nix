@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1-psy";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "gianni-rosato";
     repo = "svt-av1-psy";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4ds7yrUMp0O5/aWOkdnrANR1D3djajU/0ZeY6xJnpHI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qySrYZDwmoKf7oAQJlBSWInXeOceGSeL2Kc09SJ5Zs0=";
   };
 
   cmakeBuildType = "Release";

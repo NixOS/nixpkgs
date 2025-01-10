@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromSourcehut
-, autoPatchelfHook
-, gcc-unwrapped
-, wayland
-, libxkbcommon
+{
+  lib,
+  rustPlatform,
+  fetchFromSourcehut,
+  autoPatchelfHook,
+  gcc-unwrapped,
+  wayland,
+  libxkbcommon,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wlgreet";
     homepage = "https://git.sr.ht/~kennylevinsen/wlgreet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

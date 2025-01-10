@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "steinnes";
     repo = "timing-asgi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oEDesmy9t2m51Zd6Zg87qoYbfbDnejfrbjyBkZ3hF58=";
   };
 

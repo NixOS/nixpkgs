@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, mpfr
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  mpfr,
 }:
 
 buildOctavePackage rec {
@@ -23,17 +24,17 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Interval arithmetic to evaluate functions over subsets of their domain";
     longDescription = ''
-       The interval package for real-valued interval arithmetic allows one to
-       evaluate functions over subsets of their domain. All results are verified,
-       because interval computations automatically keep track of any errors.
+      The interval package for real-valued interval arithmetic allows one to
+      evaluate functions over subsets of their domain. All results are verified,
+      because interval computations automatically keep track of any errors.
 
-       These concepts can be used to handle uncertainties, estimate arithmetic
-       errors and produce reliable results. Also it can be applied to
-       computer-assisted proofs, constraint programming, and verified computing.
+      These concepts can be used to handle uncertainties, estimate arithmetic
+      errors and produce reliable results. Also it can be applied to
+      computer-assisted proofs, constraint programming, and verified computing.
 
-       The implementation is based on interval boundaries represented by
-       binary64 numbers and is conforming to IEEE Std 1788-2015, IEEE standard
-       for interval arithmetic.
+      The implementation is based on interval boundaries represented by
+      binary64 numbers and is conforming to IEEE Std 1788-2015, IEEE standard
+      for interval arithmetic.
     '';
   };
 }

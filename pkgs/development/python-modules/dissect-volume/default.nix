@@ -12,24 +12,24 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.11";
+  version = "3.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
-    rev = "refs/tags/${version}";
-    hash = "sha256-eHIInoquuyukKuPVvVB6qtovx1NloHHVGKfFBHxVd+o=";
+    tag = version;
+    hash = "sha256-uTbXvJ8lP4ir9rTToDGYXD837Z1fzi+Eh6cASg+jxdc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -42,8 +42,10 @@ buildPythonPackage rec {
     # gzip.BadGzipFile: Not a gzipped file
     "test_ddf_read"
     "test_dm_thin"
+    "test_lvm"
     "test_lvm_mirro"
     "test_lvm_thin"
+    "test_lvm"
     "test_md_raid0_zones"
     "test_md_read"
   ];

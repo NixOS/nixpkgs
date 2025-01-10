@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "ecs-logging-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-djCEutZqcyRfRme+omiwl3ofBUBli71TnfVu59i7vlE=";
   };
 

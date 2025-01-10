@@ -12,7 +12,7 @@
   black,
   coverage,
   ipykernel,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-regressions,
   pytestCheckHook,
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrisjsewell";
     repo = "pytest-notebook";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LoK0wb7rAbVbgyURCbSfckWvJDef3tPY+7V4YU1IBRU=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     black
     coverage
     ipykernel
-    pytest-cov
+    pytest-cov-stub
     pytest-regressions
     pytestCheckHook
   ];

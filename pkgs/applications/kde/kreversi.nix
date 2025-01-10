@@ -1,4 +1,10 @@
-{ mkDerivation, lib, extra-cmake-modules, libkdegames, kdeclarative }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  libkdegames,
+  kdeclarative,
+}:
 
 mkDerivation {
   pname = "kreversi";

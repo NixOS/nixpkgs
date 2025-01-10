@@ -31,6 +31,7 @@ To begin the installation, you have to boot your computer from the install drive
 
      ::: {.note}
      If your computer supports both BIOS and UEFI boot, choose the UEFI option.
+     You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
      :::
 
      ::: {.note}
@@ -219,6 +220,8 @@ need to do that yourself.
 The NixOS installer ships with multiple partitioning tools. The examples
 below use `parted`, but also provides `fdisk`, `gdisk`, `cfdisk`, and
 `cgdisk`.
+
+Use the command 'lsblk' to find the name of your 'disk' device.
 
 The recommended partition scheme differs depending if the computer uses
 *Legacy Boot* or *UEFI*.
