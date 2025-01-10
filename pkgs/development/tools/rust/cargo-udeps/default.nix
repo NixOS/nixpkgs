@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   # Requires network access
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Find unused dependencies in Cargo.toml";
