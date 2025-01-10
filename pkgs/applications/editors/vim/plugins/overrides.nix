@@ -10,6 +10,7 @@
   fetchpatch,
   fetchurl,
   neovimUtils,
+  replaceVars,
   substituteAll,
   # Language dependencies
   fetchYarnDeps,
@@ -2659,13 +2660,9 @@ in
   };
 
   aider-nvim = super.aider-nvim.overrideAttrs {
-    patches = [ ./patches/aider.nvim/fix-paths.patch ];
-
-    postPatch = ''
-      substituteInPlace lua/aider.lua --replace-fail '@aider@' ${aider-chat}/bin/aider
-      substituteInPlace lua/helpers.lua --replace-fail '@aider@' ${aider-chat}/bin/aider
-    '';
-    nvimRequireCheck = "aider";
+    patches = [
+      (replaceVars ./patches/aider-nvim/bin.patch { aider = lib.getExe' aider-chat "aider"; })
+    ];
   };
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
