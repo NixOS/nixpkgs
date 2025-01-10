@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "lazy" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Lazy attributes for Python objects";
