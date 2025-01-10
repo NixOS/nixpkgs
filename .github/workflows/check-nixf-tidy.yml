@@ -1,0 +1,129 @@
+name: Check changed Nix files with nixf-tidy (experimental)
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+permissions:
+  contents: read
+
+jobs:
+  nixos:
+    name: exp-nixf-tidy-check
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          # Fetches the merge commit and its parents
+          fetch-depth: 2
+      - name: Checking out base branch
+        run: |
+          base=$(mktemp -d)
+          baseRev=$(git rev-parse HEAD^1)
+          git worktree add "$base" "$baseRev"
+          echo "baseRev=$baseRev" >> "$GITHUB_ENV"
+          echo "base=$base" >> "$GITHUB_ENV"
+      - name: Get Nixpkgs revision for nixf
+        run: |
+          # pin to a commit from nixpkgs-unstable to avoid e.g. building nixf
+          # from staging
+          # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
+          rev=$(jq -r .rev ci/pinned-nixpkgs.json)
+          echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
+      - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+        with:
+          # explicitly enable sandbox
+          extra_nix_config: sandbox = true
+          nix_path: nixpkgs=${{ env.url }}
+      - name: Install nixf and jq
+        # provided jq is incompatible with our expression
+        run: "nix-env -f '<nixpkgs>' -iAP nixf jq"
+      - name: Check that Nix files pass nixf-tidy
+        run: |
+          # Filtering error messages we don't like
+          nixf_wrapper(){
+            nixf-tidy --variable-lookup < "$1" | jq -r '
+              [
+                "sema-escaping-with"
+              ]
+              as $ignored_errors|[.[]|select(.sname as $s|$ignored_errors|index($s)|not)]
+            '
+          }
+
+          failedFiles=()
+
+          # Don't report errors to file overview
+          # to avoid duplicates when editing title and description
+          if [[ "${{ github.event.action }}" == 'edited' ]] && [[ -z "${{ github.event.edited.changes.base }}" ]]; then
+            DONT_REPORT_ERROR=1
+          else
+            DONT_REPORT_ERROR=
+          fi
+          # TODO: Make this more parallel
+
+          # Loop through all Nix files touched by the PR
+          while readarray -d '' -n 2 entry && (( ${#entry[@]} != 0 )); do
+            type=${entry[0]}
+            file=${entry[1]}
+            case $type in
+              A*)
+                source=""
+                dest=$file
+                ;;
+              M*)
+                source=$file
+                dest=$file
+                ;;
+              C*|R*)
+                source=$file
+                read -r -d '' dest
+                ;;
+              *)
+                echo "Ignoring file $file with type $type"
+                continue
+            esac
+
+            if [[ -n "$source" ]] && [[ "$(nixf_wrapper ${{ env.base }}/"$source")" != '[]' ]] 2>/dev/null; then
+              echo "Ignoring file $file because it doesn't pass nixf-tidy in the base commit"
+              echo # insert blank line
+            else
+              nixf_report="$(nixf_wrapper "$dest")"
+              if [[ "$nixf_report" != '[]' ]]; then
+                echo "$dest doesn't pass nixf-tidy. Reported by nixf-tidy:"
+                errors=$(echo "$nixf_report" | jq -r --arg dest "$dest" '
+                  def getLCur: "line=" + (.line+1|tostring) + ",col=" + (.column|tostring);
+                  def getRCur: "endLine=" + (.line+1|tostring) + ",endColumn=" + (.column|tostring);
+                  def getRange: "file=\($dest)," + (.lCur|getLCur) + "," + (.rCur|getRCur);
+                  def getBody: . as $top|(.range|getRange) + ",title="+ .sname + "::" +
+                    (.message|sub("{}" ; ($top.args.[]|tostring)));
+                  def getNote: "\n::notice " + (.|getBody);
+                  def getMessage: "::error " + (.|getBody) + (if (.notes|length)>0 then
+                    ([.notes.[]|getNote]|add) else "" end);
+                  .[]|getMessage
+                ')
+                if [[ -z "$DONT_REPORT_ERROR" ]]; then
+                  echo "$errors"
+                else
+                  # just print in plain text
+                  echo "$errors" | sed 's/^:://'
+                  echo # add one empty line
+                fi
+                failedFiles+=("$dest")
+              fi
+            fi
+          done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
+
+          if [[ -n "$DONT_REPORT_ERROR" ]]; then
+            echo "Edited the PR but didn't change the base branch, only the description/title."
+            echo "Not reporting errors again to avoid duplication."
+            echo # add one empty line
+          fi
+
+          if (( "${#failedFiles[@]}" > 0 )); then
+            echo "Some new/changed Nix files don't pass nixf-tidy."
+            echo "See ${{ github.event.pull_request.html_url }}/files for reported errors."
+            echo "If you believe this is a false positive, ping @Aleksanaa and @inclyc in this PR."
+            exit 1
+          fi

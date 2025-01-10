@@ -1,0 +1,238 @@
+{
+ "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
+ "!version": 1,
+ "https://repo.maven.apache.org/maven2": {
+  "com/badlogicgames/gdx#gdx-backend-lwjgl3/1.11.0": {
+   "jar": "sha256-my0CJorGB5QwSi4E5ep1H62fX5bsyvFdgCOm4LF6994=",
+   "module": "sha256-o7gpPFXSp2lb60LCcKrfKpQcK4NqQL8Ob4W6OOY0VwY=",
+   "pom": "sha256-wa55d83hp9muWlhfDe8Ap2d4LzcR5/+RYTX2UPA2HOo="
+  },
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.11.0": {
+   "pom": "sha256-a5PHPPIyrqNpnueP5GEkJ14KwbsROJkXUcz96l8Au9c="
+  },
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.11.0/natives-desktop": {
+   "jar": "sha256-9GCzmqhP9bnWC4mT4j/zKtpWellmThTrfha7VcWk9yE="
+  },
+  "com/badlogicgames/gdx#gdx-freetype/1.11.0": {
+   "jar": "sha256-u5hP1RQ13YCN0HaSWOqzJikXG19OnkPzmvRUPh7E3yI=",
+   "module": "sha256-n5oGuAY9dyn7H94+ippXm3vuPUqevY+xrDubsj78b/M=",
+   "pom": "sha256-xkjQNIE46uOtYmScUTA8R5rr5czpsbXQeLX3rkVQG+0="
+  },
+  "com/badlogicgames/gdx#gdx-jnigen-loader/2.3.1": {
+   "jar": "sha256-ZJDdoiWmHHYCwnu+xOSBE3/1lfjOCy3bpBTww0Bq7mA=",
+   "module": "sha256-nNWFK9nlHTbRJxrypGzZfOwk5XEHblQTbsmtNxhGua8=",
+   "pom": "sha256-7e2XZPzSpbw8peeAUEHppiAZ+ovkNLWZ8D1JR+KkQng="
+  },
+  "com/badlogicgames/gdx#gdx-platform/1.11.0": {
+   "pom": "sha256-8cBBk8LQnXP8lVNQL05ZFMIOgDWrdpoZ0z4bxJJ0AkA="
+  },
+  "com/badlogicgames/gdx#gdx-platform/1.11.0/natives-desktop": {
+   "jar": "sha256-yUFpxwl25LGMCL1qKWtETqiLtUlF67EtHy5DK5L4OTA="
+  },
+  "com/badlogicgames/gdx#gdx/1.11.0": {
+   "jar": "sha256-IxU8Z+GVYGROD6EjUjK12F7kHPKJKBwtp+yMKONXULk=",
+   "module": "sha256-twUVE1CLWninINOZQrsifRvrOrzgBpskstIAA2TPbbM=",
+   "pom": "sha256-2W6H3BZixRugifIY1Cy3/U3b3sZQiytosvCsZ5dvJSU="
+  },
+  "com/badlogicgames/gdx-controllers#gdx-controllers-core/2.2.2": {
+   "jar": "sha256-DKa7jeeMTIY2ycrjhvrAU4LdMp9y1xCU+62wL89aEAQ=",
+   "pom": "sha256-Y0QV6aRkzGOr46Gb6+AYM2OdS95sUt2zIoaOQduz724="
+  },
+  "com/badlogicgames/gdx-controllers#gdx-controllers-desktop/2.2.2": {
+   "jar": "sha256-oJnxlAyrkj1QtnHH4uK6HkXq44+mxdzq6piktPUqTl0=",
+   "pom": "sha256-ZAhAV2hHVAbq8aLVysozRiKXIYdZmkssHWSOf+rarn8="
+  },
+  "com/badlogicgames/jamepad#jamepad/2.0.20.0": {
+   "jar": "sha256-6fFqB9SpRCSs0DiOw6P+TsZLfhiWxlgUwv9rRisTs2Y=",
+   "module": "sha256-vXFX36GUJsdj2VgYbnHR3+lKnBRgBeEI9pwUameDrmY=",
+   "pom": "sha256-+gwaoDndosNqw/VslH3vLEOptLnkbCPhrqddHQaZ3eQ="
+  },
+  "com/badlogicgames/jlayer#jlayer/1.0.1-gdx": {
+   "jar": "sha256-qrze3C4/pBxOE4hwUj10MzfxiZMQgGMLoaIoVTjNAPs=",
+   "pom": "sha256-nGCRe2JnOIvFeWpSDswPF8ed2hVGUM0FQdTEE4ghv0k="
+  },
+  "org/jcraft#jorbis/0.0.17": {
+   "jar": "sha256-4GfymjcBQmtn7ZcwNpScbljKW7U+73JAsuceKG0lKp4=",
+   "pom": "sha256-GN47DZMq+Zgy202DL2g1B/vdWgsMJN1oDoTOb1cYLiQ="
+  },
+  "org/json#json/20170516": {
+   "jar": "sha256-gT835IIPGFTopOtPgN+UvxsfLsbDtyaS8jq5pVYlavY=",
+   "pom": "sha256-ZMFVQ6PV2yeaIK6w36A0oqecIVn4zUAd6kj/DyNMGN0="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1": {
+   "jar": "sha256-CLvDTrdS+GPjf4OrHHsMIvfLJtD4+wpKSoxgKKxFs4U=",
+   "pom": "sha256-TKQrQ8iqDodIWWB0d0C5lFqqH99+QTTm+iTo+d8cF2A="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-linux": {
+   "jar": "sha256-Ze0Ev/fQf+ybf958OxHEBShsjWbk609Mm3kuJn7OWwY="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-linux-arm32": {
+   "jar": "sha256-hOvo8klGPrF84PrpnYsto8G/kcjUEHOjtYNFd7dS4/s="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-IgDyzcENHaZ215o+oFybpVnaCZUFwbdWtu0iL2FagSA="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-macos": {
+   "jar": "sha256-G2z/nmSKci7gzBRmlhIFKqW6gJRp+os/sh8kw6vnDek="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-nHlVeHSNWPQtXUcu2A0ulpk71Psf/ABYztosYx7zmJo="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-windows": {
+   "jar": "sha256-nnROy4QCnXrO2uh24lV2WRhKKa/uVeRT9KslZzSb+Ek="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1/natives-windows-x86": {
+   "jar": "sha256-pYAgBm4ePVP/xMf7ShWMDLP/tPM6rrPlTSVScyGUxBI="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1": {
+   "jar": "sha256-7kn8Co2UVkUuVM1vd3gj7aZm4sY/wU1lsv0sws/tXb4=",
+   "pom": "sha256-+ZSGEVVV8RPaHOOs1f7LyWk7X9o1P/era9Lj1//dsn4="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-linux": {
+   "jar": "sha256-m3mvXH/Q2UkG7h0qU6NCCidQfWYiS0/0a59ncmRd7TQ="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-linux-arm32": {
+   "jar": "sha256-Bj8Lsu2V5d4q0G4Q0xJ/hJDdviBKyj5qOc5C3pF4TF8="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-X4nVRq4fr1Gv+/sMZBR60swze/ajLwv4fEbTTDQvxdU="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-macos": {
+   "jar": "sha256-B6qwMJQFjjiph2upM54IoiQDlO+Ii35/z9R2I1j22Wg="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-500OE6wC9BAsIMF/DUFmCK2FNDSV7K4wAp32VousLSc="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-windows": {
+   "jar": "sha256-Il8331UAYUZ1vprLYnjLbJyAo0kmR5iyz8fsQ08e1HI="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1/natives-windows-x86": {
+   "jar": "sha256-Y5uy113z3Vnqewv4uEfgr1cHRpTXk5ILoclTeJeyw9g="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1": {
+   "jar": "sha256-cyXuG5GooQwGJsabVXqI8t9qwb3KDlLiqS0yQknyytA=",
+   "pom": "sha256-+ZzowctqhyXSbdyzNFxAPNu8x8qO6WYIu/PCxP2WaiE="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-linux": {
+   "jar": "sha256-C3OB9R7cYQy2ByRdw0p2LSsht0R4FARAaKGmADu4eDg="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-linux-arm32": {
+   "jar": "sha256-PQ39lwowYdM7FdvxjT7u/PB83EFx6skgUU8DhkY4mmI="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-RPO9inlEGNtNU+51Rtkdl9nK9/QuE+ojU2PMM18u9ig="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-macos": {
+   "jar": "sha256-UYTKJLjf6XJVtstVjFKb1qOImBu+VeITcY4/0r2ehuQ="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-wi7Lzvj+5K7q+YEDLfPiy8MKkRqQJS7awfFJeX1YdXU="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-windows": {
+   "jar": "sha256-X35maqJMqLP7dY5ywD/7nYCbMEicantH6tZ8aXf/ZU4="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1/natives-windows-x86": {
+   "jar": "sha256-fVtbb61e+7Lowk80dgDHy8bv3RNh/TewtaEzGSMehR4="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1": {
+   "jar": "sha256-5DbSFE86Nv/3cv1kIzMWgJt5XzkN79TVVmD8aG58KDQ=",
+   "pom": "sha256-LL9XxnqNBGatgI4aJ/4908EQ6KwC3IqyushKhRl3VUE="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-linux": {
+   "jar": "sha256-vPzZ+N/SKUiK2ew1PUjHsC3lyiG63UCS8ZAiOaHtBpA="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-linux-arm32": {
+   "jar": "sha256-IDPJfXY+YL2sAX/bsI06Q7vlwXqjZ7QsU3ycw6tAYY8="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-EFjEunNUzavz75NZUeKT91tJYedT13/XU13ccy4oPyg="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-macos": {
+   "jar": "sha256-cR8plyiIUJJiqVfxsxOL+ptQVRnRHfbldj0cmj+LPF0="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-29EQBE6uitvKjjx6cwUpo1FVnnTOqIe7PNbvDcAW8pU="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-windows": {
+   "jar": "sha256-hRubWTysIeOvUd1MMD6N8/5qNEo/gda5vMGG5+VAv9o="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1/natives-windows-x86": {
+   "jar": "sha256-aD2K09DQl3puoYuIpMvn6P1PBsGrIbq+2riDCXQLzGA="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1": {
+   "jar": "sha256-ZOXMzi/Hy88Mg0pb6GQtniSYzj/jHBT/HfdBh4o/gSE=",
+   "pom": "sha256-dKgsbPvqhNIxAk2f2FgO2VumPCAafUeqsmO6hofDCVk="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-linux": {
+   "jar": "sha256-+BuZjoxdYj1XHi/NRvy4e30w7SXfd95jrsjP7bNMSnA="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-linux-arm32": {
+   "jar": "sha256-6xnGjFt5MUjKOT24bzHQ3pVALZ9MFOUADjkYSA9iKkc="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-XOyb0h8xIAJaLIOB3BCax+yI5o5xX9fK27kPXVVfZZs="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-macos": {
+   "jar": "sha256-oXjWYDA5nGmJeN/kqVALdVep2vTAYeg8iHAzfpsL0+c="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-DXoP8tto86vkFpFn4vSJ3/d72igvQvhuQelEvnxDbdg="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-windows": {
+   "jar": "sha256-/W/3om6GRa95oNIcpz6NyeRz80AtEzPlRKgdIcpQd+c="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1/natives-windows-x86": {
+   "jar": "sha256-v3PjtRu0MOWIvRWOlsyimOmMoS8p3FzxRFwfDFw5uhs="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1": {
+   "jar": "sha256-SI9R7ZXw+sSNHYfLDjusCMAS3L9u88FohoXXCM28zVY=",
+   "pom": "sha256-78RtVita7rFRzJnBhn5KUeVLzwWs+2EwOtZUh45Nyq8="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1/natives-linux": {
+   "jar": "sha256-e9cLKCM/RiGdoZiaw+n27vcuvyEc43Uv8eZFzqQYpM8="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-pLai7OGbhNkzyXmwx1+46BgCpoLVJEmWXDP0xaH+cAw="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1/natives-macos": {
+   "jar": "sha256-H1yGorLASVqlahKnTHwvwsk1PMOKoAzBOjJAR2QcMk0="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-EY1ViXZdZobUeDcZwt6MpmWiSX2LncKK00/RDtU0P6o="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1/natives-windows": {
+   "jar": "sha256-7McVIQloBZdWnZsyIEXynBp93uxxgs9pGJ2uFUE4ucg="
+  },
+  "org/lwjgl#lwjgl/3.3.1": {
+   "jar": "sha256-z4P5DjL7lz/17fyk7zX1XKUbtwpXm2ofKQdE9VLo5IQ=",
+   "pom": "sha256-xMXHr6uOt4JTZqIwhsPf7droMIwRXF1iF6gm7DJLN+M="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-linux": {
+   "jar": "sha256-Iu8q+jGhdAozfsnGgGxrjZfpMaY+LEMnDLrxT7P2/E4="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-linux-arm32": {
+   "jar": "sha256-9rVYGOx25ewBfiW8OvbsTbe3ol56KhdW+i/6uojIZWQ="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-linux-arm64": {
+   "jar": "sha256-T9lq94+cKTsXAAEcfbGg7AI3xNGIPjf6vgj3To0uAiQ="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-macos": {
+   "jar": "sha256-9I5hCpgdylFbm75zRcx240UME0BLBS2Kw1fvCvjpCr8="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-macos-arm64": {
+   "jar": "sha256-cZfomrgKKiGDtO6SXMtE5XLwy3V6kndq34JlJpIAo2o="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-windows": {
+   "jar": "sha256-CT0T1ipkNLxla/EKOzfiUw/ZrzsLwg+OlUW+WGWdFEM="
+  },
+  "org/lwjgl#lwjgl/3.3.1/natives-windows-x86": {
+   "jar": "sha256-6QwfnPVwGu7ymC6/CQWiuZH0YiuKf4JQ6vCHO1oKAiM="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "sha256-tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  },
+  "org/sonatype/oss#oss-parent/9": {
+   "pom": "sha256-+0AmX5glSCEv+C42LllzKyGH7G8NgBgohcFO8fmCgno="
+  }
+ }
+}
