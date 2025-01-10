@@ -156,10 +156,10 @@ in
     ];
   };
 
-  astroui = super.astroui.overrideAttrs (oa: {
+  astroui = super.astroui.overrideAttrs {
     # Readme states that astrocore is an optional dependency
-    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.astrocore ];
-  });
+    checkInputs = [ self.astrocore ];
+  };
 
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     nvimSkipModule = [
@@ -1070,9 +1070,9 @@ in
     nvimRequireCheck = "fuzzy_nvim";
   };
 
-  fugit2-nvim = super.fugit2-nvim.overrideAttrs (oa: {
+  fugit2-nvim = super.fugit2-nvim.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = oa.nativeCheckInputs ++ [
+    checkInputs = [
       self.nvim-web-devicons
     ];
     dependencies = with self; [
@@ -1086,7 +1086,7 @@ in
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
-  });
+  };
 
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs {
     # The plugin has a makefile which tries to run tests in a docker container.
@@ -1431,10 +1431,10 @@ in
     dependencies = [ self.vim-floaterm ];
   };
 
-  lightline-bufferline = super.lightline-bufferline.overrideAttrs (oa: {
+  lightline-bufferline = super.lightline-bufferline.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-web-devicons ];
-  });
+    checkInputs = [ self.nvim-web-devicons ];
+  };
 
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -2234,10 +2234,10 @@ in
     ];
   };
 
-  nvim-nonicons = super.nvim-nonicons.overrideAttrs (oa: {
+  nvim-nonicons = super.nvim-nonicons.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-web-devicons ];
-  });
+    checkInputs = [ self.nvim-web-devicons ];
+  };
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
