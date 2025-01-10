@@ -266,8 +266,8 @@ rec {
       "sha256-00fCatU8SbuxQuw+VAbG1kOJ43asrbGbq8moJw1JzrY=";
 
   mypy-boto3-codebuild =
-    buildMypyBoto3Package "codebuild" "1.35.93"
-      "sha256-h2/TOx5T7U2iBfOZ6aDyykzEd0A/eiT/5/6fKS4wR1Q=";
+    buildMypyBoto3Package "codebuild" "1.35.96"
+      "sha256-SOJAFGd5Yz4TJ49VfjixfchWC0s1xdogZ/2qd5SvDVQ=";
 
   mypy-boto3-codecatalyst =
     buildMypyBoto3Package "codecatalyst" "1.35.93"
@@ -330,8 +330,8 @@ rec {
       "sha256-zBPL1DFdMYELOa3YMMlsUL+j6aDTNcYtAMlTlvkLnF0=";
 
   mypy-boto3-compute-optimizer =
-    buildMypyBoto3Package "compute-optimizer" "1.35.93"
-      "sha256-hln7MWYK6yPqN77pwGz+013kHyjXgL4xFMycUzJgMMo=";
+    buildMypyBoto3Package "compute-optimizer" "1.35.96"
+      "sha256-l6q47Z3FTNzy5/SUH+SZly1JmEz3F96zfj6J9dJXm4U=";
 
   mypy-boto3-config =
     buildMypyBoto3Package "config" "1.35.93"
@@ -542,8 +542,8 @@ rec {
       "sha256-jBVQYYUjnU8wbXW3XFSFCb/gnDOqkTgiAx8NCHN82tM=";
 
   mypy-boto3-fms =
-    buildMypyBoto3Package "fms" "1.35.93"
-      "sha256-V6LNqtede9jv8nsF8FYfTAAC0S9qapucnbG521nPyYM=";
+    buildMypyBoto3Package "fms" "1.35.96"
+      "sha256-IFNzmyaKRvoQ+afX1Oy9ZPXiIQqzR3M3NpbCArEhXkI=";
 
   mypy-boto3-forecast =
     buildMypyBoto3Package "forecast" "1.35.93"
