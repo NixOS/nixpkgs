@@ -2393,10 +2393,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
-  jwt-cli = callPackage ../tools/security/jwt-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   kaldi = callPackage ../tools/audio/kaldi {
     inherit (darwin.apple_sdk.frameworks) Accelerate;
   };
@@ -3171,11 +3167,6 @@ with pkgs;
   tracy-wayland = callPackage ../by-name/tr/tracy/package.nix { withWayland = true; };
 
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
-
-  uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
-    inherit (python3Packages) sphinx;
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
@@ -15288,8 +15279,14 @@ with pkgs;
 
   # Stumpwm is broken on SBCL 2.4.11, see
   # https://github.com/NixOS/nixpkgs/pull/360320
-  stumpwm = sbcl_2_4_10.pkgs.stumpwm;
-  stumpwm-unwrapped = sbcl_2_4_10.pkgs.stumpwm-unwrapped;
+  stumpwm = callPackage ../applications/window-managers/stumpwm {
+    stdenv = stdenvNoCC;
+    sbcl = sbcl_2_4_10.withPackages (ps: with ps; [
+      alexandria cl-ppcre clx fiasco
+    ]);
+  };
+
+  stumpwm-unwrapped = sbcl_2_4_10.pkgs.stumpwm;
 
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
 

@@ -2234,10 +2234,6 @@ self: super: with self; {
 
   chai = callPackage ../development/python-modules/chai { };
 
-  chainer = callPackage ../development/python-modules/chainer {
-    inherit (pkgs.config) cudaSupport;
-  };
-
   chainmap = callPackage ../development/python-modules/chainmap { };
 
   chainstream = callPackage ../development/python-modules/chainstream { };
@@ -7961,8 +7957,6 @@ self: super: with self; {
 
   matplotx = callPackage ../development/python-modules/matplotx { };
 
-  matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
-
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
   matrix-common = callPackage ../development/python-modules/matrix-common { };
@@ -11714,6 +11708,8 @@ self: super: with self; {
 
   pyfantom = callPackage ../development/python-modules/pyfantom { };
 
+  pyfatfs = callPackage ../development/python-modules/pyfatfs { };
+
   pyfcm = callPackage ../development/python-modules/pyfcm { };
 
   pyfido = callPackage ../development/python-modules/pyfido { };
@@ -13769,8 +13765,6 @@ self: super: with self; {
 
   qutip = callPackage ../development/python-modules/qutip { };
 
-  qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
-
   pythonqwt = callPackage ../development/python-modules/pythonqwt { };
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
@@ -14489,6 +14483,12 @@ self: super: with self; {
   scikit-rf = callPackage ../development/python-modules/scikit-rf { };
 
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
+
+  scikits-odes-core = callPackage ../development/python-modules/scikits-odes-core { };
+
+  scikits-odes-daepack = callPackage ../development/python-modules/scikits-odes-daepack { };
+
+  scikits-odes-sundials = callPackage ../development/python-modules/scikits-odes-sundials { };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
@@ -17497,6 +17497,8 @@ self: super: with self; {
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
   unasync = callPackage ../development/python-modules/unasync { };
+
+  unblob-native = callPackage ../development/python-modules/unblob-native { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 

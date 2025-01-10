@@ -113,6 +113,19 @@ in
         }
       ];
 
+      warnings =
+          lib.mkIf
+            (
+              (lib.elem "nvidia" config.services.xserver.videoDrivers)
+              && !config.hardware.nvidia.open
+              && (lib.versionOlder "551" (
+                lib.versions.major (lib.getVersion config.hardware.nvidia.package)
+              ))
+            )
+            [
+              "Using Sway with Nvidia driver version <= 550 may result in a broken system. Configure hardware.nvidia.package to use a newer version."
+            ];
+
       environment = {
         systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
