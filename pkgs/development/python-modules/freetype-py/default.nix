@@ -11,12 +11,13 @@
 
 buildPythonPackage rec {
   pname = "freetype-py";
-  version = "2.1.0.post1";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1k62fx53qrv9nb73mpqi2r11wzbx41qfv5qppvh6rylywnrknf3n";
+    inherit  pname version;
+    hash = "sha256-+bZM4ycqXDWNzugkgAoy1wmX+4cqCWWlV63KIPznpdA=";
+    extension = "zip";
   };
 
   patches = [
@@ -25,6 +26,11 @@ buildPythonPackage rec {
       freetype = "${freetype.out}/lib/libfreetype${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "certifi", "cmake"' ""
+  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
