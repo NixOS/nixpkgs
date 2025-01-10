@@ -18548,6 +18548,8 @@ self: super: with self; {
 
   zope-schema = callPackage ../development/python-modules/zope-schema { };
 
+  zope-security = callPackage ../development/python-modules/zope-security { };
+
   zope-size = callPackage ../development/python-modules/zope-size { };
 
   zope-testbrowser = callPackage ../development/python-modules/zope-testbrowser { };
