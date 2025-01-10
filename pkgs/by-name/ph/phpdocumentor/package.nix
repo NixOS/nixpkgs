@@ -5,7 +5,7 @@
   makeBinaryWrapper,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpdocumentor";
   version = "3.5.3";
 
@@ -16,7 +16,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-zpAKygpxyKYfefa5ag76saTSQNLon/v3rYkl0Nj2+FM=";
   };
 
-  vendorHash = "sha256-VNlAzWueF7ZXBpr9RrJghMPrAUof7f1DCh1osFIwFfs=";
+  vendorHash = "sha256-whyLSlv0s7v+oi+0Qv8tBxUzYrUOARUjKZiNTfIqoTU=";
 
   # Needed because of the unbound version constraint on phpdocumentor/json-path
   composerStrictValidation = false;
