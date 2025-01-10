@@ -3,23 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   substituteAll,
-
-  # build
   pkg-config,
   glibc,
   python,
-
-  # runtime
+  setuptools,
   bluez,
   boost,
   glib,
-
 }:
 
 buildPythonPackage rec {
   pname = "gattlib";
   version = "20210616";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oscaracena";
@@ -38,6 +34,8 @@ buildPythonPackage rec {
         "boost_python${pythonVersion}";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     pkg-config
