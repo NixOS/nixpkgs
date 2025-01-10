@@ -7,7 +7,7 @@
   openssl,
   stdenv,
   darwin,
-  git,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
     ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   # disable vendored libgit2 and openssl
   buildNoDefaultFeatures = true;
