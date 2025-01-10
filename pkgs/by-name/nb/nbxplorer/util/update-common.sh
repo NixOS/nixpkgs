@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_6 git gnupg nixFlakes
+#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_8 git gnupg nixVersions.stable
 set -euo pipefail
 
 # This script uses the following env vars:
@@ -50,6 +50,8 @@ repo=$tmpdir/repo
 trap "rm -rf $tmpdir" EXIT
 git clone --depth 1 --branch v${newVersion} -c advice.detachedHead=false https://github.com/$(getRepo) $repo
 export GNUPGHOME=$tmpdir
+# Fetch GitHub's key
+gpg --keyserver keyserver.ubuntu.com --recv-keys B5690EEEBB952194
 # Fetch Nicolas Dorier's key (64-bit key ID: 6618763EF09186FE)
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys AB4CFA9895ACA0DBE27F6B346618763EF09186FE 2> /dev/null
 # Fetch Andrew Camilleri's key (64-bit key ID: 8E5530D9D1C93097)
