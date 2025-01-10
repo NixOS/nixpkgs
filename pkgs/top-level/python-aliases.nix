@@ -132,12 +132,14 @@ mapAliases ({
   covCore = throw "covCore was renamed to cov-core and subsequently removed since it has ben unmaintained since 2014"; # added 2024-05-20
   cov-core = throw "cov-core has been removed, it was archived and unmaintained since 2014"; # added 2024-05-21
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
+  criticality-score = throw "use pkgs.criticality-score instead"; # added 2024-12-31
   cryptacular = throw "cryptacular was removed, because it was disabled on all python version since 3.6 and last updated in 2021"; # Added 2024-05-13
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cx_Freeze = cx-freeze; # added 2023-08-02
   cx_oracle = cx-oracle; # added 2024-01-03
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
   dask-xgboost = throw "dask-xgboost was removed because its features are available in xgboost"; # added 2022-05-24
+  dash-renderer = throw "dash-renderer has been removed since it is abandoned"; # added 2025-01-01
   dateutil = python-dateutil; # added 2021-07-03
   debian = python-debian; # added 2024-12-10
   deep_merge = throw "deep_merge has been removed, since it is no longer maintained and may be broken."; # added 2023-10-09
