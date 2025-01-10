@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lief";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     rev = version;
-    sha256 = "sha256-Mq3IC1EbJpAwqHpiByFwdWl/rUOvv+oOtLgJ6dx7/P0=";
+    sha256 = "sha256-5T/lTtmm3jwkxoFU/8Cl+hPcysZOwnWWqVQ91D5G0LA=";
   };
 
   outputs = [ "out" "py" ];
