@@ -3,6 +3,7 @@
   DiskArbitration,
   fetchFromGitHub,
   Foundation,
+  gitUpdater,
   IOKit,
   openssl,
   pkg-config,
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage rec {
 
   # Test require network access
   doCheck = false;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Key and secret workflow (validation, invalidation, etc.) tool";
