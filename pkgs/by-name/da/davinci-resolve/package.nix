@@ -282,6 +282,7 @@ resolveIcons = runCommandLocal "davinci-resolve${lib.optionalString studioVarian
   mkdir -p $out/share/icons/hicolor/128x128/apps
   ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
   ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels.png
+  ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor.png
 '';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
@@ -298,6 +299,8 @@ resolveShellWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVaria
 
 panelSetupWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
 
+remoteMonitorWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor" ["${davinci}/bin/DaVinci Remote Monitor"];
+
 in
 symlinkJoin {
 
@@ -305,6 +308,7 @@ symlinkJoin {
   inherit (davinci) version;
 
   paths = [
+
     resolveWrapper
     resolveShellWrapper
     panelSetupWrapper
@@ -343,6 +347,27 @@ symlinkJoin {
         "Graphics"
       ];
     })
+
+  ] ++ lib.lists.optionals studioVariant [
+
+    # remote monitor is not available in the non-studio version
+
+    remoteMonitorWrapper
+
+    (makeDesktopItem {
+      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor";
+      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Remote Monitor";
+      exec = "${remoteMonitorWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor";
+      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor";
+      startupNotify = true;
+      categories = [
+        "AudioVideo"
+        "AudioVideoEditing"
+        "Video"
+        "Graphics"
+      ];
+    })
+
   ];
 
   passthru = {
