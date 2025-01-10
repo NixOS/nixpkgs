@@ -66,12 +66,11 @@ let
 in
 
 let
-  mkDerivation2 =
+  mkPackage =
     rattrs:
     let
       rattrs' = transforms transformAttrs rattrs;
     in
     mkBaseDerivation mkAttrsForRealDrv rattrs';
 in
-
-mkDerivation2
+mkPackage

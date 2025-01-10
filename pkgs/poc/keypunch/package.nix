@@ -1,10 +1,10 @@
 {
   lib,
-  mkDerivation2,
+  mkPackage,
   ...
 }:
 
-mkDerivation2 (finalAttrs: {
+mkPackage (finalAttrs: {
   pname = "keypunch";
   version = "5.1";
 
