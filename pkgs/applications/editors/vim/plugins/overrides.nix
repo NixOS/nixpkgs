@@ -156,10 +156,10 @@ in
     ];
   };
 
-  astroui = super.astroui.overrideAttrs (oa: {
+  astroui = super.astroui.overrideAttrs {
     # Readme states that astrocore is an optional dependency
-    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.astrocore ];
-  });
+    checkInputs = [ self.astrocore ];
+  };
 
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     nvimSkipModule = [
@@ -745,6 +745,14 @@ in
     ];
   };
 
+  conjure = super.conjure.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimSkipModule = [
+      # Test mismatch of directory because of nix generated path
+      "conjure-spec.client.fennel.nfnl_spec"
+    ];
+  };
+
   context-vim = super.context-vim.overrideAttrs {
     # Vim plugin with optional lua highlight module
     nvimSkipModule = "context.highlight";
@@ -1062,9 +1070,9 @@ in
     nvimRequireCheck = "fuzzy_nvim";
   };
 
-  fugit2-nvim = super.fugit2-nvim.overrideAttrs (oa: {
+  fugit2-nvim = super.fugit2-nvim.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = oa.nativeCheckInputs ++ [
+    checkInputs = [
       self.nvim-web-devicons
     ];
     dependencies = with self; [
@@ -1078,7 +1086,7 @@ in
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
-  });
+  };
 
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs {
     # The plugin has a makefile which tries to run tests in a docker container.
@@ -1423,10 +1431,10 @@ in
     dependencies = [ self.vim-floaterm ];
   };
 
-  lightline-bufferline = super.lightline-bufferline.overrideAttrs (oa: {
+  lightline-bufferline = super.lightline-bufferline.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-web-devicons ];
-  });
+    checkInputs = [ self.nvim-web-devicons ];
+  };
 
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -1832,9 +1840,20 @@ in
       neotest
       nvim-nio
       plenary-nvim
+      nvim-treesitter-parsers.cpp
     ];
-    # broken
-    # nvimRequireCheck = "neotest-gtest";
+    nvimSkipModule = [
+      # lua/plenary/path.lua:511: FileNotFoundError from mkdir because of stdpath parent path missing
+      "neotest-gtest.executables.global_registry"
+      "neotest-gtest.executables.init"
+      "neotest-gtest.executables.registry"
+      "neotest-gtest.executables.ui"
+      "neotest-gtest"
+      "neotest-gtest.neotest_adapter"
+      "neotest-gtest.report"
+      "neotest-gtest.storage"
+      "neotest-gtest.utils"
+    ];
   };
 
   neotest-haskell = super.neotest-haskell.overrideAttrs {
@@ -1865,6 +1884,7 @@ in
   neotest-minitest = super.neotest-minitest.overrideAttrs {
     dependencies = with self; [
       neotest
+      nvim-nio
       plenary-nvim
     ];
   };
@@ -1918,6 +1938,7 @@ in
   neotest-rspec = super.neotest-rspec.overrideAttrs {
     dependencies = with self; [
       neotest
+      nvim-nio
       plenary-nvim
     ];
   };
@@ -2171,6 +2192,10 @@ in
     ];
   };
 
+  nvim-java-test = super.nvim-java-test.overrideAttrs {
+    dependencies = [ self.nvim-java-core ];
+  };
+
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "lsp-file-operations";
@@ -2209,10 +2234,10 @@ in
     ];
   };
 
-  nvim-nonicons = super.nvim-nonicons.overrideAttrs (oa: {
+  nvim-nonicons = super.nvim-nonicons.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-web-devicons ];
-  });
+    checkInputs = [ self.nvim-web-devicons ];
+  };
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
@@ -2353,6 +2378,29 @@ in
   nvim-trevJ-lua = super.nvim-trevJ-lua.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
     nvimRequireCheck = "trevj";
+  };
+
+  nvim-test = super.nvim-test.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      nvim-treesitter-parsers.c_sharp
+      nvim-treesitter-parsers.go
+      nvim-treesitter-parsers.haskell
+      nvim-treesitter-parsers.javascript
+      nvim-treesitter-parsers.python
+      nvim-treesitter-parsers.ruby
+      nvim-treesitter-parsers.rust
+      nvim-treesitter-parsers.typescript
+      nvim-treesitter-parsers.zig
+    ];
+    nvimSkipModule = [
+      # Optional toggleterm integration
+      "nvim-test.terms.toggleterm"
+      # Broken runners
+      "nvim-test.runners.zig"
+      "nvim-test.runners.hspec"
+      "nvim-test.runners.stack"
+    ];
   };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {
@@ -2575,6 +2623,8 @@ in
     nvimSkipModule = [
       # rainbow-delimiters.types.lua
       "rainbow-delimiters.types"
+      # Test that requires an unpackaged dependency
+      "rainbow-delimiters._test.highlight"
     ];
   };
 
@@ -3151,6 +3201,14 @@ in
       '';
       meta.maintainers = with lib.maintainers; [ enderger ];
     };
+
+  typescript-nvim = super.typescript-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-lspconfig
+    ];
+    # Optional null-ls integration
+    nvimSkipModule = [ "typescript.extensions.null-ls.code-actions.init" ];
+  };
 
   typescript-tools-nvim = super.typescript-tools-nvim.overrideAttrs {
     dependencies = with self; [

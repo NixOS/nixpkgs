@@ -4,9 +4,10 @@
   fetchFromGitHub,
   rustPlatform,
   cargo,
-  sphinx,
-  Security,
-  libiconv,
+  python3Packages,
+  versionCheckHook,
+  nix-update-script,
+
   prefix ? "uutils-",
   buildMulticallBinary ? true,
 }:
@@ -30,17 +31,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    sphinx
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    libiconv
+    python3Packages.sphinx
   ];
 
   makeFlags =
     [
-      "CARGO=${cargo}/bin/cargo"
+      "CARGO=${lib.getExe cargo}"
       "PREFIX=${placeholder "out"}"
       "PROFILE=release"
       "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
@@ -50,6 +46,21 @@ stdenv.mkDerivation rec {
 
   # too many impure/platform-dependent tests
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram =
+    let
+      prefix' = lib.optionalString (prefix != null) prefix;
+    in
+    "${placeholder "out"}/bin/${prefix'}ls";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
