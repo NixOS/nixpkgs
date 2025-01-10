@@ -1,12 +1,12 @@
 diff --git a/src/main.cpp b/src/main.cpp
-index 39dfaa24..634b004b 100644
+index d98743a6..3a951981 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -237,6 +237,7 @@ static char * main_check_latest_version() {
- 
- 
+@@ -195,6 +195,7 @@ static char * main_check_latest_version() {
+  * @return NULL.
+  */
  void * main_check_latest_version_thread(void *arg) {
 +	return NULL;
+ 	// Fetch the latest version information
  	char * latest_version = main_check_latest_version();
- 	if (latest_version) {
- 		if (
+ 	// we check for potential invalid data , see issue #4042
