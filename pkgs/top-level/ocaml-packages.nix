@@ -918,6 +918,14 @@ let
 
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
 
+    kappa-agents = callPackage ../development/ocaml-modules/kappa-agents { };
+
+    kappa-binaries = callPackage ../development/ocaml-modules/kappa-binaries { };
+
+    kappa-library = callPackage ../development/ocaml-modules/kappa-library { };
+
+    kappa-server = callPackage ../development/ocaml-modules/kappa-server { };
+
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
     kdf = callPackage ../development/ocaml-modules/kdf { };
