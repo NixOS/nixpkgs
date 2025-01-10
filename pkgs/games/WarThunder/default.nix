@@ -18,7 +18,7 @@ let
     echo "Check for home directory, create if not present."
     export ACES64_DIR=$HOME/.aces64/War-Thunder-086d99e/
     echo "DEBUG::: Print LD env variables prior to setting them."
-    echo $LD_LIBRARY_PATH
+    echo "$LD_LIBRARY_PATH"
     echo "DEBUG::: Print libPath inherited by drv on realization."
     echo ${libPath}
 
