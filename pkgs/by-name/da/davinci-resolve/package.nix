@@ -178,23 +178,6 @@ let
         done
         ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
       '';
-
-      desktopItems = [
-        (makeDesktopItem {
-          name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-          desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
-          genericName = "Video Editor";
-          exec = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-          icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-          comment = "Professional video editing, color, effects and audio post-processing";
-          categories = [
-            "AudioVideo"
-            "AudioVideoEditing"
-            "Video"
-            "Graphics"
-          ];
-        })
-      ];
     }
   );
 
@@ -270,9 +253,8 @@ fhs = buildFHSEnv {
   ''}";
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
+    mkdir -p $out/share/applications
     ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
-    ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
   '';
 };
 
@@ -288,6 +270,10 @@ resolveUdev = runCommandLocal "davinci-resolve${lib.optionalString studioVariant
   echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' > $SDX_RULES
 '';
 
+resolveIcons = runCommandLocal "davinci-resolve${lib.optionalString studioVariant "-studio"}-icons" {} ''
+  mkdir -p $out/share/icons/hicolor/128x128/apps
+  ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
+'';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
 
@@ -312,6 +298,22 @@ symlinkJoin {
     resolveShellWrapper
 
     resolveUdev
+    resolveIcons
+
+    (makeDesktopItem {
+      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+      desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
+      genericName = "Video Editor";
+      exec = "${resolveWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}";
+      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+      comment = "Professional video editing, color, effects and audio post-processing";
+      categories = [
+        "AudioVideo"
+        "AudioVideoEditing"
+        "Video"
+        "Graphics"
+      ];
+    })
   ];
 
   passthru = {
