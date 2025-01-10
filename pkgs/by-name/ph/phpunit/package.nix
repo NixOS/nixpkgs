@@ -14,11 +14,11 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-0NVoaUFmmV4EtaErhaqLxJzCbD2WuMaVZC2OHG9+gSA=";
   };
 
-  vendorHash = "sha256-EkTERk8jJWxCZCJnSHfg3Tnn//Ny2985qXJNX/gad58=";
+  vendorHash = "sha256-C1BmMURmAMQhDS6iAKC80wqZuYdSRPGyFpU9Jdr6snA=";
 
   passthru = {
     updateScript = nix-update-script { };
