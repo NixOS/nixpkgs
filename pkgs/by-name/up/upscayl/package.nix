@@ -24,6 +24,7 @@ let
     homepage = "https://upscayl.github.io/";
     maintainers = with lib.maintainers; [
       icy-thought
+      matteopacini
     ];
     license = lib.licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
