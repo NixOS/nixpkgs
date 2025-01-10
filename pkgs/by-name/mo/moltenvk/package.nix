@@ -5,7 +5,6 @@
   fetchpatch2,
   gitUpdater,
   apple-sdk_15,
-  darwinMinVersionHook,
   cereal,
   libcxx,
   glslang,
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     apple-sdk_15
     cereal
-    (darwinMinVersionHook "10.15")
     glslang
     spirv-cross
     spirv-headers

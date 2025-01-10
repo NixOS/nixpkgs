@@ -941,7 +941,8 @@
       ];
     "cookidoo" =
       ps: with ps; [
-      ]; # missing inputs: cookidoo-api
+        cookidoo-api
+      ];
     "coolmaster" =
       ps: with ps; [
         pycoolmasternet-async
@@ -1355,7 +1356,8 @@
       ];
     "eheimdigital" =
       ps: with ps; [
-      ]; # missing inputs: eheimdigital
+        eheimdigital
+      ];
     "eight_sleep" =
       ps: with ps; [
       ];
@@ -3145,7 +3147,8 @@
       ];
     "livisi" =
       ps: with ps; [
-      ]; # missing inputs: livisi
+        livisi
+      ];
     "llamalab_automate" =
       ps: with ps; [
       ];
@@ -3796,7 +3799,8 @@
       ];
     "niko_home_control" =
       ps: with ps; [
-      ]; # missing inputs: nhc
+        nhc
+      ];
     "nilu" =
       ps: with ps; [
         niluclient
@@ -6126,7 +6130,8 @@
       ];
     "watergate" =
       ps: with ps; [
-      ]; # missing inputs: watergate-local-api
+        watergate-local-api
+      ];
     "watson_iot" =
       ps: with ps; [
       ]; # missing inputs: ibmiotf
@@ -6227,7 +6232,8 @@
       ]; # missing inputs: pywmspro
     "wolflink" =
       ps: with ps; [
-      ]; # missing inputs: wolf-comm
+        wolf-comm
+      ];
     "workday" =
       ps: with ps; [
         holidays
@@ -6616,6 +6622,7 @@
     "configurator"
     "control4"
     "conversation"
+    "cookidoo"
     "coolmaster"
     "counter"
     "cover"
@@ -6671,6 +6678,7 @@
     "ecowitt"
     "edl21"
     "efergy"
+    "eheimdigital"
     "eight_sleep"
     "electrasmart"
     "elevenlabs"
@@ -6913,6 +6921,7 @@
     "linkplay"
     "litejet"
     "litterrobot"
+    "livisi"
     "local_calendar"
     "local_file"
     "local_ip"
@@ -7008,6 +7017,7 @@
     "nibe_heatpump"
     "nice_go"
     "nightscout"
+    "niko_home_control"
     "nina"
     "nmap_tracker"
     "no_ip"
@@ -7342,6 +7352,7 @@
     "wallbox"
     "waqi"
     "water_heater"
+    "watergate"
     "watttime"
     "waze_travel_time"
     "weather"
@@ -7361,6 +7372,7 @@
     "withings"
     "wiz"
     "wled"
+    "wolflink"
     "workday"
     "worldclock"
     "ws66i"

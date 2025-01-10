@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-openjpeg";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pylibjpeg-openjpeg";
     tag = "v${version}";
-    hash = "sha256-cCDnARElNn+uY+HQ39OnGJRz2vTz0I8s0Oe+qGvqM1o=";
+    hash = "sha256-T38Ur5NLF9iPTrDwT3GYgI6621A90zWP/leUxSqA70w=";
   };
 
   # don't use vendored openjpeg submodule:
@@ -67,6 +67,7 @@ buildPythonPackage rec {
   meta = {
     description = "A J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
+    changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/v${version}";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ bcdarwin ];
     # x86-linux: test_encode.py::TestEncodeBuffer failures

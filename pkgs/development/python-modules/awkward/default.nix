@@ -24,8 +24,6 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-  jax,
-  jaxlib,
 
   stdenv,
 }:
@@ -61,28 +59,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs =
-    [
-      fsspec
-      numba
-      setuptools
-      numexpr
-      pandas
-      pyarrow
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # no support for darwin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    fsspec
+    numba
+    setuptools
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ];
 
-  # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
+    # Need to be run on a GPU platform.
     "tests-cuda"
-    # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+    # JAX is broken
+    "tests/test_2603_custom_behaviors_with_jax.py"
+  ];
 
   disabledTests = [
     # AssertionError: Regex pattern did not match.

@@ -8,6 +8,7 @@
   cups,
   exiv2,
   lomiri-ui-toolkit,
+  mesa,
   pam,
   pkg-config,
   qtbase,
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     qtdeclarative # qmltestrunner
     xvfb-run
   ];
@@ -66,8 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
         "-E"
         (lib.strings.escapeShellArg "(${
           lib.concatStringsSep "|" [
-            # tst_busy_indicator runs into a codepath in lomiri-ui-toolkit that expects a working GL context
-            "^tst_busy_indicator"
             # Photo & PhotoImageProvider Randomly fail, unsure why
             "^tst_PhotoEditorPhoto"
           ]

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -17,23 +18,26 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "asteroid-filterbanks";
-  version = "0.4.0";
+  version = "0.4.0-unstable-2024-12-02";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asteroid-team";
     repo = "asteroid-filterbanks";
-    tag = "v${version}";
-    hash = "sha256-Z5M2Xgj83lzqov9kCw/rkjJ5KXbjuP+FHYCjhi5nYFE=";
+    # TODO: 0.4.0 is not compatible with recent torch and numpy
+    rev = "74a13c69ba9858d57bd4936f18f3c3bd4b2d580c";
+    hash = "sha256-iTwqq5qyTDK9f0MG2XUvYUGSOPJ2I/X/Pxrf+n7o8Mk=";
   };
 
-  # np.float is deprecated
-  postPatch = ''
-    substituteInPlace asteroid_filterbanks/multiphase_gammatone_fb.py \
-      --replace-fail "np.float(" "float("
-  '';
+  patches = [
+    (fetchpatch2 {
+      name = "numpy2-compat.patch";
+      url = "https://github.com/asteroid-team/asteroid-filterbanks/commit/2c22e97c782f0e57e49d2beb56054c71ad5ccb08.patch";
+      hash = "sha256-wBwQJzG/ET+XbV39l3UvctwhR/5TG+WgdxrPa/nyhRU=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
