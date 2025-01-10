@@ -4,6 +4,7 @@
   buildGoModule,
   darwin,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   vfkit,
 }:
@@ -44,6 +45,8 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion { package = vfkit; };
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple command line tool to start VMs through the macOS Virtualization framework";
