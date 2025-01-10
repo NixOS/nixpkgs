@@ -2,6 +2,7 @@
   lib,
   stdenv,
   aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   click,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.8.5";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-3wUf2J7TncxUdqN3SgAdHwMLbkNXj9Pwf7Zk3OmAThY=";
+    hash = "sha256-xPbq31mp1XM1WtmrknF9ZXyolxXu+iCMCqJccxC+Qd0=";
   };
 
   postPatch = ''
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytestCheckHook
   ];
