@@ -24,9 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-PUTa4ypq6zmoeNMp5SyqB05H//M2zNVILcjmU5Mzv8M=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     getmac
     requests
