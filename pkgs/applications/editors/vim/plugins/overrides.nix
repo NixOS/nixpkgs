@@ -59,6 +59,7 @@
   typescript,
   vim,
   which,
+  xdg-utils,
   xdotool,
   xkb-switch,
   xorg,
@@ -1181,6 +1182,17 @@ in
 
   guard-collection = super.guard-collection.overrideAttrs {
     dependencies = [ self.guard-nvim ];
+  };
+
+  gx-nvim = super.gx-nvim.overrideAttrs {
+    patches = lib.optionals stdenv.hostPlatform.isLinux [
+      (substituteAll {
+        src = ./patches/gx-nvim/fix-paths.patch;
+        inherit xdg-utils;
+      })
+    ];
+
+    nvimRequireCheck = "gx";
   };
 
   hardhat-nvim = super.hardhat-nvim.overrideAttrs {
