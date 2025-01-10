@@ -1,22 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   cython,
   numpy,
   scipy,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tess";
-  version = "unstable-2019-05-07";
+  version = "0.3.1";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "wackywendell";
-    repo = "tess";
-    rev = "22c19df952732f9749637d1bf6d7b676b6c7b26c";
-    sha256 = "0pj18nrfx749fjc6bjdk5r3g1104c6jy6xg7jrpmssllhypbb1m4";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-5Ic06+K7CWRh1t2v3aJ5JlBACvHXqQyYzvU71jZJFtI=";
   };
 
   buildInputs = [ cython ];
