@@ -17147,6 +17147,12 @@
     githubId = 108072;
     name = "Slawomir Gonet";
   };
+  oughie = {
+    name = "Oughie";
+    email = "oughery@gmail.com";
+    github = "Oughie";
+    githubId = 123173954;
+  };
   ovlach = {
     email = "ondrej@vlach.xyz";
     name = "Ondrej Vlach";
