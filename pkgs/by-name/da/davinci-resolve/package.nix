@@ -12,6 +12,8 @@
   xorg,
   buildFHSEnv,
   bash,
+  symlinkJoin,
+  writeShellScriptBin,
   writeText,
   ocl-icd,
   xkeyboard_config,
@@ -190,9 +192,10 @@ let
       ];
     }
   );
-in
-buildFHSEnv {
-  inherit (davinci) pname version;
+
+fhs = buildFHSEnv {
+  pname = "${davinci.pname}-fhs";
+  inherit (davinci) version;
 
   targetPkgs =
     pkgs: with pkgs; [
@@ -260,7 +263,7 @@ buildFHSEnv {
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
     export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${davinci}/libs
-    ${davinci}/bin/resolve
+    exec "$@"
   ''}";
 
   extraInstallCommands = ''
@@ -268,6 +271,30 @@ buildFHSEnv {
     ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
     ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
   '';
+};
+
+wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
+
+# creates a derivation that wraps the "path" command with arguments in "args" list to run inside the FHS
+mkWrapper = path: args: writeShellScriptBin path ''${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([wrapper] ++ args)} "$@"'';
+
+# wrap main executable
+resolveWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}" ["${davinci}/bin/resolve"];
+
+# This provides the "davinci-resolve-shell"/"davinci-resolve-studio-shell" command to open a shell in the correct FHS
+# in order to simplify running Resolve and related tools from the command line.
+resolveShellWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-shell" ["/usr/bin/env" "bash"];
+
+in
+symlinkJoin {
+
+  pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+  inherit (davinci) version;
+
+  paths = [
+    resolveWrapper
+    resolveShellWrapper
+  ];
 
   passthru = {
     inherit davinci;
@@ -300,6 +327,12 @@ buildFHSEnv {
 
   meta = {
     description = "Professional video editing, color, effects and audio post-processing";
+    longDescription = ''
+      DaVinci Resolve${lib.optionalString studioVariant " Studio"} includes a non-linear video editor, color grading tool, video effects
+      editor and track-based audio post-processing tool. The main executable davinci-resolve{lib.optionalString studioVariant "-studio"}
+      is wrapped in an FHS environment. For scripting and other purposes, the package provides the
+      davinci-resolve${lib.optionalString studioVariant "-studio"}-shell command, which opens a shell within the FHS environment.
+    '';
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
