@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   mpfr,
   m4,
   binutils,
@@ -26,11 +26,13 @@ assert stdenv.cc.libc != null;
 
 stdenv.mkDerivation rec {
   pname = "gcl";
-  version = "2.6.14";
+  version = "2.7.0pre34";
 
-  src = fetchurl {
-    url = "mirror://gnu/gcl/gcl-${version}.tar.gz";
-    hash = "sha256-CfNBfFEqoXM6Y4gJ06Y6wpDuuUSL6CeV9bZoG9MHNFo=";
+  src = fetchgit {
+    # url = "mirror://gnu/gcl/gcl-${version}.tar.gz";
+    url = "git://git.savannah.gnu.org/gcl.git/";
+    rev = "Version_" + (lib.replaceStrings [ "." ] [ "_" ] version);
+    hash = "sha256-9ftolkgr458yycV0BzCuUQkuDkFMcSdr2LdMgb5NXdc=";
   };
 
   buildInputs = [
@@ -50,6 +52,10 @@ stdenv.mkDerivation rec {
     which
     texinfo
   ];
+
+  strictDeps = true;
+
+  sourceRoot = "gcl/gcl";
 
   configureFlags = [
     "--enable-ansi"
