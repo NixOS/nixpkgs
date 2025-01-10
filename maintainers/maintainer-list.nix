@@ -17368,6 +17368,12 @@
     githubId = 108072;
     name = "Slawomir Gonet";
   };
+  oughie = {
+    name = "Oughie";
+    email = "oughery@gmail.com";
+    github = "Oughie";
+    githubId = 123173954;
+  };
   outfoxxed = {
     name = "outfoxxed";
     email = "nixpkgs@outfoxxed.me";
