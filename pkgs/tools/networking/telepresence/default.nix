@@ -29,6 +29,10 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "1ccc8bzcdxp6rh6llk7grcnmyc05fq7dz5w0mifdzjv3a473hsky";
   };
 
+  patches = [
+    ./fix-versioneer.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
