@@ -4,6 +4,7 @@
   fetchFromGitLab,
   makeWrapper,
   ocamlPackages,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-b4O48MQT3Neh8a1Z5wRgS701w6XrwpsbSMprlqTT+CE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.inria.fr/synchrone/heptagon/-/commit/f10405e385ca25dc737727e0c210a44986929bf0.patch";
+      hash = "sha256-Sn55jEoRDYnEUg4SjuBDCNN4TNl2Dwn1fTjb9O8O1bo=";
+    })
+  ];
 
   strictDeps = true;
 
