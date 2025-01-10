@@ -6,7 +6,7 @@
   fetchFromGitHub,
   freezegun,
   funcy,
-  git,
+  gitMinimal,
   pydantic,
   pytest-cov-stub,
   pytest-mock,
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
     pytest-cov-stub
     pytest-mock
     pytest-test-utils

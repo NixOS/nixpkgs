@@ -3,7 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   zsh,
   zlib,
   runtimeShell,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # command ran successfully. This tests the binary itself and the zsh
   # integration.
   nativeInstallCheckInputs = [
-    git
+    gitMinimal
     zsh
   ];
   doInstallCheck = true;

@@ -8,7 +8,7 @@
   zlib,
   stdenv,
   darwin,
-  git,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # don't use vendored libgit2

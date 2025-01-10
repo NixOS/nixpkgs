@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  git,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,13 +23,13 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     argcomplete
     colorama
-    git
+    gitMinimal
     kaptan
     requests
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''
