@@ -2,6 +2,7 @@
   lib,
   buildPecl,
   fetchFromGitHub,
+  nix-update-script,
   php,
 }:
 
@@ -18,6 +19,8 @@ buildPecl {
 
   # Tests relies on PHP 7.0
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Vulcan Logic Dumper hooks into the Zend Engine and dumps all the opcodes (execution units) of a script";
