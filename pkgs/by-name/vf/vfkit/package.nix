@@ -52,7 +52,10 @@ buildGoModule rec {
     description = "Simple command line tool to start VMs through the macOS Virtualization framework";
     homepage = "https://github.com/crc-org/vfkit";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    maintainers = with lib.maintainers; [
+      sarcasticadmin
+      phaer
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "vfkit";
