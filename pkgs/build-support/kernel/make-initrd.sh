@@ -26,7 +26,7 @@ done
 
 
 # Get the paths in the closure of `object'.
-storePaths=$(perl $pathsFromGraph closure-*)
+storePaths="$(cat $closureInfo/store-paths)"
 
 
 # Paths in cpio archives *must* be relative, otherwise the kernel
