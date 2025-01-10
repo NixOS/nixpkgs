@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -25,6 +26,10 @@ buildNpmPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Powerful Scheme based Lisp in JavaScript";
