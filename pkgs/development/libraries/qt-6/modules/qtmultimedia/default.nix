@@ -10,6 +10,7 @@
   pkg-config,
   alsa-lib,
   gstreamer,
+  gst-plugins-bad,
   gst-plugins-base,
   gst-plugins-good,
   gst-libav,
@@ -17,6 +18,7 @@
   ffmpeg,
   libva,
   libpulseaudio,
+  pipewire,
   wayland,
   libXrandr,
   elfutils,
@@ -36,6 +38,7 @@ qtModule {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libpulseaudio
+      pipewire
       alsa-lib
       wayland
       libXrandr
@@ -52,6 +55,7 @@ qtModule {
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ qtquick3d ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       gstreamer
+      gst-plugins-bad
       gst-plugins-base
       gst-plugins-good
       gst-libav
