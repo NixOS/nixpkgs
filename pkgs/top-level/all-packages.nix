@@ -2391,10 +2391,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
-  jwt-cli = callPackage ../tools/security/jwt-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   kaldi = callPackage ../tools/audio/kaldi {
     inherit (darwin.apple_sdk.frameworks) Accelerate;
   };
