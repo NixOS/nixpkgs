@@ -5,6 +5,7 @@
   fetchpatch,
   ocamlPackages,
   zlib,
+  wget,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,11 +41,17 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = with ocamlPackages; [
-    ocaml
-    camlp4
-  ];
+  nativeBuildInputs =
+    (with ocamlPackages; [
+      ocaml
+      camlp4
+    ])
+    ++ [ wget ];
   buildInputs = (with ocamlPackages; [ num ]) ++ [ zlib ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
