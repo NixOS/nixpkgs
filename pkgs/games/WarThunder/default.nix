@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook, copyDesktopItems, vulkan-loader, libva, wayland }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, jack2, alsa-lib, writeShellApplication, makeDesktopItem, gtk3, glib, xorg, remarkable2-toolchain, bash, autoPatchelfHook, copyDesktopItems, vulkan-loader, libva, wayland }:
 
 let
 
-  libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr vulkan-loader libva wayland ];
+  libPath = lib.makeLibraryPath [ autoPatchelfHook asla-lib jack2 stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr vulkan-loader libva wayland ];
 
   acesx86_64 = writeShellApplication {
   name = "acesx86_64";
-  runtimeInputs = [ bash wayland libva vulkan-loader ];
+  runtimeInputs = [ bash wayland libva vulkan-loader alsa-lib jack2 ];
 
   text = ''
     #!/bin/bash
