@@ -149,10 +149,6 @@ stdenv.mkDerivation rec {
     install -m755 -D launcher $out/bin
     install -m755 -D gaijin_selfupdater "$out/bin"
     install -m755 -D bpreport "$out/bin"
-    echo "INFO: Done, installing desktop entry."
-
-    install -m755 -D ${desktopItem}/share/applications/${name}.desktop $out/share/applications
-
     echo "INFO: Done"
 
   runHook postInstall
