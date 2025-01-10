@@ -2,12 +2,13 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  fetchpatch,
   callPackage,
   php,
   unzip,
   _7zz,
   xz,
-  git,
+  gitMinimal,
   curl,
   cacert,
   makeBinaryWrapper,
@@ -15,13 +16,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer";
-  version = "2.8.1";
+  version = "2.8.4";
 
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
   # use together with the version from this package to keep the
   # bootstrap phar file up-to-date together with the end user composer
   # package.
-  passthru.pharHash = "sha256-kws3b70hR6Yj6ntwTrnTuLDWBymSIHqgU1qiH28FN44=";
+  passthru.pharHash = "sha256-xMTi4b6rDqBOC9BCpdu6n+2h+/XtoNNiA5WO3TQ8Coo=";
 
   composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
     inherit (finalAttrs) version;
@@ -31,9 +32,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "composer";
     repo = "composer";
-    rev = finalAttrs.version;
-    hash = "sha256-5UcbEx1d5jEz73mTFTacifl6ykxm6yQw3wvkJQtINHs=";
+    tag = finalAttrs.version;
+    hash = "sha256-m4CfWWbrmMN0j27XaMx/KRbFjpW5iMMNUlAtzlrorJc=";
   };
+
+  patches = [
+    # Fix an issue preventing reproducible builds
+    # This patch should be removed at the next release (2.8.5)
+    # More information at https://github.com/composer/composer/pull/12090
+    (fetchpatch {
+      url = "https://github.com/composer/composer/commit/7b1e983ce9a0b30a6369cda11a7d61cca9c1ce46.patch";
+      hash = "sha256-veBdfZxzgL/R3P87GpvxQc+es3AdpaKSzCX0DCzH63U=";
+    })
+  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -86,7 +97,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-FfFwx5E2LVDSqo2P31fqtvk2P30XnTm+TUqhNSHTt/M=";
+    outputHash = "sha256-McyO3Z4PSyC6LiWt8rsXziAIbEqOhiaT77gUdzZ6tzw=";
   };
 
   installPhase = ''
@@ -101,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           _7zz
           curl
-          git
+          gitMinimal
           unzip
           xz
         ]
