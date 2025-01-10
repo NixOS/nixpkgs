@@ -2728,8 +2728,6 @@ self: super: with self; {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
-  criticality-score = callPackage ../development/python-modules/criticality-score { };
-
   crocoddyl = toPythonModule (pkgs.crocoddyl.override {
     pythonSupport = true;
     python3Packages = self;
