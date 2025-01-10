@@ -40,6 +40,8 @@ tcl.mkTclDerivation rec {
       --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
       --replace-fail 'set Rem2PS "rem2ps"' "set Rem2PS \"$out/bin/rem2ps\"" \
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
+    substituteInPlace configure \
+      --replace-fail 'f=-ffat-lto-objects' ""
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
