@@ -5,7 +5,6 @@
   gitUpdater,
   installShellFiles,
   rustPlatform,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,8 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ Security ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd jwt \
       --bash <($out/bin/jwt completion bash) \
@@ -33,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/jwt --version > /dev/null
     $out/bin/jwt decode eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c \
