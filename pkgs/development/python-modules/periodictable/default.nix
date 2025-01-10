@@ -2,8 +2,10 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   numpy,
   pyparsing,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -11,9 +13,9 @@
 buildPythonPackage rec {
   pname = "periodictable";
   version = "2.0.2";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-periodictable";
@@ -22,19 +24,24 @@ buildPythonPackage rec {
     hash = "sha256-nI6hiLnqmVXT06pPkHCBEMTxZhfnZJqSImW3V9mJ4+8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     pyparsing
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "periodictable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible periodic table of the elements";
     homepage = "https://github.com/pkienzle/periodictable";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ rprospero ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }
