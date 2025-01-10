@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  automake,
   fftw,
   ladspaH,
   libxml2,
@@ -25,19 +24,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    perlPackages.perl
+    perlPackages.XMLParser
   ];
   buildInputs = [
     fftw
     ladspaH
     libxml2
-    perlPackages.perl
-    perlPackages.XMLParser
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
-    patchShebangs ./metadata/
-    cp ${automake}/share/automake-*/mkinstalldirs .
+    substituteInPlace util/Makefile.am --replace-fail "ranlib" "$RANLIB"
+    substituteInPlace gsm/Makefile.am --replace-fail "ranlib" "$RANLIB"
+    substituteInPlace gverb/Makefile.am --replace-fail "ranlib" "$RANLIB"
   '';
 
   meta = with lib; {
