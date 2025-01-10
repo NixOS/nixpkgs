@@ -1,15 +1,10 @@
 {
   lib,
-  DiskArbitration,
   fetchFromGitHub,
-  Foundation,
   gitUpdater,
-  IOKit,
   openssl,
   pkg-config,
   rustPlatform,
-  Security,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,14 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DiskArbitration
-      Foundation
-      IOKit
-      Security
-    ];
+  buildInputs = [ openssl ];
 
   # build script tries to get information from git
   postPatch = ''
