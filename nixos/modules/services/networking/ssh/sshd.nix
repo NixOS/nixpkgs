@@ -560,6 +560,12 @@ in
         "ssh/sshd_config".source = sshconf;
       };
 
+    systemd.tmpfiles.settings."ssh-root-provision" = {
+      "/root"."d-" = { user = "root"; group = ":root"; mode = ":700"; };
+      "/root/.ssh"."d-" = { user = "root"; group = ":root"; mode = ":700"; };
+      "/root/.ssh/authorized_keys"."f^" = { user = "root"; group = ":root"; mode = ":600"; argument = "ssh.authorized_keys.root"; };
+    };
+
     systemd =
       {
         sockets.sshd = lib.mkIf cfg.startWhenNeeded {
