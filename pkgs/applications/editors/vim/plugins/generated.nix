@@ -1290,6 +1290,18 @@ final: prev:
     meta.homepage = "https://github.com/Saghen/blink.compat/";
   };
 
+  blink-emoji-nvim = buildVimPlugin {
+    pname = "blink-emoji.nvim";
+    version = "2025-01-04";
+    src = fetchFromGitHub {
+      owner = "moyiz";
+      repo = "blink-emoji.nvim";
+      rev = "81e6c080d1e64c9ef548534c51147fd8063481c8";
+      sha256 = "1kh5sblmnkspdjhcski2dghmkv2asw35k1cib1227h21rlalqc67";
+    };
+    meta.homepage = "https://github.com/moyiz/blink-emoji.nvim/";
+  };
+
   blink-ripgrep-nvim = buildVimPlugin {
     pname = "blink-ripgrep.nvim";
     version = "2025-01-04";
@@ -4916,6 +4928,19 @@ final: prev:
       sha256 = "06wr0krg23xy9j36chypxcnd88cvds85jk0ajbl3pvg53x0qigad";
     };
     meta.homepage = "https://github.com/junegunn/gv.vim/";
+  };
+
+  gx-nvim = buildVimPlugin {
+    pname = "gx.nvim";
+    version = "2025-01-07";
+    src = fetchFromGitHub {
+      owner = "chrishrb";
+      repo = "gx.nvim";
+      rev = "c7e6a0ace694a098a5248d92a866c290bd2da1cc";
+      sha256 = "14cjwnsrjdfhqx0hbd6j1b9lm668a6c3f72wklx66vp18qy0pafb";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/chrishrb/gx.nvim/";
   };
 
   hardhat-nvim = buildVimPlugin {
