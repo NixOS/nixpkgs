@@ -1,7 +1,8 @@
-{ lib
-, php
-, fetchFromGitHub
-, makeBinaryWrapper
+{
+  lib,
+  php,
+  fetchFromGitHub,
+  makeBinaryWrapper,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -11,7 +12,7 @@ php.buildComposerProject (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8TQlqXhZ3rHmOAuxsBYa+7JD+SxMQY0NZgCyElStFag=";
   };
 
@@ -22,14 +23,10 @@ php.buildComposerProject (finalAttrs: {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     wrapProgram "$out/bin/phpdoc" \
       --set-default APP_CACHE_DIR /tmp \
       --set-default APP_LOG_DIR /tmp/log
-
-    runHook postInstall
   '';
 
   meta = {
