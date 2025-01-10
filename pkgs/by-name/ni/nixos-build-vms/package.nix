@@ -10,7 +10,7 @@ replaceVarsWith {
 
   replacements = {
     inherit runtimeShell;
-    buildVms = ./build-vms.nix;
+    buildVms = "${./build-vms.nix}";
   };
 
   dir = "bin";
