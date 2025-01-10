@@ -10196,7 +10196,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
-  openssl = openssl_3_3;
+  openssl = openssl_3_4;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -10205,7 +10205,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_3;
+    openssl_3_4;
 
   openwebrx = callPackage ../applications/radio/openwebrx {
     inherit (python3Packages)
