@@ -238,8 +238,8 @@ rec {
       "sha256-4EYaL7nEbjypOOtEJwJvqLvXfS1D0zGzGSWY85XVzRQ=";
 
   mypy-boto3-cloudhsmv2 =
-    buildMypyBoto3Package "cloudhsmv2" "1.35.93"
-      "sha256-zJpDczYBHPPgdJlFOjzS1RnHLDO3CuPid92S1CwjaxY=";
+    buildMypyBoto3Package "cloudhsmv2" "1.35.94"
+      "sha256-dmHU4UGGd5qo7hYvOU+SmLswjMLSNFvONudTRYm25fc=";
 
   mypy-boto3-cloudsearch =
     buildMypyBoto3Package "cloudsearch" "1.35.93"
@@ -434,8 +434,8 @@ rec {
       "sha256-EZfK4RgPD0RWYqSbOu3IJX7oXN9QG8G46MFwFV09gyk=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.35.93"
-      "sha256-yrTXfvYfk7w6lRnLMlUmizQ75iOHrSLgg1pjPLmxaY0=";
+    buildMypyBoto3Package "dynamodb" "1.35.94"
+      "sha256-kSi8nfpXTx9v45keyMM7NGJtJqdnuWGXOpX3YQ2OmME=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.35.93"
@@ -614,8 +614,8 @@ rec {
       "sha256-qSuSaVpjEzdjr9vwH74IibWAiiiQRkXqn+wKWWTU+u0=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.35.93"
-      "sha256-Viw56d3d1j/V7zijdxziCh/0E8vy1oZwE7+AhP7Vwx4=";
+    buildMypyBoto3Package "imagebuilder" "1.35.94"
+      "sha256-Cj3//KC7Au8xn0NHjLH5yGjbpHFQL80EXhuMSHTlIAc=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.35.93"
@@ -1086,8 +1086,8 @@ rec {
       "sha256-VECkUIkz/tUtKaiRTpi+gcNYpkI9DugZDFZ13ZjL558=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.35.93"
-      "sha256-S+8+by+OVPbcXL0ZC3rf0XEhEp051oItzpVwEQREdcA=";
+    buildMypyBoto3Package "rds" "1.35.95"
+      "sha256-rRukdIPIrpdv4S9+EIndBDp2b4uoWP9cRIV9q1RwL9M=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.35.93"
@@ -1134,8 +1134,8 @@ rec {
       "sha256-Bv1Z2cVGXepn2/VjnoLHozMZvfdfniR+pTzv9FAoXV8=";
 
   mypy-boto3-route53 =
-    buildMypyBoto3Package "route53" "1.35.93"
-      "sha256-eMp0hg8GwRU3XL+0zmUHGrhq35g89h1AyZ5A8C4g/QE=";
+    buildMypyBoto3Package "route53" "1.35.95"
+      "sha256-0Aocwq1wvF7NmODu0NV15IoPEscjb441s0NRTVyi5Hs=";
 
   mypy-boto3-route53-recovery-cluster =
     buildMypyBoto3Package "route53-recovery-cluster" "1.35.93"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-nuCuzwEQnTMuI8Wd1an+vT3fsUAgpHqIRyoXV66L4Xs=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.35.93"
-      "sha256-87BRRU94aOljH1uYC8aXAyfBX62GL/Wb6L6AkQFOlYc=";
+    buildMypyBoto3Package "sagemaker" "1.35.95"
+      "sha256-hJfmA6R/to1JQW/VIi71LoJ6gIhXboZFMtxxZnVtX9A=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.35.93"
