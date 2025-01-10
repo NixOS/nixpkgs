@@ -1,0 +1,48 @@
+diff --git a/bin/melos.dart b/bin/melos.dart
+index 0db7013..218276f 100644
+--- a/bin/melos.dart
++++ b/bin/melos.dart
+@@ -1,11 +1,37 @@
++import 'dart:io';
+ import 'package:cli_launcher/cli_launcher.dart';
+ import 'package:melos/src/command_runner.dart';
+ 
+-Future<void> main(List<String> arguments) async => launchExecutable(
+-      arguments,
+-      LaunchConfig(
++Future<void> main(List<String> arguments) async {
++  final melosYamlPath = findMelosYaml();
++
++  if (melosYamlPath == null) {
++    print('Error: melos.yaml not found in the project.');
++    // Handle the error as needed
++    return;
++  }
++
++  melosEntryPoint(
++    arguments,
++    LaunchContext(
++      directory: Directory.current,
++      localInstallation: ExecutableInstallation(
+         name: ExecutableName('melos'),
+-        launchFromSelf: false,
+-        entrypoint: melosEntryPoint,
++        isSelf: false,
++        packageRoot: melosYamlPath,
+       ),
+-    );
++    ),
++  );
++}
++
++Directory? findMelosYaml() {
++  var directory = Directory.current;
++  while (directory.path != directory.parent.path) {
++    final melosYamlPath = '${directory.path}/melos.yaml';
++    if (File(melosYamlPath).existsSync()) {
++      return directory;
++    }
++    directory = directory.parent;
++  }
++  return null;
++}

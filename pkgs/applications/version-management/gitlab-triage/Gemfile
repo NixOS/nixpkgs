@@ -1,0 +1,3 @@
+source 'https://rubygems.org' do
+  gem 'gitlab-triage'
+end

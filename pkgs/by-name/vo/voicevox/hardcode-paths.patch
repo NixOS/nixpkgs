@@ -1,0 +1,75 @@
+diff --git a/.env.production b/.env.production
+index 5b0dcb0..5848ccd 100644
+--- a/.env.production
++++ b/.env.production
+@@ -4,7 +4,7 @@ VITE_DEFAULT_ENGINE_INFOS=`[
+         "uuid": "074fc39e-678b-4c13-8916-ffca8d505d1d",
+         "name": "VOICEVOX Engine",
+         "executionEnabled": true,
+-        "executionFilePath": "vv-engine/run.exe",
++        "executionFilePath": "@voicevox_engine_path@",
+         "executionArgs": [],
+         "host": "http://127.0.0.1:50021"
+     }
+diff --git a/electron-builder.config.js b/electron-builder.config.js
+index 462e6f2..10a9bff 100644
+--- a/electron-builder.config.js
++++ b/electron-builder.config.js
+@@ -35,19 +35,6 @@ const isMac = process.platform === "darwin";
+ // cf: https://k-hyoda.hatenablog.com/entry/2021/10/23/000349#%E8%BF%BD%E5%8A%A0%E5%B1%95%E9%96%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%85%88%E3%81%AE%E8%A8%AD%E5%AE%9A
+ const extraFilePrefix = isMac ? "MacOS/" : "";
+ 
+-const sevenZipFile = fs
+-  .readdirSync(path.resolve(__dirname, "build", "vendored", "7z"))
+-  .find(
+-    // Windows: 7za.exe, Linux: 7zzs, macOS: 7zz
+-    (fileName) => ["7za.exe", "7zzs", "7zz"].includes(fileName),
+-  );
+-
+-if (!sevenZipFile) {
+-  throw new Error(
+-    "7z binary file not found. Run `node ./build/download7z.js` first.",
+-  );
+-}
+-
+ /** @type {import("electron-builder").Configuration} */
+ const builderOptions = {
+   beforeBuild: async () => {
+@@ -88,14 +75,6 @@ const builderOptions = {
+       from: "build/README.txt",
+       to: extraFilePrefix + "README.txt",
+     },
+-    {
+-      from: VOICEVOX_ENGINE_DIR,
+-      to: path.join(extraFilePrefix, "vv-engine"),
+-    },
+-    {
+-      from: path.resolve(__dirname, "build", "vendored", "7z", sevenZipFile),
+-      to: extraFilePrefix + sevenZipFile,
+-    },
+   ],
+   // electron-builder installer
+   productName: "VOICEVOX",
+diff --git a/src/backend/electron/manager/vvppManager.ts b/src/backend/electron/manager/vvppManager.ts
+index 6aa17b6..b8b52b7 100644
+--- a/src/backend/electron/manager/vvppManager.ts
++++ b/src/backend/electron/manager/vvppManager.ts
+@@ -196,16 +196,8 @@ export class VvppManager {
+ 
+         const args = ["x", "-o" + outputDir, archiveFile, "-t" + format];
+ 
+-        let sevenZipPath = import.meta.env.VITE_7Z_BIN_NAME;
+-        if (!sevenZipPath) {
+-          throw new Error("7z path is not defined");
+-        }
+-        if (import.meta.env.PROD) {
+-          sevenZipPath = path.join(
+-            path.dirname(app.getPath("exe")),
+-            sevenZipPath,
+-          );
+-        }
++        const sevenZipPath = `@sevenzip_path@`;
++
+         log.log(
+           "Spawning 7z:",
+           sevenZipPath,

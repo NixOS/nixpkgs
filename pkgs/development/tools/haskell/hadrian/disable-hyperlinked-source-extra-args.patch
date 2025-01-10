@@ -1,0 +1,13 @@
+diff --git a/hadrian/src/Settings/Default.hs b/hadrian/src/Settings/Default.hs
+index 0b743788ec..a7ff841609 100644
+--- a/hadrian/src/Settings/Default.hs
++++ b/hadrian/src/Settings/Default.hs
+@@ -249,7 +249,7 @@ defaultExtraArgs =
+ 
+ defaultHaddockExtraArgs :: Args
+ defaultHaddockExtraArgs = builder (Haddock BuildPackage) ?
+-  mconcat [ arg "--hyperlinked-source", arg "--hoogle", arg "--quickjump" ]
++  mconcat [ arg "--hoogle", arg "--quickjump" ]
+ 
+ 
+ -- | Default source arguments, e.g. optimisation settings.
