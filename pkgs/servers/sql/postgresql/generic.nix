@@ -185,9 +185,11 @@ let
       # flags will remove unused sections from all shared libraries and binaries - including
       # those paths. This avoids a lot of circular dependency problems with different outputs,
       # and allows splitting them cleanly.
-      env.CFLAGS =
-        "-fdata-sections -ffunction-sections"
-        + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+      env = {
+        CFLAGS =
+          "-fdata-sections -ffunction-sections"
+          + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+      } // lib.optionalAttrs pythonSupport { PYTHON = "${python3}/bin/python"; };
 
       configureFlags =
         [
