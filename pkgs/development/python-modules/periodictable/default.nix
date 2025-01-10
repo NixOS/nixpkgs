@@ -1,6 +1,6 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   numpy,
   pyparsing,
@@ -10,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "periodictable";
-  version = "1.7.1";
+  version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Q9fbcjPWszli+D156lT0fDuSPT6DQDy8A/WPNTr0tSw=";
+  src = fetchFromGitHub {
+    owner = "python-periodictable";
+    repo = "periodictable";
+    tag = "v${version}";
+    hash = "sha256-nI6hiLnqmVXT06pPkHCBEMTxZhfnZJqSImW3V9mJ4+8=";
   };
 
   propagatedBuildInputs = [
