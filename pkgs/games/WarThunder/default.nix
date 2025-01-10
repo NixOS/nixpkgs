@@ -22,7 +22,7 @@ let
     echo "DEBUG::: Print libPath inherited by drv on realization."
     echo ${libPath}
 
-    echo "DEBUG::: Setting libPath for runtime enviroment.
+    echo "DEBUG::: Setting libPath for runtime enviroment."
     export LD_LIBRARY_PATH="${libPath}:$LD_LIBRARY_PATH"
     echo "DEBUG::: Print libPath: $LD_LIBRARY_PATH"
 
