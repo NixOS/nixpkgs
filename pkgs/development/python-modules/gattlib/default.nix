@@ -16,19 +16,16 @@
 
 }:
 
-let
+buildPythonPackage rec {
   pname = "gattlib";
-  version = "unstable-2021-06-16";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "20210616";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oscaracena";
     repo = "pygattlib";
-    rev = "7bdb229124fe7d9f4a2cc090277b0fdef82e2a56";
-    hash = "sha256-PS5DIH1JuH2HweyebLLM+UNFGY/XsjKIrsD9x7g7yMI=";
+    rev = "v.${version}";
+    hash = "sha256-n3D9CWKvgw4FYmbvsfhaHN963HARBG0p4CcZBC8Gkb0=";
   };
 
   patches = [
