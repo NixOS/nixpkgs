@@ -301,10 +301,14 @@ let
           remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
         '';
 
-      postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
-        # initdb needs access to "locale" command from glibc.
-        wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
-      '';
+      postFixup =
+        lib.optionalString stdenv'.hostPlatform.isGnu ''
+          # initdb needs access to "locale" command from glibc.
+          wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
+        ''
+        + lib.optionalString pythonSupport ''
+          wrapProgram "$out/bin/postgres" --set PYTHONPATH "${python3}/${python3.sitePackages}"
+        '';
 
       doCheck = !stdenv'.hostPlatform.isDarwin;
       # autodetection doesn't seem to able to find this, but it's there.
