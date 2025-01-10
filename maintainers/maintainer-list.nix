@@ -23836,6 +23836,12 @@
     githubId = 2212422;
     name = "uwap";
   };
+  uxodb = {
+    name = "uxodb";
+    matrix = "@uxodb:matrix.org";
+    github = "uxodb";
+    githubId = 20535246;
+  };
   V = {
     name = "V";
     email = "v@anomalous.eu";
