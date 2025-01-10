@@ -2,7 +2,7 @@
 
 let
 
-  libPath = lib.makeLibraryPath [ autoPatchelfHook asla-lib jack2 stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr vulkan-loader libva wayland ];
+  libPath = lib.makeLibraryPath [ autoPatchelfHook alsa-lib jack2 stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr vulkan-loader libva wayland ];
 
   acesx86_64 = writeShellApplication {
   name = "acesx86_64";
