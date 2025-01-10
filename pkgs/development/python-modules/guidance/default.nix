@@ -8,18 +8,25 @@
   setuptools,
   wheel,
   aiohttp,
+  azure-core,
+  azure-identity,
+  bitsandbytes,
   diskcache,
   fastapi,
   gptcache,
+  jsonschema,
   msal,
   numpy,
   openai,
   ordered-set,
+  pandas,
+  papermill,
   platformdirs,
   protobuf,
   pyformlang,
   requests,
   tiktoken,
+  transformers,
   torch,
   uvicorn,
 }:
@@ -64,7 +71,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    azure-core
+    azure-identity
+    bitsandbytes
+    jsonschema
+    pandas
+    papermill
     torch
+    transformers
   ];
 
   disabledTests = [
@@ -82,12 +96,25 @@ buildPythonPackage rec {
 
     # flaky tests
     "test_remote_mock_gen" # frequently fails when building packages in parallel
+
+    # requires "langchain_benchmarks"
+    "test_retrieve_langchain_err"
   ];
 
   disabledTestPaths = [
     # require network access
-    "tests/library/test_gen.py"
+    "tests/model_integration/"
+    "tests/model_specific/"
+    "tests/need_credentials/"
+    "tests/notebooks/test_notebooks.py"
+    "tests/server/test_server.py"
+    "tests/unit/library/test_image.py"
+    "tests/unit/test_tokenizers.py"
   ];
+
+  preInstallCheck = ''
+    export HF_HOME=$(mktemp -d)
+  '';
 
   preCheck = ''
     export HOME=$TMPDIR
