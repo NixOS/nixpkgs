@@ -7957,8 +7957,6 @@ self: super: with self; {
 
   matplotx = callPackage ../development/python-modules/matplotx { };
 
-  matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
-
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
   matrix-common = callPackage ../development/python-modules/matrix-common { };
