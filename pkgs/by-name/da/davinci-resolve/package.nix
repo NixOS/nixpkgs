@@ -302,11 +302,14 @@ symlinkJoin {
 
     (makeDesktopItem {
       name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
+      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
       genericName = "Video Editor";
       exec = "${resolveWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}";
       icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
       comment = "Professional video editing, color, effects and audio post-processing";
+      mimeTypes = ["application/x-resolveproj"];
+      startupNotify = true;
+      terminal = false;
       categories = [
         "AudioVideo"
         "AudioVideoEditing"
