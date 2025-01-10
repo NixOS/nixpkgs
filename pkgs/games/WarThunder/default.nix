@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 #  patchPhase = let
 
 
-libPath = lib.makeLibraryPath [ autoPatchelfHook stdenv.cc.cc stdenv.cc.cc.lib remarkable2-toolchain glib gtk3 xorg.libX11 xorg.libXrandr vulkan-loader libva wayland ];
+
 
 
   installPhase = let
