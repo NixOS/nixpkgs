@@ -561,36 +561,6 @@ in
       };
 
     systemd =
-      let
-        service =
-          { description = "SSH Daemon";
-            wantedBy = lib.optional (!cfg.startWhenNeeded) "multi-user.target";
-            after = [ "network.target" "sshd-keygen.service" ];
-            wants = [ "sshd-keygen.service" ];
-            stopIfChanged = false;
-            path = [ cfg.package ];
-            environment.LD_LIBRARY_PATH = nssModulesPath;
-
-            restartTriggers = lib.optionals (!cfg.startWhenNeeded) [
-              config.environment.etc."ssh/sshd_config".source
-            ];
-
-            serviceConfig =
-              { ExecStart =
-                  (lib.optionalString cfg.startWhenNeeded "-") +
-                  "${cfg.package}/bin/sshd " + (lib.optionalString cfg.startWhenNeeded "-i ") +
-                  "-D " +  # don't detach into a daemon process
-                  "-f /etc/ssh/sshd_config";
-                KillMode = "process";
-              } // (if cfg.startWhenNeeded then {
-                StandardInput = "socket";
-                StandardError = "journal";
-              } else {
-                Restart = "always";
-                Type = "simple";
-              });
-          };
-      in
       {
         sockets.sshd = lib.mkIf cfg.startWhenNeeded {
           description = "SSH Socket";
@@ -607,8 +577,51 @@ in
             # Prevent brute-force attacks from shutting down socket
             socketConfig.TriggerLimitIntervalSec = 0;
         };
-        services."sshd@" = lib.mkIf cfg.startWhenNeeded service;
-        services.sshd = lib.mkIf (! cfg.startWhenNeeded) service;
+
+        services."sshd@" = {
+          description = "SSH per-connection Daemon";
+          after = [ "network.target" "sshd-keygen.service" ];
+          wants = [ "sshd-keygen.service" ];
+          stopIfChanged = false;
+          path = [ cfg.package ];
+          environment.LD_LIBRARY_PATH = nssModulesPath;
+
+          serviceConfig = {
+            Type = "notify";
+            ExecStart = lib.concatStringsSep " " [
+              "-${lib.getExe' cfg.package "sshd"}"
+              "-i"
+              "-D"
+              "-f /etc/ssh/sshd_config"
+            ];
+            KillMode = "process";
+            StandardInput = "socket";
+            StandardError = "journal";
+          };
+        };
+
+        services.sshd = lib.mkIf (! cfg.startWhenNeeded) {
+          description = "SSH Daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" "sshd-keygen.service" ];
+          wants = [ "sshd-keygen.service" ];
+          stopIfChanged = false;
+          path = [ cfg.package ];
+          environment.LD_LIBRARY_PATH = nssModulesPath;
+
+          restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
+
+          serviceConfig = {
+            Type = "notify";
+            Restart = "always";
+            ExecStart = lib.concatStringsSep " " [
+              (lib.getExe' cfg.package "sshd")
+              "-D"
+              "-f" "/etc/ssh/sshd_config"
+            ];
+            KillMode = "process";
+          };
+        };
 
         services.sshd-keygen = {
           description = "SSH Host Keys Generation";
