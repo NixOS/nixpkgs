@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -20,11 +21,18 @@ rustPlatform.buildRustPackage {
     hash = "sha256-8BnYLC5SGFvk9srRyLxflDgfVbbGMSHXBOjXQLMLIi8=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
 
   cargoHash = "sha256-H/BnJiR9+wcddAEWkKaqamTEDgjTUOMq1AiGWQAfjDM=";
 
   cargoBuildFlags = [ "--workspace" ];
+
+  postInstall = ''
+    installShellCompletion completions/{_lla,lla{.bash,.fish}}
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/lla \
@@ -37,10 +45,10 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Modern alternative to ls";
+    description = "Blazing-fast `ls` replacement with superpowers";
     longDescription = ''
-      `lla` is a high-performance, extensible alternative to the traditional ls command, written in Rust.
-      It offers enhanced functionality, customizable output, and a plugin system for extended capabilities.
+      `lla` is a high-performance file explorer written in Rust that enhances the traditional
+      `ls` command with modern features, rich formatting options, and a powerful plugin system.
     '';
     homepage = "https://github.com/triyanox/lla";
     changelog = "https://github.com/triyanox/lla/blob/refs/tags/v${version}/CHANGELOG.md";
