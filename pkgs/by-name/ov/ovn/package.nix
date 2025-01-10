@@ -71,6 +71,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -vp $out/share/openvswitch/scripts
     mkdir -vp $out/etc/ovn
+    cp ovs/ovsdb/ovsdb-client $out/share/openvswitch/scripts
+    cp ovs/ovsdb/ovsdb-server $out/share/openvswitch/scripts
+    cp ovs/ovsdb/ovsdb-tool $out/share/openvswitch/scripts
     cp ovs/utilities/ovs-appctl $out/share/openvswitch/scripts
     cp ovs/utilities/ovs-vsctl $out/share/openvswitch/scripts
     cp ovs/utilities/ovs-lib $out/share/openvswitch/scripts
