@@ -273,7 +273,8 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            # "all" is required because faster-whisper accesses /proc/cpuinfo to determine cpu capabilities
+            ProcSubset = "all";
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
