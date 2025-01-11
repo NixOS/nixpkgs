@@ -329,7 +329,6 @@ let
             super'.stdenv.cc.defaultHardeningFlags ++ [
               "shadowstack"
               "pacret"
-              "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
