@@ -44,6 +44,7 @@
   charset-normalizer,
   markupsafe,
   psutil,
+  dm-tree,
   # Common deps
   git,
   pybind11,
@@ -54,7 +55,7 @@
   perl,
   llvmPackages,
   pkg-config,
-  ninja,
+  cmake,
   lndir,
   writeShellScriptBin,
   writeText,
@@ -194,7 +195,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.15.0";
+  version = "2.16.2";
   format = "setuptools";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
@@ -519,6 +520,23 @@ let
     '';
   };
 
+  dm-tree-bazel = stdenv.mkDerivation {
+    name = "${dm-tree.pname}-bazel-${dm-tree.version}";
+    src = _bazel-build.deps;
+    dontConfigure = true;
+    dontBuild = true;
+    installPhase = ''
+      runHook preInstall
+      mkdir $out
+      cp pypi_dm_tree/* $out
+      mkdir $out/site-packages
+      ${lndir}/bin/lndir \
+        ${dm-tree}/lib/python${python_dotted}/site-packages \
+        $out/site-packages
+      runHook postInstall
+    '';
+  };
+
   pypi-bazel = stdenv.mkDerivation {
     name = "pypi-bazel";
     src = _bazel-build.deps;
@@ -646,6 +664,7 @@ let
             "--override_repository=pypi_h5py=${h5py-bazel}"
             "--override_repository=pypi_wrapt=${wrapt-bazel}"
             "--override_repository=pypi_markupsafe=${markupsafe-bazel}"
+            "--override_repository=pypi_dm_tree=${dm-tree-bazel}"
             "--override_repository=pypi=${pypi-bazel}"
             "--override_repository=python=${python-bazel}"
             "--override_repository=python_version_repo=${python_version_repo-bazel}"
@@ -680,7 +699,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       tag = "v${version}";
-      hash = "sha256-tCFLEvJ1lHy7NcHDW9Dkd+2D60x+AvOB8EAwmUSQCtM=";
+      hash = "sha256-yBDS9DFkVLIT+bu/vqh/0U60UwoIzqlTKQsflM7GWCA=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -701,7 +720,7 @@ let
       ]
       ++ lib.optional cudaSupport addDriverRunpath
       ++ lib.optional stdenv.isDarwin xcbuild
-      ++ lib.optional (pythonAtLeast "3.12") ninja;
+      ++ lib.optional stdenv.isAarch64 cmake;
 
     buildInputs =
       [
@@ -835,13 +854,6 @@ let
           url = "https://raw.githubusercontent.com/conda-forge/tensorflow-feedstock/0a63c5a962451b4da99a9948323d8b3ed462f461/recipe/patches/0001-Omit-linking-to-layout_proto_cc-if-protobuf-linkage-.patch";
           hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
         })
-        (fetchpatch {
-          url = "https://github.com/openxla/xla/commit/30c1666bf76616b6d6569a262a6cc705b3ce5f47.diff";
-          name = "denormal-cstdint.patch";
-          stripLen = 1;
-          extraPrefix = "third_party/xla/";
-          hash = "sha256-kOXFVFM3Z1945gLoJhTiCvriiWTzlGcm92URWasO5hM=";
-        })
         ./fix-syslib-references.patch
         ./protobuf_lite.patch
         ./protobuf_cc_toolchain.patch
@@ -851,7 +863,6 @@ let
         ./protobuf_python.patch
         ./pybind11_protobuf_python_runtime_dep.patch
         ./pybind11_protobuf_newer_version.patch
-        ./add-python-312.patch
       ]
       ++ lib.optionals (!stdenv.isDarwin) [
         # we override Python in the bazel build anyway, but we also need
@@ -869,31 +880,6 @@ let
         rm -f .bazelversion
         patchShebangs .
         ln -s ${./riegeli-proto.patch} third_party/riegeli-proto.patch
-        ! test -e requirements_lock_3_12.txt
-        cp requirements_lock_3_11.txt requirements_lock_3_12.txt
-        substituteInPlace requirements_lock_*.txt \
-      ''
-      + lib.optionalString (stdenv.isx86_64) ''
-        --replace-fail \
-          "0cbe9848fad08baf71de1a39e12d1b6310f1d5b2d0ea4de051058e6e1076852d" \
-          "666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5" \
-        --replace-fail \
-          "1b1766d6f397c18153d40015ddfc79ddb715cabadc04d2d228d4e5a8bc4ded1a" \
-          "675d61ffbfa78604709862923189bad94014bef562cc35cf61d3a07bba02a7ed" \
-        --replace-fail \
-          "09b7847f7e83ca37c6e627682f145856de331049013853f344f37b0c9690e3df" \
-          "ffa75af20b44f8dba823498024771d5ac50620e6915abac414251bd971b4529f" \
-      ''
-      + lib.optionalString (stdenv.isAarch64) ''
-        --replace-fail \
-          "01dd17cbb340bf0fc23981e52e1d18a9d4050792e8fb8363cecbf066a84b827d" \
-          "9fad7dcb1aac3c7f0584a5a8133e3a43eeb2fe127f47e3632d43d677c66c102b" \
-        --replace-fail \
-          "06005a2ef6014e9956c09ba07654f9837d9e26696a0470e42beedadb78c11b07" \
-          "7ab55401287bfec946ced39700c053796e7cc0e3acbef09993a9ad2adba6ca6e" \
-      ''
-      + ''
-        --replace-fail "numpy==1.23.5" "numpy==1.26.4"
       ''
       + lib.optionalString (!stdenv.isDarwin) ''
         sed \
@@ -993,6 +979,7 @@ let
           rm -rf external/pypi_h5py/site-packages
           rm -rf external/pypi_wrapt/site-packages
           rm -rf external/pypi_markupsafe/site-packages
+          rm -rf external/pypi_dm_tree/site-packages
         ''
         + lib.optionalString (stdenv.isAarch64) ''
           rm -rf external/pypi_psutil/site-packages
@@ -1004,6 +991,7 @@ let
             --replace-fail ${python_dotted} @version_long@
           sed -i 's/(\("[^(),]*"\), "\([^()]*\)==[^()]*")/(\1, "\2")/g' \
             external/pypi/requirements.bzl
+          sed -i 's/, "pypi_version=[0-9.]*"//' external/pypi_numpy/BUILD.bazel
           rm -rf external/python_*-unknown-linux-gnu/bin
           rm -rf external/python_*-unknown-linux-gnu/include
           rm -rf external/python_*-unknown-linux-gnu/lib
@@ -1029,12 +1017,12 @@ let
             if cudaSupport then
               "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             else
-              "sha256-15g0FJ3moJ24RCJt5EHhZsCwLdPNkZ86bod3Mc2AG7A=";
+              "sha256-SlIIHoD4mLcUbcjkXch/NFA4khbHsj19v05Z6xMX0/Q=";
           aarch64-linux =
             if cudaSupport then
               "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             else
-              "sha256-ZKP1zTmqcuqqshzuqrDMN1XNgCY2ty8frAByiS1maU8=";
+              "sha256-bGa4OVl0UtD1qZS/zlcnLnm72UbZEr2n2HtJOUprRTs=";
           # deps hashes can't be computed for the Darwin platforms as of
           # 2024-10-21 as the expressions don't evaluate due to
           # python3Packages.jaraco-path being broken on these platforms

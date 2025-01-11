@@ -15918,21 +15918,6 @@ self: super: with self; {
         protobuf = protobuf-pythonTF;
         tensorboard-plugin-profile = tensorboard-plugin-profileTF;
       };
-      # at least with CUDA the build needs bazel 6.1.0
-      # https://discuss.ai.google.dev/t/undefined-references-to-mlir-ciface-symbols/30184/3
-      # due to hard coded dependencies, simply overriding doesn't work,
-      # so we import the derivation from commit c03f31e
-      bazel_6_1_0 = pkgs.darwin.apple_sdk_11_0.callPackage ../development/python-modules/tensorflow/bazel_6_1_0 {
-        inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation;
-        buildJdk = pkgs.jdk11_headless;
-        runJdk = pkgs.jdk11_headless;
-        stdenv = if stdenv.isDarwin then
-          pkgs.darwin.apple_sdk_11_0.stdenv else
-          if stdenv.cc.isClang
-            then pkgs.llvmPackages.stdenv
-            else pkgs.gcc12Stdenv;
-        bazel_self = compat.bazel_6_1_0;
-      };
     };
   in
   callPackage ../development/python-modules/tensorflow {
@@ -15948,7 +15933,6 @@ self: super: with self; {
     grpcio = compat.grpcioTF;
     tensorboard = compat.tensorboardTF;
     abseil-cpp = compat.abseil-cppTF;
-    bazel_6 = compat.bazel_6_1_0;
 
 
     # Tensorflow 2.13 doesn't support gcc13:
