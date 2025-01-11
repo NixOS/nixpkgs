@@ -4,6 +4,7 @@
   fetchurl,
   buildPackages,
   perl,
+  oqs-provider,
   coreutils,
   writeShellScript,
   makeBinaryWrapper,
@@ -20,6 +21,9 @@
   conf ? null,
   removeReferencesTo,
   testers,
+  providers ? [ ],
+  autoloadProviders ? false,
+  extraConfig ? null,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -275,6 +279,30 @@ let
         ''
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
+        ''
+
+        + lib.concatStringsSep "\n" (
+          map
+            (provider: ''
+              cp --no-preserve=mode ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
+
+              ${lib.optionalString (autoloadProviders) ''
+                sed -i '/^[[:space:]]*#/!s/\[provider_sect\]/[provider_sect]\n${provider.name} = ${provider.name}_sect/g' $etc/etc/ssl/openssl.cnf
+                echo "[${provider.name}_sect]" >> $etc/etc/ssl/openssl.cnf
+                echo "activate = 1" >> $etc/etc/ssl/openssl.cnf
+              ''}
+            '')
+
+            providers
+        )
+
+        + lib.optionalString (autoloadProviders) ''
+          # The default provider needs loading when there are other providers loaded by default
+          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        ''
+
+        + lib.optionalString (extraConfig != null) ''
+          echo "${extraConfig}" >> $etc/etc/ssl/openssl.cnf
         '';
 
       postFixup =

@@ -10458,6 +10458,21 @@ with pkgs;
 
   openssl = openssl_3_3;
 
+  openssl_quantum = openssl.override {
+    providers = [
+      {
+        name = "oqsprovider";
+        package = pkgs.oqs-provider;
+      }
+    ];
+    autoloadProviders = true;
+    # TLS groups should be post quantum by default
+    extraConfig = ''
+      [tls_system_default]
+      Groups = X25519MLKEM768:x25519_kyber768:x25519:P-521:prime256v1
+    '';
+  };
+
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
   };
