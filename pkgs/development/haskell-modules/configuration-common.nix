@@ -2657,12 +2657,23 @@ self: super: {
 
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
+
   # https://github.com/haskell/aeson/pull/1126
   text-iso8601 = doJailbreak super.text-iso8601;
   # https://github.com/well-typed/cborg/issues/340
   cborg = doJailbreak super.cborg;
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
+
+  psqueues = lib.pipe super.psqueues [
+    (overrideCabal { editedCabalFile = null; revision = null; } )
+    (appendPatch
+      # https://github.com/jaspervdj/psqueues/pull/59
+      (pkgs.fetchpatch {
+        url = "https://github.com/jaspervdj/psqueues/commit/281e458a3aa69b1cfc97f32e39eee0bee3035b3f.patch";
+        hash = "sha256-dcL2QShMMaiENhdGsLiVYTuorNb20NSBTHsGBM04ULw=";
+      }))
+    ];
 
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
