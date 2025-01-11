@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeBinaryWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+,
 }:
 
 buildGoModule rec {
@@ -17,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorHash = null;
+
+  env.CGO_ENABLED = 0;
 
   subPackages = [
     "cmd/slim"
