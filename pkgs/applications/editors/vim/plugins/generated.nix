@@ -7203,6 +7203,18 @@ final: prev:
     meta.homepage = "https://github.com/echasnovski/mini.sessions/";
   };
 
+  mini-snippets = buildVimPlugin {
+    pname = "mini.snippets";
+    version = "2025-01-11";
+    src = fetchFromGitHub {
+      owner = "echasnovski";
+      repo = "mini.snippets";
+      rev = "72920f62e3dd1330720e94e8f5d42592f3a1ecf8";
+      sha256 = "0lyyv95zzwa6kn3gz7sah6v7jqj635c45n88my2sx8wknadkv30y";
+    };
+    meta.homepage = "https://github.com/echasnovski/mini.snippets/";
+  };
+
   mini-splitjoin = buildVimPlugin {
     pname = "mini.splitjoin";
     version = "2024-07-01";
