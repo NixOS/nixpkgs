@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  nixosTests,
 }:
 
 buildGoModule {
@@ -25,6 +26,10 @@ buildGoModule {
     wrapProgram $out/bin/echoip \
       --add-flags "-t $out/share/echoip/html"
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) echoip; };
+  };
 
   meta = {
     description = "IP address lookup service";
