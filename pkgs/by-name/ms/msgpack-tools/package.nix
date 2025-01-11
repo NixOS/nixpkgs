@@ -3,49 +3,64 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  cmake,
+  rapidjson,
+  unzip,
+  configure_host ? null,
+  configure_debug ? false,
 }:
-
-stdenv.mkDerivation rec {
+let
+  mpack = fetchFromGitHub {
+    owner = "ludocode";
+    repo = "mpack";
+    rev = "df17e83f0fa8571b9cd0d8ccf38144fa90e244d1";
+    hash = "sha256-qlWVOAqlYcOkFdsAOFM9LIximjjxaemHM9lT4xx7htQ=";
+  };
+  libb64-version = "1.2.1";
+  libb64 = fetchurl {
+    url = "mirror://sourceforge/libb64/libb64-${libb64-version}.zip";
+    hash = "sha256-IBBvC6lc/Zw1oTxxIGZD4/s+RlEt8+Lvsv2/hxFjFLI=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-tools";
-  version = "0.6";
+  version = "1.0-unstable-2021-09-12";
 
   src = fetchFromGitHub {
     owner = "ludocode";
     repo = "msgpack-tools";
-    rev = "v${version}";
-    sha256 = "1ygjk25zlpqjckxgqmahnz999704zy2bd9id6hp5jych1szkjgs5";
-  };
-
-  libb64 = fetchurl {
-    url = "mirror://sourceforge/libb64/libb64-1.2.1.zip";
-    sha256 = "1chlcc8qggzxnbpy5wrda533xyz38dk20w9wl4srrzawm45ny410";
-  };
-
-  rapidjson = fetchurl {
-    url = "https://github.com/miloyip/rapidjson/archive/99ba17bd66a85ec64a2f322b68c2b9c3b77a4391.tar.gz";
-    sha256 = "0jxgyy5n0lf9w36dycwwgz2wici4z9dnxlsn0z6m23zaa47g3wyw";
-  };
-
-  mpack = fetchurl {
-    url = "https://github.com/ludocode/mpack/archive/df17e83f0fa8571b9cd0d8ccf38144fa90e244d1.tar.gz";
-    sha256 = "1br8g3rf86h8z8wbqkd50aq40953862lgn0xk7cy68m07fhqc3pg";
+    rev = "9b8dbcf74ac1ca3c8e02da57109f09758ee2eb7c";
+    hash = "sha256-VOGK1HtKQjbbGF1f8WI3coiYkH2usXjD+MoQUC5QrWY=";
   };
 
   postUnpack = ''
-    mkdir $sourceRoot/contrib
-    cp ${rapidjson} $sourceRoot/contrib/rapidjson-99ba17bd66a85ec64a2f322b68c2b9c3b77a4391.tar.gz
-    cp ${libb64} $sourceRoot/contrib/libb64-1.2.1.zip
-    cp ${mpack} $sourceRoot/contrib/mpack-df17e83f0fa8571b9cd0d8ccf38144fa90e244d1.tar.gz
+    mkdir -p $sourceRoot/contrib/mpack $sourceRoot/contrib/rapidjson $sourceRoot/contrib/libb64
+    cp ${libb64} $sourceRoot/contrib/libb64-${libb64-version}.zip
+    ${lib.getExe unzip} $sourceRoot/contrib/libb64-${libb64-version}.zip -d $sourceRoot/contrib/libb64-tmp
+    mv $sourceRoot/contrib/libb64-tmp/libb64-${libb64-version}/* $sourceRoot/contrib/libb64
+    rm -rf $sourceRoot/contrib/libb64-tmp $sourceRoot/contrib/libb64-${libb64-version}.zip
+    cp -r ${mpack}/** $sourceRoot/contrib/mpack
+    cp -r ${rapidjson}/** $sourceRoot/contrib/rapidjson
   '';
 
-  nativeBuildInputs = [ cmake ];
+  dontConfigure = true;
 
-  meta = with lib; {
+  preBuild = ''
+    cat > config.mk <<EOF
+    ${lib.optionalString (
+      configure_host != null
+    ) "HOST = ${configure_host}\nTOOL_PREFIX = ${configure_host}-\n"}
+    PREFIX = $out
+    DEBUG = ${toString configure_debug}
+    LIBB64_VERSION = ${libb64-version}
+    EOF
+  '';
+
+  meta = {
     description = "Command-line tools for converting between MessagePack and JSON";
     homepage = "https://github.com/ludocode/msgpack-tools";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ ];
+    changelog = "https://github.com/ludocode/msgpack-tools/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
-}
+})
