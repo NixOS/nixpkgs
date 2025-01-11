@@ -14,7 +14,7 @@
 
   libsForQt5,
 
-  withUnrar ? true,
+  withUnrar ? false,
   unrar, # has an unfree license
 }:
 
