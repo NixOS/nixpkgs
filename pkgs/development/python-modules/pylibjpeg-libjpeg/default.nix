@@ -12,18 +12,23 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-libjpeg";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-g4dGIGHo0J+F0KTVA6yjgfwiYVn6iU69jgHhvEQGwOc=";
+    hash = "sha256-xqSA1cutTsH9k4l9CW96n/CURzkAyDi3PZylZeedVjA=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'poetry-core >=1.8,<2' 'poetry-core'
+  '';
 
   build-system = [
     cython
