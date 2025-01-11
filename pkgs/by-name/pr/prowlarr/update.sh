@@ -19,15 +19,15 @@ updateHash()
     hash=$(nix-prefetch-url --type sha256 $url)
     sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-    sed -i "s|$system = \"sha256-[a-zA-Z0-9\/+-=]*\";|$system = \"$sriHash\";|g" "$dirname/default.nix"
+    sed -i "s|$system = \"sha256-[a-zA-Z0-9\/+-=]*\";|$system = \"$sriHash\";|g" "$dirname/package.nix"
 }
 
 updateVersion()
 {
-    sed -i "s/version = \"[0-9.]*\";/version = \"$1\";/g" "$dirname/default.nix"
+    sed -i "s/version = \"[0-9.]*\";/version = \"$1\";/g" "$dirname/package.nix"
 }
 
-currentVersion=$(cd $dirname && nix eval --raw -f ../../.. prowlarr.version)
+currentVersion=$(cd $dirname && nix eval --raw -f ../../../.. prowlarr.version)
 
 latestTag=$(curl https://api.github.com/repos/Prowlarr/Prowlarr/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr $latestTag : 'v\(.*\)')"
