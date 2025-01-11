@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  substitute,
+  fetchpatch,
   fetchurl,
   fetchFromGitHub,
   cmake,
@@ -179,6 +181,23 @@ stdenv.mkDerivation (finalAttrs: {
   # Build only the host software
   preConfigure = "cd host";
   patches = [
+    # fix for boost 187 remove on next update
+    (substitute {
+      src = fetchpatch {
+        name = "boost-187.patch";
+        url = "https://github.com/EttusResearch/uhd/commit/adfe953d965e58b5931c1b1968899492c8087cf6.patch";
+        hash = "sha256-qzxe6QhGoyBul7YjCiPJfeP+3dIoo1hh2sjgYmc9IiI=";
+      };
+      # The last two hunks in client.cc will fail without these substitutions
+      substitutions = [
+        "--replace-fail"
+        "[buffer, idx, func_name, p, this]"
+        "[=]"
+        "--replace-fail"
+        "[buffer, this]"
+        "[=]"
+      ];
+    })
     # Disable tests that fail in the sandbox, last checked at version 4.6.0.0
     ./no-adapter-tests.patch
   ];

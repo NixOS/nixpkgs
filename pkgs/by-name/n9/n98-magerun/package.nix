@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   php81,
+  nix-update-script,
 }:
 
 php81.buildComposerProject (finalAttrs: {
@@ -16,6 +17,14 @@ php81.buildComposerProject (finalAttrs: {
   };
 
   vendorHash = "sha256-n608AY6AQdVuN3hfVQk02vJQ6hl/0+4LVBOsBL5o3+8=";
+
+  passthru.updateScript = nix-update-script {
+    # Excludes 1.x versions from the Github tags list
+    extraArgs = [
+      "--version-regex"
+      "^(2\\.(.*))"
+    ];
+  };
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";
