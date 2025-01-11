@@ -22,7 +22,6 @@
   ld64,
   libffi,
   libiconv,
-  libtapi,
   libxml2,
   llvmPackages,
   ncurses,
@@ -181,11 +180,10 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Copy tools needed to build the SDK
       cp -d ${getBin jq}/bin/* $out/bin
-      cp -d ${getBin libtapi}/bin/* $out/bin
+      cp -d ${getBin llvmPackages.llvm}/bin/llvm-readtapi $out/bin
 
       cp -d ${getLib jq}/lib/lib*.dylib $out/lib
       cp -d ${getLib oniguruma}/lib/lib*.dylib $out/lib
-      cp -d ${getLib libtapi}/lib/libtapi*.dylib $out/lib
 
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
