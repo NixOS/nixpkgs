@@ -2451,13 +2451,6 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # https://github.com/obsidiansystems/dependent-sum/pull/73
-  dependent-sum-template = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/dependent-sum/commit/619727ba1792e39a68d23c62e75a923672e87a54.patch";
-    hash = "sha256-SyD1/KrX1KUjrR82fvI+BRcqLC2Q3AbvSeKNrdGstjg=";
-    relative = "dependent-sum-template";
-  }) super.dependent-sum-template;
-
   # doJailbreak: too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
   system-fileio = doJailbreak (dontCheck super.system-fileio);
