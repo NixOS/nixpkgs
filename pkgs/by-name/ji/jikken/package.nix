@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jikken";
-  version = "0.8.1";
+  version = "0.8.1-develop";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
     rev = "v${version}";
-    hash = "sha256-WJxrCCDe39RYwHb+zbr7ugFsFsP5Uc/arw3s6USQoN4=";
+    hash = "sha256-qvBYYcGIdww8k8DiShqOhfOAwmnpDS1q9sAfB4O2pIQ=";
   };
 
-  cargoHash = "sha256-vyByA05rcGd8/O9PKcIlUF8tq2UkomryW1nFsfqQNlk=";
+  cargoHash = "sha256-PVkSsCRlDGGyCfTLpXIMtF0OIo2bIFjUUekxIMliEXQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
