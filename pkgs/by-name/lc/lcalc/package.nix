@@ -9,19 +9,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.5";
+  version = "2.1.0";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = pname;
-    rev = version;
-    hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
+    tag = version;
+    hash = "sha256-v+7Uh6tPOfb3E9dqxx//RqD22XM4S/8ejS2v+D5G5pE=";
   };
-
-  # workaround for vendored GCC <complex> on libc++
-  # https://gitlab.com/sagemath/lcalc/-/issues/16
-  patches = [ ./libcxx-compat.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
