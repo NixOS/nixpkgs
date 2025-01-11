@@ -4671,8 +4671,6 @@ self: super: with self; {
 
   flask = callPackage ../development/python-modules/flask { };
 
-  flask-common = callPackage ../development/python-modules/flask-common { };
-
   flask-compress = callPackage ../development/python-modules/flask-compress { };
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
