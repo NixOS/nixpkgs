@@ -36,20 +36,31 @@ diff -Naurd x/third_party/absl/system.absl.crc.BUILD y/third_party/absl/system.a
 +    linkopts = ["-labsl_crc32c"],
 +    visibility = ["//visibility:public"],
 +)
-diff -Naurd x/third_party/absl/system.absl.functional.BUILD y/third_party/absl/system.absl.functional.BUILD
---- x/third_party/absl/system.absl.functional.BUILD	2024-10-10 10:15:40.640185040 +0000
-+++ y/third_party/absl/system.absl.functional.BUILD	2024-10-10 10:17:59.221375986 +0000
-@@ -4,10 +4,6 @@
+diff -Naurd x/third_party/absl/system.absl.flags.BUILD y/third_party/absl/system.absl.flags.BUILD
+--- x/third_party/absl/system.absl.flags.BUILD	2024-12-15 19:38:44.723946610 +0000
++++ y/third_party/absl/system.absl.flags.BUILD	2024-12-15 19:45:17.312776851 +0000
+@@ -97,7 +97,6 @@
  
  cc_library(
-     name = "any_invocable",
+     name = "flag",
+-    linkopts = ["-labsl_flags"],
+     deps = [
+         ":config",
+         ":flag_internal",
+diff -Naurd x/third_party/absl/system.absl.functional.BUILD y/third_party/absl/system.absl.functional.BUILD
+--- x/third_party/absl/system.absl.functional.BUILD	2024-12-23 22:57:02.844616004 +0000
++++ y/third_party/absl/system.absl.functional.BUILD	2024-12-24 09:07:15.229655674 +0000
+@@ -3,10 +3,6 @@
+ package(default_visibility = ["//visibility:public"])
+ 
+ cc_library(
+-    name = "any_invocable",
 -)
 -
 -cc_library(
--    name = "any_invocable",
-     deps = [
-         "//absl/base:base_internal",
-         "//absl/base:config",
+     name = "bind_front",
+ )
+ 
 diff -Naurd x/third_party/absl/system.absl.log.BUILD y/third_party/absl/system.absl.log.BUILD
 --- x/third_party/absl/system.absl.log.BUILD	1970-01-01 00:00:00.000000000 +0000
 +++ y/third_party/absl/system.absl.log.BUILD	2023-09-17 09:12:11.795762177 +0000
@@ -202,6 +213,17 @@ diff -Naurd x/third_party/absl/system.absl.strings.BUILD y/third_party/absl/syst
 +cc_library(
      name = "strings",
      linkopts = ["-labsl_strings"],
+     deps = [
+diff -Naurd x/third_party/absl/system.absl.synchronization.BUILD y/third_party/absl/system.absl.synchronization.BUILD
+--- x/third_party/absl/system.absl.synchronization.BUILD	2024-12-15 19:38:44.723946610 +0000
++++ y/third_party/absl/system.absl.synchronization.BUILD	2024-12-15 19:46:27.336925847 +0000
+@@ -20,6 +20,7 @@
+     name = "synchronization",
+     linkopts = [
+         "-labsl_synchronization",
++        "-labsl_kernel_timeout_internal",
+         "-pthread",
+     ],
      deps = [
 diff -Naurd x/third_party/absl/workspace.bzl y/third_party/absl/workspace.bzl
 --- x/third_party/absl/workspace.bzl	2024-10-10 10:16:56.508840929 +0000

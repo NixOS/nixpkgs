@@ -44,7 +44,7 @@
   charset-normalizer,
   markupsafe,
   psutil,
-  dm-tree,
+  optree,
   # Common deps
   git,
   pybind11,
@@ -59,6 +59,8 @@
   lndir,
   writeShellScriptBin,
   writeText,
+  patchelf,
+  unzip,
   # Common libraries
   jemalloc,
   mpi,
@@ -195,7 +197,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.16.2";
+  version = "2.17.0";
   format = "setuptools";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
@@ -520,18 +522,18 @@ let
     '';
   };
 
-  dm-tree-bazel = stdenv.mkDerivation {
-    name = "${dm-tree.pname}-bazel-${dm-tree.version}";
+  optree-bazel = stdenv.mkDerivation {
+    name = "${optree.pname}-bazel-${optree.version}";
     src = _bazel-build.deps;
     dontConfigure = true;
     dontBuild = true;
     installPhase = ''
       runHook preInstall
       mkdir $out
-      cp pypi_dm_tree/* $out
+      cp pypi_optree/* $out
       mkdir $out/site-packages
       ${lndir}/bin/lndir \
-        ${dm-tree}/lib/python${python_dotted}/site-packages \
+        ${optree}/lib/python${python_dotted}/site-packages \
         $out/site-packages
       runHook postInstall
     '';
@@ -664,7 +666,8 @@ let
             "--override_repository=pypi_h5py=${h5py-bazel}"
             "--override_repository=pypi_wrapt=${wrapt-bazel}"
             "--override_repository=pypi_markupsafe=${markupsafe-bazel}"
-            "--override_repository=pypi_dm_tree=${dm-tree-bazel}"
+            "--override_repository=pypi_optree=${optree-bazel}"
+            "--override_repository=ml_dtypes=${ml_dtypes-fix}"
             "--override_repository=pypi=${pypi-bazel}"
             "--override_repository=python=${python-bazel}"
             "--override_repository=python_version_repo=${python_version_repo-bazel}"
@@ -675,7 +678,6 @@ let
           ++ lib.optionals cudaSupport [
             "--override_repository=nccl_archive=${nccl_archive-fix}"
             "--override_repository=eigen_archive=${eigen_archive-fix}"
-            "--override_repository=ml_dtypes=${ml_dtypes-fix}"
           ];
       })
     else
@@ -699,7 +701,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       tag = "v${version}";
-      hash = "sha256-yBDS9DFkVLIT+bu/vqh/0U60UwoIzqlTKQsflM7GWCA=";
+      hash = "sha256-dJGmoYdOTumFdS8AWWGYp5HRxk/WMKQNRi2ubyD/TAU=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -717,6 +719,7 @@ let
         protobuf-extra
         wrapped_clang
         lndir
+        patchelf
       ]
       ++ lib.optional cudaSupport addDriverRunpath
       ++ lib.optional stdenv.isDarwin xcbuild
@@ -854,6 +857,16 @@ let
           url = "https://raw.githubusercontent.com/conda-forge/tensorflow-feedstock/0a63c5a962451b4da99a9948323d8b3ed462f461/recipe/patches/0001-Omit-linking-to-layout_proto_cc-if-protobuf-linkage-.patch";
           hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
         })
+        # this commit causes a libprotobuf error in:
+        # src/google/protobuf/descriptor_database.cc:642
+        # File already exists in database:
+        # tensorflow/core/tpu/kernels/sparse_core_layout.proto
+        (fetchpatch {
+          name = "fix-sparse-core-layout-proto-duplicate-loading.patch";
+          url = "https://github.com/tensorflow/tensorflow/commit/1d36138fd0204daa48d97d66e415f46ba91f0697.diff";
+          hash = "sha256-1rzz9zNTQVdKMI3ByeNT/CdLhOiCaYSrDE+/C31ekig=";
+          revert = true;
+        })
         ./fix-syslib-references.patch
         ./protobuf_lite.patch
         ./protobuf_cc_toolchain.patch
@@ -880,6 +893,8 @@ let
         rm -f .bazelversion
         patchShebangs .
         ln -s ${./riegeli-proto.patch} third_party/riegeli-proto.patch
+        substituteInPlace tensorflow/tools/pip_package/build_pip_package.py \
+          --replace-fail '"patchelf"' '"${patchelf}/bin/patchelf"'
       ''
       + lib.optionalString (!stdenv.isDarwin) ''
         sed \
@@ -954,7 +969,7 @@ let
     ] ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTargets = [
-      "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow"
+      "//tensorflow/tools/pip_package:wheel //tensorflow/tools/lib_package:libtensorflow"
     ];
 
     removeRulesCC = false;
@@ -979,7 +994,8 @@ let
           rm -rf external/pypi_h5py/site-packages
           rm -rf external/pypi_wrapt/site-packages
           rm -rf external/pypi_markupsafe/site-packages
-          rm -rf external/pypi_dm_tree/site-packages
+          rm -rf external/pypi_optree/site-packages
+          rm -rf external/pypi_ml_dtypes/site-packages
         ''
         + lib.optionalString (stdenv.isAarch64) ''
           rm -rf external/pypi_psutil/site-packages
@@ -1017,12 +1033,12 @@ let
             if cudaSupport then
               "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             else
-              "sha256-SlIIHoD4mLcUbcjkXch/NFA4khbHsj19v05Z6xMX0/Q=";
+              "sha256-bg3ii3T/Ic01xV73lSA2SYVmDIkNCasQo6fEhk9lVVk=";
           aarch64-linux =
             if cudaSupport then
               "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             else
-              "sha256-bGa4OVl0UtD1qZS/zlcnLnm72UbZEr2n2HtJOUprRTs=";
+              "sha256-d+wVbOzKGHM/yVlPiL/n8Uc/aqdhthPQhE4YMJlrLp8=";
           # deps hashes can't be computed for the Darwin platforms as of
           # 2024-10-21 as the expressions don't evaluate due to
           # python3Packages.jaraco-path being broken on these platforms
@@ -1040,7 +1056,7 @@ let
 
       # need to rebuild schemas since we use a different flatbuffers version
       preBuild = ''
-        (cd tensorflow/lite/schema;${flatbuffers-core}/bin/flatc --gen-object-api -c schema.fbs)
+        (cd tensorflow/lite/schema;${flatbuffers-core}/bin/flatc --gen-object-api -c schema_v3c.fbs)
         (cd tensorflow/lite/schema;${flatbuffers-core}/bin/flatc --gen-object-api -c conversion_metadata.fbs)
         (cd tensorflow/lite/acceleration/configuration;${flatbuffers-core}/bin/flatc -o configuration.fbs --proto configuration.proto)
         sed -i s,tflite.proto,tflite,g tensorflow/lite/acceleration/configuration/configuration.fbs/configuration.fbs
@@ -1068,10 +1084,9 @@ let
         Cflags: -I$out/include/tensorflow
         EOF
 
-        # build the source code, then copy it to $python (build_pip_package
-        # actually builds a symlink farm so we must dereference them).
-        bazel-bin/tensorflow/tools/pip_package/build_pip_package --src "$PWD/dist"
-        cp -Lr "$PWD/dist" "$python"
+        mkdir "$python"
+        cp bazel-bin/tensorflow/tools/pip_package/wheel_house/tensorflow-${version}-*.whl \
+          "$python/${pname}-${version}.whl"
       '';
 
       postFixup = lib.optionalString cudaSupport ''
@@ -1110,7 +1125,29 @@ buildPythonPackage {
   inherit version pname;
   disabled = pythonOlder "3.9";
 
-  src = bazel-build.python;
+  format = "other";
+
+  src = "${bazel-build.python}/${pname}-${version}.whl";
+
+  sourceRoot = ".";
+
+  unpackPhase = ''
+    runHook preUnpack
+    ${unzip}/bin/unzip $src
+    runHook postUnpack
+  '';
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/${python.sitePackages}
+    cp -r $sourceRoot/tensorflow* $out/${python.sitePackages}
+
+    runHook postInstall
+  '';
 
   # Adjust dependency requirements:
   # - Drop tensorflow-io dependency until we get it to build
@@ -1128,14 +1165,6 @@ buildPythonPackage {
     "libclang"
     "keras"
   ];
-
-  # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorboard, which causes environment collisions.
-  # Another possibility would be to have tensorboard only in the buildInputs
-  # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
-  postInstall = ''
-    rm $out/bin/tensorboard
-  '';
 
   setupPyGlobalFlags = [ "--project_name ${pname}" ];
 
@@ -1191,8 +1220,13 @@ buildPythonPackage {
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
   # TEST_PACKAGES in tensorflow/tools/pip_package/setup.py
   nativeCheckInputs = [
+    curl
     dill
+    double-conversion
+    grpc
+    jsoncpp
     portpicker
+    snappy
     tblib
   ];
   checkPhase = ''
