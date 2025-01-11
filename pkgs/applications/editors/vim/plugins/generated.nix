@@ -3113,6 +3113,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/ddc-filter-sorter_rank/";
   };
 
+  ddc-fuzzy = buildVimPlugin {
+    pname = "ddc-fuzzy";
+    version = "2025-01-07";
+    src = fetchFromGitHub {
+      owner = "tani";
+      repo = "ddc-fuzzy";
+      rev = "963f18c14bdb19f3925af0f7f775725be4438f3b";
+      sha256 = "0gwxicn3bpci0q0yb802wf2fzbmxggk6d74vgqr62fvlxhwamggk";
+    };
+    meta.homepage = "https://github.com/tani/ddc-fuzzy/";
+  };
+
   ddc-source-around = buildVimPlugin {
     pname = "ddc-source-around";
     version = "2024-12-28";
