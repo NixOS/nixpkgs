@@ -7647,6 +7647,8 @@ self: super: with self; {
 
   localimport = callPackage ../development/python-modules/localimport { };
 
+  local-attention = callPackage ../development/python-modules/local-attention { };
+
   localstack = callPackage ../development/python-modules/localstack { };
 
   localstack-client = callPackage ../development/python-modules/localstack-client { };
