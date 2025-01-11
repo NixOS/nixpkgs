@@ -1,0 +1,17 @@
+.TH nixos-firewall-tool 1
+.SH NAME
+nixos-firewall-tool \- a tool to temporarily manipulate the NixOS firewall
+.SH SYNOPSIS
+nixos-firewall-tool \fIsubcommand\fR
+
+Open TCP port:
+  nixos-firewall-tool open tcp 8888
+
+Open UDP port:
+  nixos-firewall-tool open udp 51820
+
+Show all firewall rules:
+  nixos-firewall-tool show
+
+Reset firewall configuration to system settings:
+  nixos-firewall-tool reset

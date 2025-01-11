@@ -1,0 +1,21 @@
+diff --git a/meson.build b/meson.build
+index d1527679e..360824994 100644
+--- a/meson.build
++++ b/meson.build
+@@ -320,15 +320,7 @@ docconf.set('LXC_USERNIC_CONF', lxc_user_network_conf)
+ docconf.set('LXC_USERNIC_DB', lxc_user_network_db)
+ docconf.set('PACKAGE_VERSION', version_data.get('LXC_VERSION'))
+ docconf.set('docdtd', '"-//OASIS//DTD DocBook XML" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"')
+-sgml2man = find_program('docbook2X2man', 'docbook2x-man', 'db2x_docbook2man', 'docbook2man', 'docbook-to-man', required: false, version: '>=0.8')
+-if not sgml2man.found()
+-    sgml2man = find_program('docbook2man', required: false, version: '<0.8')
+-    if sgml2man.found()
+-        docconf.set('docdtd', '"-//Davenport//DTD DocBook V3.0//EN"')
+-    elif want_mans
+-        error('missing required docbook2x or docbook-utils dependency')
+-    endif
+-endif
++sgml2man = find_program('docbook2X2man', 'docbook2x-man', 'db2x_docbook2man', 'docbook2man', 'docbook-to-man', required: false)
+ 
+ ## Threads.
+ threads = dependency('threads')

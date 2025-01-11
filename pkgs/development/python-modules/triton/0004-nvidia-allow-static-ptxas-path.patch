@@ -1,0 +1,26 @@
+From e503e572b6d444cd27f1cdf124aaf553aa3a8665 Mon Sep 17 00:00:00 2001
+From: SomeoneSerge <else+aalto@someonex.net>
+Date: Mon, 14 Oct 2024 00:12:05 +0000
+Subject: [PATCH 4/4] nvidia: allow static ptxas path
+
+---
+ third_party/nvidia/backend/compiler.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/third_party/nvidia/backend/compiler.py b/third_party/nvidia/backend/compiler.py
+index 6d7994923..6720e8f97 100644
+--- a/third_party/nvidia/backend/compiler.py
++++ b/third_party/nvidia/backend/compiler.py
+@@ -20,6 +20,9 @@ def _path_to_binary(binary: str):
+         os.path.join(os.path.dirname(__file__), "bin", binary),
+     ]
+ 
++    import shlex
++    paths.extend(shlex.split("@nixpkgsExtraBinaryPaths@"))
++
+     for bin in paths:
+         if os.path.exists(bin) and os.path.isfile(bin):
+             result = subprocess.check_output([bin, "--version"], stderr=subprocess.STDOUT)
+-- 
+2.46.0
+

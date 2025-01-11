@@ -1,0 +1,31 @@
+From 2cc80dc06ea42087788cf27b31821ffa99a22f89 Mon Sep 17 00:00:00 2001
+From: Johannes Lode <johannes.lode@dynainstruments.com>
+Date: Thu, 14 Nov 2019 10:44:00 +0100
+Subject: [PATCH] Drop AC_FUNC_MALLOC and _REALLOC and check for them as
+ regular functions.
+
+While cross-compiling there occurred "undefined reference to
+`rpl_malloc'", the suggested change fixes the problem.
+
+Tested for native X86_64 and armv7a-unknown-linux-gnueabihf.
+---
+ configure.ac | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 008499d..b492dc4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -81,7 +81,8 @@ AC_DEFUN([HEADER_NOT_FOUND_CXX],
+ 
+ # This is always checked (library needs this)
+ AC_HEADER_STDC
+-AC_FUNC_MALLOC
++# AC_FUNC_MALLOC -- does not work while cross-compiling
++AC_CHECK_FUNC([malloc realloc])
+ AC_CHECK_FUNC([ioctl], [], [FUNC_NOT_FOUND_LIB([ioctl])])
+ AC_CHECK_FUNC([asprintf], [], [FUNC_NOT_FOUND_LIB([asprintf])])
+ AC_CHECK_FUNC([scandir], [], [FUNC_NOT_FOUND_LIB([scandir])])
+-- 
+2.25.1
+
