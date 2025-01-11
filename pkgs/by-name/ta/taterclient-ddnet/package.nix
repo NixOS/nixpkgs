@@ -34,18 +34,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.0.1";
+  version = "10.0.3";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-mYT/njNzMwGOFKcWZMGOpS0DMu7Wy07nBP4wGpDi4Fc=";
+    hash = "sha256-RhOZuPsjyXq5UcM+5dawDi1BfjMMQ3K9O3PHkCg5sDI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-aJmdh9OthB2OyrFdxkq4xjLBphA7nn3JVmcNdJZ4pZ8=";
+    hash = "sha256-NDeHpf1iYApP/Y/DE7FGBu67ld6A0+8227oTVlOMe1M=";
   };
 
   nativeBuildInputs = [
@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CLIENT" true)
     (lib.cmakeBool "SERVER" false)
     (lib.cmakeBool "TOOLS" false)
+    (lib.cmakeBool "DISCORD" false)
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
