@@ -231,8 +231,15 @@ in
       };
       package = lib.mkPackageOption pkgs "ceph" { };
       extraConfig = lib.mkOption {
-        type = with lib.types; attrsOf str;
+        type = with lib.types; attrsOf (attrsOf str);
         default = {};
+        example = lib.literalExpression ''
+          {
+            # This would create a section for a mon daemon named node1 and related
+            # configuration for it
+            "mon.node1" = { "public_addr" = "10.10.10.1"; };
+          };
+        '';
         description = ''
           Extra configuration to add to the monitor section.
         '';
