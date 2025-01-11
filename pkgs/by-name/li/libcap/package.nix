@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-  ] ++ lib.optionals withGo [
+  ];
+
+  nativeBuildInputs = lib.optionals withGo [
     go
   ];
 
@@ -47,6 +49,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGo [
     "GOLANG=yes"
     ''GOCACHE=''${TMPDIR}/go-cache''
+    "GOFLAGS=-trimpath"
     "GOARCH=${go.GOARCH}"
     "GOOS=${go.GOOS}"
   ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
@@ -82,6 +85,10 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
+
+  disallowedReferences = lib.optionals withGo [
+    go
+  ];
 
   passthru.tests = {
     inherit
