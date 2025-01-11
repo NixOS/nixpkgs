@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       touchegg = touchegg;
     })
   ];

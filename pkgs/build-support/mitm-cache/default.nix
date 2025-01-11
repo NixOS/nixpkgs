@@ -4,7 +4,7 @@
   fetchFromGitHub,
   callPackage,
   rustPlatform,
-  substituteAll,
+  replaceVars,
   openssl,
   Security,
   python3Packages,
@@ -27,8 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6eYOSSlswJGR2IrFo17qVnwI+h2FkyTjLFvwf62nG2c=";
 
-  setupHook = substituteAll {
-    src = ./setup-hook.sh;
+  setupHook = replaceVars ./setup-hook.sh {
     inherit openssl;
     ephemeral_port_reserve = python3Packages.ephemeral-port-reserve;
   };

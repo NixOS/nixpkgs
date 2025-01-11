@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   gnome-power-manager,
   pkg-config,
@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gnome_power_manager = gnome-power-manager;
     })
   ];
