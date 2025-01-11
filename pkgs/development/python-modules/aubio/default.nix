@@ -39,6 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aubio" ];
 
+  disabledTests = [
+    # https://github.com/aubio/aubio/issues/413
+    "test_assign_cvec_phas_slice"
+  ];
+
   meta = with lib; {
     description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
