@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   rapidjson,
   AppKit,
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=true"
     "-DBUILD_EXAMPLES=${lib.boolToString buildExamples}"
+  ];
+
+  patches = [
+    # Adds unreleased PR https://github.com/discord/discord-rpc/pull/387
+    (fetchpatch {
+      name = "0001-Update-.clang-format.patch";
+      url = "https://github.com/discord/discord-rpc/commit/dc26645316a1996a10995d9f5fae53ca1caddade.patch";
+      hash = "sha256-geofgXwfbDsvsYCz92IVFrdvBDiGvMBiFd3GEbsdoHU=";
+    })
   ];
 
   meta = with lib; {
