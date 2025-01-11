@@ -10,9 +10,14 @@ let
     nim2 = nim-2_0;
   };
 in
-buildNimPackage' (finalAttrs: {
+buildNimPackage' (finalAttrs: rec {
   pname = "nph";
   version = "0.6.1";
+
+  postPatch = ''
+    substituteInPlace src/nph.nim \
+      --replace-fail 'git describe --long --dirty --always --tags' "echo ${version}"
+  '';
 
   src = fetchFromGitHub {
     owner = "arnetheduck";
