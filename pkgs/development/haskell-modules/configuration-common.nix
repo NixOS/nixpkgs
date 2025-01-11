@@ -2657,6 +2657,8 @@ self: super: {
 
   # Overly strict bounds on tasty-quickcheck (test suite)
   hashable = doJailbreak super.hashable;
+  # https://github.com/haskell/aeson/pull/1126
+  text-iso8601 = doJailbreak super.text-iso8601;
 
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
