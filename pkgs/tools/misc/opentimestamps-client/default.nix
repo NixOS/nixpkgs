@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "opentimestamps-client";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "opentimestamps";
     repo = "opentimestamps-client";
     tag = "opentimestamps-client-v${version}";
-    hash = "sha256-0dWaXetRlF1MveBdJ0sAdqJ5HCdn08gkbX+nen/ygsQ=";
+    hash = "sha256-ny2svB8WcoUky8UfeilANo1DlS+f3o9RtV4YNmUwjJk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
