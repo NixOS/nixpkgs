@@ -1954,8 +1954,6 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
-  badchars = python3Packages.callPackage ../tools/security/badchars { };
-
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
