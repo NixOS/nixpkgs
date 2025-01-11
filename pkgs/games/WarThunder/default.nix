@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://warthunder.com/";
-    description = "Military Vehicle PVP simulator, tanks, planes, warships";
+    description = "Military Vehicle PVP simulator, tanks, planes, warships. Report bugs with this nix pacakge as an issue on github @https://github.com/Mephist0phel3s/nixpkgs/issues";
     platforms = platforms.linux;
   };
 }
