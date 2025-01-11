@@ -12,7 +12,7 @@ let
   # The builder used to write during system activation
   builder = import ./extlinux-conf-builder.nix { inherit lib pkgs; };
   # The builder exposed in populateCmd, which runs on the build architecture
-  populateBuilder = import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; };
+  populateBuilder = import ./extlinux-conf-builder.nix { inherit lib; pkgs = pkgs.buildPackages; };
 in
 {
   options = {
