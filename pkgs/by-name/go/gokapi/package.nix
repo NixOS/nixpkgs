@@ -59,7 +59,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Lightweight selfhosted Firefox Send alternative without public upload. AWS S3 supported";
+    description = "Lightweight selfhosted Firefox Send alternative without public upload";
     homepage = "https://github.com/Forceu/Gokapi";
     changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
