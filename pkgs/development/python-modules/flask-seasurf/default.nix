@@ -1,40 +1,40 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
-  isPy3k,
+  setuptools,
   flask,
   mock,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-seasurf";
   version = "2.0.0";
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxcountryman";
     repo = "flask-seasurf";
-    rev = version;
+    tag = version;
     hash = "sha256-ajQiDizNaF0em9CVeaHEuJEeSaYraJh9YgvhvBPTIsk=";
   };
 
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ flask ];
+  dependencies = [ flask ];
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
     mock
   ];
 
   pythonImportsCheck = [ "flask_seasurf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flask extension for preventing cross-site request forgery";
     homepage = "https://github.com/maxcountryman/flask-seasurf";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }
