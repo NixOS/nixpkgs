@@ -1,31 +1,23 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   fetchpatch,
   pkg-config,
-  libiconv,
-  darwin,
-  testers,
-  llm-ls,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "llm-ls";
   version = "0.5.3";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "llm-ls";
-    rev = version;
+    tag = version;
     hash = "sha256-ICMM2kqrHFlKt2/jmE4gum1Eb32afTJkT3IRoqcjJJ8=";
   };
-
-  cargoHash = "sha256-m/w9aJZCCh1rgnHlkGQD/pUDoWn2/WRVt5X4pFx9nC4=";
 
   cargoPatches = [
     # https://github.com/huggingface/llm-ls/pull/102
@@ -36,29 +28,29 @@ rustPlatform.buildRustPackage {
       hash = "sha256-4gXasfMqlrrP8II+FiV/qGfO7a9qFkDQMiax7yEua5E=";
     })
   ];
+  cargoHash = "sha256-m/w9aJZCCh1rgnHlkGQD/pUDoWn2/WRVt5X4pFx9nC4=";
 
   buildAndTestSubdir = "crates/llm-ls";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libiconv
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = llm-ls;
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "LSP server leveraging LLMs for code completion (and more?)";
     homepage = "https://github.com/huggingface/llm-ls";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jfvillablanca ];
-    platforms = platforms.all;
+    changelog = "https://github.com/huggingface/llm-ls/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
+    platforms = lib.platforms.all;
     mainProgram = "llm-ls";
   };
 }
