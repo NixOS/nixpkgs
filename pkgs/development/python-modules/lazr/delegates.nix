@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "lazr-delegates";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "lazr.delegates";
+    pname = "lazr_delegates";
     inherit version;
-    hash = "sha256-UNT7iHK5UuV6SOEmEOVQ+jBm7rV8bGx1tqUUJBi6wZw=";
+    hash = "sha256-rs6yYW5Rtz8yf78SxOwrfXZwy4IL1eT2hRIV+3lsAtw=";
   };
 
   nativeBuildInputs = [ setuptools ];
