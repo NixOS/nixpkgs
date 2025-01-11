@@ -56,7 +56,7 @@ buildNpmPackage rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for balenaCloud or openBalena";
     longDescription = ''
       The balena CLI is a Command Line Interface for balenaCloud or openBalena. It is a software
@@ -66,10 +66,10 @@ buildNpmPackage rec {
     '';
     homepage = "https://github.com/balena-io/balena-cli";
     changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [
-      maintainers.kalebpace
-      maintainers.doronbehar
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      kalebpace
+      doronbehar
     ];
     mainProgram = "balena";
   };
