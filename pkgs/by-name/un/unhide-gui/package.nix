@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "unhide-gui";
-  version = "20220611";
+  version = "20240510";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "YJesus";
     repo = "Unhide";
-    rev = "v${version}";
-    hash = "sha256-v4otbDhKKRLywH6aP+mbMR0olHbW+jk4TXTBY+iaxdo=";
+    tag = "v${version}";
+    hash = "sha256-CcS/rR/jPgbcF09aM4l6z52kwFhdQI1VZOyDF2/X6Us=";
   };
 
   propagatedBuildInputs = with python3Packages; [ tkinter ];
