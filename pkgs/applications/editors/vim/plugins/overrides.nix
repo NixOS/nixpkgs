@@ -916,6 +916,10 @@ in
     dependencies = [ self.ddc-vim ];
   };
 
+  ddc-fuzzy = super.ddc-fuzzy.overrideAttrs {
+    dependencies = [ self.ddc-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = [ self.nvim-yarp ];
   };
