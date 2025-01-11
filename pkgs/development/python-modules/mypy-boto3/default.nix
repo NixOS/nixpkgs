@@ -1094,8 +1094,8 @@ rec {
       "sha256-anaaP4VNdI4ZQWTp/8R6G4APscb6AS5Lo6YRjwbtGFM=";
 
   mypy-boto3-redshift =
-    buildMypyBoto3Package "redshift" "1.35.93"
-      "sha256-Y7MZ0ZZu11nCFU2PJWue6zpXp0kefb1vWDYu2HqAe58=";
+    buildMypyBoto3Package "redshift" "1.35.97"
+      "sha256-gJm76sCPgpS9ekNDCmtt68atbVbNh4B8IqO7lS6C3ic=";
 
   mypy-boto3-redshift-data =
     buildMypyBoto3Package "redshift-data" "1.35.93"
@@ -1226,8 +1226,8 @@ rec {
       "sha256-2kPOD5J5TK+vQbQVFfK9z68uTeXL62sj1Jqe2CuB4sw=";
 
   mypy-boto3-securitylake =
-    buildMypyBoto3Package "securitylake" "1.35.93"
-      "sha256-mHi82d7YO8N0ybimZ22wautkkJR3KILHu78p0am9lmk=";
+    buildMypyBoto3Package "securitylake" "1.35.97"
+      "sha256-m+cjupsQESwFSTcWE6JwIG6Pyx9kri4GwJyjXLlLdos=";
 
   mypy-boto3-serverlessrepo =
     buildMypyBoto3Package "serverlessrepo" "1.35.93"
@@ -1330,8 +1330,8 @@ rec {
       "sha256-HVi4ZB2gqc1Y+yTrQagG0JgtMsMoASoLrHlLCZA7GUE=";
 
   mypy-boto3-sts =
-    buildMypyBoto3Package "sts" "1.35.93"
-      "sha256-s+uh11yTUuMPnKswfc2JAh175JcZh26IECKzSlLqdfw=";
+    buildMypyBoto3Package "sts" "1.35.97"
+      "sha256-bfaY9qQAqC68wvEK20NVf2YnhGcgDg91WI594+ShYi0=";
 
   mypy-boto3-support =
     buildMypyBoto3Package "support" "1.35.93"
