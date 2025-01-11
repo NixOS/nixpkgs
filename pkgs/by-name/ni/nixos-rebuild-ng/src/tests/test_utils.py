@@ -23,6 +23,7 @@ def test_dict_to_flags() -> None:
         "value",
         "--test-flag-4",
         "v1",
+        "--test-flag-4",
         "v2",
         "-t",
         "-vvvvv",

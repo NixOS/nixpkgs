@@ -152,6 +152,55 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
+def test_execute_nix_build_vm(mock_run: Any, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build-vm",
+            "--no-flake",
+            "-I",
+            "nixos-config=./configuration.nix",
+            "-I",
+            "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            "--fast",
+        ]
+    )
+
+    assert mock_run.call_count == 1
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix-build",
+                    "<nixpkgs/nixos>",
+                    "--attr",
+                    "config.system.build.vm",
+                    "--include",
+                    "nixos-config=./configuration.nix",
+                    "--include",
+                    "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            )
+        ]
+    )
+
+
+@patch.dict(nr.process.os.environ, {}, clear=True)
+@patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 def test_execute_nix_build_image_flake(mock_run: Any, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
