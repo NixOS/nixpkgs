@@ -1,35 +1,49 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   cython,
+  setuptools,
   numpy,
   scipy,
+  pytestCheckHook,
+  python,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tess";
-  version = "unstable-2019-05-07";
-  format = "setuptools";
+  version = "0.3.1";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "wackywendell";
-    repo = "tess";
-    rev = "22c19df952732f9749637d1bf6d7b676b6c7b26c";
-    sha256 = "0pj18nrfx749fjc6bjdk5r3g1104c6jy6xg7jrpmssllhypbb1m4";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-5Ic06+K7CWRh1t2v3aJ5JlBACvHXqQyYzvU71jZJFtI=";
   };
 
-  buildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "tess" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tess/tests.py" ];
+
+  preCheck = ''
+    cd $out/${python.sitePackages}
+  '';
+
+  meta = {
     description = "Module for calculating and analyzing Voronoi tessellations";
     homepage = "https://tess.readthedocs.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
