@@ -1,0 +1,26 @@
+diff --git a/snapcraft_legacy/internal/common.py b/snapcraft_legacy/internal/common.py
+index 6017b405..aacd99a5 100644
+--- a/snapcraft_legacy/internal/common.py
++++ b/snapcraft_legacy/internal/common.py
+@@ -34,14 +34,17 @@ from snaphelpers import SnapConfigOptions, SnapCtlError
+ 
+ from snapcraft_legacy.internal import errors
+ 
++# Get the path to the Nix store entry for Snapcraft at runtime
++drv = os.path.realpath(__file__).split("/")[3]
++
+ SNAPCRAFT_FILES = ["parts", "stage", "prime"]
+-_DEFAULT_PLUGINDIR = os.path.join(sys.prefix, "share", "snapcraft", "plugins")
++_DEFAULT_PLUGINDIR = os.path.join(os.sep, "nix", "store", drv, "share", "snapcraft", "plugins")
+ _plugindir = _DEFAULT_PLUGINDIR
+-_DEFAULT_SCHEMADIR = os.path.join(sys.prefix, "share", "snapcraft", "schema")
++_DEFAULT_SCHEMADIR = os.path.join(os.sep, "nix", "store", drv, "share", "snapcraft", "schema")
+ _schemadir = _DEFAULT_SCHEMADIR
+-_DEFAULT_EXTENSIONSDIR = os.path.join(sys.prefix, "share", "snapcraft", "extensions")
++_DEFAULT_EXTENSIONSDIR = os.path.join(os.sep, "nix", "store", drv, "share", "snapcraft", "extensions")
+ _extensionsdir = _DEFAULT_EXTENSIONSDIR
+-_DEFAULT_KEYRINGSDIR = os.path.join(sys.prefix, "share", "snapcraft", "keyrings")
++_DEFAULT_KEYRINGSDIR = os.path.join(os.sep, "nix", "store", drv, "share", "snapcraft", "keyrings")
+ _keyringsdir = _DEFAULT_KEYRINGSDIR
+ 
+ _DOCKERENV_FILE = "/.dockerenv"

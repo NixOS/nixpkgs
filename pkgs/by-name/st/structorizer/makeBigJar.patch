@@ -1,0 +1,31 @@
+Reason: Running the program in a headless environment fails. Besides, tests should be conducted in passthru.tests anyway. There is also no AppleStructorizerApplication.class, only the jar.
+
+diff --git a/makeBigJar b/makeBigJar
+index 25547020..c34d0d9c 100644
+--- a/makeBigJar
++++ b/makeBigJar
+@@ -75,9 +75,8 @@ jars="bsh-2.1.0                     \
+       freehep-xml-2.1.1             \
+       freehep"
+ 
+-# Apple specific stuff is only used if it exists and the compiled class is available
+-if test -f ../bin/lu/fisch/structorizer/application/AppleStructorizerApplication.class -a \
+-        -f AppleJavaExtensions.jar; then
++# Apple specific stuff is only used if the jar is available
++if test -f lib/AppleJavaExtensions.jar; then
+   jars="$jars AppleJavaExtensions"
+ fi
+ 
+@@ -114,12 +113,3 @@ echo "Done"
+ # remove the jar-directory
+ rm -R jar/
+ 
+-if test -n "$start_compiled"; then
+-  # execute the archive
+-  echo; echo "Running Structorizer from all-in-one jar"
+-  if test "$start_compiled" = "s"; then
+-    java -jar structorizer.jar
+-  else
+-    java -jar structorizer.jar &
+-  fi
+-fi  # start block end
