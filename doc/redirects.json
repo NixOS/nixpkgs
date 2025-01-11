@@ -2,6 +2,12 @@
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "neovim": [
+    "index.html#neovim"
+  ],
+  "neovim-custom-configuration": [
+    "index.html#neovim-custom-configuration"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
@@ -3763,7 +3769,8 @@
   "vim": [
     "index.html#vim"
   ],
-  "custom-configuration": [
+  "vim-custom-configuration": [
+    "index.html#vim-custom-configuration",
     "index.html#custom-configuration"
   ],
   "managing-plugins-with-vim-packages": [
@@ -3772,10 +3779,12 @@
   "what-if-your-favourite-vim-plugin-isnt-already-packaged": [
     "index.html#what-if-your-favourite-vim-plugin-isnt-already-packaged"
   ],
-  "vim-plugin-specificities": [
-    "index.html#vim-plugin-specificities"
+  "neovim-plugin-specificities": [
+    "index.html#neovim-plugin-specificities",
+    "neovim-plugin-specificities#vim-plugin-specificities"
   ],
-  "vim-plugin-treesitter": [
+  "neovim-plugin-treesitter": [
+    "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
   "managing-plugins-with-vim-plug": [
