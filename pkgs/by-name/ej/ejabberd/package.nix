@@ -17,10 +17,8 @@
   gd,
   autoreconfHook,
   gawk,
-  rebar3WithPlugins,
   fetchFromGitHub,
   fetchgit,
-  fetchHex,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -40,6 +38,8 @@
 }:
 
 let
+  inherit (beamPackages) buildRebar3 fetchHex rebar3WithPlugins;
+
   ctlpath = lib.makeBinPath [
     bash
     gnused
@@ -50,7 +50,7 @@ let
     procps
   ];
 
-  provider_asn1 = beamPackages.buildRebar3 {
+  provider_asn1 = buildRebar3 {
     name = "provider_asn1";
     version = "0.3.0";
     src = fetchHex {
@@ -60,7 +60,7 @@ let
     };
     beamDeps = [ ];
   };
-  rebar3_hex = beamPackages.buildRebar3 {
+  rebar3_hex = buildRebar3 {
     name = "rebar3_hex";
     version = "7.0.7";
     src = fetchHex {
@@ -73,7 +73,7 @@ let
 
   allBeamDeps = import ./rebar-deps.nix {
     inherit fetchHex fetchgit fetchFromGitHub;
-    builder = lib.makeOverridable beamPackages.buildRebar3;
+    builder = lib.makeOverridable buildRebar3;
 
     overrides = final: prev: {
       jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
