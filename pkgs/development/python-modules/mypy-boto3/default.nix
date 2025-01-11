@@ -1226,8 +1226,8 @@ rec {
       "sha256-2kPOD5J5TK+vQbQVFfK9z68uTeXL62sj1Jqe2CuB4sw=";
 
   mypy-boto3-securitylake =
-    buildMypyBoto3Package "securitylake" "1.35.93"
-      "sha256-mHi82d7YO8N0ybimZ22wautkkJR3KILHu78p0am9lmk=";
+    buildMypyBoto3Package "securitylake" "1.35.97"
+      "sha256-m+cjupsQESwFSTcWE6JwIG6Pyx9kri4GwJyjXLlLdos=";
 
   mypy-boto3-serverlessrepo =
     buildMypyBoto3Package "serverlessrepo" "1.35.93"
