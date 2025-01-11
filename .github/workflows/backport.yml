@@ -1,12 +1,13 @@
-name: Backport
-on:
-  pull_request_target:
-    types: [closed, labeled]
-
 # WARNING:
 # When extending this action, be aware that $GITHUB_TOKEN allows write access to
 # the GitHub repository. This means that it should not evaluate user input in a
 # way that allows code injection.
+
+name: Backport
+
+on:
+  pull_request_target:
+    types: [closed, labeled]
 
 permissions: {}
 
@@ -23,10 +24,12 @@ jobs:
         with:
           app-id: ${{ vars.BACKPORT_APP_ID }}
           private-key: ${{ secrets.BACKPORT_PRIVATE_KEY }}
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
+
       - name: Create backport PRs
         uses: korthout/backport-action@be567af183754f6a5d831ae90f648954763f17f5 # v3.1.0
         with:
