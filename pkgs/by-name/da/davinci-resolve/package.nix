@@ -30,6 +30,12 @@
 
   common-updater-scripts,
   writeShellApplication,
+
+  # overriding pythonPackage allows customizing python in the FHS environment
+  pythonPackage ? (python3.withPackages (python-pkgs: with python-pkgs; [
+    numpy
+  ])),
+
 }:
 
 let
@@ -212,8 +218,7 @@ fhs = buildFHSEnv {
       nss
       ocl-icd
       opencl-headers
-      python3
-      python3.pkgs.numpy
+      pythonPackage
       udev
       xcb-util-cursor
       xdg-utils  # xdg-open needed to open URLs
@@ -323,6 +328,11 @@ mkWrapper = path: libs: plugins: args: writeShellScriptBin path ''
     export QT_PLUGIN_PATH="${plugins}:$QT_PLUGIN_PATH"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${libs}"
 
+    # this allows Python to find the modules, see Developer/Scripting/README.txt
+    export RESOLVE_SCRIPT_API="${davinci}/Developer/Scripting"
+    export RESOLVE_SCRIPT_LIB="${davinci}/libs/Fusion/fusionscript.so"
+    export PYTHONPATH="$PYTHONPATH:${davinci}/Developer/Scripting/Modules"
+
     exec ${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([wrapper] ++ args)} "$@"
 '';
 
@@ -341,6 +351,8 @@ rawPlayerWrapper = mkWrapper "${davinci.pname}-raw-player" "${davinci}/Blackmagi
 
 remoteMonitorWrapper = mkWrapper "${davinci.pname}-monitor" "${davinci}/libs" "${davinci}/libs/plugins" ["${davinci}/bin/DaVinci Remote Monitor"];
 
+pythonWrapper = mkWrapper "${davinci.pname}-python" "${davinci}/libs" "${davinci}/libs/plugins" [ "${pythonPackage}/bin/python" ];
+
 product = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
 
 in
@@ -356,6 +368,7 @@ symlinkJoin {
     rawSpeedTestWrapper
     rawPlayerWrapper
     remoteMonitorWrapper
+    pythonWrapper
 
     resolveUdev
     resolveXdg
@@ -486,7 +499,29 @@ symlinkJoin {
           ${davinci.pname}
         ];
       ```
-    '';
+
+      Scripting using Python is supported. To add Python packages, override `pythonPackage`.
+      Example, corresponding to the default:
+      ```
+      environment.systemPackages = with pkgs; [
+        (${davinci.pname}.override {
+           pythonPackage = python3.withPackages (python-pkgs: with python-pkgs; [
+             numpy
+             # add extra Python packages here
+          ]);
+        })
+      ];
+      ```
+      Use `${davinci.pname}-python` to run Python inside the FHS environment.
+    '' + (lib.optionalString studioVariant ''
+
+      DaVinci Resolve Studio additionally support remote scripting. Example:
+      ```
+      ${davinci.pname} -nogui & sleep 30  # wait until Resolve has started up
+      SCRIPTING_PATH=''$(${davinci.pname}-shell -c "printenv RESOLVE_SCRIPT_API")
+      ${davinci.pname}-python ''$SCRIPTING_PATH/Examples/4_display_project_and_folder_tree.py
+      ```
+    '');
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
