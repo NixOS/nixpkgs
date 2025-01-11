@@ -913,6 +913,10 @@ in
     dependencies = [ self.ddc-vim ];
   };
 
+  ddc-source-file = super.ddc-source-file.overrideAttrs {
+    dependencies = [ self.ddc-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = [ self.nvim-yarp ];
   };
