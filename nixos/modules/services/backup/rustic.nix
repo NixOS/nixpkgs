@@ -147,7 +147,7 @@ let
       type = lib.types.attrTag {
         nothing = lib.mkOption {
           description = "Do nothing with the result.";
-          type = lib.types.any;
+          type = lib.types.unspecified;
         };
 
         command = lib.mkOption {
@@ -163,7 +163,7 @@ let
 
         prometheus = lib.mkOption {
           description = "Write the result as prometheus metrics.";
-          type = lib.types.submodule {  
+          type = lib.types.submodule {
             options.nodeExporterCollectorFolder = lib.mkOption {
               type = lib.types.path;
               description = ''
@@ -216,6 +216,14 @@ in
 
     backups = lib.mkOption {
       default = {};
+      description = ''
+        Backup configurations.
+
+        Each key is the name of the backup, and the value is the parameters
+        with which this backup will be run. This allows setting multiple backups
+        running at different intervals, and backing up different folders or
+        databases.
+      '';
       type = lib.types.attrsOf (lib.types.attrTag {
         files = lib.mkOption {
           description = "Backup files and directories.";
@@ -265,7 +273,7 @@ in
         postgres = lib.mkOption {
           description = ''
             Backup all postgresql databases.
-            
+
             Use a custom `command` using `pg_dump` if you want to backup a single
             database.
 
@@ -286,6 +294,14 @@ in
 
     checks = lib.mkOption {
       default = {};
+      description = ''
+        Check configurations.
+
+        Each key is the name of the check, and the value is the parameters
+        with which this check will be run. This allows setting multiple check
+        running at different intervals, eg. a frequent metadata-only check and
+        an infrequent full-data check.
+      '';
       type = lib.types.attrsOf (lib.types.submodule { options = commonOptions; });
     };
 
