@@ -9397,9 +9397,7 @@ with pkgs;
 
   isort = with python3Packages; toPythonApplication isort;
 
-  ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_17;
-  };
+  ispc = callPackage ../development/compilers/ispc { };
 
   isso = callPackage ../servers/isso {
     nodejs = nodejs_20;
