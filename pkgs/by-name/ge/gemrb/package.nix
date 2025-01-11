@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
-    hash = "sha256-n01Q/27iYXahBbUDFHW1Q3lPqCtTvhstUBgownZbKtg=";
+    hash = "sha256-+aPnOJQGRblqcrblVU5ZwA8CZqeT19rxEtn3GLuofYU=";
   };
 
   buildInputs = [
