@@ -24,7 +24,7 @@ jobs:
       contents: write  # for devmasx/merge-branch to merge branches
       pull-requests: write  # for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       # don't fail fast, so that all pairs are tried
       fail-fast: false

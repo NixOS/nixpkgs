@@ -25,7 +25,7 @@ jobs:
   check:
     name: nixpkgs-vet
     # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # This should take 1 minute at most, but let's be generous. The default of 6 hours is definitely too long.
     timeout-minutes: 10
     needs: get-merge-commit
