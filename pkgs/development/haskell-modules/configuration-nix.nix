@@ -1414,16 +1414,6 @@ self: super: builtins.intersectAttrs super {
     '';
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
-    patches = old.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        # related: https://github.com/haskell/cabal/issues/10504
-        name = "suppress-error-about-missing-local-index.patch";
-        url = "https://github.com/haskell/cabal/commit/d58a75ef4adab36688878420cc9e2c25bca41ec4.patch";
-        hash = "sha256-IZ+agNNN9AcIJBBsT30LAkAXCAoYKF+kIhccGPFdm+8=";
-        stripLen = 1;
-        includes = [ "src/Distribution/Client/IndexUtils.hs" ];
-      })
-    ];
   }) super.cabal-install;
 
   tailwind = addBuildDepend
