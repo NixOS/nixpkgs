@@ -95,6 +95,11 @@ let
     lib.optional hasInfo "info";
   outputDrvs = lib.getAttrs outputs containers;
 
+  # derivation for texlive.pkgs
+  mainDrv = removeAttrs (if outputs == [ ] then fakeTeX else containers.${builtins.head outputs}) [ "outputSpecified" ]
+    # pretend to have all outputs (for use in build-tex-env.nix)
+    // { inherit outputs; };
+
   passthru = {
     # metadata
     inherit pname;
@@ -102,6 +107,8 @@ let
     version = version + extraVersion;
     # containers behave like specified outputs
     outputSpecified = true;
+    # derivation for top level texlivePackages
+    inherit build;
   } // lib.optionalAttrs (args ? deps) { tlDeps = args.deps; }
   // lib.optionalAttrs (args ? fontMaps) { inherit (args) fontMaps; }
   // lib.optionalAttrs (args ? formats) { inherit (args) formats; }
@@ -239,15 +246,15 @@ let
       '';
     }
     # each output is just a symlink to the corresponding container
-    # if the container is missing (that is, outputs == [ ]), create a file, to prevent passing the package to .withPackages
+    # if there are no containers (that is, outputs == [ ]), create a file, to forbid passing the package to .withPackages
     ''
-      for outputName in ''${!outputs[@]} ; do
-        if [[ -n ''${outputDrvs[$outputName]} ]] ; then
+      if [[ ''${#outputDrvs[@]} -gt 0 ]] ; then
+        for outputName in ''${!outputs[@]} ; do
           ln -s "''${outputDrvs[$outputName]}" "''${outputs[$outputName]}"
-        else
-          touch "''${outputs[$outputName]}"
-        fi
-      done
+        done
+      else
+        touch "$out"
+      fi
     '';
 in
-if outputs == [ ] then removeAttrs fakeTeX [ "outputSpecified" ] else build // outputDrvs
+mainDrv
