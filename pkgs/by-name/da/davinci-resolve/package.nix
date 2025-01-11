@@ -274,7 +274,8 @@ resolveUdev = runCommandLocal "${davinci.pname}-udev" {} ''
   echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' > $SDX_RULES
 '';
 
-resolveIcons = runCommandLocal "${davinci.pname}-icons" {} ''
+resolveXdg = runCommandLocal "${davinci.pname}-xdg" {} ''
+  # icons for applications
   mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/apps
   ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}.png
   ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-panels.png
@@ -283,6 +284,33 @@ resolveIcons = runCommandLocal "${davinci.pname}-icons" {} ''
   ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-speed-test.png
   ln -s ${davinci}/graphics/blackmagicraw-player_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-player.png
   ln -s ${davinci}/graphics/blackmagicraw-player_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-player.png
+
+  # icons for mime types
+  mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/mimetypes
+
+  ln -s ${davinci}/graphics/application-x-braw-clip_48x48_mimetypes.png $out/share/icons/hicolor/48x48/mimetypes/application-x-braw-clip.png
+  ln -s ${davinci}/graphics/application-x-braw-sidecar_48x48_mimetypes.png $out/share/icons/hicolor/48x48/mimetypes/application-x-braw-sidecar.png
+  ln -s ${davinci}/graphics/application-x-braw-clip_256x256_mimetypes.png $out/share/icons/hicolor/256x256/mimetypes/application-x-braw-clip.png
+  ln -s ${davinci}/graphics/application-x-braw-sidecar_256x256_mimetypes.png $out/share/icons/hicolor/256x256/mimetypes/application-x-braw-sidecar.png
+  ln -s ${davinci}/graphics/DV_ResolveBin.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvebin.png
+  ln -s ${davinci}/graphics/DV_ResolveProj.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolveproj.png
+  ln -s ${davinci}/graphics/DV_ResolveTimeline.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvetimeline.png
+  ln -s ${davinci}/graphics/DV_TemplateBundle.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvetemplatebundle.png
+
+  # mime types
+  mkdir -p $out/share/mime/packages
+  # without these patches, GNOME displays blank icons
+  cat ${davinci}/share/blackmagicraw.xml \
+    | sed '/<mime-type type="application\/x-braw-clip">/a <generic-icon name="application-x-braw-clip"/>' \
+    | sed '/<mime-type type="application\/x-braw-sidecar">/a <generic-icon name="application-x-braw-sidecar"/>' \
+    > $out/share/mime/packages/${davinci.pname}-raw.xml
+  cat ${davinci}/share/resolve.xml \
+    | sed '/<mime-type type="application\/x-resolveproj">/a <generic-icon name="application-x-resolveproj"/>' \
+    | sed '/<mime-type type="application\/x-resolvedbkey">/a <generic-icon name="application-x-resolvedbkey"/>' \
+    | sed '/<mime-type type="application\/x-resolvebin">/a <generic-icon name="application-x-resolvebin"/>' \
+    | sed '/<mime-type type="application\/x-resolvetimeline">/a <generic-icon name="application-x-resolvetimeline"/>' \
+    | sed '/<mime-type type="application\/x-resolvetemplatebundle">/a <generic-icon name="application-x-resolvetemplatebundle"/>' \
+    > $out/share/mime/packages/${davinci.pname}.xml
 '';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
@@ -329,7 +357,7 @@ symlinkJoin {
     remoteMonitorWrapper
 
     resolveUdev
-    resolveIcons
+    resolveXdg
 
     (makeDesktopItem {
       name = "${davinci.pname}";
