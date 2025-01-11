@@ -33,10 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ];
 
-  nativeBuildInputs = [
-    SDL
-    freetype
-  ];
+  # pass in correct *-config for cross builds
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.FREETYPE_CONFIG = lib.getExe' freetype.dev "freetype-config";
 
   configureFlags = [
     (lib.enableFeature enableSdltest "sdltest")
