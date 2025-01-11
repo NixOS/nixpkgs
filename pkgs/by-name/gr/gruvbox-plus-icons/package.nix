@@ -6,6 +6,7 @@
   plasma5Packages,
   gnome-icon-theme,
   hicolor-icon-theme,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,6 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontDropIconThemeCache = true;
   dontBuild = true;
   dontConfigure = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Icon pack for Linux desktops based on the Gruvbox color scheme";
