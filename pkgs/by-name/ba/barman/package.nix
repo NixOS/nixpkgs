@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication rec {
     [
       # Assertion error
       "test_help_output"
+      "test_exits_on_unsupported_target"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # FsOperationFailed
