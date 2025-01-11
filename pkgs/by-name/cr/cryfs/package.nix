@@ -15,16 +15,15 @@
   # see https://github.com/cryfs/cryfs/issues/369
   llvmPackages,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cryfs";
-  version = "0.11.4";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    hash = "sha256-OkJhLg+YzS3kDhlpUQe9A+OiVBPG/iKs6OU7aKFJ5wY=";
+    owner = "cryfs";
+    repo = "cryfs";
+    tag = finalAttrs.version;
+    hash = "sha256-t6/W2zKO6qbCRc/knBgKIyE2WNahAX83VhwsLO5F52g=";
   };
 
   postPatch = ''
@@ -64,13 +63,11 @@ stdenv.mkDerivation rec {
     spdlog
   ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  #nativeCheckInputs = [ gtest ];
-
   cmakeFlags = [
     "-DDEPENDENCY_CONFIG='../cmake-utils/DependenciesFromLocalSystem.cmake'"
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
     "-DBoost_USE_STATIC_LIBS:BOOL=FALSE" # this option is case sensitive
-    "-DBUILD_TESTING:BOOL=${if doCheck then "TRUE" else "FALSE"}"
+    "-DBUILD_TESTING:BOOL=${if finalAttrs.doCheck then "TRUE" else "FALSE"}"
   ]; # ++ lib.optional doCheck "-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake";
 
   # macFUSE needs to be installed for the test to succeed on Darwin
@@ -90,16 +87,16 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic filesystem for the cloud";
     homepage = "https://www.cryfs.org/";
-    changelog = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/cryfs/cryfs/raw/${finalAttrs.version}/ChangeLog.txt";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       peterhoeg
       c0bw3b
       sigmasquadron
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
