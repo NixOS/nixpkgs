@@ -7024,6 +7024,13 @@
     githubId = 2544204;
     name = "Erik Skytthe";
   };
+  esrh = {
+    name = "Eshan Ramesh";
+    email = "esrh@esrh.me";
+    github = "eshrh";
+    githubId = 16175276;
+    keys = [ { fingerprint = "E4CE B0F0 B2EC 09A3 9678  F294 CC7A 7E3C 6CF3 1343"; } ];
+  };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
     github = "ethancedwards8";
