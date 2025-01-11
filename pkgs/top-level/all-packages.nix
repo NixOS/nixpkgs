@@ -3451,7 +3451,6 @@ with pkgs;
 
   gnupatch = callPackage ../tools/text/gnupatch { };
 
-  gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
 
@@ -5629,14 +5628,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  zenith = callPackage ../tools/system/zenith {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
   # Nvidia support does not require any propietary libraries, so CI can build it.
   # Note that when enabling this unconditionally, non-nvidia users will always have an empty "GPU" section.
-  zenith-nvidia = callPackage ../tools/system/zenith {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+  zenith-nvidia = zenith.override {
     nvidiaSupport = true;
   };
 
@@ -13626,8 +13620,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL;
   };
 
-  freedv = callPackage ../applications/radio/freedv {
-    inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
+  freedv = callPackage ../by-name/fr/freedv/package.nix {
     codec2 = codec2.override {
       freedvSupport = true;
     };
