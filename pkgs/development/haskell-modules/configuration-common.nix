@@ -1854,9 +1854,7 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
-  # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = lib.pipe super.reflex [
-    dontCheck
     doJailbreak
     # Until hackage release has https://github.com/reflex-frp/reflex/pull/517
     (overrideCabal (drv: {
