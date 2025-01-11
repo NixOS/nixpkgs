@@ -38,7 +38,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
 
     common_build_flags = argparse.ArgumentParser(add_help=False)
     common_build_flags.add_argument("--builders")
-    common_build_flags.add_argument("--include", "-I")
+    common_build_flags.add_argument("--include", "-I", action="append")
     common_build_flags.add_argument("--quiet", action="store_true")
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
