@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, intltool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lxmenu-data";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "9fe3218d2ef50b91190162f4f923d6524c364849f87bcda8b4ed8eb59b80bab8";
   };
 
-  buildInputs = [ intltool ];
+  nativeBuildInputs = [ intltool ];
 
   meta = {
     homepage = "https://lxde.org/";

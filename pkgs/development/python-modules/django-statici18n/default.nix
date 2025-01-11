@@ -1,24 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi, django, django-appconf }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  django,
+  django-appconf,
+
+  # tests
+  pytest-django,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "django-statici18n";
-  version = "2.2.0";
+  version = "2.5.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dbcdac190d93e0b4eabcab8875c8eb68795eceb442f926843ec5cbe1432fe628";
+  src = fetchFromGitHub {
+    owner = "zyegfryed";
+    repo = "django-statici18n";
+    tag = "v${version}";
+    hash = "sha256-n6HqHcXvz2ihwN+gJr5P+/Yt4RpuOu2yAjo9fiNZB54=";
   };
 
-  propagatedBuildInputs = [ django django-appconf ];
+  build-system = [ setuptools ];
 
-  # pypi package does not contains test harness
-  # source tarball requires setting up a config
-  doCheck = false;
+  dependencies = [
+    django
+    django-appconf
+  ];
+
+  pythonImportsCheck = [ "statici18n" ];
+
+  env.DJANGO_SETTINGS_MODULE = "tests.test_project.project.settings";
+
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Helper for generating Javascript catalog to static files";
     homepage = "https://github.com/zyegfryed/django-statici18n";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [
+      greizgh
+      schmittlauch
+    ];
   };
 }

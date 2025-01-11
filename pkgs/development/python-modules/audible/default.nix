@@ -1,28 +1,53 @@
-{ lib, fetchFromGitHub, buildPythonPackage, beautifulsoup4, httpx, pbkdf2, pillow, pyaes, rsa }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  beautifulsoup4,
+  httpx,
+  pbkdf2,
+  pillow,
+  pyaes,
+  rsa,
+
+  # test dependencies
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "audible";
-  version = "0.8.1";
+  version = "0.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
-    rev = "v${version}";
-    sha256 = "0fsb5av4s7fvpn0iryl8jj3lwffwlxgbwj46l3fidy0l58nq3b1d";
+    tag = "v${version}";
+    hash = "sha256-ILGhjuPIxpRxu/dVDmz531FUgMWosk4P+onPJltuPIs=";
   };
 
-  propagatedBuildInputs = [ beautifulsoup4 httpx pbkdf2 pillow pyaes rsa ];
+  nativeBuildInputs = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'httpx>=0.20.*,<=0.22.*' 'httpx'
-  '';
+  propagatedBuildInputs = [
+    pillow
+    beautifulsoup4
+    httpx
+    pbkdf2
+    pyaes
+    rsa
+  ];
 
-  pythonImportsCheck = [ "audible"];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "audible" ];
 
   meta = with lib; {
     description = "A(Sync) Interface for internal Audible API written in pure Python";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://github.com/mkb79/Audible";
     maintainers = with maintainers; [ jvanbruegge ];
   };

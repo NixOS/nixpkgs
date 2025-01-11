@@ -1,76 +1,84 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, defusedxml
-, lxml
-, relatorio
-, genshi
-, python-dateutil
-, polib
-, python-sql
-, werkzeug
-, wrapt
-, passlib
-, pydot
-, python-Levenshtein
-, html2text
-, weasyprint
-, gevent
-, pillow
-, withPostgresql ? true, psycopg2
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  defusedxml,
+  lxml,
+  relatorio,
+  genshi,
+  python-dateutil,
+  polib,
+  python-sql,
+  werkzeug,
+  passlib,
+  pydot,
+  levenshtein,
+  html2text,
+  weasyprint,
+  gevent,
+  pillow,
+  withPostgresql ? true,
+  psycopg2,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "6.4.1";
-  format = "setuptools";
+  version = "7.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8Ah1zNQzcVgYSqCIGRN+6o8qzVPd3WzygGtVnyojHuk=";
+    hash = "sha256-4ThDDsAvy/9Md1bbOJatIZYzrhZQsMP4hbh/9MBUxgA=";
   };
 
-  propagatedBuildInputs = [
-    defusedxml
-    lxml
-    relatorio
-    genshi
-    python-dateutil
-    polib
-    python-sql
-    werkzeug
-    wrapt
-    passlib
+  build-system = [ setuptools ];
 
-    # extra dependencies
-    pydot
-    python-Levenshtein
-    html2text
-    weasyprint
-    gevent
-    pillow
-  ] ++ relatorio.optional-dependencies.fodt
+  dependencies =
+    [
+      defusedxml
+      lxml
+      relatorio
+      genshi
+      python-dateutil
+      polib
+      python-sql
+      werkzeug
+      passlib
+
+      # extra dependencies
+      pydot
+      levenshtein
+      html2text
+      weasyprint
+      gevent
+      pillow
+    ]
+    ++ relatorio.optional-dependencies.fodt
     ++ passlib.optional-dependencies.bcrypt
     ++ passlib.optional-dependencies.argon2
     ++ lib.optional withPostgresql psycopg2;
 
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [ unittestCheckHook ];
 
+  preCheck = ''
     export HOME=$(mktemp -d)
     export TRYTOND_DATABASE_URI="sqlite://"
     export DB_NAME=":memory:";
-    ${python.interpreter} -m unittest discover -s trytond.tests
-
-    runHook postCheck
   '';
 
+  unittestFlagsArray = [
+    "-s"
+    "trytond.tests"
+  ];
+
   meta = with lib; {
-    description = "The server of the Tryton application platform";
+    description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using
@@ -80,8 +88,12 @@ buildPythonPackage rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
-    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
+    changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ udono johbo ];
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [
+      udono
+      johbo
+    ];
   };
 }

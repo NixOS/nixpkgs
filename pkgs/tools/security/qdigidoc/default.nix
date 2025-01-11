@@ -1,30 +1,52 @@
-{ lib, mkDerivation, fetchurl, cmake, gettext
-, pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
-, qttranslations, qtsvg }:
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  flatbuffers,
+  gettext,
+  pkg-config,
+  libdigidocpp,
+  opensc,
+  openldap,
+  openssl,
+  pcsclite,
+  qtbase,
+  qtsvg,
+  qttools,
+}:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.11";
+  version = "4.6.0";
 
   src = fetchurl {
-    url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4_${version}.110-1804.tar.xz";
-    sha256 = "sha256-Sg6lFZeIJn3T/suDc5Z/kNqBf/sIV9c6EJJ0Nr0dwTM=";
+    url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    hash = "sha256-szFLY9PpZMMYhfV5joueShfu92YDVmcCC3MOWIOAKVg=";
   };
 
-  tsl = fetchurl {
-    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
-    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
-  };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/open-eid/DigiDoc4-Client/commit/bb324d18f0452c2ab1b360ff6c42bb7f11ea60d7.patch";
+      hash = "sha256-JpaU9inupSDsZKhHk+sp5g+oUynVFxR7lshjTXoFIbU=";
+    })
 
-  nativeBuildInputs = [ cmake gettext pkg-config ];
+    # Regularly update this with what's on https://src.fedoraproject.org/rpms/qdigidoc/blob/rawhide/f/sandbox.patch
+    # This prevents attempts to download TSL lists inside the build sandbox.
+    # The list files are regularly updated (get new signatures), though this also happens at application runtime.
+    ./sandbox.patch
+  ];
 
-  postPatch = ''
-    substituteInPlace client/CMakeLists.txt \
-      --replace $\{TSL_URL} file://${tsl}
-  '';
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    qttools
+  ];
 
   buildInputs = [
+    flatbuffers
     libdigidocpp
     opensc
     openldap
@@ -32,7 +54,6 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
-    qttranslations
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,
@@ -47,9 +68,13 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
+    mainProgram = "qdigidoc4";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut yana ];
+    maintainers = with maintainers; [
+      flokli
+      mmahut
+    ];
   };
 }

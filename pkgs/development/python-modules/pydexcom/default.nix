@@ -1,30 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pydexcom";
-  version = "0.2.3";
+  version = "0.4.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gagebenne";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
+    repo = "pydexcom";
+    tag = version;
+    hash = "sha256-cf3AhqaA5aij2NCeFqruoeE0ovJSgZgEnVHcE3iXJ1s=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  # tests are interacting with the Dexcom API
+  dependencies = [ requests ];
+
+  # Tests are interacting with the Dexcom API
   doCheck = false;
+
   pythonImportsCheck = [ "pydexcom" ];
 
   meta = with lib; {
     description = "Python API to interact with Dexcom Share service";
     homepage = "https://github.com/gagebenne/pydexcom";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/gagebenne/pydexcom/releases/tag/${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

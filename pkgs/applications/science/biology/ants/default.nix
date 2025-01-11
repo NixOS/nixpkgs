@@ -1,40 +1,57 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk4, vtk_7, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeBinaryWrapper,
+  itk,
+  vtk,
+  Cocoa,
+}:
 
-stdenv.mkDerivation rec {
-  pname    = "ANTs";
-  version = "2.2.0";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ANTs";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
-    owner  = "ANTsX";
-    repo   = "ANTs";
-    rev    = "37ad4e20be3a5ecd26c2e4e41b49e778a0246c3d";
-    sha256 = "1hrdwv3m9xh3yf7l0rm2ggxc2xzckfb8srs88g485ibfszx7i03q";
+    owner = "ANTsX";
+    repo = "ANTs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7df9RcZZwfSkokG8dMQg65bCOk2atDGkJpPo8SrRrfY=";
   };
 
-  patches = [
-    # Fix build with gcc8
-    (fetchpatch {
-      url = "https://github.com/ANTsX/ANTs/commit/89af9b2694715bf8204993e032fa132f80cf37bd.patch";
-      sha256 = "1glkrwa1jmxxbmzihycxr576azjqby31jwpj165qc54c91pn0ams";
-    })
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ itk4 vtk_7 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs =
+    [
+      itk
+      vtk
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
-  cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
+  cmakeFlags = [
+    "-DANTS_SUPERBUILD=FALSE"
+    "-DUSE_VTK=TRUE"
+  ];
 
   postInstall = ''
     for file in $out/bin/*; do
-      wrapProgram $file --set ANTSPATH "$out/bin"
+      wrapProgram $file --set PATH "$out/bin"
     done
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/ANTsX/ANTs";
+  meta = {
+    changelog = "https://github.com/ANTsX/ANTs/releases/tag/v${finalAttrs.version}";
     description = "Advanced normalization toolkit for medical image registration and other processing";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    homepage = "https://github.com/ANTsX/ANTs";
+    license = lib.licenses.asl20;
+    mainProgram = "antsRegistration";
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
   };
-}
+})

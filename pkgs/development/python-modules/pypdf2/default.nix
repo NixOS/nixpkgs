@@ -1,35 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, python
-, isPy3k
+{
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  lib,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  pname = "PyPDF2";
-  version = "1.26.0";
+  pname = "pypdf2";
+  version = "3.0.1";
+
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "11a3aqljg4sawjijkvzhs3irpw0y67zivqpbjpm065ha5wpr13z2";
+    pname = "PyPDF2";
+    inherit version;
+    hash = "sha256-p0QI9pumJx9xuTUu9O0D3FOjGqQE0ptdMfU7/s/uFEA=";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s Tests
-  '';
+  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  # Tests broken on Python 3.x
-  doCheck = !(isPy3k);
+  # no test
+  doCheck = false;
+
+  pythonImportsCheck = [ "PyPDF2" ];
 
   meta = with lib; {
-    description = "A Pure-Python library built as a PDF toolkit";
-    homepage = "http://mstamy2.github.com/PyPDF2/";
+    description = "Pure-Python library built as a PDF toolkit";
+    homepage = "https://pypdf2.readthedocs.io/";
+    changelog = "https://github.com/py-pdf/PyPDF2/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ desiderius vrthra ];
+    maintainers = with maintainers; [
+      desiderius
+    ];
   };
-
 }

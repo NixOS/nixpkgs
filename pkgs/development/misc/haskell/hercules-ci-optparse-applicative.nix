@@ -1,19 +1,38 @@
-{ mkDerivation, ansi-wl-pprint, base, fetchFromGitHub, lib, process, QuickCheck
-, transformers, transformers-compat
+{
+  mkDerivation,
+  base,
+  fetchFromGitHub,
+  lib,
+  prettyprinter,
+  prettyprinter-ansi-terminal,
+  process,
+  QuickCheck,
+  text,
+  transformers,
+  transformers-compat,
 }:
 mkDerivation {
   pname = "hercules-ci-optparse-applicative";
-  version = "0.16.1.0";
+  version = "0.18.1.0";
   src = fetchFromGitHub {
     owner = "hercules-ci";
     repo = "optparse-applicative";
-    rev = "9e2968c09a7c5b29d04578dc68d81ce5aec0591e";
-    sha256 = "sha256-11MnpQjmR89gW5WY5BwsPhpk/LwSIxEEhIa4LLiCbBc=";
+    sha256 = "1cgxc80zfgzk4rrhspnlj7790jb0ddq7ybj7qjan5xmjjir90763";
+    rev = "a123939663ba1cd0f1750343f1c6b9864ac21207";
   };
   libraryHaskellDepends = [
-    ansi-wl-pprint base process transformers transformers-compat
+    base
+    prettyprinter
+    prettyprinter-ansi-terminal
+    process
+    text
+    transformers
+    transformers-compat
   ];
-  testHaskellDepends = [ base QuickCheck ];
+  testHaskellDepends = [
+    base
+    QuickCheck
+  ];
   homepage = "https://github.com/hercules-ci/optparse-applicative";
   description = "Utilities and combinators for parsing command line options (fork)";
   license = lib.licenses.bsd3;

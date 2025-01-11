@@ -1,13 +1,16 @@
-{ lib, stdenv, rebar3 }:
-
-{ name
-, version
-, sha256
-, src
-, meta ? { }
+{
+  lib,
+  stdenv,
+  rebar3,
 }:
 
-with lib;
+{
+  name,
+  version,
+  sha256,
+  src,
+  meta ? { },
+}:
 
 stdenv.mkDerivation ({
   pname = "rebar-deps-${name}";
@@ -15,11 +18,12 @@ stdenv.mkDerivation ({
 
   dontUnpack = true;
   dontConfigure = true;
-  dontBuild = true;
   dontFixup = true;
 
-  prePhases = ''
-    cp ${src} .
+  buildPhase = ''
+    cp -r ${src} src
+    chmod -R u+w src
+    cd src
     HOME='.' DEBUG=1 ${rebar3}/bin/rebar3 get-deps
   '';
 

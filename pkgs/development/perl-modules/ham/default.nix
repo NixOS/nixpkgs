@@ -1,20 +1,34 @@
-{ lib, buildPerlPackage, fetchFromGitHub, makeWrapper, openssh, GitRepository, URI, XMLMini }:
+{
+  lib,
+  buildPerlPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  openssh,
+  GitRepository,
+  URI,
+  XMLParser,
+}:
 
 buildPerlPackage {
   pname = "ham-unstable";
-  version = "2020-09-09";
+  version = "2023-10-06";
 
   src = fetchFromGitHub {
     owner = "kernkonzept";
     repo = "ham";
-    rev = "ae2a326f2efcdae0fa7c5bf0ba205b580fc91ecc";
-    sha256 = "0m65pav2830y0ivwsy60dc4w457qlc0nqg43lji1kj2g96hmy2bw";
+    rev = "90d104ce481ee8f9b770be4b37d97f34eef5f82f";
+    hash = "sha256-DeHH7k9K7CmQW6eOyf8TCV/HNYS30oFnI1b8ztBDk/o=";
   };
 
   outputs = [ "out" ];
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ openssh GitRepository URI XMLMini ];
+  propagatedBuildInputs = [
+    openssh
+    GitRepository
+    URI
+    XMLParser
+  ];
 
   preConfigure = ''
     patchShebangs .
@@ -30,13 +44,12 @@ buildPerlPackage {
       --prefix PATH : ${openssh}/bin
   '';
 
-  doCheck = false;
-
-  meta = {
-    description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
+  meta = with lib; {
+    description = "Tool to manage big projects consisting of multiple loosely-coupled git repositories";
     homepage = "https://github.com/kernkonzept/ham";
-    license = "unknown"; # should be gpl2, but not quite sure
-    maintainers = with lib.maintainers; [ aw ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ aw ];
+    mainProgram = "ham";
+    platforms = platforms.unix;
   };
 }

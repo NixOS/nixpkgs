@@ -1,4 +1,14 @@
-{ lib, atdgen-codec-runtime, menhir, easy-format, buildDunePackage, which, re, nixosTests }:
+{
+  lib,
+  atdgen-codec-runtime,
+  cmdliner,
+  menhir,
+  easy-format,
+  buildDunePackage,
+  re,
+  yojson,
+  nixosTests,
+}:
 
 buildDunePackage rec {
   pname = "atd";
@@ -6,11 +16,13 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  nativeBuildInputs = [ which menhir ];
-  buildInputs = [ re ];
-  propagatedBuildInputs = [ easy-format ];
-
-  strictDeps = true;
+  nativeBuildInputs = [ menhir ];
+  buildInputs = [ cmdliner ];
+  propagatedBuildInputs = [
+    easy-format
+    re
+    yojson
+  ];
 
   passthru.tests = {
     smoke-test = nixosTests.atd;
@@ -20,7 +32,7 @@ buildDunePackage rec {
     description = "Syntax for cross-language type definitions";
     homepage = "https://github.com/mjambon/atd";
     license = licenses.mit;
-    maintainers = with maintainers; [ aij jwilberding ];
+    maintainers = with maintainers; [ aij ];
     mainProgram = "atdcat";
   };
 }

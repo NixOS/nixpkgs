@@ -1,18 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
+  nix-update-script,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "result";
-  version = "0.7.0";
+  version = "0.17.0";
+  pyproject = true;
+  build-system = [
+    setuptools
+    wheel
+  ];
 
   src = fetchFromGitHub {
     owner = "rustedpy";
     repo = "result";
-     rev = "v${version}";
-    sha256 = "sha256-bEf3OJg6ksDvzZE7ezA58Q2FObb5V7BG8vkKtX284Jg=";
+    rev = "v${version}";
+    hash = "sha256-o+7qKxGQCeMUnsmEReggvf+XwQWFHRCYArYk3DxCa50=";
   };
 
   postPatch = ''
@@ -25,21 +35,18 @@ buildPythonPackage rec {
       --replace '"--cov-report=xml",' ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
   ];
 
-  disabledTestPaths = [
-    #TODO: figure out the failure "match o:" Invalid Syntax
-    "tests/test_pattern_matching.py"
-  ];
-
+  passthru.updateScript = nix-update-script { };
   pythonImportsCheck = [ "result" ];
 
   meta = with lib; {
     description = "A simple Result type for Python 3 inspired by Rust, fully type annotated";
     homepage = "https://github.com/rustedpy/result";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = with lib.maintainers; [ emattiza ];
   };
 }

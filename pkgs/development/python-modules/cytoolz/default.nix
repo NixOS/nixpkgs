@@ -1,22 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, toolz
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
+  cython,
+  setuptools,
+  toolz,
+  python,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.11.2";
+  version = "1.0.1";
+  pyproject = true;
+
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea23663153806edddce7e4153d1d407d62357c05120a4e8485bddf1bd5ab22b4";
+    hash = "sha256-icwxYbieG7Ptdjb3TtLlWYT9NVFpBPyHjK4hbkKyx9Y=";
   };
+
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   propagatedBuildInputs = [ toolz ];
 
@@ -27,12 +37,16 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # https://github.com/pytoolz/cytoolz/issues/200
+    "test_inspect_wrapped_property"
+  ];
 
-  meta = {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
-    license = "licenses.bsd3";
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
   };
 }

@@ -1,21 +1,27 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, pcre
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  pcre2,
 }:
 
 buildOctavePackage rec {
   pname = "strings";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1b0ravfvq3bxd0w3axjfsx13mmmkifmqz6pfdgyf2s8vkqnp1qng";
+    sha256 = "sha256-9l5eYgzw5K85trRAJW9eMYZxvf0RDNxDlD0MtwrSCLc=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
-    pcre
+    pcre2
   ];
 
   # The gripes library no longer exists.
@@ -35,6 +41,6 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Additional functions for manipulation and analysis of strings";
     # Some pcre symbols claimed to be missing
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,19 +1,25 @@
-{ buildPecl, lib, pkg-config, libyaml }:
+{
+  buildPecl,
+  lib,
+  libyaml,
+}:
 
 buildPecl {
   pname = "yaml";
 
-  version = "2.2.2";
-  sha256 = "sha256-EZBS8EYdV9hvRMJS+cmy3XQ0hscBwaCroK6+zdDYuCo=";
+  version = "2.2.4";
+  sha256 = "sha256-jrNTuvh/FbG2Ksbrcci1iWhZWKH+iw49IqxZVg0OiRM=";
 
-  configureFlags = [ "--with-yaml=${libyaml}" ];
+  configureFlags = [ "--with-yaml=${libyaml.dev}" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libyaml
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "YAML-1.1 parser and emitter";
-    license = licenses.mit;
-    homepage = "http://bd808.com/pecl-file_formats-yaml/";
-    maintainers = teams.php.members;
+    license = lib.licenses.mit;
+    homepage = "https://github.com/php/pecl-file_formats-yaml";
+    maintainers = lib.teams.php.members;
   };
 }

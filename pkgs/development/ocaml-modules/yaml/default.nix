@@ -1,25 +1,46 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, dune-configurator
-, bos, ctypes, fmt, logs, rresult
-, mdx, alcotest, crowbar, junit_alcotest, ezjsonm
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  bos,
+  ctypes,
+  fmt,
+  logs,
+  mdx,
+  alcotest,
+  crowbar,
+  junit_alcotest,
+  ezjsonm,
 }:
 
 buildDunePackage rec {
   pname = "yaml";
-  version = "3.0.0";
-
-  useDune2 = true;
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-v${version}.tbz";
-    sha256 = "1iws6lbnrrd5hhmm7lczfvqp0aidx5xn7jlqk2s5rjfmj9qf4j2c";
+    url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-${version}.tbz";
+    hash = "sha256-xQ0qyii5+WZ5K3HhYDNR5dJO2k39PkRT+9UDZqOggic=";
   };
 
+  minimalOCamlVersion = "4.13";
+
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ bos ctypes rresult ];
-  # crowbar is not available for OCaml < 4.08
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ fmt logs mdx.bin alcotest crowbar junit_alcotest ezjsonm ];
+  propagatedBuildInputs = [
+    bos
+    ctypes
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [ mdx.bin ];
+  checkInputs = [
+    fmt
+    logs
+    alcotest
+    crowbar
+    junit_alcotest
+    ezjsonm
+  ];
 
   meta = {
     description = "Parse and generate YAML 1.1 files";

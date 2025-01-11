@@ -1,4 +1,9 @@
-{ config, lib, pkg, ... }:
+{
+  config,
+  lib,
+  pkg,
+  ...
+}:
 let
   inherit (lib)
     mkOption
@@ -22,16 +27,16 @@ in
         with TLS client certificate authentication.
 
         This allows Docker clients to connect with the equivalents of the Docker
-        CLI <code>-H</code> and <code>--tls*</code> family of options.
+        CLI `-H` and `--tls*` family of options.
 
         For certificate setup, see https://docs.docker.com/engine/security/protect-access/
 
-        This option is independent of <xref linkend="opt-virtualisation.podman.dockerSocket.enable"/>.
+        This option is independent of [](#opt-virtualisation.podman.dockerSocket.enable).
       '';
     };
 
     server = mkOption {
-      type = types.enum [];
+      type = types.enum [ ];
       description = ''
         Choice of TLS proxy server.
       '';
@@ -87,8 +92,7 @@ in
   };
 
   config = {
-    networking.firewall.allowedTCPPorts =
-      lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
+    networking.firewall.allowedTCPPorts = lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
   };
 
   meta.maintainers = lib.teams.podman.members ++ [ lib.maintainers.roberth ];

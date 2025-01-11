@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.services.tt-rss;
 
+  inherit (cfg) phpPackage;
+
   configVersion = 26;
 
   dbPort = if cfg.database.port == null
@@ -26,7 +28,7 @@ let
       ;
   in pkgs.writeText "config.php" ''
     <?php
-      putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
+      putenv('TTRSS_PHP_EXECUTABLE=${phpPackage}/bin/php');
 
       putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
       putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
@@ -208,7 +210,7 @@ let
         };
 
         port = mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             The database's port. If not set, the default ports will be provided (5432
@@ -430,7 +432,7 @@ let
           background processes while not running tt-rss, this method is generally
           viable to keep your feeds up to date.
           Still, there are more robust (and recommended) updating methods
-          available, you can read about them here: http://tt-rss.org/wiki/UpdatingFeeds
+          available, you can read about them here: <https://tt-rss.org/wiki/UpdatingFeeds>
         '';
       };
 
@@ -456,6 +458,15 @@ let
         '';
       };
 
+      phpPackage = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.php;
+        defaultText = "pkgs.php";
+        description = ''
+          php package to use for php fpm and update daemon.
+        '';
+      };
+
       plugins = mkOption {
         type = types.listOf types.str;
         default = ["auth_internal" "note"];
@@ -476,7 +487,7 @@ let
         description = ''
           List of plugins to install. The list elements are expected to
           be derivations. All elements in this derivation are automatically
-          copied to the <literal>plugins.local</literal> directory.
+          copied to the `plugins.local` directory.
         '';
       };
 
@@ -486,7 +497,7 @@ let
         description = ''
           List of themes to install. The list elements are expected to
           be derivations. All elements in this derivation are automatically
-          copied to the <literal>themes.local</literal> directory.
+          copied to the `themes.local` directory.
         '';
       };
 
@@ -501,11 +512,22 @@ let
         '';
       };
 
+      updateDaemon = {
+        commandFlags = mkOption {
+          type = types.str;
+          default = "--quiet";
+          description = ''
+            Command-line flags passed to the update daemon.
+            The default --quiet flag mutes all logging, including errors.
+          '';
+        };
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
         description = ''
-          Additional lines to append to <literal>config.php</literal>.
+          Additional lines to append to `config.php`.
         '';
       };
     };
@@ -529,11 +551,21 @@ let
         assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
         message = "Cannot set both password and passwordFile";
       }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.name == cfg.user && cfg.database.user == cfg.user;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.tt-rss.database.createLocally` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         inherit (cfg) user;
+        inherit phpPackage;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
@@ -594,52 +626,14 @@ let
       tt-rss = {
         description = "Tiny Tiny RSS feeds update daemon";
 
-        preStart = let
-          callSql = e:
-              if cfg.database.type == "pgsql" then ''
-                  ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
-                  ${optionalString (cfg.database.passwordFile != null) "PGPASSWORD=$(cat ${cfg.database.passwordFile})"} \
-                  ${config.services.postgresql.package}/bin/psql \
-                    -U ${cfg.database.user} \
-                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
-                    -c '${e}' \
-                    ${cfg.database.name}''
-
-              else if cfg.database.type == "mysql" then ''
-                  echo '${e}' | ${config.services.mysql.package}/bin/mysql \
-                    -u ${cfg.database.user} \
-                    ${optionalString (cfg.database.password != null) "-p${cfg.database.password}"} \
-                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} -P ${toString dbPort}"} \
-                    ${cfg.database.name}''
-
-              else "";
-
-        in (optionalString (cfg.database.type == "pgsql") ''
-          exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
-          | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
-
-          if [ "$exists" == 'f' ]; then
-            ${callSql "\\i ${pkgs.tt-rss}/schema/ttrss_schema_${cfg.database.type}.sql"}
-          else
-            echo 'The database contains some data. Leaving it as it is.'
-          fi;
-        '')
-
-        + (optionalString (cfg.database.type == "mysql") ''
-          exists=$(${callSql "select count(*) > 0 from information_schema.tables where table_schema = schema()"} \
-          | tail -n+2 | sed -e 's/[ \n\t]*//')
-
-          if [ "$exists" == '0' ]; then
-            ${callSql "\\. ${pkgs.tt-rss}/schema/ttrss_schema_${cfg.database.type}.sql"}
-          else
-            echo 'The database contains some data. Leaving it as it is.'
-          fi;
-        '');
+        preStart = ''
+          ${phpPackage}/bin/php ${cfg.root}/www/update.php --update-schema --force-yes
+        '';
 
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
+          ExecStart = "${phpPackage}/bin/php ${cfg.root}/www/update.php --daemon ${cfg.updateDaemon.commandFlags}";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";
@@ -669,8 +663,8 @@ let
       enable = mkDefault true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        { name = cfg.database.user;
+          ensureDBOwnership = true;
         }
       ];
     };

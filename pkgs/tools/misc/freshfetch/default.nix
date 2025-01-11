@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, AppKit
-, CoreFoundation
-, DiskArbitration
-, Foundation
-, IOKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  AppKit,
+  CoreFoundation,
+  DiskArbitration,
+  Foundation,
+  IOKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,12 +21,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1l9zngr5l12g71j85iyph4jjri3crxc2pi9q0gczrrzvs03439mn";
   };
 
-  cargoSha256 = "sha256-ra29AwUleHVom6Pi5bL1IPqW7yyLYwRtKFvadMB/380=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "clml_rs-0.3.0" = "sha256-KTAm0TCNHGeuOmqmLcZfjl2mQmWcCxWaTPOzA38qbUM=";
+    };
+  };
 
   # freshfetch depends on rust nightly features
   RUSTC_BOOTSTRAP = 1;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreFoundation
     DiskArbitration
@@ -34,9 +40,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A fresh take on neofetch";
+    description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "freshfetch";
   };
 }

@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gmp
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gmp,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastecdsa";
-  version = "2.2.3";
+  version = "3.0.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "269bdb0f618b38f8f6aec9d23d23db518046c3cee01a954fa6aa7322a1a7db8f";
+    hash = "sha256-deOnwZYvjtOMps90fp7OUfzbMxDFsk0Oj72gFoMymAU=";
   };
 
   buildInputs = [ gmp ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # skip tests which require being online to download test vectors
@@ -35,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast elliptic curve digital signatures";
     homepage = "https://github.com/AntonKueltz/fastecdsa";
+    changelog = "https://github.com/AntonKueltz/fastecdsa/blob/v${version}/CHANGELOG.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [ prusnak ];
   };

@@ -1,21 +1,38 @@
-{ lib, fetchFromGitHub, rustPlatform
-, xorg, python3, pkg-config, cairo, libxkbcommon }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  xorg,
+  python3,
+  pkg-config,
+  cairo,
+  expat,
+  libxkbcommon,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wmfocus";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HrS+C/6KDG2Rn/3u/mMmp4vzQ5YAHUFL4HFecteuzsc=";
+    sha256 = "sha256-94MgE2j8HaS8IyzHEDtoqTls2A8xD96v2iAFx9XfMcw=";
   };
 
-  cargoSha256 = "sha256-EzgYnfUgwK2ldzrlqe9N9jeGgK+RzQPjbOjJCGEkcwE=";
+  cargoHash = "sha256-sSJAlDe1vBYs1vZW/X04cU14Wj1OF4Jy8oI4uWkrEjk=";
 
-  nativeBuildInputs = [ python3 pkg-config ];
-  buildInputs = [ cairo libxkbcommon xorg.xcbutilkeysyms ];
+  nativeBuildInputs = [
+    python3
+    pkg-config
+  ];
+  buildInputs = [
+    cairo
+    expat
+    libxkbcommon
+    xorg.xcbutilkeysyms
+  ];
 
   # For now, this is the only available featureset. This is also why the file is
   # in the i3 folder, even though it might be useful for more than just i3
@@ -24,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Visually focus windows by label";
+    mainProgram = "wmfocus";
     homepage = "https://github.com/svenstaro/wmfocus";
     license = licenses.mit;
     maintainers = with maintainers; [ synthetica ];

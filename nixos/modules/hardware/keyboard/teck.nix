@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib;
 let
   cfg = config.hardware.keyboard.teck;
+  inherit (lib) mkEnableOption mkIf;
+
 in
 {
   options.hardware.keyboard.teck = {
@@ -13,4 +19,3 @@ in
     services.udev.packages = [ pkgs.teck-udev-rules ];
   };
 }
-

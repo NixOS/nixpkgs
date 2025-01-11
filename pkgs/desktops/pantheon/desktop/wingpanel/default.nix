@@ -1,8 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , meson
 , ninja
@@ -13,26 +14,31 @@
 , granite
 , gettext
 , mutter
-, mesa
 , json-glib
-, python3
 , elementary-gtk-theme
 , elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.2";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WvkQx+9YjKCINpyVg8KjCV0GAb0rJfblSFaO14/4oas=";
+    sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
   };
 
   patches = [
     ./indicators.patch
+
+    # Add sorting for QuickSettings
+    # https://github.com/elementary/wingpanel/pull/516
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel/commit/cae197c953f4332e67cf0a5457b4e54f8adc3424.patch";
+      hash = "sha256-P7Cl6M3qvh9pa1qIwWQV4XG5NoCQId+buzEChcUOapk=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -40,9 +46,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -53,13 +58,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
-    mesa # for libEGL
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -72,13 +71,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "The extensible top panel for Pantheon";
+    description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.

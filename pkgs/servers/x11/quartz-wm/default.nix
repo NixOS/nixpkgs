@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, xorg, pixman, pkg-config, AppKit, Foundation, Xplugin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorg,
+  pixman,
+  pkg-config,
+  AppKit,
+  Foundation,
+  Xplugin,
+}:
 
-let version = "1.3.1";
-in stdenv.mkDerivation {
+let
+  version = "1.3.1";
+in
+stdenv.mkDerivation {
   pname = "quartz-wm";
   inherit version;
   src = fetchurl {
@@ -12,6 +24,8 @@ in stdenv.mkDerivation {
     ./no_title_crash.patch
     ./extern-patch.patch
   ];
+  configureFlags = [ "--enable-xplugin-dock-support" ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libXinerama
     xorg.libAppleWM
@@ -19,11 +33,12 @@ in stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXext
     pixman
-    pkg-config
-    AppKit Xplugin Foundation
+    AppKit
+    Xplugin
+    Foundation
   ];
   meta = with lib; {
-    license = licenses.apsl20;
+    license = licenses.apple-psl20;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };

@@ -1,26 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, kmod, looking-glass-client }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  kernel,
+  looking-glass-client,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kvmfr";
   version = looking-glass-client.version;
 
   src = looking-glass-client.src;
-  sourceRoot = "source/module";
-  hardeningDisable = [ "pic" "format" ];
+  sourceRoot = "${looking-glass-client.src.name}/module";
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = lib.optional (kernel.kernelAtLeast "5.16") (fetchpatch {
-    name = "kvmfr-5.16.patch";
-    url = "https://github.com/gnif/LookingGlass/commit/a9b5302a517e19d7a2da114acf71ef1e69cfb497.patch";
-    sha256 = "017nxlk2f7kyjp6llwa74dbczdb1jk8v791qld81dxhzkm9dyqqx";
-    stripLen = 1;
-  })
-  ++ lib.optional (kernel.kernelAtLeast "5.18") (fetchpatch {
-    name = "kvmfr-5.18.patch";
-    url = "https://github.com/gnif/LookingGlass/commit/c7029f95042fe902843cb6acbfc75889e93dc210.patch";
-    sha256 = "sha256-6DpL17XWj8BKpiBdKdCPC51MWKLIo6PixQ9UaygT2Zg=";
-    stripLen = 1;
-  });
+  patches = [
+    # fix build for linux-6_10
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/7305ce36af211220419eeab302ff28793d515df2.patch";
+      hash = "sha256-97nZsIH+jKCvSIPf1XPf3i8Wbr24almFZzMOhjhLOYk=";
+      stripLen = 1;
+    })
+
+    # securtiy patch for potential buffer overflow
+    # https://github.com/gnif/LookingGlass/issues/1133
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/3ea37b86e38a87ee35eefb5d8fcc38b8dc8e2903.patch";
+      hash = "sha256-Kk1gN1uB86ZJA374zmzM9dwwfMZExJcix3hee7ifpp0=";
+      stripLen = 1;
+    })
+  ];
 
   makeFlags = [
     "KVER=${kernel.modDirVersion}"

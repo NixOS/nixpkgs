@@ -1,51 +1,60 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, openssl
-, libxml2
-, boost
-, python3
-, libuuid
-, curl
-, gsoap
-, enableTools ? true
-  # Build the bundled libcurl
-  # and, if defaultToLibCurl,
-  # use instead of an external one
-, useEmbeddedLibcurl ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  openssl,
+  libxml2,
+  boost,
+  python3,
+  libuuid,
+  curl,
+  gsoap,
+  rapidjson,
+  Security,
+  enableTools ? true,
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
   # See https://github.com/cern-fts/davix/issues/23
-, defaultToLibcurl ? false
-, enableIpv6 ? true
-, enableTcpNodelay ? true
+  defaultToLibcurl ? false,
+  enableIpv6 ? true,
+  enableTcpNodelay ? true,
   # Build davix_copy.so
-, enableThirdPartyCopy ? false
+  enableThirdPartyCopy ? false,
 }:
 
 let
   boolToUpper = b: lib.toUpper (lib.boolToString b);
 in
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "0.8.7";
   pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
-  nativeBuildInputs = [ cmake pkg-config python3 ];
-  buildInputs = [
-    openssl
-    libxml2
-    boost
-    libuuid
-  ] ++ lib.optional (defaultToLibcurl && !useEmbeddedLibcurl) curl
-  ++ lib.optional (enableThirdPartyCopy) gsoap;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ];
+  buildInputs =
+    [
+      boost
+      curl
+      libxml2
+      openssl
+      rapidjson
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
+    ++ lib.optional (enableThirdPartyCopy) gsoap;
 
   # using the url below since the github release page states
   # "please ignore the GitHub-generated tarballs, as they are incomplete"
   # https://github.com/cern-fts/davix/releases/tag/R_0_8_0
   src = fetchurl {
-    url = "https://github.com/cern-fts/davix/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/davix-${version}.tar.gz";
-    sha256 = "LxCNoECKg/tbnwxoFQ02C6cz5LOg/imNRbDTLSircSQ=";
+    url = "https://github.com/cern-fts/davix/releases/download/R_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }/davix-${version}.tar.gz";
+    sha256 = "sha256-eMJOFO3X5OVgOS1nFH7IZYwqoNNkBBW99rxROvz2leY=";
   };
 
   preConfigure = ''
@@ -56,7 +65,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TOOLS=${boolToUpper enableTools}"
-    "-DEMBEDDED_LIBCURL=${boolToUpper useEmbeddedLibcurl}"
+    "-DEMBEDDED_LIBCURL=OFF"
     "-DLIBCURL_BACKEND_BY_DEFAULT=${boolToUpper defaultToLibcurl}"
     "-DENABLE_IPV6=${boolToUpper enableIpv6}"
     "-DENABLE_TCP_NODELAY=${boolToUpper enableTcpNodelay}"
@@ -64,7 +73,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file
@@ -73,7 +81,9 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
     homepage = "https://github.com/cern-fts/davix";
-    changelog = "https://github.com/cern-fts/davix/blob/R_${lib.replaceStrings ["."] ["_"] version}/RELEASE-NOTES.md";
+    changelog = "https://github.com/cern-fts/davix/blob/R_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }/RELEASE-NOTES.md";
     maintainers = with maintainers; [ adev ];
     platforms = platforms.all;
   };

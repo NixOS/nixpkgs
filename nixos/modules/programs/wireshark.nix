@@ -1,39 +1,38 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.wireshark;
   wireshark = cfg.package;
-in {
+in
+{
   options = {
     programs.wireshark = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add Wireshark to the global environment and configure a
           setcap wrapper for 'dumpcap' for users in the 'wireshark' group.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.wireshark-cli;
-        defaultText = literalExpression "pkgs.wireshark-cli";
-        description = ''
-          Which Wireshark package to install in the global environment.
-        '';
+      package = lib.mkPackageOption pkgs "wireshark-cli" {
+        example = "wireshark";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ wireshark ];
-    users.groups.wireshark = {};
+    users.groups.wireshark = { };
 
     security.wrappers.dumpcap = {
       source = "${wireshark}/bin/dumpcap";
-      capabilities = "cap_net_raw+p";
+      capabilities = "cap_net_raw,cap_net_admin+eip";
       owner = "root";
       group = "wireshark";
       permissions = "u+rx,g+x";

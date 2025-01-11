@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,10 +13,8 @@ let
 
   cfg = config.services.ntp;
 
-  stateDir = "/var/lib/ntp";
-
   configFile = pkgs.writeText "ntp.conf" ''
-    driftfile ${stateDir}/ntp.drift
+    driftfile /var/lib/ntp/ntp.drift
 
     restrict default ${toString cfg.restrictDefault}
     restrict -6 default ${toString cfg.restrictDefault}
@@ -25,7 +28,12 @@ let
     ${cfg.extraConfig}
   '';
 
-  ntpFlags = "-c ${configFile} -u ntp:ntp ${toString cfg.extraFlags}";
+  ntpFlags = [
+    "-c"
+    "${configFile}"
+    "-u"
+    "ntp:ntp"
+  ] ++ cfg.extraFlags;
 
 in
 
@@ -43,9 +51,8 @@ in
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
           the NTP network.
-          </para>
-          <para>
-          Disables <literal>systemd.timesyncd</literal> if enabled.
+
+          Disables `systemd.timesyncd` if enabled.
         '';
       };
 
@@ -53,26 +60,37 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set by default.
-          </para>
-          <para>
+
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
-          http://support.ntp.org/bin/view/Support/AccessRestrictions
+          https://support.ntp.org/Support/AccessRestrictions
         '';
-        default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
+        default = [
+          "limited"
+          "kod"
+          "nomodify"
+          "notrap"
+          "noquery"
+          "nopeer"
+        ];
       };
 
       restrictSource = mkOption {
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set on source.
-          </para>
-          <para>
+
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';
-        default = [ "limited" "kod" "nomodify" "notrap" "noquery" ];
+        default = [
+          "limited"
+          "kod"
+          "nomodify"
+          "notrap"
+          "noquery"
+        ];
       };
 
       servers = mkOption {
@@ -91,7 +109,7 @@ in
           fudge 127.127.1.0 stratum 10
         '';
         description = ''
-          Additional text appended to <filename>ntp.conf</filename>.
+          Additional text appended to {file}`ntp.conf`.
         '';
       };
 
@@ -99,13 +117,12 @@ in
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
-        default = [];
+        default = [ ];
       };
 
     };
 
   };
-
 
   ###### implementation
 
@@ -116,34 +133,57 @@ in
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;
 
-    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
+    systemd.services.systemd-timedated.environment = {
+      SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service";
+    };
 
-    users.users.ntp =
-      { isSystemUser = true;
-        group = "ntp";
-        description = "NTP daemon user";
-        home = stateDir;
+    users.users.ntp = {
+      isSystemUser = true;
+      group = "ntp";
+      description = "NTP daemon user";
+      home = "/var/lib/ntp";
+      createHome = true;
+    };
+    users.groups.ntp = { };
+
+    systemd.services.ntpd = {
+      description = "NTP Daemon";
+
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "time-sync.target" ];
+      before = [ "time-sync.target" ];
+
+      serviceConfig = {
+        ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
+        Type = "forking";
+
+        # Hardening options
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateTmp = true;
+        ProtectClock = false;
+        ProtectHome = true;
+
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = true;
+
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        AmbientCapabilities = [
+          "CAP_SYS_TIME"
+        ];
+
+        ProtectControlGroups = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RestrictSUIDSGID = true;
       };
-    users.groups.ntp = {};
-
-    systemd.services.ntpd =
-      { description = "NTP Daemon";
-
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ntp ${stateDir}
-          '';
-
-        serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
-          Type = "forking";
-        };
-      };
+    };
 
   };
 

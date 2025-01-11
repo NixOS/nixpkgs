@@ -1,48 +1,46 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, curl
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "mpvacious";
-  version = "0.15";
+  version = "0.37";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "1lxlgbjk4x3skg5s7kkr9llcdlmpmabfrcslwhhz5f4j3bq7498w";
+    sha256 = "sha256-sT74uDGtEUSDMJqSTJ6bI9XvdpRnQDNvKebWMx0CRcE=";
   };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
-    # 'require' replaced with 'dofile' to work around
-    # https://github.com/mpv-player/mpv/issues/7399 until fixed in mpvacious
-    substituteInPlace subs2srs.lua \
-      --replace "require('osd_styler')" "dofile('"$out/share/mpv/scripts/mpvacious/osd_styler.lua"')" \
-      --replace "'curl'" "'${curl}/bin/curl'" \
-      --replace "'wl-copy'" "'${wl-clipboard}/bin/wl-copy'" \
-      --replace "xclip" "${xclip}/bin/xclip"
+    substituteInPlace utils/forvo.lua \
+      --replace-fail "'curl" "'${lib.getExe curl}"
+    substituteInPlace platform/nix.lua \
+      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
+      --replace-fail "'xclip" "'${lib.getExe xclip}"
   '';
-
-  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/mpv/scripts/mpvacious
-    cp *.lua $out/share/mpv/scripts/mpvacious
+    make PREFIX=$out/share/mpv install
     runHook postInstall
   '';
 
-  passthru.scriptName = "mpvacious/subs2srs.lua";
+  passthru.scriptName = "mpvacious";
 
   meta = with lib; {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";
     homepage = "https://github.com/Ajatt-Tools/mpvacious";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kmicklas ];
   };
 }

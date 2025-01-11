@@ -1,21 +1,22 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, applet-window-buttons
-, karchive
-, kcoreaddons
-, ki18n
-, kio
-, kirigami2
-, mauikit
-, mauikit-accounts
-, mauikit-filebrowsing
-, mauikit-texteditor
-, qtmultimedia
-, qtquickcontrols2
-, kpeople
-, kcontacts
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  applet-window-buttons,
+  karchive,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kirigami2,
+  mauikit,
+  mauikit-accounts,
+  mauikit-filebrowsing,
+  mauikit-texteditor,
+  qtmultimedia,
+  qtquickcontrols2,
+  kpeople,
+  kcontacts,
 }:
 
 mkDerivation {
@@ -50,6 +51,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Contacts and dialer application";
+    mainProgram = "communicator";
     homepage = "https://invent.kde.org/maui/communicator";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

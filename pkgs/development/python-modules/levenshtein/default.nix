@@ -1,53 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cmake
-, cython
-, pytestCheckHook
-, rapidfuzz
-, scikit-build
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  cython,
+  fetchFromGitHub,
+  ninja,
+  pytestCheckHook,
+  pythonOlder,
+  rapidfuzz,
+  rapidfuzz-cpp,
+  scikit-build-core,
 }:
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.18.1";
-  format = "pyproject";
+  version = "0.26.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "Levenshtein";
-    rev = "v${version}";
-    # https://github.com/maxbachmann/Levenshtein/issues/22
-    fetchSubmodules = true;
-    sha256 = "sha256-WREYdD5MFOpCzH4BSceRpzQZdpi3Xxxn0DpMvDsNlGo=";
+    tag = "v${version}";
+    hash = "sha256-uLOOAmJ8Y0z+tuIIOSnI8qZoZ+IA2+tNBX1lDCvc8+A=";
+    fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     cython
-    scikit-build
+    ninja
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    rapidfuzz
-  ];
+  buildInputs = [ rapidfuzz-cpp ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ rapidfuzz ];
 
-  pythonImportsCheck = [
-    "Levenshtein"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "Levenshtein" ];
 
   meta = with lib; {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
+    changelog = "https://github.com/maxbachmann/Levenshtein/blob/${src.rev}/HISTORY.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];
   };

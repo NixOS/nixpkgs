@@ -1,13 +1,19 @@
-{ lib, fetchurl, makeWrapper, runCommand, callPackage }:
+{
+  lib,
+  fetchurl,
+  makeWrapper,
+  runCommand,
+  callPackage,
+}:
 
 let
-  version = "1.3.4";
+  version = "1.3.7";
 
   programs = callPackage ./programs.nix { };
 
   webapp = fetchurl {
     url = "https://github.com/root-gg/plik/releases/download/${version}/plik-${version}-linux-amd64.tar.gz";
-    sha256 = "1qp96va5l0m7jp4g007bhgcpf4ydg3cpg2x9wa9rkpp9k1svdhjy";
+    hash = "sha256-Uj3I/ohgMr/Ud5xAZiBjsIW8bSdUeXXv9NYKLu8Aym8=";
   };
 
 in
@@ -15,12 +21,18 @@ in
 
   inherit (programs) plik plikd-unwrapped;
 
-  plikd = runCommand "plikd-${version}" { nativeBuildInputs = [ makeWrapper ]; } ''
-    mkdir -p $out/libexec/plikd/{bin,webapp} $out/bin
-    tar xf ${webapp} plik-${version}-linux-amd64/webapp/dist/
-    mv plik-*/webapp/dist $out/libexec/plikd/webapp
-    cp ${programs.plikd-unwrapped}/bin/plikd $out/libexec/plikd/bin/plikd
-    makeWrapper $out/libexec/plikd/bin/plikd $out/bin/plikd \
-      --chdir "$out/libexec/plikd/bin"
-  '';
+  plikd =
+    runCommand "plikd-${version}"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+        inherit (programs.plikd-unwrapped) passthru;
+      }
+      ''
+        mkdir -p $out/libexec/plikd/{bin,webapp} $out/bin
+        tar xf ${webapp} plik-${version}-linux-amd64/webapp/dist/
+        mv plik-*/webapp/dist $out/libexec/plikd/webapp
+        cp ${programs.plikd-unwrapped}/bin/plikd $out/libexec/plikd/bin/plikd
+        makeWrapper $out/libexec/plikd/bin/plikd $out/bin/plikd \
+          --chdir "$out/libexec/plikd/bin"
+      '';
 }

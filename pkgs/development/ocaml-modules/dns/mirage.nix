@@ -1,18 +1,24 @@
-{ buildDunePackage, dns, mirage-stack, ipaddr, lwt }:
+{
+  buildDunePackage,
+  dns,
+  ipaddr,
+  lwt,
+  tcpip,
+}:
 
 buildDunePackage {
   pname = "dns-mirage";
 
-  inherit (dns) version src useDune2 minimumOCamlVersion;
+  inherit (dns) version src;
 
   propagatedBuildInputs = [
     dns
-    mirage-stack
     ipaddr
     lwt
+    tcpip
   ];
 
   meta = dns.meta // {
-    description = "An opinionated Domain Name System (DNS) library";
+    description = "Opinionated Domain Name System (DNS) library";
   };
 }

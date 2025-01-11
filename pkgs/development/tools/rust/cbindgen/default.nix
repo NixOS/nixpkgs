@@ -1,21 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, python3Packages
+, Security
+
+# tests
+, firefox-unwrapped
+, firefox-esr-unwrapped
+, mesa
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.23.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
-    owner = "eqrion";
+    owner = "mozilla";
     repo = "cbindgen";
     rev = "v${version}";
-    hash = "sha256-yux5VpN8UqBscu5TyojlZmu4q2uz8b9Tu++eNlPUj/M=";
+    hash = "sha256-XTGHHD5Qw3mr+lkPKOXyqb0K3sEENW8Sf0n9mtrFFXI=";
   };
 
-  cargoSha256 = "sha256:1838dsmaqdlbd3j040bdy1fvl3z77xmcz73r11qmnqsga4yva6d7";
+  patches = [
+    # open PR: https://github.com/mozilla/cbindgen/pull/1010
+    # see also: https://github.com/NixOS/nixpkgs/pull/298108
+    ./1010-fix-test-failures-due-to-CARGO_BUILD_TARGET.patch
+  ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  cargoHash = "sha256-l4FgwXdibek4BAnqjWd1rLxpEwuMNjYgvo6X3SS3fRo=";
 
-  checkInputs = [
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+
+  nativeCheckInputs = [
+    cmake
     python3Packages.cython
   ];
 
@@ -27,12 +46,25 @@ rustPlatform.buildRustPackage rec {
     "--skip lib_default_uses_debug_build"
     "--skip lib_explicit_debug_build"
     "--skip lib_explicit_release_build"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # WORKAROUND: test_body fails when using clang
+    # https://github.com/eqrion/cbindgen/issues/628
+    "--skip test_body"
   ];
 
+  passthru.tests = {
+    inherit
+      firefox-unwrapped
+      firefox-esr-unwrapped
+      mesa
+    ;
+  };
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A project for generating C bindings from Rust code";
-    homepage = "https://github.com/eqrion/cbindgen";
+    changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
+    description = "Project for generating C bindings from Rust code";
+    mainProgram = "cbindgen";
+    homepage = "https://github.com/mozilla/cbindgen";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa ];
   };

@@ -1,59 +1,70 @@
-{ absl-py
-, buildPythonPackage
-, chex
-, dm-haiku
-, fetchFromGitHub
-, jaxlib
-, lib
-, numpy
-, pytest-xdist
-, pytestCheckHook
-, tensorflow
-, tensorflow-datasets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  absl-py,
+  chex,
+  jax,
+  jaxlib,
+  numpy,
+  etils,
+
+  # tests
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.1.1";
+  version = "0.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-s/BcqzhdfWzR61MStusUPQtuT4+t8NcC5gBGiGggFqw=";
+    repo = "optax";
+    tag = "v${version}";
+    hash = "sha256-7UPWeo/Q9/tjewaM7HN8/e7U1U1QzAliuk95+9GOi0E=";
   };
 
-  buildInputs = [ jaxlib ];
+  outputs = [
+    "out"
+    "testsout"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     absl-py
     chex
+    etils
+    jax
+    jaxlib
     numpy
-  ];
+  ] ++ etils.optional-dependencies.epy;
 
-  checkInputs = [
-    dm-haiku
-    pytest-xdist
-    pytestCheckHook
-    tensorflow
-    tensorflow-datasets
-  ];
+  postInstall = ''
+    mkdir $testsout
+    cp -R examples $testsout/examples
+  '';
 
-  pythonImportsCheck = [
-    "optax"
-  ];
+  pythonImportsCheck = [ "optax" ];
 
-  disabledTestPaths = [
-    # Requires `flax` which depends on `optax` creating circular dependency.
-    "optax/_src/equivalence_test.py"
-    # See https://github.com/deepmind/optax/issues/323.
-    "examples/lookahead_mnist_test.py"
-  ];
+  # check in passthru.tests.pytest to escape infinite recursion with flax
+  doCheck = false;
 
-  meta = with lib; {
-    description = "Optax is a gradient processing and optimization library for JAX.";
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
+
+  meta = {
+    description = "Gradient processing and optimization library for JAX";
     homepage = "https://github.com/deepmind/optax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    changelog = "https://github.com/deepmind/optax/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

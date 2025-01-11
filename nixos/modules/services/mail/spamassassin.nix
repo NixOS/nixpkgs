@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
@@ -12,33 +14,36 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkEnableOption "the SpamAssassin daemon";
+      enable = lib.mkEnableOption "the SpamAssassin daemon";
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to run the SpamAssassin daemon in debug mode";
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         description = ''
           The SpamAssassin local.cf config
 
           If you are using this configuration:
-            add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
+
+              add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
 
           Then you can Use this sieve filter:
-            require ["fileinto", "reject", "envelope"];
 
-            if header :contains "X-Spam-Flag" "YES" {
-              fileinto "spam";
-            }
+              require ["fileinto", "reject", "envelope"];
+
+              if header :contains "X-Spam-Flag" "YES" {
+                fileinto "spam";
+              }
 
           Or this procmail filter:
-            :0:
-            * ^X-Spam-Flag: YES
-            /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
+
+              :0:
+              * ^X-Spam-Flag: YES
+              /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
 
           To filter your messages based on the additional mail headers added by spamassassin.
         '';
@@ -52,12 +57,11 @@ in
         default = "";
       };
 
-      initPreConf = mkOption {
-        type = with types; either str path;
+      initPreConf = lib.mkOption {
+        type = with lib.types; either str path;
         description = "The SpamAssassin init.pre config.";
         apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
-        default =
-        ''
+        default = ''
           #
           # to update this list, run this command in the rules directory:
           # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq
@@ -74,9 +78,9 @@ in
           loadplugin Mail::SpamAssassin::Plugin::Check
           #loadplugin Mail::SpamAssassin::Plugin::DCC
           loadplugin Mail::SpamAssassin::Plugin::DKIM
+          loadplugin Mail::SpamAssassin::Plugin::DMARC
           loadplugin Mail::SpamAssassin::Plugin::DNSEval
           loadplugin Mail::SpamAssassin::Plugin::FreeMail
-          loadplugin Mail::SpamAssassin::Plugin::Hashcash
           loadplugin Mail::SpamAssassin::Plugin::HeaderEval
           loadplugin Mail::SpamAssassin::Plugin::HTMLEval
           loadplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
@@ -108,7 +112,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."mail/spamassassin/init.pre".source = cfg.initPreConf;
     environment.etc."mail/spamassassin/local.cf".source = spamassassin-local-cf;
 
@@ -161,8 +165,8 @@ in
 
     systemd.timers.sa-update = {
       description = "sa-update-service";
-      partOf      = [ "sa-update.service" ];
-      wantedBy    = [ "timers.target" ];
+      partOf = [ "sa-update.service" ];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "1:*";
         Persistent = true;
@@ -182,7 +186,7 @@ in
       serviceConfig = {
         User = "spamd";
         Group = "spamd";
-        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
+        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${lib.optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
         ExecReload = "+${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         StateDirectory = "spamassassin";
       };

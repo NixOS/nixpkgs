@@ -1,37 +1,45 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, file
-, libev, nghttp3, quictls
-, cunit, ncurses
+, cmake
+, brotli, libev, nghttp3, quictls
 , withJemalloc ? false, jemalloc
+, curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.5.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hpIGsQBJCOyaEqopdES/hRXc2makIERonUju9D/HvgE=";
+    hash = "sha256-W9DLG9PXXuXe3rdtrbAvZZU2d7WsZ9vw/A6c3cFHBFM=";
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config file ];
-  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
-  checkInputs = [ cunit ncurses ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    brotli
+    libev
+    nghttp3
+    quictls
+  ] ++ lib.optional withJemalloc jemalloc;
 
-  preConfigure = ''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
+  ];
 
   doCheck = true;
-  enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit curlHTTP3;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";
-    description = "ngtcp2 project is an effort to implement QUIC protocol which is now being discussed in IETF QUICWG for its standardization.";
+    description = "ngtcp2 project is an effort to implement QUIC protocol which is now being discussed in IETF QUICWG for its standardization";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];

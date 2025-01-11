@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, colorama
-, pythonOlder
-, tqdm
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  pythonOlder,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "socialscan";
-  version = "1.4.2";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iojw";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "rT+/j6UqDOzuNBdN3I74YIxS6qkhd7BjHCGX+gGjprc=";
+    tag = "v${version}";
+    hash = "sha256-4JJVhB6x1NGagtfzE03Jae2GOr25hh+4l7gQ23zc7Ck=";
   };
 
   propagatedBuildInputs = [
@@ -30,13 +31,13 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "socialscan"
-  ];
+  pythonImportsCheck = [ "socialscan" ];
 
   meta = with lib; {
     description = "Python library and CLI for accurately querying username and email usage on online platforms";
+    mainProgram = "socialscan";
     homepage = "https://github.com/iojw/socialscan";
+    changelog = "https://github.com/iojw/socialscan/releases/tag/v${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ fab ];
   };

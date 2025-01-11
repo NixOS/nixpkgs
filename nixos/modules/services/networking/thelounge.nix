@@ -11,7 +11,9 @@ let
   pluginManifest = {
     dependencies = builtins.listToAttrs (builtins.map (pkg: { name = getName pkg; value = getVersion pkg; }) cfg.plugins);
   };
-  plugins = pkgs.runCommandLocal "thelounge-plugins" { } ''
+  plugins = pkgs.runCommand "thelounge-plugins" {
+    preferLocalBuild = true;
+  } ''
     mkdir -p $out/node_modules
     echo ${escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
     ${concatMapStringsSep "\n" (pkg: ''
@@ -25,14 +27,16 @@ in
   options.services.thelounge = {
     enable = mkEnableOption "The Lounge web IRC client";
 
+    package = mkPackageOption pkgs "thelounge" { };
+
     public = mkOption {
       type = types.bool;
       default = false;
       description = ''
         Make your The Lounge instance public.
-        Setting this to <literal>false</literal> will require you to configure user
-        accounts by using the (<command>thelounge</command>) command or by adding
-        entries in <filename>${dataDir}/users</filename>. You might need to restart
+        Setting this to `false` will require you to configure user
+        accounts by using the ({command}`thelounge`) command or by adding
+        entries in {file}`${dataDir}/users`. You might need to restart
         The Lounge after making changes to the state directory.
       '';
     };
@@ -46,22 +50,24 @@ in
     extraConfig = mkOption {
       default = { };
       type = types.attrs;
-      example = literalExpression ''{
-        reverseProxy = true;
-        defaults = {
-          name = "Your Network";
-          host = "localhost";
-          port = 6697;
-        };
-      }'';
+      example = literalExpression ''
+        {
+          reverseProxy = true;
+          defaults = {
+            name = "Your Network";
+            host = "localhost";
+            port = 6697;
+          };
+        }
+      '';
       description = ''
-        The Lounge's <filename>config.js</filename> contents as attribute set (will be
+        The Lounge's {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).
 
         The options defined here will be merged to the default configuration file.
-        Note: In case of duplicate configuration, options from <option>extraConfig</option> have priority.
+        Note: In case of duplicate configuration, options from {option}`extraConfig` have priority.
 
-        Documentation: <link xlink:href="https://thelounge.chat/docs/server/configuration" />
+        Documentation: <https://thelounge.chat/docs/server/configuration>
       '';
     };
 
@@ -71,7 +77,7 @@ in
       example = literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
       description = ''
         The Lounge plugins to install. Plugins can be found in
-        <literal>pkgs.theLoungePlugins.plugins</literal> and <literal>pkgs.theLoungePlugins.themes</literal>.
+        `pkgs.theLoungePlugins.plugins` and `pkgs.theLoungePlugins.themes`.
       '';
     };
   };
@@ -93,11 +99,11 @@ in
       serviceConfig = {
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;
-        ExecStart = "${pkgs.thelounge}/bin/thelounge start";
+        ExecStart = "${getExe cfg.package} start";
       };
     };
 
-    environment.systemPackages = [ pkgs.thelounge ];
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta = {

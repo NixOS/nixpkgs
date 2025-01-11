@@ -1,54 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, typing-extensions
-, wsproto
-, toml
-, h2
-, priority
-, mock
-, poetry-core
-, pytest-asyncio
-, pytest-cov
-, pytest-sugar
-, pytest-trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  exceptiongroup,
+  h11,
+  h2,
+  priority,
+  wsproto,
+  poetry-core,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Hypercorn";
-  version = "0.13.2";
-  disabled = pythonOlder "3.7";
+  pname = "hypercorn";
+  version = "0.16.0";
   format = "pyproject";
 
-  src = fetchFromGitLab {
+  disabled = pythonOlder "3.11"; # missing taskgroup dependency
+
+  src = fetchFromGitHub {
     owner = "pgjones";
-    repo = pname;
+    repo = "Hypercorn";
     rev = version;
-    sha256 = "sha256-fIjw5A6SvFUv8cU7xunVlPYphv+glypY4pzvHNifYLQ=";
+    hash = "sha256-pIUZCQmC3c6FiV0iMMwJGs9TMi6B/YM+vaSx//sAmKE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  postPatch = ''
+    sed -i "/^addopts/d" pyproject.toml
+  '';
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    exceptiongroup
+    h11
+    h2
+    priority
+    wsproto
   ];
 
-  propagatedBuildInputs = [ wsproto toml h2 priority ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
-    pytest-sugar
     pytest-trio
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [ mock ];
+  ];
+
+  disabledTests = [
+    # https://github.com/pgjones/hypercorn/issues/217
+    "test_startup_failure"
+  ];
 
   pythonImportsCheck = [ "hypercorn" ];
 
   meta = with lib; {
-    homepage = "https://pgjones.gitlab.io/hypercorn/";
-    description = "The ASGI web server inspired by Gunicorn";
+    homepage = "https://github.com/pgjones/hypercorn";
+    description = "ASGI web server inspired by Gunicorn";
+    mainProgram = "hypercorn";
     license = licenses.mit;
     maintainers = with maintainers; [ dgliwka ];
   };

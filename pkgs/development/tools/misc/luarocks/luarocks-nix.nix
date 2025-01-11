@@ -1,14 +1,44 @@
-{ luarocks, fetchFromGitHub }:
-luarocks.overrideAttrs(old: {
+{
+  luarocks_bootstrap,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  nurl,
+  file,
+}:
+
+luarocks_bootstrap.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "2021-01-22";
+  version = "0-unstable-2024-04-29";
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "6aa1d59e88eaef72d699477c3e7aa98b274ca405";
-    sha256 = "sha256-nQLl01RFYZYhpShz0gHxnhwFPvTgALpAbjFPIuTD2D0=";
+    rev = "a473a8f479711682f5b97a72362736d96efd463b";
+    hash = "sha256-hsjv+jlLsoIDM4gB/0mFeoVu1YZ1I9ELDALLTEnlCF0=";
   };
-  patches = [];
 
-  meta.mainProgram = "luarocks";
+  propagatedNativeBuildInputs = old.propagatedNativeBuildInputs ++ [
+    file
+    nurl
+  ];
+
+  patches = [ ];
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      # tags incompletely inherited from regular luarocks
+      hardcodeZeroVersion = true;
+    };
+  };
+
+  # old.meta // { /* ... */ } doesn't update meta.position, which breaks the updateScript
+  meta = {
+    inherit (old.meta)
+      description
+      license
+      maintainers
+      platforms
+      ;
+    mainProgram = "luarocks";
+  };
 })

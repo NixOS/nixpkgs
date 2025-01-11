@@ -1,34 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, six
-, mypy-extensions
-, typing
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mypy-extensions,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
-  version = "1.2.0";
   pname = "pyannotate";
+  version = "1.2.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16bm0mf7wxvy0lgmcs1p8n1ji8pnvj1jvj8zk3am70dkp825iv84";
+    hash = "sha256-BO1YBLqzgVPVmB/JLYPc9qIog0U3aFYfBX53flwFdZk=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six mypy-extensions ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    py.test
-  '';
+  dependencies = [
+    six
+    mypy-extensions
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [
+    "pyannotate_runtime"
+    "pyannotate_tools"
+  ];
+
+  disabledTestPaths =
+    [
+      "pyannotate_runtime/tests/test_collect_types.py"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      # Tests are using lib2to3
+      "pyannotate_tools/fixes/tests/test_annotate*.py"
+    ];
 
   meta = with lib; {
-    homepage = "https://github.com/dropbox/pyannotate";
     description = "Auto-generate PEP-484 annotations";
+    homepage = "https://github.com/dropbox/pyannotate";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
+    mainProgram = "pyannotate";
   };
 }

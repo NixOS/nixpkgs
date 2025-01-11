@@ -1,25 +1,30 @@
-{ lib
-, aioserial
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aioserial,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "phone-modem";
-  version = "0.1.1";
+  version = "0.1.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "phone_modem";
     inherit version;
-    sha256 = "0kqa1ky5hjs9zdp3dnd8s9mz5p6z0al3hxxlgqdq9vnnpnv0lafy";
+    hash = "sha256-7NahK9l67MdT/dDVXsq+y0Z4cZxZ/WUW2kPpE4Wz6j0=";
   };
 
-  propagatedBuildInputs = [
-    aioserial
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "aioserial==1.3.0" "aioserial"
+  '';
+
+  propagatedBuildInputs = [ aioserial ];
 
   # Project has no tests
   doCheck = false;

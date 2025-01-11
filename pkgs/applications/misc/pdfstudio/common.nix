@@ -1,20 +1,23 @@
-{ pname
-, src
-, year
-, version
-, desktopName
-, longDescription
-, buildFHSUserEnv
-, extraBuildInputs ? []
-, stdenv
-, lib
-, dpkg
-, makeDesktopItem
-, copyDesktopItems
-, autoPatchelfHook
-, sane-backends
-, cups
-, jdk11
+{
+  pname,
+  program,
+  src,
+  year,
+  version,
+  desktopName,
+  longDescription,
+  broken ? false,
+  buildFHSEnv,
+  extraBuildInputs ? [ ],
+  jdk,
+  stdenv,
+  lib,
+  dpkg,
+  makeDesktopItem,
+  copyDesktopItems,
+  autoPatchelfHook,
+  sane-backends,
+  cups,
 }:
 let
   thisPackage = stdenv.mkDerivation rec {
@@ -22,8 +25,7 @@ let
     strictDeps = true;
 
     buildInputs = [
-      sane-backends #for libsane.so.1
-      jdk11
+      sane-backends # for libsane.so.1
     ] ++ extraBuildInputs;
 
     nativeBuildInputs = [
@@ -34,33 +36,32 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = "${pname}${year}";
+        name = "${pname}";
         desktopName = desktopName;
         genericName = "View and edit PDF files";
         exec = "${pname} %f";
-        icon = "${pname}${year}";
+        icon = "${pname}";
         comment = "Views and edits PDF files";
         mimeTypes = [ "application/pdf" ];
         categories = [ "Office" ];
       })
     ];
 
-    unpackCmd = "dpkg-deb -x $src ./${pname}-${version}";
     dontBuild = true;
 
     postPatch = ''
-      substituteInPlace opt/${pname}${year}/${pname}${year} --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk11.out}"
-      substituteInPlace opt/${pname}${year}/updater --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk11.out}"
+      substituteInPlace opt/${program}${year}/${program}${year} --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk.out}"
+      substituteInPlace opt/${program}${year}/updater --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk.out}"
     '';
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/{bin,share/pixmaps}
-      rm -rf opt/${pname}${year}/jre
-      cp -r opt/${pname}${year} $out/share/
-      ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
-      ln -s $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
+      rm -rf opt/${program}${year}/jre
+      cp -r opt/${program}${year} $out/share/
+      ln -s $out/share/${program}${year}/.install4j/${program}${year}.png  $out/share/pixmaps/${pname}.png
+      ln -s $out/share/${program}${year}/${program}${year} $out/bin/
 
       runHook postInstall
     '';
@@ -68,13 +69,15 @@ let
 
 in
 # Package with cups in FHS sandbox, because JAVA bin expects "/usr/bin/lpr" for printing.
-buildFHSUserEnv {
-  name = pname;
+buildFHSEnv {
+  inherit pname version;
+
   targetPkgs = pkgs: [
     cups
     thisPackage
   ];
-  runScript = pname;
+
+  runScript = "${program}${year}";
 
   # link desktop item and icon into FHS user environment
   extraInstallCommands = ''
@@ -84,13 +87,18 @@ buildFHSUserEnv {
     ln -s ${thisPackage}/share/pixmaps/*.png "$out/share/pixmaps/"
   '';
 
-  meta = with lib; {
+  meta = {
+    inherit broken;
     homepage = "https://www.qoppa.com/${pname}/";
-    description = "An easy to use, full-featured PDF editing software";
+    description = "Easy to use, full-featured PDF editing software";
     longDescription = longDescription;
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     mainProgram = pname;
-    maintainers = [ maintainers.pwoelfel ];
+    maintainers = with lib.maintainers; [ pwoelfel ];
   };
 }

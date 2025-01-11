@@ -1,4 +1,9 @@
-{ config, lib, name, ... }:
+{
+  config,
+  lib,
+  name,
+  ...
+}:
 let
   inherit (lib) mkOption types;
 in
@@ -10,7 +15,7 @@ in
       default = null;
       example = "http://www.example.org/";
       description = ''
-        Sets up a simple reverse proxy as described by <link xlink:href="https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html#simple" />.
+        Sets up a simple reverse proxy as described by <https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html#simple>.
       '';
     };
 
@@ -19,7 +24,7 @@ in
       default = null;
       example = "index.php index.html";
       description = ''
-        Adds DirectoryIndex directive. See <link xlink:href="https://httpd.apache.org/docs/2.4/mod/mod_dir.html#directoryindex" />.
+        Adds DirectoryIndex directive. See <https://httpd.apache.org/docs/2.4/mod/mod_dir.html#directoryindex>.
       '';
     };
 
@@ -28,7 +33,7 @@ in
       default = null;
       example = "/your/alias/directory";
       description = ''
-        Alias directory for requests. See <link xlink:href="https://httpd.apache.org/docs/2.4/mod/mod_alias.html#alias" />.
+        Alias directory for requests. See <https://httpd.apache.org/docs/2.4/mod/mod_alias.html#alias>.
       '';
     };
 

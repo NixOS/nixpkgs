@@ -22,12 +22,11 @@ rec {
   };
 
   ppc64 = {
-    config = "powerpc64-unknown-linux-gnu";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    config = "powerpc64-unknown-linux-gnuabielfv2";
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    gcc = { abi = "elfv2"; };
   };
 
   sheevaplug = {
@@ -37,6 +36,10 @@ rec {
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
+
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
 
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
@@ -56,24 +59,24 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
-    rustc.config = "armv7-linux-androideabi";
-    sdkVer = "29";
-    ndkVer = "21";
+    rust.rustcTarget = "armv7-linux-androideabi";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
-    rustc.config = "aarch64-linux-android";
-    sdkVer = "29";
-    ndkVer = "21";
+    rust.rustcTarget = "aarch64-linux-android";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "30";
-    ndkVer = "21";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
@@ -91,25 +94,17 @@ rec {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;
 
-  # MIPS ABI table transcribed from here: https://wiki.debian.org/Multiarch/Tuples
-
   # can execute on 32bit chip
-  mips-linux-gnu                = { config = "mips-linux-gnu";                } // platforms.gcc_mips32r2_o32;
-  mipsel-linux-gnu              = { config = "mipsel-linux-gnu";              } // platforms.gcc_mips32r2_o32;
-  mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-linux-gnu";         } // platforms.gcc_mips32r6_o32;
-  mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-linux-gnu";       } // platforms.gcc_mips32r6_o32;
+  mips-linux-gnu           = { config = "mips-unknown-linux-gnu";           } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu         = { config = "mipsel-unknown-linux-gnu";         } // platforms.gcc_mips32r2_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32        = { config = "mips64-linux-gnuabin32";        } // platforms.gcc_mips64r2_n32;
-  mips64el-linux-gnuabin32      = { config = "mips64el-linux-gnuabin32";      } // platforms.gcc_mips64r2_n32;
-  mipsisa64r6-linux-gnuabin32   = { config = "mipsisa64r6-linux-gnuabin32";   } // platforms.gcc_mips64r6_n32;
-  mipsisa64r6el-linux-gnuabin32 = { config = "mipsisa64r6el-linux-gnuabin32"; } // platforms.gcc_mips64r6_n32;
+  mips64-linux-gnuabin32   = { config = "mips64-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32 = { config = "mips64el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r2_n32;
 
   # 64bit pointers
-  mips64-linux-gnuabi64         = { config = "mips64-linux-gnuabi64";         } // platforms.gcc_mips64r2_64;
-  mips64el-linux-gnuabi64       = { config = "mips64el-linux-gnuabi64";       } // platforms.gcc_mips64r2_64;
-  mipsisa64r6-linux-gnuabi64    = { config = "mipsisa64r6-linux-gnuabi64";    } // platforms.gcc_mips64r6_64;
-  mipsisa64r6el-linux-gnuabi64  = { config = "mipsisa64r6el-linux-gnuabi64";  } // platforms.gcc_mips64r6_64;
+  mips64-linux-gnuabi64    = { config = "mips64-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64  = { config = "mips64el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -120,6 +115,7 @@ rec {
   };
 
   gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32  = { config = "i686-unknown-linux-gnu"; };
 
   musl64 = { config = "x86_64-unknown-linux-musl"; };
@@ -136,6 +132,20 @@ rec {
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
+  };
+
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
+    libc = "newlib";
+  };
+
+  loongarch64-linux = {
+    config = "loongarch64-unknown-linux-gnu";
   };
 
   mmix = {
@@ -197,6 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
+    rust.rustcTarget = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
@@ -224,6 +235,11 @@ rec {
     libc = "newlib";
   };
 
+  microblaze-embedded = {
+    config = "microblazeel-none-elf";
+    libc = "newlib";
+  };
+
   #
   # Redox
   #
@@ -240,7 +256,7 @@ rec {
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
@@ -249,7 +265,7 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
@@ -258,7 +274,7 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
     darwinPlatform = "ios-simulator";
@@ -268,7 +284,7 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
     darwinPlatform = "ios-simulator";
@@ -304,17 +320,43 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  ucrt64 = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
+  };
+
+  # LLVM-based mingw-w64 for ARM
+  ucrtAarch64 = {
+    config = "aarch64-w64-mingw32";
+    libc = "ucrt";
+    rust.rustcTarget = "aarch64-pc-windows-gnullvm";
+    useLLVM = true;
+  };
+
   # BSDs
+
+  aarch64-freebsd = {
+    config = "aarch64-unknown-freebsd";
+    useLLVM = true;
+  };
+
+  x86_64-freebsd = {
+    config = "x86_64-unknown-freebsd";
+    useLLVM = true;
+  };
 
   x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
   };
 
   # this is broken and never worked fully
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
+    useLLVM = true;
+  };
+
+  x86_64-openbsd = {
+    config = "x86_64-unknown-openbsd";
     useLLVM = true;
   };
 
@@ -327,8 +369,17 @@ rec {
     useLLVM = true;
   };
 
+  wasm32-unknown-none = {
+    config = "wasm32-unknown-none";
+    rust.rustcTarget = "wasm32-unknown-unknown";
+    useLLVM = true;
+  };
+
   # Ghcjs
   ghcjs = {
-    config = "js-unknown-ghcjs";
+    # This triple is special to GHC/Cabal/GHCJS and not recognized by autotools
+    # See: https://gitlab.haskell.org/ghc/ghc/-/commit/6636b670233522f01d002c9b97827d00289dbf5c
+    # https://github.com/ghcjs/ghcjs/issues/53
+    config = "javascript-unknown-ghcjs";
   };
 }

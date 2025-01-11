@@ -1,37 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, semver
-, asynctest
-, deepmerge
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  semver,
+  deepmerge,
+  jmespath,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
-  version = "1.3.3";
+  version = "2.5.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
-    rev = "v${version}";
-    sha256 = "0qvv2697yhqjmgvh37h8wgz3a77n61kqmxvsk4pf47wn43hks15c";
+    tag = "v${version}";
+    hash = "sha256-johTs1AGvC6mGasK87ijhBNbHb1m36Ep9TR8XPG35d0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
+    jmespath
     semver
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     deepmerge
     pytest-asyncio
     pytestCheckHook
@@ -40,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "blebox_uniapi" ];
 
   meta = with lib; {
+    changelog = "https://github.com/blebox/blebox_uniapi/blob/v${version}/HISTORY.rst";
     description = "Python API for accessing BleBox smart home devices";
     homepage = "https://github.com/blebox/blebox_uniapi";
     license = licenses.asl20;

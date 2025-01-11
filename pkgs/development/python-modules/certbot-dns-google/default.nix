@@ -1,17 +1,21 @@
-{ buildPythonPackage
-, acme
-, certbot
-, google-api-python-client
-, oauth2client
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  google-api-python-client,
+  oauth2client,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-google";
+  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";
+
+  sourceRoot = "${src.name}/certbot-dns-google";
 
   propagatedBuildInputs = [
     acme
@@ -20,13 +24,13 @@ buildPythonPackage rec {
     oauth2client
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [
+    "-p no:cacheprovider"
+    # https://github.com/certbot/certbot/issues/9988
+    "-Wignore::DeprecationWarning"
   ];
-
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
-
-  sourceRoot = "source/certbot-dns-google";
 
   meta = certbot.meta // {
     description = "Google Cloud DNS Authenticator plugin for Certbot";

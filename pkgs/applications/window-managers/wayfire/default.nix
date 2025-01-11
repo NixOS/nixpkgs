@@ -1,33 +1,101 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config
-, cairo, doctest, libdrm, libexecinfo, libinput, libjpeg, libxkbcommon, wayland
-, wayland-protocols, wf-config, wlroots, mesa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  wf-config,
+  cairo,
+  doctest,
+  libGL,
+  libdrm,
+  libexecinfo,
+  libevdev,
+  libinput,
+  libjpeg,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
+  pango,
+  nlohmann_json,
+  xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.7.2";
+  version = "0.9.0";
 
-  src = fetchurl {
-    url = "https://github.com/WayfireWM/wayfire/releases/download/v${version}/wayfire-${version}.tar.xz";
-    sha256 = "1gasijjyfl00zpy6j9hh6qpwv0sw42h9irycbnm693j3vw9mcy66";
+  src = fetchFromGitHub {
+    owner = "WayfireWM";
+    repo = "wayfire";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-xQZ4/UE66IISZQLl702OQXAAr8XmEsA4hJwB7aXua+E=";
   };
 
-  nativeBuildInputs = [ cmake meson ninja pkg-config wayland ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+
   buildInputs = [
-    cairo doctest libdrm libexecinfo libinput libjpeg libxkbcommon wayland
-    wayland-protocols wf-config wlroots mesa
+    libGL
+    libdrm
+    libexecinfo
+    libevdev
+    libinput
+    libjpeg
+    libxkbcommon
+    wayland-protocols
+    xorg.xcbutilwm
+    nlohmann_json
+  ];
+
+  propagatedBuildInputs = [
+    wf-config
+    wlroots
+    wayland
+    cairo
+    pango
+  ];
+
+  nativeCheckInputs = [
+    cmake
+    doctest
   ];
 
   # CMake is just used for finding doctest.
   dontUseCmakeConfigure = true;
 
-  mesonFlags = [ "--sysconfdir" "/etc" ];
+  doCheck = true;
 
-  meta = with lib; {
+  mesonFlags = [
+    "--sysconfdir /etc"
+    "-Duse_system_wlroots=enabled"
+    "-Duse_system_wfconfig=enabled"
+    (lib.mesonEnable "wf-touch:tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+  ];
+
+  passthru.providedSessions = [ "wayfire" ];
+
+  passthru.tests.mate = nixosTests.mate-wayland;
+
+  meta = {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      wucke13
+      rewine
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wayfire";
   };
-}
+})

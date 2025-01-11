@@ -1,99 +1,162 @@
-{ lib, stdenv, makeWrapper, fetchurl, which, pkg-config
-, libjpeg
-, ocamlPackages
-, awscli2, curl, ffmpeg, youtube-dl
-, runtimePackages ? [ awscli2 curl ffmpeg youtube-dl ]
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  libjpeg,
+  ocamlPackages,
+  awscli2,
+  bubblewrap,
+  curl,
+  ffmpeg,
+  yt-dlp,
+  runtimePackages ? [
+    awscli2
+    bubblewrap
+    curl
+    ffmpeg
+    yt-dlp
+  ],
 }:
 
 let
   pname = "liquidsoap";
-  version = "2.0.5";
+  version = "2.2.5";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/savonet/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+BHRAnO2sKK504EhXc6LPabnOzcOAAHmtmqVNQ8OeZU=";
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "liquidsoap";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o3P7oTizO2l2WkB4LormZ/Ses5jZOpgQ1r1zB1Y3Bjs=";
   };
 
-  postFixup = ''
+  postPatch = ''
+    substituteInPlace src/lang/dune \
+      --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
+  '';
+
+  dontConfigure = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    dune build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    dune install --prefix "$out"
+
+    runHook postInstall
+  '';
+
+  fixupPhase = ''
+    runHook preFixup
+
     wrapProgram $out/bin/liquidsoap \
       --set LIQ_LADSPA_PATH /run/current-system/sw/lib/ladspa \
       --prefix PATH : ${lib.makeBinPath runtimePackages}
+
+    runHook postFixup
   '';
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    which
+    ocamlPackages.ocaml
+    ocamlPackages.dune_3
+    ocamlPackages.findlib
+    ocamlPackages.menhir
+  ];
+
   buildInputs = [
-      libjpeg
-      which
-      ocamlPackages.ocaml ocamlPackages.findlib
+    libjpeg
 
-      # Mandatory dependencies
-      ocamlPackages.dtools
-      ocamlPackages.duppy
-      ocamlPackages.mm
-      ocamlPackages.ocaml_pcre
-      ocamlPackages.menhir ocamlPackages.menhirLib
-      ocamlPackages.sedlex
+    # Mandatory dependencies
+    ocamlPackages.dtools
+    ocamlPackages.duppy
+    ocamlPackages.mm
+    ocamlPackages.ocurl
+    ocamlPackages.ocaml_pcre
+    ocamlPackages.cry
+    ocamlPackages.camomile
+    ocamlPackages.uri
+    ocamlPackages.fileutils
+    ocamlPackages.magic-mime
+    ocamlPackages.menhir # liquidsoap-lang
+    ocamlPackages.menhirLib
+    ocamlPackages.metadata
+    ocamlPackages.dune-build-info
+    ocamlPackages.re
+    ocamlPackages.sedlex # liquidsoap-lang
+    ocamlPackages.ppx_string
 
-      # Recommended dependencies
-      ocamlPackages.camomile
-      ocamlPackages.samplerate
+    # Recommended dependencies
+    ocamlPackages.ffmpeg
 
-      # Optional dependencies
-      ocamlPackages.camlimages
-      ocamlPackages.gd4o
-      ocamlPackages.alsa
-      ocamlPackages.ao
-      ocamlPackages.bjack
-      ocamlPackages.cry
-      ocamlPackages.dssi
-      ocamlPackages.faad
-      ocamlPackages.fdkaac
-      ocamlPackages.srt
-      ocamlPackages.ffmpeg
-      ocamlPackages.flac
-      ocamlPackages.frei0r
-      ocamlPackages.gstreamer
-      ocamlPackages.inotify
-      ocamlPackages.ladspa
-      ocamlPackages.lame
-      ocamlPackages.lastfm
-      ocamlPackages.lo
-      ocamlPackages.mad
-      ocamlPackages.magic
-      ocamlPackages.ogg
-      ocamlPackages.opus
-      ocamlPackages.portaudio
-      ocamlPackages.pulseaudio
-      ocamlPackages.shine
-      ocamlPackages.soundtouch
-      ocamlPackages.speex
-      ocamlPackages.srt
-      ocamlPackages.ssl
-      ocamlPackages.taglib
-      ocamlPackages.theora
-      ocamlPackages.vorbis
-      ocamlPackages.xmlplaylist
-      ocamlPackages.posix-time2
-      ocamlPackages.tsdl
-      ocamlPackages.tsdl-image
-      ocamlPackages.tsdl-ttf
+    # Optional dependencies
+    ocamlPackages.alsa
+    ocamlPackages.ao
+    ocamlPackages.bjack
+    ocamlPackages.camlimages
+    ocamlPackages.dssi
+    ocamlPackages.faad
+    ocamlPackages.fdkaac
+    ocamlPackages.flac
+    ocamlPackages.frei0r
+    ocamlPackages.gd
+    ocamlPackages.graphics
+    # ocamlPackages.gstreamer # Broken but advertised feature
+    ocamlPackages.imagelib
+    ocamlPackages.inotify
+    ocamlPackages.ladspa
+    ocamlPackages.lame
+    ocamlPackages.lastfm
+    ocamlPackages.lilv
+    ocamlPackages.lo
+    ocamlPackages.mad
+    ocamlPackages.ogg
+    ocamlPackages.opus
+    ocamlPackages.portaudio
+    ocamlPackages.posix-time2
+    ocamlPackages.pulseaudio
+    ocamlPackages.samplerate
+    ocamlPackages.shine
+    ocamlPackages.soundtouch
+    ocamlPackages.speex
+    ocamlPackages.srt
+    ocamlPackages.ssl
+    ocamlPackages.taglib
+    ocamlPackages.theora
+    ocamlPackages.tsdl
+    ocamlPackages.tsdl-image
+    ocamlPackages.tsdl-ttf
+    ocamlPackages.vorbis
+    ocamlPackages.xmlplaylist
+    ocamlPackages.yaml
+  ];
 
-      # Undocumented dependencies
-      ocamlPackages.ocurl
-      ocamlPackages.lilv
-      ocamlPackages.graphics
-      ocamlPackages.yojson
-      ocamlPackages.cohttp-lwt-unix
-    ];
-
-  meta = with lib; {
+  meta = {
     description = "Swiss-army knife for multimedia streaming";
+    mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
-    maintainers = with maintainers; [ dandellion ehmry ];
-    license = licenses.gpl2Plus;
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
+    maintainers = with lib.maintainers; [
+      dandellion
+      ehmry
+    ];
+    license = lib.licenses.gpl2Plus;
+    platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
 }

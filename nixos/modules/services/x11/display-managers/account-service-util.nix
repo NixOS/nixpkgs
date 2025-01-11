@@ -1,9 +1,10 @@
-{ accountsservice
-, glib
-, gobject-introspection
-, python3
-, wrapGAppsHook
-, lib
+{
+  accountsservice,
+  glib,
+  gobject-introspection,
+  python3,
+  wrapGAppsNoGuiHook,
+  lib,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -18,7 +19,7 @@ python3.pkgs.buildPythonApplication {
   strictDeps = false;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
     gobject-introspection
   ];
 

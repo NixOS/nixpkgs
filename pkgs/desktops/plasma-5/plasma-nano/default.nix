@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  plasma-framework
+  plasma-framework,
 }:
 
 mkDerivation {

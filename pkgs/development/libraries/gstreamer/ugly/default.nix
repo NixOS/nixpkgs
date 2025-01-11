@@ -15,22 +15,23 @@
 , x264
 , libintl
 , lib
-, opencore-amr
 , IOKit
 , CoreFoundation
 , DiskArbitration
 , enableGplPlugins ? true
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.20.1";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "06fvgyjwcf4paqxgp1xmgd0d0glkxys7n818526k10wrw92m20s2";
+    hash = "sha256-nfb9haclYkHvuyX4SzN1deOzRSZvXas4STceRpR3nxg=";
   };
 
   nativeBuildInputs = [
@@ -39,13 +40,14 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     gst-plugins-base
     orc
     libintl
-    opencore-amr
   ] ++ lib.optionals enableGplPlugins [
     a52dec
     libcdio
@@ -53,15 +55,15 @@ stdenv.mkDerivation rec {
     libmad
     libmpeg2
     x264
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     CoreFoundation
     DiskArbitration
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ (if enableGplPlugins then [
     "-Dgpl=enabled"
   ] else [

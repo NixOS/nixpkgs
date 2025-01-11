@@ -1,79 +1,90 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, isPyPy
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  pythonOlder,
+  fetchPypi,
+  writeText,
 
-# build
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# propagates
-, attrs
-, iniconfig
-, packaging
-, pluggy
-, py
-, tomli
+  # dependencies
+  attrs,
+  exceptiongroup,
+  iniconfig,
+  packaging,
+  pluggy,
+  tomli,
 
-# tests
-, hypothesis
-, pygments
+  # optional-dependencies
+  argcomplete,
+  hypothesis,
+  mock,
+  pygments,
+  requests,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.1.1";
-  format = "pyproject";
+  version = "8.3.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hBEyyu9rGtF6mv3kbcT2z6WaBflVWq5RUfc73yggymM=";
+    hash = "sha256-cLmBB71kgwinlSsG5sqaULxmC+IY1TwlfMH8lP2hAYE=";
   };
 
+  outputs = [
+    "out"
+    "testout"
+  ];
+
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    iniconfig
-    packaging
-    pluggy
-    py
-    tomli
-  ];
+  propagatedBuildInputs =
+    [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
-  checkInputs = [
-    hypothesis
-    pygments
-  ];
+  optional-dependencies = {
+    testing = [
+      argcomplete
+      attrs
+      hypothesis
+      mock
+      pygments
+      requests
+      setuptools
+      xmlschema
+    ];
+  };
 
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
-
-  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
-  # test_missing_required_plugins will emit deprecation warning which is treated as error
-  checkPhase = ''
-    runHook preCheck
-    $out/bin/py.test -x testing/ \
-      --ignore=testing/test_junitxml.py \
-      --ignore=testing/test_argcomplete.py \
-      -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
-
-    # tests leave behind unreproducible pytest binaries in the output directory, remove:
-    find $out/lib -name "*-pytest-${version}.pyc" -delete
-    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
-    find $out/lib -name "*opt-2.pyc" -delete
-
-    runHook postCheck
+  postInstall = ''
+    mkdir $testout
+    cp -R testing $testout/testing
   '';
+
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
     pytestcachePhase() {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
-    preDistPhases+=" pytestcachePhase"
+    appendToVar preDistPhases pytestcachePhase
 
     # pytest generates it's own bytecode files to improve assertion messages.
     # These files similar to cpython's bytecode files but are never laoded
@@ -83,21 +94,24 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/7.1.1/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
-    preDistPhases+=" pytestRemoveBytecodePhase"
+    appendToVar preDistPhases pytestRemoveBytecodePhase
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    maintainers = with maintainers; [
+      domenkozar
+      lovek323
+      madjar
+      lsix
+    ];
     license = licenses.mit;
   };
 }

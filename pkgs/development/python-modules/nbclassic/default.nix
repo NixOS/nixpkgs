@@ -1,47 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, notebook
-, pythonOlder
-, jupyter_server
-, pytestCheckHook
-, pytest-tornasync
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  babel,
+  ipykernel,
+  ipython-genutils,
+  jupyter-packaging,
+  jupyter-server,
+  nest-asyncio,
+  notebook-shim,
+  pytest-jupyter,
+  pytest-tornasync,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.3.5";
-  disabled = pythonOlder "3.6";
+  version = "1.1.0";
+  pyproject = true;
 
-  # tests only on github
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1d0x7nwsaw5qjw4iaylc2sxlpiq3hlg9sy3i2nh7sn3wckwl76lc";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-d7d7qF+emI+brYXfNFtRTp5kx/DoIpkqsd9KeKxk/B4=";
   };
 
-  propagatedBuildInputs = [ jupyter_server notebook ];
-
-  preCheck = ''
-    cd nbclassic
-    mv conftest.py tests
-    cd tests
-
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
-  '';
-  checkInputs = [
-    pytestCheckHook
-    pytest-tornasync
+  build-system = [
+    babel
+    jupyter-packaging
+    jupyter-server
   ];
+
+  dependencies = [
+    ipykernel
+    ipython-genutils
+    nest-asyncio
+    notebook-shim
+  ];
+
+  nativeCheckInputs = [
+    pytest-jupyter
+    pytest-tornasync
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "nbclassic" ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Jupyter lab environment notebook server extension.";
+    description = "Jupyter lab environment notebook server extension";
+    homepage = "https://github.com/jupyter/nbclassic";
     license = with licenses; [ bsd3 ];
-    homepage = "https://github.com/jupyterlab/nbclassic";
-    maintainers = [ maintainers.elohmeier ];
   };
 }

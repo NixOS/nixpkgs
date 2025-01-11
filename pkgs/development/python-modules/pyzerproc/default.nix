@@ -1,27 +1,28 @@
-{ lib
-, asynctest
-, bleak
-, click
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleak,
+  click,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pythonAtLeast,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.11";
+  version = "0.4.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-FNiq/dbh5PMTxnKCKDSHEvllehAEUYvWZS+OyP3lSW8=";
+    tag = version;
+    hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 
   postPatch = ''
@@ -33,20 +34,22 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
-  pythonImportsCheck = [
-    "pyzerproc"
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
+    # unittest.mock.InvalidSpecError: Cannot spec a Mock object.
+    "tests/test_light.py"
   ];
+
+  pythonImportsCheck = [ "pyzerproc" ];
 
   meta = with lib; {
     description = "Python library to control Zerproc Bluetooth LED smart string lights";
+    mainProgram = "pyzerproc";
     homepage = "https://github.com/emlove/pyzerproc";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

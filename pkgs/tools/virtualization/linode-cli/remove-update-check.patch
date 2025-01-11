@@ -1,11 +1,13 @@
---- a/linodecli/cli.py
-+++ b/linodecli/cli.py
-@@ -555,7 +555,7 @@
-         if self.debug_request:
-             self.print_response_debug_info(result)
- 
--        if not self.suppress_warnings:
-+        if False:
-             # check the major/minor version API reported against what we were built
-             # with to see if an upgrade should be available
-             api_version_higher = False
+diff --git a/linodecli/api_request.py b/linodecli/api_request.py
+index 4273aa6..3ada5c2 100644
+--- a/linodecli/api_request.py
++++ b/linodecli/api_request.py
+@@ -305,7 +305,7 @@ def _attempt_warn_old_version(ctx, result):
+                 file=sys.stderr,
+             )
+
+-    if api_version_higher:
++    if False:
+         # check to see if there is, in fact, a version to upgrade to.  If not, don't
+         # suggest an upgrade (since there's no package anyway)
+         new_version_exists = False

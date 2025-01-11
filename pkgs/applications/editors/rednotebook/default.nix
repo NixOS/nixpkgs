@@ -1,17 +1,29 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
-, pygobject3, pyyaml
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtksourceview,
+  pango,
+  webkitgtk_4_0,
+  pygobject3,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.24";
+  version = "2.37";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
-    rev = "v${version}";
-    sha256 = "sha256-nTFyRNJAhTrVlKdLd2F0jv7VcNn2pGTAegvfMjfHY84=";
+    tag = "v${version}";
+    sha256 = "sha256-ytaj29xZflq20+6Iqmynsr34Q9DP5uOvSBkg+vIWXgU=";
   };
 
   # We have not packaged tests.
@@ -19,9 +31,17 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ gobject-introspection ];
 
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
-    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
-    pygobject3 pyyaml
+    gdk-pixbuf
+    glib
+    gtk3
+    gtksourceview
+    pango
+    webkitgtk_4_0
+    pygobject3
+    pyyaml
   ];
 
   makeWrapperArgs = [
@@ -30,15 +50,14 @@ buildPythonApplication rec {
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
 
-  # Until gobject-introspection in nativeBuildInputs is supported.
-  # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-472568643
-  strictDeps = false;
+  pythonImportsCheck = [ "rednotebook" ];
 
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";
     changelog = "https://github.com/jendrikseipp/rednotebook/blob/v${version}/CHANGELOG.md";
-    description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
+    description = "Modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej tstrobel ];
+    maintainers = with maintainers; [ orivej ];
+    mainProgram = "rednotebook";
   };
 }

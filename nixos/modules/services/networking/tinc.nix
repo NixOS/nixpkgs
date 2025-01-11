@@ -91,7 +91,7 @@ let
         default = [ ];
         description = ''
           The external address where the host can be reached. This will set this
-          host's <option>settings.Address</option> option.
+          host's {option}`settings.Address` option.
 
           This variable is only required if you want to connect to this host.
         '';
@@ -102,7 +102,7 @@ let
         default = [ ];
         description = ''
           The subnets which this tinc daemon will serve. This will set this
-          host's <option>settings.Subnet</option> option.
+          host's {option}`settings.Subnet` option.
 
           Tinc tries to look up which other daemon it should send a packet to by
           searching the appropriate subnet. If the packet matches a subnet, it
@@ -121,7 +121,7 @@ let
           This will be appended as-is in the host's configuration file.
 
           The ed25519 public key can be specified using the
-          <option>settings.Ed25519PublicKey</option> option instead.
+          {option}`settings.Ed25519PublicKey` option instead.
         '';
       };
 
@@ -131,7 +131,7 @@ let
         description = ''
           Configuration for this host.
 
-          See <link xlink:href="https://tinc-vpn.org/documentation-1.1/Host-configuration-variables.html"/>
+          See <https://tinc-vpn.org/documentation-1.1/Host-configuration-variables.html>
           for supported values.
         '';
       };
@@ -170,7 +170,7 @@ in
               description = ''
                 Extra lines to add to the tinc service configuration file.
 
-                Note that using the declarative <option>service.tinc.networks.&lt;name&gt;.settings</option>
+                Note that using the declarative {option}`service.tinc.networks.<name>.settings`
                 option is preferred.
               '';
             };
@@ -207,7 +207,7 @@ in
               type = types.addCheck types.int (l: l >= 0 && l <= 5);
               description = ''
                 The amount of debugging information to add to the log. 0 means little
-                logging while 5 is the most logging. <command>man tincd</command> for
+                logging while 5 is the most logging. {command}`man tincd` for
                 more details.
               '';
             };
@@ -219,7 +219,7 @@ in
                 The name of the host in the network as well as the configuration for that host.
                 This name should only contain alphanumerics and underscores.
 
-                Note that using the declarative <option>service.tinc.networks.&lt;name&gt;.hostSettings</option>
+                Note that using the declarative {option}`service.tinc.networks.<name>.hostSettings`
                 option is preferred.
               '';
             };
@@ -279,14 +279,7 @@ in
               '';
             };
 
-            package = mkOption {
-              type = types.package;
-              default = pkgs.tinc_pre;
-              defaultText = literalExpression "pkgs.tinc_pre";
-              description = ''
-                The package to use for the tinc daemon's binary.
-              '';
-            };
+            package = mkPackageOption pkgs "tinc_pre" { };
 
             chroot = mkOption {
               default = false;
@@ -312,7 +305,7 @@ in
               description = ''
                 Configuration of the Tinc daemon for this network.
 
-                See <link xlink:href="https://tinc-vpn.org/documentation-1.1/Main-configuration-variables.html"/>
+                See <https://tinc-vpn.org/documentation-1.1/Main-configuration-variables.html>
                 for supported values.
               '';
             };
@@ -349,91 +342,94 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.networks != { }) {
+  config = mkIf (cfg.networks != { }) (
+    let
+      etcConfig = foldr (a: b: a // b) { }
+        (flip mapAttrsToList cfg.networks (network: data:
+          flip mapAttrs' data.hosts (host: text: nameValuePair
+            ("tinc/${network}/hosts/${host}")
+            ({ mode = "0644"; user = "tinc-${network}"; inherit text; })
+          ) // {
+            "tinc/${network}/tinc.conf" = {
+              mode = "0444";
+              text = ''
+                ${toTincConf ({ Interface = "tinc.${network}"; } // data.settings)}
+                ${data.extraConfig}
+              '';
+            };
+          }
+        ));
+    in {
+      environment.etc = etcConfig;
 
-    environment.etc = foldr (a: b: a // b) { }
-      (flip mapAttrsToList cfg.networks (network: data:
-        flip mapAttrs' data.hosts (host: text: nameValuePair
-          ("tinc/${network}/hosts/${host}")
-          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
-        ) // {
-          "tinc/${network}/tinc.conf" = {
-            mode = "0444";
-            text = ''
-              ${toTincConf ({ Interface = "tinc.${network}"; } // data.settings)}
-              ${data.extraConfig}
-            '';
+      systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
+        ("tinc.${network}")
+        (let version = getVersion data.package; in {
+          description = "Tinc Daemon - ${network}";
+          wantedBy = [ "multi-user.target" ];
+          path = [ data.package ];
+          reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
+          restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+            RestartSec = "3";
+            ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
+            ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
           };
-        }
-      ));
+          preStart = ''
+            mkdir -p /etc/tinc/${network}/hosts
+            chown tinc-${network} /etc/tinc/${network}/hosts
+            mkdir -p /etc/tinc/${network}/invitations
+            chown tinc-${network} /etc/tinc/${network}/invitations
 
-    systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
-      ("tinc.${network}")
-      ({
-        description = "Tinc Daemon - ${network}";
-        wantedBy = [ "multi-user.target" ];
-        path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          RestartSec = "3";
-          ExecReload = mkIf (versionAtLeast (getVersion data.package) "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
-          ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
+            # Determine how we should generate our keys
+            if type tinc >/dev/null 2>&1; then
+              # Tinc 1.1+ uses the tinc helper application for key generation
+            ${if data.ed25519PrivateKeyFile != null then "  # ed25519 Keyfile managed by nix" else ''
+              # Prefer ED25519 keys (only in 1.1+)
+              [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
+            ''}
+            ${if data.rsaPrivateKeyFile != null then "  # RSA Keyfile managed by nix" else ''
+              [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+            ''}
+              # In case there isn't anything to do
+              true
+            else
+              # Tinc 1.0 uses the tincd application
+              [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
+            fi
+          '';
+        })
+      );
+
+      environment.systemPackages = let
+        cli-wrappers = pkgs.stdenv.mkDerivation {
+          name = "tinc-cli-wrappers";
+          nativeBuildInputs = [ pkgs.makeWrapper ];
+          buildCommand = ''
+            mkdir -p $out/bin
+            ${concatStringsSep "\n" (mapAttrsToList (network: data:
+              optionalString (versionAtLeast data.package.version "1.1pre") ''
+                makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
+                  --add-flags "--pidfile=/run/tinc.${network}.pid" \
+                  --add-flags "--config=/etc/tinc/${network}"
+              '') cfg.networks)}
+          '';
         };
-        preStart = ''
-          mkdir -p /etc/tinc/${network}/hosts
-          chown tinc.${network} /etc/tinc/${network}/hosts
-          mkdir -p /etc/tinc/${network}/invitations
-          chown tinc.${network} /etc/tinc/${network}/invitations
+      in [ cli-wrappers ];
 
-          # Determine how we should generate our keys
-          if type tinc >/dev/null 2>&1; then
-            # Tinc 1.1+ uses the tinc helper application for key generation
-          ${if data.ed25519PrivateKeyFile != null then "  # ed25519 Keyfile managed by nix" else ''
-            # Prefer ED25519 keys (only in 1.1+)
-            [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
-          ''}
-          ${if data.rsaPrivateKeyFile != null then "  # RSA Keyfile managed by nix" else ''
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
-          ''}
-            # In case there isn't anything to do
-            true
-          else
-            # Tinc 1.0 uses the tincd application
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
-          fi
-        '';
-      })
-    );
-
-    environment.systemPackages = let
-      cli-wrappers = pkgs.stdenv.mkDerivation {
-        name = "tinc-cli-wrappers";
-        buildInputs = [ pkgs.makeWrapper ];
-        buildCommand = ''
-          mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data:
-            optionalString (versionAtLeast data.package.version "1.1pre") ''
-              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
-                --add-flags "--pidfile=/run/tinc.${network}.pid" \
-                --add-flags "--config=/etc/tinc/${network}"
-            '') cfg.networks)}
-        '';
-      };
-    in [ cli-wrappers ];
-
-    users.users = flip mapAttrs' cfg.networks (network: _:
-      nameValuePair ("tinc.${network}") ({
-        description = "Tinc daemon user for ${network}";
-        isSystemUser = true;
-        group = "tinc.${network}";
-      })
-    );
-    users.groups = flip mapAttrs' cfg.networks (network: _:
-      nameValuePair "tinc.${network}" {}
-    );
-  };
+      users.users = flip mapAttrs' cfg.networks (network: _:
+        nameValuePair ("tinc-${network}") ({
+          description = "Tinc daemon user for ${network}";
+          isSystemUser = true;
+          group = "tinc-${network}";
+        })
+      );
+      users.groups = flip mapAttrs' cfg.networks (network: _:
+        nameValuePair "tinc-${network}" {}
+      );
+    });
 
   meta.maintainers = with maintainers; [ minijackson mic92 ];
 }

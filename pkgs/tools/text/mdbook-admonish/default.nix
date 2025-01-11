@@ -1,22 +1,35 @@
-{ lib, stdenv, fetchCrate, rustPlatform, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-admonish";
-  version = "1.6.0";
+  version = "1.18.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-GH4T7arBabm+DXIJa3seP6L13DBleoNqYwzxhoCZJgI=";
+  src = fetchFromGitHub {
+    owner = "tommilligan";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-GNQIOjgHCt3XPCzF0RjV9YStI8psLdHhTPuTkdgx8vA=";
   };
 
-  cargoSha256 = "sha256-v0usxkGWs/qzUPU6ZwtTpUD7hXdSBZGYQifMZnr7sfI=";
+  cargoHash = "sha256-CG4WvAFDqtRUjF4kJ29363F6jWRChIXgT5i6ozwV4pw=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook to add Material Design admonishments";
+    description = "Preprocessor for mdbook to add Material Design admonishments";
+    mainProgram = "mdbook-admonish";
     license = licenses.mit;
-    maintainers = with maintainers; [ jmgilman ];
+    maintainers = with maintainers; [
+      jmgilman
+      Frostman
+      matthiasbeyer
+    ];
     homepage = "https://github.com/tommilligan/mdbook-admonish";
   };
 }

@@ -1,34 +1,36 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_sexp_conv
-, ppx_cstruct
-, lwt
-, mirage-net
-, io-page
-, mirage-xen
-, ipaddr
-, mirage-profile
-, shared-memory-ring
-, sexplib
-, logs
-, rresult
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_sexp_conv,
+  ppx_cstruct,
+  lwt,
+  mirage-net,
+  io-page,
+  mirage-xen,
+  ipaddr,
+  mirage-profile,
+  shared-memory-ring,
+  sexplib,
+  logs,
+  macaddr,
+  lwt-dllist,
+  result,
 }:
 
 buildDunePackage rec {
   pname = "netchannel";
-  version = "2.0.0";
+  version = "2.1.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-v${version}.tbz";
-    sha256 = "ec3906ef1804ef6a9e36b91f4ae73ce4849e9e0d1d36a80fe66b5f905fab93ad";
+    url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-${version}.tbz";
+    hash = "sha256-lTmwcNKiaq5EdJdM4UaaAVdZ+hTCX5U9MPKY/r3i7fw=";
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     ppx_cstruct
   ];
 
@@ -43,7 +45,9 @@ buildDunePackage rec {
     shared-memory-ring
     sexplib
     logs
-    rresult
+    macaddr
+    lwt-dllist
+    result
   ];
 
   meta = with lib; {

@@ -1,56 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flaky
-, hypothesis
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  pytest,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.18.3";
-  format = "setuptools";
+  version = "0.23.8"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eopKlDKiTvGmqcqw44MKlhvSKswKZd/VDYRpZbuyOqM=";
+    repo = "pytest-asyncio";
+    tag = "v${version}";
+    hash = "sha256-kMv0crYuYHi1LF+VlXizZkG87kSL7xzsKq9tP9LgFVY=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
+  outputs = [
+    "out"
+    "testout"
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  build-system = [ setuptools-scm ];
 
-  checkInputs = [
-    flaky
-    hypothesis
-    pytestCheckHook
-  ];
+  buildInputs = [ pytest ];
 
-  disabledTestPaths = [
-    "tests/trio" # pytest-trio causes infinite recursion
-  ];
+  postInstall = ''
+    mkdir $testout
+    cp -R tests $testout/tests
+  '';
 
-  pythonImportsCheck = [
-    "pytest_asyncio"
-  ];
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix { };
+
+  pythonImportsCheck = [ "pytest_asyncio" ];
 
   meta = with lib; {
     description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
-    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/v${version}/docs/source/reference/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

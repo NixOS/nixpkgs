@@ -1,22 +1,43 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose, numpy, future
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # optional-dependencies
+  numpy,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.1.6";
+  version = "3.2.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b9y0v73ih142bygi66dxqx17j2x4dfvl7xnhmafj9yjmymbakbw";
+  src = fetchFromGitHub {
+    owner = "lmfit";
+    repo = "uncertainties";
+    tag = version;
+    hash = "sha256-cm0FeJCxyBLN0GCKPnscBCx9p9qCDQdwRfhBRgQIhAo=";
   };
 
-  propagatedBuildInputs = [ future ];
-  checkInputs = [ nose numpy ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    nosetests -sv
-  '';
+  optional-dependencies.arrays = [ numpy ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ optional-dependencies.arrays;
+
+  pythonImportsCheck = [ "uncertainties" ];
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/uncertainties/";

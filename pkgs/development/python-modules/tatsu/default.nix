@@ -1,24 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, regex
-, pytest-runner, pytestCheckHook, pytest-mypy
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.8.0";
-  # upstream only supports 3.10+
+  version = "5.12.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
-    rev = "v${version}";
-    sha256 = "sha256-spTIHiyspjrIV8DKR7YNpNTNO9SlcLOROuABhmu3ckA=";
+    tag = "v${version}";
+    hash = "sha256-FRNQz3JtsFw1nch+ffGMzZF1+gq7XifPok9qsUiRPs8=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ colorama regex ];
-  checkInputs = [ pytestCheckHook pytest-mypy ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    colorama
+    regex
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tatsu" ];
 
@@ -30,8 +42,8 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://tatsu.readthedocs.io/";
+    changelog = "https://github.com/neogeny/TatSu/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
   };
-
 }

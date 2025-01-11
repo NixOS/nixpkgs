@@ -1,38 +1,40 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, AppKit
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  AppKit,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "synth";
-  version = "0.6.5-r1";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
-    owner = "getsynth";
+    owner = "shuttle-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AcAZjS2Wo0PRngf0eYrduEd6rZX5YpYxsWEp0wf9jvg=";
+    sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
-  cargoSha256 = "sha256-mMGlUCvbXaO0XfMwVtpq7HENoSaXrQU7GSh7/OhYdus=";
+  cargoHash = "sha256-i2Pp9sfTBth3DtrQ99Vw+KLnGECrkqtlRNAKiwSWf48=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Security
+  ];
+
+  checkFlags = [
+    # https://github.com/shuttle-hq/synth/issues/309
+    "--skip=docs_blog_2021_08_31_seeding_databases_tutorial_dot_md"
   ];
 
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
   meta = with lib; {
-    description = "A tool for generating realistic data using a declarative data model";
+    description = "Tool for generating realistic data using a declarative data model";
     homepage = "https://github.com/getsynth/synth";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];

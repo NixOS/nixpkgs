@@ -1,35 +1,57 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests
-, py
-, pytest
-, pytest-flake8
-, lazy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lazy,
+  packaging-legacy,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-changelog-shortener,
+  setuptools,
+  tomli,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.6.0";
+  version = "4.0.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "fc14aa6b74d4d9e27dc2e9cbff000ed9be5cd723d3ac9672e66e4e8fce797227";
+    pname = "devpi_common";
+    inherit version;
+    hash = "sha256-I1oKmkXJblTGC6a6L3fYVs+Q8aacG+6UmIfp7cA6Qcw=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    py
-    lazy
+  build-system = [
+    setuptools
+    setuptools-changelog-shortener
   ];
-  checkInputs = [ pytest pytest-flake8 ];
 
-  checkPhase = ''
-    py.test
-  '';
+  dependencies = [
+    lazy
+    packaging-legacy
+    requests
+    tomli
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "devpi_common" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
+    changelog = "https://github.com/devpi/devpi/blob/common-${version}/common/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo makefu ];
+    maintainers = with maintainers; [
+      lewo
+      makefu
+    ];
   };
 }

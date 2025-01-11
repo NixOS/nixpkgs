@@ -1,57 +1,89 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, packaging, psutil, setuptools
-# Optional dependencies:
-, bottle, pysnmp
-, hddtemp
-, netifaces # IP module
-, py-cpuinfo
+{
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  isPyPy,
+  lib,
+  defusedxml,
+  packaging,
+  psutil,
+  setuptools,
+  pydantic,
+  nixosTests,
+  # Optional dependencies:
+  fastapi,
+  jinja2,
+  pysnmp,
+  hddtemp,
+  netifaces, # IP module
+  uvicorn,
+  requests,
+  prometheus-client,
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.5";
+  version = "4.2.1";
+  pyproject = true;
+
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "v${version}";
-    sha256 = "sha256-kTnUP7WvmEw4VazjLrGb0FhSdz+/OadzgwDXs1SA02o=";
+    tag = "v${version}";
+    hash = "sha256-8Jm6DE3B7OQkaNwX/KwXMNZHUyvPtln8mJYaD6yzJRM=";
   };
 
-  # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch;
+  build-system = [ setuptools ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
-  makeWrapperArgs = lib.optionals stdenv.isDarwin [
-    "--set" "DYLD_FRAMEWORK_PATH" "/System/Library/Frameworks"
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--set"
+    "DYLD_FRAMEWORK_PATH"
+    "/System/Library/Frameworks"
   ];
 
-  doCheck = true;
-  preCheck = lib.optionalString stdenv.isDarwin ''
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+  # some tests fail in darwin sandbox
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  checkPhase = ''
+    runHook preCheck
+
+    python unittest-core.py
+
+    runHook postCheck
   '';
 
-  propagatedBuildInputs = [
-    bottle
+  dependencies = [
     defusedxml
-    future
     netifaces
     packaging
     psutil
     pysnmp
-    setuptools
-    py-cpuinfo
-  ] ++ lib.optional stdenv.isLinux hddtemp;
+    fastapi
+    uvicorn
+    requests
+    jinja2
+    prometheus-client
+  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
-  meta = with lib; {
+  passthru.tests = {
+    service = nixosTests.glances;
+  };
+
+  meta = {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
+    mainProgram = "glances";
     changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ jonringer primeos koral ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      primeos
+      koral
+    ];
   };
 }

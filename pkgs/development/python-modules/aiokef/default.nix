@@ -1,17 +1,17 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, pytest-mypy
-, pythonOlder
-, tenacity
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -21,16 +21,18 @@ buildPythonPackage rec {
     sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
   };
 
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--cov --cov-append --cov-fail-under=30 --cov-report=" "" \
+      --replace "--mypy" ""
+  '';
+
   propagatedBuildInputs = [
     async-timeout
     tenacity
   ];
 
-  checkInputs = [
-    pytest-cov
-    pytest-mypy
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];

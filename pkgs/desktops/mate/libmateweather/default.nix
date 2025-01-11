@@ -1,17 +1,46 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata, mateUpdateScript }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  glib-networking,
+  libxml2,
+  gtk3,
+  libsoup_2_4,
+  tzdata,
+  mateUpdateScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05bvc220p135l6qnhh3qskljxffds0f7fjbjnrpq524w149rgzd7";
+    sha256 = "VUNz3rWzk7nYSydd0spmyaSi0ObskgRPq4qlPjAy0rU=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  strictDeps = true;
 
-  buildInputs = [ gtk3 libsoup tzdata ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    glib # glib-compile-schemas
+    libxml2 # xmllint
+  ];
+
+  buildInputs = [
+    libsoup_2_4
+    tzdata
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    glib-networking # for obtaining IWIN forecast data
+    gtk3
+  ];
 
   configureFlags = [
     "--with-zoneinfo-dir=${tzdata}/share/zoneinfo"
@@ -22,7 +51,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Library to access weather information from online services for MATE";

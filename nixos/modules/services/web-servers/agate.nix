@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,12 +15,7 @@ in
     services.agate = {
       enable = mkEnableOption "Agate Server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.agate;
-        defaultText = literalExpression "pkgs.agate";
-        description = "The package to use";
-      };
+      package = mkPackageOption pkgs "agate" { };
 
       addresses = mkOption {
         type = types.listOf types.str;
@@ -43,7 +43,7 @@ in
         type = types.listOf types.str;
         description = ''
           Domain name of this Gemini server, enables checking hostname and port
-          in requests. (multiple occurences means basic vhosts)
+          in requests. (multiple occurrences means basic vhosts)
         '';
       };
 
@@ -76,11 +76,20 @@ in
     systemd.services.agate = {
       description = "Agate";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "network-online.target" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
 
       script =
         let
-          prefixKeyList = key: list: concatMap (v: [ key v ]) list;
+          prefixKeyList =
+            key: list:
+            concatMap (v: [
+              key
+              v
+            ]) list;
           addresses = prefixKeyList "--addr" cfg.addresses;
           hostnames = prefixKeyList "--hostname" cfg.hostnames;
         in
@@ -88,14 +97,19 @@ in
           exec ${cfg.package}/bin/agate ${
             escapeShellArgs (
               [
-                "--content" "${cfg.contentDir}"
-                "--certs" "${cfg.certificatesDir}"
-              ] ++
-              addresses ++
-              (optionals (cfg.hostnames != []) hostnames) ++
-              (optionals (cfg.language != null) [ "--lang" cfg.language ]) ++
-              (optionals cfg.onlyTls_1_3 [ "--only-tls13" ]) ++
-              (optionals (cfg.extraArgs != []) cfg.extraArgs)
+                "--content"
+                "${cfg.contentDir}"
+                "--certs"
+                "${cfg.certificatesDir}"
+              ]
+              ++ addresses
+              ++ (optionals (cfg.hostnames != [ ]) hostnames)
+              ++ (optionals (cfg.language != null) [
+                "--lang"
+                cfg.language
+              ])
+              ++ (optionals cfg.onlyTls_1_3 [ "--only-tls13" ])
+              ++ (optionals (cfg.extraArgs != [ ]) cfg.extraArgs)
             )
           }
         '';
@@ -127,7 +141,10 @@ in
         ProtectKernelTunables = true;
 
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
 
         SystemCallArchitectures = "native";

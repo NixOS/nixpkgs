@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, cmake
-, unzip
-, makeWrapper
-, boost169
-, pinnedBoost ? boost169
-, llvmPackages
-, llvmPackages_5
-, gmp
-, emacs
-, jre_headless
-, tcl
-, tk
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  unzip,
+  makeWrapper,
+  boost,
+  llvmPackages,
+  gmp,
+  emacs,
+  jre_headless,
+  tcl,
+  tk,
 }:
 
-let stdenv = llvmPackages.stdenv;
+let
+  stdenv = llvmPackages.stdenv;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mozart2";
   version = "2.0.1";
   name = "${pname}-${version}";
@@ -34,31 +35,28 @@ in stdenv.mkDerivation rec {
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
 
-  patches = [ ./patch-limits.diff ];
+  patches = [
+    ./patch-limits.diff
+    (fetchpatch {
+      name = "remove-uses-of-deprecated-boost-apis.patch";
+      url = "https://github.com/mozart/mozart2/commit/4256d3a9122e1cbb01400a1807bdee66088ff274.patch";
+      hash = "sha256-AnOrBnxoCxqis+RdCsq8EKBg//jcNHSOFYUvf7vh+Hc=";
+    })
+  ];
 
   postConfigure = ''
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper unzip ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    unzip
+  ];
 
-  # We cannot compile with both gcc and clang, but we need clang during the
-  # process, so we compile everything with clang.
-  # BUT, we need clang4 for parsing, and a more recent clang for compiling.
   cmakeFlags = [
-    "-DCMAKE_CXX_COMPILER=${llvmPackages.clang}/bin/clang++"
-    "-DCMAKE_C_COMPILER=${llvmPackages.clang}/bin/clang"
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DMOZART_BOOST_USE_STATIC_LIBS=OFF"
-    "-DCMAKE_PROGRAM_PATH=${llvmPackages_5.clang}/bin"
-    # Rationale: Nix's cc-wrapper needs to see a compile flag (like -c) to
-    # infer that it is not a linking call, and stop trashing the command line
-    # with linker flags.
-    # As it does not recognise -emit-ast, we pass -c immediately overridden
-    # by -emit-ast.
-    # The remaining is just the default flags that we cannot reuse and need
-    # to repeat here.
-    "-DMOZART_GENERATOR_FLAGS='-c;-emit-ast;--std=c++0x;-Wno-invalid-noreturn;-Wno-return-type;-Wno-braced-scalar-init'"
     # We are building with clang, as nix does not support having clang and
     # gcc together as compilers and we need clang for the sources generation.
     # However, clang emits tons of warnings about gcc's atomic-base library.
@@ -70,10 +68,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    pinnedBoost
-    llvmPackages_5.llvm
-    llvmPackages_5.clang
-    llvmPackages_5.clang-unwrapped
+    boost
     gmp
     emacs
     jre_headless
@@ -81,11 +76,17 @@ in stdenv.mkDerivation rec {
     tk
   ];
 
-  meta = {
-    description = "An open source implementation of Oz 3";
-    maintainers = [ lib.maintainers.layus ];
-    license = lib.licenses.bsd2;
+  meta = with lib; {
+    description = "Open source implementation of Oz 3";
+    maintainers = with maintainers; [
+      layus
+      h7x4
+    ];
+    license = licenses.bsd2;
     homepage = "https://mozart.github.io";
+    platforms = platforms.all;
+    # Trace/BPT trap: 5
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
 }

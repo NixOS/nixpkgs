@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, autoconf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  autoconf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "automake";
@@ -9,16 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "1bzd9g32dfm4rsbw93ld9x7b5nc1y6i4m6zp032qf1i28a8s6sxg";
   };
 
-  nativeBuildInputs = [ autoconf perl ];
+  nativeBuildInputs = [
+    autoconf
+    perl
+  ];
   buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;
 
   patches = [ ./help2man-SOURCE_DATE_EPOCH-support.patch ];
 
-  # Disable indented log output from Make, otherwise "make.test" will
-  # fail.
-  preCheck = "unset NIX_INDENT_MAKE";
   doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
   doInstallCheck = false; # runs the same thing, fails the same tests
 

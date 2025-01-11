@@ -1,28 +1,28 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, csxcad
-, qcsxcad
-, hdf5
-, vtkWithQt5
-, qtbase
-, wrapQtAppsHook
-, fparser
-, tinyxml
-, cgal
-, boost
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  csxcad,
+  qcsxcad,
+  hdf5,
+  vtkWithQt5,
+  qtbase,
+  fparser,
+  tinyxml,
+  cgal,
+  boost,
 }:
 
 mkDerivation {
   pname = "appcsxcad";
-  version = "unstable-2020-01-04";
+  version = "unstable-2023-01-06";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "AppCSXCAD";
-    rev = "de8c271ec8b57e80233cb2a432e3d7fd54d30876";
-    sha256 = "0shnfa0if3w588a68gr82qi6k7ldg1j2921fnzji90mmay21birp";
+    rev = "379ede4b8e00c11e8d0fb724c35547991b30c423";
+    hash = "sha256-L0ZEyovnfMzM7JuITBuhb4tJ2Aqgw52IiKEfEGq7Yo0=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Minimal Application using the QCSXCAD library";
+    mainProgram = "AppCSXCAD";
     homepage = "https://github.com/thliebig/AppCSXCAD";
     license = licenses.gpl3;
     maintainers = with maintainers; [ matthuszagh ];

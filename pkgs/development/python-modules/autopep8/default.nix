@@ -1,31 +1,46 @@
-{ lib, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glibcLocales,
+  pycodestyle,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.6.0";
+  version = "2.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "44f0932855039d2c15c4510d6df665e4730f2b8582704fa48f9c55bd3e17d979";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "hhatto";
+    repo = "autopep8";
+    tag = "v${version}";
+    hash = "sha256-znZw9SnnVMN8XZjko11J5GK/LAk+gmRkTgPEO9+ntJ8=";
   };
 
-  propagatedBuildInputs = [ pycodestyle toml ];
+  build-system = [ setuptools ];
 
-  # One test fails:
-  # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
-#   doCheck = false;
+  propagatedBuildInputs = [ pycodestyle ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [
+    glibcLocales
+    pytestCheckHook
+  ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
-    description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
-    homepage = "https://pypi.python.org/pypi/autopep8/";
+    changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
+    description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
+    homepage = "https://github.com/hhatto/autopep8";
     license = licenses.mit;
-    platforms = platforms.all;
+    mainProgram = "autopep8";
     maintainers = with maintainers; [ bjornfor ];
   };
 }

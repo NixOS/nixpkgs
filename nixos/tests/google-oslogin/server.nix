@@ -1,8 +1,11 @@
 { pkgs, ... }:
 let
   inherit (import ./../ssh-keys.nix pkgs)
-    snakeOilPrivateKey snakeOilPublicKey;
-in {
+    snakeOilPrivateKey
+    snakeOilPublicKey
+    ;
+in
+{
   networking.firewall.allowedTCPPorts = [ 80 ];
 
   systemd.services.mock-google-metadata = {
@@ -17,11 +20,16 @@ in {
   };
 
   services.openssh.enable = true;
-  services.openssh.kbdInteractiveAuthentication = false;
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.KbdInteractiveAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = false;
 
   security.googleOsLogin.enable = true;
 
   # Mock google service
-  networking.interfaces.lo.ipv4.addresses = [ { address = "169.254.169.254"; prefixLength = 32; } ];
+  networking.interfaces.lo.ipv4.addresses = [
+    {
+      address = "169.254.169.254";
+      prefixLength = 32;
+    }
+  ];
 }

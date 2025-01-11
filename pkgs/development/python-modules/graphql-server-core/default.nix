@@ -1,16 +1,19 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, black
-, graphql-core
-, promise
-, fetchpatch
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  graphql-core,
+  promise,
+  fetchpatch,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "graphql-server-core";
   version = "2.0.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
@@ -18,8 +21,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1w3biv2za2m1brwjy0z049c2m94gm1zfwxzgc6lwrsci724jv9fr";
   };
-
-  disable = pythonOlder "3.6";
 
   patches = [
     (fetchpatch {
@@ -33,18 +34,15 @@ buildPythonPackage rec {
     promise
   ];
 
-  checkPhase = "black --check graphql_server tests";
+  # fail with: cannot import name 'format_error' from 'graphql'
+  doCheck = false;
 
-  checkInputs = [
-    black
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Core package for using GraphQL in a custom server easily";
     homepage = "https://github.com/graphql-python/graphql-server-core";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

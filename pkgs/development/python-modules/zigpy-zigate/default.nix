@@ -1,48 +1,68 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pyusb
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpiozero,
+  mock,
+  pyserial,
+  pyserial-asyncio,
+  pyusb,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zigpy,
+}:
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.8.0";
-  # https://github.com/Martiusweb/asynctest/issues/152
-  # broken by upstream python bug with asynctest and
-  # is used exclusively by home-assistant with python 3.8
+  version = "0.13.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
-    rev = version;
-    sha256 = "sha256-rFmcgfn87XS1fvbSdJG6pItXRMkeogp4faKMe7pCxkM=";
+    tag = version;
+    hash = "sha256-MlAX7dcRZziMYCpG64OemZ8czwvDXpdoRaDVo1sUCno=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
+    gpiozero
     pyserial
     pyserial-asyncio
     pyusb
     zigpy
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    mock
     pytest-asyncio
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "zigpy_zigate" ];
+
+  disabledTestPaths = [
+    # Fails in sandbox
+    "tests/test_application.py "
+  ];
+
   meta = with lib; {
-    description = "A library which communicates with ZiGate radios for zigpy";
+    description = "Library which communicates with ZiGate radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-zigate";
+    changelog = "https://github.com/zigpy/zigpy-zigate/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
   };
 }

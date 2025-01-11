@@ -1,40 +1,49 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, breeze-icons
-, breeze-qt5
-, kdoctools
-, kconfig
-, kcrash
-, kguiaddons
-, kiconthemes
-, ki18n
-, kinit
-, kdbusaddons
-, knotifications
-, knewstuff
-, karchive
-, knotifyconfig
-, kplotting
-, ktextwidgets
-, mlt
-, shared-mime-info
-, libv4l
-, kfilemetadata
-, ffmpeg-full
-, frei0r
-, phonon-backend-gstreamer
-, qtdeclarative
-, qtmultimedia
-, qtnetworkauth
-, qtquickcontrols2
-, qtscript
-, rttr
-, kpurpose
-, kdeclarative
-, wrapGAppsHook
+{
+  mkDerivation,
+  replaceVars,
+  lib,
+  extra-cmake-modules,
+  breeze-icons,
+  breeze-qt5,
+  kdoctools,
+  kconfig,
+  kcrash,
+  kguiaddons,
+  kiconthemes,
+  ki18n,
+  kinit,
+  kdbusaddons,
+  knotifications,
+  knewstuff,
+  karchive,
+  knotifyconfig,
+  kplotting,
+  ktextwidgets,
+  mediainfo,
+  mlt,
+  shared-mime-info,
+  libv4l,
+  kfilemetadata,
+  ffmpeg-full,
+  frei0r,
+  phonon-backend-gstreamer,
+  qtdeclarative,
+  qtmultimedia,
+  qtnetworkauth,
+  qtquickcontrols2,
+  qtscript,
+  rttr,
+  kpurpose,
+  kdeclarative,
+  wrapGAppsHook3,
+  glaxnimate,
 }:
 
+let
+  mlt-full = mlt.override {
+    ffmpeg = ffmpeg-full;
+  };
+in
 mkDerivation {
   pname = "kdenlive";
   nativeBuildInputs = [
@@ -58,7 +67,8 @@ mkDerivation {
     knotifyconfig
     kplotting
     ktextwidgets
-    mlt
+    mediainfo
+    mlt-full
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
@@ -72,19 +82,24 @@ mkDerivation {
     rttr
     kpurpose
     kdeclarative
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
+
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
-  patches = [ ./mlt-path.patch ./ffmpeg-path.patch ];
-  inherit mlt;
-  ffmpeg = ffmpeg-full;
+  patches = [
+    (replaceVars ./dependency-paths.patch {
+      inherit mediainfo glaxnimate;
+      ffmpeg = ffmpeg-full;
+      mlt = mlt-full;
+    })
+  ];
+
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''
       sed -i CMakeLists.txt -e '/find_package(Qt5 REQUIRED/ s|)| Concurrent)|'
-      substituteAllInPlace src/kdenlivesettings.kcfg
     '';
 
   dontWrapGApps = true;

@@ -1,27 +1,65 @@
-{ lib, stdenv, fetchzip, perl, pkg-config, libbson
-, openssl, which, zlib, snappy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  openssl,
+  zlib,
+  zstd,
+  icu,
+  cyrus_sasl,
+  snappy,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.8.0";
+  version = "1.29.1";
 
-  src = fetchzip {
-    url = "https://github.com/mongodb/mongo-c-driver/releases/download/${version}/mongo-c-driver-${version}.tar.gz";
-    sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
+  src = fetchFromGitHub {
+    owner = "mongodb";
+    repo = "mongo-c-driver";
+    tag = version;
+    hash = "sha256-81UgJ5GboznaK9omhr3ZMOeOQbIru33Ic42tQAazSzw=";
   };
 
-  nativeBuildInputs = [ pkg-config which perl ];
-  buildInputs = [ openssl zlib ];
-  propagatedBuildInputs = [ libbson snappy ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  enableParallelBuilding = true;
+  buildInputs =
+    [
+      openssl
+      zlib
+      zstd
+      icu
+      cyrus_sasl
+      snappy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Security
+    ];
+
+  cmakeFlags = [
+    "-DBUILD_VERSION=${version}"
+    "-DENABLE_UNINSTALL=OFF"
+    "-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+
+  # remove forbidden reference to $TMPDIR
+  preFixup = ''
+    rm -rf src/{libmongoc,libbson}
+  '';
 
   meta = with lib; {
-    description = "The official C client library for MongoDB";
+    description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;
     mainProgram = "mongoc-stat";
+    maintainers = with maintainers; [ archer-65 ];
     platforms = platforms.all;
   };
 }

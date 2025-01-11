@@ -1,14 +1,20 @@
-{ callPackage, ... } @ args:
+{ callPackage, ... }@args:
 
-callPackage ./generic.nix (args // {
-  version = "8.0.13";
-  sha256 = "0cj0fnjimv22ykfl0yk6w29wcjvqp8y8j2g1c6gcml65qazrswyr";
+callPackage ./generic.nix (
+  args
+  // {
+    version = "8.0.35-31";
+    hash = "sha256-KHfgSi9bQlqsi5aDRBlSpdZgMfOrAwHK51k8KhQ9Udg=";
 
-  extraPatches = [
-    ./abi-check.patch
-  ];
+    # includes https://github.com/Percona-Lab/libkmip.git
+    fetchSubmodules = true;
 
-  extraPostInstall = ''
-    rm -r "$out"/docs
-  '';
-})
+    extraPatches = [
+      ./abi-check.patch
+    ];
+
+    extraPostInstall = ''
+      rm -r "$out"/docs
+    '';
+  }
+)

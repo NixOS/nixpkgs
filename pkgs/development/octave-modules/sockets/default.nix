@@ -1,15 +1,16 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "sockets";
-  version = "1.2.1";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "18f1zpqcf6h9b4fb0x2c5nvc3mvgj1141f1s8d9gnlhlrjlq8vqg";
+    sha256 = "sha256-u5Nb9PVyMoR0lIzXEMtkZntXbBfpyXrtLB8U+dkgYrc=";
   };
 
   meta = with lib; {

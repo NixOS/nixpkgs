@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, unzip, file, licenseFile ? null, optgamsFile ? null}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  file,
+  licenseFile ? null,
+  optgamsFile ? null,
+}:
 
 assert licenseFile != null;
 
@@ -14,15 +22,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ file ];
   dontBuild = true;
 
-  installPhase = ''
-    mkdir -p "$out/bin" "$out/share/gams"
-    cp -a * "$out/share/gams"
+  installPhase =
+    ''
+      mkdir -p "$out/bin" "$out/share/gams"
+      cp -a * "$out/share/gams"
 
-    cp ${licenseFile} $out/share/gams/gamslice.txt
-  '' + lib.optionalString (optgamsFile != null) ''
-    cp ${optgamsFile} $out/share/gams/optgams.def
-    ln -s $out/share/gams/optgams.def $out/bin/optgams.def
-  '';
+      cp ${licenseFile} $out/share/gams/gamslice.txt
+    ''
+    + lib.optionalString (optgamsFile != null) ''
+      cp ${optgamsFile} $out/share/gams/optgams.def
+      ln -s $out/share/gams/optgams.def $out/bin/optgams.def
+    '';
 
   postFixup = ''
     for f in $out/share/gams/*; do
@@ -36,16 +46,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     description = "General Algebraic Modeling System";
     longDescription = ''
       The General Algebraic Modeling System is a high-level modeling system for mathematical optimization.
       GAMS is designed for modeling and solving linear, nonlinear, and mixed-integer optimization problems.
     '';
     homepage = "https://www.gams.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.Scriptkiddi ];
     platforms = platforms.linux;
   };
 }
-

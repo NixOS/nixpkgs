@@ -1,5 +1,5 @@
 diff --git a/django_prometheus/tests/end2end/testapp/settings.py b/django_prometheus/tests/end2end/testapp/settings.py
-index 0630721..bd2190a 100644
+index cdd167f..5c6073b 100644
 --- a/django_prometheus/tests/end2end/testapp/settings.py
 +++ b/django_prometheus/tests/end2end/testapp/settings.py
 @@ -53,33 +53,6 @@ DATABASES = {
@@ -28,9 +28,9 @@ index 0630721..bd2190a 100644
 -    "mysql": {
 -        "ENGINE": "django_prometheus.db.backends.mysql",
 -        "NAME": "django_prometheus_1",
--        "USER": "travis",
+-        "USER": "root",
 -        "PASSWORD": "",
--        "HOST": "localhost",
+-        "HOST": "127.0.0.1",
 -        "PORT": "3306",
 -    },
      # The following databases are used by test_db.py only

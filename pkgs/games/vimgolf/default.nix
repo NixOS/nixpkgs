@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "vimgolf";
@@ -8,7 +12,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "vimgolf";
 
   meta = with lib; {
-    description = "A game that tests Vim efficiency";
+    description = "Game that tests Vim efficiency";
     homepage = "https://vimgolf.com";
     license = licenses.mit;
     maintainers = with maintainers; [ leungbk ];

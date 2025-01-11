@@ -1,29 +1,53 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core, girara, libspectre, gettext }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  zathura_core,
+  girara,
+  libspectre,
+  gettext,
+  desktop-file-utils,
+  appstream-glib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "0wygq89nyjrjnsq7vbpidqdsirjm6iq4w2rijzwpk2f83ys8bc3y";
+    url = "https://pwmt.org/projects/zathura-ps/download/zathura-ps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-B8pZT3J3+YdtADgEhBg0PqKWQCjpPJD5Vp7/NqiTLko=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext ];
-  buildInputs = [ libspectre zathura_core girara ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    desktop-file-utils
+    appstream-glib
+  ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  buildInputs = [
+    libspectre
+    zathura_core
+    girara
+  ];
 
-  meta = with lib; {
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  meta = {
     homepage = "https://pwmt.org/projects/zathura-ps/";
-    description = "A zathura PS plugin";
+    description = "Zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the
       libspectre library.
-      '';
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    '';
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
-
+})

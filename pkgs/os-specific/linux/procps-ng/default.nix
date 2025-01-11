@@ -1,68 +1,76 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  pkg-config,
+  autoreconfHook,
 
   # `ps` with systemd support is able to properly report different
   # attributes like unit name, so we want to have it on linux.
-, withSystemd ? stdenv.isLinux
-, systemd
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 
   # procps is mostly Linux-only. Most commands require a running Linux
   # system (or very similar like that found in Cygwin). The one
   # exception is ‘watch’ which is portable enough to run on pretty much
   # any UNIX-compatible system.
-, watchOnly ? !(stdenv.isLinux || stdenv.isCygwin)
+  watchOnly ? !(stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isCygwin),
+
+  binlore,
+  procps,
 }:
 
 stdenv.mkDerivation rec {
   pname = "procps";
-  version = "3.3.16";
+  version = "4.0.4";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
-    sha256 = "1br0g93ysqhlv13i1k4lfbimsgxnpy5rgs4lxfc9rkzdbpbaqplj";
+    hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/procps-ng/procps/-/commit/bb96fc42956c9ed926a1b958ab715f8b4a663dec.diff";
-      sha256 = "0fzsb6ns3fvrszyzsz28qvbmcn135ilr4nwh2z1a0vlpl2fw961z";
-      name = "sysconf-argmax-sanity.patch";
-    })
+  buildInputs = [ ncurses ] ++ lib.optional withSystemd systemd;
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
   ];
 
-  buildInputs = [ ncurses ]
-    ++ lib.optional withSystemd systemd;
-  nativeBuildInputs = [ pkg-config ];
-
-  makeFlags = [ "usrbin_execdir=$(out)/bin" ]
-    ++ lib.optionals watchOnly [ "watch" "PKG_LDFLAGS=" ];
+  makeFlags = [ "usrbin_execdir=$(out)/bin" ] ++ lib.optionals watchOnly [ "src/watch" ];
 
   enableParallelBuilding = true;
 
-  # Too red
-  configureFlags = [ "--disable-modern-top" ]
+  # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
+  configureFlags =
+    [
+      "--disable-modern-top"
+      "--enable-watch8bit"
+    ]
     ++ lib.optional withSystemd "--with-systemd"
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-w"
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ];
 
   installPhase = lib.optionalString watchOnly ''
-    install -m 0755 -D watch $out/bin/watch
-    install -m 0644 -D watch.1 $out/share/man/man1/watch.1
+    install -m 0755 -D src/watch $out/bin/watch
+    install -m 0644 -D man/watch.1 $out/share/man/man1/watch.1
+  '';
+
+  # no obvious exec in documented arguments; haven't trawled source
+  # to figure out what exec binlore hits on
+  passthru.binlore.out = binlore.synthesize procps ''
+    execer cannot bin/{ps,top,free}
   '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/procps-ng/procps";
     description = "Utilities that give information about processes using the /proc filesystem";
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.typetetris ];
+    maintainers = [ ];
   };
 }

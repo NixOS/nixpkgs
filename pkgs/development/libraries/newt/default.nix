@@ -1,15 +1,22 @@
-{ lib, fetchurl, stdenv, slang, popt, python }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  slang,
+  popt,
+  python,
+}:
 
 let
   pythonIncludePath = "${lib.getDev python}/include/python";
 in
 stdenv.mkDerivation rec {
   pname = "newt";
-  version = "0.52.21";
+  version = "0.52.24";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0cdvbancr7y4nrj8257y5n45hmhizr8isynagy4fpsnpammv8pi6";
+    sha256 = "sha256-Xe1+Ih+F9kJSHEmxgmyN4ZhFqjcrr11jClF3S1RPvbs=";
   };
 
   postPatch = ''
@@ -26,7 +33,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python ];
-  buildInputs = [ slang popt ];
+  buildInputs = [
+    slang
+    popt
+  ];
 
   NIX_LDFLAGS = "-lncurses";
 
@@ -36,16 +46,26 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-nls"
+  ];
+
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with lib; {
-    homepage = "https://pagure.io/newt";
-    description = "Library for color text mode, widget based user interfaces";
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -id $out/lib/libnewt.so.${version} $out/lib/libnewt.so.${version}
+    install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
+  '';
 
+  meta = with lib; {
+    description = "Library for color text mode, widget based user interfaces";
+    mainProgram = "whiptail";
+    homepage = "https://pagure.io/newt";
+    changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
     license = licenses.lgpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.viric ];
+    platforms = platforms.unix;
+    maintainers = [ ];
   };
 }

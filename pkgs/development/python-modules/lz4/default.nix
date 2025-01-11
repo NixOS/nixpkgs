@@ -1,42 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-
-# native inputs
-, pkgconfig
-, setuptools-scm
-
-# tests
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgconfig,
+  psutil,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  pname = "python-lz4";
-  version = "4.0.0";
-  format = "setuptools";
+  pname = "lz4";
+  version = "4.3.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   # get full repository in order to run tests
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9gp67i2fotvFOpkaQZ82/YKnDEs3DnzXfuNCVRJg88I=";
+    owner = "python-lz4";
+    repo = "python-lz4";
+    tag = "v${version}";
+    hash = "sha256-ZvGUkb9DoheYY2/sejUhxgh2lS5eoBrFCXR4E0IcFcs=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     sed -i '/pytest-cov/d' setup.py
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
     pkgconfig
+    setuptools-scm
+    setuptools
   ];
 
   pythonImportsCheck = [
@@ -46,13 +43,13 @@ buildPythonPackage rec {
     "lz4.stream"
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
     psutil
+    pytestCheckHook
   ];
 
   # for lz4.steam
-  PYLZ4_EXPERIMENTAL = true;
+  env.PYLZ4_EXPERIMENTAL = true;
 
   # prevent local lz4 directory from getting imported as it lacks native extensions
   preCheck = ''
@@ -63,7 +60,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

@@ -1,45 +1,62 @@
-{ buildPythonPackage
-, cython
-, fetchFromGitHub
-, isPy38
-, lib
-, lz4
-, numpy
-, pandas
-, pytestCheckHook
-, python-dateutil
-, python-snappy
-, pythonOlder
-, zstandard
+{
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  isPy38,
+  lib,
+  lz4,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  python-dateutil,
+  cramjam,
+  pythonOlder,
+  setuptools,
+  zlib-ng,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.5.1";
+  version = "1.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-kI1KRJ4iQP19hYTSRQ6VHZz+Pg5Ar7CaOB7yUJbHm2Q=";
+    tag = version;
+    hash = "sha256-/YZFrEs7abm+oPn9yyLMV1X/G5VZ/s+ThpvzoQtYQu0=";
   };
 
   preBuild = ''
     export FASTAVRO_USE_CYTHON=1
   '';
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  checkInputs = [
-    lz4
+  optional-dependencies = {
+    codecs = [
+      cramjam
+      lz4
+      zstandard
+    ];
+    snappy = [ cramjam ];
+    zstandard = [ zstandard ];
+    lz4 = [ lz4 ];
+  };
+
+  nativeCheckInputs = [
     numpy
     pandas
     pytestCheckHook
     python-dateutil
-    python-snappy
-    zstandard
-  ];
+    zlib-ng
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
@@ -52,7 +69,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast read/write of AVRO files";
+    mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
+    changelog = "https://github.com/fastavro/fastavro/blob/${version}/ChangeLog";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

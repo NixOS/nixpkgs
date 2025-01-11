@@ -1,29 +1,29 @@
-{ stdenv, lib, fetchurl
-, ocaml, findlib
+{
+  buildDunePackage,
+  ocaml,
+  lib,
+  fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-stdcompat";
-  version = "18";
+lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
+  "stdcompat is not available for OCaml ${ocaml.version}"
 
-  src = fetchurl {
-    url = "https://github.com/thierry-martinez/stdcompat/releases/download/v${version}/stdcompat-${version}.tar.gz";
-    sha256 = "sha256:01y67rndjlzfp5zq0gbqpg9skqq2hfbvhbq9lfhhk5xidr98sfj8";
-  };
+  buildDunePackage
+  rec {
+    pname = "stdcompat";
+    version = "19";
 
-  nativeBuildInputs = [ ocaml findlib ];
+    src = fetchurl {
+      url = "https://github.com/thierry-martinez/stdcompat/releases/download/v${version}/stdcompat-${version}.tar.gz";
+      sha256 = "sha256-DKQGd4nnIN6SPls6hcA/2Jvc7ivYNpeMU6rYsVc1ClU=";
+    };
 
-  strictDeps = true;
+    # Otherwise ./configure script will run and create files conflicting with dune.
+    dontConfigure = true;
 
-  # build fails otherwise
-  enableParallelBuilding = false;
-
-  configureFlags = [ "--libdir=$(OCAMLFIND_DESTDIR)" ];
-
-  meta = {
-    homepage = "https://github.com/thierry-martinez/stdcompat";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
-  };
-}
+    meta = {
+      homepage = "https://github.com/thierry-martinez/stdcompat";
+      license = lib.licenses.bsd2;
+      maintainers = [ lib.maintainers.vbgl ];
+    };
+  }

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
 , curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
-, Cocoa
+, Cocoa, libXext
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake imagemagick unzip zip file ];
 
   buildInputs = [
-    freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
+    freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg libXext
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
@@ -58,11 +58,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = "-lopenal";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A compatible client of Ace of Spades 0.75";
+    description = "Compatible client of Ace of Spades 0.75";
+    mainProgram = "openspades";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar azahi ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

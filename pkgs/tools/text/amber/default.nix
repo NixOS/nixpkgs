@@ -1,24 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, libiconv, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amber";
-  version = "0.5.9";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mmgJCD7kJjvpxyagsoe5CSzqIEZcIiYMAMP3axRphv4=";
+    sha256 = "sha256-q0o2PQngbDLumck27V0bIiB35zesn55Y+MwK2GjNVWo=";
   };
 
-  cargoSha256 = "sha256-opRinhTmhZxpAwHNiVOLXL8boQf09Y1NXrWQ6HWQYQ0=";
+  cargoHash = "sha256-nBSgP30Izskq9RbhVIyqWzZgG5ZWHVdiukldw+Q0rco=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    Security
+  ];
 
   meta = with lib; {
-    description = "A code search-and-replace tool";
+    description = "Code search-and-replace tool";
     homepage = "https://github.com/dalance/amber";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.bdesham ];

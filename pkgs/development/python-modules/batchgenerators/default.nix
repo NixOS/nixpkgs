@@ -1,62 +1,60 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, future
-, numpy
-, pillow
-, fetchpatch
-, scipy
-, scikit-learn
-, scikitimage
-, threadpoolctl
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  future,
+  numpy,
+  pillow,
+  scipy,
+  scikit-learn,
+  scikit-image,
+  threadpoolctl,
 }:
 
 buildPythonPackage rec {
   pname = "batchgenerators";
-  version = "0.21";
-  format = "setuptools";
+  version = "0.25";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
-    repo = pname;
+    repo = "batchgenerators";
     rev = "v${version}";
-    hash = "sha256-q8mBWcy+PkJcfiKtq8P2bnTw56FE1suVS0zUgUEmc5k=";
+    hash = "sha256-L2mWH2t8PN9o1M67KDdl1Tj2ZZ02MY4icsJY2VNrj3A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     future
     numpy
     pillow
     scipy
     scikit-learn
-    scikitimage
+    scikit-image
     threadpoolctl
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  # see https://github.com/MIC-DKFZ/batchgenerators/pull/78
+  pythonRemoveDeps = [ "unittest2" ];
 
-  patches = [
-    # Remove deprecated unittest2, https://github.com/MIC-DKFZ/batchgenerators/pull/78
-    (fetchpatch {
-      name = "remove-unittest2.patch";
-      url = "https://github.com/MIC-DKFZ/batchgenerators/commit/87a9437057df8a7550aa3b3eaf840871cc0d5cef.patch";
-      sha256 = "sha256-vozBK7g2dLxx9din/R2vU28Mm+LoGAO/BmQlt/ShmEo=";
-    })
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"unittest2",' ""
-  '';
+  # see https://github.com/MIC-DKFZ/batchgenerators/pull/78
+  disabledTestPaths = [ "tests/test_axis_mirroring.py" ];
 
   pythonImportsCheck = [
     "batchgenerators"
+    "batchgenerators.augmentations"
+    "batchgenerators.dataloading"
+    "batchgenerators.datasets"
+    "batchgenerators.transforms"
+    "batchgenerators.utilities"
   ];
 
   meta = with lib; {

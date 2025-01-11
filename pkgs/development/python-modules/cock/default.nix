@@ -1,15 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, click, sortedcontainers, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  sortedcontainers,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "cock";
-  version = "0.9.0";
+  version = "0.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d9021c2d9ce0dbf495a3c5ef960a9996a0681bb96ff6099f37302a3813a184e";
+    hash = "sha256-Hi8aFxATsYcEO6qNzZnF73V8WLTQjb6Dw2xF4VgT2o4=";
   };
 
-  propagatedBuildInputs = [ click sortedcontainers pyyaml ];
+  propagatedBuildInputs = [
+    click
+    sortedcontainers
+    pyyaml
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pohmelie/cock";

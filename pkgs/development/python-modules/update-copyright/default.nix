@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "update-copyright";
   version = "0.6.2";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -15,7 +21,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "An automatic copyright update tool";
+    description = "Automatic copyright update tool";
+    mainProgram = "update-copyright.py";
     homepage = "http://blog.tremily.us/posts/update-copyright";
     license = licenses.gpl3;
   };

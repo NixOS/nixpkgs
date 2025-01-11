@@ -1,35 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, contextlib2
-, cython
-, fuse
-, pkg-config
-, pytestCheckHook
-, python
-, which
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  fuse,
+  pkg-config,
+  pytestCheckHook,
+  python,
+  setuptools,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.2";
+  version = "1.5.1";
 
-  disabled = pythonOlder "3.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
-    rev = "release-${version}";
-    hash = "sha256-TnZnv439fLvg0WM96yx0dPSSz8Mrae6GDC9LiLFrgQ8=";
+    tag = "release-${version}";
+    hash = "sha256-wni/b1hEn6/G0RszCJi+wmBHx6F0Ov1cZ/sRf8PLmps=";
   };
 
-  nativeBuildInputs = [ cython pkg-config ];
+  nativeBuildInputs = [
+    cython
+    pkg-config
+    setuptools
+  ];
 
   buildInputs = [ fuse ];
-
-  propagatedBuildInputs = [ contextlib2 ];
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -37,12 +42,15 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_cython
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
   '';
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.
-  doCheck = !stdenv.isDarwin;
-  checkInputs = [ pytestCheckHook which ];
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [
+    pytestCheckHook
+    which
+  ];
 
   disabledTests = [
     "test_listdir" # accesses /usr/bin
@@ -51,8 +59,12 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
+    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor dotlambda ];
+    maintainers = with maintainers; [
+      bjornfor
+      dotlambda
+    ];
   };
 }

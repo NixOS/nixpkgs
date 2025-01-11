@@ -29,31 +29,28 @@ in
       log = mkOption {
         type = types.str;
         default = "stderr";
-        description =
-          ''
+        description = ''
             Where to send logs.
 
             Possible values are:
               - stderr
               - file:/path/to/file
               - syslog:FACILITY where FACILITY is any of "daemon", "local0",
-              etc.
+                etc.
           '';
       };
 
       chroot = mkOption {
         type = with types; nullOr str;
         default = null;
-        description =
-          ''
+        description = ''
             Chroot under which to run redsocks. Log file is opened before
             chroot, but if logging to syslog /etc/localtime may be required.
           '';
       };
 
       redsocks = mkOption {
-        description =
-          ''
+        description = ''
             Local port to proxy associations to be performed.
 
             The example shows how to configure a proxy to handle port 80 as HTTP
@@ -73,23 +70,21 @@ in
           ip = mkOption {
             type = types.str;
             default = "127.0.0.1";
-            description =
-              ''
+            description = ''
                 IP on which redsocks should listen. Defaults to 127.0.0.1 for
                 security reasons.
               '';
           };
 
           port = mkOption {
-            type = types.int;
+            type = types.port;
             default = 12345;
             description = "Port on which redsocks should listen.";
           };
 
           proxy = mkOption {
             type = types.str;
-            description =
-              ''
+            description = ''
                 Proxy through which redsocks should forward incoming traffic.
                 Example: "example.org:8080"
               '';
@@ -109,8 +104,7 @@ in
           password = mkOption {
             type = with types; nullOr str;
             default = null;
-            description =
-              ''
+            description = ''
                 Password to send to proxy. WARNING, this will end up
                 world-readable in the store! Awaiting
                 https://github.com/NixOS/nix/issues/8 to be able to fix.
@@ -121,10 +115,10 @@ in
             type = types.enum [ "false" "X-Forwarded-For" "Forwarded_ip"
                                 "Forwarded_ipport" ];
             default = "false";
-            description =
-              ''
+            description = ''
                 Way to disclose client IP to the proxy.
                   - "false": do not disclose
+
                 http-connect supports the following ways:
                   - "X-Forwarded-For": add header "X-Forwarded-For: IP"
                   - "Forwarded_ip": add header "Forwarded: for=IP" (see RFC7239)
@@ -141,8 +135,7 @@ in
           doNotRedirect = mkOption {
             type = with types; listOf str;
             default = [];
-            description =
-              ''
+            description = ''
                 Iptables filters that if matched will get the packet off of
                 redsocks.
               '';
@@ -152,8 +145,7 @@ in
           redirectCondition = mkOption {
             type = with types; either bool str;
             default = false;
-            description =
-              ''
+            description = ''
                 Conditions to make outbound packets go through this redsocks
                 instance.
 

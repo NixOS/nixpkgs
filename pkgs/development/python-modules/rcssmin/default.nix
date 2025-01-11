@@ -1,20 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+}:
+
 buildPythonPackage rec {
   pname = "rcssmin";
-  version = "1.1.0";
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27fc400627fd3d328b7fe95af2a01f5d0af6b5af39731af5d071826a1f08e362";
+    hash = "sha256-9DaHJBLPpvBP/5kMYyIkaxOqOJ9gMjuWNYPtYQLXyEw=";
   };
 
   # The package does not ship tests, and the setup machinary confuses
   # tests auto-discovery
   doCheck = false;
 
+  pythonImportsCheck = [ "rcssmin" ];
+
   meta = with lib; {
+    description = "CSS minifier written in pure python";
     homepage = "http://opensource.perlig.de/rcssmin/";
     license = licenses.asl20;
-    description = "CSS minifier written in pure python";
+    maintainers = [ ];
   };
 }

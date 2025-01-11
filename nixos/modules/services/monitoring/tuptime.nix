@@ -1,34 +1,36 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.tuptime;
 
-in {
+in
+{
 
   options.services.tuptime = {
 
-    enable = mkEnableOption "the total uptime service";
+    enable = lib.mkEnableOption "the total uptime service";
 
     timer = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to regularly log uptime to detect bad shutdowns.";
       };
 
-      period = mkOption {
-        type = types.str;
+      period = lib.mkOption {
+        type = lib.types.str;
         default = "*:0/5";
         description = "systemd calendar event";
       };
     };
   };
 
-
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.tuptime ];
 
@@ -45,7 +47,7 @@ in {
       services = {
 
         tuptime = {
-          description = "the total uptime service";
+          description = "The total uptime service";
           documentation = [ "man:tuptime(1)" ];
           after = [ "time-sync.target" ];
           wantedBy = [ "multi-user.target" ];
@@ -54,38 +56,40 @@ in {
             Type = "oneshot";
             User = "_tuptime";
             RemainAfterExit = true;
-            ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
-            ExecStop = "${pkgs.tuptime}/bin/tuptime -xg";
+            ExecStart = "${pkgs.tuptime}/bin/tuptime -q";
+            ExecStop = "${pkgs.tuptime}/bin/tuptime -qg";
           };
         };
 
-        tuptime-oneshot = mkIf cfg.timer.enable {
-          description = "the tuptime scheduled execution unit";
+        tuptime-sync = lib.mkIf cfg.timer.enable {
+          description = "Tuptime scheduled sync service";
           serviceConfig = {
-            StateDirectory = "tuptime";
             Type = "oneshot";
             User = "_tuptime";
-            ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
+            ExecStart = "${pkgs.tuptime}/bin/tuptime -q";
           };
         };
       };
 
-      timers.tuptime = mkIf cfg.timer.enable {
-        description = "the tuptime scheduled execution timer";
+      timers.tuptime-sync = lib.mkIf cfg.timer.enable {
+        description = "Tuptime scheduled sync timer";
         # this timer should be started if the service is started
         # even if the timer was previously stopped
-        wantedBy = [ "tuptime.service" "timers.target" ];
+        wantedBy = [
+          "tuptime.service"
+          "timers.target"
+        ];
         # this timer should be stopped if the service is stopped
         partOf = [ "tuptime.service" ];
         timerConfig = {
           OnBootSec = "1min";
           OnCalendar = cfg.timer.period;
-          Unit = "tuptime-oneshot.service";
+          Unit = "tuptime-sync.service";
         };
       };
     };
   };
 
-  meta.maintainers = [ maintainers.evils ];
+  meta.maintainers = [ lib.maintainers.evils ];
 
 }

@@ -1,57 +1,82 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, msgpack
-, pytestCheckHook
-, python-engineio
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  bidict,
+  python-engineio,
+
+  # optional-dependencies
+  aiohttp,
+  requests,
+  websocket-client,
+
+  # tests
+  msgpack,
+  pytestCheckHook,
+  simple-websocket,
+  uvicorn,
+
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.6.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "5.11.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
-    rev = "v${version}";
-    sha256 = "sha256-zsTSz2RHtr4LqqPCkvHcaAw7RvfkHTNDm83OS+SgMUU=";
+    tag = "v${version}";
+    hash = "sha256-iWe9IwUR+nq9SAmHzFZYUJpVOOEbc1ZdiMAjaBjQrVs=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
+  build-system = [ setuptools ];
+
+  dependencies = [
     bidict
     python-engineio
-    requests
-    websocket-client
   ];
 
-  checkInputs = [
-    mock
+  optional-dependencies = {
+    client = [
+      requests
+      websocket-client
+    ];
+    asyncio_client = [ aiohttp ];
+  };
+
+  nativeCheckInputs = [
     msgpack
     pytestCheckHook
+    uvicorn
+    simple-websocket
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "socketio" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Use fixed ports which leads to failures when building concurrently
+    "tests/async/test_admin.py"
+    "tests/common/test_admin.py"
   ];
 
-  pythonImportsCheck = [
-    "socketio"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python Socket.IO server and client";
     longDescription = ''
       Socket.IO is a lightweight transport protocol that enables real-time
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/v${version}/CHANGES.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

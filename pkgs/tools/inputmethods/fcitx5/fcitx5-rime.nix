@@ -1,22 +1,26 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, extra-cmake-modules
-, gettext
-, fcitx5
-, librime
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  extra-cmake-modules,
+  gettext,
+  zstd,
+  fcitx5,
+  librime,
+  rime-data,
+  symlinkJoin,
+  rimeDataPkgs ? [ rime-data ],
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.13";
+  version = "5.1.9";
 
-  src = fetchFromGitHub {
-    owner = "fcitx";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-/oQdBCDV5obSHw7dzdceC+zWHcNve3NDlA50GhvkK8o=";
+  src = fetchurl {
+    url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.zst";
+    hash = "sha256-+aIb7ktmhKb6ixhvzCG6GLeEUfS3QHJmEZ3YGE5YrZg=";
   };
 
   cmakeFlags = [
@@ -28,6 +32,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     pkg-config
     gettext
+    zstd
   ];
 
   buildInputs = [
@@ -35,7 +40,15 @@ stdenv.mkDerivation rec {
     librime
   ];
 
-  patches = [ ./fcitx5-rime-with-nix-env-variable.patch ];
+  rimeDataDrv = symlinkJoin {
+    name = "fcitx5-rime-data";
+    paths = rimeDataPkgs;
+    postBuild = "mkdir -p $out/share/rime-data";
+  };
+
+  postInstall = ''
+    cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
+  '';
 
   meta = with lib; {
     description = "RIME support for Fcitx5";

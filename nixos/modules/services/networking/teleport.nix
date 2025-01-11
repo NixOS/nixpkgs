@@ -11,6 +11,10 @@ in
     services.teleport = with lib.types; {
       enable = mkEnableOption "the Teleport service";
 
+      package = mkPackageOption pkgs "teleport" {
+        example = "teleport_11";
+      };
+
       settings = mkOption {
         type = settingsYaml.type;
         default = { };
@@ -34,10 +38,10 @@ in
           }
         '';
         description = ''
-          Contents of the <literal>teleport.yaml</literal> config file.
-          The <literal>--config</literal> arguments will only be passed if this set is not empty.
+          Contents of the `teleport.yaml` config file.
+          The `--config` arguments will only be passed if this set is not empty.
 
-          See <link xlink:href="https://goteleport.com/docs/setup/reference/config/"/>.
+          See <https://goteleport.com/docs/setup/reference/config/>.
         '';
       };
 
@@ -55,7 +59,7 @@ in
         enable = mkEnableOption ''
           endpoints for monitoring purposes.
 
-          See <link xlink:href="https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/"/>
+          See <https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/>
         '';
 
         addr = mkOption {
@@ -65,7 +69,7 @@ in
         };
 
         port = mkOption {
-          type = int;
+          type = port;
           default = 3000;
           description = "Metrics and diagnostics port.";
         };
@@ -74,14 +78,15 @@ in
   };
 
   config = mkIf config.services.teleport.enable {
-    environment.systemPackages = [ pkgs.teleport ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.teleport = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      path = with pkgs; [ getent shadow sudo ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.teleport}/bin/teleport start \
+          ${cfg.package}/bin/teleport start \
             ${optionalString cfg.insecure.enable "--insecure"} \
             ${optionalString cfg.diag.enable "--diag-addr=${cfg.diag.addr}:${toString cfg.diag.port}"} \
             ${optionalString (cfg.settings != { }) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}

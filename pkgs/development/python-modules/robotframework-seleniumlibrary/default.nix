@@ -1,31 +1,58 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  click,
+  robotframework,
+  robotframework-pythonlibcore,
+  selenium,
+  approvaltests,
+  pytest-mockito,
+  pytestCheckHook,
+  robotstatuschecker,
+}:
 
 buildPythonPackage rec {
-  version = "6.0.0";
   pname = "robotframework-seleniumlibrary";
+  version = "6.6.1";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    rev = "v${version}";
-    sha256 = "1rjzz6mrx4zavcck2ry8269rf3dkvvs1qfa9ra7dkppbarrjin3f";
+    tag = "v${version}";
+    sha256 = "sha256-ULY0FH1RFQIlhS45LU3vUKi6urZJHiDgi6NdqU5tV2g=";
   };
 
-  propagatedBuildInputs = [ robotframework selenium ];
-  checkInputs = [ mockito robotstatuschecker approvaltests ];
+  build-system = [ setuptools ];
 
-  # Only execute Unit Tests. Acceptance Tests require headlesschrome, currently
-  # not available in nixpkgs
-  checkPhase = ''
-    ${python.interpreter} utest/run.py
+  dependencies = [
+    click
+    robotframework
+    robotframework-pythonlibcore
+    selenium
+  ];
+
+  nativeCheckInputs = [
+    approvaltests
+    pytest-mockito
+    pytestCheckHook
+    robotstatuschecker
+  ];
+
+  preCheck = ''
+    mkdir utest/output_dir
   '';
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.rev}/docs/SeleniumLibrary-${version}.rst";
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/SeleniumLibrary";
-    license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

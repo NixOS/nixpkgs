@@ -1,16 +1,21 @@
-{ lib, buildDunePackage, fetchFromGitLab, yojson }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  yojson,
+}:
 
 buildDunePackage rec {
   pname = "ocf";
-  version = "0.8.0";
-  useDune2 = true;
+  version = "0.9.0";
+  duneVersion = "3";
   minimalOCamlVersion = "4.03";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "ocf";
     rev = version;
-    sha256 = "sha256:00ap3q5yjqmpk87lxqv1j2wkc7583ynhjr1jjrfn9r0j2h9pfd60";
+    sha256 = "sha256-tTNpvncLO/WfcMbjqRfqzcdPv2Bd877fOU5AZlkkcXA=";
   };
 
   propagatedBuildInputs = [ yojson ];

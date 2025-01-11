@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpt2tc";
   version = "2021-04-24";
 
   src = fetchurl {
-    url = "https://bellard.org/libnc/gpt2tc-${version}.tar.gz";
-    hash = "sha256-kHnRziSNRewifM/oKDQwG27rXRvntuUUX8M+PUNHpA4=";
+    url = "https://web.archive.org/web/20220603034455/https://bellard.org/libnc/gpt2tc-2021-04-24.tar.gz";
+    hash = "sha256-6oTxnbBwjHAXVrWMjOQVwdODbqLRoinx00pi29ff5w0=";
   };
 
   patches = [
@@ -18,7 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    (python3.withPackages (p: with p; [ numpy tensorflow ]))
+    (python3.withPackages (
+      p: with p; [
+        numpy
+        tensorflow
+      ]
+    ))
   ];
 
   installPhase = ''
@@ -37,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Text completion and compression using GPT-2";
     homepage = "https://bellard.org/libnc/gpt2tc.html";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ anna328p ];

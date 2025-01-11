@@ -37,8 +37,8 @@ in
 
         Specifying configFile will override this in its entirety.
 
-        See <link xlink:href="https://pomerium.io/reference/">the Pomerium
-        configuration reference</link> for more information about what to put
+        See [the Pomerium
+        configuration reference](https://pomerium.io/reference/) for more information about what to put
         here.
       '';
       default = {};

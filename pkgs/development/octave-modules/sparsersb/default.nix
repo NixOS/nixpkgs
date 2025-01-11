@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, librsb
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  librsb,
 }:
 
 buildOctavePackage rec {
@@ -22,5 +23,7 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Interface to the librsb package implementing the RSB sparse matrix format for fast shared-memory sparse matrix computations";
+    # Broken since octave>8.x
+    broken = true;
   };
 }

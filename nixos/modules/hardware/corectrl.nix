@@ -1,23 +1,36 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    ;
+
   cfg = config.programs.corectrl;
 in
 {
   options.programs.corectrl = {
     enable = mkEnableOption ''
-      A tool to overclock amd graphics cards and processors.
+      CoreCtrl, a tool to overclock amd graphics cards and processors.
       Add your user to the corectrl group to run corectrl without needing to enter your password
     '';
 
+    package = mkPackageOption pkgs "corectrl" {
+      extraDescription = "Useful for overriding the configuration options used for the package.";
+    };
+
     gpuOverclock = {
       enable = mkEnableOption ''
-        true
+        GPU overclocking
       '';
       ppfeaturemask = mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "0xfffd7fff";
         example = "0xffffffff";
         description = ''
@@ -30,33 +43,34 @@ in
     };
   };
 
-  config = mkIf cfg.enable (lib.mkMerge [
-    {
-      environment.systemPackages = [ pkgs.corectrl ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
 
-      services.dbus.packages = [ pkgs.corectrl ];
+    services.dbus.packages = [ cfg.package ];
 
-      users.groups.corectrl = { };
+    users.groups.corectrl = { };
 
-      security.polkit.extraConfig = ''
-        polkit.addRule(function(action, subject) {
-            if ((action.id == "org.corectrl.helper.init" ||
-                 action.id == "org.corectrl.helperkiller.init") &&
-                subject.local == true &&
-                subject.active == true &&
-                subject.isInGroup("corectrl")) {
-                    return polkit.Result.YES;
-            }
-        });
-      '';
-    }
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+          if ((action.id == "org.corectrl.helper.init" ||
+               action.id == "org.corectrl.helperkiller.init") &&
+              subject.local == true &&
+              subject.active == true &&
+              subject.isInGroup("corectrl")) {
+                  return polkit.Result.YES;
+          }
+      });
+    '';
 
-    (lib.mkIf cfg.gpuOverclock.enable {
-      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd/include/amd_shared.h#n169
-      # The overdrive bit
-      boot.kernelParams = [ "amdgpu.ppfeaturemask=${cfg.gpuOverclock.ppfeaturemask}" ];
-    })
-  ]);
+    # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd/include/amd_shared.h#n169
+    # The overdrive bit
+    boot.kernelParams = mkIf cfg.gpuOverclock.enable [
+      "amdgpu.ppfeaturemask=${cfg.gpuOverclock.ppfeaturemask}"
+    ];
+  };
 
-  meta.maintainers = with lib.maintainers; [ artturin ];
+  meta.maintainers = with lib.maintainers; [
+    artturin
+    Scrumplex
+  ];
 }

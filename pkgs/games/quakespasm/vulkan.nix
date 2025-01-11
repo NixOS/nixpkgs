@@ -1,45 +1,77 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{
+  SDL2,
+  fetchFromGitHub,
+  flac,
+  glslang,
+  gzip,
+  lib,
+  libmpg123,
+  libopus,
+  libvorbis,
+  makeWrapper,
+  meson,
+  moltenvk,
+  ninja,
+  opusfile,
+  pkg-config,
+  stdenv,
+  vulkan-headers,
+  vulkan-loader,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.13.0";
+  version = "1.31.3";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-dRPeUsBLliBevjMOSMU+uPSAivrQ0tbuh4QeLmowrAI=";
+    sha256 = "sha256-VqTfcwt6/VTotD2Y7x7WiVwISRGOLfmMWh6EO5DSMX4=";
   };
-
-  sourceRoot = "source/Quake";
 
   nativeBuildInputs = [
     makeWrapper
-    vulkan-headers
+    glslang
+    meson
+    ninja
+    pkg-config
   ];
 
-  buildInputs = [
-    gzip
-    SDL2
-    libvorbis
-    libmad
-    vulkan-loader
-  ];
+  buildInputs =
+    [
+      SDL2
+      flac
+      gzip
+      libmpg123
+      libopus
+      libvorbis
+      opusfile
+      vulkan-loader
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      moltenvk
+      vulkan-headers
+    ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
-  preInstall = ''
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+      "-Wno-error=unused-but-set-variable"
+      "-Wno-error=implicit-const-int-float-conversion"
+    ];
+  };
+
+  installPhase = ''
     mkdir -p "$out/bin"
+    cp vkquake "$out/bin"
   '';
 
-  makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
-
-  postFixup = ''
-    wrapProgram $out/bin/vkquake \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    patchelf $out/bin/vkquake \
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
@@ -53,7 +85,11 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [
+      PopeRigby
+      ylh
+    ];
+    mainProgram = "vkquake";
   };
 }

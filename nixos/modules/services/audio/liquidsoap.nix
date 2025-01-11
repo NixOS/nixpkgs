@@ -1,16 +1,24 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   streams = builtins.attrNames config.services.liquidsoap.streams;
 
   streamService =
     name:
-    let stream = builtins.getAttr name config.services.liquidsoap.streams; in
-    { inherit name;
+    let
+      stream = builtins.getAttr name config.services.liquidsoap.streams;
+    in
+    {
+      inherit name;
       value = {
-        after = [ "network-online.target" "sound.target" ];
+        after = [
+          "network-online.target"
+          "sound.target"
+        ];
         description = "${name} liquidsoap stream";
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.wget ];
@@ -18,6 +26,7 @@ let
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
           LogsDirectory = "liquidsoap";
+          Restart = "always";
         };
       };
     };
@@ -28,29 +37,30 @@ in
 
   options = {
 
-    services.liquidsoap.streams = mkOption {
+    services.liquidsoap.streams = lib.mkOption {
 
-      description =
-        ''
-          Set of Liquidsoap streams to start,
-          one systemd service per stream.
-        '';
+      description = ''
+        Set of Liquidsoap streams to start,
+        one systemd service per stream.
+      '';
 
-      default = {};
+      default = { };
 
-      example = {
-        myStream1 = "/etc/liquidsoap/myStream1.liq";
-        myStream2 = literalExpression "./myStream2.liq";
-        myStream3 = "out(playlist(\"/srv/music/\"))";
-      };
+      example = lib.literalExpression ''
+        {
+          myStream1 = "/etc/liquidsoap/myStream1.liq";
+          myStream2 = ./myStream2.liq;
+          myStream3 = "out(playlist(\"/srv/music/\"))";
+        }
+      '';
 
-      type = types.attrsOf (types.either types.path types.str);
+      type = lib.types.attrsOf (lib.types.either lib.types.path lib.types.str);
     };
 
   };
   ##### implementation
 
-  config = mkIf (builtins.length streams != 0) {
+  config = lib.mkIf (builtins.length streams != 0) {
 
     users.users.liquidsoap = {
       uid = config.ids.uids.liquidsoap;
@@ -63,7 +73,7 @@ in
 
     users.groups.liquidsoap.gid = config.ids.gids.liquidsoap;
 
-    systemd.services = builtins.listToAttrs ( map streamService streams );
+    systemd.services = builtins.listToAttrs (map streamService streams);
   };
 
 }

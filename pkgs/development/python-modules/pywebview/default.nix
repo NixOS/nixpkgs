@@ -1,45 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-resources
-, proxy_tools
-, pygobject3
-, pyqtwebengine
-, pytest
-, pythonOlder
-, qt5
-, qtpy
-, six
-, xvfb-run
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  bottle,
+  importlib-resources,
+  proxy-tools,
+  pygobject3,
+  pyqtwebengine,
+  pytest,
+  pythonOlder,
+  qt5,
+  qtpy,
+  six,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.6.3";
-  format = "setuptools";
+  version = "5.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
-    rev = version;
-    hash = "sha256-qOLK4MHdpmcCazCNfojncD8XH7OJB2H/pIW5XAJAlDo=";
+    tag = version;
+    hash = "sha256-/jKauq+G3Nz91n/keTZGNDTaW5EhdyCx4c2Nylxqc+0=";
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
+    bottle
     pyqtwebengine
-    proxy_tools
+    proxy-tools
     six
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pygobject3
     pytest
     qtpy
@@ -47,26 +50,20 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED
-    export HOME=$TMPDIR
-    # QStandardPaths: XDG_RUNTIME_DIR not set
-    export XDG_RUNTIME_DIR=$HOME/xdg-runtime-dir
+    # a Qt wrapper is required to run the Qt backend
+    # since the upstream script does not have a way to disable tests individually pytest is used directly instead
+    makeQtWrapper "$(command -v pytest)" tests/run.sh \
+      --set PYWEBVIEW_LOG debug \
+      --add-flags "--deselect tests/test_js_api.py::test_concurrent"
 
-    pushd tests
-    substituteInPlace run.sh \
-      --replace "PYTHONPATH=.." "PYTHONPATH=$PYTHONPATH" \
-      --replace "pywebviewtest test_js_api.py::test_concurrent ''${PYTEST_OPTIONS}" "# skip flaky test_js_api.py::test_concurrent"
-
-    patchShebangs run.sh
-    wrapQtApp run.sh
-
-    xvfb-run -s '-screen 0 800x600x24' ./run.sh
-    popd
+    # HOME and XDG directories are required for the tests
+    env \
+      HOME=$TMPDIR \
+      XDG_RUNTIME_DIR=$TMPDIR/xdg-runtime-dir \
+      xvfb-run -s '-screen 0 800x600x24' tests/run.sh
   '';
 
-  pythonImportsCheck = [
-    "webview"
-  ];
+  pythonImportsCheck = [ "webview" ];
 
   meta = with lib; {
     description = "Lightweight cross-platform wrapper around a webview";

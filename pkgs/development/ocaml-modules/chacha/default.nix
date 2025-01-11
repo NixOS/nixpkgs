@@ -1,27 +1,38 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ocaml
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  ocaml,
 
-, alcotest
-, cstruct
-, mirage-crypto
+  alcotest,
+  cstruct,
+  mirage-crypto,
 }:
 
 buildDunePackage rec {
   pname = "chacha";
-  version = "1.0.0";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/abeaumont/ocaml-chacha/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "sha256-t8dOMQQDpje0QbuOhjSIa3xnXuXcxMVTLENa/rwdgA4=";
+  src = fetchFromGitHub {
+    owner = "abeaumont";
+    repo = "ocaml-chacha";
+    rev = version;
+    hash = "sha256-PmeiFloU0k3SqOK1VjaliiCEzDzrzyMSasgnO5fJS1k=";
   };
 
-  useDune2 = true;
+  # Ensure compatibility with cstruct ≥ 6.1.0
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/abeaumont/ocaml-chacha/commit/fbe4a0a808226229728a68f278adf370251196fd.patch";
+      sha256 = "sha256-y7X9toFDrgdv3qmFmUs7K7QS+Gy45rRLulKy48m7uqc=";
+    })
+  ];
 
-  minimumOCamlVersion = "4.02";
-
-  propagatedBuildInputs = [ cstruct mirage-crypto ];
+  propagatedBuildInputs = [
+    cstruct
+    mirage-crypto
+  ];
 
   # alcotest isn't available for OCaml < 4.05 due to fmt
   doCheck = lib.versionAtLeast ocaml.version "4.05";
@@ -37,5 +48,6 @@ buildDunePackage rec {
     '';
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fufexan ];
+    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }

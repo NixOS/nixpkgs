@@ -1,10 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) generators literalExpression mkEnableOption mkIf mkOption recursiveUpdate types;
+  inherit (lib)
+    generators
+    literalExpression
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    recursiveUpdate
+    types
+    ;
   cfg = config.services.zeronet;
   dataDir = "/var/lib/zeronet";
-  configFile = pkgs.writeText "zeronet.conf" (generators.toINI {} (recursiveUpdate defaultSettings cfg.settings));
+  configFile = pkgs.writeText "zeronet.conf" (
+    generators.toINI { } (recursiveUpdate defaultSettings cfg.settings)
+  );
 
   defaultSettings = {
     global = {
@@ -12,28 +28,40 @@ let
       log_dir = dataDir;
       ui_port = cfg.port;
       fileserver_port = cfg.fileserverPort;
-      tor = if !cfg.tor then "disable" else if cfg.torAlways then "always" else "enable";
+      tor =
+        if !cfg.tor then
+          "disable"
+        else if cfg.torAlways then
+          "always"
+        else
+          "enable";
     };
   };
-in with lib; {
+in
+with lib;
+{
   options.services.zeronet = {
     enable = mkEnableOption "zeronet";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.zeronet;
-      defaultText = literalExpression "pkgs.zeronet";
-      description = "ZeroNet package to use";
-    };
+    package = mkPackageOption pkgs "zeronet" { };
 
     settings = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-      default = {};
+      type =
+        with types;
+        attrsOf (
+          attrsOf (oneOf [
+            str
+            int
+            bool
+            (listOf str)
+          ])
+        );
+      default = { };
       example = literalExpression "{ global.tor = enable; }";
 
       description = ''
-        <filename>zeronet.conf</filename> configuration. Refer to
-        <link xlink:href="https://zeronet.readthedocs.io/en/latest/faq/#is-it-possible-to-use-a-configuration-file"/>
+        {file}`zeronet.conf` configuration. Refer to
+        <https://zeronet.readthedocs.io/en/latest/faq/#is-it-possible-to-use-a-configuration-file>
         for details on supported values;
       '';
     };
@@ -93,8 +121,16 @@ in with lib; {
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "zeronet" "dataDir" ] "Zeronet will store data by default in /var/lib/zeronet")
-    (mkRemovedOptionModule [ "services" "zeronet" "logDir" ] "Zeronet will log by default in /var/lib/zeronet")
+    (mkRemovedOptionModule [
+      "services"
+      "zeronet"
+      "dataDir"
+    ] "Zeronet will store data by default in /var/lib/zeronet")
+    (mkRemovedOptionModule [
+      "services"
+      "zeronet"
+      "logDir"
+    ] "Zeronet will log by default in /var/lib/zeronet")
   ];
 
   meta.maintainers = with maintainers; [ Madouura ];

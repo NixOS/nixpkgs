@@ -1,47 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, pdm-pep517
-, sybil
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  pythonOlder,
+  hatchling,
+  sybil,
 }:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bb072b50e6484490404e5cb4034e782aaa339fdd6ac36434e53c10791aef18bf";
+  src = fetchFromGitLab {
+    owner = "warsaw";
+    repo = "public";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cqum+4hREu0jO9iFoUUzfzn597BoMAhG+aanwnh8hb8=";
   };
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     sybil
   ];
 
-  postPatch = ''
-    sed -i '/cov=public/d' pyproject.toml
-  '';
-
-  pythonImportsCheck = [
-    "public"
-  ];
+  pythonImportsCheck = [ "public" ];
 
   meta = with lib; {
+    changelog = "https://gitlab.com/warsaw/public/-/blob/${version}/docs/NEWS.rst";
     description = "Python decorator and function which populates a module's __all__ and globals";
     homepage = "https://public.readthedocs.io/";
     longDescription = ''

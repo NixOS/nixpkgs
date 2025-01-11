@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, EasyProcess
-, path
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  easyprocess,
+  path,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,15 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-/At/57IazatHpYWrlAfKflxPlstoiFddtrDOuR8OEFo=";
   };
 
-  checkInputs = [
-    EasyProcess
+  nativeCheckInputs = [
+    easyprocess
     path
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "entrypoint2"
-  ];
+  pythonImportsCheck = [ "entrypoint2" ];
 
   meta = with lib; {
     description = "Easy to use command-line interface for python modules";

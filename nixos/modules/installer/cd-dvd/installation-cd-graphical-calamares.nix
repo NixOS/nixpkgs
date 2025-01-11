@@ -3,7 +3,10 @@
 
 { pkgs, ... }:
 let
-  calamares-nixos-autostart = pkgs.makeAutostartItem { name = "io.calamares.calamares"; package = pkgs.calamares-nixos; };
+  calamares-nixos-autostart = pkgs.makeAutostartItem {
+    name = "io.calamares.calamares";
+    package = pkgs.calamares-nixos;
+  };
 in
 {
   imports = [ ./installation-cd-graphical-base.nix ];
@@ -14,7 +17,10 @@ in
     calamares-nixos
     calamares-nixos-autostart
     calamares-nixos-extensions
-    # Needed for calamares QML module packagechooserq
-    libsForQt5.full
+    # Get list of locales
+    glibcLocales
   ];
+
+  # Support choosing from any locale
+  i18n.supportedLocales = [ "all" ];
 }

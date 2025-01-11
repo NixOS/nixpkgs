@@ -1,55 +1,53 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, opencv3
-, pyqt5
-, pyqtgraph
-, numpy
-, scipy
-, numba
-, pandas
-, tables
-, git
-, scikitimage
-, matplotlib
-, qdarkstyle
-, GitPython
-, anytree
-, pims
-, imageio
-, imageio-ffmpeg
-, av
-, nose
-, pytestCheckHook
-, pyserial
-, arrayqueues
-, colorspacious
-, qimage2ndarray
-, flammkuchen
-, lightparam
+{
+  lib,
+  anytree,
+  arrayqueues,
+  av,
+  buildPythonPackage,
+  colorspacious,
+  fetchPypi,
+  flammkuchen,
+  git,
+  gitpython,
+  imageio,
+  imageio-ffmpeg,
+  lightparam,
+  matplotlib,
+  numba,
+  numpy,
+  opencv4,
+  pandas,
+  pims,
+  pyqt5,
+  pyqtgraph,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  qdarkstyle,
+  qimage2ndarray,
+  scikit-image,
+  scipy,
+  tables,
 }:
 
 buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
-  disabled = !isPy3k;
+  pyproject = true;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
   };
 
-  # crashes python
-  preCheck = ''
-    rm stytra/tests/test_z_experiments.py
-  '';
-
-  checkInputs = [
-    nose
-    pytestCheckHook
-    pyserial
+  patches = [
+    # https://github.com/portugueslab/stytra/issues/87
+    ./0000-workaround-pyqtgraph.patch
   ];
 
   propagatedBuildInputs = [
-    opencv3
+    opencv4
     pyqt5
     pyqtgraph
     numpy
@@ -58,10 +56,10 @@ buildPythonPackage rec {
     pandas
     tables
     git
-    scikitimage
+    scikit-image
     matplotlib
     qdarkstyle
-    GitPython
+    gitpython
     anytree
     qimage2ndarray
     flammkuchen
@@ -74,10 +72,20 @@ buildPythonPackage rec {
     av
   ];
 
-  meta = {
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyserial
+  ];
+
+  disabledTestPaths = [
+    # Crashes python
+    "stytra/tests/test_z_experiments.py"
+  ];
+
+  meta = with lib; {
+    description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
-    description = "A modular package to control stimulation and track behaviour";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ tbenst ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ tbenst ];
   };
 }

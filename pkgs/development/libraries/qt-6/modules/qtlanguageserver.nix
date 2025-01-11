@@ -1,8 +1,12 @@
-{ qtModule
-, qtbase
+{
+  qtModule,
+  qtbase,
 }:
 
 qtModule {
   pname = "qtlanguageserver";
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
+
+  # Doesn't have version set
+  dontCheckQtModuleVersion = true;
 }

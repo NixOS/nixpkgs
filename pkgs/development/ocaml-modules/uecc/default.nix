@@ -1,17 +1,26 @@
-{ lib, fetchFromGitLab, buildDunePackage, bigstring, alcotest, cstruct, hex }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ocaml,
+  bigstring,
+  alcotest,
+  cstruct,
+  hex,
+}:
 
 buildDunePackage rec {
   pname = "uecc";
-  version = "0.3";
+  version = "0.4";
+
+  duneVersion = "3";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ocaml-uecc";
     rev = "v${version}";
-    sha256 = "0m3cw34254baajscrwlrj0jp5n0yad3dhgi4jh3pz89iqykj15fr";
+    hash = "sha256-o/DylUx+olRRloiCU6b1t/xOmW8A5IZB2n3U7fkMo80=";
   };
-
-  useDune2 = true;
 
   propagatedBuildInputs = [
     bigstring
@@ -23,7 +32,7 @@ buildDunePackage rec {
     hex
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Bindings for ECDH and ECDSA for 8-bit, 32-bit, and 64-bit processors";

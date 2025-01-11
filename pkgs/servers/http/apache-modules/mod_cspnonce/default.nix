@@ -1,14 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, apacheHttpd }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  apacheHttpd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_cspnonce";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "wyattoday";
     repo = "mod_cspnonce";
     rev = version;
-    sha256 = "0kqvxf1dn8r0ywrfiwsxryjrxii2sq11wisbjnm7770sjwckwqh5";
+    hash = "sha256-uUWRKUjS2LvHgT5xrK+LZLQRHc6wMaxGca2OsVxVlRs=";
   };
 
   buildInputs = [ apacheHttpd ];
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An Apache2 module that makes it dead simple to add nonce values to the CSP";
+    description = "Apache2 module that makes it dead simple to add nonce values to the CSP";
     homepage = "https://github.com/wyattoday/mod_cspnonce";
     license = licenses.asl20;
     platforms = platforms.unix;

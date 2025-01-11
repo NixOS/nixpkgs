@@ -1,22 +1,75 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro ? null, futures ? null, enum34 ? null }:
+{
+  lib,
+  avro,
+  buildPythonPackage,
+  fastavro,
+  fetchFromGitHub,
+  jsonschema,
+  protobuf,
+  pyflakes,
+  pyrsistent,
+  pytestCheckHook,
+  pythonOlder,
+  rdkafka,
+  requests,
+  requests-mock,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-  version = "1.8.2";
   pname = "confluent-kafka";
+  version = "2.6.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b79e836c3554bc51c6837a8a0152f7521c9bf31342f5b8e21eba6b28044fa585";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "confluentinc";
+    repo = "confluent-kafka-python";
+    tag = "v${version}";
+    hash = "sha256-SFmZ/KriysvLkGT5mvIS9SJcUHWmvZXrqFAY0lC6bGc=";
   };
 
-  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]) ;
+  buildInputs = [ rdkafka ];
 
-  # No tests in PyPi Tarball
-  doCheck = false;
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    avro = [
+      avro
+      fastavro
+      requests
+    ];
+    json = [
+      jsonschema
+      pyrsistent
+      requests
+    ];
+    protobuf = [
+      protobuf
+      requests
+    ];
+    schema-registry = [ requests ];
+  };
+
+  nativeCheckInputs = [
+    pyflakes
+    pytestCheckHook
+    requests-mock
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "confluent_kafka" ];
+
+  disabledTestPaths = [
+    "tests/integration/"
+    "tests/test_Admin.py"
+    "tests/test_misc.py"
+  ];
 
   meta = with lib; {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
+    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ mlieberman85 ];
   };

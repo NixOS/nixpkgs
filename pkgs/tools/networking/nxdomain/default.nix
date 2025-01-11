@@ -1,4 +1,10 @@
-{ lib, buildPythonApplication, fetchPypi, dnspython, pytestCheckHook }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  dnspython,
+  pytestCheckHook,
+}:
 
 buildPythonApplication rec {
   pname = "nxdomain";
@@ -11,7 +17,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ dnspython ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postCheck = ''
     echo example.org > simple.list
@@ -21,7 +27,8 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/zopieux/nxdomain";
-    description = "A domain (ad) block list creator";
+    description = "Domain (ad) block list creator";
+    mainProgram = "nxdomain";
     platforms = platforms.all;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ zopieux ];

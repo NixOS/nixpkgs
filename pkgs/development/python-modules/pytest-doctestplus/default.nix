@@ -1,49 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, packaging
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch2,
+  gitMinimal,
+  numpy,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.11.2";
-  format = "setuptools";
+  version = "1.2.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f393adf659709a5f111d6ca190871c61808a6f3611bd0a132e27e93b24dd3448";
+    hash = "sha256-JHKoosjOo00vZfZJlUP663SO7LWcWXhS/ZiDm0cwdnk=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  patches = [
+    (fetchpatch2 {
+      name = "python313-compat.patch";
+      url = "https://github.com/scientific-python/pytest-doctestplus/commit/aee0be27a8e8753ac68adc035f098ccc7a9e3678.patch";
+      hash = "sha256-UOG664zm7rJIjm/OXNu6N6jlINNB6UDZOCSUZxy3HrQ=";
+    })
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  postPatch = ''
+    substituteInPlace pytest_doctestplus/plugin.py \
+      --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
+  '';
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     packaging
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    numpy
     pytestCheckHook
-  ];
-
-  patches = [
-    # Removal of distutils, https://github.com/astropy/pytest-doctestplus/pull/172
-    (fetchpatch {
-      name = "distutils-removal.patch";
-      url = "https://github.com/astropy/pytest-doctestplus/commit/ae2ee14cca0cde0fab355936995fa083529b00ff.patch";
-      sha256 = "sha256-uryKV7bWw2oz0glyh2lpGqtDPFvRTo8RmI1N1n15/d4=";
-    })
   ];
 
   disabledTests = [
@@ -61,6 +67,6 @@ buildPythonPackage rec {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

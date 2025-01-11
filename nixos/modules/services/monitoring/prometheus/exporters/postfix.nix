@@ -1,20 +1,32 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.postfix;
+  inherit (lib)
+    mkOption
+    types
+    mkIf
+    escapeShellArg
+    concatStringsSep
+    optional
+    ;
 in
 {
   port = 9154;
   extraOpts = {
+    package = lib.mkPackageOption pkgs "prometheus-postfix-exporter" { };
     group = mkOption {
       type = types.str;
       description = ''
         Group under which the postfix exporter shall be run.
         It should match the group that is allowed to access the
-        <literal>showq</literal> socket in the <literal>queue/public/</literal> directory.
-        Defaults to <literal>services.postfix.setgidGroup</literal> when postfix is enabled.
+        `showq` socket in the `queue/public/` directory.
+        Defaults to `services.postfix.setgidGroup` when postfix is enabled.
       '';
     };
     telemetryPath = mkOption {
@@ -61,7 +73,7 @@ in
         default = null;
         description = ''
           Name of the postfix systemd slice.
-          This overrides the <option>systemd.unit</option>.
+          This overrides the {option}`systemd.unit`.
         '';
       };
       journalPath = mkOption {
@@ -74,24 +86,32 @@ in
     };
   };
   serviceOpts = {
+    after = mkIf cfg.systemd.enable [ cfg.systemd.unit ];
     serviceConfig = {
       DynamicUser = false;
       # By default, each prometheus exporter only gets AF_INET & AF_INET6,
       # but AF_UNIX is needed to read from the `showq`-socket.
       RestrictAddressFamilies = [ "AF_UNIX" ];
+      SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
-        ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
+        ${lib.getExe cfg.package} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --postfix.showq_path ${escapeShellArg cfg.showqPath} \
-          ${concatStringsSep " \\\n  " (cfg.extraFlags
-          ++ optional cfg.systemd.enable "--systemd.enable"
-          ++ optional cfg.systemd.enable (if cfg.systemd.slice != null
-                                          then "--systemd.slice ${cfg.systemd.slice}"
-                                          else "--systemd.unit ${cfg.systemd.unit}")
-          ++ optional (cfg.systemd.enable && (cfg.systemd.journalPath != null))
-                       "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
-          ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}")}
+          ${concatStringsSep " \\\n  " (
+            cfg.extraFlags
+            ++ optional cfg.systemd.enable "--systemd.enable"
+            ++ optional cfg.systemd.enable (
+              if cfg.systemd.slice != null then
+                "--systemd.slice ${cfg.systemd.slice}"
+              else
+                "--systemd.unit ${cfg.systemd.unit}"
+            )
+            ++ optional (
+              cfg.systemd.enable && (cfg.systemd.journalPath != null)
+            ) "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
+            ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}"
+          )}
       '';
     };
   };

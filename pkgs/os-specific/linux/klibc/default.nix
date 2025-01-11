@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, buildPackages, linuxHeaders, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  linuxHeaders,
+  perl,
+  nixosTests,
+}:
 
 let
   commonMakeFlags = [
@@ -9,11 +17,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "klibc";
-  version = "2.0.10";
+  version = "2.0.13";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
-    sha256 = "sha256-ZidT2oiJ50TfwNtutAIcM3fufvjtZtfVd2X4yeJZOc0=";
+    hash = "sha256-1nOilPdC1ZNoIi/1w4Ri2BCYxVBjeZ3m+4p7o9SvBDY=";
   };
 
   patches = [ ./no-reinstall-kernel-headers.patch ];
@@ -22,15 +30,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   strictDeps = true;
 
-  hardeningDisable = [ "format" "stackprotector" ];
+  hardeningDisable = [
+    "format"
+    "stackprotector"
+  ];
 
-  makeFlags = commonMakeFlags ++ [
-    "KLIBCARCH=${stdenv.hostPlatform.linuxArch}"
-    "KLIBCKERNELSRC=${linuxHeaders}"
-  ] # TODO(@Ericson2314): We now can get the ABI from
+  makeFlags =
+    commonMakeFlags
+    ++ [
+      "KLIBCARCH=${if stdenv.hostPlatform.isRiscV64 then "riscv64" else stdenv.hostPlatform.linuxArch}"
+      "KLIBCKERNELSRC=${linuxHeaders}"
+    ]
+    # TODO(@Ericson2314): We now can get the ABI from
     # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?
     ++ lib.optional (stdenv.hostPlatform.linuxArch == "arm") "CONFIG_AEABI=y"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
+    ++ lib.optional (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   # Install static binaries as well.
   postInstall = ''
@@ -43,8 +59,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests = {
+    # uses klibc's ipconfig
+    inherit (nixosTests) initrd-network-ssh;
+  };
+
   meta = {
     description = "Minimalistic libc subset for initramfs usage";
+    mainProgram = "klcc";
     homepage = "https://kernel.org/pub/linux/libs/klibc/";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.bsd3;

@@ -1,12 +1,23 @@
-{ lib, stdenv, ghcWithPackages, taffybar, makeWrapper, packages ? (x: []) }:
+{
+  stdenv,
+  ghcWithPackages,
+  taffybar,
+  makeWrapper,
+  packages ? (x: [ ]),
+}:
 
 let
-  taffybarEnv = ghcWithPackages (self: [
-    self.taffybar
-  ] ++ packages self);
-in stdenv.mkDerivation {
+  taffybarEnv = ghcWithPackages (
+    self:
+    [
+      self.taffybar
+    ]
+    ++ packages self
+  );
+in
+stdenv.mkDerivation {
   pname = "taffybar-with-packages";
-  inherit (taffybarEnv) version;
+  inherit (taffybar) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

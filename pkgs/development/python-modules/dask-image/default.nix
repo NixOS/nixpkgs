@@ -1,54 +1,57 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, dask
-, fetchPypi
-, numpy
-, pims
-, pytestCheckHook
-, pythonOlder
-, scikitimage
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  dask,
+  numpy,
+  scipy,
+  pandas,
+  pims,
+  pytestCheckHook,
+  scikit-image,
 }:
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2021.12.0";
-  format = "setuptools";
+  version = "2024.5.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Nb5JYmvQHD44khKBJqJ9XuMmahmKjjx+MNWervcS/Pk=";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "dask-image";
+    tag = "v${version}";
+    hash = "sha256-kXCAqJ2Zgo/2Khvo2YcK+n4oGM219GyQ2Hsq9re1Lac=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     dask
     numpy
     scipy
+    pandas
     pims
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--flake8" ""
-  '';
+  pythonImportsCheck = [ "dask_image" ];
 
-  pythonImportsCheck = [
-    "dask_image"
-  ];
-
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+  meta = {
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

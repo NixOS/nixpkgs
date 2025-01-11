@@ -1,71 +1,64 @@
-{ lib
-, aiohttp
-, async-timeout
-, asyncio-dgram
-, asynctest
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, voluptuous
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  asyncio-dgram,
+  buildPythonPackage,
+  certifi,
+  docutils,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2022.03.2";
+  version = "2023.12.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-eEvvcj8tHNErU6RrWar5mxG3xbQ5wCEEYJ95hXkdY54=";
+    repo = "aioguardian";
+    tag = version;
+    hash = "sha256-7fY8+aAxlDtOBLu8SadY5qiH6+RvxnFpOw1RXTonP2o=";
   };
 
-  format = "pyproject";
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
     asyncio-dgram
+    certifi
     docutils
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asyncio-dgram
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = "<0.18"' 'docutils = "*"'
-  '';
+  disabledTestPaths = [ "examples/" ];
 
-  disabledTestPaths = [
-    "examples/"
-  ];
-
-  pythonImportsCheck = [
-    "aioguardian"
-  ];
+  pythonImportsCheck = [ "aioguardian" ];
 
   meta = with lib; {
     description = " Python library to interact with Elexa Guardian devices";
     longDescription = ''
-      aioguardian is a Pytho3, asyncio-focused library for interacting with the
+      aioguardian is an asyncio-focused library for interacting with the
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

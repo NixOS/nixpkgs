@@ -1,52 +1,48 @@
-{ agg
-, fetchFromGitHub
+{ fetchFromGitHub
 , Foundation
 , freetype
 , lib
-, lua5_2
+, lua5_4
 , meson
 , ninja
 , pcre2
 , pkg-config
-, reproc
 , SDL2
 , stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.0.5";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    sha256 = "sha256-7ppO5ITijhJ37OL6xlQgu1SaQ/snXDH5xJOwuXZNUVA=";
+    hash = "sha256-Ig0XDxnll/zruAwWHwuXiqumBXgAPxuK0E1ELupvcXo=";
   };
-
-  patches = [
-    # Fixes compatibility with Lua5.2, remove patch when a new release covers this
-    ./0001-replace-unpack-with-table-unpack.patch
-  ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
-    agg
     freetype
-    lua5_2
+    lua5_4
     pcre2
-    reproc
     SDL2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 
+  mesonFlags = [
+    "-Duse_system_lua=true"
+  ];
+
   meta = with lib; {
-    description = "A lightweight text editor written in Lua";
+    description = "Lightweight text editor written in Lua";
     homepage = "https://github.com/lite-xl/lite-xl";
     license = licenses.mit;
-    maintainers = with maintainers; [ boppyt ];
+    maintainers = with maintainers; [ sefidel ];
     platforms = platforms.unix;
+    mainProgram = "lite-xl";
   };
 }

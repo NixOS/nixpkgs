@@ -1,29 +1,45 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, aiohttp
-, pytest-vcr
-, pytest-mock
-, pytest-asyncio
-, requests
-, paramiko
-, smbprotocol
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  paramiko,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  smbprotocol,
+  tqdm,
+  adlfs,
+  dask,
+  distributed,
+  dropbox,
+  fusepy,
+  gcsfs,
+  libarchive-c,
+  ocifs,
+  panel,
+  pyarrow,
+  pygit2,
+  s3fs,
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.3.0";
-  disabled = pythonOlder "3.6";
+  version = "2024.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "intake";
+    owner = "fsspec";
     repo = "filesystem_spec";
-    rev = version;
-    sha256 = "sha256-jTF8R0kaHMsCYg+7YFi21Homn63K+ulp9NDZC/jkIXM=";
+    tag = version;
+    hash = "sha256-C+47BcIELZTEARXW8fAMHMjyKUWxU1tNKWGoPPtt/fQ=";
   };
 
   propagatedBuildInputs = [
@@ -31,40 +47,91 @@ buildPythonPackage rec {
     paramiko
     requests
     smbprotocol
+    tqdm
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    entrypoints = [ ];
+    abfs = [ adlfs ];
+    adl = [ adlfs ];
+    dask = [
+      dask
+      distributed
+    ];
+    dropbox = [
+      # missing dropboxdrivefs
+      requests
+      dropbox
+    ];
+    gcs = [ gcsfs ];
+    git = [ pygit2 ];
+    github = [ requests ];
+    gs = [ gcsfs ];
+    hdfs = [ pyarrow ];
+    arrow = [ pyarrow ];
+    http = [
+      aiohttp
+      requests
+    ];
+    sftp = [ paramiko ];
+    s3 = [ s3fs ];
+    oci = [ ocifs ];
+    smb = [ smbprotocol ];
+    ssh = [ paramiko ];
+    fuse = [ fusepy ];
+    libarchive = [ libarchive-c ];
+    gui = [ panel ];
+    tqdm = [ tqdm ];
+  };
+
+  nativeCheckInputs = [
     numpy
-    pytest-vcr
-    pytest-mock
     pytest-asyncio
+    pytest-mock
+    pytest-vcr
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # Test assumes user name is part of $HOME
-    # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
-    "test_strip_protocol_expanduser"
-    # test accesses this remote ftp server:
-    # https://ftp.fau.de/debian-cd/current/amd64/log/success
-    "test_find"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # works locally on APFS, fails on hydra with AssertionError comparing timestamps
-    # darwin hydra builder uses HFS+ and has only one second timestamp resolution
-    # this two tests however, assume nanosecond resolution
-    "test_modified"
-    "test_touch"
+  disabledTests =
+    [
+      # Test assumes user name is part of $HOME
+      # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
+      "test_strip_protocol_expanduser"
+      # test accesses this remote ftp server:
+      # https://ftp.fau.de/debian-cd/current/amd64/log/success
+      "test_find"
+      # Tests want to access S3
+      "test_urlpath_inference_errors"
+      "test_mismatch"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # works locally on APFS, fails on hydra with AssertionError comparing timestamps
+      # darwin hydra builder uses HFS+ and has only one second timestamp resolution
+      # this two tests however, assume nanosecond resolution
+      "test_modified"
+      "test_touch"
+      # tries to access /home, ignores $HOME
+      "test_directories"
+    ];
+
+  disabledTestPaths = [
+    # JSON decoding issues
+    "fsspec/implementations/tests/test_dbfs.py"
   ];
 
   pythonImportsCheck = [ "fsspec" ];
 
   meta = with lib; {
-    homepage = "https://github.com/intake/filesystem_spec";
-    description = "A specification that Python filesystems should adhere to";
+    description = "Specification that Python filesystems should adhere to";
+    homepage = "https://github.com/fsspec/filesystem_spec";
     changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

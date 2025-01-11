@@ -1,8 +1,15 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppxlib }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "ocsigen-ppx-rpc";
   version = "1.0";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocsigen";

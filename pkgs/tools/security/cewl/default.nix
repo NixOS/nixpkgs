@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, bundlerEnv }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bundlerEnv,
+}:
 
 let
   rubyEnv = bundlerEnv {
@@ -26,8 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Custom wordlist generator";
+    mainProgram = "cewl";
     homepage = "https://digi.ninja/projects/cewl.php/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

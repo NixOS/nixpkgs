@@ -1,37 +1,47 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.6.0";
-  format = "setuptools";
+  version = "0.11.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rajlaud";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0ArKVRy4H0NWShlQMziKvbHp9OjpAkEKp4zrvpVlXOk=";
+    repo = "pysqueezebox";
+    tag = "v${version}";
+    hash = "sha256-8eCf0y8xbnSP+c+QP8fRkamUj5kN4EUQVZpotdo7hbs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    async-timeout
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysqueezebox"
+  pythonImportsCheck = [ "pysqueezebox" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'has_calls' is not a valid assertion. Use a spec for the mock if 'has_calls' is meant to be an attribute.
+    "test_verified_pause"
   ];
 
   disabledTestPaths = [
@@ -42,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous library to control Logitech Media Server";
     homepage = "https://github.com/rajlaud/pysqueezebox";
+    changelog = "https://github.com/rajlaud/pysqueezebox/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ nyanloutre ];
   };

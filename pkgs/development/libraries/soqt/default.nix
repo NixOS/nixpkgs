@@ -1,4 +1,12 @@
-{ fetchFromGitHub, lib, stdenv, coin3d, qtbase, cmake, pkg-config }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  coin3d,
+  qtbase,
+  cmake,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "soqt";
@@ -9,13 +17,19 @@ stdenv.mkDerivation rec {
     repo = "soqt";
     # rev = "SoQt-${version}";
     rev = "fb8f655632bb9c9c60e0ff9fa69a5ba22d3ff99d";
-    sha256 = "sha256-YoBq8P3Tag2Sepqxf/qIcJDBhH/gladBmDUj78aacZs=";
+    hash = "sha256-YoBq8P3Tag2Sepqxf/qIcJDBhH/gladBmDUj78aacZs=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ coin3d qtbase ];
+  buildInputs = [
+    coin3d
+    qtbase
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   dontWrapQtApps = true;
 
@@ -23,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/coin3d/soqt";
     license = licenses.bsd3;
     description = "Glue between Coin high-level 3D visualization library and Qt";
-    maintainers = with maintainers; [ gebner viric ];
+    maintainers = with maintainers; [ gebner ];
     platforms = platforms.linux;
   };
 }

@@ -1,33 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cloudpickle
-, dask
-, numpy, toolz # dask[array]
-, multipledispatch
-, setuptools-scm
-, scipy
-, scikit-learn
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  dask,
+  distributed,
+  fetchPypi,
+  multipledispatch,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools-scm,
+  sparse,
 }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
   pname = "dask-glm";
+  version = "0.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58b86cebf04fe5b9e58092e1c467e32e60d01e11b71fdc628baaa9fc6d1adee5";
+    hash = "sha256-yUelZoZmmKAdeZeK5zIzy16DitXq1ghRQ1gsXpMLmko=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  checkInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikit-learn ];
+
+  propagatedBuildInputs = [
+    cloudpickle
+    distributed
+    multipledispatch
+    scikit-learn
+    scipy
+    sparse
+  ] ++ dask.optional-dependencies.array;
+
+  nativeCheckInputs = [
+    sparse
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "dask_glm" ];
+
+  disabledTestPaths = [
+    # Circular dependency with dask-ml
+    "dask_glm/tests/test_estimators.py"
+    # Test tries to imort an obsolete method
+    "dask_glm/tests/test_utils.py"
+  ];
+
+  disabledTests = [
+    # missing fixture with distributed>=2022.8.0
+    "test_determinism_distributed"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    homepage = "https://github.com/dask/dask-glm/";
     description = "Generalized Linear Models with Dask";
+    homepage = "https://github.com/dask/dask-glm/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

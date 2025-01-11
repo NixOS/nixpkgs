@@ -1,17 +1,21 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.hardware.pommed;
-    defaultConf = "${pkgs.pommed_light}/etc/pommed.conf.mactel";
-in {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.hardware.pommed;
+  defaultConf = "${pkgs.pommed_light}/etc/pommed.conf.mactel";
+in
+{
 
   options = {
 
     services.hardware.pommed = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use the pommed tool to handle Apple laptop
@@ -19,15 +23,15 @@ in {
         '';
       };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
-          The path to the <filename>pommed.conf</filename> file. Leave
+          The path to the {file}`pommed.conf` file. Leave
           to null to use the default config file
-          (<filename>/etc/pommed.conf.mactel</filename>). See the
-          files <filename>/etc/pommed.conf.mactel</filename> and
-          <filename>/etc/pommed.conf.pmac</filename> for examples to
+          ({file}`/etc/pommed.conf.mactel`). See the
+          files {file}`/etc/pommed.conf.mactel` and
+          {file}`/etc/pommed.conf.pmac` for examples to
           build on.
         '';
       };
@@ -35,8 +39,11 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.polkit pkgs.pommed_light ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.polkit
+      pkgs.pommed_light
+    ];
 
     environment.etc."pommed.conf".source =
       if cfg.configFile == null then defaultConf else cfg.configFile;

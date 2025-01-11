@@ -1,30 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi
-, isPy27, pythonAtLeast
-, pylev, pastel, typing ? null, enum34 ? null, crashtest }:
+{
+  lib,
+  buildPythonPackage,
+  crashtest,
+  fetchFromGitHub,
+  pastel,
+  poetry-core,
+  pylev,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "clikit";
   version = "0.6.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ngdkmb73gkp5y00q7r9k1cdlfn0wyzws2wrqlshc4hlkbdyabj4";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "sdispater";
+    repo = "clikit";
+    tag = version;
+    hash = "sha256-xAsUNhVQBjtSFHyjjnicAKRC3+Tdn3AdGDUYhmOOIdA=";
   };
 
-  propagatedBuildInputs = [
-    pylev pastel
-  ]
-    ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
-    ++ lib.optionals isPy27 [ typing enum34 ];
+  pythonRelaxDeps = [ "crashtest" ];
 
-  # The Pypi tarball doesn't include tests, and the GitHub source isn't
-  # buildable until we bootstrap poetry, see
-  # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
-  doCheck = false;
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    crashtest
+    pastel
+    pylev
+  ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "clikit" ];
 
   meta = with lib; {
+    description = "Group of utilities to build beautiful and testable command line interfaces";
     homepage = "https://github.com/sdispater/clikit";
-    description = "A group of utilities to build beautiful and testable command line interfaces";
+    changelog = "https://github.com/sdispater/clikit/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

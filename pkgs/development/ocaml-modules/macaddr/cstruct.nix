@@ -1,5 +1,7 @@
-{ lib, buildDunePackage
-, macaddr, cstruct
+{
+  buildDunePackage,
+  macaddr,
+  cstruct,
 }:
 
 buildDunePackage {
@@ -7,11 +9,16 @@ buildDunePackage {
 
   inherit (macaddr) version src;
 
-  propagatedBuildInputs = [ macaddr cstruct ];
+  duneVersion = "3";
+
+  propagatedBuildInputs = [
+    macaddr
+    cstruct
+  ];
 
   doCheck = true;
 
   meta = macaddr.meta // {
-    description = "A library for manipulation of MAC address representations using Cstructs";
+    description = "Library for manipulation of MAC address representations using Cstructs";
   };
 }

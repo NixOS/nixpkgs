@@ -1,52 +1,54 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, numpy
-, dill
-, astropy
-, scipy
-, pandas
-, codecov
-, pytest
-, pytest-cov
-, pytest-runner
-, coveralls
-, twine
-, check-manifest
-, lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  h5py,
+  numpy,
+  dill,
+  astropy,
+  scipy,
+  pandas,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
-  version = "4.0.4";
-  disabled = pythonOlder "3.5";
+  pname = "hickle";
+  version = "5.0.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d35030a76fe1c7fa6480088cde932689960ed354a2539ffaf5f3c90c578c06f";
+    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements_test.txt \
-      --replace 'astropy<3.1;' 'astropy;' --replace 'astropy<3.0;' 'astropy;'
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ h5py numpy dill ];
+  dependencies = [
+    dill
+    h5py
+    numpy
+  ];
 
-  doCheck = false; # incompatible with latest astropy
-  checkInputs = [
-    pytest pytest-cov pytest-runner coveralls scipy pandas astropy twine check-manifest codecov
+  nativeCheckInputs = [
+    astropy
+    pandas
+    pytestCheckHook
+    pytest-cov-stub
+    scipy
   ];
 
   pythonImportsCheck = [ "hickle" ];
 
-  meta = {
-    # incompatible with h5py>=3.0, see https://github.com/telegraphic/hickle/issues/143
-    broken = true;
+  meta = with lib; {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

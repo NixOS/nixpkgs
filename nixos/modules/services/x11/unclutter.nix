@@ -1,10 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.unclutter;
+let
+  cfg = config.services.unclutter;
 
-in {
+in
+{
   options.services.unclutter = {
 
     enable = mkOption {
@@ -13,12 +20,7 @@ in {
       default = false;
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.unclutter;
-      defaultText = literalExpression "pkgs.unclutter";
-      description = "unclutter derivation to use.";
-    };
+    package = mkPackageOption pkgs "unclutter" { };
 
     keystroke = mkOption {
       description = "Wait for a keystroke before hiding the cursor";
@@ -41,15 +43,18 @@ in {
     excluded = mkOption {
       description = "Names of windows where unclutter should not apply";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "" ];
     };
 
     extraOptions = mkOption {
       description = "More arguments to pass to the unclutter command";
       type = types.listOf types.str;
-      default = [];
-      example = [ "noevent" "grab" ];
+      default = [ ];
+      example = [
+        "noevent"
+        "grab"
+      ];
     };
   };
 
@@ -63,7 +68,7 @@ in {
           -idle ${toString cfg.timeout} \
           -jitter ${toString (cfg.threshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
-          ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
+          ${concatMapStrings (x: " -" + x) cfg.extraOptions} \
           -not ${concatStringsSep " " cfg.excluded} \
       '';
       serviceConfig.PassEnvironment = "DISPLAY";
@@ -73,8 +78,10 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "unclutter" "threeshold" ]
-                           [ "services"  "unclutter" "threshold" ])
+    (mkRenamedOptionModule
+      [ "services" "unclutter" "threeshold" ]
+      [ "services" "unclutter" "threshold" ]
+    )
   ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

@@ -1,69 +1,126 @@
-{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK31, wxmac, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
-, zstd, pdal, wrapGAppsHook
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, makeWrapper
+, wrapGAppsHook3
+
+, withOpenGL ? !stdenv.hostPlatform.isDarwin
+
+, bison
+, blas
+, cairo
+, ffmpeg
+, fftw
+, flex
+, freetype
+, gdal
+, geos
+, lapack
+, libGLU
+, libiconv
+, libpng
+, libsvm
+, libtiff
+, libxml2
+, llvmPackages
+, netcdf
+, pdal
+, pkg-config
+, postgresql
+, proj
+, python3Packages
+, readline
+, sqlite
+, wxGTK32
+, zlib
+, zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.0.1";
+  version = "8.4.0";
 
-  src = with lib; fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
-    rev = version;
-    sha256 = "sha256-rcOT21HRJDR+DEYsZn6BjOOhy28DWapz9PN7cRAdWGc=";
+    rev = finalAttrs.version;
+    hash = "sha256-NKMshd6pr2O62ZjmQ/oPttmeVBYVD0Nqhh3SwQrhZf8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite
-  readline ffmpeg makeWrapper netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid zstd wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK31 ]
-    ++ lib.optional stdenv.isDarwin wxmac
-    ++ (with python3Packages; [ python python-dateutil numpy ]
-      ++ lib.optional stdenv.isDarwin wxPython_4_0
-      ++ lib.optional stdenv.isLinux wxPython_4_1);
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
 
-  # On Darwin the installer tries to symlink the help files into a system
-  # directory
-  patches = [ ./no_symbolic_links.patch ];
+    bison
+    flex
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    netcdf # for `nc-config`
+    pkg-config
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
-  # Correct mysql_config query
-  patchPhase = ''
-      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
-  '';
+  buildInputs = [
+    blas
+    cairo
+    ffmpeg
+    fftw
+    freetype
+    gdal
+    geos
+    lapack
+    libpng
+    libsvm
+    libtiff
+    libxml2
+    netcdf
+    pdal
+    postgresql
+    proj
+    readline
+    sqlite
+    wxGTK32
+    zlib
+    zstd
+  ] ++ lib.optionals withOpenGL [ libGLU ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+
+  strictDeps = true;
 
   configureFlags = [
-    "--with-proj-share=${proj}/share/proj"
-    "--with-proj-includes=${proj.dev}/include"
-    "--with-proj-libs=${proj}/lib"
-    "--without-opengl"
-    "--with-readline"
-    "--with-wxwidgets"
-    "--with-netcdf"
+    "--with-blas"
+    "--with-cairo-ldflags=-lfontconfig"
+    "--with-cxx"
+    "--with-fftw"
+    "--with-freetype"
     "--with-geos"
+    "--with-gdal"
+    "--with-lapack"
+    "--with-libsvm"
+    "--with-nls"
+    "--with-openmp"
+    "--with-pdal"
     "--with-postgres"
     "--with-postgres-libs=${postgresql.lib}/lib/"
-    # it complains about missing libmysqld but doesn't really seem to need it
-    "--with-mysql"
-    "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
-    "--with-mysql-libs=${libmysqlclient}/lib/mysql"
-    "--with-blas"
-    "--with-liblas=${libLAS}/bin/liblas-config"
+    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-libs=${proj}/lib"
+    "--with-proj-share=${proj}/share/proj"
+    "--with-sqlite"
     "--with-zstd"
-    "--with-fftw"
-    "--with-pthread"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--with-pdal"
-  ] ++ lib.optionals stdenv.isDarwin [
+    "--without-bzlib"
+    "--without-mysql"
+    "--without-odbc"
+  ] ++ lib.optionals (! withOpenGL) [
+    "--without-opengl"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--without-cairo"
     "--without-freetype"
     "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
@@ -86,11 +143,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "https://grass.osgeo.org/";
-    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mpickering willcohen ];
+  passthru.tests = {
+    grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
-}
+
+  meta = with lib; {
+    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
+    homepage = "https://grass.osgeo.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
+    platforms = platforms.all;
+    mainProgram = "grass";
+  };
+})

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmigemo }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmigemo,
+}:
 
 buildPythonPackage rec {
   pname = "percol";
   version = "unstable-2019-07-24";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mooz";
@@ -20,6 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/mooz/percol";
     description = "Adds flavor of interactive filtering to the traditional pipe concept of shell";
+    mainProgram = "percol";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

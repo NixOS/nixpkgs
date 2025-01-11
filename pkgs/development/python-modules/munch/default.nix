@@ -1,28 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pbr
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+
+  # build-system
+  pbr,
+  setuptools,
+
+  # tests
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "munch";
-  version = "2.5.0";
+  version = "4.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2d735f6f24d4dba3417fa448cae40c6e896ec1fdab6cdb5e6510999758a4dbd2";
+  src = fetchFromGitHub {
+    owner = "Infinidat";
+    repo = "munch";
+    tag = version;
+    hash = "sha256-p7DvOGRhkCmtJ32EfttyKXGGmO5kfb2bQGqok/RJtU8=";
   };
 
-  propagatedBuildInputs = [ six pbr ];
+  patches = [
+    (fetchpatch2 {
+      # python3.13 compat
+      url = "https://github.com/Infinidat/munch/commit/84651ee872f9ea6dbaed986fd3818202933a8b50.patch";
+      hash = "sha256-n/uBAP7pnlGZcnDuxdMKWgAEdG9gWeGoLWB97T1KloY=";
+    })
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  env.PBR_VERSION = version;
+
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
 
   meta = with lib; {
-    description = "A dot-accessible dictionary (a la JavaScript objects)";
+    description = "Dot-accessible dictionary (a la JavaScript objects)";
     license = licenses.mit;
     homepage = "https://github.com/Infinidat/munch";
   };
-
 }

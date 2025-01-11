@@ -1,26 +1,30 @@
-{ stdenv, lib, fetchFromGitHub
-, meson, ninja, pkg-config
-, python3
-, curl
-, icu
-, pugixml
-, zimlib
-, zlib
-, libmicrohttpd
-, mustache-hpp
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  curl,
+  icu,
+  libzim,
+  pugixml,
+  zlib,
+  libmicrohttpd,
+  mustache-hpp,
+  gtest,
 }:
 
-
-stdenv.mkDerivation rec {
-  pname = "kiwix-lib";
-  version = "9.4.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libkiwix";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
-    repo = pname;
-    rev = version;
-    sha256 = "034nk6l623v78clrs2d0k1vg69sbzrd8c0q79qiqmlkinck1nkxw";
+    repo = "libkiwix";
+    rev = finalAttrs.version;
+    hash = "sha256-DKOwzfGyad/3diOaV1K8hXqT8YGfqCP6QDKDkxWu/1U=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +43,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     curl
     libmicrohttpd
+    libzim
     pugixml
-    zimlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -52,4 +56,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs scripts
   '';
-}
+
+  meta = with lib; {
+    description = "Common code base for all Kiwix ports";
+    homepage = "https://kiwix.org";
+    changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ colinsane ];
+  };
+})

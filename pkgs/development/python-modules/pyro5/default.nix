@@ -1,36 +1,49 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, stdenv
-, serpent
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  serpent,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Pyro5";
-  version = "5.13.1";
+  pname = "pyro5";
+  version = "5.15";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "2be9da379ae0ec4cf69ffb3c5c589b698eea00e614a9af7945b87fa9bb09baf2";
+    pname = "Pyro5";
+    inherit version;
+    hash = "sha256-gsPfyYYLSfiXso/yT+ZxbIQWcsYAr4/kDQ46f6yaP14=";
   };
 
   propagatedBuildInputs = [ serpent ];
 
-  checkInputs = [ pytestCheckHook ];
+  __darwinAllowLocalNetworking = true;
 
-  # ignore network related tests, which fail in sandbox
-  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "Socket"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # Ignore network related tests, which fail in sandbox
+    "StartNSfunc"
+    "Broadcast"
+    "GetIP"
+    "TestNameServer"
+    "TestBCSetup"
+    # time sensitive tests
+    "testTimeoutCall"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "Socket" ];
+
+  pythonImportsCheck = [ "Pyro5" ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro5";
+    changelog = "https://github.com/irmen/Pyro5/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

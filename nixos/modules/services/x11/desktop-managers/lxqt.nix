@@ -62,15 +62,19 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+
     # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
 
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
-    xdg.portal.enable = true;
-    xdg.portal.extraPortals = [ pkgs.lxqt.xdg-desktop-portal-lxqt ];
+    xdg.portal.lxqt.enable = mkDefault true;
+
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
+    xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];
   };
 
 }

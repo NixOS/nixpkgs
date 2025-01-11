@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.0";
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight data-interchange format";
-    homepage = "http://qjson.sourceforge.net/";
+    homepage = "https://qjson.sourceforge.net/";
     license = licenses.lgpl21;
   };
 }

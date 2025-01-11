@@ -1,28 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, apacheHttpd, python, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  apacheHttpd,
+  python3,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
-  version = "4.9.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "mod_wsgi";
     rev = version;
-    hash = "sha256-gaWA6m4ENYtm88hCaoqrcIooA0TBI7Kj6fU6pPShoo4=";
+    hash = "sha256-FhOSU8/4QoWa73bNi/qkgKm3CeEEdboh2MgxgQxcYzE=";
   };
 
-  buildInputs = [ apacheHttpd python ncurses ];
+  buildInputs = [
+    apacheHttpd
+    python3
+    ncurses
+  ];
 
-  patchPhase = ''
-    sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \
-      ${if stdenv.isDarwin then "-e 's|/usr/bin/lipo|lipo|'" else ""} \
-      configure
+  postPatch = ''
+    substituteInPlace configure --replace '/usr/bin/lipo' 'lipo'
   '';
+
+  makeFlags = [
+    "LIBEXECDIR=$(out)/modules"
+  ];
 
   meta = {
     homepage = "https://github.com/GrahamDumpleton/mod_wsgi";
     description = "Host Python applications in Apache through the WSGI interface";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

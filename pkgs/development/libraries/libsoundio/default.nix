@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, alsa-lib, libjack2, libpulseaudio, AudioUnit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  alsa-lib,
+  libjack2,
+  libpulseaudio,
+  AudioUnit,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -13,11 +22,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libjack2 libpulseaudio ]
-    ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optional stdenv.isDarwin AudioUnit;
+  buildInputs =
+    [ libjack2 ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libpulseaudio
+      alsa-lib
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin AudioUnit;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-strict-prototypes";
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DBUILD_TESTS=OFF"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-strict-prototypes";
 
   meta = with lib; {
     description = "Cross platform audio input and output";

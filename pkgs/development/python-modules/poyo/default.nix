@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   version = "0.5.0";
+  format = "setuptools";
   pname = "poyo";
 
   src = fetchPypi {
@@ -14,8 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/hackebrot/poyo";
-    description = "A lightweight YAML Parser for Python";
+    description = "Lightweight YAML Parser for Python";
     license = licenses.mit;
   };
-
 }

@@ -1,28 +1,75 @@
-{ lib, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic
-, unidecode, mock, pytest , backports-shutil-which, configargparse
-, python-daemon, pymsgbox, pynacl }:
+{
+  lib,
+  fetchFromGitHub,
+  bech32,
+  buildPythonPackage,
+  setuptools,
+  cryptography,
+  ed25519,
+  ecdsa,
+  gnupg,
+  semver,
+  mnemonic,
+  unidecode,
+  mock,
+  pytestCheckHook,
+  configargparse,
+  python-daemon,
+  pymsgbox,
+  pynacl,
+}:
 
-# XXX: when changing this package, please test the package onlykey-agent.
+# When changing this package, please test packages {keepkey,ledger,onlykey,trezor}-agent
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.14.4";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "v${version}";
-    sha256 = "1ksv494xpga27ifrjyn1bkqaya5h769lqb9rx1ng0n4kvmnrqr3l";
+    tag = "v${version}";
+    hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
-  propagatedBuildInputs = [ unidecode backports-shutil-which configargparse
-    python-daemon pymsgbox ecdsa ed25519 mnemonic semver pynacl ];
-
-  checkInputs = [ mock pytest ];
-
-  checkPhase = ''
-    py.test libagent/tests
+  # hardcode the path to gpgconf in the libagent library
+  postPatch = ''
+    substituteInPlace libagent/gpg/keyring.py \
+      --replace "util.which('gpgconf')" "'${gnupg}/bin/gpgconf'" \
+      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
   '';
+
+  build-system = [ setuptools ];
+
+  # https://github.com/romanz/trezor-agent/pull/481
+  pythonRemoveDeps = [ "backports.shutil-which" ];
+
+  dependencies = [
+    unidecode
+    configargparse
+    python-daemon
+    pymsgbox
+    ecdsa
+    ed25519
+    mnemonic
+    semver
+    pynacl
+    bech32
+    cryptography
+  ];
+
+  pythonImportsCheck = [ "libagent" ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # test fails in sandbox
+    "test_get_agent_sock_path"
+  ];
 
   meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";

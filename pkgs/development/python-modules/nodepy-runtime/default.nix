@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, localimport
-, pathlib2
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  localimport,
+  pathlib2,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "nodepy-runtime";
   version = "2.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,9 +23,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "nodepy"
-  ];
+  pythonImportsCheck = [ "nodepy" ];
 
   meta = with lib; {
     homepage = "https://github.com/nodepy/nodepy";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
       extra.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

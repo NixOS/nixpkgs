@@ -1,20 +1,26 @@
-{ lib, fetchFromGitHub, buildDunePackage, ssl, lwt }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ssl,
+  lwt,
+}:
 
 buildDunePackage rec {
   pname = "lwt_ssl";
-  version = "1.1.3";
+  version = "1.2.0";
 
-  minimumOCamlVersion = "4.02";
-  useDune2 = true;
+  duneVersion = "3";
 
-  src = fetchFromGitHub {
-    owner = "aantron";
-    repo = "lwt_ssl";
-    rev = version;
-    sha256 = "sha256-d/jkTI/D2LVi9nrndRGgqg6ca1FcmRKknR7YXyA7gWw=";
+  src = fetchurl {
+    url = "https://github.com/ocsigen/lwt_ssl/releases/download/${version}/lwt_ssl-${version}.tbz";
+    hash = "sha256-swIK0nrs83fhw/J0Cgizbcu6mR+EMGZRE1dBBUiImnc=";
   };
 
-  propagatedBuildInputs = [ ssl lwt ];
+  propagatedBuildInputs = [
+    ssl
+    lwt
+  ];
 
   meta = {
     homepage = "https://github.com/aantron/lwt_ssl";

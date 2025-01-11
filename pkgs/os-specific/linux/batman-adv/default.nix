@@ -1,11 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, kernel
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
 }:
 
-let cfg = import ./version.nix; in
+let
+  cfg = import ./version.nix;
+in
 
 stdenv.mkDerivation rec {
   pname = "batman-adv";
@@ -31,8 +33,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ fpletz hexa ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      fpletz
+      philiptaron
+    ];
     platforms = with lib.platforms; linux;
   };
 }

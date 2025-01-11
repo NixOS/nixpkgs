@@ -1,65 +1,105 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, llvmPackages
-, openssl
-, protobuf
-, rdkafka
-, oniguruma
-, zstd
-, Security
-, libiconv
-, coreutils
-, CoreServices
-, tzdata
-, cmake
-, perl
-  # kafka is optional but one of the most used features
-, enableKafka ? true
-  # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
-  # "disk-buffer" is using leveldb TODO: investigate how useful
-  # it would be, perhaps only for massive scale?
-, features ? ([ "sinks" "sources" "transforms" "vrl-cli" ]
-    # the second feature flag is passed to the rdkafka dependency
-    # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka/gssapi-vendored" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  protobuf,
+  rdkafka,
+  oniguruma,
+  zstd,
+  rust-jemalloc-sys,
+  rust-jemalloc-sys-unprefixed,
+  Security,
+  libiconv,
+  coreutils,
+  CoreServices,
+  SystemConfiguration,
+  tzdata,
+  cmake,
+  perl,
+  git,
+  nixosTests,
+  nix-update-script,
+  darwin,
 }:
 
 let
   pname = "vector";
-  version = "0.22.1";
+  version = "0.43.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Or8YxzSqPzuRNgPDwyUxHKmXpbYA5+x7qcC03WWWuHc=";
+    hash = "sha256-BFVRaHNd9LMJQnkHHfNtvGKkv8q7GjnT+FzNwSc8GZw=";
   };
 
-  cargoSha256 = "sha256-V+b2s2XTahfN97yzwI9u4/DwhkvloRwJJXCzjAcolTs=";
-  nativeBuildInputs = [ pkg-config cmake perl ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "greptime-proto-0.1.0" = "sha256-QT3PZnHJoVghuRCGoZIH6L8jnX7Wn9eSuQqHIyrUY4E=";
+      "greptimedb-ingester-0.1.0" = "sha256-1M9yWXDZ6U9JTVyXQg9ZcSSGJp7GXtaCfQHdtjhw6FY=";
+      "heim-0.1.0-rc.1" = "sha256-pMraYKr6srTQqEzoBx9gGHHlJ7nMKwj50ftimQAkfL0=";
+      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
+      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+      "tokio-util-0.7.11" = "sha256-oV9fSPjLMY1KbcbDP2WTVjF/N0qlQBPDIYHOp3aNCTY=";
+      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
+    };
+  };
+
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      perl
+      git
+      rustPlatform.bindgenHook
+    ]
+    # Provides the mig command used by the build scripts
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+  buildInputs =
+    [
+      oniguruma
+      openssl
+      protobuf
+      rdkafka
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rust-jemalloc-sys
+      Security
+      libiconv
+      coreutils
+      CoreServices
+      SystemConfiguration
+    ];
+
+  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
+  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
+  # TODO remove when upgrading Vector
+  RUSTFLAGS = "--allow dependency_on_unit_never_type_fallback --allow dead_code";
+
+  # Without this, we get SIGSEGV failure
+  RUST_MIN_STACK = 33554432;
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   RUSTONIG_SYSTEM_LIBONIG = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   TZDIR = "${tzdata}/share/zoneinfo";
 
   # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING=1;
+  CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
-  buildNoDefaultFeatures = true;
-  buildFeatures = features;
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   # TODO investigate compilation failure for tests
   # there are about 100 tests failing (out of 1100) for version 0.22.0
@@ -93,20 +133,25 @@ rustPlatform.buildRustPackage {
   # transforms-geoip is patched out of Cargo.toml for now - unless explicitly asked for.
   postPatch = ''
     substituteInPlace ./src/dns.rs \
-      --replace "#[tokio::test]" ""
-
-    ${lib.optionalString (!builtins.elem "transforms-geoip" features) ''
-        substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
-    ''}
+      --replace-fail "#[tokio::test]" ""
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    tests = {
+      inherit (nixosTests) vector;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
-    description = "A high-performance logs, metrics, and events router";
-    homepage = "https://github.com/timberio/vector";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ thoughtpolice happysalada ];
-    platforms = with platforms; linux;
+    description = "High-performance observability data pipeline";
+    homepage = "https://github.com/vectordotdev/vector";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+      thoughtpolice
+      happysalada
+    ];
+    platforms = with platforms; all;
+    mainProgram = "vector";
   };
 }

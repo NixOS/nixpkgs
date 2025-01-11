@@ -1,31 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pytest
-, ipython
-, ipykernel
-, qtconsole
-, napari-plugin-engine
-, imageio
-}: buildPythonPackage rec {
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipykernel,
+  ipython,
+  pythonOlder,
+  qtconsole,
+  qtpy,
+  setuptools-scm,
+}:
+
+buildPythonPackage rec {
   pname = "napari-console";
-  version = "0.0.4";
+  version = "0.0.9";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-aVdYOzkZ+dqB680oDjNCg6quXU+QgUZI09E/MSTagyA=";
+    repo = "napari-console";
+    tag = "v${version}";
+    hash = "sha256-3gOfiPx06G5c4eaLQ5kP45hUr6yw91esznJFacpO66Q=";
   };
-  nativeBuildInputs = [ setuptools-scm ];
-  # setup.py somehow requires pytest
-  propagatedBuildInputs = [ pytest ipython ipykernel napari-plugin-engine imageio qtconsole ];
-  chechInputs = [ pytestCheckHook ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    ipykernel
+    ipython
+    qtconsole
+    qtpy
+  ];
+
+  # Circular dependency: napari
+  doCheck = false;
+
+  pythonImportsCheck = [ "napari_console" ];
 
   meta = with lib; {
-    description = "A plugin that adds a console to napari";
+    description = "Plugin that adds a console to napari";
     homepage = "https://github.com/napari/napari-console";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];

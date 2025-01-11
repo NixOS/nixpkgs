@@ -1,39 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-canary";
-  version = "0.5.2";
-  format = "setuptools";
+  version = "0.5.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "snjoetw";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-PE31J82Uc6mErnh7nQ1pkIjnMbuCnlYEX2R0azknMHQ=";
+    tag = version;
+    hash = "sha256-zylWkssU85eSfR+Di7vQGTr6hOQkqXCObv/PCDHoKHA=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ requests ];
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "canary"
+  pythonImportsCheck = [ "canary" ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_location_with_motion_entry"
   ];
 
   meta = with lib; {

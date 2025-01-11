@@ -1,15 +1,16 @@
-{ fetchurl
-, python
-, anki
+{
+  python,
+  fetchurl,
+  anki,
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "mnemosyne";
-  version = "2.7.2";
+  version = "2.10.1";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
-    sha256 = "09yp9zc00xrc9dmjbsscnkb3hsv3yj46sxikc0r6s9cbghn3nypy";
+    url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
+    sha256 = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
   };
 
   nativeBuildInputs = with python.pkgs; [ pyqtwebengine.wrapQtAppsHook ];
@@ -23,24 +24,23 @@ python.pkgs.buildPythonApplication rec {
     gtts
     matplotlib
     pyopengl
-    pyqt5
-    pyqtwebengine
+    pyqt6
+    pyqt6-webengine
+    argon2-cffi
     webob
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace /usr $out
-    find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
+    substituteInPlace setup.py \
+      --replace '("", ["/usr/local/bin/mplayer"])' ""
   '';
 
-  # No tests/ directrory in tarball
+  # No tests/ directory in tarball
   doCheck = false;
 
   postInstall = ''
     mkdir -p $out/share/applications
-    mv $out/${python.sitePackages}/$out/share/locale $out/share
     mv mnemosyne.desktop $out/share/applications
-    rm -r $out/${python.sitePackages}/nix
   '';
 
   dontWrapQtApps = true;
@@ -52,6 +52,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://mnemosyne-proj.org/";
     description = "Spaced-repetition software";
+    mainProgram = "mnemosyne";
     longDescription = ''
       The Mnemosyne Project has two aspects:
 

@@ -1,22 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, oyaml
-, packaging
-, paramiko
-, pexpect
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oyaml,
+  packaging,
+  paramiko,
+  pexpect,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "fortiosapi";
   version = "1.0.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fortinet-solutions-cse";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0679dizxcd4sk1b4h6ss8qsbjb3c8qyijlp4gzjqji91w6anzg9k";
+    tag = "v${version}";
+    hash = "sha256-M71vleEhRYnlf+RSGT1GbCy5NEZaG0hWmJo01n9s6Rg=";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +31,12 @@ buildPythonPackage rec {
     paramiko
     packaging
     oyaml
+    six
   ];
 
   # Tests require a local VM
   doCheck = false;
+
   pythonImportsCheck = [ "fortiosapi" ];
 
   meta = with lib; {

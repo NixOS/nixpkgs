@@ -1,4 +1,8 @@
-{ lib, octave, python3Packages }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 with python3Packages;
 
@@ -12,17 +16,20 @@ buildPythonPackage rec {
     sha256 = "sha256-5ki2lekfK7frPsmPBIzYQOfANCUY9x+F2ZRAQSdPTxo=";
   };
 
-  propagatedBuildInputs = [ metakernel ipykernel ];
+  propagatedBuildInputs = [
+    metakernel
+    ipykernel
+  ];
 
   # Tests fail because the kernel appears to be halting or failing to launch
   # There appears to be a similar problem with metakernel's tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "A Jupyter kernel for Octave.";
+  meta = {
+    description = "Jupyter kernel for Octave";
     homepage = "https://github.com/Calysto/octave_kernel";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ thomasjm ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thomasjm ];
+    platforms = lib.platforms.all;
   };
 }

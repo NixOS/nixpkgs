@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, xlibsWrapper
-, libpng
-, libjpeg
-, expat
-, libXaw
-, bison
-, libtool
-, fontconfig
-, pango
-, gd
-, libwebp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+  libpng,
+  libjpeg,
+  expat,
+  libXaw,
+  bison,
+  libtool,
+  fontconfig,
+  pango,
+  gd,
+  libwebp,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xlibsWrapper
+    libX11
     libpng
     libjpeg
     expat
@@ -39,23 +40,24 @@ stdenv.mkDerivation rec {
     libwebp
   ];
 
-  hardeningDisable = [ "format" "fortify" ];
+  hardeningDisable = [
+    "format"
+    "fortify"
+  ];
 
-  configureFlags =
-    [
-      "--with-pngincludedir=${libpng.dev}/include"
-      "--with-pnglibdir=${libpng.out}/lib"
-      "--with-jpegincludedir=${libjpeg.dev}/include"
-      "--with-jpeglibdir=${libjpeg.out}/lib"
-      "--with-expatincludedir=${expat.dev}/include"
-      "--with-expatlibdir=${expat.out}/lib"
-      "--with-ltdl-include=${libtool}/include"
-      "--with-ltdl-lib=${libtool.lib}/lib"
-    ]
-    ++ lib.optional (xlibsWrapper == null) "--without-x";
+  configureFlags = [
+    "--with-pngincludedir=${libpng.dev}/include"
+    "--with-pnglibdir=${libpng.out}/lib"
+    "--with-jpegincludedir=${libjpeg.dev}/include"
+    "--with-jpeglibdir=${libjpeg.out}/lib"
+    "--with-expatincludedir=${expat.dev}/include"
+    "--with-expatlibdir=${expat.out}/lib"
+    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-lib=${libtool.lib}/lib"
+  ] ++ lib.optional (libX11 == null) "--without-x";
 
   meta = {
-    description = "A program for visualising graphs";
+    description = "Program for visualising graphs";
     homepage = "http://www.graphviz.org/";
     branch = "2.0";
     platforms = lib.platforms.unix;

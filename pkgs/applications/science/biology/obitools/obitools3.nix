@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, python3Packages, cmake, python3 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  python3Packages,
+  cmake,
+  python3,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "obitools3";
@@ -9,24 +16,28 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1x7a0nrr9agg1pfgq8i1j8r1p6c0jpyxsv196ylix1dd2iivmas1";
   };
 
-  nativeBuildInputs = [ python3Packages.cython cmake ];
+  nativeBuildInputs = [
+    python3Packages.cython
+    cmake
+  ];
 
-  postPatch = lib.optionalString stdenv.isAarch64 ''
-      substituteInPlace setup.py \
-      --replace "'-msse2'," ""
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace setup.py \
+    --replace "'-msse2'," ""
   '';
 
   preBuild = ''
-    substituteInPlace src/CMakeLists.txt --replace \$'{PYTHONLIB}' "$out/lib/${python3.libPrefix}/site-packages";
-    export NIX_CFLAGS_COMPILE="-L $out/lib/${python3.libPrefix}/site-packages $NIX_CFLAGS_COMPILE"
+    substituteInPlace src/CMakeLists.txt --replace \$'{PYTHONLIB}' "$out/${python3.sitePackages}";
+    export NIX_CFLAGS_COMPILE="-L $out/${python3.sitePackages} $NIX_CFLAGS_COMPILE"
   '';
 
   dontConfigure = true;
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "Management of analyses and data in DNA metabarcoding";
+    mainProgram = "obi";
     homepage = "https://git.metabarcoding.org/obitools/obitools3";
     license = licenses.cecill20;
     maintainers = [ maintainers.bzizou ];

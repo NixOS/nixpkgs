@@ -18,7 +18,7 @@ let
     sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg; };
+  php = cfg.phpPackage.override { apxs2Support = true; apacheHttpd = pkg; };
 
   phpModuleName = let
     majorVersion = lib.versions.major (lib.getVersion php);
@@ -33,7 +33,9 @@ let
     certName = if hostOpts.useACMEHost != null then hostOpts.useACMEHost else hostOpts.hostName;
   }) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
-  dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkListenInfo = hostOpts:
     if hostOpts.listen != [] then
@@ -168,7 +170,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             <IfModule mod_ssl.c>
                 SSLEngine off
             </IfModule>
@@ -187,7 +189,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             SSLEngine on
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
@@ -371,7 +373,7 @@ let
       echo "$options" >> $out
     '';
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 in
 
 
@@ -406,14 +408,7 @@ in
 
       enable = mkEnableOption "the Apache HTTP Server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.apacheHttpd;
-        defaultText = literalExpression "pkgs.apacheHttpd";
-        description = ''
-          Overridable attribute of the Apache HTTP Server package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "apacheHttpd" { };
 
       configFile = mkOption {
         type = types.path;
@@ -432,7 +427,7 @@ in
         description = ''
           Configuration lines appended to the generated Apache
           configuration file. Note that this mechanism will not work
-          when <option>configFile</option> is overridden.
+          when {option}`configFile` is overridden.
         '';
       };
 
@@ -442,21 +437,22 @@ in
         example = literalExpression ''
           [
             "proxy_connect"
-            { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
+            { name = "jk"; path = "''${pkgs.apacheHttpdPackages.mod_jk}/modules/mod_jk.so"; }
           ]
         '';
         description = ''
           Additional Apache modules to be used. These can be
           specified as a string in the case of modules distributed
           with Apache, or as an attribute set specifying the
-          <varname>name</varname> and <varname>path</varname> of the
+          {var}`name` and {var}`path` of the
           module.
         '';
       };
 
       adminAddr = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         example = "admin@example.org";
+        default = null;
         description = "E-mail address of the server administrator.";
       };
 
@@ -466,7 +462,7 @@ in
         example = "combined";
         description = ''
           Log format for log files. Possible values are: combined, common, referer, agent, none.
-          See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
+          See <https://httpd.apache.org/docs/2.4/logs.html> for more details.
         '';
       };
 
@@ -475,9 +471,9 @@ in
         default = true;
         description = ''
           If enabled, each virtual host gets its own
-          <filename>access.log</filename> and
-          <filename>error.log</filename>, namely suffixed by the
-          <option>hostName</option> of the virtual host.
+          {file}`access.log` and
+          {file}`error.log`, namely suffixed by the
+          {option}`hostName` of the virtual host.
         '';
       };
 
@@ -488,10 +484,10 @@ in
           User account under which httpd children processes run.
 
           If you require the main httpd process to run as
-          <literal>root</literal> add the following configuration:
-          <programlisting>
+          `root` add the following configuration:
+          ```
           systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
-          </programlisting>
+          ```
         '';
       };
 
@@ -544,32 +540,13 @@ in
         '';
       };
 
-      enableMellon = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the mod_auth_mellon module.";
-      };
+      enableMellon = mkEnableOption "the mod_auth_mellon module";
 
-      enablePHP = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the PHP module.";
-      };
+      enablePHP = mkEnableOption "the PHP module";
 
-      phpPackage = mkOption {
-        type = types.package;
-        default = pkgs.php;
-        defaultText = literalExpression "pkgs.php";
-        description = ''
-          Overridable attribute of the PHP package to use.
-        '';
-      };
+      phpPackage = mkPackageOption pkgs "php" { };
 
-      enablePerl = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Perl module (mod_perl).";
-      };
+      enablePerl = mkEnableOption "the Perl module (mod_perl)";
 
       phpOptions = mkOption {
         type = types.lines;
@@ -579,7 +556,7 @@ in
             date.timezone = "CET"
           '';
         description = ''
-          Options appended to the PHP configuration file <filename>php.ini</filename>.
+          Options appended to the PHP configuration file {file}`php.ini`.
         '';
       };
 
@@ -587,14 +564,13 @@ in
         type = types.enum [ "event" "prefork" "worker" ];
         default = "event";
         example = "worker";
-        description =
-          ''
+        description = ''
             Multi-processing module to be used by Apache. Available
-            modules are <literal>prefork</literal> (handles each
-            request in a separate child process), <literal>worker</literal>
+            modules are `prefork` (handles each
+            request in a separate child process), `worker`
             (hybrid approach that starts a number of child processes
-            each running a number of threads) and <literal>event</literal>
-            (the default; a recent variant of <literal>worker</literal>
+            each running a number of threads) and `event`
+            (the default; a recent variant of `worker`
             that handles persistent connections more efficiently).
           '';
       };
@@ -659,11 +635,18 @@ in
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
         '';
       }
+      {
+        assertion = cfg.enablePHP -> php.ztsSupport;
+        message = ''
+          The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
+          ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
+        '';
+      }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-    }) dependentCertNames;
+      services = [ config.systemd.services.httpd ] ++ lib.optional (vhostCertNames != []) config.systemd.services.httpd-config-reload;
+    }) vhostCertNames;
 
     warnings =
       mapAttrsToList (name: hostOpts: ''
@@ -766,8 +749,10 @@ in
     systemd.services.httpd = {
         description = "Apache HTTPD";
         wantedBy = [ "multi-user.target" ];
-        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
-        after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
+        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+        after = [ "network.target" ]
+          ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+          ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
         before = map (certName: "acme-${certName}.service") dependentCertNames;
         restartTriggers = [ cfg.configFile ];
 
@@ -808,9 +793,9 @@ in
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.httpd-config-reload = let
-      sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
-      sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
-    in mkIf (sslServices != []) {
+      sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+      sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+    in mkIf (vhostCertNames != []) {
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
@@ -820,7 +805,7 @@ in
       restartTriggers = [ cfg.configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames;
+      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames;
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;

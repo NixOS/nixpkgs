@@ -1,21 +1,43 @@
-{ fetchurl, lib, stdenv, python3, ncurses, ocamlPackages, pkg-config }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocamlPackages
+, pkg-config
+, autoreconfHook
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coccinelle";
-  version = "1.1.0";
+  version = "1.3.0";
 
-  src = fetchurl {
-    url = "https://coccinelle.gitlabpages.inria.fr/website/distrib/${pname}-${version}.tar.gz";
-    sha256 = "0k0x4qnxzj8fymkp6y9irggcah070hj7hxq8l6ddj8ccpmjbhnsb";
+  src = fetchFromGitHub {
+    repo = "coccinelle";
+    rev = finalAttrs.version;
+    owner = "coccinelle";
+    hash = "sha256-be95cuFP6bAdpCT0Z9zBAx9cc3gYuuXAmHYaI/bmyTE=";
   };
 
-  buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
-    ocaml_pcre parmap stdcompat
-    python3 ncurses pkg-config
+  nativeBuildInputs = with ocamlPackages; [
+    autoreconfHook
+    pkg-config
+    ocaml
+    findlib
+    menhir
   ];
 
-  doCheck = false;
+  buildInputs = with ocamlPackages; [
+    ocaml_pcre
+    parmap
+    pyml
+    stdcompat
+  ];
+
+  strictDeps = true;
+
+  postPatch = ''
+    # Ensure dependencies from Nixpkgs are picked up.
+    rm -rf bundles/
+  '';
 
   meta = {
     description = "Program to apply semantic patches to C code";
@@ -33,9 +55,9 @@ stdenv.mkDerivation rec {
       and others) for finding and fixing bugs in systems code.
     '';
 
-    homepage = "http://coccinelle.lip6.fr/";
-    license = lib.licenses.gpl2;
+    homepage = "https://coccinelle.gitlabpages.inria.fr/website/";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

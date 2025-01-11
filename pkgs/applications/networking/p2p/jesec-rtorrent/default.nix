@@ -1,13 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, curl
-, gtest
-, libtorrent
-, ncurses
-, jsonRpcSupport ? true, nlohmann_json
-, xmlRpcSupport ? true, xmlrpc_c
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  gtest,
+  libtorrent,
+  ncurses,
+  jsonRpcSupport ? true,
+  nlohmann_json,
+  xmlRpcSupport ? true,
+  xmlrpc_c,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,27 +24,37 @@ stdenv.mkDerivation rec {
     hash = "sha256-i7c1jSawHshj1kaXl8tdpelIKU24okeg9K5/+ht6t2k=";
   };
 
+  patches = [
+    ./avoid-stack-overflow-for-lockfile-buf.patch
+  ];
+
+  passthru = {
+    inherit libtorrent;
+  };
+
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs = [
-    curl
-    libtorrent
-    ncurses
-  ]
-  ++ lib.optional jsonRpcSupport nlohmann_json
-  ++ lib.optional xmlRpcSupport xmlrpc_c;
+  buildInputs =
+    [
+      curl
+      libtorrent
+      ncurses
+    ]
+    ++ lib.optional jsonRpcSupport nlohmann_json
+    ++ lib.optional xmlRpcSupport xmlrpc_c;
 
-  cmakeFlags = [
-    "-DUSE_RUNTIME_CA_DETECTION=NO"
-  ]
-  ++ lib.optional (!jsonRpcSupport) "-DUSE_JSONRPC=NO"
-  ++ lib.optional (!xmlRpcSupport) "-DUSE_XMLRPC=NO";
+  cmakeFlags =
+    [
+      "-DUSE_RUNTIME_CA_DETECTION=NO"
+    ]
+    ++ lib.optional (!jsonRpcSupport) "-DUSE_JSONRPC=NO"
+    ++ lib.optional (!xmlRpcSupport) "-DUSE_XMLRPC=NO";
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -56,10 +69,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach (jesec's fork)";
+    description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach (jesec's fork)";
     homepage = "https://github.com/jesec/rtorrent";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winter AndersonTorres ];
+    maintainers = with maintainers; [ winter ];
     platforms = platforms.linux;
+    mainProgram = "rtorrent";
   };
 }

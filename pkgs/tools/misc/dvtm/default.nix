@@ -1,4 +1,4 @@
-{callPackage, fetchurl}:
+{ callPackage, fetchurl }:
 callPackage ./dvtm.nix rec {
   pname = "dvtm";
   version = "0.15";
@@ -17,4 +17,3 @@ callPackage ./dvtm.nix rec {
     })
   ];
 }
-

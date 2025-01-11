@@ -1,40 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ansible-core
-, flaky
-, pytest-mock
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
-, subprocess-tee
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  pyyaml,
+  subprocess-tee,
+
+  # tests
+  coreutils,
+  ansible-core,
+  flaky,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "2.1.0";
-  format = "pyproject";
+  version = "24.10.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Yrrhu1wgZj1e4b/sBPBzwIvnIQQK+e9b3ceQTmZ40YQ=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible-compat";
+    tag = "v${version}";
+    hash = "sha256-cc97ENpoRoaYaGbnGeHU5z+ijCS8PLWtgXpQ0F3b5rk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     subprocess-tee
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    export PATH=$PATH:$out/bin
+    substituteInPlace test/test_runtime.py \
+      --replace-fail "printenv" "${lib.getExe' coreutils "printenv"}"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ansible-core
     flaky
     pytest-mock
@@ -43,24 +56,26 @@ buildPythonPackage rec {
 
   disabledTests = [
     # require network
+    "test_install_collection_from_disk"
+    "test_install_collection_git"
+    "test_load_plugins"
     "test_prepare_environment_with_collections"
     "test_prerun_reqs_v1"
     "test_prerun_reqs_v2"
-    "test_require_collection_wrong_version"
-    "test_require_collection"
-    "test_install_collection"
-    "test_install_collection_dest"
-    "test_upgrade_collection"
+    "test_require_collection_install"
     "test_require_collection_no_cache_dir"
-    "test_runtime"
+    "test_runtime_has_playbook"
+    "test_runtime_plugins"
+    "test_scan_sys_path"
   ];
 
   pythonImportsCheck = [ "ansible_compat" ];
 
-  meta = with lib; {
-    description = "A python package containing functions that help interacting with various versions of Ansible";
+  meta = {
+    description = "Function collection that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/ansible/ansible-compat/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dawidd6 ];
   };
 }

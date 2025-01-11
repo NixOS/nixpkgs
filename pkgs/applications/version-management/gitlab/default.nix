@@ -1,7 +1,43 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
-, gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper
+{
+  bundlerEnv,
+  cacert,
+  defaultGemConfig,
+  fetchFromGitLab,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  git,
+  gitlabEnterprise ? false,
+  lib,
+  makeWrapper,
+  nettools,
+  nixosTests,
+  nodejs,
+  replace,
+  ruby_3_2,
+  stdenv,
+  tzdata,
+  yarn,
+
+  # gem dependencies:
+  # gitlab-glfm-markdown
+  buildRubyGem,
+  cargo,
+  rustc,
+  rustPlatform,
+
+  # gpgme
+  pkg-config,
+
+  # openssl
+  openssl,
+
+  # ruby-magic
+  file,
+
+  # static-holmes
+  icu,
+  which,
+  zlib,
 }:
 
 let
@@ -17,55 +53,128 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    inherit ruby;
+    ruby = ruby_3_2;
     gemdir = ./rubyEnv;
-    gemset =
-      let x = import (gemdir + "/gemset.nix");
-      in x // {
-        # the openssl needs the openssl include files
-        openssl = x.openssl // {
-          buildInputs = [ openssl ];
-        };
-        ruby-magic = x.ruby-magic // {
-          buildInputs = [ file ];
-          buildFlags = [ "--enable-system-libraries" ];
-        };
-        # the included yarn rake task attaches the yarn:install task
-        # to assets:precompile, which is both unnecessary (since we
-        # run `yarn install` ourselves) and undoes the shebang patches
-        # in node_modules
-        railties = x.railties // {
-          dontBuild = false;
-          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = "-p2";
-        };
+    gemset = import (gemdir + "/gemset.nix") src;
+    gemConfig = defaultGemConfig // {
+      gpgme = attrs: {
+        nativeBuildInputs = [ pkg-config ];
       };
+      # the openssl needs the openssl include files
+      openssl = attrs: {
+        buildInputs = [ openssl ];
+      };
+      ruby-magic = attrs: {
+        buildInputs = [ file ];
+        buildFlags = [ "--enable-system-libraries" ];
+      };
+      gitlab-glfm-markdown = attrs: {
+        cargoDeps = rustPlatform.fetchCargoTarball {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            dontBuilt = true;
+            installPhase = ''
+              cp -R ext/glfm_markdown $out
+              cp Cargo.lock $out
+            '';
+          };
+          hash = "sha256-vFApyObuqsMBXhT2yyMpH7rzW0GaPgJUn9/hE/GpS9I=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
+          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
+      static_holmes = attrs: {
+        nativeBuildInputs = [
+          icu
+          which
+          zlib.dev
+        ];
+      };
+    };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+      "default"
+      "unicorn"
+      "ed25519"
+      "metrics"
+      "development"
+      "puma"
+      "test"
+      "kerberos"
+      "opentelemetry"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
-  };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarn_hash;
+    extraConfigPaths = [
+      "${src}/vendor"
+      "${src}/gems"
+    ];
   };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
 
-    # Since version 12.6.0, the rake tasks need the location of git,
-    # so we have to apply the location patches here too.
-    patches = [ ./remove-hardcoded-locations.patch ];
+    nativeBuildInputs = [
+      rubyEnv.wrappedRuby
+      rubyEnv.bundler
+      nodejs
+      yarn
+      git
+      cacert
+      fixup-yarn-lock
+    ];
+
+    patches = [
+      # Since version 12.6.0, the rake tasks need the location of git,
+      # so we have to apply the location patches here too.
+      ./remove-hardcoded-locations.patch
+
+      # Gitlab edited the default database config since [1] and the
+      # installer now complains about valid keywords only being "main", "ci" and "embedded".
+      #
+      # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
+      ./Remove-unsupported-database-names.patch
+    ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+
+    SKIP_YARN_INSTALL = 1;
+    NODE_OPTIONS = "--max-old-space-size=8192";
 
     configurePhase = ''
       runHook preConfigure
@@ -81,14 +190,15 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
       patchShebangs node_modules/
+      patchShebangs scripts/frontend/
 
       runHook postConfigure
     '';
@@ -96,11 +206,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';
@@ -119,8 +225,14 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools makeWrapper
+    rubyEnv
+    rubyEnv.wrappedRuby
+    rubyEnv.bundler
+    tzdata
+    git
+    nettools
   ];
 
   patches = [
@@ -151,8 +263,10 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
+    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
+    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
   '';
 
   buildPhase = ''
@@ -192,19 +306,24 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
-    homepage = "http://www.gitlab.com/";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz yayayayaka yuka ];
-  } // (if gitlabEnterprise then
+  meta =
+    with lib;
     {
-      license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
-      description = "GitLab Enterprise Edition";
+      homepage = "http://www.gitlab.com/";
+      platforms = platforms.linux;
+      maintainers = teams.gitlab.members;
     }
-  else
-    {
-      license = licenses.mit;
-      description = "GitLab Community Edition";
-      longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
-    });
+    // (
+      if gitlabEnterprise then
+        {
+          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+          description = "GitLab Enterprise Edition";
+        }
+      else
+        {
+          license = licenses.mit;
+          description = "GitLab Community Edition";
+          longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
+        }
+    );
 }

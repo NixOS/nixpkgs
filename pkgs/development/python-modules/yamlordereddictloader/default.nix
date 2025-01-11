@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, ordereddict
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "yamlordereddictloader";
-  version = "0.4.0";
+  version = "0.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03h8wa6pzqjiw25s3jv9gydn77gs444mf31lrgvpgy53kswz0c3z";
+    hash = "sha256-Nq8vYhD8/12k/EwS4dgV+XPc60EETnleHwYRXWNLyhM=";
   };
 
-  propagatedBuildInputs = [ pyyaml ] ++ lib.optional (isPy27) ordereddict;
+  propagatedBuildInputs = [ pyyaml ];
 
   # no tests
   doCheck = false;
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "YAML loader and dump for PyYAML allowing to keep keys order";
     homepage = "https://github.com/fmenabe/python-yamlordereddictloader";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

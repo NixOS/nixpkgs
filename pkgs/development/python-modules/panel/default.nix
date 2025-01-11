@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bleach
-, bokeh
-, param
-, pyviz-comms
-, markdown
-, pyct
-, testpath
-, tqdm
-, nodejs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bleach,
+  bokeh,
+  param,
+  pyviz-comms,
+  markdown,
+  pyct,
+  requests,
+  setuptools,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.13.1";
+  version = "1.5.5";
 
   format = "wheel";
 
@@ -23,31 +25,38 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-1GC119AUfmse3fhQQxSi9eDJJorYvt2NeE7UY1GrW3E=";
+    hash = "sha256-MfdvzTr+OoawjPGstBAhK7XpkqgVxk/CMApYsllRVv0=";
+    dist = "py3";
+    python = "py3";
   };
+
+
+  pythonRelaxDeps = [ "bokeh" ];
 
   propagatedBuildInputs = [
     bleach
     bokeh
-    param
-    pyviz-comms
     markdown
+    param
     pyct
-    testpath
+    pyviz-comms
+    requests
+    setuptools
     tqdm
+    typing-extensions
   ];
+
+  pythonImportsCheck = [ "panel" ];
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
 
-  passthru = {
-    inherit nodejs; # For convenience
-  };
-
   meta = with lib; {
-    description = "A high level dashboarding library for python visualization libraries";
-    homepage = "https://pyviz.org";
+    description = "High level dashboarding library for python visualization libraries";
+    mainProgram = "panel";
+    homepage = "https://github.com/holoviz/panel";
+    changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

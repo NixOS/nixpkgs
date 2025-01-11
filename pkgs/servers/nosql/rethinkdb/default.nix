@@ -1,22 +1,34 @@
-{ lib, stdenv, fetchurl, which, m4
-, protobuf, boost170, zlib, curl, openssl, icu, jemalloc, libtool
-, python2Packages, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  m4,
+  protobuf,
+  boost,
+  zlib,
+  curl,
+  openssl,
+  icu,
+  jemalloc,
+  libtool,
+  python3Packages,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
-  version = "2.4.1";
+  version = "2.4.4";
 
   src = fetchurl {
     url = "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
-    sha256 = "5f1786c94797a0f8973597796e22545849dc214805cf1962ef76969e0b7d495b";
+    hash = "sha256-UJEjdgK2KDDbLLParKarNGMjI3QeZxDC8N5NhPRCcR8=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
-
-    # very meta
-    substituteInPlace mk/support/pkg/re2.sh --replace "-i '''" "-i"
+  postPatch = ''
+    substituteInPlace external/quickjs_*/Makefile \
+      --replace "gcc-ar" "${stdenv.cc.targetPrefix}ar" \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   preConfigure = ''
@@ -24,37 +36,54 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = lib.optionals (!stdenv.isDarwin) [
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs = [ protobuf boost170 zlib curl openssl icu ]
-    ++ lib.optional (!stdenv.isDarwin) jemalloc
-    ++ lib.optional stdenv.isDarwin libtool;
+  buildInputs =
+    [
+      protobuf
+      boost
+      zlib
+      curl
+      openssl
+      icu
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) jemalloc
+    ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python2Packages.python makeWrapper ];
+  nativeBuildInputs = [
+    which
+    m4
+    python3Packages.python
+    makeWrapper
+  ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/rethinkdb \
-      --prefix PATH ":" "${python2Packages.rethinkdb}/bin"
+      --prefix PATH ":" "${python3Packages.rethinkdb}/bin"
   '';
 
   meta = {
-    description = "An open-source distributed database built with love";
+    description = "Open-source distributed database built with love";
+    mainProgram = "rethinkdb";
     longDescription = ''
       RethinkDB is built to store JSON documents, and scale to
       multiple machines with very little effort. It has a pleasant
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = "https://rethinkdb.com";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];
+    homepage = "https://rethinkdb.com";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      bluescreen303
+    ];
   };
 }

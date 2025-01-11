@@ -1,18 +1,25 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.systemd.coredump;
   systemd = config.systemd.package;
-in {
+in
+{
   options = {
     systemd.coredump.enable = mkOption {
       default = true;
       type = types.bool;
       description = ''
         Whether core dumps should be processed by
-        <command>systemd-coredump</command>. If disabled, core dumps
+        {command}`systemd-coredump`. If disabled, core dumps
         appear in the current directory of the crashing process.
       '';
     };
@@ -28,30 +35,53 @@ in {
     };
   };
 
-  config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-coredump.socket"
-      "systemd-coredump@.service"
-    ];
+  config = mkMerge [
 
-    environment.etc = {
-      "systemd/coredump.conf".text =
-      ''
-        [Coredump]
-        ${cfg.extraConfig}
-      '';
+    (mkIf cfg.enable {
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-coredump.socket"
+        "systemd-coredump@.service"
+      ];
 
-      # install provided sysctl snippets
-      "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
-      "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
-    };
+      environment.etc = {
+        "systemd/coredump.conf".text = ''
+          [Coredump]
+          ${cfg.extraConfig}
+        '';
 
-    users.users.systemd-coredump = {
-      uid = config.ids.uids.systemd-coredump;
-      group = "systemd-coredump";
-    };
-    users.groups.systemd-coredump = {};
+        # install provided sysctl snippets
+        "sysctl.d/50-coredump.conf".source =
+          # Fix systemd-coredump error caused by truncation of `kernel.core_pattern`
+          # when the `systemd` derivation name is too long. This works by substituting
+          # the path to `systemd` with a symlink that has a constant-length path.
+          #
+          # See: https://github.com/NixOS/nixpkgs/issues/213408
+          pkgs.substitute {
+            src = "${systemd}/example/sysctl.d/50-coredump.conf";
+            substitutions = [
+              "--replace-fail"
+              "${systemd}"
+              "${pkgs.symlinkJoin {
+                name = "systemd";
+                paths = [ systemd ];
+              }}"
+            ];
+          };
 
-    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!cfg.enable) "core";
-  };
+        "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
+      };
+
+      users.users.systemd-coredump = {
+        uid = config.ids.uids.systemd-coredump;
+        group = "systemd-coredump";
+      };
+      users.groups.systemd-coredump = { };
+    })
+
+    (mkIf (!cfg.enable) {
+      boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+    })
+
+  ];
+
 }

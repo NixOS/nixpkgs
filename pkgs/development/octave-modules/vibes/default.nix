@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, vibes
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  vibes,
 }:
 
 buildOctavePackage rec {
@@ -19,7 +20,10 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/vibes/index.html";
-    license = with licenses; [ gpl3Plus mit ];
+    license = with licenses; [
+      gpl3Plus
+      mit
+    ];
     maintainers = with maintainers; [ KarlJoad ];
     description = "Easily display results (boxes, pavings) from interval methods";
     longDescription = ''
@@ -29,7 +33,7 @@ buildOctavePackage rec {
       VIBes API that enables your program to communicate with the viewer in order
       to draw figures. This package integrates the VIBes API into Octave. The
       VIBes application is required for operation and must be installed
-      seperately. Data types from third-party interval arithmetic libraries for
+      separately. Data types from third-party interval arithmetic libraries for
       Octave are also supported.
     '';
     # Marked this way until KarlJoad gets around to packaging the vibes program.

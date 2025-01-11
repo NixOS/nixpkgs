@@ -1,40 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webtest
-, zope_component
-, hupper
-, pastedeploy
-, plaster
-, plaster-pastedeploy
-, repoze_lru
-, translationstring
-, venusian
-, webob
-, zope_deprecation
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch2,
+  webtest,
+  zope-component,
+  hupper,
+  pastedeploy,
+  plaster,
+  plaster-pastedeploy,
+  repoze-lru,
+  setuptools,
+  translationstring,
+  venusian,
+  webob,
+  zope-deprecation,
+  zope-interface,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "2.0";
+  version = "2.0.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45431b387587ed0fac6213b54d6e9f0936f0cc85238a8f5af7852fc9484c5c77";
+    hash = "sha256-NyE4pzjkIWU1zHbczm7d1aGqypUTDyNU+4NCZMBvGN4=";
   };
 
-  checkInputs = [ webtest zope_component ];
+  patches = [
+    (fetchpatch2 {
+      name = "python-3.13-compat.patch";
+      url = "https://github.com/Pylons/pyramid/commit/1079613eb07e2a67454378e1fc28815dfd64bb82.patch";
+      hash = "sha256-/jxbA2q0kAeXDvIwhNkO8h4KbKtdquWXAH7/0lV8MXc=";
+    })
+  ];
 
-  propagatedBuildInputs = [ hupper pastedeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    hupper
+    pastedeploy
+    plaster
+    plaster-pastedeploy
+    repoze-lru
+    setuptools # for pkg_resources
+    translationstring
+    venusian
+    webob
+    zope-deprecation
+    zope-interface
+  ];
+
+  nativeCheckInputs = [
+    webtest
+    zope-component
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pyramid" ];
 
   meta = with lib; {
-    description = "The Pyramid Web Framework, a Pylons project";
+    description = "Python web framework";
     homepage = "https://trypyramid.com/";
+    changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

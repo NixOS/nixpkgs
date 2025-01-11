@@ -1,56 +1,93 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytest
-, setuptools
-, six
-, testtools
-, zope_interface
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pythonOlder,
+  pythonAtLeast,
+
+  setuptools,
+
+  boltons,
+  orjson,
+  pyrsistent,
+  zope-interface,
+
+  daemontools,
+  dask,
+  distributed,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  testtools,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.14.0";
-  disabled = pythonOlder "3.6";
+  version = "1.16.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c2f099a3e8d5ecfc22745766e7cc664a48db64b6b89d986dff270491d8683149";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+
+  src = fetchFromGitHub {
+    owner = "itamarst";
+    repo = "eliot";
+    tag = version;
+    hash = "sha256-KqAXOMrRawzjpt5do2KdqpMMgpBtxeZ+X+th0WwBl+U=";
   };
 
-  checkInputs = [
-    hypothesis
-    testtools
-    pytest
-   ];
-
-  propagatedBuildInputs = [
-    aiocontextvars
-    boltons
-    pyrsistent
-    setuptools
-    six
-    zope_interface
+  patches = [
+    (fetchpatch2 {
+      name = "numpy2-compat.patch";
+      url = "https://github.com/itamarst/eliot/commit/39eccdad44f91971ecf1211fb01366b4d9801817.patch";
+      hash = "sha256-al6olmvFZ8pDblljWmWqs5QrtcuHKcea255XgG+1+1o=";
+    })
   ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    boltons
+    orjson
+    pyrsistent
+    zope-interface
+  ];
+
+  nativeCheckInputs = [
+    dask
+    distributed
+    hypothesis
+    pandas
+    pytestCheckHook
+    testtools
+    twisted
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "eliot" ];
 
   # Tests run eliot-prettyprint in out/bin.
-  # test_parse_stream is broken, skip it.
-  checkPhase = ''
+  preCheck = ''
     export PATH=$out/bin:$PATH
-    pytest -k 'not test_parse_stream'
   '';
 
-  meta = with lib; {
+  disabledTests = [
+    # Fails since dask's bump to 2024.12.2
+    # Reported upstream: https://github.com/itamarst/eliot/issues/507
+    "test_compute_logging"
+    "test_future"
+    "test_persist_logging"
+  ];
+
+  meta = {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
-    license = licenses.asl20;
-    maintainers = [ maintainers.dpausp ];
+    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
+    mainProgram = "eliot-prettyprint";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dpausp ];
   };
 }

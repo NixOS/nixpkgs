@@ -1,21 +1,42 @@
-{ majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
-, fetchpatch
-, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
-, enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
-# Darwin support
-, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
-, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
+{
+  majorVersion,
+  minorVersion,
+  sourceSha256,
+  patchesToFetch ? [ ],
+}:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  libGLU,
+  libGL,
+  libX11,
+  xorgproto,
+  libXt,
+  libpng,
+  libtiff,
+  fetchpatch,
+  enableQt ? false,
+  qtx11extras,
+  qttools,
+  qtdeclarative,
+  qtEnv,
+  enablePython ? false,
+  python ? throw "vtk: Python support requested, but no python interpreter was given.",
+  enableEgl ? false,
 }:
 
 let
-  inherit (lib) optionalString optionals optional;
+  inherit (lib) optionalString optionals;
 
-  pythonMajor = lib.substring 0 1 pythonInterpreter.pythonVersion;
-
-in stdenv.mkDerivation rec {
-  pname = "vtk${optionalString enableQt "-qvtk"}";
   version = "${majorVersion}.${minorVersion}";
+  pythonMajor = lib.substring 0 1 python.pythonVersion;
+
+in
+stdenv.mkDerivation {
+  pname = "vtk" + optionalString enableEgl "-egl" + optionalString enableQt "-qvtk";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
@@ -24,38 +45,46 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libpng libtiff ]
-    ++ optionals enableQt [ qtbase qtx11extras qttools ]
-    ++ optionals stdenv.isLinux [
+  buildInputs =
+    [
+      libpng
+      libtiff
+    ]
+    ++ optionals enableQt [
+      (qtEnv "qvtk-qt-env" [
+        qtx11extras
+        qttools
+        qtdeclarative
+      ])
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [
       libGLU
-      libGL
-      libX11
       xorgproto
       libXt
-    ] ++ optionals stdenv.isDarwin [
-      xpc
-      Cocoa
-      CoreServices
-      DiskArbitration
-      IOKit
-      CFNetwork
-      Security
-      ApplicationServices
-      CoreText
-      IOSurface
-      ImageIO
-      OpenGL
-      GLUT
-    ] ++ optional enablePython [
-      pythonInterpreter
+    ]
+    ++ optionals enablePython [
+      python
     ];
-  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];
+  propagatedBuildInputs = optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libGL
+  ];
+  # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
   patches = map fetchpatch patchesToFetch;
 
-  preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib";
-  '';
+  # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+  postPatch =
+    ''
+      sed '1i#include <cstdint>' \
+        -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
+        -i IO/Image/vtkSEPReader.h
+    ''
+    + optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
+      sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
+      sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
+    '';
 
   dontWrapQtApps = true;
 
@@ -64,48 +93,56 @@ in stdenv.mkDerivation rec {
   # built and requiring one of the shared objects.
   # At least, we use -fPIC for other packages to be able to use this in shared
   # objects.
-  cmakeFlags = [
-    "-DCMAKE_C_FLAGS=-fPIC"
-    "-DCMAKE_CXX_FLAGS=-fPIC"
-    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_PNG" else "VTK_MODULE_USE_EXTERNAL_vtkpng"}=ON"
-    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_TIFF" else "VTK_MODULE_USE_EXTERNAL_vtktiff"}=1"
-    "-DOPENGL_INCLUDE_DIR=${libGL}/include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_BINDIR=bin"
-  ] ++ optionals enableQt [
-    "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
-  ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
-    "-DVTK_QT_VERSION=5"
-  ]
-    ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
+  cmakeFlags =
+    [
+      "-DCMAKE_C_FLAGS=-fPIC"
+      "-DCMAKE_CXX_FLAGS=-fPIC"
+      "-DVTK_MODULE_USE_EXTERNAL_vtkpng=ON"
+      "-DVTK_MODULE_USE_EXTERNAL_vtktiff=1"
+      "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGL}/include"
+      (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
+    ]
+    ++ [
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DVTK_VERSIONED_INSTALL=OFF"
+    ]
+    ++ optionals enableQt [
+      "-DVTK_GROUP_ENABLE_Qt:STRING=YES"
+    ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
     ];
 
-  postPatch = optionalString stdenv.isDarwin ''
-    sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
-    sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
-    sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
-  '';
+  env = {
+    # Lots of warnings in vendored code…
+    NIX_CFLAGS_COMPILE =
+      if stdenv.cc.isClang then
+        "-Wno-error=incompatible-function-pointer-types"
+      else
+        "-Wno-error=incompatible-pointer-types";
+  };
 
-  preFixup = ''
-    for lib in $out/lib/libvtk*.so; do
-      ln -s $lib $out/lib/"$(basename "$lib" | sed -e 's/-[[:digit:]]*.[[:digit:]]*//g')"
-    done
-
-    mv $out/include/vtk-${majorVersion}/* $out/include
-    rmdir $out/include/vtk-${majorVersion}
-    ln -s $out/include $out/include/vtk-${majorVersion}
+  postInstall = optionalString enablePython ''
+    substitute \
+      ${./vtk.egg-info} \
+      $out/${python.sitePackages}/vtk-${version}.egg-info \
+      --subst-var-by VTK_VER "${version}"
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [
+      tfmoraes
+    ];
+    platforms = platforms.unix;
+    badPlatforms = optionals enableEgl platforms.darwin;
   };
 }

@@ -1,12 +1,19 @@
-{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper, nixosTests }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  writeText,
+  jdk,
+  makeWrapper,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "soapui";
-  version = "5.6.0";
+  version = "5.8.0";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/downloads.eviware/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
-    sha256 = "0vmj11fswja0ddnbc4vb7gj1al8km7ilma9bv1waaj8h5c8qpayi";
+    url = "https://dl.eviware.com/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
+    sha256 = "sha256-Xg1aeB/KQ5zMlJADFCnnpzA6iQMTlMgO7YKuWW8Y6oI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,16 +35,16 @@ stdenv.mkDerivation rec {
     (writeText "soapui-${version}.patch" ''
       --- a/bin/soapui.sh
       +++ b/bin/soapui.sh
-      @@ -34,7 +34,7 @@ SOAPUI_CLASSPATH=$SOAPUI_HOME/bin/soapui-${version}.jar:$SOAPUI_HOME/lib/*
-       export SOAPUI_CLASSPATH
+      @@ -50,7 +50,7 @@
+       #JAVA 16
+       JAVA_OPTS="$JAVA_OPTS --illegal-access=permit"
 
-       JAVA_OPTS="-Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=$SOAPUI_HOME/bin -splash:SoapUI-Spashscreen.png"
       -JFXRTPATH=`java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
       +JFXRTPATH=`${jdk}/bin/java -cp $SOAPUI_CLASSPATH com.eviware.soapui.tools.JfxrtLocator`
        SOAPUI_CLASSPATH=$JFXRTPATH:$SOAPUI_CLASSPATH
 
        if $darwin
-      @@ -69,4 +69,4 @@ echo = SOAPUI_HOME = $SOAPUI_HOME
+      @@ -85,4 +85,4 @@
        echo =
        echo ================================
 
@@ -49,11 +56,12 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) soapui; };
 
   meta = with lib; {
-    description = "The Most Advanced REST & SOAP Testing Tool in the World";
+    description = "Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = "SoapUI End User License Agreement";
     maintainers = with maintainers; [ gerschtli ];
-    platforms = platforms.all;
+    platforms = platforms.linux; # we don't fetch the dmg yet
+    mainProgram = "soapui";
   };
 }

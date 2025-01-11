@@ -1,13 +1,19 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.hledger-web;
-in {
+in
+{
   options.services.hledger-web = {
 
     enable = mkEnableOption "hledger-web service";
 
-    serveApi = mkEnableOption "Serve only the JSON web API, without the web UI.";
+    serveApi = mkEnableOption "serving only the JSON web API, without the web UI";
 
     host = mkOption {
       type = types.str;
@@ -26,28 +32,22 @@ in {
       '';
     };
 
-    capabilities = {
-      view = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Enable the view capability.
-        '';
-      };
-      add = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the add capability.
-        '';
-      };
-      manage = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the manage capability.
-        '';
-      };
+    allow = mkOption {
+      type = types.enum [
+        "view"
+        "add"
+        "edit"
+        "sandstorm"
+      ];
+      default = "view";
+      description = ''
+        User's access level for changing data.
+
+        * view: view only permission.
+        * add: view and add permissions.
+        * edit: view, add, and edit permissions.
+        * sandstorm: permissions from the `X-Sandstorm-Permissions` request header.
+      '';
     };
 
     stateDir = mkOption {
@@ -65,7 +65,7 @@ in {
       type = types.listOf types.str;
       default = [ ".hledger.journal" ];
       description = ''
-        Paths to journal files relative to <option>services.hledger-web.stateDir</option>.
+        Paths to journal files relative to {option}`services.hledger-web.stateDir`.
       '';
     };
 
@@ -80,7 +80,7 @@ in {
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "--forecast" ];
       description = ''
         Extra command line arguments to pass to hledger-web.
@@ -88,6 +88,14 @@ in {
     };
 
   };
+
+  imports = [
+    (mkRemovedOptionModule [
+      "services"
+      "hledger-web"
+      "capabilities"
+    ] "This option has been replaced by new option `services.hledger-web.allow`.")
+  ];
 
   config = mkIf cfg.enable {
 
@@ -99,44 +107,49 @@ in {
       useDefaultShell = true;
     };
 
-    users.groups.hledger = {};
+    users.groups.hledger = { };
 
-    systemd.services.hledger-web = let
-      capabilityString = with cfg.capabilities; concatStringsSep "," (
-        (optional view "view")
-        ++ (optional add "add")
-        ++ (optional manage "manage")
-      );
-      serverArgs = with cfg; escapeShellArgs ([
-        "--serve"
-        "--host=${host}"
-        "--port=${toString port}"
-        "--capabilities=${capabilityString}"
-        (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
-        (optionalString (cfg.serveApi) "--serve-api")
-      ] ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
-        ++ extraOptions);
-    in {
-      description = "hledger-web - web-app for the hledger accounting tool.";
-      documentation = [ "https://hledger.org/hledger-web.html" ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
-      serviceConfig = mkMerge [
-        {
-          ExecStart = "${pkgs.hledger-web}/bin/hledger-web ${serverArgs}";
-          Restart = "always";
-          WorkingDirectory = cfg.stateDir;
-          User = "hledger";
-          Group = "hledger";
-          PrivateTmp = true;
-        }
-        (mkIf (cfg.stateDir == "/var/lib/hledger-web") {
-          StateDirectory = "hledger-web";
-        })
-      ];
-    };
+    systemd.services.hledger-web =
+      let
+        serverArgs =
+          with cfg;
+          escapeShellArgs (
+            [
+              "--serve"
+              "--host=${host}"
+              "--port=${toString port}"
+              "--allow=${allow}"
+              (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
+              (optionalString (cfg.serveApi) "--serve-api")
+            ]
+            ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
+            ++ extraOptions
+          );
+      in
+      {
+        description = "hledger-web - web-app for the hledger accounting tool.";
+        documentation = [ "https://hledger.org/hledger-web.html" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "networking.target" ];
+        serviceConfig = mkMerge [
+          {
+            ExecStart = "${pkgs.hledger-web}/bin/hledger-web ${serverArgs}";
+            Restart = "always";
+            WorkingDirectory = cfg.stateDir;
+            User = "hledger";
+            Group = "hledger";
+            PrivateTmp = true;
+          }
+          (mkIf (cfg.stateDir == "/var/lib/hledger-web") {
+            StateDirectory = "hledger-web";
+          })
+        ];
+      };
 
   };
 
-  meta.maintainers = with lib.maintainers; [ marijanp erictapen ];
+  meta.maintainers = with lib.maintainers; [
+    marijanp
+    erictapen
+  ];
 }

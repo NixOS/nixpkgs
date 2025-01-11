@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   options.virtualisation.spiceUSBRedirection.enable = lib.mkOption {
     type = lib.types.bool;
@@ -22,5 +27,5 @@
     };
   };
 
-  meta.maintainers = [ lib.maintainers.lheckemann ];
+  meta.maintainers = [ ];
 }

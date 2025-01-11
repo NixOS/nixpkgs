@@ -1,37 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyrfxtrx";
-  version = "0.29.0";
+  version = "0.31.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyRFXtrx";
-    rev = version;
-    hash = "sha256-0tdT7UIT9F2z9+ufnzaACVxRybWxFjZObYQCd3hcXTk=";
+    tag = version;
+    hash = "sha256-Y9UVJZxm5G5ywNLW8nm162cZTs3/mFeI+ZEUGoc9eAs=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ pyserial ];
 
-  disabledTestPaths = [
-    # https://github.com/Danielhiversen/pyRFXtrx/issues/130
-    "tests/test_rollertrol.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Library to communicate with the RFXtrx family of devices";
     homepage = "https://github.com/Danielhiversen/pyRFXtrx";
+    changelog = "https://github.com/Danielhiversen/pyRFXtrx/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

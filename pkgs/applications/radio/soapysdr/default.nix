@@ -1,57 +1,84 @@
-{ stdenv, lib, lndir, makeWrapper
-, fetchFromGitHub, cmake
-, libusb-compat-0_1, pkg-config
-, usePython ? false
-, python ? null
-, ncurses, swig2
-, extraPackages ? []
-} :
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  libusb-compat-0_1,
+  ncurses,
+  usePython ? false,
+  python ? null,
+  swig,
+  extraPackages ? [ ],
+  buildPackages,
+  testers,
+}:
 
-let
-
-  version = "0.8.1";
-  modulesVersion = with lib; versions.major version + "." + versions.minor version;
-  modulesPath = "lib/SoapySDR/modules" + modulesVersion;
-  extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
-  inherit version;
+  version = "0.8.2-pre";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
-    rev = "soapy-sdr-${version}";
-    sha256 = "19f2x0pkxvf9figa0pl6xqlcz8fblvqb19mcnj632p0l8vk6qdv2";
+
+    # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
+    # use old get python lib for v2 (#437)
+    rev = "8c6cb7c5223fad995e355486527589c63aa3b21e";
+    hash = "sha256-CKasL1mlpeuxXyPe6VDdAvb1l5a1cwWgyP7XX1aM73I=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
-  buildInputs = [ libusb-compat-0_1 ncurses ]
-    ++ lib.optionals usePython [ python swig2 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs =
+    [
+      libusb-compat-0_1
+      ncurses
+    ]
+    ++ lib.optionals usePython [
+      python
+      swig
+    ];
 
-  propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
+  propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
+  cmakeFlags = lib.optionals usePython [ "-DUSE_PYTHON_CONFIG=ON" ];
 
-  postFixup = lib.optionalString (lib.length extraPackages != 0) ''
+  postFixup = lib.optionalString (extraPackages != [ ]) (
     # Join all plugins via symlinking
-    for i in ${toString extraPackages}; do
-      ${lndir}/bin/lndir -silent $i $out
-    done
-    # Needed for at least the remote plugin server
-    for file in $out/bin/*; do
-        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg extraPackagesSearchPath}
-    done
-  '';
+    lib.pipe extraPackages [
+      (map (pkg: ''
+        ${buildPackages.xorg.lndir}/bin/lndir -silent ${pkg} $out
+      ''))
+      lib.concatStrings
+    ]
+    + ''
+      # Needed for at least the remote plugin server
+      for file in $out/bin/*; do
+          wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg (lib.makeSearchPath finalAttrs.passthru.searchPath extraPackages)}
+      done
+    ''
+  );
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    searchPath = "lib/SoapySDR/modules${lib.versions.majorMinor finalAttrs.version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [
+      markuskowa
+      numinit
+    ];
     mainProgram = "SoapySDRUtil";
+    pkgConfigModules = [ "SoapySDR" ];
     platforms = platforms.unix;
   };
-}
+})

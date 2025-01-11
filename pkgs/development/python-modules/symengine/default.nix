@@ -1,62 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, cython
-, cmake
-, symengine
-, pytest
-, sympy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  cmake,
+  symengine,
+  pytest,
+  sympy,
+  python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.13.0";
+
+  build-system = [ setuptools ];
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "v${version}";
-    sha256 = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    tag = "v${version}";
+    hash = "sha256-PJUzA86SGCnDpqU9j/dr3PlM9inyi8SQX0HGqPQ9wQw=";
   };
 
-  patches = [
-    (fetchpatch {
-      # setuptools 61 compat
-      url = "https://github.com/symengine/symengine.py/commit/987e665e71cf92d1b021d7d573a1b9733408eecf.patch";
-      hash = "sha256-2QbNdw/lKYRIRpOU5BiwF2kK+5Lh2j/Q82MKUIvl0+c=";
-    })
-  ];
+  env = {
+    SymEngine_DIR = "${symengine}";
+  };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "\"cmake\"" "\"${cmake}/bin/cmake\"" \
-      --replace "'cython>=0.29.24'" "'cython'"
+      --replace-fail "'cython>=0.29.24'" "'cython'"
+
+    export PATH=${cython}/bin:$PATH
   '';
 
-  nativeBuildUnputs = [ cmake ];
+  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ cython ];
 
-  checkInputs = [ pytest sympy ];
-
-  setupPyBuildFlags = [
-    "--symengine-dir=${symengine}/"
-    "--define=\"CYTHON_BIN=${cython}/bin/cython\""
+  nativeCheckInputs = [
+    pytest
+    sympy
   ];
 
   checkPhase = ''
-    mkdir empty
-    cd empty
+    runHook preCheck
+    mkdir empty && cd empty
     ${python.interpreter} ../bin/test_python.py
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "Python library providing wrappers to SymEngine";
     homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

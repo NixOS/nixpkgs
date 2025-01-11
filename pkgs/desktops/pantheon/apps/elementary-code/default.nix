@@ -1,39 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, polkit
-, python3
-, vala
-, wrapGAppsHook
-, editorconfig-core-c
-, granite
-, gtk3
-, gtksourceview4
-, gtkspell3
-, libgee
-, libgit2-glib
-, libhandy
-, libpeas
-, libsoup
-, vte
-, ctags
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  appstream,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  vala,
+  wrapGAppsHook3,
+  editorconfig-core-c,
+  granite,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  libgee,
+  libgit2-glib,
+  libhandy,
+  libpeas,
+  libsoup_2_4,
+  vte,
+  ctags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.2.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
+    sha256 = "sha256-KoRpGBYen1eOdMBHOTBMopC+mPMOkD+iYWV3JA21mKc=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +43,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit # needed for ITS rules
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
     libgit2-glib
     libhandy
     libpeas
-    libsoup
+    libsoup_2_4
     vte
   ];
 
@@ -69,15 +68,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

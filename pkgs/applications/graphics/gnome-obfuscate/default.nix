@@ -1,70 +1,86 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-
-, gettext
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, wrapGAppsHook4
-
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk4
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  buildPackages,
+  cargo,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  gdk-pixbuf,
+  libadwaita,
+  Foundation,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-obfuscate";
-  version = "0.0.7";
+  version = "0.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Obfuscate";
-    rev = version;
-    sha256 = "sha256-jEMOg2yHi6K57XhA/7hkwwvedmikoB8pGV3ka+jixq8=";
+    rev = finalAttrs.version;
+    hash = "sha256-/Plvvn1tle8t/bsPcsamn5d81CqnyGCyGYPF6j6U5NI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "sha256-P04BeidLXouPLzT/vsa4VC5AOENF0W4gqXqzdmRFhmE=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-9lrxK2psdIPGsOC6p8T+3AGPrX6PjrK9mFirdJqBSMM=";
+  };
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
+    # The vendored gettext does not build with clang 16.
+    GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
   nativeBuildInputs = [
     gettext
-    glib
     meson
     ninja
     pkg-config
-    python3
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
-  ];
-
-  buildInputs = [
     appstream-glib
     desktop-file-utils
-    glib
-    gtk4
-    libadwaita
   ];
 
-  postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-  '';
+  buildInputs =
+    [
+      glib
+      gtk4
+      gdk-pixbuf
+      libadwaita
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+    ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Censor private information";
     homepage = "https://gitlab.gnome.org/World/obfuscate";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "obfuscate";
+    maintainers = with maintainers; [ fgaz ] ++ lib.teams.gnome-circle.members;
   };
-}
+})

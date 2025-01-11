@@ -1,26 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, joblib
-, llvmlite
-, numba
-, scikit-learn
-, scipy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  joblib,
+  llvmlite,
+  numba,
+  scikit-learn,
+  scipy,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.7";
-  format = "setuptools";
+  version = "0.5.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7LOVJV+janSLWHC0ugMA6g99qLGWSGS47dYld6hN/X0=";
+    hash = "sha256-10JUwO4KHu7IRZfV/on+3Pd4WT7qvjLC+XQSk0qYAPs=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     joblib
@@ -28,25 +33,11 @@ buildPythonPackage rec {
     numba
     scikit-learn
     scipy
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # numpy.core._exceptions._UFuncNoLoopError
-    "test_sparse_nn_descent_query_accuracy_angular"
-    "test_nn_descent_query_accuracy_angular"
-    "test_alternative_distances"
-    # scipy: ValueError: Unknown Distance Metric: wminkowski
-    # https://github.com/scikit-learn/scikit-learn/pull/21741
-    "test_weighted_minkowski"
-  ];
-
-  pythonImportsCheck = [
-    "pynndescent"
-  ];
+  pythonImportsCheck = [ "pynndescent" ];
 
   meta = with lib; {
     description = "Nearest Neighbor Descent";

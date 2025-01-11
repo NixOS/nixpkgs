@@ -24,12 +24,26 @@ let
   confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [""]);
   confServer = concatStringsSep "\n" (mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ]));
 
-  confFile = pkgs.writeText "unbound.conf" ''
+  confFileUnchecked = pkgs.writeText "unbound.conf" ''
     server:
     ${optionalString (cfg.settings.server.define-tag != "") (toOption "  " "define-tag" cfg.settings.server.define-tag)}
     ${confServer}
     ${confNoServer}
   '';
+  confFile = if cfg.checkconf then pkgs.runCommand "unbound-checkconf" {
+    preferLocalBuild = true;
+  } ''
+    cp ${confFileUnchecked} unbound.conf
+
+    # fake stateDir which is not accessible in the sandbox
+    mkdir -p $PWD/state
+    sed -i unbound.conf \
+      -e '/auto-trust-anchor-file/d' \
+      -e "s|${cfg.stateDir}|$PWD/state|"
+    ${cfg.package}/bin/unbound-checkconf unbound.conf
+
+    cp ${confFileUnchecked} $out
+  '' else confFileUnchecked;
 
   rootTrustAnchorFile = "${cfg.stateDir}/root.key";
 
@@ -42,12 +56,7 @@ in {
 
       enable = mkEnableOption "Unbound domain name server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.unbound-with-systemd;
-        defaultText = literalExpression "pkgs.unbound-with-systemd";
-        description = "The unbound package to use";
-      };
+      package = mkPackageOption pkgs "unbound-with-systemd" { };
 
       user = mkOption {
         type = types.str;
@@ -65,6 +74,18 @@ in {
         type = types.path;
         default = "/var/lib/unbound";
         description = "Directory holding all state for unbound to run.";
+      };
+
+      checkconf = mkOption {
+        type = types.bool;
+        default = !cfg.settings ? include && !cfg.settings ? remote-control;
+        defaultText = "!services.unbound.settings ? include && !services.unbound.settings ? remote-control";
+        description = ''
+          Whether to check the resulting config file with unbound checkconf for syntax errors.
+
+          If settings.include is used, this options is disabled, as the import can likely not be accessed at build time.
+          If settings.remote-control is used, this option is disabled, too as the control-key-file, server-cert-file and server-key-file cannot be accessed at build time.
+        '';
       };
 
       resolveLocalQueries = mkOption {
@@ -91,15 +112,15 @@ in {
         type = types.nullOr types.str;
         example = "/run/unbound/unbound.ctl";
         description = ''
-          When not set to <literal>null</literal> this option defines the path
+          When not set to `null` this option defines the path
           at which the unbound remote control socket should be created at. The
-          socket will be owned by the unbound user (<literal>unbound</literal>)
-          and group will be <literal>nogroup</literal>.
+          socket will be owned by the unbound user (`unbound`)
+          and group will be `nogroup`.
 
           Users that should be permitted to access the socket must be in the
-          <literal>config.services.unbound.group</literal> group.
+          `config.services.unbound.group` group.
 
-          If this option is <literal>null</literal> remote control will not be
+          If this option is `null` remote control will not be
           enabled. Unbounds default values apply.
         '';
       };
@@ -152,8 +173,7 @@ in {
         '';
         description = ''
           Declarative Unbound configuration
-          See the <citerefentry><refentrytitle>unbound.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> manpage for a list of
+          See the {manpage}`unbound.conf(5)` manpage for a list of
           available options.
         '';
       };
@@ -167,7 +187,7 @@ in {
     services.unbound.settings = {
       server = {
         directory = mkDefault cfg.stateDir;
-        username = cfg.user;
+        username = ''""'';
         chroot = ''""'';
         pidfile = ''""'';
         # when running under systemd there is no need to daemonize
@@ -212,8 +232,6 @@ in {
       resolvconf = {
         useLocalResolver = mkDefault true;
       };
-
-      networkmanager.dns = "unbound";
     };
 
     environment.etc."unbound/unbound.conf".source = confFile;
@@ -246,14 +264,13 @@ in {
         NotifyAccess = "main";
         Type = "notify";
 
-        # FIXME: Which of these do we actualy need, can we drop the chroot flag?
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
+          "CAP_NET_RAW" # needed if ip-transparent is set to true
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW"
-          "CAP_SETGID"
-          "CAP_SETUID"
-          "CAP_SYS_CHROOT"
-          "CAP_SYS_RESOURCE"
         ];
 
         User = cfg.user;
@@ -267,25 +284,24 @@ in {
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectKernelLogs = true;
+        ProtectKernelTunables = true;
         RuntimeDirectory = "unbound";
         ConfigurationDirectory = "unbound";
         StateDirectory = "unbound";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "~@clock"
-          "@cpu-emulation"
-          "@debug"
-          "@keyring"
-          "@module"
-          "mount"
-          "@obsolete"
-          "@resources"
-        ];
+        SystemCallFilter = [ "@system-service" ];
         RestrictNamespaces = true;
         LockPersonality = true;
         RestrictSUIDSGID = true;
+
+        ReadWritePaths = [ cfg.stateDir ];
 
         Restart = "on-failure";
         RestartSec = "5s";

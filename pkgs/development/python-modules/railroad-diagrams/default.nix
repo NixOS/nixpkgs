@@ -1,26 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "railroad-diagrams";
-  version = "1.1.1";
+  version = "3.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8a1ec227666be2000e76794aa740f77987f1586077aae4d090d2633b3064c976";
+    hash = "sha256-qRMyuskAyzw2czH6m2mfCJe8+GtyZPZUWGdd9DDQTOM=";
   };
 
-  # this is a dependency of pyparsing, which is a dependency of pytest
+  # This is a dependency of pyparsing, which is a dependency of pytest
   doCheck = false;
 
   pythonImportsCheck = [ "railroad" ];
 
   meta = with lib; {
-    description = "Generate SVG railroad syntax diagrams, like on JSON.org";
+    description = "Module to generate SVG railroad syntax diagrams";
     homepage = "https://github.com/tabatkins/railroad-diagrams";
     license = licenses.cc0;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

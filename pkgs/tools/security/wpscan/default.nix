@@ -1,7 +1,8 @@
-{ lib
-, bundlerApp
-, makeWrapper
-, curl
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
+  curl,
 }:
 
 bundlerApp {
@@ -9,9 +10,7 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "wpscan" ];
 
-  buildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram "$out/bin/wpscan" \
@@ -23,8 +22,12 @@ bundlerApp {
   meta = with lib; {
     description = "Black box WordPress vulnerability scanner";
     homepage = "https://wpscan.org/";
+    changelog = "https://github.com/wpscanteam/wpscan/releases";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ nyanloutre manveru ];
+    maintainers = with maintainers; [
+      nyanloutre
+      manveru
+    ];
     platforms = platforms.unix;
   };
 }

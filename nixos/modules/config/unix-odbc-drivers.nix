@@ -1,7 +1,4 @@
 { config, lib, ... }:
-
-with lib;
-
 # unixODBC drivers (this solution is not perfect.. Because the user has to
 # ask the admin to add a driver.. but it's simple and works
 
@@ -12,18 +9,19 @@ let
     Driver = ${pkg}/${pkg.driver}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
-    environment.unixODBCDrivers = mkOption {
-      type = types.listOf types.package;
-      default = [];
-      example = literalExpression "with pkgs.unixODBCDrivers; [ sqlite psql ]";
+    environment.unixODBCDrivers = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "with pkgs.unixODBCDrivers; [ sqlite psql ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in
-        <filename>/etc/odbcinst.ini</filename>.  You may also want to
-        add <literal>pkgs.unixODBC</literal> to the system path to get
+        {file}`/etc/odbcinst.ini`.  You may also want to
+        add `pkgs.unixODBC` to the system path to get
         a command line client to connect to ODBC databases.
       '';
     };
@@ -31,8 +29,10 @@ in {
 
   ###### implementation
 
-  config = mkIf (config.environment.unixODBCDrivers != []) {
-    environment.etc."odbcinst.ini".text = concatMapStringsSep "\n" iniDescription config.environment.unixODBCDrivers;
+  config = lib.mkIf (config.environment.unixODBCDrivers != [ ]) {
+    environment.etc."odbcinst.ini".text =
+      lib.concatMapStringsSep "\n" iniDescription
+        config.environment.unixODBCDrivers;
   };
 
 }

@@ -1,37 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, matplotlib
-, pytest
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  scipy,
+  matplotlib,
+  pytestCheckHook,
+  isPy3k,
 }:
 
-buildPythonPackage rec {
-  version = "1.4.5";
+buildPythonPackage {
   pname = "filterpy";
+  version = "1.4.5-unstable-2022-08-23";
+  pyproject = true;
+
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "4f2a4d39e4ea601b9ab42b2db08b5918a9538c168cff1c6895ae26646f3d73b1";
+  src = fetchFromGitHub {
+    owner = "rlabbe";
+    repo = "filterpy";
+    rev = "3b51149ebcff0401ff1e10bf08ffca7b6bbc4a33";
+    hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy scipy matplotlib ];
+  build-system = [ setuptools ];
 
-  # single test fails (even on master branch of repository)
-  # project does not use CI
-  checkPhase = ''
-    pytest --ignore=filterpy/common/tests/test_discretization.py
-  '';
+  dependencies = [
+    numpy
+    scipy
+    matplotlib
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # ValueError: Unable to avoid copy while creating an array as requested."
+    "test_multivariate_gaussian"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

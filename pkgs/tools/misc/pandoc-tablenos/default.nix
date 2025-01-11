@@ -1,7 +1,9 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, lib
-, pandoc-xnos
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  lib,
+  pandoc-xnos,
+  setuptools,
 }:
 
 buildPythonApplication rec {
@@ -16,6 +18,10 @@ buildPythonApplication rec {
     sha256 = "sha256-FwzsRziY3PoySo9hIFuLw6tOO9oQij6oQEyoY8HgnII=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [ pandoc-xnos ];
 
   # Different pandoc executables are not available
@@ -26,5 +32,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/tomduck/pandoc-tablenos";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ppenguin ];
+    mainProgram = "pandoc-tablenos";
   };
 }

@@ -1,31 +1,67 @@
-{lib, stdenv, qtdeclarative, fetchFromGitHub, qmake }:
+{
+  lib,
+  stdenv,
+  qtbase,
+  qtdeclarative,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  box2d,
+}:
+
+let
+  inherit (lib) cmakeBool;
+
+  # 2.3.1 is the only supported version
+  box2d' = (box2d.override { settingsFile = "Box2D/Common/b2Settings.h"; }).overrideAttrs (old: rec {
+    version = "2.3.1";
+    src = fetchFromGitHub {
+      owner = "erincatto";
+      repo = "box2d";
+      rev = "v${version}";
+      hash = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
+    };
+    sourceRoot = "${src.name}/Box2D";
+    cmakeFlags = old.cmakeFlags or [ ] ++ [
+      (cmakeBool "BOX2D_INSTALL" true)
+      (cmakeBool "BOX2D_BUILD_SHARED" true)
+      (cmakeBool "BOX2D_BUILD_EXAMPLES" false)
+    ];
+  });
+
+in
 stdenv.mkDerivation {
   pname = "qml-box2d";
-  version = "unstable-2018-04-06";
+  version = "unstable-2022-08-25";
+
   src = fetchFromGitHub {
     owner = "qml-box2d";
     repo = "qml-box2d";
-    sha256 = "0gb8limy6ck23z3k0k2j7c4c4s95p40f6lbzk4szq7fjnnw22kb7";
-    rev = "b7212d5640701f93f0cd88fbd3a32c619030ae62";
+    rev = "0bb88a6f871eef72b3b9ded9329c15f1da1f4fd7";
+    hash = "sha256-sfSVetpHIAIujpgjvRScAkJRlQQYjQ/yQrkWvp7Yu0s=";
   };
 
   dontWrapQtApps = true;
-  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtdeclarative ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  patchPhase = ''
-    substituteInPlace box2d.pro \
-      --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
-    qmakeFlags="$qmakeFlags PREFIXSHORTCUT=$out"
-    '';
+  buildInputs = [
+    box2d'
+    qtbase
+    qtdeclarative
+  ];
 
-  installFlags = [ "INSTALL_ROOT=$(out)" ];
+  cmakeFlags = [
+    (cmakeBool "USE_SYSTEM_BOX2D" true)
+  ];
 
   meta = with lib; {
-    description = "A QML plugin for Box2D engine";
+    description = "QML plugin for Box2D engine";
     homepage = "https://github.com/qml-box2d/qml-box2d";
-    maintainers = [ maintainers.guibou ];
+    maintainers = with maintainers; [ guibou ];
     platforms = platforms.linux;
     license = licenses.zlib;
   };

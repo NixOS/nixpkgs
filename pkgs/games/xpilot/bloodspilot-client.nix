@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, libX11, SDL, libGLU, libGL, expat, zlib, SDL_ttf, SDL_image }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  SDL,
+  libGLU,
+  libGL,
+  expat,
+  zlib,
+  SDL_ttf,
+  SDL_image,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.5.0";
@@ -10,16 +22,24 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 SDL SDL_ttf SDL_image libGLU libGL expat zlib
+    libX11
+    SDL
+    SDL_ttf
+    SDL_image
+    libGLU
+    libGL
+    expat
+    zlib
   ];
 
   NIX_LDFLAGS = "-lX11";
 
   meta = {
-    description = "A multiplayer space combat game (client part)";
+    description = "Multiplayer space combat game (client part)";
+    mainProgram = "bloodspilot-client-sdl";
     homepage = "http://bloodspilot.sf.net/";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

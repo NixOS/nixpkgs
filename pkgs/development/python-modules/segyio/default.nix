@@ -1,25 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, python
-, scikit-build
-, pytest
-, numpy
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  scikit-build,
+  pytest,
+  numpy,
 }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "segyio";
-  version = "1.9.9";
+  version = "1.9.12";
+  pyproject = false; # Built with cmake
 
   patches = [
-    # PR https://github.com/equinor/segyio/pull/531
-    (fetchpatch {
-        url = "https://github.com/equinor/segyio/commit/628bc5e02d0f98b89fe70b072df9b8e677622e9e.patch";
-        sha256 = "sha256-j+vqHZNfPIh+yWBgqbGD3W04FBvFiDJKnmcC/oTk3a8=";
-    })
+    # https://github.com/equinor/segyio/pull/570
+    ./add_missing_cstdint.patch
   ];
 
   postPatch = ''
@@ -35,16 +32,22 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "equinor";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-L3u5BHS5tARS2aIiQbumADkuzw1Aw4Yuav8H8tRNYNg=";
+    tag = "v${version}";
+    hash = "sha256-+N2JvHBxpdbysn4noY/9LZ4npoQ9143iFEzaxoafnms=";
   };
 
-  nativeBuildInputs = [ cmake ninja python scikit-build ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    scikit-build
+  ];
 
-  doCheck = true;
   # I'm not modifying the checkPhase nor adding a pytestCheckHook because the pytest is called
   # within the cmake test phase
-  checkInputs = [ pytest numpy ];
+  nativeCheckInputs = [
+    pytest
+    numpy
+  ];
 
   meta = with lib; {
     description = "Fast Python library for SEGY files";

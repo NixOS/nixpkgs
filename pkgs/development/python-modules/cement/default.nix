@@ -1,33 +1,86 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  jinja2,
+  mock,
+  pdm-backend,
+  pylibmc,
+  pystache,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  redis,
+  requests,
+  tabulate,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.6";
-  format = "setuptools";
+  version = "3.0.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fccec41eab3f15a03445b1ce24c8a7e106d4d5520f6507a7145698ce68923d31";
+  src = fetchFromGitHub {
+    owner = "datafolklabs";
+    repo = "cement";
+    tag = version;
+    hash = "sha256-weBqmNEjeSh5YQfHK48VVFW3UbZQmV4MiIQ3UPQKTTI=";
   };
 
-  # Disable test tests since they depend on a memcached server running on
-  # 127.0.0.1:11211.
-  doCheck = false;
+  build-system = [ pdm-backend ];
 
-  pythonImportsCheck = [
-    "cement"
+  optional-dependencies = {
+    colorlog = [ colorlog ];
+    jinja2 = [ jinja2 ];
+    mustache = [ pystache ];
+    generate = [ pyyaml ];
+    redis = [ redis ];
+    memcached = [ pylibmc ];
+    tabulate = [ tabulate ];
+    watchdog = [ watchdog ];
+    yaml = [ pyyaml ];
+    cli = [
+      jinja2
+      pyyaml
+    ];
+  };
+
+  nativeCheckInputs = [
+    mock
+    pytest-cov-stub
+    pytestCheckHook
+    requests
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "cement" ];
+
+  # Tests are failing on Darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTests = [
+    # Test only works with the source from PyPI
+    "test_get_version"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/ext/test_ext_memcached.py"
+    "tests/ext/test_ext_redis.py"
+    "tests/ext/test_ext_smtp.py"
   ];
 
   meta = with lib; {
     description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
+    changelog = "https://github.com/datafolklabs/cement/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eqyiel ];
+    mainProgram = "cement";
   };
 }

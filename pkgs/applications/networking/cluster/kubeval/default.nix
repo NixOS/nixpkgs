@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fetchpatch,
 }:
 
 buildGoModule rec {
@@ -15,14 +16,27 @@ buildGoModule rec {
     sha256 = "sha256-pwJOV7V78H2XaMiiJvKMcx0dEwNDrhgFHmCRLAwMirg=";
   };
 
-  vendorSha256 = "sha256-OAFxEb7IWhyRBEi8vgmekDSL/YpmD4EmUfildRaPR24=";
+  patches = [
+    # https://github.com/instrumenta/kubeval/pull/346
+    (fetchpatch {
+      name = "bump-golang.org/x/sys.patch";
+      url = "https://github.com/instrumenta/kubeval/commit/d64502b04d9e1b85fd3d5509049adb50f3e39954.patch";
+      sha256 = "sha256-S/lgwdykFLU2QZRW927fgCPxaIAMK3vSqmH08pXBQxM=";
+    })
+  ];
+
+  vendorHash = "sha256-R/vVrLsVSA9SGra4ytoHlQkPaIgQaj/XdivcQp8xjSM=";
 
   doCheck = false;
 
   meta = with lib; {
     description = "Validate your Kubernetes configuration files";
+    mainProgram = "kubeval";
     homepage = "https://github.com/instrumenta/kubeval";
     license = licenses.asl20;
-    maintainers = with maintainers; [ johanot nicknovitski ];
+    maintainers = with maintainers; [
+      johanot
+      nicknovitski
+    ];
   };
 }

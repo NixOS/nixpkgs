@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 let
   sources = (import ./sources.nix) { inherit fetchFromGitHub; };
@@ -7,7 +12,7 @@ buildGoModule {
   inherit (sources) pname version src;
 
   modRoot = "src/hockeypuck/";
-  vendorSha256 = null;
+  vendorHash = null;
   doCheck = false; # Uses networking for tests
 
   passthru.tests = nixosTests.hockeypuck;

@@ -1,50 +1,65 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, ruyaml
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  maison,
+  pdm-backend,
+  pytest-freezegun,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  ruyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "1.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lyz-code";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-YCC4xK1fB5Gyv32JhbSuejtzLNMRnH7iyUpzccVijS0=";
+    repo = "yamlfix";
+    tag = version;
+    hash = "sha256-nadyBIzXHbWm0QvympRaYU38tuPJ3TPJg8EbvVv+4L0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    pdm-backend
+  ];
+
+  dependencies = [
     click
+    maison
     ruyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-freezegun
     pytest-xdist
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'python_paths = "."' ""
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "yamlfix"
+  pythonImportsCheck = [ "yamlfix" ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/lyz-code/yamlfix/blob/${version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ koozz ];
   };
 }

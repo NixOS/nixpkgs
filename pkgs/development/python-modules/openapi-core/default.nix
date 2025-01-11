@@ -1,84 +1,91 @@
-{ lib
-, attrs
-, buildPythonPackage
-, dictpath
-, django
-, djangorestframework
-, falcon
-, fetchFromGitHub
-, flask
-, isodate
-, lazy-object-proxy
-, mock
-, more-itertools
-, openapi-schema-validator
-, openapi-spec-validator
-, parse
-, pytestCheckHook
-, pythonOlder
-, responses
-, six
-, webob
-, werkzeug
-, python
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  buildPythonPackage,
+  django,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  isodate,
+  jsonschema,
+  jsonschema-path,
+  more-itertools,
+  multidict,
+  openapi-schema-validator,
+  openapi-spec-validator,
+  parse,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  responses,
+  requests,
+  starlette,
+  webob,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.14.2";
-  format = "setuptools";
+  version = "0.19.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = version;
-    hash = "sha256-+VyNPSq7S1Oz4eGf+jaeRTx0lZ8pUA+G+KZ/5PyK+to=";
+    tag = version;
+    hash = "sha256-JvWusDokov8G0UO9oOkGicAI7wYZTnNywbvKMZKQWiQ=";
   };
 
-  postPatch = ''
-    sed -i "/^addopts/d" setup.cfg
-  '';
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    attrs
-    dictpath
+  dependencies = [
     isodate
-    lazy-object-proxy
     more-itertools
+    parse
     openapi-schema-validator
     openapi-spec-validator
-    parse
-    six
     werkzeug
+    jsonschema-path
+    jsonschema
   ];
 
-  checkInputs = [
-    django
-    djangorestframework
-    falcon
-    flask
-    mock
+  optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      multidict
+    ];
+    django = [ django ];
+    falcon = [ falcon ];
+    fastapi = [ fastapi ];
+    flask = [ flask ];
+    requests = [ requests ];
+    starlette = [
+      aioitertools
+      starlette
+    ];
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    httpx
+    pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
     responses
     webob
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
-    # AttributeError: 'str' object has no attribute '__name__'
-    "tests/integration/validation"
-    # requires secrets and additional configuration
-    "tests/integration/contrib/test_django.py"
-    # Unable to detect SECRET_KEY and ROOT_URLCONF
-    "tests/integration/contrib/test_django.py"
-  ];
-
-  disabledTests = [
-    # TypeError: Unexpected keyword arguments passed to pytest.raises: message
-    "test_string_format_invalid_value"
-    # Needs a fix for new PyYAML
-    "test_django_rest_framework_apiview"
+    # Requires secrets and additional configuration
+    "tests/integration/contrib/django/"
   ];
 
   pythonImportsCheck = [
@@ -88,8 +95,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
-    homepage = "https://github.com/p1c2u/openapi-core";
+    homepage = "https://github.com/python-openapi/openapi-core";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];
   };

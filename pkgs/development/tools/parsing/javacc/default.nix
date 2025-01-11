@@ -1,32 +1,65 @@
-{ stdenv, lib, fetchFromGitHub, ant, jdk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  stripJavaArchivesHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "javacc";
-  version = "7.0.10";
+  version = "7.0.13";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "120jva4sw1kylkwgqf869zxddss01mcn1nmimx9vmd4xaadz7cf2";
+    owner = "javacc";
+    repo = "javacc";
+    rev = "javacc-${finalAttrs.version}";
+    hash = "sha256-nDJvKIbJc23Tvfn7Zqvt5tDDffNf4KQ0juGQQCZ+i1c=";
   };
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    stripJavaArchivesHook
+  ];
 
   buildPhase = ''
+    runHook preBuild
     ant jar
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/target
-    mv scripts $out/bin
-    mv target/javacc.jar $out/target/
+    runHook preInstall
+
+    install -Dm644 target/javacc.jar -t $out/target
+    install -Dm755 scripts/{javacc,jjdoc,jjtree,jjrun} -t $out/bin
+
+    for file in $out/bin/*; do
+      wrapProgram "$file" --suffix PATH : ${jre}/bin
+    done
+
+    runHook postInstall
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    ant test
+    runHook postCheck
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/javacc/javacc/blob/${finalAttrs.src.rev}/docs/release-notes.md";
+    description = "Parser generator for building parsers from grammars";
     homepage = "https://javacc.github.io/javacc";
-    description = "A parser generator for building parsers from grammars";
     license = licenses.bsd2;
-    maintainers = [ teams.deshaw.members ];
+    mainProgram = "javacc";
+    maintainers = teams.deshaw.members;
   };
-}
+})

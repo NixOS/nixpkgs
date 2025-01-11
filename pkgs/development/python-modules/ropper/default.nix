@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, filebytes
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  filebytes,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ropper";
-  version = "1.13.7";
-  format = "setuptools";
+  version = "1.13.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,25 +20,23 @@ buildPythonPackage rec {
     owner = "sashs";
     repo = "Ropper";
     rev = "v${version}";
-    hash = "sha256-3tWWIYqh/G/b7Z6BMua5bRvtSh4SibT6pv/NArhmqPE=";
+    hash = "sha256-yuHJ+EpglumEAXEu0iJKIXK1ouW1yptNahM9Wmk7AW4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     capstone
     filebytes
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ropper"
-  ];
+  pythonImportsCheck = [ "ropper" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Show information about files in different file formats";
+    mainProgram = "ropper";
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];

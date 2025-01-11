@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "typed-ast";
-  version = "1.5.2";
+  version = "1.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,12 +17,10 @@ buildPythonPackage rec {
     owner = "python";
     repo = "typed_ast";
     rev = version;
-    hash = "sha256-Ul1FIS1a1f8l3tX+m8Bj/LsLQW1sXJv6XzEZ9zh8rfI=";
+    hash = "sha256-GRmKw7SRrrIIb61VeB8GLhSKCmLUd54AA+GAf43vor8=";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     runHook preCheck
@@ -45,6 +44,6 @@ buildPythonPackage rec {
     description = "Python AST modules with type comment support";
     homepage = "https://github.com/python/typed_ast";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

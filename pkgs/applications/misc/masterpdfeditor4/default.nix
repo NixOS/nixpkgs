@@ -1,4 +1,13 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, autoPatchelfHook, lib, wrapQtAppsHook }:
+{
+  stdenv,
+  fetchurl,
+  sane-backends,
+  qtbase,
+  qtsvg,
+  autoPatchelfHook,
+  lib,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor4";
@@ -9,9 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "0k5bzlhqglskiiq86nmy18mnh5bf2w3mr9cq3pibrwn5pisxnxxc";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase qtsvg sane-backends stdenv.cc.cc ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    sane-backends
+    stdenv.cc.cc
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +54,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Master PDF Editor - version 4, without watermark";
     homepage = "https://code-industry.net/free-pdf-editor/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

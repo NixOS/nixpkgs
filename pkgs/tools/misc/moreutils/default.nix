@@ -1,38 +1,68 @@
-{ lib, stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libxml2,
+  libxslt,
+  docbook-xsl,
+  docbook_xml_dtd_44,
+  perlPackages,
+  makeWrapper,
+  perl, # for pod2man
+  cctools,
+  gitUpdater,
+}:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "moreutils";
-  version = "0.67";
+  version = "0.70";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-8Mu7L3KqOsW9OmidMkWB+q9TofHd1P1sbsNrtE4MUoA=";
+    tag = version;
+    hash = "sha256-71ACHzzk258U4q2L7GJ59mrMZG99M7nQkcH4gHafGP0=";
   };
 
-  preBuild = ''
-    substituteInPlace Makefile --replace /usr/share/xml/docbook/stylesheet/docbook-xsl ${docbook-xsl}/xml/xsl/docbook
-  '';
+  strictDeps = true;
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    libxml2
+    libxslt
+    docbook-xsl
+    docbook_xml_dtd_44
+  ];
+  buildInputs =
+    [
+      (perl.withPackages (p: [
+        p.IPCRun
+        p.TimeDate
+        p.TimeDuration
+      ]))
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+    ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ]
-    ++ optional stdenv.isDarwin darwin.cctools;
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "DOCBOOKXSL=${docbook-xsl}/xml/xsl/docbook"
+    "INSTALL_BIN=install"
+    "PREFIX=${placeholder "out"}"
+  ];
 
-  propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "git://git.joeyh.name/moreutils";
+  };
 
-  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-  installFlags = [ "PREFIX=$(out)" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB
-    wrapProgram $out/bin/ts --prefix PERL5LIB : $PERL5LIB
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = "https://joeyh.name/code/moreutils/";
-    maintainers = with maintainers; [ koral pSub ];
+    maintainers = with maintainers; [
+      koral
+      pSub
+    ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;
   };

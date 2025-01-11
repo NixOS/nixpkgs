@@ -5,22 +5,17 @@ The list is ordered from more-specific (the user profile) to the
 least specific (the system profile)"
   (reverse (split-string (or (getenv "NIX_PROFILES") ""))))
 
-;;; Extend `load-path' to search for elisp files in subdirectories of
-;;; all folders in `NIX_PROFILES'. Also search for one level of
-;;; subdirectories in these directories to handle multi-file libraries
-;;; like `mu4e'.'
-(require 'seq)
-(let* ((subdirectory-sites (lambda (site-lisp)
-                             (when (file-exists-p site-lisp)
-                               (seq-filter (lambda (f) (file-directory-p (file-truename f)))
-                                           ;; Returns all files in `site-lisp', excluding `.' and `..'
-                                           (directory-files site-lisp 'full "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))))
-       (paths (apply #'append
-                     (mapcar (lambda (profile-dir)
-                               (let ((site-lisp (concat profile-dir "/share/emacs/site-lisp/")))
-                                 (cons site-lisp (funcall subdirectory-sites site-lisp))))
-                             (nix--profile-paths)))))
-  (setq load-path (append paths load-path)))
+;;; Extend `load-path' to search for elisp files in subdirectories of all folders in `NIX_PROFILES'.
+;;; Non-Nix distros have similar logic in /usr/share/emacs/site-lisp/subdirs.el.
+;;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Search.html
+(dolist (profile (reverse (nix--profile-paths)))
+  ;; `directory-file-name' is important to add sub dirs to the right place of `load-path'
+  ;; see the source code of `normal-top-level-add-to-load-path'
+  (let ((default-directory (directory-file-name
+                            (expand-file-name "share/emacs/site-lisp/" profile))))
+    (when (file-exists-p default-directory)
+      (setq load-path (cons default-directory load-path))
+      (normal-top-level-add-subdirs-to-load-path))))
 
 ;;; Remove wrapper site-lisp from EMACSLOADPATH so it's not propagated
 ;;; to any other Emacsen that might be started as subprocesses.
@@ -44,14 +39,30 @@ least specific (the system profile)"
       (setenv "EMACSNATIVELOADPATH" (when new-env-list
                                 (mapconcat 'identity new-env-list ":"))))))
 
+(let ((wrapper-invocation-directory (getenv "emacsWithPackages_invocationDirectory")))
+  (when wrapper-invocation-directory
+    (setq invocation-directory (file-name-as-directory wrapper-invocation-directory))
+    (setenv "emacsWithPackages_invocationDirectory" nil)))
+
+(let ((wrapper-invocation-name (getenv "emacsWithPackages_invocationName")))
+  (when wrapper-invocation-name
+    (setq invocation-name wrapper-invocation-name)
+    (setenv "emacsWithPackages_invocationName" nil)))
+
 ;;; Set up native-comp load path.
-(when (featurep 'comp)
+(when (featurep 'native-compile)
   ;; Append native-comp subdirectories from `NIX_PROFILES'.
+  ;; Emacs writes asynchronous native-compilation files to the first writable directory[1].
+  ;; At this time, (car native-comp-eln-load-path) is a writable one in `user-emacs-directory'[2].
+  ;; So we keep that one unchanged.
+  ;; [1]: info "(elisp) Native-Compilation Variables"
+  ;; [2]: https://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/startup.el?id=3685387e609753293c4518be75e77c659c3b2d8d#n601
   (setq native-comp-eln-load-path
-        (append (mapcar (lambda (profile-dir)
+        (append (list (car native-comp-eln-load-path))
+                (mapcar (lambda (profile-dir)
                           (concat profile-dir "/share/emacs/native-lisp/"))
                         (nix--profile-paths))
-                native-comp-eln-load-path)))
+                (cdr native-comp-eln-load-path))))
 
 ;;; Make `woman' find the man pages
 (defvar woman-manpath)
@@ -63,11 +74,13 @@ least specific (the system profile)"
 
 ;;; Make tramp work for remote NixOS machines
 (defvar tramp-remote-path)
-(eval-after-load 'tramp-sh
+(eval-after-load 'tramp
   ;; TODO: We should also add the other `NIX_PROFILES' to this path.
   ;; However, these are user-specific, so we would need to discover
   ;; them dynamically after connecting via `tramp'
-  '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
+  '(progn
+     (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
+     (add-to-list 'tramp-remote-path "/run/wrappers/bin")))
 
 ;;; C source directory
 ;;;

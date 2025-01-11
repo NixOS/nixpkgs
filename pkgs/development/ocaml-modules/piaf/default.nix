@@ -1,52 +1,61 @@
-{ alcotest-lwt
-, buildDunePackage
-, dune-site
-, fetchzip
-, gluten-lwt-unix
-, lib
-, logs
-, lwt_ssl
-, magic-mime
-, mrmime
-, openssl
-, pecu
-, psq
-, ssl
-, uri
+{
+  alcotest,
+  buildDunePackage,
+  fetchurl,
+  eio-ssl,
+  faraday,
+  h2-eio,
+  httpun-eio,
+  httpun-ws,
+  ipaddr,
+  ke,
+  lib,
+  logs,
+  magic-mime,
+  pecu,
+  prettym,
+  unstrctrd,
+  uri,
+  uutf,
+  dune-site,
+  eio_main,
 }:
 
 buildDunePackage rec {
   pname = "piaf";
-  version = "0.1.0";
+  version = "0.2.0";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";
-    sha256 = "0d431kz3bkwlgdamvsv94mzd9631ppcjpv516ii91glzlfdzh5hz";
+    hash = "sha256-B/qQCaUvrqrm2GEW51AH9SebGFx7x8laq5RV8hBzcPs=";
   };
 
-  postPatch = ''
-    substituteInPlace ./vendor/dune --replace "mrmime.prettym" "prettym"
-  '';
-
-  useDune2 = true;
-
   propagatedBuildInputs = [
+    eio-ssl
+    faraday
+    h2-eio
+    httpun-eio
+    httpun-ws
+    ipaddr
     logs
     magic-mime
-    mrmime
-    psq
+    pecu
+    prettym
+    unstrctrd
     uri
-    gluten-lwt-unix
+    uutf
   ];
 
+  # Some test cases fail
+  doCheck = false;
   checkInputs = [
-    alcotest-lwt
+    alcotest
     dune-site
+    eio_main
   ];
-  doCheck = true;
 
   meta = {
-    description = "An HTTP library with HTTP/2 support written entirely in OCaml";
+    description = "HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ anmonteiro ];

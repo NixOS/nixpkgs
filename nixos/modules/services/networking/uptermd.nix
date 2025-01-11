@@ -14,7 +14,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to open the firewall for the port in <option>services.uptermd.port</option>.
+          Whether to open the firewall for the port in {option}`services.uptermd.port`.
         '';
       };
 

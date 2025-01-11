@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.openwebrx;
 in
@@ -6,12 +11,7 @@ in
   options.services.openwebrx = with lib; {
     enable = mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.openwebrx;
-      defaultText = literalExpression "pkgs.openwebrx";
-      description = "OpenWebRX package to use for the service";
-    };
+    package = mkPackageOption pkgs "openwebrx" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -19,7 +19,11 @@ in
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         csdr
-        alsaUtils
+        digiham
+        codec2
+        js8call
+        m17-cxx-demod
+        alsa-utils
         netcat
       ];
       serviceConfig = {

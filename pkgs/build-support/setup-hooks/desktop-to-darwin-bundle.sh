@@ -1,13 +1,26 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 fixupOutputHooks+=('convertDesktopFiles $prefix')
 
 # Get a param out of a desktop file. First parameter is the file and the second
-# is a pattern of the key who's value we should fetch.
+# is the key who's value we should fetch.
 getDesktopParam() {
-    local file="$1";
-    local pattern="$2";
+    local file="$1"
+    local key="$2"
+    local line k v
 
-    awk -F "=" "/${pattern}/ {print \$2}" "${file}"
+    while read -r line; do
+        if [[ "$line" = *=* ]]; then
+            k="${line%%=*}"
+            v="${line#*=}"
+
+            if [[ "$k" = "$key" ]]; then
+                echo "$v"
+                return
+            fi
+        fi
+    done < "$file"
+
+    return 1
 }
 
 # Convert a freedesktop.org icon theme for a given app to a .icns file. When possible, missing
@@ -24,7 +37,7 @@ convertIconTheme() {
     local -ra scales=([1]="" [2]="@2")
 
     # Based loosely on the algorithm at:
-    # https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#icon_lookup
+    # https://specifications.freedesktop.org/icon-theme-spec/latest/#icon_lookup
     # Assumes threshold = 2 for ease of implementation.
     function findIcon() {
         local -r iconSize=$1
@@ -41,21 +54,30 @@ convertIconTheme() {
             $((iconSize - 2))x$((iconSize - 2))${scaleSuffix}
         )
 
+        local fallbackIcon=
+
         for iconIndex in "${!candidateIcons[@]}"; do
             for maybeSize in "${validSizes[@]}"; do
                 icon=${candidateIcons[$iconIndex]}
                 if [[ $icon = */$maybeSize/* ]]; then
                     if [[ $maybeSize = $exactSize ]]; then
                         echo "fixed $icon"
+                        return 0
                     else
                         echo "threshold $icon"
+                        return 0
                     fi
-                elif [[ -a $icon ]]; then
-                  echo "fallback $icon"
+                elif [[ -a $icon && -z "$fallbackIcon" ]]; then
+                    fallbackIcon="$icon"
                 fi
-                return 0
             done
         done
+
+        if [[ -n "$fallbackIcon" ]]; then
+            echo "fallback $fallbackIcon"
+            return 0
+        fi
+
         echo "scalable"
     }
 
@@ -68,7 +90,9 @@ convertIconTheme() {
         local density=$((72 * scale))x$((72 * scale))
         local dim=$((iconSize * scale))
 
+        echo "desktopToDarwinBundle: resizing icon $in to $out, size $dim" >&2
         magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
+        convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
     }
 
     function synthesizeIcon() {
@@ -80,10 +104,28 @@ convertIconTheme() {
         if [[ $in != '-' ]]; then
             local density=$((72 * scale))x$((72 * scale))
             local dim=$((iconSize * scale))
+
+            echo "desktopToDarwinBundle: rasterizing svg $in to $out, size $dim" >&2
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
             magick convert -density "$density" -units PixelsPerInch "$out" "$out"
+            convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
         else
             return 1
+        fi
+    }
+
+    # macOS does not correctly display 16x and 32x png icons on app bundles
+    # they need to be converted to rgb+mask (argb is supported only from macOS 11)
+    function convertIfUnsupportedIcon() {
+        local -r in=$1
+        local -r iconSize=$2
+        local -r scale=$3
+        local -r out=${in%.png}.rgb
+
+        if [[ ($scale -eq 1) && ($iconSize -eq 32 || $iconSize -eq 16) ]]; then
+            echo "desktopToDarwinBundle: converting ${iconSize}x icon to rgb" >&2
+            icnsutil convert "$out" "$in"
+            rm "$in"
         fi
     }
 
@@ -121,10 +163,12 @@ convertIconTheme() {
                 local icon=${iconResult#* }
                 local scaleSuffix=${scales[$scale]}
                 local result=${resultdir}/${iconSize}x${iconSize}${scales[$scale]}${scaleSuffix:+x}.png
+                echo "desktopToDarwinBundle: using $type icon $icon for size $iconSize$scaleSuffix" >&2
                 case $type in
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
                         magick convert -density "$density" -units PixelsPerInch "$icon" "$result"
+                        convertIfUnsupportedIcon "$result" "$iconSize" "$scale"
                         foundIcon=OTHER
                         ;;
                     threshold)
@@ -178,8 +222,8 @@ processExecFieldCodes() {
   local -r execNoKC="${execNoK/\%c/$(getDesktopParam "${file}" "Name")}"
   local -r icon=$(getDesktopParam "${file}" "Icon")
   local -r execNoKCI="${execNoKC/\%i/${icon:+--icon }${icon}}"
-  local -r execNoKCIfu="${execNoKCI/\%[fu]/\$1}"
-  local -r exec="${execNoKCIfu/\%[FU]/\$@}"
+  local -r execNoKCIfu="${execNoKCI/ \%[fu]/}"
+  local -r exec="${execNoKCIfu/ \%[FU]/}"
   if [[ "$exec" != "$execRaw" ]]; then
     echo 1>&2 "desktopToDarwinBundle: Application bundles do not understand desktop entry field codes. Changed '$execRaw' to '$exec'."
   fi
@@ -190,14 +234,14 @@ processExecFieldCodes() {
 convertDesktopFile() {
     local -r file=$1
     local -r sharePath=$(dirname "$(dirname "$file")")
-    local -r name=$(getDesktopParam "${file}" "^Name")
+    local -r name=$(getDesktopParam "${file}" "Name")
     local -r macOSExec=$(getDesktopParam "${file}" "X-macOS-Exec")
     if [[ "$macOSExec" ]]; then
       local -r exec="$macOSExec"
     else
       local -r exec=$(processExecFieldCodes "${file}")
     fi
-    local -r iconName=$(getDesktopParam "${file}" "^Icon")
+    local -r iconName=$(getDesktopParam "${file}" "Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
     mkdir -p "${!outputBin}/Applications/${name}.app/Contents/MacOS"

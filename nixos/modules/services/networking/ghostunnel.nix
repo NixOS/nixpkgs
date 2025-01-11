@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib)
     attrValues
@@ -9,6 +14,7 @@ let
     mapAttrs'
     mkDefault
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     nameValuePair
@@ -18,7 +24,8 @@ let
 
   mainCfg = config.services.ghostunnel;
 
-  module = { config, name, ... }:
+  module =
+    { config, name, ... }:
     {
       options = {
 
@@ -40,9 +47,9 @@ let
           description = ''
             Path to keystore (combined PEM with cert/key, or PKCS12 keystore).
 
-            NB: storepass is not supported because it would expose credentials via <code>/proc/*/cmdline</code>.
+            NB: storepass is not supported because it would expose credentials via `/proc/*/cmdline`.
 
-            Specify this or <code>cert</code> and <code>key</code>.
+            Specify this or `cert` and `key`.
           '';
           type = types.nullOr types.str;
           default = null;
@@ -52,7 +59,7 @@ let
           description = ''
             Path to certificate (PEM with certificate chain).
 
-            Not required if <code>keystore</code> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
@@ -62,7 +69,7 @@ let
           description = ''
             Path to certificate private key (PEM with private key).
 
-            Not required if <code>keystore</code> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
@@ -70,7 +77,7 @@ let
 
         cacert = mkOption {
           description = ''
-            Path to CA bundle file (PEM/X509). Uses system trust store if <code>null</code>.
+            Path to CA bundle file (PEM/X509). Uses system trust store if `null`.
           '';
           type = types.nullOr types.str;
         };
@@ -96,7 +103,7 @@ let
             Allow client if common name appears in the list.
           '';
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
         };
 
         allowOU = mkOption {
@@ -104,7 +111,7 @@ let
             Allow client if organizational unit name appears in the list.
           '';
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
         };
 
         allowDNS = mkOption {
@@ -112,7 +119,7 @@ let
             Allow client if DNS subject alternative name appears in the list.
           '';
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
         };
 
         allowURI = mkOption {
@@ -120,11 +127,11 @@ let
             Allow client if URI subject alternative name appears in the list.
           '';
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
         };
 
         extraArguments = mkOption {
-          description = "Extra arguments to pass to <code>ghostunnel server</code>";
+          description = "Extra arguments to pass to `ghostunnel server`";
           type = types.separatedString " ";
           default = "";
         };
@@ -153,7 +160,8 @@ let
 
       config.atRoot = {
         assertions = [
-          { message = ''
+          {
+            message = ''
               services.ghostunnel.servers.${name}: At least one access control flag is required.
               Set at least one of:
                 - services.ghostunnel.servers.${name}.disableAuthentication
@@ -163,13 +171,13 @@ let
                 - services.ghostunnel.servers.${name}.allowDNS
                 - services.ghostunnel.servers.${name}.allowURI
             '';
-            assertion = config.disableAuthentication
+            assertion =
+              config.disableAuthentication
               || config.allowAll
-              || config.allowCN != []
-              || config.allowOU != []
-              || config.allowDNS != []
-              || config.allowURI != []
-              ;
+              || config.allowCN != [ ]
+              || config.allowOU != [ ]
+              || config.allowDNS != [ ]
+              || config.allowURI != [ ];
           }
         ];
 
@@ -179,13 +187,14 @@ let
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Restart = "always";
-            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
             DynamicUser = true;
-            LoadCredential = optional (config.keystore != null) "keystore:${config.keystore}"
+            LoadCredential =
+              optional (config.keystore != null) "keystore:${config.keystore}"
               ++ optional (config.cert != null) "cert:${config.cert}"
               ++ optional (config.key != null) "key:${config.key}"
               ++ optional (config.cacert != null) "cacert:${config.cacert}";
-           };
+          };
           script = concatStringsSep " " (
             [ "${mainCfg.package}/bin/ghostunnel" ]
             ++ optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
@@ -196,14 +205,15 @@ let
               "server"
               "--listen ${config.listen}"
               "--target ${config.target}"
-            ] ++ optional config.allowAll "--allow-all"
-              ++ map (v: "--allow-cn=${escapeShellArg v}") config.allowCN
-              ++ map (v: "--allow-ou=${escapeShellArg v}") config.allowOU
-              ++ map (v: "--allow-dns=${escapeShellArg v}") config.allowDNS
-              ++ map (v: "--allow-uri=${escapeShellArg v}") config.allowURI
-              ++ optional config.disableAuthentication "--disable-authentication"
-              ++ optional config.unsafeTarget "--unsafe-target"
-              ++ [ config.extraArguments ]
+            ]
+            ++ optional config.allowAll "--allow-all"
+            ++ map (v: "--allow-cn=${escapeShellArg v}") config.allowCN
+            ++ map (v: "--allow-ou=${escapeShellArg v}") config.allowOU
+            ++ map (v: "--allow-dns=${escapeShellArg v}") config.allowDNS
+            ++ map (v: "--allow-uri=${escapeShellArg v}") config.allowURI
+            ++ optional config.disableAuthentication "--disable-authentication"
+            ++ optional config.unsafeTarget "--unsafe-target"
+            ++ [ config.extraArguments ]
           );
         };
       };
@@ -215,19 +225,14 @@ in
   options = {
     services.ghostunnel.enable = mkEnableOption "ghostunnel";
 
-    services.ghostunnel.package = mkOption {
-      description = "The ghostunnel package to use.";
-      type = types.package;
-      default = pkgs.ghostunnel;
-      defaultText = literalExpression "pkgs.ghostunnel";
-    };
+    services.ghostunnel.package = mkPackageOption pkgs "ghostunnel" { };
 
     services.ghostunnel.servers = mkOption {
       description = ''
         Server mode ghostunnels (TLS listener -> plain TCP/UNIX target)
       '';
       type = types.attrsOf (types.submodule module);
-      default = {};
+      default = { };
     };
   };
 

@@ -1,21 +1,45 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kio, kparts, kxmlgui, qtbase, qtscript, solid
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  kio,
+  kparts,
+  kxmlgui,
+  qtscript,
+  solid,
+  qtquickcontrols2,
+  kdeclarative,
+  kirigami2,
+  kquickcharts,
 }:
 
 mkDerivation {
   pname = "filelight";
   meta = {
     description = "Disk usage statistics";
+    mainProgram = "filelight";
     homepage = "https://apps.kde.org/filelight/";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ fridh vcunat ];
-    broken = lib.versionOlder qtbase.version "5.13";
+    maintainers = with lib.maintainers; [ vcunat ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
-    kio kparts kxmlgui qtscript solid
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
   ];
-  outputs = [ "out" "dev" ];
+  propagatedBuildInputs = [
+    kio
+    kparts
+    kxmlgui
+    qtscript
+    solid
+    qtquickcontrols2
+    kdeclarative
+    kirigami2
+    kquickcharts
+  ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

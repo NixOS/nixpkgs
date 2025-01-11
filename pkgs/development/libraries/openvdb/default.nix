@@ -1,50 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
-
-stdenv.mkDerivation rec
 {
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  jemalloc,
+  c-blosc,
+  tbb,
+  zlib,
+}:
+
+stdenv.mkDerivation rec {
   pname = "openvdb";
-  version = "7.0.0";
+  version = "12.0.0";
 
-  src = fetchFromGitHub {
-    owner = "dreamworksanimation";
-    repo = "openvdb";
-    rev = "v${version}";
-    sha256 = "0hhs50f05hkgj1wni53cwbsx2bhn1aam6z65j133356gbid2carl";
-  };
-
-  outputs = [ "out" ];
-
-  buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
-
-  setSourceRoot = ''
-    sourceRoot=$(echo */openvdb)
-  '';
-
-  installTargets = [ "install_lib" ];
-
-  enableParallelBuilding = true;
-
-  buildFlags = [
-    "lib"
-    "DESTDIR=$(out)"
-    "HALF_LIB=-lHalf"
-    "TBB_LIB=-ltbb"
-    "BLOSC_LIB=-lblosc"
-    "LOG4CPLUS_LIB="
-    "BLOSC_INCLUDE_DIR=${c-blosc}/include/"
-    "BLOSC_LIB_DIR=${c-blosc}/lib/"
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "openvdb";
+    rev = "v${version}";
+    sha256 = "sha256-S2uvzDCrTxAmvUMJr5PChcYTqhIHvRZbOfQLtUvzypI=";
+  };
 
-  NIX_CFLAGS_COMPILE="-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
-  NIX_LDFLAGS="-lboost_iostreams";
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    boost
+    tbb
+    jemalloc
+    c-blosc
+    zlib
+  ];
+
+  cmakeFlags = [
+    "-DOPENVDB_CORE_STATIC=OFF"
+    "-DOPENVDB_BUILD_NANOVDB=ON"
+  ];
+
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/OpenVDB/FindOpenVDB.cmake \
+      --replace \''${OPENVDB_LIBRARYDIR} $out/lib \
+      --replace \''${OPENVDB_INCLUDEDIR} $dev/include
+  '';
 
   meta = with lib; {
-    description = "An open framework for voxel";
+    description = "Open framework for voxel";
+    mainProgram = "vdb_print";
     homepage = "https://www.openvdb.org";
     maintainers = [ maintainers.guibou ];
-    platforms = platforms.linux;
-    license = licenses.mpl20;
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

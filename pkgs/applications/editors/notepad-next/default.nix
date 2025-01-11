@@ -1,37 +1,55 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, libsForQt5, stdenv }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  qtx11extras,
+  stdenv,
+}:
 
 mkDerivation rec {
   pname = "notepad-next";
-  version = "0.5.1";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    sha256 = "sha256-J7Ngt6YtAAZsza2lN0d1lX3T8gNJHp60sCwwaLMGBHQ=";
+    hash = "sha256-3BCLPY104zxALd3wFH8e9PitjmFbPcOfKsLqXowXqnY=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake libsForQt5.qt5.qttools ];
-  qmakeFlags = [ "src/NotepadNext.pro" ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
+  buildInputs = [ qtx11extras ];
 
-  # References
-  #  https://github.com/dail8859/NotepadNext/blob/master/doc/Building.md
-  #  https://github.com/dail8859/NotepadNext/pull/124
+  qmakeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "src/NotepadNext.pro"
+  ];
+
   postPatch = ''
-    substituteInPlace ./src/NotepadNext/NotepadNext.pro --replace /usr $out
+    substituteInPlace src/i18n.pri \
+      --replace 'EXTRA_TRANSLATIONS = \' "" \
+      --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
 
-  # Upstream suggestion: https://github.com/dail8859/NotepadNext/issues/135
-  CXXFLAGS = "-std=gnu++1z";
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv $out/bin $out/Applications
+    rm -fr $out/share
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
-    description = "Notepad++-like editor for the Linux desktop";
+    description = "Cross-platform, reimplementation of Notepad++";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
+    mainProgram = "NotepadNext";
   };
 }

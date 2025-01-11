@@ -1,37 +1,43 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pyee
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, syncer
-, tqdm
-, urllib3
-, websockets
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
+  pyee,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  syncer,
+  tqdm,
+  urllib3,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pyppeteer";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
+    owner = "pyppeteer";
+    repo = "pyppeteer";
+    tag = version;
+    hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
+      --replace 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
+      --replace 'websockets = "^10.0"' 'websockets = "*"'
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -43,17 +49,11 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     syncer
     pytest-xdist
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
-      --replace 'websockets = "^9.1"' 'websockets = "*"'
-  '';
 
   disabledTestPaths = [
     # Requires network access
@@ -82,13 +82,13 @@ buildPythonPackage rec {
     "TestPDF"
   ];
 
-  pythonImportsCheck = [
-    "pyppeteer"
-  ];
+  pythonImportsCheck = [ "pyppeteer" ];
 
   meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
+    mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
+    changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];
   };

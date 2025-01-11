@@ -8,52 +8,56 @@ let
   smokepingPidDir = "/run";
   configFile =
     if cfg.config == null
-      then
-        ''
-          *** General ***
-          cgiurl   = ${cfg.cgiUrl}
-          contact = ${cfg.ownerEmail}
-          datadir  = ${smokepingHome}/data
-          imgcache = ${smokepingHome}/cache
-          imgurl   = ${cfg.imgUrl}
-          linkstyle = ${cfg.linkStyle}
-          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
-          owner = ${cfg.owner}
-          pagedir = ${smokepingHome}/cache
-          piddir  = ${smokepingPidDir}
-          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
-          smokemail = ${cfg.smokeMailTemplate}
-          *** Presentation ***
-          template = ${cfg.presentationTemplate}
-          ${cfg.presentationConfig}
-          *** Alerts ***
-          ${cfg.alertConfig}
-          *** Database ***
-          ${cfg.databaseConfig}
-          *** Probes ***
-          ${cfg.probeConfig}
-          *** Targets ***
-          ${cfg.targetConfig}
-          ${cfg.extraConfig}
-        ''
-      else
-        cfg.config;
+    then
+      ''
+        *** General ***
+        cgiurl   = ${cfg.cgiUrl}
+        contact = ${cfg.ownerEmail}
+        datadir  = ${smokepingHome}/data
+        imgcache = ${smokepingHome}/cache
+        imgurl   = ${cfg.imgUrl}
+        linkstyle = ${cfg.linkStyle}
+        ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
+        owner = ${cfg.owner}
+        pagedir = ${smokepingHome}/cache
+        piddir  = ${smokepingPidDir}
+        ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
+        smokemail = ${cfg.smokeMailTemplate}
+        *** Presentation ***
+        template = ${cfg.presentationTemplate}
+        ${cfg.presentationConfig}
+        *** Alerts ***
+        ${cfg.alertConfig}
+        *** Database ***
+        ${cfg.databaseConfig}
+        *** Probes ***
+        ${cfg.probeConfig}
+        *** Targets ***
+        ${cfg.targetConfig}
+        ${cfg.extraConfig}
+      ''
+    else
+      cfg.config;
 
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
     #!${pkgs.bash}/bin/bash
-    ${cfg.package}/bin/smokeping_cgi ${configPath}
+    ${cfg.package}/bin/smokeping_cgi /etc/smokeping.conf
   '';
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "smokeping" "port" ] ''
+      The smokeping web service is now served by nginx.
+      In order to change the port, you need to change the nginx configuration under `services.nginx.virtualHosts.smokeping.listen.*.port`.
+    '')
+  ];
+
   options = {
     services.smokeping = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the smokeping service";
-      };
+      enable = mkEnableOption "smokeping service";
+
       alertConfig = mkOption {
         type = types.lines;
         default = ''
@@ -74,16 +78,18 @@ in
       };
       cgiUrl = mkOption {
         type = types.str;
-        default = "http://${cfg.hostName}:${toString cfg.port}/smokeping.cgi";
-        defaultText = literalExpression ''"http://''${hostName}:''${toString port}/smokeping.cgi"'';
+        default = "http://${cfg.hostName}/smokeping.cgi";
+        defaultText = literalExpression ''"http://''${hostName}/smokeping.cgi"'';
         example = "https://somewhere.example.com/smokeping.cgi";
         description = "URL to the smokeping cgi.";
       };
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = "Full smokeping config supplied by the user. Overrides " +
-          "and replaces any other configuration supplied.";
+        description = ''
+          Full smokeping config supplied by the user. Overrides
+          and replaces any other configuration supplied.
+        '';
       };
       databaseConfig = mkOption {
         type = types.lines;
@@ -113,7 +119,8 @@ in
               MAX  0.5 144   7200
               MIN  0.5 144   7200
         '';
-        description = ''Configure the ping frequency and retention of the rrd files.
+        description = ''
+          Configure the ping frequency and retention of the rrd files.
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
       };
@@ -142,7 +149,7 @@ in
         '';
       };
       linkStyle = mkOption {
-        type = types.enum ["original" "absolute" "relative"];
+        type = types.enum [ "original" "absolute" "relative" ];
         default = "relative";
         example = "absolute";
         description = "DNS name for the urls generated in the cgi.";
@@ -156,7 +163,7 @@ in
       owner = mkOption {
         type = types.str;
         default = "nobody";
-        example = "Joe Admin";
+        example = "Bob Foobawr";
         description = "Real name of the owner of the instance";
       };
       ownerEmail = mkOption {
@@ -166,12 +173,7 @@ in
         example = "no-reply@yourdomain.com";
         description = "Email contact for owner";
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.smokeping;
-        defaultText = literalExpression "pkgs.smokeping";
-        description = "Specify a custom smokeping package";
-      };
+      package = mkPackageOption pkgs "smokeping" { };
       host = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
@@ -179,14 +181,9 @@ in
         description = ''
           Host/IP to bind to for the web server.
 
-          Setting it to <literal>null</literal> skips passing the -h option to thttpd,
+          Setting it to `null` skips passing the -h option to thttpd,
           which makes it bind to all interfaces.
         '';
-      };
-      port = mkOption {
-        type = types.int;
-        default = 8081;
-        description = "TCP port to use for the web server.";
       };
       presentationConfig = mkOption {
         type = types.lines;
@@ -302,12 +299,14 @@ in
     ];
     security.wrappers = {
       fping =
-        { setuid = true;
+        {
+          setuid = true;
           owner = "root";
           group = "root";
           source = "${pkgs.fping}/bin/fping";
         };
     };
+    environment.etc."smokeping.conf".source = configPath;
     environment.systemPackages = [ pkgs.fping ];
     users.users.${cfg.user} = {
       isNormalUser = false;
@@ -315,48 +314,67 @@ in
       group = cfg.user;
       description = "smokeping daemon user";
       home = smokepingHome;
-      createHome = true;
     };
-    users.groups.${cfg.user} = {};
+
+    users.users.${config.services.nginx.user} = mkIf cfg.webService {
+      extraGroups = [
+        cfg.user ## user == group in this module
+      ];
+    };
+
+    users.groups.${cfg.user} = { };
+
     systemd.services.smokeping = {
-      requiredBy = [ "multi-user.target"];
+      reloadTriggers = [ configPath ];
+      requiredBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
+        ExecStart = "${cfg.package}/bin/smokeping --config=/etc/smokeping.conf --nodaemon";
       };
       preStart = ''
-        mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
-        rm -f ${smokepingHome}/cropper
-        ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
-        rm -f ${smokepingHome}/smokeping.fcgi
-        ln -s ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
     };
-    systemd.services.thttpd = mkIf cfg.webService {
-      requiredBy = [ "multi-user.target"];
-      requires = [ "smokeping.service"];
-      path = with pkgs; [ bash rrdtool smokeping thttpd ];
-      serviceConfig = {
-        Restart = "always";
-        ExecStart = lib.concatStringsSep " " (lib.concatLists [
-          [ "${pkgs.thttpd}/bin/thttpd" ]
-          [ "-u ${cfg.user}" ]
-          [ ''-c "**.fcgi"'' ]
-          [ "-d ${smokepingHome}" ]
-          (lib.optional (cfg.host != null) "-h ${cfg.host}")
-          [ "-p ${builtins.toString cfg.port}" ]
-          [ "-D -nos" ]
-        ]);
+
+    systemd.tmpfiles.rules = [
+      # create cache and data directories
+      "d ${smokepingHome}/cache 0750 ${cfg.user} ${cfg.user}"
+      "d ${smokepingHome}/data 0750 ${cfg.user} ${cfg.user}"
+      # create symlings
+      "L+ ${smokepingHome}/css - - - - ${cfg.package}/htdocs/css"
+      "L+ ${smokepingHome}/js - - - - ${cfg.package}/htdocs/js"
+      "L+ ${smokepingHome}/smokeping.fcgi - - - - ${cgiHome}"
+      # recursively adjust access mode and ownership (in case config change)
+      "Z ${smokepingHome} 0750 ${cfg.user} ${cfg.user}"
+    ];
+
+    # use nginx to serve the smokeping web service
+    services.fcgiwrap.instances.smokeping = mkIf cfg.webService {
+      process.user = cfg.user;
+      process.group = cfg.user;
+      socket = { inherit (config.services.nginx) user group; };
+    };
+    services.nginx = mkIf cfg.webService {
+      enable = true;
+      virtualHosts."smokeping" = {
+        serverName = mkDefault cfg.host;
+        locations."/" = {
+          root = smokepingHome;
+          index = "smokeping.fcgi";
+        };
+        locations."/smokeping.fcgi" = {
+          extraConfig = ''
+            include ${config.services.nginx.package}/conf/fastcgi_params;
+            fastcgi_pass unix:${config.services.fcgiwrap.instances.smokeping.socket.address};
+            fastcgi_param SCRIPT_FILENAME ${smokepingHome}/smokeping.fcgi;
+            fastcgi_param DOCUMENT_ROOT ${smokepingHome};
+          '';
+        };
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    erictapen
-    nh2
-  ];
+  meta.maintainers = with lib.maintainers; [ nh2 ];
 }
-

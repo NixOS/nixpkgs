@@ -1,7 +1,8 @@
-{ buildPythonApplication
-, fetchPypi
-, pandocfilters
-, lib
+{
+  buildPythonApplication,
+  fetchPypi,
+  pandocfilters,
+  lib,
 }:
 
 buildPythonApplication rec {
@@ -22,5 +23,6 @@ buildPythonApplication rec {
     description = "Pandoc filter which converts PlantUML code blocks to PlantUML images";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai ];
+    mainProgram = "pandoc-plantuml";
   };
 }

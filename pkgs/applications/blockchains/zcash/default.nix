@@ -1,56 +1,96 @@
-{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook
-, makeWrapper, cargo, pkg-config, curl, coreutils, boost179, db62, hexdump
-, libsodium, libevent, testers, utf8cpp, util-linux, withDaemon ? true
-, withMining ? true, withUtils ? true, withWallet ? true, withZmq ? true, zcash
-, zeromq
+{
+  autoreconfHook,
+  boost,
+  cargo,
+  coreutils,
+  curl,
+  cxx-rs,
+  db62,
+  fetchFromGitHub,
+  git,
+  hexdump,
+  lib,
+  libevent,
+  libsodium,
+  makeWrapper,
+  rustPlatform,
+  pkg-config,
+  Security,
+  stdenv,
+  testers,
+  tl-expected,
+  utf8cpp,
+  util-linux,
+  zcash,
+  zeromq,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
+rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   pname = "zcash";
-  version = "5.0.0";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "zcash";
-    repo  = "zcash";
+    repo = "zcash";
     rev = "v${version}";
-    sha256 = "sha256-5PlqFs2njqNeZgmNz0VKMWcRY5lPaF9oTsoh/uLEWi8=";
+    hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
 
-  prePatch = lib.optionalString stdenv.isAarch64 ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace .cargo/config.offline \
       --replace "[target.aarch64-unknown-linux-gnu]" "" \
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
-  cargoSha256 = "sha256-eRRRjUbOieRC88wf+f1jAYvqGFmogBEla67NnImicEc=";
+  cargoHash = "sha256-Mz8mr/RDcOfwJvXhY19rZmWHP8mUeEf9GYD+3JAPNOw=";
 
-  nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
-  buildInputs = [ boost179 libevent libsodium utf8cpp ]
-    ++ lib.optional withWallet db62
-    ++ lib.optional withZmq zeromq;
+  nativeBuildInputs = [
+    autoreconfHook
+    cargo
+    cxx-rs
+    git
+    hexdump
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      boost
+      db62
+      libevent
+      libsodium
+      tl-expected
+      utf8cpp
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
   configurePhase = "configurePhase";
-  buildPhase = "buildPhase";
-  checkPhase = "checkPhase";
-  installPhase = "installPhase";
+  dontCargoBuild = true;
+  dontCargoCheck = true;
+  dontCargoInstall = true;
 
   postPatch = ''
     # Have to do this here instead of in preConfigure because
     # cargoDepsCopy gets unset after postPatch.
-    configureFlagsArray+=("RUST_VENDORED_SOURCES=$NIX_BUILD_TOP/$cargoDepsCopy")
+    configureFlagsArray+=("RUST_VENDORED_SOURCES=$cargoDepsCopy")
   '';
+
+  CXXFLAGS = [
+    "-I${lib.getDev utf8cpp}/include/utf8cpp"
+    "-I${lib.getDev cxx-rs}/include"
+  ];
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost179}/lib"
-    "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
-    "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
-  ] ++ lib.optional (!withWallet) "--disable-wallet"
-    ++ lib.optional (!withDaemon) "--without-daemon"
-    ++ lib.optional (!withUtils) "--without-utils"
-    ++ lib.optional (!withMining) "--disable-mining";
+    "--with-boost-libdir=${lib.getLib boost}/lib"
+    "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTargetSpec}"
+  ];
 
   enableParallelBuilding = true;
 
@@ -65,14 +105,26 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   postInstall = ''
     wrapProgram $out/bin/zcash-fetch-params \
-        --set PATH ${lib.makeBinPath [ coreutils curl util-linux ]}
+        --set PATH ${
+          lib.makeBinPath [
+            coreutils
+            curl
+            util-linux
+          ]
+        }
   '';
 
   meta = with lib; {
     description = "Peer-to-peer, anonymous electronic cash system";
     homepage = "https://z.cash/";
-    maintainers = with maintainers; [ rht tkerber centromere ];
+    maintainers = with maintainers; [
+      rht
+      tkerber
+      centromere
+    ];
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+
+    # https://github.com/zcash/zcash/issues/4405
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
 }

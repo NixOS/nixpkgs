@@ -1,9 +1,10 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, rustPlatform
-, rustfmt
-, protobuf
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  rustfmt,
+  protobuf,
 }:
 let
   src = fetchFromGitHub {
@@ -14,9 +15,9 @@ let
   };
 
   meta = with lib; {
-    description = "A graph database written in rust ";
+    description = "Graph database written in rust";
     homepage = "https://github.com/indradb/indradb";
-    license = licenses.asl20;
+    license = licenses.mpl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = platforms.unix;
   };
@@ -25,15 +26,18 @@ in
   indradb-server = rustPlatform.buildRustPackage {
     pname = "indradb-server";
     version = "unstable-2021-01-05";
-    inherit src;
+    inherit src meta;
 
-    cargoSha256 = "sha256-3WtiW31AkyNX7HiT/zqfNo2VSKR7Q57/wCigST066Js=";
+    cargoHash = "sha256-3WtiW31AkyNX7HiT/zqfNo2VSKR7Q57/wCigST066Js=";
 
     buildAndTestSubdir = "server";
 
     PROTOC = "${protobuf}/bin/protoc";
 
-    nativeBuildInputs = [ rustfmt rustPlatform.bindgenHook ];
+    nativeBuildInputs = [
+      rustfmt
+      rustPlatform.bindgenHook
+    ];
 
     # test rely on libindradb and it can't be found
     # failure at https://github.com/indradb/indradb/blob/master/server/tests/plugins.rs#L63
@@ -43,13 +47,16 @@ in
   indradb-client = rustPlatform.buildRustPackage {
     pname = "indradb-client";
     version = "unstable-2021-01-05";
-    inherit src;
+    inherit src meta;
 
-    cargoSha256 = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
+    cargoHash = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
 
     PROTOC = "${protobuf}/bin/protoc";
 
-    nativeBuildInputs = [ rustfmt rustPlatform.bindgenHook ];
+    nativeBuildInputs = [
+      rustfmt
+      rustPlatform.bindgenHook
+    ];
 
     buildAndTestSubdir = "client";
   };

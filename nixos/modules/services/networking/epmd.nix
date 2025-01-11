@@ -1,15 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.epmd;
 in
 {
   ###### interface
   options.services.epmd = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable socket activation for Erlang Port Mapper Daemon (epmd),
@@ -17,34 +19,27 @@ in
         Erlang computations.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.erlang;
-      defaultText = literalExpression "pkgs.erlang";
+    package = lib.mkPackageOption pkgs "erlang" { };
+    listenStream = lib.mkOption {
+      type = lib.types.str;
+      default = "[::]:4369";
       description = ''
-        The Erlang package to use to get epmd binary. That way you can re-use
-        an Erlang runtime that is already installed for other purposes.
+        the listenStream used by the systemd socket.
+        see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
+        use this to change the port epmd will run on.
+        if not defined, epmd will use "[::]:4369"
       '';
     };
-    listenStream = mkOption
-      {
-        type = types.str;
-        default = "[::]:4369";
-        description = ''
-          the listenStream used by the systemd socket.
-          see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more informations.
-          use this to change the port epmd will run on.
-          if not defined, epmd will use "[::]:4369"
-        '';
-      };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    assertions = [{
-      assertion = cfg.listenStream == "[::]:4369" -> config.networking.enableIPv6;
-      message = "epmd listens by default on ipv6, enable ipv6 or change config.services.epmd.listenStream";
-    }];
+  config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.listenStream == "[::]:4369" -> config.networking.enableIPv6;
+        message = "epmd listens by default on ipv6, enable ipv6 or change config.services.epmd.listenStream";
+      }
+    ];
     systemd.sockets.epmd = rec {
       description = "Erlang Port Mapper Daemon Activation Socket";
       wantedBy = [ "sockets.target" ];
@@ -68,5 +63,5 @@ in
     };
   };
 
-  meta.maintainers = teams.beam.members;
+  meta.maintainers = lib.teams.beam.members;
 }

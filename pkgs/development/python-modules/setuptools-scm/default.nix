@@ -1,41 +1,61 @@
-{ buildPythonPackage
-, callPackage
-, fetchPypi
-, packaging
-, tomli
-, lib
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  packaging,
+  typing-extensions,
+  tomli,
+
+  # optional-dependencies
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "6.4.2";
+  version = "8.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    sha256 = "sha256-aDOsZcbtlxGk1dImb4Akz6B8UzoOVfTBL27/KApanjA=";
+    hash = "sha256-Qt6htldxy6k7elFdZaZdgkblYHaKZrkQalksjn8myKc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  dependencies = [
     packaging
-    tomli
-  ];
+    setuptools
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  pythonImportsCheck = [
-    "setuptools_scm"
-  ];
+  optional-dependencies = {
+    rich = [ rich ];
+  };
 
-  # check in passhtru.tests.pytest to escape infinite recursion on pytest
+  pythonImportsCheck = [ "setuptools_scm" ];
+
+  # check in passthru.tests.pytest to escape infinite recursion on pytest
   doCheck = false;
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
   };
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
+    changelog = "https://github.com/pypa/setuptools_scm/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

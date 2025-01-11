@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.xdg.portal.wlr;
   package = pkgs.xdg-desktop-portal-wlr;
@@ -10,34 +12,34 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 
   options.xdg.portal.wlr = {
-    enable = mkEnableOption ''
-      desktop portal for wlroots-based desktops
+    enable = lib.mkEnableOption ''
+      desktop portal for wlroots-based desktops.
 
-      This will add the <package>xdg-desktop-portal-wlr</package> package into
-      the <option>xdg.portal.extraPortals</option> option, and provide the
+      This will add the `xdg-desktop-portal-wlr` package into
+      the {option}`xdg.portal.extraPortals` option, and provide the
       configuration file
     '';
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
-        Configuration for <package>xdg-desktop-portal-wlr</package>.
+        Configuration for `xdg-desktop-portal-wlr`.
 
-        See <literal>xdg-desktop-portal-wlr(5)</literal> for supported
+        See `xdg-desktop-portal-wlr(5)` for supported
         values.
       '';
 
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
       };
 
       default = { };
 
       # Example taken from the manpage
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           screencast = {
             output_name = "HDMI-A-1";
@@ -52,7 +54,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     xdg.portal = {
       enable = true;
       extraPortals = [ package ];

@@ -1,33 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, ocaml, findlib }:
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, logs, zarith }:
 
-let
+buildDunePackage rec {
   pname = "ocplib-simplex";
-  version = "0.4";
-in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
-    owner = "OCamlPro-Iguernlala";
+    owner = "OCamlPro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09niyidrjzrj8g1qwx4wgsdf5m6cwrnzg7zsgala36jliic4di60";
+    hash = "sha256-fLTht+TlyJIsIAsRLmmkFKsnbSeW3BgyAyURFdnGfko=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ocaml findlib ];
+  # Fix tests with dune 3.17.0
+  # See https://github.com/OCamlPro/ocplib-simplex/issues/35
+  patches = (fetchpatch {
+    url = "https://github.com/OCamlPro/ocplib-simplex/commit/456a744bddd397daade7959d4a49cfadafdadd33.patch";
+    hash = "sha256-tQUXOoRGe1AIzHcm6j2MopROxn75OE9YUP+CwcKUbVg=";
+  });
 
-  strictDeps = true;
+  propagatedBuildInputs = [ logs zarith ];
 
-  installFlags = [ "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
-
-  createFindlibDestdir = true;
+  doCheck = true;
 
   meta = {
-    description = "An OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
+    description = "OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
     homepage = "https://github.com/OCamlPro-Iguernlala/ocplib-simplex";
-    inherit (ocaml.meta) platforms;
-    license = lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
   };
 }

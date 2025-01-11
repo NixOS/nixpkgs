@@ -1,12 +1,16 @@
-{ lib, buildDunePackage, fetchurl }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
 buildDunePackage rec {
   pname = "atdgen-codec-runtime";
-  version = "2.4.1";
+  version = "2.15.0";
 
   src = fetchurl {
-    url = "https://github.com/ahrefs/atd/releases/download/${version}/atdgen-codec-runtime-${version}.tbz";
-    sha256 = "sha256:16888rnvhgh5yxxsnzsj10g5pzs1l4dn27n23kk2f4641dn26s3a";
+    url = "https://github.com/ahrefs/atd/releases/download/${version}/atd-${version}.tbz";
+    hash = "sha256-ukJ5vtVNE9zz9nA6SzF0TbgV3yLAUC2ZZdbGdM4IOTM=";
   };
 
   meta = {

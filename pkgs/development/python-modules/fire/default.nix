@@ -1,29 +1,49 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  six,
+  hypothesis,
+  mock,
+  levenshtein,
+  pytestCheckHook,
+  termcolor,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.4.0";
+  version = "0.7.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
-    rev = "v${version}";
-    sha256 = "1caz6j2kdhj0kccrnqri6b4g2d6wzkkx8y9vxyvm7axvrwkv2vyn";
+    tag = "v${version}";
+    hash = "sha256-cYlkMnZOa0J6dOiWsWZplk/MajVRiCYe8tK3641fD0w=";
   };
 
-  propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
+  build-system = [ setuptools ];
 
-  checkInputs = [ hypothesis mock python-Levenshtein pytest ];
+  dependencies = [
+    six
+    termcolor
+  ];
 
-  # ignore test which asserts exact usage statement, default behavior
-  # changed in python3.8. This can likely be remove >=0.3.1
-  checkPhase = ''
-    py.test -k 'not testInitRequiresFlag'
-  '';
+  nativeCheckInputs = [
+    hypothesis
+    mock
+    levenshtein
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "fire" ];
 
   meta = with lib; {
-    description = "A library for automatically generating command line interfaces";
+    description = "Library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line
       interfaces (CLIs) from absolutely any Python object.
@@ -42,6 +62,8 @@ buildPythonPackage rec {
         REPL with the modules and variables you'll need already imported
         and created.
     '';
+    homepage = "https://github.com/google/python-fire";
+    changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ leenaars ];
   };

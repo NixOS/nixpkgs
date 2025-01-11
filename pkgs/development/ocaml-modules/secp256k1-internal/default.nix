@@ -1,27 +1,27 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, gmp
-, dune-configurator
-, cstruct
-, bigstring
-, alcotest
-, hex
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  gmp,
+  dune-configurator,
+  cstruct,
+  bigstring,
+  alcotest,
+  hex,
 }:
 
 buildDunePackage rec {
   pname = "secp256k1-internal";
-  version = "0.2";
+  version = "0.4";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ocaml-secp256k1-internal";
     rev = "v${version}";
-    sha256 = "1g9fyi78nmmm19l2cggwj14m4n80rz7gmnh1gq376zids71s6qxv";
+    hash = "sha256-amVtp94cE1NxClWJgcJvRmilnQlC7z44mORUaxvPn00=";
   };
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     gmp

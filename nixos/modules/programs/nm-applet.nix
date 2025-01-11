@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   meta = {
@@ -6,7 +11,7 @@
   };
 
   options.programs.nm-applet = {
-    enable = lib.mkEnableOption "nm-applet";
+    enable = lib.mkEnableOption "nm-applet, a NetworkManager control applet for GNOME";
 
     indicator = lib.mkOption {
       type = lib.types.bool;

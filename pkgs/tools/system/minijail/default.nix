@@ -1,41 +1,34 @@
-{ stdenv, lib, fetchFromGitiles, glibc, libcap, qemu }:
-
-let
-  dumpConstants =
-    if stdenv.buildPlatform == stdenv.hostPlatform then "./dump_constants"
-    else if stdenv.hostPlatform.isAarch32 then "qemu-arm dump_constants"
-    else if stdenv.hostPlatform.isAarch64 then "qemu-aarch64 dump_constants"
-    else if stdenv.hostPlatform.isx86_64 then "qemu-x86_64 dump_constants"
-    else throw "Unsupported host platform";
-in
+{
+  stdenv,
+  lib,
+  fetchFromGitiles,
+  libcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "17";
+  version = "2024.05.22";
 
   src = fetchFromGitiles {
-    url = "https://android.googlesource.com/platform/external/minijail";
+    url = "https://chromium.googlesource.com/chromiumos/platform/minijail";
     rev = "linux-v${version}";
-    sha256 = "1j65h50wa39m6qvgnh1pf59fv9jdsdbc6a6c1na7y0rgljxhmdzv";
+    sha256 = "sha256-1NNjNEC0pNb0WW0PG5smltT1/dGYNRfhNxJtW0hngI8=";
   };
 
-  nativeBuildInputs =
-    lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) qemu;
   buildInputs = [ libcap ];
 
-  makeFlags = [ "LIBDIR=$(out)/lib" ];
-  dumpConstantsFlags = lib.optional (stdenv.hostPlatform.libc == "glibc")
-    "LDFLAGS=-L${glibc.static}/lib";
+  makeFlags = [
+    "ECHO=echo"
+    "LIBDIR=$(out)/lib"
+  ];
 
   postPatch = ''
-    substituteInPlace common.mk --replace /bin/echo echo
+    substituteInPlace Makefile --replace /bin/echo echo
     patchShebangs platform2_preinstall.sh
   '';
 
-  postBuild = ''
-    make $makeFlags $buildFlags $dumpConstantsFlags dump_constants
-    ${dumpConstants} > constants.json
-  '';
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   installPhase = ''
     ./platform2_preinstall.sh ${version} $out/include/chromeos
@@ -47,16 +40,20 @@ stdenv.mkDerivation rec {
     cp -v *.pc $out/lib/pkgconfig
     cp -v libminijail.h scoped_minijail.h $out/include/chromeos
     cp -v minijail0 $out/bin
-    cp -v constants.json $out/share/minijail
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://android.googlesource.com/platform/external/minijail/";
+    homepage = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/heads/main/README.md";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
+    changelog = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/tags/linux-v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pcarrier qyliss ];
+    maintainers = with maintainers; [
+      pcarrier
+      qyliss
+    ];
     platforms = platforms.linux;
+    mainProgram = "minijail0";
   };
 }

@@ -9,7 +9,7 @@ index 88c5f53..1ccd6e4 100644
 +            '@libgeos_c@',
          ]
          _lgeos = load_dll('geos_c', fallbacks=alt_paths)
- 
+
 @@ -160,6 +161,7 @@ elif sys.platform == 'darwin':
              "/usr/local/lib/libgeos_c.dylib",
              # homebrew Apple Silicon
@@ -17,7 +17,7 @@ index 88c5f53..1ccd6e4 100644
 +            "@libgeos_c@",
          ]
          _lgeos = load_dll('geos_c', fallbacks=alt_paths)
- 
+
 diff --git a/tests/test_dlls.py b/tests/test_dlls.py
 index c71da8e..c36262c 100644
 --- a/tests/test_dlls.py

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
 }:
 
 buildPythonPackage rec {
   version = "0.61.1";
+  format = "setuptools";
   pname = "azure-graphrbac";
 
   src = fetchPypi {

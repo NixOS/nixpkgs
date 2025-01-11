@@ -1,19 +1,24 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, flake8 }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  flake8,
+}:
 
 buildPythonPackage rec {
   pname = "pure-cdb";
-  version = "3.1.1";
-  disabled = pythonOlder "3.4";
+  version = "4.0.0";
+  format = "setuptools";
 
   # Archive on pypi has no tests.
   src = fetchFromGitHub {
     owner = "bbayles";
     repo = "python-pure-cdb";
-    rev = "v${version}";
-    hash = "sha256-/FAe4NkY5unt83BOnJ3QqBJFQCPdQnbMVl1fSZ511Fc=";
+    tag = "v${version}";
+    hash = "sha256-7zxQO+oTZJhXfM2yijGXchLixiQRuFTOSESVlEc+T0s=";
   };
 
-  checkInputs = [ flake8 ];
+  nativeCheckInputs = [ flake8 ];
 
   pythonImportsCheck = [ "cdblib" ];
 

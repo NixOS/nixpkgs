@@ -1,29 +1,44 @@
-{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, Security, fetchpatch }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  ncurses,
+  openssl,
+  pkg-config,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.4.8";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
-    repo = pname;
+    repo = "wiki-tui";
     rev = "v${version}";
-    sha256 = "sha256-/u0segKHrrtXfEjOmpnQ/iFbsM+VfsZKTpyc1IfuOU8=";
+    hash = "sha256-eTDxRrTP9vX7F1lmDCuF6g1pfaZChqB8Pv1kfrd7I9w=";
   };
-
-  buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-3xvaEzqAz/U8CkdGYXLBnxrgW1raeKuzRsmD+0Sd4iQ=";
+  buildInputs = [
+    ncurses
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  # Tests fail with this error: `found argument --test-threads which was not expected`
-  doCheck = false;
+  cargoHash = "sha256-fLA7dF91mEgjTnbhujTKaHX+qmpzYaqzL8cc/x+mrUk=";
 
   meta = with lib; {
-    description = "A simple and easy to use Wikipedia Text User Interface";
+    description = "Simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
+    changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom builditluc ];
+    maintainers = with maintainers; [
+      lom
+      builditluc
+      matthiasbeyer
+    ];
+    mainProgram = "wiki-tui";
   };
 }

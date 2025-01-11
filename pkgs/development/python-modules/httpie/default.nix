@@ -1,47 +1,52 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, installShellFiles
-, pandoc
-, pythonOlder
-# BuildInputs
-, charset-normalizer
-, defusedxml
-, multidict
-, pygments
-, requests
-, requests-toolbelt
-, setuptools
-, rich
-, pysocks
-# CheckInputs
-, pytest-httpbin
-, pytest-lazy-fixture
-, pytest-mock
-, pytestCheckHook
-, responses
-, werkzeug
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  charset-normalizer,
+  defusedxml,
+  fetchFromGitHub,
+  installShellFiles,
+  multidict,
+  pandoc,
+  pip,
+  pygments,
+  pytest-httpbin,
+  pytest-lazy-fixture,
+  pytest-mock,
+  pytestCheckHook,
+  requests-toolbelt,
+  requests,
+  responses,
+  rich,
+  setuptools,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "httpie";
-  version = "3.2.1";
-  format = "setuptools";
+  version = "3.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
-    rev = version;
-    hash = "sha256-WEe8zSlNckl7bPBi6u8mHQ1/xPw3kE81F8Xr15TchgM=";
+    tag = version;
+    hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
+
+  pythonRelaxDeps = [
+    "defusedxml"
+    "requests"
+  ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     defusedxml
     multidict
@@ -50,10 +55,12 @@ buildPythonPackage rec {
     requests-toolbelt
     setuptools
     rich
-    pysocks
-  ];
+  ] ++ requests.optional-dependencies.socks;
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pip
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock
@@ -64,10 +71,9 @@ buildPythonPackage rec {
 
   postInstall = ''
     # install completions
-    installShellCompletion --bash \
-      --name http.bash extras/httpie-completion.bash
-    installShellCompletion --fish \
-      --name http.fish extras/httpie-completion.fish
+    installShellCompletion --cmd http \
+      --bash extras/httpie-completion.bash \
+      --fish extras/httpie-completion.fish
 
     # convert the docs/README.md file
     pandoc --standalone -f markdown -t man docs/README.md -o docs/http.1
@@ -79,27 +85,39 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [
-    "httpie"
-  ];
+  pythonImportsCheck = [ "httpie" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    # flaky
+  disabledTestPaths = [
+    # Tests are flaky
     "tests/test_plugins_cli.py"
   ];
 
-  disabledTests = [
-    # flaky
-    "test_stdin_read_warning"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # flaky
-    "test_daemon_runner"
-  ];
+  disabledTests =
+    [
+      # argparse output changed
+      "test_naked_invocation"
+      # Test is flaky
+      "test_stdin_read_warning"
+      # httpbin compatibility issues
+      "test_compress_form"
+      "test_binary_suppresses_when_terminal"
+      "test_binary_suppresses_when_not_terminal_but_pretty"
+      "test_binary_included_and_correct_when_suitable"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Test is flaky
+      "test_daemon_runner"
+    ];
 
   meta = with lib; {
-    description = "A command line HTTP client whose goal is to make CLI human-friendly";
+    description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
+    changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];
+    maintainers = with maintainers; [
+      antono
+      relrod
+      schneefux
+    ];
   };
 }

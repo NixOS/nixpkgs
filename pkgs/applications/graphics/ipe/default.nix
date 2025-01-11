@@ -1,7 +1,7 @@
 { lib
-, mkDerivation
+, stdenv
 , makeDesktopItem
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , copyDesktopItems
 , cairo
@@ -13,22 +13,28 @@
 , libspiro
 , lua5
 , qtbase
-, texlive
+, qtsvg
+, texliveSmall
+, qhull
+, wrapQtAppsHook
 , zlib
+, withTeXLive ? true
+, withQVoronoi ? false
+, buildPackages
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ipe";
-  version = "7.2.23";
+  version = "7.2.30";
 
-  src = fetchurl {
-    url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${pname}-${version}-src.tar.gz";
-    sha256 = "0yvm3zfba1ljyy518vjnvwpyg7lgnmdwm19v5k0wfgz64aca56x1";
+  src = fetchFromGitHub {
+    owner = "otfried";
+    repo = "ipe";
+    tag = "v${version}";
+    hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 
-  sourceRoot = "${pname}-${version}/src";
-
-  nativeBuildInputs = [ pkg-config copyDesktopItems ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
 
   buildInputs = [
     cairo
@@ -40,15 +46,26 @@ mkDerivation rec {
     libspiro
     lua5
     qtbase
-    texlive
+    qtsvg
     zlib
-  ];
+  ] ++ (lib.optionals withTeXLive [
+    texliveSmall
+  ]) ++ (lib.optionals withQVoronoi [
+    qhull
+  ]);
 
-  IPEPREFIX = placeholder "out";
-  URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
-  LUA_PACKAGE = "lua";
+  makeFlags = [
+    "-C src"
+    "IPEPREFIX=${placeholder "out"}"
+    "LUA_PACKAGE=lua"
+    "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
+    "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
+  ] ++ (lib.optionals withQVoronoi [
+    "IPEQVORONOI=1"
+    "QHULL_CFLAGS=-I${qhull}/include/libqhull_r"
+  ]);
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
 
   enableParallelBuilding = true;
 
@@ -73,7 +90,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An editor for drawing figures";
+    description = "Editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''

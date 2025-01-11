@@ -1,25 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, findutils, getopt, gnugrep, gnused, sops, vault }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  findutils,
+  getopt,
+  gnugrep,
+  gnused,
+  sops,
+}:
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "3.8.3";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FpF/d+e5T6nb0OENaYLY+3ATZ+qcAeih5/yKI+AtfKA=";
+    hash = "sha256-s76XIB7s92zSzG8GGsJJuTG3cwbGHL7oc1x30k/WoOU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ getopt sops ];
+  buildInputs = [
+    getopt
+    sops
+  ];
 
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
 
-  # NOTE: Remove the install and upgrade hooks.
+  # NOTE: Fix version string
   postPatch = ''
-    sed -i '/^hooks:/,+2 d' plugin.yaml
+    sed -i 's/^version:.*/version: "${version}"/' plugin.yaml
   '';
 
   installPhase = ''
@@ -29,16 +43,25 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/${pname} plugin.yaml
     cp -r scripts/* $out/${pname}/scripts
     wrapProgram $out/${pname}/scripts/run.sh \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils getopt gnugrep gnused sops vault ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            findutils
+            getopt
+            gnugrep
+            gnused
+            sops
+          ]
+        }
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A Helm plugin that helps manage secrets";
-    inherit (src.meta) homepage;
+    description = "Helm plugin that helps manage secrets";
+    homepage = "https://github.com/jkroepke/helm-secrets";
     license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }

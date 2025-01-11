@@ -1,59 +1,96 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, numpy
-, scipy
-, pytestCheckHook
-, pytest-cov
-, pytest-timeout
-, h5py
-, matplotlib
-, nibabel
-, pandas
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  scipy,
+  pytestCheckHook,
+  pytest-timeout,
+  matplotlib,
+  decorator,
+  jinja2,
+  pooch,
+  tqdm,
+  packaging,
+  lazy-loader,
+  h5io,
+  pymatreader,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "0.24.1";
+  version = "1.8.0";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.9";
 
-  # PyPI dist insufficient to run tests
   src = fetchFromGitHub {
     owner = "mne-tools";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0n91pj97xmpn0bmlv56q2117szlvvs4b52pjjlm3g8ny4xb3iwr0";
+    repo = "mne-python";
+    tag = "v${version}";
+    hash = "sha256-WPRTX8yB4oP/L5DjSq9M6WOmHJDpQv0sAbuosp7ZGVw=";
   };
 
-  propagatedBuildInputs = [ numpy scipy ];
+  postPatch = ''
+    substituteInPlace pyproject.toml  \
+      --replace-fail "--cov-report=" ""  \
+      --replace-fail "--cov-branch" ""
+  '';
 
-  # all tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
-  doCheck = false;
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-timeout
-    h5py
-    matplotlib
-    nibabel
-    pandas
-    scikit-learn
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
+
+  dependencies = [
+    numpy
+    scipy
+    matplotlib
+    tqdm
+    pooch
+    decorator
+    packaging
+    jinja2
+    lazy-loader
+  ];
+
+  optional-dependencies.hdf5 = [
+    h5io
+    pymatreader
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
   preCheck = ''
-    export HOME=$TMP
+    export HOME=$(mktemp -d)
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
+  disabledTests = [
+    # requires qtbot which is unmaintained/not in Nixpkgs:
+    "test_plotting_scalebars"
+    # tries to write a datetime object to hdf5, which fails:
+    "test_hitachi_basic"
+  ];
+
   pythonImportsCheck = [ "mne" ];
 
   meta = with lib; {
-    homepage = "https://mne.tools";
     description = "Magnetoencephelography and electroencephalography in Python";
+    mainProgram = "mne";
+    homepage = "https://mne.tools";
+    changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [
+      bcdarwin
+      mbalatsko
+    ];
   };
 }

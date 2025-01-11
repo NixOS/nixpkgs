@@ -1,41 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jaraco-classes,
+  jaraco-context,
+  keyring,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  pname = "keyrings.alt";
-  version = "4.1.0";
-  disabled = isPy27;
+  pname = "keyrings-alt";
+  version = "5.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "52ccb61d6f16c10f32f30d38cceef7811ed48e086d73e3bae86f0854352c4ab2";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "keyrings.alt";
+    tag = "v${version}";
+    hash = "sha256-m/hIXjri3FZ3rPIymiIBy8cKNOwJoj14WjsOyDtcWmU=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--flake8" ""
-  '';
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ six ];
-
-  checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
-
-  # heavily relies on importing tests from keyring package
-  doCheck = false;
-  checkPhase = ''
-    py.test
-  '';
-
-  pythonImportsCheck = [
-    "keyrings.alt"
+  dependencies = [
+    jaraco-classes
+    jaraco-context
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    keyring
+  ];
+
+  pythonImportsCheck = [ "keyrings.alt" ];
+
   meta = with lib; {
-    license = licenses.mit;
     description = "Alternate keyring implementations";
     homepage = "https://github.com/jaraco/keyrings.alt";
+    changelog = "https://github.com/jaraco/keyrings.alt/blob/v${version}/NEWS.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ nyarly ];
   };
 }

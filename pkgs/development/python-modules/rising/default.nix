@@ -1,33 +1,73 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-cov
-, dill
-, numpy
-, pytorch
-, threadpoolctl
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  versioneer,
+
+  # dependencies
+  lightning-utilities,
+  numpy,
+  torch,
+  threadpoolctl,
+  tqdm,
+
+  # tests
+  dill,
+  pytestCheckHook,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "rising";
-  version = "0.2.1";
-
-  disabled = isPy27;
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PhoenixDL";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "15wYWToXRae1cMpHWbJwzAp0THx6ED9ixQgL+n1v9PI=";
+    repo = "rising";
+    tag = "v${version}";
+    hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-  propagatedBuildInputs = [ numpy pytorch threadpoolctl tqdm ];
-  checkInputs = [ dill pytest-cov pytestCheckHook ];
+  pythonRelaxDeps = [ "lightning-utilities" ];
 
-  disabledTests = [ "test_affine" ];  # deprecated division operator '/'
+  # Remove vendorized versioneer (incompatible with python 3.12)
+  postPatch = ''
+    rm versioneer.py
+  '';
+
+  build-system = [ versioneer ];
+
+  dependencies = [
+    lightning-utilities
+    numpy
+    torch
+    threadpoolctl
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    dill
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
+    "test_progressive_resize_integration"
+  ];
+
+  pythonImportsCheck = [
+    "rising"
+    "rising.loading"
+    "rising.ops"
+    "rising.random"
+    "rising.transforms"
+    "rising.transforms.functional"
+    "rising.utils"
+  ];
 
   meta = {
     description = "High-performance data loading and augmentation library in PyTorch";

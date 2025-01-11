@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, b43FirmwareCutter }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  b43FirmwareCutter,
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "b43-firmware";
   version = "6.30.163.46";
 

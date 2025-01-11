@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchurl, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.2";
+  version = "2.13.15";
 
-  src = fetchurl {
-    url = "https://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
-    sha256 = "sha256-39VH2QQcjFRa5be/7z8O8tnyUg1qtEGIyeqN5W1dKYo=";
+  src = fetchFromGitHub {
+    owner = "lttng";
+    repo = "lttng-modules";
+    rev = "v${version}";
+    hash = "sha256-cEiv1EjsEvyreRERrCGKKpJdA1IKvuyVmgA7S3EkEnU=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   makeFlags = kernel.makeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -27,9 +34,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux kernel modules for LTTng tracing";
     homepage = "https://lttng.org/";
-    license = with licenses; [ lgpl21Only gpl2Only mit ];
+    license = with licenses; [
+      lgpl21Only
+      gpl2Only
+      mit
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    broken = kernel.kernelAtLeast "5.18";
+    broken =
+      (lib.versions.majorMinor kernel.modDirVersion) == "5.10"
+      || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
   };
 }

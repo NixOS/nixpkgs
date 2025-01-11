@@ -1,9 +1,14 @@
-{ buildDunePackage, junit, ounit }:
+{
+  buildDunePackage,
+  junit,
+  ounit,
+}:
 
 buildDunePackage ({
   pname = "junit_ounit";
 
-  inherit (junit) src version meta useDune2;
+  inherit (junit) src version meta;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     junit

@@ -1,73 +1,150 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
-, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  xdg-utils,
+  gtk3,
+  jdk,
+  gradle_8,
+  python3,
+}:
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation rec {
-  version = "5.5";
+  version = "5.13";
   pname = "jabref";
 
-  src = fetchurl {
-    url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}-portable_linux.tar.gz";
-    sha256 = "sha256-9MHNehyAmu7CiBp1rgb4zTkSqmjXm2tcmiGKFBFapKI=";
+  src = fetchFromGitHub {
+    owner = "JabRef";
+    repo = "jabref";
+    rev = "v${version}";
+    hash = "sha256-inE2FXAaEEiq7343KwtjEiTEHLtn01AzP0foTpsLoAw=";
+    fetchSubmodules = true;
   };
 
-  preferLocalBuild = true;
+  desktopItems = [
+    (makeDesktopItem {
+      comment = meta.description;
+      name = "JabRef";
+      desktopName = "JabRef";
+      genericName = "Bibliography manager";
+      categories = [ "Office" ];
+      icon = "jabref";
+      exec = "JabRef %U";
+      startupWMClass = "org.jabref.gui.JabRefGUI";
+      mimeTypes = [ "text/x-bibtex" ];
+    })
+  ];
 
-  desktopItem = makeDesktopItem {
-    comment =  meta.description;
-    name = "jabref";
-    desktopName = "JabRef";
-    genericName = "Bibliography manager";
-    categories = [ "Office" ];
-    icon = "jabref";
-    exec = "jabref";
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
+  postPatch = ''
+    # Disable update check
+    substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
+      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+        'VERSION_CHECK_ENABLED, Boolean.FALSE'
 
-  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib ];
-  systemLibPaths = lib.makeLibraryPath systemLibs;
+    # Find OpenOffice/LibreOffice binary
+    substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
+      --replace '/usr' '/run/current-system/sw'
+  '';
+
+  nativeBuildInputs = [
+    jdk
+    gradle
+    wrapGAppsHook3
+    copyDesktopItems
+    unzip
+  ];
+
+  buildInputs = [
+    gtk3
+    python3
+  ];
+
+  gradleFlags = [
+    "-PprojVersion=${version}"
+    "-Dorg.gradle.java.home=${jdk}"
+  ];
+
+  preBuild = ''
+    gradleFlagsArray+=(-PprojVersionInfo="${version} NixOS")
+  '';
+
+  dontWrapGApps = true;
 
   installPhase = ''
-    mkdir -p $out/share/java $out/share/icons
+    runHook preInstall
 
-    cp -r lib $out/lib
+    install -dm755 $out/share/java/jabref
+    install -Dm644 LICENSE $out/share/licenses/jabref/LICENSE
+    install -Dm644 src/main/resources/icons/jabref.svg $out/share/pixmaps/jabref.svg
 
-    for f in $out/lib/runtime/bin/j*; do
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${ lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
-    done
+    # script to support browser extensions
+    install -Dm755 buildres/linux/jabrefHost.py $out/lib/jabrefHost.py
+    patchShebangs $out/lib/jabrefHost.py
+    install -Dm644 buildres/linux/native-messaging-host/firefox/org.jabref.jabref.json $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
+    sed -i -e "s|/opt/jabref|$out|" $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
 
-    for f in $out/lib/runtime/lib/*.so; do
-      patchelf \
-        --set-rpath "${systemLibPaths}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
-    done
+    # Resources in the jar can't be found, workaround copied from AUR
+    cp -r build/resources $out/share/java/jabref
 
-    # patching the libs in the JImage runtime image is quite impossible as there is no documented way
-    # of rebuilding the image after it has been extracted
-    # the image format itself is "intendedly not documented" - maybe one of the reasons the
-    # devolpers constantly broke "jimage recreate" and dropped it in OpenJDK 9 Build 116 Early Access
-    # so, for now just copy the image and provide our lib paths through the wrapper
+    tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
 
-    makeWrapper $out/lib/runtime/bin/java $out/bin/jabref \
-      --add-flags '-Djava.library.path=${systemLibPaths}' --add-flags "-p $out/lib/app -m org.jabref/org.jabref.JabRefLauncher" \
-      --prefix LD_LIBRARY_PATH : '${systemLibPaths}'
+    DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 
-    cp -r ${desktopItem}/share/applications $out/share/
+    # Temp fix: openjfx doesn't build with webkit
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
 
-    # we still need to unpack the runtime image to get the icon
-    mkdir unpacked
-    $out/lib/runtime/bin/jimage extract --dir=./unpacked lib/runtime/lib/modules
-    cp unpacked/org.jabref/icons/jabref.svg $out/share/icons/jabref.svg
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/bin/*
+
+    # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
+    makeWrapper ${jdk}/bin/java $out/bin/JabRef \
+      "''${gappsWrapperArgs[@]}" \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --add-flags "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main" \
+      --add-flags "$DEFAULT_JVM_OPTS"
+
+    # lowercase alias (for convenience and required for browser extensions)
+    ln -sf $out/bin/JabRef $out/bin/jabref
+  '';
+
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle nixDownloadDeps -Dos.arch=amd64
+    gradle nixDownloadDeps -Dos.arch=aarch64
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+      binaryNativeCode # source bundles dependencies as jars
+    ];
+    license = licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      gebner
+      linsui
+    ];
   };
 }

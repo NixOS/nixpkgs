@@ -3,9 +3,10 @@ import ./make-test-python.nix (
   {
     name = "nar-serve";
     meta.maintainers = [ lib.maintainers.rizary ];
-    nodes =
-      {
-        server = { pkgs, ... }: {
+    nodes = {
+      server =
+        { pkgs, ... }:
+        {
           services.nginx = {
             enable = true;
             virtualHosts.default.root = "/var/www";
@@ -25,8 +26,10 @@ import ./make-test-python.nix (
 
           # virtualisation.diskSize = 2 * 1024;
         };
-      };
+    };
     testScript = ''
+      import os
+
       start_all()
 
       # Create a fake cache with Nginx service the static files

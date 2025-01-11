@@ -5,7 +5,7 @@ make_vala_find_vapi_files() {
     fi
 }
 
-addEnvHooks "$hostOffset" make_vala_find_vapi_files
+addEnvHooks "$targetOffset" make_vala_find_vapi_files
 
 _multioutMoveVapiDirs() {
   moveToOutput share/vala/vapi "${!outputDev}"

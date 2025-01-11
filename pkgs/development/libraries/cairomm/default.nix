@@ -1,45 +1,67 @@
-{ fetchurl, lib, stdenv, pkg-config, darwin, cairo, fontconfig, freetype, libsigcxx, meson, ninja }:
+{
+  fetchurl,
+  stdenv,
+  lib,
+  pkg-config,
+  darwin,
+  boost,
+  cairo,
+  fontconfig,
+  libsigcxx,
+  meson,
+  ninja,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cairomm";
-  version = "1.14.3";
+  version = "1.14.5";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "https://www.cairographics.org/releases/${pname}-${version}.tar.xz";
-    # gnome doesn't have the latest version ATM; beware: same name but different hash
-    #url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DTfgZ8XEyngIt87dq/4ZMsW9KnUK1k+zIeEhNTYpfng=";
+    url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
+    sha256 = "cBNiA1QMiE6Jzhye37Y2m5lTk39s1ZbZfHjJdYpdSNs=";
   };
 
-  outputs = [ "out" "dev" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  propagatedBuildInputs = [ cairo libsigcxx ];
-  buildInputs = [ fontconfig freetype ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-  ]);
+  buildInputs =
+    [
+      boost # for tests
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+      ]
+    );
 
-  doCheck = true;
+  propagatedBuildInputs = [
+    cairo
+    libsigcxx
+  ];
+
+  mesonFlags = [
+    "-Dbuild-tests=true"
+  ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "A 2D graphics library with support for multiple output devices";
-
-    longDescription = ''
-      Cairo is a 2D graphics library with support for multiple output
-      devices.  Currently supported output targets include the X
-      Window System, Quartz, Win32, image buffers, PostScript, PDF,
-      and SVG file output.  Experimental backends include OpenGL
-      (through glitz), XCB, BeOS, OS/2, and DirectFB.
-
-      Cairo is designed to produce consistent output on all output
-      media while taking advantage of display hardware acceleration
-      when available (e.g., through the X Render Extension).
-    '';
-
+    description = "C++ bindings for the Cairo vector graphics library";
     homepage = "https://www.cairographics.org/";
-
-    license = with licenses; [ lgpl2Plus mpl10 ];
+    license = with licenses; [
+      lgpl2Plus
+      mpl10
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,28 +1,59 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, gettext, mount, libuuid, kmod, macfuse-stubs, DiskArbitration
-, crypto ? false, libgcrypt, gnutls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  mount,
+  libuuid,
+  kmod,
+  macfuse-stubs,
+  DiskArbitration,
+  crypto ? false,
+  libgcrypt,
+  gnutls,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2022.5.17";
+  version = "2022.10.3";
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "tuxera";
     repo = "ntfs-3g";
     rev = version;
-    sha256 = "sha256-xh8cMNIHeJ1rtk5zwOsmcxeedgZ3+MSiWn2UC7y+gtQ=";
+    sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
   };
 
-  buildInputs = [ gettext libuuid ]
-    ++ lib.optionals crypto [ gnutls libgcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ macfuse-stubs DiskArbitration ];
+  buildInputs =
+    [
+      gettext
+      libuuid
+    ]
+    ++ lib.optionals crypto [
+      gnutls
+      libgcrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      macfuse-stubs
+      DiskArbitration
+    ];
 
   # Note: libgcrypt is listed here non-optionally because its m4 macros are
   # being used in ntfs-3g's configure.ac.
-  nativeBuildInputs = [ autoreconfHook libgcrypt pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libgcrypt
+    pkg-config
+  ];
 
   patches = [
     # https://github.com/tuxera/ntfs-3g/pull/39
@@ -30,24 +61,26 @@ stdenv.mkDerivation rec {
     ./consistent-sbindir-usage.patch
   ];
 
-  configureFlags = [
-    "--disable-ldconfig"
-    "--exec-prefix=\${prefix}"
-    "--enable-mount-helper"
-    "--enable-posix-acls"
-    "--enable-xattr-mappings"
-    "--${if crypto then "enable" else "disable"}-crypto"
-    "--enable-extras"
-    "--with-mount-helper=${mount}/bin/mount"
-    "--with-umount-helper=${mount}/bin/umount"
-    "--with-modprobe-helper=${kmod}/bin/modprobe"
-  ];
+  configureFlags =
+    [
+      "--disable-ldconfig"
+      "--exec-prefix=\${prefix}"
+      "--enable-mount-helper"
+      "--enable-posix-acls"
+      "--enable-xattr-mappings"
+      "--${if crypto then "enable" else "disable"}-crypto"
+      "--enable-extras"
+      "--with-mount-helper=${mount}/bin/mount"
+      "--with-umount-helper=${mount}/bin/umount"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--with-modprobe-helper=${kmod}/bin/modprobe"
+    ];
 
-  postInstall =
-    ''
-      # Prefer ntfs-3g over the ntfs driver in the kernel.
-      ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
-    '';
+  postInstall = ''
+    # Prefer ntfs-3g over the ntfs driver in the kernel.
+    ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
+  '';
 
   enableParallelBuilding = true;
 

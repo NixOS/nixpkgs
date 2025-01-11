@@ -22,21 +22,20 @@
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
-, clutter-gtk
 , dbus
 , accountsservice
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
-    sha256 = "sha256-CY+dPSyQ/ovSdI80uEipDdnWy1KjbZnwpn9sd8HrbPQ=";
+    sha256 = "sha256-m/xuaMCAPoqhl/M547mdafBPBu3UhHmVmBIUKQoS5L8=";
   };
 
   patches = [
@@ -54,12 +53,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     accountsservice
-    clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-icon-theme
     gnome-settings-daemon
     gdk-pixbuf
@@ -72,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # A hook does this but after wrapGAppsHook so the files never get wrapped.
+    # A hook does this but after wrapGAppsHook3 so the files never get wrapped.
     "--sbindir=${placeholder "out"}/bin"
     # baked into the program for discovery of the greeter configuration
     "--sysconfdir=/etc"
@@ -109,9 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
 
     xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
       path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";

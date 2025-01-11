@@ -1,47 +1,48 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, siobrultech-protocols
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  siobrultech-protocols,
 }:
 
 buildPythonPackage rec {
   pname = "greeneye-monitor";
-  version = "3.0.3";
+  version = "5.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  format = "setuptools";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "greeneye-monitor";
-    rev = "v${version}";
-    hash = "sha256-weZTOVFBlB6TxFs8pLWfyB7WD/bn3ljBjX2tVi1Zc/I=";
+    tag = "v${version}";
+    hash = "sha256-7EDuQ+wECcTzxkEufMpg3WSzosWeiwfxcVIVtQi+0BI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "siobrultech_protocols==" "siobrultech_protocols>="
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     siobrultech-protocols
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-socket
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "greeneye.monitor" ];
 
-  meta = {
+  meta = with lib; {
     description = "Receive data packets from GreenEye Monitor";
     homepage = "https://github.com/jkeljo/greeneye-monitor";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    changelog = "https://github.com/jkeljo/greeneye-monitor/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

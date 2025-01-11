@@ -1,24 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruplacer";
-  version = "0.6.4";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "TankerHQ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jLGstlEqABT4ejdYlTQZaBVeYy86+lqIilyufPGIZyQ=";
+    sha256 = "sha256-Zvbb9pQpxbJZi0qcDU6f2jEgavl9cA7gIYU7NRXZ9fc=";
   };
 
-  cargoSha256 = "sha256-cv+g68WQvnnd0qZDB9PfZLbsdrM+RXs27a0Q5YPiHDQ=";
+  cargoHash = "sha256-vdq2nEFhvteQEqEZNbSegivvkU6cTxSmZLc6oaxLkwY=";
 
-  buildInputs = (lib.optional stdenv.isDarwin Security);
-
-  meta = with lib; {
+  meta = {
     description = "Find and replace text in source files";
+    mainProgram = "ruplacer";
     homepage = "https://github.com/TankerHQ/ruplacer";
-    license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
   };
 }

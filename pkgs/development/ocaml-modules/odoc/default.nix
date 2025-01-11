@@ -1,30 +1,68 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, astring, cmdliner, cppo, fpath, result, tyxml
-, markup, alcotest, yojson, sexplib, jq
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  ocaml-crunch,
+  astring,
+  cmdliner,
+  cppo,
+  fpath,
+  result,
+  tyxml,
+  markup,
+  yojson,
+  sexplib0,
+  jq,
+  odoc-parser,
+  ppx_expect,
+  bash,
+  fmt,
 }:
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "1.5.3";
+  inherit (odoc-parser) version src;
 
-  minimumOCamlVersion = "4.02";
+  nativeBuildInputs = [
+    cppo
+    ocaml-crunch
+  ];
+  buildInputs = [
+    astring
+    cmdliner
+    fpath
+    result
+    tyxml
+    odoc-parser
+    fmt
+  ];
 
-  src = fetchurl {
-    url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
-    sha256 = "0idzidmz7y10xkwcf4aih0mdvkipxk1gzi4anhnbbi2q2s0nzdzj";
-  };
+  nativeCheckInputs = [
+    bash
+    jq
+  ];
+  checkInputs = [
+    markup
+    yojson
+    sexplib0
+    jq
+    ppx_expect
+  ];
+  doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder yojson.version "2.0";
 
-  useDune2 = true;
-
-  buildInputs = [ astring cmdliner cppo fpath result tyxml ];
-
-  checkInputs = [ alcotest markup yojson sexplib jq ];
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  preCheck = ''
+    # some run.t files check the content of patchShebangs-ed scripts, so patch
+    # them as well
+    find test \( -name '*.sh' -o -name 'run.t' \)  -execdir sed 's@#!/bin/sh@#!${bash}/bin/sh@' -i '{}' \;
+    patchShebangs test
+  '';
 
   meta = {
-    description = "A documentation generator for OCaml";
+    description = "Documentation generator for OCaml";
+    mainProgram = "odoc";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/ocaml/odoc";
+    changelog = "https://github.com/ocaml/odoc/blob/${version}/CHANGES.md";
   };
 }

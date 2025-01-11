@@ -1,24 +1,28 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.airsonic;
   opt = options.services.airsonic;
-in {
+in
+{
   options = {
 
     services.airsonic = {
-      enable = mkEnableOption "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)";
+      enable = lib.mkEnableOption "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "airsonic";
         description = "User account under which airsonic runs.";
       };
 
-      home = mkOption {
-        type = types.path;
+      home = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/airsonic";
         description = ''
           The directory where Airsonic will create files.
@@ -26,16 +30,16 @@ in {
         '';
       };
 
-      virtualHost = mkOption {
-        type = types.nullOr types.str;
+      virtualHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
@@ -47,8 +51,8 @@ in {
         '';
       };
 
-      port = mkOption {
-        type = types.int;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 4040;
         description = ''
           The port on which Airsonic will listen for
@@ -56,8 +60,8 @@ in {
         '';
       };
 
-      contextPath = mkOption {
-        type = types.path;
+      contextPath = lib.mkOption {
+        type = lib.types.path;
         default = "/";
         description = ''
           The context path, i.e., the last part of the Airsonic
@@ -65,8 +69,8 @@ in {
         '';
       };
 
-      maxMemory = mkOption {
-        type = types.int;
+      maxMemory = lib.mkOption {
+        type = lib.types.int;
         default = 100;
         description = ''
           The memory limit (max Java heap size) in megabytes.
@@ -74,10 +78,10 @@ in {
         '';
       };
 
-      transcoders = mkOption {
-        type = types.listOf types.path;
+      transcoders = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
+        defaultText = lib.literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
         description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
@@ -85,26 +89,23 @@ in {
         '';
       };
 
-      jre = mkOption {
-        type = types.package;
-        default = pkgs.jre8;
-        defaultText = literalExpression "pkgs.jre8";
-        description = ''
-          JRE package to use.
-
+      jre = lib.mkPackageOption pkgs "jre8" {
+        extraDescription = ''
+          ::: {.note}
           Airsonic only supports Java 8, airsonic-advanced requires at least
           Java 11.
+          :::
         '';
       };
 
-      war = mkOption {
-        type = types.path;
+      war = lib.mkOption {
+        type = lib.types.path;
         default = "${pkgs.airsonic}/webapps/airsonic.war";
-        defaultText = literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
+        defaultText = lib.literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
         description = "Airsonic war file to use.";
       };
 
-      jvmOptions = mkOption {
+      jvmOptions = lib.mkOption {
         description = ''
           Extra command line options for the JVM running AirSonic.
           Useful for sending jukebox output to non-default alsa
@@ -112,7 +113,7 @@ in {
         '';
         default = [
         ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [
           "-Djavax.sound.sampled.Clip='#CODEC [plughw:1,0]'"
           "-Djavax.sound.sampled.Port='#Port CODEC [hw:1]'"
@@ -124,7 +125,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.airsonic = {
       description = "Airsonic Media Server";
       after = [ "network.target" ];
@@ -144,10 +145,9 @@ in {
           -Dairsonic.home=${cfg.home} \
           -Dserver.address=${cfg.listenAddress} \
           -Dserver.port=${toString cfg.port} \
-          -Dairsonic.contextPath=${cfg.contextPath} \
+          -Dserver.context-path=${cfg.contextPath} \
           -Djava.awt.headless=true \
-          ${optionalString (cfg.virtualHost != null)
-            "-Dserver.use-forward-headers=true"} \
+          ${lib.optionalString (cfg.virtualHost != null) "-Dserver.use-forward-headers=true"} \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
           -jar ${cfg.war}
@@ -158,7 +158,7 @@ in {
       };
     };
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
+    services.nginx = lib.mkIf (cfg.virtualHost != null) {
       enable = true;
       recommendedProxySettings = true;
       virtualHosts.${cfg.virtualHost} = {
@@ -174,6 +174,6 @@ in {
       createHome = true;
       isSystemUser = true;
     };
-    users.groups.airsonic = {};
+    users.groups.airsonic = { };
   };
 }

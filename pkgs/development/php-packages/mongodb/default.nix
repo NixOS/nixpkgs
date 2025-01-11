@@ -1,36 +1,51 @@
-{ stdenv
-, buildPecl
-, lib
-, pcre2
-, pkg-config
-, cyrus_sasl
-, icu64
-, openssl
-, snappy
-, zlib
-, darwin
+{
+  stdenv,
+  buildPecl,
+  fetchFromGitHub,
+  lib,
+  libiconv,
+  pcre2,
+  pkg-config,
+  cyrus_sasl,
+  icu64,
+  openssl,
+  snappy,
+  zlib,
+  darwin,
 }:
 
-buildPecl {
+buildPecl rec {
   pname = "mongodb";
+  version = "1.20.1";
 
-  version = "1.13.0";
-  sha256 = "sha256-IoZbYdJkyQyeqoXZTy9fV+VkFAyth8jCYB+jP4Dv4Ls=";
+  src = fetchFromGitHub {
+    owner = "mongodb";
+    repo = "mongo-php-driver";
+    rev = version;
+    hash = "sha256-lldANJ4J1DrV6o9cwEmUPdbVx6edDp9GdyxdwRIS6Bs=";
+    fetchSubmodules = true;
+  };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    cyrus_sasl
-    icu64
-    openssl
-    snappy
-    zlib
-    pcre2
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs =
+    [
+      cyrus_sasl
+      icu64
+      openssl
+      snappy
+      zlib
+      pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.Libsystem
+      libiconv
+    ];
 
-  meta = with lib; {
-    description = "MongoDB driver for PHP";
-    license = licenses.asl20;
-    homepage = "https://docs.mongodb.com/drivers/php/";
-    maintainers = teams.php.members;
+  meta = {
+    description = "Official MongoDB PHP driver";
+    homepage = "https://github.com/mongodb/mongo-php-driver";
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.php.members;
   };
 }

@@ -1,20 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+}:
+
 buildPythonPackage rec {
   pname = "rjsmin";
-  version = "1.2.0";
+  version = "1.2.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c529feb6c400984452494c52dd9fdf59185afeacca2afc5174a28ab37751a1b";
+    hash = "sha256-E4i1JJOkwE+8lwotdXwwH6BaPDdkAxTCzp38jYpzDMY=";
   };
 
   # The package does not ship tests, and the setup machinary confuses
   # tests auto-discovery
   doCheck = false;
 
+  pythonImportsCheck = [ "rjsmin" ];
+
   meta = with lib; {
+    description = "Module to minify Javascript";
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
-    description = "Javascript minifier written in python";
+    maintainers = [ ];
   };
 }

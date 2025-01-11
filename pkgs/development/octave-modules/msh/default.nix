@@ -1,28 +1,33 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-# Octave Dependencies
-, splines
-# Other Dependencies
-, gmsh
-, gawk
-, pkg-config
-, dolfin
-, autoconf, automake
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
+  # Octave Dependencies
+  splines,
+  # Other Dependencies
+  gmsh,
+  gawk,
+  pkg-config,
+  dolfin,
+  autoconf,
+  automake,
 }:
 
 buildOctavePackage rec {
   pname = "msh";
-  version = "1.0.10";
+  version = "1.0.12";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1mb5qrp9y1w1cbzrd9v84430ldy57ca843yspnrgbcqpxyyxbgfz";
+  src = fetchFromGitHub {
+    owner = "carlodefalco";
+    repo = "msh";
+    rev = "v${version}";
+    sha256 = "sha256-UnMrIruzm3ARoTgUlMMxfjTOMZw/znZUQJmj3VEOw8I=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    autoconf automake
+    autoconf
+    automake
     dolfin
   ];
 

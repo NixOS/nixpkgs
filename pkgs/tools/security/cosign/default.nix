@@ -1,30 +1,45 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
-
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pcsclite,
+  pkg-config,
+  installShellFiles,
+  PCSC,
+  pivKeySupport ? true,
+  pkcs11Support ? true,
+  testers,
+  cosign,
+}:
 buildGoModule rec {
   pname = "cosign";
-  version = "1.9.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-l+jM0GCjaqbaoIcjUgnIZJqSGIsirWMwJWPrilBdps8=";
+    hash = "sha256-+UZ1o9rkbk/RnyU2Vzzs7uIm+texl5kGa+qt88x4zuk=";
   };
 
-  buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
-    ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
+  buildInputs =
+    lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite)
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pivKeySupport) [ PCSC ];
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  vendorSha256 = "sha256-mZeCQOnAVZrJmi9F+y7QPPXXl48f7HAjJCmri01hYew=";
+  vendorHash = "sha256-E1QHLh2gg5RZ7+tl7eJNR2FmtfVI6rwI6qLD7tio18c=";
 
   subPackages = [
     "cmd/cosign"
-    "cmd/cosign/webhook"
-    "cmd/sget"
   ];
 
-  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+  tags =
+    [ ] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
   ldflags = [
     "-s"
@@ -33,37 +48,42 @@ buildGoModule rec {
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
-  postBuild = ''
-    # cmd/cosign/webhook should be called cosigned
-    mv $GOPATH/bin/{webhook,cosigned}
-  '';
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     # test all paths
     unset subPackages
 
-    rm cmd/cosign/cli/fulcio/fulcioroots/fulcioroots_test.go # Require network access
-    rm pkg/cosign/kubernetes/webhook/validator_test.go # Require network access
+    rm pkg/cosign/ctlog_test.go # Require network access
     rm pkg/cosign/tlog_test.go # Require network access
-    rm pkg/cosign/tuf/client_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_blob_test.go # Require network access
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cosign \
       --bash <($out/bin/cosign completion bash) \
       --fish <($out/bin/cosign completion fish) \
       --zsh <($out/bin/cosign completion zsh)
-    installShellCompletion --cmd sget \
-      --bash <($out/bin/sget completion bash) \
-      --fish <($out/bin/sget completion fish) \
-      --zsh <($out/bin/sget completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = cosign;
+    command = "cosign version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
+    mainProgram = "cosign";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk ];
+    maintainers = with maintainers; [
+      lesuisse
+      jk
+      developer-guy
+    ];
   };
 }

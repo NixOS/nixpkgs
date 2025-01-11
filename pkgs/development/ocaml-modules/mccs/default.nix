@@ -1,17 +1,20 @@
-{ lib, fetchFromGitHub, buildDunePackage, cudf }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cudf,
+}:
 
 buildDunePackage rec {
   pname = "mccs";
-  version = "1.1+13";
+  version = "1.1+18";
 
   src = fetchFromGitHub {
     owner = "AltGr";
     repo = "ocaml-mccs";
     rev = version;
-    sha256 = "sha256-K249E9qkWNK4BC+ynaR3bVEyu9Tk8iCE7GptKk/aVJc=";
+    hash = "sha256-Swfqq7O5KASf1nkK/lgIO9byWDUv1FiWh8cNULF7wfI=";
   };
-
-  useDune2 = true;
 
   propagatedBuildInputs = [
     cudf
@@ -20,10 +23,13 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A library providing a multi criteria CUDF solver, part of MANCOOSI project.";
+    description = "Library providing a multi criteria CUDF solver, part of MANCOOSI project";
     downloadPage = "https://github.com/AltGr/ocaml-mccs";
     homepage = "https://www.i3s.unice.fr/~cpjm/misc/";
-    license = with licenses; [ lgpl21 gpl3 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [
+      lgpl21
+      gpl3
+    ];
+    maintainers = [ ];
   };
 }

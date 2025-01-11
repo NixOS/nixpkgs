@@ -1,25 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.litestream;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
 in
 {
   options.services.litestream = {
-    enable = mkEnableOption "litestream";
+    enable = lib.mkEnableOption "litestream";
 
-    package = mkOption {
-      description = "Package to use.";
-      default = pkgs.litestream;
-      defaultText = literalExpression "pkgs.litestream";
-      type = types.package;
-    };
+    package = lib.mkPackageOption pkgs "litestream" { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
-        See the <link xlink:href="https://litestream.io/reference/config/">documentation</link>.
+        See the [documentation](https://litestream.io/reference/config/).
       '';
       type = settingsFormat.type;
       example = {
@@ -36,14 +33,12 @@ in
       };
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/secrets/litestream";
       description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the
         world-readable Nix store, by specifying placeholder variables as
@@ -56,11 +51,11 @@ in
         variable values. If no value is set then it will be replaced with an
         empty string.
 
-        <programlisting>
+        ```
           # Content of the environment file
           LITESTREAM_ACCESS_KEY_ID=AKIAxxxxxxxxxxxxxxxx
           LITESTREAM_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxx
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
         this exporter is running.
@@ -68,7 +63,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     environment.etc = {
       "litestream.yml" = {
@@ -81,7 +76,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
       serviceConfig = {
-        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/litestream replicate";
         Restart = "always";
         User = "litestream";
@@ -94,7 +89,8 @@ in
       group = "litestream";
       isSystemUser = true;
     };
-    users.groups.litestream = {};
+    users.groups.litestream = { };
   };
-  meta.doc = ./litestream.xml;
+
+  meta.doc = ./default.md;
 }

@@ -1,30 +1,30 @@
-{ alcotest
-, base64
-, bigarray-compat
-, bigarray-overlap
-, bigstringaf
-, buildDunePackage
-, fetchzip
-, fmt
-, jsonm
-, ke
-, lib
-, ptime
+{
+  alcotest,
+  base64,
+  bigarray-overlap,
+  bigstringaf,
+  buildDunePackage,
+  fetchurl,
+  fmt,
+  jsonm,
+  ke,
+  lib,
+  ptime,
 }:
 
 buildDunePackage rec {
   pname = "prettym";
-  version = "0.0.2";
+  version = "0.0.3";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/dinosaure/prettym/releases/download/${version}/prettym-${version}.tbz";
-    sha256 = "03x7jh62mvzc6x2d8xsy456qa6iphw72zm7jmqrakpmsy6zcf2lb";
+    hash = "sha256-kXDxoRref02YpYSlvlK7a5FBX5ccbnWJQzG0axi5jwk=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
-    bigarray-compat
     bigarray-overlap
     bigstringaf
     fmt
@@ -40,9 +40,9 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A simple bounded encoder to serialize human readable values and respect the 80-column constraint";
+    description = "Simple bounded encoder to serialize human readable values and respect the 80-column constraint";
     license = lib.licenses.mit;
     homepage = "https://github.com/dinosaure/prettym";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

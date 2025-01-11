@@ -1,23 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestExtension,
+  testers,
+  buildPostgresqlExtension,
+}:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg_repack";
-  version = "1.4.7";
+  version = "1.5.2";
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = postgresql.buildInputs;
 
   src = fetchFromGitHub {
-    owner  = "reorg";
-    repo   = "pg_repack";
-    rev    = "refs/tags/ver_${version}";
-    sha256 = "12j8crgljvkm9dz790xcsr8l7sv8ydvb2imrb0jh1jvj0r9yg1v5";
+    owner = "reorg";
+    repo = "pg_repack";
+    rev = "ver_${finalAttrs.version}";
+    sha256 = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
   };
 
-  installPhase = ''
-    install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack.so -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
-  '';
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    extension = postgresqlTestExtension {
+      inherit (finalAttrs) finalPackage;
+      sql = "CREATE EXTENSION pg_repack;";
+    };
+  };
 
   meta = with lib; {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
@@ -27,9 +39,10 @@ stdenv.mkDerivation rec {
       exclusive lock on the processed tables during processing. pg_repack is efficient to boot,
       with performance comparable to using CLUSTER directly.
     '';
+    homepage = "https://github.com/reorg/pg_repack";
     license = licenses.bsd3;
     maintainers = with maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
-    inherit (src.meta) homepage;
+    mainProgram = "pg_repack";
   };
-}
+})

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dill
-, pox
-, ppft
-, multiprocess
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  multiprocess,
+  pox,
+  ppft,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pathos";
-  version = "0.2.8";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-71hMaG+3FbWMtGqwcDOZ8uit0DsHEoc9H2GXfX7TeoM=";
+    tag = version;
+    hash = "sha256-J3rwnsn/3DXmChydwNC5yvsdSk1mzvPSnSo21BwkhSE=";
   };
 
   propagatedBuildInputs = [
@@ -32,14 +33,13 @@ buildPythonPackage rec {
   # Require network
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pathos"
-  ];
+  pythonImportsCheck = [ "pathos" ];
 
   meta = with lib; {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
+    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gruvbox-dark-icons-gtk";
   version = "1.0.0";
 
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ breeze-icons gnome-icon-theme hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    breeze-icons
+    gnome-icon-theme
+    hicolor-icon-theme
+  ];
 
   installPhase = ''
     mkdir -p $out/share/icons/oomox-gruvbox-dark

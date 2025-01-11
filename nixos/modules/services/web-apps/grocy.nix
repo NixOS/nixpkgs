@@ -1,12 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.grocy;
-in {
+in
+{
   options.services.grocy = {
     enable = mkEnableOption "grocy";
+
+    package = mkPackageOption pkgs "grocy" { };
 
     hostName = mkOption {
       type = types.str;
@@ -25,7 +33,13 @@ in {
     };
 
     phpfpm.settings = mkOption {
-      type = with types; attrsOf (oneOf [ int str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          int
+          str
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "php_admin_value[error_log]" = "stderr";
@@ -48,7 +62,7 @@ in {
       type = types.str;
       default = "/var/lib/grocy";
       description = ''
-        Home directory of the <literal>grocy</literal> user which contains
+        Home directory of the `grocy` user which contains
         the application's state.
       '';
     };
@@ -64,7 +78,24 @@ in {
       };
 
       culture = mkOption {
-        type = types.enum [ "de" "en" "da" "en_GB" "es" "fr" "hu" "it" "nl" "no" "pl" "pt_BR" "ru" "sk_SK" "sv_SE" "tr" ];
+        type = types.enum [
+          "de"
+          "en"
+          "da"
+          "en_GB"
+          "es"
+          "fr"
+          "hu"
+          "it"
+          "nl"
+          "no"
+          "pl"
+          "pt_BR"
+          "ru"
+          "sk_SK"
+          "sv_SE"
+          "tr"
+        ];
         default = "en";
         description = ''
           Display language of the frontend.
@@ -107,17 +138,20 @@ in {
       group = "nginx";
     };
 
-    systemd.tmpfiles.rules = map (
-      dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -"
-    ) [ "viewcache" "plugins" "settingoverrides" "storage" ];
+    systemd.tmpfiles.rules = map (dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -") [
+      "viewcache"
+      "plugins"
+      "settingoverrides"
+      "storage"
+    ];
 
     services.phpfpm.pools.grocy = {
       user = "grocy";
       group = "nginx";
 
-      # PHP 8.0 is the only version which is supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v3.3.0/README.md#how-to-install
-      phpPackage = pkgs.php80;
+      # PHP 8.1 and 8.2 are the only version which are supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v4.0.2/README.md#platform-support
+      phpPackage = pkgs.php82;
 
       inherit (cfg.phpfpm) settings;
 
@@ -130,10 +164,21 @@ in {
       };
     };
 
+    # After an update of grocy, the viewcache needs to be deleted. Otherwise grocy will not work
+    # https://github.com/grocy/grocy#how-to-update
+    systemd.services.grocy-setup = {
+      wantedBy = [ "multi-user.target" ];
+      before = [ "phpfpm-grocy.service" ];
+      script = ''
+        rm -rf ${cfg.dataDir}/viewcache/*
+      '';
+    };
+
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${pkgs.grocy}/public";
+        {
+          root = "${cfg.package}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';
@@ -166,7 +211,7 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [ ma27 ];
-    doc = ./grocy.xml;
+    maintainers = with maintainers; [ ];
+    doc = ./grocy.md;
   };
 }

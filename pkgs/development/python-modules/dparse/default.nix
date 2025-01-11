@@ -1,32 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, toml
-, pyyaml
-, packaging
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  packaging,
+  tomli,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dparse";
-  version = "0.5.1";
-  disabled = isPy27;
+  version = "0.6.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a1b5f169102e1c894f9a7d5ccf6f9402a836a5d24be80a986c7ce9eaed78f367";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "pyupio";
+    repo = "dparse";
+    tag = version;
+    hash = "sha256-LnsmJtWLjV3xoSjacfR9sUwPlOjQTRBWirJVtIJSE8A=";
   };
 
-  propagatedBuildInputs = [
-    toml
-    pyyaml
-    packaging
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
+  dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  optional-dependencies = {
+    # FIXME pipenv = [ pipenv ];
+    conda = [ pyyaml ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "dparse" ];
 
   disabledTests = [
     # requires unpackaged dependency pipenv
@@ -34,8 +45,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A parser for Python dependency files";
+    description = "Parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
+    changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ thomasdesr ];
   };

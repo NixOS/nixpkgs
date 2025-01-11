@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,7 +15,18 @@ let
 
   configFile = format.generate "nats.conf" cfg.settings;
 
-in {
+  validateConfig =
+    file:
+    pkgs.runCommand "validate-nats-conf"
+      {
+        nativeBuildInputs = [ pkgs.nats-server ];
+      }
+      ''
+        nats-server --config "${configFile}" -t
+        ln -s "${configFile}" "$out"
+      '';
+in
+{
 
   ### Interface
 
@@ -76,8 +92,8 @@ in {
         '';
         description = ''
           Declarative NATS configuration. See the
-          <link xlink:href="https://docs.nats.io/nats-server/configuration">
-          NATS documentation</link> for a list of options.
+          [
+          NATS documentation](https://docs.nats.io/nats-server/configuration) for a list of options.
         '';
       };
     };
@@ -104,7 +120,7 @@ in {
         })
         {
           Type = "simple";
-          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${configFile}";
+          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${validateConfig configFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStop = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
           Restart = "on-failure";
@@ -133,11 +149,17 @@ in {
           ProtectSystem = "strict";
           ReadOnlyPaths = [ ];
           ReadWritePaths = [ cfg.dataDir ];
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
           UMask = "0077";
         }
       ];

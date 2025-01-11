@@ -5,34 +5,47 @@ let
   containerPort = 80;
 in
 
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "containers-portforward";
-  meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ianwookim ];
-  };
-
-  nodes.machine =
-    { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      virtualisation.writableStore = true;
-
-      containers.webserver =
-        { privateNetwork = true;
-          hostAddress = hostIp;
-          localAddress = containerIp;
-          forwardPorts = [ { protocol = "tcp"; hostPort = hostPort; containerPort = containerPort; } ];
-          config =
-            { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
-              networking.firewall.allowedTCPPorts = [ 80 ];
-            };
-        };
-
-      virtualisation.additionalPaths = [ pkgs.stdenv ];
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "containers-portforward";
+    meta = {
+      maintainers = with lib.maintainers; [
+        aristid
+        aszlig
+        kampfschlaefer
+        ianwookim
+      ];
     };
 
-  testScript =
-    ''
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [ ../modules/installer/cd-dvd/channel.nix ];
+        virtualisation.writableStore = true;
+
+        containers.webserver = {
+          privateNetwork = true;
+          hostAddress = hostIp;
+          localAddress = containerIp;
+          forwardPorts = [
+            {
+              protocol = "tcp";
+              hostPort = hostPort;
+              containerPort = containerPort;
+            }
+          ];
+          config = {
+            services.httpd.enable = true;
+            services.httpd.adminAddr = "foo@example.org";
+            networking.firewall.allowedTCPPorts = [ 80 ];
+          };
+        };
+
+        virtualisation.additionalPaths = [ pkgs.stdenv ];
+      };
+
+    testScript = ''
       container_list = machine.succeed("nixos-container list")
       assert "webserver" in container_list
 
@@ -56,4 +69,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       machine.fail("nixos-container destroy webserver")
     '';
 
-})
+  }
+)

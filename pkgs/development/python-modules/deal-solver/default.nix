@@ -1,60 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, flit-core
-, z3
-, astroid
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  astroid,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  hypothesis,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  z3-solver,
 }:
 
 buildPythonPackage rec {
   pname = "deal-solver";
-  version = "0.1.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "0.1.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-eSSyLBwPc0rrfew91nLBagYDD6aJRyx0cE9YTTSODI8=";
+    repo = "deal-solver";
+    tag = version;
+    hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  postPatch = ''
-    # Use upstream z3 implementation
-    substituteInPlace pyproject.toml \
-      --replace "\"z3-solver\"," "" \
-      --replace "\"--cov=deal_solver\"," "" \
-      --replace "\"--cov-report=html\"," "" \
-      --replace "\"--cov-report=xml\"," "" \
-      --replace "\"--cov-report=term-missing:skip-covered\"," "" \
-      --replace "\"--cov-fail-under=100\"," ""
-  '';
+  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
+  pythonRemoveDeps = [ "z3-solver" ];
 
-  propagatedBuildInputs = [
-    z3
+  dependencies = [
+    z3-solver
     astroid
-  ];
+  ] ++ z3-solver.requiredPythonModules;
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
     hypothesis
-  ];
-
-  disabledTests = [
-    # z3 assertion error
-    "test_expr_asserts_ok"
-  ];
-
-  disabledTestPaths = [
-    # regex matching seems flaky on tests
-    "tests/test_stdlib/test_re.py"
+    pytest-cov-stub
+    pytest-xdist
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "deal_solver" ];
@@ -62,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Z3-powered solver (theorem prover) for deal";
     homepage = "https://github.com/life4/deal-solver";
+    changelog = "https://github.com/life4/deal-solver/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
   };

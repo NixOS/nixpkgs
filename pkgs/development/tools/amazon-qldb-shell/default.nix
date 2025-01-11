@@ -1,12 +1,11 @@
-{ stdenv
-, lib
-, clang
-, cmake
-, fetchFromGitHub
-, llvmPackages
-, rustPlatform
-, testers
-, Security
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  Security,
 }:
 
 let
@@ -22,22 +21,29 @@ let
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
-    nativeBuildInputs = [ clang cmake ];
-    buildInputs = [ llvmPackages.libclang ]
-      ++ lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [
+      cmake
+      rustPlatform.bindgenHook
+    ];
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-    cargoSha256 = "sha256-y3dNEa2U9mwsENPda44zweszlk4UJXGtfeH+er8mi0U=";
-
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+    cargoLock = {
+      lockFile = ./Cargo.lock;
+      outputHashes = {
+        "amazon-qldb-driver-0.1.0" = "sha256-az0rANBcryHHnpGWvo15TGGW4KMUULZHaj5msIHts14=";
+      };
+    };
 
     passthru.tests.version = testers.testVersion { inherit package; };
 
     meta = with lib; {
-      description = "An interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";
+      description = "Interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";
       homepage = "https://github.com/awslabs/amazon-qldb-shell";
       license = licenses.asl20;
       maintainers = [ maintainers.terlar ];
       mainProgram = "qldb";
+      # See https://hydra.nixos.org/build/255146098/log.
+      broken = true; # Added 2024-04-06
     };
   };
 in

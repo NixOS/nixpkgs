@@ -1,18 +1,19 @@
-{ lib
-, fetchurl
-, stdenv
-, gettext
-, pkg-config
-, glib
-, gtk2
-, libX11
-, libSM
-, libICE
-, which
-, IOKit
-, copyDesktopItems
-, makeDesktopItem
-, wrapGAppsHook
+{
+  lib,
+  fetchurl,
+  stdenv,
+  gettext,
+  pkg-config,
+  glib,
+  gtk2,
+  libX11,
+  libSM,
+  libICE,
+  which,
+  IOKit,
+  copyDesktopItems,
+  makeDesktopItem,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,20 @@ stdenv.mkDerivation rec {
     sha256 = "01lccz4fga40isv09j8rjgr0qy10rff9vj042n6gi6gdv4z69q0y";
   };
 
-  nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook ];
-  buildInputs = [ gettext glib gtk2 libX11 libSM libICE ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+    which
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    gettext
+    glib
+    gtk2
+    libX11
+    libSM
+    libICE
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   hardeningDisable = [ "format" ];
 
@@ -56,7 +68,10 @@ stdenv.mkDerivation rec {
       desktopName = "GKrellM";
       genericName = "System monitor";
       comment = "The GNU Krell Monitors";
-      categories = [ "System" "Monitor" ];
+      categories = [
+        "System"
+        "Monitor"
+      ];
     })
   ];
 
@@ -70,7 +85,6 @@ stdenv.mkDerivation rec {
 
     homepage = "http://gkrellm.srcbox.net";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ khumba ];
     platforms = platforms.linux;
   };
 }

@@ -1,23 +1,35 @@
-{ writeScript
-, lib
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, jq
-, nix-prefetch-git
-, moreutils
-, runtimeShell
-, ...
+{
+  writeScript,
+  lib,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  jq,
+  nix-prefetch-git,
+  moreutils,
+  runtimeShell,
+  ...
 }:
 
 writeScript "update-librewolf" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ coreutils curl gnugrep gnupg gnused jq moreutils nix-prefetch-git ]}
+  PATH=${
+    lib.makeBinPath [
+      coreutils
+      curl
+      gnugrep
+      gnupg
+      gnused
+      jq
+      moreutils
+      nix-prefetch-git
+    ]
+  }
   set -euo pipefail
 
-  latestTag=$(curl https://gitlab.com/api/v4/projects/librewolf-community%2Fbrowser%2Fsource/repository/tags?per_page=1 | jq -r .[0].name)
+  latestTag=$(curl "https://codeberg.org/api/v1/repos/librewolf/source/tags?page=1&limit=1" | jq -r .[0].name)
   echo "latestTag=$latestTag"
 
   srcJson=pkgs/applications/networking/browsers/librewolf/src.json
@@ -29,7 +41,7 @@ writeScript "update-librewolf" ''
   fi
 
   prefetchOut=$(mktemp)
-  repoUrl=https://gitlab.com/librewolf-community/browser/source.git/
+  repoUrl=https://codeberg.org/librewolf/source.git
   nix-prefetch-git $repoUrl --quiet --rev $latestTag --fetch-submodules > $prefetchOut
   srcDir=$(jq -r .path < $prefetchOut)
   srcHash=$(jq -r .sha256 < $prefetchOut)

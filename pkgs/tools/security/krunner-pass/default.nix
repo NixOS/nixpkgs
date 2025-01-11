@@ -1,12 +1,13 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, extra-cmake-modules
-, kauth
-, krunner
-, pass
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  extra-cmake-modules,
+  kauth,
+  krunner,
+  pass,
 }:
 
 mkDerivation rec {
@@ -27,7 +28,10 @@ mkDerivation rec {
     (pass.withExtensions (p: with p; [ pass-otp ]))
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   patches = [
     (fetchpatch {
@@ -42,8 +46,12 @@ mkDerivation rec {
     ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"''
   ];
 
-  # there are *lots* of pointless warnings in v1.3.0
-  cmakeFlags = [ "-Wno-dev" ];
+  cmakeFlags = [
+    # there are *lots* of pointless warnings in v1.3.0
+    "-Wno-dev"
+    # required for kf5auth to work correctly
+    "-DCMAKE_POLICY_DEFAULT_CMP0012=NEW"
+  ];
 
   meta = with lib; {
     description = "Integrates krunner with pass the unix standard password manager (https://www.passwordstore.org/)";

@@ -1,33 +1,50 @@
-{ lib, buildPythonPackage, fetchPypi
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  traitlets,
 
-# tests
-, ipython
+  # tests
+  ipython,
 }:
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";
-  version = "0.1.3";
+  version = "0.1.7";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a04bfba22e0d1395479f866853ec1ee28eea1485c1d69a6faf00dc3e24ff34ee";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "ipython";
+    repo = "matplotlib-inline";
+    tag = version;
+    hash = "sha256-y7T8BshNa8NVWzH8oLS4dTAyhG+YmkkYQJFAyMXsJFA=";
   };
 
-  propagatedBuildInputs = [
-    traitlets
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ traitlets ];
 
   # wants to import ipython, which creates a circular dependency
   doCheck = false;
-  pythonImportsCheck = [ "matplotlib_inline" ];
 
-  passthru.tests = { inherit ipython; };
+  #
+  pythonImportsCheck = [
+    # tries to import matplotlib, which can't work with doCheck disabled
+    #"matplotlib_inline"
+  ];
+
+  passthru.tests = {
+    inherit ipython;
+  };
 
   meta = with lib; {
     description = "Matplotlib Inline Back-end for IPython and Jupyter";
     homepage = "https://github.com/ipython/matplotlib-inline";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

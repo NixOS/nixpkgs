@@ -1,19 +1,25 @@
-import ./make-test-python.nix ({ lib, ... }:
+import ./make-test-python.nix (
+  { lib, ... }:
 
-with lib;
+  let
+    jackettPort = 9117;
+  in
+  {
+    name = "jackett";
+    meta.maintainers = with lib.maintainers; [ etu ];
 
-{
-  name = "jackett";
-  meta.maintainers = with maintainers; [ etu ];
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.jackett.enable = true;
+        services.jackett.port = jackettPort;
+      };
 
-  nodes.machine =
-    { pkgs, ... }:
-    { services.jackett.enable = true; };
-
-  testScript = ''
-    machine.start()
-    machine.wait_for_unit("jackett.service")
-    machine.wait_for_open_port(9117)
-    machine.succeed("curl --fail http://localhost:9117/")
-  '';
-})
+    testScript = ''
+      machine.start()
+      machine.wait_for_unit("jackett.service")
+      machine.wait_for_open_port(${toString jackettPort})
+      machine.succeed("curl --fail http://localhost:${toString jackettPort}/")
+    '';
+  }
+)

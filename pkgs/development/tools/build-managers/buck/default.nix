@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, jdk8, ant, python3, watchman, bash, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk8,
+  ant,
+  python3,
+  watchman,
+  bash,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "buck";
-  version = "2021.05.05.01";
+  version = "2022.05.05.01";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mASJCLxW7320MXYUUWYfaxs9AbSdltxlae8OQsPUZJc=";
+    sha256 = "15v4sk1l43pgd5jxr5lxnh0ks6vb3xk5253n66s7vvsnph48j14q";
   };
 
   patches = [ ./pex-mtime.patch ];
@@ -17,7 +27,13 @@ stdenv.mkDerivation rec {
     grep -l -r '/bin/bash' --null | xargs -0 sed -i -e "s!/bin/bash!${bash}/bin/bash!g"
   '';
 
-  nativeBuildInputs = [ makeWrapper python3 jdk8 ant watchman ];
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+    jdk8
+    ant
+    watchman
+  ];
 
   buildPhase = ''
     # Set correct version, see https://github.com/facebook/buck/issues/2607
@@ -31,14 +47,23 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D -m755 buck-out/gen/*/programs/buck.pex $out/bin/buck
     wrapProgram $out/bin/buck \
-      --prefix PATH : "${lib.makeBinPath [ jdk8 watchman python3 ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          jdk8
+          watchman
+          python3
+        ]
+      }"
   '';
 
   meta = with lib; {
     homepage = "https://buck.build/";
-    description = "A high-performance build tool";
-    maintainers = [ maintainers.jgertm maintainers.marsam ];
+    description = "High-performance build tool";
+    mainProgram = "buck";
+    maintainers = [ maintainers.jgertm ];
     license = licenses.asl20;
     platforms = platforms.all;
+    # https://github.com/facebook/buck/issues/2666
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

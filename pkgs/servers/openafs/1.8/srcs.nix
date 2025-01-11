@@ -1,16 +1,16 @@
 { fetchurl }:
 rec {
-  version = "1.8.8.1";
+  version = "1.8.13.1";
   src = fetchurl {
     url = "https://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
-    sha256 = "sha256-58S+1wdbzWQC4/DC1bnb52rS7jxf1d3DlzozVsoj70Q=";
+    hash = "sha256-eVc9fu/RzGUODFSd1oeiObxrGn7iys82KxoqOz9G/To=";
   };
 
   srcs = [
     src
     (fetchurl {
       url = "https://www.openafs.org/dl/openafs/${version}/openafs-${version}-doc.tar.bz2";
-      sha256 = "sha256-y17O3C4WS+o7SMayydbxw2v96R0GikxiqciF30j+jms=";
+      hash = "sha256-JwGqr0g1tanct8VISVOggiH63BOfrAVQ2kIukG5Xtcs=";
     })
   ];
 }

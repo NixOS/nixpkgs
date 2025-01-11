@@ -1,34 +1,32 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
   # interface
   options.programs.k3b = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable k3b, the KDE disk burning application.
 
-        Additionally to installing <package>k3b</package> enabling this will
-        add <literal>setuid</literal> wrappers in <literal>/run/wrappers/bin</literal>
-        for both <package>cdrdao</package> and <package>cdrecord</package>. On first
-        run you must manually configure the path of <package>cdrdae</package> and
-        <package>cdrecord</package> to correspond to the appropriate paths under
-        <literal>/run/wrappers/bin</literal> in the "Setup External Programs" menu.
+        Additionally to installing `k3b` enabling this will
+        add `setuid` wrappers in `/run/wrappers/bin`
+        for both `cdrdao` and `cdrecord`. On first
+        run you must manually configure the path of `cdrdae` and
+        `cdrecord` to correspond to the appropriate paths under
+        `/run/wrappers/bin` in the "Setup External Programs" menu.
       '';
     };
   };
 
   # implementation
-  config = mkIf config.programs.k3b.enable {
+  config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
       k3b
       dvdplusrwtools
       cdrdao
-      cdrkit
+      cdrtools
     ];
 
     security.wrappers = {
@@ -44,7 +42,7 @@ with lib;
         owner = "root";
         group = "cdrom";
         permissions = "u+wrx,g+x";
-        source = "${pkgs.cdrkit}/bin/cdrecord";
+        source = "${pkgs.cdrtools}/bin/cdrecord";
       };
     };
 

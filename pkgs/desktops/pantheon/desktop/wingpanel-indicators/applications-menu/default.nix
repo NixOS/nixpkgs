@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , substituteAll
 , meson
@@ -12,12 +13,11 @@
 , libgee
 , gettext
 , gtk3
-, gnome-menus
 , json-glib
 , elementary-dock
 , bamf
 , switchboard-with-plugs
-, libsoup
+, libsoup_2_4
 , wingpanel
 , zeitgeist
 , bc
@@ -26,19 +26,27 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.10.2";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "applications-menu";
     rev = version;
-    sha256 = "sha256-xBuMJzIFOueSvNwvXc85AI9NHuMW3bOblNsyuDkIzyk=";
+    sha256 = "sha256-WlRrEkX0DGIHYWvUc9G4BbvofzWJwqkiJaJFwQ43GPE=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       bc = "${bc}/bin/bc";
+    })
+
+    # Build against switchboard-3
+    # https://github.com/elementary/applications-menu/pull/580
+    (fetchpatch {
+      url = "https://github.com/elementary/applications-menu/commit/9191ee5a2ee33477515d331b96945d51a13074a9.patch";
+      excludes = [ ".github/workflows/githubci.yml" ];
+      hash = "sha256-/LOIEOg9fVfKv/BWFsP1VyuUOIFYem9Gk+3e49M2b9E=";
     })
   ];
 
@@ -59,7 +67,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup
+    libsoup_2_4
     switchboard-with-plugs
     wingpanel
     zeitgeist
@@ -80,10 +88,10 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  doCheck = true;
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

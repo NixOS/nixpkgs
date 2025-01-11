@@ -1,7 +1,23 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config, extra-cmake-modules,
-kconfig, kconfigwidgets, kdbusaddons, kdoctools, ki18n, kidletime,
-kjobwidgets, kio, knotifications, kwindowsystem, kxmlgui, ktextwidgets,
-kcalendarcore
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  extra-cmake-modules,
+  kconfig,
+  kconfigwidgets,
+  kdbusaddons,
+  kdoctools,
+  ki18n,
+  kidletime,
+  kjobwidgets,
+  kio,
+  knotifications,
+  kwindowsystem,
+  kxmlgui,
+  ktextwidgets,
+  kcalendarcore,
 }:
 
 mkDerivation rec {
@@ -14,19 +30,32 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config extra-cmake-modules
+    cmake
+    pkg-config
+    extra-cmake-modules
   ];
 
   buildInputs = [
-    kconfig kconfigwidgets kdbusaddons kdoctools ki18n kidletime kjobwidgets
-kio knotifications kwindowsystem kxmlgui ktextwidgets
+    kconfig
+    kconfigwidgets
+    kdbusaddons
+    kdoctools
+    ki18n
+    kidletime
+    kjobwidgets
+    kio
+    knotifications
+    kwindowsystem
+    kxmlgui
+    ktextwidgets
     kcalendarcore
   ];
 
   meta = with lib; {
     description = "Todo management and time tracking application";
+    mainProgram = "ktimetracker";
     license = licenses.gpl2;
     homepage = "https://userbase.kde.org/KTimeTracker";
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

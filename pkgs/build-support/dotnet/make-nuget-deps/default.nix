@@ -1,9 +1,33 @@
-{ linkFarmFromDrvs, fetchurl }:
-{ name, nugetDeps }:
-  linkFarmFromDrvs "${name}-nuget-deps" (nugetDeps {
-    fetchNuGet = { pname, version, sha256 }: fetchurl {
-      name = "${pname}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-      inherit sha256;
-    };
+{
+  symlinkJoin,
+  lib,
+  fetchNupkg,
+}:
+lib.makeOverridable (
+  {
+    name,
+    nugetDeps ? null,
+    sourceFile ? null,
+    installable ? false,
+  }:
+  (symlinkJoin {
+    name = "${name}-nuget-deps";
+    paths =
+      let
+        loadDeps =
+          if nugetDeps != null then
+            nugetDeps
+          else if lib.hasSuffix ".nix" sourceFile then
+            assert (lib.isPath sourceFile);
+            import sourceFile
+          else
+            { fetchNuGet }: builtins.map fetchNuGet (lib.importJSON sourceFile);
+      in
+      loadDeps {
+        fetchNuGet = args: fetchNupkg (args // { inherit installable; });
+      };
   })
+  // {
+    inherit sourceFile;
+  }
+)

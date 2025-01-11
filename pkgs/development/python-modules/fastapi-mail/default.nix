@@ -1,54 +1,61 @@
-{ lib
-, aioredis
-, aiosmtplib
-, blinker
-, buildPythonPackage
-, email_validator
-, fakeredis
-, fastapi
-, fetchFromGitHub
-, httpx
-, jinja2
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, python-multipart
-, pythonOlder
+{
+  lib,
+  aiosmtplib,
+  blinker,
+  buildPythonPackage,
+  email-validator,
+  fakeredis,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  poetry-core,
+  pydantic-settings,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.0.9";
-  format = "pyproject";
+  version = "1.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sabuhish";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-2Nb+FzmhsKvauT/yOCLHCEld8r+6niu9kV6EmjhC6S0=";
+    repo = "fastapi-mail";
+    tag = version;
+    hash = "sha256-QypW7yE5jBkS1Q4XPIOktWnCmCXGoUzZF/SdWmFsPX8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
-    aioredis
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiosmtplib
     blinker
-    email_validator
+    email-validator
     fakeredis
-    fastapi
-    httpx
     jinja2
     pydantic
-    python-multipart
+    pydantic-settings
+    starlette
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    httpx = [ httpx ];
+    redis = [ redis ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -59,13 +66,12 @@ buildPythonPackage rec {
     "test_redis_checker"
   ];
 
-  pythonImportsCheck = [
-    "fastapi_mail"
-  ];
+  pythonImportsCheck = [ "fastapi_mail" ];
 
   meta = with lib; {
     description = "Module for sending emails and attachments";
     homepage = "https://github.com/sabuhish/fastapi-mail";
+    changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

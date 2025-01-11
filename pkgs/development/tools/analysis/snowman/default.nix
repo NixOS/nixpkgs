@@ -1,4 +1,11 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, boost, qtbase }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  qtbase,
+}:
 
 mkDerivation rec {
   pname = "snowman";
@@ -13,7 +20,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost qtbase ];
+  buildInputs = [
+    boost
+    qtbase
+  ];
 
   postUnpack = ''
     export sourceRoot=$sourceRoot/src
@@ -25,7 +35,7 @@ mkDerivation rec {
 
     # https://github.com/yegord/snowman/blob/master/doc/licenses.asciidoc
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

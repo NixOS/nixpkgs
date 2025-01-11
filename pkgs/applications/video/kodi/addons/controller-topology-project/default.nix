@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, toKodiAddon, addonDir }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  toKodiAddon,
+  addonDir,
+}:
 let
-  drv = stdenv.mkDerivation {
+  drv = stdenv.mkDerivation rec {
     pname = "controller-topology-project";
-    version = "unstable-2022-01-22";
+    version = "1.0.0";
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = "controller-topology-project";
-      rev = "e2a9bac903f21b2acfeee374070cfc97d03aba2d";
-      sha256 = "sha256-o6uKxOjEYNAK27drvNOokOFPdjkOEnr49mBre9ycM0w=";
+      rev = "v${version}";
+      sha256 = "sha256-6g4dyR34b0YgxlzRRS2C/gY3wjlO9MMYEB2fHLSCqC4=";
     };
 
     postPatch = ''
       # remove addons already included in the base kodi package
       rm -r addons/game.controller.default
+      rm -r addons/game.controller.keyboard
+      rm -r addons/game.controller.mouse
       rm -r addons/game.controller.snes
     '';
 
@@ -32,4 +40,4 @@ let
     };
   };
 in
-  toKodiAddon drv
+toKodiAddon drv

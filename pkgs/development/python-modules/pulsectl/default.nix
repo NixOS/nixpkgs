@@ -1,12 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libpulseaudio,
+  glibc,
+  substituteAll,
+  stdenv,
+  pulseaudio,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "22.3.2";
+  version = "24.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zBdOHO69TmIixbePT0FfEugHU8mrdas1QVm0y1lQsIQ=";
+    hash = "sha256-C6MnRdPxmNVlevGffuPrAHr1qGowbsPNRa9C52eCDQ0=";
   };
 
   patches = [
@@ -18,20 +29,20 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "pulsectl"
+  pythonImportsCheck = [ "pulsectl" ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+    pulseaudio
   ];
 
-  checkInputs = [ pulseaudio ];
-
-  checkPhase = ''
+  preCheck = ''
     export HOME=$TMPDIR
-    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {
     description = "Python high-level interface and ctypes-based bindings for PulseAudio (libpulse)";
-    homepage = "https://pypi.python.org/pypi/pulsectl/";
+    homepage = "https://github.com/mk-fg/python-pulse-control";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

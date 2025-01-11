@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libIDL, libintl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  libIDL,
+  libintl,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ORBit2";
@@ -9,10 +18,51 @@ stdenv.mkDerivation rec {
     sha256 = "0l3mhpyym9m5iz09fz0rgiqxl2ym6kpkwpsp1xrr4aa80nlh1jam";
   };
 
-  nativeBuildInputs = [ pkg-config libintl ];
-  propagatedBuildInputs = [ glib libIDL ];
+  strictDeps = true;
 
-  outputs = [ "out" "dev" ];
+  # Processing file orbit-interface.idl
+  # sh: gcc: not found
+  # output does not contain binaries for build
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    pkg-config
+    libintl
+  ];
+  propagatedBuildInputs = [
+    glib
+    libIDL
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) [
+      # the ./configure script is not compatible with gcc-14, not easy to
+      # regenerate without porting: https://github.com/NixOS/nixpkgs/issues/367694
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ]
+  );
+
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "--with-idl-compiler=${lib.getExe' buildPackages.gnome2.ORBit2 "orbit-idl-2"}"
+    # https://github.com/void-linux/void-packages/blob/e5856e02aa6ef7e4f2725afbff2915f89d39024b/srcpkgs/ORBit2/template#L17-L35
+    "ac_cv_alignof_CORBA_boolean=1"
+    "ac_cv_alignof_CORBA_char=1"
+    "ac_cv_alignof_CORBA_double=8"
+    "ac_cv_alignof_CORBA_float=4"
+    "ac_cv_alignof_CORBA_long=4"
+    "ac_cv_alignof_CORBA_long_double=8"
+    "ac_cv_alignof_CORBA_long_long=8"
+    "ac_cv_alignof_CORBA_octet=1"
+    "ac_cv_alignof_CORBA_short=2"
+    "ac_cv_alignof_CORBA_struct=1"
+    "ac_cv_alignof_CORBA_wchar=2"
+    "ac_cv_alignof_CORBA_pointer=${if stdenv.hostPlatform.is64bit then "8" else "4"}"
+  ];
 
   preBuild = ''
     sed 's/-DG_DISABLE_DEPRECATED//' -i linc2/src/Makefile
@@ -31,9 +81,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    homepage    = "https://developer-old.gnome.org/ORBit2/";
-    description = "A CORBA 2.4-compliant Object Request Broker";
-    platforms   = platforms.unix;
+    homepage = "https://developer-old.gnome.org/ORBit2/";
+    description = "CORBA 2.4-compliant Object Request Broker";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''

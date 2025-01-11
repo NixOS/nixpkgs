@@ -1,50 +1,67 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  gpgme,
+  lvm2,
+  btrfs-progs,
+  libapparmor,
+  libselinux,
+  libseccomp,
+  testers,
+  buildah,
 }:
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.26.1";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "sha256-RlDvTabpW2DQHJe4wFYBBuNrkfKTYbyudoX26MyvGBQ=";
+    hash = "sha256-avQdK7+kMrPc8rp/2nTiUC/ZTW8nUem9v3u0xsE0oGM=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+  # /nix/store/.../bin/ld: internal/mkcw/embed/entrypoint_amd64.o: relocation R_X86_64_32S against `.rodata.1' can not be used when making a PIE object; recompile with -fPIE
+  hardeningDisable = [ "pie" ];
 
-  buildInputs = [
-    btrfs-progs
-    gpgme
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      gpgme
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      btrfs-progs
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make bin/buildah GIT_COMMIT="unknown"
-    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
+    make bin/buildah
+    make -C docs GOMD2MAN="go-md2man"
     runHook postBuild
   '';
 
@@ -56,12 +73,20 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = buildah;
+    command = ''
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
+      buildah --version
+    '';
+  };
+
   meta = with lib; {
-    description = "A tool which facilitates building OCI images";
+    description = "Tool which facilitates building OCI images";
+    mainProgram = "buildah";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

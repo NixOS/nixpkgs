@@ -1,48 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pathspec
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, stdenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pathspec,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.26.3";
-  disabled = pythonOlder "3.5";
+  version = "1.35.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3934dcde484374596d6b52d8db412929a169f6d9e52e20f9ade5bf3523d9b96e";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "adrienverge";
+    repo = "yamllint";
+    tag = "v${version}";
+    hash = "sha256-+7Q2cPl4XElI2IfLAkteifFVTrGkj2IjZk7nPuc6eYM=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyyaml
     pathspec
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373
-    "test_find_files_recursively"
-  ] ++ lib.optional stdenv.isDarwin [
-    # locale tests are broken on BSDs; see https://github.com/adrienverge/yamllint/issues/307
-    "test_locale_accents"
-    "test_locale_case"
-    "test_run_with_locale"
-  ];
+  disabledTests =
+    [
+      # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373
+      "test_find_files_recursively"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # locale tests are broken on BSDs; see https://github.com/adrienverge/yamllint/issues/307
+      "test_locale_accents"
+      "test_locale_case"
+      "test_run_with_locale"
+    ];
 
   pythonImportsCheck = [ "yamllint" ];
 
   meta = with lib; {
-    description = "A linter for YAML files";
+    description = "Linter for YAML files";
+    mainProgram = "yamllint";
     homepage = "https://github.com/adrienverge/yamllint";
+    changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonringer mikefaille ];
+    maintainers = with maintainers; [
+      mikefaille
+    ];
   };
 }

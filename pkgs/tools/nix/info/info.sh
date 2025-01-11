@@ -51,9 +51,14 @@ Options:
  -d, --debug      debug mode
 
 EOF
-            exit 1
-            ;;
-
+            case "${1:-}" in
+                -h|--help)
+                    exit 0
+                    ;;
+                *)
+                    exit 1
+                    ;;
+            esac
     esac
 done
 
@@ -70,7 +75,7 @@ nixev() {
 }
 
 desc_system() {
-    nixev '(import <nixpkgs> {}).stdenv.hostPlatform.system'
+    nixev 'builtins.currentSystem'
 }
 
 desc_host_os() {
@@ -98,7 +103,7 @@ desc_multi_user() {
 }
 
 desc_nixpkgs_path() {
-    nixev '<nixpkgs>'
+    nixev '<nixpkgs>' 2>/dev/null || echo "not found"
 }
 
 channel_facts() {

@@ -1,44 +1,73 @@
-{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
-, qtbase, qtimageformats, qtwebengine, qtx11extras, mkDerivation
-, libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  httplib,
+  qtbase,
+  qtimageformats,
+  qtwebengine,
+  qtx11extras,
+  libarchive,
+  libXdmcp,
+  libpthreadstubs,
+  wrapQtAppsHook,
+  xcbutilkeysyms,
+}:
 
-mkDerivation rec {
+let
+  isQt5 = lib.versions.major qtbase.version == "5";
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.6.999";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "763edca12ccd6c67e51f10891d1ced8b2510904f";
-    sha256 = "sha256-1/wQXkRWvpRia8UDvvvmzHinPG8q2Tz9Uoeegej9uC8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
   };
 
-  # we only need this if we are using a version that hasn't been released. We
-  # could also match on the "VERSION x.y.z" bit but then it would have to be
-  # updated based on whatever is the latest release, so instead just rewrite the
-  # line.
-  postPatch = ''
-    sed -i CMakeLists.txt \
-      -e 's@^project.*@project(Zeal VERSION ${version})@'
-  '';
-
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
-
-  buildInputs = [
-    qtbase qtimageformats qtwebengine qtx11extras
-    libarchive
-    libXdmcp libpthreadstubs xcbutilkeysyms
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    wrapQtAppsHook
   ];
 
-  meta = with lib; {
-    description = "A simple offline API documentation browser";
+  buildInputs = [
+    httplib
+    libXdmcp
+    libarchive
+    libpthreadstubs
+    qtbase
+    qtimageformats
+    qtwebengine
+    xcbutilkeysyms
+  ] ++ lib.optionals isQt5 [ qtx11extras ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
+  ];
+
+  meta = {
+    description = "Simple offline API documentation browser";
     longDescription = ''
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
     homepage = "https://zealdocs.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ skeidel peterhoeg ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zealdocs/zeal/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      AndersonTorres
+    ];
+    mainProgram = "zeal";
+    inherit (qtbase.meta) platforms;
   };
-}
+})

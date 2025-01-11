@@ -1,43 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipython,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  tqdm,
 }:
 
 buildPythonPackage rec {
-  version = "0.1.8";
   pname = "cdcs";
-  format = "setuptools";
+  version = "0.2.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
-    rev = "v${version}";
-    sha256 = "sha256-s+COE7hus1J5I8PTdagl7KEK5QFoidjQ3ee46kOWmkE=";
+    tag = "v${version}";
+    hash = "sha256-HhAzULVWkKOWDJ6IZyBy0MYc/YGAFkSTLIgpdyvw1eI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    ipython
     numpy
     pandas
     requests
+    tqdm
   ];
 
-  # Project has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
 
-  pythonImportsCheck = [
-    "cdcs"
+  pythonImportsCheck = [ "cdcs" ];
+
+  disabledTests = [
+    # Test is out-dated
+    "test_head"
   ];
 
   meta = with lib; {
     description = "Python client for performing REST calls to configurable data curation system (CDCS) databases";
     homepage = "https://github.com/usnistgov/pycdcs";
+    changelog = "https://github.com/usnistgov/pycdcs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

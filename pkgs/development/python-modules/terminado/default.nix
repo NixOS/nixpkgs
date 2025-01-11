@@ -1,27 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ptyprocess
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  ptyprocess,
+  tornado,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "terminado";
-  version = "0.13.3";
+  version = "0.18.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lNHPq2NSWZP31cm0aaUKGNDN85Q1tZeFcVU53UHjbA0=";
+    hash = "sha256-3gnyxLhd5HZfdxRoj/9X0+dbrR+Qm1if3ogEYMdT/S4=";
   };
 
-  propagatedBuildInputs = [ ptyprocess tornado ];
+  nativeBuildInputs = [ hatchling ];
 
-  # test_max_terminals fails
-  doCheck = false;
+  propagatedBuildInputs = [
+    ptyprocess
+    tornado
+  ];
+
+  pythonImportsCheck = [ "terminado" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest-timeout
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Terminals served by Tornado websockets";
     homepage = "https://github.com/jupyter/terminado";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

@@ -1,130 +1,177 @@
-{ pkgs ? (import ../.. { inherit system; config = { }; })
-, system ? builtins.currentSystem
-, ...
-}:
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  let
+    dbContents = ''
+      dn: dc=example
+      objectClass: domain
+      dc: example
 
-let
-  dbContents = ''
-    dn: dc=example
-    objectClass: domain
-    dc: example
+      dn: ou=users,dc=example
+      objectClass: organizationalUnit
+      ou: users
+    '';
 
-    dn: ou=users,dc=example
-    objectClass: organizationalUnit
-    ou: users
-  '';
-  testScript = ''
-    machine.wait_for_unit("openldap.service")
-    machine.succeed(
-        'ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"',
-    )
-  '';
-in {
-  # New-style configuration
-  current = import ./make-test-python.nix ({ pkgs, ... }: {
-    inherit testScript;
+    ldifConfig = ''
+      dn: cn=config
+      cn: config
+      objectClass: olcGlobal
+      olcLogLevel: stats
+
+      dn: cn=schema,cn=config
+      cn: schema
+      objectClass: olcSchemaConfig
+
+      include: file://${pkgs.openldap}/etc/schema/core.ldif
+      include: file://${pkgs.openldap}/etc/schema/cosine.ldif
+      include: file://${pkgs.openldap}/etc/schema/inetorgperson.ldif
+
+      dn: olcDatabase={0}config,cn=config
+      olcDatabase: {0}config
+      objectClass: olcDatabaseConfig
+      olcRootDN: cn=root,cn=config
+      olcRootPW: configpassword
+
+      dn: olcDatabase={1}mdb,cn=config
+      objectClass: olcDatabaseConfig
+      objectClass: olcMdbConfig
+      olcDatabase: {1}mdb
+      olcDbDirectory: /var/db/openldap
+      olcDbIndex: objectClass eq
+      olcSuffix: dc=example
+      olcRootDN: cn=root,dc=example
+      olcRootPW: notapassword
+    '';
+
+    ldapClientConfig = {
+      enable = true;
+      loginPam = false;
+      nsswitch = false;
+      server = "ldap://";
+      base = "dc=example";
+    };
+
+  in
+  {
     name = "openldap";
 
-    nodes.machine = { pkgs, ... }: {
-      environment.etc."openldap/root_password".text = "notapassword";
-      services.openldap = {
-        enable = true;
-        settings = {
-          children = {
-            "cn=schema".includes = [
-              "${pkgs.openldap}/etc/schema/core.ldif"
-              "${pkgs.openldap}/etc/schema/cosine.ldif"
-              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
-              "${pkgs.openldap}/etc/schema/nis.ldif"
-            ];
-            "olcDatabase={1}mdb" = {
-              # This tests string, base64 and path values, as well as lists of string values
-              attrs = {
-                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
-                olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
-                olcSuffix = "dc=example";
-                olcRootDN = {
-                  # cn=root,dc=example
-                  base64 = "Y249cm9vdCxkYz1leGFtcGxl";
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.etc."openldap/root_password".text = "notapassword";
+
+        users.ldap = ldapClientConfig;
+
+        services.openldap = {
+          enable = true;
+          urlList = [
+            "ldapi:///"
+            "ldap://"
+          ];
+          settings = {
+            children = {
+              "cn=schema".includes = [
+                "${pkgs.openldap}/etc/schema/core.ldif"
+                "${pkgs.openldap}/etc/schema/cosine.ldif"
+                "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+                "${pkgs.openldap}/etc/schema/nis.ldif"
+              ];
+              "olcDatabase={0}config" = {
+                attrs = {
+                  objectClass = [ "olcDatabaseConfig" ];
+                  olcDatabase = "{0}config";
+                  olcRootDN = "cn=root,cn=config";
+                  olcRootPW = "configpassword";
                 };
-                olcRootPW = {
-                  path = "/etc/openldap/root_password";
+              };
+              "olcDatabase={1}mdb" = {
+                # This tests string, base64 and path values, as well as lists of string values
+                attrs = {
+                  objectClass = [
+                    "olcDatabaseConfig"
+                    "olcMdbConfig"
+                  ];
+                  olcDatabase = "{1}mdb";
+                  olcDbDirectory = "/var/lib/openldap/db";
+                  olcSuffix = "dc=example";
+                  olcRootDN = {
+                    # cn=root,dc=example
+                    base64 = "Y249cm9vdCxkYz1leGFtcGxl";
+                  };
+                  olcRootPW = {
+                    path = "/etc/openldap/root_password";
+                  };
                 };
               };
             };
           };
         };
-        declarativeContents."dc=example" = dbContents;
+
+        specialisation = {
+          declarativeContents.configuration =
+            { ... }:
+            {
+              services.openldap.declarativeContents."dc=example" = dbContents;
+            };
+          mutableConfig.configuration =
+            { ... }:
+            {
+              services.openldap = {
+                declarativeContents."dc=example" = dbContents;
+                mutableConfig = true;
+              };
+            };
+          manualConfigDir = {
+            inheritParentConfig = false;
+            configuration =
+              { ... }:
+              {
+                users.ldap = ldapClientConfig;
+                services.openldap = {
+                  enable = true;
+                  configDir = "/var/db/slapd.d";
+                };
+              };
+          };
+        };
       };
-    };
-  }) { inherit pkgs system; };
+    testScript =
+      { nodes, ... }:
+      let
+        specializations = "${nodes.machine.system.build.toplevel}/specialisation";
+        changeRootPw = ''
+          dn: olcDatabase={1}mdb,cn=config
+          changetype: modify
+          replace: olcRootPW
+          olcRootPW: foobar
+        '';
+      in
+      ''
+        # Test startup with empty DB
+        machine.wait_for_unit("openldap.service")
 
-  # Old-style configuration
-  oldOptions = import ./make-test-python.nix ({ pkgs, ... }: {
-    inherit testScript;
-    name = "openldap";
+        with subtest("declarative contents"):
+          machine.succeed('${specializations}/declarativeContents/bin/switch-to-configuration test')
+          machine.wait_for_unit("openldap.service")
+          machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword')
+          machine.fail('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
 
-    nodes.machine = { pkgs, ... }: {
-      services.openldap = {
-        enable = true;
-        logLevel = "stats acl";
-        defaultSchemas = true;
-        database = "mdb";
-        suffix = "dc=example";
-        rootdn = "cn=root,dc=example";
-        rootpw = "notapassword";
-        declarativeContents."dc=example" = dbContents;
-      };
-    };
-  }) { inherit system pkgs; };
+        with subtest("mutable config"):
+          machine.succeed('${specializations}/mutableConfig/bin/switch-to-configuration test')
+          machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword')
+          machine.succeed('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
+          machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar')
 
-  # Manually managed configDir, for example if dynamic config is essential
-  manualConfigDir = import ./make-test-python.nix ({ pkgs, ... }: {
-    name = "openldap";
-
-    nodes.machine = { pkgs, ... }: {
-      services.openldap = {
-        enable = true;
-        configDir = "/var/db/slapd.d";
-      };
-    };
-
-    testScript = let
-      contents = pkgs.writeText "data.ldif" dbContents;
-      config = pkgs.writeText "config.ldif" ''
-        dn: cn=config
-        cn: config
-        objectClass: olcGlobal
-        olcLogLevel: stats
-        olcPidFile: /run/slapd/slapd.pid
-
-        dn: cn=schema,cn=config
-        cn: schema
-        objectClass: olcSchemaConfig
-
-        include: file://${pkgs.openldap}/etc/schema/core.ldif
-        include: file://${pkgs.openldap}/etc/schema/cosine.ldif
-        include: file://${pkgs.openldap}/etc/schema/inetorgperson.ldif
-
-        dn: olcDatabase={1}mdb,cn=config
-        objectClass: olcDatabaseConfig
-        objectClass: olcMdbConfig
-        olcDatabase: {1}mdb
-        olcDbDirectory: /var/db/openldap
-        olcDbIndex: objectClass eq
-        olcSuffix: dc=example
-        olcRootDN: cn=root,dc=example
-        olcRootPW: notapassword
+        with subtest("manual config dir"):
+          machine.succeed(
+            'mkdir /var/db/slapd.d /var/db/openldap',
+            'slapadd -F /var/db/slapd.d -n0 -l ${pkgs.writeText "config.ldif" ldifConfig}',
+            'slapadd -F /var/db/slapd.d -n1 -l ${pkgs.writeText "contents.ldif" dbContents}',
+            'chown -R openldap:openldap /var/db/slapd.d /var/db/openldap',
+            '${specializations}/manualConfigDir/bin/switch-to-configuration test',
+          )
+          machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword')
+          machine.succeed('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
+          machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar')
       '';
-    in ''
-      machine.succeed(
-          "mkdir -p /var/db/slapd.d /var/db/openldap",
-          "slapadd -F /var/db/slapd.d -n0 -l ${config}",
-          "slapadd -F /var/db/slapd.d -n1 -l ${contents}",
-          "chown -R openldap:openldap /var/db/slapd.d /var/db/openldap",
-          "systemctl restart openldap",
-      )
-    '' + testScript;
-  }) { inherit system pkgs; };
-}
+  }
+)

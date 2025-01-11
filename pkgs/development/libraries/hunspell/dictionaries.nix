@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ lib, stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, python3, hunspell }:
 
 
 let
@@ -29,14 +29,14 @@ let
     { shortName, shortDescription, dictFileName }:
     mkDict rec {
       inherit dictFileName;
-      version = "2.2";
+      version = "2.5";
       pname = "hunspell-dict-${shortName}-rla";
       readmeFile = "README.txt";
       src = fetchFromGitHub {
         owner = "sbosio";
         repo = "rla-es";
         rev = "v${version}";
-        sha256 = "0n9ms092k7vg7xpd3ksadxydbrizkb7js7dfxr08nbnnb9fgy0i8";
+        sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
       meta = with lib; {
         description = "Hunspell dictionary for ${shortDescription} from rla";
@@ -46,13 +46,13 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ bash coreutils which zip unzip ];
-      patchPhase = ''
+      postPatch = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
-           --replace /bin/bash bash \
+           --replace /bin/bash ${bash}/bin/bash \
            --replace /dev/stderr stderr.log
 
         substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash bash \
+           --replace /bin/bash ${bash}/bin/bash \
       '';
       buildPhase = ''
         cd ortograf/herramientas
@@ -442,7 +442,7 @@ rec {
   es_CR = es-cr;
   es-cr = mkDictFromRla {
     shortName = "es-cr";
-    shortDescription = "Spanish (Costra Rica)";
+    shortDescription = "Spanish (Costa Rica)";
     dictFileName = "es_CR";
   };
 
@@ -669,6 +669,28 @@ rec {
     shortDescription = "Swedish (Finland)";
   };
 
+  /* ESTONIAN */
+
+  et_EE = et-ee;
+  et-ee = mkDict rec {
+    pname = "hunspell-dict-et-ee";
+    name = pname;
+    version = "20030606";
+
+    src = fetchzip {
+      url = "http://www.meso.ee/~jjpp/speller/ispell-et_${version}.tar.gz";
+      sha256 = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
+    };
+
+    dictFileName = "et_EE";
+    readmeFile = "README";
+
+    preInstall = ''
+      mv latin-1/${dictFileName}.dic ./
+      mv latin-1/${dictFileName}.aff ./
+    '';
+  };
+
   /* GERMAN */
 
   de_DE = de-de;
@@ -697,12 +719,12 @@ rec {
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
     pname = "hunspell-dict-uk-ua";
-    version = "4.6.3";
-    _version = "4-6.3";
+    version = "6.5.3";
+    _version = "1727974630";
 
     src = fetchurl {
-      url = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/${_version}/@@download/file/dict-uk_UA-${version}.oxt";
-      sha256 = "14rd07yx4fx2qxjr5xqc8qy151idd8k2hr5yi18d9r8gccnm9w50";
+      url = "https://extensions.libreoffice.org/assets/downloads/521/${_version}/dict-uk_UA-${version}.oxt";
+      hash = "sha256-c957WHJqaf/M2QrE2H3aIDAWGoQDnDl0na7sd+kUXNI=";
     };
 
     dictFileName = "uk_UA";
@@ -807,7 +829,7 @@ rec {
     meta = with lib; {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
       homepage = "https://www.opentaal.org/";
-      license = with licenses; [ bsd3 ]; # and/or cc-by-nc-30
+      license = with licenses; [ bsd3 /* or */ cc-by-30 ];
       maintainers = with maintainers; [ artturin ];
     };
   };
@@ -828,14 +850,14 @@ rec {
   th_TH = th-th;
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
-    version = "experimental-2021-12-20";
+    version = "experimental-2024-04-15";
     dictFileName = "th_TH";
     readmeFile = "README.md";
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
-      rev = "f119e58e5f6954965d6abd683e7d4c4b9be2684f";
-      sha256 = "sha256-hwqKvuLxbtzxfyQ5YhC/sdb3QQwxCfzgDOHeatxDjxM=";
+      rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
+      sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
     };
     meta = with lib; {
       description = "Hunspell dictionary for Central Thai (Thailand)";
@@ -843,6 +865,236 @@ rec {
       license = with licenses; [ gpl3 ];
       maintainers = with maintainers; [ toastal ]; # looking for a native speaker
       platforms = platforms.all;
+    };
+  };
+
+  /* INDONESIA */
+
+  id_ID = id_id;
+  id_id = mkDictFromLibreOffice {
+    shortName = "id-id";
+    dictFileName = "id_ID";
+    sourceRoot = "id";
+    shortDescription = "Bahasa Indonesia (Indonesia)";
+    readmeFile = "README-dict.md";
+    license = with lib.licenses; [ lgpl21Only lgpl3Only ];
+  };
+
+  /* CROATIAN */
+
+  hr_HR = hr-hr;
+  hr-hr = mkDictFromLibreOffice {
+    shortName = "hr-hr";
+    dictFileName = "hr_HR";
+    shortDescription = "Croatian (Croatia)";
+    readmeFile = "README_hr_HR.txt";
+    license = with lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
+  };
+
+  /* NORWEGIAN */
+
+  nb_NO = nb-no;
+  nb-no = mkDictFromLibreOffice {
+    shortName = "nb-no";
+    dictFileName = "nb_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Bokmål (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
+  };
+
+  nn_NO = nn-no;
+  nn-no = mkDictFromLibreOffice {
+    shortName = "nn-no";
+    dictFileName = "nn_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Nynorsk (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
+  };
+
+  /* TOKI PONA */
+
+  tok = mkDict rec {
+    pname = "hunspell-dict-tok";
+    version = "20220829";
+    dictFileName = "tok";
+    readmeFile = "README.en.adoc";
+
+    src = fetchzip {
+      url = "https://github.com/somasis/hunspell-tok/releases/download/${version}/hunspell-tok-${version}.tar.gz";
+      sha256 = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
+    };
+
+    dontBuild = true;
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Toki Pona";
+      homepage = "https://github.com/somasis/hunspell-tok";
+      license = with lib.licenses; [ cc0 publicDomain cc-by-sa-30 cc-by-sa-40 ];
+      maintainers = with maintainers; [ somasis ];
+      platforms = platforms.all;
+    };
+  };
+
+  /* POLISH */
+
+  pl_PL = pl-pl;
+  pl-pl = mkDictFromLibreOffice {
+    shortName = "pl-pl";
+    dictFileName = "pl_PL";
+    shortDescription = "Polish (Poland)";
+    readmeFile = "README_en.txt";
+    # the README doesn't specify versions of licenses :/
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
+  };
+
+  /* PORTUGUESE */
+
+  pt_BR = pt-br;
+  pt-br = mkDictFromLibreOffice {
+    shortName = "pt-br";
+    dictFileName = "pt_BR";
+    shortDescription = "Portuguese (Brazil)";
+    readmeFile = "README_pt_BR.txt";
+    license = with lib.licenses; [ lgpl3 ];
+  };
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    shortDescription = "Portuguese (Portugal)";
+    readmeFile = "README_pt_PT.txt";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+  };
+
+  /* PERSIAN */
+
+  fa_IR = fa-ir;
+  fa-ir = mkDict {
+    pname = "hunspell-dict-fa-ir";
+    version = "experimental-2022-09-04";
+    dictFileName = "fa-IR";
+    readmeFile = "README.md";
+    src = fetchFromGitHub {
+      owner = "b00f";
+      repo = "lilak";
+      rev = "1a80a8e5c9377ac424d29ef20be894e250bc9765";
+      hash = "sha256-xonnrclzgFEHdQ9g8ijm0bo9r5a5Y0va52NoJR5d8mo=";
+    };
+    nativeBuildInputs = [ python3 ];
+    buildPhase = ''
+      runHook preBuild
+      mkdir build
+      (cd src && python3 lilak.py)
+      mv build/* ./
+      # remove timestamp from file
+      sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
+      runHook postBuild
+    '';
+    meta = with lib; {
+      description = "Hunspell dictionary for Persian (Iran)";
+      homepage = "https://github.com/b00f/lilak";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ nix-julia ];
+      platforms = platforms.all;
+    };
+  };
+
+  /* ROMANIAN */
+  ro_RO = ro-ro;
+  ro-ro = mkDict rec {
+    pname = "hunspell-dict-ro-ro";
+    version = "3.3.10";
+    shortName = "ro-ro";
+    dictFileName = "ro_RO";
+    fileName = "${dictFileName}.${version}.zip";
+    shortDescription = "Romanian (Romania)";
+    readmeFile = "README";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/rospell/${fileName}";
+      hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}.aff ${dictFileName}.dic ${readmeFile} -d ${dictFileName}
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for ${shortDescription} from rospell";
+      homepage = "https://sourceforge.net/projects/rospell/";
+      license = with lib.licenses; [ gpl2Only ];
+      maintainers = with lib.maintainers; [ Andy3153 ];
+    };
+  };
+
+  /* Turkish */
+  tr_TR = tr-tr;
+  tr-tr = mkDict rec {
+    pname = "hunspell-dict-tr-tr";
+    version = "1.1.1";
+
+    src = fetchFromGitHub {
+      owner = "tdd-ai";
+      repo = "hunspell-tr";
+      rev = "7302eca5f3652fe7ae3d3ec06c44697c97342b4e";
+      hash = "sha256-r/I5T/1e7gcp2XZ4UvnpFmWMTsNqLZSCbkqPcgC13PE=";
+    };
+
+    dictFileName = "tr_TR";
+    readmeFile = "README.md";
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
+      homepage = "https://github.com/tdd-ai/hunspell-tr/";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ samemrecebi ];
+      platforms = platforms.all;
+    };
+  };
+
+  /* GREEK */
+
+  el_GR = el-gr;
+  el-gr = mkDictFromLibreOffice {
+    shortName = "el-gr";
+    dictFileName = "el_GR";
+    shortDescription = "Greek (Greece)";
+    readmeFile = "README_el_GR.txt";
+    license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
+  };
+
+  /* KOREAN */
+  ko_KR = ko-kr;
+  ko-kr = mkDict rec {
+    pname = "hunspell-dict-ko-kr";
+    version = "0.7.94";
+
+    src = fetchFromGitHub {
+      owner = "spellcheck-ko";
+      repo = "hunspell-dict-ko";
+      rev = version;
+      hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
+    };
+
+    dictFileName = "ko_KR";
+    readmeFile = "README.md";
+
+    nativeBuildInputs = [ (python3.withPackages (ps: [ ps.pyyaml ])) ];
+
+    preInstall = ''
+      mv ko.aff ko_KR.aff
+      mv ko.dic ko_KR.dic
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for Korean (South Korea)";
+      homepage = "https://github.com/spellcheck-ko/hunspell-dict-ko";
+      license = with lib.licenses; [ gpl2Plus lgpl21Plus mpl11 ];
+      maintainers = with lib.maintainers; [ honnip ];
     };
   };
 }

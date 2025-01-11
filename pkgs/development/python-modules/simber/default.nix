@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, colorama
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "simber";
-  version = "0.2.4";
+  version = "0.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,25 +17,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
-    rev = version;
-    hash = "sha256-P4bhxu9Di4E2Zkd0vIkyDi1S6Y0V/EQSMF4ftWoiXKE=";
+    tag = version;
+    hash = "sha256-kHoFZD7nhVxJu9MqePLkL7KTG2saPecY9238c/oeEco=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "simber"
-  ];
+  pythonImportsCheck = [ "simber" ];
 
   meta = with lib; {
     description = "Simple, minimal and powerful logger for Python";
     homepage = "https://github.com/deepjyoti30/simber";
+    changelog = "https://github.com/deepjyoti30/simber/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
   };

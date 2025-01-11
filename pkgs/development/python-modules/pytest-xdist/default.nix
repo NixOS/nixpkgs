@@ -1,39 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, filelock
-, execnet
-, pytest
-, pytest-forked
-, psutil
-, pexpect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  filelock,
+  execnet,
+  pytest,
+  psutil,
+  setproctitle,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.5.0";
-  disabled = pythonOlder "3.6";
+  version = "3.6.1";
+  disabled = pythonOlder "3.7";
+
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-RYDeyj/wTdsqxT66Oddstd1e3qwFDLb7x2iw3XErTt8=";
+    pname = "pytest_xdist";
+    inherit version;
+    hash = "sha256-6tFWpNsjHux2lzf1dmjvWKIISjSy5VxKj6INhhEHMA0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [
-    pytest
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
-  checkInputs = [ pytestCheckHook filelock pexpect ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
-  pytestFlagsArray = [
-    # pytest can already use xdist at this point
-    "--numprocesses=$NIX_BUILD_CORES"
-    "--forked"
+  buildInputs = [ pytest ];
+
+  dependencies = [ execnet ];
+
+  nativeCheckInputs = [
+    filelock
+    pytestCheckHook
   ];
+
+  optional-dependencies = {
+    psutil = [ psutil ];
+    setproctitle = [ setproctitle ];
+  };
+
+  # pytest can already use xdist at this point
+  preCheck = ''
+    appendToVar pytestFlagsArray "--numprocesses=$NIX_BUILD_CORES"
+  '';
 
   # access file system
   disabledTests = [
@@ -45,11 +60,14 @@ buildPythonPackage rec {
     "test_rsyncignore"
     # flakey
     "test_internal_errors_propagate_to_controller"
+    # https://github.com/pytest-dev/pytest-xdist/issues/985
+    "test_workqueue_ordered_by_size"
   ];
 
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
     description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;

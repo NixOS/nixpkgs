@@ -1,145 +1,146 @@
-{ stdenv
-, fetchzip
-, fetchurl
-, fetchFromGitHub
-, lib
-, gradle
-, perl
-, makeWrapper
-, openjdk11
-, unzip
-, makeDesktopItem
-, autoPatchelfHook
-, icoutils
-, xcbuild
-, protobuf3_17
-, libredirect
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  callPackage,
+  gradle_8,
+  makeBinaryWrapper,
+  openjdk21,
+  unzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  xcbuild,
+  protobuf,
+  ghidra-extensions,
+  python3,
+  python3Packages,
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.1.2";
+  version = "11.2.1";
 
+  releaseName = "NIX";
+  distroPrefix = "ghidra_${version}_${releaseName}";
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-gnSIXje0hUpAculNXAyiS7Twc5XWitMgYp7svyZQxzE=";
+    hash = "sha256-UVX56yNZSAbUejiQ0AIn00r7R+fUW1DEjZmCr1iYwV4=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      # 1970-Jan-01
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/SOURCE_DATE_EPOCH
+      # 19700101
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/SOURCE_DATE_EPOCH_SHORT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-  };
+  patches = [
+    # Use our own protoc binary instead of the prebuilt one
+    ./0001-Use-protobuf-gradle-plugin.patch
 
-  # postPatch scripts.
-  # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-  fixProtoc = ''
+    # Override installation directory to allow loading extensions
+    ./0002-Load-nix-extensions.patch
+
+    # Remove build dates from output filenames for easier reference
+    ./0003-Remove-build-datestamp.patch
+  ];
+
+  postPatch = ''
+    # Set name of release (eg. PUBLIC, DEV, etc.)
+    sed -i -e 's/application\.release\.name=.*/application.release.name=${releaseName}/' Ghidra/application.properties
+
+    # Set build date and git revision
+    echo "application.build.date=$(cat SOURCE_DATE_EPOCH)" >> Ghidra/application.properties
+    echo "application.build.date.short=$(cat SOURCE_DATE_EPOCH_SHORT)" >> Ghidra/application.properties
+    echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
+
+    # Tells ghidra to use our own protoc binary instead of the prebuilt one.
     cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf3_17}/bin/protoc'
-  }
-}
-HERE
-  '';
-
-  # Adds a gradle step that downloads all the dependencies to the gradle cache.
-  addResolveStep = ''
-    cat >>build.gradle <<HERE
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-      }
-      subProject.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+    protobuf {
+      protoc {
+        path = '${protobuf}/bin/protoc'
       }
     }
-  }
-}
-void resolveConfiguration(subProject, configuration, name) {
-  if (configuration.canBeResolved) {
-    logger.info("Resolving project {} {}", subProject.name, name)
-    configuration.resolve()
-  }
-}
-HERE
+    HERE
   '';
 
-  # fake build to pre-download deps into fixed-output derivation
-  # Taken from mindustry derivation.
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src;
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
-    patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-    postPatch = fixProtoc + addResolveStep;
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    patches
+    postPatch
+    ;
 
-    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
+  # Don't create .orig files if the patch isn't an exact match.
+  patchFlags = [
+    "--no-backup-if-mismatch"
+    "-p1"
+  ];
 
-      # First, fetch the static dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk11} -I gradle/support/fetchDependencies.gradle init
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+      terminal = false;
+      startupWMClass = "ghidra-Ghidra";
+    })
+  ];
 
-      # Then, fetch the maven dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk11} resolveDependencies
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/maven/$x/$3/$4/$5" #e' \
-        | sh
-      cp -r dependencies $out/dependencies
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-UHV7Z2HaVTOCY5U0zjUtkchJicrXMBfYBHvL8AA7NTg=";
-  };
-
-in stdenv.mkDerivation rec {
-  inherit pname version src;
-
-  nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  nativeBuildInputs =
+    [
+      gradle
+      unzip
+      makeBinaryWrapper
+      copyDesktopItems
+      protobuf
+      python3
+      python3Packages.pip
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+      desktopToDarwinBundle
+    ];
 
   dontStrip = true;
 
-  patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-  postPatch = fixProtoc;
+  __darwinAllowLocalNetworking = true;
 
-  buildPhase = (lib.optionalString stdenv.isDarwin ''
-    export HOME=$(mktemp -d)
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
-    # construct a dummy /etc/passwd file - something attempts to determine
-    # the user's "real" home using this
-    DUMMY_PASSWD=$(realpath ../dummy-passwd)
-    cat > $DUMMY_PASSWD <<EOF
-    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
-    EOF
+  gradleFlags = [ "-Dorg.gradle.java.home=${openjdk21}" ];
 
-    export NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-    export DYLD_INSERT_LIBRARIES=${libredirect}/lib/libredirect.dylib
-  '') + ''
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-
-    ln -s ${deps}/dependencies dependencies
-
-    sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
-
-    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk11} buildGhidra
+  preBuild = ''
+    export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
+    gradle -I gradle/support/fetchDependencies.gradle
   '';
 
+  gradleBuildTask = "buildGhidra";
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "${pkg_path}" "$out/share/applications"
 
     ZIP=build/dist/$(ls build/dist)
@@ -149,34 +150,55 @@ in stdenv.mkDerivation rec {
     mv "${pkg_path}"/*/* "${pkg_path}"
     rmdir "''${f[@]}"
 
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
-
-    icotool -x "Ghidra/RuntimeScripts/Windows/support/ghidra.ico"
-    rm ghidra_4_40x40x32.png
-    for f in ghidra_*.png; do
-      res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -d"x" -f1-2)
-      mkdir -pv "$out/share/icons/hicolor/$res/apps"
-      mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
+    for f in Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon*.png; do
+      res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -c11-)
+      install -Dm444 "$f" "$out/share/icons/hicolor/''${res}x''${res}/apps/ghidra.png"
     done;
+    # improved macOS icon support
+    install -Dm444 Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon64.png $out/share/icons/hicolor/32x32@2/apps/ghidra.png
+
+    runHook postInstall
   '';
 
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+    ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
+      --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
+      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
-  meta = with lib; {
-    description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
-    homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode  # deps
-    ];
-    license = licenses.asl20;
-    maintainers = [ "roblabla" ];
+  passthru = {
+    inherit releaseName distroPrefix;
+    inherit (ghidra-extensions.override { ghidra = finalAttrs.finalPackage; })
+      buildGhidraExtension
+      buildGhidraScripts
+      ;
+
+    withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
 
-}
+  meta = with lib; {
+    changelog = "https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_${finalAttrs.version}_build/Ghidra/Configurations/Public_Release/src/global/docs/ChangeHistory.html";
+    description = "Software reverse engineering (SRE) suite of tools";
+    mainProgram = "ghidra";
+    homepage = "https://ghidra-sre.org/";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      roblabla
+      vringar
+    ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+  };
+})

@@ -1,22 +1,40 @@
-{ lib, stdenv, fetchurl, pkg-config, libX11, libXtst, qt4 }:
-stdenv.mkDerivation rec {
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libX11,
+  libXtst,
+  qtbase,
+  qttools,
+  qtx11extras,
+}:
+mkDerivation rec {
   pname = "qjoypad";
-  version = "4.1.0";
-  src = fetchurl {
-    url = "mirror://sourceforge/qjoypad/qjoypad-${version}.tar.gz";
-    sha256 = "1jlm7i26nfp185xrl41kz5z6fgvyj51bjpz48cg27xx64y40iamm";
+  version = "4.3.1";
+
+  src = fetchFromGitHub {
+    owner = "panzi";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256:1w26ddxb1xirb7qjf7kv9llxzjhbhcb7warnxbx41qhbni46g26y";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXtst qt4 ];
-  NIX_LDFLAGS = "-lX11";
-  patchPhase = ''
-    cd src
-    substituteInPlace config --replace /bin/bash ${stdenv.shell}
-    mkdir -p $out
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${libX11}/lib"
-  '';
-  meta = {
-    description = "A program that lets you use gaming devices anywhere";
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    libX11
+    libXtst
+    qtbase
+    qtx11extras
+  ];
+
+  meta = with lib; {
+    description = "Program that lets you use gaming devices anywhere";
     longDescription = ''
       A simple Linux/QT program that lets you use your gaming devices
       where you want them: in your games! QJoyPad takes input from a
@@ -33,9 +51,10 @@ stdenv.mkDerivation rec {
       of gaming devices in Linux, and makes the Linux gaming
       experience just a little bit nicer.
     '';
-    homepage = "http://qjoypad.sourceforge.net";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ astsmtl ];
-    platforms = with lib.platforms; linux;
+    homepage = "https://github.com/panzi/qjoypad/";
+    license = lib.licenses.gpl2Only;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = with platforms; linux;
+    mainProgram = "qjoypad";
   };
 }

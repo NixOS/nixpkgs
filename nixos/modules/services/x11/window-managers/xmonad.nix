@@ -24,20 +24,21 @@ let
         inherit (cfg) ghcArgs;
       } cfg.config;
     in
-      pkgs.runCommandLocal "xmonad" {
+      pkgs.runCommand "xmonad" {
+        preferLocalBuild = true;
         nativeBuildInputs = [ pkgs.makeWrapper ];
       } (''
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
       '' + optionalString cfg.enableConfiguredRecompile ''
-          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
       '' + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
       '');
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
-  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan ];
+  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan slotThe ];
 
   options = {
     services.xserver.windowManager.xmonad = {
@@ -46,13 +47,13 @@ in {
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
-        example = literalExpression "pkgs.haskell.packages.ghc784";
+        example = literalExpression "pkgs.haskell.packages.ghc810";
         type = types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
           Xmonad and the packages listed in
-          <varname>extraPackages</varname>.
+          {var}`extraPackages`.
         '';
       };
 
@@ -69,7 +70,7 @@ in {
         description = ''
           Extra packages available to ghc when rebuilding Xmonad. The
           value must be a function which receives the attrset defined
-          in <varname>haskellPackages</varname> as the sole argument.
+          in {var}`haskellPackages` as the sole argument.
         '';
       };
 
@@ -94,17 +95,17 @@ in {
           "mod+q" restart key binding dysfunctional though, because that attempts
           to call your binary with the "--restart" command line option, unless
           you implement that yourself. You way mant to bind "mod+q" to
-          <literal>(restart "xmonad" True)</literal> instead, which will just restart
+          `(restart "xmonad" True)` instead, which will just restart
           xmonad from PATH. This allows e.g. switching to the new xmonad binary
           after rebuilding your system with nixos-rebuild.
           For the same reason, ghc is not added to the environment when this
-          option is set, unless <option>enableConfiguredRecompile</option> is
-          set to <literal>true</literal>.
+          option is set, unless {option}`enableConfiguredRecompile` is
+          set to `true`.
 
           If you actually want to run xmonad with a config specified here, but
           also be able to recompile and restart it from a copy of that source in
-          $HOME/.xmonad on the fly, set <option>enableConfiguredRecompile</option>
-          to <literal>true</literal> and implement something like "compileRestart"
+          $HOME/.xmonad on the fly, set {option}`enableConfiguredRecompile`
+          to `true` and implement something like "compileRestart"
           from the example.
           This should allow you to switch at will between the local xmonad and
           the one NixOS puts in your PATH.
@@ -163,7 +164,7 @@ in {
         default = false;
         type = lib.types.bool;
         description = ''
-          Enable recompilation even if <option>config</option> is set to a
+          Enable recompilation even if {option}`config` is set to a
           non-null value. This adds the necessary Haskell dependencies (GHC with
           packages) to the xmonad binary's environment.
         '';

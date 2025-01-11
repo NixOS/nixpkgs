@@ -1,28 +1,41 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, bash
-, cmake
-, qtbase
-, qttools
-, qtmultimedia
-, qtwebkit
-, qtsvg
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  boost,
+  xercesc,
+  xalanc,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  qtsvg,
 }:
 
 mkDerivation rec {
   pname = "brewtarget";
-  version = "2.3.1";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "Brewtarget";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14xmm6f8xmvypagx4qdw8q9llzmyi9zzfhnzh4kbbflhjbcr7isz";
+    sha256 = "sha256-PqaiZ2eLH8+qRRkIolnQClTL9O9EgHMqFH/nUffosV8=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase qttools qtmultimedia qtwebkit qtsvg ];
+  nativeBuildInputs = [
+    cmake
+    boost
+    xercesc
+    xalanc
+  ];
+  buildInputs = [
+    qtbase
+    qttools
+    qtmultimedia
+    qtsvg
+  ];
 
   preConfigure = ''
     chmod +x configure
@@ -31,6 +44,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Open source beer recipe creation tool";
+    mainProgram = "brewtarget";
     homepage = "http://www.brewtarget.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.mmahut ];

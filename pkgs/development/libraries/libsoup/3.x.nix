@@ -1,56 +1,70 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, meson
-, ninja
-, pkg-config
-, gnome
-, libsysprof-capture
-, sqlite
-, glib-networking
-, gobject-introspection
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
-, vala
-, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
-, libpsl
-, python3
-, brotli
-, libnghttp2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  libsysprof-capture,
+  sqlite,
+  buildPackages,
+  gobject-introspection,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  vala,
+  libpsl,
+  python3,
+  gi-docgen,
+  brotli,
+  libnghttp2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.0.6";
+  version = "3.6.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-tF1Z+EC5rPm7Rf1FhU4+9nL1fjq5V0AcOtjXUCrCPaY=";
+    sha256 = "sha256-zrHxqivdc7LNgVnTmYyWxV7wl+8V5LTzYCkgn6GK+Dg=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
+  depsBuildBuild = [
     pkg-config
-    glib
-    python3
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ] ++ lib.optionals withVala [
-    vala
   ];
 
-  buildInputs = [
-    sqlite
-    libpsl
-    glib.out
-    brotli
-    libnghttp2
-  ] ++ lib.optionals stdenv.isLinux [
-    libsysprof-capture
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
+
+  buildInputs =
+    [
+      sqlite
+      libpsl
+      glib.out
+      brotli
+      libnghttp2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libsysprof-capture
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -59,17 +73,16 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
-    "-Dvapi=${if withVala then "enabled" else "disabled"}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dntlm=disabled"
     # Requires wstest from autobahn-testsuite.
     "-Dautobahn=disabled"
-    # Requires quart Python module.
-    "-Dhttp2_tests=disabled"
     # Requires gnutls, not added for closure size.
     "-Dpkcs11_tests=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsysprof=disabled"
+
+    (lib.mesonEnable "docs" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "sysprof" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "vapi" withIntrospection)
   ];
 
   # TODO: For some reason the pkg-config setup hook does not pick this up.
@@ -77,15 +90,18 @@ stdenv.mkDerivation rec {
 
   # HSTS tests fail.
   doCheck = false;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs libsoup/
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
       packageName = pname;
@@ -95,7 +111,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HTTP client/server library for GNOME";
-    homepage = "https://wiki.gnome.org/Projects/libsoup";
+    homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
   };

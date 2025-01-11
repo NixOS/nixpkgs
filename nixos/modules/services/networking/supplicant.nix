@@ -13,7 +13,7 @@ let
   serviceName = iface: "supplicant-${if (iface=="WLAN") then "wlan@" else (
                                      if (iface=="LAN") then "lan@" else (
                                      if (iface=="DBUS") then "dbus"
-                                     else (replaceChars [" "] ["-"] iface)))}";
+                                     else (replaceStrings [" "] ["-"] iface)))}";
 
   # TODO: Use proper privilege separation for wpa_supplicant
   supplicantService = iface: suppl:
@@ -26,12 +26,15 @@ let
       ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
       bridgeArg = optionalString (suppl.bridge!="") "-b${suppl.bridge}";
-      confFileArg = optionalString (suppl.configFile.path!=null) "-c${suppl.configFile.path}";
-      extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceChars [" "] ["-"] iface}" ''
+      extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceStrings [" "] ["-"] iface}" ''
         ${optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
         ${optionalString suppl.configFile.writable "update_config=1"}
         ${suppl.extraConf}
       '';
+      confArgs = escapeShellArgs
+        (if suppl.configFile.path == null
+         then [ "-c${extraConfFile}" ]
+         else [ "-c${suppl.configFile.path}" "-I${extraConfFile}" ]);
     in
       { description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
         wantedBy = [ "multi-user.target" ] ++ deps;
@@ -51,7 +54,7 @@ let
           ''}
         '';
 
-        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confFileArg} -I${extraConfFile} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
+        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confArgs} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
 
       };
 
@@ -75,9 +78,9 @@ in
               default = null;
               example = literalExpression "/etc/wpa_supplicant.conf";
               description = ''
-                External <literal>wpa_supplicant.conf</literal> configuration file.
-                The configuration options defined declaratively within <literal>networking.supplicant</literal> have
-                precedence over options defined in <literal>configFile</literal>.
+                External `wpa_supplicant.conf` configuration file.
+                The configuration options defined declaratively within `networking.supplicant` have
+                precedence over options defined in `configFile`.
               '';
             };
 
@@ -85,8 +88,8 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Whether the configuration file at <literal>configFile.path</literal> should be written to by
-                <literal>wpa_supplicant</literal>.
+                Whether the configuration file at `configFile.path` should be written to by
+                `wpa_supplicant`.
               '';
             };
 
@@ -110,11 +113,11 @@ in
               model_number=2015
             '';
             description = ''
-              Configuration options for <literal>wpa_supplicant.conf</literal>.
-              Options defined here have precedence over options in <literal>configFile</literal>.
-              NOTE: Do not write sensitive data into <literal>extraConf</literal> as it will
-              be world-readable in the <literal>nix-store</literal>. For sensitive information
-              use the <literal>configFile</literal> instead.
+              Configuration options for `wpa_supplicant.conf`.
+              Options defined here have precedence over options in `configFile`.
+              NOTE: Do not write sensitive data into `extraConf` as it will
+              be world-readable in the `nix-store`. For sensitive information
+              use the `configFile` instead.
             '';
           };
 
@@ -122,8 +125,7 @@ in
             type = types.str;
             default = "";
             example = "-e/run/wpa_supplicant/entropy.bin";
-            description =
-              "Command line arguments to add when executing <literal>wpa_supplicant</literal>.";
+            description = "Command line arguments to add when executing `wpa_supplicant`.";
           };
 
           driver = mkOption {
@@ -185,20 +187,20 @@ in
       '';
 
       description = ''
-        Interfaces for which to start <command>wpa_supplicant</command>.
+        Interfaces for which to start {command}`wpa_supplicant`.
         The supplicant is used to scan for and associate with wireless networks,
         or to authenticate with 802.1x capable network switches.
 
         The value of this option is an attribute set. Each attribute configures a
-        <command>wpa_supplicant</command> service, where the attribute name specifies
-        the name of the interface that <command>wpa_supplicant</command> operates on.
+        {command}`wpa_supplicant` service, where the attribute name specifies
+        the name of the interface that {command}`wpa_supplicant` operates on.
         The attribute name can be a space separated list of interfaces.
-        The attribute names <literal>WLAN</literal>, <literal>LAN</literal> and <literal>DBUS</literal>
-        have a special meaning. <literal>WLAN</literal> and <literal>LAN</literal> are
-        configurations for universal <command>wpa_supplicant</command> service that is
+        The attribute names `WLAN`, `LAN` and `DBUS`
+        have a special meaning. `WLAN` and `LAN` are
+        configurations for universal {command}`wpa_supplicant` service that is
         started for each WLAN interface or for each LAN interface, respectively.
-        <literal>DBUS</literal> defines a device-unrelated <command>wpa_supplicant</command>
-        service that can be accessed through <literal>D-Bus</literal>.
+        `DBUS` defines a device-unrelated {command}`wpa_supplicant`
+        service that can be accessed through `D-Bus`.
       '';
 
     };
@@ -223,7 +225,7 @@ in
         text = ''
           ${flip (concatMapStringsSep "\n") (filter (n: n!="WLAN" && n!="LAN" && n!="DBUS") (attrNames cfg)) (iface:
             flip (concatMapStringsSep "\n") (splitString " " iface) (i: ''
-              ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceChars [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
+              ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceStrings [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
 
           ${optionalString (hasAttr "WLAN" cfg) ''
             ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ocaml, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ekrhyper";
@@ -9,11 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fEe0DIMGj7wO+79/BZf45kykgyTXpbZJsyFSt31XqpM=";
   };
 
-  buildInputs = [
+  strictDeps = true;
+  nativeBuildInputs = [
     ocaml
     perl
   ];
-  setSourceRoot = "export sourceRoot=$(echo */ekrh/src/)";
+  setSourceRoot = "export sourceRoot=$(echo */ekrh/src)";
   preInstall = "export INSTALLDIR=$out";
   postInstall = ''for i in "$out/casc"/*; do ln -s "$i" "$out/bin/ekrh-casc-$(basename $i)"; done '';
 

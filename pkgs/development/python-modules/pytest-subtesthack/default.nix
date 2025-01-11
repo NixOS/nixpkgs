@@ -1,12 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-subtesthack";
-  version = "0.1.2";
+  version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0711e5d04c291ac9ac6c9eff447ec2811b1d23ccdfe1417d16d4f96481efcbe6";
+    hash = "sha256-67UEIDycAf3TedKvp0dofct7HtG+H8DD9Tmy3oEnYgA=";
   };
 
   buildInputs = [ pytest ];

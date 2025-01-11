@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchzip, kernel }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dpdk-kmods";
-  version = "2021-04-21";
+  version = "2023-02-05";
 
   src = fetchzip {
-    url = "https://git.dpdk.org/dpdk-kmods/snapshot/dpdk-kmods-e13d7af77a1bf98757f85c3c4083f6ee6d0d2372.tar.xz";
-    sha256 = "sha256-8ysWT3X3rIyUAo4/QbkX7cQq5iFeU18/BPsmmWugcIc=";
+    url = "https://git.dpdk.org/dpdk-kmods/snapshot/dpdk-kmods-e721c733cd24206399bebb8f0751b0387c4c1595.tar.xz";
+    sha256 = "sha256-AG5Lthp+CPR4R7I23DUmoWAmET8gLEFHHdjk2TUbQn4=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -32,6 +37,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.mic92 ];
     platforms = platforms.linux;
-    broken = kernel.kernelAtLeast "5.18";
   };
 }

@@ -1,24 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, ipython
-, numpy
-, pyserial
-, pyusb
-, hostPlatform
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  ipython,
+  numpy,
+  pyserial,
+  pyusb,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rfcat";
-  version = "1.9.5";
+  version = "2.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "atlas0fd00m";
     repo = "rfcat";
-    rev = "v${version}";
-    sha256 = "1mmr7g7ma70sk6vl851430nqnd7zxsk7yb0xngwrdx9z7fbz2ck0";
+    tag = "v${version}";
+    hash = "sha256-hdRsVbDXRC1EOhBoFJ9T5ZE6hwOgDWSdN5sIpxJ0x3E=";
   };
 
   propagatedBuildInputs = [
@@ -29,14 +34,12 @@ buildPythonPackage rec {
     pyusb
   ];
 
-  postInstall = lib.optionalString hostPlatform.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/etc/udev/rules.d
     cp etc/udev/rules.d/20-rfcat.rules $out/etc/udev/rules.d
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rflib" ];
 

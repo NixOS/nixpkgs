@@ -1,11 +1,28 @@
-{ config, lib, pkgs, ... }:
-
 {
-  options.boot.initrd.services.bcache.enable = (lib.mkEnableOption "bcache support in the initrd") // {
-    visible = false; # only works with systemd stage 1
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.boot.bcache;
+in
+{
+  options.boot.bcache.enable = lib.mkEnableOption "bcache mount support" // {
+    default = true;
+    example = false;
+  };
+  options.boot.initrd.services.bcache.enable = lib.mkEnableOption "bcache support in the initrd" // {
+    description = ''
+      *This will only be used when systemd is used in stage 1.*
+
+      Whether to enable bcache support in the initrd.
+    '';
+    default = config.boot.initrd.systemd.enable && config.boot.bcache.enable;
+    defaultText = lib.literalExpression "config.boot.initrd.systemd.enable && config.boot.bcache.enable";
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.bcache-tools ];
 

@@ -1,44 +1,79 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  aprutil,
+  boost,
+  cairo,
+  curl,
+  glib,
+  harfbuzz,
+  icu,
+  iniparser,
+  libmemcached,
+  mapnik,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "unstable-2017-01-08";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "e25bfdba1c1f2103c69529f1a30b22a14ce311f1";
-    sha256 = "12c96avka1dfb9wxqmjd57j30w9h8yx4y4w34kyq6xnf6lwnkcxp";
+    tag = "v${version}";
+    hash = "sha256-JC275LKsCeEo5DcIX0X7kcLoijQJqfJvBvw8xi2gwpk=";
   };
 
-  patches = [
-    # Pull upstream fix for -fno-common toolchains:
-    #  https://github.com/openstreetmap/mod_tile/pull/202
-    (fetchpatch {
-      name = "fno-common";
-      url = "https://github.com/openstreetmap/mod_tile/commit/a22065b8ae3c018820a5ca9bf8e2b2bb0a0bfeb4.patch";
-      sha256 = "1ywfa14xn9aa96vx1adn1ndi29qpflca06x986bx9c5pqk761yz3";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ apacheHttpd apr cairo iniparser mapnik ];
-
-  configureFlags = [
-    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+  buildInputs = [
+    apacheHttpd
+    apr
+    aprutil
+    boost
+    cairo
+    curl
+    glib
+    harfbuzz
+    icu
+    iniparser
+    libmemcached
+    mapnik
   ];
 
-  installPhase = ''
-    mkdir -p $out/modules
-    make install-mod_tile DESTDIR=$out
-    mv $out${apacheHttpd}/* $out
-    rm -rf $out/nix
-  '';
+  enableParallelBuilding = true;
+
+  # Explicitly specify directory paths
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
+    (lib.cmakeFeature "CMAKE_INSTALL_MODULESDIR" "modules")
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "")
+    (lib.cmakeBool "ENABLE_TESTS" doCheck)
+  ];
+
+  # And use DESTDIR to define the install destination
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  doCheck = true;
+  # Do not run tests in parallel
+  enableParallelChecking = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jglukasik ];
     platforms = platforms.linux;
   };

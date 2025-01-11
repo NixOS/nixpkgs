@@ -1,10 +1,29 @@
-{lib, stdenv, fetchurl, ocaml, zlib, which, eprover, makeWrapper, coq}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  zlib,
+  which,
+  eprover,
+  makeWrapper,
+  coq,
+}:
 stdenv.mkDerivation rec {
   pname = "satallax";
   version = "2.7";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ocaml zlib which eprover coq];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    ocaml
+    which
+    eprover
+    coq
+  ];
+  buildInputs = [ zlib ];
+
   src = fetchurl {
     url = "https://www.ps.uni-saarland.de/~cebrown/satallax/downloads/${pname}-${version}.tar.gz";
     sha256 = "1kvxn8mc35igk4vigi5cp7w3wpxk2z3bgwllfm4n3h2jfs0vkpib";
@@ -14,6 +33,10 @@ stdenv.mkDerivation rec {
     # GCC9 doesn't allow default value in friend declaration.
     ./fix-declaration-gcc9.patch
   ];
+
+  prePatch = ''
+    patch -p1 -i ${../avy/minisat-fenv.patch} -d minisat
+  '';
 
   preConfigure = ''
     mkdir fake-tools
@@ -41,13 +64,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postBuild = "echo testing; ! (bash ./test | grep ERROR)";
+  # error: invalid suffix on literal; C++11 requires a space between literal and identifier
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-reserved-user-defined-literal";
 
   installPhase = ''
     mkdir -p "$out/share/doc/satallax" "$out/bin" "$out/lib" "$out/lib/satallax"
     cp bin/satallax.opt "$out/bin/satallax"
     wrapProgram "$out/bin/satallax" \
-      --suffix PATH : "${lib.makeBinPath [ coq eprover ]}:$out/libexec/satallax" \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          coq
+          eprover
+        ]
+      }:$out/libexec/satallax" \
       --add-flags "-M" --add-flags "$out/lib/satallax/modes"
 
     cp LICENSE README "$out/share/doc/satallax"
@@ -59,11 +88,23 @@ stdenv.mkDerivation rec {
     cp -r coq* "$out/lib/satallax/"
   '';
 
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  checkPhase = ''
+    runHook preCheck
+    if bash ./test | grep ERROR; then
+      echo "Tests failed"
+      exit 1
+    fi
+    runHook postCheck
+  '';
+
   meta = {
     description = "Automated theorem prover for higher-order logic";
-    license = lib.licenses.mit ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    mainProgram = "satallax";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
     downloadPage = "http://www.ps.uni-saarland.de/~cebrown/satallax/downloads.php";
     homepage = "http://www.ps.uni-saarland.de/~cebrown/satallax/index.php";
   };

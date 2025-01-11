@@ -1,28 +1,52 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core
-, girara, gettext, libarchive }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  zathura_core,
+  girara,
+  gettext,
+  libarchive,
+  desktop-file-utils,
+  appstream-glib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-cb";
-  version = "0.1.8";
+  version = "0.1.11";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "1i6cf0vks501cggwvfsl6qb7mdaf3sszdymphimfvnspw810faj5";
+    url = "https://pwmt.org/projects/zathura-cb/download/zathura-cb-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TiAepUzcIKkyWMQ1VvY4lEGvmXQN59ymyh/1JBcvvUc=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext ];
-  buildInputs = [ libarchive zathura_core girara ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    desktop-file-utils
+    appstream-glib
+  ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  buildInputs = [
+    libarchive
+    zathura_core
+    girara
+  ];
 
-  meta = with lib; {
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  meta = {
     homepage = "https://pwmt.org/projects/zathura-cb/";
-    description = "A zathura CB plugin";
+    description = "Zathura CB plugin";
     longDescription = ''
       The zathura-cb plugin adds comic book support to zathura.
-      '';
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jlesquembre ];
+    '';
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jlesquembre ];
   };
-}
+})

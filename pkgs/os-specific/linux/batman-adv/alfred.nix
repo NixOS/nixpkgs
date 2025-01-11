@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gpsd, libcap, libnl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gpsd,
+  libcap,
+  libnl,
+}:
 
-let cfg = import ./version.nix; in
+let
+  cfg = import ./version.nix;
+in
 
 stdenv.mkDerivation rec {
   pname = "alfred";
@@ -12,16 +22,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gpsd libcap libnl ];
+  buildInputs = [
+    gpsd
+    libcap
+    libnl
+  ];
 
   preBuild = ''
-    makeFlags="PREFIX=$out PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
+    makeFlags="PREFIX=$out"
   '';
 
   meta = {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2, information distribution tool";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = with lib.platforms; linux;
   };

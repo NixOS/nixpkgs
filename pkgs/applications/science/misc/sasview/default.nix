@@ -1,23 +1,31 @@
-{ lib
-, python3
-, fetchFromGitHub
-, which
-, wrapQtAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sasview";
-  version = "5.0.4";
+  version = "5.0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasview";
-    rev = "v${version}";
-    hash = "sha256-TjcchqA6GCvkr59ZgDuGglan2RxLp+aMjJk28XhvoiY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cwP9VuvO4GPlbAxCqw31xISTi9NoF5RoBQmjWusrnzc=";
   };
+
+  # AttributeError: module 'numpy' has no attribute 'float'.
+  postPatch = ''
+    substituteInPlace src/sas/sascalc/pr/p_invertor.py \
+      --replace "dtype=np.float)" "dtype=float)"
+  '';
 
   nativeBuildInputs = [
     python3.pkgs.pyqt5
+    python3.pkgs.setuptools
     wrapQtAppsHook
   ];
 
@@ -46,17 +54,26 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     unittest-xml-reporting
   ];
 
-  pytestFlagsArray = [ "test" ];
+  pytestFlagsArray = [
+    "test"
+  ];
+
+  disabledTests = [
+    # NoKnownLoaderException
+    "test_invalid_cansas"
+    "test_data_reader_exception"
+  ];
 
   meta = with lib; {
-    homepage = "https://www.sasview.org";
     description = "Fitting and data analysis for small angle scattering data";
-    maintainers = with maintainers; [ rprospero ];
+    homepage = "https://www.sasview.org";
+    changelog = "https://github.com/SasView/sasview/releases/tag/v${version}";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ rprospero ];
   };
 }

@@ -1,27 +1,75 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  Cocoa,
+  Virtualization,
+  sigtool,
+  testers,
+  linuxkit,
+}:
 
-buildGoPackage rec {
-  pname   = "linuxkit";
-  version = "0.8";
-
-  goPackagePath = "github.com/linuxkit/linuxkit";
+buildGoModule rec {
+  pname = "linuxkit";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "15jj60k8wz9cahjbdscnwyyfb1k1grjh7yrilb1cj4r8mby4sp2g";
+    sha256 = "sha256-dCRTBy2Nbl5KP8dxXt+1ww1BF/gWm3PfLtSBAaVcBvw=";
   };
 
-  subPackages = [ "src/cmd/linuxkit" ];
+  vendorHash = null;
 
-  ldflags = [ "-s" "-w" "-X ${goPackagePath}/src/cmd/linuxkit/version.GitCommit=${src.rev}" "-X ${goPackagePath}/src/cmd/linuxkit/version.Version=${version}" ];
+  modRoot = "./src/cmd/linuxkit";
+
+  patches = [
+    ./darwin-os-version.patch
+    ./support-apple-11-sdk.patch
+  ];
+
+  # - On macOS, an executable must be signed with the right entitlement(s) to be
+  #   able to use the Virtualization framework at runtime.
+  # - sigtool is allows us to validly sign such executables with a dummy
+  #   authority.
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+    Virtualization
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version=${version}"
+  ];
+
+  nativeCheckInputs = [ git ];
+
+  # - Because this package definition doesn't build using the source's Makefile,
+  #   we must manually call the sign target.
+  # - The binary stripping that nixpkgs does by default in the
+  #   fixup phase removes such signing and entitlements, so we have to sign
+  #   after stripping.
+  # - Finally, at the start of the fixup phase, the working directory is
+  #   $sourceRoot/src/cmd/linuxkit, so it's simpler to use the sign target from
+  #   the Makefile in that directory rather than $sourceRoot/Makefile.
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    make sign LOCAL_TARGET=$out/bin/linuxkit
+  '';
+  passthru.tests.version = testers.testVersion {
+    package = linuxkit;
+    command = "linuxkit version";
+  };
 
   meta = with lib; {
-    description = "A toolkit for building secure, portable and lean operating systems for containers";
+    description = "Toolkit for building secure, portable and lean operating systems for containers";
+    mainProgram = "linuxkit";
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
-    maintainers = [ maintainers.nicknovitski ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ nicknovitski ];
   };
 }

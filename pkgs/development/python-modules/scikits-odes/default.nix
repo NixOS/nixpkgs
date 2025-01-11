@@ -1,53 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, enum34
-, gfortran
-, isPy27
-, isPy3k
-, numpy
-, pytest
-, python
-, scipy
-, sundials
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  setuptools,
+  scipy,
+  scikits-odes-core,
+  scikits-odes-daepack,
+  scikits-odes-sundials,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
+  inherit (scikits-odes-core) version src;
   pname = "scikits.odes";
-  version = "2.6.3";
+  pyproject = true;
 
-  disabled = isPy27;
+  sourceRoot = "${src.name}/packages/scikits-odes";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9693da78d1bd0bd6af8db59aeaaed92a399c6af36960c6a0a665a2130eab59e7";
-  };
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    gfortran
-    cython
+  dependencies = [
+    scipy
+    scikits-odes-core
+    scikits-odes-daepack
+    scikits-odes-sundials
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    sundials
-    scipy
-  ] ++ lib.optionals (!isPy3k) [ enum34 ];
+  pythonImportsCheck = [ "scikits_odes" ];
 
-  doCheck = true;
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    cd $out/${python.sitePackages}/scikits/odes/tests
-    pytest
-  '';
+  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+    # skip on aarch64, see https://github.com/bmcage/odes/issues/101
+    "test_lsodi"
+  ];
 
-  meta = with lib; {
-    description = "A scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
-    homepage = "https://github.com/bmcage/odes";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ idontgetoutmuch ];
-    platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
+  meta = scikits-odes-core.meta // {
+    description = "Scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
+    homepage = "https://github.com/bmcage/odes/blob/master/packages/scikits-odes";
   };
 }

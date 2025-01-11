@@ -33,39 +33,66 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? {} }:
-
-with pkgs.lib;
+{ lib, fetchFromGitHub, python3Packages, extraIntegrations ? { }, }:
 
 let
-  src = pkgs.fetchFromGitHub {
+  inherit (lib) attrValues mapAttrs;
+
+  src = fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
     rev = version;
-    sha256 = "0424zsnf747s10kfzv5y0m0ac9sgczip78yvghhrc2i089i5z2h4";
+    sha256 = "sha256-p5eoNNHQQl314mfUk2t3qQaerPu02GKA+tKkAY7bojk=";
   };
-  version = "7.30.1";
+  version = "7.56.2";
 
   # Build helper to build a single datadog integration package.
-  buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
-    inherit src version;
-    name = "datadog-integration-${pname}-${version}";
+  buildIntegration = { pname, ... }@args:
+    python3Packages.buildPythonPackage (args // {
+      inherit src version;
+      name = "datadog-integration-${pname}-${version}";
+      pyproject = true;
 
-    postPatch = ''
-      # jailbreak install_requires
-      sed -i 's/==.*//' requirements.in
-      cp requirements.in requirements.txt
-    '';
-    sourceRoot = "source/${args.sourceRoot or pname}";
-    doCheck = false;
-  });
+      sourceRoot = "${src.name}/${args.sourceRoot or pname}";
+      buildInputs = with python3Packages; [ hatchling setuptools ];
+      doCheck = false;
+    });
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
-    propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus-client simplejson uptime
+
+    # Make setuptools build the 'base' and 'checks' modules.
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace "from setuptools import setup" "from setuptools import find_packages, setup" \
+        --replace "packages=['datadog_checks']" "packages=find_packages()"
+    '';
+
+    propagatedBuildInputs = with python3Packages; [
+      binary
+      cachetools
+      cryptography
+      immutables
+      jellyfish
+      prometheus-client
+      protobuf
+      pydantic
+      python-dateutil
+      pyyaml
+      requests
+      requests-toolbelt
+      requests-unixsocket
+      simplejson
+      uptime
+      wrapt
+    ];
+
+    pythonImportsCheck = [
+      "datadog_checks.base"
+      "datadog_checks.base.checks"
+      "datadog_checks.checks"
     ];
   };
 
@@ -75,18 +102,18 @@ let
     mongo    = (ps: [ ps.pymongo ]);
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000 psycopg2 ]);
-    process  = (ps: []);
+    postgres = (ps: with ps; [ pg8000 psycopg2 semver ]);
+    process  = (ps: [ ps.psutil]);
   };
 
   # All integrations (default + extra):
   integrations = defaultIntegrations // extraIntegrations;
   builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
     inherit pname;
-    propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
+    propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
   }) integrations;
 
 in builtIntegrations // {
   inherit datadog_checks_base;
-  python = python.withPackages (_: (attrValues builtIntegrations));
+  python = python3Packages.python.withPackages (_: (attrValues builtIntegrations));
 }

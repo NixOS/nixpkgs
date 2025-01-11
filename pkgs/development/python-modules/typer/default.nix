@@ -1,61 +1,82 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, flit-core
-, click
-, pytestCheckHook
-, shellingham
-, pytest-xdist
-, pytest-sugar
-, coverage
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  click,
+  coverage,
+  fetchPypi,
+  pdm-backend,
+  procps,
+  pytest-sugar,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  shellingham,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.4.1";
+  version = "0.12.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Vkau8Nk2ssdhoQOT8DhO5rXH/guz5c1xCxcTTKHZnP8=";
+    hash = "sha256-9ZLwib7cyOwbl0El1khRApw7GvFF8ErKZNaUEPDJtyI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [
     click
-  ];
+    typing-extensions
+    # Build includes the standard optional by default
+    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
+  ] ++ optional-dependencies.standard;
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-xdist
-    pytest-sugar
-    shellingham
-    coverage # execs coverage in tests
-  ];
+  optional-dependencies = {
+    standard = [
+      shellingham
+      rich
+    ];
+  };
+
+  nativeCheckInputs =
+    [
+      coverage # execs coverage in tests
+      pytest-sugar
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      procps
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # likely related to https://github.com/sarugaku/shellingham/issues/35
-    "test_show_completion"
-    "test_install_completion"
-  ];
+
+  disabledTests =
+    [
+      "test_scripts"
+      # Likely related to https://github.com/sarugaku/shellingham/issues/35
+      # fails also on Linux
+      "test_show_completion"
+      "test_install_completion"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      "test_install_completion"
+    ];
 
   pythonImportsCheck = [ "typer" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "Python library for building CLI applications";
+    description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
+    changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat ];
   };

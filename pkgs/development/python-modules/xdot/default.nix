@@ -1,34 +1,68 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python, xvfb-run
-, wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  xvfb-run,
+  wrapGAppsHook3,
+  gobject-introspection,
+  pygobject3,
+  graphviz,
+  gtk3,
+  numpy,
+  packaging,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "xdot";
-  version = "1.2";
+  version = "1.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3df91e6c671869bd2a6b2a8883fa3476dbe2ba763bd2a7646cf848a9eba71b70";
+  src = fetchFromGitHub {
+    owner = "jrfonseca";
+    repo = "xdot.py";
+    rev = version;
+    hash = "sha256-fkO1bINRkCCzVRrQg9+vIODbN+bpXq2OHBKkzzZUZNA=";
   };
 
-  disabled = !isPy3k;
-  nativeBuildInputs = [ wrapGAppsHook ];
-  propagatedBuildInputs = [ gobject-introspection pygobject3 graphviz gtk3 numpy ];
-  checkInputs = [ xvfb-run ];
+  build-system = [ setuptools ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/xdot" --prefix PATH : "${lib.makeBinPath [ graphviz ]}"
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    graphviz
+    gtk3
+  ];
+
+  dependencies = [
+    pygobject3
+    numpy
+    packaging
+  ];
+  nativeCheckInputs = [ xvfb-run ];
+
+  dontWrapGApps = true;
+  # Arguments to be passed to `makeWrapper`, only used by buildPython*
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ graphviz ]})
   '';
 
   checkPhase = ''
-    xvfb-run -s '-screen 0 800x600x24' ${python.interpreter} nix_run_setup test
+    runHook preCheck
+
+    xvfb-run -s '-screen 0 800x600x24' ${python.interpreter} test.py
+
+    runHook postCheck
   '';
 
-  # https://github.com/NixOS/nixpkgs/pull/107872#issuecomment-752175866
-  # cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import)
-  doCheck = false;
-
   meta = with lib; {
-    description = "An interactive viewer for graphs written in Graphviz's dot";
+    description = "Interactive viewer for graphs written in Graphviz's dot";
+    mainProgram = "xdot";
     homepage = "https://github.com/jrfonseca/xdot.py";
     license = licenses.lgpl3Plus;
   };

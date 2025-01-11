@@ -1,28 +1,40 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, docopt, anytree
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-buildPythonApplication rec {
-
+python3.pkgs.buildPythonApplication rec {
   pname = "catcli";
-  version = "0.8.0";
+  version = "0.9.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deadc0de6";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1hkgf692h3akdxiwhzm3vqibh1ps661qllilf55nyk109cx79gna";
+    tag = "v${version}";
+    hash = "sha256-+/kd7oPT6msojPj25bzG9HwVqPj47gIUg9LngbDc3y8=";
   };
-
-  propagatedBuildInputs = [ docopt anytree ];
 
   postPatch = "patchShebangs . ";
 
+  propagatedBuildInputs = with python3.pkgs; [
+    anytree
+    docopt
+    fusepy
+    pyfzf
+    types-docopt
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
   meta = with lib; {
-    description = "The command line catalog tool for your offline data";
+    description = "Command line catalog tool for your offline data";
+    mainProgram = "catcli";
     homepage = "https://github.com/deadc0de6/catcli";
+    changelog = "https://github.com/deadc0de6/catcli/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ petersjt014 ];
     platforms = platforms.all;

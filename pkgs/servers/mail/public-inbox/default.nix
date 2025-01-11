@@ -1,46 +1,55 @@
-{ stdenv, lib, fetchurl, makeWrapper, nixosTests
-, buildPerlPackage
-, coreutils
-, curl
-, git
-, gnumake
-, highlight
-, libgit2
-, man
-, openssl
-, pkg-config
-, sqlite
-, xapian
-, AnyURIEscape
-, DBDSQLite
-, DBI
-, EmailAddressXS
-, EmailMIME
-, IOSocketSSL
-, IPCRun
-, Inline
-, InlineC
-, LinuxInotify2
-, MailIMAPClient
-, ParseRecDescent
-, Plack
-, PlackMiddlewareReverseProxy
-, SearchXapian
-, TimeDate
-, URI
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  nixosTests,
+  buildPerlPackage,
+  coreutils,
+  curl,
+  git,
+  gnumake,
+  highlight,
+  libgit2,
+  libxcrypt,
+  man,
+  openssl,
+  pkg-config,
+  sqlite,
+  xapian,
+  AnyURIEscape,
+  DBDSQLite,
+  DBI,
+  EmailAddressXS,
+  EmailMIME,
+  IOSocketSSL,
+  # FIXME: to be packaged
+  #, IOSocketSocks
+  IPCRun,
+  Inline,
+  InlineC,
+  LinuxInotify2,
+  MailIMAPClient,
+  # FIXME: to be packaged
+  #, NetNetrc
+  # FIXME: to be packaged
+  #, NetNNTP
+  ParseRecDescent,
+  Plack,
+  PlackMiddlewareReverseProxy,
+  PlackTestExternalServer,
+  SearchXapian,
+  TestSimple13,
+  TimeDate,
+  URI,
+  XMLTreePP,
 }:
 
 let
 
   skippedTests = [
-    # These tests would fail, and produce "Operation not permitted"
-    # errors from git, because they use git init --shared.  This tries
-    # to set the setgid bit, which isn't permitted inside build
-    # sandboxes.
-    #
-    # These tests were indentified with
-    #     grep -r shared t/
-    "convert-compact" "search" "v2writable" "www_listing"
+    # fatal: Could not make /tmp/pi-search-9188-DGZM/a.git/branches/ writable by group
+    "search"
     # perl5.32.0-public-inbox> t/eml.t ...................... 1/? Cannot parse parameter '=?ISO-8859-1?Q?=20charset=3D=1BOF?=' at t/eml.t line 270.
     # perl5.32.0-public-inbox> #   Failed test 'got wide character by assuming utf-8'
     # perl5.32.0-public-inbox> #   at t/eml.t line 272.
@@ -51,6 +60,9 @@ let
     #        got: 'makefile'
     #   expected: 'make'
     "hl_mod"
+    # Hangs on "inbox unlocked on initial fetch, waiting for IDLE".
+    # Fixed in HEAD: 7234e671 ("t/imapd: workaround a Perl 5.36.0 readline regression")
+    "imapd"
     # Failed test 'clone + index v1 synced ->created_at'
     # at t/lei-mirror.t line 175.
     #        got: '1638378723'
@@ -67,23 +79,28 @@ let
     #   expected: anything else
     # waiting for child to reap grandchild...
     "spawn"
+    # Failed to connect to 127.0.0.1
+    "v2mirror"
   ];
 
-  testConditions = with lib;
-    concatMapStringsSep " " (n: "! -name ${escapeShellArg n}.t") skippedTests;
+  testConditions = lib.concatMapStringsSep " " (n: "! -name ${lib.escapeShellArg n}.t") skippedTests;
 
 in
 
 buildPerlPackage rec {
   pname = "public-inbox";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
-    sha256 = "sha256-laJOOCk5NecIGWesv4D30cLGfijQHVkeo55eNqNKzew=";
+    sha256 = "sha256-ENnT2YK7rpODII9TqiEYSCp5mpWOnxskeSuAf8Ilqro=";
   };
 
-  outputs = [ "out" "devdoc" "sa_config" ];
+  outputs = [
+    "out"
+    "devdoc"
+    "sa_config"
+  ];
 
   postConfigure = ''
     substituteInPlace Makefile --replace 'TEST_FILES = t/*.t' \
@@ -99,12 +116,15 @@ buildPerlPackage rec {
     DBDSQLite
     DBI
     EmailAddressXS
-    EmailMIME
     highlight
     IOSocketSSL
+    #IOSocketSocks
     IPCRun
     Inline
     InlineC
+    MailIMAPClient
+    #NetNetrc
+    #NetNNTP
     ParseRecDescent
     Plack
     PlackMiddlewareReverseProxy
@@ -115,18 +135,23 @@ buildPerlPackage rec {
     man
   ];
 
-  doCheck = !stdenv.isDarwin;
-  checkInputs = [
-    MailIMAPClient
-    curl
-    git
-    openssl
-    pkg-config
-    sqlite
-    xapian
-  ] ++ lib.optionals stdenv.isLinux [
-    LinuxInotify2
-  ];
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs =
+    [
+      curl
+      git
+      openssl
+      pkg-config
+      sqlite
+      xapian
+      EmailMIME
+      PlackTestExternalServer
+      TestSimple13
+      XMLTreePP
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      LinuxInotify2
+    ];
   preCheck = ''
     perl certs/create-certs.perl
     export TEST_LEI_ERR_LOUD=1
@@ -137,12 +162,17 @@ buildPerlPackage rec {
   installTargets = [ "install" ];
   postInstall = ''
     for prog in $out/bin/*; do
-        wrapProgram $prog --prefix PATH : ${lib.makeBinPath [
-          git
-          /* for InlineC */
-          gnumake
-          stdenv.cc.cc
-        ]}
+        wrapProgram $prog \
+            --set NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} -I${lib.getDev libxcrypt}/include \
+            --prefix PATH : ${
+              lib.makeBinPath [
+                git
+                xapian
+                # for InlineC
+                gnumake
+                stdenv.cc
+              ]
+            }
     done
 
     mv sa_config $sa_config
@@ -155,7 +185,10 @@ buildPerlPackage rec {
   meta = with lib; {
     homepage = "https://public-inbox.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ julm qyliss ];
+    maintainers = with maintainers; [
+      julm
+      qyliss
+    ];
     platforms = platforms.all;
   };
 }

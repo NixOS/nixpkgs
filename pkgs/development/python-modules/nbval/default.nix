@@ -1,41 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, ipykernel
-, jupyter-client
-, nbformat
-, pytestCheckHook
-, pytest
-, six
-, glibcLocales
-, matplotlib
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  coverage,
+  ipykernel,
+  jupyter-client,
+  nbformat,
+  pytestCheckHook,
+  pytest,
+  glibcLocales,
+  matplotlib,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.9.6";
+  version = "0.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfefcd2ef66ee2d337d0b252c6bcec4023384eb32e8b9e5fcc3ac80ab8cd7d40";
+    hash = "sha256-d8lXl2B7CpaLq9JZfuNJQQLSXDrTdDXeu9rA5G43kJQ=";
   };
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     coverage
     ipykernel
     jupyter-client
     nbformat
     pytest
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     matplotlib
     sympy
@@ -51,19 +55,20 @@ buildPythonPackage rec {
     "tests/test_timeouts.py"
     # No value for us
     "tests/test_coverage.py"
+    # nbdime marked broken
+    "tests/test_nbdime_reporter.py"
   ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "nbval"
-  ];
+  pythonImportsCheck = [ "nbval" ];
 
   meta = with lib; {
-    description = "A py.test plugin to validate Jupyter notebooks";
+    description = "Py.test plugin to validate Jupyter notebooks";
     homepage = "https://github.com/computationalmodelling/nbval";
+    changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

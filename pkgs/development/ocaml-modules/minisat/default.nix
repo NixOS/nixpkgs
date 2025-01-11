@@ -1,18 +1,20 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 
 buildDunePackage rec {
   pname = "minisat";
-  version = "0.4";
+  version = "0.6";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   src = fetchFromGitHub {
-    owner  = "c-cube";
-    repo   = "ocaml-minisat";
-    rev    = "v${version}";
-    sha256 = "009jncrvnl9synxx6jnm6gp0cs7zlj71z22zz7bs1750b0jrfm2r";
+    owner = "c-cube";
+    repo = "ocaml-minisat";
+    rev = "v${version}";
+    hash = "sha256-dH0Ndlyo/DTZ6Ao1S478aBuxoZFSkRBi5HblkTWCPas=";
   };
 
   meta = {

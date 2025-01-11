@@ -1,39 +1,66 @@
-{ lib, stdenv, fetchurl, fetchpatch, ocamlPackages, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  ocamlPackages,
+  pkg-config,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mldonkey";
-  version = "3.1.7-2";
+  version = "3.2.1";
 
-  src = fetchurl {
-    url = "https://ygrek.org/p/release/mldonkey/mldonkey-${version}.tar.bz2";
-    sha256 = "b926e7aa3de4b4525af73c88f1724d576b4add56ef070f025941dd51cb24a794";
+  src = fetchFromGitHub {
+    owner = "ygrek";
+    repo = "mldonkey";
+    tag = "release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    hash = "sha256-Dbb7163CdqHY7/FJY2yWBFRudT+hTFT6fO4sFgt6C/A=";
   };
 
-  patches = [
-    # Fixes C++17 compat
-    (fetchpatch {
-      url = "https://github.com/ygrek/mldonkey/pull/66/commits/20ff84c185396f3d759cf4ef46b9f0bd33a51060.patch";
-      hash = "sha256-MCqx0jVfOaLkZhhv0b1cTdO6BK2/f6TxTWmx+NZjXME=";
-    })
-  ];
-
-  preConfigure = ''
-    substituteInPlace Makefile --replace '+camlp4' \
-      '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
+  postPatch = ''
+    substituteInPlace config/Makefile.in \
+      --replace-fail '+camlp4' '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
 
-  buildInputs = (with ocamlPackages; [
-    ocaml
-    camlp4
-    num
-  ]) ++ [
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    ocamlPackages.camlp4
+    ocamlPackages.findlib
+    ocamlPackages.ocaml
+    pkg-config
+  ];
+
+  buildInputs = [
+    ocamlPackages.num
     zlib
   ];
 
+  preAutoreconf = ''
+    cd config
+  '';
+
+  postAutoreconf = ''
+    cd ..
+  '';
+
+  env =
+    {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    }
+    # https://github.com/ygrek/mldonkey/issues/117
+    // lib.optionalAttrs stdenv.cc.isClang {
+      CXXFLAGS = "-std=c++98";
+    };
+
   meta = {
-    broken = stdenv.isDarwin;
     description = "Client for many p2p networks, with multiple frontends";
-    homepage = "http://mldonkey.sourceforge.net/";
+    homepage = "https://github.com/ygrek/mldonkey";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };

@@ -1,30 +1,43 @@
-{ lib, stdenv, windows, fetchurl }:
+{
+  lib,
+  stdenv,
+  windows,
+  autoreconfHook,
+  mingw_w64_headers,
+  crt ? stdenv.hostPlatform.libc,
+}:
 
-let
-  version = "9.0.0";
-in stdenv.mkDerivation {
+assert lib.assertOneOf "crt" crt [
+  "msvcrt"
+  "ucrt"
+];
+
+stdenv.mkDerivation {
   pname = "mingw-w64";
-  inherit version;
+  inherit (mingw_w64_headers) version src meta;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/mingw-w64/mingw-w64-v${version}.tar.bz2";
-    sha256 = "10a15bi4lyfi0k0haj0klqambicwma6yi7vssgbz8prg815vja8r";
-  };
-
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
-    "--enable-idl"
-    "--enable-secure-api"
+    (lib.enableFeature true "idl")
+    (lib.enableFeature true "secure-api")
+    (lib.withFeatureAs true "default-msvcrt" crt)
+
+    # Including other architectures causes errors with invalid asm
+    (lib.enableFeature stdenv.hostPlatform.isi686 "lib32")
+    (lib.enableFeature stdenv.hostPlatform.isx86_64 "lib64")
+    (lib.enableFeature stdenv.hostPlatform.isAarch64 "libarm64")
   ];
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ windows.mingw_w64_headers ];
-  dontStrip = true;
-  hardeningDisable = [ "stackprotector" "fortify" ];
-
-  meta = {
-    platforms = lib.platforms.windows;
-  };
+  hardeningDisable = [
+    "stackprotector"
+    "fortify"
+  ];
 }

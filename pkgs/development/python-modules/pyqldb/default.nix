@@ -1,19 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub, boto3, amazon-ion, ionhash, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  boto3,
+  amazon-ion,
+  ionhash,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pyqldb";
-  version = "3.2.2";
+  version = "3.2.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-qldb-driver-python";
-    rev = "v${version}";
-    sha256 = "sha256-TKf43+k428h8T6ye6mJrnK9D4J1xpIu0QacM7lWJF7w=";
+    tag = "v${version}";
+    hash = "sha256-u8wI8ThD/BA+WI62OvNFmYvcqr018wgrh+5J+p2A6hM=";
   };
 
-  propagatedBuildInputs = [ boto3 amazon-ion ionhash ];
+  propagatedBuildInputs = [
+    boto3
+    amazon-ion
+    ionhash
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export AWS_DEFAULT_REGION=us-east-1

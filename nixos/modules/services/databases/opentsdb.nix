@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.opentsdb;
 
   configFile = pkgs.writeText "opentsdb.conf" cfg.config;
 
-in {
+in
+{
 
   ###### interface
 
@@ -15,49 +18,36 @@ in {
 
     services.opentsdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run OpenTSDB.
-        '';
-      };
+      enable = lib.mkEnableOption "OpenTSDB";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentsdb;
-        defaultText = literalExpression "pkgs.opentsdb";
-        description = ''
-          OpenTSDB package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "opentsdb" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "opentsdb";
         description = ''
           User account under which OpenTSDB runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "opentsdb";
         description = ''
           Group account under which OpenTSDB runs.
         '';
       };
 
-      port = mkOption {
-        type = types.int;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 4242;
         description = ''
           Which port OpenTSDB listens on.
         '';
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           tsd.core.auto_create_metrics = true
           tsd.http.request.enable_chunked  = true
@@ -73,7 +63,7 @@ in {
 
   ###### implementation
 
-  config = mkIf config.services.opentsdb.enable {
+  config = lib.mkIf config.services.opentsdb.enable {
 
     systemd.services.opentsdb = {
       description = "OpenTSDB Server";
@@ -83,10 +73,9 @@ in {
       environment.JAVA_HOME = "${pkgs.jre}";
       path = [ pkgs.gnuplot ];
 
-      preStart =
-        ''
+      preStart = ''
         COMPRESSION=NONE HBASE_HOME=${config.services.hbase.package} ${cfg.package}/share/opentsdb/tools/create_table.sh
-        '';
+      '';
 
       serviceConfig = {
         PermissionsStartOnly = true;

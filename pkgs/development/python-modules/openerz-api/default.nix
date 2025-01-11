@@ -1,29 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "openerz-api";
-  version = "0.1.0";
+  version = "0.3.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "misialq";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "10kxsmaz2rn26jijaxmdmhx8vjdz8hrhlrvd39gc8yvqbjwhi3nw";
+    repo = "openerz-api";
+    tag = "v${version}";
+    hash = "sha256-CwK61StspZJt0TALv76zfibUzlriwp9HRoYOtX9bU+c=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ requests ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     testfixtures
   ];
@@ -33,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with the OpenERZ API";
     homepage = "https://github.com/misialq/openerz-api";
+    changelog = "https://github.com/misialq/openerz-api/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

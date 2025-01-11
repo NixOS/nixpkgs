@@ -1,41 +1,50 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, treelog
-, stringly
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  appdirs,
+  bottombar,
+  numpy,
+  nutils-poly,
+  psutil,
+  stringly,
+  treelog,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "7.0";
-  format = "setuptools";
+  version = "8.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-V7lSMhwzc9+36uXMCy5uF241XwJ62Pdf59RUulOt4i8=";
+    tag = "v${version}";
+    hash = "sha256-E/y1YXW+0+LfntRQsdIU9rMOmN8mlFwXktD/sViJo3I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
+    appdirs
+    bottombar
     numpy
-    treelog
+    nutils-poly
+    psutil
     stringly
+    treelog
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  pythonRelaxDeps = [ "psutil" ];
 
-  pythonImportsCheck = [
-    "nutils"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "nutils" ];
 
   disabledTestPaths = [
     # AttributeError: type object 'setup' has no attribute '__code__'
@@ -44,9 +53,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Numerical Utilities for Finite Element Analysis";
+    changelog = "https://github.com/evalf/nutils/releases/tag/v${version}";
     homepage = "https://www.nutils.org/";
     license = licenses.mit;
-    broken = stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }

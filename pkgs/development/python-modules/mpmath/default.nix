@@ -1,31 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gmpy2,
+  isPyPy,
+  setuptools,
+  pytestCheckHook,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "mpmath";
-  version = "1.2.1";
+  version = "1.3.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "79ffb45cf9f4b101a807595bcb3e72e0396202e0b1d25d689134b48c4216a81a";
+  src = fetchFromGitHub {
+    owner = "mpmath";
+    repo = "mpmath";
+    tag = version;
+    hash = "sha256-9BGcaC3TyolGeO65/H42T/WQY6z5vc1h+MA+8MGFChU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  # error: invalid command 'test'
-  doCheck = false;
+  optional-dependencies = {
+    gmpy = lib.optionals (!isPyPy) [ gmpy2 ];
+  };
+
+  passthru.tests = {
+    inherit sage;
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage    = "https://mpmath.org/";
-    description = "A pure-Python library for multiprecision floating arithmetic";
-    license     = licenses.bsd3;
+    homepage = "https://mpmath.org/";
+    description = "Pure-Python library for multiprecision floating arithmetic";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
-
 }

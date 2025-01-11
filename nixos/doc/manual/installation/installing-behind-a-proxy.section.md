@@ -7,8 +7,10 @@ To install NixOS behind a proxy, do the following before running
     keep the internet accessible after reboot.
 
     ```nix
-    networking.proxy.default = "http://user:password@proxy:port/";
-    networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    {
+      networking.proxy.default = "http://user:password@proxy:port/";
+      networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    }
     ```
 
 1.  Setup the proxy environment variables in the shell where you are

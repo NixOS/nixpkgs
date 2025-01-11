@@ -1,53 +1,59 @@
-{ cri-o-unwrapped
-, runCommand
-, makeWrapper
-, lib
-, extraPackages ? []
-, cri-o
-, runc # Default container runtime
-, crun # Container runtime (default with cgroups v2 for podman/buildah)
-, conmon # Container runtime monitor
-, util-linux # nsenter
-, cni-plugins # not added to path
-, iptables
+{
+  cri-o-unwrapped,
+  runCommand,
+  makeWrapper,
+  lib,
+  extraPackages ? [ ],
+  runc, # Default container runtime
+  conntrack-tools,
+  crun, # Container runtime (default with cgroups v2 for podman/buildah)
+  conmon, # Container runtime monitor
+  util-linux, # nsenter
+  iptables,
 }:
 
 let
-  cri-o = cri-o-unwrapped;
+  binPath = lib.makeBinPath (
+    [
+      runc
+      conntrack-tools
+      crun
+      conmon
+      util-linux
+      iptables
+    ]
+    ++ extraPackages
+  );
 
-  binPath = lib.makeBinPath ([
-    runc
-    crun
-    conmon
-    util-linux
-    iptables
-  ] ++ extraPackages);
+in
+runCommand cri-o-unwrapped.name
+  {
+    name = "${cri-o-unwrapped.pname}-wrapper-${cri-o-unwrapped.version}";
+    inherit (cri-o-unwrapped) pname version passthru;
 
-in runCommand cri-o.name {
-  name = "${cri-o.pname}-wrapper-${cri-o.version}";
-  inherit (cri-o) pname version passthru;
+    preferLocalBuild = true;
 
-  preferLocalBuild = true;
+    meta = builtins.removeAttrs cri-o-unwrapped.meta [ "outputsToInstall" ];
 
-  meta = builtins.removeAttrs cri-o.meta [ "outputsToInstall" ];
+    outputs = [
+      "out"
+      "man"
+    ];
 
-  outputs = [
-    "out"
-    "man"
-  ];
+    nativeBuildInputs = [
+      makeWrapper
+    ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  }
+  ''
+    ln -s ${cri-o-unwrapped.man} $man
 
-} ''
-  ln -s ${cri-o.man} $man
+    mkdir -p $out/bin
+    ln -s ${cri-o-unwrapped}/etc $out/etc
+    ln -s ${cri-o-unwrapped}/share $out/share
 
-  mkdir -p $out/bin
-  ln -s ${cri-o-unwrapped}/share $out/share
-
-  for p in ${cri-o-unwrapped}/bin/*; do
-    makeWrapper $p $out/bin/''${p##*/} \
-      --prefix PATH : ${binPath}
-  done
-''
+    for p in ${cri-o-unwrapped}/bin/*; do
+      makeWrapper $p $out/bin/''${p##*/} \
+        --prefix PATH : ${binPath}
+    done
+  ''

@@ -1,28 +1,41 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub
-, Cocoa ? null }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  Cocoa,
+  installShellFiles,
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "noti";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
     rev = version;
-    sha256 = "12r9wawwl6x0rfv1kahwkamfa0pjq24z60az9pn9nsi2z1rrlwkd";
+    hash = "sha256-8CHSbKOiWNYqKBU1kqQm5t02DJq0JfoIaPsU6Ylc46E=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin Cocoa;
+  vendorHash = null;
 
-  goPackagePath = "github.com/variadico/noti";
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   ldflags = [
-    "-X ${goPackagePath}/internal/command.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/variadico/noti/internal/command.Version=${version}"
   ];
 
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
   postInstall = ''
-    install -Dm444 -t $out/share/man/man1 $src/docs/man/*.1
-    install -Dm444 -t $out/share/man/man5 $src/docs/man/*.5
+    installManPage docs/man/dist/*
   '';
 
   meta = with lib; {
@@ -30,10 +43,12 @@ buildGoPackage rec {
     longDescription = ''
       Monitor a process and trigger a notification.
 
-      Never sit and wait for some long-running process to finish. Noti can alert you when it's done. You can receive messages on your computer or phone.
+      Never sit and wait for some long-running process to finish. Noti can alert
+      you when it's done. You can receive messages on your computer or phone.
     '';
     homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
-    maintainers = with maintainers; [ stites marsam ];
+    maintainers = with maintainers; [ stites ];
+    mainProgram = "noti";
   };
 }

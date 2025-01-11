@@ -1,38 +1,56 @@
-{ lib, buildPythonPackage, fetchPypi, fasteners
-, jinja2
-, pbr
-, python-jenkins
-, pyyaml
-, six
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fasteners,
+  jinja2,
+  pbr,
+  python-jenkins,
+  pyyaml,
+  six,
+  stevedore,
+  pytestCheckHook,
+  setuptools,
+  testtools,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "4.1.0";
+  version = "6.4.2";
+
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5jCltdomD4u5LZrYJFUHB/sLORXYuWoeJOalAci0+XQ=";
+    hash = "sha256-G+DVRd6o3GwTdFNnJkotIidrxexJZSdgCGXTA4KnJJA=";
   };
 
   postPatch = ''
-    # relax version constraint, https://storyboard.openstack.org/#!/story/2009723
-    substituteInPlace requirements.txt --replace 'PyYAML>=3.10.0,<6' 'PyYAML>=3.10.0'
-
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = [ pbr python-jenkins pyyaml six stevedore fasteners jinja2 ];
+  dependencies = [
+    pbr
+    python-jenkins
+    pyyaml
+    six
+    stevedore
+    fasteners
+    jinja2
+  ];
 
-  # Need to fix test deps, relies on stestr and a few other packages that aren't available on nixpkgs
-  checkPhase = "$out/bin/jenkins-jobs --help";
+  nativeCheckInputs = [
+    pytestCheckHook
+    testtools
+    pytest-mock
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
-    homepage = "https://docs.openstack.org/infra/jenkins-job-builder/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    mainProgram = "jenkins-jobs";
+    homepage = "https://jenkins-job-builder.readthedocs.io/en/latest/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-
 }

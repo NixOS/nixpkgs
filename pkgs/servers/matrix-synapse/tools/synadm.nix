@@ -1,25 +1,24 @@
-{ lib
-, python3Packages
+{
+  lib,
+  python3,
+  fetchPypi,
+  nix-update-script,
 }:
 
-with python3Packages; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.34";
+  version = "0.46.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pM1nY8j7W1aeWv7/H+9Sz9jo4u1sax/fuKPtx0JKtL8=";
+    hash = "sha256-EjV3zTd6VAemNS/mD19Caw9SQZW1qs4+07wRxfVq++g=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Click>=7.0,<8.0" "Click"
-  '';
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     click-option-group
+    dnspython
     tabulate
     pyyaml
     requests
@@ -32,13 +31,17 @@ with python3Packages; buildPythonApplication rec {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Command line admin tool for Synapse";
+    mainProgram = "synadm";
     longDescription = ''
       A CLI tool to help admins of Matrix Synapse homeservers
       conveniently issue commands available via its admin API's
-      (matrix-org/synapse@master/docs/admin_api)
+      (element-hq/synapse@master/docs/admin_api)
     '';
+    changelog = "https://github.com/JOJ0/synadm/releases/tag/v${version}";
     homepage = "https://github.com/JOJ0/synadm";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexa ];

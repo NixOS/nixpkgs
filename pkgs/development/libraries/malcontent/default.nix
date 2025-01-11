@@ -1,11 +1,10 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , glib
 , coreutils
 , accountsservice
@@ -15,20 +14,21 @@
 , glib-testing
 , python3
 , nixosTests
+, malcontent-ui
 }:
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.10.4";
+  version = "0.13.0";
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
-    repo = pname;
+    repo = "malcontent";
     rev = version;
-    sha256 = "sha256-s2wQLb3tCfO3p8yYG8Nc6pu+y2TLfrmo7Ug1LgDLEdw=";
+    hash = "sha256-DVoTJrpXk5AoRMz+TxEP3NIAA/OOGRzZurLyGp0UBUo=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libmalcontent/tests/app-filter.c \
-      --replace "/usr/bin/true" "${coreutils}/bin/true" \
-      --replace "/bin/true" "${coreutils}/bin/true" \
-      --replace "/usr/bin/false" "${coreutils}/bin/false" \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/usr/bin/false" "${coreutils}/bin/false" \
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
   '';
 
   postInstall = ''
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.malcontent;
+      inherit malcontent-ui;
     };
   };
 
@@ -96,6 +97,7 @@ stdenv.mkDerivation rec {
     outputsToInstall = [ "bin" "out" "man" ];
 
     description = "Parental controls library";
+    mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

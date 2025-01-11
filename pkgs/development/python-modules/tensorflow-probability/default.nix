@@ -1,54 +1,72 @@
-{ lib
-, fetchFromGitHub
-, buildBazelPackage
-, buildPythonPackage
-, python
-, setuptools
-, wheel
-, absl-py
-, tensorflow
-, six
-, numpy
-, dm-tree
-, keras
-, decorator
-, cloudpickle
-, gast
-, hypothesis
-, scipy
-, pandas
-, mpmath
-, matplotlib
-, mock
-, pytest
+{
+  lib,
+  stdenv,
+
+  # bazel wheel
+  buildBazelPackage,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  python,
+  setuptools,
+  wheel,
+  absl-py,
+
+  bazel_6,
+  cctools,
+
+  # python package
+  buildPythonPackage,
+
+  # dependencies
+  cloudpickle,
+  decorator,
+  dm-tree,
+  gast,
+  keras,
+  numpy,
+  six,
+  tensorflow,
+
+  # tests
+  hypothesis,
+  matplotlib,
+  mock,
+  mpmath,
+  pandas,
+  pytest,
+  scipy,
 }:
 
 let
-  version = "0.15.0";
-  pname = "tensorflow_probability";
+  version = "0.25.0";
+  pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
-    name = "${pname}-${version}-py2.py3-none-any.whl";
+    name = "tensorflow_probability-${version}-py2.py3-none-any.whl";
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "v" + version;
-      sha256 = "155fgmra90s08vjnp61qxdrpzq74xa3kdzhgdkavwgc25pvxn3mi";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
     nativeBuildInputs = [
+      absl-py
       # needed to create the output wheel in installPhase
       python
       setuptools
-      wheel
-      absl-py
       tensorflow
+      wheel
     ];
 
-    bazelTarget = ":pip_pkg";
+    bazel = bazel_6;
+
+    bazelTargets = [ ":pip_pkg" ];
+    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "0sgxdlw5x3dydy53l10vbrj8smh78b7r1wff8jxcgp4w69mk8zfm";
+      sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
     };
 
     buildAttrs = {
@@ -69,33 +87,34 @@ let
       '';
     };
   };
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit version pname;
   format = "wheel";
 
   src = bazel-wheel;
 
-  propagatedBuildInputs = [
-    tensorflow
-    six
-    numpy
-    decorator
+  dependencies = [
     cloudpickle
-    gast
+    decorator
     dm-tree
+    gast
     keras
+    numpy
+    six
+    tensorflow
   ];
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
-    pytest
-    scipy
-    pandas
-    mpmath
     matplotlib
     mock
+    mpmath
+    pandas
+    pytest
+    scipy
   ];
 
   # Ideally, we run unit tests with pytest, but in checkPhase, only the Bazel-build wheel is available.
@@ -106,10 +125,11 @@ in buildPythonPackage {
   # sanity check
   pythonImportsCheck = [ "tensorflow_probability" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [];  # This package is maintainerless.
+    changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

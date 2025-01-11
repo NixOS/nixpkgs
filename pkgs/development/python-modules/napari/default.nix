@@ -1,83 +1,111 @@
-{ lib
-, mkDerivationWith
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, superqt
-, typing-extensions
-, tifffile
-, napari-npe2
-, pint
-, pyyaml
-, numpydoc
-, dask
-, magicgui
-, docstring-parser
-, appdirs
-, imageio
-, pyopengl
-, cachey
-, napari-svg
-, psutil
-, napari-console
-, wrapt
-, pydantic
-, tqdm
-, jsonschema
-, scipy
-, wrapQtAppsHook
-}: mkDerivationWith buildPythonPackage rec {
-  pname = "napari";
-  version = "0.4.15";
+{
+  lib,
+  app-model,
+  appdirs,
+  buildPythonPackage,
+  cachey,
+  certifi,
+  dask,
+  docstring-parser,
+  fetchFromGitHub,
+  imageio,
+  jsonschema,
+  magicgui,
+  mkDerivationWith,
+  napari-console,
+  napari-npe2,
+  napari-svg,
+  numpydoc,
+  pandas,
+  pillow,
+  pint,
+  psutil,
+  pydantic,
+  pyopengl,
+  pythonOlder,
+  pyyaml,
+  scikit-image,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  superqt,
+  tifffile,
+  toolz,
+  tqdm,
+  typing-extensions,
+  vispy,
+  wrapQtAppsHook,
+  wrapt,
+}:
 
-  format = "pyproject";
+mkDerivationWith buildPythonPackage rec {
+  pname = "napari";
+  version = "0.5.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-52TDMU6box7TA26P0F9ZgPr8fyzYM646lPUfOektOuE=";
+    repo = "napari";
+    tag = "v${version}";
+    hash = "sha256-wJifLRrHlDzPgBU7OOPqjdzYpr9M+Klc+yAc/IpyZN8=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "scikit-image[data]>=0.19.1" "scikit-image"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
-    wrapQtAppsHook
   ];
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
   propagatedBuildInputs = [
-    napari-npe2
+    app-model
+    appdirs
     cachey
-    napari-svg
-    napari-console
-    superqt
-    magicgui
-    typing-extensions
-    tifffile
-    pint
-    pyyaml
-    numpydoc
+    certifi
     dask
     docstring-parser
-    appdirs
     imageio
-    pyopengl
-    psutil
-    wrapt
-    pydantic
-    tqdm
     jsonschema
+    magicgui
+    napari-console
+    napari-npe2
+    napari-svg
+    numpydoc
+    pandas
+    pillow
+    pint
+    psutil
+    pydantic
+    pyopengl
+    pyyaml
+    scikit-image
     scipy
-  ];
+    superqt
+    tifffile
+    toolz
+    tqdm
+    typing-extensions
+    vispy
+    wrapt
+  ] ++ dask.optional-dependencies.array;
 
   dontUseSetuptoolsCheck = true;
+
   postFixup = ''
     wrapQtApp $out/bin/napari
   '';
 
   meta = with lib; {
-    description = "A fast, interactive, multi-dimensional image viewer for python";
+    description = "Fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
+    changelog = "https://github.com/napari/napari/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

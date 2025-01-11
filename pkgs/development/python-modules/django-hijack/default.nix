@@ -1,38 +1,58 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, django
-, django_compat
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nix-update-script,
+
+  # build-system
+  flit-gettext,
+  flit-scm,
+
+  # dependencies
+  django,
+
+  # tests
+  pytest-cov-stub,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.2.0";
+  version = "3.7.1";
+  pyproject = true;
 
-  # the wheel comes with pre-built assets, allowing us to avoid fighting
-  # with npm/webpack/gettext to build them ourselves.
-  format = "wheel";
-  src = fetchPypi {
-    inherit version format;
-    pname = "django_hijack";
-    dist = "py3";
-    python = "py3";
-    sha256 = "1ixn7ppmbq1bgqahwv3z57hk80ql7sxpwl8jms7y8w5z1h91cn86";
+  src = fetchFromGitHub {
+    owner = "django-hijack";
+    repo = "django-hijack";
+    tag = version;
+    hash = "sha256-3P7SCKS+ThBRNfXpN17N1y5vhYYWRL2JGVBOUHRdhK8=";
   };
 
-  propagatedBuildInputs = [ django django_compat ];
+  build-system = [
+    flit-gettext
+    flit-scm
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-django ];
+  dependencies = [ django ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-django
+  ];
+
   preCheck = ''
-    export DJANGO_SETTINGS_MODULE='hijack.tests.test_app.settings'
+    export DJANGO_SETTINGS_MODULE=tests.test_app.settings
   '';
-  pytestFlagsArray = [ "--pyargs" "hijack" ];
+
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-    homepage = "https://github.com/arteria/django-hijack";
+    homepage = "https://github.com/django-hijack/django-hijack";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, xorg, i3lock }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  i3lock,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "i3lock-fancy-rapid";
-  version = "2019-10-09";
+  version = "unstable-2021-04-21";
+
   src = fetchFromGitHub {
     owner = "yvbbrjdr";
     repo = "i3lock-fancy-rapid";
-    rev = "c67f09bc8a48798c7c820d7d4749240b10865ce0";
-    sha256 = "0jhvlj6v6wx70239pgkjxd42z1s2bzfg886ra6n1rzsdclf4rkc6";
+    rev = "6eeebd4caa177b82fa5010b5e8828cce3f89fb97";
+    hash = "sha256-EoX8ts0yV/zkb4wgEh4P8noU+UraRS4w9pp+76v+Nm0=";
   };
 
   buildInputs = [ xorg.libX11 ];
+
   propagatedBuildInputs = [ i3lock ];
 
   postPatch = ''
@@ -19,13 +27,19 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D i3lock-fancy-rapid $out/bin/i3lock-fancy-rapid
+    ln -s $out/bin/i3lock-fancy-rapid $out/bin/i3lock
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A faster implementation of i3lock-fancy";
+    description = "Faster implementation of i3lock-fancy";
     homepage = "https://github.com/yvbbrjdr/i3lock-fancy-rapid";
     maintainers = with maintainers; [ nickhu ];
+    mainProgram = "i3lock-fancy-rapid";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

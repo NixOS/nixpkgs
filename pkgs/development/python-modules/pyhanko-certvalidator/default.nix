@@ -1,33 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, asn1crypto
-, cryptography
-, oscrypto
-, requests
-, uritools
-, openssl
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  asn1crypto,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  freezegun,
+  oscrypto,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  uritools,
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.19.5";
-  format = "setuptools";
+  version = "0.26.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
-    rev = version;
-    sha256 = "sha256-UxlBggKgqvbKioG98UaKvhW0YgEa6PqV913nqYvTx1I=";
+    tag = "v${version}";
+    hash = "sha256-+/3n+v/8Tpqt7UoOrBi4S84N6Jioay7e2j+SvKJeoLA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     cryptography
     oscrypto
@@ -35,39 +39,20 @@ buildPythonPackage rec {
     uritools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
+    freezegun
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Test looks for libcrypto.so.1.1
-    "dev/stress_test.py"
-    # Requests
-    "tests/test_crl_client.py"
-  ];
-
-  disabledTests = [
-    # Look for nonexisting certificates
-    "test_basic_certificate_validator_tls"
-    # Failed to fetch OCSP response from http://ocsp.digicert.com
-    "test_fetch_ocsp_aiohttp"
-    "test_fetch_ocsp_requests"
-    "test_fetch_ocsp_err_requests"
-    # Unable to build a validation path for the certificate "%s" - no issuer matching "%s" was found
-    "test_revocation_mode_hard_aiohttp_autofetch"
-    # The path could not be validated because no revocation information could be found for intermediate certificate 1
-    "test_revocation_mode_hard"
-  ];
-
-  pythonImportsCheck = [
-    "pyhanko_certvalidator"
-  ];
+  pythonImportsCheck = [ "pyhanko_certvalidator" ];
 
   meta = with lib; {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/certvalidator";
+    changelog = "https://github.com/MatthiasValvekens/certvalidator/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

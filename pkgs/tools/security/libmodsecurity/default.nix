@@ -1,34 +1,69 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, bison, flex, pkg-config
-, curl, geoip, libmaxminddb, libxml2, lmdb, lua, pcre
-, ssdeep, yajl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
+  curl,
+  geoip,
+  libmaxminddb,
+  libxml2,
+  lmdb,
+  lua,
+  pcre,
+  pcre2,
+  ssdeep,
+  yajl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.6";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
-    owner = "SpiderLabs";
+    owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${version}";
-    sha256 = "sha256-V+NBT2YN8qO3Px8zEzSA2ZsjSf1pv8+VlLxYlrpqfGg=";
+    hash = "sha256-+z31t007NLCAFG/Lsj5j/AbBDPkI2wjbH5yM5vipH04=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
-  buildInputs = [ curl geoip libmaxminddb libxml2 lmdb lua pcre ssdeep yajl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+  ];
+  buildInputs = [
+    curl
+    geoip
+    libmaxminddb
+    libxml2
+    lmdb
+    lua
+    pcre
+    pcre2
+    ssdeep
+    yajl
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
     "--enable-parser-generation"
+    "--disable-doxygen-doc"
     "--with-curl=${curl.dev}"
     "--with-libxml=${libxml2.dev}"
     "--with-lmdb=${lmdb.out}"
     "--with-maxmind=${libmaxminddb}"
     "--with-pcre=${pcre.dev}"
+    "--with-pcre2=${pcre2.out}"
     "--with-ssdeep=${ssdeep}"
   ];
 
@@ -36,6 +71,10 @@ stdenv.mkDerivation rec {
     substituteInPlace build/lmdb.m4 \
       --replace "\''${path}/include/lmdb.h" "${lmdb.dev}/include/lmdb.h" \
       --replace "lmdb_inc_path=\"\''${path}/include\"" "lmdb_inc_path=\"${lmdb.dev}/include\""
+    substituteInPlace build/pcre2.m4 \
+      --replace "/usr/local/pcre2" "${pcre2.out}/lib" \
+      --replace "\''${path}/include/pcre2.h" "${pcre2.dev}/include/pcre2.h" \
+      --replace "pcre2_inc_path=\"\''${path}/include\"" "pcre2_inc_path=\"${pcre2.dev}/include\""
     substituteInPlace build/ssdeep.m4 \
       --replace "/usr/local/libfuzzy" "${ssdeep}/lib" \
       --replace "\''${path}/include/fuzzy.h" "${ssdeep}/include/fuzzy.h" \
@@ -56,7 +95,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/SpiderLabs/ModSecurity";
+    homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     description = ''
       ModSecurity v3 library component.
     '';
@@ -71,5 +110,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "modsec-rules-check";
   };
 }

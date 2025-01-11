@@ -1,35 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytest
-, numpy
-, scipy
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  versioneer,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "transforms3d";
-  version = "unstable-2019-12-17";
+  version = "0.4.2";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
-  # no Git tag or PyPI release in some time
   src = fetchFromGitHub {
     owner = "matthew-brett";
     repo = pname;
-    rev = "6b20250c610249914ca5e3a3a2964c36ca35c19a";
-    sha256 = "1z789hgk71a6rj6mqp9srpzamg06g58hs2p1l1p344cfnkj5a4kc";
+    tag = version;
+    hash = "sha256-9wICu7zNYF54e6xcDpZxqctB4GVu5Knf79Z36016Rpw=";
   };
 
-  propagatedBuildInputs = [ numpy sympy ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
-  checkInputs = [ pytest scipy ];
-  checkPhase = "pytest transforms3d";
+  dependencies = [
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    scipy
+    sympy
+  ];
+
+  pythonImportsCheck = [ "transforms3d" ];
 
   meta = with lib; {
     homepage = "https://matthew-brett.github.io/transforms3d";
     description = "Convert between various geometric transformations";
+    changelog = "https://github.com/matthew-brett/transforms3d/blob/main/Changelog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ bcdarwin ];
   };

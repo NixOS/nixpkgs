@@ -8,7 +8,7 @@ in
 {
   options = {
     services.snowflake-proxy = {
-      enable = mkEnableOption "System to defeat internet censorship";
+      enable = mkEnableOption "snowflake-proxy, a system to defeat internet censorship";
 
       broker = mkOption {
         description = "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
@@ -71,7 +71,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @mount @obsolete @reboot @swap @privileged @resources";
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
     };

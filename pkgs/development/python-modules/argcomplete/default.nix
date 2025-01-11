@@ -1,38 +1,49 @@
-{ buildPythonPackage, fetchPypi, lib
-, dicttoxml
-, importlib-metadata
-, pexpect
-, prettytable
-, requests-toolbelt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
+
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "2.0.0";
+  version = "3.5.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6372ad78c89d662035101418ae253668445b391755cfe94ea52f1b9d22425b20";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "kislyuk";
+    repo = "argcomplete";
+    tag = "v${version}";
+    hash = "sha256-um8iFzEHExTRV1BAl86/XKLc7vmf2Ws1dB83agfvoec=";
   };
 
-  doCheck = false; # meant to be ran with interactive interpreter
-
-  # re-enable if we are able to make testing work
-  # checkInputs = [ bashInteractive coverage flake8 ];
-
-  propagatedBuildInputs = [
-    dicttoxml
-    importlib-metadata
-    pexpect
-    prettytable
-    requests-toolbelt
+  patches = [
+    # fixes issues with python3Packages.traitlets tests
+    # https://git.launchpad.net/ubuntu/+source/python-argcomplete/tree/debian/patches/python-3.13-compat.patch?h=ubuntu/plucky
+    # https://github.com/kislyuk/argcomplete/pull/513
+    ./python-3.13-compat.patch
   ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  # Tries to build and install test packages which fails
+  doCheck = false;
 
   pythonImportsCheck = [ "argcomplete" ];
 
   meta = with lib; {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    maintainers = [ maintainers.womfoo ];
-    license = [ licenses.asl20 ];
+    changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
+    downloadPage = "https://github.com/kislyuk/argcomplete";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ womfoo ];
   };
 }

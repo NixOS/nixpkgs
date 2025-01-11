@@ -1,6 +1,13 @@
-{ callPackage, luaPackages, perlPackages, python3Packages }:
+{
+  callPackage,
+  luaPackages,
+  perlPackages,
+  python3Packages,
+}:
 
 {
+  autosort = callPackage ./autosort { };
+
   colorize_nicks = callPackage ./colorize_nicks { };
 
   edit = callPackage ./edit { };
@@ -10,6 +17,8 @@
   };
 
   url_hint = callPackage ./url_hint { };
+
+  weechat-grep = callPackage ./weechat-grep { };
 
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
     inherit (luaPackages) cjson luaffi;

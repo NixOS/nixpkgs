@@ -1,19 +1,37 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, dbus-glib, libXScrnSaver, libnotify, libxml2, pam, systemd, mate, wrapGAppsHook, mateUpdateScript }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  dbus-glib,
+  libXScrnSaver,
+  libnotify,
+  libxml2,
+  mate-desktop,
+  mate-menus,
+  mate-panel,
+  pam,
+  systemd,
+  wrapGAppsHook3,
+  mateUpdateScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-screensaver";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "T72yHqSlnqjeM+qb93bYaXU+SSlWBGZMMOIg4JZZuLw=";
+    sha256 = "ag8kqPhKL5XhARSrU+Y/1KymiKVf3FA+1lDgpBDj6nA=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     libxml2 # provides xmllint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -21,11 +39,11 @@ stdenv.mkDerivation rec {
     dbus-glib
     libXScrnSaver
     libnotify
+    mate-desktop
+    mate-menus
+    mate-panel
     pam
     systemd
-    mate.mate-desktop
-    mate.mate-menus
-    mate.mate-panel
   ];
 
   configureFlags = [ "--without-console-kit" ];
@@ -34,12 +52,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Screen saver and locker for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

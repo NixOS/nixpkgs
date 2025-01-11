@@ -1,4 +1,11 @@
-{ fetchPypi, unzip, stdenv, pname, version, jarHash }:
+{
+  fetchPypi,
+  unzip,
+  stdenv,
+  pname,
+  version,
+  jarHash,
+}:
 
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -6,6 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
+    python = "py3";
+    dist = "py3";
     hash = jarHash;
   };
 
@@ -15,6 +24,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     unzip ${src}
-    mv ./skein/java/skein.jar $out
+    install -D ./skein/java/skein.jar $out
   '';
 }

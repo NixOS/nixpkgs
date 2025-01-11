@@ -71,7 +71,7 @@ $ ./maintainers/scripts/haskell/hydra-report.hs get-report
 $ ./maintainers/scripts/haskell/hydra-report.hs ping-maintainers
 ```
 
-The `hyda-report.hs ping-maintainers` command generates a Markdown document
+The `hydra-report.hs ping-maintainers` command generates a Markdown document
 that you can paste in a GitHub comment on the PR opened above.  This
 comment describes which Haskell packages are now failing to build.  It also
 pings the maintainers so that they know to fix up their packages.
@@ -137,7 +137,7 @@ following will happen:
     This is a list of Haskell packages that are known to be broken.
 
 -   [`hackage-packages.nix`](hackage-packages.nix) will be regenerated.  This
-    will mark all Haskell pacakges in `configuration-hackage2nix/broken.yaml`
+    will mark all Haskell packages in `configuration-hackage2nix/broken.yaml`
     as `broken`.
 
 -   The
@@ -249,6 +249,8 @@ opening the next one.  When you want to merge the currently open
     $ ./maintainers/scripts/haskell/merge-and-open-pr.sh PR_NUM_OF_CURRENT_HASKELL_UPDATES_PR
     ```
 
+    Find the PR number easily [here](https://github.com/nixos/nixpkgs/pulls?q=is%3Apr+is%3Aopen+head%3Ahaskell-updates)
+
     This does the following things:
 
     1.  Fetches `origin`, makes sure you currently have the `haskell-updates`
@@ -349,5 +351,5 @@ Here are some additional tips that didn't fit in above.
         and work the new member into the `haskell-updates` rotation.
 
     1.  Optionally, have the new member add themselves to the Haskell
-        section in [`CODEOWNERS`](../../../.github/CODEOWNERS).  This
+        section in [`OWNERS`](../../../ci/OWNERS).  This
         will cause them to get pinged on most Haskell-related PRs.

@@ -1,17 +1,18 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, netcdf
-, statistics
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  netcdf,
+  statistics,
 }:
 
 buildOctavePackage rec {
   pname = "ncarray";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0v96iziikvq2v7hczhbfs9zmk49v99kn6z3lgibqqpwam175yqgd";
+    sha256 = "sha256-W6L2Esm7AdzntT7cimKylbeKYcZWKhHim96N5dM/qoE=";
   };
 
   buildInputs = [

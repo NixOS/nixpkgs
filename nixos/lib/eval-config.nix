@@ -9,12 +9,16 @@
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
 evalConfigArgs@
-{ # !!! system can be set modularly, would be nice to remove
+{ # !!! system can be set modularly, would be nice to remove,
+  #     however, removing or changing this default is too much
+  #     of a breaking change. To set it modularly, pass `null`.
   system ? builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
   # be set modularly anyway.
   pkgs ? null
 , # !!! what do we gain by making this configurable?
+  #     we can add modules that are included in specialisations, regardless
+  #     of inheritParentConfig.
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}
@@ -26,14 +30,34 @@ evalConfigArgs@
   check ? true
 , prefix ? []
 , lib ? import ../../lib
-, extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                 in if e == "" then [] else [(import e)]
+, extraModules ?
+    let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+    in lib.optional (e != "") (
+      lib.warn
+        ''
+          The NIXOS_EXTRA_MODULE_PATH environment variable is deprecated and will be
+          removed in NixOS 25.05.
+          We recommend a workflow where you update the expression files instead, but
+          if you wish to continue to use this variable, you may do so with a module like:
+
+          {
+            imports = [
+              (builtins.getEnv "NIXOS_EXTRA_MODULE_PATH")
+            ];
+          }
+
+          This has the benefit that your configuration hints at the
+          non-standard workflow.
+        ''
+        # NOTE: this import call is unnecessary and it even removes the file name
+        #       from error messages.
+        import e
+    )
 }:
 
-let pkgs_ = pkgs;
-in
-
 let
+  inherit (lib) optional;
+
   evalModulesMinimal = (import ./default.nix {
     inherit lib;
     # Implicit use of feature is noted in implementation.
@@ -43,20 +67,33 @@ let
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
-    config = {
-      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
-      # this.  Since the latter defaults to the former, the former should
-      # default to the argument. That way this new default could propagate all
-      # they way through, but has the last priority behind everything else.
-      nixpkgs.system = lib.mkDefault system;
-
-      _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
-    };
+    config = lib.mkMerge (
+      (optional (system != null) {
+        # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+        # this.  Since the latter defaults to the former, the former should
+        # default to the argument. That way this new default could propagate all
+        # they way through, but has the last priority behind everything else.
+        nixpkgs.system = lib.mkDefault system;
+      })
+      ++
+      (optional (pkgs != null) {
+        # This should be default priority, so it conflicts with any user-defined pkgs.
+        nixpkgs.pkgs = pkgs;
+      })
+    );
   };
 
   withWarnings = x:
     lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
     lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+    lib.warnIf (specialArgs?pkgs) ''
+      You have set specialArgs.pkgs, which means that options like nixpkgs.config
+      and nixpkgs.overlays will be ignored. If you wish to reuse an already created
+      pkgs, which you know is configured correctly for this NixOS configuration,
+      please import the `nixosModules.pkgsReadOnly` module from the nixpkgs flake or
+      `(modulesPath + "/misc/nixpkgs/read-only.nix"), and set `{ nixpkgs.pkgs = <your pkgs>; }`.
+      This properly disables the ignored options to prevent future surprises.
+    ''
     x;
 
   legacyModules =
@@ -99,8 +136,11 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
+  withExtraAttrs = configuration: configuration // {
+    inherit extraArgs;
+    inherit (configuration._module.args) pkgs;
+    inherit lib;
+    extendModules = args: withExtraAttrs (configuration.extendModules args);
+  };
 in
-withWarnings nixosWithUserModules // {
-  inherit extraArgs;
-  inherit (nixosWithUserModules._module.args) pkgs;
-}
+withWarnings (withExtraAttrs nixosWithUserModules)

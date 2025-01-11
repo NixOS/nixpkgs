@@ -1,4 +1,15 @@
-{ symlinkJoin, lib, rofi-unwrapped, makeWrapper, wrapGAppsHook, gdk-pixbuf, hicolor-icon-theme, theme ? null, plugins ? [], symlink-dmenu ? false }:
+{
+  symlinkJoin,
+  lib,
+  rofi-unwrapped,
+  makeWrapper,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  hicolor-icon-theme,
+  theme ? null,
+  plugins ? [ ],
+  symlink-dmenu ? false,
+}:
 
 symlinkJoin {
   name = "rofi-${rofi-unwrapped.version}";
@@ -7,7 +18,10 @@ symlinkJoin {
     rofi-unwrapped.out
   ] ++ (lib.forEach plugins (p: p.out));
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+  ];
   buildInputs = [ gdk-pixbuf ];
 
   preferLocalBuild = true;
@@ -25,9 +39,12 @@ symlinkJoin {
     makeWrapper ${rofi-unwrapped}/bin/rofi $out/bin/rofi \
       ''${gappsWrapperArgs[@]} \
       --prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share \
-      ${lib.optionalString (plugins != []) ''--prefix XDG_DATA_DIRS : ${lib.concatStringsSep ":" (lib.forEach plugins (p: "${p.out}/share"))}''} \
+      ${
+        lib.optionalString (plugins != [ ])
+          ''--prefix XDG_DATA_DIRS : ${lib.concatStringsSep ":" (lib.forEach plugins (p: "${p.out}/share"))}''
+      } \
       ${lib.optionalString (theme != null) ''--add-flags "-theme ${theme}"''} \
-      ${lib.optionalString (plugins != []) ''--add-flags "-plugin-path $out/lib/rofi"''}
+      ${lib.optionalString (plugins != [ ]) ''--add-flags "-plugin-path $out/lib/rofi"''}
 
     ${lib.optionalString symlink-dmenu "ln -s ${rofi-unwrapped}/bin/rofi $out/bin/dmenu"}
 
@@ -37,6 +54,6 @@ symlinkJoin {
   '';
 
   meta = rofi-unwrapped.meta // {
-    priority = (rofi-unwrapped.meta.priority or 0) - 1;
+    priority = (rofi-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

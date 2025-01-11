@@ -1,59 +1,63 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, cmake
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  callPackage,
 
-# Linux deps
-, libGL
-, xorg
+  # Linux deps
+  libGL,
+  xorg,
 
-# Darwin deps
-, cf-private
-, Cocoa
-, AudioToolbox
-, OpenGL
-, Foundation
-, ForceFeedback
+  # Darwin deps
+  CoreFoundation,
+  Cocoa,
+  AudioToolbox,
+  OpenGL,
+  Foundation,
+  ForceFeedback,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2021.3";
+  version = "2024.0";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${version}";
-    sha256 = "sha256-ENs2Jy2l6fogZdCSaIyfV9wQm57qaZfx5HVHOnQBrRk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-EBgb442wI9qU/o6EVCwPnMtPuv1f6Xk2+CZpKWXf3tY=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = if stdenv.isDarwin
-    then [
-      cf-private
-      Cocoa
-      AudioToolbox
-      OpenGL
-      Foundation
-      ForceFeedback
-    ]
-    else [
-      libGL
-      xorg.libX11
-      xorg.libXext
-    ];
+  buildInputs =
+    if stdenv.hostPlatform.isDarwin then
+      [
+        CoreFoundation
+        Cocoa
+        AudioToolbox
+        OpenGL
+        Foundation
+        ForceFeedback
+      ]
+    else
+      [
+        libGL
+        xorg.libX11
+        xorg.libXext
+      ];
 
   preConfigure = ''
     cd dev
   '';
 
-  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
-    description = "The Lobster programming language";
+    description = "Lobster programming language";
+    mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of
       very static typing and memory management with a very lightweight,
@@ -63,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

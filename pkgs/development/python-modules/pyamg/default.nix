@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, pytest
-, pybind11
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  pytest,
+  python,
+  pybind11,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "4.2.3";
+  version = "5.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N608Hcr/JDXCq3yOw2lCrwcmxWPTUFm80Y6wdHP3GC4=";
+    hash = "sha256-9EnZNCJOUDQB7nLNLuzhop2JO3q+NfYqRNUrqDEZjvo=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     numpy
@@ -28,12 +32,16 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  # failed with "ModuleNotFoundError: No module named 'pyamg.amg_core.evolution_strength'"
-  doCheck = false;
-  # taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python-pyamg#n27
-  # checkPhase = ''
-  #   PYTHONPATH="$PWD/build/lib.linux-*:$PYTHONPATH" ${python3.interpreter} -c "import pyamg; pyamg.test()"
-  # '';
+  checkPhase = ''
+    runHook preCheck
+
+    # The `pyamg` directory in PWD doesn't have the compiled Cython modules in it, but has higher import priority compared to the properly built and installed `pyamg`.
+    # It's easier to just remove the package directory in PWD.
+    rm -r pyamg
+    ${python.interpreter} -c "import pyamg; pyamg.test()"
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [
     "pyamg"
@@ -43,7 +51,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Algebraic Multigrid Solvers in Python";
     homepage = "https://github.com/pyamg/pyamg";
+    changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

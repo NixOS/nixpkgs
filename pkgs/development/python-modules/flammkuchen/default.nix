@@ -1,31 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, numpy
-, scipy
-, tables
-, pandas
-, nose
-, configparser
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  scipy,
+  setuptools,
+  tables,
 }:
 
 buildPythonPackage rec {
   pname = "flammkuchen";
-  version = "0.9.2";
+  version = "1.0.3";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f249fe5bf85f717d3836e0db6fa9443a8a43101ce07704715b42251c44fc968e";
+    hash = "sha256-z68HBsU9J6oe8+YL4OOQiMYQRs3TZUDM+e2ssqo6BFI=";
   };
 
-  checkInputs = [
-    nose
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
     scipy
     tables
+  ];
+
+  nativeCheckInputs = [
     pandas
-  ] ++ lib.optionals isPy27 [ configparser ];
+    pytestCheckHook
+  ];
 
   meta = {
     homepage = "https://github.com/portugueslab/flammkuchen";

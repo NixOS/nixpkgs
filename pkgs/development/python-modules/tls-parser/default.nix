@@ -1,13 +1,14 @@
-{ lib
-, pythonOlder
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tls-parser";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,16 +17,12 @@ buildPythonPackage rec {
     owner = "nabla-c0d3";
     repo = "tls_parser";
     rev = version;
-    hash = "sha256-A1lYRe1sHDoOFdF20DP+xRMcPBWzokIXFphIpaBmwBc=";
+    hash = "sha256-2XHhUDiJ1EctnYdxYFbNSVLF8dmHP9cZXjziOE9+Dew=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tls_parser"
-  ];
+  pythonImportsCheck = [ "tls_parser" ];
 
   meta = with lib; {
     description = "Small library to parse TLS records";

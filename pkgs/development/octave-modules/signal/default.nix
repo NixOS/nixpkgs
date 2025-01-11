@@ -1,16 +1,17 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, control
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  control,
 }:
 
 buildOctavePackage rec {
   pname = "signal";
-  version = "1.4.1";
+  version = "1.4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1amfh7ifjqxz2kr34hgq2mq8ygmd5j3cjdk1k2dk6qcgic7n0y6r";
+    sha256 = "sha256-lO74/qeMiWCfjd9tX/i/wuDauTK0P4bOkRR0pYtcce4=";
   };
 
   requiredOctavePackages = [

@@ -1,47 +1,88 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pathlib
-, py-cpuinfo
-, pytest
-, pythonOlder
-, statistics
+{
+  lib,
+  aspectlib,
+  buildPythonPackage,
+  elasticsearch,
+  fetchFromGitHub,
+  freezegun,
+  git,
+  mercurial,
+  nbmake,
+  py-cpuinfo,
+  pygal,
+  pytest,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "3.4.1";
-  format = "setuptools";
+  version = "5.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qc/8Epax5bPUZvhq42xSj6NUq0T4gbO5dDDS6omWBOU=";
+    repo = "pytest-benchmark";
+    tag = "v${version}";
+    hash = "sha256-4fD9UfZ6jtY7Gx/PVzd1JNWeQNz+DJ2kQmCku2TgxzI=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    py-cpuinfo
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    pathlib
-    statistics
-  ];
+  buildInputs = [ pytest ];
 
-  # Circular dependency
-  doCheck = false;
+  dependencies = [ py-cpuinfo ];
 
-  pythonImportsCheck = [
-    "pytest_benchmark"
-  ];
+  optional-dependencies = {
+    aspect = [ aspectlib ];
+    histogram = [
+      pygal
+      # FIXME package pygaljs
+      setuptools
+    ];
+    elasticsearch = [ elasticsearch ];
+  };
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pytest_benchmark" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    freezegun
+    git
+    mercurial
+    nbmake
+    pytestCheckHook
+    pytest-xdist
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests =
+    lib.optionals (pythonOlder "3.12") [
+      # AttributeError: 'PluginImportFixer' object has no attribute 'find_spec'
+      "test_compare_1"
+      "test_compare_2"
+      "test_regression_checks"
+      "test_regression_checks_inf"
+      "test_rendering"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # argparse usage changes mismatches test artifact
+      "test_help"
+    ];
+
+  meta = {
+    changelog = "https://github.com/ionelmc/pytest-benchmark/blob/${src.rev}/CHANGELOG.rst";
     description = "Pytest fixture for benchmarking code";
     homepage = "https://github.com/ionelmc/pytest-benchmark";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

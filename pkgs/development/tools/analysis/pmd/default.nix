@@ -1,29 +1,54 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, openjdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  openjdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pmd";
-  version = "6.43.0";
+  version = "6.55.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "sha256-+eJCN890vm4WBcMZ2VCGOS8WUyIckL+DfQVNaUSovGE=";
+    url = "https://github.com/pmd/pmd/releases/download/pmd_releases/${version}/pmd-bin-${version}.zip";
+    hash = "sha256-Iaz5bUPLQNWRyszMHCCmb8eW6t32nqYYEllER7rHoR0=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    cp -R {bin,lib} $out
-    wrapProgram $out/bin/run.sh --prefix PATH : ${openjdk.jre}/bin
+
+    install -Dm755 bin/run.sh $out/libexec/pmd
+    install -Dm644 lib/*.jar -t $out/lib/pmd
+
+    wrapProgram $out/libexec/pmd \
+        --prefix PATH : ${openjdk.jre}/bin \
+        --set LIB_DIR $out/lib/pmd
+
+    for app in pmd cpd cpdgui designer bgastviewer designerold ast-dump; do
+        makeWrapper $out/libexec/pmd $out/bin/$app --argv0 $app --add-flags $app
+    done
+
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "An extensible cross-language static code analyzer";
+    description = "Extensible cross-language static code analyzer";
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
     platforms = platforms.unix;
-    license = with licenses; [ bsdOriginal asl20 ];
+    license = with licenses; [
+      bsdOriginal
+      asl20
+    ];
   };
 }

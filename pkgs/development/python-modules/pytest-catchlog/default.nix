@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, unzip }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  unzip,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-catchlog";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +27,6 @@ buildPythonPackage rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-catchlog/";
-    description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
+    description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog";
   };
 }

@@ -1,33 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, cryptography
-, eventlet
-, greenlet
-, iana-etc
-, libredirect
-, lxml
-, mock
-, netifaces
-, pastedeploy
-, pbr
-, pyeclib
-, requests
-, setuptools
-, six
-, stestr
-, swiftclient
-, xattr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boto3,
+  cryptography,
+  eventlet,
+  greenlet,
+  iana-etc,
+  installShellFiles,
+  libredirect,
+  lxml,
+  mock,
+  netifaces,
+  pastedeploy,
+  pbr,
+  pyeclib,
+  requests,
+  setuptools,
+  six,
+  stestr,
+  swiftclient,
+  xattr,
 }:
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.29.1";
+  version = "2.34.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PoTob/Qz/XxEv/A271RQWT11rIIJBejVGjpAT14iKUg=";
+    hash = "sha256-ZvdWWvPUdZIEadxV0nhqgTXhgJJu+hD1LnYCAP+9gpM=";
   };
 
   postPatch = ''
@@ -35,7 +38,12 @@ buildPythonPackage rec {
     rm test/functional/s3api/{__init__.py,s3_test_client.py}
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [
+    pbr
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
@@ -51,12 +59,16 @@ buildPythonPackage rec {
     xattr
   ];
 
-  checkInputs = [
+  dependencies = [
     boto3
     mock
     stestr
     swiftclient
   ];
+
+  postInstall = ''
+    installManPage doc/manpages/*
+  '';
 
   # a lot of tests currently fail while establishing a connection
   doCheck = false;

@@ -1,35 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, perl
-, python3
-, openssl
-, xorg
-, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  perl,
+  python3,
+  openssl,
+  xorg,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kdash";
-  version = "0.3.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "kdash-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08ca638kvs98xhbc9g1szw0730cjk9g01qqaja8j413n2h1pr8yq";
+    sha256 = "sha256-IpF5uXRxHBmfWkBBJjNvDsyQG5nzFjKbCmmGpG3howo=";
   };
 
-  nativeBuildInputs = [ perl python3 pkg-config ];
+  nativeBuildInputs = [
+    perl
+    python3
+    pkg-config
+  ];
 
-  buildInputs = [ openssl xorg.xcbutil ]
-    ++ lib.optional stdenv.isDarwin AppKit;
+  buildInputs = [
+    openssl
+    xorg.xcbutil
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
-  cargoSha256 = "0nb554y8r7gvw7ls6gnrg98xxbws0mc6zdsc6ss3p2x9z8xwx204";
+  cargoHash = "sha256-jm0UCKDy6TrogMPavB86lvk8yKZXubTGGbApk+oP2RQ=";
 
   meta = with lib; {
-    description = "A simple and fast dashboard for Kubernetes";
+    description = "Simple and fast dashboard for Kubernetes";
+    mainProgram = "kdash";
     homepage = "https://github.com/kdash-rs/kdash";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ matthiasbeyer ];

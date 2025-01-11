@@ -1,11 +1,13 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "escapism";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

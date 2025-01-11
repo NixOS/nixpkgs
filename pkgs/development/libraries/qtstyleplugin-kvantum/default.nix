@@ -1,47 +1,96 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
-, libX11, libXext, qttools, wrapQtAppsHook
-, gitUpdater
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qmake,
+  qtbase,
+  qtsvg,
+  qtx11extras ? null, # Qt 5 only
+  kwindowsystem,
+  qtwayland,
+  libX11,
+  libXext,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 
-stdenv.mkDerivation rec {
-  pname = "qtstyleplugin-kvantum";
-  version = "1.0.2";
+  qt6Kvantum ? null,
+}:
+let
+  isQt5 = lib.versionOlder qtbase.version "6";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "V${version}";
-    sha256 = "NPMqd7j9Unvw8p/cUNMYWmgrb2ysdMvSSGJ6lJWh4/M=";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-x2XsJ26y9y6IF9aY0fmAcvO4zmwLjvE2Lfvzw+GqchM=";
   };
 
   nativeBuildInputs = [
-    qmake qttools wrapQtAppsHook
+    cmake
+    qmake
+    qttools
+    wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      libX11
+      libXext
+    ]
+    ++ lib.optionals isQt5 [ qtx11extras ]
+    ++ lib.optionals (!isQt5) [
+      kwindowsystem
+      qtwayland
+    ];
 
-  sourceRoot = "source/Kvantum";
+  sourceRoot = "${finalAttrs.src.name}/Kvantum";
+
+  patches = [
+    (fetchpatch {
+      # add xdg dirs support
+      url = "https://github.com/tsujan/Kvantum/commit/01989083f9ee75a013c2654e760efd0a1dea4a68.patch";
+      hash = "sha256-HPx+p4Iek/Me78olty1fA0dUNceK7bwOlTYIcQu8ycc=";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = ''
-    # Fix plugin dir
-    substituteInPlace style/style.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+    substituteInPlace style/CMakeLists.txt \
+      --replace-fail '"''${_Qt6_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/" \
+      --replace-fail '"''${_Qt5_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/"
+  '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT5" isQt5)
+  ];
+
+  postInstall = lib.optionalString isQt5 ''
+    # make default Kvantum themes available for Qt 5 apps
+    mkdir -p "$out/share"
+    ln -s "${qt6Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "libsForQt5.${pname}";
     rev-prefix = "V";
   };
 
-  meta = with lib; {
+  meta = {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    broken = lib.versionOlder qtbase.version "5.14";
-    maintainers = [ maintainers.bugworm ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      romildo
+      Scrumplex
+    ];
   };
-}
+})

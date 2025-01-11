@@ -1,30 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "imapclient";
-  version = "2.2.0";
+  version = "3.0.1";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
-    rev = version;
-    sha256 = "sha256-q/8LFKHgrY3pQV7Coz+5pZAw696uABMTEkYoli6C2KA=";
+    tag = version;
+    hash = "sha256-WY3OLPUwixrL2NSLfNBSSNMXJEoYBL+O6KoglU3Cz9g=";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [
+    "imapclient"
+    "imapclient.response_types"
+    "imapclient.exceptions"
+    "imapclient.testable_imapclient"
+    "imapclient.tls"
+  ];
 
   meta = with lib; {
     homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ almac dotlambda ];
+    maintainers = with maintainers; [
+      almac
+      dotlambda
+    ];
   };
 }

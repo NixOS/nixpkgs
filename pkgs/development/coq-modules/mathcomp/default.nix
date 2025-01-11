@@ -11,14 +11,24 @@
 ############################################################################
 
 { lib, ncurses, graphviz, lua, fetchzip,
-  mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
-  coqPackages, coq, version ? null }@args:
-with builtins // lib;
+  mkCoqDerivation, withDoc ? false, single ? false,
+  coq, hierarchy-builder, stdlib, version ? null }@args:
+
 let
   repo  = "math-comp";
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = let inherit (lib.versions) range; in
+    lib.switch coq.coq-version [
+      { case = range "8.19" "8.20"; out = "2.3.0"; }
+      { case = range "8.17" "8.20"; out = "2.2.0"; }
+      { case = range "8.17" "8.18"; out = "2.1.0"; }
+      { case = range "8.17" "8.18"; out = "2.0.0"; }
+      { case = range "8.19" "8.20"; out = "1.19.0"; }
+      { case = range "8.17" "8.18"; out = "1.18.0"; }
+      { case = range "8.15" "8.18"; out = "1.17.0"; }
+      { case = range "8.13" "8.18"; out = "1.16.0"; }
+      { case = range "8.14" "8.16"; out = "1.15.0"; }
       { case = range "8.11" "8.15"; out = "1.14.0"; }
       { case = range "8.11" "8.15"; out = "1.13.0"; }
       { case = range "8.10" "8.13"; out = "1.12.0"; }
@@ -30,6 +40,15 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "2.3.0".sha256  = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
+    "2.2.0".sha256  = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";
+    "2.1.0".sha256  = "sha256-XDLx0BIkVRkSJ4sGCIE51j3rtkSGemNTs/cdVmTvxqo=";
+    "2.0.0".sha256  = "sha256-dpOmrHYUXBBS9kmmz7puzufxlbNpIZofpcTvJFLG5DI=";
+    "1.19.0".sha256 = "sha256-3kxS3qA+7WwQkXoFC/+kq3OEkv4kMEzQ/G3aXPsp1Q4=";
+    "1.18.0".sha256 = "sha256-mJJ/zvM2WtmBZU3U4oid/zCMvDXei/93v5hwyyqwiiY=";
+    "1.17.0".sha256 = "sha256-bUfoSTMiW/GzC1jKFay6DRqGzKPuLOSUsO6/wPSFwNg=";
+    "1.16.0".sha256 = "sha256-gXTKhRgSGeRBUnwdDezMsMKbOvxdffT+kViZ9e1gEz0=";
+    "1.15.0".sha256 = "1bp0jxl35ms54s0mdqky15w9af03f3i0n06qk12k4gw1xzvwqv21";
     "1.14.0".sha256 = "07yamlp1c0g5nahkd2gpfhammcca74ga2s6qr7a3wm6y6j5pivk9";
     "1.13.0".sha256 = "0j4cz2y1r1aw79snkcf1pmicgzf8swbaf9ippz0vg99a572zqzri";
     "1.12.0".sha256 = "1ccfny1vwgmdl91kz5xlmhq4wz078xm4z5wpd0jy5rn890dx03wp";
@@ -47,8 +66,7 @@ let
   packages = [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
 
   mathcomp_ = package: let
-      mathcomp-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (pred.equal package) packages));
+      mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
@@ -59,12 +77,12 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        mlPlugin = versions.isLe "8.6" coq.coq-version;
-        nativeBuildInputs = optionals withDoc [ graphviz lua ];
+        mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
+        nativeBuildInputs = lib.optionals withDoc [ graphviz lua ];
         buildInputs = [ ncurses ];
-        propagatedBuildInputs = mathcomp-deps;
+        propagatedBuildInputs = [ stdlib ] ++ mathcomp-deps;
 
-        buildFlags = optional withDoc "doc";
+        buildFlags = lib.optional withDoc "doc";
 
         preBuild = ''
           if [[ -f etc/utils/ssrcoqdep ]]
@@ -75,16 +93,16 @@ let
           fi
         '' + ''
           cd ${pkgpath}
-        '' + optionalString (package == "all") pkgallMake;
+        '' + lib.optionalString (package == "all") pkgallMake;
 
         meta = {
           homepage    = "https://math-comp.github.io/";
-          license     = licenses.cecill-b;
-          maintainers = with maintainers; [ vbgl jwiegley cohencyril ];
+          license     = lib.licenses.cecill-b;
+          maintainers = with lib.maintainers; [ vbgl jwiegley cohencyril ];
         };
-      } // optionalAttrs (package != "single")
-        { passthru = genAttrs packages mathcomp_; }
-        // optionalAttrs withDoc {
+      } // lib.optionalAttrs (package != "single")
+        { passthru = lib.genAttrs packages mathcomp_; }
+        // lib.optionalAttrs withDoc {
             htmldoc_template =
               fetchzip {
                 url = "https://github.com/math-comp/math-comp.github.io/archive/doc-1.12.0.zip";
@@ -96,7 +114,7 @@ let
             '';
             postInstall =
               let tgt = "$out/share/coq/${coq.coq-version}/"; in
-              optionalString withDoc ''
+              lib.optionalString withDoc ''
               mkdir -p ${tgt}
               cp -r htmldoc ${tgt}
               cp -r $htmldoc_template/htmldoc_template/* ${tgt}/htmldoc/
@@ -105,15 +123,22 @@ let
             extraInstallFlags = [ "-f Makefile.coq" ];
           });
     patched-derivation1 = derivation.overrideAttrs (o:
-      optionalAttrs (o.pname != null && o.pname == "mathcomp-all" &&
-         o.version != null && o.version != "dev" && versions.isLt "1.7" o.version)
+      lib.optionalAttrs (o.pname != null && o.pname == "mathcomp-all" &&
+         o.version != null && o.version != "dev" && lib.versions.isLt "1.7" o.version)
       { preBuild = ""; buildPhase = ""; installPhase = "echo doing nothing"; }
     );
-    patched-derivation = patched-derivation1.overrideAttrs (o:
-      optionalAttrs (versions.isLe "8.7" coq.coq-version ||
-            (o.version != "dev" && versions.isLe "1.7" o.version))
+    patched-derivation2 = patched-derivation1.overrideAttrs (o:
+      lib.optionalAttrs (lib.versions.isLe "8.7" coq.coq-version ||
+            (o.version != "dev" && lib.versions.isLe "1.7" o.version))
       {
         installFlags = o.installFlags ++ [ "-f Makefile.coq" ];
+      }
+    );
+    patched-derivation = patched-derivation2.overrideAttrs (o:
+      lib.optionalAttrs (o.version != null
+        && (o.version == "dev" || lib.versions.isGe "2.0.0" o.version))
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ hierarchy-builder ];
       }
     );
     in patched-derivation;

@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.lnd;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9092;
@@ -41,6 +46,9 @@ in
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     LogsDirectory = "prometheus-lnd-exporter";
-    ReadOnlyPaths = [ cfg.lndTlsPath cfg.lndMacaroonDir ];
+    ReadOnlyPaths = [
+      cfg.lndTlsPath
+      cfg.lndMacaroonDir
+    ];
   };
 }

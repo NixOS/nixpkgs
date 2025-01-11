@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, jackSupport ? true
-, jack
-, coremidiSupport ? stdenv.hostPlatform.isDarwin
-, CoreMIDI
-, CoreAudio
-, CoreServices
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  jackSupport ? true,
+  jack,
+  coremidiSupport ? stdenv.hostPlatform.isDarwin,
+  CoreMIDI,
+  CoreAudio,
+  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,11 +41,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = lib.optional alsaSupport alsa-lib
+  buildInputs =
+    lib.optional alsaSupport alsa-lib
     ++ lib.optional jackSupport jack
-    ++ lib.optionals coremidiSupport [ CoreMIDI CoreAudio CoreServices ];
+    ++ lib.optionals coremidiSupport [
+      CoreMIDI
+      CoreAudio
+      CoreServices
+    ];
 
   cmakeFlags = [
     "-DRTMIDI_API_ALSA=${if alsaSupport then "ON" else "OFF"}"
@@ -53,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A set of C++ classes that provide a cross platform API for realtime MIDI input/output";
+    description = "Set of C++ classes that provide a cross platform API for realtime MIDI input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtmidi/";
     license = licenses.mit;
     maintainers = with maintainers; [ magnetophon ];

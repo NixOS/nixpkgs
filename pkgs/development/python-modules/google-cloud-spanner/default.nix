@@ -1,45 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc-google-iam-v1
-, google-cloud-core
-, google-cloud-testutils
-, libcst
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  grpc-interceptor,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlparse,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.14.1";
+  version = "3.51.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-d1d81cUtQu6DqKopv082HlmgSYOAWUdaBYBLjzFyC2M=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-spanner";
+    tag = "v${version}";
+    hash = "sha256-ug3xtPykH4emiQuK1UxWGUeKmXqkY/EX0mSncCkGCQg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    deprecated
+    google-api-core
     google-cloud-core
     grpc-google-iam-v1
-    libcst
+    grpc-interceptor
     proto-plus
+    protobuf
     sqlparse
-  ];
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  optional-dependencies = {
+    libcst = [ libcst ];
+  };
+
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
   '';
+
+  disabledTests = [
+    # Requires credentials
+    "test_list_backup"
+    "test_list_database"
+    "test_list_instance"
+  ];
 
   disabledTestPaths = [
     # Requires credentials
@@ -53,6 +81,7 @@ buildPythonPackage rec {
     "tests/unit/spanner_dbapi/test_connect.py"
     "tests/unit/spanner_dbapi/test_connection.py"
     "tests/unit/spanner_dbapi/test_cursor.py"
+    "samples/samples/"
   ];
 
   pythonImportsCheck = [
@@ -65,7 +94,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
+    changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

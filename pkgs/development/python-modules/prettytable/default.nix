@@ -1,43 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, setuptools-scm
-, wcwidth
-, importlib-metadata
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  wcwidth,
+
+  # tests
+  coverage,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.2.0";
+  version = "3.12.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-rn2WxkEAVD3GFmK0CijzsDwPlKUD7RIcb8ongsWBb4E=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "prettytable";
+    tag = version;
+    hash = "sha256-RoBPmnuAOtTET898Gdm1zzPIst26GdCY5nU1PyJ+Nro=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ glibcLocales ];
-
-  propagatedBuildInputs = [
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
+  dependencies = [ wcwidth ];
 
-  # no test no longer available in pypi package
-  doCheck = false;
+  nativeCheckInputs = [
+    coverage
+    pytest-cov-stub
+    pytest-lazy-fixtures
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "prettytable" ];
 
-  meta = with lib; {
-    description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
-    homepage = "http://code.google.com/p/prettytable/";
-    license = licenses.bsd3;
+  meta = {
+    description = "Display tabular data in a visually appealing ASCII table format";
+    homepage = "https://github.com/jazzband/prettytable";
+    changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-
 }

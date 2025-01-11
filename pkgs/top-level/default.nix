@@ -27,6 +27,10 @@
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
 
+, # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
+  # until <https://github.com/NixOS/nix/issues/11503> is fixed.
+  __allowFileset ? true
+
 , # List of overlays layers used to extend Nixpkgs.
   overlays ? []
 
@@ -47,7 +51,24 @@ let # Rename the function arguments
   crossSystem0 = crossSystem;
 
 in let
-  lib = import ../../lib;
+  pristineLib = import ../../lib;
+
+  lib =
+    if __allowFileset then
+      pristineLib
+    else
+      pristineLib.extend (_: _: {
+        fileset = abort ''
+
+          The use of `lib.fileset` is currently forbidden in Nixpkgs due to the
+          upstream Nix bug <https://github.com/NixOS/nix/issues/11503>. This
+          causes difficult‐to‐debug errors when combined with chroot stores,
+          such as in the NixOS installer.
+
+          For packages that require source to be vendored inside Nixpkgs,
+          please use a subdirectory of the package instead.
+        '';
+      });
 
   inherit (lib) throwIfNot;
 
@@ -61,10 +82,22 @@ in let
   localSystem = lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
+  #
+  # See `lib.systems.equals` documentation for more details.
+  #
+  # Note that it is generally not possible to compare systems as given in
+  # parameters, e.g. if systems are initialized as
+  #
+  #   localSystem = { system = "x86_64-linux"; };
+  #   crossSystem = { config = "x86_64-unknown-linux-gnu"; };
+  #
+  # Both systems are semantically equivalent as the same vendor and ABI are
+  # inferred from the system double in `localSystem`.
   crossSystem =
-    if crossSystem0 == null || crossSystem0 == args.localSystem
+    let system = lib.systems.elaborate crossSystem0; in
+    if crossSystem0 == null || lib.systems.equals system localSystem
     then localSystem
-    else lib.systems.elaborate crossSystem0;
+    else system;
 
   # Allow both:
   # { /* the config */ } and
@@ -82,6 +115,7 @@ in let
         config = config1;
       })
     ];
+    class = "nixpkgsConfig";
   };
 
   # take all the rest as-is

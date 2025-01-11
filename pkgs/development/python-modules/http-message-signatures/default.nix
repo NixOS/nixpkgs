@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, http-sfv
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  http-sfv,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,32 +21,24 @@ buildPythonPackage rec {
     owner = "pyauth";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CMF9p913P04Hx/221ck1e0AoAsP7aXkX2UKp4S1nnU0=";
+    hash = "sha256-Jsivw4lNA/2oqsOGGx8D4gUPftzuys877A9RXyapnSQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     cryptography
     http-sfv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];
 
-  pytestFlagsArray = [
-    "test/test.py"
-  ];
+  pytestFlagsArray = [ "test/test.py" ];
 
-  pythonImportsCheck = [
-    "http_message_signatures"
-  ];
+  pythonImportsCheck = [ "http_message_signatures" ];
 
   meta = with lib; {
     description = "Requests authentication module for HTTP Signature";

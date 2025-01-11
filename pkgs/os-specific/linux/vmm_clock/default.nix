@@ -1,17 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
-  name = "vmm_clock";
-  version = "0.1.0";
+  pname = "vmm_clock";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "vmm_clock";
-    rev = "${version}";
-    sha256 = "0hg7ywznh6v11fywsz6f7w298bxph0wwm046zqaqncjvr4aizla4";
+    rev = version;
+    hash = "sha256-XYRxrVixvImxr2j3qxBcv1df1LvPRKqKKgegW3HqUcQ=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   extraConfig = ''
@@ -26,13 +34,14 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = kernel.kernelOlder "4.19";
-    description =
-      "Experimental implementation of a kvmclock-derived clocksource for Linux guests under OpenBSD's hypervisor";
+    description = "Experimental implementation of a kvmclock-derived clocksource for Linux guests under OpenBSD's hypervisor";
     homepage = "https://github.com/voutilad/vmm_clock";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qbit ];
-    platforms = platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 
   enableParallelBuilding = true;

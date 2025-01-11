@@ -1,18 +1,29 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  lib ? pkgs.lib,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
-  minimal = { config, ... }: {
-    services.teleport.enable = true;
+  packages = with pkgs; {
+    "default" = teleport;
+    "15" = teleport_15;
   };
 
-  client = { config, ... }: {
+  minimal = package: {
     services.teleport = {
       enable = true;
+      inherit package;
+    };
+  };
+
+  client = package: {
+    services.teleport = {
+      enable = true;
+      inherit package;
       settings = {
         teleport = {
           nodename = "client";
@@ -31,15 +42,18 @@ let
         auth_service.enabled = false;
       };
     };
-    networking.interfaces.eth1.ipv4.addresses = [{
-      address = "192.168.1.20";
-      prefixLength = 24;
-    }];
+    networking.interfaces.eth1.ipv4.addresses = [
+      {
+        address = "192.168.1.20";
+        prefixLength = 24;
+      }
+    ];
   };
 
-  server = { config, ... }: {
+  server = package: {
     services.teleport = {
       enable = true;
+      inherit package;
       settings = {
         teleport = {
           nodename = "server";
@@ -57,19 +71,21 @@ let
     };
     networking = {
       firewall.allowedTCPPorts = [ 3025 ];
-      interfaces.eth1.ipv4.addresses = [{
-        address = "192.168.1.10";
-        prefixLength = 24;
-      }];
+      interfaces.eth1.ipv4.addresses = [
+        {
+          address = "192.168.1.10";
+          prefixLength = 24;
+        }
+      ];
     };
   };
 in
-{
-  minimal = makeTest {
+lib.concatMapAttrs (name: package: {
+  "minimal_${name}" = makeTest {
     # minimal setup should always work
     name = "teleport-minimal-setup";
-    meta.maintainers = with pkgs.lib.maintainers; [ ymatsiuk ];
-    nodes = { inherit minimal; };
+    meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
+    nodes.minimal = minimal package;
 
     testScript = ''
       minimal.wait_for_open_port(3025)
@@ -78,11 +94,14 @@ in
     '';
   };
 
-  basic = makeTest {
+  "basic_${name}" = makeTest {
     # basic server and client test
     name = "teleport-server-client";
-    meta.maintainers = with pkgs.lib.maintainers; [ ymatsiuk ];
-    nodes = { inherit server client; };
+    meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
+    nodes = {
+      server = server package;
+      client = client package;
+    };
 
     testScript = ''
       with subtest("teleport ready"):
@@ -96,4 +115,4 @@ in
           server.succeed("journalctl -u teleport.service --grep='Starting teleport in insecure mode.'")
     '';
   };
-}
+}) packages

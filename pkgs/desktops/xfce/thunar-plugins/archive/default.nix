@@ -1,22 +1,22 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, thunar
-, exo
-, libxfce4util
-, intltool
-, gettext
+{
+  lib,
+  mkXfceDerivation,
+  gtk3,
+  thunar,
+  exo,
+  libxfce4util,
+  gettext,
 }:
 
 mkXfceDerivation {
   category = "thunar-plugins";
-  pname  = "thunar-archive-plugin";
-  version = "0.4.0";
+  pname = "thunar-archive-plugin";
+  version = "0.5.3";
+  odd-unstable = false;
 
-  sha256 = "sha256-aEAErm87K2k8TAz2ZtMQEhmzhOeR2hkJjcoBUFn8I50=";
+  sha256 = "sha256-9EjEQml/Xdj/jCtC4ZuGdmpeNnOqUWJOqoVzLuxzG6s=";
 
   nativeBuildInputs = [
-    intltool
     gettext
   ];
 

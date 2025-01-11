@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.opentabletdriver;
 in
@@ -9,36 +12,32 @@ in
 
   options = {
     hardware.opentabletdriver = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable OpenTabletDriver udev rules, user service and blacklist kernel
           modules known to conflict with OpenTabletDriver.
         '';
       };
 
-      blacklistedKernelModules = mkOption {
-        type = types.listOf types.str;
-        default = [ "hid-uclogic" "wacom" ];
+      blacklistedKernelModules = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "hid-uclogic"
+          "wacom"
+        ];
         description = ''
           Blacklist of kernel modules known to conflict with OpenTabletDriver.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentabletdriver;
-        defaultText = literalExpression "pkgs.opentabletdriver";
-        description = ''
-          OpenTabletDriver derivation to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "opentabletdriver" { };
 
       daemon = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = true;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             Whether to start OpenTabletDriver daemon as a systemd user service.
           '';
@@ -47,23 +46,25 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];
 
     boot.blacklistedKernelModules = cfg.blacklistedKernelModules;
 
-    systemd.user.services.opentabletdriver = with pkgs; mkIf cfg.daemon.enable {
-      description = "Open source, cross-platform, user-mode tablet driver";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+    systemd.user.services.opentabletdriver =
+      with pkgs;
+      lib.mkIf cfg.daemon.enable {
+        description = "Open source, cross-platform, user-mode tablet driver";
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${cfg.package}/bin/otd-daemon -c ${cfg.package}/lib/OpenTabletDriver/Configurations";
-        Restart = "on-failure";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${cfg.package}/bin/otd-daemon";
+          Restart = "on-failure";
+        };
       };
-    };
   };
 }

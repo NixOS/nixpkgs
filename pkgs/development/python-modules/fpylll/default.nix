@@ -1,36 +1,56 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, pkgconfig
-, gmp
-, pari
-, mpfr
-, fplll
-, cython
-, cysignals
-, numpy
-, pytest
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  fetchpatch,
+
+  # build-system
+  cysignals,
+  cython,
+  pkgconfig,
+  setuptools,
+
+  gmp,
+  pari,
+  mpfr,
+  fplll,
+  numpy,
+
+  # Reverse dependency
+  sage,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.7";
+  version = "0.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
-    rev = version;
-    sha256 = "sha256-iUPreJ8BSB8LDisbJis0xn8ld6+Nf9Z4AP8SWJlCfZg=";
+    tag = version;
+    hash = "sha256-M3ZnDL0Ui3UAa5Jn/Wr5pAHhghP7EAaQD/sx5QZ58ZQ=";
   };
 
   patches = [
-   (fetchpatch {
-     name = "remove-strategies-doctest.patch";
-     url = "https://github.com/fplll/fpylll/commit/3edffcd189e9d827a322d83b0f84d32e5f067442.patch";
-     sha256 = "sha256-U7qOIbVzUNwYmjOPryjnE3J+MX/vMwm3T0UyOZ5ylLc=";
-   })
+    (fetchpatch {
+      url = "https://github.com/fplll/fpylll/commit/fc432b21fa7e4b9891f5b761b3539989eb958f2b.diff";
+      hash = "sha256-+UidQ5xnlmjeVeVvR4J2zDzAuXP5LUPXCh4RP4o9oGA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/fplll/fpylll/commit/cece9c9b182dc3ac2c9121549cb427ccf4c4a9fe.diff";
+      hash = "sha256-epJb8gorQ7gEEylZ2yZFdM9+EZ4ys9mUUUPiJ2D0VOM=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cython
+    cysignals
+    pkgconfig
+    setuptools
   ];
 
   buildInputs = [
@@ -40,30 +60,24 @@ buildPythonPackage rec {
     fplll
   ];
 
-  propagatedBuildInputs = [
-    cython
-    cysignals
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeBuildInputs = [
-    pkgconfig
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
+  preCheck = ''
     # Since upstream introduced --doctest-modules in
     # https://github.com/fplll/fpylll/commit/9732fdb40cf1bd43ad1f60762ec0a8401743fc79,
     # it is necessary to ignore import mismatches. Not sure why, but the files
     # should be identical anyway.
-    PY_IGNORE_IMPORTMISMATCH=1 pytest
+    export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
-    description = "A Python interface for fplll";
+    description = "Python interface for fplll";
     changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
     homepage = "https://github.com/fplll/fpylll";
     maintainers = teams.sage.members;

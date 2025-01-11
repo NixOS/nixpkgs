@@ -1,41 +1,54 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.cfdyndns;
 in
 {
   imports = [
-    (mkRemovedOptionModule
-      [ "services" "cfdyndns" "apikey" ]
-      "Use services.cfdyndns.apikeyFile instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "cfdyndns"
+      "apikey"
+    ] "Use services.cfdyndns.apikeyFile instead.")
   ];
 
   options = {
     services.cfdyndns = {
-      enable = mkEnableOption "Cloudflare Dynamic DNS Client";
+      enable = lib.mkEnableOption "Cloudflare Dynamic DNS Client";
 
-      email = mkOption {
-        type = types.str;
+      email = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The email address to use to authenticate to CloudFlare.
         '';
       };
 
-      apikeyFile = mkOption {
+      apiTokenFile = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
+        description = ''
+          The path to a file containing the API Token
+          used to authenticate with CloudFlare.
+        '';
+      };
+
+      apikeyFile = lib.mkOption {
+        default = null;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           The path to a file containing the API Key
           used to authenticate with CloudFlare.
         '';
       };
 
-      records = mkOption {
-        default = [];
+      records = lib.mkOption {
+        default = [ ];
         example = [ "host.tld" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           The records to update in CloudFlare.
         '';
@@ -43,7 +56,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.cfdyndns = {
       description = "CloudFlare Dynamic DNS Client";
       after = [ "network.target" ];
@@ -51,32 +64,24 @@ in
       startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";
-        User = config.ids.uids.cfdyndns;
-        Group = config.ids.gids.cfdyndns;
+        LoadCredential = lib.optional (
+          cfg.apiTokenFile != null
+        ) "CLOUDFLARE_APITOKEN_FILE:${cfg.apiTokenFile}";
+        DynamicUser = true;
       };
       environment = {
-        CLOUDFLARE_EMAIL="${cfg.email}";
-        CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
+        CLOUDFLARE_RECORDS = "${lib.concatStringsSep "," cfg.records}";
       };
       script = ''
-        ${optionalString (cfg.apikeyFile != null) ''
-          export CLOUDFLARE_APIKEY="$(cat ${escapeShellArg cfg.apikeyFile})"
+        ${lib.optionalString (cfg.apikeyFile != null) ''
+          export CLOUDFLARE_APIKEY="$(cat ${lib.escapeShellArg cfg.apikeyFile})"
+          export CLOUDFLARE_EMAIL="${cfg.email}"
+        ''}
+        ${lib.optionalString (cfg.apiTokenFile != null) ''
+          export CLOUDFLARE_APITOKEN=$(${pkgs.systemd}/bin/systemd-creds cat CLOUDFLARE_APITOKEN_FILE)
         ''}
         ${pkgs.cfdyndns}/bin/cfdyndns
       '';
-    };
-
-    users.users = {
-      cfdyndns = {
-        group = "cfdyndns";
-        uid = config.ids.uids.cfdyndns;
-      };
-    };
-
-    users.groups = {
-      cfdyndns = {
-        gid = config.ids.gids.cfdyndns;
-      };
     };
   };
 }

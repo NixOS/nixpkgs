@@ -1,28 +1,40 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, cython
-, scipy
-, scikit-learn
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  cython,
+  scipy,
+  scikit-learn,
+  matplotlib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn-extra";
-  version = "0.2.0";
+  version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09v7a9jdycdrlqq349m1gbn8ppzv1bl5g3l72k6ywsx2xb01qw13";
+    tag = "v${version}";
+    sha256 = "sha256-dHOwo6NIuhcvIehpuJQ621JEg5O3mnXycAhpTZKaxns=";
   };
 
-  nativeBuildInputs = [ numpy cython ];
-  propagatedBuildInputs = [ numpy scipy scikit-learn ];
-  checkInputs = [ matplotlib pytestCheckHook ];
+  nativeBuildInputs = [
+    numpy
+    cython
+  ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    scikit-learn
+  ];
+  nativeCheckInputs = [
+    matplotlib
+    pytestCheckHook
+  ];
 
   preCheck = ''
     # Remove the package in the build dir, because Python defaults to it and
@@ -37,7 +49,7 @@ buildPythonPackage rec {
     "doc"
   ];
   disabledTests = [
-    "build"   # needs network connection
+    "build" # needs network connection
     "test_all_estimators" # sklearn.exceptions.NotFittedError: Estimator fails to pass `check_is_fitted` even though it has been fit.
   ];
 
@@ -50,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A set of tools for scikit-learn";
+    description = "Set of tools for scikit-learn";
     homepage = "https://github.com/scikit-learn-contrib/scikit-learn-extra";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];

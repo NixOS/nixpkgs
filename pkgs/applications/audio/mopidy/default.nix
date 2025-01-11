@@ -1,43 +1,57 @@
-{ lib, newScope, python }:
+{
+  lib,
+  newScope,
+  python,
+}:
 
 # Create a custom scope so we are consistent in which python version is used
-lib.makeScope newScope (self: with self; {
-  inherit python;
-  pythonPackages = python.pkgs;
+lib.makeScope newScope (
+  self: with self; {
+    inherit python;
+    pythonPackages = python.pkgs;
 
-  mopidy = callPackage ./mopidy.nix { };
+    mopidy = callPackage ./mopidy.nix { };
 
-  mopidy-iris = callPackage ./iris.nix { };
+    mopidy-bandcamp = callPackage ./bandcamp.nix { };
 
-  mopidy-jellyfin = callPackage ./jellyfin.nix { };
+    mopidy-iris = callPackage ./iris.nix { };
 
-  mopidy-local = callPackage ./local.nix { };
+    mopidy-jellyfin = callPackage ./jellyfin.nix { };
 
-  mopidy-moped = callPackage ./moped.nix { };
+    mopidy-local = callPackage ./local.nix { };
 
-  mopidy-mopify = callPackage ./mopify.nix { };
+    mopidy-moped = callPackage ./moped.nix { };
 
-  mopidy-mpd = callPackage ./mpd.nix { };
+    mopidy-mopify = callPackage ./mopify.nix { };
 
-  mopidy-mpris = callPackage ./mpris.nix { };
+    mopidy-mpd = callPackage ./mpd.nix { };
 
-  mopidy-muse = callPackage ./muse.nix { };
+    mopidy-mpris = callPackage ./mpris.nix { };
 
-  mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
+    mopidy-muse = callPackage ./muse.nix { };
 
-  mopidy-podcast = callPackage ./podcast.nix { };
+    mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
-  mopidy-scrobbler = callPackage ./scrobbler.nix { };
+    mopidy-notify = callPackage ./notify.nix { };
 
-  mopidy-somafm = callPackage ./somafm.nix { };
+    mopidy-podcast = callPackage ./podcast.nix { };
 
-  mopidy-soundcloud = callPackage ./soundcloud.nix { };
+    mopidy-scrobbler = callPackage ./scrobbler.nix { };
 
-  mopidy-tunein = callPackage ./tunein.nix { };
+    mopidy-somafm = callPackage ./somafm.nix { };
 
-  mopidy-youtube = callPackage ./youtube.nix { };
+    mopidy-soundcloud = callPackage ./soundcloud.nix { };
 
-  mopidy-ytmusic = callPackage ./ytmusic.nix { };
+    mopidy-spotify = callPackage ./spotify.nix { };
 
-  mopidy-subidy = callPackage ./subidy.nix { };
-})
+    mopidy-tidal = callPackage ./tidal.nix { };
+
+    mopidy-tunein = callPackage ./tunein.nix { };
+
+    mopidy-youtube = callPackage ./youtube.nix { };
+
+    mopidy-ytmusic = callPackage ./ytmusic.nix { };
+
+    mopidy-subidy = callPackage ./subidy.nix { };
+  }
+)

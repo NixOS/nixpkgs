@@ -1,22 +1,32 @@
-{ lib, fetchurl, buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+}:
 
-buildDunePackage rec {
-   pname = "ocaml-migrate-parsetree";
-   version = "2.3.0";
+lib.throwIf (lib.versionAtLeast ocaml.version "5.1")
+  "ocaml-migrate-parsetree is not available for OCaml ${ocaml.version}"
 
-   useDune2 = true;
+  buildDunePackage
+  rec {
+    pname = "ocaml-migrate-parsetree";
+    version = "2.4.0";
 
-   minimalOCamlVersion = "4.02";
+    minimalOCamlVersion = "4.02";
 
-   src = fetchurl {
-     url = "https://github.com/ocaml-ppx/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-     sha256 = "sha256:02mzh1rcvc2xpq4iz01z7kvzsgxns3774ggxi96f147i8yr2d08h";
-   };
+    src = fetchurl {
+      url = "https://github.com/ocaml-ppx/${pname}/releases/download/${version}/${pname}-${version}.tbz";
+      sha256 = "sha256-7EnEUtwzemIFVqtoK/AZi/UBglULUC2PsjClkSYKpqQ=";
+    };
 
-   meta = {
-     description = "Convert OCaml parsetrees between different major versions";
-     license = lib.licenses.lgpl21;
-     maintainers = with lib.maintainers; [ vbgl sternenseemann ];
-     homepage = "https://github.com/ocaml-ppx/ocaml-migrate-parsetree";
-   };
-}
+    meta = {
+      description = "Convert OCaml parsetrees between different major versions";
+      license = lib.licenses.lgpl21;
+      maintainers = with lib.maintainers; [
+        vbgl
+        sternenseemann
+      ];
+      homepage = "https://github.com/ocaml-ppx/ocaml-migrate-parsetree";
+    };
+  }

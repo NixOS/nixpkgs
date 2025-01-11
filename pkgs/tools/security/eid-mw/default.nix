@@ -1,37 +1,61 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, makeWrapper
-, curl
-, gtk3
-, libassuan
-, libbsd
-, libproxy
-, libxml2
-, openssl
-, p11-kit
-, pcsclite
-, nssTools
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  substituteAll,
+  curl,
+  gtk3,
+  libassuan,
+  libbsd,
+  libproxy,
+  libxml2,
+  nssTools,
+  openssl,
+  p11-kit,
+  pcsclite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.0.28";
+  version = "5.1.21";
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
     rev = "v${version}";
-    sha256 = "rrrzw8i271ZZkwY3L6aRw2Nlz+GmDr/1ahYYlUBvtzo=";
+    hash = "sha256-WFXVQ2CNrEEy4R6xGiwWkAZmbvXK44FtO5w6s1ZUZpA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
-  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+    substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
+  '';
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    curl
+    gtk3
+    libassuan
+    libbsd
+    libproxy
+    libxml2
+    openssl
+    p11-kit
+    pcsclite
+  ];
+
   preConfigure = ''
     mkdir openssl
     ln -s ${lib.getLib openssl}/lib openssl
@@ -43,10 +67,6 @@ stdenv.mkDerivation rec {
   '';
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
-
-  postPatch = ''
-    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
-  '';
 
   postInstall =
     let
@@ -96,6 +116,9 @@ stdenv.mkDerivation rec {
           firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bfortz chvp ];
+    maintainers = with maintainers; [
+      bfortz
+      chvp
+    ];
   };
 }

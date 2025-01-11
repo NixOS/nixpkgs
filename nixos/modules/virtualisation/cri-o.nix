@@ -1,20 +1,25 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.virtualisation.cri-o;
 
-  crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
+  crioPackage = pkgs.cri-o.override {
+    extraPackages =
+      cfg.extraPackages
+      ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
+  };
 
   format = pkgs.formats.toml { };
 
   cfgFile = format.generate "00-default.conf" cfg.settings;
 in
 {
-  imports = [
-    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
-  ];
-
   meta = {
     maintainers = teams.podman.members;
   };
@@ -23,13 +28,27 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "btrfs" "overlay" "vfs" ];
+      type = types.enum [
+        "aufs"
+        "btrfs"
+        "devmapper"
+        "overlay"
+        "vfs"
+        "zfs"
+      ];
       default = "overlay";
       description = "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
+      type = types.enum [
+        "trace"
+        "debug"
+        "info"
+        "warn"
+        "error"
+        "fatal"
+      ];
       default = "info";
       description = "Log level to be used";
     };
@@ -71,10 +90,6 @@ in
     package = mkOption {
       type = types.package;
       default = crioPackage;
-      defaultText = literalDocBook ''
-        <literal>pkgs.cri-o</literal> built with
-        <literal>config.${opt.extraPackages}</literal>.
-      '';
       internal = true;
       description = ''
         The final CRI-O package (including extra packages).
@@ -93,15 +108,18 @@ in
       default = { };
       description = ''
         Configuration for cri-o, see
-        <link xlink:href="https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md"/>.
+        <https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md>.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package pkgs.cri-tools ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.cri-tools
+    ];
 
-    environment.etc."crictl.yaml".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
+    environment.etc."crictl.yaml".source = "${cfg.package}/etc/crictl.yaml";
 
     virtualisation.cri-o.settings.crio = {
       storage_driver = cfg.storageDriver;
@@ -121,9 +139,7 @@ in
         log_level = cfg.logLevel;
         manage_ns_lifecycle = true;
         pinns_path = "${cfg.package}/bin/pinns";
-        hooks_dir =
-          optional (config.virtualisation.containers.ociSeccompBpfHook.enable)
-            config.boot.kernelPackages.oci-seccomp-bpf-hook;
+        hooks_dir = optional (config.virtualisation.containers.ociSeccompBpfHook.enable) config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
         default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
         runtimes = mkIf (cfg.runtime != null) {
@@ -132,8 +148,10 @@ in
       };
     };
 
-    environment.etc."cni/net.d/10-crio-bridge.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
-    environment.etc."cni/net.d/99-loopback.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/99-loopback.conf";
+    environment.etc."cni/net.d/10-crio-bridge.conflist".source =
+      "${cfg.package}/etc/cni/net.d/10-crio-bridge.conflist";
+    environment.etc."cni/net.d/99-loopback.conflist".source =
+      "${cfg.package}/etc/cni/net.d/99-loopback.conflist";
     environment.etc."crio/crio.conf.d/00-default.conf".source = cfgFile;
 
     # Enable common /etc/containers configuration

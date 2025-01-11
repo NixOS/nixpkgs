@@ -1,50 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptoolsBuildHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2022.3.0";
-  format = "pyproject";
+  version = "2024.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-OYNEv30XBHeqzv9wIQ4R69aa9rFW/hOXgFTSXEhylEA=";
+  src = fetchFromGitHub {
+    owner = "pydata";
+    repo = "xarray";
+    tag = "v${version}";
+    hash = "sha256-s5MvHp2OkomD3xNYzj9oKlVLMgHZDQRBJM6vgOAv1jQ=";
   };
+  patches = [
+    # Fixes https://github.com/pydata/xarray/issues/9873
+    (fetchpatch {
+      name = "xarray-PR9879-fix-tests.patch";
+      url = "https://github.com/pydata/xarray/commit/50f3a04855d7cf79ddf132ed07d74fb534e57f3a.patch";
+      hash = "sha256-PKYzzBOG1Dccpt9D7rcQV1Hxgw11mDOAx3iUfD0rrUc=";
+    })
+  ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION="${version}";
-
-  nativeBuildInputs = [
-    setuptoolsBuildHook
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
+    packaging
     pandas
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xarray"
-  ];
+  pythonImportsCheck = [ "xarray" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pydata/xarray/blob/${src.rev}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
   };
 }

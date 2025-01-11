@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-rlock";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "asyncio_rlock";

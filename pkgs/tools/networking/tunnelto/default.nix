@@ -1,28 +1,37 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tunnelto";
-  version = "0.1.18";
+  version = "unstable-2022-09-25";
 
   src = fetchFromGitHub {
     owner = "agrinman";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-dCHl5EXjUagOKeHxqb3GlAoSDw0u3tQ4GKEtbFF8OSs=";
+    rev = "06428f13c638180dd349a4c42a17b569ab51a25f";
+    sha256 = "sha256-84jGcR/E1QoqIlbGu67muYUtZU66ZJtj4tdZvmYbII4=";
   };
 
-  cargoSha256 = "sha256-6HU1w69cJj+tE1IUUNoxh0cHEwlRKF5qWx7FiOHeUNk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libhoney-rust-0.1.6" = "sha256-orKQ+MNHF1VSo74XahY9NFf5qMm0Wj95y6nbaG3Ivog=";
+      "tracing-distributed-0.3.1" = "sha256-i+2wqIp1BFmHEnd56Wp49LzEkTR9k5xgru1UIjj3Qys=";
+    };
+  };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Expose your local web server to the internet with a public URL";

@@ -1,47 +1,59 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, inflection
-, pbr
-, tinycss2
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  pbr,
+  setuptools,
+
+  # dependencies
+  inflection,
+  tinycss2,
+
+  # checks
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "qstylizer";
-  version = "0.2.1";
+  version = "0.2.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blambright";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-iEMxBpS9gOPubd9O8zpVmR5B7+UZJFkPuOtikO1a9v0=";
+    repo = "qstylizer";
+    tag = version;
+    hash = "sha256-eZVBUGQxa2cr0O48iKWNTqM9E5ZAsiT1WfXjdYdxIdg=";
   };
 
-  nativeBuildInputs = [
+  PBR_VERSION = version;
+
+  build-system = [
     pbr
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     inflection
     tinycss2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
 
-  preBuild = ''
-    export PBR_VERSION=${version}
-  '';
+  pythonImportsCheck = [ "qstylizer" ];
 
-  meta = with lib; {
-    description = "Qt stylesheet generation utility for PyQt/PySide ";
+  meta = {
+    description = "Qt stylesheet generation utility for PyQt/PySide";
     homepage = "https://github.com/blambright/qstylizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

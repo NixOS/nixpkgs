@@ -1,26 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markdown
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  markdown,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "markdown-include";
-  version = "0.6.0";
+  version = "0.8.1";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18p4qfhazvskcg6xsdv1np8m1gc1llyabp311xzhqy7p6q76hpbg";
+  # only wheel on pypi
+  src = fetchFromGitHub {
+    owner = "cmacmackin";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-1MEk0U00a5cpVhqnDZkwBIk4NYgsRXTVsI/ANNQ/OH0=";
   };
 
-  propagatedBuildInputs = [
-    markdown
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  pythonImportsCheck = [
-    "markdown_include"
-  ];
+  propagatedBuildInputs = [ markdown ];
+
+  pythonImportsCheck = [ "markdown_include" ];
 
   doCheck = false; # no tests
 
@@ -28,6 +31,6 @@ buildPythonPackage rec {
     description = "Extension to Python-Markdown which provides an include function";
     homepage = "https://github.com/cmacmackin/markdown-include";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

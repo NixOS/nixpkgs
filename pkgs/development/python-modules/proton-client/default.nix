@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, substituteAll
-, bcrypt
-, pyopenssl
-, python-gnupg
-, pytestCheckHook
-, requests
-, openssl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  substituteAll,
+  bcrypt,
+  pyopenssl,
+  python-gnupg,
+  pytestCheckHook,
+  requests,
+  openssl,
 }:
 
 buildPythonPackage rec {
   pname = "proton-client";
   version = "0.7.1";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-python-client";
     rev = version;
-    sha256 = "sha256-mhPq9O/LCu3+E1jKlaJmrI8dxbA9BIwlc34qGwoxi5g=";
+    hash = "sha256-mhPq9O/LCu3+E1jKlaJmrI8dxbA9BIwlc34qGwoxi5g=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +44,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     #ValueError: Invalid modulus
@@ -55,7 +57,7 @@ buildPythonPackage rec {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,13 +1,22 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, requests, xbmcswift2 }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  requests,
+  xbmcswift2,
+}:
 
 buildKodiAddon rec {
   pname = "arteplussept";
   namespace = "plugin.video.arteplussept";
-  version = "1.1.1";
+  version = "1.4.2";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    hash = "sha256-IYodi0Uz16Qg4MHCz/K06pEXblrsBxHD25fb6LrW8To=";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
+    hash = "sha256-dqxGKaOnEYOI33Aw76zbjma5z7MqOUh367dFsV87olU=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +32,7 @@ buildKodiAddon rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/known-as-bmf/plugin.video.arteplussept";
+    homepage = "https://github.com/thomas-ernest/plugin.video.arteplussept";
     description = "Watch videos available on Arte+7";
     license = licenses.mit;
     maintainers = teams.kodi.members;

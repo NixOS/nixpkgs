@@ -1,70 +1,82 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mackerel-agent;
-  settingsFmt = pkgs.formats.toml {};
-in {
+  settingsFmt = pkgs.formats.toml { };
+in
+{
   options.services.mackerel-agent = {
-    enable = mkEnableOption "mackerel.io agent";
+    enable = lib.mkEnableOption "mackerel.io agent";
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption "Whether to run as root.";
+    runAsRoot = lib.mkEnableOption "running as root";
 
-    autoRetirement = mkEnableOption ''
-      Whether to automatically retire the host upon OS shutdown.
+    autoRetirement = lib.mkEnableOption ''
+      retiring the host upon OS shutdown
     '';
 
-    apiKeyFile = mkOption {
-      type = types.path;
+    apiKeyFile = lib.mkOption {
+      type = lib.types.path;
       example = "/run/keys/mackerel-api-key";
       description = ''
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
-        <literallayout>apikey = "EXAMPLE_API_KEY"</literallayout>
+        `apikey = "EXAMPLE_API_KEY"`
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Options for mackerel-agent.conf.
 
         Documentation:
-        <link xlink:href="https://mackerel.io/docs/entry/spec/agent"/>
+        <https://mackerel.io/docs/entry/spec/agent>
       '';
 
-      default = {};
+      default = { };
       example = {
         verbose = false;
         silent = false;
       };
 
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = settingsFmt.type;
 
         options.host_status = {
-          on_start = mkOption {
-            type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
+          on_start = lib.mkOption {
+            type = lib.types.enum [
+              "working"
+              "standby"
+              "maintenance"
+              "poweroff"
+            ];
             description = "Host status after agent startup.";
             default = "working";
           };
-          on_stop = mkOption {
-            type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
+          on_stop = lib.mkOption {
+            type = lib.types.enum [
+              "working"
+              "standby"
+              "maintenance"
+              "poweroff"
+            ];
             description = "Host status after agent shutdown.";
             default = "poweroff";
           };
         };
 
-        options.diagnostic =
-          mkEnableOption "Collect memory usage for the agent itself";
+        options.diagnostic = lib.mkEnableOption "collecting memory usage for the agent itself";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mackerel-agent ];
 
     environment.etc = {
@@ -74,33 +86,37 @@ in {
     };
 
     services.mackerel-agent.settings = {
-      root = mkDefault "/var/lib/mackerel-agent";
-      pidfile = mkDefault "/run/mackerel-agent/mackerel-agent.pid";
+      root = lib.mkDefault "/var/lib/mackerel-agent";
+      pidfile = lib.mkDefault "/run/mackerel-agent/mackerel-agent.pid";
 
       # conf.d stores the symlink to cfg.apiKeyFile
-      include = mkDefault "/etc/mackerel-agent/conf.d/*.conf";
+      include = lib.mkDefault "/etc/mackerel-agent/conf.d/*.conf";
     };
 
-    # upstream service file in https://git.io/JUt4Q
+    # upstream service file in https://github.com/mackerelio/mackerel-agent/blob/master/packaging/rpm/src/mackerel-agent.service
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
-      after = [ "network-online.target" "nss-lookup.target" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        MACKEREL_PLUGIN_WORKDIR = mkDefault "%C/mackerel-agent";
+        MACKEREL_PLUGIN_WORKDIR = lib.mkDefault "%C/mackerel-agent";
       };
       serviceConfig = {
         DynamicUser = !cfg.runAsRoot;
-        PrivateTmp = mkDefault true;
+        PrivateTmp = lib.mkDefault true;
         CacheDirectory = "mackerel-agent";
         ConfigurationDirectory = "mackerel-agent";
         RuntimeDirectory = "mackerel-agent";
         StateDirectory = "mackerel-agent";
         ExecStart = "${pkgs.mackerel-agent}/bin/mackerel-agent supervise";
-        ExecStopPost = mkIf cfg.autoRetirement "${pkg.mackerel-agent}/bin/mackerel-agent retire -force";
+        ExecStopPost = lib.mkIf cfg.autoRetirement "${pkgs.mackerel-agent}/bin/mackerel-agent retire -force";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        LimitNOFILE = mkDefault 65536;
-        LimitNPROC = mkDefault 65536;
+        LimitNOFILE = lib.mkDefault 65536;
+        LimitNPROC = lib.mkDefault 65536;
       };
       restartTriggers = [
         config.environment.etc."mackerel-agent/mackerel-agent.conf".source

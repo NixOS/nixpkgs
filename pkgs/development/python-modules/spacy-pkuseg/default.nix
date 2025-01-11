@@ -1,31 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cython
-, numpy
-, srsly
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  setuptools,
+  numpy,
+  srsly,
 }:
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
-  version = "0.0.28";
-
-  disabled = !isPy3k;
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "spacy_pkuseg";
-    hash = "sha256-mmA/baY9ohvrM41ak5L+G8CUrSQeZCrzmMAoND4X/NI=";
+    hash = "sha256-M1MeqOE/wJ6+O0C9l+hNB8zVof5n+o6EFzdpolrAMVg=";
   };
 
   # Does not seem to have actual tests, but unittest discover
   # recognizes some non-tests as tests and fails.
   doCheck = false;
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    numpy
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ numpy srsly ];
+  dependencies = [
+    numpy
+    srsly
+  ];
 
   pythonImportsCheck = [ "spacy_pkuseg" ];
 
@@ -33,6 +40,6 @@ buildPythonPackage rec {
     description = "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
     homepage = "https://github.com/explosion/spacy-pkuseg";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

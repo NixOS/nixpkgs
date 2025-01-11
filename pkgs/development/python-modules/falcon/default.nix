@@ -1,46 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, isPyPy
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  isPyPy,
+  fetchFromGitHub,
 
-# build
-, cython
+  # build
+  cython,
+  setuptools,
 
-# tests
-, aiofiles
-, cbor2
-, httpx
-, msgpack
-, mujson
-, orjson
-, pytest-asyncio
-, pytestCheckHook
-, pyyaml
-, rapidjson
-, requests
-, testtools
-, ujson
-, uvicorn
-, websockets
+  # tests
+  aiofiles,
+  cbor2,
+  httpx,
+  msgpack,
+  mujson,
+  orjson,
+  pytest-asyncio,
+  pytest7CheckHook,
+  pyyaml,
+  rapidjson,
+  requests,
+  testtools,
+  ujson,
+  uvicorn,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "3.1.0";
-  format = "pyproject";
+  version = "4.0.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "falconry";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Y6bD0GCXhqpvMV+/i1v59p2qWZ91f2ey7sPQrVALY54=";
+    repo = "falcon";
+    tag = version;
+    hash = "sha256-umNuHyZrdDGyrhQEG9+f08D4Wwrz6bVJ6ysw8pfbHv4=";
   };
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cython
-  ];
+  build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
+
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -52,9 +56,9 @@ buildPythonPackage rec {
     popd
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     # https://github.com/falconry/falcon/blob/master/requirements/tests
-    pytestCheckHook
+    pytest7CheckHook
     pyyaml
     requests
     rapidjson
@@ -72,24 +76,25 @@ buildPythonPackage rec {
     msgpack
     mujson
     ujson
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    testtools
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ testtools ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  disabledTestPaths = [
-    # needs a running server
-    "tests/asgi/test_asgi_servers.py"
-  ];
+  disabledTestPaths =
+    [
+      # needs a running server
+      "tests/asgi/test_asgi_servers.py"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # ModuleNotFoundError: No module named 'distutils'
+      "tests/asgi/test_cythonized_asgi.py"
+    ];
 
   meta = with lib; {
-    description = "An unladen web framework for building APIs and app backends";
+    changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";
+    description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

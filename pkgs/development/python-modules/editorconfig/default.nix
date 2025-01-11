@@ -1,53 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cmake,
 }:
 
-let
-  tests = fetchFromGitHub {
-    owner = "editorconfig";
-    repo = "editorconfig-core-test";
-    rev = "e407c1592df0f8e91664835324dea85146f20189";
-    sha256 = "sha256-9WSEkMJOewPqJjB6f7J6Ir0L+U712hkaN+GszjnGw7c=";
-  };
-in
 buildPythonPackage rec {
   pname = "editorconfig";
-  version = "0.12.3";
+  version = "0.17.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
     rev = "v${version}";
-    sha256 = "sha256-ZwoTMgk18+BpPNtXKQUMXGcl2Lp+1RQVyPHgk6gHWh8=";
-    # workaround until https://github.com/editorconfig/editorconfig-core-py/pull/40 is merged
-    # fetchSubmodules = true;
+    hash = "sha256-vYuXW+Yb0GXZAwaarV4WBIJtS31+EleiddU9ibBn/hs=";
+    fetchSubmodules = true;
   };
 
-  postUnpack = ''
-    cp -r ${tests}/* source/tests
-    chmod +w -R source/tests
-  '';
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    cmake
-  ];
+  nativeCheckInputs = [ cmake ];
 
   dontUseCmakeConfigure = true;
 
   checkPhase = ''
+    runHook preCheck
+
     cmake .
-    # utf_8_char fails with Python 3
-    ctest -E "utf_8_char" .
+    ctest .
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "editorconfig" ];
 
   meta = with lib; {
     description = "EditorConfig File Locator and Interpreter for Python";
+    mainProgram = "editorconfig";
     homepage = "https://github.com/editorconfig/editorconfig-core-py";
     license = licenses.psfl;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

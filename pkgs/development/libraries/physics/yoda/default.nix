@@ -1,28 +1,64 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  bash,
+  python,
+  root,
+  makeWrapper,
+  zlib,
+  withRootSupport ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.5";
+  version = "2.0.2";
 
-  src = fetchurl {
-    url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-WRkaDpr6jbU/+qIHn4Uy5bE94b5iJwPW9wYNNhBSi2s=";
+  src = fetchFromGitLab {
+    owner = "hepcedar";
+    repo = pname;
+    rev = "yoda-${version}";
+    hash = "sha256-sHvwgLH22fvdlh4oLjr4fzZ2WtBJMAlvr4Vxi9Xdf84=";
   };
 
-  nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
-  buildInputs = [ python ]
-    ++ (with python.pkgs; [ numpy matplotlib ])
-    ++ lib.optional withRootSupport root;
-  propagatedBuildInputs = [ zlib ];
+  nativeBuildInputs = with python.pkgs; [
+    autoreconfHook
+    bash
+    cython
+    makeWrapper
+  ];
+
+  buildInputs =
+    [
+      python
+    ]
+    ++ (with python.pkgs; [
+      numpy
+      matplotlib
+    ])
+    ++ lib.optionals withRootSupport [
+      root
+    ];
+
+  propagatedBuildInputs = [
+    zlib
+  ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
   postPatch = ''
     touch pyext/yoda/*.{pyx,pxd}
     patchShebangs .
+
+    substituteInPlace pyext/yoda/plotting/script_generator.py \
+      --replace '/usr/bin/env python' '${python.interpreter}'
   '';
 
   postInstall = ''
+    patchShebangs --build $out/bin/yoda-config
     for prog in "$out"/bin/*; do
       wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
     done
@@ -31,13 +67,15 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   doInstallCheck = true;
+
   installCheckTarget = "check";
 
-  meta = {
+  meta = with lib; {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${version}/ChangeLog";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

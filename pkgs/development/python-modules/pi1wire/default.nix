@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pi1wire";
-  version = "0.2.0";
+  version = "0.3.0";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ushiboy";
     repo = "pi1wire";
-    rev = "v${version}";
-    hash = "sha256-70w71heHWR5yArl+HuNAlzL2Yq/CL0iMNMiQw5qovls=";
+    tag = "v${version}";
+    hash = "sha256-l/5w71QsAW4BvILOaLdUVvQ8xxUm1ZTzUESRFzUgtic=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_find_all_sensors" # flaky

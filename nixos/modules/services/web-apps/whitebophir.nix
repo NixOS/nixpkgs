@@ -1,20 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.whitebophir;
-in {
+in
+{
   options = {
     services.whitebophir = {
-      enable = mkEnableOption "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under <filename>/var/lib/whitebophir</filename>)";
+      enable = mkEnableOption "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under {file}`/var/lib/whitebophir`)";
 
-      package = mkOption {
-        default = pkgs.whitebophir;
-        defaultText = literalExpression "pkgs.whitebophir";
-        type = types.package;
-        description = "Whitebophir package to use.";
-      };
+      package = mkPackageOption pkgs "whitebophir" { };
 
       listenAddress = mkOption {
         type = types.str;
@@ -33,18 +34,18 @@ in {
   config = mkIf cfg.enable {
     systemd.services.whitebophir = {
       description = "Whitebophir Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       environment = {
-        PORT            = toString cfg.port;
-        HOST            = toString cfg.listenAddress;
+        PORT = toString cfg.port;
+        HOST = toString cfg.listenAddress;
         WBO_HISTORY_DIR = "/var/lib/whitebophir";
       };
 
       serviceConfig = {
-        DynamicUser    = true;
-        ExecStart      = "${cfg.package}/bin/whitebophir";
-        Restart        = "always";
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/whitebophir";
+        Restart = "always";
         StateDirectory = "whitebophir";
       };
     };

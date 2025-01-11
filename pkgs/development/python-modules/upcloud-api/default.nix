@@ -1,27 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "upcloud-api";
-  version = "2.0.0";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-python-api";
-    rev = "v${version}";
-    sha256 = "1kkgrn97pw4k49ys97hjrvh2j8y2p2r9970v9csgrk5wci4562wm";
+    tag = "v${version}";
+    hash = "sha256-RDGRue9hejNPKIP61GtJHMG5rG3CKvJdsYxVrp6I5W0=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
@@ -29,6 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "upcloud_api" ];
 
   meta = with lib; {
+    changelog = "https://github.com/UpCloudLtd/upcloud-python-api/blob/${src.rev}/CHANGELOG.md";
     description = "UpCloud API Client";
     homepage = "https://github.com/UpCloudLtd/upcloud-python-api";
     license = licenses.mit;

@@ -1,14 +1,15 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, kconfig
-, kcoreaddons
-, ki18n
-, knotifications
-, qtbase
-, qtquickcontrols2
-, qtx11extras
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kconfig,
+  kcoreaddons,
+  ki18n,
+  knotifications,
+  mauiman,
+  qtquickcontrols2,
+  qtx11extras,
 }:
 
 mkDerivation {
@@ -24,6 +25,7 @@ mkDerivation {
     kcoreaddons
     ki18n
     knotifications
+    mauiman
     qtquickcontrols2
     qtx11extras
   ];

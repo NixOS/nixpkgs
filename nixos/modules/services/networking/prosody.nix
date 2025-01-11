@@ -263,8 +263,15 @@ let
     if builtins.isString x then ''"${x}"''
     else if builtins.isBool x then boolToString x
     else if builtins.isInt x then toString x
-    else if builtins.isList x then ''{ ${lib.concatStringsSep ", " (map (n: toLua n) x) } }''
+    else if builtins.isList x then "{ ${lib.concatMapStringsSep ", " toLua x} }"
     else throw "Invalid Lua value";
+
+  settingsToLua = prefix: settings: generators.toKeyValue {
+    listsAsDuplicateKeys = false;
+    mkKeyValue = k: generators.mkKeyValueDefault {
+      mkValueString = toLua;
+    } " = " (prefix + k);
+  } (filterAttrs (k: v: v != null) settings);
 
   createSSLOptsStr = o: ''
     ssl = {
@@ -309,7 +316,7 @@ let
         type = types.int;
         default = 300;
         description = ''
-          Timout after which the room is destroyed or unlocked if not
+          Timeout after which the room is destroyed or unlocked if not
           configured, in seconds
        '';
       };
@@ -418,12 +425,23 @@ let
       httpUploadPath = mkOption {
         type = types.str;
         description = ''
-          Directory where the uploaded files will be stored. By
-          default, uploaded files are put in a sub-directory of the
-          default Prosody storage path (usually /var/lib/prosody).
+          Directory where the uploaded files will be stored when the http_upload module is used.
+          By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
         '';
         default = "/var/lib/prosody";
       };
+    };
+  };
+
+  httpFileShareOpts = { ... }: {
+    freeformType = with types;
+      let atom = oneOf [ int bool str (listOf atom) ]; in
+      attrsOf (nullOr atom) // {
+        description = "int, bool, string or list of them";
+      };
+    options.domain = mkOption {
+      type = with types; nullOr str;
+      description = "Domain name for a http_file_share service.";
     };
   };
 
@@ -489,19 +507,15 @@ in
 
           Setting this option to true will prevent you from building a
           NixOS configuration which won't comply with this standard.
-          You can explicitely decide to ignore this standard if you
+          You can explicitly decide to ignore this standard if you
           know what you are doing by setting this option to false.
 
           [1] https://xmpp.org/extensions/xep-0423.html
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        description = "Prosody package to use";
-        default = pkgs.prosody;
-        defaultText = literalExpression "pkgs.prosody";
-        example = literalExpression ''
+      package = mkPackageOption pkgs "prosody" {
+        example = ''
           pkgs.prosody.override {
             withExtraLibs = [ pkgs.luaPackages.lpty ];
             withCommunityModules = [ "auth_external" ];
@@ -511,8 +525,13 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        description = "Directory where Prosody stores its data";
         default = "/var/lib/prosody";
+        description = ''
+          The prosody home directory used to store all data. If left as the default value
+          this directory will automatically be created before the prosody server starts, otherwise
+          you are responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
+        '';
       };
 
       disco_items = mkOption {
@@ -524,13 +543,29 @@ in
       user = mkOption {
         type = types.str;
         default = "prosody";
-        description = "User account under which prosody runs.";
+        description = ''
+          User account under which prosody runs.
+
+          ::: {.note}
+          If left as the default value this user will automatically be created
+          on system activation, otherwise you are responsible for
+          ensuring the user exists before the prosody service starts.
+          :::
+        '';
       };
 
       group = mkOption {
         type = types.str;
         default = "prosody";
-        description = "Group account under which prosody runs.";
+        description = ''
+          Group account under which prosody runs.
+
+          ::: {.note}
+          If left as the default value this group will automatically be created
+          on system activation, otherwise you are responsible for
+          ensuring the group exists before the prosody service starts.
+          :::
+        '';
       };
 
       allowRegistration = mkOption {
@@ -628,14 +663,25 @@ in
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = "Addtional path in which to look find plugins/modules";
+        description = "Additional path in which to look find plugins/modules";
       };
 
       uploadHttp = mkOption {
         description = ''
-          Configures the Prosody builtin HTTP server to handle user uploads.
+          Configures the old Prosody builtin HTTP server to handle user uploads.
         '';
         type = types.nullOr (types.submodule uploadHttpOpts);
+        default = null;
+        example = {
+          domain = "uploads.my-xmpp-example-host.org";
+        };
+      };
+
+      httpFileShare = mkOption {
+        description = ''
+          Configures the http_file_share module to handle user uploads.
+        '';
+        type = types.nullOr (types.submodule httpFileShareOpts);
         default = null;
         example = {
           domain = "uploads.my-xmpp-example-host.org";
@@ -699,6 +745,17 @@ in
         description = "Additional prosody configuration";
       };
 
+      log = mkOption {
+        type = types.lines;
+        default = ''"*syslog"'';
+        description = "Logging configuration. See [](https://prosody.im/doc/logging) for more details";
+        example = ''
+          {
+            { min = "warn"; to = "*syslog"; };
+          }
+        '';
+      };
+
     };
   };
 
@@ -712,7 +769,7 @@ in
 
           Having a server not XEP-0423-compliant might make your XMPP
           experience terrible. See the NixOS manual for further
-          informations.
+          information.
 
           If you know what you're doing, you can disable this warning by
           setting config.services.prosody.xmppComplianceSuite to false.
@@ -723,11 +780,10 @@ in
             You need to setup at least a MUC domain to comply with
             XEP-0423.
           '' + genericErrMsg;}
-        { assertion = cfg.uploadHttp != null || !cfg.xmppComplianceSuite;
+        { assertion = cfg.uploadHttp != null || cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
           message = ''
-            You need to setup the uploadHttp module through
-            config.services.prosody.uploadHttp to comply with
-            XEP-0423.
+            You need to setup the http_upload or http_file_share modules through config.services.prosody.uploadHttp
+            or config.services.prosody.httpFileShare to comply with XEP-0423.
           '' + genericErrMsg;}
       ];
     in errors;
@@ -736,9 +792,11 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text =
       let
-        httpDiscoItems = if (cfg.uploadHttp != null)
-            then [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}]
-            else [];
+        httpDiscoItems = optional (cfg.uploadHttp != null) {
+          url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";
+        } ++ optional (cfg.httpFileShare != null) {
+          url = cfg.httpFileShare.domain; description = "HTTP file share endpoint";
+        };
         mucDiscoItems = builtins.foldl'
             (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
             []
@@ -748,7 +806,7 @@ in
 
       pidfile = "/run/prosody/prosody.pid"
 
-      log = "*syslog"
+      log = ${cfg.log}
 
       data_path = "${cfg.dataDir}"
       plugin_paths = {
@@ -758,9 +816,6 @@ in
       ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
 
       admins = ${toLua cfg.admins}
-
-      -- we already build with libevent, so we can just enable it for a more performant server
-      use_libevent = true
 
       modules_enabled = {
 
@@ -820,12 +875,16 @@ in
         '') cfg.muc}
 
       ${ lib.optionalString (cfg.uploadHttp != null) ''
-        -- TODO: think about migrating this to mod-http_file_share instead.
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
             http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
             http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
             ${lib.optionalString (cfg.uploadHttp.userQuota != null) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
             http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
+      ''}
+
+      ${lib.optionalString (cfg.httpFileShare != null) ''
+        Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
       ''}
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
@@ -839,9 +898,8 @@ in
     users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
-      createHome = true;
       inherit (cfg) group;
-      home = "${cfg.dataDir}";
+      home = cfg.dataDir;
     };
 
     users.groups.prosody = mkIf (cfg.group == "prosody") {
@@ -854,30 +912,36 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Type = "forking";
-        RuntimeDirectory = [ "prosody" ];
-        PIDFile = "/run/prosody/prosody.pid";
-        ExecStart = "${cfg.package}/bin/prosodyctl start";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      serviceConfig = mkMerge [
+        {
+          User = cfg.user;
+          Group = cfg.group;
+          Type = "forking";
+          RuntimeDirectory = [ "prosody" ];
+          PIDFile = "/run/prosody/prosody.pid";
+          ExecStart = "${cfg.package}/bin/prosodyctl start";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
-        MemoryDenyWriteExecute = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
-        PrivateTmp = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-      };
+          MemoryDenyWriteExecute = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+        }
+        (mkIf (cfg.dataDir == "/var/lib/prosody") {
+          StateDirectory = "prosody";
+        })
+      ];
     };
 
   };
-  meta.doc = ./prosody.xml;
+
+  meta.doc = ./prosody.md;
 }

@@ -1,38 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, case
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  psutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "3.6.4.0";
-  format = "setuptools";
+  version = "4.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ismj2p8c66ykpss94rs0bfra5agxxmljz8r3gaq79r8valfb799";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "billiard";
+    tag = "v${version}";
+    hash = "sha256-9LuAlIn6hNiZGvWuaaDQxx9g0aBVF6Z2krxEOrssqRs=";
   };
 
-  checkInputs = [
-    case
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "billiard"
+  pythonImportsCheck = [ "billiard" ];
+
+  disabledTests = [
+    # time sensitive
+    "test_on_ready_counter_is_synchronized"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python multiprocessing fork with improvements and bugfixes";
     homepage = "https://github.com/celery/billiard";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/celery/billiard/blob/v${version}/CHANGES.txt";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

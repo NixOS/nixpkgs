@@ -1,40 +1,57 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, libunwind
-, pytz
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  fetchFromGitHub,
+  setuptools,
+  colorama,
+  pytz,
+  requests,
+  six,
+  libunwind,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.4.15";
   pname = "vmprof";
+  version = "0.4.17";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a2d872a40196404386d1e0d960e97b37c86c3f72a4f9d5a2b5f9ca1adaff5b62";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+
+  src = fetchFromGitHub {
+    owner = "vmprof";
+    repo = "vmprof-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7k6mtEdPmp1eNzB4l/k/ExSYtRJVmRxcx50ql8zR36k=";
   };
 
-  buildInputs = [ libunwind ];
-  propagatedBuildInputs = [ colorama requests six pytz ];
+  build-system = [ setuptools ];
 
-  # No tests included
-  doCheck = false;
+  dependencies = [
+    colorama
+    requests
+    six
+    pytz
+  ];
+
+  buildInputs = [ libunwind ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    "test_gzip_call"
+    "test_is_enabled"
+    "test_get_profile_path"
+    "test_get_runtime"
+  ];
+
   pythonImportsCheck = [ "vmprof" ];
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: src/vmprof_unix.o:src/vmprof_common.h:92: multiple definition of
-  #     `_PyThreadState_Current'; src/_vmprof.o:src/vmprof_common.h:92: first defined here
-  # TODO: can be removed once next release contains:
-  #   https://github.com/vmprof/vmprof-python/pull/203
-  NIX_CFLAGS_COMPILE = "-fcommon";
-
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    description = "A vmprof client";
+    description = "Vmprof client";
+    mainProgram = "vmprofshow";
     license = licenses.mit;
     homepage = "https://vmprof.readthedocs.org/";
   };

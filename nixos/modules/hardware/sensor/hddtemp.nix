@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkIf mkOption types;
 
@@ -43,8 +48,11 @@ in
       };
 
       unit = mkOption {
-        description = "Celcius or Fahrenheit";
-        type = types.enum [ "C" "F" ];
+        description = "Celsius or Fahrenheit";
+        type = types.enum [
+          "C"
+          "F"
+        ];
         default = "C";
       };
 

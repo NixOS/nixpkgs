@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texliveSmall, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
@@ -8,35 +8,48 @@
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
+, testers
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.2.0";
+  version = "4.4.2";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-OOq3cZt60JU4jwaqCQxaKyAnkZRd5g0+K7DqsfUJdIg=";
+    sha256 = "sha256-FXjNYD6NhmtYdD5J2L+ZxWnoEHm2pgzzPN973/64F+w=";
   };
+
+  outputs = [ "out" "tex" ];
 
   dontUseImakeConfigure = true;
 
+  nativeBuildInputs = [
+    bison
+    imake
+    perl
+    pkg-config
+    tzdata
+    which
+  ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    pkg-config bison imake which blas lapack curl tcl tk jdk
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    pango pcre2 readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
+    which blas lapack curl tcl tk jdk
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation libobjc libcxx ];
+  strictDeps = true;
 
   patches = [
     ./no-usr-local-search-paths.patch
-    ./test-reg-packages.patch
   ];
 
   # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
   # https://github.com/NixOS/nixpkgs/issues/146131
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
       --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
       --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
@@ -70,8 +83,10 @@ stdenv.mkDerivation rec {
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
+      CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
+      r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       --disable-R-framework
       --without-x
       OBJC="clang"
@@ -85,22 +100,35 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+  # move tex files to $tex for use with texlive.combine
+  # add link in $out since ${R_SHARE_DIR}/texmf is hardcoded in several places
+  postInstall = ''
+    mv -T "$out/lib/R/share/texmf" "$tex"
+    ln -s "$tex" "$out/lib/R/share/texmf"
+  '';
+
   # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
   # but Nix cannot detect it as a run-time dependency because the installed file
   # is compiled and compressed, which hides the store path.
-  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
+  postFixup = ''
+    echo ${which} > $out/nix-support/undetected-runtime-dependencies
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''find $out -name "*.so" -exec patchelf {} --add-rpath $out/lib/R/lib \;''}
+  '';
 
   doCheck = true;
   preCheck = "export HOME=$TMPDIR; export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 
-  # disable stackprotector on aarch64-darwin for now
-  # https://github.com/NixOS/nixpkgs/issues/158730
-  # see https://github.com/NixOS/nixpkgs/issues/127608 for a similar issue
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
-
   setupHook = ./setup-hook.sh;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  # make tex output available to texlive.combine
+  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
+  passthru.tlType = "run";
+  # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
+  passthru.tlDeps = with texlive; [ amsfonts amsmath fancyvrb graphics hyperref iftex jknapltx latex lm tools upquote url ];
 
   meta = with lib; {
     homepage = "http://www.r-project.org/";
@@ -126,8 +154,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
 
     maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
   };
-}
+})

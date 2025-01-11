@@ -1,4 +1,8 @@
-{ lib, stdenv, substituteAll }:
+{
+  lib,
+  stdenv,
+  substituteAll,
+}:
 
 # Provides a facility to hook into rfkill changes.
 #
@@ -25,13 +29,13 @@
 # in the rfkill package.
 
 let
-  rfkillHook =
-    substituteAll {
-      inherit (stdenv) shell;
-      isExecutable = true;
-      src = ./rfkill-hook.sh;
-    };
-in stdenv.mkDerivation {
+  rfkillHook = substituteAll {
+    inherit (stdenv) shell;
+    isExecutable = true;
+    src = ./rfkill-hook.sh;
+  };
+in
+stdenv.mkDerivation {
   name = "rfkill-udev";
 
   dontUnpack = true;
@@ -50,6 +54,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
     description = "Rules+hook for udev to catch rfkill state changes";
+    mainProgram = "rfkill-hook.sh";
     platforms = platforms.linux;
     license = licenses.mit;
   };

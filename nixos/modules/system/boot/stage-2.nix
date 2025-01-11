@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,20 +15,22 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     shell = "${pkgs.bash}/bin/bash";
-    inherit (config.boot) systemdExecutable extraSystemdUnitPaths;
+    inherit (config.boot) readOnlyNixStore systemdExecutable extraSystemdUnitPaths;
+    inherit (config.system.nixos) distroName;
     isExecutable = true;
-    inherit (config.nix) readOnlyStore;
     inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path = lib.makeBinPath ([
-      pkgs.coreutils
-      pkgs.util-linux
-    ] ++ lib.optional useHostResolvConf pkgs.openresolv);
-    postBootCommands = pkgs.writeText "local-cmds"
-      ''
-        ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
-      '';
+    path = lib.makeBinPath (
+      [
+        pkgs.coreutils
+        pkgs.util-linux
+      ]
+      ++ lib.optional useHostResolvConf pkgs.openresolv
+    );
+    postBootCommands = pkgs.writeText "local-cmds" ''
+      ${config.boot.postBootCommands}
+      ${config.powerManagement.powerUpCommands}
+    '';
   };
 
 in
@@ -42,6 +49,17 @@ in
         '';
       };
 
+      readOnlyNixStore = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If set, NixOS will enforce the immutability of the Nix store
+          by making {file}`/nix/store` a read-only bind
+          mount.  Nix will automatically make the store writable when
+          needed.
+        '';
+      };
+
       systemdExecutable = mkOption {
         default = "/run/current-system/systemd/lib/systemd/systemd";
         type = types.str;
@@ -51,7 +69,7 @@ in
       };
 
       extraSystemdUnitPaths = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Additional paths that get appended to the SYSTEMD_UNIT_PATH environment variable
@@ -61,7 +79,6 @@ in
     };
 
   };
-
 
   config = {
 

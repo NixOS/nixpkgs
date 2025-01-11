@@ -1,54 +1,63 @@
-{ lib, stdenv, fetchurl, ocaml, writeText }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  writeText,
+}:
 
-let
-  pname = "camlidl";
-  webpage = "https://caml.inria.fr/pub/old_caml_site/camlidl/";
-in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.05";
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.03")
+  "camlidl is not available for OCaml ${ocaml.version}"
 
-  src = fetchurl {
-    url = "http://caml.inria.fr/pub/old_caml_site/distrib/bazar-ocaml/${pname}-${version}.tar.gz";
-    sha256 = "0483cs66zsxsavcllpw1qqvyhxb39ddil3h72clcd69g7fyxazl5";
-  };
+  stdenv.mkDerivation
+  rec {
+    pname = "ocaml${ocaml.version}-camlidl";
+    version = "1.12";
 
-  nativeBuildInputs = [ ocaml ];
+    src = fetchFromGitHub {
+      owner = "xavierleroy";
+      repo = "camlidl";
+      rev = "camlidl112";
+      hash = "sha256-ONPQMDFaU2OzFa5jgMVKx+ZRKk8ZgBZyk42vDvbM7E0=";
+    };
 
-  # build fails otherwise
-  enableParallelBuilding = false;
+    nativeBuildInputs = [ ocaml ];
 
-  preBuild = ''
-    mv config/Makefile.unix config/Makefile
-    substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
-    substituteInPlace config/Makefile --replace OCAMLLIB=/usr/local/lib/ocaml OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
-    substituteInPlace config/Makefile --replace CPP=/lib/cpp CPP=${stdenv.cc}/bin/cpp
-    substituteInPlace config/Makefile --replace "OCAMLC=ocamlc -g" "OCAMLC=ocamlc -g -warn-error -31"
-    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/caml
-  '';
+    # build fails otherwise
+    enableParallelBuilding = false;
 
-  postInstall = ''
-    cat >$out/lib/ocaml/${ocaml.version}/site-lib/camlidl/META <<EOF
-    # Courtesy of GODI
-    description = "Stub generator"
-    version = "${version}"
-    archive(byte) = "com.cma"
-    archive(native) = "com.cmxa"
-    EOF
-    mkdir -p $out/bin
-    ln -s $out/camlidl $out/bin
-  '';
+    preBuild = ''
+      mv config/Makefile.unix config/Makefile
+      substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
+      substituteInPlace config/Makefile --replace 'OCAMLLIB=$(shell $(OCAMLC) -where)' OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
+      substituteInPlace config/Makefile --replace CPP=cpp CPP=${stdenv.cc}/bin/cpp
+      substituteInPlace lib/Makefile --replace '$(OCAMLLIB)/Makefile.config' "${ocaml}/lib/ocaml/Makefile.config"
+      mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/caml
+      mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/stublibs
+    '';
 
-  setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-    export NIX_CFLAGS_COMPILE+=" -isystem $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
-    export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
-  '';
+    postInstall = ''
+      cat >$out/lib/ocaml/${ocaml.version}/site-lib/camlidl/META <<EOF
+      # Courtesy of GODI
+      description = "Stub generator"
+      version = "${version}"
+      archive(byte) = "com.cma"
+      archive(native) = "com.cmxa"
+      EOF
+      mkdir -p $out/bin
+      ln -s $out/camlidl $out/bin
+    '';
 
-  meta = {
-    description = "A stub code generator and COM binding for Objective Caml";
-    homepage = webpage;
-    license = "LGPL";
-    maintainers = [ lib.maintainers.roconnor ];
-  };
-}
+    setupHook = writeText "setupHook.sh" ''
+      export NIX_CFLAGS_COMPILE+=" -isystem $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
+      export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
+    '';
+
+    meta = {
+      description = "Stub code generator and COM binding for Objective Caml";
+      mainProgram = "camlidl";
+      homepage = "https://xavierleroy.org/camlidl/";
+      license = lib.licenses.lgpl21;
+      maintainers = [ lib.maintainers.roconnor ];
+    };
+  }

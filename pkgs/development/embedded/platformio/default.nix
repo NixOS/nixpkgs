@@ -1,21 +1,13 @@
-
-{ newScope, fetchFromGitHub }:
+{ newScope, python3Packages }:
 
 let
   callPackage = newScope self;
 
-  version = "6.0.1";
-
-  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
-  src = fetchFromGitHub {
-    owner = "platformio";
-    repo = "platformio-core";
-    rev = "v${version}";
-    sha256 = "sha256-noLdQctAaMNmfuxI3iybHFx3Q9aTr3gZaUZ+/uO+fnA=";
-  };
-
   self = {
-    platformio-chrootenv = callPackage ./chrootenv.nix { inherit version src; };
+    platformio-core = python3Packages.callPackage ./core.nix { };
+
+    platformio-chrootenv = callPackage ./chrootenv.nix { };
   };
 
-in self
+in
+self

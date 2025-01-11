@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
-, gst_all_1, glib-networking, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pythonPackages,
+  wrapGAppsNoGuiHook,
+  gst_all_1,
+  glib-networking,
+  gobject-introspection,
+  pipewire,
+  nixosTests,
 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "3.3.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-F0fIl9DrludZZdzsrl/xsp7TLMgTPbVGtGvMHyD52Yw=";
+    sha256 = "sha256-2OFav2HaQq/RphmZxLyL1n3suwzt1Y/d4h33EdbStjk=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsNoGuiHook ];
 
   buildInputs = with gst_all_1; [
     glib-networking
@@ -21,31 +30,40 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
+    gst-plugins-rs
+    pipewire
   ];
 
-  propagatedBuildInputs = [
-    gobject-introspection
-  ] ++ (with pythonPackages; [
-      gst-python
-      pygobject3
-      pykka
-      requests
-      setuptools
-      tornado
-    ] ++ lib.optional (!stdenv.isDarwin) dbus-python
-  );
+  propagatedBuildInputs =
+    [ gobject-introspection ]
+    ++ (
+      with pythonPackages;
+      [
+        gst-python
+        pygobject3
+        pykka
+        requests
+        setuptools
+        tornado
+      ]
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
+    );
+
+  propagatedNativeBuildInputs = [ gobject-introspection ];
 
   # There are no tests
   doCheck = false;
 
+  passthru.tests = {
+    inherit (nixosTests) mopidy;
+  };
+
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
-    description = ''
-      An extensible music server that plays music from local disk, Spotify,
-      SoundCloud, and more
-    '';
+    description = "Extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
+    mainProgram = "mopidy";
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

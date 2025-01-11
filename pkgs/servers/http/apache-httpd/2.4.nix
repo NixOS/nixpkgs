@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which
+{ lib, stdenv, fetchurl, fetchpatch2, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt, buildPackages, pkgsCross, runCommand
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -11,34 +11,47 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.54";
+  version = "2.4.62";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "sha256-6zl/7u/MryVPjUXeN2jZ1o6Oc4UcSa/VtxdtHs+Aw0A=";
+    hash = "sha256-Z0GI579EztgtqNtSLalGhJ4iCA1z0WyT9/TfieJXKew=";
   };
+
+  patches = [
+    # Fix cross-compilation by using CC_FOR_BUILD for generator program
+    # https://issues.apache.org/bugzilla/show_bug.cgi?id=51257#c6
+    (fetchpatch2 {
+      name = "apache-httpd-cross-compile.patch";
+      url = "https://gitlab.com/buildroot.org/buildroot/-/raw/5dae8cddeecf16c791f3c138542ec51c4e627d75/package/apache/0001-cross-compile.patch";
+      hash = "sha256-KGnAa6euOt6dkZQwURyVITcfqTkDkSR8zpE97DywUUw=";
+    })
+  ];
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  nativeBuildInputs = [ which ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = [ perl ] ++
+  nativeBuildInputs = [ perl which ];
+
+  buildInputs = [ perl libxcrypt zlib ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
-    lib.optional stdenv.isDarwin libiconv;
+    lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+    sed -i configure -e 's|perlbin=.*|perlbin="/usr/bin/env perl"|'
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
   '';
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
 
   configureFlags = [
     "--with-apr=${apr.dev}"
@@ -66,6 +79,10 @@ stdenv.mkDerivation rec {
 
     (lib.enableFeature luaSupport "lua")
     (lib.withFeatureAs luaSupport "lua" lua5)
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # skip bad config check when cross compiling
+    # https://gitlab.com/buildroot.org/buildroot/-/blob/5dae8cddeecf16c791f3c138542ec51c4e627d75/package/apache/apache.mk#L23
+    "ap_cv_void_ptr_lt_long=no"
   ];
 
   enableParallelBuilding = true;
@@ -85,6 +102,10 @@ stdenv.mkDerivation rec {
       acme-integration = nixosTests.acme;
       proxy = nixosTests.proxy;
       php = nixosTests.php.httpd;
+      cross = runCommand "apacheHttpd-test-cross" { } ''
+        ${pkgsCross.aarch64-multiplatform.apacheHttpd.dev}/bin/apxs -q -n INCLUDE | grep CC=aarch64-unknown-linux-gnu-gcc > $out
+        head -n1 ${pkgsCross.aarch64-multiplatform.apacheHttpd}/bin/dbmmanage | grep '^#!${pkgsCross.aarch64-multiplatform.perl}/bin/perl$' >> $out
+      '';
     };
   };
 

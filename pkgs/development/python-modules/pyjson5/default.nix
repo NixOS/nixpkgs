@@ -1,26 +1,44 @@
-{ buildPythonPackage, lib, nose, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  wheel,
+}:
 
 buildPythonPackage rec {
   pname = "pyjson5";
-  version = "0.8.5";
+  version = "1.6.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "dpranke";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0nyngj18jlkgvm1177lc3cj47wm4yh3dqigygvcvw7xkyryafsqn";
+    owner = "Kijewski";
+    repo = "pyjson5";
+    tag = "v${version}";
+    hash = "sha256-QggO1go9iQIy235I9CYOeC6JCoOT2sfDsrbSySN3mMw=";
+    fetchSubmodules = true;
   };
 
-  doCheck = true;
-  checkInputs = [ nose ];
-  checkPhase = ''
-    nosetests
-  '';
+  build-system = [
+    cython
+    setuptools
+    wheel
+  ];
+
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "pyjson5" ];
 
   meta = with lib; {
-    description = "Python implementation of the JSON5 data format";
+    description = "JSON5 serializer and parser library";
+    homepage = "https://github.com/Kijewski/pyjson5";
+    changelog = "https://github.com/Kijewski/pyjson5/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    homepage = "https://github.com/dpranke/pyjson5";
-    maintainers = with maintainers; [ isgy ];
+    maintainers = with maintainers; [ fab ];
   };
 }

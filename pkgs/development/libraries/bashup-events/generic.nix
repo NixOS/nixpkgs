@@ -1,35 +1,34 @@
 {
   # general
-  lib
-, resholve
-, bash
-, doCheck ? true
-, doInstallCheck ? true
+  lib,
+  resholve,
+  bash,
+  doCheck ? true,
+  doInstallCheck ? true,
   # variant-specific
-, variant
-, version
-, branch
-, src
-, fake ? false
-, keep
+  variant,
+  version,
+  branch,
+  src,
+  fake ? false,
+  keep,
 }:
 let
   # extracting this so that it's trivial to test in other shells
-  installCheck = shell:
-    ''
-      echo "testing bashup.events in ${shell}"
-      ${shell} <<'EOF'
-      source $out/bin/bashup.events
-      neat(){
-        echo $0: Hi from event \'test event\'. I can have both $1 and $2 arguments.
-        exit 0
-      }
-      event on "test event" @2 neat curried
-      echo event registered
-      event emit "test event" runtime
-      exit 1 # fail if emitting event didn't exit clean
-      EOF
-    '';
+  installCheck = shell: ''
+    echo "testing bashup.events in ${shell}"
+    ${shell} <<'EOF'
+    source $out/bin/bashup.events
+    neat(){
+      echo $0: Hi from event \'test event\'. I can have both $1 and $2 arguments.
+      exit 0
+    }
+    event on "test event" @2 neat curried
+    echo event registered
+    event emit "test event" runtime
+    exit 1 # fail if emitting event didn't exit clean
+    EOF
+  '';
 
 in
 resholve.mkDerivation rec {
@@ -49,7 +48,7 @@ resholve.mkDerivation rec {
   '';
 
   inherit doCheck;
-  checkInputs = [ bash ];
+  nativeCheckInputs = [ bash ];
 
   checkPhase = ''
     runHook preCheck
@@ -68,7 +67,7 @@ resholve.mkDerivation rec {
   };
 
   inherit doInstallCheck;
-  installCheckInputs = [ bash ];
+  nativeInstallCheckInputs = [ bash ];
   installCheckPhase = ''
     runHook preInstallCheck
     ${installCheck "${bash}/bin/bash"}
@@ -77,7 +76,8 @@ resholve.mkDerivation rec {
 
   meta = with lib; {
     inherit branch;
-    description = "An event listener/callback API for creating extensible bash programs";
+    description = "Event listener/callback API for creating extensible bash programs";
+    mainProgram = "bashup.events";
     homepage = "https://github.com/bashup/events";
     license = licenses.cc0;
     maintainers = with maintainers; [ abathur ];

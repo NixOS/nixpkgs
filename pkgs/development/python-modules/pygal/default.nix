@@ -1,59 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPyPy
-, flask
-, pyquery
-, pytest
-, pytest-runner
-, cairosvg
-, tinycss
-, cssselect
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  importlib-metadata,
+
+  # optional-dependencies
+  lxml,
+  cairosvg,
+
+  # tests
+  pyquery,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygal";
-  version = "3.0.0";
+  version = "3.0.5";
+  pyproject = true;
 
-  doCheck = !isPyPy; # one check fails with pypy
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KSP5XS5RWTCqWplyGdzO+/PZK36vX8HJ/ruVsJk1/bI=";
+    hash = "sha256-wKDzTlvBwBl1wr+4NCrVIeKTrULlJWmd0AxNelLBS3E=";
   };
 
-  buildInputs = [
-    flask
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail pytest-runner ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ importlib-metadata ];
+
+  optional-dependencies = {
+    lxml = [ lxml ];
+    png = [ cairosvg ];
+  };
+
+  nativeCheckInputs = [
     pyquery
-
-    # Should be a check input, but upstream lists it under "setup_requires".
-    # https://github.com/Kozea/pygal/issues/430
-    pytest-runner
-  ];
-
-  checkInputs = [
-    pytest
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
     export LANG=en_US.UTF-8
   '';
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
-  '';
-
-  propagatedBuildInputs = [ cairosvg tinycss cssselect ]
-    ++ lib.optionals (!isPyPy) [ lxml ];
-
   meta = with lib; {
-    description = "Sexy and simple python charting";
+    description = "Module for dynamic SVG charting";
     homepage = "http://www.pygal.org";
+    changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
+    downloadPage = "https://github.com/Kozea/pygal";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ sjourdois ];
+    maintainers = [ ];
+    mainProgram = "pygal_gen.py";
   };
-
 }

@@ -1,49 +1,83 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, click
-, num2words
-, numpy
-, scipy
-, pandas
-, nibabel
-, patsy
-, bids-validator
-, sqlalchemy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  formulaic,
+  click,
+  num2words,
+  numpy,
+  scipy,
+  pandas,
+  nibabel,
+  bids-validator,
+  sqlalchemy,
+  universal-pathlib,
+  pytestCheckHook,
+  versioneer,
 }:
 
 buildPythonPackage rec {
-  version = "0.15.0";
   pname = "pybids";
+  version = "0.18.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Eq+4x7h1uR5QHXfgCEZl+7usc9CBFQClvV36Yyrqbd0=";
+  src = fetchFromGitHub {
+    owner = "bids-standard";
+    repo = "pybids";
+    rev = version;
+    hash = "sha256-nSBc4vhkCdRo7CNBwvJreCiwoxJK6ztyI5gvcpzYZ/Y=";
   };
 
-  propagatedBuildInputs = [
-    click
-    num2words
-    numpy
-    scipy
-    pandas
-    nibabel
-    patsy
-    bids-validator
-    sqlalchemy
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  pythonRelaxDeps = [
+    "formulaic"
+    "sqlalchemy"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [
+    setuptools
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
+
+  dependencies = [
+    bids-validator
+    click
+    formulaic
+    nibabel
+    num2words
+    numpy
+    pandas
+    scipy
+    sqlalchemy
+    universal-pathlib
+  ];
+
   pythonImportsCheck = [ "bids" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Could not connect to the endpoint URL
+    "src/bids/layout/tests/test_remote_bids.py"
+  ];
+
+  disabledTests = [
+    # Regression associated with formulaic >= 0.6.0
+    # (see https://github.com/bids-standard/pybids/issues/1000)
+    "test_split"
+  ];
+
+  meta = {
     description = "Python tools for querying and manipulating BIDS datasets";
     homepage = "https://github.com/bids-standard/pybids";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
-    # Doesn't support sqlalchemy >=1.4
-    # See https://github.com/bids-standard/pybids/issues/680
-    broken = true;
+    changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
+    mainProgram = "pybids";
   };
 }

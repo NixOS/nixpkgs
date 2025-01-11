@@ -1,29 +1,47 @@
-{ stdenv, lib, fetchFromGitHub, linux-pam }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  linux-pam,
+  libxcb,
+  makeBinaryWrapper,
+  zig_0_12,
+  callPackage,
+  nixosTests,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ly";
-  version = "0.2.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "cylgom";
+    owner = "fairyglade";
     repo = "ly";
-    rev = version;
-    sha256 = "16gjcrd4a6i4x8q8iwlgdildm7cpdsja8z22pf2izdm6rwfki97d";
-    fetchSubmodules = true;
+    rev = "v1.0.2";
+    hash = "sha256-VUtNEL7Te/ba+wvL0SsUHlyv2NPmkYKs76TnW8r3ysw=";
   };
 
-  buildInputs = [ linux-pam ];
-  makeFlags = [ "FLAGS=-Wno-error" ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    zig_0_12.hook
+  ];
+  buildInputs = [
+    libxcb
+    linux-pam
+  ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/ly $out/bin
+  postPatch = ''
+    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
+
+  passthru.tests = { inherit (nixosTests) ly; };
 
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
-    homepage = "https://github.com/cylgom/ly";
+    homepage = "https://github.com/fairyglade/ly";
     maintainers = [ maintainers.vidister ];
+    platforms = platforms.linux;
+    mainProgram = "ly";
   };
 }

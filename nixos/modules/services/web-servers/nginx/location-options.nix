@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib }:
+{ lib, config }:
 
 with lib;
 
@@ -30,10 +30,7 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>.
-
-        WARNING: The generate file contains the users' passwords in a
-        non-cryptographically-securely hashed way.
+        Can be created by running {command}`nix-shell --packages apacheHttpd --run 'htpasswd -B -c FILENAME USERNAME'`.
       '';
     };
 
@@ -93,7 +90,7 @@ with lib;
     };
 
     return = mkOption {
-      type = types.nullOr types.str;
+      type = with types; nullOr (oneOf [ str int ]);
       default = null;
       example = "301 http://example.com$request_uri";
       description = ''
@@ -126,6 +123,15 @@ with lib;
         Order of this location block in relation to the others in the vhost.
         The semantics are the same as with `lib.mkOrder`. Smaller values have
         a greater priority.
+      '';
+    };
+
+    recommendedProxySettings = mkOption {
+      type = types.bool;
+      default = config.services.nginx.recommendedProxySettings;
+      defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
+      description = ''
+        Enable recommended proxy settings.
       '';
     };
   };

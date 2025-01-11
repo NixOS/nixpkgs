@@ -1,44 +1,49 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
 let
   cfg = config.services.sonarr;
 in
 {
   options = {
     services.sonarr = {
-      enable = mkEnableOption "Sonarr";
+      enable = lib.mkEnableOption "Sonarr";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/sonarr/.config/NzbDrone";
         description = "The directory where Sonarr stores its data files.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for the Sonarr web interface
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "sonarr";
         description = "User account under which Sonaar runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "sonarr";
         description = "Group under which Sonaar runs.";
       };
+
+      package = lib.mkPackageOption pkgs "sonarr" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
     ];
@@ -52,16 +57,20 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.sonarr}/bin/NzbDrone -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe cfg.package)
+          "-nobrowser"
+          "-data=${cfg.dataDir}"
+        ];
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 8989 ];
     };
 
-    users.users = mkIf (cfg.user == "sonarr") {
+    users.users = lib.mkIf (cfg.user == "sonarr") {
       sonarr = {
         group = cfg.group;
         home = cfg.dataDir;
@@ -69,7 +78,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "sonarr") {
+    users.groups = lib.mkIf (cfg.group == "sonarr") {
       sonarr.gid = config.ids.gids.sonarr;
     };
   };

@@ -1,69 +1,83 @@
-{ lib
-, glibcLocales
-, buildPythonPackage
-, fetchPypi
-, six
-, appdirs
-, scandir ? null
-, backports_os ? null
-, typing ? null
-, pytz
-, enum34
-, pyftpdlib
-, psutil
-, mock
-, pythonAtLeast
-, isPy3k
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  stdenv,
+  appdirs,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  psutil,
+  pyftpdlib,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "fs";
-  version = "2.4.15";
+  version = "2.4.16";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sJ0CwxH0rdHm4rdXJMRQ6vz+7MkXV5IkyorSHazQoYI=";
+    hash = "sha256-rpfH1RIT9LcLapWCklMCiQkN46fhWEHhCPvhRPBp0xM=";
   };
 
-  buildInputs = [ glibcLocales ];
+  build-system = [ setuptools ];
 
-  # strong cycle with paramaterized
-  doCheck = false;
-  checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
-  propagatedBuildInputs = [ six appdirs pytz ]
-    ++ lib.optionals (!isPy3k) [ backports_os ]
-    ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
-    ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]
-    ++ lib.optionals (!pythonAtLeast "3.5") [ enum34 ];
+  dependencies = [
+    six
+    appdirs
+    pytz
+  ];
 
-  LC_ALL="en_US.utf-8";
+  nativeCheckInputs = [
+    pyftpdlib
+    mock
+    psutil
+    pytestCheckHook
+  ];
+
+  LC_ALL = "en_US.utf-8";
 
   preCheck = ''
     HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [ "--ignore=tests/test_opener.py" ];
-
-  disabledTests = [
-    "user_data_repr"
-  ] ++ lib.optionals (stdenv.isDarwin) [ # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
-    "test_ftpfs"
-  ] ++ lib.optionals (pythonAtLeast "3.9") [
-    # update friend version of this commit: https://github.com/PyFilesystem/pyfilesystem2/commit/3e02968ce7da7099dd19167815c5628293e00040
-    # merged into master, able to be removed after >2.4.1
-    "test_copy_sendfile"
+  disabledTestPaths = [
+    # Circular dependency with parameterized
+    "tests/test_move.py"
+    "tests/test_mirror.py"
+    "tests/test_copy.py"
   ];
+
+  disabledTests =
+    [
+      "user_data_repr"
+      # https://github.com/PyFilesystem/pyfilesystem2/issues/568
+      "test_remove"
+      # Tests require network access
+      "TestFTPFS"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
+      "test_ftpfs"
+    ];
+
+  pythonImportsCheck = [ "fs" ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Filesystem abstraction";
-    homepage    = "https://github.com/PyFilesystem/pyfilesystem2";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/PyFilesystem/pyfilesystem2";
+    changelog = "https://github.com/PyFilesystem/pyfilesystem2/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
-
 }

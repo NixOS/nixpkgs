@@ -1,13 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, publicsuffix2
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  publicsuffix2,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 buildPythonPackage rec {
   pname = "urlpy";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nexB";
@@ -18,27 +20,21 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  propagatedBuildInputs = [
-    publicsuffix2
-  ];
+  propagatedBuildInputs = [ publicsuffix2 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.9") [
     # Fails with "AssertionError: assert 'unknown' == ''"
     "test_unknown_protocol"
   ];
 
-  pythonImportsCheck = [
-    "urlpy"
-  ];
+  pythonImportsCheck = [ "urlpy" ];
 
   meta = with lib; {
     description = "Simple URL parsing, canonicalization and equivalence";
     homepage = "https://github.com/nexB/urlpy";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

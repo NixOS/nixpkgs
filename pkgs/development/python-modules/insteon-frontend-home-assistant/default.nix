@@ -1,26 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "insteon-frontend-home-assistant";
-  version = "0.1.0";
+  version = "0.5.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "70ee413cae8717416f5add1be7647158d8ff4303942dafccac0792ef44336cdf";
+    hash = "sha256-NZwnx8tlXnsVCk4nvNjOg3cjSr2CnjqWcZG7xFTC2wA=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # upstream has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "insteon_frontend" ];
 
-  meta = {
-    description = "The Insteon frontend for Home Assistant";
-    homepage = "https://github.com/teharris1/insteon-panel";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+  meta = with lib; {
+    changelog = "https://github.com/pyinsteon/insteon-panel/releases/tag/${version}";
+    description = "Insteon frontend for Home Assistant";
+    homepage = "https://github.com/pyinsteon/insteon-panel";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

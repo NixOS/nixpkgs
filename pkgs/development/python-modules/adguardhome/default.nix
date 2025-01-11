@@ -1,45 +1,46 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "adguardhome";
-  version = "0.5.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "0.7.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256-HAgt52Bo2NOUkpr5xvWTcRyrLKpfcBDlVAZxgDNI7hY=";
+    tag = "v${version}";
+    hash = "sha256-n55G6ulKcgSSrgPk70D52OO9fp3WURlcRhJQUKrZ1Nk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov" "" \
-      --replace '"0.0.0"' '"${version}"'
-
-    substituteInPlace tests/test_adguardhome.py \
-      --replace 0.0.0 ${version}
+      --replace-fail "--cov" "" \
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the AdGuard Home API";
     homepage = "https://github.com/frenck/python-adguardhome";
+    changelog = "https://github.com/frenck/python-adguardhome/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee ];
   };

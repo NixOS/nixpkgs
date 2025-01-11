@@ -1,35 +1,42 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, blessed
-, keyring
-, keyrings-alt
-, lxml
-, measurement
-, python-dateutil
-, requests
-, rich
-, typing-extensions
-, pytestCheckHook
-, mock
-, nose
-, pythonOlder
+{
+  lib,
+  blessed,
+  browser-cookie3,
+  buildPythonPackage,
+  cloudscraper,
+  fetchPypi,
+  keyring,
+  keyrings-alt,
+  lxml,
+  measurement,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.17.0";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UXFvKQtC44EvscYWXK7KI/do3U0wTWI3zKwvsRdzKrs=";
+    hash = "sha256-H9oKSio+2x4TDCB4YN5mmERUEeETLKahPlW3TDDFE/E=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     blessed
+    browser-cookie3
+    cloudscraper
     keyring
     keyrings-alt
     lxml
@@ -40,15 +47,19 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
-    nose
     pytestCheckHook
   ];
 
   postPatch = ''
     # Remove overly restrictive version constraints
     sed -i -e "s/>=.*//" requirements.txt
+
+    # https://github.com/coddingtonbear/python-measurement/pull/8
+    substituteInPlace tests/test_client.py \
+      --replace-fail "Weight" "Mass" \
+      --replace-fail '"Mass"' '"Weight"'
   '';
 
   disabledTests = [
@@ -56,14 +67,13 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  pythonImportsCheck = [
-    "myfitnesspal"
-  ];
+  pythonImportsCheck = [ "myfitnesspal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to access meal tracking data stored in MyFitnessPal";
+    mainProgram = "myfitnesspal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

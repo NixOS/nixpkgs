@@ -1,80 +1,96 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, cairo
-, harfbuzz
-, libintl
-, libthai
-, darwin
-, fribidi
-, gnome
-, gi-docgen
-, makeFontsConf
-, freefont_ttf
-, meson
-, ninja
-, glib
-, python3
-, x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, gobject-introspection
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cairo,
+  harfbuzz,
+  libintl,
+  libthai,
+  darwin,
+  fribidi,
+  gnome,
+  gi-docgen,
+  makeFontsConf,
+  freefont_ttf,
+  meson,
+  ninja,
+  glib,
+  python3,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
+  libXft,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.50.7";
+  version = "1.54.0";
 
-  outputs = [ "bin" "out" "dev" ]
-    ++ lib.optionals withDocs [ "devdoc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "BHfzaaPUxpXfcpmmmJ3ABHVqf03ifuysQFxnkLfjrTM=";
+    url =
+      with finalAttrs;
+      "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-ip7tdQIe5zTX/A/fOmXDu6Ud/v5K5RqbQUpgxwstHtg=";
   };
-
-  strictDeps = !withIntrospection;
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson ninja
-    glib # for glib-mkenum
-    pkg-config
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ] ++ lib.optionals withDocs [
-    gi-docgen
-    python3
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      glib # for glib-mkenum
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+    ];
 
-  buildInputs = [
-    fribidi
-    libthai
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-    Carbon
-    CoreGraphics
-    CoreText
-  ]);
+  buildInputs =
+    [
+      fribidi
+      libthai
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+        Carbon
+        CoreGraphics
+        CoreText
+      ]
+    );
 
-  propagatedBuildInputs = [
-    cairo
-    glib
-    libintl
-    harfbuzz
-  ] ++ lib.optionals x11Support [
-    libXft
-  ];
+  propagatedBuildInputs =
+    [
+      cairo
+      glib
+      libintl
+      harfbuzz
+    ]
+    ++ lib.optionals x11Support [
+      libXft
+    ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withDocs}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-  ] ++ lib.optionals (!x11Support) [
-    "-Dxft=disabled" # only works with x11
+    (lib.mesonBool "documentation" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -82,22 +98,36 @@ stdenv.mkDerivation rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
+
   doCheck = false; # test-font: FAIL
 
-  postFixup = lib.optionalString withDocs ''
+  postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = finalAttrs.pname;
+      # 1.90 is alpha for API 2.
+      freeze = "1.90.0";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
   meta = with lib; {
-    description = "A library for laying out and rendering of text, with an emphasis on internationalization";
+    description = "Library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an
@@ -111,6 +141,15 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
+
+    pkgConfigModules = [
+      "pango"
+      "pangocairo"
+      "pangofc"
+      "pangoft2"
+      "pangoot"
+      "pangoxft"
+    ];
   };
-}
+})

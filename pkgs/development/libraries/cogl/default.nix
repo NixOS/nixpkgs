@@ -1,7 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libGL, glib, gdk-pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome
-, mesa, automake, autoconf
-, gstreamerSupport ? true, gst_all_1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libGL,
+  glib,
+  gdk-pixbuf,
+  xorg,
+  libintl,
+  pangoSupport ? true,
+  pango,
+  cairo,
+  gobject-introspection,
+  wayland,
+  gnome,
+  mesa,
+  automake,
+  autoconf,
+  gstreamerSupport ? false,
+  gst_all_1,
+  harfbuzz,
+  OpenGL,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cogl";
@@ -17,42 +37,88 @@ stdenv.mkDerivation rec {
     # submitted by Fedora on the GNOME Bugzilla
     # (https://bugzilla.gnome.org/787443). Upstream thinks the patch
     # could be merged, but dev can not make a new release.
-
-    (fetchpatch {
-      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589";
-      sha256 = "0f0d9iddg8zwy853phh7swikg4yzhxxv71fcag36f8gis0j5p998";
-    })
-
-    (fetchpatch {
-      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056";
-      sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
-    })
+    ./patches/gnome_bugzilla_787443_359589_deepin.patch
+    ./patches/gnome_bugzilla_787443_361056_deepin.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ pkg-config libintl automake autoconf ];
+  nativeBuildInputs = [
+    pkg-config
+    libintl
+    automake
+    autoconf
+    gobject-introspection
+  ];
 
-  configureFlags = [
-    "--enable-introspection"
-    "--enable-kms-egl-platform"
-    "--enable-wayland-egl-platform"
-    "--enable-wayland-egl-server"
-  ] ++ lib.optional gstreamerSupport "--enable-cogl-gst"
-  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
-
-  propagatedBuildInputs = with xorg; [
-      glib gdk-pixbuf gobject-introspection wayland mesa
-      libGL libXrandr libXfixes libXcomposite libXdamage
+  configureFlags =
+    [
+      "--enable-introspection"
     ]
-    ++ lib.optionals gstreamerSupport [ gst_all_1.gstreamer
-                                               gst_all_1.gst-plugins-base ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      "--enable-kms-egl-platform"
+      "--enable-wayland-egl-platform"
+      "--enable-wayland-egl-server"
+      "--enable-gles1"
+      "--enable-gles2"
+      # Force linking against libGL.
+      # Otherwise, it tries to load it from the runtime library path.
+      "LIBS=-lGL"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--disable-glx"
+      "--without-x"
+    ]
+    ++ lib.optionals gstreamerSupport [
+      "--enable-cogl-gst"
+    ];
 
-  buildInputs = lib.optionals pangoSupport [ pango cairo ];
+  # TODO: this shouldn't propagate so many things
+  # especially not gobject-introspection
+  propagatedBuildInputs =
+    [
+      glib
+      gdk-pixbuf
+      gobject-introspection
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wayland
+      mesa  # actually uses eglmesaext
+      libGL
+      xorg.libXrandr
+      xorg.libXfixes
+      xorg.libXcomposite
+      xorg.libXdamage
+    ]
+    ++ lib.optionals gstreamerSupport [
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+    ];
 
-  COGL_PANGO_DEP_CFLAGS
-    = lib.optionalString (stdenv.isDarwin && pangoSupport)
-      "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
+  buildInputs =
+    lib.optionals pangoSupport [
+      pango
+      cairo
+      harfbuzz
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
+
+  env =
+    {
+      COGL_PANGO_DEP_CFLAGS = toString (
+        lib.optionals (stdenv.hostPlatform.isDarwin && pangoSupport) [
+          "-I${pango.dev}/include/pango-1.0"
+          "-I${cairo.dev}/include/cairo"
+          "-I${harfbuzz.dev}/include/harfbuzz"
+        ]
+      );
+    }
+    // lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    };
 
   #doCheck = true; # all tests fail (no idea why)
 
@@ -64,7 +130,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small open source library for using 3D graphics hardware for rendering";
+    description = "Small open source library for using 3D graphics hardware for rendering";
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''
@@ -74,7 +140,12 @@ stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
-    platforms = platforms.mesaPlatforms;
-    license = with licenses; [ mit bsd3 publicDomain sgi-b-20 ];
+    platforms = platforms.unix;
+    license = with licenses; [
+      mit
+      bsd3
+      publicDomain
+      sgi-b-20
+    ];
   };
 }

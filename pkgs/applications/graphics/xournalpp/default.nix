@@ -1,42 +1,65 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, gettext
-, wrapGAppsHook
-, pkg-config
+  cmake,
+  gettext,
+  wrapGAppsHook3,
+  pkg-config,
 
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, librsvg
-, libsndfile
-, libxml2
-, libzip
-, pcre
-, poppler
-, portaudio
-, zlib
-# plugins
-, withLua ? true, lua
+  adwaita-icon-theme,
+  alsa-lib,
+  binutils,
+  glib,
+  gsettings-desktop-schemas,
+  gtk3,
+  gtksourceview4,
+  librsvg,
+  libsndfile,
+  libxml2,
+  libzip,
+  pcre,
+  poppler,
+  portaudio,
+  zlib,
+  # plugins
+  withLua ? true,
+  lua,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.1.1";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
-    repo = pname;
+    repo = "xournalpp";
     rev = "v${version}";
-    sha256 = "sha256-AzLkXGcTjtfBaPOZ/Tc+TwL63vm08G2tZw3pGzoo7po=";
+    hash = "sha256-Hm3NDVELOnwjg6NiV5VBbt/15slHAgOVZLTV3zBMkLI=";
   };
 
-  nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
+  postPatch = ''
+    substituteInPlace src/util/Stacktrace.cpp \
+      --replace-fail "addr2line" "${binutils}/bin/addr2line"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    wrapGAppsHook3
+  ];
+
   buildInputs =
-    [ glib
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ [
+      glib
       gsettings-desktop-schemas
       gtk3
+      gtksourceview4
       librsvg
       libsndfile
       libxml2
@@ -48,16 +71,21 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withLua lua;
 
-  buildFlags = "translations";
+  buildFlags = [ "translations" ];
 
-  hardeningDisable = [ "format" ];
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share"
+    )
+  '';
 
   meta = with lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
-    homepage    = "https://xournalpp.github.io/";
-    changelog   = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ andrew-d sikmir ];
-    platforms   = platforms.linux;
+    homepage = "https://xournalpp.github.io/";
+    changelog = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+    mainProgram = "xournalpp";
   };
 }

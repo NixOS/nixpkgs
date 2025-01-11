@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, coreutils
 , lazarus
 , fpc
 , libX11
@@ -16,8 +17,7 @@
 , python3
 
 # Qt5
-, libqt5pas
-, qt5
+, libsForQt5
 
 , widgetset ? "qt5"
 # See https://github.com/Alexey-T/CudaText-lexers
@@ -31,43 +31,50 @@ let
     (name: spec:
       fetchFromGitHub {
         repo = name;
-        inherit (spec) owner rev sha256;
+        inherit (spec) owner rev hash;
       }
     )
     (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.165.2";
+  version = "1.202.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "sha256-eNpU7PpzyL2KHPL6cPmxZw/49VALjCWUdavV6Ex1IQI=";
+    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
+
+  patches = [ ./proc_globdata.patch ];
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
-      --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
-      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
+      --subst-var out \
+      --subst-var-by python3 ${python3}
+    substituteInPlace app/proc_editor_saving.pas \
+      --replace-fail '/bin/cp' "${coreutils}/bin/cp"
   '';
 
   nativeBuildInputs = [ lazarus fpc ]
-    ++ lib.optional (widgetset == "qt5") qt5.wrapQtAppsHook;
+    ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
 
   buildInputs = [ libX11 ]
     ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [ pango cairo glib atk gdk-pixbuf ]
     ++ lib.optional (widgetset == "gtk2") gtk2
     ++ lib.optional (widgetset == "gtk3") gtk3
-    ++ lib.optional (widgetset == "qt5") libqt5pas;
+    ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
-    cp -r --no-preserve=mode ${dep} ${name}
+    cp -r ${dep} ${name}
   '') deps) + ''
+    # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
+    substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
+      --replace GTK2_IME_CODE _GTK2_IME_CODE
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
@@ -83,7 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -Dm755 app/cudatext $out/bin/cudatext
+    install -Dm755 app/cudatext -t $out/bin
 
     install -dm755 $out/share/cudatext
     cp -r app/{data,py,settings_default} $out/share/cudatext
@@ -113,5 +120,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "cudatext";
   };
 }

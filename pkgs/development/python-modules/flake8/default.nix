@@ -1,62 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, configparser
-, enum34
-, mccabe
-, pycodestyle
-, pyflakes
-, functools32
-, typing
-, importlib-metadata
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  mccabe,
+  pycodestyle,
+  pyflakes,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "4.0.1";
+  version = "7.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "03c7mnk34wfz7a0m5zq0273y94awz69fy5iww8alh4a4v96h6vl0";
+  disabled = pythonOlder "3.8";
+
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "flake8";
+    rev = version;
+    hash = "sha256-6iCZEapftHqd9okJS1wMzIjjmWahrmmZtXd7SUMVcmE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "mccabe>=0.6.0,<0.7.0" "mccabe>=0.7.0,<0.8.0"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyflakes
-    pycodestyle
+  dependencies = [
     mccabe
-  ] ++ lib.optionals (pythonOlder "3.2") [
-    configparser
-    functools32
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    typing
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    pycodestyle
+    pyflakes
   ];
 
-  # Tests fail on Python 3.7 due to importlib using a deprecated interface
-  doCheck = !(pythonOlder "3.8");
-
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
-
-  disabled = pythonOlder "3.6";
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
-    homepage = "https://github.com/pycqa/flake8";
+    changelog = "https://github.com/PyCQA/flake8/blob/${src.rev}/docs/source/release-notes/${version}.rst";
+    description = "Modular source code checker: pep8, pyflakes and co";
+    homepage = "https://github.com/PyCQA/flake8";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "flake8";
   };
 }

@@ -18,7 +18,7 @@ This is an example of using `warnings`.
                This is known to cause some specific problems in certain situations.
                '' ]
       else [];
-  }
+  };
 }
 ```
 
@@ -35,6 +35,6 @@ This example, extracted from the [`syslogd` module](https://github.com/NixOS/nix
           message = "rsyslogd conflicts with syslogd";
         }
       ];
-  }
+  };
 }
 ```

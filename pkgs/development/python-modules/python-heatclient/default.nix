@@ -1,67 +1,85 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, babel
-, cliff
-, iso8601
-, osc-lib
-, prettytable
-, oslo-i18n
-, oslo-serialization
-, oslo-utils
-, keystoneauth1
-, python-swiftclient
-, pyyaml
-, requests
-, six
-, stestr
-, testscenarios
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  cliff,
+  fetchPypi,
+  iso8601,
+  keystoneauth1,
+  openstackdocstheme,
+  osc-lib,
+  oslo-i18n,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  prettytable,
+  python-swiftclient,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests-mock,
+  setuptools,
+  sphinxHook,
+  stestr,
+  testscenarios,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "2.5.1";
+  version = "4.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3l7XyxKm18BAM1DhNsCmRwcZR224+8m/jQ1YHrwLHCs=";
+    hash = "sha256-1oSZzmcDEwThBbF8M/nvY//axJLyQUxDAVOYIsLr9w0=";
   };
 
-  propagatedBuildInputs = [
-    pbr
-    babel
+  build-system = [
+    openstackdocstheme
+    setuptools
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     cliff
     iso8601
+    keystoneauth1
     osc-lib
-    prettytable
     oslo-i18n
     oslo-serialization
     oslo-utils
-    keystoneauth1
+    pbr
+    prettytable
     python-swiftclient
     pyyaml
     requests
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     requests-mock
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     stestr run -e <(echo "
       heatclient.tests.unit.test_common_http.HttpClientTest.test_get_system_ca_file
+      heatclient.tests.unit.test_deployment_utils.TempURLSignalTest.test_create_temp_url
     ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "heatclient" ];
 
   meta = with lib; {
-    description = "A client library for Heat built on the Heat orchestration API";
+    description = "Library for Heat built on the Heat orchestration API";
+    mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

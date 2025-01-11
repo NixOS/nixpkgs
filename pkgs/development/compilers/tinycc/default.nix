@@ -1,66 +1,112 @@
-{ lib
-, stdenv
-, fetchFromRepoOrCz
-, perl
-, texinfo
-, which
+{
+  lib,
+  copyPkgconfigItems,
+  fetchFromRepoOrCz,
+  makePkgconfigItem,
+  perl,
+  stdenv,
+  texinfo,
+  which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27+date=2022-01-11";
+  version = "0.9.27-unstable-2022-07-15";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = "4e0e9b8f210d69893b306d6b24d2dd615a22f246";
-    hash = "sha256-0BJ5wXsgDLBIvcbq+rL9UQC4NjLHCI9r6sUWF98APPg=";
+    rev = "af1abf1f45d45b34f0b02437f559f4dfdba7d23c";
+    hash = "sha256-jY0P2GErmo//YBaz6u4/jj/voOE3C2JaIDRmo0orXN8=";
   };
 
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
+
   nativeBuildInputs = [
+    copyPkgconfigItems
     perl
     texinfo
     which
   ];
 
+  strictDeps = true;
+
+  pkgconfigItems =
+    let
+      libtcc-pcitem = {
+        name = "libtcc";
+        inherit (finalAttrs) version;
+        cflags = [ "-I${libtcc-pcitem.variables.includedir}" ];
+        libs = [
+          "-L${libtcc-pcitem.variables.libdir}"
+          "-Wl,--rpath ${libtcc-pcitem.variables.libdir}"
+          "-ltcc"
+        ];
+        variables = {
+          prefix = "${placeholder "out"}";
+          includedir = "${placeholder "dev"}/include";
+          libdir = "${placeholder "lib"}/lib";
+        };
+        description = "Tiny C compiler backend";
+      };
+    in
+    [
+      (makePkgconfigItem libtcc-pcitem)
+    ];
+
   postPatch = ''
     patchShebangs texi2pod.pl
   '';
 
-  configureFlags = [
-    "--cc=$CC"
-    "--ar=$AR"
-    "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
-    "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
-    # build cross compilers
-    "--enable-cross"
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "--config-musl"
-  ];
+  configureFlags =
+    [
+      "--cc=$CC"
+      "--ar=$AR"
+      "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
+      "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+      "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
+      # build cross compilers
+      "--enable-cross"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      "--config-musl"
+    ];
 
-  preConfigure = ''
-    echo ${version} > VERSION
-    configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
-  '';
+  preConfigure =
+    let
+      # To avoid "malformed 32-bit x.y.z" error on mac when using clang
+      versionIsClean = version: builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
+    in
+    ''
+      ${
+        if stdenv.hostPlatform.isDarwin && !versionIsClean finalAttrs.version then
+          "echo 'not overwriting VERSION since it would upset ld'"
+        else
+          "echo ${finalAttrs.version} > VERSION"
+      }
+      configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
+    '';
 
-  postFixup = ''
-    cat >libtcc.pc <<EOF
-    Name: libtcc
-    Description: Tiny C compiler backend
-    Version: ${version}
-    Libs: -L$out/lib -Wl,--rpath $out/lib -ltcc -ldl
-    Cflags: -I$out/include
-    EOF
-    install -Dt $out/lib/pkgconfig libtcc.pc -m 444
-  '';
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-int"
+      "-Wno-error=int-conversion"
+    ]
+  );
 
-  outputs = [ "out" "info" "man" ];
+  # Test segfault for static build
+  doCheck = !stdenv.hostPlatform.isStatic;
 
-  doCheck = true;
   checkTarget = "test";
+  # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    rm tests/tests2/{108,114}*
+  '';
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     homepage = "https://repo.or.cz/tinycc.git";
     description = "Small, fast, and embeddable C compiler and interpreter";
     longDescription = ''
@@ -84,10 +130,16 @@ stdenv.mkDerivation rec {
 
       With libtcc, you can use TCC as a backend for dynamic code generation.
     '';
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ joachifm AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ lgpl21Only ];
+    mainProgram = "tcc";
+    maintainers = with lib.maintainers; [
+      joachifm
+      AndersonTorres
+    ];
+    platforms = lib.platforms.unix;
+    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})
 # TODO: more multiple outputs
 # TODO: self-compilation

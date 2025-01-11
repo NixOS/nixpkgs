@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools, qtx11extras, poppler }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qtbase,
+  qttools,
+  qtx11extras,
+  poppler,
+}:
 
 mkDerivation rec {
   pname = "qcomicbook";
@@ -12,11 +22,15 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
-    qtbase qttools qtx11extras poppler
+    qtbase
+    qttools
+    qtx11extras
+    poppler
   ];
 
   postInstall = ''
@@ -27,6 +41,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
+    mainProgram = "qcomicbook";
     license = licenses.gpl2;
 
     longDescription = ''

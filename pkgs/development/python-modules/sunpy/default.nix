@@ -1,44 +1,45 @@
-{ lib
-, stdenv
-, asdf
-, astropy
-, astropy-extension-helpers
-, astropy-helpers
-, beautifulsoup4
-, buildPythonPackage
-, drms
-, fetchPypi
-, glymur
-, h5netcdf
-, hypothesis
-, lxml
-, matplotlib
-, numpy
-, pandas
-, parfive
-, pytest-astropy
-, pytestCheckHook
-, pytest-mock
-, python-dateutil
-, pythonOlder
-, scikitimage
-, scipy
-, setuptools-scm
-, sqlalchemy
-, tqdm
-, zeep
+{
+  lib,
+  stdenv,
+  asdf,
+  astropy,
+  astropy-extension-helpers,
+  astropy-helpers,
+  beautifulsoup4,
+  buildPythonPackage,
+  drms,
+  fetchPypi,
+  glymur,
+  h5netcdf,
+  hypothesis,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  parfive,
+  pytest-astropy,
+  pytestCheckHook,
+  pytest-mock,
+  python-dateutil,
+  pythonOlder,
+  scikit-image,
+  scipy,
+  setuptools-scm,
+  sqlalchemy,
+  tqdm,
+  zeep,
 }:
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "4.0.1";
+  version = "5.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TKOJcEg5A3zjuJbH/tugoX7A7vxSwcE20jJ5QuvWTu8=";
+    hash = "sha256-V8w+ErYVKoAPv6X3eh4rUZ5TKti9Z46A1JAdIjabs8k=";
   };
 
   nativeBuildInputs = [
@@ -53,16 +54,14 @@ buildPythonPackage rec {
     parfive
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asdf = [
       asdf
       # asdf-astropy
     ];
-    database = [
-      sqlalchemy
-    ];
+    database = [ sqlalchemy ];
     image = [
-      scikitimage
+      scikit-image
       scipy
     ];
     net = [
@@ -85,16 +84,18 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    hypothesis
-    pytest-astropy
-    pytest-mock
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.asdf
-    ++ passthru.optional-dependencies.database
-    ++ passthru.optional-dependencies.image
-    ++ passthru.optional-dependencies.net
-    ++ passthru.optional-dependencies.timeseries;
+  nativeCheckInputs =
+    [
+      hypothesis
+      pytest-astropy
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.asdf
+    ++ optional-dependencies.database
+    ++ optional-dependencies.image
+    ++ optional-dependencies.net
+    ++ optional-dependencies.timeseries;
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -102,7 +103,7 @@ buildPythonPackage rec {
   '';
 
   # darwin has write permission issues
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -158,6 +159,7 @@ buildPythonPackage rec {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
+    broken = true;
   };
 }

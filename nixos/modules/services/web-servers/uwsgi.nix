@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,67 +12,88 @@ let
 
   isEmperor = cfg.instance.type == "emperor";
 
-  imperialPowers =
-    [
-      # spawn other user processes
-      "CAP_SETUID" "CAP_SETGID"
-      "CAP_SYS_CHROOT"
-      # transfer capabilities
-      "CAP_SETPCAP"
-      # create other user sockets
-      "CAP_CHOWN"
-    ];
+  imperialPowers = [
+    # spawn other user processes
+    "CAP_SETUID"
+    "CAP_SETGID"
+    "CAP_SYS_CHROOT"
+    # transfer capabilities
+    "CAP_SETPCAP"
+    # create other user sockets
+    "CAP_CHOWN"
+  ];
 
-  buildCfg = name: c:
+  buildCfg =
+    name: c:
     let
       plugins' =
-        if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
-        then throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
-        else c.plugins or cfg.plugins;
+        if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [ ]) then
+          throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
+        else
+          c.plugins or cfg.plugins;
       plugins = unique plugins';
 
-      hasPython = v: filter (n: n == "python${v}") plugins != [];
+      hasPython = v: filter (n: n == "python${v}") plugins != [ ];
       hasPython2 = hasPython "2";
       hasPython3 = hasPython "3";
 
       python =
         if hasPython2 && hasPython3 then
           throw "`plugins` attribute in uWSGI configuration shouldn't contain both python2 and python3"
-        else if hasPython2 then cfg.package.python2
-        else if hasPython3 then cfg.package.python3
-        else null;
+        else if hasPython2 then
+          cfg.package.python2
+        else if hasPython3 then
+          cfg.package.python3
+        else
+          null;
 
-      pythonEnv = python.withPackages (c.pythonPackages or (self: []));
+      pythonEnv = python.withPackages (c.pythonPackages or (self: [ ]));
 
       uwsgiCfg = {
         uwsgi =
-          if c.type == "normal"
-            then {
+          if c.type == "normal" then
+            {
               inherit plugins;
-            } // removeAttrs c [ "type" "pythonPackages" ]
-              // optionalAttrs (python != null) {
-                pyhome = "${pythonEnv}";
-                env =
-                  # Argh, uwsgi expects list of key-values there instead of a dictionary.
-                  let envs = partition (hasPrefix "PATH=") (c.env or []);
-                      oldPaths = map (x: substring (stringLength "PATH=") (stringLength x) x) envs.right;
-                      paths = oldPaths ++ [ "${pythonEnv}/bin" ];
-                  in [ "PATH=${concatStringsSep ":" paths}" ] ++ envs.wrong;
-              }
-          else if isEmperor
-            then {
-              emperor = if builtins.typeOf c.vassals != "set" then c.vassals
-                        else pkgs.buildEnv {
-                          name = "vassals";
-                          paths = mapAttrsToList buildCfg c.vassals;
-                        };
-            } // removeAttrs c [ "type" "vassals" ]
-          else throw "`type` attribute in uWSGI configuration should be either 'normal' or 'emperor'";
+            }
+            // removeAttrs c [
+              "type"
+              "pythonPackages"
+            ]
+            // optionalAttrs (python != null) {
+              pyhome = "${pythonEnv}";
+              env =
+                # Argh, uwsgi expects list of key-values there instead of a dictionary.
+                let
+                  envs = partition (hasPrefix "PATH=") (c.env or [ ]);
+                  oldPaths = map (x: substring (stringLength "PATH=") (stringLength x) x) envs.right;
+                  paths = oldPaths ++ [ "${pythonEnv}/bin" ];
+                in
+                [ "PATH=${concatStringsSep ":" paths}" ] ++ envs.wrong;
+            }
+          else if isEmperor then
+            {
+              emperor =
+                if builtins.typeOf c.vassals != "set" then
+                  c.vassals
+                else
+                  pkgs.buildEnv {
+                    name = "vassals";
+                    paths = mapAttrsToList buildCfg c.vassals;
+                  };
+            }
+            // removeAttrs c [
+              "type"
+              "vassals"
+            ]
+          else
+            throw "`type` attribute in uWSGI configuration should be either 'normal' or 'emperor'";
       };
 
-    in pkgs.writeTextDir "${name}.json" (builtins.toJSON uwsgiCfg);
+    in
+    pkgs.writeTextDir "${name}.json" (builtins.toJSON uwsgiCfg);
 
-in {
+in
+{
 
   options = {
     services.uwsgi = {
@@ -90,25 +116,30 @@ in {
       };
 
       instance = mkOption {
-        type =  with types; let
-          valueType = nullOr (oneOf [
-            bool
-            int
-            float
-            str
-            (lazyAttrsOf valueType)
-            (listOf valueType)
-            (mkOptionType {
-              name = "function";
-              description = "function";
-              check = x: isFunction x;
-              merge = mergeOneOption;
-            })
-          ]) // {
-            description = "Json value or lambda";
-            emptyValue.value = {};
-          };
-        in valueType;
+        type =
+          with types;
+          let
+            valueType =
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+                (lazyAttrsOf valueType)
+                (listOf valueType)
+                (mkOptionType {
+                  name = "function";
+                  description = "function";
+                  check = x: isFunction x;
+                  merge = mergeOneOption;
+                })
+              ])
+              // {
+                description = "Json value or lambda";
+                emptyValue.value = { };
+              };
+          in
+          valueType;
         default = {
           type = "normal";
         };
@@ -125,23 +156,23 @@ in {
           }
         '';
         description = ''
-          uWSGI configuration. It awaits an attribute <literal>type</literal> inside which can be either
-          <literal>normal</literal> or <literal>emperor</literal>.
+          uWSGI configuration. It awaits an attribute `type` inside which can be either
+          `normal` or `emperor`.
 
-          For <literal>normal</literal> mode you can specify <literal>pythonPackages</literal> as a function
-          from libraries set into a list of libraries. <literal>pythonpath</literal> will be set accordingly.
+          For `normal` mode you can specify `pythonPackages` as a function
+          from libraries set into a list of libraries. `pythonpath` will be set accordingly.
 
-          For <literal>emperor</literal> mode, you should use <literal>vassals</literal> attribute
+          For `emperor` mode, you should use `vassals` attribute
           which should be either a set of names and configurations or a path to a directory.
 
           Other attributes will be used in configuration file as-is. Notice that you can redefine
-          <literal>plugins</literal> setting here.
+          `plugins` setting here.
         '';
       };
 
       plugins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Plugins used with uWSGI";
       };
 
@@ -169,21 +200,18 @@ in {
         '';
         description = ''
           Grant capabilities to the uWSGI instance. See the
-          <literal>capabilities(7)</literal> for available values.
-          <note>
-            <para>
-              uWSGI runs as an unprivileged user (even as Emperor) with the minimal
-              capabilities required. This option can be used to add fine-grained
-              permissions without running the service as root.
-            </para>
-            <para>
-              When in Emperor mode, any capability to be inherited by a vassal must
-              be specified again in the vassal configuration using <literal>cap</literal>.
-              See the uWSGI <link
-              xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
-              for more information.
-            </para>
-          </note>
+          `capabilities(7)` for available values.
+
+          ::: {.note}
+          uWSGI runs as an unprivileged user (even as Emperor) with the minimal
+          capabilities required. This option can be used to add fine-grained
+          permissions without running the service as root.
+
+          When in Emperor mode, any capability to be inherited by a vassal must
+          be specified again in the vassal configuration using `cap`.
+          See the uWSGI [docs](https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html)
+          for more information.
+          :::
         '';
       };
     };

@@ -1,41 +1,50 @@
-{ lib, fetchurl, appimageTools, pkgs }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+}:
 
 let
   pname = "plexamp";
-  version = "4.2.1";
+  version = "4.11.5";
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
-    name="${pname}-${version}.AppImage";
-    sha512 = "S2/T+T24X6D0oTbGPMp2BVfWTvzsUCWS1xsigLT/vFr12PlZgPfOWgo987W3YE30WJJDdybLqnkTl+uhNndC+A==";
+    name = "${pname}-${version}.AppImage";
+    hash = "sha512-j8fPp6JcTB/PwsGgvEGqETZ83mGee1MwR4T9eFcNuoLRtlnudM7c3WDgxhpUdv5Nx3XkcMVnW1fntZYN2sIfzA==";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
-  multiPkgs = null; # no 32bit needed
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
-
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
-    install -m 444 -D ${appimageContents}/plexamp.png \
-      $out/share/icons/hicolor/512x512/apps/plexamp.png
+    install -m 444 -D ${appimageContents}/plexamp.svg \
+      $out/share/icons/hicolor/scalable/apps/plexamp.svg
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram "$out/bin/plexamp" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   passthru.updateScript = ./update-plexamp.sh;
 
   meta = with lib; {
-    description = "A beautiful Plex music player for audiophiles, curators, and hipsters";
+    description = "Beautiful Plex music player for audiophiles, curators, and hipsters";
     homepage = "https://plexamp.com/";
-    changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/44";
+    changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/77";
     license = licenses.unfree;
-    maintainers = with maintainers; [ killercup synthetica ];
+    maintainers = with maintainers; [
+      killercup
+      redhawk
+      synthetica
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

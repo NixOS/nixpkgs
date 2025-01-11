@@ -1,32 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bitlist
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  bitlist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "2.2.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c6nw22UtAREYZp0XCEZE6p7GpRvSLukq5y0c9KvVf9w=";
+    hash = "sha256-MhOQ4pemxmjfp7Uy5hLA8i8BBI5QbvD4EjEcKMM/u3I=";
   };
 
-  propagatedBuildInputs = [
-    bitlist
+  nativeBuildInputs = [
+    setuptools
+    wheel
   ];
+
+  propagatedBuildInputs = [ bitlist ];
 
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fountains"
-  ];
+  pythonImportsCheck = [ "fountains" ];
 
   meta = with lib; {
     description = "Python library for generating and embedding data for unit testing";

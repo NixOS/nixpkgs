@@ -1,20 +1,37 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, param
-, panel
+{
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  lib,
+  param,
+  panel,
 }:
 
 buildPythonPackage rec {
-  pname = "pyviz_comms";
-  version = "2.2.0";
+  pname = "pyviz-comms";
+  version = "3.0.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-uMncveAfOEeEP7TQTDs/TeeEkgxx5Eztnfu1YPbJIhg=";
+    pname = "pyviz_comms";
+    inherit version;
+    hash = "sha256-/eSgF8IhPs7mOppnQUMchF5CpcexWI5Ke6LkNwxYNyg=";
   };
 
-  propagatedBuildInputs = [ param ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"jupyterlab>=4.0.0,<5",' ""
+  '';
+
+  build-system = [
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+  ];
+
+  dependencies = [ param ];
 
   # there are not tests with the package
   doCheck = false;
@@ -25,10 +42,10 @@ buildPythonPackage rec {
     inherit panel;
   };
 
-  meta = with lib; {
-    description = "Launch jobs, organize the output, and dissect the results";
+  meta = {
+    description = "Bidirectional communication for the HoloViz ecosystem";
     homepage = "https://pyviz.org/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

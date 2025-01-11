@@ -1,36 +1,75 @@
-{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchurl
-, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash, knewstuff }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  karchive,
+  kwindowsystem,
+  qtx11extras,
+  kcrash,
+  knewstuff,
+  wayland-scanner,
+  plasma-framework,
+  plasma-wayland-protocols,
+  plasma-workspace,
+  plasma-desktop,
+  qtwayland,
+  wayland,
+  xorg,
+}:
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.10.4";
+  version = "unstable-2024-01-31";
 
-  src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "XRop+MNcbeCcbnL2LM1i67QvMudW3CjWYEPLkT/qbGM=";
-    name = "${pname}-${version}.tar.xz";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "plasma";
+    repo = "latte-dock";
+    rev = "131ee4d39ce8913b2de8f9a673903225345c7a38";
+    sha256 = "sha256-C1FvgkdxCzny+F6igS2YjsHOpkK34wl6je2tHlGQwU0=";
   };
 
-  buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
+  buildInputs = [
+    plasma-framework
+    plasma-wayland-protocols
+    qtwayland
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    xorg.libSM
+    wayland
+    plasma-workspace
+    plasma-desktop
+  ];
 
-  nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
-    qtx11extras kcrash knewstuff ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    cmake
+    karchive
+    kwindowsystem
+    qtx11extras
+    kcrash
+    knewstuff
+    wayland-scanner
+  ];
 
   patches = [
-    ./0001-close-user-autostart.patch
+    ./0001-Disable-autostart.patch
   ];
-  fixupPhase = ''
+
+  postInstall = ''
     mkdir -p $out/etc/xdg/autostart
     cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
   '';
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";
-    homepage = "https://github.com/psifidotos/Latte-Dock";
+    mainProgram = "latte-dock";
+    homepage = "https://invent.kde.org/plasma/latte-dock";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.benley maintainers.ysndr ];
+    maintainers = [ maintainers.ysndr ];
   };
-
 
 }

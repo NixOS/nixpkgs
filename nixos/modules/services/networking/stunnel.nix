@@ -1,86 +1,41 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.stunnel;
   yesNo = val: if val then "yes" else "no";
 
+  verifyRequiredField = type: field: n: c: {
+    assertion = lib.hasAttr field c;
+    message = "stunnel: \"${n}\" ${type} configuration - Field ${field} is required.";
+  };
+
   verifyChainPathAssert = n: c: {
-    assertion = c.verifyHostname == null || (c.verifyChain || c.verifyPeer);
-    message =  "stunnel: \"${n}\" client configuration - hostname verification " +
-      "is not possible without either verifyChain or verifyPeer enabled";
+    assertion = (c.verifyHostname or null) == null || (c.verifyChain || c.verifyPeer);
+    message =
+      "stunnel: \"${n}\" client configuration - hostname verification "
+      + "is not possible without either verifyChain or verifyPeer enabled";
   };
 
-  serverConfig = {
-    options = {
-      accept = mkOption {
-        type = types.either types.str types.int;
-        description = ''
-          On which [host:]port stunnel should listen for incoming TLS connections.
-          Note that unlike other softwares stunnel ipv6 address need no brackets,
-          so to listen on all IPv6 addresses on port 1234 one would use ':::1234'.
-        '';
-      };
-
-      connect = mkOption {
-        type = types.either types.str types.int;
-        description = "Port or IP:Port to which the decrypted connection should be forwarded.";
-      };
-
-      cert = mkOption {
-        type = types.path;
-        description = "File containing both the private and public keys.";
-      };
-    };
-  };
-
-  clientConfig = {
-    options = {
-      accept = mkOption {
-        type = types.str;
-        description = "IP:Port on which connections should be accepted.";
-      };
-
-      connect = mkOption {
-        type = types.str;
-        description = "IP:Port destination to connect to.";
-      };
-
-      verifyChain = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Check if the provided certificate has a valid certificate chain (against CAPath).";
-      };
-
-      verifyPeer = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Check if the provided certificate is contained in CAPath.";
-      };
-
-      CAPath = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = "Path to a directory containing certificates to validate against.";
-      };
-
-      CAFile = mkOption {
-        type = types.nullOr types.path;
-        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
-        description = "Path to a file containing certificates to validate against.";
-      };
-
-      verifyHostname = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        description = "If set, stunnel checks if the provided certificate is valid for the given hostname.";
-      };
-    };
-  };
-
+  removeNulls = lib.mapAttrs (_: lib.filterAttrs (_: v: v != null));
+  mkValueString =
+    v:
+    if v == true then
+      "yes"
+    else if v == false then
+      "no"
+    else
+      lib.generators.mkValueStringDefault { } v;
+  generateConfig =
+    c:
+    lib.generators.toINI {
+      mkSectionName = lib.id;
+      mkKeyValue = k: v: "${k} = ${mkValueString v}";
+    } (removeNulls c);
 
 in
 
@@ -92,46 +47,68 @@ in
 
     services.stunnel = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the stunnel TLS tunneling service.";
       };
 
-      user = mkOption {
-        type = with types; nullOr str;
+      user = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = "nobody";
         description = "The user under which stunnel runs.";
       };
 
-      group = mkOption {
-        type = with types; nullOr str;
+      group = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = "nogroup";
         description = "The group under which stunnel runs.";
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "emerg" "alert" "crit" "err" "warning" "notice" "info" "debug" ];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [
+          "emerg"
+          "alert"
+          "crit"
+          "err"
+          "warning"
+          "notice"
+          "info"
+          "debug"
+        ];
         default = "info";
         description = "Verbosity of stunnel output.";
       };
 
-      fipsMode = mkOption {
-        type = types.bool;
+      fipsMode = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable FIPS 140-2 mode required for compliance.";
       };
 
-      enableInsecureSSLv3 = mkOption {
-        type = types.bool;
+      enableInsecureSSLv3 = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable support for the insecure SSLv3 protocol.";
       };
 
+      servers = lib.mkOption {
+        description = ''
+          Define the server configurations.
 
-      servers = mkOption {
-        description = "Define the server configuations.";
-        type = with types; attrsOf (submodule serverConfig);
+          See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
+        '';
+        type =
+          with lib.types;
+          attrsOf (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+              ])
+            )
+          );
         example = {
           fancyWebserver = {
             accept = 443;
@@ -142,9 +119,49 @@ in
         default = { };
       };
 
-      clients = mkOption {
-        description = "Define the client configurations.";
-        type = with types; attrsOf (submodule clientConfig);
+      clients = lib.mkOption {
+        description = ''
+          Define the client configurations.
+
+          By default, verifyChain and OCSPaia are enabled and a CAFile is provided from pkgs.cacert.
+
+          See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
+        '';
+        type =
+          with lib.types;
+          attrsOf (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+              ])
+            )
+          );
+
+        apply =
+          let
+            applyDefaults =
+              c:
+              {
+                CAFile = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+                OCSPaia = true;
+                verifyChain = true;
+              }
+              // c;
+            setCheckHostFromVerifyHostname =
+              c:
+              # To preserve backward-compatibility with the old NixOS stunnel module
+              # definition, allow "verifyHostname" as an alias for "checkHost".
+              c
+              // {
+                checkHost = c.checkHost or c.verifyHostname or null;
+                verifyHostname = null; # Not a real stunnel configuration setting
+              };
+            forceClient = c: c // { client = true; };
+          in
+          lib.mapAttrs (_: c: forceClient (setCheckHostFromVerifyHostname (applyDefaults c)));
+
         example = {
           foobar = {
             accept = "0.0.0.0:8080";
@@ -157,62 +174,41 @@ in
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    assertions = concatLists [
-      (singleton {
-        assertion = (length (attrValues cfg.servers) != 0) || ((length (attrValues cfg.clients)) != 0);
+    assertions = lib.concatLists [
+      (lib.singleton {
+        assertion =
+          (lib.length (lib.attrValues cfg.servers) != 0) || ((lib.length (lib.attrValues cfg.clients)) != 0);
         message = "stunnel: At least one server- or client-configuration has to be present.";
       })
 
-      (mapAttrsToList verifyChainPathAssert cfg.clients)
+      (lib.mapAttrsToList verifyChainPathAssert cfg.clients)
+      (lib.mapAttrsToList (verifyRequiredField "client" "accept") cfg.clients)
+      (lib.mapAttrsToList (verifyRequiredField "client" "connect") cfg.clients)
+      (lib.mapAttrsToList (verifyRequiredField "server" "accept") cfg.servers)
+      (lib.mapAttrsToList (verifyRequiredField "server" "cert") cfg.servers)
+      (lib.mapAttrsToList (verifyRequiredField "server" "connect") cfg.servers)
     ];
 
     environment.systemPackages = [ pkgs.stunnel ];
 
     environment.etc."stunnel.cfg".text = ''
-      ${ if cfg.user != null then "setuid = ${cfg.user}" else "" }
-      ${ if cfg.group != null then "setgid = ${cfg.group}" else "" }
+      ${lib.optionalString (cfg.user != null) "setuid = ${cfg.user}"}
+      ${lib.optionalString (cfg.group != null) "setgid = ${cfg.group}"}
 
       debug = ${cfg.logLevel}
 
-      ${ optionalString cfg.fipsMode "fips = yes" }
-      ${ optionalString cfg.enableInsecureSSLv3 "options = -NO_SSLv3" }
+      ${lib.optionalString cfg.fipsMode "fips = yes"}
+      ${lib.optionalString cfg.enableInsecureSSLv3 "options = -NO_SSLv3"}
 
       ; ----- SERVER CONFIGURATIONS -----
-      ${ lib.concatStringsSep "\n"
-           (lib.mapAttrsToList
-             (n: v: ''
-               [${n}]
-               accept = ${toString v.accept}
-               connect = ${toString v.connect}
-               cert = ${v.cert}
-
-             '')
-           cfg.servers)
-      }
+      ${generateConfig cfg.servers}
 
       ; ----- CLIENT CONFIGURATIONS -----
-      ${ lib.concatStringsSep "\n"
-           (lib.mapAttrsToList
-             (n: v: ''
-               [${n}]
-               client = yes
-               accept = ${v.accept}
-               connect = ${v.connect}
-               verifyChain = ${yesNo v.verifyChain}
-               verifyPeer = ${yesNo v.verifyPeer}
-               ${optionalString (v.CAPath != null) "CApath = ${v.CAPath}"}
-               ${optionalString (v.CAFile != null) "CAFile = ${v.CAFile}"}
-               ${optionalString (v.verifyHostname != null) "checkHost = ${v.verifyHostname}"}
-               OCSPaia = yes
-
-             '')
-           cfg.clients)
-      }
+      ${generateConfig cfg.clients}
     '';
 
     systemd.services.stunnel = {
@@ -227,7 +223,7 @@ in
       };
     };
 
-    meta.maintainers = with maintainers; [
+    meta.maintainers = with lib.maintainers; [
       # Server side
       lschuermann
       # Client side

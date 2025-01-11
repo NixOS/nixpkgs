@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, postgresql
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  postgresql,
 }:
 
 buildOctavePackage rec {
@@ -13,6 +14,10 @@ buildOctavePackage rec {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
     sha256 = "1c0n76adi0jw6bx62s04vjyda6kb6ca8lzz2vam43vdy10prcq9p";
   };
+  patches = [
+    # Fix for octave 8.x
+    ./c_verror.patch
+  ];
 
   propagatedBuildInputs = [
     postgresql

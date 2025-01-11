@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.nomad;
@@ -10,20 +15,13 @@ in
     services.nomad = {
       enable = mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nomad;
-        defaultText = literalExpression "pkgs.nomad";
-        description = ''
-          The package used for the Nomad agent and CLI.
-        '';
-      };
+      package = mkPackageOption pkgs "nomad" { };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
         description = ''
-          Extra packages to add to <envar>PATH</envar> for the Nomad agent process.
+          Extra packages to add to {env}`PATH` for the Nomad agent process.
         '';
         example = literalExpression ''
           with pkgs; [ cni-plugins ]
@@ -67,31 +65,42 @@ in
           Additional plugins dir used to configure nomad.
         '';
         example = literalExpression ''
-          [ "<pluginDir>" "pkgs.<plugins-name>"]
+          [ "<pluginDir>" pkgs.nomad-driver-nix pkgs.nomad-driver-podman  ]
         '';
       };
 
+      credentials = mkOption {
+        description = ''
+          Credentials envs used to configure nomad secrets.
+        '';
+        type = types.attrsOf types.str;
+        default = { };
+
+        example = {
+          logs_remote_write_password = "/run/keys/nomad_write_password";
+        };
+      };
 
       settings = mkOption {
         type = format.type;
         default = { };
         description = ''
-          Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
+          Configuration for Nomad. See the [documentation](https://www.nomadproject.io/docs/configuration)
           for supported values.
 
-          Notes about <literal>data_dir</literal>:
+          Notes about `data_dir`:
 
-          If <literal>data_dir</literal> is set to a value other than the
-          default value of <literal>"/var/lib/nomad"</literal> it is the Nomad
+          If `data_dir` is set to a value other than the
+          default value of `"/var/lib/nomad"` it is the Nomad
           cluster manager's responsibility to make sure that this directory
           exists and has the appropriate permissions.
 
-          Additionally, if <literal>dropPrivileges</literal> is
-          <literal>true</literal> then <literal>data_dir</literal>
-          <emphasis>cannot</emphasis> be customized. Setting
-          <literal>dropPrivileges</literal> to <literal>true</literal> enables
-          the <literal>DynamicUser</literal> feature of systemd which directly
-          manages and operates on <literal>StateDirectory</literal>.
+          Additionally, if `dropPrivileges` is
+          `true` then `data_dir`
+          *cannot* be customized. Setting
+          `dropPrivileges` to `true` enables
+          the `DynamicUser` feature of systemd which directly
+          manages and operates on `StateDirectory`.
         '';
         example = literalExpression ''
           {
@@ -128,20 +137,31 @@ in
       after = [ "network-online.target" ];
       restartTriggers = [ config.environment.etc."nomad.json".source ];
 
-      path = cfg.extraPackages ++ (with pkgs; [
-        # Client mode requires at least the following:
-        coreutils
-        iproute2
-        iptables
-      ]);
+      path =
+        cfg.extraPackages
+        ++ (with pkgs; [
+          # Client mode requires at least the following:
+          coreutils
+          iproute2
+          iptables
+        ]);
 
       serviceConfig = mkMerge [
         {
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
+          ExecStart =
+            let
+              pluginsDir = pkgs.symlinkJoin {
+                name = "nomad-plugins";
+                paths = cfg.extraSettingsPlugins;
+              };
+            in
+            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin"
+            + concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
+            + concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (
+              lib.attrNames cfg.credentials
+            );
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;
@@ -150,6 +170,7 @@ in
           Restart = "on-failure";
           RestartSec = 2;
           TasksMax = "infinity";
+          LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
         }
         (mkIf cfg.enableDocker {
           SupplementaryGroups = "docker"; # space-separated string

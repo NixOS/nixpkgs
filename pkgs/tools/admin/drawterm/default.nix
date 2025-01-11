@@ -1,37 +1,94 @@
-{ stdenv
-, lib
-, fetchgit
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFrom9Front,
+  unstableGitUpdater,
+  installShellFiles,
+  makeWrapper,
+  xorg,
+  pkg-config,
+  wayland-scanner,
+  pipewire,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  wlr-protocols,
+  pulseaudio,
+  config,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "drawterm";
-  version = "unstable-2021-10-02";
+  version = "0-unstable-2024-10-04";
 
-  src = fetchgit {
-    url = "git://git.9front.org/plan9front/drawterm";
-    rev = "c6f547e1a46ebbf7a290427fe3a0b66932d671a0";
-    sha256 = "09v2vk5s23q0islfz273pqy696zhzh3gqi25hadr54lif0511wsl";
+  src = fetchFrom9Front {
+    owner = "plan9front";
+    repo = "drawterm";
+    rev = "d7620e8d528a87a3d6cf7285a839d52d4f705771";
+    hash = "sha256-v84kvlLKUGR6SY+DPD9fVUivkE56txrMU0dlph2c7bM=";
   };
 
-  buildInputs = [
-    xorg.libX11
-    xorg.libXt
-  ];
+  enableParallelBuilding = true;
+  strictDeps = true;
+  nativeBuildInputs =
+    [ installShellFiles ]
+    ++ {
+      linux = [
+        pkg-config
+        wayland-scanner
+      ];
+      unix = [ makeWrapper ];
+    }
+    ."${config}" or (throw "unsupported CONF");
+
+  buildInputs =
+    {
+      linux = [
+        pipewire
+        wayland
+        wayland-protocols
+        libxkbcommon
+        wlr-protocols
+      ];
+      unix = [
+        xorg.libX11
+        xorg.libXt
+      ];
+    }
+    ."${config}" or (throw "unsupported CONF");
 
   # TODO: macos
-  makeFlags = [ "CONF=unix" ];
+  makeFlags = [ "CONF=${config}" ];
 
-  installPhase = ''
-    install -Dm755 -t $out/bin/ drawterm
-    install -Dm644 -t $out/man/man1/ drawterm.1
-  '';
+  installPhase =
+    {
+      linux = ''
+        install -Dm755 -t $out/bin/ drawterm
+      '';
+      unix = ''
+        # wrapping the oss output with pulse seems to be the easiest
+        mv drawterm drawterm.bin
+        install -Dm755 -t $out/bin/ drawterm.bin
+        makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+      '';
+    }
+    ."${config}" or (throw "unsupported CONF")
+    + ''
+      installManPage drawterm.1
+    '';
+
+  passthru = {
+    updateScript = unstableGitUpdater { shallowClone = false; };
+    tests = nixosTests.drawterm;
+  };
 
   meta = with lib; {
-    description = "Connect to Plan9 CPU servers from other operating systems.";
+    description = "Connect to Plan 9 CPU servers from other operating systems";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ moody ];
     platforms = platforms.linux;
+    mainProgram = "drawterm";
   };
 }

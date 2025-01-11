@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "dicttoxml";
-  version = "1.7.4";
+  version = "1.7.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45";
+    hash = "sha256-bzbOZEiB21zYlAvum3yz8/a3sye6imfYPT4sqgU4v50=";
   };
 
   # No tests in archive

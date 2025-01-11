@@ -1,42 +1,62 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, cpyparsing
-, ipykernel
-, mypy
-, pexpect
-, pygments
-, pytestCheckHook
-, prompt-toolkit
-, tkinter
-, watchdog
+{
+  lib,
+  anyio,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cpyparsing,
+  ipykernel,
+  mypy,
+  pexpect,
+  pygments,
+  pytestCheckHook,
+  prompt-toolkit,
+  setuptools,
+  tkinter,
+  watchdog,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "coconut";
-  version = "1.6.0";
+  version = "3.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
-    rev = "v${version}";
-    sha256 = "/397YGV6QWWmKfqr5hSvqRoPOu7Hx1Pak6rVPR3etzw=";
+    tag = "v${version}";
+    hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
   };
 
-  propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ pexpect pytestCheckHook tkinter ];
+  propagatedBuildInputs = [
+    anyio
+    async-generator
+    cpyparsing
+    ipykernel
+    mypy
+    pygments
+    prompt-toolkit
+    setuptools
+    watchdog
+  ];
+
+  nativeCheckInputs = [
+    pexpect
+    pytestCheckHook
+    tkinter
+  ];
 
   # Currently most tests have performance issues
-  pytestFlagsArray = [
-    "tests/constants_test.py"
-  ];
+  pytestFlagsArray = [ "coconut/tests/constants_test.py" ];
 
   pythonImportsCheck = [ "coconut" ];
 
   meta = with lib; {
-    homepage = "http://coconut-lang.org/";
     description = "Simple, elegant, Pythonic functional programming";
+    homepage = "http://coconut-lang.org/";
+    changelog = "https://github.com/evhub/coconut/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fabianhjr ];
   };

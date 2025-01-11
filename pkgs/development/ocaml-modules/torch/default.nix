@@ -1,61 +1,70 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchFromGitHub
-, cmdliner
-, ctypes
-, dune-configurator
-, npy
-, ocaml-compiler-libs
-, ppx_custom_printf
-, ppx_expect
-, ppx_sexp_conv
-, sexplib
-, stdio
-, pytorch
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cmdliner,
+  ctypes,
+  ctypes-foreign,
+  dune-configurator,
+  npy,
+  ocaml-compiler-libs,
+  ppx_custom_printf,
+  ppx_expect,
+  ppx_sexp_conv,
+  sexplib,
+  stdio,
+  torch,
 }:
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.14";
-
-  useDune2 = true;
+  version = "0.17";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "ocaml-${pname}";
-    rev    = version;
-    sha256 = "sha256:039anfvzsalbqi5cdp95bbixcwr2ngharihgd149hcr0wa47y700";
+    repo = "ocaml-${pname}";
+    rev = version;
+    hash = "sha256-z/9NUBjeFWE63Z/e8OyzDiy8hrn6qzjaiBH8G9MPeos=";
   };
+
+  patches = [
+    # Pytorch 2.0 support. Drop when it reaches a release
+    (fetchpatch {
+      url = "https://github.com/LaurentMazare/ocaml-torch/commit/ef7ef30cafecb09e45ec1ed8ce4bedae5947cfa5.patch";
+      hash = "sha256-smdwKy40iIISp/25L2J4az6KmqFS1soeChBElUyhl5A=";
+    })
+  ];
 
   buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     cmdliner
     ctypes
+    ctypes-foreign
     npy
     ocaml-compiler-libs
-    pytorch
-    pytorch.dev
     ppx_custom_printf
     ppx_expect
     ppx_sexp_conv
     sexplib
     stdio
+    torch
+    torch.dev
   ];
 
-  preBuild = "export LIBTORCH=${pytorch.dev}/";
+  preBuild = "export LIBTORCH=${torch.dev}/";
 
-  doCheck = !stdenv.isAarch64;
-  checkPhase = "dune runtest";
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Ocaml bindings to Pytorch";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.asl20;
-    broken = lib.versionAtLeast pytorch.version "1.11";
+    broken = true; # Not compatible with libtorch ≥ 2.3.0
   };
 }

@@ -1,20 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oslotest
-, pbr
-, testscenarios
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oslotest,
+  pbr,
+  setuptools,
+  testscenarios,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "5.1.0";
+  version = "6.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.i18n";
     inherit version;
-    sha256 = "6bf111a6357d5449640852de4640eae4159b5562bbba4c90febb0034abc095d0";
+    hash = "sha256-k5O8rpLq3F93ETLRxqsjmxmJb/bYheOvwhqfqk3pJNM=";
   };
 
   postPatch = ''
@@ -23,16 +26,26 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ pbr ];
+  build-system = [
+    pbr
+    setuptools
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     oslotest
     stestr
     testscenarios
   ];
 
   checkPhase = ''
-    stestr run
+    runHook preCheck
+
+    stestr run -e <(echo "
+    # test counts warnings which no longer matches in python 3.11
+    oslo_i18n.tests.test_message.MessageTestCase.test_translate_message_bad_translation
+    ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "oslo_i18n" ];

@@ -15,20 +15,26 @@ let
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
+  inherit (snipe-it.passthru) phpPackage;
+
   # shell script for local administration
-  artisan = pkgs.writeScriptBin "snipe-it" ''
+  artisan = (pkgs.writeScriptBin "snipe-it" ''
     #! ${pkgs.runtimeShell}
-    cd ${snipe-it}
+    cd "${snipe-it}/share/php/snipe-it"
     sudo=exec
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
-    $sudo ${pkgs.php}/bin/php artisan $*
-  '';
+    $sudo ${phpPackage}/bin/php artisan $*
+  '').overrideAttrs (old: {
+    meta = old.meta // {
+      mainProgram = "snipe-it";
+    };
+  });
 in {
   options.services.snipe-it = {
 
-    enable = mkEnableOption "A free open source IT asset/license management system";
+    enable = mkEnableOption "snipe-it, a free open source IT asset/license management system";
 
     user = mkOption {
       default = "snipeit";
@@ -46,7 +52,7 @@ in {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
-        generated with <code>head -c 32 /dev/urandom | base64</code>.
+        generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/snipe-it/appkey";
       type = types.path;
@@ -54,11 +60,8 @@ in {
 
     hostName = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "snipe-it.example.com";
       description = ''
         The hostname to serve Snipe-IT on.
@@ -69,7 +72,7 @@ in {
       description = ''
         The root URL that you want to host Snipe-IT on. All URLs in Snipe-IT will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
-        Command example: <code>snipe-it snipe-it:update-url https://old.example.com https://new.example.com</code>
+        Command example: `snipe-it snipe-it:update-url https://old.example.com https://new.example.com`
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostName}";
       defaultText = ''
@@ -113,7 +116,7 @@ in {
         example = "/run/keys/snipe-it/dbpassword";
         description = ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
       createLocally = mkOption {
@@ -156,7 +159,7 @@ in {
         example = "/run/keys/snipe-it/mailpassword";
         description = ''
           A file containing the password corresponding to
-          <option>mail.user</option>.
+          {option}`mail.user`.
         '';
       };
       backupNotificationAddress = mkOption {
@@ -208,7 +211,7 @@ in {
         "pm.max_requests" = 500;
       };
       description = ''
-        Options for the snipe-it PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        Options for the snipe-it PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -274,17 +277,17 @@ in {
       '';
       description = ''
         Snipe-IT configuration options to set in the
-        <filename>.env</filename> file.
-        Refer to <link xlink:href="https://snipe-it.readme.io/docs/configuration"/>
+        {file}`.env` file.
+        Refer to <https://snipe-it.readme.io/docs/configuration>
         for details on supported values.
 
         Settings containing secret data should be set to an attribute
-        set containing the attribute <literal>_secret</literal> - a
+        set containing the attribute `_secret` - a
         string pointing to a file containing the value the option
         should be set to. See the example to get a better picture of
-        this: in the resulting <filename>.env</filename> file, the
-        <literal>OIDC_CLIENT_SECRET</literal> key will be set to the
-        contents of the <filename>/run/keys/oidc_secret</filename>
+        this: in the resulting {file}`.env` file, the
+        `OIDC_CLIENT_SECRET` key will be set to the
+        contents of the {file}`/run/keys/oidc_secret`
         file.
       '';
     };
@@ -328,7 +331,7 @@ in {
       APP_CONFIG_CACHE = "/run/snipe-it/cache/config.php";
       APP_ROUTES_CACHE = "/run/snipe-it/cache/routes-v7.php";
       APP_EVENTS_CACHE = "/run/snipe-it/cache/events.php";
-      SESSION_SECURE_COOKIE = tlsEnabled;
+      SECURE_COOKIES = tlsEnabled;
     };
 
     services.mysql = mkIf db.createLocally {
@@ -343,8 +346,7 @@ in {
     };
 
     services.phpfpm.pools.snipe-it = {
-      inherit user group;
-      phpPackage = pkgs.php81;
+      inherit user group phpPackage;
       phpOptions = ''
         post_max_size = ${cfg.maxUploadSize}
         upload_max_filesize = ${cfg.maxUploadSize}
@@ -359,14 +361,14 @@ in {
     services.nginx = {
       enable = mkDefault true;
       virtualHosts."${cfg.hostName}" = mkMerge [ cfg.nginx {
-        root = mkForce "${snipe-it}/public";
+        root = mkForce "${snipe-it}/share/php/snipe-it/public";
         extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
         locations = {
           "/" = {
             index = "index.php";
             extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
           };
-          "~ \.php$" = {
+          "~ \\.php$" = {
             extraConfig = ''
               try_files $uri $uri/ /index.php?$query_string;
               include ${config.services.nginx.package}/conf/fastcgi_params;
@@ -376,7 +378,7 @@ in {
               ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
             '';
           };
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
         };
@@ -384,7 +386,7 @@ in {
     };
 
     systemd.services.snipe-it-setup = {
-      description = "Preperation tasks for snipe-it";
+      description = "Preparation tasks for snipe-it";
       before = [ "phpfpm-snipe-it.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
@@ -394,9 +396,9 @@ in {
         User = user;
         WorkingDirectory = snipe-it;
         RuntimeDirectory = "snipe-it/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
       };
-      path = [ pkgs.replace-secret ];
+      path = [ pkgs.replace-secret artisan ];
       script =
         let
           isSecret  = v: isAttrs v && v ? _secret && (isString v._secret || builtins.isPath v._secret);
@@ -453,25 +455,45 @@ in {
           rm "${cfg.dataDir}"/bootstrap/cache/*.php || true
 
           # migrate db
-          ${pkgs.php}/bin/php artisan migrate --force
+          ${lib.getExe artisan} migrate --force
+
+          # A placeholder file for invalid barcodes
+          invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"
+          if [ ! -e "$invalid_barcode_location" ]; then
+              cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          fi
         '';
     };
 
     systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
-      "d ${cfg.dataDir}/bootstrap                  0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/bootstrap/cache            0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public                     0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public/uploads             0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage                    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/app                0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/fonts              0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework          0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/cache    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/sessions 0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}                              0710 ${user} ${group} - -"
+      "d ${cfg.dataDir}/bootstrap                    0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/bootstrap/cache              0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public                       0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads               0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/accessories   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/assets        0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/avatars       0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/barcodes      0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/categories    0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/companies     0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/components    0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/consumables   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/departments   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/locations     0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/manufacturers 0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/models        0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/suppliers     0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage                      0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app                  0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/fonts                0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework            0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/cache      0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/sessions   0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/views      0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/logs                 0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/uploads              0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/private_uploads      0700 ${user} ${group} - -"
     ];
 
     users = {

@@ -1,34 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bite-parser";
-  version = "0.1.3";
+  version = "0.2.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f246e98a5556d6ed9a33fda1e94c3ab906305729feb30d25e35344b3e1c1fd9";
+  src = fetchFromGitHub {
+    owner = "jgosmann";
+    repo = "bite-parser";
+    tag = "v${version}";
+    hash = "sha256-C508csRbjCeLgkp66TwDuxUtMITTmub5/TFv8x80HLA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    typing-extensions
   ];
 
   pythonImportsCheck = [ "bite" ];
@@ -36,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous parser taking incremental bites out of your byte input stream";
     homepage = "https://github.com/jgosmann/bite-parser";
-    changelog = "https://github.com/jgosmann/bite-parser/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jgosmann/bite-parser/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

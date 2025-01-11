@@ -1,28 +1,30 @@
-{ stdenv, fetchurl
-, glade
-, gnunet
-, gnutls
-, gtk3
-, libextractor
-, libgcrypt
-, libsodium
-, libxml2
-, pkg-config
-, wrapGAppsHook
+{
+  stdenv,
+  fetchurl,
+  glade,
+  gnunet,
+  gnutls,
+  gtk3,
+  libextractor,
+  libgcrypt,
+  libsodium,
+  libxml2,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.15.0";
+  version = "0.23.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FLLlqpQ7Bf+oNRUvx7IniVxFusy/tPYxEP2T6VGF7h8=";
+    url = "mirror://gnu/gnunet/gnunet-gtk-${version}.tar.gz";
+    hash = "sha256-bmU3799pZVUyrsJ92MKgn5NIqCW76ml4N42Ewi+VWvI=";
   };
 
-  nativeBuildInputs= [
+  nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -38,7 +40,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gnunet=${gnunet}" ];
 
-  patchPhase = "patchShebangs pixmaps/icon-theme-installer";
+  postPatch = "patchShebangs pixmaps/icon-theme-installer";
+
+  postInstall = ''
+    ln -s $out/share/gnunet-gtk/gnunet_logo.png $out/share/gnunet/gnunet-logo-color.png
+  '';
 
   meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";

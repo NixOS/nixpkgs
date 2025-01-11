@@ -1,17 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sacn";
-  version = "1.8.1";
-  disabled = isPy27;
+  version = "1.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdc9af732f4ca5badbf732499775575c4f815c73f857720c0a61a3fc80257f7a";
+    hash = "sha256-Z2Td/tdXYfQ9/QvM1NeT/OgQ/TYa3CQtWo8O1Dl3+Ao=";
   };
 
   # no tests
@@ -20,9 +23,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sacn" ];
 
   meta = with lib; {
-    description = "A simple ANSI E1.31 (aka sACN) module for python";
+    description = "Simple ANSI E1.31 (aka sACN) module";
     homepage = "https://github.com/Hundemeier/sacn";
+    changelog = "https://github.com/Hundemeier/sacn/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

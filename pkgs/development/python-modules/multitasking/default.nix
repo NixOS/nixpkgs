@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "multitasking";
-  version = "0.0.10";
+  version = "0.0.11";
+  format = "setuptools";
 
   # GitHub source releases aren't tagged
   src = fetchPypi {
     inherit pname version;
-    sha256 = "810640fa6670be41f4a712b287d9307a14ad849d966f06a17d2cf1593b66c3cd";
+    hash = "sha256-TWvDzGX5stynL7Wnh4UKiNro9iDCs2rptVJI5RvNYCY=";
   };
 
-  doCheck = false;  # No tests included
+  doCheck = false; # No tests included
   pythonImportsCheck = [ "multitasking" ];
 
   meta = with lib; {

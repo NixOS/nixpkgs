@@ -1,15 +1,17 @@
 # Env to update Gemfile.lock / gemset.nix
-with import <nixpkgs> {};
-stdenv.mkDerivation {
+{
+  pkgs ? import ../../../.. { },
+}:
+pkgs.stdenv.mkDerivation {
   name = "env";
-  buildInputs = [
+  nativeBuildInputs = [ pkgs.pkg-config ];
+  buildInputs = with pkgs; [
     bundix
     git
     libiconv
     libpcap
     libxml2
     libxslt
-    pkg-config
     postgresql
     ruby.devEnv
     sqlite

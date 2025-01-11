@@ -1,30 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, nbconvert
-, pytestCheckHook
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nbconvert,
+  pytestCheckHook,
+  requests,
+  responses,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "nbconflux";
   version = "0.7.0";
-  disabled = isPy27; # no longer compatible with python 2 urllib
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Valassis-Digital-Media";
+    owner = "vericast";
     repo = "nbconflux";
-    rev = version;
-    sha256 = "1708qkb275d6f7b4b5zmqx3i0jh56nrx2n9rwwp5nbaah5p2wwlh";
+    tag = version;
+    hash = "sha256-kHIuboFKLVsu5zlZ0bM1BUoQR8f1l0XWcaaVI9bECJw=";
   };
 
-  propagatedBuildInputs = [ nbconvert requests ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
-  checkInputs = [ pytestCheckHook responses ];
+  dependencies = [
+    nbconvert
+    requests
+  ];
 
-  JUPYTER_PATH="${nbconvert}/share/jupyter";
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
+
+  patches = [
+    # The original setup.py file is missing commas in the install_requires list
+    ./setup-py.patch
+  ];
+
+  postPatch = ''
+    # remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  JUPYTER_PATH = "${nbconvert}/share/jupyter";
   disabledTests = [
     "test_post_to_confluence"
     "test_optional_components"
@@ -32,6 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Converts Jupyter Notebooks to Atlassian Confluence (R) pages using nbconvert";
+    mainProgram = "nbconflux";
     homepage = "https://github.com/Valassis-Digital-Media/nbconflux";
     license = licenses.bsd3;
     maintainers = [ maintainers.arnoldfarkas ];

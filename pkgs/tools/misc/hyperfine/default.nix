@@ -1,24 +1,27 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
-  version = "1.13.0";
+  version = "1.19.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-1TWaLw1JxUE8RjPVVTldCbMSArNb+uhXM865iuJaJUo=";
+  src = fetchFromGitHub {
+    owner = "sharkdp";
+    repo = "hyperfine";
+    rev = "v${version}";
+    hash = "sha256-c8yK9U8UWRWUSGGGrAds6zAqxAiBLWq/RcZ6pvYNpgk=";
   };
 
-  cargoSha256 = "sha256-kzDjxWMXie6qjherzdXvHxrS4i8FAXcKiuk/+wbMkAA=";
+  cargoHash = "sha256-Ia9L7RxYmhFzTVOzegxAmsgBmx30PPqyVFELayL3dq8=";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     installManPage doc/hyperfine.1
@@ -32,7 +35,14 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line benchmarking tool";
     homepage = "https://github.com/sharkdp/hyperfine";
     changelog = "https://github.com/sharkdp/hyperfine/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda thoughtpolice ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      thoughtpolice
+    ];
+    mainProgram = "hyperfine";
   };
 }

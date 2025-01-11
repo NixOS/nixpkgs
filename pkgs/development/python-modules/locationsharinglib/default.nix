@@ -1,60 +1,53 @@
-{ lib
-, betamax
-, buildPythonPackage
-, cachetools
-, coloredlogs
-, emoji
-, fetchPypi
-, nose
-, pythonOlder
-, pytz
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cachetools,
+  coloredlogs,
+  fetchPypi,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
-  version = "4.1.8";
-  disabled = pythonOlder "3.7";
+  version = "5.0.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
+    hash = "sha256-ar5/gyDnby0aceqqHe8lTQaHafOub+IPKglmct4xEGM=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Tests requirements want to pull in multiple modules which we don't need
+    substituteInPlace setup.py \
+      --replace-fail "tests_require=test_requirements" "tests_require=[]"
+    cp .VERSION locationsharinglib/.VERSION
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     coloredlogs
     requests
     cachetools
     pytz
   ];
 
-  checkInputs = [
-    betamax
-    emoji
-    nose
-  ];
-
-  postPatch = ''
-    # Tests requirements want to pull in multiple modules which we don't need
-    substituteInPlace setup.py \
-      --replace "tests_require=test_requirements" "tests_require=[]"
-     substituteInPlace requirements.txt \
-       --replace "coloredlogs>=15.0.1" "coloredlogs"
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    # Only coverage no real unit tests
-    nosetests
-    runHook postCheck
-  '';
+  # There are no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "locationsharinglib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to retrieve coordinates from a Google account";
     homepage = "https://locationsharinglib.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/costastf/locationsharinglib/blob/${version}/HISTORY.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

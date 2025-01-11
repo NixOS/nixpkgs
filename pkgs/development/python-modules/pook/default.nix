@@ -1,27 +1,34 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, furl
-, jsonschema
-, nose
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  furl,
+  hatchling,
+  jsonschema,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest7CheckHook,
+  pythonOlder,
+  requests,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.0.2";
-  disabled = pythonOlder "3.5";
+  version = "1.4.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4OGcnuajGdBRlXCYwbTK/zLNQRrir60qCYajHRRCpkU=";
+    repo = "pook";
+    tag = "v${version}";
+    hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
   };
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -31,16 +38,25 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-httpbin
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [ "pook" ];
 
+  disabledTestPaths = [
+    # Don't test integrations
+    "tests/integration/"
+    # Tests require network access
+    "tests/unit/interceptors/"
+  ];
+
   meta = with lib; {
-    description = "HTTP traffic mocking and testing made simple in Python";
+    description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
+    changelog = "https://github.com/h2non/pook/blob/v${version}/History.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

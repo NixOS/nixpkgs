@@ -1,23 +1,55 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, perlPackages, libxml2, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  makeWrapper,
+  perlPackages,
+  ocamlPackages,
+  libxml2,
+  libintl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hivex";
-  version = "1.3.21";
+  version = "1.3.24";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ms4+9KL/LKUKmb4Gi2D7H9vJ6rivU+NF6XznW6S2O1Y=";
+    hash = "sha256-pS+kXOzJp4rbLShgXWgmHk8f1FFKd4pUcwE9LMyKGTw=";
   };
 
   patches = [ ./hivex-syms.patch ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
-  buildInputs = [
-    libxml2
-  ]
-  ++ (with perlPackages; [ perl IOStringy ])
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  postPatch = ''
+    substituteInPlace ocaml/Makefile.am \
+        --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib'
+  '';
+
+  strictDeps = true;
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      makeWrapper
+      perlPackages.perl
+      pkg-config
+    ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+    ]);
+  buildInputs =
+    [
+      libxml2
+    ]
+    ++ (with perlPackages; [
+      perl
+      IOStringy
+    ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/hivexregedit \
@@ -29,11 +61,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Windows registry hive extraction library";
-    license = licenses.lgpl2;
+    license = licenses.lgpl2Only;
     homepage = "https://github.com/libguestfs/hivex";
-    maintainers = with maintainers; [offline];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.unix;
   };
 }

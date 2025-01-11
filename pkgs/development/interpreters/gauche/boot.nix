@@ -1,18 +1,46 @@
-{ stdenv, lib, fetchurl, pkg-config, texinfo, libiconv, gdbm, openssl, zlib
-, mbedtls, cacert }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  texinfo,
+  libiconv,
+  gdbm,
+  openssl,
+  zlib,
+  mbedtls,
+  cacert,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gauche-bootstrap";
-  version = "0.9.9";
+  version = "0.9.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
-    sha256 = "1yzpszhw52vkpr65r5d4khf3489mnnvnw58dd2wsvvx7499k5aac";
+    url = "https://github.com/shirok/Gauche/releases/download/release${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }/Gauche-${version}.tgz";
+    hash = "sha256-NkPie8fIgiz9b7KJLbGF9ljo42STi8LM/O2yOeNa94M=";
   };
 
-  nativeBuildInputs = [ pkg-config texinfo ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+  ];
 
-  buildInputs = [ libiconv gdbm openssl zlib mbedtls cacert ];
+  buildInputs =
+    [
+      libiconv
+      gdbm
+      openssl
+      zlib
+      mbedtls
+      cacert
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      darwin.apple_sdk_11_0.frameworks.CoreServices
+    ];
 
   postPatch = ''
     patchShebangs .
@@ -34,8 +62,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "R7RS Scheme scripting engine";
+    description = "R7RS Scheme scripting engine (released version)";
     homepage = "https://practical-scheme.net/gauche/";
+    mainProgram = "gosh";
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.bsd3;
     platforms = platforms.unix;

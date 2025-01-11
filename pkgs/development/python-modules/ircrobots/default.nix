@@ -1,50 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, anyio
-, asyncio-rlock
-, asyncio-throttle
-, dataclasses
-, ircstates
-, async_stagger
-, async-timeout
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  anyio,
+  asyncio-rlock,
+  asyncio-throttle,
+  ircstates,
+  async-stagger,
+  async-timeout,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ircrobots";
-  version = "0.4.6";
-  disabled = pythonOlder "3.6";
+  version = "0.7.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+BrS1+ZkgwT/qvqD0PwRZi2LF+31biS738SzKH1dy7w=";
+    hash = "sha256-slz4AH2Mi21N3aV+OrnoXoQsseS7arW2NuUZARQJsf0=";
   };
 
-  postPatch = ''
-    # too specific pins https://github.com/jesopo/ircrobots/issues/3
-    sed -iE 's/anyio.*/anyio/' requirements.txt
-    sed -iE 's/ircstates.*/ircstates/' requirements.txt
-    sed -iE 's/async_timeout.*/async_timeout/' requirements.txt
-  '';
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     anyio
     asyncio-rlock
     asyncio-throttle
     ircstates
-    async_stagger
+    async-stagger
     async-timeout
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest test
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "ircrobots" ];
 

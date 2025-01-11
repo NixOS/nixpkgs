@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,9 +17,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0sl4ivn95sr5pgw2z877gmhyfc4mk9xr457i5g2i4wqnf2jmy14j";
   };
 
-  cargoSha256 = "04kj1yj6hhnis3ss0xs4zq8rl71rzn577g8i0wmapkjqzqwg37yb";
+  cargoHash = "sha256-y5/xOP5YzqsqBxG9c4r9ORyaEf5Ed6D10NFCaKQPchI=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Tests require network access
   doCheck = false;
@@ -28,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/LamdaLamdaLamda/cocom";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cocom";
   };
 }

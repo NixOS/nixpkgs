@@ -1,12 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage, tqdm }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  tqdm,
+}:
 
 buildPythonPackage rec {
   pname = "proglog";
   version = "0.1.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZYwoycguTK6y8l9Ij/+c6s4i+NabFdDByG1kJ15N2rQ=";
+    hash = "sha256-ZYwoycguTK6y8l9Ij/+c6s4i+NabFdDByG1kJ15N2rQ=";
   };
 
   propagatedBuildInputs = [ tqdm ];

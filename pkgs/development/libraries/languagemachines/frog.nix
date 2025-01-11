@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl
-, automake, autoconf, bzip2, libtar, libtool, pkg-config, autoconf-archive
-, libxml2, icu
-, languageMachines
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+  bzip2,
+  libtar,
+  libtool,
+  pkg-config,
+  autoconf-archive,
+  libxml2,
+  icu,
+  languageMachines,
 }:
 
 let
@@ -11,18 +21,29 @@ in
 stdenv.mkDerivation {
   pname = "frog";
   version = release.version;
-  src = fetchurl { inherit (release) url sha256;
-                   name = "frog-v${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config automake autoconf ];
-  buildInputs = [ bzip2 libtar libtool autoconf-archive
-                  libxml2 icu
-                  languageMachines.ticcutils
-                  languageMachines.timbl
-                  languageMachines.mbt
-                  languageMachines.libfolia
-                  languageMachines.ucto
-                  languageMachines.frogdata
-                ];
+  src = fetchurl {
+    inherit (release) url sha256;
+    name = "frog-v${release.version}.tar.gz";
+  };
+  nativeBuildInputs = [
+    pkg-config
+    automake
+    autoconf
+  ];
+  buildInputs = [
+    bzip2
+    libtar
+    libtool
+    autoconf-archive
+    libxml2
+    icu
+    languageMachines.ticcutils
+    languageMachines.timbl
+    languageMachines.mbt
+    languageMachines.libfolia
+    languageMachines.ucto
+    languageMachines.frogdata
+  ];
 
   preConfigure = ''
     sh bootstrap.sh
@@ -38,10 +59,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
-    homepage    = "https://languagemachines.github.io/frog";
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
+    description = "Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
+    homepage = "https://languagemachines.github.io/frog";
+    license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
 
     longDescription = ''

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "virtio_vmmci";
-  version = "0.4.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "virtio_vmmci";
-    rev = "${version}";
-    sha256 = "104xnpcy5kb4y7ipy1fx1v6byddzs63bv2dqjy3yl23n764fsy43";
+    rev = version;
+    hash = "sha256-h8yu4+vTgpAD+sKa1KnVD+qubiIlkYtG2nmQnXOi/sk=";
   };
 
   hardeningDisable = [ "pic" "format" ];
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An OpenBSD VMM Control Interface (vmmci) for Linux";
+    description = "OpenBSD VMM Control Interface (vmmci) for Linux";
     homepage = "https://github.com/voutilad/virtio_vmmci";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qbit ];
     platforms = platforms.linux;
   };

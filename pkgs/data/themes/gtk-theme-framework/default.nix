@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, theme, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  theme,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtk-theme-framework";
@@ -31,6 +36,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jaxwilko/gtk-theme-framework";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flexagoon ];
+    maintainers = [ ];
   };
 }

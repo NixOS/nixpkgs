@@ -1,31 +1,50 @@
-{ lib, fetchFromGitHub, glibcLocales, python }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python,
+}:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.3.0";
   pname = "brotab";
+  version = "1.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = pname;
     rev = version;
-    sha256 = "1ja9qaf3rxm0chgzs5mpw973h7ibb454k9mbfbb2gl12gr9zllyw";
+    hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 
+  patches = [
+    # https://github.com/balta2ar/brotab/pull/102
+    (fetchpatch {
+      name = "remove-unnecessary-pip-import.patch";
+      url = "https://github.com/balta2ar/brotab/commit/825cd48f255c911aabbfb495f6b8fc73f27d3fe5.patch";
+      hash = "sha256-IN28AOLPKPUc3KkxIGFMpZNNXA1+O12NxS+Hl4KMXbg=";
+    })
+  ];
+
   propagatedBuildInputs = with python.pkgs; [
-    requests
     flask
     psutil
+    requests
     setuptools
   ];
 
-  checkBuildInputs = with python.pkgs; [
-    pytest
-  ];
-
-  # test_integration.py requires Chrome browser session
-  checkPhase = ''
-    ${python.interpreter} -m unittest brotab/tests/test_{brotab,utils}.py
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "Flask==2.0.2" "Flask>=2.0.2" \
+      --replace "psutil==5.8.0" "psutil>=5.8.0" \
+      --replace "requests==2.24.0" "requests>=2.24.0"
   '';
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = with python.pkgs; [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/balta2ar/brotab";

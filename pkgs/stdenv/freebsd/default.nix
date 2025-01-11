@@ -1,276 +1,585 @@
-{ lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+# afaik the longest dependency chain is stdenv -> stdenv-1#coreutils -> stdenv-1#gmp -> stdenv-0#libcxx -> stdenv-0#libc
+# this is only possible through aggressive hacking to make libcxx build with stdenv-0#libc instead of bootstrapTools.libc.
+{
+  lib,
+  localSystem,
+  crossSystem,
+  config,
+  overlays,
+  crossOverlays ? [ ],
+  bootstrapFiles ?
+    let
+      table = {
+        x86_64-freebsd = import ./bootstrap-files/x86_64-unknown-freebsd.nix;
+      };
+      files =
+        table.${localSystem.system}
+          or (throw "unsupported platform ${localSystem.system} for the pure FreeBSD stdenv");
+    in
+    files,
 }:
 
 assert crossSystem == localSystem;
-let inherit (localSystem) system;
-    fetchURL = import <nix/fetchurl.nix>;
-    trivialBuilder = (import ./trivial-builder.nix);
-    make = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "make";
-      ver = "4.3";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
+let
+  inherit (localSystem) system;
+  mkExtraBuildCommands0 = cc: ''
+    rsrc="$out/resource-root"
+    mkdir "$rsrc"
+    ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major cc.version}/include" "$rsrc"
+    echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+  '';
+  mkExtraBuildCommands =
+    cc: compiler-rt:
+    mkExtraBuildCommands0 cc
+    + ''
+      ln -s "${compiler-rt.out}/lib" "$rsrc/lib"
+      ln -s "${compiler-rt.out}/share" "$rsrc/share"
+    '';
+
+  bootstrapArchive = (
+    derivation {
+      inherit system;
+      name = "bootstrap-archive";
+      pname = "bootstrap-archive";
+      version = "9.9.9";
+      builder = "${bootstrapFiles.unpack}/libexec/ld-elf.so.1";
+      args = [
+        "${bootstrapFiles.unpack}/bin/bash"
+        ./unpack-bootstrap-files.sh
+      ];
+      LD_LIBRARY_PATH = "${bootstrapFiles.unpack}/lib";
+      src = bootstrapFiles.unpack;
+      inherit (bootstrapFiles) bootstrapTools;
+    }
+  );
+
+  linkBootstrap = (
+    attrs:
+    derivation (
+      attrs
+      // {
+        inherit system;
+        name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
+        src = bootstrapArchive;
+        builder = "${bootstrapArchive}/bin/bash";
+        args = [ ./linkBootstrap.sh ];
+        PATH = "${bootstrapArchive}/bin";
+        paths = attrs.paths;
+      }
+    )
+  );
+
+  # commented linkBootstrap entries are provided but unused
+  bootstrapTools = {
+    expand-response-params = "";
+    bsdcp = linkBootstrap { paths = [ "bin/bsdcp" ]; };
+    patchelf = linkBootstrap { paths = [ "bin/patchelf" ]; };
+    bash = linkBootstrap {
+      paths = [
+        "bin/bash"
+        "bin/sh"
+      ];
+      shell = "bin/bash";
+      shellPath = "/bin/bash";
     };
-    bash = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "bash";
-      ver = "4.4.18";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "08vz660768mnnax7n8d4d85jxafwdmsxsi7fh0hzvmafbvn9wkb0";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
+    curl = linkBootstrap {
+      paths = [
+        "bin/curl"
+      ];
     };
-    coreutils = trivialBuilder rec {
-      inherit (localSystem) system;
+    llvmPackages = {
+      clang-unwrapped = linkBootstrap {
+        paths = [
+          "bin/clang"
+          "bin/clang++"
+          "bin/cpp"
+        ];
+        # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
+        version = "18";
+      };
+      libunwind = linkBootstrap {
+        name = "libunwind";
+        paths = [
+          "lib/libunwind.a"
+          "lib/libunwind.so"
+          "lib/libunwind.so.1"
+          "lib/libunwind.so.1.0"
+          "lib/libunwind_shared.so"
+        ];
+      };
+    };
+    coreutils = linkBootstrap {
       name = "coreutils";
-      ver = "8.31";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-gmp"
-                        "--without-libpth-prefix"
-                      ];
+      paths = map (str: "bin/" + str) [
+        "base64"
+        "basename"
+        "cat"
+        "chcon"
+        "chgrp"
+        "chmod"
+        "chown"
+        "chroot"
+        "cksum"
+        "comm"
+        "cp"
+        "csplit"
+        "cut"
+        "date"
+        "dd"
+        "df"
+        "dir"
+        "dircolors"
+        "dirname"
+        "du"
+        "echo"
+        "env"
+        "expand"
+        "expr"
+        "factor"
+        "false"
+        "fmt"
+        "fold"
+        "groups"
+        "head"
+        "hostid"
+        "id"
+        "install"
+        "join"
+        "kill"
+        "link"
+        "ln"
+        "logname"
+        "ls"
+        "md5sum"
+        "mkdir"
+        "mkfifo"
+        "mknod"
+        "mktemp"
+        "mv"
+        "nice"
+        "nl"
+        "nohup"
+        "nproc"
+        "numfmt"
+        "od"
+        "paste"
+        "pathchk"
+        "pinky"
+        "pr"
+        "printenv"
+        "printf"
+        "ptx"
+        "pwd"
+        "readlink"
+        "realpath"
+        "rm"
+        "rmdir"
+        "runcon"
+        "seq"
+        "shred"
+        "shuf"
+        "sleep"
+        "sort"
+        "split"
+        "stat"
+        "stdbuf"
+        "stty"
+        "sum"
+        "tac"
+        "tail"
+        "tee"
+        "test"
+        "timeout"
+        "touch"
+        "tr"
+        "true"
+        "truncate"
+        "tsort"
+        "tty"
+        "uname"
+        "unexpand"
+        "uniq"
+        "unlink"
+        "users"
+        "vdir"
+        "wc"
+        "who"
+        "whoami"
+        "yes"
+        "["
+      ];
     };
-    findutils = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "findutils";
-      ver = "4.7.0";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-gmp"
-                        "--without-libpth-prefix"
-                      ];
-    };
-    diffutils = trivialBuilder rec {
-      inherit (localSystem) system;
+    diffutils = linkBootstrap {
       name = "diffutils";
-      ver = "3.7";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "09isrg0isjinv8c535nxsi1s86wfdfzml80dbw41dj9x3hiad9xk";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-libsigsegv-prefix"
-                      ];
+      paths = map (str: "bin/" + str) [
+        "diff"
+        "cmp"
+        #"diff3"
+        #"sdiff"
+      ];
     };
-    grep = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "grep";
-      ver = "3.4";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "1yy33kiwrxrwj2nxa4fg15bvmwyghqbs8qwkdvy5phm784f7brjq";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--disable-perl-regexp"
-                        "--without-libsegsegv-prefix"
-                      ];
+    findutils = linkBootstrap {
+      name = "findutils";
+      paths = [
+        "bin/find"
+        "bin/xargs"
+      ];
     };
-    patch = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "patch";
-      ver = "2.7.6";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "1zfqy4rdcy279vwn2z1kbv19dcfw25d2aqy9nzvdkq5bjzd0nqdc";
+    iconv = linkBootstrap { paths = [ "bin/iconv" ]; };
+    patch = linkBootstrap { paths = [ "bin/patch" ]; };
+    gnutar = linkBootstrap { paths = [ "bin/tar" ]; };
+    gawk = linkBootstrap {
+      paths = [
+        "bin/awk"
+        "bin/gawk"
+      ];
     };
-    gawk = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "gawk";
-      ver = "5.0.1";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "15570p7g2x54asvr2fsc56sxzmm08fbk4mzpcs5n92fp9vq8cklf";
-      configureArgs = [ "--disable-nls"
-                        "--disable-mpfr"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-libsegsegv-prefix"
-                      ];
+    gnumake = linkBootstrap { paths = [ "bin/make" ]; };
+    gnugrep = linkBootstrap {
+      paths = [
+        "bin/grep"
+        "bin/egrep"
+        "bin/fgrep"
+      ];
     };
-    cpio = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "cpio";
-      ver = "2.13";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "126vyg4a8wcdwh6npgvxy6gq433bzgz3ph37hmjpycc4r7cp0x78";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
+    gnused = linkBootstrap { paths = [ "bin/sed" ]; };
+    gzip = linkBootstrap {
+      paths = [
+        "bin/gzip"
+        #"bin/gunzip"
+      ];
     };
-    sed = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "sed";
-      ver = "4.8";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "0cznxw73fzv1n3nj2zsq6nf73rvsbxndp444xkpahdqvlzz0r6zp";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
+    bzip2 = linkBootstrap {
+      paths = [
+        "bin/bzip2"
+        "lib/libbz2.so"
+        "lib/libbz2.so.1"
+      ];
     };
-    cacert = fetchURL rec {
-      url = "https://curl.haxx.se/ca/cacert-2020-01-01.pem";
-      sha256 = "07q808n307gzaga93abpf6an7c3rd35p18psdc1dd83lspgp1xxd";
-      executable = false;
+    xz = linkBootstrap {
+      paths = [
+        "bin/xz"
+        "bin/unxz"
+        "lib/liblzma.so"
+        "lib/liblzma.so.5"
+      ];
     };
-    curl = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "curl";
-      ver = "7.68.0";
-      url = "https://curl.haxx.se/download/${name}-${ver}.tar.xz";
-      sha256 = "0nh3j90w6b97wqcgxjfq55qhkz9s38955fbhwzv2fsi7483j895p";
-      configureArgs = [ "--disable-nls"
-                        "--disable-ares"
-                        "--disable-debug"
-                        "--disable-ldap"
-                        "--disable-ldaps"
-                        "--disable-rtsp"
-                        "--disable-dict"
-                        "--disable-telnet"
-                        "--disable-tftp"
-                        "--disable-pop3"
-                        "--disable-imap"
-                        "--disable-smb"
-                        "--disable-smtp"
-                        "--disable-gopher"
-                        "--disable-manual"
-                        "--disable-verbose"
-                        "--disable-sspi"
-                        "--disable-tls-srp"
-                        "--disable-unix-sockets"
-                        "--without-brotli"
-                        "--without-gnutls"
-                        "--without-mbedtls"
-                        "--without-wolfssl"
-                        "--without-bearssl"
-                        "--without-libidn2"
-                        "--without-librtmp"
-                        "--without-nghttp2"
-                        "--with-ssl=/usr"
-                        "--with-ca-bundle=${cacert}"
-                      ];
+    binutils-unwrapped = linkBootstrap {
+      name = "binutils";
+      paths = map (str: "bin/" + str) [
+        "ld"
+        #"as"
+        #"addr2line"
+        "ar"
+        #"c++filt"
+        #"elfedit"
+        #"gprof"
+        #"objdump"
+        "nm"
+        "objcopy"
+        "ranlib"
+        "readelf"
+        "size"
+        "strings"
+        "strip"
+      ];
     };
-    bashExe = "${bash}/bin/bash";
+    freebsd = {
+      locales = linkBootstrap { paths = [ "share/locale" ]; };
+      libc = linkBootstrap {
+        name = "bootstrapLibs";
+        paths = [
+          "lib/Scrt1.o"
+          "lib/crt1.o"
+          "lib/crtbegin.o"
+          "lib/crtbeginS.o"
+          "lib/crtbeginT.o"
+          "lib/crtend.o"
+          "lib/crtendS.o"
+          "lib/crti.o"
+          "lib/crtn.o"
+          "lib/libc++.a"
+          "lib/libc++.so"
+          "lib/libc++.so.1"
+          "lib/libc.a"
+          "lib/libc.so"
+          "lib/libc.so.7"
+          "lib/libc_nonshared.a"
+          "lib/libcrypt.so"
+          "lib/libcrypt.so.5"
+          "lib/libcxxrt.a"
+          "lib/libcxxrt.so"
+          "lib/libcxxrt.so.1"
+          "lib/libdevstat.so"
+          "lib/libdevstat.so.7"
+          "lib/libdl.so"
+          "lib/libdl.so.1"
+          "lib/libelf.so"
+          "lib/libelf.so.2"
+          "lib/libexecinfo.so"
+          "lib/libexecinfo.so.1"
+          "lib/libgcc.a"
+          "lib/libgcc_eh.a"
+          "lib/libgcc_s.so"
+          "lib/libgcc_s.so.1"
+          "lib/libkvm.so"
+          "lib/libkvm.so.7"
+          "lib/libm.a"
+          "lib/libm.so"
+          "lib/libm.so.5"
+          "lib/libmd.so"
+          "lib/libmd.so.6"
+          "lib/libncurses.so"
+          "lib/libncurses.so.6"
+          "lib/libncursesw.so"
+          "lib/libncursesw.so.6"
+          "lib/libpthread.so"
+          "lib/librt.so"
+          "lib/librt.so.1"
+          "lib/libthr.so"
+          "lib/libthr.so.3"
+          "lib/libutil.so"
+          "lib/libutil.so.9"
+          "lib/libxnet.so"
+          "include"
+          "share"
+          "libexec"
+        ];
+        pname = "libs";
+        version = "bootstrap";
+      };
+    };
+  };
+
+  mkStdenv =
+    {
+      name ? "freebsd",
+      overrides ?
+        prevStage: super: self:
+        { },
+      hascxx ? true,
+    }:
+    prevStage:
+    let
+      bsdcp =
+        prevStage.bsdcp or (prevStage.runCommand "bsdcp" { }
+          "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp"
+        );
+      initialPath = with prevStage; [
+        coreutils
+        gnutar
+        findutils
+        gnumake
+        gnused
+        patchelf
+        gnugrep
+        gawk
+        diffutils
+        patch
+        bash
+        xz
+        gzip
+        bzip2
+        bsdcp
+      ];
+      shell = "${prevStage.bash}/bin/bash";
+      stdenvNoCC = import ../generic {
+        inherit
+          config
+          initialPath
+          shell
+          fetchurlBoot
+          ;
+        name = "stdenvNoCC-${name}";
+        buildPlatform = localSystem;
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
+        cc = null;
+      };
+      fetchurlBoot = import ../../build-support/fetchurl {
+        inherit lib stdenvNoCC;
+        inherit (prevStage) curl;
+      };
+      stdenv = import ../generic {
+        inherit
+          config
+          initialPath
+          shell
+          fetchurlBoot
+          ;
+        name = "stdenv-${name}";
+        buildPlatform = localSystem;
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
+        extraNativeBuildInputs = [
+          ./unpack-source.sh
+          ./always-patchelf.sh
+        ];
+        cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+          inherit lib stdenvNoCC;
+          name = "${name}-cc";
+          inherit (prevStage.freebsd) libc;
+          inherit (prevStage) gnugrep coreutils expand-response-params;
+          libcxx = prevStage.llvmPackages.libcxx or null;
+          runtimeShell = shell;
+          propagateDoc = false;
+          nativeTools = false;
+          nativeLibc = false;
+          cc = prevStage.llvmPackages.clang-unwrapped;
+          isClang = true;
+          extraPackages = lib.optionals hascxx [
+            prevStage.llvmPackages.compiler-rt
+          ];
+          nixSupport = {
+            libcxx-cxxflags = lib.optionals (!hascxx) [ "-isystem ${prevStage.freebsd.libc}/include/c++/v1" ];
+          };
+          extraBuildCommands = lib.optionalString hascxx (
+            mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt
+          );
+          bintools = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
+            inherit lib stdenvNoCC;
+            name = "${name}-bintools";
+            inherit (prevStage.freebsd) libc;
+            inherit (prevStage) gnugrep coreutils expand-response-params;
+            runtimeShell = shell;
+            bintools = prevStage.binutils-unwrapped;
+            propagateDoc = false;
+            nativeTools = false;
+            nativeLibc = false;
+          };
+        };
+        overrides = overrides prevStage;
+        preHook = ''
+          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+          export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+          export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
+        '';
+      };
+    in
+    {
+      inherit config overlays stdenv;
+    };
 in
 [
-
-  ({}: {
-    __raw = true;
-
-    bootstrapTools = derivation ({
-      inherit system;
-      inherit make bash coreutils findutils
-        diffutils grep patch gawk cpio sed
-        curl;
-
-      name = "trivial-bootstrap-tools";
-      builder = bashExe;
-      args = [ ./trivial-bootstrap.sh ];
-      buildInputs = [ make ];
-      mkdir = "/bin/mkdir";
-      ln = "/bin/ln";
-    } // lib.optionalAttrs config.contentAddressedByDefault {
-      __contentAddressed = true;
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-    });
-  })
-
-  ({ bootstrapTools, ... }: rec {
-    __raw = true;
-
-    inherit bootstrapTools;
-
-    fetchurl = import ../../build-support/fetchurl {
-      inherit lib;
-      stdenvNoCC = stdenv;
-      curl = bootstrapTools;
-    };
-
-    stdenv = import ../generic {
-      name = "stdenv-freebsd-boot-1";
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
-      inherit config;
-      initialPath = [ "/" "/usr" ];
-      shell = "${bootstrapTools}/bin/bash";
-      fetchurlBoot = null;
-      cc = null;
-      overrides = self: super: {
-      };
-    };
-  })
-
-  (prevStage: {
-    __raw = true;
-
-    inherit (prevStage) bootstrapTools;
-
-    stdenv = import ../generic {
-      name = "stdenv-freebsd-boot-0";
-      inherit config;
-      initialPath = [ prevStage.bootstrapTools ];
-      inherit (prevStage.stdenv)
-        buildPlatform hostPlatform targetPlatform
-        shell;
-      fetchurlBoot = prevStage.fetchurl;
-      cc = null;
-    };
-  })
-
-  (prevStage: {
-    inherit config overlays;
-    stdenv = import ../generic rec {
-      name = "stdenv-freebsd-boot-3";
-      inherit config;
-
-      inherit (prevStage.stdenv)
-        buildPlatform hostPlatform targetPlatform
-        initialPath shell fetchurlBoot;
-
-      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
-        inherit lib;
-        nativeTools  = true;
-        nativePrefix = "/usr";
-        nativeLibc   = true;
-        stdenvNoCC = prevStage.stdenv;
-        buildPackages = {
-          inherit (prevStage) stdenv;
-        };
-        cc           = {
-          name    = "clang-9.9.9";
-          cc      = "/usr";
-          outPath = prevStage.bootstrapTools;
-        };
-        isClang      = true;
-        bintools = import ../../build-support/bintools-wrapper {
+  (
+    { }:
+    mkStdenv {
+      name = "freebsd-boot-0";
+      hascxx = false;
+      overrides = prevStage: self: super: {
+        # this one's goal is to build foundational libs like libc and libcxx. we want to override literally every possible bin package we can with bootstrap tools
+        # we CAN'T import LLVM because the compiler built here is used to build the final compiler and the final compiler must not be built by the bootstrap compiler
+        inherit (bootstrapTools)
+          patchelf
+          bash
+          curl
+          coreutils
+          diffutils
+          findutils
+          iconv
+          patch
+          gnutar
+          gawk
+          gnumake
+          gnugrep
+          gnused
+          gzip
+          bzip2
+          xz
+          ;
+        binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
+        fetchurl = import ../../build-support/fetchurl {
           inherit lib;
-          stdenvNoCC = prevStage.stdenv;
-          nativeTools  = true;
-          nativeLibc   = true;
-          propagateDoc = false;
-          nativePrefix = "/usr";
-          bintools     = { name = "${name}-binutils";
-                           outPath = prevStage.bootstrapTools; };
+          inherit (self) stdenvNoCC;
+          inherit (prevStage) curl;
+        };
+        gettext = super.gettext.overrideAttrs {
+          NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?
+        };
+        curlReal = super.curl;
+        tzdata = super.tzdata.overrideAttrs { NIX_CFLAGS_COMPILE = "-DHAVE_GETTEXT=0"; };
+
+        # make it so libcxx/libunwind are built in this stdenv and not the next
+        freebsd = super.freebsd.overrideScope (
+          self': super': {
+            inherit (prevStage.freebsd) locales;
+            stdenvNoLibcxx = self.overrideCC (self.stdenv // { name = "stdenv-freebsd-boot-0.4"; }) (
+              self.stdenv.cc.override {
+                name = "freebsd-boot-0.4-cc";
+                libc = self.freebsd.libc;
+                bintools = self.stdenv.cc.bintools.override {
+                  name = "freebsd-boot-0.4-bintools";
+                  libc = self.freebsd.libc;
+                };
+              }
+            );
+          }
+        );
+        llvmPackages = super.llvmPackages // {
+          libcxx =
+            (super.llvmPackages.libcxx.override {
+              stdenv = self.overrideCC (self.stdenv // { name = "stdenv-freebsd-boot-0.5"; }) (
+                self.stdenv.cc.override {
+                  name = "freebsd-boot-0.5-cc";
+                  libc = self.freebsd.libc;
+                  bintools = self.stdenv.cc.bintools.override {
+                    name = "freebsd-boot-0.5-bintools";
+                    libc = self.freebsd.libc;
+                  };
+                  extraPackages = [
+                    self.llvmPackages.compiler-rt
+                  ];
+                  extraBuildCommands = mkExtraBuildCommands self.llvmPackages.clang-unwrapped self.llvmPackages.compiler-rt;
+                }
+              );
+            }).overrideAttrs
+              (
+                self': super': {
+                  NIX_CFLAGS_COMPILE = "-nostdlib++";
+                  NIX_LDFLAGS = "--allow-shlib-undefined";
+                  cmakeFlags = builtins.filter (x: x != "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib") super'.cmakeFlags;
+                }
+              );
         };
       };
-
-      preHook = "export NIX_NO_SELF_RPATH=1";
+    } bootstrapTools
+  )
+  (mkStdenv {
+    name = "freebsd-boot-1";
+    overrides = prevStage: self: super: {
+      # this one's goal is to build all the tools that get imported into the final stdenv.
+      # we can import the foundational libs from boot-0
+      # we can import bins and libs that DON'T get imported OR LINKED into the final stdenv from boot-0
+      curl = prevStage.curlReal;
+      inherit (prevStage)
+        fetchurl
+        python3
+        bison
+        perl
+        cmake
+        ninja
+        ;
+      fetchurlReal = super.fetchurl;
+      freebsd = super.freebsd.overrideScope (
+        self': super': {
+          locales = prevStage.freebsd.locales;
+          localesReal = super'.locales;
+          libc = prevStage.freebsd.libc;
+        }
+      );
+      llvmPackages = super.llvmPackages // {
+        libcxx = prevStage.llvmPackages.libcxx;
+      };
     };
   })
-
+  (mkStdenv {
+    name = "freebsd";
+    overrides = prevStage: self: super: {
+      __bootstrapArchive = bootstrapArchive;
+      fetchurl = prevStage.fetchurlReal;
+      freebsd = super.freebsd.overrideScope (
+        self': super': { localesPrev = prevStage.freebsd.localesReal; }
+      );
+    };
+  })
 ]

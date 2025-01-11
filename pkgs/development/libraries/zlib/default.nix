@@ -1,13 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, shared ? !stdenv.hostPlatform.isStatic
-, static ? true
-# If true, a separate .static ouput is created and the .a is moved there.
-# In this case `pkg-config` auto detection does not currently work if the
-# .static output is given as `buildInputs` to another package (#66461), because
-# the `.pc` file lists only the main output's lib dir.
-# If false, and if `{ static = true; }`, the .a stays in the main output.
-, splitStaticOutput ? shared && static
+{
+  lib,
+  stdenv,
+  fetchurl,
+  shared ? !stdenv.hostPlatform.isStatic,
+  static ? true,
+  # If true, a separate .static ouput is created and the .a is moved there.
+  # In this case `pkg-config` auto detection does not currently work if the
+  # .static output is given as `buildInputs` to another package (#66461), because
+  # the `.pc` file lists only the main output's lib dir.
+  # If false, and if `{ static = true; }`, the .a stays in the main output.
+  splitStaticOutput ? shared && static,
+  testers,
+  minizip,
 }:
 
 # Without either the build will actually still succeed because the build
@@ -21,17 +25,23 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.2.12";
+  version = "1.3.1";
 
-  src = fetchurl {
-    urls =
-      [ "https://www.zlib.net/fossils/zlib-${version}.tar.gz"  # stable archive path
-        "mirror://sourceforge/libpng/zlib/${version}/zlib-${version}.tar.gz"
+  src =
+    let
+      inherit (finalAttrs) version;
+    in
+    fetchurl {
+      urls = [
+        # This URL works for 1.2.13 only; hopefully also for future releases.
+        "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+        # Stable archive path, but captcha can be encountered, causing hash mismatch.
+        "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
       ];
-    sha256 = "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9";
-  };
+      hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
+    };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
@@ -40,17 +50,21 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  patches = [
-    ./fix-configure-issue-cross.patch
-  ];
-
   strictDeps = true;
-  outputs = [ "out" "dev" ]
-    ++ lib.optional splitStaticOutput "static";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  # For zlib's ./configure (as of verion 1.2.11), the order
+  dontConfigure = stdenv.hostPlatform.isMinGW;
+
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
+
+  # For zlib's ./configure (as of version 1.2.11), the order
   # of --static/--shared flags matters!
   # `--shared --static` builds only static libs, while
   # `--static --shared` builds both.
@@ -62,8 +76,7 @@ stdenv.mkDerivation (rec {
   # `--static --shared`, `--shared` and giving nothing.
   # Of these, we choose `--static --shared`, for clarity and simpler
   # conditions.
-  configureFlags = lib.optional static "--static"
-                   ++ lib.optional shared "--shared";
+  configureFlags = lib.optional static "--static" ++ lib.optional shared "--shared";
   # We do the right thing manually, above, so don't need these.
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
@@ -76,33 +89,43 @@ stdenv.mkDerivation (rec {
   # here (in case zlib ever switches to autoconf in the future),
   # but we don't do it simply to avoid mass rebuilds.
 
-  postInstall = lib.optionalString splitStaticOutput ''
-    moveToOutput lib/libz.a "$static"
-  ''
+  postInstall =
+    lib.optionalString splitStaticOutput ''
+      moveToOutput lib/libz.a "$static"
+    ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
     # Darwin; others time it installs as a .dylib.  I haven't yet figured out
     # what causes this difference.
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
-      ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
-    done
-  ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for file in $out/lib/*.so* $out/lib/*.dylib* ; do
+        ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
+      done
+    ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt" && shared) ''
-    ln -s zlib1.dll $out/bin/libz.dll
-  '';
+    + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
+      ln -s zlib1.dll $out/bin/libz.dll
+    '';
 
-  # As zlib takes part in the stdenv building, we don't want references
-  # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
+  env =
+    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      # As zlib takes part in the stdenv building, we don't want references
+      # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+      NIX_CFLAGS_COMPILE = "-static-libgcc";
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
+      # lld 16 enables --no-undefined-version by defualt
+      # This makes configure think it can't build dynamic libraries
+      # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
+      NIX_LDFLAGS = "--undefined-version";
+    };
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
-  installFlags = lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  installFlags = lib.optionals stdenv.hostPlatform.isMinGW [
     "BINARY_PATH=$(out)/bin"
     "INCLUDE_PATH=$(dev)/include"
     "LIBRARY_PATH=$(out)/lib"
@@ -111,18 +134,24 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  makeFlags = [
-    "PREFIX=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
-    "-f" "win32/Makefile.gcc"
-  ] ++ lib.optionals shared [
-    # Note that as of writing (zlib 1.2.11), this flag only has an effect
-    # for Windows as it is specific to `win32/Makefile.gcc`.
-    "SHARED_MODE=1"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${stdenv.cc.targetPrefix}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      "-f"
+      "win32/Makefile.gcc"
+    ]
+    ++ lib.optionals shared [
+      # Note that as of writing (zlib 1.2.11), this flag only has an effect
+      # for Windows as it is specific to `win32/Makefile.gcc`.
+      "SHARED_MODE=1"
+    ];
 
-  passthru = {
-    inherit version;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    # uses `zlib` derivation:
+    inherit minizip;
   };
 
   meta = with lib; {
@@ -130,11 +159,6 @@ stdenv.mkDerivation (rec {
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
+    pkgConfigModules = [ "zlib" ];
   };
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preConfigure = ''
-    export CHOST=${stdenv.hostPlatform.config}
-  '';
-} // lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
-  dontConfigure = true;
 })

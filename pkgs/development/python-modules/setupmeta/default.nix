@@ -1,18 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, mock
-, pep440
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  mock,
+  pep440,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  six,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "setupmeta";
-  version = "3.3.2";
+  version = "3.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "codrsquad";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kX7S5NSqO1LDRkfBHaNfTjzW+l0Pd+5KvQHiNF3eH/M=";
+    tag = "v${version}";
+    hash = "sha256-OI7PU5LQ6w0iAbK7nsP+6RizsEWjKP9nec2J6n0xUhI=";
   };
 
   preBuild = ''
@@ -30,12 +33,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     mock
     pep440
+    pip
     pytestCheckHook
     six
   ];
@@ -50,11 +55,12 @@ buildPythonPackage rec {
     "test_clean"
     "test_scenario"
     "test_git_versioning"
+    # setuptools.installer and fetch_build_eggs are deprecated.
+    # Requirements should be satisfied by a PEP 517 installer.
+    "test_brand_new_project"
   ];
 
-  pythonImportsCheck = [
-    "setupmeta"
-  ];
+  pythonImportsCheck = [ "setupmeta" ];
 
   meta = with lib; {
     description = "Python module to simplify setup.py files";

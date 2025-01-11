@@ -1,7 +1,4 @@
 { lib, config, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.postfixadmin;
   fpm = config.services.phpfpm.pools.postfixadmin;
@@ -10,26 +7,26 @@ let
 in
 {
   options.services.postfixadmin = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable postfixadmin.
 
         Also enables nginx virtual host management.
-        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+        Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
       '';
     };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       example = "postfixadmin.example.com";
       description = "Hostname to use for the nginx vhost";
     };
 
-    adminEmail = mkOption {
-      type = types.str;
+    adminEmail = lib.mkOption {
+      type = lib.types.str;
       example = "postmaster@example.com";
       description = ''
         Defines the Site Admin's email address.
@@ -38,52 +35,52 @@ in
       '';
     };
 
-    setupPasswordFile = mkOption {
-      type = types.path;
+    setupPasswordFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Password file for the admin.
-        Generate with <literal>php -r "echo password_hash('some password here', PASSWORD_DEFAULT);"</literal>
+        Generate with `php -r "echo password_hash('some password here', PASSWORD_DEFAULT);"`
       '';
     };
 
     database = {
-      username = mkOption {
-        type = types.str;
+      username = lib.mkOption {
+        type = lib.types.str;
         default = "postfixadmin";
         description = ''
           Username for the postgresql connection.
-          If <literal>database.host</literal> is set to <literal>localhost</literal>, a unix user and group of the same name will be created as well.
+          If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
         '';
       };
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = ''
           Host of the postgresql server. If this is not set to
-          <literal>localhost</literal>, you have to create the
+          `localhost`, you have to create the
           postgresql user and database yourself, with appropriate
           permissions.
         '';
       };
-      passwordFile = mkOption {
-        type = types.path;
-        description = "Password file for the postgresql connection. Must be readable by user <literal>nginx</literal>.";
+      passwordFile = lib.mkOption {
+        type = lib.types.path;
+        description = "Password file for the postgresql connection. Must be readable by user `nginx`.";
       };
-      dbname = mkOption {
-        type = types.str;
+      dbname = lib.mkOption {
+        type = lib.types.str;
         default = "postfixadmin";
         description = "Name of the postgresql database";
       };
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = "Extra configuration for the postfixadmin instance, see postfixadmin's config.inc.php for available options.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."postfixadmin/config.local.php".text = ''
       <?php
 
@@ -91,7 +88,7 @@ in
 
       $CONF['database_type'] = 'pgsql';
       $CONF['database_host'] = ${if localDB then "null" else "'${cfg.database.host}'"};
-      ${optionalString localDB "$CONF['database_user'] = '${cfg.database.username}';"}
+      ${lib.optionalString localDB "$CONF['database_user'] = '${cfg.database.username}';"}
       $CONF['database_password'] = ${if localDB then "'dummy'" else "file_get_contents('${cfg.database.passwordFile}')"};
       $CONF['database_name'] = '${cfg.database.dbname}';
       $CONF['configured'] = true;
@@ -99,14 +96,18 @@ in
       ${cfg.extraConfig}
     '';
 
-    systemd.tmpfiles.rules = [ "d /var/cache/postfixadmin/templates_c 700 ${user} ${user}" ];
+    systemd.tmpfiles.settings."10-postfixadmin"."/var/cache/postfixadmin/templates_c".d = {
+      inherit user;
+      group = user;
+      mode = "700";
+    };
 
     services.nginx = {
       enable = true;
       virtualHosts = {
         ${cfg.hostName} = {
-          forceSSL = mkDefault true;
-          enableACME = mkDefault true;
+          forceSSL = lib.mkDefault true;
+          enableACME = lib.mkDefault true;
           locations."/" = {
             root = "${pkgs.postfixadmin}/public";
             index = "index.php";
@@ -123,7 +124,7 @@ in
       };
     };
 
-    services.postgresql = mkIf localDB {
+    services.postgresql = lib.mkIf localDB {
       enable = true;
       ensureUsers = [ {
         name = cfg.database.username;
@@ -132,7 +133,7 @@ in
     # The postgresql module doesn't currently support concepts like
     # objects owners and extensions; for now we tack on what's needed
     # here.
-    systemd.services.postfixadmin-postgres = let pgsql = config.services.postgresql; in mkIf localDB {
+    systemd.services.postfixadmin-postgres = let pgsql = config.services.postgresql; in lib.mkIf localDB {
       after = [ "postgresql.service" ];
       bindsTo = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
@@ -168,12 +169,12 @@ in
       };
     };
 
-    users.users.${user} = mkIf localDB {
+    users.users.${user} = lib.mkIf localDB {
       group = user;
       isSystemUser = true;
       createHome = false;
     };
-    users.groups.${user} = mkIf localDB {};
+    users.groups.${user} = lib.mkIf localDB {};
 
     services.phpfpm.pools.postfixadmin = {
       user = user;
@@ -182,7 +183,7 @@ in
         error_log = 'stderr'
         log_errors = on
       '';
-      settings = mapAttrs (name: mkDefault) {
+      settings = lib.mapAttrs (name: lib.mkDefault) {
         "listen.owner" = "nginx";
         "listen.group" = "nginx";
         "listen.mode" = "0660";

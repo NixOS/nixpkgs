@@ -1,43 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, w3lib
-, parsel
-, jmespath
-, itemadapter
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  w3lib,
+  parsel,
+  jmespath,
+  itemadapter,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.0.4";
-  disabled = pythonOlder "3.6";
+  version = "1.3.2";
+  pyproject = true;
 
-  # Tests not included in PyPI tarball
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "scrapy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0j68xgx2z63sc1nc9clw6744036vfbijdsghvjv6pk674d5lgyam";
+    repo = "itemloaders";
+    tag = "v${version}";
+    hash = "sha256-Hs3FodJAWZGeo+kMmcto5WW433RekwVuucaJl8TKc+0=";
   };
 
-  propagatedBuildInputs = [ w3lib parsel jmespath itemadapter ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # Test are failing (AssertionError: Lists differ: ...)
-    "test_nested_css"
-    "test_nested_xpath"
+  propagatedBuildInputs = [
+    w3lib
+    parsel
+    jmespath
+    itemadapter
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "itemloaders" ];
 
   meta = with lib; {
-    description = "Base library for scrapy's ItemLoader";
+    description = "Library to populate items using XPath and CSS with a convenient API";
     homepage = "https://github.com/scrapy/itemloaders";
+    changelog = "https://github.com/scrapy/itemloaders/raw/v${version}/docs/release-notes.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

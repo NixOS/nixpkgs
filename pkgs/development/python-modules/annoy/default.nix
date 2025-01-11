@@ -1,28 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, h5py
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  h5py,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "1.17.0";
   pname = "annoy";
+  version = "1.17.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9891e264041d1dcf3af42f67fbb16cb273c5404bc8c869d0915a3087f71d58dd";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "spotify";
+    repo = "annoy";
+    tag = "v${version}";
+    hash = "sha256-oJHW4lULRun2in35pBGOKg44s5kgLH2BKiMOzVu4rf4=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'nose>=1.0'" ""
+  '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ h5py ];
 
-  checkInputs = [
-    nose
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
   ];
+
+  preCheck = ''
+    rm -rf annoy
+  '';
+
+  disabledTestPaths = [
+    # network access
+    "test/accuracy_test.py"
+  ];
+
+  pythonImportsCheck = [ "annoy" ];
 
   meta = with lib; {
     description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
     homepage = "https://github.com/spotify/annoy";
+    changelog = "https://github.com/spotify/annoy/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

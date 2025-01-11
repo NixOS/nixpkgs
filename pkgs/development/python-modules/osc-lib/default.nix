@@ -1,44 +1,50 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cliff
-, oslo-i18n
-, oslo-utils
-, openstacksdk
-, pbr
-, requests-mock
-, simplejson
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cliff,
+  oslo-i18n,
+  oslo-utils,
+  openstacksdk,
+  pbr,
+  pythonOlder,
+  requests-mock,
+  setuptools,
+  requests,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "unstable-2022-03-09";
+  version = "3.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
-    sha256 = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
+    rev = version;
+    hash = "sha256-DDjWM4hjHPXYDeAJ6FDZZPzi65DG1rJ3efs8MouX1WY=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
-  PBR_VERSION = "2.5.0";
+  PBR_VERSION = version;
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cliff
     openstacksdk
     oslo-i18n
     oslo-utils
-    simplejson
+    requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     stestr
   ];
@@ -56,7 +62,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "osc_lib" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
     license = licenses.asl20;

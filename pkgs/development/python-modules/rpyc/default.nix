@@ -1,50 +1,70 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plumbum
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  plumbum,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "5.1.0";
-  format = "setuptools";
+  version = "6.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Xeot4QEgTZjvdO0ydmKjccp6zwC93Yp/HkRlSgyDf8k=";
+    repo = "rpyc";
+    tag = version;
+    hash = "sha256-ZYGOwg2IJtVVxHV2hC3inliTLP4BBFOnOz7VPhRpcgg=";
   };
 
-  propagatedBuildInputs = [
-    plumbum
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ plumbum ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
+  '';
 
   disabledTests = [
     # Disable tests that requires network access
     "test_api"
+    "test_close_timeout"
+    "test_deploy"
+    "test_listing"
     "test_pruning"
     "test_rpyc"
+    "test_instancecheck_across_connections"
+    # Internal import error
+    "test_modules"
     # Test is outdated
     # ssl.SSLError: [SSL: NO_CIPHERS_AVAILABLE] no ciphers available (_ssl.c:997)
     "test_ssl_conenction"
   ];
 
-  pythonImportsCheck = [
-    "rpyc"
+  disabledTestPaths = [
+    # Internal import issue
+    "tests/test_attributes.py"
+    "tests/test_service_pickle.py"
+    "tests/test_affinity.py"
+    "tests/test_magic.py"
   ];
+
+  pythonImportsCheck = [ "rpyc" ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
     homepage = "https://rpyc.readthedocs.org";
+    changelog = "https://github.com/tomerfiliba-org/rpyc/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

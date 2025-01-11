@@ -1,15 +1,34 @@
-{ qtModule, qtbase, qtquickcontrols, wayland, pkg-config }:
+{
+  qtModule,
+  qtbase,
+  qtquickcontrols,
+  wayland,
+  wayland-scanner,
+  pkg-config,
+  lib,
+}:
 
 qtModule {
   pname = "qtwayland";
-  qtInputs = [ qtbase qtquickcontrols ];
+  propagatedBuildInputs = [
+    qtbase
+    qtquickcontrols
+  ];
   buildInputs = [ wayland ];
-  nativeBuildInputs = [ pkg-config ];
-  outputs = [ "out" "dev" "bin" ];
+  nativeBuildInputs = [
+    pkg-config
+    wayland-scanner
+  ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
   patches = [
     # NixOS-specific, ensure that app_id is correctly determined for
     # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
-    # context).  Beware: shared among different Qt5 versions.
+    # context).
     ./qtwayland-app_id.patch
   ];
+  meta.badPlatforms = lib.platforms.darwin;
 }

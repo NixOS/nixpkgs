@@ -1,58 +1,47 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "4.0.8";
-  disabled = python3.pythonOlder "3.6";
+  version = "4.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AppDaemon";
-    repo = pname;
-    rev = version;
-    sha256 = "04a4qx0rbx2vpkzpibmwkpy7fawa6dbgqlrllryrl7dchbrf703q";
+    repo = "appdaemon";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T3InE4J4qYeFJTq6nrW8y5BOA7Z0n3t9eVpl641r/xk=";
   };
 
-  # relax dependencies
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "deepdiff==5.2.3" "deepdiff" \
-      --replace "pygments==2.8.1" "pygments"
-    sed -i 's/==/>=/' requirements.txt
-  '';
+  pythonRelaxDeps = true;
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    aiodns
     aiohttp
     aiohttp-jinja2
     astral
-    azure-keyvault-secrets
-    azure-mgmt-compute
-    azure-mgmt-resource
-    azure-mgmt-storage
-    azure-storage-blob
     bcrypt
-    cchardet
     deepdiff
     feedparser
     iso8601
-    jinja2
     paho-mqtt
     pid
-    pygments
     python-dateutil
-    python-engineio
     python-socketio
     pytz
     pyyaml
     requests
     sockjs
     uvloop
-    voluptuous
     websocket-client
-    yarl
+    tomli
+    tomli-w
   ];
 
   # no tests implemented
@@ -62,7 +51,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
+    mainProgram = "appdaemon";
     homepage = "https://github.com/AppDaemon/appdaemon";
+    changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
     license = licenses.mit;
     maintainers = teams.home-assistant.members;
   };

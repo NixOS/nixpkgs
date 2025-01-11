@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl8814au";
-  version = "${kernel.version}-unstable-2022-05-23";
+  version = "${kernel.version}-unstable-2024-05-26";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8814au";
-    rev = "687f05c73e22dc14d5f24f2bb92f2ecac3cc71d5";
-    sha256 = "08znnihk9rdrwgyzazxqcrzwdjnm5q8ah92bfb552wjv11r87zv1";
+    rev = "810573647b837d88c4191597a0ea6d226f69f64c";
+    hash = "sha256-AaOnUy3igocsCF/FNogn+z+QcQiid7U7XimE68wAco0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -16,12 +21,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

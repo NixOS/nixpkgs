@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  importlib-metadata,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,14 +18,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-r0SCigkUpOiba4MDf80+dLjOjjruVNILh/raWfvjXA0=";
+    hash = "sha256-r0SCigkUpOiba4MDf80+dLjOjjruVNILh/raWfvjXA0=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "exdown" ];
 
@@ -31,6 +33,6 @@ buildPythonPackage rec {
     description = "Extract code blocks from markdown";
     homepage = "https://github.com/nschloe/exdown";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

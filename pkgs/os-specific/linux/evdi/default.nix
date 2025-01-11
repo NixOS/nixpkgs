@@ -1,40 +1,74 @@
-{ lib, stdenv, fetchFromGitHub, kernel, libdrm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  libdrm,
+  python3,
+}:
 
-stdenv.mkDerivation rec {
+let
+  python3WithLibs = python3.withPackages (
+    ps: with ps; [
+      pybind11
+    ]
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.10.1";
+  version = "1.14.8";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XABpC2g4/e6/2HsHzrBUs6OW1lzgGBYlFAatVcA/vD8=";
+    repo = "evdi";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-57DP8kKsPEK1C5A6QfoZZDmm76pn4SaUKEKu9cicyKI=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error"
+    "-Wno-error=discarded-qualifiers" # for Linux 4.19 compatibility
+    "-Wno-error=sign-compare"
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildInputs = [ kernel libdrm ];
+  buildInputs = [
+    kernel
+    libdrm
+    python3WithLibs
+  ];
 
   makeFlags = kernel.makeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  hardeningDisable = [ "format" "pic" "fortify" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+    "fortify"
+  ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  meta = {
+    broken = kernel.kernelOlder "4.19";
+    changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${finalAttrs.version}";
     description = "Extensible Virtual Display Interface";
-    maintainers = with maintainers; [ eyjhb ];
-    platforms = platforms.linux;
-    license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = kernel.kernelOlder "4.19" || stdenv.isAarch64;
+    license = with lib.licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    maintainers = with lib.maintainers; [ drupol ];
+    platforms = lib.platforms.linux;
   };
-}
+})

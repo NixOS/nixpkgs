@@ -1,5 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub
-, kcoreaddons, kwindowsystem, plasma-framework, systemsettings }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  kcoreaddons,
+  kwindowsystem,
+  plasma-framework,
+  systemsettings,
+}:
 
 mkDerivation rec {
   pname = "parachute";
@@ -13,7 +20,10 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    kcoreaddons kwindowsystem plasma-framework systemsettings
+    kcoreaddons
+    kwindowsystem
+    plasma-framework
+    systemsettings
   ];
 
   dontBuild = true;
@@ -28,9 +38,9 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Look at your windows and desktops from above.";
+    description = "Look at your windows and desktops from above";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

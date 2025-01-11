@@ -1,51 +1,53 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, prompt-toolkit
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  prompt-toolkit,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "1.10.0";
+  version = "2.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = pname;
-    rev = version;
-    sha256 = "14k24fq2nmk90iv0k7pnmmdhmk8z261397wg52sfcsccyhpdw3i7";
+    tag = version;
+    hash = "sha256-JY0kXomgiGtOrsXfRf0756dTPVgud91teh+jW+kFNdk=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-  ];
+  pythonRelaxDeps = [ "prompt_toolkit" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ prompt-toolkit ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ulimit -n 1024
+  '';
 
   disabledTests = [
-    # TypeError: <lambda>() missing 1 required...
-    "test_print_with_style"
+    # RuntimeError: no running event loop
+    "test_blank_line_fix"
   ];
 
-  pythonImportsCheck = [
-    "questionary"
-  ];
+  pythonImportsCheck = [ "questionary" ];
 
   meta = with lib; {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
+    changelog = "https://github.com/tmbo/questionary/blob/${src.rev}/docs/pages/changelog.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

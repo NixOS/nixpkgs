@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.munge;
@@ -15,11 +17,11 @@ in
   options = {
 
     services.munge = {
-      enable = mkEnableOption "munge service";
+      enable = lib.mkEnableOption "munge service";
 
-      password = mkOption {
+      password = lib.mkOption {
         default = "/etc/munge/munge.key";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           The path to a daemon's secret key.
         '';
@@ -31,33 +33,42 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.munge ];
 
     users.users.munge = {
-      description   = "Munge daemon user";
-      isSystemUser  = true;
-      group         = "munge";
+      description = "Munge daemon user";
+      isSystemUser = true;
+      group = "munge";
     };
 
-    users.groups.munge = {};
+    users.groups.munge = { };
 
     systemd.services.munged = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [
+        "network-online.target"
+        "time-sync.target"
+      ];
+      after = [
+        "network-online.target"
+        "time-sync.target"
+      ];
 
-      path = [ pkgs.munge pkgs.coreutils ];
+      path = [
+        pkgs.munge
+        pkgs.coreutils
+      ];
 
       serviceConfig = {
         ExecStartPre = "+${pkgs.coreutils}/bin/chmod 0400 ${cfg.password}";
-        ExecStart = "${pkgs.munge}/bin/munged --syslog --key-file ${cfg.password}";
-        PIDFile = "/run/munge/munged.pid";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = "${pkgs.munge}/bin/munged --foreground --key-file ${cfg.password}";
         User = "munge";
         Group = "munge";
         StateDirectory = "munge";
         StateDirectoryMode = "0711";
+        Restart = "on-failure";
         RuntimeDirectory = "munge";
       };
 

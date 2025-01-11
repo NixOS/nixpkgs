@@ -1,16 +1,18 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, matgeom
+{
+  buildOctavePackage,
+  lib,
+  fetchhg,
+  matgeom,
 }:
 
 buildOctavePackage rec {
   pname = "geometry";
-  version = "4.0.0";
+  version = "unstable-2021-07-07";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1zmd97xir62fr5v57xifh2cvna5fg67h9yb7bp2vm3ll04y41lhs";
+  src = fetchhg {
+    url = "http://hg.code.sf.net/p/octave/${pname}";
+    rev = "04965cda30b5f9e51774194c67879e7336df1710";
+    sha256 = "sha256-ECysYOJMF4gPiCFung9hFSlyyO60X3MGirQ9FlYDix8=";
   };
 
   requiredOctavePackages = [
@@ -19,7 +21,10 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/geometry/index.html";
-    license = with licenses; [ gpl3Plus boost ];
+    license = with licenses; [
+      gpl3Plus
+      boost
+    ];
     maintainers = with maintainers; [ KarlJoad ];
     description = "Library for extending MatGeom functionality";
   };

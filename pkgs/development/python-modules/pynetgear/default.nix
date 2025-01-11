@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynetgear";
-  version = "0.10.5";
+  version = "0.10.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,17 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatMaul";
     repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-eYcMS8gxJO5JXvgIcZEEei5THb+gDdmoad+/Vokis/Q=";
+    tag = version;
+    hash = "sha256-5Lj2cK/SOGgaPu8dI9X3Leg4dPAY7tdIHCzFnNaube8=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  pythonImportsCheck = [
-    "pynetgear"
-  ];
+  pythonImportsCheck = [ "pynetgear" ];
 
   # Tests don't pass
   # https://github.com/MatMaul/pynetgear/issues/109
@@ -34,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with Netgear wireless routers";
     homepage = "https://github.com/MatMaul/pynetgear";
+    changelog = "https://github.com/MatMaul/pynetgear/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

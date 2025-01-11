@@ -1,24 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  which,
+  m4,
+  python3,
+  bison,
+  flex,
+  llvmPackages,
+  ncurses,
+  tbb,
   # the default test target is sse4, but that is not supported by all Hydra agents
-, testedTargets ? [ "sse2-i32x4" ]
+  testedTargets ?
+    if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then
+      [ "neon-i32x4" ]
+    else
+      [ "sse2-i32x4" ],
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "ispc";
-  version = "1.18.0";
+  pname = "ispc";
+  version = "1.25.3";
+
+  dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-eI/zUhZDTd2SiFltjrs8kxvQQOPHpqhArGyOW+och3E=";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-baTJNfhOSYfJJnrutkW06AIMXpVP3eBpEes0GSI1yGY=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ];
+  nativeBuildInputs = [
+    cmake
+    which
+    m4
+    bison
+    flex
+    python3
+    llvmPackages.libllvm.dev
+    tbb
+  ];
+
   buildInputs = with llvmPackages; [
-    libllvm libclang openmp ncurses
+    libllvm
+    libclang
+    openmp
+    ncurses
   ];
 
   postPatch = ''
@@ -30,8 +59,7 @@ stdenv.mkDerivation rec {
 
   inherit testedTargets;
 
-  # needs 'transcendentals' executable, which is only on linux
-  doCheck = stdenv.isLinux;
+  doCheck = true;
 
   # the compiler enforces -Werror, and -fno-strict-overflow makes it mad.
   # hilariously this is something of a double negative: 'disable' the
@@ -47,25 +75,45 @@ stdenv.mkDerivation rec {
       echo "================================"
       echo
       (cd ../
-       PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
+       PATH=${llvmPackages.clang}/bin:$PATH python scripts/run_tests.py -t $target --non-interactive --verbose --file=test_output.log
        fgrep -q "No new fails"  test_output.log || exit 1)
     done
   '';
 
   cmakeFlags = [
+    "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
+    "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
     "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    "-DARM_ENABLED=FALSE"
+    (
+      "-DARM_ENABLED="
+      + (if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE")
+    )
+    (
+      "-DX86_ENABLED="
+      + (if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE")
+    )
   ];
 
   meta = with lib; {
-    homepage    = "https://ispc.github.io/";
+    homepage = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [ aristid thoughtpolice athas ];
+    mainProgram = "ispc";
+    license = licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ]; # TODO: buildable on more platforms?
+    maintainers = with maintainers; [
+      aristid
+      thoughtpolice
+      athas
+      alexfmpe
+    ];
   };
 }

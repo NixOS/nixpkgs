@@ -1,28 +1,35 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.less;
 
-  configText = if (cfg.configFile != null) then (builtins.readFile cfg.configFile) else ''
-    #command
-    ${concatStringsSep "\n"
-      (mapAttrsToList (command: action: "${command} ${action}") cfg.commands)
-    }
-    ${if cfg.clearDefaultCommands then "#stop" else ""}
+  configText =
+    if (cfg.configFile != null) then
+      (builtins.readFile cfg.configFile)
+    else
+      ''
+        #command
+        ${builtins.concatStringsSep "\n" (
+          lib.mapAttrsToList (command: action: "${command} ${action}") cfg.commands
+        )}
+        ${lib.optionalString cfg.clearDefaultCommands "#stop"}
 
-    #line-edit
-    ${concatStringsSep "\n"
-      (mapAttrsToList (command: action: "${command} ${action}") cfg.lineEditingKeys)
-    }
+        #line-edit
+        ${builtins.concatStringsSep "\n" (
+          lib.mapAttrsToList (command: action: "${command} ${action}") cfg.lineEditingKeys
+        )}
 
-    #env
-    ${concatStringsSep "\n"
-      (mapAttrsToList (variable: values: "${variable}=${values}") cfg.envVariables)
-    }
-  '';
+        #env
+        ${builtins.concatStringsSep "\n" (
+          lib.mapAttrsToList (variable: values: "${variable}=${values}") cfg.envVariables
+        )}
+      '';
 
   lessKey = pkgs.writeText "lessconfig" configText;
 
@@ -35,24 +42,26 @@ in
 
       # note that environment.nix sets PAGER=less, and
       # therefore also enables this module
-      enable = mkEnableOption "less";
+      enable = lib.mkEnableOption "less, a file pager";
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      package = lib.mkPackageOption pkgs "less" { };
+
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        example = literalExpression ''"''${pkgs.my-configs}/lesskey"'';
+        example = lib.literalExpression ''"''${pkgs.my-configs}/lesskey"'';
         description = ''
           Path to lesskey configuration file.
 
-          <option>configFile</option> takes precedence over <option>commands</option>,
-          <option>clearDefaultCommands</option>, <option>lineEditingKeys</option>, and
-          <option>envVariables</option>.
+          {option}`configFile` takes precedence over {option}`commands`,
+          {option}`clearDefaultCommands`, {option}`lineEditingKeys`, and
+          {option}`envVariables`.
         '';
       };
 
-      commands = mkOption {
-        type = types.attrsOf types.str;
-        default = {};
+      commands = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
         example = {
           h = "noaction 5\\e(";
           l = "noaction 5\\e)";
@@ -60,8 +69,8 @@ in
         description = "Defines new command keys.";
       };
 
-      clearDefaultCommands = mkOption {
-        type = types.bool;
+      clearDefaultCommands = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Clear all default commands.
@@ -70,17 +79,17 @@ in
         '';
       };
 
-      lineEditingKeys = mkOption {
-        type = types.attrsOf types.str;
-        default = {};
+      lineEditingKeys = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
         example = {
           e = "abort";
         };
         description = "Defines new line-editing keys.";
       };
 
-      envVariables = mkOption {
-        type = types.attrsOf types.str;
+      envVariables = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         default = {
           LESS = "-R";
         };
@@ -90,45 +99,50 @@ in
         description = "Defines environment variables.";
       };
 
-      lessopen = mkOption {
-        type = types.nullOr types.str;
-        default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
-        defaultText = literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
+      lessopen = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = lib.literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
         description = ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
         '';
       };
 
-      lessclose = mkOption {
-        type = types.nullOr types.str;
+      lessclose = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
-          When less closes a file opened in such a way, it will call another program, called the input postprocessor, which may  perform  any  desired  clean-up  action (such  as deleting the replacement file created by LESSOPEN).
+          When less closes a file opened in such a way, it will call another program, called the input postprocessor,
+          which may perform any desired clean-up action (such as deleting the replacement file created by LESSOPEN).
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.less ];
+    environment.systemPackages = [ cfg.package ];
 
-    environment.variables = {
-      LESSKEYIN_SYSTEM = toString lessKey;
-    } // optionalAttrs (cfg.lessopen != null) {
-      LESSOPEN = cfg.lessopen;
-    } // optionalAttrs (cfg.lessclose != null) {
-      LESSCLOSE = cfg.lessclose;
-    };
+    environment.variables =
+      {
+        LESSKEYIN_SYSTEM = builtins.toString lessKey;
+      }
+      // lib.optionalAttrs (cfg.lessopen != null) {
+        LESSOPEN = cfg.lessopen;
+      }
+      // lib.optionalAttrs (cfg.lessclose != null) {
+        LESSCLOSE = cfg.lessclose;
+      };
 
-    warnings = optional (
-      cfg.clearDefaultCommands && (all (x: x != "quit") (attrValues cfg.commands))
-    ) ''
-      config.programs.less.clearDefaultCommands clears all default commands of less but there is no alternative binding for exiting.
-      Consider adding a binding for 'quit'.
-    '';
+    warnings =
+      lib.optional
+        (cfg.clearDefaultCommands && (builtins.all (x: x != "quit") (builtins.attrValues cfg.commands)))
+        ''
+          config.programs.less.clearDefaultCommands clears all default commands of less but there is no alternative binding for exiting.
+          Consider adding a binding for 'quit'.
+        '';
   };
 
-  meta.maintainers = with maintainers; [ johnazoidberg ];
+  meta.maintainers = with lib.maintainers; [ johnazoidberg ];
 
 }

@@ -1,60 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, protobuf
-, pytest-asyncio
-, pytest-httpx
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  protobuf,
+  pytest-asyncio,
+  pytest-httpx,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  segno,
+  setuptools-scm,
+  syrupy,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "devolo-plc-api";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "1.4.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    rev = "v${version}";
-    sha256 = "sha256-LMwvIwbP/nRFby295ur6QTgyXLLJ8ip30V9bti27qKQ=";
+    tag = "v${version}";
+    hash = "sha256-EP99AswHmLO+8ZQAPjJyw/P9QqfDawy3AqyJR870Qms=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "protobuf>=4.22.0" "protobuf"
+  '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     httpx
     protobuf
+    segno
     zeroconf
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx
     pytest-mock
     pytestCheckHook
+    syrupy
   ];
 
-
-
-  pythonImportsCheck = [
-    "devolo_plc_api"
+  disabledTests = [
+    # pytest-httpx compat issue
+    "test_wrong_password_type"
   ];
+
+  pythonImportsCheck = [ "devolo_plc_api" ];
 
   meta = with lib; {
-    description = "Python module to interact with Devolo PLC devices";
+    description = "Module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
+    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };

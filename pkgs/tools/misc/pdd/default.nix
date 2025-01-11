@@ -1,14 +1,19 @@
-{ lib, fetchFromGitHub, buildPythonApplication, python-dateutil }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  python-dateutil,
+}:
 
 buildPythonApplication rec {
   pname = "pdd";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "pdd";
-    rev = "v${version}";
-    sha256 = "1ivzcbm888aibiihw03idp38qbl8mywj1lc1x0q787v0pzqfb4ss";
+    tag = "v${version}";
+    sha256 = "sha256-Z+jUFu4VvrgWUtkXMkjspcRJ/JG81X9gc2tnDoCdrsk=";
   };
 
   format = "other";
@@ -28,7 +33,8 @@ buildPythonApplication rec {
       program arguments are specified it shows the current date, time and
       timezone.
     '';
-    maintainers = [ maintainers.infinisil ];
+    maintainers = [ ];
     license = licenses.gpl3;
+    mainProgram = "pdd";
   };
 }

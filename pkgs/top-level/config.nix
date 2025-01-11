@@ -1,19 +1,30 @@
 # This file defines the structure of the `config` nixpkgs option.
 
+# This file is tested in `pkgs/test/config.nix`.
+# Run tests with:
+#
+#     nix-build -A tests.config
+#
+
 { config, lib, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    literalExpression
+    mapAttrsToList
+    mkOption
+    optionals
+    types
+    ;
 
   mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
     type = args.type or (types.uniq types.bool);
     default = args.default or false;
-    description = (args.description or ''
+    description = ((args.description or ''
       Whether to ${args.feature} while building nixpkgs packages.
     '') + ''
       Changing the default may cause a mass rebuild.
-    '';
+    '');
   });
 
   options = {
@@ -34,24 +45,33 @@ let
     /* Config options */
 
     warnUndeclaredOptions = mkOption {
-      description = "Whether to warn when <literal>config</literal> contains an unrecognized attribute.";
+      description = "Whether to warn when `config` contains an unrecognized attribute.";
+      type = types.bool;
       default = false;
     };
 
     doCheckByDefault = mkMassRebuild {
-      feature = "run <literal>checkPhase</literal> by default";
+      feature = "run `checkPhase` by default";
     };
 
     strictDepsByDefault = mkMassRebuild {
-      feature = "set <literal>strictDeps</literal> to true by default";
+      feature = "set `strictDeps` to true by default";
+    };
+
+    structuredAttrsByDefault = mkMassRebuild {
+      feature = "set `__structuredAttrs` to true by default";
     };
 
     enableParallelBuildingByDefault = mkMassRebuild {
-      feature = "set <literal>enableParallelBuilding</literal> to true by default";
+      feature = "set `enableParallelBuilding` to true by default";
+    };
+
+    configurePlatformsByDefault = mkMassRebuild {
+      feature = "set `configurePlatforms` to `[\"build\" \"host\"]` by default";
     };
 
     contentAddressedByDefault = mkMassRebuild {
-      feature = "set <literal>__contentAddressed</literal> to true by default";
+      feature = "set `__contentAddressed` to true by default";
     };
 
     allowAliases = mkOption {
@@ -61,7 +81,7 @@ let
         Whether to expose old attribute names for compatibility.
 
         The recommended setting is to enable this, as it
-        improves backward compatibity, easing updates.
+        improves backward compatibility, easing updates.
 
         The only reason to disable aliases is for continuous
         integration purposes. For instance, Nixpkgs should
@@ -80,7 +100,7 @@ let
       description = ''
         Whether to allow unfree packages.
 
-        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree">Installing unfree packages</link> in the NixOS manual.
+        See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
       '';
     };
 
@@ -92,7 +112,7 @@ let
       description = ''
         Whether to allow broken packages.
 
-        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken">Installing broken packages</link> in the NixOS manual.
+        See [Installing broken packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken) in the NixOS manual.
       '';
     };
 
@@ -104,8 +124,48 @@ let
       description = ''
         Whether to allow unsupported packages.
 
-        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system">Installing packages on unsupported systems</link> in the NixOS manual.
+        See [Installing packages on unsupported systems](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system) in the NixOS manual.
       '';
+    };
+
+    cudaSupport = mkMassRebuild {
+      type = types.bool;
+      default = false;
+      feature = "build packages with CUDA support by default";
+    };
+
+    replaceBootstrapFiles = mkMassRebuild {
+      type = types.functionTo (types.attrsOf types.package);
+      default = lib.id;
+      defaultText = literalExpression "lib.id";
+      description = ''
+        Use the bootstrap files returned instead of the default bootstrap
+        files.
+        The default bootstrap files are passed as an argument.
+      '';
+      example = literalExpression ''
+        prevFiles:
+        let
+          replacements = {
+            "sha256-YQlr088HPoVWBU2jpPhpIMyOyoEDZYDw1y60SGGbUM0=" = import <nix/fetchurl.nix> {
+              url = "(custom glibc linux x86_64 bootstrap-tools.tar.xz)";
+              hash = "(...)";
+            };
+            "sha256-QrTEnQTBM1Y/qV9odq8irZkQSD9uOMbs2Q5NgCvKCNQ=" = import <nix/fetchurl.nix> {
+              url = "(custom glibc linux x86_64 busybox)";
+              hash = "(...)";
+              executable = true;
+            };
+          };
+        in
+        builtins.mapAttrs (name: prev: replacements.''${prev.outputHash} or prev) prevFiles
+      '';
+    };
+
+    rocmSupport = mkMassRebuild {
+      type = types.bool;
+      default = false;
+      feature = "build packages with ROCm support by default";
     };
 
     showDerivationWarnings = mkOption {
@@ -116,19 +176,26 @@ let
         or deprecated values passed into `stdenv.mkDerivation`.
 
         A list of warnings can be found in
-        <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix">/pkgs/stdenv/generic/check-meta.nix</link>.
+        [/pkgs/stdenv/generic/check-meta.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix).
 
         This is not a stable interface; warnings may be added, changed
         or removed without prior notice.
       '';
     };
 
+    checkMeta = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
   };
 
 in {
 
   freeformType =
-    let t = lib.types.lazyAttrsOf lib.types.raw;
+    let t = types.lazyAttrsOf types.raw;
     in t // {
       merge = loc: defs:
         let r = t.merge loc defs;
@@ -138,8 +205,8 @@ in {
   inherit options;
 
   config = {
-    warnings = lib.optionals config.warnUndeclaredOptions (
-      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
+    warnings = optionals config.warnUndeclaredOptions (
+      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
     );
   };
 

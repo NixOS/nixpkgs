@@ -6,7 +6,7 @@
 
 let
   # N.B. Keep in sync with default arg for stdenv/generic.
-  defaultMkDerivationFromStdenv = import ./generic/make-derivation.nix { inherit lib config; };
+  defaultMkDerivationFromStdenv = stdenv: (import ./generic/make-derivation.nix { inherit lib config; } stdenv).mkDerivation;
 
   # Low level function to help with overriding `mkDerivationFromStdenv`. One
   # gives it the old stdenv arguments and a "continuation" function, and
@@ -32,7 +32,11 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideCC = stdenv: cc: stdenv.override { allowedRequisites = null; cc = cc; };
+  overrideCC = stdenv: cc: stdenv.override {
+    allowedRequisites = null;
+    cc = cc;
+    hasCC = cc != null;
+  };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
@@ -41,6 +45,41 @@ rec {
   overrideInStdenv = stdenv: pkgs:
     stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or []) ++ pkgs; });
 
+
+  # Override the libc++ dynamic library used in the stdenv to use the one from the platform’s
+  # default stdenv. This allows building packages and linking dependencies with different
+  # compiler versions while still using the same libc++ implementation for compatibility.
+  #
+  # Note that this adapter still uses the headers from the new stdenv’s libc++. This is necessary
+  # because older compilers may not be able to parse the headers from the default stdenv’s libc++.
+  overrideLibcxx = stdenv:
+    assert stdenv.cc.libcxx != null;
+    assert pkgs.stdenv.cc.libcxx != null;
+    # only unified libcxx / libcxxabi stdenv's are supported
+    assert lib.versionAtLeast pkgs.stdenv.cc.libcxx.version "12";
+    assert lib.versionAtLeast stdenv.cc.libcxx.version "12";
+    let
+      llvmLibcxxVersion = lib.getVersion llvmLibcxx;
+
+      stdenvLibcxx = pkgs.stdenv.cc.libcxx;
+      llvmLibcxx = stdenv.cc.libcxx;
+
+      libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
+        outputs = [ "out" "dev" ];
+        isLLVM = true;
+      } ''
+        mkdir -p "$dev/nix-support"
+        ln -s '${stdenvLibcxx}' "$out"
+        echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
+        ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
+      '';
+    in
+    overrideCC stdenv (stdenv.cc.override {
+      inherit libcxx;
+      extraPackages = [
+        pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
+      ];
+    });
 
   # Override the setup script of stdenv.  Useful for testing new
   # versions of the setup script without causing a rebuild of
@@ -60,14 +99,19 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else (mkDerivationSuper args).overrideAttrs(finalAttrs: {
-        NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "") + " -static";
-      } // lib.optionalAttrs (!(finalAttrs.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (finalAttrs.configureFlags or []) ++ [
-            "--disable-shared" # brrr...
-          ];
+      else (mkDerivationSuper args).overrideAttrs (args: if args ? env.NIX_CFLAGS_LINK then {
+        env = args.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK + " -static";
+        };
+      } else {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+        configureFlags = (args.configureFlags or []) ++ [
+          "--disable-shared" # brrr...
+        ];
+        cmakeFlags = (args.cmakeFlags or []) ++ ["-DCMAKE_SKIP_INSTALL_RPATH=On"];
       }));
-    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
+    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
         pkgs.glibc.static
       ];
@@ -86,26 +130,27 @@ rec {
           "--disable-shared"
         ];
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        mesonFlags = (args.mesonFlags or []) ++ [
+          "-Ddefault_library=static"
+          "-Ddefault_both_libraries=static"
+        ];
       });
     });
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv.override (old: {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
-    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-        + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
-        (pkgs.buildPackages.makeSetupHook {
-          substitutions = {
-            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-          };
-        } ./darwin/portable-libsystem.sh)
-      ];
-    });
+    mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
+    (mkDerivationSuper args).overrideAttrs (prevAttrs:
+      if prevAttrs ? env.NIX_CFLAGS_LINK then {
+        env = prevAttrs.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK
+            + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+        };
+      } else {
+        NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
+          + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+      }));
   });
 
   # Puts all the other ones together
@@ -117,9 +162,6 @@ rec {
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
-
-    # Glibc doesn’t come with static runtimes by default.
-    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.glibc.static ])
   );
 
 
@@ -141,27 +183,12 @@ rec {
      Example:
        stdenvNoOptimise =
          addAttrsToDerivation
-           { NIX_CFLAGS_COMPILE = "-O0"; }
+           { env.NIX_CFLAGS_COMPILE = "-O0"; }
            stdenv;
   */
   addAttrsToDerivation = extraAttrs: stdenv: stdenv.override (old: {
     mkDerivationFromStdenv = extendMkDerivationArgs old (_: extraAttrs);
   });
-
-
-  # remove after 22.05 and before 22.11
-  addCoverageInstrumentation = stdenv:
-    builtins.trace "'addCoverageInstrumentation' adapter is deprecated and will be removed before 22.11"
-    overrideInStdenv stdenv [ pkgs.enableGCOVInstrumentation pkgs.keepBuildTree ];
-
-
-  # remove after 22.05 and before 22.11
-  replaceMaintainersField = stdenv: pkgs: maintainers:
-    builtins.trace "'replaceMaintainersField' adapter is deprecated and will be removed before 22.11"
-    stdenv.override (old: {
-      mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
-        lib.recursiveUpdate pkg { meta.maintainers = maintainers; });
-    });
 
 
   /* Use the trace output to report all processed derivations with their
@@ -183,35 +210,6 @@ rec {
     });
 
 
-  # remove after 22.05 and before 22.11
-  validateLicenses = licensePred: stdenv:
-    builtins.trace "'validateLicenses' adapter is deprecated and will be removed before 22.11"
-    stdenv.override (old: {
-      mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
-        let
-          drv = builtins.unsafeDiscardStringContext pkg.drvPath;
-          license =
-            pkg.meta.license or
-              # Fixed-output derivations such as source tarballs usually
-              # don't have licensing information, but that's OK.
-              (pkg.outputHash or
-                (builtins.trace
-                  "warning: ${drv} lacks licensing information" null));
-
-          validate = arg:
-            if licensePred license then arg
-            else abort ''
-              while building ${drv}:
-              license `${builtins.toString license}' does not pass the predicate.
-            '';
-
-        in pkg // {
-          outPath = validate pkg.outPath;
-          drvPath = validate pkg.drvPath;
-        });
-    });
-
-
   /* Modify a stdenv so that it produces debug builds; that is,
      binaries have debug info, and compiler optimisations are
      disabled. */
@@ -219,7 +217,7 @@ rec {
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         dontStrip = true;
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og"; };
       });
     });
 
@@ -232,6 +230,55 @@ rec {
       });
     });
 
+  /* Copy the libstdc++ from the model stdenv to the target stdenv.
+   *
+   * TODO(@connorbaker):
+   * This interface provides behavior which should be revisited prior to the
+   * release of 24.05. For a more detailed explanation and discussion, see
+   * https://github.com/NixOS/nixpkgs/issues/283517. */
+  useLibsFrom = modelStdenv: targetStdenv:
+    let
+      ccForLibs = modelStdenv.cc.cc;
+      /* NOTE(@connorbaker):
+       * This assumes targetStdenv.cc is a cc-wrapper. */
+      cc = targetStdenv.cc.override {
+        /* NOTE(originally by rrbutani):
+         * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
+         * clang based `cc` to use `libstdc++` (from gcc).
+         *
+         * Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
+         * `cc`.
+         *
+         * Note that this does not inhibit our `cc`'s lib dir from being added to
+         * cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
+         * `gccForLibs`'s paths should take precedence. */
+        useCcForLibs = true;
+        gccForLibs = ccForLibs;
+      };
+    in
+    overrideCC targetStdenv cc;
+
+  useMoldLinker = stdenv:
+    if stdenv.targetPlatform.isDarwin
+    then throw "Mold can't be used to emit Mach-O (Darwin) binaries"
+    else let
+      bintools = stdenv.cc.bintools.override {
+        extraBuildCommands = ''
+          wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+          wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        '';
+      };
+    in stdenv.override (old: {
+      allowedRequisites = null;
+      cc = stdenv.cc.override { inherit bintools; };
+      # gcc >12.1.0 supports '-fuse-ld=mold'
+      # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
+      # https://github.com/rui314/mold#how-to-use
+      } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
+        mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+          NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+        });
+      });
 
   /* Modify a stdenv so that it builds binaries optimized specifically
      for the machine they are built on.
@@ -240,7 +287,8 @@ rec {
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native"; };
+
         NIX_ENFORCE_NO_NATIVE = false;
 
         preferLocalBuild = true;
@@ -265,7 +313,32 @@ rec {
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}"; };
       });
+    });
+
+  # Overriding the SDK changes the Darwin SDK used to build the package, which:
+  # * Ensures that the compiler and bintools have the correct Libsystem version; and
+  # * Replaces any SDK references with those in the SDK corresponding to the requested SDK version.
+  #
+  # `sdkVersion` can be any of the following:
+  # * A version string indicating the requested SDK version; or
+  # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
+  #
+  # Note: `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
+  overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
+
+  withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
+    bintools = let
+      bintools' = stdenv.cc.bintools;
+    in if bintools' ? override then (bintools'.override {
+      inherit defaultHardeningFlags;
+    }) else bintools';
+  in
+    stdenv.override (old: {
+      cc = if stdenv.cc == null then null else stdenv.cc.override {
+        inherit bintools;
+      };
+      allowedRequisites = lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
     });
 }

@@ -1,46 +1,43 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.lidarr;
 in
 {
   options = {
     services.lidarr = {
-      enable = mkEnableOption "Lidarr";
+      enable = lib.mkEnableOption "Lidarr, a Usenet/BitTorrent music downloader";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/lidarr/.config/Lidarr";
         description = "The directory where Lidarr stores its data files.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.lidarr;
-        defaultText = literalExpression "pkgs.lidarr";
-        description = "The Lidarr package to use";
-      };
+      package = lib.mkPackageOption pkgs "lidarr" { };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for Lidarr
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "lidarr";
         description = ''
           User account under which Lidarr runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "lidarr";
         description = ''
           Group under which Lidarr runs.
@@ -49,10 +46,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+  config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.settings."10-lidarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.lidarr = {
       description = "Lidarr";
@@ -68,11 +66,11 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 8686 ];
     };
 
-    users.users = mkIf (cfg.user == "lidarr") {
+    users.users = lib.mkIf (cfg.user == "lidarr") {
       lidarr = {
         group = cfg.group;
         home = "/var/lib/lidarr";
@@ -80,7 +78,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "lidarr") {
+    users.groups = lib.mkIf (cfg.group == "lidarr") {
       lidarr = {
         gid = config.ids.gids.lidarr;
       };

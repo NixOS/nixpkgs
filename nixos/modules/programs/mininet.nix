@@ -1,39 +1,22 @@
 # Global configuration for mininet
 # kernel must have NETNS/VETH/SCHED
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  cfg  = config.programs.mininet;
-
-  generatedPath = with pkgs; makeSearchPath "bin"  [
-    iperf ethtool iproute2 socat
-  ];
-
-  pyEnv = pkgs.python.withPackages(ps: [ ps.mininet-python ]);
-
-  mnexecWrapped = pkgs.runCommand "mnexec-wrapper"
-    { buildInputs = [ pkgs.makeWrapper pkgs.pythonPackages.wrapPython ]; }
-    ''
-      makeWrapper ${pkgs.mininet}/bin/mnexec \
-        $out/bin/mnexec \
-        --prefix PATH : "${generatedPath}"
-
-      ln -s ${pyEnv}/bin/mn $out/bin/mn
-
-      # mn errors out without a telnet binary
-      # pkgs.inetutils brings an undesired ifconfig into PATH see #43105
-      ln -s ${pkgs.inetutils}/bin/telnet $out/bin/telnet
-    '';
+  cfg = config.programs.mininet;
 in
 {
-  options.programs.mininet.enable = mkEnableOption "Mininet";
+  options.programs.mininet.enable = lib.mkEnableOption "Mininet, an emulator for rapid prototyping of Software Defined Networks";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     virtualisation.vswitch.enable = true;
 
-    environment.systemPackages = [ mnexecWrapped ];
+    environment.systemPackages = [ pkgs.mininet ];
   };
 }

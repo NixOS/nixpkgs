@@ -1,27 +1,64 @@
-{ mkDerivation, stdenv, lib, fetchurl, rpmextract, autoPatchelfHook , libuuid
-, libXtst, libXfixes, glib, gst_all_1, alsa-lib, freetype, fontconfig , libXext
-, libGL, libpng, libXScrnSaver, libxcb, xorg, libpulseaudio, libdrm
+{
+  mkDerivation,
+  stdenv,
+  lib,
+  fetchurl,
+  rpmextract,
+  autoPatchelfHook,
+  libuuid,
+  libXtst,
+  libXfixes,
+  glib,
+  gst_all_1,
+  alsa-lib,
+  freetype,
+  fontconfig,
+  libXext,
+  libGL,
+  libpng,
+  libXScrnSaver,
+  libxcb,
+  xorg,
+  libpulseaudio,
+  libdrm,
 }:
 mkDerivation rec {
   pname = "hpmyroom";
-  version = "12.1.1.0257";
+  version = "12.13.0.0749";
 
   src = fetchurl {
     url = "https://www.myroom.hpe.com/downloadfiles/${pname}-${version}.x86_64.rpm";
-    sha256 = "1xm41v324zq1x5awgb7fr238f7ml7vq6jrfh84358i5shgha1g2k";
+    sha256 = "sha256-Ff3j14rC2ZHhNJLPxvKn9Sxyv351HuHbggclwOuFfX4=";
   };
 
   nativeBuildInputs = [
-    rpmextract autoPatchelfHook
+    rpmextract
+    autoPatchelfHook
   ];
 
-  buildInputs = [
-    libuuid libXtst libXScrnSaver libXfixes alsa-lib freetype fontconfig libXext
-    libGL libpng libxcb libpulseaudio libdrm
-    glib  # For libgobject
-    stdenv.cc.cc  # For libstdc++
-    xorg.libX11
-  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ]);
+  buildInputs =
+    [
+      libuuid
+      libXtst
+      libXScrnSaver
+      libXfixes
+      alsa-lib
+      freetype
+      fontconfig
+      libXext
+      libGL
+      libpng
+      libxcb
+      libpulseaudio
+      libdrm
+      glib # For libgobject
+      stdenv.cc.cc # For libstdc++
+      xorg.libX11
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ]);
 
   unpackPhase = ''
     rpmextract $src
@@ -50,9 +87,12 @@ mkDerivation rec {
   meta = {
     description = "Client for HPE's MyRoom web conferencing solution";
     maintainers = with lib.maintainers; [ johnazoidberg ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     homepage = "https://myroom.hpe.com";
     # TODO: A Darwin binary is available upstream
     platforms = [ "x86_64-linux" ];
+    mainProgram = "hpmyroom";
+    broken = true; # requires libpng15
   };
 }

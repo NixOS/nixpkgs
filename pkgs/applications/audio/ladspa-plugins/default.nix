@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, automake
-, fftw
-, ladspaH
-, libxml2
-, pkg-config
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  automake,
+  fftw,
+  ladspaH,
+  libxml2,
+  pkg-config,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fftw ladspaH libxml2 perlPackages.perl perlPackages.XMLParser ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    fftw
+    ladspaH
+    libxml2
+    perlPackages.perl
+    perlPackages.XMLParser
+  ];
 
   patchPhase = ''
     patchShebangs .
@@ -33,8 +43,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,37 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, gdcm
-, nose
-, nibabel
-, numpy
-, pydicom
-, scipy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  gdcm,
+  nibabel,
+  numpy,
+  pydicom,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.3.0";
-  disabled = isPy27;
+  version = "2.5.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   # no tests in PyPI dist
   src = fetchFromGitHub {
     owner = "icometrix";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-QSu9CGXFjDpI25Cy6QSbrwiQ2bwsVezCUxSovRLs6AI=";
+    tag = version;
+    hash = "sha256-lPaBKqYO8B138fCgeKH6vpwGQhN3JCOnDj5PgaYfRPA=";
   };
 
-  propagatedBuildInputs = [ nibabel numpy pydicom scipy setuptools ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ nose gdcm ];
-  checkPhase = "nosetests tests";
+  propagatedBuildInputs = [
+    gdcm
+    nibabel
+    numpy
+    pydicom
+    scipy
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/test_generic.py --replace-fail "from common" "from dicom2nifti.common"
+    substituteInPlace tests/test_ge.py --replace-fail "import convert_generic" "import dicom2nifti.convert_generic as convert_generic"
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pylibjpeg
+    pylibjpeg-libjpeg
+  ];
+
+  pythonImportsCheck = [ "dicom2nifti" ];
 
   meta = with lib; {
     homepage = "https://github.com/icometrix/dicom2nifti";
     description = "Library for converting dicom files to nifti";
+    mainProgram = "dicom2nifti";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

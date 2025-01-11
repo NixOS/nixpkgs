@@ -1,29 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, dockbarx
-, gobject-introspection
-, keybinder3
-, pkg-config
-, python3Packages
-, vala
-, wafHook
-, wrapGAppsHook
-, xfce
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  dockbarx,
+  gobject-introspection,
+  keybinder3,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook3,
+  xfce,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";
-  version = "${ver}-${rev}";
-  ver = "0.6";
-  rev = "5213876151f1836f044e9902a22d1e682144c1e0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "xfce4-dockbarx-plugin";
-    rev = rev;
-    sha256 = "sha256-VqtGcBRjvpCO9prVHOv6Gt1rAZtcAgkQkVCoR6ykC2k=";
+    rev = "v${version}";
+    sha256 = "sha256-ZxaWORqA8LiM4CzakxClg5C6AsyHrzCGydgboCrC45g=";
   };
 
   pythonPath = [
@@ -32,12 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    cmake
     gobject-introspection
     pkg-config
     python3Packages.wrapPython
-    vala
-    wafHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -45,18 +42,23 @@ stdenv.mkDerivation rec {
     python3Packages.python
     xfce.xfce4-panel
     xfce.xfconf
-  ]
-  ++ pythonPath;
+  ] ++ pythonPath;
 
   postPatch = ''
-    substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"
-    substituteInPlace src/dockbarx.vala --replace /usr/share/            $out/share/
-    substituteInPlace src/dockbarx.vala --replace '/usr/bin/env python3' ${bash}/bin/bash
+    # We execute the wrapped xfce4-panel-plug directly.
+    # Since argv is used for g_free() we also need to shift the indexes.
+    substituteInPlace src/xfce_panel_plugin.c \
+      --replace '"python3",' "" \
+      --replace "g_free(argv[3]);" "g_free(argv[2]);" \
+      --replace "g_free(argv[5]);" "g_free(argv[4]);"
+
+    patchShebangs src/xfce4-dockbarx-plug.py
   '';
 
   postFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"
+    chmod +x $out/share/dockbarx/xfce4-panel-plug
+    wrapPythonProgramsIn "$out/share/dockbarx" "$out $pythonPath"
   '';
 
   meta = with lib; {

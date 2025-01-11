@@ -1,38 +1,43 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.tiddlywiki;
-  listenParams = concatStrings (mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions);
+  listenParams = lib.concatStrings (
+    lib.mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions
+  );
   exe = "${pkgs.nodePackages.tiddlywiki}/lib/node_modules/.bin/tiddlywiki";
   name = "tiddlywiki";
   dataDir = "/var/lib/" + name;
 
-in {
+in
+{
 
   options.services.tiddlywiki = {
 
-    enable = mkEnableOption "TiddlyWiki nodejs server";
+    enable = lib.mkEnableOption "TiddlyWiki nodejs server";
 
-    listenOptions = mkOption {
-      type = types.attrs;
-      default = {};
+    listenOptions = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
       example = {
         credentials = "../credentials.csv";
-        readers="(authenticated)";
+        readers = "(authenticated)";
         port = 3456;
       };
       description = ''
-        Parameters passed to <literal>--listen</literal> command.
-        Refer to <link xlink:href="https://tiddlywiki.com/#WebServer"/>
+        Parameters passed to `--listen` command.
+        Refer to <https://tiddlywiki.com/#WebServer>
         for details on supported values.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd = {
       services.tiddlywiki = {
         description = "TiddlyWiki nodejs server";

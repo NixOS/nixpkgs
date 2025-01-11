@@ -6,13 +6,21 @@
 # profile, try disabling it. If you report an issue and use this
 # profile, always mention that you do.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 {
   meta = {
-    maintainers = [ maintainers.joachifm maintainers.emily ];
+    maintainers = [
+      maintainers.joachifm
+      maintainers.emily
+    ];
   };
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
@@ -39,14 +47,17 @@ with lib;
   security.apparmor.killUnconfinedConfinables = mkDefault true;
 
   boot.kernelParams = [
-    # Slab/slub sanity checks, redzoning, and poisoning
-    "slub_debug=FZP"
+    # Don't merge slabs
+    "slab_nomerge"
 
-    # Overwrite free'd memory
+    # Overwrite free'd pages
     "page_poison=1"
 
     # Enable page allocator randomization
     "page_alloc.shuffle=1"
+
+    # Disable debugfs
+    "debugfs=off"
   ];
 
   boot.blacklistedKernelModules = [
@@ -78,10 +89,6 @@ with lib;
     "sysv"
     "ufs"
   ];
-
-  # Restrict ptrace() usage to processes with a pre-defined relationship
-  # (e.g., parent/child)
-  boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
 
   # Hide kptrs even for processes with CAP_SYSLOG
   boot.kernel.sysctl."kernel.kptr_restrict" = mkOverride 500 2;

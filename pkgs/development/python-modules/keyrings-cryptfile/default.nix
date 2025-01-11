@@ -1,59 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, argon2-cffi
-, keyring
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  argon2-cffi,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  keyring,
+  pycryptodome,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
-  pname = "keyrings.cryptfile";
-  # NOTE: newer releases are bugged/incompatible
-  # https://github.com/frispete/keyrings.cryptfile/issues/15
-  version = "1.3.4";
+  pname = "keyrings-cryptfile";
+  version = "1.4.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-jW+cKMm+xef8C+fl0CGe+6SEkYBHDjFX2/kLCZ62j6c=";
+  src = fetchFromGitHub {
+    owner = "frispete";
+    repo = "keyrings.cryptfile";
+    tag = "v${version}";
+    hash = "sha256-cDXx0s3o8hNqgzX4oNkjGhNcaUX5vi1uN2d9sdbiZwk=";
   };
 
-  patches = [
-    # upstream setup.cfg has an option that is not supported
-    ./fix-testsuite.patch
-    # change of API in keyrings.testing
-    (fetchpatch {
-      url = "https://github.com/frispete/keyrings.cryptfile/commit/6fb9e45f559b8b69f7a0a519c0bece6324471d79.patch";
-      sha256 = "sha256-1878pMO9Ed1zs1pl+7gMjwx77HbDHdE1CryN8TPfPdU=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     keyring
     pycryptodome
   ];
 
-  pythonImportsCheck = [
-    "keyrings.cryptfile"
-  ];
+  pythonImportsCheck = [ "keyrings.cryptfile" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [
-    "test_set_properties"
-    "UncryptedFileKeyringTestCase"
+    # correct raise `ValueError`s which pytest fails to catch for some reason:
+    "test_empty_username"
+    # TestEncryptedFileKeyring::test_file raises 'ValueError: Incorrect Password' for some reason, maybe mock related:
+    "TestEncryptedFileKeyring"
   ];
 
   meta = with lib; {
     description = "Encrypted file keyring backend";
+    mainProgram = "cryptfile-convert";
     homepage = "https://github.com/frispete/keyrings.cryptfile";
+    changelog = "https://github.com/frispete/keyrings.cryptfile/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = teams.chia.members;
+    maintainers = [ maintainers.bbjubjub ];
   };
 }

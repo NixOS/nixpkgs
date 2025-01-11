@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, popt, avahi, pkg-config, python3, gtk3, runCommand
-, gcc, autoconf, automake, which, procps, libiberty_static
-, runtimeShell
-, sysconfDir ? ""   # set this parameter to override the default value $out/etc
-, static ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  popt,
+  avahi,
+  pkg-config,
+  python3,
+  gtk3,
+  runCommand,
+  gcc,
+  autoconf,
+  automake,
+  which,
+  procps,
+  libiberty_static,
+  runtimeShell,
+  sysconfDir ? "", # set this parameter to override the default value $out/etc
+  static ? false,
 }:
 
 let
@@ -17,20 +31,31 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
-    buildInputs = [popt avahi pkg-config python3 gtk3 which procps libiberty_static];
-    preConfigure =
-    ''
+    nativeBuildInputs = [
+      pkg-config
+      autoconf
+      automake
+      which
+      (python3.withPackages (p: [ p.setuptools ]))
+    ];
+    buildInputs = [
+      popt
+      avahi
+      gtk3
+      procps
+      libiberty_static
+    ];
+    preConfigure = ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
 
       configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                             CXXFLAGS="-O2 -fno-strict-aliasing"
           --mandir=$out/share/man
-                            ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
-                            ${if static then "LDFLAGS=-static" else ""}
-                            --with${if static == true || popt == null then "" else "out"}-included-popt
-                            --with${if avahi != null then "" else "out"}-avahi
-                            --with${if gtk3 != null then "" else "out"}-gtk
+                            ${lib.optionalString (sysconfDir != "") "--sysconfdir=${sysconfDir}"}
+                            ${lib.optionalString static "LDFLAGS=-static"}
+                            ${lib.withFeature (static == true || popt == null) "included-popt"}
+                            ${lib.withFeature (avahi != null) "avahi"}
+                            ${lib.withFeature (gtk3 != null) "gtk"}
                             --without-gnome
                             --enable-rfc2553
                             --disable-Werror   # a must on gcc 4.6
@@ -49,8 +74,9 @@ let
       #
       # extraConfig is meant to be sh lines exporting environment
       # variables like DISTCC_HOSTS, DISTCC_DIR, ...
-      links = extraConfig: (runCommand "distcc-links" { passthru.gcc = gcc.cc; }
-        ''
+      links =
+        extraConfig:
+        (runCommand "distcc-links" { passthru.gcc = gcc.cc; } ''
           mkdir -p $out/bin
           if [ -x "${gcc.cc}/bin/gcc" ]; then
             cat > $out/bin/gcc << EOF
@@ -72,7 +98,7 @@ let
     };
 
     meta = {
-      description = "A fast, free distributed C/C++ compiler";
+      description = "Fast, free distributed C/C++ compiler";
       homepage = "http://distcc.org";
       license = "GPL";
 
@@ -81,4 +107,4 @@ let
     };
   };
 in
-  distcc
+distcc

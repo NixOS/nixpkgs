@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg, libtapi, DiskArbitration }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  xar,
+  undmg,
+  libtapi,
+  DiskArbitration,
+}:
 
 stdenv.mkDerivation rec {
   pname = "macfuse-stubs";
-  version = "4.1.0";
+  version = "4.8.0";
 
   src = fetchurl {
     url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
-    sha256 = "118hg64w5wb95lbxw6w1hbqxrx3plcbxfjhvxx86q0zx0saa9diw";
+    hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
   };
 
-  nativeBuildInputs = [ cpio xar undmg libtapi ];
+  nativeBuildInputs = [
+    cpio
+    xar
+    undmg
+    libtapi
+  ];
   propagatedBuildInputs = [ DiskArbitration ];
 
   postUnpack = ''

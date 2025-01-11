@@ -1,26 +1,43 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, wrapt
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonAtLeast,
+  setuptools,
+  wrapt,
+  pytestCheckHook,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "deprecated";
-  version = "1.2.13";
+  version = "1.2.14";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "Deprecated";
-    inherit version;
-    sha256 = "sha256-Q6xTNdqQwxwkugKK9TapHUHVP55pAd2wIbzFcs5E440=";
-  };
-
-  propagatedBuildInputs = [
-    wrapt
+  outputs = [
+    "out"
+    "doc"
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  src = fetchFromGitHub {
+    owner = "tantale";
+    repo = "deprecated";
+    tag = "v${version}";
+    hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
+  };
+
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ sphinxHook ];
+
+  propagatedBuildInputs = [ wrapt ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # assertion text mismatch
+    "test_classic_deprecated_class_method__warns"
+    "test_sphinx_deprecated_class_method__warns"
   ];
 
   pythonImportsCheck = [ "deprecated" ];

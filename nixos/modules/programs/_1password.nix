@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -8,28 +11,25 @@ let
 
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "programs" "_1password" "gid" ] ''
+      A preallocated GID will be used instead.
+    '')
+  ];
+
   options = {
     programs._1password = {
-      enable = mkEnableOption "the 1Password CLI tool";
+      enable = lib.mkEnableOption "the 1Password CLI tool";
 
-      gid = mkOption {
-        type = types.addCheck types.int (x: x >= 1000);
-        example = literalExpression "5001";
-        description = ''
-          The gid to assign to the onepassword-cli group, which is needed for integration with the 1Password GUI.
-          It must be 1000 or greater.
-        '';
-      };
-
-      package = mkPackageOption pkgs "1Password CLI" {
-        default = [ "_1password" ];
+      package = lib.mkPackageOption pkgs "1Password CLI" {
+        default = [ "_1password-cli" ];
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    users.groups.onepassword-cli.gid = cfg.gid;
+    users.groups.onepassword-cli.gid = config.ids.gids.onepassword-cli;
 
     security.wrappers = {
       "op" = {

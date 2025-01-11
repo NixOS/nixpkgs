@@ -1,17 +1,17 @@
 { lib, mkDerivation, fetchFromGitHub
 , python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl
+, which, perl, libgit2
 }:
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.27.8";
+  version = "0.29.10";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-t/nd7m8XpB026q/kyH16rKkw3qza19ISalB0Juzx4NU=";
+    hash = "sha256-3YRWGIfBGgN3vlBlFoVbMWgkhoxs7OQli1qtKUXf0KA=";
   };
 
   postPatch = ''
@@ -31,6 +31,7 @@ mkDerivation rec {
     qtmultimedia
     qttools
     qtxmlpatterns
+    libgit2
   ];
 
   buildPhase = ''
@@ -43,9 +44,12 @@ mkDerivation rec {
   postBuild = ''
     mkdir $out/bin
     mv $out/lib/klayout $out/bin/
+
+    install -Dm444 etc/klayout.desktop -t $out/share/applications
+    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-parentheses" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
 
   dontInstall = true; # Installation already happens as part of "build.sh"
 
@@ -55,11 +59,12 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
+    mainProgram = "klayout";
     license = with licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
   };
 }
 

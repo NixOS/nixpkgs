@@ -1,16 +1,17 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , version
 , suffix ? ""
-, curl
-, sha256 ? null
-, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
+, hash ? null
+, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
-}:
-assert (sha256 == null) -> (src != null);
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
+, self_attribute_name
+}@args:
+assert (hash == null) -> (src != null);
 let
-  atLeast24 = lib.versionAtLeast version "2.4pre";
-  atLeast25 = lib.versionAtLeast version "2.5pre";
-  atLeast27 = lib.versionAtLeast version "2.7pre";
+  atLeast224 = lib.versionAtLeast version "2.24pre";
+  atLeast225 = lib.versionAtLeast version "2.25pre";
 in
 { stdenv
 , autoconf-archive
@@ -24,8 +25,13 @@ in
 , bzip2
 , callPackage
 , coreutils
+, curl
+, darwin
+, docbook_xsl_ns
+, docbook5
 , editline
 , flex
+, git
 , gnutar
 , gtest
 , gzip
@@ -33,26 +39,41 @@ in
 , lib
 , libarchive
 , libcpuid
+, libgit2
 , libsodium
+, libxml2
+, libxslt
 , lowdown
+, lowdown-unsandboxed
+, toml11
+, man
 , mdbook
+, mdbook-linkcheck
 , nlohmann_json
+, nixosTests
 , openssl
 , perl
+, python3
 , pkg-config
+, rapidcheck
 , Security
 , sqlite
 , util-linuxMinimal
 , xz
-
-, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
-, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+, withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
 
 , confDir
 , stateDir
 , storeDir
+
+  # passthru tests
+, pkgsi686Linux
+, pkgsStatic
+, runCommand
+, pkgs
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -66,20 +87,33 @@ self = stdenv.mkDerivation {
     [ "out" "dev" ]
     ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
-  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
+
+  hardeningDisable = [
+    "shadowstack"
+  ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+
+  nativeInstallCheckInputs = lib.optional atLeast224 [ git man ];
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals atLeast24 [
     autoconf-archive
     autoreconfHook
     bison
     flex
     jq
-  ] ++ lib.optionals (atLeast24 && enableDocumentation) [
-    (lib.getBin lowdown)
-    mdbook
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals enableDocumentation
+    (if atLeast224 then [
+      (lib.getBin lowdown-unsandboxed)
+      mdbook
+      mdbook-linkcheck
+    ] else [
+      libxslt
+      libxml2
+      docbook_xsl_ns
+      docbook5
+    ])
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal
   ];
 
@@ -93,32 +127,36 @@ self = stdenv.mkDerivation {
     openssl
     sqlite
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ] ++ lib.optionals atLeast24 [
     gtest
     libarchive
     lowdown
-  ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
+  ] ++ lib.optionals atLeast224 [
+    libgit2
+    toml11
+    rapidcheck
+  ] ++ lib.optionals (atLeast225 && enableDocumentation) [
+    python3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+  ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
     libcpuid
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
+  ] ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin) [
+    darwin.apple_sdk.libs.sandbox
   ];
 
   propagatedBuildInputs = [
     boehmgc
-  ] ++ lib.optional (atLeast27) [
+  ] ++ lib.optionals atLeast224 [
     nlohmann_json
   ];
 
-  NIX_LDFLAGS = lib.optionals (!atLeast24) [
-    # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-    (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
-    # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-    (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
-  ];
+  postPatch = ''
+    patchShebangs --build tests
+  '';
 
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
@@ -127,16 +165,16 @@ self = stdenv.mkDerivation {
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
-        patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+        patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
       ''}
     '' +
     # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which
     # removes config.nix entirely and is not present in 2.3.x, we need to
     # patch around an issue where the Nix configure step pulls in the build
     # system's bash and other utilities when cross-compiling.
-    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast24) ''
+    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast224) ''
       mkdir tmp/
       substitute corepkgs/config.nix.in tmp/config.nix.in \
         --subst-var-by bash ${bash}/bin/bash \
@@ -156,19 +194,24 @@ self = stdenv.mkDerivation {
     "--enable-gc"
   ] ++ lib.optionals (!enableDocumentation) [
     "--disable-doc-gen"
-  ] ++ lib.optionals (!atLeast24) [
-    # option was removed in 2.4
-    "--disable-init-state"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+  ] ++ lib.optionals (atLeast224 && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [
     # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
     "--disable-seccomp-sandboxing"
+  ] ++ lib.optionals (atLeast224 && stdenv.cc.isGNU && !enableStatic) [
+    "--enable-lto"
   ];
 
   makeFlags = [
+    # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
+    # of make jobserver. until gcc adds support for this we have to instruct make to use this
+    # old style or LTO builds will run their linking on only one thread, which takes forever.
+    "--jobserver-style=pipe"
     "profiledir=$(out)/etc/profile.d"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
@@ -176,20 +219,74 @@ self = stdenv.mkDerivation {
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   doInstallCheck = true;
+  installCheckTarget = if atLeast224 then "installcheck" else null;
 
   # socket path becomes too long otherwise
-  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+  preInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export TMPDIR=$NIX_BUILD_TOP
   ''
+  # Prevent crashes in libcurl due to invoking Objective-C `+initialize` methods after `fork`.
+  # See http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+  ''
   # See https://github.com/NixOS/nix/issues/5687
-  + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
+  + lib.optionalString (atLeast224 && stdenv.hostPlatform.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
+  '' # TODO: investigate why this broken
+  + lib.optionalString (atLeast224 && stdenv.hostPlatform.system == "aarch64-linux") ''
+    echo "exit 0" > tests/functional/flakes/show.sh
+  '' + ''
+    # nixStatic otherwise does not find its man pages in tests.
+    export MANPATH=$man/share/man:$MANPATH
   '';
 
-  separateDebugInfo = stdenv.isLinux && (atLeast24 -> !enableStatic);
+  separateDebugInfo = stdenv.hostPlatform.isLinux && (atLeast224 -> !enableStatic);
 
   enableParallelBuilding = true;
 
+  passthru = {
+    inherit aws-sdk-cpp boehmgc;
+
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
+
+    tests = {
+      srcVersion = runCommand "nix-src-version" {
+        inherit version;
+      } ''
+        # This file is an implementation detail, but it's a good sanity check
+        # If upstream changes that, we'll have to adapt.
+        srcVersion=$(cat ${src}/.version)
+        echo "Version in nix nix expression: $version"
+        echo "Version in nix.src: $srcVersion"
+        if [ "$version" != "$srcVersion" ]; then
+          echo "Version mismatch!"
+          exit 1
+        fi
+        touch $out
+      '';
+
+      /** Intended to test `lib`, but also a good smoke test for Nix */
+      nixpkgs-lib = import ../../../../lib/tests/test-with-nix.nix {
+        inherit lib pkgs;
+        nix = self;
+      };
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
+
+      # Basic smoke tests that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
+      upgrade = nixosTests.nix-upgrade;
+      simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+    };
+  };
+
+  # point 'nix edit' and ofborg at the file that defines the attribute,
+  # not this common file.
+  pos = builtins.unsafeGetAttrPos "version" args;
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
@@ -200,16 +297,11 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ eelco lovesegfault artturin ];
+    license = licenses.lgpl21Plus;
+    inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
-  };
-
-  passthru = {
-    inherit aws-sdk-cpp boehmgc;
-
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; });
+    mainProgram = "nix";
   };
 };
 in self

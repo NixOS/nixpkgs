@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "cube";
   version = "2017-07-05";
 
@@ -14,9 +15,9 @@ build-idris-package  {
   };
 
   meta = {
-    description = "An implementation of the Lambda Cube in Idris";
+    description = "Implementation of the Lambda Cube in Idris";
     homepage = "https://github.com/aatxe/cube.idr";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

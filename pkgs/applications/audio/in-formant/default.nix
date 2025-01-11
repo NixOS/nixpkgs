@@ -1,45 +1,77 @@
-{ stdenv, cmake, lib, fetchFromGitHub, qt5, fftw, libtorch-bin, portaudio, eigen
-, xorg, pkg-config, autoPatchelfHook, soxr
+{
+  stdenv,
+  cmake,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtcharts,
+  fftw,
+  libtorch-bin,
+  portaudio,
+  eigen,
+  xorg,
+  pkg-config,
+  autoPatchelfHook,
+  soxr,
+  libsamplerate,
+  armadillo,
+  tomlplusplus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "in-formant";
-  version = "2021-06-30";
+  version = "unstable-2022-09-15";
 
-  # no Qt6 yet, so we're stuck in the last Qt5-supporting commit: https://github.com/NixOS/nixpkgs/issues/108008
   src = fetchFromGitHub {
     owner = "in-formant";
     repo = "in-formant";
-    rev = "e28e628cf5ff0949a7b046d220cc884f6035f31a";
-    sha256 = "sha256-YvtV0wGUNmI/+GGxrIfTk/l8tqUsWgc/LAI17X+AWGI=";
+    rev = "e0606feecff70f0fd4226ff8f116e46817dd7462";
+    hash = "sha256-/4eKny9M2e8Lb9LOiKBj9QLE00CAaD+2ZAwn48lnvKQ=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config qt5.wrapQtAppsHook autoPatchelfHook ];
+  patches = [
+    # Ignore the freetype sources bundled as a submodule:
+    # /nix/store/…-harfbuzz-7.0.0/lib/libharfbuzz.so.0: undefined reference to `FT_Get_Transform'
+    ./0001-Avoid-using-vendored-dependencies-we-have-in-nixpkgs.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+    autoPatchelfHook
+  ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtquickcontrols
-    qt5.qtquickcontrols2
-    qt5.qtcharts
+    qtbase
+    qtcharts
     fftw
     libtorch-bin
     portaudio
     eigen
     xorg.libxcb
     soxr
+    libsamplerate
+    armadillo
+    tomlplusplus
   ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp in-formant $out/bin
+    install -Dm444 $src/dist-res/in-formant.desktop -t $out/share/applications
+    install -Dm444 $src/dist-res/in-formant.png -t $out/share/icons/hicolor/512x512/apps
   '';
 
   meta = with lib; {
-    description = "A real-time pitch and formant tracking software";
+    description = "Real-time pitch and formant tracking software";
+    mainProgram = "in-formant";
     homepage = "https://github.com/in-formant/in-formant";
     license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ckie ];
+    # currently broken on i686-linux and aarch64-linux due to other nixpkgs dependencies
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ ];
   };
 }

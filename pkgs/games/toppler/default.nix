@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
 
-, pkg-config
-, gettext
-, povray
-, imagemagick
-, gimp
+  pkg-config,
+  gettext,
+  povray,
+  imagemagick,
+  gimp,
 
-, SDL2
-, SDL2_mixer
-, SDL2_image
-, libpng
-, zlib
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
+  libpng,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toppler";
   version = "1.3";
 
   src = fetchFromGitLab {
     owner = "roever";
     repo = "toppler";
-    rev = "v${version}";
-    sha256 = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
   };
 
   nativeBuildInputs = [
@@ -58,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

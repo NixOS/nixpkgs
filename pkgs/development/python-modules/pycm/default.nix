@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  seaborn,
 }:
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.5";
+  version = "4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-iDt1voNcn59bZN/AyKrWFBIymTT618o91kz2AV42hWs=";
+    tag = "v${version}";
+    hash = "sha256-GyH06G7bArFBTzV/Sx/KmoJvcoed0sswW7qGqsSULHo=";
   };
 
   propagatedBuildInputs = [
@@ -28,8 +29,13 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # Minor tolerance issues with Python 3.12; should be fixed in next release
+    # (see https://github.com/sepandhaghighi/pycm/pull/528)
+    "verified_test"
+    "function_test"
   ];
 
   postPatch = ''
@@ -38,22 +44,14 @@ buildPythonPackage rec {
     # Also depends on python3Packages.notebook
     rm Otherfiles/notebook_check.py
     substituteInPlace setup.py \
-      --replace '=get_requires()' '=[]'
+      --replace-fail '=get_requires()' '=[]'
   '';
 
-  disabledTests = [
-    # Output formatting error
-    "pycm.pycm_compare.Compare"
-    "plot_test"
-  ];
-
-  pythonImportsCheck = [
-    "pycm"
-  ];
+  pythonImportsCheck = [ "pycm" ];
 
   meta = with lib; {
     description = "Multiclass confusion matrix library";
-    homepage = "https://pycm.ir";
+    homepage = "https://pycm.io";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

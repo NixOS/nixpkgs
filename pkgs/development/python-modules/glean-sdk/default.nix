@@ -1,68 +1,67 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, cffi
-, fetchPypi
-, glean-parser
-, iso8601
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
-, setuptools-rust
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glean-parser,
+  pytest-localserver,
+  pytestCheckHook,
+  rustPlatform,
+  semver,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "44.0.0";
+  version = "60.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gzLsBwq3wrFde5cEb5+oFLW4KrwoiZpr22JbJhNr1yk=";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "glean";
+    rev = "v${version}";
+    hash = "sha256-C3wQdxPNBPQN6eUK6Vq0bA6Wpqb28e9BTBf7c/hTQxU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-lWFv8eiA3QHp5bhcg4qon/dvKUbFbtH1Q2oXGkk0Me0=";
+    hash = "sha256-XqOCHnvM64kZNifU5Wt/bFAvyRVy28ozWSwlvm/sMk8=";
   };
 
-  nativeBuildInputs = [
-    cargo
-    rustc
+  build-system = [
     rustPlatform.cargoSetupHook
-    setuptools-rust
+    rustPlatform.maturinBuildHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
-    cffi
+  dependencies = [
     glean-parser
-    iso8601
+    semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-localserver
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace glean-core/python/setup.py \
-      --replace "glean_parser==5.0.1" "glean_parser>=5.0.1"
-  '';
+  pytestFlagsArray = [ "glean-core/python/tests" ];
 
-  pythonImportsCheck = [
-    "glean"
+  disabledTests = [
+    # RuntimeError: No ping received.
+    "test_client_activity_api"
+    "test_flipping_upload_enabled_respects_order_of_events"
+    # A warning causes this test to fail
+    "test_get_language_tag_reports_the_tag_for_the_default_locale"
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  pythonImportsCheck = [ "glean" ];
+
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
-    license = licenses.mpl20;
-    maintainers = [];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ melling ];
   };
 }

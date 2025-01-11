@@ -27,15 +27,8 @@ in {
 
       enable = mkEnableOption "spacecookie";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.spacecookie;
-        defaultText = literalExpression "pkgs.spacecookie";
-        example = literalExpression "pkgs.haskellPackages.spacecookie";
-        description = ''
-          The spacecookie derivation to use. This can be used to
-          override the used package or to use another version.
-        '';
+      package = mkPackageOption pkgs "spacecookie" {
+        example = "haskellPackages.spacecookie";
       };
 
       openFirewall = mkOption {
@@ -59,8 +52,8 @@ in {
         default = "[::]";
         description = ''
           Address to listen on. Must be in the
-          <literal>ListenStream=</literal> syntax of
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd.socket(5)</link>.
+          `ListenStream=` syntax of
+          [systemd.socket(5)](https://www.freedesktop.org/software/systemd/man/systemd.socket.html).
         '';
       };
 
@@ -85,7 +78,7 @@ in {
               The directory spacecookie should serve via gopher.
               Files in there need to be world-readable since
               the spacecookie service file sets
-              <literal>DynamicUser=true</literal>.
+              `DynamicUser=true`.
             '';
           };
 
@@ -134,7 +127,7 @@ in {
           Settings for spacecookie. The settings set here are
           directly translated to the spacecookie JSON config
           file. See
-          <link xlink:href="https://sternenseemann.github.io/spacecookie/spacecookie.json.5.html">spacecookie.json(5)</link>
+          [spacecookie.json(5)](https://sternenseemann.github.io/spacecookie/spacecookie.json.5.html)
           for explanations of all options.
         '';
       };

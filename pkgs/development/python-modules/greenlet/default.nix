@@ -1,33 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # tests
+  objgraph,
+  psutil,
+  python,
+  unittestCheckHook,
 }:
 
+let
+  greenlet = buildPythonPackage rec {
+    pname = "greenlet";
+    version = "3.1.1";
+    pyproject = true;
 
-buildPythonPackage rec {
-  pname = "greenlet";
-  version = "1.1.2";
-  disabled = isPyPy;  # builtin for pypy
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-TOOsbNtq33lGR11+8xd3wm2UvMw3fgcKeYa9LVxRVGc=";
+    };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a";
-  };
+    build-system = [ setuptools ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover -v greenlet.tests
-    runHook postCheck
-  '';
+    # tests in passthru, infinite recursion via objgraph/graphviz
+    doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/python-greenlet/greenlet";
-    description = "Module for lightweight in-process concurrent programming";
-    license = with licenses; [
-      psfl  # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
-      mit
+    nativeCheckInputs = [
+      objgraph
+      psutil
+      unittestCheckHook
     ];
+
+    preCheck = ''
+      pushd ${placeholder "out"}/${python.sitePackages}
+    '';
+
+    unittestFlagsArray = [ "greenlet.tests" ];
+
+    postCheck = ''
+      popd
+    '';
+
+    passthru.tests.pytest = greenlet.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    meta = with lib; {
+      changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
+      homepage = "https://github.com/python-greenlet/greenlet";
+      description = "Module for lightweight in-process concurrent programming";
+      license = with licenses; [
+        psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+        mit
+      ];
+    };
   };
-}
+in
+greenlet

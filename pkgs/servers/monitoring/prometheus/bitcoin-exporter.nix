@@ -1,8 +1,12 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "bitcoin-prometheus-exporter";
-  version = "0.5.0";
+  version = "0.7.0";
 
   format = "other";
 
@@ -10,19 +14,18 @@ python3Packages.buildPythonApplication rec {
     owner = "jvstein";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l0j6dyb0vflh386z3g8srysay5sf47g5rg2f5xrkckv86rjr115";
+    sha256 = "sha256-ZWr+bBNnRYzqjatOJ4jYGzvTyfheceY2UDvG4Juvo5I=";
   };
 
-  patches = [
-    # remove after update to new release
-    (fetchpatch {
-      name = "configurable-listening-address.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/jvstein/bitcoin-prometheus-exporter/pull/11.patch";
-      sha256 = "0a2l8aqgprc1d5k8yg1gisn6imh9hzg6j0irid3pjvp5i5dcnhyq";
-    })
-  ];
+  # Copying bitcoind-monitor.py is enough.
+  # The makefile builds docker containers.
+  dontBuild = true;
 
-  propagatedBuildInputs = with python3Packages; [ prometheus-client bitcoinlib riprova ];
+  propagatedBuildInputs = with python3Packages; [
+    prometheus-client
+    python-bitcoinlib
+    riprova
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -34,6 +37,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Prometheus exporter for Bitcoin Core nodes";
+    mainProgram = "bitcoind-monitor.py";
     homepage = "https://github.com/jvstein/bitcoin-prometheus-exporter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmilata ];

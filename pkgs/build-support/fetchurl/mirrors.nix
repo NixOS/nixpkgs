@@ -43,6 +43,11 @@
     "http://bioconductor.jp/packages/"
   ];
 
+  # CRAN mirrors
+  cran = [
+    "https://cran.r-project.org/src/contrib/"
+  ];
+
   # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html
   bitlbee = [
     "https://get.bitlbee.org/"
@@ -52,8 +57,8 @@
 
   # GCC
   gcc = [
-    "https://bigsearcher.com/mirrors/gcc/"
     "https://mirror.koddos.net/gcc/"
+    "https://bigsearcher.com/mirrors/gcc/"
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
@@ -118,13 +123,8 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
-  # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
-    "https://download.kde.org/download.php?url="
-    "https://ftp.gwdg.de/pub/linux/kde/"
-    "https://mirrors.ocf.berkeley.edu/kde/"
-    "https://mirrors.mit.edu/kde/"
-    "https://mirrors.ustc.edu.cn/kde/"
+    "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
@@ -168,12 +168,6 @@
   # Qt
   qt = [
     "https://download.qt.io/"
-  ];
-
-  # Roy marples mirrors
-  roy = [
-    "https://roy.marples.name/downloads/"
-    "https://cflags.cc/roy/"
   ];
 
   # Sage mirrors (https://www.sagemath.org/mirrors.html)
@@ -264,7 +258,6 @@
     "https://versaweb.dl.sourceforge.net/sourceforge/"
     "https://freefr.dl.sourceforge.net/sourceforge/"
     "https://osdn.dl.sourceforge.net/sourceforge/"
-    "https://kent.dl.sourceforge.net/sourceforge/"
   ];
 
   # Steam Runtime
@@ -310,7 +303,13 @@
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
     "https://mirrors.kernel.org/CPAN/"
-    "https://backpan.perl.org/"  # for old releases
+    "https://backpan.perl.org/" # for old releases
+  ];
+
+  # D DUB
+  dub = [
+    "https://code.dlang.org/packages/"
+    "https://codemirror.dlang.org/packages/"
   ];
 
   # Haskell Hackage
@@ -323,7 +322,6 @@
     "https://luarocks.org/"
     "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
     "https://luafr.org/moonrocks/"
-    "http://luarocks.logiceditor.com/rocks/"
   ];
 
   # Python PyPI

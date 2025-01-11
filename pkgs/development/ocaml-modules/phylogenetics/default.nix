@@ -1,48 +1,48 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_deriving
-, bppsuite
-, alcotest
-, angstrom-unix
-, biocaml
-, core
-, gsl
-, lacaml
-, menhir
-, menhirLib
-, printbox-text
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  bppsuite,
+  alcotest,
+  angstrom-unix,
+  biotk,
+  core,
+  gsl,
+  lacaml,
+  menhir,
+  menhirLib,
+  printbox-text,
 }:
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchurl {
-    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "sha256:064ldljzh17h8pp0c27xd1pf6c50yhccw2g3hddzhk07a95q8v16";
+    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/phylogenetics-${version}.tbz";
+    hash = "sha256-3oZ9fMAXqOQ02rQ+8W8PZJWXOJLNe2qERrGOeTk3BKg=";
   };
-
-  # Ensure compatibility with printbox ≥ 0.6
-  preConfigure = ''
-    substituteInPlace lib/dune --replace printbox printbox-text
-  '';
 
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [ alcotest bppsuite ];
-  buildInputs = [ menhir ];
+  nativeCheckInputs = [ bppsuite ];
+  checkInputs = [ alcotest ];
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
     angstrom-unix
-    biocaml
+    biotk
     core
     gsl
     lacaml
     menhirLib
-    ppx_deriving
     printbox-text
   ];
 
+  checkPhase = ''
+    runHook preCheck
+    dune build @app/fulltest
+    runHook postCheck
+  '';
   doCheck = true;
 
   meta = with lib; {

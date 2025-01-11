@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.py-air-control;
+  inherit (lib) mkOption types;
 
   workingDir = "/var/lib/${cfg.stateDir}";
 
@@ -30,7 +35,7 @@ in
       type = types.str;
       default = "prometheus-py-air-control-exporter";
       description = ''
-        Directory below <literal>/var/lib</literal> to store runtime data.
+        Directory below `/var/lib` to store runtime data.
         This directory will be created automatically using systemd's StateDirectory mechanism.
       '';
     };

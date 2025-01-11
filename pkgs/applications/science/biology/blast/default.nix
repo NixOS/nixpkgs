@@ -1,12 +1,24 @@
-{ lib, stdenv, buildPackages, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils, ApplicationServices }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  zlib,
+  bzip2,
+  perl,
+  cpio,
+  gawk,
+  coreutils,
+  ApplicationServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blast";
-  version = "2.13.0";
+  version = "2.14.1";
 
   src = fetchurl {
     url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
-    sha256 = "sha256-iVU3FNEz2vKMR3+D0zN5Szxi5BSECMByobRiDl7E/rI=";
+    sha256 = "sha256-cSwtvfD7E8wcLU9O9d0c5LBsO1fpbf6o8j5umfWxZQ4=";
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";
@@ -16,8 +28,8 @@ stdenv.mkDerivation rec {
     # These extra cause clang to hang on Darwin.
     "--with-flat-makefile"
     "--without-makefile-auto-update"
-    "--with-dll"  # build dynamic libraries (static are default)
-    ];
+    "--with-dll" # build dynamic libraries (static are default)
+  ];
 
   makeFlags = [ "all_projects=app/" ];
 
@@ -80,8 +92,14 @@ stdenv.mkDerivation rec {
 
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
-  buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
-    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = [
+    coreutils
+    perl
+    gawk
+    zlib
+    bzip2
+    cpio
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   postInstall = ''
@@ -96,8 +114,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of
-    similarity between biological sequences'';
+    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences'';
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = licenses.publicDomain;
 

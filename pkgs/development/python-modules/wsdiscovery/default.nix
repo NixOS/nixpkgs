@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, netifaces
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  netifaces,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,14 +28,12 @@ buildPythonPackage rec {
     netifaces
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "wsdiscovery"
-  ];
+  pythonImportsCheck = [ "wsdiscovery" ];
 
   meta = with lib; {
     description = "WS-Discovery implementation for Python";

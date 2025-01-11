@@ -1,19 +1,42 @@
-{ gsmakeDerivation, fetchzip, base }:
+{
+  lib,
+  stdenv,
+  make,
+  wrapGNUstepAppsHook,
+  fetchzip,
+  base,
+}:
 
-gsmakeDerivation rec {
-  version = "0.29.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.31.1";
   pname = "gnustep-gui";
 
   src = fetchzip {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
-    sha256 = "0x6n48p178r4zd8f4sqjfqd6rp49w00wr59w19lpwlmrdv7bn538";
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-+4XEJ6PKpantbIbyNroFMaNBTFffkuW/ajSocGQO9Mo=";
   };
+
+  nativeBuildInputs = [
+    make
+    wrapGNUstepAppsHook
+  ];
   buildInputs = [ base ];
+
   patches = [
     ./fixup-all.patch
   ];
   meta = {
-    description = "A GUI class library of GNUstep";
-    changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
+    description = "GUI class library of GNUstep";
+    homepage = "https://gnustep.github.io/";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      matthewbauer
+      dblsaiko
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,31 +1,45 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  testers,
 
-stdenv.mkDerivation rec {
+  cmake,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.10.2";
+  version = "3.13.0";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/geos/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ULvFmaw4a0wrOWLcxBHwBAph8gSq7066ciXs3Qz0VxU=";
+  src = fetchFromGitHub {
+    owner = "libgeos";
+    repo = "geos";
+    tag = finalAttrs.version;
+    hash = "sha256-WcE5dbfbeq9uCRgfVgiA3MTOisRpilXxjquEM5aKTCc=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  postPatch = ''
-    substituteInPlace tools/geos-config.in \
-      --replace "@libdir@" "@prefix@/lib" \
-      --replace "@includedir@" "@prefix@/include"
-  '';
+  # https://github.com/libgeos/geos/issues/930
+  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;unit-geom-Envelope"
+  ];
+
+  doCheck = true;
+
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
-    description = "C++ port of the Java Topology Suite (JTS)";
-    homepage = "https://trac.osgeo.org/geos";
+    description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
+    homepage = "https://libgeos.org";
     license = licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [
-      willcohen
-    ];
+    mainProgram = "geosop";
+    maintainers = teams.geospatial.members;
+    pkgConfigModules = [ "geos" ];
+    changelog = "https://github.com/libgeos/geos/releases/tag/${finalAttrs.finalPackage.version}";
   };
-}
+})

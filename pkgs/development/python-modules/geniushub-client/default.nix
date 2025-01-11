@@ -1,30 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geniushub-client";
-  version = "0.6.30";
+  version = "0.7.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "390932b6e5051e221d104b2683d9deb6e352172c4ec4eeede0954bf2f9680211";
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "manzanotti";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-Gq2scYos7E8me1a4x7NanHRq2eYWuU2uSUwM+O1TPb8=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'VERSION = os.environ["GITHUB_REF_NAME"]' "" \
+      --replace "version=VERSION," 'version="${version}",'
+  '';
 
-  # tests only implemented after 0.6.30
-  doCheck = false;
+  propagatedBuildInputs = [ aiohttp ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "geniushubclient" ];
 
   meta = with lib; {
-    description = "Aiohttp-based client for Genius Hub systems";
-    homepage = "https://github.com/zxdavb/geniushub-client";
+    description = "Module to interact with Genius Hub systems";
+    homepage = "https://github.com/manzanotti/geniushub-client";
+    changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

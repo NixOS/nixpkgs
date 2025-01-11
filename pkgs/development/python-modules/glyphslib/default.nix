@@ -1,41 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, openstep-plist
-, ufoLib2
-, pytestCheckHook
-, unicodedata2
-, setuptools-scm
-, ufonormalizer
-, xmldiff
-, defcon
-, ufo2ft
-, skia-pathops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  openstep-plist,
+  ufolib2,
+  pytestCheckHook,
+  unicodedata2,
+  setuptools-scm,
+  ufonormalizer,
+  xmldiff,
+  defcon,
+  ufo2ft,
+  skia-pathops,
 }:
 
 buildPythonPackage rec {
   pname = "glyphslib";
-  version = "6.0.4";
+  version = "6.9.5";
 
   format = "pyproject";
 
-  src = fetchPypi {
-    pname = "glyphsLib";
-    inherit version;
-    sha256 = "sha256-PT66n1WEO5FNcwov8GaXT1YNrAi22X4HN7iVNkuehKI=";
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "glyphsLib";
+    tag = "v${version}";
+    hash = "sha256-9b4nPiGyBsTplEhfmPdhjalV0fexYXerdRqUbOUXlh0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "glyphsLib" ];
-
   propagatedBuildInputs = [
     fonttools
     openstep-plist
-    ufoLib2
+    ufolib2
     unicodedata2
     ufonormalizer
     xmldiff
@@ -43,6 +41,10 @@ buildPythonPackage rec {
     ufo2ft
     skia-pathops
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "glyphsLib" ];
 
   disabledTestPaths = [
     "tests/builder/designspace_gen_test.py" # this test tries to use non-existent font "CoolFoundry Examplary Serif"
@@ -56,4 +58,3 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.BarinovMaxim ];
   };
 }
-

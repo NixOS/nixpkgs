@@ -1,22 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "2.6.0";
+  version = "3.2.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1e35ed7a3cdc3100545b43e196d34754e6551e7f95e4caebbe0e1c0ca41c2f1b";
+    pname = "python_crontab";
+    inherit version;
+    hash = "sha256-QAZ9HdOa3jRgsq2FV8dlFRTNOFHe//9hxcYOEifFw2s=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  dependencies = [ python-dateutil ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
   disabledTests = [
     "test_07_non_posix_shell"
     # doctest that assumes /tmp is writeable, awkward to patch
     "test_03_usage"
+    # Test is assuming $CURRENT_YEAR is not a leap year
+    "test_19_frequency_at_month"
+    "test_20_frequency_at_year"
   ];
 
-  propagatedBuildInputs = [ python-dateutil ];
+  pythonImportsCheck = [ "crontab" ];
 
   meta = with lib; {
     description = "Python API for crontab";
@@ -24,7 +44,7 @@ buildPythonPackage rec {
       Crontab module for reading and writing crontab files
       and accessing the system cron automatically and simply using a direct API.
     '';
-    homepage = "https://pypi.org/project/python-crontab/";
+    homepage = "https://gitlab.com/doctormo/python-crontab/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ kfollesdal ];
   };

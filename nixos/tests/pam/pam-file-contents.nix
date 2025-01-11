@@ -2,11 +2,12 @@ let
   name = "pam";
 in
 import ../make-test-python.nix ({ pkgs, ... }: {
+  name = "pam-file-contents";
 
   nodes.machine = { ... }: {
     imports = [ ../../modules/profiles/minimal.nix ];
 
-    krb5.enable = true;
+    security.krb5.enable = true;
 
     users = {
       mutableUsers = false;

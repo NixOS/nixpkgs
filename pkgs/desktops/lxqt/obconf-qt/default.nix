@@ -1,53 +1,59 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, qtbase
-, qttools
-, qtx11extras
-, xorg
-, lxqt-build-tools
-, openbox
-, lxqtUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libSM,
+  libXdmcp,
+  libpthreadstubs,
+  lxqt-build-tools,
+  openbox,
+  pcre,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.16.2";
+  version = "0.16.5";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "obconf-qt";
     rev = version;
-    sha256 = "zxwQfKowgpLjfxSV2t7Ly8o7DFqoIxi60zIVCcKDQWo=";
+    hash = "sha256-C7s312DeLiustPBBY4OdjYvN7X6noktLA8LuhlOaVRo=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    libSM
+    libXdmcp
+    libpthreadstubs
+    openbox
     pcre
     qtbase
-    qttools
-    qtx11extras
-    xorg.libpthreadstubs
-    xorg.libXdmcp
-    xorg.libSM
-    openbox
+    qtwayland
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/obconf-qt";
-    description = "The Qt port of obconf, the Openbox configuration tool";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    description = "Qt port of obconf, the Openbox configuration tool";
+    mainProgram = "obconf-qt";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.lxqt.members;
   };
 }

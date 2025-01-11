@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://m12-assets.unigine.com/d/Unigine_Tropics-${version}.run";
-    sha256 = "0icasdp46fjnic7gk83pknjx0gpap9j202dm0llcfg5zin5kbq7x";
+    url = "https://assets.unigine.com/d/Unigine_Tropics-${version}.run";
+    sha256 = "sha256-/eA1i42/PMcoBbUJIGS66j7QpZ13oPkOi1Y6Q27TikU=";
   };
 
   libPath = lib.makeLibraryPath [
@@ -86,10 +86,12 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   meta = {
-    description = "The Unigine Heaven GPU benchmarking tool";
+    description = "Unigine Heaven GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/tropics";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    mainProgram = "Tropics";
   };
 }

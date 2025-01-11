@@ -1,37 +1,47 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.cachix-agent;
-in {
+in
+{
   meta.maintainers = [ lib.maintainers.domenkozar ];
 
   options.services.cachix-agent = {
-    enable = mkEnableOption "Cachix Deploy Agent: https://docs.cachix.org/deploy/";
+    enable = lib.mkEnableOption "Cachix Deploy Agent: https://docs.cachix.org/deploy/";
 
-    name = mkOption {
-      type = types.str;
+    name = lib.mkOption {
+      type = lib.types.str;
       description = "Agent name, usually same as the hostname";
       default = config.networking.hostName;
       defaultText = "config.networking.hostName";
     };
 
-    profile = mkOption {
-      type = types.nullOr types.str;
+    verbose = lib.mkOption {
+      type = lib.types.bool;
+      description = "Enable verbose output";
+      default = false;
+    };
+
+    profile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Profile name, defaults to 'system' (NixOS).";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cachix;
-      defaultText = literalExpression "pkgs.cachix";
-      description = "Cachix Client package to use.";
+    host = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Cachix uri to use.";
     };
 
-    credentialsFile = mkOption {
-      type = types.path;
+    package = lib.mkPackageOption pkgs "cachix" { };
+
+    credentialsFile = lib.mkOption {
+      type = lib.types.path;
       default = "/etc/cachix-agent.token";
       description = ''
         Required file that needs to contain CACHIX_AGENT_TOKEN=...
@@ -39,19 +49,32 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.cachix-agent = {
       description = "Cachix Deploy Agent";
-      after = ["network-online.target"];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
-      # don't restart while changing
-      reloadIfChanged = true;
+
+      # Cachix requires $USER to be set
       environment.USER = "root";
+
+      # don't stop the service if the unit disappears
+      unitConfig.X-StopOnRemoval = false;
+
       serviceConfig = {
-        Restart = "on-failure";
+        # we don't want to kill children processes as those are deployments
+        KillMode = "process";
+        Restart = "always";
+        RestartSec = 5;
         EnvironmentFile = cfg.credentialsFile;
-        ExecStart = "${cfg.package}/bin/cachix deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
+        ExecStart = ''
+          ${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} ${
+            lib.optionalString (cfg.host != null) "--host ${cfg.host}"
+          } \
+            deploy agent ${cfg.name} ${lib.optionalString (cfg.profile != null) cfg.profile}
+        '';
       };
     };
   };

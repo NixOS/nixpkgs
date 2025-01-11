@@ -1,16 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "audioread";
-  version = "2.1.9";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3480e42056c8e80a8192a54f6729a280ef66d27782ee11cbd63e9d4d1523089";
+    hash = "sha256-rFRgpUmMSL3y6OdnQCWDpNzRP0QU0ob0LOQ3nos1Bm0=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   # No tests, need to disable or py3k breaks
   doCheck = false;

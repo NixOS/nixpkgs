@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.nix.gc;
 in
@@ -14,42 +12,40 @@ in
 
     nix.gc = {
 
-      automatic = mkOption {
+      automatic = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Automatically run the garbage collector at a specific time.";
       };
 
-      dates = mkOption {
-        type = types.str;
+      dates = lib.mkOption {
+        type = lib.types.singleLineStr;
         default = "03:15";
         example = "weekly";
         description = ''
           How often or when garbage collection is performed. For most desktop and server systems
           a sufficient garbage collection is once a week.
 
-          The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          This value must be a calendar event in the format specified by
+          {manpage}`systemd.time(7)`.
         '';
       };
 
-      randomizedDelaySec = mkOption {
+      randomizedDelaySec = lib.mkOption {
         default = "0";
-        type = types.str;
+        type = lib.types.singleLineStr;
         example = "45min";
         description = ''
           Add a randomized delay before each garbage collection.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
+          {manpage}`systemd.time(7)`
         '';
       };
 
-      persistent = mkOption {
+      persistent = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         example = false;
         description = ''
           Takes a boolean argument. If true, the time when the service
@@ -63,20 +59,18 @@ in
         '';
       };
 
-      options = mkOption {
+      options = lib.mkOption {
         default = "";
         example = "--max-freed $((64 * 1024**3))";
-        type = types.str;
+        type = lib.types.singleLineStr;
         description = ''
-          Options given to <filename>nix-collect-garbage</filename> when the
-          garbage collector is run automatically.
+          Options given to [`nix-collect-garbage`](https://nixos.org/manual/nix/stable/command-ref/nix-collect-garbage) when the garbage collector is run automatically.
         '';
       };
 
     };
 
   };
-
 
   ###### implementation
 
@@ -91,7 +85,8 @@ in
     systemd.services.nix-gc = lib.mkIf config.nix.enable {
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
-      startAt = optional cfg.automatic cfg.dates;
+      serviceConfig.Type = "oneshot";
+      startAt = lib.optional cfg.automatic cfg.dates;
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {

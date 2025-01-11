@@ -1,16 +1,21 @@
-{ lib, fetchFromGitHub, buildDunePackage, stdlib-shims }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  stdlib-shims,
+}:
 
 buildDunePackage rec {
   pname = "bitstring";
-  version = "4.1.0";
+  version = "4.1.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "xguerin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mghsl8b2zd2676mh1r9142hymhvzy9cw8kgkjmirxkn56wbf56b";
+    sha256 = "sha256-eO7/S9PoMybZPnQQ+q9qbqKpYO4Foc9OjW4uiwwNds8=";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];

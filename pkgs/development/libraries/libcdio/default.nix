@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, libcddb, pkg-config, ncurses, help2man, libiconv, Carbon, IOKit }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libcddb,
+  pkg-config,
+  ncurses,
+  help2man,
+  libiconv,
+  Carbon,
+  IOKit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcdio";
@@ -10,6 +22,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fixes test failure of realpath test with glibc-2.36
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/libcdio/raw/d49ccdd9c8b4e9d57c01539f4c8948f28ce82bca/f/realpath-test-fix.patch";
+      sha256 = "sha256-ldAGlcf79uQ8QAt4Au8Iv6jsI6ICZXtXOKZBpyELtN8=";
+    })
+
     # pull pending upstream patch to fix build on ncurses-6.3:
     #  https://savannah.gnu.org/patch/index.php?10130
     (fetchpatch {
@@ -23,14 +41,31 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkg-config help2man ];
-  buildInputs = [ libcddb ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
+  nativeBuildInputs = [
+    pkg-config
+    help2man
+  ];
+  buildInputs =
+    [
+      libcddb
+      libiconv
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      IOKit
+    ];
 
-  doCheck = !stdenv.isDarwin;
+  enableParallelBuilding = true;
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "A library for OS-independent CD-ROM and CD image access";
+    description = "Library for OS-independent CD-ROM and CD image access";
     longDescription = ''
       GNU libcdio is a library for OS-independent CD-ROM and
       CD image access.  It includes a library for working with
@@ -39,6 +74,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

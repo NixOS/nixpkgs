@@ -1,22 +1,26 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.SystemdJournal2Gelf;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.SystemdJournal2Gelf;
 in
 
-{ options = {
+{
+  options = {
     services.SystemdJournal2Gelf = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable SystemdJournal2Gelf.
         '';
       };
 
-      graylogServer = mkOption {
-        type = types.str;
+      graylogServer = lib.mkOption {
+        type = lib.types.str;
         example = "graylog2.example.com:11201";
         description = ''
           Host and port of your graylog2 input. This should be a GELF
@@ -24,28 +28,21 @@ in
         '';
       };
 
-      extraOptions = mkOption {
-        type = types.separatedString " ";
+      extraOptions = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "";
         description = ''
           Any extra flags to pass to SystemdJournal2Gelf. Note that
-          these are basically <literal>journalctl</literal> flags.
+          these are basically `journalctl` flags.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.systemd-journal2gelf;
-        defaultText = literalExpression "pkgs.systemd-journal2gelf";
-        description = ''
-          SystemdJournal2Gelf package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "systemd-journal2gelf" { };
 
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.SystemdJournal2Gelf = {
       description = "SystemdJournal2Gelf";
       after = [ "network.target" ];

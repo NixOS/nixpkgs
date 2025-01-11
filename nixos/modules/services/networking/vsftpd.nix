@@ -1,19 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
-  /* minimal secure setup:
+  /*
+    minimal secure setup:
 
-   enable = true;
-   forceLocalLoginsSSL = true;
-   forceLocalDataSSL = true;
-   userlistDeny = false;
-   localUsers = true;
-   userlist = ["non-root-user" "other-non-root-user"];
-   rsaCertFile = "/var/vsftpd/vsftpd.pem";
-
+    enable = true;
+    forceLocalLoginsSSL = true;
+    forceLocalDataSSL = true;
+    userlistDeny = false;
+    localUsers = true;
+    userlist = ["non-root-user" "other-non-root-user"];
+    rsaCertFile = "/var/vsftpd/vsftpd.pem";
   */
 
   cfg = config.services.vsftpd;
@@ -27,7 +32,8 @@ let
       type = types.bool;
       name = nixosName;
       value = mkOption {
-        inherit description default;
+        description = description;
+        inherit default;
         type = types.bool;
       };
     };
@@ -68,16 +74,16 @@ let
       Whether users are included.
     '')
     (yesNoOption "userlistDeny" "userlist_deny" false ''
-      Specifies whether <option>userlistFile</option> is a list of user
+      Specifies whether {option}`userlistFile` is a list of user
       names to allow or deny access.
-      The default <literal>false</literal> means whitelist/allow.
+      The default `false` means whitelist/allow.
     '')
     (yesNoOption "forceLocalLoginsSSL" "force_local_logins_ssl" false ''
-      Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
+      Only applies if {option}`sslEnable` is true. Non anonymous (local) users
       must use a secure SSL connection to send a password.
     '')
     (yesNoOption "forceLocalDataSSL" "force_local_data_ssl" false ''
-      Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
+      Only applies if {option}`sslEnable` is true. Non anonymous (local) users
       must use a secure SSL connection for sending/receiving data on data connection.
     '')
     (yesNoOption "portPromiscuous" "port_promiscuous" false ''
@@ -85,59 +91,58 @@ let
       outgoing data connections can only connect to the client. Only enable if you
       know what you are doing!
     '')
-    (yesNoOption "ssl_tlsv1" "ssl_tlsv1" true  ''
-      Only applies if <option>ssl_enable</option> is activated. If
+    (yesNoOption "ssl_tlsv1" "ssl_tlsv1" true ''
+      Only applies if {option}`ssl_enable` is activated. If
       enabled, this option will permit TLS v1 protocol connections.
       TLS v1 connections are preferred.
     '')
     (yesNoOption "ssl_sslv2" "ssl_sslv2" false ''
-      Only applies if <option>ssl_enable</option> is activated. If
+      Only applies if {option}`ssl_enable` is activated. If
       enabled, this option will permit SSL v2 protocol connections.
       TLS v1 connections are preferred.
     '')
     (yesNoOption "ssl_sslv3" "ssl_sslv3" false ''
-      Only applies if <option>ssl_enable</option> is activated. If
+      Only applies if {option}`ssl_enable` is activated. If
       enabled, this option will permit SSL v3 protocol connections.
       TLS v1 connections are preferred.
     '')
   ];
 
-  configFile = pkgs.writeText "vsftpd.conf"
-    ''
-      ${concatMapStrings (x: "${x.cfgText}\n") optionDescription}
-      ${optionalString (cfg.rsaCertFile != null) ''
-        ssl_enable=YES
-        rsa_cert_file=${cfg.rsaCertFile}
-      ''}
-      ${optionalString (cfg.rsaKeyFile != null) ''
-        rsa_private_key_file=${cfg.rsaKeyFile}
-      ''}
-      ${optionalString (cfg.userlistFile != null) ''
-        userlist_file=${cfg.userlistFile}
-      ''}
-      background=YES
-      listen=NO
-      listen_ipv6=YES
-      nopriv_user=vsftpd
-      secure_chroot_dir=/var/empty
-      ${optionalString (cfg.localRoot != null) ''
-        local_root=${cfg.localRoot}
-      ''}
-      syslog_enable=YES
-      ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
-        seccomp_sandbox=NO
-      ''}
-      anon_umask=${cfg.anonymousUmask}
-      ${optionalString cfg.anonymousUser ''
-        anon_root=${cfg.anonymousUserHome}
-      ''}
-      ${optionalString cfg.enableVirtualUsers ''
-        guest_enable=YES
-        guest_username=vsftpd
-      ''}
-      pam_service_name=vsftpd
-      ${cfg.extraConfig}
-    '';
+  configFile = pkgs.writeText "vsftpd.conf" ''
+    ${concatMapStrings (x: "${x.cfgText}\n") optionDescription}
+    ${optionalString (cfg.rsaCertFile != null) ''
+      ssl_enable=YES
+      rsa_cert_file=${cfg.rsaCertFile}
+    ''}
+    ${optionalString (cfg.rsaKeyFile != null) ''
+      rsa_private_key_file=${cfg.rsaKeyFile}
+    ''}
+    ${optionalString (cfg.userlistFile != null) ''
+      userlist_file=${cfg.userlistFile}
+    ''}
+    background=YES
+    listen=NO
+    listen_ipv6=YES
+    nopriv_user=vsftpd
+    secure_chroot_dir=/var/empty
+    ${optionalString (cfg.localRoot != null) ''
+      local_root=${cfg.localRoot}
+    ''}
+    syslog_enable=YES
+    ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
+      seccomp_sandbox=NO
+    ''}
+    anon_umask=${cfg.anonymousUmask}
+    ${optionalString cfg.anonymousUser ''
+      anon_root=${cfg.anonymousUserHome}
+    ''}
+    ${optionalString cfg.enableVirtualUsers ''
+      guest_enable=YES
+      guest_username=vsftpd
+    ''}
+    pam_service_name=vsftpd
+    ${cfg.extraConfig}
+  '';
 
 in
 
@@ -152,9 +157,9 @@ in
       enable = mkEnableOption "vsftpd";
 
       userlist = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
-        description = "See <option>userlistFile</option>.";
+        description = "See {option}`userlistFile`.";
       };
 
       userlistFile = mkOption {
@@ -162,12 +167,12 @@ in
         default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
         defaultText = literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
         description = ''
-          Newline separated list of names to be allowed/denied if <option>userlistEnable</option>
-          is <literal>true</literal>. Meaning see <option>userlistDeny</option>.
+          Newline separated list of names to be allowed/denied if {option}`userlistEnable`
+          is `true`. Meaning see {option}`userlistDeny`.
 
-          The default is a file containing the users from <option>userlist</option>.
+          The default is a file containing the users from {option}`userlist`.
 
-          If explicitely set to null userlist_file will not be set in vsftpd's config file.
+          If explicitly set to null userlist_file will not be set in vsftpd's config file.
         '';
       };
 
@@ -175,7 +180,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the <literal>pam_userdb</literal>-based
+          Whether to enable the `pam_userdb`-based
           virtual user system
         '';
       };
@@ -185,8 +190,8 @@ in
         example = "/etc/vsftpd/userDb";
         default = null;
         description = ''
-          Only applies if <option>enableVirtualUsers</option> is true.
-          Path pointing to the <literal>pam_userdb</literal> user
+          Only applies if {option}`enableVirtualUsers` is true.
+          Path pointing to the `pam_userdb` user
           database used by vsftpd to authenticate the virtual users.
 
           This user list should be stored in the Berkeley DB database
@@ -194,21 +199,21 @@ in
 
           To generate a new user database, create a text file, add
           your users using the following format:
-          <programlisting>
+          ```
           user1
           password1
           user2
           password2
-          </programlisting>
+          ```
 
-          You can then install <literal>pkgs.db</literal> to generate
+          You can then install `pkgs.db` to generate
           the Berkeley DB using
-          <programlisting>
+          ```
           db_load -T -t hash -f logins.txt userDb.db
-          </programlisting>
+          ```
 
-          Caution: <literal>pam_userdb</literal> will automatically
-          append a <literal>.db</literal> suffix to the filename you
+          Caution: `pam_userdb` will automatically
+          append a `.db` suffix to the filename you
           provide though this option. This option shouldn't include
           this filetype suffix.
         '';
@@ -264,52 +269,59 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion =
-              (cfg.forceLocalLoginsSSL -> cfg.rsaCertFile != null)
-          &&  (cfg.forceLocalDataSSL -> cfg.rsaCertFile != null);
+      {
+        assertion =
+          (cfg.forceLocalLoginsSSL -> cfg.rsaCertFile != null)
+          && (cfg.forceLocalDataSSL -> cfg.rsaCertFile != null);
         message = "vsftpd: If forceLocalLoginsSSL or forceLocalDataSSL is true then a rsaCertFile must be provided!";
       }
       {
-        assertion = (cfg.enableVirtualUsers -> cfg.userDbPath != null)
-                 && (cfg.enableVirtualUsers -> cfg.localUsers != null);
+        assertion =
+          (cfg.enableVirtualUsers -> cfg.userDbPath != null) && (cfg.enableVirtualUsers -> cfg.localUsers);
         message = "vsftpd: If enableVirtualUsers is true, you need to setup both the userDbPath and localUsers options.";
-      }];
+      }
+    ];
 
-    users.users = {
-      "vsftpd" = {
-        group = "vsftpd";
-        isSystemUser = true;
-        description = "VSFTPD user";
-        home = if cfg.localRoot != null
-               then cfg.localRoot # <= Necessary for virtual users.
-               else "/homeless-shelter";
-      };
-    } // optionalAttrs cfg.anonymousUser {
-      "ftp" = { name = "ftp";
+    users.users =
+      {
+        "vsftpd" = {
+          group = "vsftpd";
+          isSystemUser = true;
+          description = "VSFTPD user";
+          home =
+            if cfg.localRoot != null then
+              cfg.localRoot # <= Necessary for virtual users.
+            else
+              "/homeless-shelter";
+        };
+      }
+      // optionalAttrs cfg.anonymousUser {
+        "ftp" = {
+          name = "ftp";
           uid = config.ids.uids.ftp;
           group = "ftp";
           description = "Anonymous FTP user";
           home = cfg.anonymousUserHome;
         };
-    };
+      };
 
-    users.groups.vsftpd = {};
+    users.groups.vsftpd = { };
     users.groups.ftp.gid = config.ids.gids.ftp;
 
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root
-    services.vsftpd.userlist = if cfg.userlistDeny then ["root"] else [];
+    services.vsftpd.userlist = optional cfg.userlistDeny "root";
 
     systemd = {
-      tmpfiles.rules = optional cfg.anonymousUser
-        #Type Path                       Mode User   Gr    Age Arg
-        "d    '${builtins.toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
+      tmpfiles.rules =
+        optional cfg.anonymousUser
+          #Type Path                       Mode User   Gr    Age Arg
+          "d    '${builtins.toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
       services.vsftpd = {
         description = "Vsftpd Server";
 
@@ -321,7 +333,7 @@ in
       };
     };
 
-    security.pam.services.vsftpd.text = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null)''
+    security.pam.services.vsftpd.text = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) ''
       auth required pam_userdb.so db=${cfg.userDbPath}
       account required pam_userdb.so db=${cfg.userDbPath}
     '';

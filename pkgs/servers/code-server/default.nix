@@ -1,61 +1,109 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
-, cacert, moreutils, jq, git, rsync, pkg-config, yarn, python3
-, esbuild, nodejs-14_x, node-gyp, libsecret, xorg, ripgrep
-, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  cacert,
+  moreutils,
+  jq,
+  git,
+  rsync,
+  pkg-config,
+  yarn,
+  python3,
+  esbuild,
+  nodejs,
+  node-gyp,
+  libsecret,
+  xorg,
+  ripgrep,
+  AppKit,
+  Cocoa,
+  CoreServices,
+  Security,
+  cctools,
+  xcbuild,
+  quilt,
+  nixosTests,
+}:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs-14_x;
   python = python3;
   yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
+  defaultYarnOpts = [ ];
 
-  # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path : version : ''
-    mkdir -p ${path}/node_modules/esbuild/bin
-    jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
-  '';
-
-in stdenv.mkDerivation rec {
-  pname = "code-server";
-  version = "4.0.1";
-  commit = "7fe23daf009e5234eaa54a1ea5ff26df384c47ac";
-
-  src = fetchFromGitHub {
-    owner = "cdr";
-    repo = "code-server";
-    rev = "v${version}";
-    sha256 = "1s3dcmzlkyh7qfs3ai1p7dlp45iys0ax1fbxxz17p395pw9anrrl";
+  esbuild' = esbuild.override {
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.16.17";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
 
-  cloudAgent = buildGoModule rec {
-    pname = "cloud-agent";
-    version = "0.2.3";
+  # replaces esbuild's download script with a binary from nixpkgs
+  patchEsbuild = path: version: ''
+    mkdir -p ${path}/node_modules/esbuild/bin
+    jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
+    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
+    ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
+  '';
 
-    src = fetchFromGitHub {
-      owner = "cdr";
-      repo = "cloud-agent";
-      rev = "v${version}";
-      sha256 = "14i1qq273f0yn5v52ryiqwj7izkd1yd212di4gh4bqypmmzhw3jj";
-    };
+  # Comment from @code-asher, the code-server maintainer
+  # See https://github.com/NixOS/nixpkgs/pull/240001#discussion_r1244303617
+  #
+  # If the commit is missing it will break display languages (Japanese, Spanish,
+  # etc). For some reason VS Code has a hard dependency on the commit being set
+  # for that functionality.
+  # The commit is also used in cache busting. Without the commit you could run
+  # into issues where the browser is loading old versions of assets from the
+  # cache.
+  # Lastly, it can be helpful for the commit to be accurate in bug reports
+  # especially when they are built outside of our CI as sometimes the version
+  # numbers can be unreliable (since they are arbitrarily provided).
+  #
+  # To compute the commit when upgrading this derivation, do:
+  # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
+  # Example: `$ git rev-parse v4.16.1`
+  commit = "1962f48b7f71772dc2c060dbaa5a6b4c0792a549";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "code-server";
+  version = "4.91.1";
 
-    vendorSha256 = "0k9v10wkzx53r5syf6bmm81gr4s5dalyaa07y9zvx6vv5r2h0661";
-
-    postPatch = ''
-      # the cloud-agent release tag has an empty version string, so add it back in
-      substituteInPlace internal/version/version.go \
-        --replace 'var Version string' 'var Version string = "v${version}"'
-    '';
+  src = fetchFromGitHub {
+    owner = "coder";
+    repo = "code-server";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-w0+lg/DcxKLrAz6DQGQ9+yPn42LrQ95Yn16IKNfqPvE=";
   };
 
   yarnCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-${system}-yarn-cache";
-    inherit src;
-    nativeBuildInputs = [ yarn' git cacert ];
+    name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
+    inherit (finalAttrs) src;
+
+    nativeBuildInputs = [
+      yarn'
+      git
+      cacert
+    ];
+
     buildPhase = ''
+      runHook preBuild
+
       export HOME=$PWD
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
@@ -66,26 +114,53 @@ in stdenv.mkDerivation rec {
         xargs -I {} yarn --cwd {} \
           --frozen-lockfile --ignore-scripts --ignore-platform \
           --ignore-engines --no-progress --non-interactive
+
+      find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
+        xargs -I {} yarn --cwd {} \
+          --ignore-scripts --ignore-engines
+
+      runHook postBuild
     '';
+
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-
-    # to get hash values use nix-build -A code-server.prefetchYarnCache
-    outputHash = "0qmfsirld1qfl2s26rxbpmvxsyj2pvzkgk8w89zlrgbhgc5fj8p9";
+    outputHash = "sha256-LCmygPid6VJqR1PCOMk/Hc6bo4nwsLwYr7O1p3FQVvQ=";
   };
 
   nativeBuildInputs = [
-    nodejs yarn' python pkg-config makeWrapper git rsync jq moreutils
+    nodejs
+    yarn'
+    python
+    pkg-config
+    makeWrapper
+    git
+    rsync
+    jq
+    moreutils
+    quilt
   ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile ])
-    ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa CoreServices Security cctools xcbuild
+
+  buildInputs =
+    [
+      xorg.libX11
+      xorg.libxkbfile
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libsecret
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Cocoa
+      CoreServices
+      Security
+      cctools
+      xcbuild
     ];
 
   patches = [
-    # remove download of coder-cloud agent
-    ./remove-cloud-agent-download.patch
+    # Remove all git calls from the VS Code build script except `git rev-parse
+    # HEAD` which is replaced in postPatch with the commit.
+    ./build-vscode-nogit.patch
   ];
 
   postPatch = ''
@@ -94,11 +169,15 @@ in stdenv.mkDerivation rec {
     patchShebangs ./ci
 
     # inject git commit
-    substituteInPlace ci/build/build-release.sh \
-      --replace '$(git rev-parse HEAD)' "$commit"
+    substituteInPlace ./ci/build/build-vscode.sh \
+      --replace-fail '$(git rev-parse HEAD)' "${commit}"
+    substituteInPlace ./ci/build/build-release.sh \
+      --replace-fail '$(git rev-parse HEAD)' "${commit}"
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     # run yarn offline by default
     echo '--install.offline true' >> .yarnrc
 
@@ -108,11 +187,7 @@ in stdenv.mkDerivation rec {
     '') defaultYarnOpts}
 
     # set offline mirror to yarn cache we created in previous steps
-    yarn --offline config set yarn-offline-mirror "${yarnCache}"
-
-    # link coder-cloud agent from nix store
-    mkdir -p lib
-    ln -s "${cloudAgent}/bin/cloud-agent" ./lib/coder-cloud-agent
+    yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
 
     # skip unnecessary electron download
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
@@ -127,131 +202,149 @@ in stdenv.mkDerivation rec {
     # use updated node-gyp. fixes the following error on Darwin:
     # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
     export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
+
+    runHook postConfigure
   '';
 
-  buildPhase = ''
-    # install code-server dependencies
-    yarn --offline --ignore-scripts
+  buildPhase =
+    ''
+      runHook preBuild
 
-    # patch shebangs of everything to allow binary packages to build
-    patchShebangs .
+      # Apply patches.
+      quilt push -a
 
-    # Skip shellcheck download
-    jq "del(.scripts.preinstall)" node_modules/shellcheck/package.json | sponge node_modules/shellcheck/package.json
+      export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+      export SKIP_SUBMODULE_DEPS=1
+      export NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=4096"
 
-    # rebuild binary packages now that scripts have been patched
-    npm rebuild
+      # Remove all built-in extensions, as these are 3rd party extensions that
+      # get downloaded from the VS Code marketplace.
+      jq --slurp '.[0] * .[1]' "./lib/vscode/product.json" <(
+        cat << EOF
+      {
+        "builtInExtensions": []
+      }
+      EOF
+      ) | sponge ./lib/vscode/product.json
 
-    # Replicate ci/dev/postinstall.sh
-    echo "----- Replicate ci/dev/postinstall.sh"
-    yarn --cwd "./vendor" install --modules-folder modules --offline --ignore-scripts --frozen-lockfile
+      # Disable automatic updates.
+      sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
+        lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
 
-    # Replicate vendor/postinstall.sh
-    echo " ----- Replicate vendor/postinstall.sh"
-    yarn --cwd "./vendor/modules/code-oss-dev" --offline --frozen-lockfile --ignore-scripts install
+      # Patch out remote download of nodejs from build script.
+      patch -p1 -i ${./remove-node-download.patch}
 
-    # remove all built-in extensions, as these are 3rd party extensions that
-    # get downloaded from vscode marketplace
-    jq --slurp '.[0] * .[1]' "vendor/modules/code-oss-dev/product.json" <(
-      cat << EOF
-    {
-      "builtInExtensions": []
-    }
-    EOF
-    ) | sponge vendor/modules/code-oss-dev/product.json
+      # Install dependencies.
+      patchShebangs .
+      find . -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {} yarn --cwd {} \
+            --offline --frozen-lockfile --ignore-scripts --ignore-engines
+      patchShebangs .
 
-    # disable automatic updates
-    sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
-      vendor/modules/code-oss-dev/src/vs/platform/update/common/update.config.contribution.ts
+      # Use esbuild from nixpkgs.
+      ${patchEsbuild "./lib/vscode/build" "0.12.6"}
+      ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
 
-    # put ripgrep binary into bin, so postinstall does not try to download it
-    find -name vscode-ripgrep -type d \
-      -execdir mkdir -p {}/bin \; \
-      -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
+      # Kerberos errors while building, so remove it for now as it is not
+      # required.
+      yarn remove kerberos --cwd lib/vscode/remote --offline --frozen-lockfile --ignore-scripts --ignore-engines
 
-    # Playwright is only needed for tests, we can disable it for builds.
-    # There's an environment variable to disable downloads, but the package makes a breaking call to
-    # sw_vers before that variable is checked.
-    patch -p1 -i ${./playwright.patch}
+      # Put ripgrep binary into bin, so post-install does not try to download it.
+      find -name ripgrep -type d \
+        -execdir mkdir -p {}/bin \; \
+        -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
-    # Patch out remote download of nodejs from build script
-    patch -p1 -i ${./remove-node-download.patch}
+      # Run post-install scripts after patching.
+      find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
+        -and -type f -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+      patchShebangs .
 
-    # Replicate install vscode dependencies without running script for all vscode packages
-    # that require patching for postinstall scripts to succeed
-    find ./vendor/modules/code-oss-dev -path "*node_modules" -prune -o \
-      -path "./*/*/*/*/*" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --frozen-lockfile --offline --ignore-scripts --ignore-engines
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
+      # (see issue #101229).
+      pushd ./lib/vscode/remote/node_modules/@parcel/watcher
+      mkdir -p ./build/Release
+      mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+      jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
+      popd
+    ''
+    + ''
 
+      # Build binary packages (argon2, node-pty, etc).
+      npm rebuild --offline
+      npm rebuild --offline --prefix lib/vscode/remote
 
-    # patch shebangs of everything to allow binary packages to build
-    patchShebangs .
+      # Build code-server and VS Code.
+      yarn build
+      VERSION=${finalAttrs.version} yarn build:vscode
 
-    ${patchEsbuild "./vendor/modules/code-oss-dev/build" "0.12.6"}
-    ${patchEsbuild "./vendor/modules/code-oss-dev/extensions" "0.11.23"}
-  '' + lib.optionalString stdenv.isDarwin ''
-    # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-    # (see issue #101229)
-    pushd ./vendor/modules/code-oss-dev/remote/node_modules/@parcel/watcher
-    mkdir -p ./build/Release
-    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
-    jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
-    popd
-  '' + ''
-    # rebuild binaries, we use npm here, as yarn does not provide an alternative
-    # that would not attempt to try to reinstall everything and break our
-    # patching attempts
-    npm rebuild --prefix vendor/modules/code-oss-dev --update-binary
+      # Inject version into package.json.
+      jq --slurp '.[0] * .[1]' ./package.json <(
+        cat << EOF
+      {
+        "version": "${finalAttrs.version}"
+      }
+      EOF
+      ) | sponge ./package.json
 
-    # run postinstall scripts after patching
-    find ./vendor/modules/code-oss-dev -path "*node_modules" -prune -o \
-      -path "./*/*/*/*/*" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+      # Create release, keeping all dependencies.
+      KEEP_MODULES=1 yarn release
 
-    # build code-server
-    yarn build
+      # Prune development dependencies.  We only need to do this for the root as
+      # the VS Code build process already does this for VS Code.
+      npm prune --omit=dev --prefix release
 
-    # build vscode
-    yarn build:vscode
-
-    # create release
-    yarn release
-  '';
+      runHook postBuild
+    '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/code-server $out/bin
 
     # copy release to libexec path
     cp -R -T release "$out/libexec/code-server"
 
-    # install only production dependencies
-    yarn --offline --cwd "$out/libexec/code-server" --production
-
-    # link coder-cloud agent from nix store
-    mkdir -p $out/libexec/code-server/lib
-    ln -s "${cloudAgent}/bin/cloud-agent" $out/libexec/code-server/lib/coder-cloud-agent
-
     # create wrapper
-    makeWrapper "${nodejs-14_x}/bin/node" "$out/bin/code-server" \
+    makeWrapper "${nodejs}/bin/node" "$out/bin/code-server" \
       --add-flags "$out/libexec/code-server/out/node/entry.js"
+
+    runHook postInstall
   '';
 
   passthru = {
-    prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
+    prefetchYarnCache = lib.overrideDerivation finalAttrs.yarnCache (d: {
       outputHash = lib.fakeSha256;
     });
+    tests = {
+      inherit (nixosTests) code-server;
+    };
+    # vscode-with-extensions compatibility
+    executableName = "code-server";
+    longName = "Visual Studio Code Server";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/coder/code-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the
       browser.
     '';
-    homepage = "https://github.com/cdr/code-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ offline ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    homepage = "https://github.com/coder/code-server";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      offline
+      henkery
+      code-asher
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
+    mainProgram = "code-server";
   };
-}
+})

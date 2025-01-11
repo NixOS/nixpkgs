@@ -1,38 +1,81 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, nodePackages, alsa-lib, gtk3, libdbusmenu, libxshmfence, mesa, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  electron,
+  cacert,
+  gitMinimal,
+  yarn,
+}:
 stdenv.mkDerivation rec {
   pname = "whalebird";
-  version = "4.5.4";
+  version = "6.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/h3poteto/whalebird-desktop/releases/download/${version}/Whalebird-${version}-linux-x64.deb";
-    sha256 = "048c2hpnlzjli8r1lcm7hd32qfsq4p9vkimrgc049yw9f15ndjpr";
+  src = fetchFromGitHub {
+    owner = "h3poteto";
+    repo = "whalebird-desktop";
+    rev = "v${version}";
+    hash = "sha256-Jf+vhsfVjNrxdBkwwh3D3d2AlsGHfmEn90dq2QrKi2k=";
+  };
+  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
+  offlineCache = stdenv.mkDerivation {
+    name = "whalebird-${version}-offline-cache";
+    inherit src;
+
+    nativeBuildInputs = [
+      cacert # needed for git
+      gitMinimal # needed to download git dependencies
+      yarn
+    ];
+
+    buildPhase = ''
+      export HOME=$(mktemp -d)
+      yarn config set enableTelemetry 0
+      yarn config set cacheFolder $out
+      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.cpu '[ "arm64", "x64" ]'
+      yarn
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-SJCJq1vkO/jH9YgB3rV/pK4wV5Prm3sNjOj9YwL6XTw=";
   };
 
   nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
     makeWrapper
-    nodePackages.asar
+    copyDesktopItems
+    yarn
   ];
 
-  buildInputs = [ alsa-lib gtk3 libdbusmenu libxshmfence mesa nss ];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Whalebird";
+      comment = meta.description;
+      categories = [ "Network" ];
+      exec = "whalebird";
+      icon = "whalebird";
+      name = "whalebird";
+    })
+  ];
 
-  dontConfigure = true;
-
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
+  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   buildPhase = ''
     runHook preBuild
 
-    # Necessary steps to find the tray icon
-    asar extract opt/Whalebird/resources/app.asar "$TMP/work"
-    substituteInPlace $TMP/work/dist/electron/main.js \
-      --replace "jo,\"tray_icon.png\"" "\"$out/opt/Whalebird/resources/build/icons/tray_icon.png\""
-    asar pack --unpack='{*.node,*.ftz,rect-overlay}' "$TMP/work" opt/Whalebird/resources/app.asar
+    export HOME=$(mktemp -d)
+    yarn config set enableTelemetry 0
+    yarn config set cacheFolder ${offlineCache}
+
+    yarn --immutable-cache
+    yarn run nextron build --no-pack
+    yarn run electron-builder --dir \
+      --config electron-builder.yml \
+      -c.electronDist="${electron.dist}" \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -40,22 +83,35 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    mv usr/share opt $out
+    mkdir -p $out/opt
+    cp -r ./dist/*-unpacked $out/opt/Whalebird
 
-    substituteInPlace $out/share/applications/whalebird.desktop \
-      --replace '/opt/Whalebird' $out/bin
-    makeWrapper ${electron}/bin/electron $out/bin/whalebird \
-      --add-flags $out/opt/Whalebird/resources/app.asar
+    # Install icons
+    # Taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=whalebird#n41
+    for i in 16 32 128 256 512; do
+      install -Dm644 "resources/icons/icon.iconset/icon_$i"x"$i.png" \
+        "$out/share/icons/hicolor/$i"x"$i/apps/whalebird.png"
+    done
+    install -Dm644 "resources/icons/icon.iconset/icon_32x32@2x.png" \
+      "$out/share/icons/hicolor/64x64/apps/whalebird.png"
+
+    makeWrapper "${electron}/bin/electron" "$out/bin/whalebird" \
+      --add-flags "$out/opt/Whalebird/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Electron based Mastodon, Pleroma and Misskey client for Windows, Mac and Linux";
+    description = "Single-column Fediverse client for desktop";
+    mainProgram = "whalebird";
     homepage = "https://whalebird.social";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ weathercold ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

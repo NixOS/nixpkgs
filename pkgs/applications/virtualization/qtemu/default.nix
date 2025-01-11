@@ -1,4 +1,12 @@
-{ lib, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  pkg-config,
+  qmake,
+  qtbase,
+  qemu,
+}:
 
 mkDerivation rec {
   pname = "qtemu";
@@ -41,5 +49,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];
+    mainProgram = "qtemu";
   };
 }

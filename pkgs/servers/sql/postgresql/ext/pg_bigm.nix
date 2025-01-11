@@ -1,31 +1,29 @@
-{ lib, stdenv, fetchurl, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_bigm";
-  version = "1.2-20200228";
+  version = "1.2-20240606";
 
-  src = fetchurl {
-    url = "mirror://osdn/pgbigm/72448/${pname}-${version}.tar.gz";
-    sha256 = "1hxn90prldwriqmqlf33ypgbxw5v54gkzx1305yzghryzfg7rhbl";
+  src = fetchFromGitHub {
+    owner = "pgbigm";
+    repo = "pg_bigm";
+    rev = "v${version}";
+    hash = "sha256-5Uy1DmGZR4WdtRUvNdZ5b9zBHJUb9idcEzW20rkreBs=";
   };
 
-  buildInputs = [ postgresql ];
-
   makeFlags = [ "USE_PGXS=1" ];
-
-  installPhase = ''
-    mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *.so      $out/lib
-    cp *.sql     $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-  '';
 
   meta = with lib; {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
   };

@@ -1,28 +1,38 @@
-{ lib
-, pythonOlder
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, slurm
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  cython,
+  slurm,
 }:
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "21.08.4";
-  format = "setuptools";
+  version = "24.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "v${version}";
-    hash = "sha256-9ZYTBO8g+5B9D8Ll5JjkJYFyh0RQNIjxg958UZoCNmA=";
+    tag = "v${version}";
+    hash = "sha256-EJTzaoHBidnaHxFLw8FrjJITUxioRGEhl1yvm/QDpXc=";
   };
 
-  buildInputs = [ cython slurm ];
+  nativeBuildInputs = [ setuptools ];
 
-  setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
+  buildInputs = [
+    cython
+    slurm
+  ];
+
+  env = {
+    SLURM_LIB_DIR = "${lib.getLib slurm}/lib";
+    SLURM_INCLUDE_DIR = "${lib.getDev slurm}/include";
+  };
 
   # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
   doCheck = false;

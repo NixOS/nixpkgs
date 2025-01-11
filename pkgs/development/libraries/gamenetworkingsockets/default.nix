@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, go, protobuf, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  go,
+  protobuf,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "GameNetworkingSockets";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1d3k1ciw8c8rznxsr4bfmw0f0srblpflv8xqavhcxx2zwvaya78c";
+    sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
   };
 
-  nativeBuildInputs = [ cmake ninja go ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    go
+  ];
 
   cmakeFlags = [ "-G Ninja" ];
 

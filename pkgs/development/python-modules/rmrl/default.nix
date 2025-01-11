@@ -1,34 +1,47 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, pdfrw
-, reportlab
-, svglib
-, xdg
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pdfrw,
+  reportlab,
+  rmscene,
+  setuptools,
+  svglib,
+  xdg,
 }:
 
 buildPythonPackage rec {
   pname = "rmrl";
-  version = "0.2.1";
+  version = "0.2.1-unstable-2023-06-1";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
-  format = "pyproject";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c532bef4168350e6ab17cf37c6481dc12b6a78e007c073503f082f36215b71c9";
+  src = fetchFromGitHub {
+    owner = "benneti";
+    repo = "rmrl";
+    rev = "e6f20322c80c6551174da1826c78261dfb3b74fe";
+    hash = "sha256-jGWYrw6kcNSb4zhyCjap3l8+YCdOkk5kb5UCiBgW8u0=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
+  pythonRelaxDeps = [
+    "reportlab"
+    "rmscene"
+    "xdg"
+  ];
+
   propagatedBuildInputs = [
     pdfrw
     reportlab
+    rmscene
+    setuptools
     svglib
     xdg
   ];
@@ -40,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Render reMarkable documents to PDF";
-    homepage = "https://github.com/rschroll/rmrl";
+    homepage = "https://github.com/benneti/rmrl";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

@@ -1,35 +1,51 @@
-{ stdenv, lib, fetchFromGitHub, expat, ocaml, findlib, ounit }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  expat,
+  ocaml,
+  findlib,
+  ounit,
+}:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-expat";
-  version = "1.1.0";
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
+  "ocaml_expat is not available for OCaml ${ocaml.version}"
 
-  src = fetchFromGitHub {
-    owner = "whitequark";
-    repo = "ocaml-expat";
-    rev = "v${version}";
-    sha256 = "07wm9663z744ya6z2lhiz5hbmc76kkipg04j9vw9dqpd1y1f2x3q";
-  };
+  stdenv.mkDerivation
+  rec {
+    pname = "ocaml${ocaml.version}-expat";
+    version = "1.3.0";
 
-  prePatch = ''
-    substituteInPlace Makefile --replace "gcc" "\$(CC)"
-  '';
+    src = fetchFromGitHub {
+      owner = "whitequark";
+      repo = "ocaml-expat";
+      rev = "v${version}";
+      hash = "sha256-eDA6MUcztaI+fpunWBdanNnPo9Y5gvbj/ViVcxYYEBg=";
+    };
 
-  nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ expat ounit ];
+    prePatch = ''
+      substituteInPlace Makefile --replace "gcc" "\$(CC)"
+    '';
 
-  strictDeps = true;
+    nativeBuildInputs = [
+      ocaml
+      findlib
+    ];
+    buildInputs = [ expat ];
 
-  doCheck = lib.versionOlder ocaml.version "4.06";
-  checkTarget = "testall";
+    strictDeps = true;
 
-  createFindlibDestdir = true;
+    doCheck = lib.versionAtLeast ocaml.version "4.08";
+    checkTarget = "testall";
+    checkInputs = [ ounit ];
 
-  meta = {
-    description = "OCaml wrapper for the Expat XML parsing library";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
-  };
-}
+    createFindlibDestdir = true;
+
+    meta = {
+      description = "OCaml wrapper for the Expat XML parsing library";
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.vbgl ];
+      inherit (src.meta) homepage;
+      inherit (ocaml.meta) platforms;
+    };
+  }

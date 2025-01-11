@@ -1,9 +1,16 @@
-{ buildPecl, lib, php, pkg-config, openssl, libevent }:
+{
+  buildPecl,
+  lib,
+  php,
+  pkg-config,
+  openssl,
+  libevent,
+}:
 buildPecl {
   pname = "event";
 
-  version = "3.0.6";
-  sha256 = "sha256-BN43wydPQBCVla29YoPqKSVihSZCkLAIgDZb+CNQecw=";
+  version = "3.0.8";
+  sha256 = "sha256-4+ke3T3BXglpuSVMw2Jq4Hgl45vybWG0mTX2b2A9e2s=";
 
   configureFlags = [
     "--with-event-libevent-dir=${libevent.dev}"
@@ -19,14 +26,14 @@ buildPecl {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl libevent ];
+  buildInputs = [
+    openssl
+    libevent
+  ];
   internalDeps = [ php.extensions.sockets ];
 
   meta = with lib; {
-    description = ''
-      This is an extension to efficiently schedule I/O, time and signal based
-      events using the best I/O notification mechanism available for specific platform.
-    '';
+    description = "Efficiently schedule I/O, time and signal based events using the best I/O notification mechanism available";
     license = licenses.php301;
     homepage = "https://bitbucket.org/osmanov/pecl-event/";
     maintainers = teams.php.members;

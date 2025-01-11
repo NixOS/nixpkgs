@@ -23,8 +23,8 @@ in
                 default = false;
                 description = ''
                   Take unencrypted connections from the
-                  <literal>source</literal> socket and send encrypted
-                  connections to the <literal>target</literal> socket.
+                  `source` socket and send encrypted
+                  connections to the `target` socket.
                 '';
               };
 
@@ -33,8 +33,8 @@ in
                 default = false;
                 description = ''
                   Take encrypted connections from the
-                  <literal>source</literal> socket and send unencrypted
-                  connections to the <literal>target</literal> socket.
+                  `source` socket and send unencrypted
+                  connections to the `target` socket.
                 '';
               };
 
@@ -43,10 +43,10 @@ in
                 description = ''
                   Address on which spiped should listen for incoming
                   connections.  Must be in one of the following formats:
-                  <literal>/absolute/path/to/unix/socket</literal>,
-                  <literal>host.name:port</literal>,
-                  <literal>[ip.v4.ad.dr]:port</literal> or
-                  <literal>[ipv6::addr]:port</literal> - note that
+                  `/absolute/path/to/unix/socket`,
+                  `host.name:port`,
+                  `[ip.v4.ad.dr]:port` or
+                  `[ipv6::addr]:port` - note that
                   hostnames are resolved when spiped is launched and are
                   not re-resolved later; thus if DNS entries change
                   spiped will continue to connect to the expired
@@ -62,11 +62,11 @@ in
               keyfile = mkOption {
                 type    = types.path;
                 description = ''
-                  Name of a file containing the spiped key. As the
-                  daemon runs as the <literal>spiped</literal> user, the
-                  key file must be somewhere owned by that user. By
-                  default, we recommend putting the keys for any spipe
-                  services in <literal>/var/lib/spiped</literal>.
+                  Name of a file containing the spiped key.
+                  As the daemon runs as the `spiped` user,
+                  the key file must be readable by that user.
+                  To securely manage the file within your configuration
+                  consider a tool such as agenix or sops-nix.
                 '';
               };
 
@@ -92,13 +92,13 @@ in
                 type = types.bool;
                 default = false;
                 description = ''
-                  Wait for DNS. Normally when <literal>spiped</literal> is
+                  Wait for DNS. Normally when `spiped` is
                   launched it resolves addresses and binds to its source
                   socket before the parent process returns; with this option
                   it will daemonize first and retry failed DNS lookups until
-                  they succeed. This allows <literal>spiped</literal> to
+                  they succeed. This allows `spiped` to
                   launch even if DNS isn't set up yet, but at the expense of
-                  losing the guarantee that once <literal>spiped</literal> has
+                  losing the guarantee that once `spiped` has
                   finished launching it will be ready to create pipes.
                 '';
               };
@@ -158,8 +158,8 @@ in
         description = ''
           Configuration for a secure pipe daemon. The daemon can be
           started, stopped, or examined using
-          <literal>systemctl</literal>, under the name
-          <literal>spiped@foo</literal>.
+          `systemctl`, under the name
+          `spiped@foo`.
         '';
       };
     };
@@ -185,20 +185,12 @@ in
       serviceConfig = {
         Restart   = "always";
         User      = "spiped";
-        PermissionsStartOnly = true;
       };
+      stopIfChanged = false;
 
-      preStart  = ''
-        cd /var/lib/spiped
-        chmod -R 0660 *
-        chown -R spiped:spiped *
-      '';
       scriptArgs = "%i";
       script = "exec ${pkgs.spiped}/bin/spiped -F `cat /etc/spiped/$1.spec`";
     };
-
-    system.activationScripts.spiped = optionalString (cfg.config != {})
-      "mkdir -p /var/lib/spiped";
 
     # Setup spiped config files
     environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"

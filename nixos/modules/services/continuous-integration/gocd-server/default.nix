@@ -1,11 +1,18 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.gocd-server;
   opt = options.services.gocd-server;
-in {
+in
+{
   options = {
     services.gocd-server = {
       enable = mkEnableOption "gocd-server";
@@ -29,7 +36,10 @@ in {
       extraGroups = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        example = [ "wheel" "docker" ];
+        example = [
+          "wheel"
+          "docker"
+        ];
         description = ''
           List of extra groups that the "gocd-server" user should be a part of.
         '';
@@ -46,7 +56,7 @@ in {
 
       port = mkOption {
         default = 8153;
-        type = types.int;
+        type = types.port;
         description = ''
           Specifies port number on which the Go.CD server HTTP interface listens.
         '';
@@ -69,7 +79,13 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
+        default = [
+          pkgs.stdenv
+          pkgs.jre
+          pkgs.git
+          config.programs.ssh.package
+          pkgs.nix
+        ];
         defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
@@ -106,6 +122,8 @@ in {
           "-Dcruise.config.file=${cfg.workDir}/conf/cruise-config.xml"
           "-Dcruise.server.port=${toString cfg.port}"
           "-Dcruise.server.ssl.port=${toString cfg.sslPort}"
+          "--add-opens=java.base/java.lang=ALL-UNNAMED"
+          "--add-opens=java.base/java.util=ALL-UNNAMED"
         ];
         defaultText = literalExpression ''
           [
@@ -119,6 +137,8 @@ in {
             "-Dcruise.config.file=''${config.${opt.workDir}}/conf/cruise-config.xml"
             "-Dcruise.server.port=''${toString config.${opt.port}}"
             "-Dcruise.server.ssl.port=''${toString config.${opt.sslPort}}"
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+            "--add-opens=java.base/java.util=ALL-UNNAMED"
           ]
         '';
 
@@ -153,7 +173,7 @@ in {
         description = ''
           Additional environment variables to be passed to the gocd-server process.
           As a base environment, gocd-server receives NIX_PATH from
-          <option>environment.sessionVariables</option>, NIX_REMOTE is set to
+          {option}`environment.sessionVariables`, NIX_REMOTE is set to
           "daemon".
         '';
       };
@@ -184,14 +204,15 @@ in {
 
       environment =
         let
-          selectedSessionVars =
-            lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
-              config.environment.sessionVariables;
+          selectedSessionVars = lib.filterAttrs (
+            n: v: builtins.elem n [ "NIX_PATH" ]
+          ) config.environment.sessionVariables;
         in
-          selectedSessionVars //
-            { NIX_REMOTE = "daemon";
-            } //
-            cfg.environment;
+        selectedSessionVars
+        // {
+          NIX_REMOTE = "daemon";
+        }
+        // cfg.environment;
 
       path = cfg.packages;
 
@@ -199,7 +220,7 @@ in {
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
         ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
                                ${concatStringsSep " " cfg.extraOptions}  \
-                              -jar ${pkgs.gocd-server}/go-server/go.jar
+                              -jar ${pkgs.gocd-server}/go-server/lib/go.jar
       '';
 
       serviceConfig = {

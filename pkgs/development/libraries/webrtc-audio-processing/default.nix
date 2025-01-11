@@ -1,43 +1,83 @@
-{ lib, stdenv, fetchurl
-, darwin
-, abseil-cpp_202111
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchurl,
+  darwin,
+  abseil-cpp,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webrtc-audio-processing";
-  version = "1.0";
+  version = "1.3";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v1.0/webrtc-audio-processing-v${version}.tar.gz";
-    sha256 = "sha256-dqRy1OfOG9TX2cgCD8cowU44zVanns/nPYZrilPfuiU=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pulseaudio";
+    repo = "webrtc-audio-processing";
+    rev = "v${version}";
+    hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
+
+  patches = [
+    # Fix an include oppsie that happens to not happen on glibc
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/merge_requests/38
+    (fetchurl {
+      url = "https://git.alpinelinux.org/aports/plain/community/webrtc-audio-processing-1/0001-rtc_base-Include-stdint.h-to-fix-build-failures.patch?id=625e19c19972e69e034c0870a31b375833d1ab5d";
+      hash = "sha256-9nI22SJoU0H3CzsPSAObtCFTadtvkzdnqIh6mxmUuds=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
   ];
 
-  buildInputs = [
-    abseil-cpp_202111
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  propagatedBuildInputs = [
+    abseil-cpp
+  ];
 
-  patchPhase = ''
-    # this is just incorrect upstream
-    # see https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/4
-    substituteInPlace meson.build \
-      --replace "absl_flags_registry" "absl_flags_reflection"
-    '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
-  '';
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      ApplicationServices
+      Foundation
+    ]
+  );
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
+    NIX_CFLAGS_COMPILE = "-msse2";
+  };
 
   meta = with lib; {
-    homepage = "http://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
-    description = "A more Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
+    homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
+    description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = licenses.bsd3;
-    # attempts to inline 256bit AVX instructions on x86
-    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
-    platforms = lib.lists.subtractLists platforms.i686 platforms.unix;
+    platforms =
+      intersectLists
+        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
+        (platforms.darwin ++ platforms.linux ++ platforms.windows)
+        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
+        (
+          platforms.arm
+          ++ platforms.aarch64
+          ++ platforms.mips
+          ++ platforms.power
+          ++ platforms.riscv
+          ++ platforms.x86
+        );
+    # BE platforms are unsupported
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
+    badPlatforms = platforms.bigEndian;
   };
 }

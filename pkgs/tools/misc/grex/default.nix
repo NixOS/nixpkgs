@@ -1,25 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, Security
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "grex";
-  version = "1.3.0";
-
-  cargoSha256 = "sha256-zNwTk4RcTv2dGbKWelOPSvasBmj7tnjLhQ0DZhZ9hxk=";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "pemistahl";
-    repo = pname;
+    repo = "grex";
     rev = "v${version}";
-    sha256 = "sha256-NMz35jgd7XPemVdA8nol2H6cgWD3yEPh0FEMPw8kgKQ=";
+    hash = "sha256-Ut2H2H66XN1+wHpYivnuhil21lbd7bwIcIcMyIimdis=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  cargoHash = "sha256-ZRE1vKgi0/UtSe2bdN0BLdtDfAauTfwcqOcl3y63fAA=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -27,9 +27,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A command-line tool for generating regular expressions from user-provided test cases";
+    description = "Command-line tool for generating regular expressions from user-provided test cases";
     homepage = "https://github.com/pemistahl/grex";
+    changelog = "https://github.com/pemistahl/grex/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "grex";
+    maintainers = with maintainers; [
+      SuperSandro2000
+      mfrw
+    ];
   };
 }

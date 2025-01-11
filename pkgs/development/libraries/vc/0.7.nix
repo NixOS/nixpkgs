@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "Vc";
@@ -22,11 +27,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Library for multiprecision complex arithmetic with exact rounding";
     homepage = "https://github.com/VcDevel/Vc";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken =
+      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  version = "0.9.6";
+  version = "0.9.91";
   pname = "qjackctl";
 
   # some dependencies such as killall have to be installed additionally
@@ -13,8 +13,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rncbc";
     repo = "qjackctl";
-    rev = "${pname}_${lib.replaceChars ["."] ["_"] version}";
-    sha256 = "sha256-8oVnUe+/y4p1WeHMEhKMIl0/ax3PT0pN4f1UJaBmZBw=";
+    rev = "${pname}_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "sha256-YfdRyylU/ktFvsh18FjpnG9MkV1HxHJBhRnHWQ7I+hY=";
   };
 
   buildInputs = [
@@ -37,10 +37,11 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Qt application to control the JACK sound server daemon";
+    description = "Qt application to control the JACK sound server daemon";
+    mainProgram = "qjackctl";
     homepage = "https://github.com/rncbc/qjackctl";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

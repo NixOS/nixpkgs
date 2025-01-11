@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, typing-extensions
-, dataclasses
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +23,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  pythonImportsCheck = [
-    "simple_di"
-  ];
+  pythonImportsCheck = [ "simple_di" ];
 
   # pypi distribution contains no tests
   doCheck = false;

@@ -1,30 +1,35 @@
-{ lib
-, buildPythonPackage
-, internetarchive
-, fetchPypi
-, yt-dlp
-, docopt
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  internetarchive,
+  fetchPypi,
+  yt-dlp,
+  docopt,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "0.0.31";
+  version = "2024.12.21";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hoVmkBrXc2AN5K/vZpxby1U7huhXbfFCiy+2Njt+2Lk=";
+    hash = "sha256-ZQMok8os+EIv65FJzErZkS7fjkzBf9KBPWbyWq3HO5k=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docopt==0.6.2" "docopt" \
-      --replace "internetarchive==2.0.3" "internetarchive"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ internetarchive docopt yt-dlp ];
+  dependencies = [
+    internetarchive
+    docopt
+    yt-dlp
+  ];
+
+  pythonRelaxDeps = [ "docopt" ];
 
   pythonImportsCheck = [ "tubeup" ];
 
@@ -33,8 +38,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Youtube (and other video site) to Internet Archive Uploader";
+    mainProgram = "tubeup";
     homepage = "https://github.com/bibanon/tubeup";
+    changelog = "https://github.com/bibanon/tubeup/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

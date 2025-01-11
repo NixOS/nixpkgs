@@ -1,56 +1,77 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
-, dnspython
-, geoip2
-, ipython
-, praw
-, pyenchant
-, pygeoip
-, pytestCheckHook
-, pytz
-, sqlalchemy
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  geoip2,
+  ipython,
+  isPyPy,
+  setuptools,
+  praw,
+  pyenchant,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  sqlalchemy,
+  xmltodict,
+  importlib-metadata,
+  packaging,
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.8";
-  disabled = isPyPy;
+  version = "8.0.1";
+  pyproject = true;
+
+  disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zxb95GVcDrd3FG/k+0PLg+dVlMgQpf1ntG8jF/zpHH4=";
+    hash = "sha256-Z9Tcn2lb5a7c6aVbhPjuO6trrZQwSBA1iaMiDzpe+DA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=66.1" "setuptools"
+  '';
+
+  dependencies = [
     dnspython
     geoip2
     ipython
     praw
     pyenchant
-    pygeoip
     pytz
     sqlalchemy
     xmltodict
+    importlib-metadata
+    packaging
   ];
 
-  # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "praw>=4.0.0,<6.0.0" "praw" \
-      --replace "sqlalchemy<1.4" "sqlalchemy"
-  '';
+  pythonRemoveDeps = [ "sopel-help" ];
 
-  checkInputs = [ pytestCheckHook ];
+  pythonRelaxDeps = [ "sqlalchemy" ];
 
-  preCheck = ''
-    export TESTDIR=$(mktemp -d)
-    cp -R ./test $TESTDIR
-    pushd $TESTDIR
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postCheck = ''
-    popd
-  '';
+  disabledTests = [
+    # requires network access
+    "test_example_exchange_cmd_0"
+    "test_example_exchange_cmd_1"
+    "test_example_duck_0"
+    "test_example_duck_1"
+    "test_example_suggest_0"
+    "test_example_suggest_1"
+    "test_example_suggest_2"
+    "test_example_tr2_0"
+    "test_example_tr2_1"
+    "test_example_tr2_2"
+    "test_example_title_command_0"
+    "test_example_wiktionary_0"
+    "test_example_wiktionary_ety_0"
+  ];
 
   pythonImportsCheck = [ "sopel" ];
 
@@ -59,5 +80,6 @@ buildPythonPackage rec {
     homepage = "https://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
+    mainProgram = "sopel";
   };
 }

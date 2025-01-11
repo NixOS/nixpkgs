@@ -1,17 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ cmake
+, fetchFromGitHub
+, lib
+, stdenv
+}:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has
 # just recently been renamed again to oneDNN. See here for details:
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oneDNN";
-  version = "2.3.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
-    rev = "v${version}";
-    sha256 = "sha256-sfTcBthrnt7m9AnzdwWl9yLu1jRpwUp8i9s9DlA3IJo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/ERkk6bgGEKoJEVdnBxMFEzB8pii71t3zQZNtyg+TdQ=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -21,24 +25,21 @@ stdenv.mkDerivation rec {
   # Tests fail on some Hydra builders, because they do not support SSE4.2.
   doCheck = false;
 
-  # The test driver doesn't add an RPath to the build libdir
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src
-  '';
-
-  # The cmake install gets tripped up and installs a nix tree into $out, in
-  # addition to the correct install; clean it up.
+  # Fixup bad cmake paths
   postInstall = ''
-    rm -r $out/nix
+    substituteInPlace $out/lib/cmake/dnnl/dnnl-config.cmake \
+      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
+
+    substituteInPlace $out/lib/cmake/dnnl/dnnl-targets.cmake \
+      --replace "\''${_IMPORT_PREFIX}/" ""
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${finalAttrs.version}";
     description = "oneAPI Deep Neural Network Library (oneDNN)";
     homepage = "https://01.org/oneDNN";
-    changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice bhipple ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bhipple ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,18 +1,19 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "cone";
-  version = "unstable-2021-07-25";
+  version = "unstable-2022-12-12";
 
   src = fetchFromGitHub {
     owner = "jondgoodwin";
     repo = pname;
-    rev = "5feaabc342bcff3755f638a7e25155cd12127592";
-    sha256 = "CTDS83AWtuDY5g6NDn7O2awrYsKFf3Kp35FkMEjfbVw=";
+    rev = "698bd6afc75777eabbc8ef576d64d683c6a1c5ab";
+    sha256 = "0y2s9xgkci8n72v6gnc1i7shr2y3g2sa8fbr25gpxa9ipiq9khg7";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,10 +22,10 @@ llvmPackages.stdenv.mkDerivation rec {
     llvmPackages.llvm
   ];
 
+  # M68k is an experimental target, so not enabled by default
   postPatch = ''
     sed -i CMakeLists.txt \
-        -e 's/LLVM 7/LLVM/' \
-        -e '/AVR/d'
+        -e '/M68k/d'
   '';
 
   installPhase = ''
@@ -34,9 +35,10 @@ llvmPackages.stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cone Programming Language";
+    mainProgram = "conec";
     homepage = "https://cone.jondgoodwin.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

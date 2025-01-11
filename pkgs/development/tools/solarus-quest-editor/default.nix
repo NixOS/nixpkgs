@@ -1,7 +1,22 @@
-{ lib, mkDerivation, fetchFromGitLab, cmake, luajit
-, SDL2, SDL2_image, SDL2_ttf, physfs, fetchpatch
-, openal, libmodplug, libvorbis, solarus
-, qtbase, qttools, glm }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  cmake,
+  luajit,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  physfs,
+  fetchpatch,
+  openal,
+  libmodplug,
+  libvorbis,
+  solarus,
+  qtbase,
+  qttools,
+  glm,
+}:
 
 mkDerivation rec {
   pname = "solarus-quest-editor";
@@ -23,19 +38,32 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ luajit SDL2 SDL2_image SDL2_ttf physfs openal
-    libmodplug libvorbis solarus qtbase qttools glm ];
+  buildInputs = [
+    luajit
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    physfs
+    openal
+    libmodplug
+    libvorbis
+    solarus
+    qtbase
+    qttools
+    glm
+  ];
 
   meta = with lib; {
-    description = "The editor for the Zelda-like ARPG game engine, Solarus";
+    description = "Editor for the Zelda-like ARPG game engine, Solarus";
+    mainProgram = "solarus-quest-editor";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
       Many full-fledged games have been writen for the engine.
       Games can be created easily using the editor.
     '';
-    homepage = "http://www.solarus-games.org";
+    homepage = "https://www.solarus-games.org";
     license = licenses.gpl3;
-    maintainers = [ maintainers.Nate-Devv ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 

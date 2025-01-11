@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchPypi, psutil, matplotlib, pytest }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  psutil,
+  matplotlib,
+  pytest,
+}:
 buildPythonApplication rec {
   pname = "psrecord";
   version = "1.2";
@@ -9,10 +16,11 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    psutil matplotlib
+    psutil
+    matplotlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -27,5 +35,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/astrofrog/psrecord";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ johnazoidberg ];
+    mainProgram = "psrecord";
   };
 }

@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, p4est-withMetis ? true, metis
-, p4est-sc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  p4est-withMetis ? true,
+  metis,
+  p4est-sc,
 }:
 
 let
   inherit (p4est-sc) debugEnable mpiSupport;
-  dbg = if debugEnable then "-dbg" else "";
+  dbg = lib.optionalString debugEnable "-dbg";
   withMetis = p4est-withMetis;
 in
 stdenv.mkDerivation {
@@ -22,7 +27,10 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   propagatedBuildInputs = [ p4est-sc ];
   buildInputs = lib.optional withMetis metis;
   inherit debugEnable mpiSupport withMetis;
@@ -31,17 +39,22 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -i -e "s:\(^\s*ACLOCAL_AMFLAGS.*\)\s@P4EST_SC_AMFLAGS@\s*$:\1 -I ${p4est-sc}/share/aclocal:" Makefile.am
   '';
-  preConfigure = ''
+  preAutoreconf = ''
     echo "2.8.0" > .tarball-version
-    ${if mpiSupport then "unset CC" else ""}
+  '';
+  preConfigure = lib.optionalString mpiSupport ''
+    unset CC
   '';
 
-  configureFlags = p4est-sc.configureFlags
-    ++ [ "--with-sc=${p4est-sc}" ]
-    ++ lib.optional withMetis "--with-metis"
-  ;
+  configureFlags =
+    p4est-sc.configureFlags ++ [ "--with-sc=${p4est-sc}" ] ++ lib.optional withMetis "--with-metis";
 
-  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding preCheck doCheck;
+  inherit (p4est-sc)
+    makeFlags
+    dontDisableStatic
+    enableParallelBuilding
+    doCheck
+    ;
 
   meta = {
     branch = "prev3-develop";

@@ -1,30 +1,35 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
+, qmake
+, wrapQtAppsHook
+, qt6Packages
 , bison
 , flex
 , which
 , alsa-lib
 , libsndfile
-, qt4
-, qscintilla-qt4
 , libpulseaudio
 , libjack2
 , audioBackend ? "pulse" # "pulse", "alsa", or "jack"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.3.5.2";
+  version = "1.5.4.2";
 
-  src = fetchurl {
-    url = "https://audicle.cs.princeton.edu/mini/release/files/miniAudicle-${version}.tgz";
-    hash = "sha256-dakDz69uHbKZFj8z67CubmRXEQ5X6GuYqlCXXvLzqSI=";
+  src = fetchFromGitHub {
+    owner = "ccrma";
+    repo = "miniAudicle";
+    rev = "chuck-${finalAttrs.version}";
+    hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
+    fetchSubmodules = true;
   };
 
-  sourceRoot = "miniAudicle-${version}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
+    echo '#define GIT_REVISION "${finalAttrs.version}-NixOS"' > git-rev.h
     substituteInPlace miniAudicle.pro \
       --replace "/usr/local" $out
   '';
@@ -33,27 +38,27 @@ stdenv.mkDerivation rec {
     bison
     flex
     which
+    qmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
     libsndfile
-    qt4
-    qscintilla-qt4
+    qt6Packages.qscintilla
   ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
     ++ lib.optional (audioBackend == "jack")  libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
   meta = with lib; {
-    description = "A light-weight integrated development environment for the ChucK digital audio programming language";
+    description = "Light-weight integrated development environment for the ChucK digital audio programming language";
+    mainProgram = "miniAudicle";
     homepage = "https://audicle.cs.princeton.edu/mini/";
     downloadPage = "https://audicle.cs.princeton.edu/mini/linux/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # not attempted
+    broken = stdenv.hostPlatform.isDarwin; # not attempted
   };
-}
+})

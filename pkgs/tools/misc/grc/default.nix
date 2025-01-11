@@ -1,6 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  installShellFiles,
 }:
 
 buildPythonApplication rec {
@@ -20,24 +22,37 @@ buildPythonApplication rec {
       substituteInPlace $f \
         --replace /usr/local/ $out/
     done
+
+    # Support for absolute store paths.
+    substituteInPlace grc.conf \
+      --replace "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
   '';
+
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall
+
     ./install.sh "$out" "$out"
-    install -Dm444 -t $out/share/zsh/vendor-completions _grc
+    installShellCompletion --zsh --name _grc _grc
+
     runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
-    description = "A generic text colouriser";
+    description = "Generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for
       beautifying your logfiles or output of commands.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [
+      azahi
+      lovek323
+      peterhoeg
+    ];
     platforms = platforms.unix;
+    mainProgram = "grc";
   };
 }

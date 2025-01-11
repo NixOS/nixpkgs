@@ -1,93 +1,91 @@
-{ lib
-, babel
-, buildPythonPackage
-, colorama
-, cssselect
-, feedparser
-, fetchFromGitLab
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer-six
-, pillow
-, prettytable
-, pyqt5
-, python-dateutil
-, pythonOlder
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchFromGitLab,
+  fetchpatch,
+  html2text,
+  lxml,
+  packaging,
+  pillow,
+  prettytable,
+  pycountry,
+  pytestCheckHook,
+  python-dateutil,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  testers,
+  unidecode,
+  woob,
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.0";
-  format = "setuptools";
+  version = "3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "woob";
-    repo = pname;
+    repo = "woob";
     rev = version;
-    hash = "sha256-XLcHNidclORbxVXgcsHY6Ja/dak+EVSKTaVQmg1f/rw=";
+    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
-  nativeBuildInputs = [
-    pyqt5
+  patches = [
+    (fetchpatch {
+      name = "no-deprecated-pkg_resources.patch";
+      url = "https://gitlab.com/woob/woob/-/commit/3283c4c1a935cc71acea98b2d8c88bc4bf28f643.patch";
+      hash = "sha256-3bRuv93ivKRxbGr52coO023DlxHZWwUeInXTPqQAeL8=";
+    })
   ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [ "packaging" ];
 
   propagatedBuildInputs = [
     babel
-    colorama
-    cssselect
     python-dateutil
-    feedparser
-    gdata
-    gnupg
-    google-api-python-client
+    python-jose
     html2text
-    libyaml
     lxml
-    mechanize
-    pdfminer-six
+    packaging
     pillow
     prettytable
-    pyqt5
+    pycountry
     pyyaml
     requests
-    simplejson
-    termcolor
+    rich
     unidecode
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "with-doctest = 1" "" \
-      --replace "with-coverage = 1" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    nose
+  disabledTests = [
+    # require networking
+    "test_ciphers"
+    "test_verify"
   ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  pythonImportsCheck = [ "woob" ];
 
-  pythonImportsCheck = [
-    "woob"
-  ];
+  passthru.tests.version = testers.testVersion {
+    package = woob;
+    version = "v${version}";
+  };
 
   meta = with lib; {
+    changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
+    mainProgram = "woob";
     homepage = "https://woob.tech";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ DamienCassou ];

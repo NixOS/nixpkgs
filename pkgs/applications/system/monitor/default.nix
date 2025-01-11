@@ -1,37 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libwnck
-, libgee
-, libgtop
-, libhandy
-, sassc
-, udisks2
-, wrapGAppsHook
-, libX11
-, libXext
-, libXNVCtrl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  curl,
+  flatpak,
+  gettext,
+  glib,
+  gtk3,
+  json-glib,
+  libwnck,
+  libgee,
+  libgtop,
+  libhandy,
+  sassc,
+  udisks2,
+  wrapGAppsHook3,
+  libX11,
+  libXext,
+  libXNVCtrl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.13.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-qwx60cp3Q6PL1iwRP+M9Rtmxcis0EByi8fk13H4cXfc=";
+    hash = "sha256-Kk3L4hfHon0B6Y6vU7en1UFpg221+EiVCxMX9mvu7pU=";
     fetchSubmodules = true;
   };
 
@@ -42,12 +46,15 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    curl
+    flatpak
     glib
     gtk3
+    json-glib
     pantheon.granite
     pantheon.wingpanel
     libgee
@@ -72,11 +79,17 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+
+    # Alternatively, using pkg-config here should just work.
+    substituteInPlace meson.build --replace \
+      "meson.get_compiler('c').find_library('libcurl', dirs: vapidir)" \
+      "meson.get_compiler('c').find_library('libcurl', dirs: '${curl.out}/lib')"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      # Upstream frequently tags these to fix CI, which are mostly irrelevant to us.
+      ignoredVersions = "-";
     };
   };
 

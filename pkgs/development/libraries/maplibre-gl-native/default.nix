@@ -1,26 +1,29 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, qtbase
-, curl
-, libuv
-, glfw3
-, rapidjson
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchpatch2,
+  cmake,
+  pkg-config,
+  qtbase,
+  curl,
+  libuv,
+  glfw3,
+  rapidjson,
+  stdenv,
 }:
 
 mkDerivation rec {
   pname = "maplibre-gl-native";
-  version = "unstable-2022-04-07";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "maplibre-gl-native";
-    rev = "225f8a4bfe7ad30fd59d693c1fb3ca0ba70d2806";
+    rev = "qt-v${version}";
     fetchSubmodules = true;
-    hash = "sha256-NLtpi+bDLTHlnzMZ4YFQyF5B1xt9lzHyZPvEQLlBAnY=";
+    hash = "sha256-g5J873U/6mrl27iquPl3BdEGhMxkOdfP15dHr27wa48=";
   };
 
   patches = [
@@ -28,6 +31,11 @@ mkDerivation rec {
       name = "skip-license-check.patch";
       url = "https://git.alpinelinux.org/aports/plain/testing/mapbox-gl-native/0002-skip-license-check.patch?id=6751a93dca26b0b3ceec9eb151272253a2fe497e";
       sha256 = "1yybwzxbvn0lqb1br1fyg7763p2h117s6mkmywkl4l7qg9daa7ba";
+    })
+    (fetchpatch2 {
+      name = "cstdint.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/maplibre-gl-native/cstdint.patch?id=ae8edc6b02df388ef37a69c12a5df25dd8550238";
+      hash = "sha256-o7wT/rk5vgwxEutAyIEAxwfKNxCoBtkhVcLjc7uTsYc=";
     })
   ];
 
@@ -55,12 +63,18 @@ mkDerivation rec {
     "-DMBGL_WITH_QT_HEADLESS=OFF"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but problematic with some old GCCs
+      "-Wno-error=use-after-free"
+    ]
+  );
+
   meta = with lib; {
     description = "Open-source alternative to Mapbox GL Native";
     homepage = "https://maplibre.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
-    broken = lib.versionOlder qtbase.version "5.15";
   };
 }

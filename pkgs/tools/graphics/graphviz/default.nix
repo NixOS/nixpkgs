@@ -9,7 +9,6 @@
 , fontconfig
 , gd
 , gts
-, libdevil
 , libjpeg
 , libpng
 , libtool
@@ -18,25 +17,28 @@
 , bison
 , xorg
 , ApplicationServices
+, Foundation
 , python3
-, fltk
-, exiv2
 , withXorg ? true
+
+# for passthru.tests
+, exiv2
+, fltk
+, graphicsmagick
 }:
 
 let
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "3.0.0";
+  version = "12.2.0";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    # use rev as tags have disappeared before
-    rev = "24cf7232bb8728823466e0ef536862013893e567";
-    sha256 = "sha256-qqrpCJ9WP8wadupp4YRJMMaSCeFIDuFDQvEOpbG/wGM=";
+    rev = version;
+    hash = "sha256-BSqCI9nIDjymPbCPWGFdWmqfyjuTkIsL1r0qv+Qjy10=";
   };
 
   nativeBuildInputs = [
@@ -54,41 +56,30 @@ stdenv.mkDerivation {
     fontconfig
     gd
     gts
-    libdevil
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices ];
+  ++ optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Foundation ];
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ lib.optional (xorg == null) "--without-x";
+  ] ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = lib.optionalString (withXorg && stdenv.isDarwin)
+  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin)
     "-I${cairo.dev}/include/cairo";
-
-  # ''
-  #   substituteInPlace rtest/rtest.sh \
-  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
-  # '';
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
-  postPatch = ''
-    for f in $(find . -name Makefile.in); do
-      substituteInPlace $f --replace "-lstdc++" "-lc++"
-    done
+  preAutoreconf = ''
+    ./autogen.sh
   '';
 
-  preAutoreconf = "./autogen.sh";
-
   postFixup = optionalString withXorg ''
-    substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
       --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
       --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
@@ -96,8 +87,17 @@ stdenv.mkDerivation {
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) pygraphviz;
-    inherit fltk exiv2;
+    inherit (python3.pkgs)
+      graphviz
+      pydot
+      pygraphviz
+      xdot
+    ;
+    inherit
+      exiv2
+      fltk
+      graphicsmagick
+    ;
   };
 
   meta = with lib; {

@@ -1,39 +1,109 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, typing-extensions
-, mypy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  numpy,
+  types-pytz,
+
+  # tests
+  pytestCheckHook,
+  beautifulsoup4,
+  html5lib,
+  jinja2,
+  lxml,
+  matplotlib,
+  odfpy,
+  openpyxl,
+  pandas,
+  pyarrow,
+  pyreadstat,
+  python-calamine,
+  scipy,
+  sqlalchemy,
+  tables,
+  tabulate,
+  typing-extensions,
+  xarray,
+  xlsxwriter,
 }:
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "1.2.0.39";
+  version = "2.2.3.241126";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.10";
 
-  # Use GitHub source since PyPi source does not include tests
   src = fetchFromGitHub {
-    owner = "VirtusLab";
-    repo = pname;
-    rev = "2bd932777d1050ea8f86c527266a4cd205aa15b1";
-    sha256 = "m2McU53NNvRwnWKN9GL8dW1eCGKbTi0471szRQwZu1Q=";
+    owner = "pandas-dev";
+    repo = "pandas-stubs";
+    tag = "v${version}";
+    hash = "sha256-y+td1x33mALh/AfDh0uIq7ebCBWWWCJewhvBQ4WNe3U=";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    numpy
+    types-pytz
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    beautifulsoup4
+    html5lib
+    jinja2
+    lxml
+    matplotlib
+    odfpy
+    openpyxl
+    pandas
+    pyarrow
+    pyreadstat
+    scipy
+    sqlalchemy
+    tables
+    tabulate
+    typing-extensions
+    xarray
+    xlsxwriter
+    python-calamine
+  ];
+
+  disabledTests =
+    [
+      # Missing dependencies, error and warning checks
+      "test_all_read_without_lxml_dtype_backend" # pyarrow.orc
+      "test_orc" # pyarrow.orc
+      "test_plotting" # UserWarning: No artists with labels found to put in legend.
+      "test_spss" # FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
+      "test_show_version"
+      # FutureWarning: In the future `np.bool` will be defined as the corresponding...
+      "test_timedelta_cmp"
+      "test_timestamp_cmp"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Disable tests for types that are not supported on aarch64 in `numpy` < 2.0
+      "test_astype_float" # `f16` and `float128`
+      "test_astype_complex" # `c32` and `complex256`
+    ];
+
   pythonImportsCheck = [ "pandas" ];
-  checkInputs = [ mypy ];
-  checkPhase = ''
-    mypy --config-file mypy.ini third_party/3/pandas tests/snippets
-  '';
 
   meta = with lib; {
     description = "Type annotations for Pandas";
-    homepage = "https://github.com/VirtusLab/pandas-stubs";
+    homepage = "https://github.com/pandas-dev/pandas-stubs";
     license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    maintainers = with maintainers; [ malo ];
   };
 }

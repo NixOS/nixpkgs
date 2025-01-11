@@ -1,41 +1,45 @@
-{ lib
-, ase
-, buildPythonPackage
-, cython
-, datamodeldict
-, fetchFromGitHub
-, matplotlib
-, numericalunits
-, numpy
-, pandas
-, phonopy
-, potentials
-, pymatgen
-, pytest
-, pythonOlder
-, pythonAtLeast
-, requests
-, scipy
-, toolz
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  datamodeldict,
+  fetchFromGitHub,
+  matplotlib,
+  numericalunits,
+  numpy,
+  pandas,
+  phonopy,
+  potentials,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scipy,
+  setuptools,
+  toolz,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
-  version = "1.4.4";
   pname = "atomman";
-  format = "setuptools";
+  version = "1.4.11";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
-    rev = "v${version}";
-    hash = "sha256-iLAB0KMtrTCyGpx+81QfHDPVDhq8OA6CDL/ipVRpyo0=";
+    tag = "v${version}";
+    hash = "sha256-2yxHv9fSgLM5BeUkXV9NX+xyplXtyfWodwS9sVUVzqU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    numpy
     cython
+  ];
+
+  dependencies = [
     datamodeldict
     matplotlib
     numericalunits
@@ -48,31 +52,32 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
-    ase
-    phonopy
-    pymatgen
-    pytest
-  ];
+  pythonRelaxDeps = [ "atomman" ];
 
-  checkPhase = ''
-    # pytestCheckHook doesn't work
-    pytest tests -k "not test_rootdir and not test_version \
-      and not test_atomic_mass and not imageflags \
-      and not test_build_unit and not test_set_and_get_in_units \
-      and not test_set_literal and not test_scalar_model " \
-      --ignore tests/plot/test_interpolate.py \
-      --ignore tests/tools/test_vect_angle.py
+  preCheck = ''
+    # By default, pytestCheckHook imports atomman from the current directory
+    # instead of from where `pip` installs it and fails due to missing Cython
+    # modules. Fix this by removing atomman from the current directory.
+    #
+    rm -r atomman
   '';
 
-  pythonImportsCheck = [
-    "atomman"
+  nativeCheckInputs = [
+    phonopy
+    pytestCheckHook
   ];
 
+  disabledTests = [
+    "test_unique_shifts_prototype" # needs network access to download database files
+  ];
+
+  pythonImportsCheck = [ "atomman" ];
+
   meta = with lib; {
+    changelog = "https://github.com/usnistgov/atomman/blob/${src.rev}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

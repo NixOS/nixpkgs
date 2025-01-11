@@ -1,14 +1,25 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, qtwebengine, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  poppler,
+  qtwebengine,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corepdf";
-  version = "4.3.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VwJ3H/jNP3u5C+LATPUSftiWm89upx77fN3NqzTnU7Y=";
+    hash = "sha256-t3r/bF/uKoprdDoRjrmYTND0Jws+jX6tAGnBeqofBF8=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +36,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A PDF viewer from the C Suite";
+    description = "PDF viewer from the C Suite";
+    mainProgram = "corepdf";
     homepage = "https://gitlab.com/cubocore/coreapps/corepdf";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

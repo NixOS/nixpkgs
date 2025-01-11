@@ -1,39 +1,68 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
-, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
-, pcre, librevisa, python3, qtbase, qtsvg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  pkg-config,
+  cmake,
+  glib,
+  boost,
+  libsigrok,
+  libsigrokdecode,
+  libserialport,
+  libzip,
+  libftdi1,
+  hidapi,
+  glibmm,
+  pcre,
+  python3,
+  qtsvg,
+  qttools,
+  bluez,
+  wrapQtAppsHook,
+  desktopToDarwinBundle,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pulseview";
-  version = "0.4.1";
+  version = "0.4.2-unstable-2024-03-14";
 
-  src = fetchurl {
-    url = "https://sigrok.org/download/source/pulseview/${pname}-${version}.tar.gz";
-    sha256 = "0bvgmkgz37n2bi9niskpl05hf7rsj1lj972fbrgnlz25s4ywxrwy";
+  src = fetchgit {
+    url = "git://sigrok.org/pulseview";
+    rev = "d00efc65ef47090b71c4da12797056033bee795f";
+    hash = "sha256-MwfMUqV3ejxesg+3cFeXVB5hwg4r0cOCgHJuH3ZLmNE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
-    pcre librevisa python3
-    qtbase qtsvg
-  ];
-
-  patches = [
-    # Allow building with glib 2.68
-    # PR at https://github.com/sigrokproject/pulseview/pull/39
-    (fetchpatch {
-      url = "https://github.com/sigrokproject/pulseview/commit/fb89dd11f2a4a08b73c498869789e38677181a8d.patch";
-      sha256 = "07ifsis9jlc0jjp2d11f7hvw9kaxcbk0a57h2m4xsv1d7vzl9yfh";
-    })
-  ];
+    glib
+    boost
+    libsigrok
+    libsigrokdecode
+    libserialport
+    libzip
+    libftdi1
+    hidapi
+    glibmm
+    pcre
+    python3
+    qtsvg
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   meta = with lib; {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";
+    mainProgram = "pulseview";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      bjornfor
+      vifino
+    ];
+    platforms = platforms.unix;
   };
 }

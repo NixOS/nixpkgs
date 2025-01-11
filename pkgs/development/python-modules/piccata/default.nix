@@ -1,35 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "piccata";
-  version = "2.0.0";
+  version = "2.0.2";
+  format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = pname;
-    rev = version;
-    sha256 = "0pn842jcf2czjks5dphivgp1s7wiifqiv93s0a89h0wxafd6pbsr";
+    tag = version;
+    hash = "sha256-Vuhwt+esTkvyEIRVYaRGvNMTAXVWBBv/6lpaxN5RrBA=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # No communication possible in the sandbox
     "test_client_server_communication"
   ];
 
-  pythonImportsCheck = [
-    "piccata"
-  ];
+  pythonImportsCheck = [ "piccata" ];
 
   meta = with lib; {
     description = "Simple CoAP (RFC7252) toolkit";

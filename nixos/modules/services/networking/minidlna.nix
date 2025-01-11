@@ -1,193 +1,118 @@
-# Module for MiniDLNA, a simple DLNA server.
 { config, lib, pkgs, ... }:
-
-with lib;
 
 let
   cfg = config.services.minidlna;
-  port = 8200;
-in
+  format = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
+  cfgfile = format.generate "minidlna.conf" cfg.settings;
 
-{
-  ###### interface
-  options = {
-    services.minidlna.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        ''
-          Whether to enable MiniDLNA, a simple DLNA server.  It serves
-          media files such as video and music to DLNA client devices
-          such as televisions and media players.
+in {
+  options.services.minidlna.enable = lib.mkEnableOption "MiniDLNA, a simple DLNA server. Consider adding `openFirewall = true` into your config";
+  options.services.minidlna.openFirewall = lib.mkEnableOption "opening HTTP (TCP) and SSDP (UDP) ports in the firewall";
+  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" {};
+
+  options.services.minidlna.settings = lib.mkOption {
+    default = {};
+    description = "Configuration for `minidlna.conf(5)`.";
+    type = lib.types.submodule {
+      freeformType = format.type;
+
+      options.media_dir = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        example = [ "/data/media" "V,/home/alice/video" ];
+        description = ''
+          Directories to be scanned for media files.
+          The `A,` `V,` `P,` prefixes restrict a directory to audio, video or image files.
+          The directories must be accessible to the `minidlna` user account.
         '';
-    };
-
-    services.minidlna.mediaDirs = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "/data/media" "V,/home/alice/video" ];
-      description =
-        ''
-          Directories to be scanned for media files.  The prefixes
-          <literal>A,</literal>, <literal>V,</literal> and
-          <literal>P,</literal> restrict a directory to audio, video
-          or image files.  The directories must be accessible to the
-          <literal>minidlna</literal> user account.
-        '';
-    };
-
-    services.minidlna.friendlyName = mkOption {
-      type = types.str;
-      default = "${config.networking.hostName} MiniDLNA";
-      defaultText = literalExpression ''"''${config.networking.hostName} MiniDLNA"'';
-      example = "rpi3";
-      description =
-        ''
-          Name that the DLNA server presents to clients.
-        '';
-    };
-
-    services.minidlna.rootContainer = mkOption {
-      type = types.str;
-      default = ".";
-      example = "B";
-      description =
-        ''
-          Use a different container as the root of the directory tree presented
-          to clients. The possible values are:
-          - "." - standard container
-          - "B" - "Browse Directory"
-          - "M" - "Music"
-          - "P" - "Pictures"
-          - "V" - "Video"
-          - Or, you can specify the ObjectID of your desired root container
-            (eg. 1$F for Music/Playlists)
-          If you specify "B" and the client device is audio-only then
-          "Music/Folders" will be used as root.
-         '';
-    };
-
-    services.minidlna.loglevel = mkOption {
-      type = types.str;
-      default = "warn";
-      example = "general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn";
-      description =
-        ''
-          Defines the type of messages that should be logged, and down to
-          which level of importance they should be considered.
-
-          The possible types are “artwork”, “database”, “general”, “http”,
-          “inotify”, “metadata”, “scanner”, “ssdp” and “tivo”.
-
-          The levels are “off”, “fatal”, “error”, “warn”, “info” and
-          “debug”, listed here in order of decreasing importance.  “off”
-          turns off logging messages entirely, “fatal” logs the most
-          critical messages only, and so on down to “debug” that logs every
-          single messages.
-
-          The types are comma-separated, followed by an equal sign (‘=’),
-          followed by a level that applies to the preceding types. This can
-          be repeated, separating each of these constructs with a comma.
-
-          Defaults to “general,artwork,database,inotify,scanner,metadata,
-          http,ssdp,tivo=warn” which logs every type of message at the
-          “warn” level.
-        '';
-    };
-
-    services.minidlna.announceInterval = mkOption {
-      type = types.int;
-      default = 895;
-      description =
-        ''
+      };
+      options.notify_interval = lib.mkOption {
+        type = lib.types.int;
+        default = 90000;
+        description = ''
           The interval between announces (in seconds).
-
-          By default miniDLNA will announce its presence on the network
-          approximately every 15 minutes.
-
-          Many people prefer shorter announce intervals (e.g. 60 seconds)
-          on their home networks, especially when DLNA clients are
-          started on demand.
+          Instead of waiting for announces, you should set `openFirewall` option to use SSDP discovery.
+          Lower values (e.g. 30 seconds) should be used if your network is blocking the SSDP multicast.
+          Some relevant information can be found [here](https://sourceforge.net/p/minidlna/discussion/879957/thread/1389d197/).
         '';
-    };
-
-    services.minidlna.config = mkOption {
-      type = types.lines;
-      description =
-      ''
-        The contents of MiniDLNA's configuration file.
-        When the service is activated, a basic template is generated
-        from the current options opened here.
-      '';
-    };
-
-    services.minidlna.extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
-        # Not exhaustive example
-        # Support for streaming .jpg and .mp3 files to a TiVo supporting HMO.
-        enable_tivo=no
-        # SSDP notify interval, in seconds.
-        notify_interval=10
-        # maximum number of simultaneous connections
-        # note: many clients open several simultaneous connections while
-        # streaming
-        max_connections=50
-        # set this to yes to allow symlinks that point outside user-defined
-        # media_dirs.
-        wide_links=yes
-      '';
-      description =
-      ''
-        Extra minidlna options not yet opened for configuration here
-        (strict_dlna, model_number, model_name, etc...).  This is appended
-        to the current service already provided.
-      '';
+      };
+      options.port = lib.mkOption {
+        type = lib.types.port;
+        default = 8200;
+        description = "Port number for HTTP traffic (descriptions, SOAP, media transfer).";
+      };
+      options.db_dir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/cache/minidlna";
+        example = "/tmp/minidlna";
+        description = "Specify the directory to store database and album art cache.";
+      };
+      options.friendly_name = lib.mkOption {
+        type = lib.types.str;
+        default = config.networking.hostName;
+        defaultText = lib.literalExpression "config.networking.hostName";
+        example = "rpi3";
+        description = "Name that the server presents to clients.";
+      };
+      options.root_container = lib.mkOption {
+        type = lib.types.str;
+        default = "B";
+        example = ".";
+        description = "Use a different container as the root of the directory tree presented to clients.";
+      };
+      options.log_level = lib.mkOption {
+        type = lib.types.str;
+        default = "warn";
+        example = "general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn";
+        description = "Defines the type of messages that should be logged and down to which level of importance.";
+      };
+      options.enable_subtitles = lib.mkOption {
+        type = lib.types.enum [ "yes" "no" ];
+        default = "yes";
+        description = "Enable subtitle support on unknown clients.";
+      };
+      options.inotify = lib.mkOption {
+        type = lib.types.enum [ "yes" "no" ];
+        default = "no";
+        description = "Whether to enable inotify monitoring to automatically discover new files.";
+      };
+      options.enable_tivo = lib.mkOption {
+        type = lib.types.enum [ "yes" "no" ];
+        default = "no";
+        description = "Support for streaming .jpg and .mp3 files to a TiVo supporting HMO.";
+      };
+      options.wide_links = lib.mkOption {
+        type = lib.types.enum [ "yes" "no" ];
+        default = "no";
+        description = "Set this to yes to allow symlinks that point outside user-defined `media_dir`.";
+      };
     };
   };
 
-  ###### implementation
-  config = mkIf cfg.enable {
-    services.minidlna.config =
-      ''
-        port=${toString port}
-        friendly_name=${cfg.friendlyName}
-        db_dir=/var/cache/minidlna
-        log_level=${cfg.loglevel}
-        inotify=yes
-        root_container=${cfg.rootContainer}
-        ${concatMapStrings (dir: ''
-          media_dir=${dir}
-        '') cfg.mediaDirs}
-        notify_interval=${toString cfg.announceInterval}
-        ${cfg.extraConfig}
-      '';
+  config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.port ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 1900 ];
 
+    users.groups.minidlna.gid = config.ids.gids.minidlna;
     users.users.minidlna = {
       description = "MiniDLNA daemon user";
       group = "minidlna";
       uid = config.ids.uids.minidlna;
     };
 
-    users.groups.minidlna.gid = config.ids.gids.minidlna;
+    systemd.services.minidlna = {
+      description = "MiniDLNA Server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-    systemd.services.minidlna =
-      { description = "MiniDLNA Server";
-
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig =
-          { User = "minidlna";
-            Group = "minidlna";
-            CacheDirectory = "minidlna";
-            RuntimeDirectory = "minidlna";
-            PIDFile = "/run/minidlna/pid";
-            ExecStart =
-              "${pkgs.minidlna}/sbin/minidlnad -S -P /run/minidlna/pid" +
-              " -f ${pkgs.writeText "minidlna.conf" cfg.config}";
-          };
+      serviceConfig = {
+        User = "minidlna";
+        Group = "minidlna";
+        CacheDirectory = "minidlna";
+        RuntimeDirectory = "minidlna";
+        PIDFile = "/run/minidlna/pid";
+        ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${cfgfile}";
       };
+    };
   };
 }

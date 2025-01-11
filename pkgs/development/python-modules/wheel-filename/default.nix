@@ -1,9 +1,13 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -20,25 +24,29 @@ buildPythonPackage rec {
     hash = "sha256-M3XGHG733X5qKuMS6mvFSFHYOwWPaBMXw+w0eYo6ByE=";
   };
 
-  buildInputs = [
-    attrs
+  patches = [
+    (fetchpatch {
+      name = "remove-wheel-dependency-constraint.patch";
+      url = "https://github.com/jwodder/wheel-filename/commit/11cfa57c8a32fa2a52fb5fe537859997bb642e75.patch";
+      hash = "sha256-ssePCVlJuHPJpPyFET3FnnWRlslLnZbnfn42g52yVN4=";
+    })
   ];
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=wheel_filename --no-cov-on-fail" ""
-  '';
-
-  pythonImportsCheck = [
-    "wheel_filename"
-  ];
+  pythonImportsCheck = [ "wheel_filename" ];
 
   meta = with lib; {
     description = "Parse wheel filenames";
+    mainProgram = "wheel-filename";
     homepage = "https://github.com/jwodder/wheel-filename";
     license = with licenses; [ mit ];
     maintainers = with lib.maintainers; [ ayazhafiz ];

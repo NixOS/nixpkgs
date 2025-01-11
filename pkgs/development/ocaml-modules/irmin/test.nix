@@ -1,5 +1,21 @@
-{ buildDunePackage
-, alcotest, cmdliner, irmin, metrics-unix, mtime, irmin-layers
+{
+  buildDunePackage,
+  irmin,
+  ppx_irmin,
+  mtime,
+  astring,
+  fmt,
+  jsonm,
+  logs,
+  lwt,
+  metrics-unix,
+  ocaml-syntax-shims,
+  cmdliner,
+  metrics,
+  alcotest-lwt,
+  hex,
+  vector,
+  qcheck-alcotest,
 }:
 
 buildDunePackage {
@@ -8,10 +24,29 @@ buildDunePackage {
 
   inherit (irmin) version src;
 
-  useDune2 = true;
+  nativeBuildInputs = [ ppx_irmin ];
 
   propagatedBuildInputs = [
-    alcotest cmdliner irmin metrics-unix mtime irmin-layers
+    irmin
+    ppx_irmin
+    alcotest-lwt
+    mtime
+    astring
+    fmt
+    jsonm
+    logs
+    lwt
+    metrics-unix
+    ocaml-syntax-shims
+    cmdliner
+    metrics
+  ];
+
+  doCheck = true;
+  checkInputs = [
+    hex
+    qcheck-alcotest
+    vector
   ];
 
   meta = irmin.meta // {

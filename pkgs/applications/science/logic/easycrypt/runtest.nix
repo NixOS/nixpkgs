@@ -2,6 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   inherit (easycrypt) src version;
+  format = "other";
 
   pname = "easycrypt-runtest";
 
@@ -20,5 +21,6 @@ python3Packages.buildPythonApplication rec {
 
   meta = easycrypt.meta // {
     description = "Testing program for EasyCrypt formalizations";
+    mainProgram = "ec-runtest";
   };
 }

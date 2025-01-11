@@ -1,30 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, libxfce4util
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, gtk3
-, xfce
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  libxfce4util,
+  xfce4-panel,
+  libxfce4ui,
+  xfconf,
+  gtk3,
+  gitUpdater,
 }:
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-eyes-plugin";
-  version = "4.6.0";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-eyes-plugin";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rQ/wXYi6OTt8iSL4Iz7dM/wKTosAC2HeH486EMWuUyQ=";
+    sha256 = "sha256-ArSsY3YEoLkmJhbLlhPg/meX+2sPH8KImnfh4K1KAaU=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [
@@ -35,7 +37,10 @@ in stdenv.mkDerivation rec {
     gtk3
   ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-eyes-plugin";

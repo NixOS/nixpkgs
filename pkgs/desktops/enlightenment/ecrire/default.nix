@@ -1,10 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +28,11 @@ stdenv.mkDerivation rec {
     efl
   ];
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
     description = "EFL simple text editor";
+    mainProgram = "ecrire";
     homepage = "https://www.enlightenment.org/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

@@ -1,24 +1,26 @@
-{ lib, mkDerivation, fetchFromGitHub
-, callPackage
-, pkg-config
-, makeWrapper
-, qmake
-, qtbase
-, qtwebengine
-, qtsvg
-, qtimageformats
-, aria2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  libkiwix,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtwebengine,
+  qtsvg,
+  qtimageformats,
+  aria2,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kiwix";
-  version = "2.0.5";
+  version = "2.3.1-unstable-2024-02-20";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = "${pname}-desktop";
-    rev = version;
-    sha256 = "12v43bcg4g8fcp02y2srsfdvcb7dpl4pxb9z7a235006s0kfv8yn";
+    owner = "kiwix";
+    repo = "kiwix-desktop";
+    rev = "17ac566b07814aefb1decf108e4ba6d7ad9ef7bc";
+    hash = "sha256-BZzFnQE8/dyZkpY0X3zZ6yC6yLZ002Q/RoDzEhSOa/g=";
   };
 
   nativeBuildInputs = [
@@ -27,11 +29,11 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    libkiwix
     qtbase
     qtwebengine
     qtsvg
     qtimageformats
-    (callPackage ./lib.nix {})
   ];
 
   qtWrapperArgs = [
@@ -39,10 +41,11 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An offline reader for Web content";
+    description = "Offline reader for Web content";
+    mainProgram = "kiwix-desktop";
     homepage = "https://kiwix.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = [ ];
   };
 }

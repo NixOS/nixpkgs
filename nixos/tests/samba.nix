@@ -1,40 +1,43 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "samba";
 
-{
-  name = "samba";
+    meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
-  meta.maintainers = [ pkgs.lib.maintainers.eelco ];
-
-  nodes =
-    { client =
-        { pkgs, ... }:
-        { virtualisation.fileSystems =
-            { "/public" = {
-                fsType = "cifs";
-                device = "//server/public";
-                options = [ "guest" ];
-              };
+    nodes = {
+      client =
+        { ... }:
+        {
+          virtualisation.fileSystems = {
+            "/public" = {
+              fsType = "cifs";
+              device = "//server/public";
+              options = [ "guest" ];
             };
+          };
         };
 
       server =
         { ... }:
-        { services.samba.enable = true;
-          services.samba.openFirewall = true;
-          services.samba.shares.public =
-            { path = "/public";
-              "read only" = true;
-              browseable = "yes";
-              "guest ok" = "yes";
-              comment = "Public samba share.";
+        {
+          services.samba = {
+            enable = true;
+            openFirewall = true;
+            settings = {
+              "public" = {
+                "path" = "/public";
+                "read only" = true;
+                "browseable" = "yes";
+                "guest ok" = "yes";
+                "comment" = "Public samba share.";
+              };
             };
+          };
         };
     };
 
-  # client# [    4.542997] mount[777]: sh: systemd-ask-password: command not found
-
-  testScript =
-    ''
+    testScript = ''
       server.start()
       server.wait_for_unit("samba.target")
       server.succeed("mkdir -p /public; echo bar > /public/foo")
@@ -43,4 +46,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
       client.wait_for_unit("remote-fs.target")
       client.succeed("[[ $(cat /public/foo) = bar ]]")
     '';
-})
+  }
+)

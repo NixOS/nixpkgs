@@ -1,57 +1,126 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configobj
-, patiencediff
-, fastbencode
-, fastimport
-, dulwich
-, launchpadlib
-, testtools
-, pythonOlder
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  configobj,
+  cython,
+  dulwich,
+  fastbencode,
+  fastimport,
+  pygithub,
+  libiconv,
+  merge3,
+  patiencediff,
+  pyyaml,
+  tzlocal,
+  urllib3,
+  breezy,
+  launchpadlib,
+  testtools,
+  pythonOlder,
+  installShellFiles,
+  rustPlatform,
+  rustc,
+  setuptools-gettext,
+  setuptools-rust,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.2.2";
+  version = "3.3.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-GHpuRSCN0F2BdQc2cgyDcQz0gJT1R+xAgcVxJZVZpNU=";
+  src = fetchFromGitHub {
+    owner = "breezy-team";
+    repo = "breezy";
+    rev = "brz-${version}";
+    hash = "sha256-NSfMUyx6a/vb1vTNn/fFfNktrFdB2N940m0TR6EhB9k=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
-  propagatedBuildInputs = [
-    configobj
-    fastbencode
-    patiencediff
-    fastimport
-    dulwich
-    launchpadlib
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  nativeBuildInputs = [
+    cython
+    installShellFiles
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    setuptools-gettext
+    setuptools-rust
   ];
 
-  checkInputs = [ testtools ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  # There is a conflict with their `lazy_import` and plugin tests
+  propagatedBuildInputs =
+    [
+      configobj
+      dulwich
+      fastbencode
+      merge3
+      patiencediff
+      pyyaml
+      tzlocal
+      urllib3
+    ]
+    ++ optional-dependencies.launchpad
+    ++ optional-dependencies.fastimport
+    ++ optional-dependencies.github;
+
+  optional-dependencies = {
+    launchpad = [ launchpadlib ];
+    fastimport = [ fastimport ];
+    github = [ pygithub ];
+  };
+
+  nativeCheckInputs = [ testtools ];
+
+  # multiple failures on sandbox
   doCheck = false;
 
-  # symlink for bazaar compatibility
+  checkPhase = ''
+    runHook preCheck
+
+    HOME=$TMPDIR $out/bin/brz --no-plugins selftest
+
+    runHook postCheck
+  '';
+
   postInstall = ''
+    wrapProgram $out/bin/brz --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # symlink for bazaar compatibility
     ln -s "$out/bin/brz" "$out/bin/bzr"
 
     installShellCompletion --cmd brz --bash contrib/bash/brz
   '';
 
-  pythonImportsCheck = [ "breezy" ];
+  pythonImportsCheck = [
+    "breezy"
+    "breezy.bzr.rio"
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = breezy;
+      command = "HOME=$TMPDIR brz --version";
+    };
+  };
 
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
+    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
+    mainProgram = "brz";
   };
 }

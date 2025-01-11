@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libiconv
-, pytestCheckHook
-, pythonOlder
-, rustPlatform
-, setuptools-rust
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libiconv,
+  dirty-equals,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "rtoml";
-  version = "0.7";
+  version = "0.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,42 +21,40 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-h4vY63pDkrMHt2X244FssLxHsphsfjNd6gnVFUeZZTY=";
+    hash = "sha256-1movtKMQkQ6PEpKpSkK0Oy4AV0ee7XrS0P9m6QwZTaM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "05fwcs6w023ihw3gyihzbnfwjaqy40d6h0z2yas4kqkkvz9x4f8j";
+    hash = "sha256-BWcOIZMl4yHxxKxCn6Qh69MlMdz3REp3izN0A1eFX3o=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    setuptools-rust
-    rust.rustc
-    rust.cargo
+  build-system = with rustPlatform; [
     cargoSetupHook
+    maturinBuildHook
   ];
 
-  buildInputs = [
-    libiconv
-  ];
+  buildInputs = [ libiconv ];
 
-  pythonImportsCheck = [
-    "rtoml"
-  ];
+  pythonImportsCheck = [ "rtoml" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    dirty-equals
+    pytest-benchmark
     pytestCheckHook
   ];
 
-  preCheck = ''
-    cd tests
-  '';
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  disabledTests = [
+    # TypeError: loads() got an unexpected keyword argument 'name'
+    "test_load_data_toml"
   ];
+
+  preCheck = ''
+    rm -rf rtoml
+  '';
 
   meta = with lib; {
     description = "Rust based TOML library for Python";

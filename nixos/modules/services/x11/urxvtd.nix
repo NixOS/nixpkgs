@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # maintainer: siddharthist
 
@@ -6,7 +11,8 @@ with lib;
 
 let
   cfg = config.services.urxvtd;
-in {
+in
+{
   options.services.urxvtd = {
     enable = mkOption {
       type = types.bool;
@@ -17,14 +23,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      default = pkgs.rxvt-unicode;
-      defaultText = literalExpression "pkgs.rxvt-unicode";
-      description = ''
-        Package to install. Usually pkgs.rxvt-unicode.
-      '';
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "rxvt-unicode" { };
   };
 
   config = mkIf cfg.enable {

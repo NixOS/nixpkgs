@@ -1,29 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, bmake, cleanPackaging }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bmake,
+  cleanPackaging,
+}:
 
 stdenv.mkDerivation {
   pname = "kgt";
-  version = "2021-04-07";
+  version = "2023-06-03";
 
   src = fetchFromGitHub {
     owner = "katef";
     repo = "kgt";
-    # 2021-04-07, no version tags (yet)
-    rev = "a7cbc52d368e413a3f1212c0fafccc05b2a42606";
-    sha256 = "1x6q30xb8ihxi26rzk3s2hqd827fim4l4wn3qq252ibrwcq6lqyj";
+    # 2023-06-03, no version tags (yet)
+    rev = "dc881796aa691f1fddb1d01ec77216b34fe8134d";
+    hash = "sha256-Az5995/eGUHFL1C1WAdgh1td3goHUYgzWFeVFz2zb8g=";
     fetchSubmodules = true;
   };
 
-  outputs = [ "bin" "doc" "out" ];
+  outputs = [
+    "bin"
+    "doc"
+    "out"
+  ];
 
   nativeBuildInputs = [ bmake ];
   enableParallelBuilding = true;
 
-  makeFlags = [ "-r" "PREFIX=$(bin)" ];
+  makeFlags = [
+    "-r"
+    "PREFIX=$(bin)"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    ${cleanPackaging.commonFileActions {
+    ${
+      cleanPackaging.commonFileActions {
         docFiles = [
           "README.md"
           "LICENCE"
@@ -52,7 +66,8 @@ stdenv.mkDerivation {
           ".gitattributes"
           ".github"
         ];
-      }} $doc/share/doc/kgt
+      }
+    } $doc/share/doc/kgt
 
     install -Dm755 build/bin/kgt $bin/bin/kgt
     rm build/bin/kgt
@@ -66,15 +81,16 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "BNF wrangling and railroad diagrams";
+    mainProgram = "kgt";
     longDescription = ''
       KGT: Kate's Grammar Tool
 
       Input: Various BNF-like syntaxes
       Output: Various BNF-like syntaxes, AST dumps, and Railroad Syntax Diagrams
     '';
-    homepage    = "https://github.com/katef/kgt";
-    license     = licenses.bsd2;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/katef/kgt";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ Profpatsch ];
   };
 

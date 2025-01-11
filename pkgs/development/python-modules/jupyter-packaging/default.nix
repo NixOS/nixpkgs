@@ -1,27 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecation
-, pythonOlder
-, packaging
-, pytestCheckHook
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  deprecation,
+  hatchling,
+  pythonOlder,
+  packaging,
+  pytestCheckHook,
+  pytest-timeout,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";
-  version = "0.12.0";
+  version = "0.12.3";
   disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_packaging";
     inherit version;
-    sha256 = "sha256-snRV1grck6e6ouC484a+gbkyu048ARYEbfntIwzT+qw=";
+    hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
 
-  propagatedBuildInputs = [ deprecation packaging tomlkit ];
+  patches = [
+    (fetchpatch {
+      name = "setuptools-68-test-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter-packaging/commit/e963fb27aa3b58cd70c5ca61ebe68c222d803b7e.patch";
+      hash = "sha256-NlO07wBCutAJ1DgoT+rQFkuC9Y+DyF1YFlTwWpwsJzo=";
+    })
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [ hatchling ];
+
+  propagatedBuildInputs = [
+    deprecation
+    packaging
+    setuptools
+    tomlkit
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ];
+
+  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -44,6 +70,5 @@ buildPythonPackage rec {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = licenses.bsd3;
-    maintainers = [ maintainers.elohmeier ];
   };
 }

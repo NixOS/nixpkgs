@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "flow-exporter";
@@ -11,10 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-6FqupoYWRvex7XhM7ly8f7ICnuS9JvCRIVEBIJe+64k=";
   };
 
-  vendorSha256 = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
+  vendorHash = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
 
   meta = with lib; {
     description = "Export network flows from kafka to Prometheus";
+    mainProgram = "flow-exporter";
     homepage = "https://github.com/neptune-networks/flow-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ kloenk ];

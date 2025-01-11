@@ -1,74 +1,78 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, GitPython
-, isort
-, jupyter-client
-, jupyter-packaging
-, jupyterlab
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-jupyter-builder,
+  hatchling,
+
+  # dependencies
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  packaging,
+  pyyaml,
+  pythonOlder,
+  tomli,
+
+  # tests
+  jupyter-client,
+  notebook,
+  pytest-xdist,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.13.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "1.16.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-ebe5sQJxA8QE6eJp6vPUyMaEvZUPqzCmQ6damzo1BVo=";
+    repo = "jupytext";
+    tag = "v${version}";
+    hash = "sha256-MkFTIHXpe0rYBJsaXwFqDEao+wSL2tG4JtPx1CjHGoY=";
   };
 
-  buildInputs = [
-    jupyter-packaging
-    jupyterlab
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown-it-py
     mdit-py-plugins
     nbformat
+    packaging
     pyyaml
-    toml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  checkInputs = [
-    GitPython
-    isort
+  nativeCheckInputs = [
     jupyter-client
     notebook
+    pytest-xdist
     pytestCheckHook
+    versionCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/mwouts/jupytext/pull/885
-    substituteInPlace setup.py \
-      --replace "markdown-it-py~=1.0" "markdown-it-py>=1.0.0,<3.0.0"
-  '';
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
     # Tests that use a Jupyter notebook require $HOME to be writable
     export HOME=$(mktemp -d);
+    export PATH=$out/bin:$PATH;
   '';
 
-  pytestFlagsArray = [
-    # Pre-commit tests expect the source directory to be a Git repository
-    "--ignore-glob='tests/test_pre_commit_*.py'"
+  disabledTestPaths = [
+    # Requires the `git` python module
+    "tests/external"
   ];
 
-  disabledTests = [
-    "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires access to trash
+    "test_load_save_rename"
   ];
 
   pythonImportsCheck = [
@@ -76,10 +80,12 @@ buildPythonPackage rec {
     "jupytext.cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
-    license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    changelog = "https://github.com/mwouts/jupytext/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupytext";
   };
 }

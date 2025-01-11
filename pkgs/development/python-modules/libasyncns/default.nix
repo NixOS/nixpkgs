@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchurl
-, libasyncns
-, pkg-config
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchurl,
+  libasyncns,
+  pkg-config,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   patches = [ ./libasyncns-fix-res-consts.patch ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace resquery.c \
       --replace '<arpa/nameser.h>' '<arpa/nameser_compat.h>'
   '';

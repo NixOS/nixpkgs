@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.hardware.openrazer;
   kernelPackages = config.boot.kernelPackages;
@@ -19,7 +21,9 @@ let
       [Startup]
       sync_effects_enabled = ${toPyBoolStr cfg.syncEffectsEnabled}
       devices_off_on_screensaver = ${toPyBoolStr cfg.devicesOffOnScreensaver}
-      mouse_battery_notifier = ${toPyBoolStr cfg.mouseBatteryNotifier}
+      battery_notifier = ${toPyBoolStr cfg.batteryNotifier.enable}
+      battery_notifier_freq = ${builtins.toString cfg.batteryNotifier.frequency}
+      battery_notifier_percent = ${builtins.toString cfg.batteryNotifier.percentage}
 
       [Statistics]
       key_statistics = ${toPyBoolStr cfg.keyStatistics}
@@ -49,20 +53,20 @@ in
 {
   options = {
     hardware.openrazer = {
-      enable = mkEnableOption ''
-        OpenRazer drivers and userspace daemon.
+      enable = lib.mkEnableOption ''
+        OpenRazer drivers and userspace daemon
       '';
 
-      verboseLogging = mkOption {
-        type = types.bool;
+      verboseLogging = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable verbose logging. Logs debug messages.
         '';
       };
 
-      syncEffectsEnabled = mkOption {
-        type = types.bool;
+      syncEffectsEnabled = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Set the sync effects flag to true so any assignment of
@@ -70,24 +74,51 @@ in
         '';
       };
 
-      devicesOffOnScreensaver = mkOption {
-        type = types.bool;
+      devicesOffOnScreensaver = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Turn off the devices when the systems screensaver kicks in.
         '';
       };
 
-      mouseBatteryNotifier = mkOption {
-        type = types.bool;
-        default = true;
+      batteryNotifier = lib.mkOption {
         description = ''
-          Mouse battery notifier.
+          Settings for device battery notifications.
         '';
+        default = { };
+        type = lib.types.submodule {
+          options = {
+            enable = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Mouse battery notifier.
+              '';
+            };
+            frequency = lib.mkOption {
+              type = lib.types.int;
+              default = 600;
+              description = ''
+                How often battery notifications should be shown (in seconds).
+                A value of 0 disables notifications.
+              '';
+            };
+
+            percentage = lib.mkOption {
+              type = lib.types.int;
+              default = 33;
+              description = ''
+                At what battery percentage the device should reach before
+                sending notifications.
+              '';
+            };
+          };
+        };
       };
 
-      keyStatistics = mkOption {
-        type = types.bool;
+      keyStatistics = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Collects number of keypresses per hour per key used to
@@ -95,9 +126,9 @@ in
         '';
       };
 
-      users = mkOption {
-        type = with types; listOf str;
-        default = [];
+      users = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
         description = ''
           Usernames to be added to the "openrazer" group, so that they
           can start and interact with the OpenRazer userspace daemon.
@@ -106,11 +137,18 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "hardware" "openrazer" "mouseBatteryNotifier" ]
+      [ "hardware" "openrazer" "batteryNotifier" "enable" ]
+    )
+  ];
+
+  config = lib.mkIf cfg.enable {
     boot.extraModulePackages = [ kernelPackages.openrazer ];
     boot.kernelModules = drivers;
 
-    # Makes the man pages available so you can succesfully run
+    # Makes the man pages available so you can successfully run
     # > systemctl --user help openrazer-daemon
     environment.systemPackages = [ pkgs.python3Packages.openrazer-daemon.man ];
 
@@ -127,15 +165,15 @@ in
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
       unitConfig.Documentation = "man:openrazer-daemon(8)";
-        # Requires a graphical session so the daemon knows when the screensaver
-        # starts. See the 'devicesOffOnScreensaver' option.
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.razer";
-          ExecStart = "${daemonExe} --foreground";
-          Restart = "always";
+      # Requires a graphical session so the daemon knows when the screensaver
+      # starts. See the 'devicesOffOnScreensaver' option.
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.razer";
+        ExecStart = "${daemonExe} --foreground";
+        Restart = "always";
       };
     };
   };

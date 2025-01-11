@@ -1,6 +1,16 @@
-{ config, lib, name, ... }:
+{
+  config,
+  lib,
+  name,
+  ...
+}:
 let
-  inherit (lib) literalExpression mkOption nameValuePair types;
+  inherit (lib)
+    literalExpression
+    mkOption
+    nameValuePair
+    types
+    ;
 in
 {
   options = {
@@ -13,48 +23,62 @@ in
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = ["www.example.org" "www.example.org:8080" "example.org"];
+      default = [ ];
+      example = [
+        "www.example.org"
+        "www.example.org:8080"
+        "example.org"
+      ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule ({
-        options = {
-          port = mkOption {
-            type = types.port;
-            description = "Port to listen on";
+      type =
+        with types;
+        listOf (submodule ({
+          options = {
+            port = mkOption {
+              type = types.port;
+              description = "Port to listen on";
+            };
+            ip = mkOption {
+              type = types.str;
+              default = "*";
+              description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
+            };
+            ssl = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether to enable SSL (https) support.";
+            };
           };
-          ip = mkOption {
-            type = types.str;
-            default = "*";
-            description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
-          };
-          ssl = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Whether to enable SSL (https) support.";
-          };
-        };
-      }));
-      default = [];
+        }));
+      default = [ ];
       example = [
-        { ip = "195.154.1.1"; port = 443; ssl = true;}
-        { ip = "192.154.1.1"; port = 80; }
-        { ip = "*"; port = 8080; }
+        {
+          ip = "195.154.1.1";
+          port = 443;
+          ssl = true;
+        }
+        {
+          ip = "192.154.1.1";
+          port = 80;
+        }
+        {
+          ip = "*";
+          port = 8080;
+        }
       ];
       description = ''
         Listen addresses and ports for this virtual host.
-        <note>
-        <para>
-          This option overrides <literal>addSSL</literal>, <literal>forceSSL</literal> and <literal>onlySSL</literal>.
-        </para>
-        <para>
-          If you only want to set the addresses manually and not the ports, take a look at <literal>listenAddresses</literal>.
-        </para>
-        </note>
+
+        ::: {.note}
+        This option overrides `addSSL`, `forceSSL` and `onlySSL`.
+
+        If you only want to set the addresses manually and not the ports, take a look at `listenAddresses`.
+        :::
       '';
     };
 
@@ -63,7 +87,7 @@ in
 
       description = ''
         Listen addresses for this virtual host.
-        Compared to <literal>listen</literal> this only sets the addreses
+        Compared to `listen` this only sets the addresses
         and the ports are chosen automatically.
       '';
       default = [ "*" ];
@@ -81,7 +105,7 @@ in
       default = false;
       description = ''
         Whether to enable HTTPS in addition to plain HTTP. This will set defaults for
-        <literal>listen</literal> to listen on all interfaces on the respective default
+        `listen` to listen on all interfaces on the respective default
         ports (80, 443).
       '';
     };
@@ -91,7 +115,7 @@ in
       default = false;
       description = ''
         Whether to enable HTTPS and reject plain HTTP connections. This will set
-        defaults for <literal>listen</literal> to listen on all interfaces on port 443.
+        defaults for `listen` to listen on all interfaces on port 443.
       '';
     };
 
@@ -101,7 +125,7 @@ in
       description = ''
         Whether to add a separate nginx server block that permanently redirects (301)
         all plain HTTP traffic to HTTPS. This will set defaults for
-        <literal>listen</literal> to listen on all interfaces on the respective default
+        `listen` to listen on all interfaces on the respective default
         ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
       '';
     };
@@ -111,7 +135,7 @@ in
       default = false;
       description = ''
         Whether to ask Let's Encrypt to sign a certificate for this vhost.
-        Alternately, you can use an existing certificate through <option>useACMEHost</option>.
+        Alternately, you can use an existing certificate through {option}`useACMEHost`.
       '';
     };
 
@@ -121,9 +145,9 @@ in
       description = ''
         A host of an existing Let's Encrypt certificate to use.
         This is useful if you have many subdomains and want to avoid hitting the
-        <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
-        Alternately, you can generate a certificate through <option>enableACME</option>.
-        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
+        [rate limit](https://letsencrypt.org/docs/rate-limits).
+        Alternately, you can generate a certificate through {option}`enableACME`.
+        *Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using [](#opt-security.acme.certs).*
       '';
     };
 
@@ -159,8 +183,8 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. <emphasis>However, if you use the prefork mpm, there will
-        be severe restrictions.</emphasis> Refer to <link xlink:href="https://httpd.apache.org/docs/2.4/howto/http2.html#mpm-config"/> for details.
+        Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. *However, if you use the prefork mpm, there will
+        be severe restrictions.* Refer to <https://httpd.apache.org/docs/2.4/howto/http2.html#mpm-config> for details.
       '';
     };
 
@@ -183,9 +207,10 @@ in
 
     servedDirs = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       example = [
-        { urlPath = "/nix";
+        {
+          urlPath = "/nix";
           dir = "/home/eelco/Dev/nix-homepage";
         }
       ];
@@ -196,20 +221,21 @@ in
 
     servedFiles = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       example = [
-        { urlPath = "/foo/bar.png";
+        {
+          urlPath = "/foo/bar.png";
           file = "/home/eelco/some-file.png";
         }
       ];
       description = ''
         This option provides a simple way to serve individual, static files.
 
-        <note><para>
-          This option has been deprecated and will be removed in a future
-          version of NixOS. You can achieve the same result by making use of
-          the <literal>locations.&lt;name&gt;.alias</literal> option.
-        </para></note>
+        ::: {.note}
+        This option has been deprecated and will be removed in a future
+        version of NixOS. You can achieve the same result by making use of
+        the `locations.<name>.alias` option.
+        :::
       '';
     };
 
@@ -232,8 +258,8 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to enable serving <filename>~/public_html</filename> as
-        <literal>/~<replaceable>username</replaceable></literal>.
+        Whether to enable serving {file}`~/public_html` as
+        `/~«username»`.
       '';
     };
 
@@ -261,14 +287,13 @@ in
       default = "";
       example = "Disallow: /foo/";
       description = ''
-        Specification of pages to be ignored by web crawlers. See <link
-        xlink:href='http://www.robotstxt.org/'/> for details.
+        Specification of pages to be ignored by web crawlers. See <http://www.robotstxt.org/> for details.
       '';
     };
 
     locations = mkOption {
       type = with types; attrsOf (submodule (import ./location-options.nix));
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "/" = {
@@ -280,8 +305,7 @@ in
         };
       '';
       description = ''
-        Declarative location config. See <link
-        xlink:href="https://httpd.apache.org/docs/2.4/mod/core.html#location"/> for details.
+        Declarative location config. See <https://httpd.apache.org/docs/2.4/mod/core.html#location> for details.
       '';
     };
 
@@ -289,7 +313,9 @@ in
 
   config = {
 
-    locations = builtins.listToAttrs (map (elem: nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles);
+    locations = builtins.listToAttrs (
+      map (elem: nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles
+    );
 
   };
 }

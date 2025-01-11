@@ -1,80 +1,77 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, makeWrapper
+{ lib
+, git
 , dotnetCorePackages
+, glibcLocales
+, buildDotnetModule
+, fetchFromGitHub
+, bintools
+, stdenv
 , mono
-, Nuget
 }:
-
 let
-
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-
-  deps = import ./deps.nix { inherit fetchurl; };
-
+  mainProgram = "EventStore.ClusterNode";
 in
 
-stdenv.mkDerivation rec {
-
+buildDotnetModule rec {
   pname = "EventStore";
-  version = "5.0.8";
+  version = "23.6.0";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "021m610gzmrp2drywl1q3y6xxpy4qayn580d855ag952z9s6w9nj";
+    hash = "sha256-+Wxm6yusaCoqXIbsi0ZoALAviKUyNMQwbzsQtBK/PCo=";
+    leaveDotGit = true;
   };
 
-  buildInputs = [
-    makeWrapper
-    dotnet-sdk
-    mono
-    Nuget
+  # Fixes application reporting 0.0.0.0 as its version.
+  MINVERVERSIONOVERRIDE = version;
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+
+  nativeBuildInputs = [ git glibcLocales bintools ];
+
+  runtimeDeps = [ mono ];
+
+  executables = [ mainProgram ];
+
+  # This test has a problem running on macOS
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V2,String>.should_receive_expected_endpoints"
+    "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V3,UInt32>.should_receive_expected_endpoints"
   ];
 
-  # that dependency seems to not be required for building, but pulls in libcurl which fails to be located.
-  # see: https://github.com/EventStore/EventStore/issues/1897
-  patchPhase = ''
-    for f in $(find . -iname "*.csproj"); do
-      sed -i '/Include="Microsoft.SourceLink.GitHub"/d' $f
-    done
-  '';
+  nugetDeps = ./deps.json;
 
-  buildPhase = ''
-    export FrameworkPathOverride=${mono}/lib/mono/4.7.1-api
-
-    # disable default-source so nuget does not try to download from online-repo
-    nuget sources Disable -Name "nuget.org"
-    # add all dependencies to a source called 'nixos'
-    for package in ${toString deps}; do
-      nuget add $package -Source nixos
-    done
-
-    dotnet restore --source nixos src/EventStore.sln
-    dotnet build --no-restore -c Release src/EventStore.sln
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,lib/eventstore}
-    cp -r bin/Release/* $out/lib/eventstore
-    makeWrapper "${mono}/bin/mono" $out/bin/eventstored \
-      --add-flags "$out/lib/eventstore/EventStore.ClusterNode/net471/EventStore.ClusterNode.exe"
-  '';
+  projectFile = "src/EventStore.ClusterNode/EventStore.ClusterNode.csproj";
 
   doCheck = true;
+  testProjectFile = "src/EventStore.Projections.Core.Tests/EventStore.Projections.Core.Tests.csproj";
 
-  checkPhase = ''
-    dotnet test src/EventStore.Projections.Core.Tests/EventStore.Projections.Core.Tests.csproj -- RunConfiguration.TargetPlatform=x64
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/EventStore.ClusterNode --insecure \
+      --db "$HOME/data" \
+      --index "$HOME/index" \
+      --log "$HOME/log" \
+      -runprojections all --startstandardprojections \
+      --EnableAtomPubOverHttp &
+
+    PID=$!
+
+    sleep 30s;
+    kill "$PID";
   '';
 
-  meta = {
+  passthru.updateScript = ./updater.sh;
+
+  meta = with lib; {
     homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ puffnfresh mdarocha ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    inherit mainProgram;
   };
-
 }

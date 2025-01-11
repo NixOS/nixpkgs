@@ -1,23 +1,36 @@
-{ lib, buildDunePackage, dune_3, stdune, dyn }:
+{
+  lib,
+  buildDunePackage,
+  dyn,
+  fetchurl,
+  ppx_expect,
+  stdune,
+}:
 
 buildDunePackage rec {
   pname = "fiber";
-  inherit (dune_3) src version;
+  version = "3.7.0";
 
-  duneVersion = "3";
+  src = fetchurl {
+    url = "https://github.com/ocaml-dune/fiber/releases/download/${version}/fiber-lwt-${version}.tbz";
+    hash = "sha256-hkihWuk/5pQpmc42iHQpo5E7YoKcRxTlIMwOehw7loI=";
+  };
 
-  dontAddPrefix = true;
+  buildInputs = [
+    stdune
+    dyn
+  ];
 
-  buildInputs = [ stdune dyn ];
+  checkInputs = [ ppx_expect ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
+  # Tests are Ocaml version dependent
+  # https://github.com/ocaml-dune/fiber/issues/27
+  doCheck = false;
 
   meta = with lib; {
     description = "Structured concurrency library";
-    inherit (dune_3.meta) homepage;
-    maintainers = with lib.maintainers; [ ];
+    homepage = "https://github.com/ocaml-dune/fiber";
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

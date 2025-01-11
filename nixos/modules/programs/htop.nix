@@ -1,36 +1,50 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.htop;
 
-  fmt = value:
-    if isList value then concatStringsSep " " (map fmt value) else
-    if isString value then value else
-    if isBool value || isInt value then toString value else
-    throw "Unrecognized type ${typeOf value} in htop settings";
+  fmt =
+    value:
+    if builtins.isList value then
+      builtins.concatStringsSep " " (builtins.map fmt value)
+    else if builtins.isString value then
+      value
+    else if builtins.isBool value then
+      if value then "1" else "0"
+    else if builtins.isInt value then
+      builtins.toString value
+    else
+      throw "Unrecognized type ${builtins.typeOf value} in htop settings";
 
 in
 
 {
 
   options.programs.htop = {
-    package = mkOption {
-      type = types.package;
-      default = pkgs.htop;
-      defaultText = "pkgs.htop";
-      description = ''
-        The htop package that should be used.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "htop" { };
 
-    enable = mkEnableOption "htop process monitor";
+    enable = lib.mkEnableOption "htop process monitor";
 
-    settings = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);
-      default = {};
+    settings = lib.mkOption {
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+          (listOf (oneOf [
+            str
+            int
+            bool
+          ]))
+        ]);
+      default = { };
       example = {
         hide_kernel_threads = true;
         hide_userland_threads = true;
@@ -44,15 +58,19 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.package
     ];
 
-    environment.etc."htoprc".text = ''
-      # Global htop configuration
-      # To change set: programs.htop.settings.KEY = VALUE;
-    '' + concatStringsSep "\n" (mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings);
+    environment.etc."htoprc".text =
+      ''
+        # Global htop configuration
+        # To change set: programs.htop.settings.KEY = VALUE;
+      ''
+      + builtins.concatStringsSep "\n" (
+        lib.mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings
+      );
   };
 
 }

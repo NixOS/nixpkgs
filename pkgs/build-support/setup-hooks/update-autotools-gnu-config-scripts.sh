@@ -1,4 +1,4 @@
-preConfigurePhases+=" updateAutotoolsGnuConfigScriptsPhase"
+appendToVar preConfigurePhases updateAutotoolsGnuConfigScriptsPhase
 
 updateAutotoolsGnuConfigScriptsPhase() {
     if [ -n "${dontUpdateAutotoolsGnuConfigScripts-}" ]; then return; fi

@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, dune_3, dune-private-libs }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  dune-private-libs,
+}:
 
 buildDunePackage rec {
   pname = "dune-glob";
@@ -17,7 +22,7 @@ buildDunePackage rec {
   meta = with lib; {
     inherit (dune_3.meta) homepage;
     description = "Glob string matching language supported by dune";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

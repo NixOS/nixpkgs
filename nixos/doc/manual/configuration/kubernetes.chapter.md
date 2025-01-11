@@ -7,35 +7,43 @@ There are generally two ways of enabling Kubernetes on NixOS. One way is
 to enable and configure cluster components appropriately by hand:
 
 ```nix
-services.kubernetes = {
-  apiserver.enable = true;
-  controllerManager.enable = true;
-  scheduler.enable = true;
-  addonManager.enable = true;
-  proxy.enable = true;
-  flannel.enable = true;
-};
+{
+  services.kubernetes = {
+    apiserver.enable = true;
+    controllerManager.enable = true;
+    scheduler.enable = true;
+    addonManager.enable = true;
+    proxy.enable = true;
+    flannel.enable = true;
+  };
+}
 ```
 
-Another way is to assign cluster roles (\"master\" and/or \"node\") to
+Another way is to assign cluster roles ("master" and/or "node") to
 the host. This enables apiserver, controllerManager, scheduler,
 addonManager, kube-proxy and etcd:
 
 ```nix
-services.kubernetes.roles = [ "master" ];
+{
+  services.kubernetes.roles = [ "master" ];
+}
 ```
 
 While this will enable the kubelet and kube-proxy only:
 
 ```nix
-services.kubernetes.roles = [ "node" ];
+{
+  services.kubernetes.roles = [ "node" ];
+}
 ```
 
 Assigning both the master and node roles is usable if you want a single
 node Kubernetes cluster for dev or testing purposes:
 
 ```nix
-services.kubernetes.roles = [ "master" "node" ];
+{
+  services.kubernetes.roles = [ "master" "node" ];
+}
 ```
 
 Note: Assigning either role will also default both
@@ -43,16 +51,8 @@ Note: Assigning either role will also default both
 and [](#opt-services.kubernetes.easyCerts)
 to true. This sets up flannel as CNI and activates automatic PKI bootstrapping.
 
-As of kubernetes 1.10.X it has been deprecated to open non-tls-enabled
-ports on kubernetes components. Thus, from NixOS 19.03 all plain HTTP
-ports have been disabled by default. While opening insecure ports is
-still possible, it is recommended not to bind these to other interfaces
-than loopback. To re-enable the insecure port on the apiserver, see options:
-[](#opt-services.kubernetes.apiserver.insecurePort) and
-[](#opt-services.kubernetes.apiserver.insecureBindAddress)
-
 ::: {.note}
-As of NixOS 19.03, it is mandatory to configure:
+It is mandatory to configure:
 [](#opt-services.kubernetes.masterAddress).
 The masterAddress must be resolveable and routeable by all cluster nodes.
 In single node clusters, this can be set to `localhost`.

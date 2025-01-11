@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "mmottl";
@@ -15,7 +15,9 @@ buildDunePackage rec {
     sha256 = "1i4pnh2v00i0s7s9pcwz1x6s4xcd77d08gjjkvy0fmda6mqq6ghn";
   };
 
-  buildInputs = [ dune-configurator postgresql ];
+  nativeBuildInputs = [ postgresql ];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ postgresql ];
 
   meta = {
     description = "Bindings to the PostgreSQL library";

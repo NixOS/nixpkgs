@@ -1,32 +1,49 @@
-{ lib, stdenvNoCC, dtc }:
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  dtc,
+  writers,
+  python3,
+}:
 
-with lib; {
-  applyOverlays = (base: overlays': stdenvNoCC.mkDerivation {
-    name = "device-tree-overlays";
-    nativeBuildInputs = [ dtc ];
-    buildCommand = let
-      overlays = toList overlays';
-    in ''
-      mkdir -p $out
-      cd ${base}
-      find . -type f -name '*.dtb' -print0 \
-        | xargs -0 cp -v --no-preserve=mode --target-directory $out --parents
+{
+  # Compile single Device Tree overlay source
+  # file (.dts) into its compiled variant (.dtb)
+  compileDTS = (
+    {
+      name,
+      dtsFile,
+      includePaths ? [ ],
+      extraPreprocessorFlags ? [ ],
+    }:
+    stdenv.mkDerivation {
+      inherit name;
 
-      for dtb in $(find $out -type f -name '*.dtb'); do
-        dtbCompat="$( fdtget -t s $dtb / compatible )"
+      nativeBuildInputs = [ dtc ];
 
-        ${flip (concatMapStringsSep "\n") overlays (o: ''
-        overlayCompat="$( fdtget -t s ${o.dtboFile} / compatible )"
-        # overlayCompat in dtbCompat
-        if [[ "$dtbCompat" =~ "$overlayCompat" ]]; then
-          echo "Applying overlay ${o.name} to $( basename $dtb )"
-          mv $dtb{,.in}
-          fdtoverlay -o "$dtb" -i "$dtb.in" ${o.dtboFile};
-          rm $dtb.in
-        fi
-        '')}
+      buildCommand =
+        let
+          includeFlagsStr = lib.concatMapStringsSep " " (includePath: "-I${includePath}") includePaths;
+          extraPreprocessorFlagsStr = lib.concatStringsSep " " extraPreprocessorFlags;
+        in
+        ''
+          $CC -E -nostdinc ${includeFlagsStr} -undef -D__DTS__ -x assembler-with-cpp ${extraPreprocessorFlagsStr} ${dtsFile} | \
+          dtc -I dts -O dtb -@ -o $out
+        '';
+    }
+  );
 
-      done
-    '';
-  });
+  applyOverlays = (
+    base: overlays':
+    stdenvNoCC.mkDerivation {
+      name = "device-tree-overlays";
+      nativeBuildInputs = [
+        (python3.pythonOnBuildForHost.withPackages (ps: [ ps.libfdt ]))
+      ];
+      buildCommand = ''
+        python ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
+      '';
+    }
+  );
 }

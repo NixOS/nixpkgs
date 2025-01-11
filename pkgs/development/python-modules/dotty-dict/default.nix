@@ -1,26 +1,34 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "dotty_dict";
-  version = "1.3.0";
+  pname = "dotty-dict";
+  version = "1.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-6wA1o2KezYQ5emjx9C8elKvRw0V3oZzT6srTMe58uvA=";
+  src = fetchFromGitHub {
+    owner = "pawelzny";
+    repo = "dotty_dict";
+    tag = "v${version}";
+    hash = "sha256-kY7o9wgfsV7oc5twOeuhG47C0Js6JzCt02S9Sd8dSGc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ poetry-core ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "dotty_dict" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Dictionary wrapper for quick access to deeply nested keys";
     homepage = "https://dotty-dict.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    changelog = "https://github.com/pawelzny/dotty_dict/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

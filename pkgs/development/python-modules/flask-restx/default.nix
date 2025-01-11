@@ -1,81 +1,96 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, aniso8601
-, jsonschema
-, flask
-, werkzeug
-, pytz
-, faker
-, six
-, mock
-, blinker
-, pytest-flask
-, pytest-mock
-, pytest-benchmark
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aniso8601,
+  jsonschema,
+  flask,
+  importlib-resources,
+  werkzeug,
+  pytz,
+  faker,
+  mock,
+  blinker,
+  py,
+  pytest-flask,
+  pytest-mock,
+  pytest-benchmark,
+  pytest-vcr,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.5.1";
+  version = "1.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
-    repo = pname;
-    rev = version;
-    sha256 = "18vrmknyxw6adn62pz3kr9kvazfgjgl4pgimdf8527fyyiwcqy15";
+    repo = "flask-restx";
+    tag = version;
+    hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
   };
 
-  patches = [
-    # Fixes werkzeug 2.1 compatibility
-    (fetchpatch {
-      # https://github.com/python-restx/flask-restx/pull/427
-      url = "https://github.com/python-restx/flask-restx/commit/bb72a51860ea8a42c928f69bdd44ad20b1f9ee7e.patch";
-      hash = "sha256-DRH3lI6TV1m0Dq1VyscL7GQS26OOra9g88dXZNrNpmQ=";
-    })
-    (fetchpatch {
-      # https://github.com/python-restx/flask-restx/pull/427
-      url = "https://github.com/python-restx/flask-restx/commit/bb3e9dd83b9d4c0d0fa0de7d7ff713fae71eccee.patch";
-      hash = "sha256-HJpjG4aQWzEPCMfbXfkw4mz5TH9d89BCvGH2dE6Jfv0=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aniso8601
     flask
+    importlib-resources
     jsonschema
     pytz
-    six
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     faker
     mock
+    py
     pytest-benchmark
     pytest-flask
     pytest-mock
+    pytest-vcr
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-    "--deselect=tests/test_inputs.py::URLTest::test_check"
-    "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
-    "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
+  pytestFlagsArray =
+    [
+      "--benchmark-disable"
+      "--deselect=tests/test_inputs.py::URLTest::test_check"
+      "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
+      "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
+    ];
+
+  disabledTests = [
+    "test_specs_endpoint_host_and_subdomain"
+    # broken in werkzeug 2.3 upgrade
+    "test_media_types_method"
+    "test_media_types_q"
+    # erroneous use of pytz
+    # https://github.com/python-restx/flask-restx/issues/620
+    # two fixes are proposed: one fixing just tests, and one removing pytz altogether.
+    # we disable the tests in the meanwhile and let upstream decide
+    "test_rfc822_value"
+    "test_iso8601_value"
   ];
 
   pythonImportsCheck = [ "flask_restx" ];
 
   meta = with lib; {
-    homepage = "https://flask-restx.readthedocs.io/en/${version}/";
     description = "Fully featured framework for fast, easy and documented API development with Flask";
-    changelog = "https://github.com/python-restx/flask-restx/raw/${version}/CHANGELOG.rst";
+    homepage = "https://github.com/python-restx/flask-restx";
+    changelog = "https://github.com/python-restx/flask-restx/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

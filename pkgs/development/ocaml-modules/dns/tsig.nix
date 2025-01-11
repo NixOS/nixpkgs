@@ -1,12 +1,18 @@
-{ buildDunePackage, dns, mirage-crypto, base64, alcotest }:
+{
+  buildDunePackage,
+  dns,
+  digestif,
+  base64,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "dns-tsig";
 
-  inherit (dns) version src useDune2 minimumOCamlVersion;
+  inherit (dns) version src;
 
   propagatedBuildInputs = [
-    mirage-crypto
+    digestif
     dns
     base64
   ];

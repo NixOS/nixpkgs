@@ -1,32 +1,59 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, scipy
-, autograd
-, nose2
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  torch,
+  autograd,
+  matplotlib,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "0.2.5";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "0zk775v281375sangc5qkwrkb8yc9wx1g8b1917s4s8wszzkp8k6";
+    tag = version;
+    hash = "sha256-LOEulticgCWZBCf3qj5KFBHt0lMd4H85368IhG3DQ4g=";
   };
 
-  propagatedBuildInputs = [ numpy scipy ];
-  checkInputs = [ nose2 autograd ];
-
-  checkPhase = ''
-    # nose2 doesn't properly support excludes
-    rm tests/test_{problem,tensorflow,theano}.py
-
-    nose2 tests -v
+  preConfigure = ''
+    substituteInPlace pyproject.toml --replace-fail "\"pip==22.3.1\"," ""
   '';
+
+  build-system = [
+    setuptools-scm
+  ];
+  dependencies = [
+    numpy
+    scipy
+    torch
+  ];
+  nativeCheckInputs = [
+    autograd
+    matplotlib
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    substituteInPlace "tests/conftest.py" \
+      --replace-fail "import tensorflow as tf" ""
+    substituteInPlace "tests/conftest.py" \
+      --replace-fail "tf.random.set_seed(seed)" ""
+  '';
+
+  disabledTestPaths = [
+    "tests/test_examples.py"
+    "tests/backends/test_tensorflow.py"
+    "tests/backends/test_jax.py"
+    "tests/test_problem.py"
+  ];
 
   pythonImportsCheck = [ "pymanopt" ];
 

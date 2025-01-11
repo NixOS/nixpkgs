@@ -1,84 +1,89 @@
 { lib
 , stdenv
-, writeText
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , protobuf
 , makeWrapper
+, git
 , dbus
 , libnftnl
 , libmnl
 , libwg
+, darwin
+, enableOpenvpn ? true
 , openvpn-mullvad
 , shadowsocks-rust
+, installShellFiles
+, writeShellScriptBin
 }:
 let
-  # result of running address_cache as of 02 Mar 2022
-  bootstrap-address-cache = writeText "api-ip-address.txt" ''
-    193.138.218.78:443
-    193.138.218.71:444
-    185.65.134.66:444
-    185.65.135.117:444
-    217.138.254.130:444
-    91.90.44.10:444
+  # NOTE(cole-h): This is necessary because wireguard-go-rs executes go in its build.rs (whose goal
+  # is to  produce $OUT_DIR/libwg.a), and a mixed Rust-Go build is non-trivial (read: I didn't want
+  # to attempt it). So, we just fake the "go" binary and do what it would have done: put libwg.a
+  # under $OUT_DIR so that it can be linked against.
+  fakeGoCopyLibwg = writeShellScriptBin "go" ''
+    [ ! -e "$OUT_DIR"/libwg.a ] && cp ${libwg}/lib/libwg.a "$OUT_DIR"/libwg.a
   '';
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2022.1";
+  version = "2024.8";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-bLwuM3Qy2iStbXIvDEWp31vuiihSQThOej297XKo5Xc=";
+    fetchSubmodules = true;
+    hash = "sha256-mDQRIlu1wslgLhYlH87i9yntfPwTd7UQK2c6IoHuIqU=";
   };
 
-  cargoHash = "sha256-CBbm8cJHTjyvvzCFQfKmsE5d9N7azEm8nI6KeWLVaa8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HCW2brAQK20oJIFKrdqHqRmihnKnxGZfyt5T8Yrt1z8=";
+
+  checkFlags = "--skip=version_check";
 
   nativeBuildInputs = [
     pkg-config
     protobuf
     makeWrapper
+    git
+    installShellFiles
+    fakeGoCopyLibwg
   ];
 
-  buildInputs = [
-    dbus.dev
-    libnftnl
-    libmnl
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dbus.dev
+      libnftnl
+      libmnl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libpcap
+    ];
 
-  # talpid-core wants libwg.a in build/lib/{triple}
-  preBuild = ''
-    dest=build/lib/${stdenv.targetPlatform.config}
-    mkdir -p $dest
-    ln -s ${libwg}/lib/libwg.a $dest
+  postInstall = ''
+    compdir=$(mktemp -d)
+    for shell in bash zsh fish; do
+      $out/bin/mullvad shell-completions $shell $compdir
+    done
+    installShellCompletion --cmd mullvad \
+      --bash $compdir/mullvad.bash \
+      --zsh $compdir/_mullvad \
+      --fish $compdir/mullvad.fish
   '';
 
   postFixup =
     # Place all binaries in the 'mullvad-' namespace, even though these
     # specific binaries aren't used in the lifetime of the program.
-    # `address_cache` is used to generate the `api-ip-address.txt` file, which
-    # contains list of Mullvad API servers -- though we provide a "backup" of
-    # the output of this command, it could change at any time, so we want
-    # users to be able to regenerate the list at any time. (The daemon will
-    # refuse to start without this file.)
     ''
-      for bin in address_cache relay_list translations-converter; do
+      for bin in relay_list translations-converter tunnel-obfuscation; do
         mv "$out/bin/$bin" "$out/bin/mullvad-$bin"
       done
     '' +
-    # Put distributed assets in-place -- specifically, the
-    # bootstrap-address-cache is necessary; otherwise, the user will have to run
-    # the `address_cache` binary and move the contents into place at
-    # `/var/cache/mullvad-vpn/api-ip-address.txt` manually.
-    ''
-      mkdir -p $out/share/mullvad
-      ln -s ${bootstrap-address-cache} $out/share/mullvad/api-ip-address.txt
-    '' +
     # Files necessary for OpenVPN tunnels to work.
-    ''
+    lib.optionalString enableOpenvpn ''
+      mkdir -p $out/share/mullvad
       cp dist-assets/ca.crt $out/share/mullvad
       ln -s ${openvpn-mullvad}/bin/openvpn $out/share/mullvad
       ln -s ${shadowsocks-rust}/bin/sslocal $out/share/mullvad

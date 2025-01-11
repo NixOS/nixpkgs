@@ -1,60 +1,62 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libgamemode32
-, meson
-, ninja
-, pkg-config
-, dbus
-, inih
-, systemd
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libgamemode32,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  dbus,
+  inih,
+  systemd,
+  appstream,
+  findutils,
+  gawk,
+  procps,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gamemode";
-  version = "1.6.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "FeralInteractive";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-P00OnZiPZyxBu9zuG+3JNorXHBhJZy+cKPjX+duZrJ0=";
+    repo = "gamemode";
+    tag = finalAttrs.version;
+    hash = "sha256-JkDFhFLUHlgD6RKxlxMjrSF2zQ4AWmRUQMLbWYwIZmg=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "static" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   patches = [
-    # Run executables from PATH instead of /usr/bin
-    # See https://github.com/FeralInteractive/gamemode/pull/323
-    (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/be44b7091baa33be6dda60392e4c06c2f398ee72.patch";
-      sha256 = "TlDUETs4+N3pvrVd0FQGlGmC+6ByhJ2E7gKXa7suBtE=";
-    })
-
-    # Fix loading shipped config when using a prefix other than /usr
-    # See https://github.com/FeralInteractive/gamemode/pull/324
-    (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/b29aa903ce5acc9141cfd3960c98ccb047eca872.patch";
-      sha256 = "LwBzBJQ7dfm2mFVSOSPjJP+skgV5N6h77i66L1Sq+ZM=";
-    })
-
     # Add @libraryPath@ template variable to fix loading the PRELOAD library
     ./preload-nix-workaround.patch
   ];
 
   postPatch = ''
     substituteInPlace data/gamemoderun \
-      --subst-var-by libraryPath ${lib.makeLibraryPath ([
-        (placeholder "lib")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-        # Support wrapping 32bit applications on a 64bit linux system
-        libgamemode32
-      ])}
+      --subst-var-by libraryPath ${
+        lib.makeLibraryPath (
+          [
+            (placeholder "lib")
+          ]
+          ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+            # Support wrapping 32bit applications on a 64bit linux system
+            libgamemode32
+          ]
+        )
+      }
   '';
 
   nativeBuildInputs = [
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -67,38 +69,49 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # libexec is just a way to package binaries without including them
-    # in PATH. It doesn't make sense to install them to $lib
-    # (the default behaviour in the meson hook).
-    "--libexecdir=${placeholder "out"}/libexec"
-
+    "-Dwith-pam-limits-dir=etc/security/limits.d"
     "-Dwith-systemd-user-unit-dir=lib/systemd/user"
+    "-Dwith-systemd-group-dir=lib/sysusers.d"
+
+    # The meson builder installs internal executables to $lib/lib by
+    # default, but they should be installed to "$out". It's also more
+    # appropriate to install these executables under a libexec
+    # directory instead of lib.
+    "--libexecdir=libexec"
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     appstream
   ];
 
-  # Move static libraries to $static so $lib only contains dynamic libraries.
-  postInstall = ''
-    moveToOutput lib/*.a "$static"
-  '';
-
-  # Add $lib/lib to gamemoded & gamemode-simulate-game's rpath since
-  # they use dlopen to load libgamemode. Can't use makeWrapper since
-  # it would break the security wrapper in the NixOS module.
   postFixup = ''
+    # Add $lib/lib to gamemoded & gamemode-simulate-game's rpath since
+    # they use dlopen to load libgamemode. Can't use makeWrapper since
+    # it would break the security wrapper in the NixOS module.
     for bin in "$out/bin/gamemoded" "$out/bin/gamemode-simulate-game"; do
       patchelf --set-rpath "$lib/lib:$(patchelf --print-rpath "$bin")" "$bin"
     done
+
+    wrapProgram "$out/bin/gamemodelist" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          findutils
+          gawk
+          procps
+        ]
+      }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Optimise Linux system performance on demand";
-    homepage = "https://github.com/FeralInteractive/GameMode";
+    homepage = "https://feralinteractive.github.io/gamemode";
+    changelog = "https://github.com/FeralInteractive/gamemode/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
+    mainProgram = "gamemoderun"; # Requires NixOS module to run
   };
-}
+})

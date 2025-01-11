@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonOlder
-, backports-zoneinfo
-, python-dateutil
-, tzdata
-, hypothesis
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pythonOlder,
+  python-dateutil,
+  setuptools,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -23,22 +24,22 @@ buildPythonPackage rec {
     sha256 = "af097bae1b616dde5c5744441e2ddc69e74dfdcb0c263129610d85b87445a59d";
   };
 
-  propagatedBuildInputs = (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [
-    backports-zoneinfo
-  ]) ++ (lib.optionals (pythonOlder "3.6") [
-    python-dateutil
-  ]) ++ (lib.optionals (pythonAtLeast "3.6") [
-    tzdata
-  ]);
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  propagatedBuildInputs =
+    (lib.optionals (pythonOlder "3.6") [ python-dateutil ])
+    ++ (lib.optionals (pythonAtLeast "3.6") [ tzdata ]);
+
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     pytz
   ];
 
   # https://github.com/pganssle/pytz-deprecation-shim/issues/27
-  doCheck = pythonAtLeast "3.9";
+  # https://github.com/pganssle/pytz-deprecation-shim/issues/30
+  # The test suite is just very flaky and breaks all the time
+  doCheck = false;
 
   meta = with lib; {
     description = "Shims to make deprecation of pytz easier";

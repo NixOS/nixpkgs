@@ -1,15 +1,23 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.dmarc;
+  inherit (lib) mkOption types optionalString;
 
   json = builtins.toJSON {
     inherit (cfg) folders port;
     listen_addr = cfg.listenAddress;
     storage_path = "$STATE_DIRECTORY";
-    imap = (builtins.removeAttrs cfg.imap [ "passwordFile" ]) // { password = "$IMAP_PASSWORD"; use_ssl = true; };
+    imap = (builtins.removeAttrs cfg.imap [ "passwordFile" ]) // {
+      password = "$IMAP_PASSWORD";
+      use_ssl = true;
+    };
     poll_interval_seconds = cfg.pollIntervalSeconds;
     deduplication_max_seconds = cfg.deduplicationMaxSeconds;
     logging = {
@@ -17,7 +25,8 @@ let
       disable_existing_loggers = false;
     };
   };
-in {
+in
+{
   port = 9797;
   extraOpts = {
     imap = {
@@ -93,12 +102,15 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Whether to declare enable <literal>--debug</literal>.
+        Whether to declare enable `--debug`.
       '';
     };
   };
   serviceOpts = {
-    path = with pkgs; [ envsubst coreutils ];
+    path = with pkgs; [
+      envsubst
+      coreutils
+    ];
     serviceConfig = {
       StateDirectory = "prometheus-dmarc-exporter";
       WorkingDirectory = "/var/lib/prometheus-dmarc-exporter";

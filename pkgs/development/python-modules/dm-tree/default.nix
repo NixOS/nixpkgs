@@ -1,31 +1,54 @@
-{ stdenv
-, abseil-cpp
-, absl-py
-, attrs
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, lib
-, numpy
-, pybind11
-, wrapt
-}:
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchFromGitHub,
+  stdenv,
 
+  # nativeBuildInputs
+  cmake,
+  pybind11,
+
+  # buildInputs
+  abseil-cpp,
+
+  # build-system
+  setuptools,
+
+  # checks
+  absl-py,
+  attrs,
+  numpy,
+  wrapt,
+}:
+let
+  patchCMakeAbseil = fetchpatch {
+    name = "0001-don-t-rebuild-abseil.patch";
+    url = "https://raw.githubusercontent.com/conda-forge/dm-tree-feedstock/93a91aa2c13240cecf88133e2885ade9121b464a/recipe/patches/0001-don-t-rebuild-abseil.patch";
+    hash = "sha256-bho7lXAV5xHkPmWy94THJtx+6i+px5w6xKKfThvBO/M=";
+  };
+  patchCMakePybind = fetchpatch {
+    name = "0002-don-t-fetch-pybind11.patch";
+    url = "https://raw.githubusercontent.com/conda-forge/dm-tree-feedstock/93a91aa2c13240cecf88133e2885ade9121b464a/recipe/patches/0002-don-t-fetch-pybind11.patch";
+    hash = "sha256-41XIouQ4Fm1yewaxK9erfcnkGBS6vgdvMm/DyF0rsKg=";
+  };
+in
 buildPythonPackage rec {
   pname = "dm-tree";
-  # As of 2021-12-29, the latest stable version still builds with Bazel.
-  version = "unstable-2021-12-20";
+  version = "0.1.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "tree";
-    rev = "b452e5c2743e7489b4ba7f16ecd51c516d7cd8e3";
-    sha256 = "1r187xwpvnnj98lyasngcv3lbxz0ziihpl5dbnjbfbjr0kh6z0j9";
+    tag = version;
+    hash = "sha256-VvSJTuEYjIz/4TTibSLkbg65YmcYqHImTHOomeorMJc=";
   };
 
   patches = [
-    ./cmake.patch
-  ];
+    patchCMakeAbseil
+    patchCMakePybind
+  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./0003-don-t-configure-apple.patch);
 
   dontUseCmakeConfigure = true;
 
@@ -39,7 +62,9 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     absl-py
     attrs
     numpy
@@ -48,11 +73,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tree" ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "Tree is a library for working with nested data structures.";
+  meta = {
+    description = "Tree is a library for working with nested data structures";
     homepage = "https://github.com/deepmind/tree";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ndl ];
+    changelog = "https://github.com/google-deepmind/tree/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      samuela
+      ndl
+    ];
   };
 }

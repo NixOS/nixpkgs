@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.ethercalc;
-in {
+in
+{
   options = {
     services.ethercalc = {
       enable = mkOption {
@@ -14,7 +20,7 @@ in {
           ethercalc, an online collaborative spreadsheet server.
 
           Persistent state will be maintained under
-          <filename>/var/lib/ethercalc</filename>. Upstream supports using a
+          {file}`/var/lib/ethercalc`. Upstream supports using a
           redis server for storage and recommends the redis backend for
           intensive use; however, the Nix module doesn't currently support
           redis.
@@ -24,12 +30,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        default = pkgs.ethercalc;
-        defaultText = literalExpression "pkgs.ethercalc";
-        type = types.package;
-        description = "Ethercalc package to use.";
-      };
+      package = mkPackageOption pkgs "ethercalc" { };
 
       host = mkOption {
         type = types.str;
@@ -48,13 +49,13 @@ in {
   config = mkIf cfg.enable {
     systemd.services.ethercalc = {
       description = "Ethercalc service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        DynamicUser    =   true;
-        ExecStart        = "${cfg.package}/bin/ethercalc --host ${cfg.host} --port ${toString cfg.port}";
-        Restart          = "always";
-        StateDirectory   = "ethercalc";
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/ethercalc --host ${cfg.host} --port ${toString cfg.port}";
+        Restart = "always";
+        StateDirectory = "ethercalc";
         WorkingDirectory = "/var/lib/ethercalc";
       };
     };

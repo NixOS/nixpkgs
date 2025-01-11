@@ -1,36 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# tested using
-, python
+  # build-system
+  setuptools,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "81d6d8e39695f2c37954d1011c0480ef7cf444d4e3ae24bc5e89ee5de360139a";
+  src = fetchFromGitHub {
+    owner = "redis";
+    repo = "hiredis-py";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-PnCSf7ZEPNtweQEnWTHCCVCvg5QGxGeBSAZCFHOziDQ=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "hiredis" ];
 
-  checkPhase = ''
-    mv hiredis _hiredis
-    ${python.interpreter} test.py
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf hiredis
   '';
 
   meta = with lib; {
     description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
     homepage = "https://github.com/redis/hiredis-py";
+    changelog = "https://github.com/redis/hiredis-py/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };
 }
-

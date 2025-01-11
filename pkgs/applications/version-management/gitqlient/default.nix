@@ -1,20 +1,22 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtwebengine
-, gitUpdater
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtwebengine,
+  gitUpdater,
 }:
 
 mkDerivation rec {
   pname = "gitqlient";
-  version = "1.4.3";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "francescmm";
-    repo = pname;
+    repo = "gitqlient";
     rev = "v${version}";
-    sha256 = "018jz6b28zwr205jmgw13ddlfvlhxqf0cw1pfjiwsi6i8gay7w6s";
+    fetchSubmodules = true;
+    hash = "sha256-gfWky5KTSj+5FC++QIVTJbrDOYi/dirTzs6LvTnO74A=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +31,9 @@ mkDerivation rec {
     "GitQlient.pro"
   ];
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/francescmm/GitQlient";
@@ -37,5 +41,6 @@ mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
+    mainProgram = "gitqlient";
   };
 }

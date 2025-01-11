@@ -1,30 +1,52 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, cppo, logs, ptime, uri, bigstringaf
-, re, cmdliner, alcotest }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  angstrom,
+  bigstringaf,
+  domain-name,
+  dune-site,
+  ipaddr,
+  logs,
+  lwt-dllist,
+  mtime,
+  ptime,
+  uri,
+}:
 
 buildDunePackage rec {
   pname = "caqti";
-  version = "1.8.0";
-  useDune2 = true;
+  version = "2.1.1";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.08";
 
-  src = fetchFromGitHub {
-    owner = "paurkedal";
-    repo = "ocaml-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256-8uKlrq9j1Z3QzkCyoRIn2j6wCdGyo7BY7XlbFHN1xVE=";
+  src = fetchurl {
+    url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${version}/caqti-v${version}.tbz";
+    hash = "sha256-SDpTX0HiZBkX/BgyzkrRX/w/ToKDsbMBiiYXNJWDCQo=";
   };
 
-  nativeBuildInputs = [ cppo ];
-  propagatedBuildInputs = [ logs ptime uri bigstringaf ];
-  checkInputs = [ re cmdliner alcotest ];
+  buildInputs = [ dune-site ];
+  propagatedBuildInputs = [
+    angstrom
+    bigstringaf
+    domain-name
+    ipaddr
+    logs
+    lwt-dllist
+    mtime
+    ptime
+    uri
+  ];
 
-  doCheck = true;
+  # Checks depend on caqti-driver-sqlite3 (circural dependency)
+  doCheck = false;
 
   meta = {
     description = "Unified interface to relational database libraries";
-    license = "LGPL-3.0-or-later WITH OCaml-LGPL-linking-exception";
+    license = with lib.licenses; [
+      lgpl3Plus
+      ocamlLgplLinkingException
+    ];
     maintainers = with lib.maintainers; [ bcc32 ];
     homepage = "https://github.com/paurkedal/ocaml-caqti";
   };

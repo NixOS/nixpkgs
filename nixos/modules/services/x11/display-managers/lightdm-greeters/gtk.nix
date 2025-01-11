@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -15,8 +20,7 @@ let
   icons = cfg.iconTheme.package;
   cursors = cfg.cursorTheme.package;
 
-  gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
-    ''
+  gtkGreeterConf = writeText "lightdm-gtk-greeter.conf" ''
     [greeter]
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
@@ -27,7 +31,7 @@ let
     ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
     ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
     ${cfg.extraConfig}
-    '';
+  '';
 
 in
 {
@@ -47,8 +51,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.gnome-themes-extra;
-          defaultText = literalExpression "pkgs.gnome.gnome-themes-extra";
+          default = pkgs.gnome-themes-extra;
+          defaultText = literalExpression "pkgs.gnome-themes-extra";
           description = ''
             The package path that contains the theme given in the name option.
           '';
@@ -68,8 +72,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';
@@ -89,8 +93,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the cursor theme given in the name option.
           '';
@@ -128,7 +132,16 @@ in
       indicators = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
-        example = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power" ];
+        example = [
+          "~host"
+          "~spacer"
+          "~clock"
+          "~spacer"
+          "~session"
+          "~language"
+          "~a11y"
+          "~power"
+        ];
         description = ''
           List of allowed indicator modules to use for the lightdm gtk
           greeter panel.
@@ -158,7 +171,7 @@ in
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = pkgs.lightdm_gtk_greeter.xgreeters;
+      package = pkgs.lightdm-gtk-greeter.xgreeters;
       name = "lightdm-gtk-greeter";
     };
 

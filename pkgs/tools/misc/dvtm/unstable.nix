@@ -1,13 +1,22 @@
-{callPackage, fetchFromGitHub, fetchpatch}:
+{
+  callPackage,
+  fetchpatch,
+  fetchzip,
+}:
+
+let
+  rev = "7bcf43f8dbd5c4a67ec573a1248114caa75fa3c2";
+in
 callPackage ./dvtm.nix {
   pname = "dvtm-unstable";
-  version = "2018-03-31";
+  version = "unstable-2021-03-09";
 
-  src = fetchFromGitHub {
-    owner = "martanne";
-    repo = "dvtm";
-    rev = "311a8c0c28296f8f87fb63349e0f3254c7481e14";
-    sha256 = "0pyxjkaxh8n97kccnmd3p98vi9h8mcfy5lswzqiplsxmxxmlbpx2";
+  src = fetchzip {
+    urls = [
+      "https://github.com/martanne/dvtm/archive/${rev}.tar.gz"
+      "https://git.sr.ht/~martanne/dvtm/archive/${rev}.tar.gz"
+    ];
+    hash = "sha256-UtkNsW0mvLfbPSAIIZ1yvX9xzIDtiBeXCjhN2R8JhDc=";
   };
 
   patches = [
@@ -17,14 +26,6 @@ callPackage ./dvtm.nix {
       name = "use-self-pipe-fix-darwin";
       url = "https://github.com/martanne/dvtm/commit/1f1ed664d64603f3f1ce1388571227dc723901b2.patch";
       sha256 = "14j3kks7b1v6qq12442v1da3h7khp02rp0vi0qrz0rfgkg1zilpb";
-    })
-
-    # https://github.com/martanne/dvtm/pull/86
-    # Fix buffer corruption when title is updated
-    (fetchpatch {
-      name = "fix-buffer-corruption-on-title-update";
-      url = "https://github.com/martanne/dvtm/commit/be6c3f8f615daeab214d484e6fff22e19631a0d1.patch";
-      sha256 = "1wdrl3sg815lhs22fwbc4w5dn4ifpdgl7v1kqfnhg752av4im7h7";
     })
   ];
 }

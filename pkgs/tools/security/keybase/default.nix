@@ -1,14 +1,29 @@
-{ stdenv, substituteAll, lib, buildGoModule, fetchFromGitHub
-, AVFoundation, AudioToolbox, ImageIO, CoreMedia
-, Foundation, CoreGraphics, MediaToolbox, gnupg
+{
+  stdenv,
+  replaceVars,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  AppKit,
+  AVFoundation,
+  AudioToolbox,
+  ImageIO,
+  CoreMedia,
+  Foundation,
+  CoreGraphics,
+  MediaToolbox,
+  gnupg,
 }:
 
 buildGoModule rec {
   pname = "keybase";
-  version = "5.9.3";
+  version = "6.4.0";
 
   modRoot = "go";
-  subPackages = [ "kbnm" "keybase" ];
+  subPackages = [
+    "kbnm"
+    "keybase"
+  ];
 
   dontRenameImports = true;
 
@@ -16,27 +31,45 @@ buildGoModule rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    sha256 = "sha256-vPQ1hBd33DwsW0b79kNH1yd7mrwkoftIYFgmMVxC+78=";
+    hash = "sha256-hRqxA2gPL1UKbz9DwgfZfjE6e5pB7zenZqK+k1i8F2g=";
   };
-  vendorSha256 = "sha256-ckAnSSSEF00gbgxnPAi2Pi8TNu3nmAahK7TP6HnfmNo=";
+  vendorHash = "sha256-KHahkGzkXr6xp0XY9MyEeeiHnmphaNYi9dPBQ476+us=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths-keybase.patch;
+    (replaceVars ./fix-paths-keybase.patch {
       gpg = "${gnupg}/bin/gpg";
       gpg2 = "${gnupg}/bin/gpg2";
     })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    AppKit
+    AVFoundation
+    AudioToolbox
+    ImageIO
+    CoreMedia
+    Foundation
+    CoreGraphics
+    MediaToolbox
+  ];
   tags = [ "production" ];
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";
-    description = "The Keybase official command-line utility and service";
+    description = "Keybase official command-line utility and service";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ avaq carlsverre np rvolosatovs Br1ght0ne shofius ];
+    maintainers = with maintainers; [
+      avaq
+      np
+      rvolosatovs
+      Br1ght0ne
+      shofius
+      ryand56
+    ];
     license = licenses.bsd3;
   };
 }

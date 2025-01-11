@@ -1,24 +1,36 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, jellyfin-apiclient-python
-, jinja2
-, mpv
-, pillow
-, pystray
-, python-mpv-jsonipc
-, pywebview
-, tkinter
+{
+  lib,
+  buildPythonApplication,
+  copyDesktopItems,
+  fetchPypi,
+  gobject-introspection,
+  jellyfin-apiclient-python,
+  jinja2,
+  makeDesktopItem,
+  mpv,
+  pillow,
+  pystray,
+  python,
+  python-mpv-jsonipc,
+  pywebview,
+  tkinter,
+  wrapGAppsHook3,
 }:
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.0.2";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "yFFMsGbzMAKyXpD/vZelswYulTYe5WybjG5pD2RpLrk=";
+    hash = "sha256-EANaNmvD8hcdGB2aoGemKvA9syS1VvIqGsP1jk0b+lE=";
   };
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     jellyfin-apiclient-python
@@ -50,11 +62,45 @@ buildPythonApplication rec {
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace "check_updates: bool = True" "check_updates: bool = False" \
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
+    # python-mpv renamed to mpv with 1.0.4
+    substituteInPlace setup.py \
+      --replace "python-mpv" "mpv" \
+      --replace "mpv-jsonipc" "python_mpv_jsonipc"
   '';
+
+  # Install all the icons for the desktop item
+  postInstall = ''
+    for s in 16 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/''${s}x''${s}/apps
+      ln -s $out/${python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
+        $out/share/icons/hicolor/''${s}x''${s}/apps/${pname}.png
+    done
+  '';
+
+  # needed for pystray to access appindicator using GI
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+  dontWrapGApps = true;
 
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "Jellyfin MPV Shim";
+      categories = [
+        "Video"
+        "AudioVideo"
+        "TV"
+        "Player"
+      ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
@@ -80,5 +126,6 @@ buildPythonApplication rec {
       unlicense
     ];
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "jellyfin-mpv-shim";
   };
 }

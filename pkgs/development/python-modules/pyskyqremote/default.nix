@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, websocket-client
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  websocket-client,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pyskyqremote";
-  version = "0.3.12";
+  version = "0.3.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
     repo = "skyq_remote";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-NEdlhp0Bjbb1oRCFf0OPEuFlLE2JjRWYWwnTaHozPr0=";
+    tag = version;
+    hash = "sha256-aMgUwgKHgR+NQvRxiUV7GaXehjDIlJJJHwSmHDmzK08=";
   };
 
   propagatedBuildInputs = [
@@ -30,13 +31,12 @@ buildPythonPackage rec {
   # Project has no tests, only a test script which looks like anusage example
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyskyqremote"
-  ];
+  pythonImportsCheck = [ "pyskyqremote" ];
 
   meta = with lib; {
     description = "Python module for accessing SkyQ boxes";
     homepage = "https://github.com/RogerSelwyn/skyq_remote";
+    changelog = "https://github.com/RogerSelwyn/skyq_remote/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,23 +1,46 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Libsystem,
+  SystemConfiguration,
+  installShellFiles,
+  libiconv,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "2.0.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
-    repo = pname;
+    repo = "pueue";
     rev = "v${version}";
-    sha256 = "sha256-eFO9v+CZ3sFJJ0Ksa2sV5snjBz9lUkElGSj4DfEUebs=";
+    hash = "sha256-b4kZ//+rO70uZh1fvI4A2dbCZ7ymci9g/u5keMBWYf8=";
   };
 
-  cargoSha256 = "sha256-cyuDXMmVrVx3kluumR6WleMzuoV+261f47rpkVYHzZA=";
+  cargoHash = "sha256-sTpxcJs5I7LzVw56ka5PlFixJSiJeCae9serS0FhmuA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rustPlatform.bindgenHook
+    ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Libsystem
+    SystemConfiguration
+    libiconv
+  ];
 
-  checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
+  checkFlags = [
+    "--test client_tests"
+    "--skip=test_single_huge_payload"
+    "--skip=test_create_unix_socket"
+  ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -27,10 +50,21 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A daemon for managing long running shell commands";
     homepage = "https://github.com/Nukesor/pueue";
-    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
+    description = "Daemon for managing long running shell commands";
+    longDescription = ''
+      Pueue is a command-line task management tool for sequential and parallel
+      execution of long-running tasks.
+
+      Simply put, it's a tool that processes a queue of shell commands. On top
+      of that, there are a lot of convenient features and abstractions.
+
+      Since Pueue is not bound to any terminal, you can control your tasks from
+      any terminal on the same machine. The queue will be continuously
+      processed, even if you no longer have any active ssh sessions.
+    '';
+    changelog = "https://github.com/Nukesor/pueue/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ sarcasticadmin ];
   };
 }

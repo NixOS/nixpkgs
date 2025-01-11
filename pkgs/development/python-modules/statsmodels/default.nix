@@ -1,38 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, nose
-, numpy
-, scipy
-, pandas
-, patsy
-, cython
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  numpy,
+  packaging,
+  pandas,
+  patsy,
+  pythonOlder,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.13.2";
-  disabled = isPy27;
+  version = "0.14.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d9wpLJk5wDakdvF3D50Il2sFQ32qIpko2nMjEUfN59Q=";
+    hash = "sha256-7PNQJkP6k6q+XwvfI477WWCVF8TWCoEWMtMfzc6GwtI=";
   };
 
-  nativeBuildInputs = [ cython ];
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy scipy pandas patsy matplotlib ];
+  build-system = [
+    cython
+    numpy
+    scipy
+    setuptools
+    setuptools-scm
+  ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
+  dependencies = [
+    numpy
+    packaging
+    pandas
+    patsy
+    scipy
+  ];
 
   # Huge test suites with several test failures
   doCheck = false;
+
   pythonImportsCheck = [ "statsmodels" ];
 
-  meta = {
+  meta = with lib; {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
+    license = licenses.bsd3;
   };
 }

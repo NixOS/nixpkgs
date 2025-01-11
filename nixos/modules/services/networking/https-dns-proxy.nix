@@ -1,39 +1,63 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     concatStringsSep
-    mkEnableOption mkIf mkOption types;
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 
   cfg = config.services.https-dns-proxy;
 
   providers = {
     cloudflare = {
-      ips = [ "1.1.1.1" "1.0.0.1" ];
+      ips = [
+        "1.1.1.1"
+        "1.0.0.1"
+      ];
       url = "https://cloudflare-dns.com/dns-query";
     };
     google = {
-      ips = [ "8.8.8.8" "8.8.4.4" ];
+      ips = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
       url = "https://dns.google/dns-query";
     };
     quad9 = {
-      ips = [ "9.9.9.9" "149.112.112.112" ];
+      ips = [
+        "9.9.9.9"
+        "149.112.112.112"
+      ];
       url = "https://dns.quad9.net/dns-query";
+    };
+    opendns = {
+      ips = [
+        "208.67.222.222"
+        "208.67.220.220"
+      ];
+      url = "https://doh.opendns.com/dns-query";
+    };
+    custom = {
+      inherit (cfg.provider) ips url;
     };
   };
 
   defaultProvider = "quad9";
 
-  providerCfg =
-    let
-      isCustom = cfg.provider.kind == "custom";
-    in
-    lib.concatStringsSep " " [
-      "-b"
-      (concatStringsSep "," (if isCustom then cfg.provider.ips else providers."${cfg.provider.kind}".ips))
-      "-r"
-      (if isCustom then cfg.provider.url else providers."${cfg.provider.kind}".url)
-    ];
+  providerCfg = concatStringsSep " " [
+    "-b"
+    (concatStringsSep "," providers."${cfg.provider.kind}".ips)
+    "-r"
+    providers."${cfg.provider.kind}".url
+  ];
 
 in
 {
@@ -62,14 +86,16 @@ in
           The upstream provider to use or custom in case you do not trust any of
           the predefined providers or just want to use your own.
 
-          The default is ${defaultProvider} and there are privacy and security trade-offs
-          when using any upstream provider. Please consider that before using any
-          of them.
+          The default is ${defaultProvider} and there are privacy and security
+          trade-offs when using any upstream provider. Please consider that
+          before using any of them.
 
-          If you pick a custom provider, you will need to provide the bootstrap
-          IP addresses as well as the resolver https URL.
+          Supported providers: ${concatStringsSep ", " (builtins.attrNames providers)}
+
+          If you pick the custom provider, you will need to provide the
+          bootstrap IP addresses as well as the resolver https URL.
         '';
-        type = types.enum ((builtins.attrNames providers) ++ [ "custom" ]);
+        type = types.enum (builtins.attrNames providers);
         default = defaultProvider;
       };
 
@@ -105,14 +131,18 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.https-dns-proxy = {
       description = "DNS to DNS over HTTPS (DoH) proxy";
+      requires = [ "network.target" ];
       after = [ "network.target" ];
+      wants = [ "nss-lookup.target" ];
+      before = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = rec {
         Type = "exec";
         DynamicUser = true;
+        ProtectHome = "tmpfs";
         ExecStart = lib.concatStringsSep " " (
           [
-            "${pkgs.https-dns-proxy}/bin/https_dns_proxy"
+            (lib.getExe pkgs.https-dns-proxy)
             "-a ${toString cfg.address}"
             "-p ${toString cfg.port}"
             "-l -"

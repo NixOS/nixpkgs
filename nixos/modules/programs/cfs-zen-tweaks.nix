@@ -1,8 +1,11 @@
 # CFS Zen Tweaks
 
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -13,16 +16,22 @@ in
 {
 
   meta = {
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 
   options = {
-    programs.cfs-zen-tweaks.enable = mkEnableOption "CFS Zen Tweaks";
+    programs.cfs-zen-tweaks.enable = lib.mkEnableOption "CFS Zen Tweaks";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ pkgs.cfs-zen-tweaks ];
 
-    systemd.services.set-cfs-tweak.wantedBy = [ "multi-user.target" "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
+    systemd.services.set-cfs-tweaks.wantedBy = [
+      "multi-user.target"
+      "suspend.target"
+      "hibernate.target"
+      "hybrid-sleep.target"
+      "suspend-then-hibernate.target"
+    ];
   };
 }

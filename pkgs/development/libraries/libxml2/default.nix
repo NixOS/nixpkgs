@@ -1,51 +1,53 @@
-{ stdenv
-, lib
-, fetchurl
-, zlib
-, pkg-config
-, autoreconfHook
-, xz
-, libintl
-, python
-, gettext
-, ncurses
-, findXMLCatalogs
-, libiconv
-, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
-, icuSupport ? false
-, icu
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  libintl,
+  python,
+  gettext,
+  ncurses,
+  findXMLCatalogs,
+  libiconv,
+  # Python limits cross-compilation to an allowlist of host OSes.
+  # https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
+  pythonSupport ?
+    enableShared
+    && (
+      stdenv.hostPlatform == stdenv.buildPlatform
+      || stdenv.hostPlatform.isCygwin
+      || stdenv.hostPlatform.isLinux
+      || stdenv.hostPlatform.isWasi
+    ),
+  icuSupport ? false,
+  icu,
+  enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
+  gnome,
+  testers,
+  enableHttp ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.9.14";
+  version = "2.13.5";
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ]
+  outputs =
+    [
+      "bin"
+      "dev"
+      "out"
+      "devdoc"
+    ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
+  outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vnzk33wfms348lgz9pvkq9li7jm44pvm73lbr3w1khwgljlmmv0";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-dPwWMhejlkJX0745r5Q+CIYSY8QjH571tJa29tTHsrY=";
   };
-
-  patches = [
-    # Upstream bugs:
-    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
-    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
-    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
-    # but only the UTF-8 part.
-    # Can also be mitigated by fixing malformed XML inputs, such as in
-    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
-    # Other discussion:
-    #   https://github.com/itstool/itstool/issues/22
-    #   https://github.com/NixOS/nixpkgs/pull/63174
-    #   https://github.com/NixOS/nixpkgs/pull/72342
-    ./utf8-xmlErrorFuncHandler.patch
-  ];
 
   strictDeps = true;
 
@@ -54,72 +56,80 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = lib.optionals pythonSupport [
-    python
-  ] ++ lib.optionals (pythonSupport && python?isPy2 && python.isPy2) [
-    gettext
-  ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
-    ncurses
-  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
-    libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
-  ];
+  buildInputs =
+    lib.optionals pythonSupport [
+      python
+    ]
+    ++ lib.optionals (pythonSupport && python ? isPy2 && python.isPy2) [
+      gettext
+    ]
+    ++ lib.optionals (pythonSupport && python ? isPy3 && python.isPy3) [
+      ncurses
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python ? isPy2 && python.isPy2) [
+      libintl
+    ];
 
-  propagatedBuildInputs = [
-    zlib
-    findXMLCatalogs
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ] ++ lib.optionals icuSupport [
-    icu
-  ];
+  propagatedBuildInputs =
+    [
+      findXMLCatalogs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals icuSupport [
+      icu
+    ];
 
   configureFlags = [
     "--exec-prefix=${placeholder "dev"}"
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
-    (lib.withFeatureAs pythonSupport "python" python)
-  ];
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+  ] ++ lib.optional enableHttp "--with-http";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
+    "pyexecdir=\"${placeholder "py"}/${python.sitePackages}\""
   ];
 
   enableParallelBuilding = true;
 
-  doCheck =
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    !stdenv.isDarwin &&
-    stdenv.hostPlatform.libc != "musl";
+  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
+  preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+  '';
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
   preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
+    substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
-  postFixup = ''
-    moveToOutput bin/xml2-config "$dev"
-    moveToOutput lib/xml2Conf.sh "$dev"
-    moveToOutput share/man/man1 "$bin"
-  '' + lib.optionalString (enableStatic && enableShared) ''
-    moveToOutput lib/libxml2.a "$static"
-  '';
+  postFixup =
+    ''
+      moveToOutput bin/xml2-config "$dev"
+      moveToOutput lib/xml2Conf.sh "$dev"
+    ''
+    + lib.optionalString (enableStatic && enableShared) ''
+      moveToOutput lib/libxml2.a "$static"
+    '';
 
   passthru = {
-    inherit version;
-    pythonSupport = pythonSupport;
+    inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxml2";
       versionPolicy = "none";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -128,6 +138,7 @@ stdenv.mkDerivation rec {
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
+    pkgConfigModules = [ "libxml-2.0" ];
   };
-}
+})

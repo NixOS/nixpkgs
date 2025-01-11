@@ -12,8 +12,6 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
-
 in {
   imports = [
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
@@ -38,23 +36,14 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        description = ''
-          Matomo package for the service to use.
-          This can be used to point to newer releases from nixos-unstable,
-          as they don't get backported if they are not security-relevant.
-        '';
-        default = pkgs.matomo;
-        defaultText = literalExpression "pkgs.matomo";
-      };
+      package = mkPackageOption pkgs "matomo" { };
 
       webServerUser = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "lighttpd";
         description = ''
-          Name of the web server user that forwards requests to <option>services.phpfpm.pools.&lt;name&gt;.socket</option> the fastcgi socket for Matomo if the nginx
+          Name of the web server user that forwards requests to {option}`services.phpfpm.pools.<name>.socket` the fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
@@ -70,18 +59,16 @@ in {
           This means that you can safely disable browser triggers for Matomo archiving,
           and safely enable to delete old visitor logs.
           Before deleting visitor logs,
-          make sure though that you run <literal>systemctl start matomo-archive-processing.service</literal>
+          make sure though that you run `systemctl start matomo-archive-processing.service`
           at least once without errors if you have already collected data before.
         '';
       };
 
       hostname = mkOption {
         type = types.str;
-        default = "${user}.${fqdn}";
+        default = "${user}.${config.networking.fqdnOrHostName}";
         defaultText = literalExpression ''
-          if config.${options.networking.domain} != null
-          then "${user}.''${config.${options.networking.fqdn}}"
-          else "${user}.''${config.${options.networking.hostName}}"
+          "${user}.''${config.${options.networking.fqdnOrHostName}}"
         '';
         example = "matomo.yourdomain.org";
         description = ''
@@ -116,8 +103,8 @@ in {
             With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
-            If enabled, then by default, the <option>serverName</option> is
-            <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
+            If enabled, then by default, the {option}`serverName` is
+            `''${user}.''${config.networking.hostName}.''${config.networking.domain}`,
             SSL is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtualHost will be configured.
         '';
@@ -132,7 +119,7 @@ in {
 
     assertions = [ {
         assertion = cfg.nginx != null || cfg.webServerUser != null;
-        message = "Either services.matomo.nginx or services.matomo.nginx.webServerUser is mandatory";
+        message = "Either services.matomo.nginx or services.matomo.webServerUser is mandatory";
     }];
 
     users.users.${user} = {
@@ -178,7 +165,7 @@ in {
           CURRENT_PACKAGE=$(readlink ${dataDir}/current-package)
           NEW_PACKAGE=${cfg.package}
           if [ "$CURRENT_PACKAGE" != "$NEW_PACKAGE" ]; then
-            # keeping tmp arround between upgrades seems to bork stuff, so delete it
+            # keeping tmp around between upgrades seems to bork stuff, so delete it
             rm -rf ${dataDir}/tmp
           fi
         elif [ -e ${dataDir}/tmp ]; then
@@ -329,7 +316,7 @@ in {
   };
 
   meta = {
-    doc = ./matomo-doc.xml;
+    doc = ./matomo.md;
     maintainers = with lib.maintainers; [ florianjacob ];
   };
 }

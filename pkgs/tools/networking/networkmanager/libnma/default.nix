@@ -1,38 +1,45 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, gtk-doc
-, pkg-config
-, vala
-, networkmanager
-, gnome
-, isocodes
-, libxml2
-, docbook_xsl
-, docbook_xml_dtd_43
-, mobile-broadband-provider-info
-, gobject-introspection
-, gtk3
-, withGtk4 ? false
-, gtk4
-, withGnome ? true
-, gcr
-, glib
-, substituteAll
-, lib
+{
+  stdenv,
+  fetchurl,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  gettext,
+  gtk-doc,
+  pkg-config,
+  vala,
+  networkmanager,
+  gnome,
+  isocodes,
+  libxml2,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  mobile-broadband-provider-info,
+  gobject-introspection,
+  gtk3,
+  withGtk4 ? false,
+  gtk4,
+  withGnome ? true,
+  gcr_4,
+  glib,
+  lib,
+  _experimental-update-script-combinators,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.38";
+  version = "1.10.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Xtk+rhhFb/WopPQIF4we4ZjcjTpGxl+QdbEBkW5k6LQ=";
+    sha256 = "U6b7KxkK03xZhsrtPpi+3nw8YCOZ7k+TyPwFQwPXbas=";
   };
 
   patches = [
@@ -40,30 +47,37 @@ stdenv.mkDerivation rec {
     ./hardcode-gsettings.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    gobject-introspection
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
-    libxml2
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      pkg-config
+      gobject-introspection
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_43
+      libxml2
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    gtk3
-    networkmanager
-    isocodes
-    mobile-broadband-provider-info
-  ] ++ lib.optionals withGtk4 [
-    gtk4
-  ] ++ lib.optionals withGnome [
-    # advanced certificate chooser
-    gcr
-  ];
+  buildInputs =
+    [
+      gtk3
+      networkmanager
+      isocodes
+      mobile-broadband-provider-info
+    ]
+    ++ lib.optionals withGtk4 [
+      gtk4
+    ]
+    ++ lib.optionals withGnome [
+      # advanced certificate chooser
+      gcr_4
+    ];
 
   mesonFlags = [
     "-Dgcr=${lib.boolToString withGnome}"
@@ -72,7 +86,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nma-ws/nma-eap.c --subst-var-by \
-      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "$name"}
   '';
 
   postInstall = ''
@@ -80,10 +94,24 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
+        "org.gnome.nm-applet.eap" = "NM_APPLET_GSETTINGS";
+      };
+      inherit src;
     };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "libnma";
+          versionPolicy = "odd-unstable";
+        };
+        updateGsettingsPatch = _experimental-update-script-combinators.copyAttrOutputToFile "libnma.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateGsettingsPatch
+      ];
   };
 
   meta = with lib; {

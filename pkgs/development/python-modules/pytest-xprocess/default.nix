@@ -1,29 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi
-, psutil
-, pytest
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
+  py,
+  pytest,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.18.1";
+  version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd9f30ed1584b5833bc34494748adf0fb9de3ca7bacc4e88ad71989c21cba266";
+    hash = "sha256-FeJwY3WG6rxWdV7l/MgcSL20a6fvfA1bG2QwLQgMxg8=";
   };
+
+  postPatch = ''
+    # Remove test QoL package from install_requires
+    substituteInPlace setup.py \
+      --replace "'pytest-cache', " ""
+  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ psutil ];
-
-  # Remove test QoL package from install_requires
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-cache', " ""
-  '';
+  propagatedBuildInputs = [
+    psutil
+    py
+  ];
 
   # There's no tests in repo
   doCheck = false;
@@ -32,6 +40,6 @@ buildPythonPackage rec {
     description = "Pytest external process plugin";
     homepage = "https://github.com/pytest-dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

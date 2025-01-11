@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, babashka
-, cacert
-, clojure
-, git
-, jdk
-, obb
-, fetchFromGitHub
-, makeWrapper
-, runCommand }:
+{
+  lib,
+  stdenv,
+  babashka,
+  cacert,
+  clojure,
+  git,
+  jdk,
+  obb,
+  fetchFromGitHub,
+  makeWrapper,
+  runCommand,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obb";
@@ -24,7 +25,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ babashka cacert git jdk ];
+  buildInputs = [
+    babashka
+    cacert
+    git
+    jdk
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -65,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       [ $(${obb}/bin/obb -e '(+ 1 2)') = '3' ]
       touch $out
     '';
@@ -79,5 +85,8 @@ stdenv.mkDerivation rec {
       willcohen
     ];
     platforms = platforms.darwin;
+
+    # https://hydra.nixos.org/job/nixpkgs/trunk/obb.aarch64-darwin/all
+    broken = true;
   };
 }

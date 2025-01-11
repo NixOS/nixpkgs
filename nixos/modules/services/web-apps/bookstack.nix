@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.bookstack;
-  bookstack = pkgs.bookstack.override {
+  bookstack = cfg.package.override {
     dataDir = cfg.dataDir;
   };
   db = cfg.database;
@@ -33,8 +33,9 @@ in {
   ];
 
   options.services.bookstack = {
-
     enable = mkEnableOption "BookStack";
+
+    package = mkPackageOption pkgs "bookstack" { };
 
     user = mkOption {
       default = "bookstack";
@@ -52,7 +53,7 @@ in {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
-        generated with <code>head -c 32 /dev/urandom | base64</code>.
+        generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/bookstack-appkey";
       type = types.path;
@@ -60,11 +61,8 @@ in {
 
     hostname = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "bookstack.example.com";
       description = ''
         The hostname to serve BookStack on.
@@ -74,7 +72,7 @@ in {
     appURL = mkOption {
       description = ''
         The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
-        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan bookstack:update-url https://old.example.com https://new.example.com</code>
+        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: `php artisan bookstack:update-url https://old.example.com https://new.example.com`
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
       defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
@@ -116,7 +114,7 @@ in {
         example = "/run/keys/bookstack-dbpassword";
         description = ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
       createLocally = mkOption {
@@ -164,7 +162,7 @@ in {
         example = "/run/keys/bookstack-mailpassword";
         description = ''
           A file containing the password corresponding to
-          <option>mail.user</option>.
+          {option}`mail.user`.
         '';
       };
       encryption = mkOption {
@@ -192,7 +190,7 @@ in {
         "pm.max_requests" = 500;
       };
       description = ''
-        Options for the bookstack PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        Options for the bookstack PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -258,18 +256,18 @@ in {
       '';
       description = ''
         BookStack configuration options to set in the
-        <filename>.env</filename> file.
+        {file}`.env` file.
 
-        Refer to <link xlink:href="https://www.bookstackapp.com/docs/"/>
+        Refer to <https://www.bookstackapp.com/docs/>
         for details on supported values.
 
         Settings containing secret data should be set to an attribute
-        set containing the attribute <literal>_secret</literal> - a
+        set containing the attribute `_secret` - a
         string pointing to a file containing the value the option
         should be set to. See the example to get a better picture of
-        this: in the resulting <filename>.env</filename> file, the
-        <literal>OIDC_CLIENT_SECRET</literal> key will be set to the
-        contents of the <filename>/run/keys/oidc_secret</filename>
+        this: in the resulting {file}`.env` file, the
+        `OIDC_CLIENT_SECRET` key will be set to the
+        contents of the {file}`/run/keys/oidc_secret`
         file.
       '';
     };
@@ -351,10 +349,10 @@ in {
             index = "index.php";
             tryFiles = "$uri $uri/ /index.php?$query_string";
           };
-          "~ \.php$".extraConfig = ''
+          "~ \\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
           '';
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
         };
@@ -362,7 +360,7 @@ in {
     };
 
     systemd.services.bookstack-setup = {
-      description = "Preperation tasks for BookStack";
+      description = "Preparation tasks for BookStack";
       before = [ "phpfpm-bookstack.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
@@ -372,7 +370,7 @@ in {
         User = user;
         WorkingDirectory = "${bookstack}";
         RuntimeDirectory = "bookstack/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
       };
       path = [ pkgs.replace-secret ];
       script =
@@ -415,20 +413,25 @@ in {
       '';
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public                     0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public/uploads             0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage                    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/app                0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/fonts              0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework          0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/cache    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/sessions 0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-bookstack" = let
+      defaultConfig = {
+        inherit user group;
+        mode = "0700";
+      };
+    in {
+      "${cfg.dataDir}".d = defaultConfig // { mode = "0710"; };
+      "${cfg.dataDir}/public".d = defaultConfig // { mode = "0750"; };
+      "${cfg.dataDir}/public/uploads".d = defaultConfig // { mode = "0750"; };
+      "${cfg.dataDir}/storage".d = defaultConfig;
+      "${cfg.dataDir}/storage/app".d = defaultConfig;
+      "${cfg.dataDir}/storage/fonts".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework/cache".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework/sessions".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework/views".d = defaultConfig;
+      "${cfg.dataDir}/storage/logs".d = defaultConfig;
+      "${cfg.dataDir}/storage/uploads".d = defaultConfig;
+    };
 
     users = {
       users = mkIf (user == "bookstack") {

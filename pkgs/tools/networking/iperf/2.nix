@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iperf";
@@ -11,6 +15,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
   configureFlags = [ "--enable-fastsampling" ];
+
+  makeFlags = [ "AR:=$(AR)" ];
 
   postInstall = ''
     mv $out/bin/iperf $out/bin/iperf2

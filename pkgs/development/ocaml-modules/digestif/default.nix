@@ -1,29 +1,38 @@
-{ lib, ocaml, fetchurl, buildDunePackage
-, pkg-config, which
-, bigarray-compat, eqaf, stdlib-shims
-, alcotest, astring, bos, findlib, fpath
+{
+  lib,
+  ocaml,
+  fetchurl,
+  buildDunePackage,
+  eqaf,
+  alcotest,
+  astring,
+  bos,
+  crowbar,
+  findlib,
+  fpath,
 }:
 
 buildDunePackage rec {
   pname = "digestif";
-  version = "1.1.0";
+  version = "1.2.0";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-v${version}.tbz";
-    sha256 = "01gwkbrznci4xdcbww4ysgsciz2qs0r8jsmhp0siwbcgcrf1jjv5";
+    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-${version}.tbz";
+    hash = "sha256-wwFoyv4nmmZTZ4BrPl5jmP10dPHlJg52gm1eydOypQg=";
   };
 
-  nativeBuildInputs = [ findlib which ];
-  buildInputs = [ ocaml ];
+  propagatedBuildInputs = [ eqaf ];
 
-  propagatedBuildInputs = [ bigarray-compat eqaf stdlib-shims ];
-
-  strictDeps = !doCheck;
-
-  checkInputs = [ alcotest astring bos fpath ];
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  checkInputs = [
+    alcotest
+    astring
+    bos
+    crowbar
+    fpath
+  ];
+  doCheck = true;
 
   postCheck = ''
     ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ test/test_runes.ml

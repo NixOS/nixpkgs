@@ -118,7 +118,7 @@ in
         description = ''
           Whether to open ports in the firewall for ZNC. Does work with
           ports for listeners specified in
-          <option>services.znc.config.Listener</option>.
+          {option}`services.znc.config.Listener`.
         '';
       };
 
@@ -151,29 +151,25 @@ in
         '';
         description = ''
           Configuration for ZNC, see
-          <link xlink:href="https://wiki.znc.in/Configuration"/> for details. The
+          <https://wiki.znc.in/Configuration> for details. The
           Nix value declared here will be translated directly to the xml-like
           format ZNC expects. This is much more flexible than the legacy options
-          under <option>services.znc.confOptions.*</option>, but also can't do
+          under {option}`services.znc.confOptions.*`, but also can't do
           any type checking.
-          </para>
-          <para>
-          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
+
+          You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.services.znc.config`
           to view the current value. By default it contains a listener for port
           5000 with SSL enabled.
-          </para>
-          <para>
-          Nix attributes called <literal>extraConfig</literal> will be inserted
+
+          Nix attributes called `extraConfig` will be inserted
           verbatim into the resulting config file.
-          </para>
-          <para>
-          If <option>services.znc.useLegacyConfig</option> is turned on, the
-          option values in <option>services.znc.confOptions.*</option> will be
+
+          If {option}`services.znc.useLegacyConfig` is turned on, the
+          option values in {option}`services.znc.confOptions.*` will be
           gracefully be applied to this option.
-          </para>
-          <para>
+
           If you intend to update the configuration through this option, be sure
-          to enable <option>services.znc.mutable</option>, otherwise none of the
+          to disable {option}`services.znc.mutable`, otherwise none of the
           changes here will be applied after the initial deploy.
         '';
       };
@@ -183,11 +179,10 @@ in
         example = literalExpression "~/.znc/configs/znc.conf";
         description = ''
           Configuration file for ZNC. It is recommended to use the
-          <option>config</option> option instead.
-          </para>
-          <para>
+          {option}`config` option instead.
+
           Setting this option will override any auto-generated config file
-          through the <option>confOptions</option> or <option>config</option>
+          through the {option}`confOptions` or {option}`config`
           options.
         '';
       };
@@ -206,15 +201,13 @@ in
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the
-          <literal>dataDir</literal> directory to be changed by the user at
+          `dataDir` directory to be changed by the user at
           run-time.
-          </para>
-          <para>
+
           If enabled, modifications to the ZNC configuration after its initial
           creation are not overwritten by a NixOS rebuild. If disabled, the
           ZNC configuration is rebuilt on every NixOS rebuild.
-          </para>
-          <para>
+
           If the user wants to manage the ZNC service using the web admin
           interface, this option should be enabled.
         '';
@@ -250,6 +243,7 @@ in
     systemd.services.znc = {
       description = "ZNC Server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         User = cfg.user;

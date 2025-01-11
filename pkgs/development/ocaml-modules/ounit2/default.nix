@@ -1,26 +1,32 @@
-{ lib, ocaml, buildDunePackage, fetchurl, stdlib-shims, ncurses }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  seq,
+  stdlib-shims,
+}:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.08";
 
   pname = "ounit2";
-  version = "2.2.4";
-
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  version = "2.2.7";
 
   src = fetchurl {
-    url = "https://github.com/gildor478/ounit/releases/download/v${version}/ounit-v${version}.tbz";
-    sha256 = "0i9kiqbf2dp12c4qcvbn4abdpdp6h4g5z54ycsh0q8jpv6jnkh5m";
+    url = "https://github.com/gildor478/ounit/releases/download/v${version}/ounit-${version}.tbz";
+    hash = "sha256-kPbmO9EkClHYubL3IgWb15zgC1J2vdYji49cYTwOc4g=";
   };
 
-  propagatedBuildInputs = [ stdlib-shims ];
+  propagatedBuildInputs = [
+    seq
+    stdlib-shims
+  ];
 
   doCheck = true;
-  checkInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   meta = with lib; {
     homepage = "https://github.com/gildor478/ounit";
-    description = "A unit test framework for OCaml";
+    description = "Unit test framework for OCaml";
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann ];
   };

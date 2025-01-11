@@ -1,15 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, fetchzip
-, autoconf, automake, autoreconfHook, clang, dos2unix, file, perl
-, pkg-config
-, alsa-lib, coreutils, freetype, glib, glibc, gnugrep, libpulseaudio, libtool
-, libuuid, openssl, pango, xorg
-, squeakImageHash ? null, squeakSourcesHash ? null, squeakSourcesVersion ? null
-, squeakVersion ? null, squeakVmCommitHash ? null, squeakVmCommitHashHash ? null
-, squeakVmVersion ? null
-} @ args:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  fetchzip,
+  autoconf,
+  automake,
+  autoreconfHook,
+  dos2unix,
+  file,
+  perl,
+  pkg-config,
+  alsa-lib,
+  coreutils,
+  freetype,
+  glib,
+  glibc,
+  gnugrep,
+  libGL,
+  libpulseaudio,
+  libtool,
+  libuuid,
+  openssl,
+  pango,
+  xorg,
+  squeakImageHash ? null,
+  squeakSourcesHash ? null,
+  squeakSourcesVersion ? null,
+  squeakVersion ? null,
+  squeakVmCommitHash ? null,
+  squeakVmCommitHashHash ? null,
+  squeakVmVersion ? null,
+}@args:
 
 let
-  inherit (builtins) elemAt;
+  inherit (builtins) elemAt toString;
+
   nullableOr = o: default: if o == null then default else o;
 
   bits = stdenv.hostPlatform.parsed.cpu.bits;
@@ -36,10 +62,12 @@ let
   squeakVmCommitHash = nullableOr args.squeakVmCommitHash or null (fetchurl {
     url = "https://api.github.com/repos/OpenSmalltalk/opensmalltalk-vm/commits/${squeakVmVersionRelease}";
     curlOpts = "--header Accept:application/vnd.github.v3.sha";
-    hash = nullableOr args.squeakVmCommitHashHash or null
-      "sha256-quwmhpJlb2fp0fI9b03fBxSR44j1xmHPW20wkSqTOhQ=";
+    hash =
+      nullableOr args.squeakVmCommitHashHash or null
+        "sha256-quwmhpJlb2fp0fI9b03fBxSR44j1xmHPW20wkSqTOhQ=";
   });
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "squeak";
   version = squeakVersion;
 
@@ -51,22 +79,25 @@ in stdenv.mkDerivation {
     owner = "OpenSmalltalk";
     repo = "opensmalltalk-vm";
     rev = squeakVmVersionRelease;
-    hash = nullableOr args.squeakVmHash or null
-      "sha256-rNJn5ya+7ggC21MpwSrl2ByJDjVycONKHADboH7dQLM=";
+    hash = nullableOr args.squeakVmHash or null "sha256-rNJn5ya+7ggC21MpwSrl2ByJDjVycONKHADboH7dQLM=";
   };
-  imageSrc = let
-    squeakImageName = "Squeak${squeakVersionBase}-${squeakImageVersion}-${toString bits}bit";
-  in fetchzip {
-    url = "https://files.squeak.org/${squeakVersionBase}/${squeakImageName}/${squeakImageName}.zip";
-    name = "source";
-    stripRoot = false;
-    hash = nullableOr args.squeakImageHash or null
-      "sha256-wDuRyc/DNqG1D4DzyBkUvrzFkBlXBtbpnANZlRV/Fas=";
-  };
+  imageSrc =
+    let
+      squeakImageName = "Squeak${squeakVersionBase}-${squeakImageVersion}-${toString bits}bit";
+    in
+    fetchzip {
+      url = "https://files.squeak.org/${squeakVersionBase}/${squeakImageName}/${squeakImageName}.zip";
+      name = "source";
+      stripRoot = false;
+      hash =
+        nullableOr args.squeakImageHash or null
+          "sha256-wDuRyc/DNqG1D4DzyBkUvrzFkBlXBtbpnANZlRV/Fas=";
+    };
   sourcesSrc = fetchurl {
     url = "https://files.squeak.org/sources_files/SqueakV${squeakSourcesVersion}.sources.gz";
-    hash = nullableOr args.squeakSourcesHash or null
-      "sha256-ZViZ1VgI32LwLTEyw7utp8oaAK3UmCNJnHqsGm1IKYE=";
+    hash =
+      nullableOr args.squeakSourcesHash or null
+        "sha256-ZViZ1VgI32LwLTEyw7utp8oaAK3UmCNJnHqsGm1IKYE=";
   };
 
   vmBuild = "linux64x64";
@@ -75,7 +106,6 @@ in stdenv.mkDerivation {
     autoconf
     automake
     autoreconfHook
-    clang
     dos2unix
     file
     perl
@@ -88,6 +118,7 @@ in stdenv.mkDerivation {
     glib
     glibc
     gnugrep
+    libGL
     libpulseaudio
     libtool
     libuuid
@@ -110,6 +141,9 @@ in stdenv.mkDerivation {
     ./squeak-configure-version.patch
     ./squeak-plugins-discovery.patch
     ./squeak-squeaksh-nixpkgs.patch
+    # it looks like -export-dynamic is being passed erroneously to the compiler,
+    # as it is a linker flag and at this step the build is just compiling notice the -c flag.
+    ./cc-no-export-dynamic.patch
   ];
 
   postPatch = ''
@@ -139,7 +173,16 @@ in stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: vm/vm.a(cogit.o):spur64src/vm/cogitX64SysV.c:2552: multiple definition of
   #       `traceStores'; vm/vm.a(gcc3x-cointerp.o):spur64src/vm/cogit.h:140: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ "-fcommon" ]
+    ++ (lib.optionals stdenv.cc.isClang [
+      # LLVM 16 turned these into errors (rightly, perhaps.)
+      # Allow this package to continue to build despite this change.
+      "-Wno-error=int-conversion"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-function-pointer-types"
+    ])
+  );
 
   preAutoreconf = ''
     pushd ./platforms/unix/config > /dev/null
@@ -183,7 +226,10 @@ in stdenv.mkDerivation {
   ];
   configureScript = "./mvm";
 
-  installTargets = [ "install" "install-image" ];
+  installTargets = [
+    "install"
+    "install-image"
+  ];
 
   postInstall = ''
     rm "$out/squeak"
@@ -193,7 +239,10 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Squeak virtual machine";
     homepage = "https://opensmalltalk.org/";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ ehmry ];
     platforms = [ "x86_64-linux" ];
   };

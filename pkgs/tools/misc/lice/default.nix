@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi , setuptools, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "lice";
@@ -11,13 +17,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   meta = with lib; {
     description = "Print license based on selection and user options";
     homepage = "https://github.com/licenses/lice";
     license = licenses.bsd3;
     maintainers = with maintainers; [ swflint ];
     platforms = platforms.unix;
+    mainProgram = "lice";
   };
 
 }

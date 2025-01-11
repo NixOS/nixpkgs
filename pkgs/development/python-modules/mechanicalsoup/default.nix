@@ -1,41 +1,30 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, lxml
-, pytest-httpbin
-, pytest-mock
-, pytestCheckHook
-, requests
-, requests-mock
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytest-httpbin,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
-  version = "1.1.0";
+  version = "1.3.0";
+  format = "setuptools";
 
-  disabled = ! pythonAtLeast "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
-    rev = "v${version}";
-    sha256 = "1mly0ivai3rx64frk7a7ra6abhdxm9x3l6s6x7sgrl9qx1z8zsp3";
+    tag = "v${version}";
+    hash = "sha256-iZ2nwBxikf0cTTlxzcGvHJim4N6ZEqIhlK7t1WAYdms=";
   };
-
-  propagatedBuildInputs = [
-    beautifulsoup4
-    lxml
-    requests
-  ];
-
-  checkInputs = [
-    pytest-httpbin
-    pytest-mock
-    pytestCheckHook
-    requests-mock
-  ];
 
   postPatch = ''
     # Is in setup_requires but not used in setup.py
@@ -45,12 +34,31 @@ buildPythonPackage rec {
       --replace " --cov --cov-config .coveragerc --flake8" ""
   '';
 
+  propagatedBuildInputs = [
+    beautifulsoup4
+    lxml
+    requests
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest-httpbin
+    pytest-mock
+    pytestCheckHook
+    requests-mock
+  ];
+
   pythonImportsCheck = [ "mechanicalsoup" ];
 
   meta = with lib; {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
+    changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich fab ];
+    maintainers = with maintainers; [
+      jgillich
+      fab
+    ];
   };
 }

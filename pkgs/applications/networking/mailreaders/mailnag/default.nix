@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
-, gettext
-, xorg # for lndir
-, gtk3
-, python3Packages
-, gdk-pixbuf
-, libnotify
-, gst_all_1
-, libsecret
-, wrapGAppsHook
-, gsettings-desktop-schemas
-, glib
-, gobject-introspection
-# Available plugins (can be overriden)
-, availablePlugins
-# Used in the withPlugins interface at passthru, can be overrided directly, or
-# prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
-, mailnag
-, userPlugins ? [ ]
-, pluginsDeps ? [ ]
+{
+  lib,
+  fetchFromGitHub,
+  gettext,
+  xorg, # for lndir
+  gtk3,
+  python3Packages,
+  gdk-pixbuf,
+  libnotify,
+  gst_all_1,
+  libsecret,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  glib,
+  gobject-introspection,
+  # Available plugins (can be overridden)
+  availablePlugins,
+  # Used in the withPlugins interface at passthru, can be overrided directly, or
+  # prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
+  mailnag,
+  userPlugins ? [ ],
+  pluginsDeps ? [ ],
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -41,13 +42,13 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gobject-introspection
     libsecret
   ] ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
     # To later add plugins to
     xorg.lndir
   ];
@@ -67,14 +68,14 @@ python3Packages.buildPythonApplication rec {
         # goa plugin requires gio's gnome-online-accounts which requires making sure
         # mailnag runs with GI_TYPELIB_PATH containing the path to Goa-1.0.typelib.
         # This is handled best by adding the plugins' deps to buildInputs and let
-        # wrapGAppsHook handle that.
+        # wrapGAppsHook3 handle that.
         pluginsDeps = lib.flatten (lib.catAttrs "buildInputs" plugs);
         self = mailnag;
       in
-        self.override {
-          userPlugins = plugs;
-          inherit pluginsDeps;
-        };
+      self.override {
+        userPlugins = plugs;
+        inherit pluginsDeps;
+      };
   };
 
   # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped
@@ -98,10 +99,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An extensible mail notification daemon";
+    description = "Extensible mail notification daemon";
     homepage = "https://github.com/pulb/mailnag";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ doronbehar ];
+    broken = true; # at 2022-09-23
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
-, responses
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytest-asyncio,
+  pytest-timeout,
+  responses,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,17 @@ buildPythonPackage rec {
     owner = "pavoni";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1+xIqOogRUt+blX7AZSKIiU8lpR4AzKIIW/smCSft94=";
+    hash = "sha256-1+xIqOogRUt+blX7AZSKIiU8lpR4AzKIIW/smCSft94=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];

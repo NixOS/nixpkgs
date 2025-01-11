@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitLab, fetchpatch, makeWrapper, autoreconfHook
+, autoconf-archive
 , pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -18,16 +19,17 @@
 , writeShellScript
 , closureInfo
 , runCommand
+, libxcrypt
 }:
 
 let
-  apparmor-version = "3.0.4";
+  apparmor-version = "4.0.3";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
-    description = "A mandatory access control system - ${component}";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ joachifm julm thoughtpolice ];
+    description = "Mandatory access control system - ${component}";
+    license = with licenses; [ gpl2Only lgpl21Only ];
+    maintainers = with maintainers; [ julm thoughtpolice grimmauld ];
     platforms = platforms.linux;
   };
 
@@ -35,7 +37,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    sha256 = "1a217j28rgfq4lsmpn0wv1xgmdr9ba8iysv9i6q477kj6z77zrb9";
+    hash = "sha256-6RMttvlXepxUyqdZeDujjVGOwuXl/nXnjii4sA/ppc4=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -55,7 +57,15 @@ let
       --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    ./0001-aa-remove-unknown_empty-ruleset.patch
+
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://gitlab.com/apparmor/apparmor/-/commit/7fb040bde69ebdfce48cf1a01c1a62fd4f8eef0a.patch";
+      hash = "sha256-RZ04nfcV8hTd2CO3mYcfOGCLke8+FhV7DPfmDqSSdWk=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
@@ -83,6 +93,7 @@ let
     strictDeps = false;
 
     nativeBuildInputs = [
+      autoconf-archive
       autoreconfHook
       bison
       flex
@@ -93,7 +104,8 @@ let
       perl
     ] ++ lib.optional withPython python;
 
-    buildInputs = lib.optional withPerl perl
+    buildInputs = [ libxcrypt ]
+      ++ lib.optional withPerl perl
       ++ lib.optional withPython python;
 
     # required to build apparmor-parser
@@ -126,9 +138,10 @@ let
     meta = apparmor-meta "library";
   };
 
-  apparmor-utils = stdenv.mkDerivation {
+  apparmor-utils = python.pkgs.buildPythonApplication {
     pname = "apparmor-utils";
     version = apparmor-version;
+    format = "other";
 
     src = apparmor-sources;
 
@@ -141,7 +154,15 @@ let
       perl
       python
       libapparmor
-      libapparmor.python
+      (libapparmor.python or null)
+    ];
+
+    propagatedBuildInputs = [
+      (libapparmor.python or null)
+
+      # Used by aa-notify
+      python.pkgs.notify2
+      python.pkgs.psutil
     ];
 
     prePatch = prePatchCommon +
@@ -149,9 +170,12 @@ let
       lib.optionalString stdenv.hostPlatform.isMusl ''
         sed -i ./utils/Makefile -e "/\<vim\>/d"
       '' + ''
-      for file in utils/apparmor/easyprof.py utils/apparmor/aa.py utils/logprof.conf; do
-        substituteInPlace $file --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
-      done
+      sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' ./utils/Makefile
+
+      sed -i utils/aa-unconfined -e "/my_env\['PATH'\]/d"
+
+      substituteInPlace utils/aa-remove-unknown \
+       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
     '';
     inherit patches;
     postPatch = "cd ./utils";
@@ -159,17 +183,6 @@ let
     installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
 
     postInstall = ''
-      sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
-      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.sitePackages}:$PYTHONPATH"
-      done
-
-      substituteInPlace $out/bin/aa-notify \
-        --replace /usr/bin/notify-send ${libnotify}/bin/notify-send \
-        --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
-
-      substituteInPlace $out/bin/aa-remove-unknown \
-       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
       wrapProgram $out/bin/aa-remove-unknown \
        --prefix PATH : ${lib.makeBinPath [ gawk ]}
 
@@ -212,7 +225,7 @@ let
   };
 
   apparmor-parser = stdenv.mkDerivation {
-    name = "apparmor-parser";
+    pname = "apparmor-parser";
     version = apparmor-version;
 
     src = apparmor-sources;
@@ -317,12 +330,16 @@ let
     , baseRules ? [
         "r $path"
         "r $path/etc/**"
-        "r $path/share/**"
+        "mr $path/share/**"
         # Note that not all libraries are prefixed with "lib",
         # eg. glibc-2.30/lib/ld-2.30.so
         "mr $path/lib/**.so*"
+        "mr $path/lib64/**.so*"
         # eg. glibc-2.30/lib/gconv/gconv-modules
         "r $path/lib/**"
+        "r $path/lib64/**"
+        # Internal executables
+        "ixr $path/libexec/**"
       ]
     , name ? ""
     }: rootPaths: runCommand

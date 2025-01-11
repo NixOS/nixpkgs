@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,10 +11,9 @@ let
 
   cfg = config.services.xserver.windowManager.awesome;
   awesome = cfg.package;
-  getLuaPath = lib : dir : "${lib}/${dir}/lua/${pkgs.luaPackages.lua.luaversion}";
-  makeSearchPath = lib.concatMapStrings (path:
-    " --search " + (getLuaPath path "share") +
-    " --search " + (getLuaPath path "lib")
+  getLuaPath = lib: dir: "${lib}/${dir}/lua/${awesome.lua.luaversion}";
+  makeSearchPath = lib.concatMapStrings (
+    path: " --search " + (getLuaPath path "share") + " --search " + (getLuaPath path "lib")
   );
 in
 
@@ -24,18 +28,13 @@ in
       enable = mkEnableOption "Awesome window manager";
 
       luaModules = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         description = "List of lua packages available for being used in the Awesome configuration.";
         example = literalExpression "[ pkgs.luaPackages.vicious ]";
       };
 
-      package = mkOption {
-        default = null;
-        type = types.nullOr types.package;
-        description = "Package to use for running the Awesome WM.";
-        apply = pkg: if pkg == null then pkgs.awesome else pkg;
-      };
+      package = mkPackageOption pkgs "awesome" { };
 
       noArgb = mkOption {
         default = false;
@@ -46,19 +45,17 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "awesome";
-        start =
-          ''
-            ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "awesome";
+      start = ''
+        ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ awesome ];
 

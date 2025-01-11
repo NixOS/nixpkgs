@@ -1,30 +1,65 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytestCheckHook, pytest-cov, pytest-xprocess, pytestcache }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cachelib,
+  flask,
+  asgiref,
+  pytest-asyncio,
+  pytest-xprocess,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Caching";
-  version = "1.10.1";
-  disabled = isPy27; # invalid python2 syntax
+  pname = "flask-caching";
+  version = "2.3.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00";
+    pname = "flask_caching";
+    inherit version;
+    hash = "sha256-1+TKZKM7Sf6zOfzdF+a6JfXgEWjPiF5TeQ6IX4Ok0s8=";
   };
 
-  propagatedBuildInputs = [ flask ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
+  '';
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-xprocess pytestcache ];
-
-  disabledTests = [
-    # backend_cache relies on pytest-cache, which is a stale package from 2013
-    "backend_cache"
-    # optional backends
-    "Redis"
-    "Memcache"
+  propagatedBuildInputs = [
+    cachelib
+    flask
   ];
 
+  nativeCheckInputs = [
+    asgiref
+    pytest-asyncio
+    pytest-xprocess
+    pytestCheckHook
+  ];
+
+  disabledTests =
+    [
+      # backend_cache relies on pytest-cache, which is a stale package from 2013
+      "backend_cache"
+      # optional backends
+      "Redis"
+      "Memcache"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ignore flaky test
+      "test_cache_timeout_dynamic"
+      "test_cached_view_class"
+    ];
+
   meta = with lib; {
-    description = "Adds caching support to your Flask application";
-    homepage = "https://github.com/sh4nks/flask-caching";
+    description = "Caching extension for Flask";
+    homepage = "https://github.com/pallets-eco/flask-caching";
+    changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

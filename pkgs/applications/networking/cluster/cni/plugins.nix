@@ -1,17 +1,22 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "cni-plugins";
-  version = "1.1.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "sha256-I9OmTO5obTwAj4hkecUfmRYR4Q3rdllMfbpESv66eEQ=";
+    hash = "sha256-thtN7po5SToM0ZFYIbycaPJTafLvk9hFV4XFGOpWmpg=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -24,11 +29,13 @@ buildGoModule rec {
     "plugins/ipam/host-local"
     "plugins/ipam/static"
     "plugins/main/bridge"
+    "plugins/main/dummy"
     "plugins/main/host-device"
     "plugins/main/ipvlan"
     "plugins/main/loopback"
     "plugins/main/macvlan"
     "plugins/main/ptp"
+    "plugins/main/tap"
     "plugins/main/vlan"
     "plugins/meta/bandwidth"
     "plugins/meta/firewall"
@@ -38,13 +45,14 @@ buildGoModule rec {
     "plugins/meta/vrf"
   ];
 
-  passthru.tests = { inherit (nixosTests) cri-o podman; };
+  passthru.tests = { inherit (nixosTests) cri-o; };
 
   meta = with lib; {
+    changelog = "https://github.com/containernetworking/plugins/releases/tag/${src.rev}";
     description = "Some standard networking plugins, maintained by the CNI team";
     homepage = "https://www.cni.dev/plugins/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

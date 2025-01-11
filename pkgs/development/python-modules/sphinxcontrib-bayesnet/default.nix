@@ -1,22 +1,33 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  sphinxcontrib-tikz,
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";
-  version = "0.1";
+  version = "0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x1kisvj7221cxfzmwplx3xlwbavl636fpncnjh7gghp1af71clw";
+    hash = "sha256-+M+K8WzQqxQUGgAgGPK+isf3gKK7HOrdI6nNW/V8Wv0=";
   };
 
-  propagatedBuildInputs = [ sphinx sphinxcontrib-tikz ];
+  propagatedBuildInputs = [
+    sphinx
+    sphinxcontrib-tikz
+  ];
 
   # No tests
   doCheck = false;
   pythonImportsCheck = [ "sphinxcontrib.bayesnet" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://github.com/jluttine/sphinx-bayesnet";
     description = "Bayesian networks and factor graphs in Sphinx using TikZ syntax";
     license = licenses.gpl3Only;

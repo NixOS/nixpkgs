@@ -1,38 +1,70 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiodns
-, aiohttp
-, backports-zoneinfo
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiodns,
+  aiohttp,
+  aresponses,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezer,
+  pytestCheckHook,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "2.2.0";
+  version = "4.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
-    rev = version;
-    sha256 = "sha256-2gex50QEN55uUa8SfAQA7iDZ3SVnpOTXfD3Sxq7KvNw=";
+    tag = "v${version}";
+    hash = "sha256-lWP4ZG195IuP8E9n53EkvdIs3aVTYeEc171Yh3EngOI=";
   };
 
-  PACKAGE_VERSION = version;
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  env.PACKAGE_VERSION = version;
+
+  dependencies = [
     aiodns
     aiohttp
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
+    yarl
   ];
-
-  # no unit tests implemented
-  doCheck = false;
 
   pythonImportsCheck = [ "forecast_solar" ];
 
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-freezer
+    pytestCheckHook
+    syrupy
+  ];
+
+  disabledTests = [
+    # "Error while resolving Forecast.Solar API address"
+    "test_api_key_validation"
+    "test_estimated_forecast"
+    "test_internal_session"
+    "test_json_request"
+    "test_plane_validation"
+    "test_status_400"
+    "test_status_401"
+    "test_status_422"
+    "test_status_429"
+  ];
+
   meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
     license = licenses.mit;

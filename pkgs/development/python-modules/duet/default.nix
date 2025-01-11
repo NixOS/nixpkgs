@@ -1,27 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duet";
-  version = "0.2.1";
+  version = "0.2.9";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "duet";
-    rev = "v${version}";
-    sha256 = "sha256-hK2Cx7dSm1mGM2z9oCoRogfa2aIsjyJcdpSSfdHhPmw=";
+    tag = "v${version}";
+    hash = "sha256-P7JxUigD7ZyhtocV+YuAVxuUYVa4F7PpXuA1CCmcMvg=";
   };
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "duet" ];
+
+  disabledTests = [
+    # test fails because builder is too busy and cannot finish quickly enough
+    "test_repeated_sleep"
+  ];
 
   meta = with lib; {
-    description = "A simple future-based async library for python";
+    description = "Simple future-based async library for python";
     homepage = "https://github.com/google/duet";
     maintainers = with maintainers; [ drewrisinger ];
   };

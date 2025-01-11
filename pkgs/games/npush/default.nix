@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-8hbSsyeehzd4T3fUhDyebyI/oTHOHr3a8ArYAquivNk=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     ncurses
@@ -24,6 +28,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}c++"
   ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   installPhase = ''
     runHook preInstall
@@ -38,9 +43,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    homepage = "http://npush.sourceforge.net/";
-    description = "A Sokoban-like game";
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://npush.sourceforge.net/";
+    description = "Sokoban-like game";
+    mainProgram = "npush";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;

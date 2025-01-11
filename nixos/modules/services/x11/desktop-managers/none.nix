@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   runXdgAutostart = config.services.xserver.desktopManager.runXdgAutostartIfNone;
@@ -13,11 +18,11 @@ in
         (with only a window manager), these sessions usually don't handle XDG
         autostart files by default.
 
-        Some services like <option>i18n.inputMethod</option> and
-        <option>service.earlyoom</option> use XDG autostart files to start.
-        If this option is not set to <literal>true</literal> and you are using
+        Some services like {option}`i18n.inputMethod` and
+        {option}`service.earlyoom` use XDG autostart files to start.
+        If this option is not set to `true` and you are using
         a window manager without a desktop manager, you need to manually start
-        them or running <package>dex</package> somewhere.
+        them or running `dex` somewhere.
       '';
     };
   };
@@ -37,8 +42,14 @@ in
       systemd.user.targets.xdg-autostart-if-no-desktop-manager = {
         description = "Run XDG autostart files";
         # From `plasma-workspace`, `share/systemd/user/plasma-workspace@.target`.
-        requires = [ "xdg-desktop-autostart.target" "graphical-session.target" ];
-        before = [ "xdg-desktop-autostart.target" "graphical-session.target" ];
+        requires = [
+          "xdg-desktop-autostart.target"
+          "graphical-session.target"
+        ];
+        before = [
+          "xdg-desktop-autostart.target"
+          "graphical-session.target"
+        ];
         bindsTo = [ "graphical-session.target" ];
       };
     })

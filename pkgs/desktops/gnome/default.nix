@@ -1,393 +1,142 @@
 { config, pkgs, lib }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+# NOTE: New packages should generally go to top-level instead of here!
+lib.makeScope pkgs.newScope (self:
+let
+  inherit (self) callPackage;
+in
+{
   updateScript = callPackage ./update.nix { };
 
-  libsoup = pkgs.libsoup.override { gnomeSupport = true; };
-  libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
+  # Temporary helper until gdk-pixbuf supports multiple cache files.
+  # This will go away, do not use outside Nixpkgs.
+  _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  adwaita-icon-theme = callPackage ./core/adwaita-icon-theme { };
-
-  baobab = callPackage ./core/baobab { };
-
-  caribou = callPackage ./core/caribou { };
-
-  dconf-editor = callPackage ./core/dconf-editor { };
-
-  empathy = callPackage ./core/empathy { };
-
-  epiphany = callPackage ./core/epiphany { };
-
-  evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
-
-  evolution-data-server = callPackage ./core/evolution-data-server { };
-
-  gdm = callPackage ./core/gdm { };
-
-  gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
-
-  gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
-
-  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
-
-  gnome-color-manager = callPackage ./core/gnome-color-manager { };
-
-  gnome-contacts = callPackage ./core/gnome-contacts { };
-
-  gnome-control-center = callPackage ./core/gnome-control-center { };
-
-  gnome-calculator = callPackage ./core/gnome-calculator { };
-
-  gnome-common = callPackage ./core/gnome-common { };
-
-  gnome-dictionary = callPackage ./core/gnome-dictionary { };
-
-  gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
-
-  gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
-
-  gnome-keyring = callPackage ./core/gnome-keyring { };
-
-  libgnome-keyring = callPackage ./core/libgnome-keyring { };
-
-  gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
-
-  gnome-online-miners = callPackage ./core/gnome-online-miners { };
-
-  gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
-
-  gnome-session = callPackage ./core/gnome-session { };
-
-  gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
-
-  gnome-shell = callPackage ./core/gnome-shell { };
-
-  gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
-
-  gnome-screenshot = callPackage ./core/gnome-screenshot { };
-
-  gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
-
-  # Using 3.38 to match Mutter used in Pantheon
-  gnome-settings-daemon338 = callPackage ./core/gnome-settings-daemon/3.38 { };
-
-  gnome-software = callPackage ./core/gnome-software { };
-
-  gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
-
-  gnome-terminal = callPackage ./core/gnome-terminal { };
-
-  gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
-
-  gnome-user-share = callPackage ./core/gnome-user-share { };
-
-  gucharmap = callPackage ./core/gucharmap { };
-
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-  eog = callPackage ./core/eog { };
+  nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
-  mutter = callPackage ./core/mutter { };
-
-  # Needed for elementary's gala and greeter until support for higher versions is provided
-  mutter338 = callPackage ./core/mutter/3.38 { };
-
-  nautilus = callPackage ./core/nautilus { };
-
-  networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
-    withGnome = true;
-  };
-
-  networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
-    withGnome = true;
-  };
-
-  networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
-    withGnome = true;
-  };
-
-  networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
-    withGnome = true;
-  };
-
-  networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
-    withGnome = true;
-  };
-
-  networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    withGnome = true;
-  };
-
-  rygel = callPackage ./core/rygel { };
-
-  simple-scan = callPackage ./core/simple-scan { };
-
-  sushi = callPackage ./core/sushi { };
-
-  totem = callPackage ./core/totem { };
-
-  yelp = callPackage ./core/yelp { };
-
-  yelp-xsl = callPackage ./core/yelp-xsl { };
-
-  zenity = callPackage ./core/zenity { };
-
-
-#### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
-
-  accerciser = callPackage ./apps/accerciser { };
-
-  cheese = callPackage ./apps/cheese { };
-
-  file-roller = callPackage ./apps/file-roller { };
-
-  gedit = callPackage ./apps/gedit { };
-
-  ghex = callPackage ./apps/ghex { };
-
-  gnome-books = callPackage ./apps/gnome-books { };
-
-  gnome-boxes = callPackage ./apps/gnome-boxes { };
-
-  gnome-calendar = callPackage ./apps/gnome-calendar { };
-
-  gnome-characters = callPackage ./apps/gnome-characters { };
-
-  gnome-clocks = callPackage ./apps/gnome-clocks { };
-
-  gnome-documents = callPackage ./apps/gnome-documents { };
-
-  gnome-logs = callPackage ./apps/gnome-logs { };
-
-  gnome-maps = callPackage ./apps/gnome-maps { };
-
-  gnome-music = callPackage ./apps/gnome-music { };
-
-  gnome-nettool = callPackage ./apps/gnome-nettool { };
-
-  gnome-notes = callPackage ./apps/gnome-notes { };
-
-  gnome-power-manager = callPackage ./apps/gnome-power-manager { };
-
-  gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
-
-  gnome-todo = callPackage ./apps/gnome-todo {};
-
-  gnome-weather = callPackage ./apps/gnome-weather { };
-
-  polari = callPackage ./apps/polari { };
-
-  seahorse = callPackage ./apps/seahorse { };
-
-  vinagre = callPackage ./apps/vinagre { };
-
-#### Dev http://ftp.gnome.org/pub/GNOME/devtools/
-
-  anjuta = callPackage ./devtools/anjuta { };
-
-  devhelp = callPackage ./devtools/devhelp { };
-
-  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
-
-#### Games
-
-  aisleriot = callPackage ./games/aisleriot { };
-
-  atomix = callPackage ./games/atomix { };
-
-  five-or-more = callPackage ./games/five-or-more { };
-
-  four-in-a-row = callPackage ./games/four-in-a-row { };
-
-  gnome-chess = callPackage ./games/gnome-chess { };
-
-  gnome-klotski = callPackage ./games/gnome-klotski { };
-
-  gnome-mahjongg = callPackage ./games/gnome-mahjongg { };
-
-  gnome-mines = callPackage ./games/gnome-mines { };
-
-  gnome-nibbles = callPackage ./games/gnome-nibbles { };
-
-  gnome-robots = callPackage ./games/gnome-robots { };
-
-  gnome-sudoku = callPackage ./games/gnome-sudoku { };
-
-  gnome-taquin = callPackage ./games/gnome-taquin { };
-
-  gnome-tetravex = callPackage ./games/gnome-tetravex { };
-
-  hitori = callPackage ./games/hitori { };
-
-  iagno = callPackage ./games/iagno { };
-
-  lightsoff = callPackage ./games/lightsoff { };
-
-  swell-foop = callPackage ./games/swell-foop { };
-
-  tali = callPackage ./games/tali { };
-
-  quadrapassel = callPackage ./games/quadrapassel { };
-
-#### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
-
-  geary = callPackage ./misc/geary { };
-
-  gitg = callPackage ./misc/gitg { };
-
-  gnome-applets = callPackage ./misc/gnome-applets { };
-
-  gnome-flashback = callPackage ./misc/gnome-flashback { };
-
-  gnome-panel = callPackage ./misc/gnome-panel {
-    autoreconfHook = pkgs.autoreconfHook269;
-  };
-
-  gnome-tweaks = callPackage ./misc/gnome-tweaks { };
-
-  gpaste = callPackage ./misc/gpaste { };
-
-  metacity = callPackage ./misc/metacity { };
-
-  nautilus-python = callPackage ./misc/nautilus-python { };
-
-  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant1; };
-
-  pomodoro = callPackage ./misc/pomodoro { };
-
-  gnome-autoar = callPackage ./misc/gnome-autoar { };
-
-  gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
+  libgnome-keyring = throw "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly."; # Added on 2024-06-22.
+  libchamplain = throw "The ‘gnome.libchamplain’ was removed as unused. Please use ‘pkgs.libchamplain’ directly."; # Added on 2024-08-11.
+  libsoup = throw "The ‘gnome.libsoup’ was removed as unused. Please use ‘pkgs.libsoup’."; # Added on 2024-08-11.
 
-  gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
-  libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
+  gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
+  gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
+  gnome-online-miners = throw "The ‘gnome.gnome-online-miners’ was removed, it was broken and abandoned."; # added on 2024-08-11.
 
-  bijiben = throw "The ‘gnome.bijiben’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-notes’ directly."; # added 2018-09-26
-  evolution_data_server = throw "The ‘gnome.evolution_data_server’ alias was removed on 2022-01-13. Please use ‘gnome.evolution-data-server’ directly."; # added 2018-02-25
-  geocode_glib = throw "The ‘gnome.geocode_glib’ alias was removed on 2022-01-13. Please use ‘pkgs.geocode-glib’ directly."; # added 2018-02-25
-  glib_networking = throw "The ‘gnome.glib_networking’ alias was removed on 2022-01-13. Please use ‘pkgs.glib-networking’ directly."; # added 2018-02-25
-  gnome_common = throw "The ‘gnome.gnome_common’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-common’ directly."; # added 2018-02-25
-  gnome_control_center = throw "The ‘gnome.gnome_control_center’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-control-center’ directly."; # added 2018-02-25
-  gnome_desktop = throw "The ‘gnome.gnome_desktop’ alias was removed on 2022-01-13. Please use pkgs.gnome-desktop’ directly."; # added 2018-02-25
-  gnome_keyring = throw "The ‘gnome.gnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-keyring’ directly."; # added 2018-02-25
-  gnome_online_accounts = throw "The ‘gnome.gnome_online_accounts’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-online-accounts’ directly."; # added 2018-02-25
-  gnome_session = throw "The ‘gnome.gnome_session’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-session’ directly."; # added 2018-02-25
-  gnome_settings_daemon = throw "The ‘gnome.gnome_settings_daemon’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-settings-daemon’ directly."; # added 2018-02-25
-  gnome_shell = throw "The ‘gnome.gnome_shell’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-shell’ directly."; # added 2018-02-25
-  gnome_terminal = throw "The ‘gnome.gnome_terminal’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-terminal’ directly."; # added 2018-02-25
-  gnome-themes-standard = throw "The ‘gnome.gnome-themes-standard’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-themes-extra’ directly."; # added 2018-03-14
-  gnome_themes_standard = throw "The ‘gnome.gnome_themes_standard’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-themes-standard’ directly."; # added 2018-02-25
-  gnome-tweak-tool = throw "The ‘gnome.gnome-tweak-tool’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-tweaks’ directly."; # added 2018-03-21
-  gsettings_desktop_schemas = throw "The ‘gnome.gsettings_desktop_schemas’ alias was removed on 2022-01-13. Please use ‘gnome.gsettings-desktop-schemas’ directly."; # added 2018-02-25
-  libgames-support = throw "The ‘gnome.libgames-support’ alias was removed on 2022-01-13. Please use ‘pkgs.libgnome-games-support’ directly."; # added 2018-03-14
-  libgnome_keyring = throw "The ‘gnome.libgnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.libgnome-keyring’ directly."; # added 2018-02-25
-  rarian = throw "The ‘gnome.rarian’ alias was removed on 2022-01-13. Please use ‘pkgs.rarian’ directly."; # added 2018-04-25
-  networkmanager_fortisslvpn = throw "The ‘gnome.networkmanager_fortisslvpn’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-fortisslvpn’ directly."; # added 2018-02-25
-  networkmanager_iodine = throw "The ‘gnome.networkmanager_iodine’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-iodine’ directly."; # added 2018-02-25
-  networkmanager_l2tp = throw "The ‘gnome.networkmanager_l2tp’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-l2tp’ directly."; # added 2018-02-25
-  networkmanager_openconnect = throw "The ‘gnome.networkmanager_openconnect’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-openconnect’ directly."; # added 2018-02-25
-  networkmanager_openvpn = throw "The ‘gnome.networkmanager_openvpn’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-openvpn’ directly."; # added 2018-02-25
-  networkmanager_vpnc = throw "The ‘gnome.networkmanager_vpnc’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-vpnc’ directly."; # added 2018-02-25
-  yelp_xsl = throw "The ‘gnome.yelp_xsl’ alias was removed on 2022-01-13. Please use ‘gnome.yelp-xsl’ directly."; # added 2018-02-25
-  yelp_tools = throw "The ‘gnome.yelp_tools’ alias was removed on 2022-01-13. Please use ‘gnome.yelp-tools’ directly."; # added 2018-02-25
+  accerciser = throw "The ‘gnome.accerciser’ was moved to top-level. Please use ‘pkgs.accerciser’ directly."; # Added on 2024-06-22.
+  adwaita-icon-theme = throw "The ‘gnome.adwaita-icon-theme’ was moved to top-level. Please use ‘pkgs.adwaita-icon-theme’ directly."; # Added on 2024-06-22.
+  aisleriot = throw "The ‘gnome.aisleriot’ was moved to top-level. Please use ‘pkgs.aisleriot’ directly."; # Added on 2024-08-11.
+  atomix = throw "The ‘gnome.atomix’ was moved to top-level. Please use ‘pkgs.atomix’ directly."; # Added on 2024-08-11.
+  baobab = throw "The ‘gnome.baobab’ was moved to top-level. Please use ‘pkgs.baobab’ directly."; # Added on 2024-06-22.
+  caribou = throw "The ‘gnome.caribou’ was moved to top-level. Please use ‘pkgs.caribou’ directly."; # Added on 2024-08-11.
+  cheese = throw "The ‘gnome.cheese’ was moved to top-level. Please use ‘pkgs.cheese’ directly."; # Added on 2024-06-22.
+  dconf-editor = throw "The ‘gnome.dconf-editor’ was moved to top-level. Please use ‘pkgs.dconf-editor’ directly."; # Added on 2024-06-22.
+  devhelp = throw "The ‘gnome.devhelp’ was moved to top-level. Please use ‘pkgs.devhelp’ directly."; # Added on 2024-06-22.
+  eog = throw "The ‘gnome.eog’ was moved to top-level. Please use ‘pkgs.eog’ directly."; # Added on 2024-06-22.
+  epiphany = throw "The ‘gnome.epiphany’ was moved to top-level. Please use ‘pkgs.epiphany’ directly."; # Added on 2024-06-22.
+  evince = throw "The ‘gnome.evince’ was moved to top-level. Please use ‘pkgs.evince’ directly."; # Added on 2024-06-13.
+  evolution-data-server = throw "The ‘gnome.evolution-data-server’ was moved to top-level. Please use ‘pkgs.evolution-data-server’ directly."; # Added on 2024-06-13.
+  file-roller = throw "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly."; # Added on 2024-06-13.
+  five-or-more = throw "The ‘gnome.five-or-more’ was moved to top-level. Please use ‘pkgs.five-or-more’ directly."; # Added on 2024-08-11.
+  four-in-a-row = throw "The ‘gnome.four-in-a-row’ was moved to top-level. Please use ‘pkgs.four-in-a-row’ directly."; # Added on 2024-08-11.
+  gdm = throw "The ‘gnome.gdm’ was moved to top-level. Please use ‘pkgs.gdm’ directly."; # Added on 2024-08-11.
+  geary = throw "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly."; # Added on 2024-06-22.
+  ghex = throw "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly."; # Added on 2024-06-22.
+  gitg = throw "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly."; # Added on 2024-06-22.
+  gnome-applets = throw "The ‘gnome.gnome-applets’ was moved to top-level. Please use ‘pkgs.gnome-applets’ directly."; # Added on 2024-08-31.
+  gnome-autoar = throw "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly."; # Added on 2024-06-13.
+  gnome-backgrounds = throw "The ‘gnome.gnome-backgrounds’ was moved to top-level. Please use ‘pkgs.gnome-backgrounds’ directly."; # Added on 2024-08-11.
+  gnome-bluetooth = throw "The ‘gnome.gnome-bluetooth’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth’ directly."; # Added on 2024-08-28.
+  gnome-bluetooth_1_0 = throw "The ‘gnome.gnome-bluetooth_1_0’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth_1_0’ directly."; # Added on 2024-08-28.
+  gnome-boxes = throw "The ‘gnome.gnome-boxes’ was moved to top-level. Please use ‘pkgs.gnome-boxes’ directly."; # Added on 2024-08-11.
+  gnome-characters = throw "The ‘gnome.gnome-characters’ was moved to top-level. Please use ‘pkgs.gnome-characters’ directly."; # Added on 2024-08-11.
+  gnome-chess = throw "The ‘gnome.gnome-chess’ was moved to top-level. Please use ‘pkgs.gnome-chess’ directly."; # Added on 2024-08-11.
+  gnome-clocks = throw "The ‘gnome.gnome-clocks’ was moved to top-level. Please use ‘pkgs.gnome-clocks’ directly."; # Added on 2024-08-11.
+  gnome-color-manager = throw "The ‘gnome.gnome-color-manager’ was moved to top-level. Please use ‘pkgs.gnome-color-manager’ directly."; # Added on 2024-08-11.
+  gnome-common = throw "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly."; # Added on 2024-06-22.
+  gnome-calculator = throw "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly."; # Added on 2024-06-22.
+  gnome-calendar = throw "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly."; # Added on 2024-06-22.
+  gnome-contacts = throw "The ‘gnome.gnome-contacts’ was moved to top-level. Please use ‘pkgs.gnome-contacts’ directly."; # Added on 2024-08-11.
+  gnome-control-center = throw "The ‘gnome.gnome-control-center’ was moved to top-level. Please use ‘pkgs.gnome-control-center’ directly."; # Added on 2024-08-28.
+  gnome-dictionary = throw "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly."; # Added on 2024-06-22.
+  gnome-disk-utility = throw "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly."; # Added on 2024-06-22.
+  gnome-flashback = throw "The ‘gnome.gnome-flashback’ was moved to top-level. Please use ‘pkgs.gnome-flashback’ directly."; # Added on 2024-08-31.
+  gnome-font-viewer = throw "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly."; # Added on 2024-06-22.
+  gnome-initial-setup = throw "The ‘gnome.gnome-initial-setup’ was moved to top-level. Please use ‘pkgs.gnome-initial-setup’ directly."; # Added on 2024-08-11.
+  gnome-keyring = throw "The ‘gnome.gnome-keyring’ was moved to top-level. Please use ‘pkgs.gnome-keyring’ directly."; # Added on 2024-06-22.
+  gnome-klotski = throw "The ‘gnome.gnome-klotski’ was moved to top-level. Please use ‘pkgs.gnome-klotski’ directly."; # Added on 2024-08-11.
+  gnome-logs = throw "The ‘gnome.gnome-logs’ was moved to top-level. Please use ‘pkgs.gnome-logs’ directly."; # Added on 2024-08-11.
+  gnome-mahjongg = throw "The ‘gnome.gnome-mahjongg’ was moved to top-level. Please use ‘pkgs.gnome-mahjongg’ directly."; # Added on 2024-08-11.
+  gnome-maps = throw "The ‘gnome.gnome-maps’ was moved to top-level. Please use ‘pkgs.gnome-maps’ directly."; # Added on 2024-08-11.
+  gnome-mines = throw "The ‘gnome.gnome-mines’ was moved to top-level. Please use ‘pkgs.gnome-mines’ directly."; # Added on 2024-08-11.
+  gnome-music = throw "The ‘gnome.gnome-music’ was moved to top-level. Please use ‘pkgs.gnome-music’ directly."; # Added on 2024-08-11.
+  gnome-nettool = throw "The ‘gnome.gnome-nettool’ was moved to top-level. Please use ‘pkgs.gnome-nettool’ directly."; # Added on 2024-08-11.
+  gnome-nibbles = throw "The ‘gnome.gnome-nibbles’ was moved to top-level. Please use ‘pkgs.gnome-nibbles’ directly."; # Added on 2024-08-11.
+  gnome-notes = throw "The ‘gnome.gnome-notes’ was moved to top-level. Please use ‘pkgs.gnome-notes’ directly."; # Added on 2024-08-11.
+  gnome-packagekit = throw "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly."; # Added on 2024-06-22.
+  gnome-panel = throw "The ‘gnome.gnome-panel’ was moved to top-level. Please use ‘pkgs.gnome-panel’ directly."; # Added on 2024-08-31.
+  gnome-panel-with-modules = throw "The ‘gnome.gnome-panel-with-modules’ was moved to top-level. Please use ‘pkgs.gnome-panel-with-modules’ directly."; # Added on 2024-08-31.
+  gnome-power-manager = throw "The ‘gnome.gnome-power-manager’ was moved to top-level. Please use ‘pkgs.gnome-power-manager’ directly."; # Added on 2024-08-11.
+  gnome-remote-desktop = throw "The ‘gnome.gnome-remote-desktop’ was moved to top-level. Please use ‘pkgs.gnome-remote-desktop’ directly."; # Added on 2024-08-11.
+  gnome-robots = throw "The ‘gnome.gnome-robots’ was moved to top-level. Please use ‘pkgs.gnome-robots’ directly."; # Added on 2024-08-11.
+  gnome-screenshot = throw "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly."; # Added on 2024-06-22.
+  gnome-session = throw "The ‘gnome.gnome-session’ was moved to top-level. Please use ‘pkgs.gnome-session’ directly."; # Added on 2024-08-28.
+  gnome-session-ctl = throw "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly."; # Added on 2024-08-28.
+  gnome-settings-daemon = throw "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly."; # Added on 2024-08-28.
+  gnome-settings-daemon43 = throw "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly."; # Added on 2024-08-28.
+  gnome-shell = throw "The ‘gnome.gnome-shell’ was moved to top-level. Please use ‘pkgs.gnome-shell’ directly."; # Added on 2024-08-28.
+  gnome-shell-extensions = throw "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly."; # Added on 2024-08-11.
+  gnome-software = throw "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly."; # Added on 2024-08-11.
+  gnome-sound-recorder = throw "The ‘gnome.gnome-sound-recorder’ was moved to top-level. Please use ‘pkgs.gnome-sound-recorder’ directly."; # Added on 2024-08-11.
+  gnome-sudoku = throw "The ‘gnome.gnome-sudoku’ was moved to top-level. Please use ‘pkgs.gnome-sudoku’ directly."; # Added on 2024-08-11.
+  gnome-system-monitor = throw "The ‘gnome.gnome-system-monitor’ was moved to top-level. Please use ‘pkgs.gnome-system-monitor’ directly."; # Added on 2024-06-22.
+  gnome-taquin = throw "The ‘gnome.gnome-taquin’ was moved to top-level. Please use ‘pkgs.gnome-taquin’ directly."; # Added on 2024-08-11.
+  gnome-terminal = throw "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly."; # Added on 2024-06-13.
+  gnome-tetravex = throw "The ‘gnome.gnome-tetravex’ was moved to top-level. Please use ‘pkgs.gnome-tetravex’ directly."; # Added on 2024-08-11.
+  gnome-themes-extra = throw "The ‘gnome.gnome-themes-extra’ was moved to top-level. Please use ‘pkgs.gnome-themes-extra’ directly."; # Added on 2024-06-22.
+  gnome-tweaks = throw "The ‘gnome.gnome-tweaks’ was moved to top-level. Please use ‘pkgs.gnome-tweaks’ directly."; # Added on 2024-06-22.
+  gnome-user-share = throw "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly."; # Added on 2024-06-13.
+  gnome-weather = throw "The ‘gnome.gnome-weather’ was moved to top-level. Please use ‘pkgs.gnome-weather’ directly."; # Added on 2024-08-11.
+  gpaste = throw "The ‘gnome.gpaste’ was moved to top-level. Please use ‘pkgs.gpaste’ directly."; # Added on 2024-06-22.
+  gtkhtml = throw "The ‘gnome.gtkhtml’ was moved to top-level. Please use ‘pkgs.gtkhtml’ directly."; # Added on 2024-08-11.
+  gucharmap = throw "The ‘gnome.gucharmap’ was moved to top-level. Please use ‘pkgs.gucharmap’ directly."; # Added on 2024-06-22.
+  hitori = throw "The ‘gnome.hitori’ was moved to top-level. Please use ‘pkgs.hitori’ directly."; # Added on 2024-08-11.
+  iagno = throw "The ‘gnome.iagno’ was moved to top-level. Please use ‘pkgs.iagno’ directly."; # Added on 2024-08-11.
+  lightsoff = throw "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly."; # Added on 2024-08-11.
+  metacity = throw "The ‘gnome.metacity’ was moved to top-level. Please use ‘pkgs.metacity’ directly."; # Added on 2024-08-11.
+  mutter = throw "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly."; # Added on 2024-08-28.
+  mutter43 = throw "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly."; # Added on 2024-08-28.
+  nautilus = throw "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly."; # Added on 2024-06-13.
+  networkmanager-openvpn = throw "The ‘gnome.networkmanager-openvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-openvpn’ directly."; # Added on 2024-08-31.
+  networkmanager-vpnc = throw "The ‘gnome.networkmanager-vpnc’ was moved to top-level. Please use ‘pkgs.networkmanager-vpnc’ directly."; # Added on 2024-08-31.
+  networkmanager-openconnect = throw "The ‘gnome.networkmanager-openconnect’ was moved to top-level. Please use ‘pkgs.networkmanager-openconnect’ directly."; # Added on 2024-08-31.
+  networkmanager-fortisslvpn = throw "The ‘gnome.networkmanager-fortisslvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-fortisslvpn’ directly."; # Added on 2024-08-31.
+  networkmanager-l2tp = throw "The ‘gnome.networkmanager-l2tp’ was moved to top-level. Please use ‘pkgs.networkmanager-l2tp’ directly."; # Added on 2024-08-31.
+  networkmanager-iodine = throw "The ‘gnome.networkmanager-iodine’ was moved to top-level. Please use ‘pkgs.networkmanager-iodine’ directly."; # Added on 2024-08-31.
+  nautilus-python = throw "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly."; # Added on 2024-06-13.
+  polari = throw "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly."; # Added on 2024-08-11.
+  pomodoro = throw "The ‘gnome.pomodoro’ was moved to top-level. Please use ‘pkgs.gnome-pomodoro’ directly."; # Added on 2024-06-22.
+  quadrapassel = throw "The ‘gnome.quadrapassel’ was moved to top-level. Please use ‘pkgs.quadrapassel’ directly."; # Added on 2024-08-11.
+  rygel = throw "The ‘gnome.rygel’ was moved to top-level. Please use ‘pkgs.rygel’ directly."; # Added on 2024-06-22.
+  seahorse = throw "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly."; # Added on 2024-06-22.
+  simple-scan = throw "The ‘gnome.simple-scan’ was moved to top-level. Please use ‘pkgs.simple-scan’ directly."; # Added on 2024-06-22.
+  sushi = throw "The ‘gnome.sushi’ was moved to top-level. Please use ‘pkgs.sushi’ directly."; # Added on 2024-06-22.
+  swell-foop = throw "The ‘gnome.swell-foop’ was moved to top-level. Please use ‘pkgs.swell-foop’ directly."; # Added on 2024-08-11.
+  tali = throw "The ‘gnome.tali’ was moved to top-level. Please use ‘pkgs.tali’ directly."; # Added on 2024-08-11.
+  totem = throw "The ‘gnome.totem’ was moved to top-level. Please use ‘pkgs.totem’ directly."; # Added on 2024-06-22.
+  vinagre = throw "The ‘gnome.vinagre’ was moved to top-level. Please use ‘pkgs.vinagre’ directly."; # Added on 2024-08-11.
+  yelp = throw "The ‘gnome.yelp’ was moved to top-level. Please use ‘pkgs.yelp’ directly."; # Added on 2024-06-22.
+  yelp-xsl = throw "The ‘gnome.yelp-xsl’ was moved to top-level. Please use ‘pkgs.yelp-xsl’ directly."; # Added on 2024-06-22.
+  zenity = throw "The ‘gnome.zenity’ was moved to top-level. Please use ‘pkgs.zenity’ directly."; # Added on 2024-06-22.
 
-  atk = throw "The ‘gnome.atk’ alias was removed on 2022-01-13. Please use ‘pkgs.atk’ directly."; # added 2019-02-08
-  glib = throw "The ‘gnome.glib’ alias was removed on 2022-01-13. Please use ‘pkgs.glib’ directly."; # added 2019-02-08
-  gobject-introspection = throw "The ‘gnome.gobject-introspection’ alias was removed on 2022-01-13. Please use ‘pkgs.gobject-introspection’ directly."; # added 2019-02-08
-  gspell = throw "The ‘gnome.gspell’ alias was removed on 2022-01-13. Please use ‘pkgs.gspell’ directly."; # added 2019-02-08
-  webkitgtk = throw "The ‘gnome.webkitgtk’ alias was removed on 2022-01-13. Please use ‘pkgs.webkitgtk’ directly."; # added 2019-02-08
-  gtk3 = throw "The ‘gnome.gtk3’ alias was removed on 2022-01-13. Please use ‘pkgs.gtk3’ directly."; # added 2019-02-08
-  gtkmm3 = throw "The ‘gnome.gtkmm3’ alias was removed on 2022-01-13. Please use ‘pkgs.gtkmm3’ directly."; # added 2019-02-08
-  libgtop = throw "The ‘gnome.libgtop’ alias was removed on 2022-01-13. Please use ‘pkgs.libgtop’ directly."; # added 2019-02-08
-  libgudev = throw "The ‘gnome.libgudev’ alias was removed on 2022-01-13. Please use ‘pkgs.libgudev’ directly."; # added 2019-02-08
-  libhttpseverywhere = throw "The ‘gnome.libhttpseverywhere’ alias was removed on 2022-01-13. Please use ‘pkgs.libhttpseverywhere’ directly."; # added 2019-02-08
-  librsvg = throw "The ‘gnome.librsvg’ alias was removed on 2022-01-13. Please use ‘pkgs.librsvg’ directly."; # added 2019-02-08
-  libsecret = throw "The ‘gnome.libsecret’ alias was removed on 2022-01-13. Please use ‘pkgs.libsecret’ directly."; # added 2019-02-08
-  gdk-pixbuf = throw "The ‘gnome.gdk-pixbuf’ alias was removed on 2022-01-13. Please use ‘pkgs.gdk-pixbuf’ directly."; # added 2019-02-08
-  gtksourceview = throw "The ‘gnome.gtksourceview’ alias was removed on 2022-01-13. Please use ‘pkgs.gtksourceview’ directly."; # added 2019-02-08
-  gtksourceviewmm = throw "The ‘gnome.gtksourceviewmm’ alias was removed on 2022-01-13. Please use ‘pkgs.gtksourceviewmm’ directly."; # added 2019-02-08
-  gtksourceview4 = throw "The ‘gnome.gtksourceview4’ alias was removed on 2022-01-13. Please use ‘pkgs.gtksourceview4’ directly."; # added 2019-02-08
-  easytag = throw "The ‘gnome.easytag’ alias was removed on 2022-01-13. Please use ‘pkgs.easytag’ directly."; # added 2019-02-08
-  meld = throw "The ‘gnome.meld’ alias was removed on 2022-01-13. Please use ‘pkgs.meld’ directly."; # added 2019-02-08
-  orca = throw "The ‘gnome.orca’ alias was removed on 2022-01-13. Please use ‘pkgs.orca’ directly."; # added 2019-02-08
-  rhythmbox = throw "The ‘gnome.rhythmbox’ alias was removed on 2022-01-13. Please use ‘pkgs.rhythmbox’ directly."; # added 2019-02-08
-  shotwell = throw "The ‘gnome.shotwell’ alias was removed on 2022-01-13. Please use ‘pkgs.shotwell’ directly."; # added 2019-02-08
-  gnome-usage = throw "The ‘gnome.gnome-usage’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-usage’ directly."; # added 2019-02-08
-  clutter = throw "The ‘gnome.clutter’ alias was removed on 2022-01-13. Please use ‘pkgs.clutter’ directly."; # added 2019-02-08
-  clutter-gst = throw "The ‘gnome.clutter-gst’ alias was removed on 2022-01-13. Please use ‘pkgs.clutter-gst’ directly."; # added 2019-02-08
-  clutter-gtk = throw "The ‘gnome.clutter-gtk’ alias was removed on 2022-01-13. Please use ‘pkgs.clutter-gtk’ directly."; # added 2019-02-08
-  cogl = throw "The ‘gnome.cogl’ alias was removed on 2022-01-13. Please use ‘pkgs.cogl’ directly."; # added 2019-02-08
-  gtk-vnc = throw "The ‘gnome.gtk-vnc’ alias was removed on 2022-01-13. Please use ‘pkgs.gtk-vnc’ directly."; # added 2019-02-08
-  libdazzle = throw "The ‘gnome.libdazzle’ alias was removed on 2022-01-13. Please use ‘pkgs.libdazzle’ directly."; # added 2019-02-08
-  libgda = throw "The ‘gnome.libgda’ alias was removed on 2022-01-13. Please use ‘pkgs.libgda’ directly."; # added 2019-02-08
-  libgit2-glib = throw "The ‘gnome.libgit2-glib’ alias was removed on 2022-01-13. Please use ‘pkgs.libgit2-glib’ directly."; # added 2019-02-08
-  libgxps = throw "The ‘gnome.libgxps’ alias was removed on 2022-01-13. Please use ‘pkgs.libgxps’ directly."; # added 2019-02-08
-  libgdata = throw "The ‘gnome.libgdata’ alias was removed on 2022-01-13. Please use ‘pkgs.libgdata’ directly."; # added 2019-02-08
-  libgepub = throw "The ‘gnome.libgepub’ alias was removed on 2022-01-13. Please use ‘pkgs.libgepub’ directly."; # added 2019-02-08
-  libpeas = throw "The ‘gnome.libpeas’ alias was removed on 2022-01-13. Please use ‘pkgs.libpeas’ directly."; # added 2019-02-08
-  libgee = throw "The ‘gnome.libgee’ alias was removed on 2022-01-13. Please use ‘pkgs.libgee’ directly."; # added 2019-02-08
-  geocode-glib = throw "The ‘gnome.geocode-glib’ alias was removed on 2022-01-13. Please use ‘pkgs.geocode-glib’ directly."; # added 2019-02-08
-  libgweather = throw "The ‘gnome.libgweather’ alias was removed on 2022-01-13. Please use ‘pkgs.libgweather’ directly."; # added 2019-02-08
-  librest = throw "The ‘gnome.librest’ alias was removed on 2022-01-13. Please use ‘pkgs.librest’ directly."; # added 2019-02-08
-  libzapojit = throw "The ‘gnome.libzapojit’ alias was removed on 2022-01-13. Please use ‘pkgs.libzapojit’ directly."; # added 2019-02-08
-  libmediaart = throw "The ‘gnome.libmediaart’ alias was removed on 2022-01-13. Please use ‘pkgs.libmediaart’ directly."; # added 2019-02-08
-  gfbgraph = throw "The ‘gnome.gfbgraph’ alias was removed on 2022-01-13. Please use ‘pkgs.gfbgraph’ directly."; # added 2019-02-08
-  gexiv2 = throw "The ‘gnome.gexiv2’ alias was removed on 2022-01-13. Please use ‘pkgs.gexiv2’ directly."; # added 2019-02-08
-  folks = throw "The ‘gnome.folks’ alias was removed on 2022-01-13. Please use ‘pkgs.folks’ directly."; # added 2019-02-08
-  totem-pl-parser = throw "The ‘gnome.totem-pl-parser’ alias was removed on 2022-01-13. Please use ‘pkgs.totem-pl-parser’ directly."; # added 2019-02-08
-  gcr = throw "The ‘gnome.gcr’ alias was removed on 2022-01-13. Please use ‘pkgs.gcr’ directly."; # added 2019-02-08
-  gsound = throw "The ‘gnome.gsound’ alias was removed on 2022-01-13. Please use ‘pkgs.gsound’ directly."; # added 2019-02-08
-  libgnomekbd = throw "The ‘gnome.libgnomekbd’ alias was removed on 2022-01-13. Please use ‘pkgs.libgnomekbd’ directly."; # added 2019-02-08
-  vte = throw "The ‘gnome.vte’ alias was removed on 2022-01-13. Please use ‘pkgs.vte’ directly."; # added 2019-02-08
-  vte_290 = throw "The ‘gnome.vte_290’ alias was removed on 2022-01-13. Please use ‘pkgs.vte_290’ directly."; # added 2019-02-08
-  gnome-menus = throw "The ‘gnome.gnome-menus’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-menus’ directly."; # added 2019-02-08
-  gdl = throw "The ‘gnome.gdl’ alias was removed on 2022-01-13. Please use ‘pkgs.gdl’ directly."; # added 2019-02-08
-
-
-  gsettings-desktop-schemas = throw "The ‘gnome.gsettings-desktop-schemas’ alias was removed on 2022-01-13. Please use ‘pkgs.gsettings-desktop-schemas’ directly."; # added 2019-04-16
-  gnome-video-effects = throw "The ‘gnome.gnome-video-effects’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-video-effects’ directly."; # added 2019-08-19
-  gnome-online-accounts = throw "The ‘gnome.gnome-online-accounts’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-online-accounts’ directly."; # added 2019-08-23
-  grilo = throw "The ‘gnome.grilo’ alias was removed on 2022-01-13. Please use ‘pkgs.grilo’ directly."; # added 2019-08-23
-  grilo-plugins = throw "The ‘gnome.grilo-plugins’ alias was removed on 2022-01-13. Please use ‘pkgs.grilo-plugins’ directly."; # added 2019-08-23
-  tracker = throw "The ‘gnome.tracker’ alias was removed on 2022-01-13. Please use ‘pkgs.tracker’ directly."; # added 2019-08-23
-  tracker-miners = throw "The ‘gnome.tracker-miners’ alias was removed on 2022-01-13. Please use ‘pkgs.tracker-miners’ directly."; # added 2019-08-23
-  gnome-photos = throw "The ‘gnome.gnome-photos’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-photos’ directly."; # added 2019-08-23
-  glib-networking = throw "The ‘gnome.glib-networking’ alias was removed on 2022-01-13. Please use ‘pkgs.glib-networking’ directly."; # added 2019-09-02
-  nemiver = throw "The ‘gnome.nemiver’ alias was removed on 2022-01-13. Please use ‘pkgs.nemiver’ directly."; # added 2019-09-09
-
-  defaultIconTheme = throw "The ‘gnome.defaultIconTheme’ alias was removed on 2022-01-13. Please use ‘gnome.adwaita-icon-theme’ directly."; # added 2019-02-08
-  gtk = throw "The ‘gnome.gtk’ alias was removed on 2022-01-13. Please use ‘pkgs.gtk3’ directly."; # added 2019-02-08
-  gtkmm = throw "The ‘gnome.gtkmm’ alias was removed on 2022-01-13. Please use ‘pkgs.gtkmm3’ directly."; # added 2019-02-08
-  rest = throw "The ‘gnome.rest’ alias was removed on 2022-01-13. Please use ‘pkgs.librest’ directly."; # added 2019-02-08
-
-  pidgin-im-gnome-shell-extension = throw "The ‘gnome.pidgin-im-gnome-shell-extension’ alias was removed on 2022-01-13. Please use ‘pkgs.gnomeExtensions.pidgin-im-integration’ directly."; # added 2019-08-01
-
-  vala = throw "The ‘gnome.vala’ alias was removed on 2022-01-13. Please use ‘pkgs.vala’ directly."; # added 2019-10-10
-
-  gnome-user-docs = throw "The ‘gnome.gnome-user-docs’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-user-docs’ directly."; # added 2019-11-20
-
-  gjs = throw "The ‘gnome.gjs’ alias was removed on 2022-01-13. Please use ‘pkgs.gjs’ directly."; # added 2019-01-05
-
-  yelp-tools = throw "The ‘gnome.yelp-tools’ alias was removed on 2022-01-13. Please use ‘pkgs.yelp-tools’ directly."; # added 2019-11-20
-
-  dconf = throw "The ‘gnome.dconf’ alias was removed on 2022-01-13. Please use ‘pkgs.dconf’ directly."; # added 2019-11-30
-
-  networkmanagerapplet = throw "The ‘gnome.networkmanagerapplet’ alias was removed on 2022-01-13. Please use ‘pkgs.networkmanagerapplet’ directly."; # added 2019-12-12
-
-  glade = throw "The ‘gnome.glade’ alias was removed on 2022-01-13. Please use ‘pkgs.glade’ directly."; # added 2020-05-15
-
-  maintainers = throw "The ‘gnome.maintainers’ alias was removed on 2022-01-13. Please use ‘lib.teams.gnome.members’ directly."; # added 2020-04-01
-
-  mutter328 = throw "Removed as Pantheon is upgraded to mutter338.";
-
-  mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
-
-  gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
+#### Removals
+  anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
 }

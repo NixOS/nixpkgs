@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, gssdp
-, gtk4
-, libsoup
+{
+  stdenv,
+  lib,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  gssdp_1_6,
+  gtk4,
+  libsoup_3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp-tools";
-  inherit (gssdp) version src;
+  inherit (gssdp_1_6) version src;
 
   patches = [
     # Allow building tools separately from the library.
@@ -31,9 +32,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gssdp
+    gssdp_1_6
     gtk4
-    libsoup
+    libsoup_3
   ];
 
   preConfigure = ''
@@ -42,9 +43,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Device Sniffer tool based on GSSDP framework";
+    mainProgram = "gssdp-device-sniffer";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
-    maintainers = gssdp.meta.maintainers;
+    maintainers = gssdp_1_6.meta.maintainers;
     platforms = platforms.all;
   };
 }

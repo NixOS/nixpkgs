@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "pluginUtils";
   version = "1.1";
@@ -10,7 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "1hnr5sp7k6ypf4ks61lnyqx44dkv35yllf3a3xcbrw7yqzagwr1c";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [
+    faust2jaqt
+    faust2lv2
+  ];
+
+  dontWrapQtApps = true;
 
   buildPhase = ''
     for f in *.dsp
@@ -28,7 +39,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
-    cp * $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
   '';
 
   meta = {

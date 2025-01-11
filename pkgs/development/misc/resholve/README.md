@@ -44,7 +44,6 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 { lib
 , fetchFromGitHub
 , resholve
-, substituteAll
 , bash
 , coreutils
 , goss
@@ -53,13 +52,13 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.3.16";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "aelsabbahy";
+    owner = "goss-org";
     repo = "goss";
-    rev = "v${version}";
-    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
   };
 
   dontConfigure = true;
@@ -75,18 +74,20 @@ resholve.mkDerivation rec {
       scripts = [ "bin/dgoss" ];
       interpreter = "${bash}/bin/bash";
       inputs = [ coreutils which ];
-      fake = {
-        external = [ "docker" ];
+      keep = {
+        "$CONTAINER_RUNTIME" = true;
       };
     };
   };
 
   meta = with lib; {
-    homepage = "https://github.com/aelsabbahy/goss/blob/v${version}/extras/dgoss/README.md";
+    homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual ];
+    maintainers = with maintainers; [ hyzual anthonyroussel ];
+    mainProgram = "dgoss";
   };
 }
 ```
@@ -94,24 +95,27 @@ resholve.mkDerivation rec {
 
 ## Basic `resholve.writeScript` and `resholve.writeScriptBin` examples
 
-Both of these functions have the same basic API. This example is a little
-trivial for now. If you have a real usage that you find helpful, please PR it.
+Both of these functions have the same basic API. The examples are a little
+trivial, so I'll also link to some real-world examples:
+- [shell.nix from abathur/tdverpy](https://github.com/abathur/tdverpy/blob/e1f956df3ed1c7097a5164e0c85b178772e277f5/shell.nix#L6-L13)
 
 ```nix
-resholvedScript = resholve.writeScript "name" {
+{
+  resholvedScript = resholve.writeScript "name" {
     inputs = [ file ];
     interpreter = "${bash}/bin/bash";
   } ''
     echo "Hello"
     file .
   '';
-resholvedScriptBin = resholve.writeScriptBin "name" {
+  resholvedScriptBin = resholve.writeScriptBin "name" {
     inputs = [ file ];
     interpreter = "${bash}/bin/bash";
   } ''
     echo "Hello"
     file .
   '';
+}
 ```
 
 
@@ -153,7 +157,7 @@ that the `resholve` CLI expects. Here's an overview:
 |--------|------|------------|
 | scripts | `<list>` | scripts to resolve (`$out`-relative paths) |
 | interpreter | `"none"` `<path>` | The absolute interpreter `<path>` for the script's shebang. The special value `none` ensures there is no shebang. |
-| inputs | `<packages>` | Packages to resolve external dependencies from. |
+| inputs | `<packages>` `<paths>` | A list of packages and string paths to directories/files to resolve external dependencies from. |
 | fake | `<directives>` | pretend some commands exist |
 | fix | `<directives>` | fix things we can't auto-fix/ignore |
 | keep | `<directives>` | keep things we can't auto-fix/ignore |
@@ -183,6 +187,7 @@ handle any potential problems it encounters with directives. There are currently
      scripts from using the latest current-system symlinks.)
    - resolve commands in a variable definition
    - resolve an absolute command path from inputs as if it were a bare reference
+   - force resholve to resolve known security wrappers
 3. `keep` directives tell resholve not to raise an error (i.e., ignore)
    something it would usually object to. Common examples:
    - variables used as/within the first word of a command
@@ -190,7 +195,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve`.
+> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:
@@ -202,7 +207,7 @@ more copies of their specification/behavior than I like, and continuing to
 add more at this early date will only ensure that I spend more time updating
 docs and less time filling in feature gaps.
 
-Full documentation may be greatly accellerated if someone can help me sort out
+Full documentation may be greatly accelerated if someone can help me sort out
 single-sourcing. See: https://github.com/abathur/resholve/issues/19
 -->
 
@@ -210,29 +215,31 @@ This will hopefully make more sense when you see it. Here are CLI examples
 from the manpage, and the Nix equivalents:
 
 ```nix
-# --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
-fake = {
-  # fake accepts the initial of valid identifier types as a CLI convenience.
-  # Use full names in the Nix API.
-  function = [ "setUp" "tearDown" ];
-  builtin = [ "setopt" ];
-  source = [ "/etc/bashrc" ];
-};
+{
+  # --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
+  fake = {
+    # fake accepts the initial of valid identifier types as a CLI convenience.
+    # Use full names in the Nix API.
+    function = [ "setUp" "tearDown" ];
+    builtin = [ "setopt" ];
+    source = [ "/etc/bashrc" ];
+  };
 
-# --fix 'aliases $GIT:gix /bin/bash'
-fix = {
-  # all single-word directives use `true` as value
-  aliases = true;
-  "$GIT" = [ "gix" ];
-  "/bin/bash";
-};
+  # --fix 'aliases $GIT:gix /bin/bash'
+  fix = {
+    # all single-word directives use `true` as value
+    aliases = true;
+    "$GIT" = [ "gix" ];
+    "/bin/bash" = true;
+  };
 
-# --keep 'source:$HOME /etc/bashrc ~/.bashrc'
-keep = {
-  source = [ "$HOME" ];
-  "/etc/bashrc" = true;
-  "~/.bashrc" = true;
-};
+  # --keep 'source:$HOME /etc/bashrc ~/.bashrc'
+  keep = {
+    source = [ "$HOME" ];
+    "/etc/bashrc" = true;
+    "~/.bashrc" = true;
+  };
+}
 ```
 
 
@@ -250,8 +257,23 @@ with some rules (internal to resholve) for locating sub-executions in
 some of the more common commands.
 
 - "execer" lore identifies whether an executable can, cannot,
-  or might execute its arguments. Every "can" or "might" verdict requires
-  either built-in rules for finding the executable, or human triage.
+  or might execute its arguments. Every "can" or "might" verdict requires:
+  - an update to the matching rules in [binlore](https://github.com/abathur/binlore)
+    if there's absolutely no exec in the executable and binlore just lacks
+    rules for understanding this
+  - an override in [binlore](https://github.com/abathur/binlore) if there is
+    exec but it isn't actually under user control
+  - a parser in [resholve](https://github.com/abathur/resholve) capable of
+    isolating the exec'd words if the command does have exec under user
+    control
+  - overriding the execer lore for the executable if manual triage indicates
+    that all of the invocations in the current package don't include any
+    commands that the executable would exec
+  - if manual triage turns up any commands that would be exec'd, use some
+    non-resholve tool to patch/substitute/replace them before or after you
+    run resholve on them (if before, you may need to also add keep directives
+    for these absolute paths)
+
 - "wrapper" lore maps shell exec wrappers to the programs they exec so
   that resholve can substitute an executable's verdict for its wrapper's.
 
@@ -266,27 +288,29 @@ the main lever is the ability to substitute your own lore. This is how you'd
 do it piecemeal:
 
 ```nix
-# --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
-execer = [
-  /*
-    This is the same verdict binlore will
-    come up with. It's a no-op just to demo
-    how to fiddle lore via the Nix API.
-  */
-  "cannot:${openssl.bin}/bin/openssl"
-  # different verdict, but not used
-  "can:${openssl.bin}/bin/c_rehash"
-];
+{
+  # --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
+  execer = [
+    /*
+      This is the same verdict binlore will
+      come up with. It's a no-op just to demo
+      how to fiddle lore via the Nix API.
+    */
+    "cannot:${openssl.bin}/bin/openssl"
+    # different verdict, but not used
+    "can:${openssl.bin}/bin/c_rehash"
+  ];
 
-# --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
-execer = [
-  /*
-    This is the same verdict binlore will
-    come up with. It's a no-op just to demo
-    how to fiddle lore via the Nix API.
-  */
-  "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
-];
+  # --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
+  wrapper = [
+    /*
+      This is the same verdict binlore will
+      come up with. It's a no-op just to demo
+      how to fiddle lore via the Nix API.
+    */
+    "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
+  ];
+}
 ```
 
 

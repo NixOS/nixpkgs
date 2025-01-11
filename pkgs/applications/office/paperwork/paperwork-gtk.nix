@@ -1,29 +1,33 @@
-{ lib
-, python3Packages
-, gtk3
-, cairo
-, gnome
-, librsvg
-, xvfb-run
-, dbus
-, libnotify
-, wrapGAppsHook
-, fetchFromGitLab
-, which
-, gettext
-, gobject-introspection
-, gdk-pixbuf
-, texlive
-, imagemagick
-, perlPackages
-, writeScript
+{
+  lib,
+  python3Packages,
+  gtk3,
+  cairo,
+  adwaita-icon-theme,
+  librsvg,
+  xvfb-run,
+  dbus,
+  libnotify,
+  wrapGAppsHook3,
+  fetchFromGitLab,
+  which,
+  gettext,
+  gobject-introspection,
+  gdk-pixbuf,
+  texliveSmall,
+  imagemagick,
+  perlPackages,
+  writeScript,
 }:
 
 let
   documentation_deps = [
-    (texlive.combine {
-      inherit (texlive) scheme-small wrapfig was;
-    })
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        wrapfig
+        gensymb
+      ]
+    ))
     xvfb-run
     imagemagick
     perlPackages.Po4a
@@ -34,6 +38,7 @@ in
 python3Packages.buildPythonApplication rec {
   inherit src version;
   pname = "paperwork";
+  format = "pyproject";
 
   sample_docs = sample_documents // {
     # a trick for the update script
@@ -41,20 +46,13 @@ python3Packages.buildPythonApplication rec {
     src = sample_documents;
   };
 
-  sourceRoot = "source/paperwork-gtk";
+  sourceRoot = "${src.name}/paperwork-gtk";
 
-  # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
     chmod a+w -R ..
     patchShebangs ../tools
 
     export HOME=$(mktemp -d)
-
-    cat - ../AUTHORS.py > src/paperwork_gtk/_version.py <<EOF
-    # -*- coding: utf-8 -*-
-    version = "${version}"
-    authors_code=""
-    EOF
   '';
 
   preBuild = ''
@@ -63,19 +61,21 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork
-    cp ${python3Packages.paperwork-shell}/bin/.paperwork-cli-wrapped $out/bin/paperwork-cli
+    for exe in paperwork-cli paperwork-json; do
+      cp ${python3Packages.paperwork-shell}/bin/.$exe-wrapped $out/bin/$exe
+    done
     # install desktop files and icons
     XDG_DATA_HOME=$out/share $out/bin/paperwork-gtk install --user
 
     # fixes [WARNING] [openpaperwork_core.resources.setuptools] Failed to find
     # resource file paperwork_gtk.icon.out/paperwork_128.png, tried at path
     # /nix/store/3n5lz6y8k9yks76f0nar3smc8djan3xr-paperwork-2.0.2/lib/python3.8/site-packages/paperwork_gtk/icon/out/paperwork_128.png.
-    site=$out/lib/${python3Packages.python.libPrefix}/site-packages/paperwork_gtk
+    site=$out/${python3Packages.python.sitePackages}/paperwork_gtk
     for i in $site/data/paperwork_*.png; do
       ln -s $i $site/icon/out;
     done
 
-    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${gnome.adwaita-icon-theme}/share
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${adwaita-icon-theme}/share
     # build the user manual
     PATH=$out/bin:$PATH PAPERWORK_TEST_DOCUMENTS=${sample_docs} make data
     for i in src/paperwork_gtk/model/help/out/*.pdf; do
@@ -83,18 +83,19 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ dbus.daemon ];
+  nativeCheckInputs = [ dbus ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
+    python3Packages.setuptools-scm
     (lib.getBin gettext)
     which
     gdk-pixbuf # for the setup hook
   ] ++ documentation_deps;
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libnotify
     librsvg
     gtk3
@@ -114,8 +115,11 @@ python3Packages.buildPythonApplication rec {
     # only need to run a virtual X server + dbus but also have a large enough
     # resolution, because the Cairo test tries to draw a 200x200 window.
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       $out/bin/paperwork-gtk chkdeps
+
+    $out/bin/paperwork-cli chkdeps
+    $out/bin/paperwork-json chkdeps
 
     # content of make test, without the dep on make install
     python -m unittest discover --verbose -s tests
@@ -145,10 +149,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A personal document manager for scanned documents";
+    description = "Personal document manager for scanned documents";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [
+      aszlig
+      symphorien
+    ];
     platforms = lib.platforms.linux;
   };
 }

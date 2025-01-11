@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, qtbase, qmake, qca-qt5 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  qca-qt5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qoauth";
@@ -18,10 +25,13 @@ stdenv.mkDerivation rec {
         -e '/features.path =/ s|$$\[QMAKE_MKSPECS\]|$$NIX_OUTPUT_DEV/mkspecs|'
   '';
 
-  buildInputs = [ qtbase qca-qt5 ];
+  buildInputs = [
+    qtbase
+    qca-qt5
+  ];
   nativeBuildInputs = [ qmake ];
 
-  NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
+  env.NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
   NIX_LDFLAGS = "-lqca-qt5";
 
   dontWrapQtApps = true;

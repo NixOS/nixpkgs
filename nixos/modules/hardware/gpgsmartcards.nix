@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # gnupg's manual describes how to setup ccid udev rules:
   #   https://www.gnupg.org/howtos/card-howto/en/ch02s03.html
@@ -8,7 +11,7 @@ let
   # https://salsa.debian.org/debian/gnupg2/-/blob/debian/main/debian/scdaemon.udev
 
   # the latest rev of the entire debian gnupg2 repo as of 2021-04-28
-  # the scdaemon.udev file was last commited on 2021-01-05 (7817a03):
+  # the scdaemon.udev file was last committed on 2021-01-05 (7817a03):
   scdaemonUdevRev = "01898735a015541e3ffb43c7245ac1e612f40836";
 
   scdaemonRules = pkgs.fetchurl {
@@ -19,19 +22,20 @@ let
   # per debian's udev deb hook (https://man7.org/linux/man-pages/man1/dh_installudev.1.html)
   destination = "60-scdaemon.rules";
 
-  scdaemonUdevRulesPkg = pkgs.runCommand "scdaemon-udev-rules" {} ''
+  scdaemonUdevRulesPkg = pkgs.runCommand "scdaemon-udev-rules" { } ''
     loc="$out/lib/udev/rules.d/"
     mkdir -p "''${loc}"
     cp "${scdaemonRules}" "''${loc}/${destination}"
   '';
 
   cfg = config.hardware.gpgSmartcards;
-in {
+in
+{
   options.hardware.gpgSmartcards = {
-    enable = mkEnableOption "udev rules for gnupg smart cards";
+    enable = lib.mkEnableOption "udev rules for gnupg smart cards";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ scdaemonUdevRulesPkg ];
   };
 }

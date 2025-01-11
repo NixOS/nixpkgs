@@ -1,50 +1,39 @@
-{ lib, fetchurl, stdenv, ocaml, ocamlbuild, findlib, ocaml_extlib, glib, perl, pkg-config, stdlib-shims, ounit }:
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  fetchFromGitLab,
+  extlib,
+  ounit2,
+}:
 
-stdenv.mkDerivation {
-  pname = "ocaml${ocaml.version}-cudf";
-  version = "0.9";
+buildDunePackage rec {
+  pname = "cudf";
+  version = "0.10";
 
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/36602/cudf-0.9.tar.gz";
-    sha256 = "sha256-mTLk2V3OI1sUNIYv84nM3reiirf0AuozG5ZzLCmn4Rw=";
+  minimalOCamlVersion = "4.07";
+
+  src = fetchFromGitLab {
+    owner = "irill";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-E4KXKnso/Q3ZwcYpKPgvswNR9qd/lafKljPMxfStedM=";
   };
 
-  buildFlags = [
-    "all"
-    "opt"
-  ];
-  nativeBuildInputs = [
-    findlib
-    ocaml
-    ocamlbuild
-    pkg-config
-  ];
-  buildInputs = [
-    glib
-    perl
-    stdlib-shims
-  ];
   propagatedBuildInputs = [
-    ocaml_extlib
+    extlib
   ];
 
-  checkTarget = [
-    "all"
-    "test"
-  ];
   checkInputs = [
-    ounit
+    ounit2
   ];
-  doCheck = true;
-
-  preInstall = "mkdir -p $OCAMLFIND_DESTDIR";
-  installFlags = "BINDIR=$(out)/bin";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
-    description = "A library for CUDF format";
+    description = "Library for CUDF format";
     homepage = "https://www.mancoosi.org/cudf/";
     downloadPage = "https://gforge.inria.fr/projects/cudf/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

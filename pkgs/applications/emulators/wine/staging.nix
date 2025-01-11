@@ -1,27 +1,53 @@
-{ lib, callPackage, wineUnstable }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  autoconf,
+  hexdump,
+  perl,
+  python3,
+  wineUnstable,
+  gitMinimal,
+}:
 
-with callPackage ./util.nix {};
+with callPackage ./util.nix { };
 
-let patch = (callPackage ./sources.nix {}).staging;
-    build-inputs = pkgNames: extra:
-      (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
-in assert lib.getVersion wineUnstable == patch.version;
+let
+  patch = (callPackage ./sources.nix { }).staging;
+  build-inputs = pkgNames: extra: (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
+in
+assert lib.versions.majorMinor wineUnstable.version == lib.versions.majorMinor patch.version;
 
-(lib.overrideDerivation wineUnstable (self: {
-  buildInputs = build-inputs [ "perl" "util-linux" "autoconf" "gitMinimal" ] self.buildInputs;
+(wineUnstable.override { wineRelease = "staging"; }).overrideAttrs (self: {
+  buildInputs = build-inputs (
+    [
+      "perl"
+      "autoconf"
+      "gitMinimal"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux "util-linux"
+  ) self.buildInputs;
+  nativeBuildInputs = [
+    autoconf
+    hexdump
+    perl
+    python3
+    gitMinimal
+  ] ++ self.nativeBuildInputs;
 
-  name = "${self.name}-staging";
-
-  prePatch = self.prePatch or "" + ''
-    patchShebangs tools
-    cp -r ${patch}/patches .
-    chmod +w patches
-    cd patches
-    patchShebangs gitapply.sh
-    ./patchinstall.sh DESTDIR="$PWD/.." --all ${lib.concatMapStringsSep " " (ps: "-W ${ps}") patch.disabledPatchsets}
-    cd ..
-  '';
-})) // {
+  prePatch =
+    self.prePatch or ""
+    + ''
+      patchShebangs tools
+      cp -r ${patch}/patches ${patch}/staging .
+      chmod +w patches
+      patchShebangs ./patches/gitapply.sh
+      python3 ./staging/patchinstall.py DESTDIR="$PWD" --all ${
+        lib.concatMapStringsSep " " (ps: "-W ${ps}") patch.disabledPatchsets
+      }
+    '';
+})
+// {
   meta = wineUnstable.meta // {
     description = wineUnstable.meta.description + " (with staging patches)";
   };

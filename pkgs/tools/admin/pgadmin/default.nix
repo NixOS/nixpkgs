@@ -1,98 +1,51 @@
-{ lib
-, python3
-, fetchurl
-, zlib
-, mkYarnModules
-, sphinx
-, nixosTests
-, pkgs
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  zlib,
+  nixosTests,
+  postgresqlTestHook,
+  postgresql,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
+  stdenv,
+  server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "6.10";
+  version = "8.12";
+  yarnHash = "sha256-C5CI8oP9vEana3OEs1yAsSSTvO2uLEuCU1nHhC7LerY=";
 
-  src = fetchurl {
-    url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-wl7qC0p1NLX4+ulb4AGNPU6D0r838t6t/IYwJZcDnVQ=";
+  src = fetchFromGitHub {
+    owner = "pgadmin-org";
+    repo = "pgadmin4";
+    rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
+    hash = "sha256-OIFHaU+Ty0xJn42iqYhse8dfFJZpx8AV/10RNxp1Y4o=";
   };
 
-  yarnDeps = mkYarnModules {
-    pname = "${pname}-yarn-deps";
-    inherit version;
-    packageJSON = ./package.json;
+  # keep the scope, as it is used throughout the derivation and tests
+  # this also makes potential future overrides easier
+  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
+
+  offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+    hash = yarnHash;
   };
 
-  # move buildDeps here to easily pass to test suite
-  buildDeps = with pythonPackages; [
-    flask
-    flask-gravatar
-    flask_login
-    flask_mail
-    flask_migrate
-    flask_sqlalchemy
-    flask-wtf
-    flask-compress
-    passlib
-    pytz
-    simplejson
-    six
-    sqlparse
-    wtforms
-    flask-paranoid
-    psutil
-    psycopg2
-    python-dateutil
-    sqlalchemy
-    itsdangerous
-    flask-security-too
-    bcrypt
-    cryptography
-    sshtunnel
-    ldap3
-    flask-babelex
-    flask-babel
-    gssapi
-    flask-socketio
-    eventlet
-    httpagentparser
-    user-agents
-    wheel
-    authlib
-    qrcode
-    pillow
-    pyotp
-    botocore
-    boto3
-  ];
-
-  # override necessary on pgadmin4 6.10
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
-      };
-      disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
-        "test_aborting"
-      ];
-    });
-    flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-      # tests fail due to downgrades here
-      doCheck = false;
-    });
-    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
-      };
-    });
-  });
-
+  # don't bother to test kerberos authentication
+  # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
+  skippedTests = builtins.concatStringsSep "," (
+    [ "browser.tests.test_kerberos_with_mocking" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "browser.server_groups.servers.tests.test_all_server_get"
+      "browser.server_groups.servers.tests.test_check_connect"
+      "browser.server_groups.servers.tests.test_check_ssh_mock_connect"
+      "browser.server_groups.servers.tests.test_is_password_saved"
+    ]
+  );
 in
 
 pythonPackages.buildPythonApplication rec {
@@ -106,33 +59,32 @@ pythonPackages.buildPythonApplication rec {
   patches = [
     # Expose setup.py for later use
     ./expose-setup.py.patch
+    # check for permission of /etc/pgadmin/config_system and don't fail
+    ./check-system-config-dir.patch
   ];
 
   postPatch = ''
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
-      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+      --replace-fail 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
 
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
-      --replace "code_snippets" ""
-    patchShebangs .
-
+      --replace-fail "code_snippets" ""
     # relax dependencies
-    substituteInPlace requirements.txt \
-      --replace "eventlet==0.33.0" "eventlet>=0.33.0" \
-      --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
-      --replace "cryptography==3.*" "cryptography>=3.0" \
-      --replace "requests==2.25.*" "requests>=2.25.0" \
-      --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23" \
-      --replace "pytz==2021.*" "pytz" \
-      --replace "Werkzeug==2.0.3" "werkzeug>=2.*"
-    # don't use Server Mode (can be overridden later)
+    sed 's|==|>=|g' -i requirements.txt
+    # fix extra_require error with "*" in match
+    sed 's|*|0|g' -i requirements.txt
+    # remove packageManager from package.json so we can work without corepack
+    substituteInPlace web/package.json \
+      --replace-fail "\"packageManager\": \"yarn@3.8.3\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \
-      --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+      --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
+    ${lib.optionalString (!server-mode) ''
+      substituteInPlace web/config.py \
+        --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
+    ''}
   '';
 
   preBuild = ''
@@ -140,25 +92,40 @@ pythonPackages.buildPythonApplication rec {
     echo Creating required directories...
     mkdir -p pip-build/pgadmin4/docs
 
-    # build the documentation
+    echo Building the documentation
     cd docs/en_US
-    ${sphinx}/bin/sphinx-build -W -b html -d _build/doctrees . _build/html
+    sphinx-build -W -b html -d _build/doctrees . _build/html
 
     # Build the clean tree
-    cd ../../web
-    cp -r * ../pip-build/pgadmin4
-    cd ../docs
+    cd ..
     cp -r * ../pip-build/pgadmin4/docs
     for DIR in `ls -d ??_??/`
     do
       if [ -d ''${DIR}_build/html ]; then
           mkdir -p ../pip-build/pgadmin4/docs/''${DIR}_build
-          cp -Rv ''${DIR}_build/html ../pip-build/pgadmin4/docs/''${DIR}_build
+          cp -R ''${DIR}_build/html ../pip-build/pgadmin4/docs/''${DIR}_build
       fi
     done
     cd ../
 
-    cp -r ${yarnDeps}/* pip-build/pgadmin4
+    # mkYarnModules and mkYarnPackage have problems running the webpacker
+    echo Building the web frontend...
+    cd web
+    export HOME="$TMPDIR"
+    yarn config --offline set yarn-offline-mirror "${offlineCache}"
+    # replace with converted yarn.lock file
+    rm yarn.lock
+    cp ${./yarn.lock} yarn.lock
+    chmod +w yarn.lock
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+    yarn webpacker
+    cp -r * ../pip-build/pgadmin4
+    # save some disk space
+    rm -rf ../pip-build/pgadmin4/node_modules
+
+    cd ..
 
     echo Creating distro config...
     echo HELP_PATH = \'../../docs/en_US/_build/html/\' > pip-build/pgadmin4/config_distro.py
@@ -174,33 +141,141 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip ];
+  nativeBuildInputs = with pythonPackages; [
+    cython
+    pip
+    sphinx
+    yarn
+    fixup-yarn-lock
+    nodejs
+  ];
   buildInputs = [
     zlib
     pythonPackages.wheel
   ];
 
-  # tests need an own data, log directory
-  # and a working and correctly setup postgres database
-  # checks will be run through nixos/tests
-  doCheck = false;
-
-  # speaklater3 is seperate because when passing buildDeps
-  # to the test, it fails there due to a collision with speaklater
-  propagatedBuildInputs = buildDeps ++ [ pythonPackages.speaklater3 ];
+  propagatedBuildInputs = with pythonPackages; [
+    flask
+    flask-login
+    flask-mail
+    flask-migrate
+    flask-sqlalchemy
+    flask-wtf
+    flask-compress
+    passlib
+    pytz
+    simplejson
+    sqlparse
+    wtforms
+    flask-paranoid
+    psutil
+    psycopg
+    python-dateutil
+    sqlalchemy
+    itsdangerous
+    flask-security
+    bcrypt
+    cryptography
+    sshtunnel
+    ldap3
+    flask-babel
+    gssapi
+    flask-socketio
+    eventlet
+    user-agents
+    wheel
+    authlib
+    qrcode
+    pillow
+    pyotp
+    botocore
+    boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
+    sphinxcontrib-youtube
+    dnspython
+    greenlet
+    speaklater3
+    google-auth-oauthlib
+    google-api-python-client
+    keyring
+    typer
+    rich
+    jsonformatter
+    libgravatar
+    setuptools
+  ];
 
   passthru.tests = {
-    standalone = nixosTests.pgadmin4-standalone;
-    # regression and function tests of the package itself
-    package = import ../../../../nixos/tests/pgadmin4.nix { inherit pkgs buildDeps; pythonEnv = pythonPackages; };
+    inherit (nixosTests) pgadmin4;
   };
 
-  meta = with lib; {
-    description = "Administration and development platform for PostgreSQL";
+  nativeCheckInputs = [
+    postgresqlTestHook
+    postgresql
+    pythonPackages.testscenarios
+    pythonPackages.selenium
+  ];
+
+  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
+  doCheck = postgresql.doCheck;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ## Setup ##
+
+    # pgadmin needs a home directory to save the configuration
+    export HOME=$TMPDIR
+    cd pgadmin4
+
+    # set configuration for postgresql test
+    # also ensure Server Mode is set to false. If not, the tests will fail, since pgadmin expects read/write permissions
+    # in /var/lib/pgadmin and /var/log/pgadmin
+    # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
+    cp -v regression/test_config.json.in regression/test_config.json
+    substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
+    substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+
+    ## Browser test ##
+    python regression/runtests.py --pkg browser --exclude ${skippedTests}
+
+    ## Reverse engineered SQL test ##
+
+    python regression/runtests.py --pkg resql
+
+    runHook postCheck
+  '';
+
+  meta = {
+    description = "Administration and development platform for PostgreSQL${
+      lib.optionalString (!server-mode) ". Desktop Mode"
+    }";
+    longDescription = ''
+      pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres users alike,
+      providing a powerful graphical interface that simplifies the creation, maintenance and use of database objects.
+      ${
+        if server-mode then
+          ''
+            This version is build with SERVER_MODE set to True (the default). It will require access to `/var/lib/pgadmin`
+            and `/var/log/pgadmin`. This is the default version for the NixOS module `services.pgadmin`.
+            This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
+          ''
+        else
+          ''
+            This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
+            for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used (e.g. on MacOS).
+            This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
+          ''
+      }
+    '';
     homepage = "https://www.pgadmin.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
-    maintainers = with maintainers; [ gador ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "pgadmin4";
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,18 +1,24 @@
-{ lib, stdenv, rustPlatform, fetchurl, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchurl,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "okapi";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/trinsic-id/okapi/releases/download/v${version}/okapi-vendor-${version}.tar.gz";
-    sha256 = "sha256-wNruDPjYHDJtpzQIly4da9rQg1ftdCVxRNNLkFsbKXs=";
+    sha256 = "sha256-wszpCzh1VhqBlox7ywWi6WKUmxQUTsf5N5IiJumlEbM=";
   };
 
   cargoVendorDir = "vendor";
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     cp -r include $out

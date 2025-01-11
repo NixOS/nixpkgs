@@ -1,29 +1,25 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, fftw
-, fftwSinglePrec
-, fftwFloat
-, fftwLongDouble
-, lapack
-, blas
-, portaudio
-, jdk
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  fftw,
+  fftwSinglePrec,
+  fftwFloat,
+  fftwLongDouble,
+  lapack,
+  blas,
+  portaudio,
+  jdk,
 }:
 
 buildOctavePackage rec {
   pname = "ltfat";
-  version = "2.3.1";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0gghh5a4w649ff776wvidfvqas87m0n7rqs960pid1d11bnyqqrh";
+    url = "https://github.com/ltfat/ltfat/releases/download/v${version}/${pname}-${version}-of.tar.gz";
+    sha256 = "sha256-FMDZ8XFhLG7KDoUjtXvafekg6tSltwBaO0+//jMzJj4=";
   };
-
-  patches = [
-    # Fixes a syntax error with performing multiplication.
-    ./syntax-error.patch
-  ];
 
   buildInputs = [
     fftw

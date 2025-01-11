@@ -1,28 +1,35 @@
-{ lib
-, apsw
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, flask
-, python
-, sqlite
-, withMysql ? false
-, mysql-connector
-, withPostgres ? false
-, psycopg2
+{
+  lib,
+  apsw,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  flask,
+  python,
+  sqlite,
+  withMysql ? false,
+  mysql-connector,
+  withPostgres ? false,
+  psycopg2,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.14.10";
-  format = "setuptools";
+  version = "3.17.8";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
-    repo = pname;
-    rev = version;
-    hash = "sha256-k3kKAImE1aVlmsSPXpaIkAVspAsAo5Hz6/n7u6+zTzA=";
+    repo = "peewee";
+    tag = version;
+    hash = "sha256-2mViwo39adzzhpFS056C1JU5fXr3zKorzkVyJrKKRhI=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [
     sqlite
@@ -31,15 +38,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     apsw
-  ] ++ lib.optional withPostgres [
-    psycopg2
-  ] ++ lib.optional withMysql [
-    mysql-connector
-  ];
+  ] ++ lib.optionals withPostgres [ psycopg2 ] ++ lib.optionals withMysql [ mysql-connector ];
 
-  checkInputs = [
-    flask
-  ];
+  nativeCheckInputs = [ flask ];
 
   doCheck = withPostgres;
 
@@ -48,14 +49,14 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  pythonImportsCheck = [
-    "peewee"
-  ];
+  pythonImportsCheck = [ "peewee" ];
 
   meta = with lib; {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
+    changelog = "https://github.com/coleifer/peewee/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "pwiz.py";
   };
 }

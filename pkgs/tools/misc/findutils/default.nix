@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  coreutils,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -9,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "findutils";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
-    sha256 = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
+    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
+    sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
   postPatch = ''
@@ -22,16 +26,22 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-install-statedir.patch ];
 
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
-  doCheck
-    =  !stdenv.hostPlatform.isDarwin
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
+    && !stdenv.hostPlatform.isFreeBSD
     && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  outputs = [ "out" "info" "locate"];
+  outputs = [
+    "out"
+    "info"
+    "locate"
+  ];
 
   configureFlags = [
     # "sort" need not be on the PATH as a run-time dep, so we need to tell
@@ -40,7 +50,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var/cache"
   ];
 
-  CFLAGS = lib.optionals stdenv.isDarwin [
+  CFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
     # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
     "-D__nonnull\\(params\\)="
@@ -59,6 +69,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  # or you can check libc/include/sys/cdefs.h in bionic source code
+  hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
@@ -85,5 +100,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
 
     license = lib.licenses.gpl3Plus;
+
+    mainProgram = "find";
   };
 }

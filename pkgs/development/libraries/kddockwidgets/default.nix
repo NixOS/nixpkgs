@@ -1,29 +1,50 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtx11extras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtdeclarative,
+  qtquickcontrols2,
+  qtx11extras,
+  spdlog,
+  fmt,
+  nlohmann_json,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "KDDockWidgets";
-  version = "1.5.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7jC0zl5ESwqZXzvFJYmPvRhwFitse05NuYoTgFWiHac=";
+    sha256 = "sha256-DxRySKhQ15OpstjCO6FJ9edV7z8/rECN2+o5T63vFzQ=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase qtx11extras ];
+  buildInputs = [
+    spdlog
+    fmt
+    nlohmann_json
+  ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    qtquickcontrols2
+    qtx11extras
+  ];
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "KDAB's Dock Widget Framework for Qt";
     homepage = "https://www.kdab.com/development-resources/qt-tools/kddockwidgets";
-    license = with licenses; [ gpl2Only gpl3Only ];
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
     maintainers = with maintainers; [ _1000teslas ];
   };
 }

@@ -1,44 +1,54 @@
-{ stdenv
-, lib
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, kcolorpicker
-, kimageannotator
-, wrapQtAppsHook
-, qtsvg
-, qttranslations
-, qtx11extras
+{
+  stdenv,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  fetchpatch,
+  kcolorpicker,
+  kimageannotator,
+  wrapQtAppsHook,
+  qtsvg,
+  qttools,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ksnip";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
     rev = "v${version}";
-    sha256 = "sha256-4EIb1cHmScnFN7IralBR5hnvPBCHNQRcTWEWYezoOcQ=";
+    sha256 = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
   };
+
+  patches = [
+    # Fix build with latest kImageAnnotator
+    (fetchpatch {
+      url = "https://github.com/ksnip/ksnip/commit/76f4b381971eead6ff31b8bf3bb64bb5717469c3.patch";
+      hash = "sha256-JWoI974qDNZIzr/8oksI8m6g3XNWEaQRGsqSfvQrmao=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
     kcolorpicker
     kimageannotator
     qtsvg
-    qttranslations
     qtx11extras
   ];
 
   meta = with lib; {
     homepage = "https://github.com/ksnip/ksnip";
-    description = "Cross-platform screenshot tool wihth many annotation features";
+    description = "Cross-platform screenshot tool with many annotation features";
     longDescription = ''
       Features:
 
@@ -73,5 +83,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
+    mainProgram = "ksnip";
   };
 }

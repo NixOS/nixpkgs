@@ -1,29 +1,50 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxml2, libsoup, upower,
-  libxfce4ui, xfce4-panel, xfconf, hicolor-icon-theme, xfce }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  glib,
+  gtk3,
+  json_c,
+  libxml2,
+  libsoup_2_4,
+  upower,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  hicolor-icon-theme,
+  gitUpdater,
+}:
 
 let
   category = "panel-plugins";
 in
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-weather-plugin";
-  version = "0.11.0";
+  pname = "xfce4-weather-plugin";
+  version = "0.11.3";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-4yQuqVHVG8D97R0CpPH2Yr7Bah+xDIVfcb2mVBoRU/w=";
+    sha256 = "sha256-AC0f5jkG0vOgEvPLWMzv8d+8xGZ1njbHbTsD3QHA3Fc=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [
+    glib
+    gtk3
+    json_c
     libxml2
-    libsoup
+    libsoup_2_4
     upower
     libxfce4ui
+    libxfce4util
     xfce4-panel
     xfconf
     hicolor-icon-theme
@@ -31,7 +52,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-weather-plugin";

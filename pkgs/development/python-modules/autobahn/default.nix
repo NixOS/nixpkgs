@@ -1,84 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, argon2-cffi
-, base58
-, cbor2
-, cffi
-, click
-, cryptography
-, ecdsa
-, eth-abi
-, eth-account
-, flatbuffers
-, jinja2
-, hkdf
-, hyperlink
-, mnemonic
-, mock
-, msgpack
-, passlib
-, py-ecc
-, py-eth-sig-utils
-, py-multihash
-, py-ubjson
-, pynacl
-, pygobject3
-, pyopenssl
-, qrcode
-, pytest-asyncio
-, python-snappy
-, pytestCheckHook
-, pythonOlder
-  # , pytrie
-, rlp
-, service-identity
-, spake2
-, twisted
-, txaio
-, ujson
-  # , web3
-  # , wsaccel
-  # , xbr
-, yapf
-  # , zlmdb
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  attrs,
+  argon2-cffi,
+  cbor2,
+  cffi,
+  cryptography,
+  flatbuffers,
+  hyperlink,
+  mock,
+  msgpack,
+  passlib,
+  py-ubjson,
+  pynacl,
+  pygobject3,
+  pyopenssl,
+  qrcode,
+  pytest-asyncio,
+  python-snappy,
+  pytestCheckHook,
+  pythonOlder,
+  service-identity,
+  setuptools,
+  twisted,
+  txaio,
+  ujson,
+  zope-interface,
 }@args:
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "22.5.1";
-  format = "setuptools";
+  version = "24.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-NKpVabC0QZ+MJ3eSxgDcJRjEkwkox04iee+LiNi4o+o=";
+  src = fetchFromGitHub {
+    owner = "crossbario";
+    repo = "autobahn-python";
+    tag = "v${version}";
+    hash = "sha256-aeTE4a37zr83KZ+v947XikzFrHAhkZ4mj4tXdkQnB84=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest>=2.8.6,<3.3.0" "pytest"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     hyperlink
     pynacl
     txaio
   ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
-    pytestCheckHook
-    # FIXME: remove the following dependencies when web3 gets added
-    eth-account
-  ] ++ passthru.optional-dependencies.scram
-  ++ passthru.optional-dependencies.serialization
-  ++ passthru.optional-dependencies.xbr;
+  nativeCheckInputs =
+    [
+      mock
+      pytest-asyncio
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.scram
+    ++ optional-dependencies.serialization;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
@@ -86,30 +67,50 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "--pyargs autobahn"
+    "--ignore=./autobahn/twisted"
+    "./autobahn"
   ];
 
-  pythonImportsCheck = [
-    "autobahn"
-  ];
+  pythonImportsCheck = [ "autobahn" ];
 
-  passthru.optional-dependencies = rec {
-    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
-    accelerate = [ /* wsaccel */ ];
+  optional-dependencies = rec {
+    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui;
+    accelerate = [
+      # wsaccel
+    ];
     compress = [ python-snappy ];
-    encryption = [ pynacl pyopenssl qrcode /* pytrie */ service-identity ];
+    encryption = [
+      pynacl
+      pyopenssl
+      qrcode # pytrie
+      service-identity
+    ];
     nvx = [ cffi ];
-    scram = [ argon2-cffi cffi passlib ];
-    serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
-    twisted = [ attrs args.twisted zope_interface ];
+    scram = [
+      argon2-cffi
+      cffi
+      passlib
+    ];
+    serialization = [
+      cbor2
+      flatbuffers
+      msgpack
+      ujson
+      py-ubjson
+    ];
+    twisted = [
+      attrs
+      args.twisted
+      zope-interface
+    ];
     ui = [ pygobject3 ];
-    xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc py-eth-sig-utils py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
   };
 
   meta = with lib; {
+    changelog = "https://github.com/crossbario/autobahn-python/blob/${src.rev}/docs/changelog.rst";
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

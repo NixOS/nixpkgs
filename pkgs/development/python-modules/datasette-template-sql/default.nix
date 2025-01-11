@@ -1,26 +1,29 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, datasette
-, pytestCheckHook
-, pytest-asyncio
-, sqlite-utils
+{
+  lib,
+  buildPythonPackage,
+  datasette,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "datasette-template-sql";
   version = "1.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "1ag5f62y445jscxnklcfd84pjinkknmrpk1kmm2j121p7484hrsn";
+    hash = "sha256-VmdIEDk3iCBFrTPMm6ud00Z5CWqO0Wk707IQ4oVx5ak=";
   };
 
   propagatedBuildInputs = [ datasette ];
 
-  checkInputs = [ pytestCheckHook pytest-asyncio sqlite-utils ];
+  # Tests require a running datasette instance
+  doCheck = false;
 
   pythonImportsCheck = [ "datasette_template_sql" ];
 
@@ -28,6 +31,6 @@ buildPythonPackage rec {
     description = "Datasette plugin for executing SQL queries from templates";
     homepage = "https://datasette.io/plugins/datasette-template-sql";
     license = licenses.asl20;
-    maintainers = [ maintainers.MostAwesomeDude ];
+    maintainers = with maintainers; [ MostAwesomeDude ];
   };
 }

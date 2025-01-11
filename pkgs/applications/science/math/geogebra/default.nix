@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGL,
+  xorg,
+  jre,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  language ? "en_US",
+}:
 let
   pname = "geogebra";
-  version = "5-0-706-0";
+  version = "5-0-785-0";
 
   srcIcon = fetchurl {
-    url = "http://static.geogebra.org/images/geogebra-logo.svg";
-    sha256 = "01sy7ggfvck350hwv0cla9ynrvghvssqm3c59x4q5lwsxjsxdpjm";
+    url = "https://web.archive.org/web/20200227000442if_/https://static.geogebra.org/images/geogebra-logo.svg";
+    hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
   };
 
   desktopItem = makeDesktopItem {
@@ -15,8 +26,15 @@ let
     desktopName = "Geogebra";
     genericName = "Geogebra";
     comment = meta.description;
-    categories = [ "Education" "Science" "Math" ];
-    mimeTypes = [ "application/vnd.geogebra.file" "application/vnd.geogebra.tool" ];
+    categories = [
+      "Education"
+      "Science"
+      "Math"
+    ];
+    mimeTypes = [
+      "application/vnd.geogebra.file"
+      "application/vnd.geogebra.tool"
+    ];
   };
 
   meta = with lib; {
@@ -27,23 +45,40 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ sikmir imsofi ];
-    license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
+    maintainers = with maintainers; [
+      sikmir
+      soupglasses
+    ];
+    license = with licenses; [
+      gpl3
+      cc-by-nc-sa-30
+      geogebra
+    ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode # some jars include native binaries
+    ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linuxPkg = stdenv.mkDerivation {
-    inherit pname version meta srcIcon desktopItem;
+    inherit
+      pname
+      version
+      meta
+      srcIcon
+      desktopItem
+      ;
 
     preferLocalBuild = true;
 
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-        "https://web.archive.org/web/20220516130744/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "https://web.archive.org/web/20230627211902/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       ];
-      sha256 = "d18f3d20baff693606331f035fa4bf73e7418d28090f038054da98444b06f69b";
+      hash = "sha256-cL4ERKZpE9Y6IdOjvYiX3nIIW3E2qoqkpMyTszvFseM=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -51,7 +86,16 @@ let
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
+      # The bundled jogl (required for 3D graphics) links to libXxf86vm, and loads libGL at runtime
+      # OpenGL versions newer than 3.0 cause "javax.media.opengl.GLException: Not a GL2 implementation"
       makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            xorg.libXxf86vm
+          ]
+        }" \
+        --set MESA_GL_VERSION_OVERRIDE 3.0 \
         --set JAVACMD "${jre}/bin/java" \
         --set GG_PATH "$out/libexec/geogebra" \
         --add-flags "--language=${language}"
@@ -71,10 +115,10 @@ let
 
     src = fetchurl {
       urls = [
-        "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
-        "https://web.archive.org/web/20220516132502/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+        "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}-x64.zip"
+        "https://web.archive.org/web/20230627211427/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}-x64.zip"
       ];
-      sha256 = "0070ec8d8d5f79c921b5d7433048c2c114ec4b812d839bb04e67848fce24ee0a";
+      hash = "sha256-KHjNH8c3/aMJ5CcwCwW9z0QRxJwqYU5I610zpMMruBQ=";
     };
 
     dontUnpack = true;
@@ -87,6 +131,4 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+if stdenv.hostPlatform.isDarwin then darwinPkg else linuxPkg

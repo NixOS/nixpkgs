@@ -1,36 +1,49 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
 
-, at-spi2-atk
-, at-spi2-core
-, libepoxy
-, gtk3
-, libdatrie
-, libselinux
-, libsepol
-, libthai
-, pcre
-, util-linux
-, wayland
-, xorg
+  qtbase,
 
-, cmake
-, doxygen
-, pkg-config
-, wayland-protocols
+  at-spi2-atk,
+  at-spi2-core,
+  libepoxy,
+  gtk3,
+  libdatrie,
+  libselinux,
+  libsepol,
+  libthai,
+  pcre,
+  util-linux,
+  wayland,
+  xorg,
+
+  cmake,
+  doxygen,
+  pkg-config,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 mkDerivation rec {
   pname = "maliit-framework";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = version;
-    sha256 = "138jyvw130kmrldksbk4l38gvvahh3x51zi4vyplad0z5nxmbazb";
+    tag = version;
+    sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
+
+  patches = [
+    # FIXME: backport GCC 12 build fix, remove for next release
+    (fetchpatch {
+      url = "https://github.com/maliit/framework/commit/86e55980e3025678882cb9c4c78614f86cdc1f04.diff";
+      hash = "sha256-5R+sCI05vJX5epu6hcDSWWzlZ8ns1wKEJ+u8xC6d8Xo=";
+    })
+  ];
 
   buildInputs = [
     at-spi2-atk
@@ -53,16 +66,18 @@ mkDerivation rec {
     doxygen
     pkg-config
     wayland-protocols
+    wayland-scanner
   ];
 
-  preConfigure = ''
-    cmakeFlags+="-DQT5_PLUGINS_INSTALL_DIR=$out/$qtPluginPrefix"
-  '';
+  cmakeFlags = [
+    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ];
 
   meta = with lib; {
     description = "Core libraries of Maliit and server";
+    mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

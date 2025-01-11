@@ -5,18 +5,19 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
+{ lib, stdenv, fetchzip, fetchurl, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
-, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12, ncurses
-, buildIde ? true
-, glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
+, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
+, ocamlPackages_4_14
+, ncurses
+, buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
+, glib, adwaita-icon-theme, wrapGAppsHook3, makeDesktopItem, copyDesktopItems
 , csdp ? null
-, version, coq-version ? null,
+, version, coq-version ? null
 }@args:
-let lib' = lib; in
-let lib = import ../../../../build-support/coq/extra-lib.nix {lib = lib';}; in
-with builtins; with lib;
 let
+  lib = import ../../../../build-support/coq/extra-lib.nix { inherit (args) lib; };
+
   release = {
    "8.5pl1".sha256     = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
    "8.5pl2".sha256     = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
@@ -41,51 +42,61 @@ let
    "8.12.0".sha256     = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
    "8.12.1".sha256     = "1rkcyjjrzcqw9xk93hsq0vvji4f8r5iq0f739mghk60bghkpnb7q";
    "8.12.2".sha256     = "18gscfm039pqhq4msq01nraig5dm9ab98bjca94zldf8jvdv0x2n";
-   "8.13.0".sha256     = "0sjbqmz6qcvnz0hv87xha80qbhvmmyd675wyc5z4rgr34j2l1ymd";
-   "8.13.1".sha256     = "0xx2ns84mlip9bg2mkahy3pmc5zfcgrjxsviq9yijbzy1r95wf0n";
-   "8.13.2".sha256     = "1884vbmwmqwn9ngibax6dhnqh4cc02l0s2ajc6jb1xgr0i60whjk";
-   "8.14.0".sha256     = "04y2z0qyvag66zanfyc3f9agvmzbn4lsr0p1l7ck6yjhqx7vbm17";
-   "8.14.1".sha256     = "0sx78pgx0qw8v7v2r32zzy3l161zipzq95iacda628girim7psnl";
-   "8.15.0".sha256     = "sha256:1ma76wfrpfsl72yh10w1ys2a0vi0mdc2jc79kdc8nrmxkhpw1nxx";
-   "8.15.1".sha256     = "sha256:1dsa04jzkx5pw69pmxn0l55q4w88lg6fvz7clbga0bazzsfnsgd6";
-   "8.15.2".sha256     = "sha256:0gn8dz69scxnxaq6ycb3x34bjfk9wlp1y2xn8w69kg9fm4b6gkc7";
-   "8.16+rc1".sha256   = "sha256-dU+E0Mz7MVntbQIeG9I59ANBaHaXXSrjCRdoqZ5TO60=";
+   "8.13.0".sha256     = "1l2c63vskp8kiyxiyi5rpgbmnv67ysn3y4lybd6nj0li5llibifi";
+   "8.13.1".sha256     = "15drjcqhsgwqnv02bbidyhk316ypyhz1pxfz2gwsalci9svhkz0v";
+   "8.13.2".sha256     = "14d4alp35hngvga9m7cfp5d1nl62xdj0nm4811f2jjblk86gxxk4";
+   "8.14.0".sha256     = "0yxjx9kq9bfpk31dc1c6a0pz0827fz7jmrcwwd4n7dc07yi0arq8";
+   "8.14.1".sha256     = "0xdqiabgm4lrm6d7lw544zd8xwb1cdcavsxvwwlqq6yid2rl2yli";
+   "8.15.0".sha256     = "sha256:0q7jl3bn0d1v9cwdkxykw4frccww6wbh1p8hdrfqw489mkxmh5jh";
+   "8.15.1".sha256     = "sha256:1janvmnk3czimp0j5qmnfwx6509vhpjc2q7lcza1bc6dm6kn8n42";
+   "8.15.2".sha256     = "sha256:0qibbvzrhsvs6w3zpkhyclndp29jnr6bs9i5skjlpp431jdjjfqd";
+   "8.16.0".sha256   = "sha256-3V6kL9j2rn5FHBxq1mtmWWTZS9X5cAyvtUsS6DaM+is=";
+   "8.16.1".sha256   = "sha256-n7830+zfZeyYHEOGdUo57bH6bb2/SZs8zv8xJhV+iAc=";
+   "8.17.0".sha256   = "sha256-TGwm7S6+vkeZ8cidvp8pkiAd9tk008jvvPvYgfEOXhM=";
+   "8.17.1".sha256   = "sha256-x+RwkbxMg9aR0L3WSCtpIz8jwA5cJA4tXAtHMZb20y4=";
+   "8.18.0".sha256   = "sha256-WhiBs4nzPHQ0R24xAdM49kmxSCPOxiOVMA1iiMYunz4=";
+   "8.19.0".sha256   = "sha256-ixsYCvCXpBHqJ71hLQklphlwoOO3i/6w2PJjllKqf9k=";
+   "8.19.1".sha256   = "sha256-kmZ8Uk8jpzjOd67aAPp3C+vU2oNaBw9pr7+Uixcgg94=";
+   "8.19.2".sha256   = "sha256-q+i07JsMZp83Gqav6v1jxsgPLN7sPvp5/oszVnavmz0=";
+   "8.20.0".sha256   = "sha256-WFpZlA6CzFVAruPhWcHQI7VOBVhrGLdFzWrHW0DTSl0=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
-    { inherit lib stdenv fetchzip; }
+    { inherit lib stdenv fetchzip fetchurl; }
     { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
     args.version;
   version = fetched.version;
-  coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
-  coqAtLeast = v: coq-version == "dev" || versionAtLeast coq-version v;
-  ideFlags = optionalString (buildIde && !coqAtLeast "8.10")
+  coq-version = args.coq-version or (if version != "dev" then lib.versions.majorMinor version else "dev");
+  coqAtLeast = v: coq-version == "dev" || lib.versionAtLeast coq-version v;
+  buildIde = args.buildIde or (!coqAtLeast "8.14");
+  ideFlags = lib.optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
-  csdpPatch = if csdp != null then ''
+  csdpPatch = lib.optionalString (csdp != null) ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
-  '' else "";
-  ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
-    else with versions; switch coq-version [
-      { case = range "8.14" "8.14"; out = ocamlPackages_4_12; }
-      { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
-      { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
-      { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
-    ] ocamlPackages_4_12;
-  ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
-    ++ optional (coqAtLeast "8.14") dune_2;
+  '';
+  ocamlPackages = if customOCamlPackages != null then customOCamlPackages
+    else lib.switch coq-version [
+      { case = lib.versions.range "8.16" "8.18"; out = ocamlPackages_4_14; }
+      { case = lib.versions.range "8.14" "8.15"; out = ocamlPackages_4_12; }
+      { case = lib.versions.range "8.11" "8.13"; out = ocamlPackages_4_10; }
+      { case = lib.versions.range "8.7" "8.10";  out = ocamlPackages_4_09; }
+      { case = lib.versions.range "8.5" "8.6";   out = ocamlPackages_4_05; }
+    ] ocamlPackages_4_14;
+  ocamlNativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
+    ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
   ocamlPropagatedBuildInputs = [ ]
-    ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
-    ++ optional (!coqAtLeast "8.13") ocamlPackages.num
-    ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
+    ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
+    ++ lib.optional (!coqAtLeast "8.13") ocamlPackages.num
+    ++ lib.optional (coqAtLeast "8.13") ocamlPackages.zarith;
 self = stdenv.mkDerivation {
   pname = "coq";
   inherit (fetched) version src;
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlNativeNuildInputs;
-    inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
+    inherit ocamlPackages ocamlNativeBuildInputs;
+    inherit ocamlPropagatedBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
@@ -99,7 +110,7 @@ self = stdenv.mkDerivation {
         (coq-prog-args))
       (mapc (lambda (arg)
         (when (file-directory-p (concat arg "/lib/coq/${coq-version}/user-contrib"))
-          (setenv "COQPATH" (concat (getenv "COQPATH") ":" arg "/lib/coq/${coq-version}/user-contrib")))) '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
+          (setenv "COQPATH" (concat (getenv "COQPATH") ":" arg "/lib/coq/${coq-version}/user-contrib")))) '(${lib.concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
       ; TODO Abstract this pattern from here and nixBufferBuilders.withPackages!
       (defvar nixpkgs--coq-buffer-count 0)
       (when (eq nixpkgs--coq-buffer-count 0)
@@ -136,13 +147,13 @@ self = stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ]
     ++ ocamlNativeBuildInputs
-    ++ optional buildIde copyDesktopItems
-    ++ optional (buildIde && coqAtLeast "8.10") wrapGAppsHook
-    ++ optional (!coqAtLeast "8.6") gnumake42;
+    ++ lib.optional buildIde copyDesktopItems
+    ++ lib.optional (buildIde && coqAtLeast "8.10") wrapGAppsHook3
+    ++ lib.optional (!coqAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ]
-    ++ optionals buildIde
+    ++ lib.optionals buildIde
       (if coqAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
+       then [ ocamlPackages.lablgtk3-sourceview3 glib adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
   ;
 
@@ -152,7 +163,7 @@ self = stdenv.mkDerivation {
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    ${if !coqAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
+    ${lib.optionalString (!coqAtLeast "8.7") "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\""}
     ${csdpPatch}
   '';
 
@@ -176,12 +187,12 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = [ "revision" "coq" ] ++ optional buildIde "coqide" ++ optional (!coqAtLeast "8.14") "bin/votour";
+  buildFlags = [ "revision" "coq" ] ++ lib.optional buildIde "coqide" ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
   enableParallelBuilding = true;
 
   createFindlibDestdir = true;
 
-  desktopItems = optional buildIde (makeDesktopItem {
+  desktopItems = lib.optional buildIde (makeDesktopItem {
     name = "coqide";
     exec = "coqide";
     icon = "coq";
@@ -190,17 +201,21 @@ self = stdenv.mkDerivation {
     categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
   });
 
-  postInstall = let suffix = if coqAtLeast "8.14" then "-core" else ""; in ''
+  postInstall = let suffix = lib.optionalString (coqAtLeast "8.14") "-core"; in lib.optionalString (!coqAtLeast "8.17") ''
     cp bin/votour $out/bin/
+  '' + ''
     ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
-  '' + optionalString (coqAtLeast "8.14") ''
+  '' + lib.optionalString (coqAtLeast "8.21") ''
+    ln -s $out/lib/rocq-runtime $OCAMLFIND_DESTDIR/rocq-runtime
+    ln -s $out/lib/rocq-core $OCAMLFIND_DESTDIR/rocq-core
+  '' + lib.optionalString (coqAtLeast "8.14") ''
     ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
-  '' + optionalString buildIde ''
+  '' + lib.optionalString buildIde ''
     mkdir -p "$out/share/pixmaps"
     ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
@@ -208,11 +223,25 @@ self = stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = "http://coq.inria.fr";
+    homepage = "https://coq.inria.fr";
     license = licenses.lgpl21;
     branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
     platforms = platforms.unix;
     mainProgram = "coqide";
   };
-}; in self
+}; in
+if coqAtLeast "8.17" then self.overrideAttrs(_: let
+  core-stdlib-package = if coqAtLeast "8.21" then "rocq-core" else "coq-stdlib"; in {
+  buildPhase = ''
+    runHook preBuild
+    make dunestrap
+    dune build -p coq-core${lib.optionalString (coqAtLeast "8.21") ",rocq-runtime"},${core-stdlib-package},coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix $out coq-core ${lib.optionalString (coqAtLeast "8.21") "rocq-runtime"} ${core-stdlib-package} coqide-server${lib.optionalString buildIde " coqide"}
+    runHook postInstall
+  '';
+}) else self

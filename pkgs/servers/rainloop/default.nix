@@ -1,10 +1,23 @@
-{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
-  common = { edition, sha256 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  writeText,
+  dos2unix,
+  dataPath ? "/var/lib/rainloop",
+}:
+let
+  common =
+    { edition, sha256 }:
     stdenv.mkDerivation (rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.16.0";
 
-      nativeBuildInputs = [ unzip ];
+      nativeBuildInputs = [
+        unzip
+        dos2unix
+      ];
 
       unpackPhase = ''
         mkdir rainloop
@@ -12,11 +25,25 @@
       '';
 
       src = fetchurl {
-        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${lib.optionalString (edition != "") "-"}${version}.zip";
+        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${
+          lib.optionalString (edition != "") "-"
+        }${version}.zip";
         sha256 = sha256;
       };
 
-      includeScript = pkgs.writeText "include.php" ''
+      prePatch = ''
+        dos2unix ./rainloop/rainloop/v/1.16.0/app/libraries/MailSo/Base/HtmlUtils.php
+      '';
+
+      patches = [
+        ./fix-cve-2022-29360.patch
+      ];
+
+      postPatch = ''
+        unix2dos ./rainloop/rainloop/v/1.16.0/app/libraries/MailSo/Base/HtmlUtils.php
+      '';
+
+      includeScript = writeText "include.php" ''
         <?php
 
         /**
@@ -42,12 +69,13 @@
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
-        license = with licenses; if edition == "" then unfree else agpl3;
+        license = with licenses; if edition == "" then unfree else agpl3Only;
         platforms = platforms.all;
         maintainers = with maintainers; [ das_j ];
       };
     });
-in {
+in
+{
   rainloop-community = common {
     edition = "community";
     sha256 = "sha256-25ScQ2OwSKAuqg8GomqDhpebhzQZjCk57h6MxUNiymc=";

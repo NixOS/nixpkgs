@@ -1,23 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, utop, python3, stdcompat, ncurses }:
+{
+  buildDunePackage,
+  lib,
+  fetchFromGitHub,
+  utop,
+  python3,
+  stdcompat,
+}:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "pyml";
-  version = "20211015";
+  version = "20231101";
 
   src = fetchFromGitHub {
-    owner  = "thierry-martinez";
-    repo   = pname;
-    rev    = version;
-    sha256 = "sha256-GCO6KlRhJmADFjQ5QF4naMQBskF63yqnJnLnuQsagEk=";
+    owner = "thierry-martinez";
+    repo = "pyml";
+    rev = version;
+    sha256 = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
 
-  nativeBuildInputs = [
-    ocaml
-    findlib
-  ];
   buildInputs = [
     utop
-    ncurses
   ];
 
   propagatedBuildInputs = [
@@ -25,24 +27,18 @@ stdenv.mkDerivation rec {
     stdcompat
   ];
 
+  nativeCheckInputs = [
+    python3.pkgs.numpy
+    python3.pkgs.ipython
+  ];
+
   strictDeps = true;
-
-  buildPhase = ''
-    make all pymltop pymlutop PREFIX=$out
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    mkdir -p $OCAMLFIND_DESTDIR/stublibs
-    make install PREFIX=$out
-    runHook postInstall
-  '';
 
   doCheck = true;
 
   meta = {
     description = "OCaml bindings for Python";
+    homepage = "https://github.com/thierry-martinez/pyml";
     license = lib.licenses.bsd2;
   };
 }

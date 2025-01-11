@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, ocamlPackages
-, makeWrapper
-, libGLU
-, libGL
-, freeglut
-, mpfr
-, gmp
-, pkgsHostTarget
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+  makeWrapper,
+  libGLU,
+  libGL,
+  libglut,
+  mpfr,
+  gmp,
+  pkgsHostTarget,
 }:
 
 let
@@ -24,30 +25,38 @@ stdenv.mkDerivation rec {
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ (with ocamlPackages; [
-    ocaml
-    findlib
-  ]);
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+    ]);
 
-  buildInputs = [
-    freeglut
-    libGL
-    libGLU
-    mpfr
-    gmp
-  ] ++ (with ocamlPackages; [
-    camlp4
-    lablgl
-    camlimages_4_2_4
-  ]);
+  buildInputs =
+    [
+      libglut
+      libGL
+      libGLU
+      mpfr
+      gmp
+    ]
+    ++ (with ocamlPackages; [
+      camlp4
+      lablgl
+      camlimages
+      num
+    ]);
 
   postPatch = ''
     for f in callbacks*/Makefile src/Makefile; do
       substituteInPlace "$f" --replace "+camlp4" \
         "${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4"
     done
+
+    # Fatal error: exception Sys_error("Mutex.unlock: Operation not permitted")
+    sed -i "/gl_started/d" src/draw.ml* src/main.ml
   '';
 
   installPhase = ''
@@ -61,7 +70,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://raffalli.eu/~christophe/glsurf/";
-    description = "A program to draw implicit surfaces and curves";
+    description = "Program to draw implicit surfaces and curves";
+    mainProgram = "glsurf";
     license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

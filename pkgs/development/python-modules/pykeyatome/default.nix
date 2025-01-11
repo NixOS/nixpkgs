@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fake-useragent
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, responses
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fake-useragent,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "pykeyatome";
-  version = "1.5.2";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jugla";
     repo = "pyKeyAtome";
-    rev = "refs/tags/V${version}";
-    sha256 = "sha256-9J8MaQs3+/Ld+v3WmA98lSu3iMrX4Se4q1jD1KeRTpw=";
+    tag = "V${version}";
+    hash = "sha256-zRXUjekawf2/zTSlXqHVB02dDkb6HbU4NN6UBgl2rtg=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
     requests-mock
@@ -46,13 +47,13 @@ buildPythonPackage rec {
     "test_relog_after_session_down"
   ];
 
-  pythonImportsCheck = [
-    "pykeyatome"
-  ];
+  pythonImportsCheck = [ "pykeyatome" ];
 
   meta = with lib; {
     description = "Python module to get data from Atome Key";
+    mainProgram = "pykeyatome";
     homepage = "https://github.com/jugla/pyKeyAtome";
+    changelog = "https://github.com/jugla/pyKeyAtome/releases/tag/V${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

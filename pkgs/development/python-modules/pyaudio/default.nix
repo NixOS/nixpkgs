@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pkgs,
 }:
 
 buildPythonPackage rec {
-  pname = "PyAudio";
-  version = "0.2.11";
+  pname = "pyaudio";
+  version = "0.2.14";
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "93bfde30e0b64e63a46f2fd77e85c41fd51182a4a3413d9edfaf9ffaa26efb74";
+    pname = "PyAudio";
+    inherit version;
+    hash = "sha256-eN//OHm0mU0fT8ZIVkald1XG7jwZZHpJH3kKCJW9L4c=";
   };
 
   buildInputs = [ pkgs.portaudio ];
@@ -22,5 +24,4 @@ buildPythonPackage rec {
     homepage = "https://people.csail.mit.edu/hubert/pyaudio/";
     license = licenses.mit;
   };
-
 }

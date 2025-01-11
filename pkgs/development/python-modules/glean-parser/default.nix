@@ -1,68 +1,70 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, click
-, diskcache
-, fetchPypi
-, jinja2
-, jsonschema
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools-scm
-, yamllint
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  click,
+  diskcache,
+  fetchPypi,
+  jinja2,
+  jsonschema,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "5.1.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "14.5.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-PjOMNUnrz0kDfYEXv5Ni/9RIHn4Yylle6NJOK1Rb3SY=";
+    hash = "sha256-7EZtFRYYk477A/F8FsrrEmZr2InGRWK440vNLZXgcvc=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" "" \
-      --replace "MarkupSafe==2.0.1" "MarkupSafe"
+      --replace-fail "pytest-runner" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     click
     diskcache
     jinja2
     jsonschema
     pyyaml
-    yamllint
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   disabledTests = [
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1741668
+    # Network access
     "test_validate_ping"
+    "test_logging"
+    # Fails since yamllint 1.27.x
+    "test_yaml_lint"
   ];
 
-  pythonImportsCheck = [
-    "glean_parser"
-  ];
+  pythonImportsCheck = [ "glean_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
+    mainProgram = "glean_parser";
     homepage = "https://github.com/mozilla/glean_parser";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [];
+    changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

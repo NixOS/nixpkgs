@@ -1,7 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  setuptools,
+  pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -12,20 +16,38 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = pname;
-    rev = version;
-    sha256 = "05byv1079qi7ypvzm13yf5nc23ink6gr6c5wrhq7fwld4syscy2q";
+    tag = version;
+    hash = "sha256-WHimvSaNcncwzLwwk5+ZNg7BbHF+hPr39SfidEDYfhU=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
-  checkPhase = "pytest testing/";
+  preBuild = ''
+    # re-run cython
+    make -B
+  '';
 
   pythonImportsCheck = [ "http_parser" ];
 
-  meta = with lib; {
+  # The imp module is deprecated since version 3.4, and was removed in 3.12
+  # https://docs.python.org/3.11/library/imp.html
+  # Fix from: https://github.com/benoitc/http-parser/pull/101/
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/benoitc/http-parser/commit/4d4984ce129253f9de475bfd3c683301c916e8b1.patch";
+      hash = "sha256-d3k1X41/D9PpPWsDety2AiYyLv9LJIhpkOo3a6qKcB8=";
+    })
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "HTTP request/response parser for python in C";
     homepage = "https://github.com/benoitc/http-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

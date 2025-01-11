@@ -1,10 +1,16 @@
-{ stdenv, lib, fetchurl, cleanPackaging }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cleanPackaging,
+}:
 
 let
   version = "0.3.4";
   sha256 = "00xbkp99x9v07r34w7m2p8gak5hdsdbka36n7a733rdrrkgf5z7r";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "nettee";
   inherit version;
 
@@ -16,12 +22,18 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://saf.bio.caltech.edu/nettee.html";
     description = ''Network "tee" program'';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ Profpatsch ];
     platforms = lib.platforms.linux;
+    mainProgram = "nettee";
   };
 
-  outputs = [ "bin" "man" "doc" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "doc"
+    "out"
+  ];
 
   patchPhase = ''
     # h_addr field was removed
@@ -39,7 +51,8 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ${cleanPackaging.commonFileActions {
+    ${
+      cleanPackaging.commonFileActions {
         docFiles = [
           "*.html"
           "*.TXT"
@@ -54,7 +67,8 @@ in stdenv.mkDerivation {
           "*.h"
           "nettee"
         ];
-      }} $doc/share/doc/nettee
+      }
+    } $doc/share/doc/nettee
 
     mkdir -p $man/share/man/{man1,man3}
     mv nettee.1 $man/share/man/man1

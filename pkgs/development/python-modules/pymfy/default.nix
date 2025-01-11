@@ -1,50 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpretty
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpretty,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "pymfy";
   version = "0.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tetienne";
     repo = "somfy-open-api";
-    rev = "v${version}";
-    sha256 = "0wpjwjmywfyqgwvfa5kwcjpaljc32qa088kk88nl9nqdvc31mzhv";
+    tag = "v${version}";
+    hash = "sha256-G/4aBtsN20QtQnMiBBQWg0mqrmR8FuU2f9g77qvk8nI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "requests-oauthlib" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     requests
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpretty
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pymfy"
-  ];
+  pythonImportsCheck = [ "pymfy" ];
 
   meta = with lib; {
     description = "Python client for the Somfy Open API";
     homepage = "https://github.com/tetienne/somfy-open-api";
-    license = with licenses; [ gpl3Only ];
+    changelog = "https://github.com/tetienne/somfy-open-api/releases/tag/v${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
 }

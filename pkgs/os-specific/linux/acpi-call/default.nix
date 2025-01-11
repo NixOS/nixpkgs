@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "acpi-call";
@@ -26,10 +31,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ raskin mic92 ];
+    maintainers = with maintainers; [
+      raskin
+      mic92
+    ];
     homepage = "https://github.com/nix-community/acpi_call";
     platforms = platforms.linux;
-    description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
+    description = "Module allowing arbitrary ACPI calls; use case: hybrid video";
+    mainProgram = "test_discrete_video_off.sh";
     license = licenses.gpl3Plus;
   };
 }

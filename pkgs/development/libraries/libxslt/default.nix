@@ -8,22 +8,26 @@
 , gettext
 , python
 , ncurses
+, libxcrypt
 , libgcrypt
 , cryptoSupport ? false
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? libxml2.pythonSupport
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxslt";
-  version = "1.1.35";
+  version = "1.1.42";
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
+  outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
+  outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "gkfzPpqHLGrIWapFAYvExNALl+L+rJ7rwQyTzh803Xk=";
+    url = "mirror://gnome/sources/libxslt/${lib.versions.majorMinor finalAttrs.version}/libxslt-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hcpiysDUH8d9P2Az2p32/XPSDqL8GLCjYJ/7QRDhuus=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -31,8 +35,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libxml2.dev
-  ] ++ lib.optional stdenv.isDarwin [
+    libxml2.dev libxcrypt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gettext
   ] ++ lib.optionals pythonSupport [
     libxml2.py
@@ -50,37 +54,38 @@ stdenv.mkDerivation rec {
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ lib.optionals pythonSupport [
-    "--with-python=${python}"
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
   ];
 
+  enableParallelBuilding = true;
+
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
-    moveToOutput share/man/man1 "$bin"
   '' + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput ${python.libPrefix} "$py"
+    moveToOutput ${python.sitePackages} "$py"
   '';
 
   passthru = {
     inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxslt";
       versionPolicy = "none";
     };
   };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
-    description = "A C library and tools to do XSL transformations";
+    description = "C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
-}
+})

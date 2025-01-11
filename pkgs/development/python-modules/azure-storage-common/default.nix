@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, cryptography
-, python-dateutil
-, requests
-, isPy3k
-, azure-storage-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  cryptography,
+  python-dateutil,
+  requests,
+  isPy3k,
+  azure-storage-nspkg,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-common";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,8 +1,24 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, libtool
-, gtk2-x11, gtk3-x11 , gtkSupport ? null
-, libpulseaudio, gst_all_1, libvorbis, libcap
-, Carbon, CoreServices
-, withAlsa ? stdenv.isLinux, alsa-lib }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libtool,
+  gtk2-x11,
+  gtk3-x11,
+  gtkSupport ? null,
+  libpulseaudio,
+  gst_all_1,
+  libvorbis,
+  libcap,
+  systemd,
+  Carbon,
+  CoreServices,
+  AppKit,
+  withAlsa ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcanberra";
@@ -13,34 +29,60 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
-  strictDeps = true;
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libpulseaudio libvorbis
-    libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
-  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
-    ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
-    ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
-    ++ lib.optionals stdenv.isDarwin [Carbon CoreServices]
-    ++ lib.optional stdenv.isLinux libcap
-    ++ lib.optional withAlsa alsa-lib;
-
-  configureFlags = [ "--disable-oss" ];
-
-  patches = [
-    (fetchpatch {
-      name = "0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch";
-      url = "http://git.0pointer.net/libcanberra.git/patch/?id=c0620e432650e81062c1967cc669829dbd29b310";
-      sha256 = "0rc7zwn39yxzxp37qh329g7375r5ywcqcaak8ryd0dgvg8m5hcx9";
-    })
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    patch -p0 < ${fetchpatch {
-      url = "https://raw.githubusercontent.com/macports/macports-ports/master/audio/libcanberra/files/patch-configure.diff";
-      sha256 = "1f7h7ifpqvbfhqygn1b7klvwi80zmpv3538vbmq7ql7bkf1q8h31";
-    }}
-  '';
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs =
+    [
+      libpulseaudio
+      libvorbis
+      libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ])
+    ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
+    ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreServices
+      AppKit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
+      systemd
+    ]
+    ++ lib.optional withAlsa alsa-lib;
+
+  configureFlags =
+    [ "--disable-oss" ]
+    ++ lib.optional stdenv.hostPlatform.isLinux "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
+
+  patches =
+    [
+      (fetchpatch {
+        name = "0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch";
+        url = "http://git.0pointer.net/libcanberra.git/patch/?id=c0620e432650e81062c1967cc669829dbd29b310";
+        sha256 = "0rc7zwn39yxzxp37qh329g7375r5ywcqcaak8ryd0dgvg8m5hcx9";
+      })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (fetchpatch {
+        url = "https://github.com/macports/macports-ports/raw/5a7965dfea7727d1ceedee46c7b0ccee9cb23468/audio/libcanberra/files/patch-configure.diff";
+        sha256 = "sha256-pEJy1krciUEg5BFIS8FJ4BubjfS/nt9aqi6BLnS1+4M=";
+        extraPrefix = "";
+      })
+      (fetchpatch {
+        url = "https://github.com/macports/macports-ports/raw/5a7965dfea7727d1ceedee46c7b0ccee9cb23468/audio/libcanberra/files/dynamic_lookup-11.patch";
+        sha256 = "sha256-nUjha2pKh5VZl0ZZzcr9NTo1TVuMqF4OcLiztxW+ofQ=";
+        extraPrefix = "";
+      })
+    ];
 
   postInstall = ''
     for f in $out/lib/*.la; do
@@ -53,7 +95,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An implementation of the XDG Sound Theme and Name Specifications";
+    description = "Implementation of the XDG Sound Theme and Name Specifications";
+    mainProgram = "canberra-gtk-play";
     longDescription = ''
       libcanberra is an implementation of the XDG Sound Theme and Name
       Specifications, for generating event sounds on free desktops
@@ -63,7 +106,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://0pointer.de/lennart/projects/libcanberra/";
     license = licenses.lgpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ RossComputerGuy ];
     platforms = platforms.unix;
   };
 }

@@ -1,11 +1,12 @@
-{ stdenv
-, pkgs
-, lib
-, nodejs-14_x
+{
+  stdenv,
+  pkgs,
+  lib,
+  nodejs_20,
 }:
 
 let
-  nodejs = nodejs-14_x;
+  nodejs = nodejs_20;
 
   nodePackages = import ./node-packages.nix {
     inherit pkgs nodejs;
@@ -17,11 +18,18 @@ let
   combined = ethercalc.override {
     meta = with lib; {
       description = "Online collaborative spreadsheet";
-      license = with licenses; [ cpal10 artistic2 mit asl20 cc0 mpl20 ];
+      license = with licenses; [
+        cpal10
+        artistic2
+        mit
+        asl20
+        cc0
+        mpl20
+      ];
       homepage = "https://github.com/audreyt/ethercalc";
       maintainers = with maintainers; [ iblech ];
       platforms = platforms.unix;
     };
   };
 in
-  combined
+combined

@@ -1,20 +1,20 @@
-{ buildPythonPackage
-, build
-, git
-, gnupg
-, pbr
-, sphinx
-, stestr
-, testresources
-, testscenarios
-, virtualenv
+{
+  buildPythonPackage,
+  build,
+  git,
+  gnupg,
+  pbr,
+  sphinx,
+  stestr,
+  testresources,
+  testscenarios,
+  virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pbr";
-  inherit (pbr) version;
-
-  src = pbr.src;
+  inherit (pbr) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -24,8 +24,11 @@ buildPythonPackage rec {
 
   dontBuild = true;
   dontInstall = true;
+  preConfigure = ''
+    pythonOutputDistPhase() { touch $dist; }
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pbr
     build
     git
@@ -43,6 +46,9 @@ buildPythonPackage rec {
     pbr.tests.test_core.TestCore.test_console_script_install
     pbr.tests.test_wsgi.TestWsgiScripts.test_with_argument
     pbr.tests.test_wsgi.TestWsgiScripts.test_wsgi_script_run
+    # Tests are failing because of fixture timeouts
+    pbr.tests.test_packaging.TestPEP517Support.test_pep_517_support
+    pbr.tests.test_packaging.TestRequirementParsing.test_requirement_parsing
     ")
   '';
 }

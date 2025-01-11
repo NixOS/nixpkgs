@@ -1,31 +1,70 @@
-{ lib, isPyPy, buildPythonPackage, fetchPypi
-, pytest, cmdline, pytest-cov, coverage, setuptools-git, mock, path, execnet
-, contextlib2, termcolor, six }:
+{
+  lib,
+  isPyPy,
+  buildPythonPackage,
+  pytest-fixture-config,
+  fetchpatch,
 
-buildPythonPackage rec {
+  # build-time
+  setuptools,
+  setuptools-git,
+
+  # runtime
+  pytest,
+  mock,
+  path,
+  execnet,
+  termcolor,
+  six,
+
+  # tests
+  pytestCheckHook,
+}:
+
+buildPythonPackage {
   pname = "pytest-shutil";
-  version = "1.7.0";
+  inherit (pytest-fixture-config) version src;
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
-  };
+  # imp was removed in Python 3.12
+  patches = [
+    (fetchpatch {
+      name = "stop-using-imp.patch";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-pytest-shutil/stop-using-imp.patch?rev=10";
+      hash = "sha256-ZsfOic6VmKIlK+HeAlUwiM4fXgw9wHo445dP9j5/h8Q=";
+    })
+  ] ++ pytest-fixture-config.patches;
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "path.py" "path"
+    cd pytest-shutil
   '';
+
+  build-system = [
+    setuptools
+    setuptools-git
+  ];
 
   buildInputs = [ pytest ];
-  checkInputs = [ cmdline pytest ];
-  propagatedBuildInputs = [ pytest-cov coverage setuptools-git mock path execnet contextlib2 termcolor six ];
 
-  checkPhase = ''
-    py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}
-  '';
+  dependencies = [
+    mock
+    path
+    execnet
+    termcolor
+    six
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests =
+    [ "test_pretty_formatter" ]
+    ++ lib.optionals isPyPy [
+      "test_run"
+      "test_run_integration"
+    ];
 
   meta = with lib; {
-    description = "A goodie-bag of unix shell and environment tools for py.test";
+    description = "Goodie-bag of unix shell and environment tools for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with maintainers; [ ryansydnor ];
     license = licenses.mit;

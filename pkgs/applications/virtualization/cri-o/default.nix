@@ -1,43 +1,55 @@
-{ lib
-, btrfs-progs
-, buildGoModule
-, fetchFromGitHub
-, glibc
-, gpgme
-, installShellFiles
-, libapparmor
-, libseccomp
-, libselinux
-, lvm2
-, pkg-config
-, nixosTests
+{
+  lib,
+  btrfs-progs,
+  buildGoModule,
+  fetchFromGitHub,
+  glibc,
+  gpgme,
+  installShellFiles,
+  libapparmor,
+  libseccomp,
+  libselinux,
+  lvm2,
+  pkg-config,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.24.1";
+  version = "1.31.3";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "sha256-/AoZKeUcYF1fyYtllXpB7GNWR/6SWEOy2ffDLYbTp9E=";
+    hash = "sha256-uoB5v+dl3895sW597f/Y49E2BJvy89871xu/rqWd7kw=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  outputs = [ "out" "man" ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  outputs = [
+    "out"
+    "man"
+  ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [
-    btrfs-progs
-    gpgme
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
-  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
+  buildInputs =
+    [
+      btrfs-progs
+      gpgme
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ]
+    ++ lib.optionals (glibc != null) [
+      glibc
+      glibc.static
+    ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
@@ -53,6 +65,9 @@ buildGoModule rec {
     for shell in bash fish zsh; do
       installShellCompletion --$shell completions/$shell/*
     done
+
+    install contrib/cni/*.conflist -Dt $out/etc/cni/net.d
+    install crictl.yaml -Dt $out/etc
 
     installManPage docs/*.[1-9]
     runHook postInstall

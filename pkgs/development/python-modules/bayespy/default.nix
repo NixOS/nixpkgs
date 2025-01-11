@@ -1,29 +1,47 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, nose, glibcLocales
-, numpy, scipy, matplotlib, h5py }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  scipy,
+  h5py,
+  truncnorm,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "bayespy";
-  version = "0.5.22";
+  version = "0.6.1";
+  pyproject = true;
 
-  # Python 2 not supported and not some old Python 3 because MPL doesn't support
-  # them properly.
-  disabled = pythonOlder "3.4";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ed0057dc22bd392df4b3bba23536117e1b2866e3201b12c5a37428d23421a5ba";
+  src = fetchFromGitHub {
+    owner = "bayespy";
+    repo = "bayespy";
+    tag = version;
+    hash = "sha256-X7CwJBrKHlU1jqMkt/7XEzaiwul1Yzkb/V64lXG4Aqo=";
   };
 
-  checkInputs = [ pytest nose glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
-
-  checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest -k 'not test_message_to_parents'
+  postPatch = ''
+    substituteInPlace versioneer.py \
+      --replace-fail SafeConfigParser ConfigParser \
+      --replace-fail readfp read_file
   '';
 
+  build-system = [ setuptools ];
+
+  dependencies = [
+    numpy
+    scipy
+    h5py
+    truncnorm
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "bayespy" ];
+
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "http://www.bayespy.org";
     description = "Variational Bayesian inference tools for Python";
     license = licenses.mit;

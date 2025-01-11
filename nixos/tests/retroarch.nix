@@ -1,17 +1,21 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
   {
     name = "retroarch";
-    meta = with pkgs.lib.maintainers; { maintainers = [ j0hax ]; };
+    meta = with pkgs.lib; {
+      maintainers = teams.libretro.members ++ [ maintainers.j0hax ];
+    };
 
-    nodes.machine = { ... }:
+    nodes.machine =
+      { ... }:
 
       {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.desktopManager.retroarch = {
           enable = true;
-          package = pkgs.retroarchFull;
+          package = pkgs.retroarch-bare;
         };
         services.xserver.displayManager = {
           sddm.enable = true;
@@ -23,19 +27,21 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-    testScript = { nodes, ... }:
+    testScript =
+      { nodes, ... }:
       let
         user = nodes.machine.config.users.users.alice;
         xdo = "${pkgs.xdotool}/bin/xdotool";
-      in ''
+      in
+      ''
         with subtest("Wait for login"):
             start_all()
-            machine.wait_for_file("${user.home}/.Xauthority")
-            machine.succeed("xauth merge ${user.home}/.Xauthority")
+            machine.wait_for_file("/tmp/xauth_*")
+            machine.succeed("xauth merge /tmp/xauth_*")
 
         with subtest("Check RetroArch started"):
             machine.wait_until_succeeds("pgrep retroarch")
-            machine.wait_for_window("^RetroArch ")
+            machine.wait_for_window("^RetroArch")
 
         with subtest("Check configuration created"):
             machine.wait_for_file("${user.home}/.config/retroarch/retroarch.cfg")
@@ -46,4 +52,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
             )
             machine.screenshot("screen")
       '';
-  })
+  }
+)

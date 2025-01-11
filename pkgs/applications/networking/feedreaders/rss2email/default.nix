@@ -1,20 +1,41 @@
-{ pythonPackages, fetchurl, lib, nixosTests }:
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  fetchpatch2,
+  nixosTests,
+}:
 
 with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.13.1";
+  version = "3.14";
 
-  propagatedBuildInputs = [ feedparser html2text ];
-  checkInputs = [ beautifulsoup4 ];
+  propagatedBuildInputs = [
+    feedparser
+    html2text
+  ];
+  nativeCheckInputs = [ beautifulsoup4 ];
 
-  src = fetchurl {
-    url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "3994444766874bb35c9f886da76f3b24be1cb7bbaf40fad12b16f2af80ac1296";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  patches = [
+    (fetchpatch2 {
+      name = "html2text-2024.2.25-compat.patch";
+      url = "https://github.com/rss2email/rss2email/commit/b5c0e78006c2db6929b5ff50e8529de58a00412a.patch";
+      hash = "sha256-edmsi3I0acx5iF9xoAS9deSexqW2UtWZR/L7CgeZs/M=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   postPatch = ''
     # sendmail executable is called from PATH instead of sbin by default
@@ -39,10 +60,11 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A tool that converts RSS/Atom newsfeeds to email";
+    description = "Tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ Profpatsch ekleog ];
+    maintainers = with maintainers; [ ekleog ];
+    mainProgram = "r2e";
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, poetry-core
-, i3ipc
-, xlib
-, six
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  poetry-core,
+  i3ipc,
+  xlib,
+  six,
 }:
 
 buildPythonApplication rec {
@@ -39,6 +40,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "swallow";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

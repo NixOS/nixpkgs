@@ -1,19 +1,45 @@
-{ lib, stdenv, fetchgit, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  texinfo,
+  ncurses,
+  readline,
+  zlib,
+  lzo,
+  openssl,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tinc";
   version = "1.1pre18";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "gsliepen";
+    repo = "tinc";
     rev = "release-${version}";
-    url = "git://tinc-vpn.org/tinc";
-    sha256 = "0a7d1xg34p54sv66lckn8rz2bpg7bl01najm2rxiwbsm956y7afm";
+    hash = "sha256-1anjTUlVLx57FlUqGwBd590lfkZ2MmrM1qRcMl4P7Sg=";
   };
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook texinfo ];
-  buildInputs = [ ncurses readline zlib lzo openssl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    texinfo
+  ];
+  buildInputs = [
+    ncurses
+    readline
+    zlib
+    lzo
+    openssl
+  ];
 
   # needed so the build doesn't need to run git to find out the version.
   prePatch = ''
@@ -28,6 +54,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
+  passthru.tests = { inherit (nixosTests) tinc; };
+
   meta = with lib; {
     description = "VPN daemon with full mesh routing";
     longDescription = ''
@@ -36,9 +64,12 @@ stdenv.mkDerivation rec {
       Internet.  It features full mesh routing, as well as encryption,
       authentication, compression and ethernet bridging.
     '';
-    homepage="http://www.tinc-vpn.org/";
+    homepage = "http://www.tinc-vpn.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz lassulus mic92 ];
+    maintainers = with maintainers; [
+      lassulus
+      mic92
+    ];
   };
 }

@@ -1,39 +1,61 @@
-{ stdenv, lib, fetchFromGitHub, python, makeWrapper
-, eigen, fftw, libtiff, libpng, zlib, ants, bc
-, qt5, libGL, libGLU, libX11, libXext
-, withGui ? true, less }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python,
+  makeWrapper,
+  eigen,
+  fftw,
+  libtiff,
+  libpng,
+  zlib,
+  ants,
+  bc,
+  qt5,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  less,
+  withGui ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mrtrix";
-  version = "unstable-2021-11-25";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
-    owner  = "MRtrix3";
-    repo   = "mrtrix3";
-    rev    = "994498557037c9e4f7ba67f255820ef84ea899d9";
-    sha256 = "sha256-8eFDS5z4ZxMzi9Khk90KAS4ndma/Syd6JDXM2Fpr0M8=";
+    owner = "MRtrix3";
+    repo = "mrtrix3";
+    tag = version;
+    hash = "sha256-87zBAoBLWQPccGS37XyQ8H0GhL01k8GQFgcLL6IwbcM=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ eigen makeWrapper ] ++ lib.optional withGui qt5.wrapQtAppsHook;
+  nativeBuildInputs = [
+    eigen
+    makeWrapper
+  ] ++ lib.optional withGui qt5.wrapQtAppsHook;
 
-  buildInputs = [
-    ants
-    python
-    fftw
-    libtiff
-    libpng
-    zlib
-  ] ++ lib.optionals withGui [
-    libGL
-    libGLU
-    libX11
-    libXext
-    qt5.qtbase
-    qt5.qtsvg
-  ];
+  buildInputs =
+    [
+      ants
+      python
+      fftw
+      libtiff
+      libpng
+      zlib
+    ]
+    ++ lib.optionals withGui [
+      libGL
+      libGLU
+      libX11
+      libXext
+      qt5.qtbase
+      qt5.qtsvg
+    ];
 
-  installCheckInputs = [ bc ];
+  nativeInstallCheckInputs = [ bc ];
 
   postPatch = ''
     patchShebangs ./build ./configure ./run_tests ./bin/*
@@ -86,11 +108,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;
-    license   = licenses.mpl20;
+    license = licenses.mpl20;
   };
 }

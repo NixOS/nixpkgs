@@ -1,6 +1,9 @@
-{ mkDerivation
-, extra-cmake-modules
-, qtbase, qtdeclarative
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  qtbase,
+  qtdeclarative,
 }:
 
 mkDerivation {
@@ -12,4 +15,5 @@ mkDerivation {
     substituteInPlace CMakeLists.txt \
       --replace /lib/udev/rules.d "$bin/lib/udev/rules.d"
   '';
+  meta.platforms = lib.platforms.linux;
 }

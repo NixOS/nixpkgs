@@ -1,28 +1,36 @@
-{ buildDunePackage
-, lib
-, ppxlib
-, fetchFromGitHub
-, ojs
-, js_of_ocaml-compiler
-, nodejs
+{
+  buildDunePackage,
+  ocaml,
+  lib,
+  ppxlib,
+  fetchFromGitHub,
+  ojs,
+  js_of_ocaml-compiler,
+  nodejs,
 }:
 
 buildDunePackage rec {
   pname = "gen_js_api";
-  version = "1.0.9";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qx6if1avr484bl9x1h0cksdc6gqw5i4pwzdr27h46hppnnvi8y8";
+    sha256 = "sha256-9xYSxiPKZP7U1wbnw3/FiLhF/JmTA12rlrr4jSynA3k=";
   };
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.11";
 
-  propagatedBuildInputs = [ ojs ppxlib ];
-  checkInputs = [ js_of_ocaml-compiler nodejs ];
-  doCheck = true;
+  propagatedBuildInputs = [
+    ojs
+    ppxlib
+  ];
+  nativeCheckInputs = [
+    js_of_ocaml-compiler
+    nodejs
+  ];
+  doCheck = lib.versionAtLeast ocaml.version "4.13";
 
   meta = {
     homepage = "https://github.com/LexiFi/gen_js_api";

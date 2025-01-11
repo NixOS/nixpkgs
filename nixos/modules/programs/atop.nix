@@ -1,10 +1,14 @@
 # Global configuration for atop.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib;
-
-let cfg = config.programs.atop;
+let
+  cfg = config.programs.atop;
 
 in
 {
@@ -14,38 +18,31 @@ in
 
     programs.atop = rec {
 
-      enable = mkEnableOption "Atop";
+      enable = lib.mkEnableOption "Atop, a tool for monitoring system resources";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atop;
-        defaultText = literalExpression "pkgs.atop";
-        description = ''
-          Which package to use for Atop.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "atop" { };
 
       netatop = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to install and enable the netatop kernel module.
             Note: this sets the kernel taint flag "O" for loading out-of-tree modules.
           '';
         };
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           default = config.boot.kernelPackages.netatop;
-          defaultText = literalExpression "config.boot.kernelPackages.netatop";
+          defaultText = lib.literalExpression "config.boot.kernelPackages.netatop";
           description = ''
             Which package to use for netatop.
           '';
         };
       };
 
-      atopgpu.enable = mkOption {
-        type = types.bool;
+      atopgpu.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to install and enable the atopgpud daemon to get information about
@@ -53,8 +50,8 @@ in
         '';
       };
 
-      setuidWrapper.enable = mkOption {
-        type = types.bool;
+      setuidWrapper.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to install a setuid wrapper for Atop. This is required to use some of
@@ -63,24 +60,24 @@ in
         '';
       };
 
-      atopService.enable = mkOption {
-        type = types.bool;
+      atopService.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the atop service responsible for storing statistics for
           long-term analysis.
         '';
       };
-      atopRotateTimer.enable = mkOption {
-        type = types.bool;
+      atopRotateTimer.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the atop-rotate timer, which restarts the atop service
           daily to make sure the data files are rotate.
         '';
       };
-      atopacctService.enable = mkOption {
-        type = types.bool;
+      atopacctService.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the atopacct service which manages process accounting.
@@ -88,85 +85,101 @@ in
           two refresh intervals.
         '';
       };
-      settings = mkOption {
-        type = types.attrs;
+      settings = lib.mkOption {
+        type = lib.types.attrs;
         default = { };
         example = {
           flags = "a1f";
           interval = 5;
         };
         description = ''
-          Parameters to be written to <filename>/etc/atoprc</filename>.
+          Parameters to be written to {file}`/etc/atoprc`.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let
-      atop =
-        if cfg.atopgpu.enable then
-          (cfg.package.override { withAtopgpu = true; })
-        else
-          cfg.package;
+      atop = if cfg.atopgpu.enable then (cfg.package.override { withAtopgpu = true; }) else cfg.package;
     in
     {
-      environment.etc = mkIf (cfg.settings != { }) {
-        atoprc.text = concatStrings
-          (mapAttrsToList
-            (n: v: ''
-              ${n} ${toString v}
-            '')
-            cfg.settings);
+      environment.etc = lib.mkIf (cfg.settings != { }) {
+        atoprc.text = lib.concatStrings (
+          lib.mapAttrsToList (n: v: ''
+            ${n} ${builtins.toString v}
+          '') cfg.settings
+        );
       };
-      environment.systemPackages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
+      environment.systemPackages = [
+        atop
+        (lib.mkIf cfg.netatop.enable cfg.netatop.package)
+      ];
       boot.extraModulePackages = [ (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       systemd =
         let
-          mkSystemd = type: cond: name: restartTriggers: {
-            ${name} = lib.mkIf cond {
+          mkSystemd = type: name: restartTriggers: {
+            ${name} = {
               inherit restartTriggers;
-              wantedBy = [ (if type == "services" then "multi-user.target" else if type == "timers" then "timers.target" else null) ];
+              wantedBy = [
+                (
+                  if type == "services" then
+                    "multi-user.target"
+                  else if type == "timers" then
+                    "timers.target"
+                  else
+                    null
+                )
+              ];
             };
           };
           mkService = mkSystemd "services";
           mkTimer = mkSystemd "timers";
         in
         {
-          packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
-          services =
-            mkService cfg.atopService.enable "atop" [ atop ]
-            // lib.mkIf cfg.atopService.enable {
-              # always convert logs to newer version first
-              # XXX might trigger TimeoutStart but restarting atop.service will
-              # convert remainings logs and start eventually
-              atop.serviceConfig.ExecStartPre = pkgs.writeShellScript "atop-update-log-format" ''
-                set -e -u
-                for logfile in "$LOGPATH"/atop_*
-                do
-                  ${atop}/bin/atopconvert "$logfile" "$logfile".new
-                  # only replace old file if version was upgraded to avoid
-                  # false positives for atop-rotate.service
-                  if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
-                  then
-                    ${pkgs.coreutils}/bin/mv -v -f "$logfile".new "$logfile"
-                  fi
-                done
-              '';
-            }
-            // mkService cfg.atopacctService.enable "atopacct" [ atop ]
-            // mkService cfg.netatop.enable "netatop" [ cfg.netatop.package ]
-            // mkService cfg.atopgpu.enable "atopgpu" [ atop ];
-          timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate" [ atop ];
+          packages = [
+            atop
+            (lib.mkIf cfg.netatop.enable cfg.netatop.package)
+          ];
+          services = lib.mkMerge [
+            (lib.mkIf cfg.atopService.enable (
+              lib.recursiveUpdate (mkService "atop" [ atop ]) {
+                # always convert logs to newer version first
+                # XXX might trigger TimeoutStart but restarting atop.service will
+                # convert remainings logs and start eventually
+                atop.preStart = ''
+                  set -e -u
+                  shopt -s nullglob
+                  rm -f "$LOGPATH"/atop_*.new
+                  for logfile in "$LOGPATH"/atop_*
+                  do
+                    ${atop}/bin/atopconvert "$logfile" "$logfile".new
+                    # only replace old file if version was upgraded to avoid
+                    # false positives for atop-rotate.service
+                    if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
+                    then
+                      mv -v -f "$logfile".new "$logfile"
+                    else
+                      rm -f "$logfile".new
+                    fi
+                  done
+                '';
+              }
+            ))
+            (lib.mkIf cfg.atopacctService.enable (mkService "atopacct" [ atop ]))
+            (lib.mkIf cfg.netatop.enable (mkService "netatop" [ cfg.netatop.package ]))
+            (lib.mkIf cfg.atopgpu.enable (mkService "atopgpu" [ atop ]))
+          ];
+          timers = lib.mkIf cfg.atopRotateTimer.enable (mkTimer "atop-rotate" [ atop ]);
         };
 
       security.wrappers = lib.mkIf cfg.setuidWrapper.enable {
-        atop =
-          { setuid = true;
-            owner = "root";
-            group = "root";
-            source = "${atop}/bin/atop";
-          };
+        atop = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${atop}/bin/atop";
+        };
       };
     }
   );

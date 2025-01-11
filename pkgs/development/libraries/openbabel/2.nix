@@ -1,4 +1,17 @@
-{stdenv, lib, fetchFromGitHub, fetchpatch, cmake, zlib, libxml2, eigen, python3, cairo, pcre, pkg-config }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  zlib,
+  libxml2,
+  eigen,
+  python3,
+  cairo,
+  pcre,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
@@ -7,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openbabel";
     repo = "openbabel";
-    rev = "openbabel-${lib.replaceStrings ["."] ["-"] version}";
+    rev = "openbabel-${lib.replaceStrings [ "." ] [ "-" ] version}";
     sha256 = "sha256-+pXsWMzex7rB1mm6dnTHzAcyw9jImgx1OZuLeCvbeJ0=";
   };
 
@@ -19,12 +32,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib libxml2 eigen python3 cairo pcre ];
+  postPatch = ''
+    sed '1i#include <ctime>' -i include/openbabel/obutil.h # gcc12
+  '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    zlib
+    libxml2
+    eigen
+    python3
+    cairo
+    pcre
+  ];
+
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=14" ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = with lib; {
-    description = "A toolbox designed to speak the many languages of chemical data";
+    description = "Toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ danielbarter ];

@@ -1,53 +1,64 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, git
-, jupyter_server
-, jupyter-packaging
-, jupyterlab
-, nbdime
-, nbformat
-, pexpect
-, pytest-asyncio
-, pytest-tornasync
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  git,
+  jupyter-server,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  jupyterlab,
+  nbdime,
+  nbformat,
+  pexpect,
+  pytest-asyncio,
+  pytest-jupyter,
+  pytest-tornasync,
+  pytestCheckHook,
+  pythonOlder,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.36.0";
+  version = "0.50.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    sha256 = "sha256-K+h1ra9PsqKlSSPnc1jgSODICv3FoEdwqBGYWQYs6wE=";
+    hash = "sha256-zu/chWMsr0maBItDRFnQO15iFmWAHp23GXvUhvXTNDM=";
   };
 
   nativeBuildInputs = [
-    jupyter-packaging
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+    jupyterlab
   ];
 
   propagatedBuildInputs = [
-    jupyter_server
+    jupyter-server
     nbdime
     git
     nbformat
     pexpect
+    traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jupyterlab
     pytest-asyncio
+    pytest-jupyter
     pytest-tornasync
     pytestCheckHook
   ];
 
-  # All Tests on darwin fail or are skipped due to sandbox
-  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   disabledTestPaths = [
     "jupyterlab_git/tests/test_handlers.py"
@@ -63,13 +74,14 @@ buildPythonPackage rec {
     "test_Git_get_nbdiff_dict"
   ];
 
-  pythonImportsCheck = [
-    "jupyterlab_git"
-  ];
+  pythonImportsCheck = [ "jupyterlab_git" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Jupyter lab extension for version control with Git";
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
+    changelog = "https://github.com/jupyterlab/jupyterlab-git/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ chiroptical ];
   };

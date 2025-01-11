@@ -1,45 +1,55 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, types-docutils
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  rstcheck-core,
+  typer,
+  types-docutils,
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "5.0.0";
-  format = "pyproject";
+  version = "6.2.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "myint";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-vTUa/eP6/flxRLBuzdHoNoPoGAg6XWwu922az8tLgJM=";
+    owner = "rstcheck";
+    repo = "rstcheck";
+    tag = "v${version}";
+    hash = "sha256-CB8UtYAJpPrUOGgHOIp9Ts0GaID6GdtKHWD/ihxRoNg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
+    rstcheck-core
     types-docutils
-    typing-extensions
+    pydantic
+    typer
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
+    "test_error_without_config_file_macos"
+    "test_file_1_is_bad_without_config_macos"
   ];
 
-  pythonImportsCheck = [
-    "rstcheck"
-  ];
+  pythonImportsCheck = [ "rstcheck" ];
 
   preCheck = ''
     # The tests need to find and call the rstcheck executable
@@ -49,7 +59,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
+    changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ staccato ];
+    mainProgram = "rstcheck";
   };
 }

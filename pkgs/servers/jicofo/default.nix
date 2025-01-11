@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  jre_headless,
+  nixosTests,
+}:
 
 let
   pname = "jicofo";
-  version = "1.0-832";
+  version = "1.0-1117";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "ZSzxD4RCsIkNtB4agBRZkzbJOi6ttzlc4Qw5n0t5syc=";
+    sha256 = "PUIPLCdL68+cf3eue7+p0aptYavq046RtSaFM9XPgQQ=";
   };
 in
 stdenv.mkDerivation {
@@ -13,7 +20,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
+  nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
     runHook preInstall
@@ -35,7 +42,8 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A server side focus component used in Jitsi Meet conferences";
+    description = "Server side focus component used in Jitsi Meet conferences";
+    mainProgram = "jicofo";
     longDescription = ''
       JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.
     '';

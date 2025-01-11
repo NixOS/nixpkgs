@@ -1,10 +1,9 @@
-{ lib, ruby_3_0, bundlerApp, fetchpatch }:
+{ lib, bundlerApp }:
 
 bundlerApp {
   pname = "3llo";
-  ruby = ruby_3_0;
 
-  gemdir  = ./.;
+  gemdir = ./.;
 
   exes = [ "3llo" ];
 
@@ -12,6 +11,6 @@ bundlerApp {
     description = "Trello interactive CLI on terminal";
     license = licenses.mit;
     homepage = "https://github.com/qcam/3llo";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

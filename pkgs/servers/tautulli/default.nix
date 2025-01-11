@@ -1,18 +1,28 @@
-{ lib, fetchFromGitHub, buildPythonApplication, setuptools, wrapPython, makeWrapper }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  setuptools,
+  wrapPython,
+  makeWrapper,
+}:
 
 buildPythonApplication rec {
   pname = "Tautulli";
-  version = "2.9.5";
+  version = "2.15.0";
   format = "other";
 
   pythonPath = [ setuptools ];
-  nativeBuildInputs = [ wrapPython makeWrapper ];
+  nativeBuildInputs = [
+    wrapPython
+    makeWrapper
+  ];
 
   src = fetchFromGitHub {
     owner = "Tautulli";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-agkYfLWmeQOD+dtoYvTcNPXjfU3kv56c15AFeB7eVTw=";
+    tag = "v${version}";
+    sha256 = "sha256-QhJc4Jwxlp3yB0jWa7sRDnIOWLW8CQUupnzbUscJH+c=";
   };
 
   installPhase = ''
@@ -43,11 +53,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta  = with lib; {
-    description = "A Python based monitoring and tracking tool for Plex Media Server";
+  meta = with lib; {
+    description = "Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ csingley ];
+    maintainers = with maintainers; [ rhoriguchi ];
   };
 }

@@ -1,59 +1,68 @@
-{ lib
-, stdenv
-, fetchurl
-, Carbon
-, Cocoa
-, ffmpeg
-, glib
-, libGLU
-, mesa
-, perl
-, pkg-config
-, proj
-, python3
-, wrapGAppsHook
-, wxGTK30-gtk3
-, wxmac
-, xlibsWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  Carbon,
+  Cocoa,
+  ffmpeg,
+  glib,
+  libGLU,
+  libICE,
+  libX11,
+  libgbm,
+  perl,
+  pkg-config,
+  proj,
+  gdal,
+  python3,
+  wrapGAppsHook3,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.4.1";
+  version = "1.4.15";
+
+  src = fetchurl {
+    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-8RuVHVugJmTP3CBYXzxxZGe5GYGUxJrlkzxXFRakkWI=";
+  };
 
   nativeBuildInputs = [
     perl
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ffmpeg
-    glib
-    libGLU
-    mesa
-    proj
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    Cocoa
-    wxmac
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    wxGTK30-gtk3
-    xlibsWrapper
-  ];
-
-  src = fetchurl {
-    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-69X1jGjBTQIQzkD1mTZTzE8L/GXnnf5SI52l7eIiLz4=";
-  };
+  buildInputs =
+    [
+      ffmpeg
+      glib
+      proj
+      gdal
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # TODO: libGLU doesn't build for macOS because of Mesa issues
+      # (#233265); is it required for anything?
+      libGLU
+      libgbm
+      libICE
+      libX11
+    ];
 
   postPatch = ''
     patchShebangs .
   '';
 
   enableParallelBuilding = true;
-  doCheck = (!stdenv.isDarwin); # times out
+  doCheck = (!stdenv.hostPlatform.isDarwin); # times out
   enableParallelChecking = false;
 
   meta = with lib; {

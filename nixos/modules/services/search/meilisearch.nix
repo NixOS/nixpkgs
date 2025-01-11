@@ -1,50 +1,55 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.meilisearch;
 
 in
 {
 
-  meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc meilisearch.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > meilisearch.xml`
-  meta.doc = ./meilisearch.xml;
+  meta.maintainers = with lib.maintainers; [
+    Br1ght0ne
+    happysalada
+  ];
+  meta.doc = ./meilisearch.md;
 
   ###### interface
 
   options.services.meilisearch = {
-    enable = mkEnableOption "MeiliSearch - a RESTful search API";
+    enable = lib.mkEnableOption "MeiliSearch - a RESTful search API";
 
-    package = mkOption {
-      description = "The package to use for meilisearch. Use this if you require specific features to be enabled. The default package has no features.";
-      default = pkgs.meilisearch;
-      defaultText = "pkgs.meilisearch";
-      type = types.package;
+    package = lib.mkPackageOption pkgs "meilisearch" {
+      extraDescription = ''
+        Use this if you require specific features to be enabled. The default package has no features.
+      '';
     };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       description = "MeiliSearch listen address.";
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    listenPort = mkOption {
+    listenPort = lib.mkOption {
       description = "MeiliSearch port to listen on.";
       default = 7700;
-      type = types.port;
+      type = lib.types.port;
     };
 
-    environment = mkOption {
+    environment = lib.mkOption {
       description = "Defines the running environment of MeiliSearch.";
       default = "development";
-      type = types.enum [ "development" "production" ];
+      type = lib.types.enum [
+        "development"
+        "production"
+      ];
     };
 
     # TODO change this to LoadCredentials once possible
-    masterKeyEnvironmentFile = mkOption {
+    masterKeyEnvironmentFile = lib.mkOption {
       description = ''
         Path to file which contains the master key.
         By doing so, all routes will be protected and will require a key to be accessed.
@@ -53,10 +58,10 @@ in
         MEILI_MASTER_KEY=my_secret_key
       '';
       default = null;
-      type = with types; nullOr path;
+      type = with lib.types; nullOr path;
     };
 
-    noAnalytics = mkOption {
+    noAnalytics = lib.mkOption {
       description = ''
         Deactivates analytics.
         Analytics allow MeiliSearch to know how many users are using MeiliSearch,
@@ -64,10 +69,10 @@ in
         This process is entirely anonymous.
       '';
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       description = ''
         Defines how much detail should be present in MeiliSearch's logs.
         MeiliSearch currently supports four log levels, listed in order of increasing verbosity:
@@ -78,10 +83,10 @@ in
           Useful when diagnosing issues and debugging
       '';
       default = "INFO";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    maxIndexSize = mkOption {
+    maxIndexSize = lib.mkOption {
       description = ''
         Sets the maximum size of the index.
         Value must be given in bytes or explicitly stating a base unit.
@@ -89,10 +94,10 @@ in
         Default is 100 GiB
       '';
       default = "107374182400";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    payloadSizeLimit = mkOption {
+    payloadSizeLimit = lib.mkOption {
       description = ''
         Sets the maximum size of accepted JSON payloads.
         Value must be given in bytes or explicitly stating a base unit.
@@ -100,14 +105,18 @@ in
         Default is ~ 100 MB
       '';
       default = "104857600";
-      type = types.str;
+      type = lib.types.str;
     };
 
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+
+    # used to restore dumps
+    environment.systemPackages = [ cfg.package ];
+
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
       wantedBy = [ "multi-user.target" ];
@@ -115,9 +124,9 @@ in
       environment = {
         MEILI_DB_PATH = "/var/lib/meilisearch";
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
-        MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
+        MEILI_NO_ANALYTICS = lib.boolToString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
-        MEILI_DUMPS_DIR = "/var/lib/meilisearch/dumps";
+        MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
       };
@@ -125,7 +134,7 @@ in
         ExecStart = "${cfg.package}/bin/meilisearch";
         DynamicUser = true;
         StateDirectory = "meilisearch";
-        EnvironmentFile = mkIf (cfg.masterKeyEnvironmentFile != null) cfg.masterKeyEnvironmentFile;
+        EnvironmentFile = lib.mkIf (cfg.masterKeyEnvironmentFile != null) cfg.masterKeyEnvironmentFile;
       };
     };
   };

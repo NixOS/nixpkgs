@@ -1,17 +1,34 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, iconnamingutils, librsvg, gtk3, hicolor-icon-theme, mateUpdateScript }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  iconnamingutils,
+  librsvg,
+  gtk3,
+  hicolor-icon-theme,
+  mateUpdateScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0nha555fhhn0j5wmzmdc7bh93ckzwwdm8mwmzma5whkzslv09xa1";
+    sha256 = "lNYHkGDKXfdFQpId5O6ji30C0HVhyRk1bZXeh2+abTo=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext iconnamingutils ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    iconnamingutils
+  ];
 
-  buildInputs = [ librsvg ];
+  buildInputs = [
+    librsvg
+  ];
 
   propagatedBuildInputs = [
     hicolor-icon-theme
@@ -27,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Icon themes from MATE";

@@ -1,58 +1,44 @@
-{ lib
-, astor
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, funcparserlib
-, hy
-, pytestCheckHook
-, python
-, pythonOlder
-, rply
-, testers
-, toPythonApplication
-, hyDefinedPythonPackages ? python-packages: [ ] /* Packages like with python.withPackages */
+{
+  lib,
+  astor,
+  buildPythonPackage,
+  fetchFromGitHub,
+  funcparserlib,
+  hy,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.0a4";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hylang";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-MBzp3jqBg/kH233wcgYYHc+Yg9GuOaBsXIfjFDihD1E=";
+    repo = "hy";
+    tag = version;
+    hash = "sha256-o6txdC8TOdaILAJP9LDAhJ587p+mw0bUEGLneQQYW9c=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
-  propagatedBuildInputs = [
-    colorama
-    funcparserlib
-    rply # TODO: remove on the next release
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    astor
-  ]
-  # for backwards compatibility with removed pkgs/development/interpreters/hy
-  # See: https://github.com/NixOS/nixpkgs/issues/171428
-  ++ (hyDefinedPythonPackages python.pkgs);
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ funcparserlib ] ++ lib.optionals (pythonOlder "3.9") [ astor ];
 
-  disabledTests = [
-    # Don't test the binary
-    "test_bin_hy"
-    "test_hystartup"
-    "est_hy2py_import"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    # For test_bin_hy
+    export PATH="$out/bin:$PATH"
+  '';
 
   pythonImportsCheck = [ "hy" ];
 
@@ -61,17 +47,25 @@ buildPythonPackage rec {
       package = hy;
       command = "hy -v";
     };
-    # also for backwards compatibility with removed pkgs/development/interpreters/hy
-    withPackages = python-packages: (toPythonApplication hy).override {
-      hyDefinedPythonPackages = python-packages;
-    };
+    # For backwards compatibility with removed pkgs/development/interpreters/hy
+    # Example usage:
+    #   hy.withPackages (ps: with ps; [ hyrule requests ])
+    withPackages =
+      python-packages:
+      (python.withPackages (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+        name = "${hy.name}-env";
+        meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
+      });
   };
 
   meta = with lib; {
-    description = "A LISP dialect embedded in Python";
+    description = "LISP dialect embedded in Python";
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab mazurel nixy thiagokokada ];
+    maintainers = with maintainers; [
+      mazurel
+      nixy
+    ];
   };
 }

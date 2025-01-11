@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, autoPatchelfHook
-, requireFile
-, callPackage
-, makeWrapper
-, alsa-lib
-, dbus
-, fontconfig
-, freetype
-, gcc
-, glib
-, installShellFiles
-, libssh2
-, ncurses
-, opencv4
-, openssl
-, unixODBC
-, xkeyboard_config
-, xorg
-, zlib
-, libxml2
-, libuuid
-, lang ? "en"
-, libGL
-, libGLU
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  requireFile,
+  alsa-lib,
+  dbus,
+  fontconfig,
+  freetype,
+  gcc,
+  glib,
+  installShellFiles,
+  libssh2,
+  ncurses,
+  opencv4,
+  openssl,
+  unixODBC,
+  xkeyboard_config,
+  xorg,
+  zlib,
+  libxml2,
+  libuuid,
+  lang ? "en",
+  libGL,
+  libGLU,
+  wrapQtAppsHook,
 }:
 
 let
@@ -39,50 +39,55 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     installShellFiles
-    makeWrapper
+    wrapQtAppsHook
   ];
+  dontWrapQtApps = true;
 
-  buildInputs = [
-    alsa-lib
-    dbus
-    fontconfig
-    freetype
-    gcc.cc
-    gcc.libc
-    glib
-    libssh2
-    ncurses
-    opencv4
-    openssl
-    stdenv.cc.cc.lib
-    unixODBC
-    xkeyboard_config
-    libxml2
-    libuuid
-    zlib
-    libGL
-    libGLU
-  ] ++ (with xorg; [
-    libX11
-    libXext
-    libXtst
-    libXi
-    libXmu
-    libXrender
-    libxcb
-    libXcursor
-    libXfixes
-    libXrandr
-    libICE
-    libSM
-  ]);
+  buildInputs =
+    [
+      alsa-lib
+      dbus
+      fontconfig
+      freetype
+      gcc.cc
+      gcc.libc
+      glib
+      libssh2
+      ncurses
+      opencv4
+      openssl
+      (lib.getLib stdenv.cc.cc)
+      unixODBC
+      xkeyboard_config
+      libxml2
+      libuuid
+      zlib
+      libGL
+      libGLU
+    ]
+    ++ (with xorg; [
+      libX11
+      libXext
+      libXtst
+      libXi
+      libXmu
+      libXrender
+      libxcb
+      libXcursor
+      libXfixes
+      libXrandr
+      libICE
+      libSM
+    ]);
 
   # some bundled libs are found through LD_LIBRARY_PATH
   autoPatchelfIgnoreMissingDeps = true;
 
-  ldpath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath =
+    lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") (
+      ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
+    );
 
   unpackPhase = ''
     # find offset from file
@@ -101,9 +106,9 @@ stdenv.mkDerivation rec {
     # Fix the installation script
     patchShebangs MathInstaller
     substituteInPlace MathInstaller \
-      --replace '`hostname`' "" \
-      --replace "chgrp" "# chgrp" \
-      --replace "chown" ": # chown"
+      --replace-fail '`hostname`' "" \
+      --replace-fail "chgrp" "# chgrp" \
+      --replace-fail "chown" ": # chown"
 
     # Install the desktop items
     export XDG_DATA_HOME="$out/share"
@@ -113,18 +118,23 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/${dirName}/Executables
     for path in MathKernel math mcc wolfram; do
-      makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
+      makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${lib.getLib stdenv.cc.cc}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
     done
 
     for path in WolframKernel wolframscript; do
-      makeWrapper $out/libexec/${dirName}/SystemFiles/Kernel/Binaries/Linux-x86-64/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
+      makeWrapper $out/libexec/${dirName}/SystemFiles/Kernel/Binaries/Linux-x86-64/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${lib.getLib stdenv.cc.cc}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
     done
 
-    # ... and xkeyboard config path for Qt
+    wrapQtApp "$out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer" \
+      --set LD_LIBRARY_PATH "${zlib}/lib:${lib.getLib stdenv.cc.cc}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
+    if ! isELF "$out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer"; then
+      substituteInPlace $out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer \
+        --replace-fail "TopDirectory=" "TopDirectory=$out/libexec/${dirName} #";
+    fi
+
     for path in WolframPlayer wolframplayer; do
-      makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path \
-        --set LD_LIBRARY_PATH "${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}" \
-        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
+      makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path
     done
 
     # Install man pages
@@ -140,6 +150,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Wolfram Engine computational software system";
     homepage = "https://www.wolfram.com/engine/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ fbeffa ];
     platforms = [ "x86_64-linux" ];

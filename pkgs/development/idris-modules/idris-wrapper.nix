@@ -1,9 +1,16 @@
-{ stdenv, lib, symlinkJoin, makeWrapper, idris-no-deps, gmp }:
+{
+  stdenv,
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  idris-no-deps,
+  gmp,
+}:
 
 symlinkJoin {
   inherit (idris-no-deps) name src meta;
   paths = [ idris-no-deps ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/idris \
       --run 'export IDRIS_CC=''${IDRIS_CC:-${stdenv.cc}/bin/cc}' \

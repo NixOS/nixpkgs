@@ -1,41 +1,309 @@
-{ stdenv
-, lib
-, callPackage
-, fetchzip
-, jack
-, udev
-, libsForQt5
+{
+  stdenv,
+  lib,
+  pkg-config,
+  fetchFromGitLab,
+  gitUpdater,
+  ffmpeg_6,
+
+  # for daemon
+  autoreconfHook,
+  perl, # for pod2man
+  alsa-lib,
+  asio,
+  dbus,
+  sdbus-cpp,
+  fmt,
+  gmp,
+  gnutls,
+  llhttp,
+  jack,
+  jsoncpp,
+  libarchive,
+  libgit2,
+  libnatpmp,
+  libpulseaudio,
+  libupnp,
+  msgpack-cxx,
+  openssl,
+  restinio,
+  secp256k1,
+  speex,
+  udev,
+  webrtc-audio-processing,
+  yaml-cpp,
+  zlib,
+
+  # for dhtnet
+  expected-lite,
+
+  # for client
+  cmake,
+  git,
+  networkmanager, # for libnm
+  python3,
+  qttools, # for translations
+  wrapQtAppsHook,
+  libnotify,
+  qt5compat,
+  qtbase,
+  qtdeclarative,
+  qrencode,
+  qtmultimedia,
+  qtnetworkauth,
+  qtpositioning,
+  qtsvg,
+  qtwebengine,
+  qtwebchannel,
+  wrapGAppsHook3,
+  withWebengine ? true,
+
+  # for pjsip
+  fetchFromGitHub,
+  pjsip,
+
+  # for opendht
+  opendht,
 }:
 
-rec {
-  version = "20211223.2.37be4c3";
+stdenv.mkDerivation rec {
+  pname = "jami";
+  version = "20241031.0";
 
-  src = fetchzip {
-    url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
-    sha256 = "1zw9azwmxr4991nq5kl527lbwlj7psrissgvrkl1kxxbfbdncbhh";
-
-    stripRoot = false;
-    postFetch = ''
-      cd $out
-      mv ring-project/* ./
-      rm -r ring-project.rst ring-project client-android client-ios client-macosx client-uwp
-      rm daemon/contrib/tarballs/*
-    '';
+  src = fetchFromGitLab {
+    domain = "git.jami.net";
+    owner = "savoirfairelinux";
+    repo = "jami-client-qt";
+    rev = "stable/${version}";
+    hash = "sha256-LKezdzM+ltUSgW4GmTXICyufx9mI1AVbdEcwSp6tmao=";
+    fetchSubmodules = true;
   };
 
-  jami-meta = with lib; {
+  pjsip-jami = pjsip.overrideAttrs (old: rec {
+    version = "8fc165b833eea6e3c88d67a541385424b129fd3f";
+
+    src = fetchFromGitHub {
+      owner = "savoirfairelinux";
+      repo = "pjproject";
+      rev = version;
+      hash = "sha256-uA6ZJYUgAu3cK4CKCGtqaI0KPM/0szExPS2pCOflz5A=";
+    };
+
+    configureFlags = [
+      "--disable-sound"
+      "--enable-video"
+      "--enable-ext-sound"
+      "--disable-speex-aec"
+      "--disable-g711-codec"
+      "--disable-l16-codec"
+      "--disable-gsm-codec"
+      "--disable-g722-codec"
+      "--disable-g7221-codec"
+      "--disable-speex-codec"
+      "--disable-ilbc-codec"
+      "--disable-opencore-amr"
+      "--disable-silk"
+      "--disable-sdl"
+      "--disable-ffmpeg"
+      "--disable-v4l2"
+      "--disable-openh264"
+      "--disable-resample"
+      "--disable-libwebrtc"
+      "--with-gnutls=yes"
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
+
+    buildInputs = old.buildInputs ++ [ gnutls ];
+  });
+
+  opendht-jami =
+    (opendht.overrideAttrs {
+      src = fetchFromGitHub {
+        owner = "savoirfairelinux";
+        repo = "opendht";
+        rev = "074e05cc3254d5d73b0d96ee772a6e01bb3113e5";
+        hash = "sha256-WuaURlC7eDDxvnM3YuyU9CNrwnE4WBQUIEw3z/0zjN8=";
+      };
+    }).override
+      {
+        enableProxyServerAndClient = true;
+        enablePushNotifications = true;
+      };
+
+  dhtnet = stdenv.mkDerivation {
+    pname = "dhtnet";
+    version = "unstable-2024-07-22";
+
+    src = fetchFromGitLab {
+      domain = "git.jami.net";
+      owner = "savoirfairelinux";
+      repo = "dhtnet";
+      rev = "8cd00200669fa5b7632faa447ba206c3847e2879";
+      hash = "sha256-SGidaCi5z7hO0ePJIZIkcWAkb+cKsZTdksVS7ldpjME=";
+    };
+
+    postPatch = ''
+      substituteInPlace dependencies/build.py \
+        --replace-fail \
+        "wget https://raw.githubusercontent.com/martinmoene/expected-lite/master/include/nonstd/expected.hpp -O" \
+        "cp ${expected-lite}/include/nonstd/expected.hpp"
+    '';
+
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+
+    buildInputs = [
+      asio
+      fmt
+      gnutls
+      llhttp
+      jsoncpp
+      libupnp
+      msgpack-cxx
+      opendht-jami
+      openssl
+      pjsip-jami
+      python3
+      restinio
+    ];
+
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=Off"
+      "-DBUILD_BENCHMARKS=Off"
+      "-DBUILD_TOOLS=Off"
+      "-DBUILD_TESTING=Off"
+      "-DBUILD_DEPENDENCIES=Off"
+      "-DBUILD_EXAMPLE=Off"
+    ];
+
+    meta = with lib; {
+      description = "Lightweight Peer-to-Peer Communication Library";
+      license = licenses.gpl3Only;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.linsui ];
+    };
+  };
+
+  daemon = stdenv.mkDerivation {
+    pname = "jami-daemon";
+    inherit src version meta;
+    sourceRoot = "${src.name}/daemon";
+
+    # Fix for libgit2 breaking changes
+    postPatch = ''
+      substituteInPlace src/jamidht/conversationrepository.cpp \
+        --replace-fail "git_commit* const" "const git_commit*"
+    '';
+
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+      perl
+    ];
+
+    buildInputs = [
+      alsa-lib
+      asio
+      dbus
+      dhtnet
+      sdbus-cpp
+      fmt
+      ffmpeg_6
+      gmp
+      gnutls
+      llhttp
+      jack
+      jsoncpp
+      libarchive
+      libgit2
+      libnatpmp
+      libpulseaudio
+      libupnp
+      msgpack-cxx
+      opendht-jami
+      openssl
+      pjsip-jami
+      restinio
+      secp256k1
+      speex
+      udev
+      webrtc-audio-processing
+      yaml-cpp
+      zlib
+    ];
+
+    enableParallelBuilding = true;
+  };
+
+  qwindowkit = fetchFromGitHub {
+    owner = "stdware";
+    repo = "qwindowkit";
+    rev = "79b1f3110754f9c21af2d7dacbd07b1a9dbaf6ef";
+    hash = "sha256-iZfmv3ADVjHf47HPK/FdrfeAzrXbxbjH3H5MFVg/ZWE=";
+    fetchSubmodules = true;
+  };
+
+  postPatch = ''
+    sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
+    sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
+    cp -R --no-preserve=mode,ownership ${qwindowkit} qwindowkit
+  '';
+
+  preConfigure = ''
+    echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
+    # Currently the daemon is still built seperately but jami expects it in CMAKE_INSTALL_PREFIX
+    # This can be removed in future versions when JAMICORE_AS_SUBDIR is on
+    mkdir -p $out
+    ln -s ${daemon} $out/daemon
+  '';
+
+  dontWrapGApps = true;
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    wrapQtAppsHook
+    pkg-config
+    cmake
+    git
+    python3
+    qttools
+  ];
+
+  buildInputs = [
+    ffmpeg_6
+    libnotify
+    networkmanager
+    qtbase
+    qt5compat
+    qrencode
+    qtnetworkauth
+    qtdeclarative
+    qtmultimedia
+    qtpositioning
+    qtsvg
+    qtwebchannel
+  ] ++ lib.optionals withWebengine [ qtwebengine ];
+
+  cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
+
+  qtWrapperArgs = [
+    # With wayland the titlebar is not themed and the wmclass is wrong.
+    "--set-default QT_QPA_PLATFORM xcb"
+  ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "stable/"; };
+
+  meta = with lib; {
     homepage = "https://jami.net/";
-    description = " for Jami, the free and universal communication platform that respects the privacy and freedoms of its users";
+    description = "Free and universal communication platform that respects the privacy and freedoms of its users";
+    mainProgram = "jami";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.linsui ];
   };
-
-  jami-daemon = callPackage ./daemon.nix { inherit version src udev jack jami-meta; };
-
-  jami-libclient = libsForQt5.callPackage ./libclient.nix { inherit version src jami-meta; };
-
-  jami-client-gnome = libsForQt5.callPackage ./client-gnome.nix { inherit version src jami-meta; };
-
-  jami-client-qt = libsForQt5.callPackage ./client-qt.nix { inherit version src jami-meta; };
 }

@@ -1,27 +1,66 @@
-{ stdenv, lib, fetchFromGitHub, flex, bison, qt4, libX11, cmake, gperf, adms,
-ngspice, wrapGAppsHook,
-kernels ? [ ngspice ] }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, flex
+, bison
+, qtbase
+, qtcharts
+, qttools
+, qtsvg
+, qtwayland
+, wrapQtAppsHook
+, libX11
+, cmake
+, gperf
+, adms
+, ngspice
+, qucsator-rf
+, kernels ? [ ngspice qucsator-rf ]
+}:
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "0.0.22";
+  version = "24.4.1";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "0rrq2ddridc09m6fixdmbngn42xmv8cmdf6r8zzn2s98fqib5qd6";
+    hash = "sha256-ll5P8cqJBzoieExElggn5tRbDcmH7L3yvcbtAQ0BBww=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook cmake ];
-  buildInputs = [ flex bison qt4 libX11 gperf adms ] ++ kernels;
-
-  preConfigure = ''
-    # Make custom kernels avaible from qucs-s
-    gappsWrapperArgs+=(--prefix PATH ":" ${lib.escapeShellArg (lib.makeBinPath kernels)})
+  postPatch = ''
+    # Workaround a CMake bug (we don't generally do distributable bundles in nixpkgs anyway):
+    #   warning: cannot resolve item '/usr/lib/libSystem.B.dylib'
+    #
+    #   possible problems:
+    #       need more directories?
+    #           need to use InstallRequiredSystemLibraries?
+    #               run in install tree instead of build tree?
+    for filename in \
+      qucs/CMakeLists.txt \
+      qucs-transcalc/CMakeLists.txt \
+      qucs-attenuator/CMakeLists.txt \
+      qucs-s-spar-viewer/CMakeLists.txt \
+      ; do
+      substituteInPlace "$filename" \
+        --replace-fail 'fixup_bundle(' 'message(\"nixpkgs will not fixup_bundle: \" '
+    done
   '';
 
-  QTDIR=qt4;
+  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
+  buildInputs = [ qtbase qttools qtcharts qtsvg gperf adms ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland libX11 ]
+    ++ kernels;
+
+  cmakeFlags = [
+    "-DWITH_QT6=ON"
+  ];
+
+  # Make custom kernels avaible from qucs-s
+  qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
+
+  QTDIR = qtbase.dev;
 
   doInstallCheck = true;
   installCheck = ''
@@ -36,7 +75,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mazurel ];
-    platforms = with platforms; linux;
+    mainProgram = "qucs-s";
+    maintainers = with maintainers; [ mazurel kashw2 thomaslepoix ];
+    platforms = with platforms; unix;
   };
 }

@@ -1,35 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, boost
-, openal, glm, freetype, libGLU, SDL2, libepoxy
-, dejavu_fonts, inkscape, optipng, imagemagick
-, withCrashReporter ? !stdenv.isDarwin
-,   qtbase ? null
-,   wrapQtAppsHook ? null
-,   curl ? null
-,   gdb  ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  boost,
+  openal,
+  glm,
+  freetype,
+  libGLU,
+  SDL2,
+  libepoxy,
+  dejavu_fonts,
+  inkscape,
+  optipng,
+  imagemagick,
+  withCrashReporter ? !stdenv.hostPlatform.isDarwin,
+  qtbase ? null,
+  wrapQtAppsHook ? null,
+  curl ? null,
+  gdb ? null,
 }:
 
-with lib;
+let
+  inherit (lib)
+    licenses
+    maintainers
+    optionals
+    optionalString
+    platforms
+    ;
+in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "arx-libertatis";
-  version = "2020-10-20";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "arx";
     repo = "ArxLibertatis";
-    rev = "21df2e37664de79e117eff2af164873f05600f4c";
-    sha256 = "06plyyh0ddqv1j04m1vclz9j72609pgrp61v8wfjdcln8djm376i";
+    rev = version;
+    sha256 = "GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
   };
 
   nativeBuildInputs = [
-    cmake inkscape imagemagick optipng
+    cmake
+    inkscape
+    imagemagick
+    optipng
   ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
-  buildInputs = [
-    zlib boost openal glm
-    freetype libGLU SDL2 libepoxy
-  ] ++ optionals withCrashReporter [ qtbase curl ]
-    ++ optionals stdenv.isLinux    [ gdb ];
+  buildInputs =
+    [
+      zlib
+      boost
+      openal
+      glm
+      freetype
+      libGLU
+      SDL2
+      libepoxy
+    ]
+    ++ optionals withCrashReporter [
+      qtbase
+      curl
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"
@@ -39,13 +75,15 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  postInstall = ''
-    ln -sf \
-      ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
-      $out/share/games/arx/misc/dejavusansmono.ttf
-  '' + optionalString withCrashReporter ''
-    wrapQtApp "$out/libexec/arxcrashreporter"
-  '';
+  postInstall =
+    ''
+      ln -sf \
+        ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
+        $out/share/games/arx/misc/dejavusansmono.ttf
+    ''
+    + optionalString withCrashReporter ''
+      wrapQtApp "$out/libexec/arxcrashreporter"
+    '';
 
   meta = {
     description = ''

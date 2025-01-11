@@ -1,53 +1,54 @@
-{ absl-py
-, buildPythonPackage
-, contextlib2
-, fetchPypi
-, fetchurl
-, lib
-, pyyaml
+{
+  absl-py,
+  buildPythonPackage,
+  contextlib2,
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  pyyaml,
+  six,
+  setuptools,
+  flit-core,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
-let
-  requirements = fetchurl {
-    url = "https://raw.githubusercontent.com/google/ml_collections/7f749a281c69f9d0b339c05ecb94b80d95029f25/requirements.txt";
-    sha256 = "1xb351hiscj4zmajfkql3swpacdp6lmz8iwdvwwdx2zqw9a62zps";
-  };
-  requirements-test = fetchurl {
-    url = "https://raw.githubusercontent.com/google/ml_collections/7f749a281c69f9d0b339c05ecb94b80d95029f25/requirements-test.txt";
-    sha256 = "0r457k2nrg5jkf093r0x29yf8xwy6l7jxi6al0fh7mmnfrhr9cb1";
-  };
-in
 buildPythonPackage rec {
   pname = "ml-collections";
-  version = "0.1.0";
+  version = "1.0.0";
+  pyproject = true;
+  build-system = [ flit-core ];
 
-  # ml-collections does not have any git release tags. See https://github.com/google/ml_collections/issues/8.
-  src = fetchPypi {
-    inherit version;
-    pname = "ml_collections";
-    sha256 = "0g6gxfz8g6fh1sghys869ylxgpda9hq7ylc8jw05608l3k6pz8ar";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "ml_collections";
+    tag = "v${version}";
+    hash = "sha256-QUhwkfffjA6gKd6lTmEgnnoUeJOu82mfFPBta9/iebg=";
   };
 
-  # The pypi source archive does not include requirements.txt or
-  # requirements-test.txt. See https://github.com/google/ml_collections/issues/7.
-  postPatch = ''
-    cp ${requirements} requirements.txt
-    cp ${requirements-test} requirements-test.txt
-  '';
+  dependencies = [
+    six
+    absl-py
+    contextlib2
+    pyyaml
+  ];
 
-  propagatedBuildInputs = [ absl-py contextlib2 pyyaml ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
-  # The official test suite uses bazel. With pytestCheckHook there are name
-  # conflicts between files and tests have assumptions that are broken by the
-  # nix-build environment, eg. re module names and __file__ attributes.
-  doCheck = false;
+  pytestFlagsArray = [
+    "ml_collections/"
+    "--ignore=ml_collections/config_dict/examples/examples_test.py" # From github workflows
+  ];
 
   pythonImportsCheck = [ "ml_collections" ];
 
-  meta = with lib; {
-    description = "ML Collections is a library of Python collections designed for ML usecases.";
+  meta = {
+    description = "ML Collections is a library of Python collections designed for ML usecases";
     homepage = "https://github.com/google/ml_collections";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

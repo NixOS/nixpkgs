@@ -1,77 +1,96 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-
-, isPy3k
-, isPyPy
-
-, pyenchant
-, scikit-learn
-, pypillowfight
-, pycountry
-, whoosh
-, termcolor
-, python-Levenshtein
-, pygobject3
-, pyocr
-, natsort
-, libinsane
-, distro
-, openpaperwork-core
-, openpaperwork-gtk
-, psutil
-
-, pkgs
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  pyenchant,
+  scikit-learn,
+  pypillowfight,
+  pycountry,
+  whoosh,
+  termcolor,
+  pygobject3,
+  pyocr,
+  natsort,
+  libinsane,
+  distro,
+  openpaperwork-core,
+  openpaperwork-gtk,
+  psutil,
+  gtk3,
+  poppler_gi,
+  gettext,
+  which,
+  shared-mime-info,
+  libreoffice,
+  unittestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "paperwork-backend";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  format = "pyproject";
 
-  sourceRoot = "source/paperwork-backend";
+  sourceRoot = "${src.name}/paperwork-backend";
 
-  # Python 2.x is not supported.
-  disabled = !isPy3k && !isPyPy;
+  patches = [
+    # disables a flaky test https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/issues/1035#note_1493700
+    ./flaky_test.patch
+  ];
 
-  patchPhase = ''
-    echo 'version = "${version}"' > src/paperwork_backend/_version.py
+  patchFlags = [ "-p2" ];
+
+  postPatch = ''
     chmod a+w -R ..
     patchShebangs ../tools
   '';
 
   propagatedBuildInputs = [
-    pyenchant
-    scikit-learn
-    pypillowfight
-    pycountry
-    whoosh
-    termcolor
-    python-Levenshtein
+    distro
+    gtk3
     libinsane
+    natsort
+    openpaperwork-core
+    pyenchant
+    pycountry
     pygobject3
     pyocr
-    natsort
-    pkgs.poppler_gi
-    pkgs.gtk3
-    distro
-    openpaperwork-core
+    pypillowfight
+    poppler_gi
+    scikit-learn
+    termcolor
+    whoosh
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [
+    gettext
+    shared-mime-info
+    which
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which pkgs.shared-mime-info ];
   preBuild = ''
     make l10n_compile
   '';
 
-  checkInputs = [ openpaperwork-gtk psutil pkgs.libreoffice ];
+  nativeCheckInputs = [
+    libreoffice
+    openpaperwork-gtk
+    psutil
+    unittestCheckHook
+  ];
 
-  meta = {
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  meta = with lib; {
     description = "Backend part of Paperwork (Python API, no UI)";
-    homepage = "https://openpaper.work/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    homepage = "https://openpaper.work";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      aszlig
+      symphorien
+    ];
   };
 }

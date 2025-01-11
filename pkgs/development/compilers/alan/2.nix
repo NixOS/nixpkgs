@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
 
   # Add a workarounf for -fno-common tollchains like upstream gcc-10.
   # alan-3 is already fixed, but the backport is nontrivial.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/alan2
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.alanif.se/";
-    description = "The Alan interactive fiction language (legacy version)";
+    description = "Alan interactive fiction language (legacy version)";
     license = licenses.artistic2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ neilmayhew ];

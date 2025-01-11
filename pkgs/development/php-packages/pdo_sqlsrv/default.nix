@@ -1,14 +1,21 @@
-{ stdenv, buildPecl, lib, libiconv, unixODBC, php }:
+{
+  stdenv,
+  buildPecl,
+  lib,
+  libiconv,
+  unixODBC,
+  php,
+}:
 
 buildPecl {
   pname = "pdo_sqlsrv";
 
-  version = "5.10.0";
-  sha256 = "sha256-BEa7i/8egvz9mT69dl0dxWcVo+dURT9Dzo6f6EdlESo=";
+  version = "5.10.1";
+  sha256 = "sha256-x4VBlqI2vINQijRvjG7x35mbwh7rvYOL2wUTIV4GKK0=";
 
   internalDeps = [ php.extensions.pdo ];
 
-  buildInputs = [ unixODBC ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ unixODBC ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "Microsoft Drivers for PHP for SQL Server";

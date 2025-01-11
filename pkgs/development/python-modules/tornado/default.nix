@@ -1,35 +1,76 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
-, pycares
-, pycurl
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+
+  # for passthru.tests
+  distributed,
+  jupyter-server,
+  jupyterlab,
+  matplotlib,
+  mitmproxy,
+  pytest-tornado,
+  pytest-tornasync,
+  pyzmq,
+  sockjs-tornado,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.1";
+  version = "6.4.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "33c6e81d7bd55b468d2e793517c909b139960b6c790a60b7991b9b6b76fb9791";
+  src = fetchFromGitHub {
+    owner = "tornadoweb";
+    repo = "tornado";
+    tag = "v${version}";
+    hash = "sha256-qgJh8pnC1ALF8KxhAYkZFAc0DE6jHVB8R/ERJFL4OFc=";
   };
 
-  checkInputs = [
-    pycares
-    pycurl
-    twisted
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
+    # https://github.com/tornadoweb/tornado/blob/v6.2.0/maint/test/README
+    "maint/test"
+
+    # AttributeError: 'TestIOStreamWebMixin' object has no attribute 'io_loop'
+    "tornado/test/iostream_test.py"
+  ];
+
+  disabledTests = [
+    # Exception: did not get expected log message
+    "test_unix_socket_bad_request"
   ];
 
   pythonImportsCheck = [ "tornado" ];
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit
+      distributed
+      jupyter-server
+      jupyterlab
+      matplotlib
+      mitmproxy
+      pytest-tornado
+      pytest-tornasync
+      pyzmq
+      sockjs-tornado
+      urllib3
+      ;
+  };
+
   meta = with lib; {
-    description = "A web framework and asynchronous networking library";
+    description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

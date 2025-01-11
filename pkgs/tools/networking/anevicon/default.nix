@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  libiconv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1m3ci7g7nn28p6x5m85av3ljgszwlg55f1hmgjnarc6bas5bapl7";
   };
 
-  cargoSha256 = "1g15v13ysx09fy0b8qddw5fwql2pvwzc2g2h1ndhzpxvfy7fzpr1";
+  cargoHash = "sha256-Id/vjne73w+bDVA8wT7fV1DMXeGtYbSAdwl07UfYJbw=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    Security
+  ];
 
   cargoPatches = [
     # Add Cargo.lock file, https://github.com/rozgo/anevicon/pull/1
@@ -32,12 +36,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Tries to send large UDP packets that Darwin rejects.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "UDP-based load generator";
     homepage = "https://github.com/rozgo/anevicon";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "anevicon";
   };
 }

@@ -1,83 +1,101 @@
-{ lib
-, stdenv
-, mkDerivationWith
-, fetchFromGitHub
-, doxygen
-, gtk3
-, libopenshot
-, python3Packages
-, qtsvg
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  mkDerivationWith,
+  fetchFromGitHub,
+  doxygen,
+  gtk3,
+  libopenshot,
+  python3,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  wayland,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
+  wrapGAppsHook3,
 }:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
+let
   pname = "openshot-qt";
-  version = "2.6.1";
-
+  version = "3.2.1";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    rev = "v${version}";
-    sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
+    tag = "v${version}";
+    hash = "sha256-zZZ7C/1+Qh7KS1WJ8YWkhFgw0+UHJhjk+145u9/TBcI=";
   };
+in
+mkDerivationWith python3.pkgs.buildPythonApplication {
+  inherit pname version src;
+
+  outputs = [ "out" ]; # "lib" can't be split
 
   nativeBuildInputs = [
     doxygen
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs =
+    [
+      gtk3
+    ]
+    ++ lib.optionals waylandSupport [
+      qtwayland
+      wayland
+    ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     httplib2
     libopenshot
-    pyqt5_with_qtwebkit
+    pyqtwebengine
     pyzmq
     requests
-    sip_4
+    sip
   ];
 
-  dontWrapGApps = true;
-  dontWrapQtApps = true;
+  strictDeps = true;
 
   preConfigure = ''
-    # tries to create caching directories during install
+    # the builder tries to create caching directories during install
     export HOME=$(mktemp -d)
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/openshot-qt \
-  ''
-  # Fix toolbar icons on Darwin
-  + lib.optionalString stdenv.isDarwin ''
-      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
-  ''
-  + ''
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}"
   '';
 
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "http://openshot.org/";
-    description = "Free, open-source video editor";
-    longDescription = ''
-      OpenShot Video Editor is a free, open-source video editor for Linux.
-      OpenShot can take your videos, photos, and music files and help you
-      create the film you have always dreamed of. Easily add sub-titles,
-      transitions, and effects, and then export your film to DVD, YouTube,
-      Vimeo, Xbox 360, and many other common formats.
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  postFixup =
+    ''
+      wrapProgram $out/bin/openshot-qt \
+    ''
+    # Fix toolbar icons on Darwin
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
+    ''
+    + ''
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
     '';
-    license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
-  };
 
   passthru = {
     inherit libopenshot;
     inherit (libopenshot) libopenshot-audio;
+  };
+
+  meta = {
+    homepage = "http://openshot.org/";
+    description = "Free, open-source video editor";
+    longDescription = ''
+      OpenShot Video Editor is a free, open-source video editor for Linux.
+      OpenShot can take your videos, photos, and music files and help you create
+      the film you have always dreamed of. Easily add sub-titles, transitions,
+      and effects, and then export your film to DVD, YouTube, Vimeo, Xbox 360,
+      and many other common formats.
+    '';
+    license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "openshot-qt";
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,37 +1,36 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, qttools, which
-, alsa-lib, libjack2, liblo, qtbase
+, alsa-lib, libjack2, liblo, qtbase, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "seq66";
-  version = "0.90.5";
+  version = "0.99.16";
 
   src = fetchFromGitHub {
     owner = "ahlstromcj";
-    repo = pname;
+    repo = "seq66";
     rev = version;
-    sha256 = "1jvra1wzlycfpvffnqidk264zw6fyl4fsghkw5256ldk22aalmq9";
+    hash = "sha256-HXmpAgztIr6fUdksBPyLli/eMoD3Xlfs+UhHvfrZe0U=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config qttools which ];
+  nativeBuildInputs = [ autoreconfHook pkg-config qttools which wrapQtAppsHook ];
 
   buildInputs = [ alsa-lib libjack2 liblo qtbase ];
 
   postPatch = ''
-    for d in libseq66/include libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/include seq_rtmidi/src Seqtool/src; do
-      substituteInPlace "$d/Makefile.am" --replace '$(git_info)' '${version}'
+    for d in libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/src; do
+      substituteInPlace "$d/Makefile.am" --replace-fail '$(git_info)' '${version}'
     done
   '';
 
   enableParallelBuilding = true;
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "https://github.com/ahlstromcj/seq66";
     description = "Loop based midi sequencer with Qt GUI derived from seq24 and sequencer64";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej ];
+    mainProgram = "qseq66";
     platforms = platforms.linux;
   };
 }

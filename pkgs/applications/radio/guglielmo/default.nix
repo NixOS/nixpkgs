@@ -1,35 +1,43 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config
-, airspy
-, librtlsdr
-, fdk_aac
-, faad2
-, fftwFloat
-, libsndfile
-, libsamplerate
-, portaudio
-, qtmultimedia
-, qwt
-} :
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  airspy,
+  rtl-sdr,
+  fdk_aac,
+  faad2,
+  fftwFloat,
+  libsndfile,
+  libsamplerate,
+  portaudio,
+  qtmultimedia,
+  qwt,
+}:
 
 mkDerivation rec {
   pname = "guglielmo";
-  version = "0.3";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "marcogrecopriolo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s1iz9s0k897jayiwl3yr9ylpclw6bzcpmzhxqn0mkd7jhgfl4vx";
+    sha256 = "sha256-W+KTwtxbTDrtONmkw95gXT28n3k9KS364WOzLLJdGLM=";
   };
 
   postInstall = ''
     mv $out/linux-bin $out/bin
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     airspy
-    librtlsdr
+    rtl-sdr
     fdk_aac
     faad2
     fftwFloat
@@ -42,14 +50,15 @@ mkDerivation rec {
 
   postFixup = ''
     # guglielmo opens SDR libraries at run time
-    patchelf --add-rpath "${airspy}/lib:${librtlsdr}/lib" $out/bin/.guglielmo-wrapped
+    patchelf --add-rpath "${airspy}/lib:${rtl-sdr}/lib" $out/bin/.guglielmo-wrapped
   '';
 
   meta = with lib; {
     description = "Qt based FM / Dab tuner";
+    mainProgram = "guglielmo";
     homepage = "https://github.com/marcogrecopriolo/guglielmo";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.markuskowa ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
   };
 }

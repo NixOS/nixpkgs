@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.modemmanager;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9539;

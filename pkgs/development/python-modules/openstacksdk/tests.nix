@@ -1,28 +1,28 @@
-{ buildPythonPackage
-, ddt
-, hacking
-, jsonschema
-, lib
-, openstacksdk
-, oslo-config
-, oslotest
-, prometheus-client
-, requests-mock
-, stdenv
-, stestr
-, testscenarios
+{
+  buildPythonPackage,
+  ddt,
+  hacking,
+  jsonschema,
+  lib,
+  openstacksdk,
+  oslo-config,
+  oslotest,
+  prometheus-client,
+  requests-mock,
+  stdenv,
+  stestr,
+  testscenarios,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "openstacksdk-tests";
-  inherit (openstacksdk) version;
-
-  src = openstacksdk.src;
+  inherit (openstacksdk) version src;
+  format = "other";
 
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     hacking
     jsonschema
@@ -36,15 +36,17 @@ buildPythonPackage rec {
   ];
 
   checkPhase =
-    let aarch64TestsExcluded = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    ''
+      stestr run -e <(echo "
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_node_set_provision_state_with_retries
       openstack.tests.unit.cloud.test_role_assignment.TestRoleAssignment.test_grant_role_user_domain_exists
       openstack.tests.unit.cloud.test_volume_backups.TestVolumeBackups.test_delete_volume_backup_force
       openstack.tests.unit.object_store.v1.test_proxy.TestTempURLBytesPathAndKey.test_set_account_temp_url_key_second
       openstack.tests.unit.cloud.test_security_groups.TestSecurityGroups.test_delete_security_group_neutron_not_found
-    ''; in
     ''
-      stestr run -e <(echo "${aarch64TestsExcluded}
+    + ''
       openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_wait_for_baremetal_node_lock_locked
       openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_inspect_machine_inspect_failed
       openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_inspect_machine_available_wait
@@ -52,6 +54,13 @@ buildPythonPackage rec {
       openstack.tests.unit.cloud.test_image.TestImage.test_create_image_task
       openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_error_396
       openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_wait
+      openstack.tests.unit.image.v2.test_proxy.TestTask.test_wait_for_task_error_396
+      openstack.tests.unit.image.v2.test_proxy.TestTask.test_wait_for_task_wait
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_callback
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_callback_without_progress
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_status
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_success_not_found
+      openstack.tests.unit.test_resource.TestWaitForStatus.test_callback
       openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails
       openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails_different_attribute
       openstack.tests.unit.test_resource.TestWaitForStatus.test_status_match
@@ -60,6 +69,7 @@ buildPythonPackage rec {
       openstack.tests.unit.test_stats.TestStats.test_projects
       openstack.tests.unit.test_stats.TestStats.test_servers
       openstack.tests.unit.test_stats.TestStats.test_servers_no_detail
+      openstack.tests.unit.test_stats.TestStats.test_timeout
       ")
     '';
 }

@@ -1,13 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.emacs;
 
-  editorScript = pkgs.writeScriptBin "emacseditor" ''
-    #!${pkgs.runtimeShell}
+  editorScript = pkgs.writeShellScriptBin "emacseditor" ''
     if [ -z "$1" ]; then
       exec ${cfg.package}/bin/emacsclient --create-frame --alternate-editor ${cfg.package}/bin/emacs
     else
@@ -15,41 +16,22 @@ let
     fi
   '';
 
-  desktopApplicationFile = pkgs.writeTextFile {
-    name = "emacsclient.desktop";
-    destination = "/share/applications/emacsclient.desktop";
-    text = ''
-      [Desktop Entry]
-      Name=Emacsclient
-      GenericName=Text Editor
-      Comment=Edit text
-      MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
-      Exec=emacseditor %F
-      Icon=emacs
-      Type=Application
-      Terminal=false
-      Categories=Development;TextEditor;
-      StartupWMClass=Emacs
-      Keywords=Text;Editor;
-    '';
-  };
-
 in
 {
 
   options.services.emacs = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
-        Whether to enable a user service for the Emacs daemon. Use <literal>emacsclient</literal> to connect to the
-        daemon. If <literal>true</literal>, <varname>services.emacs.install</varname> is
-        considered <literal>true</literal>, whatever its value.
+        Whether to enable a user service for the Emacs daemon. Use `emacsclient` to connect to the
+        daemon. If `true`, {var}`services.emacs.install` is
+        considered `true`, whatever its value.
       '';
     };
 
-    install = mkOption {
-      type = types.bool;
+    install = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to install a user service for the Emacs daemon. Once
@@ -58,46 +40,58 @@ in
 
         The service must be manually started for each user with
         "systemctl --user start emacs" or globally through
-        <varname>services.emacs.enable</varname>.
+        {var}`services.emacs.enable`.
       '';
     };
 
+    package = lib.mkPackageOption pkgs "emacs" { };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.emacs;
-      defaultText = literalExpression "pkgs.emacs";
-      description = ''
-        emacs derivation to use.
-      '';
-    };
-
-    defaultEditor = mkOption {
-      type = types.bool;
+    defaultEditor = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         When enabled, configures emacsclient to be the default editor
         using the EDITOR environment variable.
       '';
     };
+
+    startWithGraphical = lib.mkOption {
+      type = lib.types.bool;
+      default = config.services.xserver.enable;
+      defaultText = lib.literalExpression "config.services.xserver.enable";
+      description = ''
+        Start emacs with the graphical session instead of any session. Without this, emacs clients will not be able to create frames in the graphical session.
+      '';
+    };
   };
 
-  config = mkIf (cfg.enable || cfg.install) {
-    systemd.user.services.emacs = {
-      description = "Emacs: the extensible, self-documenting text editor";
+  config = lib.mkIf (cfg.enable || cfg.install) {
+    systemd.user.services.emacs =
+      {
+        description = "Emacs: the extensible, self-documenting text editor";
 
-      serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.bash}/bin/bash -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --daemon'";
-        ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
-        Restart = "always";
+        serviceConfig = {
+          Type = "notify";
+          ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
+          ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
+          Restart = "always";
+        };
+
+        unitConfig = lib.optionalAttrs cfg.startWithGraphical {
+          After = "graphical-session.target";
+        };
+      }
+      // lib.optionalAttrs cfg.enable {
+        wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
       };
-    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
 
-    environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
+    environment.systemPackages = [
+      cfg.package
+      editorScript
+    ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
+    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
   };
 
-  meta.doc = ./emacs.xml;
+  meta.doc = ./emacs.md;
 }

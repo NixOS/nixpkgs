@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.services.mjpg-streamer;
 
-in {
+in
+{
 
   options = {
 
@@ -26,7 +32,7 @@ in {
         type = types.str;
         default = "output_http.so -w @www@ -n -p 5050";
         description = ''
-          Output plugin. <literal>@www@</literal> is substituted for default mjpg-streamer www directory.
+          Output plugin. `@www@` is substituted for default mjpg-streamer www directory.
           See plugins documentation for more information.
         '';
       };

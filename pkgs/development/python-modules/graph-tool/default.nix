@@ -1,56 +1,92 @@
-{ fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook
-, pkg-config, boost, expat, scipy, cgal, gmp, mpfr
-, gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
-, buildPythonPackage
-, lib
+{
+  buildPythonPackage,
+  lib,
+  fetchurl,
+  stdenv,
+
+  boost,
+  cairomm,
+  cgal,
+  expat,
+  gmp,
+  gobject-introspection,
+  gtk3,
+  llvmPackages,
+  matplotlib,
+  mpfr,
+  numpy,
+  pkg-config,
+  pycairo,
+  pygobject3,
+  python,
+  scipy,
+  sparsehash,
+  gitUpdater,
 }:
 
+let
+  boost' = boost.override {
+    enablePython = true;
+    inherit python;
+  };
+in
 buildPythonPackage rec {
   pname = "graph-tool";
+  version = "2.80";
   format = "other";
-  version = "2.43";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-XxvuCUIgz7JIaNsPr0f44v/Sb3fdcJmVhC5NnomNqGw=";
+    hash = "sha256-wacOB12+co+tJdw/WpqVl4gKbW/2hDW5HSHwtE742+Y=";
   };
+
+  postPatch = ''
+    # remove error messages about tput during build process without adding ncurses
+    substituteInPlace configure \
+      --replace-fail 'tput setaf $1' : \
+      --replace-fail 'tput sgr0' :
+  '';
 
   configureFlags = [
     "--with-python-module-path=$(out)/${python.sitePackages}"
-    "--with-boost-libdir=${boost}/lib"
-    "--with-expat=${expat}"
+    "--with-boost-libdir=${boost'}/lib"
     "--with-cgal=${cgal}"
-    "--enable-openmp"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ ncurses ];
+  enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
-    boost
+  build-system = [ pkg-config ];
+
+  # https://graph-tool.skewed.de/installation.html#manual-compilation
+  dependencies = [
+    boost'
+    cairomm
     cgal
     expat
     gmp
-    mpfr
-    python
-    scipy
-    # optional
-    sparsehash
-    # drawing
-    cairomm
     gobject-introspection
     gtk3
-    pycairo
     matplotlib
+    mpfr
+    numpy
+    pycairo
     pygobject3
-  ];
+    scipy
+    sparsehash
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
-  enableParallelBuilding = false;
+  pythonImportsCheck = [ "graph_tool" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    url = "https://git.skewed.de/count0/graph-tool";
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = "https://graph-tool.skewed.de/";
-    license     = licenses.gpl3;
-    maintainers = [ maintainers.joelmo ];
+    homepage = "https://graph-tool.skewed.de";
+    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.mjoerg ];
   };
 }

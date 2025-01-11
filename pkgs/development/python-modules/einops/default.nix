@@ -1,56 +1,59 @@
-{ lib
-, buildPythonPackage
-, chainer
-, fetchFromGitHub
-, jupyter
-, keras
-  #, mxnet
-, nbconvert
-, nbformat
-, nose
-, numpy
-, parameterized
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  hatchling,
+  jupyter,
+  nbconvert,
+  numpy,
+  parameterized,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-n4R4lcRimuOncisCTs2zJWPlqZ+W2yPkvkWAnx4R91s=";
+    tag = "v${version}";
+    hash = "sha256-6x9AttvSvgYrHaS5ESKOwyEnXxD2BitYTGtqqSKur+0=";
   };
 
-  checkInputs = [
-    chainer
+  patches = [
+    # https://github.com/arogozhnikov/einops/pull/325
+    (fetchpatch2 {
+      name = "numpy_2-compatibility.patch";
+      url = "https://github.com/arogozhnikov/einops/commit/11680b457ce2216d9827330d0b794565946847d7.patch";
+      hash = "sha256-OKWp319ClYarNrek7TdRHt+NKTOEfBdJaV0U/6vLeMc=";
+    })
+  ];
+
+  nativeBuildInputs = [ hatchling ];
+
+  nativeCheckInputs = [
     jupyter
-    keras
-    # mxnet (has issues with some CPUs, segfault)
     nbconvert
-    nbformat
-    nose
     numpy
     parameterized
+    pillow
     pytestCheckHook
   ];
 
-  # No CUDA in sandbox
-  EINOPS_SKIP_CUPY = 1;
+  env.EINOPS_TEST_BACKENDS = "numpy";
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "einops"
-  ];
+  pythonImportsCheck = [ "einops" ];
 
   disabledTests = [
     # Tests are failing as mxnet is not pulled-in
@@ -60,9 +63,9 @@ buildPythonPackage rec {
     "test_backends_installed"
   ];
 
-  disabledTestPaths = [
-    "tests/test_layers.py"
-  ];
+  disabledTestPaths = [ "tests/test_layers.py" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Flexible and powerful tensor operations for readable and reliable code";
@@ -71,4 +74,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ yl3dy ];
   };
 }
-

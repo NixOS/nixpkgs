@@ -1,34 +1,64 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, which, sedlex, easy-format, xmlm, base64 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  which,
+  sedlex,
+  easy-format,
+  xmlm,
+  base64,
+}:
 
-stdenv.mkDerivation rec {
-  version = "0.6.15";
-  pname = "piqi";
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "piqi is not available for OCaml ${ocaml.version}"
 
-  src = fetchFromGitHub {
-    owner = "alavrik";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0v04hs85xv6d4ysqxyv1dik34dx49yab9shpi4x7iv19qlzl7csb";
-  };
+  stdenv.mkDerivation
+  rec {
+    version = "0.6.16";
+    pname = "piqi";
+    name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  nativeBuildInputs = [ ocaml findlib which ];
-  propagatedBuildInputs = [ sedlex xmlm easy-format base64 ];
+    src = fetchFromGitHub {
+      owner = "alavrik";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "sha256-qE+yybTn+kzbY0h8udhZYO+GwQPI/J/6p3LMmF12cFU=";
+    };
 
-  strictDeps = true;
+    nativeBuildInputs = [
+      ocaml
+      findlib
+      which
+    ];
+    propagatedBuildInputs = [
+      sedlex
+      xmlm
+      easy-format
+      base64
+    ];
 
-  patches = [ ./no-ocamlpath-override.patch ];
+    strictDeps = true;
 
-  createFindlibDestdir = true;
+    patches = [
+      ./no-stream.patch
+      ./no-ocamlpath-override.patch
+    ];
 
-  postBuild = "make -C piqilib piqilib.cma";
+    createFindlibDestdir = true;
 
-  installTargets = [ "install" "ocaml-install" ];
+    postBuild = "make -C piqilib piqilib.cma";
 
-  meta = with lib; {
-    homepage = "https://piqi.org";
-    description = "Universal schema language and a collection of tools built around it";
-    license = licenses.asl20;
-    maintainers = [ maintainers.maurer ];
-  };
-}
+    installTargets = [
+      "install"
+      "ocaml-install"
+    ];
+
+    meta = with lib; {
+      homepage = "https://piqi.org";
+      description = "Universal schema language and a collection of tools built around it";
+      license = licenses.asl20;
+      maintainers = [ maintainers.maurer ];
+    };
+  }

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gx";
@@ -11,14 +15,18 @@ buildGoModule rec {
     sha256 = "sha256-jGtUsb2gm8dN45wniD+PYoUlk8m1ssrfj1a7PPYEYuo=";
   };
 
-  vendorSha256 = "sha256-6tdVpMztaBjoQRVG2vaUWuvnPq05zjbNAX9HBiC50t0=";
+  vendorHash = "sha256-6tdVpMztaBjoQRVG2vaUWuvnPq05zjbNAX9HBiC50t0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
-    description = "A packaging tool built around IPFS";
+    description = "Packaging tool built around IPFS";
     homepage = "https://github.com/whyrusleeping/gx";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
+    mainProgram = "gx";
   };
 }

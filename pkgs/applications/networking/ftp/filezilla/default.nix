@@ -11,34 +11,33 @@
 , pugixml
 , sqlite
 , tinyxml
-, wrapGAppsHook
-, wxGTK30-gtk3
+, boost
+, wrapGAppsHook3
+, wxGTK32
+, gtk3
 , xdg-utils
+, CoreServices
+, Security
 }:
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.58.0";
+  version = "3.67.0";
 
   src = fetchurl {
-    url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "sha256-0P5/cuAfd0K6oGRmgYsYbo6R//Ytbuey8OiEtrM4XYg=";
+    url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.xz";
+    hash = "sha256-5drcgH25mc60ZJhPl00+9ZtWLFlUZlgFfpsgEYOtr5o=";
   };
-
-  # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
-  postPatch = ''
-    sed -i src/interface/Mainfrm.h \
-      -e '/^#define/a #include <list>'
-  '';
 
   configureFlags = [
     "--disable-manualupdatecheck"
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
+    boost
     dbus
     gettext
     gnutls
@@ -48,10 +47,10 @@ stdenv.mkDerivation rec {
     pugixml
     sqlite
     tinyxml
-    wxGTK30-gtk3
-    wxGTK30-gtk3.gtk
+    wxGTK32
+    gtk3
     xdg-utils
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
   enableParallelBuilding = true;
 

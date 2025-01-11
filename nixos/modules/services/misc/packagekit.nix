@@ -1,26 +1,37 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.packagekit;
 
   inherit (lib)
-    mkEnableOption mkOption mkIf mkRemovedOptionModule types
-    listToAttrs recursiveUpdate;
+    mkEnableOption
+    mkOption
+    mkIf
+    mkRemovedOptionModule
+    types
+    listToAttrs
+    recursiveUpdate
+    ;
 
   iniFmt = pkgs.formats.ini { };
 
   confFiles = [
-    (iniFmt.generate "PackageKit.conf" (recursiveUpdate
-      {
+    (iniFmt.generate "PackageKit.conf" (
+      recursiveUpdate {
         Daemon = {
-          DefaultBackend = "nix";
+          DefaultBackend = "test_nop";
           KeepCache = false;
         };
-      }
-      cfg.settings))
+      } cfg.settings
+    ))
 
-    (iniFmt.generate "Vendor.conf" (recursiveUpdate
-      {
+    (iniFmt.generate "Vendor.conf" (
+      recursiveUpdate {
         PackagesNotFound = rec {
           DefaultUrl = "https://github.com/NixOS/nixpkgs";
           CodecUrl = DefaultUrl;
@@ -28,21 +39,25 @@ let
           FontUrl = DefaultUrl;
           MimeUrl = DefaultUrl;
         };
-      }
-      cfg.vendorSettings))
+      } cfg.vendorSettings
+    ))
   ];
 
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to Nix.")
+    (mkRemovedOptionModule [
+      "services"
+      "packagekit"
+      "backend"
+    ] "Always set to test_nop, Nix backend is broken see #177946.")
   ];
 
   options.services.packagekit = {
     enable = mkEnableOption ''
-      PackageKit provides a cross-platform D-Bus abstraction layer for
+      PackageKit, a cross-platform D-Bus abstraction layer for
       installing software. Software utilizing PackageKit can install
-      software regardless of the package manager.
+      software regardless of the package manager
     '';
 
     settings = mkOption {
@@ -66,9 +81,8 @@ in
 
     systemd.packages = with pkgs; [ packagekit ];
 
-    environment.etc = listToAttrs (map
-      (e:
-        lib.nameValuePair "PackageKit/${e.name}" { source = e; })
-      confFiles);
+    environment.etc = listToAttrs (
+      map (e: lib.nameValuePair "PackageKit/${e.name}" { source = e; }) confFiles
+    );
   };
 }

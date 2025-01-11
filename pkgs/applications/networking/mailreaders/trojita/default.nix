@@ -1,24 +1,23 @@
-{ akonadi-contacts
-, cmake
-, fetchgit
-, fetchsvn
-, gnupg
-, gpgme
-, kcontacts
-, kf5gpgmepp
-, lib
-, libsecret
-, mimetic
-, mkDerivation
-, pkg-config
-, qgpgme
-, qtbase
-, qtkeychain
-, qttools
-, qtwebkit
-, qttranslations
-, substituteAll
-, withI18n ? false
+{
+  akonadi-contacts,
+  cmake,
+  fetchFromGitLab,
+  fetchsvn,
+  gnupg,
+  gpgme,
+  kcontacts,
+  kf5gpgmepp,
+  lib,
+  libsecret,
+  mimetic,
+  mkDerivation,
+  pkg-config,
+  qgpgme,
+  qtbase,
+  qtkeychain,
+  qttools,
+  qtwebkit,
+  withI18n ? false,
 }:
 
 let
@@ -27,21 +26,18 @@ let
     rev = "1566642";
     sha256 = "0y45fjib153za085la3hqpryycx33dkj3cz8kwzn2w31kvldfl1q";
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "trojita";
-  version = "unstable-2020-07-06";
+  version = "unstable-2022-08-22";
 
-  src = fetchgit {
-    url = "https://anongit.kde.org/trojita.git";
-    rev = "e973a5169f18ca862ceb8ad749c93cd621d86e14";
-    sha256 = "0r8nmlqwgsqkk0k8xh32fkwvv6iylj35xq2h8b7l3g03yc342kbn";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "pim";
+    repo = "trojita";
+    rev = "91087933c5e7a03a8097c0ffe5f7289abcfc123b";
+    sha256 = "sha256-15G9YjT3qBKbeOKfb/IgXOO+DaJaTULP9NJn/MFYZS8=";
   };
-
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.patch;
-    inherit qttranslations;
-  });
 
   buildInputs = [
     akonadi-contacts
@@ -64,18 +60,22 @@ in mkDerivation rec {
     gnupg
   ];
 
-  postPatch = "echo ${version} > src/trojita-version"
+  postPatch =
+    "echo ${version} > src/trojita-version"
     + lib.optionalString withI18n ''
-    mkdir -p po
-    for f in `find ${l10n} -name "trojita_common.po"`; do
-      cp $f po/trojita_common_$(echo $f | cut -d/ -f5).po
-    done
-  '';
+      mkdir -p po
+      for f in `find ${l10n} -name "trojita_common.po"`; do
+        cp $f po/trojita_common_$(echo $f | cut -d/ -f5).po
+      done
+    '';
 
   meta = with lib; {
-    description = "A Qt IMAP e-mail client";
+    description = "Qt IMAP e-mail client";
     homepage = "http://trojita.flaska.net/";
-    license = with licenses; [ gpl2 gpl3 ];
+    license = with licenses; [
+      gpl2
+      gpl3
+    ];
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };

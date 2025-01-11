@@ -1,39 +1,66 @@
-{ lib, stdenv, fetchurl, zlib, apngSupport ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  apngSupport ? true,
+  testers,
+}:
 
 assert zlib != null;
 
 let
-  patchVersion = "1.6.37";
+  patchVersion = "1.6.43";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
-    sha256 = "1dh0250mw9b2hx7cdmnb2blk7ddl49n6vx8zz7jdmiwxy38v4fw2";
+    hash = "sha256-0QdXnpDVU4bQDmCG6nUJQvIqBLmrR2u6DGYHcM76/iI=";
   };
   whenPatched = lib.optionalString apngSupport;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.37";
+  version = "1.6.43";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
-    sha256 = "1jl8in381z0128vgxnvn33nln6hzckl7l7j9nqvkaf1m9n1p0pjh";
+    url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
+    hash = "sha256-alygZSOSotfJ2yrltAIQhDwLvAgcvUEIJasAzFnxSmw=";
   };
-  postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
+  postPatch =
+    whenPatched "gunzip < ${patch_src} | patch -Np1"
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
 
-  outputs = [ "out" "dev" "man" ];
+      sed -i 1i'int feenableexcept(int __mask);' contrib/libtests/pngvalid.c
+    '';
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   outputBin = "dev";
 
   propagatedBuildInputs = [ zlib ];
 
   doCheck = true;
 
-  passthru = { inherit zlib; };
+  passthru = {
+    inherit zlib;
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
-    description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
+    description =
+      "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
+    changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
     license = licenses.libpng2;
+    pkgConfigModules = [
+      "libpng"
+      "libpng16"
+    ];
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ vcunat ];
   };
-}
+})

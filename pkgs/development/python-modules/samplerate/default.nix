@@ -1,38 +1,73 @@
-{ lib
-, buildPythonPackage
-, numpy
-, pkgs
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  setuptools,
+  setuptools-scm,
+  pybind11,
+
+  # dependencies
+  cffi,
+  numpy,
+
+  # native dependencies
+  libsamplerate,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
-  pname = "scikits.samplerate";
-  version = "0.3.3";
+buildPythonPackage rec {
+  pname = "samplerate";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "cournape";
-    repo = "samplerate";
-    rev = "a536c97eb2d6195b5f266ea3cc3a35364c4c2210";
-    sha256 = "sha256-7x03Q6VXfP9p8HCk15IDZ9HeqTyi5F1AlGX/otdh8VU=";
+    owner = "tuxu";
+    repo = "python-samplerate";
+    tag = "v${version}";
+    hash = "sha256-/9NFJcn8R0DFjVhFAIYOtzZM90hjVIfsVXFlS0nHNhA=";
   };
 
-  buildInputs =  [ pkgs.libsamplerate ];
-  propagatedBuildInputs = [ numpy ];
-
-  preConfigure = ''
-     cat > site.cfg << END
-     [samplerate]
-     library_dirs=${pkgs.libsamplerate.out}/lib
-     include_dirs=${pkgs.libsamplerate.dev}/include
-     END
+  postPatch = ''
+    # unvendor pybind11, libsamplerate
+    rm -r external
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "add_subdirectory(external)" "find_package(pybind11 REQUIRED)"
   '';
 
-  doCheck = false;
+  build-system = [
+    cmake
+    setuptools
+    setuptools-scm
+    pybind11
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [ libsamplerate ];
+
+  propagatedBuildInputs = [
+    cffi
+    numpy
+  ];
+
+  pythonImportsCheck = [ "samplerate" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf samplerate
+  '';
 
   meta = with lib; {
-    homepage = "https://github.com/cournape/samplerate";
-    description = "High quality sampling rate convertion from audio data in numpy arrays";
-    license = licenses.gpl2;
+    description = "Python bindings for libsamplerate based on CFFI and NumPy";
+    homepage = "https://github.com/tuxu/python-samplerate";
+    changelog = "https://github.com/tuxu/python-samplerate/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
   };
-
 }

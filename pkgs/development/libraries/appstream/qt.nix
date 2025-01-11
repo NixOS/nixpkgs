@@ -1,31 +1,50 @@
-{ lib, mkDerivation, appstream, qtbase, qttools, nixosTests }:
+{
+  lib,
+  stdenv,
+  appstream,
+  qtbase,
+  qttools,
+  nixosTests,
+}:
 
 # TODO: look into using the libraries from the regular appstream derivation as we keep duplicates here
 
-mkDerivation {
+let
+  qtSuffix = lib.optionalString (lib.versions.major qtbase.version == "5") "5";
+in
+stdenv.mkDerivation {
   pname = "appstream-qt";
   inherit (appstream) version src;
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
-  buildInputs = appstream.buildInputs ++ [ appstream qtbase ];
+  buildInputs = appstream.buildInputs ++ [
+    appstream
+    qtbase
+  ];
 
   nativeBuildInputs = appstream.nativeBuildInputs ++ [ qttools ];
 
-  mesonFlags = appstream.mesonFlags ++ [ "-Dqt=true" ];
-
-  patches = (appstream.patches or []) ++ lib.optionals (lib.versionOlder qtbase.version "5.14") [
-    # Fix darwin build for libsForQt5.appstream-qt
-    # Old Qt moc doesn't know about fancy C++14 features
-    # ../qt/component.h:93: Parse error at "UrlTranslate"
-    # Remove both this patch and related comment in default.nix
-    # once Qt 5.14 or later becomes default on darwin
-    ./fix-build-for-qt-olderthan-514.patch
+  mesonFlags = appstream.mesonFlags ++ [
+    (lib.mesonBool "qt" true)
+    (lib.mesonOption "qt-versions" (lib.versions.major qtbase.version))
   ];
 
+  patches = appstream.patches;
+
+  dontWrapQtApps = true;
+
+  # AppStreamQt tries to be relocatable, in hacky cmake ways that generally fail
+  # horribly on NixOS. Just hardcode the paths.
   postFixup = ''
-    sed -i "$dev/lib/cmake/AppStreamQt/AppStreamQtConfig.cmake" \
+    sed -i "$dev/lib/cmake/AppStreamQt${qtSuffix}/AppStreamQt${qtSuffix}Config.cmake" \
       -e "/INTERFACE_INCLUDE_DIRECTORIES/ s@\''${PACKAGE_PREFIX_DIR}@$dev@"
+    sed -i "$dev/lib/cmake/AppStreamQt${qtSuffix}/AppStreamQt${qtSuffix}Config.cmake" \
+      -e "/IMPORTED_LOCATION/ s@\''${PACKAGE_PREFIX_DIR}@$out@"
   '';
 
   passthru = appstream.passthru // {
@@ -36,5 +55,5 @@ mkDerivation {
 
   meta = appstream.meta // {
     description = "Software metadata handling library - Qt";
- };
+  };
 }

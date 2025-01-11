@@ -1,73 +1,88 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, wrapGAppsHook
-, gdk-pixbuf
-, gobject-introspection
-, imagemagick
-, librsvg
-, pango
-, webkitgtk
-# Python libs
-, protonvpn-nm-lib
-, psutil
-# Optionals
-, withIndicator ? true
-, libappindicator-gtk3 }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  wrapGAppsHook3,
+  dbus-python,
+  packaging,
+  proton-core,
+  proton-keyring-linux,
+  proton-vpn-api-core,
+  proton-vpn-local-agent,
+  proton-vpn-network-manager,
+  pycairo,
+  pygobject3,
+  withIndicator ? true,
+  libappindicator-gtk3,
+  libayatana-appindicator,
+}:
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "1.10.0";
+  version = "4.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
-    repo = "linux-app";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-6IRkJKtdQQ9Yixb9CkT3tGNY0MYFZyvz1/6buZo5eYU=";
+    repo = "proton-vpn-gtk-app";
+    tag = "v${version}";
+    hash = "sha256-kNWwrNpXCkAPvXXqv8HwOx0msYEVsO0JgrtG3wUVmQ4=";
   };
 
   nativeBuildInputs = [
-    gdk-pixbuf
+    # Needed for the NM namespace
     gobject-introspection
-    imagemagick
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = [
-    protonvpn-nm-lib
-    psutil
+  buildInputs = lib.optionals withIndicator [
+    # Adds AppIndicator3 namespace
+    libappindicator-gtk3
+    # Adds AyatanaAppIndicator3 namespace
+    libayatana-appindicator
   ];
 
-  buildInputs = [
-    # To avoid enabling strictDeps = false (#56943)
-    gobject-introspection
-    librsvg
-    pango
-    webkitgtk
-  ] ++ lib.optionals withIndicator [ libappindicator-gtk3 ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    dbus-python
+    packaging
+    proton-core
+    proton-keyring-linux
+    proton-vpn-api-core
+    proton-vpn-local-agent
+    proton-vpn-network-manager
+    pycairo
+    pygobject3
+  ];
 
   postInstall = ''
-    # Setting icons
-    for size in 16 32 48 64 72 96 128 192 512 1024; do
-      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize $size'x'$size \
-        protonvpn_gui/assets/icons/protonvpn-logo.png \
-        $out/share/icons/hicolor/$size'x'$size/apps/protonvpn.png
-    done
-
-    install -Dm644 protonvpn.desktop -t $out/share/applications/
-    substituteInPlace $out/share/applications/protonvpn.desktop \
-      --replace 'protonvpn-logo' protonvpn
+    mkdir -p $out/share/{applications,pixmaps}
+    install -Dm 644 ${src}/rpmbuild/SOURCES/protonvpn-app.desktop $out/share/applications
+    install -Dm 644 ${src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
   '';
 
-  # Project has a dummy test
+  preCheck = ''
+    # Needed for Permission denied: '/homeless-shelter'
+    export HOME=$(mktemp -d)
+  '';
+
+  # Gets a segmentation fault after the widgets test
   doCheck = false;
 
-  meta = with lib; {
-    description = "Official ProtonVPN Linux app";
-    homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ wolfangaukang ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+  meta = {
+    description = "Proton VPN GTK app for Linux";
+    homepage = "https://github.com/ProtonVPN/proton-vpn-gtk-app";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    mainProgram = "protonvpn-app";
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

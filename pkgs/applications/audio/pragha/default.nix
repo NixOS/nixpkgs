@@ -22,7 +22,7 @@
 , libcdio-paranoia, withCD ? true
 , keybinder3, withKeybinder ? false
 , libnotify, withLibnotify ? false
-, libsoup, withLibsoup ? false
+, libsoup_2_4, withLibsoup ? false
 , libgudev, withGudev ? false # experimental
 , libmtp, withMtp ? false # experimental
 , xfce, withXfce4ui ? false
@@ -73,7 +73,7 @@ mkDerivation rec {
   ++ lib.optional withLibnotify libnotify
   ++ lib.optional withLastfm liblastfmSF
   ++ lib.optional withGlyr glyr
-  ++ lib.optional withLibsoup libsoup
+  ++ lib.optional withLibsoup libsoup_2_4
   ++ lib.optional withMtp libmtp
   ++ lib.optional withXfce4ui xfce.libxfce4ui
   ++ lib.optional withTotemPlParser totem-pl-parser
@@ -83,7 +83,7 @@ mkDerivation rec {
 
   CFLAGS = [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
 
-  NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
 
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
@@ -94,7 +94,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A lightweight GTK+ music manager - fork of Consonance Music Manager";
+    description = "Lightweight GTK+ music manager - fork of Consonance Music Manager";
+    mainProgram = "pragha";
     homepage = "https://pragha-music-player.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mbaeten ];

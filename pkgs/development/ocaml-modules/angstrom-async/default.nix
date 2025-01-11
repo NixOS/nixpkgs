@@ -1,13 +1,21 @@
-{ lib, fetchFromGitHub, buildDunePackage, angstrom, async }:
+{
+  lib,
+  buildDunePackage,
+  angstrom,
+  async,
+}:
 
 buildDunePackage rec {
   pname = "angstrom-async";
 
-  inherit (angstrom) version useDune2 src;
+  inherit (angstrom) version src;
 
-  minimumOCamlVersion = "4.04.1";
+  minimalOCamlVersion = "4.04.1";
 
-  propagatedBuildInputs = [ angstrom async ];
+  propagatedBuildInputs = [
+    angstrom
+    async
+  ];
 
   doCheck = true;
 

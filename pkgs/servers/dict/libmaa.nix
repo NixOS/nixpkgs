@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
@@ -12,11 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool ];
   # configureFlags = [ "--datadir=/run/current-system/share/dictd" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   meta = with lib; {
-    description = "Dict protocol server and client";
-    maintainers = [ ];
-    platforms = platforms.linux;
+    description = "Provides many low-level data structures which are helpful for writing compilers";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

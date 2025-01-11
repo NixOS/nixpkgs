@@ -1,32 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, pkg-config
-, xz
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  elfutils,
+  makeBinaryWrapper,
+  pkg-config,
+  xz,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pwninit";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "io12";
     repo = "pwninit";
     rev = version;
-    sha256 = "sha256-XKDYJH2SG3TkwL+FN6rXDap8la07icR0GPFiYcnOHeI=";
+    sha256 = "sha256-tbZS7PdRFvO2ifoHA/w3cSPfqqHrLeLHAg6V8oG9gVE=";
   };
 
-  buildInputs = [ openssl xz ] ++ lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    openssl
+    xz
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
+  postInstall = ''
+    wrapProgram $out/bin/pwninit \
+      --prefix PATH : "${lib.getBin elfutils}/bin"
+  '';
   doCheck = false; # there are no tests to run
 
-  cargoSha256 = "sha256-2HCHiU309hbdwohUKVT3TEfGvOfxQWtEGj7FIS8OS7s=";
+  cargoHash = "sha256-J2uQoqStBl+qItaXWi17H/IailZ7P4YzhLNs17BY92Q=";
 
   meta = {
     description = "Automate starting binary exploit challenges";
+    mainProgram = "pwninit";
     homepage = "https://github.com/io12/pwninit";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.scoder12 ];

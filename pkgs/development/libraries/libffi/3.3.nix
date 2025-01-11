@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
-, dejagnu
+  doCheck ? true, # test suite depends on dejagnu which cannot be used during bootstrapping
+  dejagnu,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +16,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
   };
 
-  patches = [];
+  patches = [ ];
 
-  outputs = [ "out" "dev" "man" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "info"
+  ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
@@ -29,6 +36,9 @@ stdenv.mkDerivation rec {
     "--disable-exec-static-tramp"
   ];
 
+  # with fortify3, tests fail for some reason
+  hardeningDisable = [ "fortify3" ];
+
   preCheck = ''
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
@@ -38,10 +48,10 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   meta = with lib; {
-    description = "A foreign function call interface library";
+    description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a
@@ -60,5 +70,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ armeenm ];
     platforms = platforms.all;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

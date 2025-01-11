@@ -8,7 +8,7 @@ It means that if you have SSH access to a machine, no additional setup is needed
 
 ## Interactive mounting {#sec-sshfs-interactive}
 
-In NixOS, SSHFS is packaged as <package>sshfs</package>.
+In NixOS, SSHFS is packaged as `sshfs`.
 Once installed, mounting a directory interactively is simple as running:
 ```ShellSession
 $ sshfs my-user@example.com:/my-dir /mnt/my-dir
@@ -26,8 +26,8 @@ To create a new key without a passphrase you can do:
 ```ShellSession
 $ ssh-keygen -t ed25519 -P '' -f example-key
 Generating public/private ed25519 key pair.
-Your identification has been saved in test-key
-Your public key has been saved in test-key.pub
+Your identification has been saved in example-key
+Your public key has been saved in example-key.pub
 The key fingerprint is:
 SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
 ```
@@ -38,8 +38,6 @@ The file system can be configured in NixOS via the usual [fileSystems](#opt-file
 Here's a typical setup:
 ```nix
 {
-  system.fsPackages = [ pkgs.sshfs ];
-
   fileSystems."/mnt/my-dir" = {
     device = "my-user@example.com:/my-dir/";
     fsType = "sshfs";

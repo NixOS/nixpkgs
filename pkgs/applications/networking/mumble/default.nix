@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, qt5, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, qt5, cmake
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsa-lib, python3
 , rnnoise
@@ -7,16 +7,16 @@
 , flac
 , libogg
 , libvorbis
-, grpcSupport ? false, grpc, which
+, stdenv_32bit
 , iceSupport ? true, zeroc-ice
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
 , pulseSupport ? true, libpulseaudio
-, speechdSupport ? false, speechd
+, speechdSupport ? false, speechd-minimal
 }:
 
 let
-  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
+  generic = overrides: source: (overrides.stdenv or stdenv).mkDerivation (source // overrides // {
     pname = overrides.type;
     version = source.version;
 
@@ -28,6 +28,7 @@ let
 
     cmakeFlags = [
       "-D g15=OFF"
+      "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
     ] ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
@@ -40,7 +41,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ petabyteboy infinisil felixsinger ];
+      maintainers = with maintainers; [ felixsinger lilacious ];
       platforms = platforms.linux;
     };
   });
@@ -52,7 +53,7 @@ let
     buildInputs = [ flac libogg libopus libsndfile libvorbis qt5.qtsvg rnnoise speex ]
       ++ lib.optional (!jackSupport) alsa-lib
       ++ lib.optional jackSupport libjack2
-      ++ lib.optional speechdSupport speechd
+      ++ lib.optional speechdSupport speechd-minimal
       ++ lib.optional pulseSupport libpulseaudio
       ++ lib.optional pipewireSupport pipewire;
 
@@ -61,17 +62,17 @@ let
       "-D bundled-celt=ON"
       "-D bundled-opus=OFF"
       "-D bundled-speex=OFF"
-      "-D bundled-rnnoise=OFF"
       "-D bundle-qt-translations=OFF"
       "-D update=OFF"
       "-D overlay-xcompile=OFF"
       "-D oss=OFF"
+      "-D warnings-as-errors=OFF" # conversion error workaround
     ] ++ lib.optional (!speechdSupport) "-D speechd=OFF"
       ++ lib.optional (!pulseSupport) "-D pulseaudio=OFF"
       ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
       ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
 
-    NIX_CFLAGS_COMPILE = lib.optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
     postFixup = ''
       wrapProgram $out/bin/mumble \
@@ -89,27 +90,45 @@ let
         "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
-      ]
-      ++ lib.optional grpcSupport "-D grpc=ON";
+      ];
 
     buildInputs = [ libcap ]
-      ++ lib.optional iceSupport zeroc-ice
-      ++ lib.optionals grpcSupport [ grpc which ];
+      ++ lib.optional iceSupport zeroc-ice;
+  } source;
+
+  overlay = source: generic {
+    stdenv = stdenv_32bit;
+    type = "mumble-overlay";
+
+    configureFlags = [
+      "-D server=OFF"
+      "-D client=OFF"
+      "-D overlay=ON"
+    ];
   } source;
 
   source = rec {
-    version = "unstable-1.4.231";
+    version = "1.5.634";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "9e0e274d6a9d8a9919267e747d05d0500d150560";
-      sha256 = "0whvb4nlf7gjf2v7wsaq0ir18mshhw5wi8c9q9qz43wnh42nn2qi";
+      rev = "v${version}";
+      hash = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      (fetchpatch {
+        name = "GCC14.patch";
+        url = "https://github.com/mumble-voip/mumble/commit/56945a9dfb62d29dccfe561572ebf64500deaed1.patch";
+        hash = "sha256-Frct9XJ/ZuHPglx+GB9h3vVycR8YY039dStIbfkPPDk=";
+      })
+    ];
   };
 in {
-  mumble  = client source;
-  murmur  = server source;
+  mumble  = lib.recursiveUpdate (client source) {meta.mainProgram = "mumble";};
+  murmur  = lib.recursiveUpdate (server source) {meta.mainProgram = "mumble-server";};
+  overlay = overlay source;
 }

@@ -1,25 +1,37 @@
-{ lib, pytest, fetchFromGitHub, buildPythonPackage, appdirs }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  appdirs,
+  py,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "rply";
-  version = "0.7.7";
+  version = "0.7.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alex";
     repo = "rply";
     rev = "v${version}";
-    sha256 = "1qv37hn7hhxd388znri76g0zjxsbwhxhcaic94dvw9pq4l60vqp6";
+    hash = "sha256-mO/wcIsDIBjoxUsFvzftj5H5ziJijJcoyrUk52fcyE4=";
   };
 
   propagatedBuildInputs = [ appdirs ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test tests
+  nativeCheckInputs = [
+    py
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {
-    description = "A python Lex/Yacc that works with RPython";
+    description = "Python Lex/Yacc that works with RPython";
     homepage = "https://github.com/alex/rply";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nixy ];

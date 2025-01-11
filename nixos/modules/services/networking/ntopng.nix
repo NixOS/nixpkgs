@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -14,19 +20,20 @@ let
     else
       "redis-${cfg.redis.createInstance}.service";
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "ntopng.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "ntopng.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "ntopng.conf" ''
-      ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
-      --http-port=${toString cfg.httpPort}
-      --redis=${cfg.redis.address}
-      --data-dir=/var/lib/ntopng
-      --user=ntopng
-      ${cfg.extraConfig}
-    '';
+      pkgs.writeText "ntopng.conf" ''
+        ${concatStringsSep "\n" (map (e: "--interface=${e}") cfg.interfaces)}
+        --http-port=${toString cfg.httpPort}
+        --redis=${cfg.redis.address}
+        --data-dir=/var/lib/ntopng
+        --user=ntopng
+        ${cfg.extraConfig}
+      '';
 
 in
 
@@ -61,7 +68,10 @@ in
 
       interfaces = mkOption {
         default = [ "any" ];
-        example = [ "eth0" "wlan0" ];
+        example = [
+          "eth0"
+          "wlan0"
+        ];
         type = types.listOf types.str;
         description = ''
           List of interfaces to monitor. Use "any" to monitor all interfaces.
@@ -86,11 +96,11 @@ in
 
       redis.createInstance = mkOption {
         type = types.nullOr types.str;
-        default = if versionAtLeast config.system.stateVersion "22.05" then "ntopng" else "";
+        default = optionalString (versionAtLeast config.system.stateVersion "22.05") "ntopng";
         description = ''
-          Local Redis instance name. Set to <literal>null</literal> to disable
-          local Redis instance. Defaults to <literal>""</literal> for
-          <literal>system.stateVersion</literal> older than 22.05.
+          Local Redis instance name. Set to `null` to disable
+          local Redis instance. Defaults to `""` for
+          `system.stateVersion` older than 22.05.
         '';
       };
 
@@ -114,7 +124,7 @@ in
         description = ''
           Configuration lines that will be appended to the generated ntopng
           configuration file. Note that this mechanism does not work when the
-          manual <option>configText</option> option is used.
+          manual {option}`configText` option is used.
         '';
       };
 
@@ -126,7 +136,8 @@ in
 
     # ntopng uses redis for data storage
     services.ntopng.redis.address =
-      mkIf createRedis config.services.redis.servers.${cfg.redis.createInstance}.unixSocket;
+      mkIf createRedis
+        config.services.redis.servers.${cfg.redis.createInstance}.unixSocket;
 
     services.redis.servers = mkIf createRedis {
       ${cfg.redis.createInstance} = {

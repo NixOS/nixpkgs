@@ -1,30 +1,30 @@
-{ base58
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, morphys
-, pytest-runner
-, pytestCheckHook
-, pythonOlder
-, six
-, varint
+{
+  lib,
+  base58,
+  buildPythonPackage,
+  fetchFromGitHub,
+  morphys,
+  pytestCheckHook,
+  six,
+  varint,
 }:
 
 buildPythonPackage rec {
   pname = "py-multihash";
   version = "2.0.1";
-  disabled = pythonOlder "3.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
+    tag = "v${version}";
+    hash = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner', " ""
+  '';
 
   propagatedBuildInputs = [
     base58
@@ -33,9 +33,7 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multihash" ];
 

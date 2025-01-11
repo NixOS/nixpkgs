@@ -1,49 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  ocaml-ng,
+  zlib,
+  pcre,
+  pcre2,
+  neko,
+  mbedtls_2,
+  Security,
+}:
 let
-  ocamlDependencies = version:
-    if lib.versionAtLeast version "4.2"
-    then with ocaml-ng.ocamlPackages_4_12; [
-      ocaml
-      findlib
-      sedlex
-      xml-light
-      ptmap
-      camlp5
-      sha
-      dune_2
-      luv
-      ocaml_extlib
-    ] else if lib.versionAtLeast version "4.0"
-    then with ocaml-ng.ocamlPackages_4_10; [
-      ocaml
-      findlib
-      sedlex
-      xml-light
-      ptmap
-      camlp5
-      sha
-      dune_2
-      luv
-      ocaml_extlib-1-7-7
-    ] else with ocaml-ng.ocamlPackages_4_05; [
-      ocaml
-      camlp4
-    ];
+  ocamlDependencies =
+    version:
+    if lib.versionAtLeast version "4.3" then
+      with ocaml-ng.ocamlPackages_4_14;
+      [
+        ocaml
+        findlib
+        sedlex
+        xml-light
+        ptmap
+        camlp5
+        sha
+        dune_3
+        luv
+        extlib
+      ]
+    else
+      with ocaml-ng.ocamlPackages_4_10;
+      [
+        ocaml
+        findlib
+        sedlex
+        xml-light
+        ptmap
+        camlp5
+        sha
+        dune_3
+        luv
+        extlib-1-7-7
+      ];
 
   defaultPatch = ''
     substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
       --replace '"neko"' '"${neko}/bin/neko"'
   '';
 
-  generic = { sha256, version, prePatch ? defaultPatch }:
+  generic =
+    {
+      hash,
+      version,
+      prePatch ? defaultPatch,
+    }:
     stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 
-      buildInputs = [ zlib pcre neko ]
-        ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls
-        ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.isDarwin) Security
+      buildInputs =
+        [
+          zlib
+          neko
+        ]
+        ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
+        ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
+        ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.hostPlatform.isDarwin) Security
         ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
@@ -51,12 +73,15 @@ let
         repo = "haxe";
         rev = version;
         fetchSubmodules = true;
-        inherit sha256;
+        inherit hash;
       };
 
       inherit prePatch;
 
-      buildFlags = [ "all" "tools" ];
+      buildFlags = [
+        "all"
+        "tools"
+      ];
 
       installPhase = ''
         install -vd "$out/bin" "$out/lib/haxe/std"
@@ -114,40 +139,31 @@ let
       meta = with lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
-        license = with licenses; [ gpl2Plus mit ]; # based on upstream opam file
-        maintainers = [ maintainers.marcweber maintainers.locallycompact ];
+        license = with licenses; [
+          gpl2Plus
+          mit
+        ]; # based on upstream opam file
+        maintainers = [
+          maintainers.marcweber
+          maintainers.locallycompact
+          maintainers.logo
+          maintainers.bwkam
+        ];
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
-in {
-  # this old version is required to compile some libraries
-  haxe_3_2 = generic {
-    version = "3.2.1";
-    sha256 = "1x9ay5a2llq46fww3k07jxx8h1vfpyxb522snc6702a050ki5vz3";
-    prePatch = ''
-      sed -i -e 's|"/usr/lib/haxe/std/";|"'"$out/lib/haxe/std/"'";\n&|g' main.ml
-      substituteInPlace extra/haxelib_src/src/tools/haxelib/Main.hx \
-        --replace '"neko"' '"${neko}/bin/neko"'
-    '';
-  };
-  haxe_3_4 = generic {
-    version = "3.4.6";
-    sha256 = "1myc4b8fwp0f9vky17wv45n34a583f5sjvajsc93f5gm1wanp4if";
-    prePatch = ''
-      ${defaultPatch}
-      sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
-    '';
-  };
+in
+{
   haxe_4_0 = generic {
     version = "4.0.5";
-    sha256 = "0f534pchdx0m057ixnk07ab4s518ica958pvpd0vfjsrxg5yjkqa";
+    hash = "sha256-Ck/py+tZS7dBu/uikhSLKBRNljpg2h5PARX0Btklozg=";
   };
   haxe_4_1 = generic {
     version = "4.1.5";
-    sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
+    hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
   };
-  haxe_4_2 = generic {
-    version = "4.2.1";
-    sha256 = "sha256-0j6M21dh8DB1gC/bPYNJrVuDbJyqQbP+61ItO5RBUcA=";
+  haxe_4_3 = generic {
+    version = "4.3.6";
+    hash = "sha256-m/A0xxB3fw+syPmH1GPKKCcj0a2G/HMRKOu+FKrO5jQ=";
   };
 }

@@ -1,20 +1,33 @@
-{ buildPecl, lib }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+}:
 
+let
+  version = "3.4.1";
+in
 buildPecl {
+  inherit version;
+
   pname = "xdebug";
 
-  version = "3.1.4";
-  sha256 = "sha256-QZWSb59sToAv90m7LKhaxQY2cZpy5TieNy4171I1Bfk=";
+  src = fetchFromGitHub {
+    owner = "xdebug";
+    repo = "xdebug";
+    rev = version;
+    hash = "sha256-yOqVS58bsFXGhdkQ20LK0E80bV7O2r/BE76CfBoeEqA=";
+  };
 
   doCheck = true;
-  checkTarget = "test";
 
   zendExtension = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/xdebug/xdebug/releases/tag/${version}";
     description = "Provides functions for function traces and profiling";
-    license = licenses.php301;
     homepage = "https://xdebug.org/";
-    maintainers = teams.php.members;
+    license = lib.licenses.php301;
+    maintainers = lib.teams.php.members;
   };
 }

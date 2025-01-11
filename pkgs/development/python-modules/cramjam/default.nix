@@ -1,53 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, libiconv
-, brotli
-, lz4
-, memory_profiler
-, numpy
-, pytest-benchmark
-, pytestCheckHook
-, python-snappy
-, zstd
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  libiconv,
+  hypothesis,
+  numpy,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "pyrus-cramjam";
-    rev = "v${version}";
-    sha256 = "sha256-00KvbiTf8PxYWljLKTRZmPIAbb+PnBleDM4p0AzZhHw=";
+    tag = "v${version}";
+    hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sha256 = "sha256-4y/jeEZjVUbaXtBx5l3Hrbnj3iNYX089K4xexRP+5v0=";
+    hash = "sha256-Bp7EtyuLdLUfU3yvouNVE42klfqYt9QOwt+iGe521yI=";
   };
+
+  buildAndTestSubdir = "cramjam-python";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  checkInputs = [
-    brotli
-    lz4
-    memory_profiler
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+
+  nativeCheckInputs = [
+    hypothesis
     numpy
-    pytest-benchmark
+    pytest-xdist
     pytestCheckHook
-    python-snappy
-    zstd
   ];
-  pytestFlagsArray = [ "--benchmark-disable" ];
+
+  pytestFlagsArray = [ "cramjam-python/tests" ];
+
+  disabledTestPaths = [
+    "cramjam-python/benchmarks/test_bench.py"
+    # test_variants.py appears to be flaky
+    #
+    # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
+    "cramjam-python/tests/test_variants.py"
+  ];
+
   pythonImportsCheck = [ "cramjam" ];
 
   meta = with lib; {

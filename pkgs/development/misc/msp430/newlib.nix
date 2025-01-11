@@ -1,4 +1,9 @@
-{ stdenvNoCC, lndir, newlib, msp430GccSupport }:
+{
+  stdenvNoCC,
+  xorg,
+  newlib,
+  msp430GccSupport,
+}:
 
 stdenvNoCC.mkDerivation {
   name = "msp430-${newlib.name}";
@@ -10,9 +15,9 @@ stdenvNoCC.mkDerivation {
 
   buildCommand = ''
     mkdir $out
-    ${lndir}/bin/lndir -silent $newlib $out
-    ${lndir}/bin/lndir -silent $msp430GccSupport/include $out/${newlib.incdir}
-    ${lndir}/bin/lndir -silent $msp430GccSupport/lib $out/${newlib.libdir}
+    ${xorg.lndir}/bin/lndir -silent $newlib $out
+    ${xorg.lndir}/bin/lndir -silent $msp430GccSupport/include $out/${newlib.incdir}
+    ${xorg.lndir}/bin/lndir -silent $msp430GccSupport/lib $out/${newlib.libdir}
   '';
 
   passthru = {

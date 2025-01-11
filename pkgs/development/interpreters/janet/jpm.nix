@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, janet }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  janet,
+}:
 
 let
   platformFiles = {
@@ -13,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jpm";
-  version = "0.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-nv+vkDjEY711L+C5ibw48DUSNqq2UJiFC2i5LntuBNM=";
+    rev = "v${version}";
+    sha256 = "sha256-lPB4jew6RkJlDp8xOQ4YA9MkgLBImaBHcvv4WF/sLRc=";
   };
 
   # `auto-shebangs true` gives us a shebang line that points to janet inside the
@@ -54,6 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = janet.meta // {
     description = "Janet Project Manager for the Janet programming language";
+    mainProgram = "jpm";
     platforms = lib.attrNames platformFiles;
   };
 }

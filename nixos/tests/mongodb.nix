@@ -1,6 +1,7 @@
 # This test start mongodb, runs a query using mongo shell
 
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
   let
     testQuery = pkgs.writeScript "nixtest.js" ''
       db.greetings.insert({ "greeting": "hello" });
@@ -24,35 +25,35 @@ import ./make-test-python.nix ({ pkgs, ... }:
       node.wait_for_closed_port(27017)
     '';
 
-  in {
+  in
+  {
     name = "mongodb";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ bluescreen303 offline cstrahan rvl phile314 ];
+      maintainers = [
+        bluescreen303
+        offline
+        phile314
+      ];
     };
 
     nodes = {
-      node = {...}: {
-        environment.systemPackages = with pkgs; [
-          mongodb-3_4
-          mongodb-3_6
-          mongodb-4_0
-          mongodb-4_2
-          mongodb-4_4
-          mongodb-5_0
-        ];
-      };
+      node =
+        { ... }:
+        {
+          environment.systemPackages = with pkgs; [
+            # remember to update mongodb.passthru.tests if you change this
+            mongodb-7_0
+          ];
+        };
     };
 
-    testScript = ''
-      node.start()
-    ''
-      + runMongoDBTest pkgs.mongodb-3_4
-      + runMongoDBTest pkgs.mongodb-3_6
-      + runMongoDBTest pkgs.mongodb-4_0
-      + runMongoDBTest pkgs.mongodb-4_2
-      + runMongoDBTest pkgs.mongodb-4_4
-      + runMongoDBTest pkgs.mongodb-5_0
+    testScript =
+      ''
+        node.start()
+      ''
+      + runMongoDBTest pkgs.mongodb-7_0
       + ''
         node.shutdown()
       '';
-  })
+  }
+)

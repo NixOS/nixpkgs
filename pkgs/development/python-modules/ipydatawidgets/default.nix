@@ -1,31 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, pytest-cov
-, nbval
-, jupyter-packaging
-, ipywidgets
-, numpy
-, six
-, traittypes
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytestCheckHook,
+  nbval,
+  jupyter-packaging,
+  ipywidgets,
+  numpy,
+  six,
+  traittypes,
 }:
 
 buildPythonPackage rec {
   pname = "ipydatawidgets";
-  version = "4.2.0";
+  version = "4.3.5";
+  format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0e4b58b59b508165e8562b8f5d1dbfcd739855847ec0477bd9185a5e9b7c5bc";
+    hash = "sha256-OU8kiVdlh8/XVTd6CaBn9GytIggZZQkgIf0avL54Uqg=";
   };
 
-  nativeBuildInputs = [
-    jupyter-packaging
-  ];
+  nativeBuildInputs = [ jupyter-packaging ];
 
   setupPyBuildFlags = [ "--skip-npm" ];
 
@@ -36,9 +35,10 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  checkInputs = [ pytest pytest-cov nbval ];
-
-  checkPhase = "pytest ipydatawidgets/tests";
+  nativeCheckInputs = [
+    pytestCheckHook
+    nbval
+  ];
 
   meta = {
     description = "Widgets to help facilitate reuse of large datasets across different widgets";

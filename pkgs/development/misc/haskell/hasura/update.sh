@@ -88,7 +88,7 @@ new_kritilang_version=$(curl --silent "https://api.github.com/repos/hasura/kriti
 cabal2nix --revision "$new_kritilang_version" --maintainer lassulus "https://github.com/hasura/kriti-lang.git" >> "$kritilang_derivation_file"
 
 echo "###################"
-echo "please update pkgs/servers/hasura/cli.nix vendorSha256"
+echo "please update pkgs/servers/hasura/cli.nix vendorHash"
 echo "please update pkgs/development/haskell-modules/configuration-common.nix graphql-engine version"
 echo "###################"
 

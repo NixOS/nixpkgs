@@ -1,60 +1,98 @@
-{ lib
-, backoff
-, backports-datetime-fromisoformat
-, buildPythonPackage
-, dataclasses
-, fetchFromGitHub
-, google-api-core
-, jinja2
-, ndjson
-, pillow
-, pydantic
-, pytest-cases
-, pytestCheckHook
-, pythonOlder
-, rasterio
-, requests
-, shapely
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  google-api-core,
+  hatchling,
+  imagesize,
+  mypy,
+  nbconvert,
+  nbformat,
+  numpy,
+  opencv-python-headless,
+  pillow,
+  pydantic,
+  pyproj,
+  pytest-cov-stub,
+  pytest-order,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  shapely,
+  strenum,
+  tqdm,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.15.0";
-  disabled = pythonOlder "3.6";
+  version = "5.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "v.${version}";
-    sha256 = "sha256-pJkDC/2EDPWbIw9WqV9kdYmr4X6apXtholzd0IYjgDg=";
+    tag = "v.${version}";
+    hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
 
-  propagatedBuildInputs = [
-    backoff
-    backports-datetime-fromisoformat
-    dataclasses
+  sourceRoot = "${src.name}/libs/labelbox";
+
+  pythonRelaxDeps = [
+    "mypy"
+    "python-dateutil"
+  ];
+
+  build-system = [ hatchling ];
+
+  dependencies = [
     google-api-core
-    jinja2
-    ndjson
-    pillow
     pydantic
-    rasterio
+    python-dateutil
     requests
-    shapely
+    strenum
+    tqdm
+    geojson
+    mypy
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "pydantic==1.8" "pydantic>=1.8"
-  '';
+  optional-dependencies = {
+    data = [
+      shapely
+      numpy
+      pillow
+      opencv-python-headless
+      typeguard
+      imagesize
+      pyproj
+      # pygeotile
+      typing-extensions
+    ];
+  };
 
-  checkInputs = [
-    pytest-cases
+  nativeCheckInputs = [
+    nbconvert
+    nbformat
+    pytest-cov-stub
+    pytest-order
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
     "tests/integration"
+    # Missing requirements
+    "tests/data"
+    "tests/unit/test_label_data_type.py"
   ];
 
   pythonImportsCheck = [ "labelbox" ];
@@ -62,6 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, humanize
-, lxml
-, pytestCheckHook
-, pythonOlder
-, requests
-, slixmpp
-, websockets
+{
+  lib,
+  aiohttp,
+  bidict,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanize,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  slixmpp,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "ajmarks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eKGundh7j9LqFd71bx86rNBVu2iAcgLN25JfFa39+VA=";
+    hash = "sha256-eKGundh7j9LqFd71bx86rNBVu2iAcgLN25JfFa39+VA=";
   };
 
   propagatedBuildInputs = [
@@ -36,13 +37,9 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gekitchen"
-  ];
+  pythonImportsCheck = [ "gekitchen" ];
 
   meta = with lib; {
     description = "Python SDK for GE smart appliances";

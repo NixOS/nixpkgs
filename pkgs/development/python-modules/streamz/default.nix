@@ -1,46 +1,40 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, confluent-kafka
-, distributed
-, fetchPypi
-, flaky
-, graphviz
-, networkx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
-, toolz
-, tornado
-, zict
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  confluent-kafka,
+  dask,
+  dask-expr,
+  distributed,
+  flaky,
+  graphviz,
+  networkx,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests,
+  six,
+  toolz,
+  tornado,
+  zict,
 }:
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.6.3";
-  format = "setuptools";
+  version = "0.6.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0wZ1ldLFRAIL9R+gLfwsFbL+gvdORAkYWNjnDmeafm8=";
+    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
 
-  patches = [
-    # remove with next bump
-    (fetchpatch {
-      name = "fix-tests-against-distributed-2021.10.0.patch";
-      url = "https://github.com/python-streamz/streamz/commit/5bd3bc4d305ff40c740bc2550c8491be9162778a.patch";
-      sha256 = "1xzxcbf7yninkyizrwm3ahqk6ij2fmh0454iqjx2n7mmzx3sazx7";
-      includes = ["streamz/tests/test_dask.py"];
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     networkx
     six
     toolz
@@ -48,8 +42,10 @@ buildPythonPackage rec {
     zict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     confluent-kafka
+    dask
+    dask-expr
     distributed
     flaky
     graphviz
@@ -58,28 +54,33 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "streamz"
-  ];
+  pythonImportsCheck = [ "streamz" ];
 
   disabledTests = [
-    # test_tcp_async fails on sandbox build
+    # Error with distutils version: fixture 'cleanup' not found
+    "test_separate_thread_without_time"
+    "test_await_syntax"
+    "test_partition_then_scatter_sync"
+    "test_sync"
+    "test_sync_2"
+    # Test fail in the sandbox
     "test_tcp_async"
     "test_tcp"
     "test_partition_timeout"
-    # flaky
-    "test_from_iterable_backpressure"
+    # Tests are flaky
+    "test_from_iterable"
+    "test_buffer"
   ];
+
   disabledTestPaths = [
-    # disable kafka tests
+    # Disable kafka tests
     "streamz/tests/test_kafka.py"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

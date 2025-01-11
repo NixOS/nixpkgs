@@ -1,64 +1,91 @@
-{ lib, buildPythonPackage, fetchFromGitHub, runtimeShell,
-  nose, dbus, dbus-python, pygobject3,
-  which, pyflakes, pycodestyle, bluez, networkmanager
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  runCommand,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  dbus-python,
+
+  # checks
+  dbus,
+  gobject-introspection,
+  pygobject3,
+  bluez,
+  networkmanager,
+  pytestCheckHook,
 }:
 
+let
+  # Cannot just add it to path in preCheck since that attribute will be passed to
+  # mkDerivation even with doCheck = false, causing a dependency cycle.
+  pbap-client = runCommand "pbap-client" { } ''
+    mkdir -p "$out/bin"
+    ln -s "${bluez.test}/test/pbap-client" "$out/bin/pbap-client"
+  '';
+in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.26.1";
+  version = "0.32.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-kavbWMTgKU/rBIo7RMs9NkwReYQyEdeFwMBSzEM9wa0=";
+    tag = version;
+    hash = "sha256-TOs6wAZDcSD1eP+Hbj78YXoAtKbReC5di5QSpQdwp8E=";
   };
 
-  prePatch = ''
-    substituteInPlace tests/test_code.py \
-      --replace "pyflakes3" "pyflakes" \
-      --replace "/bin/bash" "${runtimeShell}" \
-      --replace "--ignore=E124,E402,E731,W504" "--ignore=E124,E402,E731,W504,E501" # ignore long lines too
-  '';
-
-  # TODO: Get the rest of these tests running?
-  # This is a mocking library used as a check dependency for a single derivation.
-  # That derivation's tests pass. Maybe not worth the effort to fix these...
-  NOSE_EXCLUDE = lib.concatStringsSep "," [
-    "test_bluez4" # NixOS ships BlueZ5
-    # These appear to fail because they're expecting to run in an Ubuntu chroot?
-    "test_everything" # BlueZ5 OBEX
-    "test_polkitd"
-    "test_consolekit"
-    "test_api"
-    "test_logind"
-    "test_notification_daemon"
-    "test_ofono"
-    "test_gnome_screensaver"
-    "test_cli"
-    "test_timedated"
-    "test_upower"
-    # needs glib
-    "test_accounts_service"
-    # needs dbus-daemon active
-    "test_systemd"
-    # Very slow, consider disabling?
-    # "test_networkmanager"
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/martinpitt/python-dbusmock/commit/1a8d8722068ef7e5f061336047a72d1a0f253b98.patch";
+      hash = "sha256-0j3UXsTMDh1+UolkmoLQXlwHXve81yKiGJ7gDWNZVPY=";
+    })
+    (fetchpatch {
+      name = "os-release.patch";
+      url = "https://github.com/martinpitt/python-dbusmock/commit/4b99cff50e8c741f20aef4527b27ccdb2a4053d2.patch";
+      hash = "sha256-Xcovv44JeuTvPAtXWJvWE+MxlyloClSJGKZz+C3P5bE=";
+    })
+    (fetchpatch {
+      name = "tests-bluez-5.79.patch";
+      url = "https://github.com/martinpitt/python-dbusmock/commit/d5e449bff924ea2b2837843237fbb5d9751c4f89.patch";
+      hash = "sha256-CafQ/RhFynjI9eY4Xeu5yS+a29ZiJJnSYUmd74/2Dpg=";
+    })
   ];
 
-  checkInputs = [
-    nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez (lib.getOutput "test" bluez) networkmanager
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    export PATH="$PATH:${lib.getOutput "test" bluez}/test";
-    nosetests -v
-    runHook postCheck
-  '';
+  dependencies = [ dbus-python ];
+
+  nativeCheckInputs = [
+    dbus
+    gobject-introspection
+    pygobject3
+    bluez
+    pbap-client
+    networkmanager
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # wants to call upower, which is a reverse-dependency
+    "test_dbusmock_test_template"
+    # Failed to execute program org.TestSystem: No such file or directory
+    "test_system_service_activation"
+    "test_session_service_activation"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${version}";
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;

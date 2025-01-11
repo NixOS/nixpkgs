@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, qttools
-, wrapQtAppsHook
-, qtbase
-, qtwayland
-, qtsvg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cutemaze";
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchurl {
-    url = "https://gottcode.org/cutemaze/${pname}-${version}-src.tar.bz2";
-    sha256 = "6944931cd39e9ef202c11483b7b2b7409a068c52fa5fd4419ff938b1158c72ab";
+    url = "https://gottcode.org/cutemaze/cutemaze-${version}.tar.bz2";
+    hash = "sha256-DKWg/wuWSsjs9dkJlanIxQhVWpebWRx5h6SRi5yFm84=";
   };
 
   nativeBuildInputs = [
@@ -24,20 +25,34 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtwayland
-    qtsvg
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv CuteMaze.app $out/Applications
-  '';
+  installPhase =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        runHook preInstall
+
+        mkdir -p $out/Applications
+        mv CuteMaze.app $out/Applications
+        makeWrapper $out/Applications/CuteMaze.app/Contents/MacOS/CuteMaze $out/bin/cutemaze
+
+        runHook postInstall
+      ''
+    else
+      null;
 
   meta = with lib; {
-    homepage = "https://gottcode.org/cutemaze/";
+    changelog = "https://github.com/gottcode/cutemaze/blob/v${version}/ChangeLog";
     description = "Simple, top-down game in which mazes are randomly generated";
+    mainProgram = "cutemaze";
+    homepage = "https://gottcode.org/cutemaze/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;

@@ -1,32 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  sphinx,
+  pytestCheckHook,
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.3.1";
+  version = "0.5.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "82151cbd43ccec94a1530155f4ad34f251aaca6a0ffd5516d7fadf952d32dc1e";
+    pname = "sphinx_argparse";
+    inherit version;
+    hash = "sha256-5TUvj6iUtvtv2gSYuiip+NQ1lx70u8GmycZBTnZE8DI=";
   };
 
-  checkInputs = [
-    pytest
+  build-system = [ flit-core ];
+
+  dependencies = [ sphinx ];
+
+  nativeCheckInputs = [
+    lxml
+    pytestCheckHook
   ];
 
-  checkPhase = "py.test";
-
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  pythonImportsCheck = [ "sphinxarg" ];
 
   meta = {
-    description = "A sphinx extension that automatically documents argparse commands and options";
-    homepage = "https://github.com/ribozz/sphinx-argparse";
+    description = "Sphinx extension that automatically documents argparse commands and options";
+    homepage = "https://github.com/ashb/sphinx-argparse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clacke ];
   };

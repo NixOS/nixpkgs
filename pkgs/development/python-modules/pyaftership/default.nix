@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyaftership";
-  version = "21.11.0";
+  version = "23.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,15 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-SN7fvI/+VHYn2eYQe5wp6lEZ73YeZbsiPjDiq/Ibk3Q=";
+    tag = version;
+    hash = "sha256-njlDScmxIYWxB4EL9lOSGCXqZDzP999gI9EkpcZyFlE=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
@@ -39,13 +38,12 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  pythonImportsCheck = [
-    "pyaftership"
-  ];
+  pythonImportsCheck = [ "pyaftership" ];
 
   meta = with lib; {
     description = "Python wrapper package for the AfterShip API";
     homepage = "https://github.com/ludeeus/pyaftership";
+    changelog = "https://github.com/ludeeus/pyaftership/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee ];
   };

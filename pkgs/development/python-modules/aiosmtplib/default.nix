@@ -1,56 +1,46 @@
-{ lib
-, aiosmtpd
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, hypothesis
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiosmtpd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  hatchling,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "1.1.6";
-  format = "pyproject";
+  version = "3.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cole";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-bo+u3I+ZX95UYkEam2TB6d6rvbYKa5Qu/9oNX5le478=";
+    repo = "aiosmtplib";
+    tag = "v${version}";
+    hash = "sha256-1GuxlgNvzVv6hEQY1Mkv7NxAoOik9gpIS90a6flfC+k=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosmtpd
     hypothesis
     pytest-asyncio
     pytestCheckHook
+    trustme
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/cole/aiosmtplib/pull/183
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/cole/aiosmtplib/commit/3aba1c132d9454e05d4281f4c8aa618b4e1b783d.patch";
-      hash = "sha256-KlA46gD6swfJ/3OLO3xWZWa66Gx1/izmUMQ60PQy0po=";
-    })
-  ];
-
-  pythonImportsCheck = [
-    "aiosmtplib"
-  ];
+  pythonImportsCheck = [ "aiosmtplib" ];
 
   meta = with lib; {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
+    changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

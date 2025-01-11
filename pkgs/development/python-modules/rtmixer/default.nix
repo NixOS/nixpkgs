@@ -1,31 +1,40 @@
-{ fetchFromGitHub
-, buildPythonPackage
-, isPy27
-, cython
-, portaudio
-, cffi
-, pa-ringbuffer
-, sounddevice
-, lib
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy27,
+  setuptools,
+  cython,
+  portaudio,
+  cffi,
+  pa-ringbuffer,
+  sounddevice,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "rtmixer";
-  version = "0.1.1";
+  version = "0.1.7";
+  pyproject = true;
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "python-rtmixer";
-    rev = version;
-    sha256 = "1bvgzzxiypvvb3qacbcry6761x9sk3dnx7jga7pli63f69vakg4y";
+    tag = version;
+    hash = "sha256-K5w6XWnDdA5HrzDOMhqinlxrg/09AF6c5CWZEsfVHb4=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ portaudio ];
-  nativeBuildInputs = [ cython ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  buildInputs = [ portaudio ];
+
+  nativeBuildInputs = [
+    cython
+    cffi
+  ];
+
+  dependencies = [
     cffi
     pa-ringbuffer
     sounddevice

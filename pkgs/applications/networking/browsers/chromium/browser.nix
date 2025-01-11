@@ -1,16 +1,24 @@
-{ lib, mkChromiumDerivation
-, channel, chromiumVersionAtLeast
-, enableWideVine, ungoogled
+{
+  lib,
+  mkChromiumDerivation,
+  chromiumVersionAtLeast,
+  enableWideVine,
+  ungoogled,
 }:
-
-with lib;
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
+  buildTargets = [
+    "run_mksnapshot_default"
+    "chrome_sandbox"
+    "chrome"
+  ];
 
-  outputs = ["out" "sandbox"];
+  outputs = [
+    "out"
+    "sandbox"
+  ];
 
   sandboxExecutableName = "__chromium-suid-sandbox";
 
@@ -75,26 +83,41 @@ mkChromiumDerivation (base: rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    description = "An open source web browser from Google"
-      + optionalString ungoogled ", with dependencies on Google web services removed";
+    description =
+      "Open source web browser from Google"
+      + lib.optionalString ungoogled ", with dependencies on Google web services removed";
     longDescription = ''
       Chromium is an open source web browser from Google that aims to build a
       safer, faster, and more stable way for all Internet users to experience
       the web. It has a minimalist user interface and provides the vast majority
       of source code for Google Chrome (which has some additional features).
     '';
-    homepage = if ungoogled
-      then "https://github.com/Eloston/ungoogled-chromium"
-      else "https://www.chromium.org/";
-    maintainers = with maintainers; if ungoogled
-      then [ squalus primeos michaeladler ]
-      else [ primeos thefloweringash ];
-    license = if enableWideVine then licenses.unfree else licenses.bsd3;
-    platforms = platforms.linux;
+    homepage =
+      if ungoogled then
+        "https://github.com/ungoogled-software/ungoogled-chromium"
+      else
+        "https://www.chromium.org/";
+    # Maintainer pings for this derivation are highly unreliable.
+    # If you add yourself as maintainer here, please also add yourself as CODEOWNER.
+    maintainers =
+      with lib.maintainers;
+      if ungoogled then
+        [
+          networkexception
+          emilylange
+        ]
+      else
+        [
+          networkexception
+          emilylange
+        ];
+    license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     mainProgram = "chromium";
-    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
-      then ["aarch64-linux" "x86_64-linux"]
-      else [];
+    hydraPlatforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })

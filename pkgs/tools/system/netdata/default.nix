@@ -1,117 +1,286 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
-, CoreFoundation, IOKit, libossp_uuid
-, nixosTests
-, curl, libcap, libuuid, lm_sensors, zlib, protobuf
-, withCups ? false, cups
-, withDBengine ? true, libuv, lz4, judy
-, withIpmi ? (!stdenv.isDarwin), freeipmi
-, withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
-, withCloud ? (!stdenv.isDarwin), json_c
-, withSsl ? true, openssl
-, withDebug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  buildGoModule,
+  cmake,
+  cups,
+  curl,
+  darwin,
+  freeipmi,
+  go,
+  google-cloud-cpp,
+  grpc,
+  jemalloc,
+  json_c,
+  libbpf,
+  libcap,
+  libelf,
+  libmnl,
+  libnetfilter_acct,
+  libossp_uuid,
+  libuuid,
+  libuv,
+  libyaml,
+  lm_sensors,
+  lz4,
+  makeWrapper,
+  ninja,
+  nixosTests,
+  openssl,
+  overrideSDK,
+  pkg-config,
+  protobuf,
+  snappy,
+  systemd,
+  withCloud ? false,
+  withCloudUi ? false,
+  withConnPrometheus ? false,
+  withConnPubSub ? false,
+  withCups ? false,
+  withDBengine ? true,
+  withDebug ? false,
+  withEbpf ? false,
+  withIpmi ? (stdenv.hostPlatform.isLinux),
+  withNetfilter ? (stdenv.hostPlatform.isLinux),
+  withNetworkViewer ? (stdenv.hostPlatform.isLinux),
+  withSsl ? true,
+  withSystemdJournal ? (stdenv.hostPlatform.isLinux),
+  zlib,
 }:
-
-with lib;
-
 let
-  go-d-plugin = callPackage ./go.d.plugin.nix {};
-in stdenv.mkDerivation rec {
-  version = "1.34.1";
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
+  version = "1.47.5";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
-    rev = "v${version}";
-    sha256 = "sha256-MGXHIbmoPRyjjYHV/RD9sd8Dn74YVlET2V3d/wJ3blo=";
+    rev = "v${finalAttrs.version}";
+    hash =
+      if withCloudUi then
+        "sha256-+cPYwjxg/+A5bNa517zg9xKEjUa8uPM9WD67tToPH5o="
+      # we delete the v2 GUI after fetching
+      else
+        "sha256-0aiBUkDymmdIT/u1y2PG30QYAvb8Zc4i8ZgjOtlzt+A=";
     fetchSubmodules = true;
+
+    # Remove v2 dashboard distributed under NCUL1. Make sure an empty
+    # Makefile.am exists, as autoreconf will get confused otherwise.
+    postFetch = lib.optionalString (!withCloudUi) ''
+      rm -rf $out/src/web/gui/v2/*
+      touch $out/src/web/gui/v2/Makefile.am
+    '';
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev zlib.dev protobuf ]
-    ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
-    ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
-    ++ optionals withCups [ cups ]
-    ++ optionals withDBengine [ libuv lz4.dev judy ]
-    ++ optionals withIpmi [ freeipmi ]
-    ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ optionals withCloud [ json_c ]
-    ++ optionals withSsl [ openssl.dev ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+    go
+    ninja
+  ] ++ lib.optionals withCups [ cups.dev ];
+  # bash is only used to rewrite shebangs
+  buildInputs =
+    [
+      bash
+      curl
+      jemalloc
+      json_c
+      libuv
+      zlib
+      libyaml
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreFoundation
+        IOKit
+        libossp_uuid
+      ]
+    )
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      libcap
+      libuuid
+      lm_sensors
+    ]
+    ++ lib.optionals withCups [ cups ]
+    ++ lib.optionals withDBengine [ lz4 ]
+    ++ lib.optionals withIpmi [ freeipmi ]
+    ++ lib.optionals withNetfilter [
+      libmnl
+      libnetfilter_acct
+    ]
+    ++ lib.optionals withConnPubSub [
+      google-cloud-cpp
+      grpc
+    ]
+    ++ lib.optionals withConnPrometheus [ snappy ]
+    ++ lib.optionals withEbpf [
+      libelf
+      libbpf
+    ]
+    ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
+    ++ lib.optionals withSystemdJournal [ systemd ]
+    ++ lib.optionals withSsl [ openssl ];
 
   patches = [
-    # required to prevent plugins from relying on /etc
-    # and /var
-    ./no-files-in-etc-and-var.patch
-    # The current IPC location is unsafe as it writes
-    # a fixed path in /tmp, which is world-writable.
-    # Therefore we put it into `/run/netdata`, which is owned
-    # by netdata only.
-    ./ipc-socket-in-run.patch
-
-    # Avoid build-only inputs in closure leaked by configure command:
-    #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
-    ./skip-CONFIGURE_COMMAND.patch
+    # Allow ndsudo to use non-hardcoded `PATH`
+    # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+    #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+    ./ndsudo-fix-path.patch
+    # Allow building without non-free v2 dashboard.
+    ./dashboard-v2-removal.patch
   ];
 
-  # Guard against unused buld-time development inputs in closure. Without
+  # Guard against unused build-time development inputs in closure. Without
   # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
   # to bootstrap tools:
   #   https://github.com/NixOS/nixpkgs/pull/175719
   # We pick zlib.dev as a simple canary package with pkg-config input.
-  disallowedReferences = [ zlib.dev ];
+  disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
-  NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  donStrip = withDebug;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
-  postInstall = ''
-    ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
-    ln -s ${go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
-  '' + optionalString (!stdenv.isDarwin) ''
-    # rename this plugin so netdata will look for setuid wrapper
-    mv $out/libexec/netdata/plugins.d/apps.plugin \
-       $out/libexec/netdata/plugins.d/apps.plugin.org
-    mv $out/libexec/netdata/plugins.d/cgroup-network \
-       $out/libexec/netdata/plugins.d/cgroup-network.org
-    mv $out/libexec/netdata/plugins.d/perf.plugin \
-       $out/libexec/netdata/plugins.d/perf.plugin.org
-    mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
-       $out/libexec/netdata/plugins.d/slabinfo.plugin.org
-    ${optionalString withIpmi ''
-      mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
-         $out/libexec/netdata/plugins.d/freeipmi.plugin.org
-    ''}
+  postInstall =
+    ''
+      # Relocate one folder above.
+      mv $out/usr/* $out/
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      # rename this plugin so netdata will look for setuid wrapper
+      mv $out/libexec/netdata/plugins.d/apps.plugin \
+         $out/libexec/netdata/plugins.d/apps.plugin.org
+      mv $out/libexec/netdata/plugins.d/cgroup-network \
+         $out/libexec/netdata/plugins.d/cgroup-network.org
+      mv $out/libexec/netdata/plugins.d/perf.plugin \
+         $out/libexec/netdata/plugins.d/perf.plugin.org
+      mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
+         $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+      mv $out/libexec/netdata/plugins.d/debugfs.plugin \
+         $out/libexec/netdata/plugins.d/debugfs.plugin.org
+      ${lib.optionalString withSystemdJournal ''
+        mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+           $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+      ''}
+      ${lib.optionalString withIpmi ''
+        mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
+           $out/libexec/netdata/plugins.d/freeipmi.plugin.org
+      ''}
+      ${lib.optionalString withNetworkViewer ''
+        mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
+           $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+      ''}
+      ${lib.optionalString (!withCloudUi) ''
+        rm -rf $out/share/netdata/web/index.html
+        cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
+      ''}
+    '';
+
+  preConfigure = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH=$TMPDIR/go
+    export GOSUMDB=off
+
+    substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
+      --replace-fail \
+        'GOPROXY=https://proxy.golang.org' \
+        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules}'
+
+    # Prevent the path to be caught into the Nix store path.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
+      --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
+      --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
+      --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
+      --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
+      --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
+      --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
+      --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
+      --replace-fail 'set(sbindir_POST "''${NETDATA_RUNTIME_PREFIX}/''${BINDIR}")' 'set(sbindir_POST "${placeholder "out"}/bin")' \
+      --replace-fail 'set(configdir_POST "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(configdir_POST "/etc/netdata")' \
+      --replace-fail 'set(libconfigdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(libconfigdir_POST "${placeholder "out"}/share/netdata/conf.d")' \
+      --replace-fail 'set(cachedir_POST "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(libconfigdir_POST "/var/cache/netdata")' \
+      --replace-fail 'set(registrydir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata/registry")' 'set(registrydir_POST "/var/lib/netdata/registry")' \
+      --replace-fail 'set(varlibdir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")'
   '';
 
-  preConfigure = optionalString (!stdenv.isDarwin) ''
-    substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
-      --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
-  '';
-
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--disable-ebpf"
-  ] ++ optionals withCloud [
-    "--enable-cloud"
-    "--with-aclk-ng"
+  cmakeFlags = [
+    "-DWEB_DIR=share/netdata/web"
+    (lib.cmakeBool "ENABLE_CLOUD" withCloud)
+    # ACLK is agent cloud link.
+    (lib.cmakeBool "ENABLE_ACLK" withCloud)
+    (lib.cmakeBool "ENABLE_DASHBOARD_V2" withCloudUi)
+    (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
+    (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
+    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
+    (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+    (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
+    (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
+    (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
+    (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
+    (lib.cmakeBool "ENABLE_JEMALLOC" true)
+    # Suggested by upstream.
+    "-G Ninja"
   ];
 
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
+    wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
+    wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
+    substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
+
+    # Time to cleanup the output directory.
+    unlink $out/sbin
+    cp $out/etc/netdata/edit-config $out/bin/netdata-edit-config
+    mv $out/lib/netdata/conf.d $out/share/netdata/conf.d
+    rm -rf $out/{var,usr,etc}
   '';
 
-  passthru = {
-    inherit withIpmi;
+  enableParallelBuilding = true;
+
+  passthru = rec {
+    netdata-go-modules =
+      (buildGoModule {
+        pname = "netdata-go-plugins";
+        inherit (finalAttrs) version src;
+
+        sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
+
+        vendorHash = "sha256-NZ1tg+lvXNgypqmjjb5f7dHH6DIA9VOa4PMM4eq11n0=";
+        doCheck = false;
+        proxyVendor = true;
+
+        ldflags = [
+          "-s"
+          "-w"
+          "-X main.version=${finalAttrs.version}"
+        ];
+
+        passthru.tests = tests;
+        meta = finalAttrs.meta // {
+          description = "Netdata orchestrator for data collection modules written in Go";
+          mainProgram = "godplugin";
+          license = lib.licenses.gpl3Only;
+        };
+      }).goModules;
+    inherit withIpmi withNetworkViewer;
     tests.netdata = nixosTests.netdata;
   };
 
-  meta = {
-    broken = stdenv.isDarwin;
+  meta = with lib; {
+    broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
+    license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
     maintainers = [ ];
   };
-}
+})

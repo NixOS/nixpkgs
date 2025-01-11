@@ -1,4 +1,8 @@
-{ bundlerApp, bundlerUpdateScript, lib }:
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  lib,
+}:
 
 bundlerApp {
   pname = "rufo";
@@ -12,5 +16,6 @@ bundlerApp {
     homepage = "https://github.com/ruby-formatter/rufo";
     license = licenses.mit;
     maintainers = with maintainers; [ andersk ];
+    mainProgram = "rufo";
   };
 }

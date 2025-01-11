@@ -1,3 +1,4 @@
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 # This is the builder for all X.org components.
 source $stdenv/setup
 
@@ -20,14 +21,14 @@ postInstall() {
         for p in "${pkgsHostHost[@]}" "${pkgsHostTarget[@]}"; do
             if test -e $p/lib/pkgconfig/$r.pc; then
                 echo "  found requisite $r in $p"
-                propagatedBuildInputs+=" $p"
+                appendToVar propagatedBuildInputs "$p"
             fi
         done
     done
 }
 
 
-installFlags="appdefaultdir=$out/share/X11/app-defaults $installFlags"
+prependToVar installFlags "appdefaultdir=$out/share/X11/app-defaults"
 
 
 if test -n "$x11BuildHook"; then
@@ -36,5 +37,6 @@ fi
 
 
 enableParallelBuilding=1
+enableParallelInstalling=1
 
 genericBuild

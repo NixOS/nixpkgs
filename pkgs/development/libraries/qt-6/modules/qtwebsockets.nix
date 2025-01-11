@@ -1,11 +1,15 @@
-{ qtModule
-, qtbase
-, qtdeclarative
-, openssl
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  openssl,
 }:
 
 qtModule {
   pname = "qtwebsockets";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
   buildInputs = [ openssl ];
 }

@@ -1,29 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, greenlet
-, pytest
-, decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  greenlet,
+  pytest,
+  decorator,
+  twisted,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-twisted";
-  version = "1.13.2";
+  version = "1.14.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "cee2320becc5625050ab221b8f38533e636651a24644612f4726891fdf1f1847";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-twisted";
+    tag = "v${version}";
+    hash = "sha256-1dAfCa6hON0Vh9StI1Xw69IAwBzUkR6DdjQ0HNyoyME=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ greenlet decorator ];
+  dependencies = [
+    decorator
+    greenlet
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    twisted
+  ];
+
+  pythonImportsCheck = [ "pytest_twisted" ];
 
   meta = with lib; {
-    description = "A twisted plugin for py.test";
+    changelog = "https://github.com/pytest-dev/pytest-twisted/releases/tag/v${version}";
+    description = "Twisted plugin for py.test";
     homepage = "https://github.com/pytest-dev/pytest-twisted";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

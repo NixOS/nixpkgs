@@ -1,22 +1,28 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  dune-configurator,
+}:
 
 buildDunePackage rec {
   pname = "parmap";
-  version = "1.2.4";
+  version = "1.2.5";
 
-  src = fetchurl {
-    url = "https://github.com/rdicosmo/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "sha256-BTkSEjIK3CVNloJACFo6eQ6Ob9o/cdrA9xuv87NKas4=";
+  src = fetchFromGitHub {
+    owner = "rdicosmo";
+    repo = pname;
+    rev = version;
+    hash = "sha256-tBu7TGtDOe5FbxLZuz6nl+65aN9FHIngq/O4dJWzr3Q=";
   };
 
   minimalOCamlVersion = "4.03";
-  useDune2 = true;
 
   buildInputs = [
     dune-configurator
   ];
 
-  doCheck = true;
+  doCheck = false; # prevent running slow benchmarks
 
   meta = with lib; {
     description = "Library for multicore parallel programming";

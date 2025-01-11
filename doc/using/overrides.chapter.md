@@ -13,7 +13,13 @@ It is used to override the arguments passed to a function.
 Example usages:
 
 ```nix
-pkgs.foo.override { arg1 = val1; arg2 = val2; ... }
+pkgs.foo.override { arg1 = val1; arg2 = val2; /* ... */ }
+```
+
+It's also possible to access the previous arguments.
+
+```nix
+pkgs.foo.override (previous: { arg1 = previous.arg1; /* ... */ })
 ```
 
 <!-- TODO: move below programlisting to a new section about extending and overlays and reference it -->
@@ -21,36 +27,59 @@ pkgs.foo.override { arg1 = val1; arg2 = val2; ... }
 ```nix
 import pkgs.path { overlays = [ (self: super: {
   foo = super.foo.override { barSupport = true ; };
-  })]};
+  })];}
 ```
 
 ```nix
-mypkg = pkgs.callPackage ./mypkg.nix {
-  mydep = pkgs.mydep.override { ... };
-  }
+{
+  mypkg = pkgs.callPackage ./mypkg.nix {
+    mydep = pkgs.mydep.override { /* ... */ };
+  };
+}
 ```
 
 In the first example, `pkgs.foo` is the result of a function call with some default arguments, usually a derivation. Using `pkgs.foo.override` will call the same function with the given new arguments.
+
+Many packages, like the `foo` example above, provide package options with default values in their arguments, to facilitate overriding.
+Because it's not usually feasible to test that packages build with all combinations of options, you might find that a package doesn't build if you override options to non-default values.
+
+Package maintainers are not expected to fix arbitrary combinations of options.
+If you find that something doesn't work, please submit a fix, ideally with a regression test.
+If you want to ensure that things keep working, consider [becoming a maintainer](https://github.com/NixOS/nixpkgs/tree/master/maintainers) for the package.
 
 ## &lt;pkg&gt;.overrideAttrs {#sec-pkg-overrideAttrs}
 
 The function `overrideAttrs` allows overriding the attribute set passed to a `stdenv.mkDerivation` call, producing a new derivation based on the original one. This function is available on all derivations produced by the `stdenv.mkDerivation` function, which is most packages in the nixpkgs expression `pkgs`.
 
-Example usage:
+Example usages:
 
 ```nix
-helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
-  separateDebugInfo = true;
-});
+{
+  helloBar = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
+    pname = previousAttrs.pname + "-bar";
+  });
+}
 ```
 
-In the above example, the `separateDebugInfo` attribute is overridden to be true, thus building debug info for `helloWithDebug`, while all other attributes will be retained from the original `hello` package.
+In the above example, "-bar" is appended to the pname attribute, while all other attributes will be retained from the original `hello` package.
 
 The argument `previousAttrs` is conventionally used to refer to the attr set originally passed to `stdenv.mkDerivation`.
 
 The argument `finalAttrs` refers to the final attributes passed to `mkDerivation`, plus the `finalPackage` attribute which is equal to the result of `mkDerivation` or subsequent `overrideAttrs` calls.
 
 If only a one-argument function is written, the argument has the meaning of `previousAttrs`.
+
+Function arguments can be omitted entirely if there is no need to access `previousAttrs` or `finalAttrs`.
+
+```nix
+{
+  helloWithDebug = pkgs.hello.overrideAttrs {
+    separateDebugInfo = true;
+  };
+}
+```
+
+In the above example, the `separateDebugInfo` attribute is overridden to be true, thus building debug info for `helloWithDebug`.
 
 ::: {.note}
 Note that `separateDebugInfo` is processed only by the `stdenv.mkDerivation` function, not the generated, raw Nix derivation. Thus, using `overrideDerivation` will not work in this case, as it overrides only the attributes of the final derivation. It is for this reason that `overrideAttrs` should be preferred in (almost) all cases to `overrideDerivation`, i.e. to allow using `stdenv.mkDerivation` to process input arguments, as well as the fact that it is easier to use (you can use the same attribute names you see in your Nix code, instead of the ones generated (e.g. `buildInputs` vs `nativeBuildInputs`), and it involves less typing).
@@ -63,7 +92,7 @@ You should prefer `overrideAttrs` in almost all cases, see its documentation for
 :::
 
 ::: {.warning}
-Do not use this function in Nixpkgs as it evaluates a Derivation before modifying it, which breaks package abstraction and removes error-checking of function arguments. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in `~/.config/nixpkgs/config.nix`.
+Do not use this function in Nixpkgs as it evaluates a derivation before modifying it, which breaks package abstraction. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in `~/.config/nixpkgs/config.nix`.
 :::
 
 The function `overrideDerivation` creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the `makeOverridable` function. Most standard derivation-producing functions, such as `stdenv.mkDerivation`, are defined using this function, which means most packages in the nixpkgs expression, `pkgs`, have this function.
@@ -71,14 +100,16 @@ The function `overrideDerivation` creates a new derivation based on an existing 
 Example usage:
 
 ```nix
-mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
-  name = "sed-4.2.2-pre";
-  src = fetchurl {
-    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
-  };
-  patches = [];
-});
+{
+  mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
+    name = "sed-4.2.2-pre";
+    src = fetchurl {
+      url = "ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2";
+      hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
+    };
+    patches = [];
+  });
+}
 ```
 
 In the above example, the `name`, `src`, and `patches` of the derivation will be overridden, while all other attributes will be retained from the original derivation.
@@ -96,8 +127,10 @@ The function `lib.makeOverridable` is used to make the result of a function easi
 Example usage:
 
 ```nix
-f = { a, b }: { result = a+b; };
-c = lib.makeOverridable f { a = 1; b = 2; };
+{
+  f = { a, b }: { result = a+b; };
+  c = lib.makeOverridable f { a = 1; b = 2; };
+}
 ```
 
 The variable `c` is the value of the `f` function applied with some default arguments. Hence the value of `c.result` is `3`, in this example.

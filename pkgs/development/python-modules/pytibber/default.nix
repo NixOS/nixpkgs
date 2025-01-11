@@ -1,57 +1,52 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, async-timeout
-, graphql-subscription-manager
-, python-dateutil
-, pytz
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gql,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.22.3";
-  format = "setuptools";
+  version = "0.30.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    rev = version;
-    hash = "sha256-tM8Uu/TpP5a7y+ePFko0bMoZJWG2efYA861Ez8dPeFY=";
+    tag = version;
+    hash = "sha256-lUxID4D9wxKvDF3epEznTof9lHYKFniTDYv7/gvW7Z4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-    graphql-subscription-manager
-    python-dateutil
-    pytz
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [
+    aiohttp
+    gql
+  ] ++ gql.optional-dependencies.websockets;
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "test/test.py"
-  ];
+  pytestFlagsArray = [ "test/test.py" ];
 
-  # tests access network
+  # Tests access network
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tibber"
-  ];
+  pythonImportsCheck = [ "tibber" ];
 
   meta = with lib; {
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
+    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

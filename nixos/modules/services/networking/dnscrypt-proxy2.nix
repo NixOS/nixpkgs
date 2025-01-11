@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 let
   cfg = config.services.dnscrypt-proxy2;
@@ -11,7 +17,7 @@ in
     settings = mkOption {
       description = ''
         Attrset that is converted and passed as TOML config file.
-        For available params, see: <link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>
+        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
       '';
       example = literalExpression ''
         {
@@ -24,12 +30,12 @@ in
         }
       '';
       type = types.attrs;
-      default = {};
+      default = { };
     };
 
     upstreamDefaults = mkOption {
       description = ''
-        Whether to base the config declared in <option>services.dnscrypt-proxy2.settings</option> on the upstream example config (<link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>)
+        Whether to base the config declared in {option}`services.dnscrypt-proxy2.settings` on the upstream example config (<https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>)
 
         Disable this if you want to declare your dnscrypt config from scratch.
       '';
@@ -39,24 +45,32 @@ in
 
     configFile = mkOption {
       description = ''
-        Path to TOML config file. See: <link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>
+        Path to TOML config file. See: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>
         If this option is set, it will override any configuration done in options.services.dnscrypt-proxy2.settings.
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
       type = types.path;
-      default = pkgs.runCommand "dnscrypt-proxy.toml" {
-        json = builtins.toJSON cfg.settings;
-        passAsFile = [ "json" ];
-      } ''
-        ${if cfg.upstreamDefaults then ''
-          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
-          ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
-        '' else ''
-          cp $jsonPath config.json
-        ''}
-        ${pkgs.remarshal}/bin/json2toml < config.json > $out
-      '';
-      defaultText = literalDocBook "TOML file generated from <option>services.dnscrypt-proxy2.settings</option>";
+      default =
+        pkgs.runCommand "dnscrypt-proxy.toml"
+          {
+            json = builtins.toJSON cfg.settings;
+            passAsFile = [ "json" ];
+          }
+          ''
+            ${
+              if cfg.upstreamDefaults then
+                ''
+                  ${pkgs.buildPackages.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+                  ${pkgs.buildPackages.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
+                ''
+              else
+                ''
+                  cp $jsonPath config.json
+                ''
+            }
+            ${pkgs.buildPackages.remarshal}/bin/json2toml < config.json > $out
+          '';
+      defaultText = literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
     };
   };
 
@@ -80,7 +94,7 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
-        ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+        ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy -config ${cfg.configFile}";
         LockPersonality = true;
         LogsDirectory = "dnscrypt-proxy";
         MemoryDenyWriteExecute = true;
@@ -111,7 +125,6 @@ in
           "~@aio"
           "~@keyring"
           "~@memlock"
-          "~@resources"
           "~@setuid"
           "~@timer"
         ];

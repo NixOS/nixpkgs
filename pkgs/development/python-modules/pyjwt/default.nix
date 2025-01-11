@@ -1,37 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, ecdsa
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cryptography,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-rtd-theme,
+  zope-interface,
+  oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.3.0";
-  disabled = pythonOlder "3.6";
+  version = "2.10.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "PyJWT";
-    inherit version;
-    sha256 = "sha256-uIi01W8G9tzXdyEMM05pxze+dHVdPl6e4/5n3Big7kE=";
+  src = fetchFromGitHub {
+    owner = "jpadilla";
+    repo = "pyjwt";
+    tag = version;
+    hash = "sha256-BPVythRLpglYtpLEoaC7+Q4l9izYXH2M9JEbxdyQZqU=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    ecdsa
+  outputs = [
+    "out"
+    "doc"
   ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    zope-interface
+  ];
+
+  optional-dependencies.crypto = [ cryptography ];
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ (lib.flatten (lib.attrValues optional-dependencies));
+
+  disabledTests = [
+    # requires internet connection
+    "test_get_jwt_set_sslcontext_default"
   ];
 
   pythonImportsCheck = [ "jwt" ];
 
+  passthru.tests = {
+    inherit oauthlib;
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/jpadilla/pyjwt/blob/${version}/CHANGELOG.rst";
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;

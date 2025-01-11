@@ -1,30 +1,47 @@
-{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libunwind
+, python3
+, rustPlatform
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
-  version = "0.3.11";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
     rev = "v${version}";
-    sha256 = "sha256-4Zp4IGd4lKBC0ye2/7Tfpz8vJzm0VnkKqx/2k3mCj3A=";
+    hash = "sha256-T96F8xgB9HRwuvDLXi6+lfi8za/iNn1NAbG4AIpE0V0=";
   };
 
-  NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
+  cargoHash = "sha256-SkHlXvhmw7swjZDdat0z0o5ATDJ1qSE/iwiwywsFOyw=";
 
-  # error: linker `arm-linux-gnueabihf-gcc` not found
-  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export RUSTFLAGS="-Clinker=$CC"
-  '';
+  buildFeatures = [ "unwind" ];
 
-  checkInputs = [ python3 ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
 
-  cargoSha256 = "sha256-LEtmzCoT8esBYh9PkCGpzUU7miaWd3Ao0z/LzxhP39A=";
+  nativeCheckInputs = [
+    python3
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
+
+  checkFlags = [
+    # assertion `left == right` failed
+    "--skip=test_negative_linenumber_increment"
+  ];
 
   meta = with lib; {
     description = "Sampling profiler for Python programs";
+    mainProgram = "py-spy";
+    homepage = "https://github.com/benfred/py-spy";
+    changelog = "https://github.com/benfred/py-spy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

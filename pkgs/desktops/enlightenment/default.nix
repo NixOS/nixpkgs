@@ -1,16 +1,21 @@
-{ callPackage, pkgs }:
-{
-  #### CORE EFL
-  efl = callPackage ./efl { };
+{ lib, pkgs }:
 
-  #### WINDOW MANAGER
-  enlightenment = callPackage ./enlightenment { };
+lib.makeScope pkgs.newScope (
+  self: with self; {
 
-  #### APPLICATIONS
-  econnman = callPackage ./econnman { };
-  ecrire = callPackage ./ecrire { };
-  ephoto = callPackage ./ephoto { };
-  evisum = callPackage ./evisum { };
-  rage = callPackage ./rage { };
-  terminology = callPackage ./terminology { };
-}
+    #### CORE EFL
+    efl = callPackage ./efl { };
+
+    #### WINDOW MANAGER
+    enlightenment = callPackage ./enlightenment { };
+
+    #### APPLICATIONS
+    econnman = callPackage ./econnman { };
+    ecrire = callPackage ./ecrire { };
+    ephoto = callPackage ./ephoto { };
+    evisum = callPackage ./evisum { };
+    rage = callPackage ./rage { };
+    terminology = callPackage ./terminology { };
+
+  }
+)

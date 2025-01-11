@@ -1,22 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ush";
-  version = "3.1.0";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tarruda";
     repo = "python-ush";
     rev = version;
-    sha256 = "sha256-eL3vG3yS02enbLYorKvvYKbju9HInffUhrZgkodwhvo=";
+    hash = "sha256-a6ICbd8647DRtuHl2vs64bsChUjlpuWHV1ipBdFA600=";
   };
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "ush" ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     six
   ];
@@ -30,6 +37,6 @@ buildPythonPackage rec {
     description = "Powerful API for invoking with external commands";
     homepage = "https://github.com/tarruda/python-ush";
     license = licenses.mit;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

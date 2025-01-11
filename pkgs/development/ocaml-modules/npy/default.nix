@@ -1,22 +1,28 @@
-{ lib, buildDunePackage, fetchFromGitHub, numpy, camlzip }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  numpy,
+  camlzip,
+}:
 
 buildDunePackage rec {
   pname = "npy";
   version = "0.0.9";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "${pname}-ocaml";
-    rev    = version;
-    sha256 = "1fryglkm20h6kdqjl55b7065b34bdg3g3p6j0jv33zvd1m5888m1";
+    repo = "${pname}-ocaml";
+    rev = version;
+    hash = "sha256:1fryglkm20h6kdqjl55b7065b34bdg3g3p6j0jv33zvd1m5888m1";
   };
 
   propagatedBuildInputs = [ camlzip ];
-  checkInputs = [ numpy ];
+  nativeCheckInputs = [ numpy ];
 
   doCheck = true;
 

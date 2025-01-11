@@ -1,48 +1,57 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
-, borgbackup
-, qt5
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtwayland,
+  borgbackup,
+  versionCheckHook,
+  makeFontsConf,
+  qtbase,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.8.6";
+  version = "0.10.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-J/Cl+et4AS44PPG2SmOHosKVw0XtOyNL0qJk68OHwQc=";
+    tag = "v${version}";
+    hash = "sha256-VhM782mFWITA0VlKw0sBIu/UxUqlFLgq5XVdCpQggCw=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
-    paramiko
-    peewee
-    pyqt5
-    python-dateutil
-    psutil
-    qdarkstyle
-    secretstorage
-    appdirs
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
+
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-    --replace setuptools_git "" \
-    --replace pytest-runner ""
+  dependencies = with python3Packages; [
+    packaging
+    peewee
+    platformdirs
+    psutil
+    pyqt6
+    secretstorage
+  ];
 
+  postPatch = ''
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
-    --replace Exec=vorta "Exec=$out/bin/vorta" \
-    --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
+    --replace-fail com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 
   postInstall = ''
     install -Dm644 src/vorta/assets/metadata/com.borgbase.Vorta.desktop $out/share/applications/com.borgbase.Vorta.desktop
+    install -Dm644 src/vorta/assets/icons/icon.svg $out/share/pixmaps/com.borgbase.Vorta-symbolic.svg
   '';
 
   preFixup = ''
@@ -52,42 +61,47 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest-qt
     pytest-mock
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    # For tests/test_misc.py::test_autostart
-    mkdir -p $HOME/.config/autostart
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
-    export QT_QPA_PLATFORM=offscreen
-  '';
+  preCheck =
+    let
+      fontsConf = makeFontsConf {
+        fontDirectories = [ ];
+      };
+    in
+    ''
+      export HOME=$(mktemp -d)
+      export FONTCONFIG_FILE=${fontsConf};
+      # For tests/test_misc.py::test_autostart
+      mkdir -p $HOME/.config/autostart
+      export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
+      export QT_QPA_PLATFORM=offscreen
+    '';
 
-  disabledTestPaths = [
-    "tests/test_archives.py"
-    "tests/test_borg.py"
-    "tests/test_lock.py"
-    "tests/test_notifications.py"
-  ];
+  disabledTestPaths =
+    [
+      # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)    "tests/test_excludes.py"
+      "tests/integration"
+      "tests/unit"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Darwin-only test
+      "tests/network_manager/test_darwin.py"
+    ];
 
-  disabledTests = [
-    "diff_archives_dict_issue-Users"
-    "diff_archives-test"
-    "test_repo_unlink"
-    "test_repo_add_success"
-    "test_ssh_dialog"
-    "test_create"
-    "test_scheduler_create_backup"
-  ];
-
-  meta = with lib; {
-    license = licenses.gpl3Only;
-    homepage = "https://vorta.borgbase.com/";
-    maintainers = with maintainers; [ ma27 ];
+  meta = {
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v${version}";
     description = "Desktop Backup Client for Borg";
-    platforms = platforms.linux;
+    homepage = "https://vorta.borgbase.com/";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.linux;
+    mainProgram = "vorta";
   };
 }

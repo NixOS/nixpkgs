@@ -25,22 +25,23 @@
 , libXmu
 , libGLU
 , libGL
-, openexr
+, openexr_3
 , panotools
 , perlPackages
 , sqlite
 , vigra
+, wrapGAppsHook3
 , wxGTK
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "hugin";
-  version = "2021.0.0";
+  version = "2024.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
-    sha256 = "sha256-BHrqin+keESzTvJ8GdO2l+hJOdyx/bvrLCBGIbZu6tk=";
+    hash = "sha256-E+wM3utOtjFJyDN2jT43Tnz1pqjY0C1QiFzklvBbp+Q=";
   };
 
   buildInputs = [
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     libXmu
     libGLU
     libGL
-    openexr
+    openexr_3
     panotools
     sqlite
     vigra
@@ -70,12 +71,14 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 wxGTK ];
+
+  strictDeps = true;
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
     for p in $out/bin/*; do
@@ -88,7 +91,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://hugin.sourceforge.net/";
+    homepage = "https://hugin.sourceforge.io/";
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hrdinka ];

@@ -2,80 +2,66 @@
 
 Writing Nix expressions for Qt libraries and applications is largely similar as for other C++ software.
 This section assumes some knowledge of the latter.
-There are two problems that the Nixpkgs Qt infrastructure addresses,
-which are not shared by other C++ software:
 
-1.  There are usually multiple supported versions of Qt in Nixpkgs.
-    All of a package's dependencies must be built with the same version of Qt.
-    This is similar to the version constraints imposed on interpreted languages like Python.
-2.  Qt makes extensive use of runtime dependency detection.
-    Runtime dependencies are made into build dependencies through wrappers.
+The major caveat with Qt applications is that Qt uses a plugin system to load additional modules at runtime.
+In Nixpkgs, we wrap Qt applications to inject environment variables telling Qt where to discover the required plugins and QML modules.
+
+This effectively makes the runtime dependencies pure and explicit at build-time, at the cost of introducing
+an extra indirection.
 
 ## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
-```{=docbook}
-<programlisting>
-{ stdenv, lib, qtbase, wrapQtAppsHook }: <co xml:id='qt-default-nix-co-1' />
+```nix
+{ stdenv, qt6 }:
 
 stdenv.mkDerivation {
   pname = "myapp";
   version = "1.0";
 
-  buildInputs = [ qtbase ];
-  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id='qt-default-nix-co-2' />
-}
-</programlisting>
-
- <calloutlist>
-  <callout arearefs='qt-default-nix-co-1'>
-   <para>
-    Import Qt modules directly, that is: <literal>qtbase</literal>, <literal>qtdeclarative</literal>, etc.
-    <emphasis>Do not</emphasis> import Qt package sets such as <literal>qt5</literal>
-    because the Qt versions of dependencies may not be coherent, causing build and runtime failures.
-   </para>
-  </callout>
-  <callout arearefs='qt-default-nix-co-2'>
-    <para>
-      All Qt packages must include <literal>wrapQtAppsHook</literal> in
-      <literal>nativeBuildInputs</literal>, or you must explicitly set
-      <literal>dontWrapQtApps</literal>.
-    </para>
-  </callout>
- </calloutlist>
-```
-
-## Locating runtime dependencies {#qt-runtime-dependencies}
-
-Qt applications must be wrapped to find runtime dependencies.
-Include `wrapQtAppsHook` in `nativeBuildInputs`:
-
-```nix
-{ stdenv, wrapQtAppsHook }:
-
-stdenv.mkDerivation {
-  # ...
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  buildInputs = [ qt6.qtbase ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 }
 ```
+
+The same goes for Qt 5 where libraries and tools are under `libsForQt5`.
+
+Any Qt package should include `wrapQtAppsHook` or `wrapQtAppsNoGuiHook` in `nativeBuildInputs`, or explicitly set `dontWrapQtApps` to bypass generating the wrappers.
+
+::: {.note}
+
+`wrapQtAppsHook` propagates plugins and QML components from `qtwayland` on platforms that support it, to allow applications to act as native Wayland clients. It should be used for all graphical applications.
+
+`wrapQtAppsNoGuiHook` does not propagate `qtwayland` to reduce closure size for purely command-line applications.
+
+:::
+
+## Packages supporting multiple Qt versions {#qt-versions}
+
+If your package is a library that can be built with multiple Qt versions, you may want to take Qt modules as separate arguments (`qtbase`, `qtdeclarative` etc.), and invoke the package from `pkgs/top-level/qt5-packages.nix` or `pkgs/top-level/qt6-packages.nix` using the respective `callPackage` functions.
+
+Applications should generally be built with upstream's preferred Qt version.
+
+## Locating additional runtime dependencies {#qt-runtime-dependencies}
 
 Add entries to `qtWrapperArgs` are to modify the wrappers created by
 `wrapQtAppsHook`:
 
 ```nix
-{ stdenv, wrapQtAppsHook }:
+{ stdenv, qt6 }:
 
 stdenv.mkDerivation {
   # ...
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
   qtWrapperArgs = [ ''--prefix PATH : /path/to/bin'' ];
 }
 ```
 
 The entries are passed as arguments to [wrapProgram](#fun-wrapProgram).
 
-Set `dontWrapQtApps` to stop applications from being wrapped automatically.
-Wrap programs manually with `wrapQtApp`, using the syntax of
-[wrapProgram](#fun-wrapProgram):
+If you need more control over the wrapping process, set `dontWrapQtApps` to disable automatic wrapper generation,
+and then create wrappers manually in `fixupPhase`, using `wrapQtApp`, which itself is a small wrapper over [wrapProgram](#fun-wrapProgram):
+
+The `makeWrapper` arguments required for Qt are also exposed in the environment as `$qtWrapperArgs`.
 
 ```nix
 { stdenv, lib, wrapQtAppsHook }:
@@ -95,66 +81,3 @@ stdenv.mkDerivation {
 This means that scripts won't be automatically wrapped so you'll need to manually wrap them as previously mentioned.
 An example of when you'd always need to do this is with Python applications that use PyQt.
 :::
-
-## Adding a library to Nixpkgs {#adding-a-library-to-nixpkgs}
-
-Add Qt libraries to `qt5-packages.nix` to make them available for every
-supported Qt version.
-
-### Example adding a Qt library {#qt-library-all-packages-nix}
-
-The following represents the contents of `qt5-packages.nix`.
-
-```nix
-{
-  # ...
-
-  mylib = callPackage ../path/to/mylib {};
-
-  # ...
-}
-```
-
-Libraries are built with every available version of Qt.
-Use the `meta.broken` attribute to disable the package for unsupported Qt versions:
-
-```nix
-{ stdenv, lib, qtbase }:
-
-stdenv.mkDerivation {
-  # ...
-  # Disable this library with Qt < 5.9.0
-  meta.broken = lib.versionOlder qtbase.version "5.9.0";
-}
-```
-
-## Adding an application to Nixpkgs {#adding-an-application-to-nixpkgs}
-
-Add Qt applications to `qt5-packages.nix`. Add an alias to `all-packages.nix`
-to select the Qt 5 version used for the application.
-
-### Example adding a Qt application {#qt-application-all-packages-nix}
-
-The following represents the contents of `qt5-packages.nix`.
-
-```nix
-{
-  # ...
-
-  myapp = callPackage ../path/to/myapp {};
-
-  # ...
-}
-```
-
-The following represents the contents of `all-packages.nix`.
-
-```nix
-{
-  # ...
-
-  myapp = libsForQt5.myapp;
-
-  # ...
-}
-```

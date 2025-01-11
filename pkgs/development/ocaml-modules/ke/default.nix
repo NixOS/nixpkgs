@@ -1,25 +1,31 @@
-{ lib, buildDunePackage, fetchurl
-, bigarray-compat, fmt
-, alcotest, bigstringaf
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fmt,
+  alcotest,
+  bigstringaf,
 }:
 
 buildDunePackage rec {
   pname = "ke";
-  version = "0.4";
-
-  useDune2 = true;
+  version = "0.6";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ke/releases/download/v${version}/ke-v${version}.tbz";
-    sha256 = "13c9xy60vmq29mnwpg3h3zgl6gjbjfwbx1s0crfc6xwvark0zxnx";
+    url = "https://github.com/mirage/ke/releases/download/v${version}/ke-${version}.tbz";
+    sha256 = "sha256-YSFyB+IgCwSxd1lzZhD/kggmmmR/hUy1rnLNrA1nIwU=";
   };
 
-  propagatedBuildInputs = [ bigarray-compat fmt ];
+  propagatedBuildInputs = [ fmt ];
 
-  checkInputs = [ alcotest bigstringaf ];
+  checkInputs = [
+    alcotest
+    bigstringaf
+  ];
   doCheck = true;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   meta = {
     description = "Fast implementation of queue in OCaml";

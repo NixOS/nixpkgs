@@ -1,43 +1,101 @@
-# Inherit arguments from the derivation
-makeWrapperArgs=( ${makeWrapperArgs-} )
+# For compatibility, convert makeWrapperArgs to an array unless we are using
+# structured attributes. That is, we ensure that makeWrapperArgs is always an
+# array.
+# See https://github.com/NixOS/nixpkgs/blob/858f4db3048c5be3527e183470e93c1a72c5727c/pkgs/build-support/dotnet/build-dotnet-module/hooks/dotnet-fixup-hook.sh#L1-L3
+# and https://github.com/NixOS/nixpkgs/pull/313005#issuecomment-2175482920
+if [[ -z $__structuredAttrs ]]; then
+    makeWrapperArgs=( ${makeWrapperArgs-} )
+fi
 
 # First argument is the executable you want to wrap,
 # the second is the destination for the wrapper.
 wrapDotnetProgram() {
+    local -r dotnetRuntime=@dotnetRuntime@
+    local -r wrapperPath=@wrapperPath@
+
+    local -r dotnetFromEnvScript='dotnetFromEnv() {
+    local dotnetPath
+    if command -v dotnet 2>&1 >/dev/null; then
+        dotnetPath=$(which dotnet) && \
+            dotnetPath=$(realpath "$dotnetPath") && \
+            dotnetPath=$(dirname "$dotnetPath") && \
+            export DOTNET_ROOT="$dotnetPath"
+    fi
+}
+dotnetFromEnv'
+
+    if [[ -n $__structuredAttrs ]]; then
+        local -r dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
+    else
+        local -r dotnetRuntimeDepsArray=($dotnetRuntimeDeps)
+    fi
+
+    local dotnetRuntimeDepsFlags=()
+    if (( ${#dotnetRuntimeDepsArray[@]} > 0 )); then
+        local libraryPathArray=("${dotnetRuntimeDepsArray[@]/%//lib}")
+        local OLDIFS="$IFS" IFS=':'
+        dotnetRuntimeDepsFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPathArray[*]}")
+        IFS="$OLDIFS"
+    fi
+
+    local dotnetRootFlagsArray=()
+    if [[ -z ${dotnetSelfContainedBuild-} ]]; then
+        if [[ -n ${useDotnetFromEnv-} ]]; then
+            # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
+            dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$wrapperPath")
+            dotnetRootFlagsArray+=("--run" "$dotnetFromEnvScript")
+            if [[ -n $dotnetRuntime ]]; then
+                dotnetRootFlagsArray+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
+                dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$dotnetRuntime/bin")
+            fi
+        elif [[ -n $dotnetRuntime ]]; then
+            dotnetRootFlagsArray+=("--set" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
+            dotnetRootFlagsArray+=("--prefix" "PATH" ":" "$dotnetRuntime/bin")
+        fi
+    fi
+
     makeWrapper "$1" "$2" \
-        --set "DOTNET_ROOT" "@dotnetRuntime@" \
-        --suffix "LD_LIBRARY_PATH" : "@runtimeDeps@" \
+        "${dotnetRuntimeDepsFlags[@]}" \
+        "${dotnetRootFlagsArray[@]}" \
         "${gappsWrapperArgs[@]}" \
         "${makeWrapperArgs[@]}"
 
-    echo "Installed wrapper to: "$2""
+    echo "installed wrapper to "$2""
 }
 
 dotnetFixupHook() {
-    echo "Executing dotnetFixupPhase"
+    local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
 
-    if [ "${executables}" ]; then
-        for executable in ${executables[@]}; do
-            execPath="$out/lib/${pname}/$executable"
+    local executable executableBasename
 
-            if [[ -f "$execPath" && -x "$execPath" ]]; then
-                wrapDotnetProgram "$execPath" "$out/bin/$(basename "$executable")"
+    # check if dotnetExecutables is declared (including empty values, in which case we generate no executables)
+    if declare -p dotnetExecutables &>/dev/null; then
+        if [[ -n $__structuredAttrs ]]; then
+            local dotnetExecutablesArray=( "${dotnetExecutables[@]}" )
+        else
+            local dotnetExecutablesArray=($dotnetExecutables)
+        fi
+        for executable in "${dotnetExecutablesArray[@]}"; do
+            executableBasename=$(basename "$executable")
+
+            local path="$dotnetInstallPath/$executable"
+
+            if test -x "$path"; then
+                wrapDotnetProgram "$path" "$out/bin/$executableBasename"
             else
-                echo "Specified binary \"$executable\" is either not an executable, or does not exist!"
+                echo "Specified binary \"$executable\" is either not an executable or does not exist!"
+                echo "Looked in $path"
                 exit 1
             fi
         done
     else
-        for executable in $out/lib/${pname}/*; do
-            if [[ -f "$executable" && -x "$executable" && "$executable" != *"dll"* ]]; then
-                wrapDotnetProgram "$executable" "$out/bin/$(basename "$executable")"
-            fi
-        done
+        while IFS= read -d '' executable; do
+            executableBasename=$(basename "$executable")
+            wrapDotnetProgram "$executable" "$out/bin/$executableBasename" \;
+        done < <(find "$dotnetInstallPath" ! -name "*.dll" -executable -type f -print0)
     fi
-
-    echo "Finished dotnetFixupPhase"
 }
 
-if [[ -z "${dontDotnetFixup-}" ]]; then
+if [[ -z "${dontFixup-}" && -z "${dontDotnetFixup-}" ]]; then
     preFixupPhases+=" dotnetFixupHook"
 fi

@@ -1,21 +1,24 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "opensensemap-api";
-  version = "0.2.0";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-KSukSPpSbfbEEqTq4zqqo8OT7ptdPrGy2QyQYjErQWI=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-opensensemap-api";
+    tag = version;
+    hash = "sha256-iUSdjU41JOT7k044EI2XEvJiSo6V4mO6S51EcIughEM=";
   };
 
   propagatedBuildInputs = [
@@ -23,12 +26,10 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  # no tests are present
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "opensensemap_api"
-  ];
+  pythonImportsCheck = [ "opensensemap_api" ];
 
   meta = with lib; {
     description = "OpenSenseMap API Python client";
@@ -37,6 +38,7 @@ buildPythonPackage rec {
       available information from the sensor can be retrieved.
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-opensensemap-api";
+    changelog = "https://github.com/home-assistant-ecosystem/python-opensensemap-api/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

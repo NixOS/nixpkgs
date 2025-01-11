@@ -1,47 +1,42 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.7.1";
+  version = "0.7.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nielstron";
-    repo = pname;
-    rev = "release-${version}";
-    sha256 = "1xwx0c1dp2374bwigzwhvcj4577vrxyhn6i5zv73k9ydc7w1xgyz";
+    repo = "pyfronius";
+    tag = "release-${version}";
+    hash = "sha256-7GtY/6uuLe7K9T7xMVt2ytpA6MKVWnyEoLtA5dSMiH4=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Python3.10 compatibility; https://github.com/nielstron/pyfronius/pull/7
-      url = "https://github.com/nielstron/pyfronius/commit/9deb209d4246ff575cd3c4c5373037bf11df6719.patch";
-      hash = "sha256-srXYCvp86kGYUYZIXMcu68hEbkTspD945J+hc/AhqSw=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyfronius" ];
 
   meta = with lib; {
     description = "Python module to communicate with Fronius Symo";
     homepage = "https://github.com/nielstron/pyfronius";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/nielstron/pyfronius/releases/tag/release-${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    # https://github.com/nielstron/pyfronius/issues/18
+    broken = versionAtLeast aiohttp.version "3.10.1";
   };
 }

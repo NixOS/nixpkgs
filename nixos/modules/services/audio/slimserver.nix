@@ -1,33 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.slimserver;
 
-in {
+in
+{
   options = {
 
     services.slimserver = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable slimserver.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.slimserver;
-        defaultText = literalExpression "pkgs.slimserver";
-        description = "Slimserver package to use.";
-      };
+      package = lib.mkPackageOption pkgs "slimserver" { };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/slimserver";
         description = ''
           The directory where slimserver stores its state, tag cache,
@@ -37,10 +35,9 @@ in {
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - slimserver slimserver - -"
@@ -54,7 +51,7 @@ in {
       serviceConfig = {
         User = "slimserver";
         # Issue 40589: Disable broken image/video support (audio still works!)
-        ExecStart = "${cfg.package}/slimserver.pl --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
+        ExecStart = "${lib.getExe cfg.package} --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
       };
     };
 
@@ -65,9 +62,8 @@ in {
         group = "slimserver";
         isSystemUser = true;
       };
-      groups.slimserver = {};
+      groups.slimserver = { };
     };
   };
 
 }
-

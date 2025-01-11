@@ -1,20 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  capnproto,
+  cmake,
+  gdb,
+  libpfm,
+  makeWrapper,
+  pkg-config,
+  procps,
+  python3,
+  which,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
-  version = "5.5.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.8.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
-    rev = version;
-    sha256 = "sha256-ZZhkmDWGNWejwXZEcFO9p9NG1dopK7kXRj7OrkJCPR0=";
+    rev = finalAttrs.version;
+    hash = "sha256-FudAAkWIe6gv4NYFoe9E0hlgTM70lymBE5Fw/vbehps=";
   };
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
-    sed '7i#include <math.h>' -i src/Scheduler.cc
-    patchShebangs .
+    patchShebangs src
   '';
 
   # With LTO enabled, linking fails with the following message:
@@ -25,28 +39,51 @@ stdenv.mkDerivation rec {
   # collect2: error: ld returned 1 exit status
   #
   # See also https://github.com/NixOS/nixpkgs/pull/110846
-  preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "-flto" ""
+  '';
 
-  nativeBuildInputs = [ cmake pkg-config which ];
-  buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    capnproto
+    cmake
+    makeWrapper
+    pkg-config
+    python3.pythonOnBuildForHost
+    which
   ];
-  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
+
+  buildInputs = [
+    bash
+    capnproto
+    gdb
+    libpfm
+    procps
+    python3
+    zlib
+  ];
+
   cmakeFlags = [
-    "-DCMAKE_C_FLAGS_RELEASE:STRING="
-    "-DCMAKE_CXX_FLAGS_RELEASE:STRING="
-    "-Ddisable32bit=ON"
+    (lib.cmakeBool "disable32bit" true)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # we turn on additional warnings due to hardening
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "fortify" ];
 
   # FIXME
-  #doCheck = true;
+  doCheck = false;
 
   preCheck = "export HOME=$TMPDIR";
+
+  # needs GDB to replay programs at runtime
+  preFixup = ''
+    wrapProgram "$out/bin/rr" \
+      --prefix PATH ":" "${lib.makeBinPath [ gdb ]}";
+  '';
 
   meta = {
     homepage = "https://rr-project.org/";
@@ -58,8 +95,18 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = with lib.licenses; [ mit bsd2 ];
-    maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = lib.platforms.x86;
+    license = with lib.licenses; [
+      mit
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [
+      pierron
+      thoughtpolice
+    ];
+    platforms = [
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
-}
+})

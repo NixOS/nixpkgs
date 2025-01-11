@@ -1,7 +1,19 @@
-{ config, lib, pkgs, options }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 let
   cfg = config.services.prometheus.exporters.sql;
+  inherit (lib)
+    mkOption
+    types
+    mapAttrs
+    mapAttrsToList
+    concatStringsSep
+    ;
   cfgOptions = {
     options = with types; {
       jobs = mkOption {
@@ -17,7 +29,7 @@ let
         type = str;
         description = ''
           How often to run this job, specified in
-          <link xlink:href="https://golang.org/pkg/time/#ParseDuration">Go duration</link> format.
+          [Go duration](https://golang.org/pkg/time/#ParseDuration) format.
         '';
       };
       connections = mkOption {
@@ -26,7 +38,7 @@ let
       };
       startupSql = mkOption {
         type = listOf str;
-        default = [];
+        default = [ ];
         description = "A list of SQL statements to execute once after making a connection.";
       };
       queries = mkOption {
@@ -59,15 +71,16 @@ let
   };
 
   configFile =
-    if cfg.configFile != null
-    then cfg.configFile
+    if cfg.configFile != null then
+      cfg.configFile
     else
       let
         nameInline = mapAttrsToList (k: v: v // { name = k; });
         renameStartupSql = j: removeAttrs (j // { startup_sql = j.startupSql; }) [ "startupSql" ];
         configuration = {
-          jobs = map renameStartupSql
-            (nameInline (mapAttrs (k: v: (v // { queries = nameInline v.queries; })) cfg.configuration.jobs));
+          jobs = map renameStartupSql (
+            nameInline (mapAttrs (k: v: (v // { queries = nameInline v.queries; })) cfg.configuration.jobs)
+          );
         };
       in
       builtins.toFile "config.yaml" (builtins.toJSON configuration);

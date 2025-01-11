@@ -1,32 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, ffmpeg
-, libopus
-, aiohttp
-, aiodns
-, brotli
-, cchardet
-, orjson
-, pynacl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  ffmpeg,
+  libopus,
+  aiohttp,
+  aiodns,
+  audioop-lts,
+  brotli,
+  faust-cchardet,
+  orjson,
+  pynacl,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "2.0.0b3";
-
-  format = "setuptools";
+  version = "2.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nextcord";
     repo = "nextcord";
-    rev = version;
-    hash = "sha256-ygRbgL+px93Gx0Sv6d5AX+0CPYoOc2V1rnuViRa4Zy0=";
+    tag = "v${version}";
+    hash = "sha256-bv4I+Ol/N4kbp/Ch7utaUpo0GmF+Mpx4zWmHL7uIveM=";
   };
 
   patches = [
@@ -37,14 +40,23 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    aiodns
-    aiohttp
-    brotli
-    cchardet
-    orjson
-    pynacl
+  build-system = [
+    setuptools
   ];
+
+  dependencies =
+    [
+      aiodns
+      aiohttp
+      brotli
+      faust-cchardet
+      orjson
+      pynacl
+      setuptools # for pkg_resources, remove with next release
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      audioop-lts
+    ];
 
   # upstream has no tests
   doCheck = false;
@@ -56,6 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/nextcord/nextcord/blob/${src.rev}/docs/whats_new.rst";
     description = "Python wrapper for the Discord API forked from discord.py";
     homepage = "https://github.com/nextcord/nextcord";
     license = licenses.mit;

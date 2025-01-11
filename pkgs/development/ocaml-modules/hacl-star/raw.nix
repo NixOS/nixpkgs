@@ -1,18 +1,23 @@
-{ lib, which, stdenv, fetchzip, ocaml, findlib, hacl-star, ctypes, cppo }:
-
+{
+  lib,
+  which,
+  stdenv,
+  fetchzip,
+  cmake,
+  ocaml,
+  findlib,
+  ctypes,
+  cppo,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
-  version = "0.4.5";
+  version = "0.7.2";
 
   src = fetchzip {
-    url = "https://github.com/project-everest/hacl-star/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
-    sha256 = "1330vgbf5krlkvifby96kyk13xhmihajk2w5hgf2761jrljmnnrs";
+    url = "https://github.com/cryspen/hacl-packages/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
+    hash = "sha256-6WPbdkT9IsX0Q8mF2vLBJMktEES8tU45JztOPepAL0o=";
     stripRoot = false;
   };
-
-  sourceRoot = "./source/raw";
-
-  minimalOCamlVersion = "4.08";
 
   # strictoverflow is disabled because it breaks aarch64-darwin
   hardeningDisable = [ "strictoverflow" ];
@@ -21,18 +26,36 @@ stdenv.mkDerivation rec {
     patchShebangs ./
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    make -C hacl-star-raw build-c
+    make -C hacl-star-raw build-bindings
+
+    runHook postBuild
+  '';
+
   preInstall = ''
+    mkdir $out
     mkdir -p $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  installTargets = "install-hacl-star-raw";
+  installPhase = ''
+    runHook preInstall
 
+    make -C hacl-star-raw install
+
+    runHook postInstall
+  '';
+
+  dontUseCmakeConfigure = true;
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  createFindlibDestdir = true;
 
   nativeBuildInputs = [
     which
+    cmake
     ocaml
     findlib
   ];
@@ -50,9 +73,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
+    inherit (ocaml.meta) platforms;
     description = "Auto-generated low-level OCaml bindings for EverCrypt/HACL*";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ulrikstrid ];
-    platforms = ocaml.meta.platforms;
   };
 }

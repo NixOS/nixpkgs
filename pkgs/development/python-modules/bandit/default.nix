@@ -1,31 +1,33 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, isPy3k
-
-# pythonPackages
-, GitPython
-, pbr
-, pyyaml
-, six
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  gitpython,
+  pbr,
+  pyyaml,
+  rich,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "bandit";
-  version = "1.7.4";
-  disabled = !isPy3k;
+  version = "1.8.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LWOoxXNBe64ziWLUubBvvGCA907NlVoJKEnh5lxxe9I=";
+    hash = "sha256-tb/lWglavZ/iAJkXinxsBg+ES/1P5MdtKONeTFK50x4=";
   };
 
+  nativeBuildInputs = [ pbr ];
+
   propagatedBuildInputs = [
-    GitPython
-    pbr
+    gitpython
     pyyaml
-    six
+    rich
     stevedore
   ];
 
@@ -33,12 +35,13 @@ buildPythonPackage rec {
   #   and this requires Network Connectivity
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "bandit" ];
+
+  meta = with lib; {
     description = "Security oriented static analyser for python code";
-    homepage = "https://bandit.readthedocs.io/en/latest/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    homepage = "https://bandit.readthedocs.io/";
+    changelog = "https://github.com/PyCQA/bandit/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

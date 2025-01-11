@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,8 @@ let
   format = pkgs.formats.json { };
 
   configFile = format.generate "wiki-js.yml" cfg.settings;
-in {
+in
+{
   options.services.wiki-js = {
     enable = mkEnableOption "wiki-js";
 
@@ -17,7 +23,7 @@ in {
       default = null;
       example = "/root/wiki-js.env";
       description = ''
-        Environment fiel to inject e.g. secrets into the configuration.
+        Environment file to inject e.g. secrets into the configuration.
       '';
     };
 
@@ -25,12 +31,12 @@ in {
       default = "wiki-js";
       type = types.str;
       description = ''
-        Name of the directory in <filename>/var/lib</filename>.
+        Name of the directory in {file}`/var/lib`.
       '';
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       type = types.submodule {
         freeformType = format.type;
         options = {
@@ -53,11 +59,16 @@ in {
           db = {
             type = mkOption {
               default = "postgres";
-              type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
+              type = types.enum [
+                "postgres"
+                "mysql"
+                "mariadb"
+                "mssql"
+              ];
               description = ''
-                Database driver to use for persistence. Please note that <literal>sqlite</literal>
+                Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
-                in <package>pkgs.wiki-js</package> and it's not recommended by upstream for
+                in `pkgs.wiki-js` and it's not recommended by upstream for
                 production use.
               '';
             };
@@ -79,7 +90,14 @@ in {
 
           logLevel = mkOption {
             default = "info";
-            type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
+            type = types.enum [
+              "error"
+              "warn"
+              "info"
+              "verbose"
+              "debug"
+              "silly"
+            ];
             description = ''
               Define how much detail is supposed to be logged at runtime.
             '';
@@ -88,23 +106,20 @@ in {
           offline = mkEnableOption "offline mode" // {
             description = ''
               Disable latest file updates and enable
-              <link xlink:href="https://docs.requarks.io/install/sideload">sideloading</link>.
+              [sideloading](https://docs.requarks.io/install/sideload).
             '';
           };
         };
       };
       description = ''
-        Settings to configure <package>wiki-js</package>. This directly
-        corresponds to <link xlink:href="https://docs.requarks.io/install/config">the upstream
-        configuration options</link>.
+        Settings to configure `wiki-js`. This directly
+        corresponds to [the upstream configuration options](https://docs.requarks.io/install/config).
 
         Secrets can be injected via the environment by
-        <itemizedlist>
-          <listitem><para>specifying <xref linkend="opt-services.wiki-js.environmentFile" />
-          to contain secrets</para></listitem>
-          <listitem><para>and setting sensitive values to <literal>$(ENVIRONMENT_VAR)</literal>
-          with this value defined in the environment-file.</para></listitem>
-        </itemizedlist>
+        - specifying [](#opt-services.wiki-js.environmentFile)
+          to contain secrets
+        - and setting sensitive values to `$(ENVIRONMENT_VAR)`
+          with this value defined in the environment-file.
       '';
     };
   };
@@ -116,7 +131,13 @@ in {
       documentation = [ "https://docs.requarks.io/" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ coreutils ];
+      path = with pkgs; [
+        # Needed for git storage.
+        git
+        # Needed for git+ssh storage.
+        openssh
+      ];
+
       preStart = ''
         ln -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml
         ln -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}
@@ -130,7 +151,7 @@ in {
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.wiki-js}/server";
+        ExecStart = "${pkgs.nodejs_18}/bin/node ${pkgs.wiki-js}/server";
       };
     };
   };

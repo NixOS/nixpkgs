@@ -1,12 +1,14 @@
-{ lib, buildDunePackage, fetchFromGitHub, callPackage
-, ffmpeg-base ? callPackage ./base.nix { }
-, ffmpeg-avutil
-, ffmpeg-avcodec
-, ffmpeg-avfilter
-, ffmpeg-swscale
-, ffmpeg-swresample
-, ffmpeg-av
-, ffmpeg-avdevice
+{
+  buildDunePackage,
+  callPackage,
+  ffmpeg-base ? callPackage ./base.nix { },
+  ffmpeg-avutil,
+  ffmpeg-avcodec,
+  ffmpeg-avfilter,
+  ffmpeg-swscale,
+  ffmpeg-swresample,
+  ffmpeg-av,
+  ffmpeg-avdevice,
 }:
 
 buildDunePackage {
@@ -14,7 +16,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src useDune2;
+  inherit (ffmpeg-base) version src;
 
   propagatedBuildInputs = [
     ffmpeg-avutil

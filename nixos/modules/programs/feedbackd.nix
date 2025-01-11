@@ -1,33 +1,30 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.programs.feedbackd;
-in {
+in
+{
   options = {
     programs.feedbackd = {
-      enable = mkEnableOption ''
-        Whether to enable the feedbackd D-BUS service and udev rules.
+      enable = lib.mkEnableOption ''
+        the feedbackd D-BUS service and udev rules.
 
-        Your user needs to be in the `feedbackd` group to trigger effects.
+        Your user needs to be in the `feedbackd` group to trigger effects
       '';
-      package = mkOption {
-        description = ''
-          Which feedbackd package to use.
-        '';
-        type = types.package;
-        default = pkgs.feedbackd;
-        defaultText = literalExpression "pkgs.feedbackd";
-      };
+      package = lib.mkPackageOption pkgs "feedbackd" { };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    users.groups.feedbackd = {};
+    users.groups.feedbackd = { };
   };
 }

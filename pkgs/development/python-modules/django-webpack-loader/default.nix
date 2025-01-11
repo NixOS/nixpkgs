@@ -1,21 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "1.4.1";
+  version = "3.1.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e34085b7fc4d352e482ff9cf7d09ae4524e730675e25432ab1d25a2dd94e583";
+    hash = "sha256-8Rt5cA0b/BKZExvfS6R5wewgD4OhQA4aL+tcK6e2+MQ=";
   };
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ django ];
 
   # django.core.exceptions.ImproperlyConfigured (path issue with DJANGO_SETTINGS_MODULE?)
   doCheck = false;
 
+  pythonImportsCheck = [ "webpack_loader" ];
+
   meta = with lib; {
     description = "Use webpack to generate your static bundles";
     homepage = "https://github.com/owais/django-webpack-loader";
-    maintainers = with maintainers; [ peterromfeldhk ];
+    changelog = "https://github.com/django-webpack/django-webpack-loader/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
+    maintainers = with maintainers; [ peterromfeldhk ];
   };
 }

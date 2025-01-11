@@ -1,5 +1,15 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitLab, fetchpatch, flac, libao, libvorbis, ncurses
-, opusfile, pkg-config
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitLab,
+  fetchpatch,
+  flac,
+  libao,
+  libvorbis,
+  ncurses,
+  opusfile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +24,18 @@ stdenv.mkDerivation rec {
     sha256 = "07zs8wx1ahf3q505fk9b6cgzlkhnayfsscch46yy9s1wgxgphj7s";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ flac libao libvorbis ncurses opusfile ];
+  buildInputs = [
+    flac
+    libao
+    libvorbis
+    ncurses
+    opusfile
+  ];
 
   patches = [
     ./gnu-screen.patch
@@ -37,24 +56,25 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to perform sample comparison testing on the command line";
+    description = "Tool to perform sample comparison testing on the command line";
     longDescription = ''
-       squishyball is a simple command-line utility for performing
-       double-blind A/B, A/B/X or X/X/Y testing on the command line.
-       The user specifies two input files to be compared and uses the
-       keyboard during playback to flip between the randomized samples
-       to perform on-the-fly compar‐ isons.  After a predetermined
-       number of trials, squishyball prints the trial results to
-       stdout and exits.  Results (stdout) may be redirected to a file
-       without affecting interactive use of the terminal.
+      squishyball is a simple command-line utility for performing
+      double-blind A/B, A/B/X or X/X/Y testing on the command line.
+      The user specifies two input files to be compared and uses the
+      keyboard during playback to flip between the randomized samples
+      to perform on-the-fly compar‐ isons.  After a predetermined
+      number of trials, squishyball prints the trial results to
+      stdout and exits.  Results (stdout) may be redirected to a file
+      without affecting interactive use of the terminal.
 
-       squishyball can also be used to perform casual, non-randomized
-       comparisons of groups of up to ten samples; this is the default
-       mode of operation.
+      squishyball can also be used to perform casual, non-randomized
+      comparisons of groups of up to ten samples; this is the default
+      mode of operation.
     '';
     homepage = "https://gitlab.xiph.org/xiph/squishyball";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ michalrus ];
     platforms = platforms.linux;
+    mainProgram = "squishyball";
   };
 }

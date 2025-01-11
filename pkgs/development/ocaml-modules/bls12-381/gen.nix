@@ -1,4 +1,10 @@
-{ lib, fetchFromGitLab, buildDunePackage, ff-sig, zarith }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ff-sig,
+  zarith,
+}:
 
 buildDunePackage rec {
   pname = "bls12-381-gen";
@@ -11,7 +17,7 @@ buildDunePackage rec {
     sha256 = "qocIfQdv9rniOUykRulu2zWsqkzT0OrsGczgVKALRuk=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

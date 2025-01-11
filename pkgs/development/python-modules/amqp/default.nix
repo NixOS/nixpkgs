@@ -1,45 +1,51 @@
-{ lib
-, buildPythonPackage
-, case
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, vine
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-rerunfailures,
+  pythonOlder,
+  vine,
 }:
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "5.1.1";
+  version = "5.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LBsT/swIk+lGxly9XzZCeGHP+k6iIB2Pb8oi4qNzteI=";
+    hash = "sha256-zdwAxyVElSICO62Un3D/97SPCxredNFwpvEKsERzlDI=";
   };
 
-  propagatedBuildInputs = [
-    vine
-  ];
+  propagatedBuildInputs = [ vine ];
 
-  checkInputs = [
-    case
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-rerunfailures
   ];
 
-  disabledTests = [
-    # Requires network access
-    "test_rmq.py"
-  ];
+  disabledTests =
+    [
+      # Requires network access
+      "test_rmq.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Requires network access but fails on macos only
+      "test_connection.py"
+    ];
 
-  pythonImportsCheck = [
-    "amqp"
-  ];
+  pythonImportsCheck = [ "amqp" ];
 
   meta = with lib; {
     description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
     homepage = "https://github.com/celery/py-amqp";
+    changelog = "https://github.com/celery/py-amqp/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,25 +1,26 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, ki18n
-, kirigami2
-, qtquickcontrols2
+  ki18n,
+  kirigami2,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {
   pname = "kirigami-addons";
-  version = "21.05";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pwkpag15mvzhd3hvdwx0a8ajwq9j30r6069vsx85bagnag3zanh";
+    hash = "sha256-KTkEfGmQf9kj+9e/rJM7jd/4BqubDLu5/oLkX88uENA=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,6 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/libraries/kirigami-addons";
     # https://invent.kde.org/libraries/kirigami-addons/-/blob/b197d98fdd079b6fc651949bd198363872d1be23/src/treeview/treeviewplugin.cpp#L1-5
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-

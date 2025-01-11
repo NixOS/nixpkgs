@@ -1,18 +1,21 @@
-{ lib, python3Packages, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
-  version = "2.0.0";
+  version = "2.0.2";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "Mopidy-SomaFM";
-    sha256 = "1j88rrliys8hqvnb35k1xqw88bvrllcb4rb53lgh82byhscsxlf3";
+    sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
   };
 
-  propagatedBuildInputs = [
-    mopidy
-  ];
+  propagatedBuildInputs = [ mopidy ];
 
   doCheck = false;
 
@@ -23,4 +26,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.nickhu ];
   };
 }
-

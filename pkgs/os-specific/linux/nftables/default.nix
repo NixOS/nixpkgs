@@ -1,47 +1,89 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex
-, asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
-, libmnl, libnftnl, libpcap
-, gmp, jansson, libedit
-, autoreconfHook
-, withDebugSymbols ? false
-, withPython ? false , python3
-, withXtables ? true , iptables
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  bison,
+  flex,
+  asciidoc,
+  libxslt,
+  findXMLCatalogs,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libmnl,
+  libnftnl,
+  libpcap,
+  gmp,
+  jansson,
+  autoreconfHook,
+  withDebugSymbols ? false,
+  withCli ? true,
+  libedit,
+  withXtables ? true,
+  iptables,
+  nixosTests,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.4";
+  version = "1.1.1";
   pname = "nftables";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-kn+x/qH2haMowQz3ketlXX4e1J0xDupcsxAd/Y1sujU=";
+    url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
+    hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config bison flex
-    asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt
+    pkg-config
+    bison
+    flex
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    findXMLCatalogs
+    libxslt
   ];
 
-  buildInputs = [
-    libmnl libnftnl libpcap
-    gmp jansson libedit
-  ] ++ lib.optional withXtables iptables
-    ++ lib.optional withPython python3;
+  buildInputs =
+    [
+      libmnl
+      libnftnl
+      libpcap
+      gmp
+      jansson
+    ]
+    ++ lib.optional withCli libedit
+    ++ lib.optional withXtables iptables;
 
-  configureFlags = [
-    "--with-json"
-    "--with-cli=editline"
-  ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional (!withPython) "--disable-python"
-    ++ lib.optional withPython "--enable-python"
+  configureFlags =
+    [
+      "--with-json"
+      (lib.withFeatureAs withCli "cli" "editline")
+    ]
+    ++ lib.optional (!withDebugSymbols) "--disable-debug"
     ++ lib.optional withXtables "--with-xtables";
 
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) firewall-nftables;
+    lxd-nftables = nixosTests.lxd.nftables;
+    nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.netfilter.org/nftables";
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
-    description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
+    description = "Project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ajs124 ];
+    maintainers = with maintainers; [ izorkin ];
+    mainProgram = "nft";
   };
 }

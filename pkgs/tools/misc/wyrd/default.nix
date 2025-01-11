@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ocamlPackages, ncurses, remind }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+  ncurses,
+  remind,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -13,12 +20,20 @@ stdenv.mkDerivation rec {
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
   '';
 
-  buildInputs = [ ocamlPackages.ocaml ncurses remind ocamlPackages.camlp4 ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    ocamlPackages.ocaml
+    ocamlPackages.camlp4
+  ];
+  buildInputs = [
+    ncurses
+    remind
+  ];
 
   preferLocalBuild = true;
 
   meta = with lib; {
-    description = "A text-based front-end to Remind";
+    description = "Text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated
       calendar and alarm program. Remind's power lies in its
@@ -28,8 +43,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://pessimization.com/software/wyrd/";
     downloadPage = "http://pessimization.com/software/wyrd/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "wyrd";
   };
 }

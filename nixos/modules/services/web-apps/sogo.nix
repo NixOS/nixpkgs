@@ -1,22 +1,37 @@
-{ config, pkgs, lib, ... }: with lib; let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+let
   cfg = config.services.sogo;
 
   preStart = pkgs.writeShellScriptBin "sogo-prestart" ''
-    touch /etc/sogo/sogo.conf
-    chown sogo:sogo /etc/sogo/sogo.conf
-    chmod 640 /etc/sogo/sogo.conf
+    ${
+      if (cfg.configReplaces != { }) then
+        ''
+          # Insert secrets
+          ${concatStringsSep "\n" (
+            mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces
+          )}
 
-    ${if (cfg.configReplaces != {}) then ''
-      # Insert secrets
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces)}
-
-      ${pkgs.perl}/bin/perl -p ${concatStringsSep " " (mapAttrsToList (k: v: '' -e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces)} /etc/sogo/sogo.conf.raw > /etc/sogo/sogo.conf
-    '' else ''
-      cp /etc/sogo/sogo.conf.raw /etc/sogo/sogo.conf
-    ''}
+          ${pkgs.perl}/bin/perl -p ${
+            concatStringsSep " " (
+              mapAttrsToList (k: v: ''-e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces
+            )
+          } /etc/sogo/sogo.conf.raw | install -m 640 -o sogo -g sogo /dev/stdin /etc/sogo/sogo.conf
+        ''
+      else
+        ''
+          install -m 640 -o sogo -g sogo /etc/sogo/sogo.conf.raw /etc/sogo/sogo.conf
+        ''
+    }
   '';
 
-in {
+in
+{
   options.services.sogo = with types; {
     enable = mkEnableOption "SOGo groupware";
 
@@ -49,11 +64,11 @@ in {
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
 
-        In the example, every occurence of LDAP_BINDPW will be replaced with the text of the
+        In the example, every occurrence of LDAP_BINDPW will be replaced with the text of the
         specified file.
       '';
       type = attrsOf str;
-      default = {};
+      default = { };
       example = {
         LDAP_BINDPW = "/var/lib/secrets/sogo/ldappw";
       };
@@ -88,7 +103,13 @@ in {
 
     systemd.services.sogo = {
       description = "SOGo groupware";
-      after = [ "postgresql.service" "mysql.service" "memcached.service" "openldap.service" "dovecot2.service" ];
+      after = [
+        "postgresql.service"
+        "mysql.service"
+        "memcached.service"
+        "openldap.service"
+        "dovecot2.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
 
@@ -169,14 +190,23 @@ in {
     systemd.services.sogo-ealarms = {
       description = "SOGo email alarms";
 
-      after = [ "postgresql.service" "mysqld.service" "memcached.service" "openldap.service" "dovecot2.service" "sogo.service" ];
+      after = [
+        "postgresql.service"
+        "mysqld.service"
+        "memcached.service"
+        "openldap.service"
+        "dovecot2.service"
+        "sogo.service"
+      ];
       restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
 
       startAt = [ "minutely" ];
 
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.sogo}/bin/sogo-ealarms-notify${optionalString (cfg.ealarmsCredFile != null) " -p ${cfg.ealarmsCredFile}"}";
+        ExecStart = "${pkgs.sogo}/bin/sogo-ealarms-notify${
+          optionalString (cfg.ealarmsCredFile != null) " -p ${cfg.ealarmsCredFile}"
+        }";
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -232,8 +262,8 @@ in {
         proxy_connect_timeout 90;
         proxy_send_timeout 90;
         proxy_read_timeout 90;
-        proxy_buffer_size 4k;
-        proxy_buffers 4 32k;
+        proxy_buffer_size 64k;
+        proxy_buffers 8 64k;
         proxy_busy_buffers_size 64k;
         proxy_temp_file_write_size 64k;
         client_max_body_size 50m;
@@ -255,13 +285,14 @@ in {
         alias ${pkgs.sogo}/lib/GNUstep/SOGo/$1.SOGo/Resources/$2;
       '';
 
-      locations."~ ^/SOGo/so/ControlPanel/Products/[^/]*UI/Resources/.*\\.(jpg|png|gif|css|js)$".extraConfig = ''
-        alias ${pkgs.sogo}/lib/GNUstep/SOGo/$1.SOGo/Resources/$2;
-      '';
+      locations."~ ^/SOGo/so/ControlPanel/Products/[^/]*UI/Resources/.*\\.(jpg|png|gif|css|js)$".extraConfig =
+        ''
+          alias ${pkgs.sogo}/lib/GNUstep/SOGo/$1.SOGo/Resources/$2;
+        '';
     };
 
     # User and group
-    users.groups.sogo = {};
+    users.groups.sogo = { };
     users.users.sogo = {
       group = "sogo";
       isSystemUser = true;

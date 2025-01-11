@@ -1,40 +1,55 @@
-{ runCommand, git }: src:
+{
+  runCommand,
+  git,
+  lib,
+}:
 
-let
-  srcStr = toString src;
+lib.makeOverridable (
+  src:
 
-  # Adds the current directory (respecting ignored files) to the git store, and returns the hash
-  gitHashFile = runCommand "put-in-git" {
-      nativeBuildInputs = [ git ];
-      dummy = builtins.currentTime; # impure, do every time
-      preferLocalBuild = true;
-    } ''
-      cd ${srcStr}
-      DOT_GIT=$(git rev-parse --resolve-git-dir .git) # path to repo
+  let
+    srcStr = toString src;
 
-      cp $DOT_GIT/index $DOT_GIT/index-user # backup index
-      git reset # reset index
-      git add . # add current directory
+    # Adds the current directory (respecting ignored files) to the git store, and returns the hash
+    gitHashFile =
+      runCommand "put-in-git"
+        {
+          nativeBuildInputs = [ git ];
+          dummy = builtins.currentTime; # impure, do every time
+          preferLocalBuild = true;
+        }
+        ''
+          cd ${srcStr}
+          DOT_GIT=$(git rev-parse --resolve-git-dir .git) # path to repo
 
-      # hash of current directory
-      # remove trailing newline
-      git rev-parse $(git write-tree) \
-        | tr -d '\n' > $out
+          cp $DOT_GIT/index $DOT_GIT/index-user # backup index
+          git reset # reset index
+          git add . # add current directory
 
-      mv $DOT_GIT/index-user $DOT_GIT/index # restore index
-    '';
+          # hash of current directory
+          # remove trailing newline
+          git rev-parse $(git write-tree) \
+            | tr -d '\n' > $out
 
-  gitHash = builtins.readFile gitHashFile; # cache against git hash
+          mv $DOT_GIT/index-user $DOT_GIT/index # restore index
+        '';
 
-  nixPath = runCommand "put-in-nix" {
-      nativeBuildInputs = [ git ];
-      preferLocalBuild = true;
-    } ''
-      mkdir $out
+    gitHash = builtins.readFile gitHashFile; # cache against git hash
 
-      # dump tar of *current directory* at given revision
-      git -C ${srcStr} archive --format=tar ${gitHash} \
-        | tar xf - -C $out
-    '';
+    nixPath =
+      runCommand "put-in-nix"
+        {
+          nativeBuildInputs = [ git ];
+          preferLocalBuild = true;
+        }
+        ''
+          mkdir $out
 
-in nixPath
+          # dump tar of *current directory* at given revision
+          git -C ${srcStr} archive --format=tar ${gitHash} \
+            | tar xf - -C $out
+        '';
+
+  in
+  nixPath
+)

@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, future
-, imageio
-, numpy
-, pandas
-, pytorch
-, tensorboard
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
+  future,
+  imageio,
+  numpy,
+  pandas,
+  torch,
+  tensorboard,
 }:
 
 buildPythonPackage rec {
   pname = "test-tube";
   version = "0.628";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -24,16 +26,14 @@ buildPythonPackage rec {
     sha256 = "0w60xarmcw06gc4002sy7bjfykdz34gbgniswxkl0lw8a1v0xn2m";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [
     future
     imageio
     numpy
     pandas
-    pytorch
+    torch
     tensorboard
   ];
 

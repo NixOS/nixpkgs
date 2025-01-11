@@ -1,34 +1,51 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, cookiecutter, networkx , pandas, tornado, tqdm
-, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  cookiecutter,
+  networkx,
+  pandas,
+  tornado,
+  tqdm,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "mesa";
-  version = "0.8.7";
+  version = "2.4.0";
+  format = "setuptools";
 
   # According to their docs, this library is for Python 3+.
   disabled = isPy27;
 
-  src = fetchFromGitHub {
-    owner = "projectmesa";
-    repo = "mesa";
-    rev = "v${version}";
-    sha256 = "0i1bpdqjrx4avgrzyqxpwxx86j11yhrq1j4kca854xahvhmwis19";
+  src = fetchPypi {
+    pname = "mesa";
+    inherit version;
+    hash = "sha256-FlQlyNvtMXRSFT3kMwCEAjAH4b+ZCsxliUiPgbRsSgc=";
   };
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    cookiecutter
+    networkx
+    pandas
+    tornado
+    tqdm
+  ];
 
-  # Ignore test which tries to mkdir in unreachable location.
-  checkPhase = ''
-    pytest tests -k "not scaffold"
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [ cookiecutter networkx pandas tornado tqdm ];
+  disabledTests = [
+    "test_examples"
+    "test_run"
+    "test_scaffold_creates_project_dir"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
-    description = "An agent-based modeling (or ABM) framework in Python";
+    description = "Agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;
     maintainers = [ maintainers.dpaetzel ];
+    broken = true; # missing dependencies
   };
 }

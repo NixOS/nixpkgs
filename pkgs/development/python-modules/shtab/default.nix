@@ -1,51 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, bashInteractive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  bashInteractive,
 }:
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.5.4";
-  format = "setuptools";
+  version = "1.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MYLAQSz55913fOhRnH+Y9xugOdfO43gkavitazIgeqg=";
+    repo = "shtab";
+    tag = "v${version}";
+    hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
+  '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bashInteractive
     pytest-timeout
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
-  '';
-
-  pythonImportsCheck = [
-    "shtab"
-  ];
+  pythonImportsCheck = [ "shtab" ];
 
   meta = with lib; {
     description = "Module for shell tab completion of Python CLI applications";
+    mainProgram = "shtab";
     homepage = "https://docs.iterative.ai/shtab/";
+    changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

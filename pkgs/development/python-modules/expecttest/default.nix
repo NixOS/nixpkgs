@@ -1,26 +1,30 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, lib
-, poetry
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  lib,
+  poetry-core,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "expecttest";
-  version = "0.1.3";
-  format = "pyproject";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ezyang";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5CnpVFSbf3FcAa06Y7atG8sxu8uevpfrliB2HuVcrx0=";
+    owner = "pytorch";
+    repo = "expecttest";
+    rev = "683b09a352cc426851adc2e3a9f46e0ab25e4dee"; # no tags
+    hash = "sha256-e9/KxPN/w0mrFYgesRGqaiDQ6gor7BpX/5/B0NPtXLY=";
   };
 
-  buildInputs = [ poetry ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [ hypothesis pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "expecttest" ];
 
@@ -28,7 +32,7 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.mit;
     description = ''EZ Yang "golden" tests (testing against a reference implementation)'';
-    homepage = "https://github.com/ezyang/expecttest";
+    homepage = "https://github.com/pytorch/expecttest";
     platforms = lib.platforms.unix;
   };
 }

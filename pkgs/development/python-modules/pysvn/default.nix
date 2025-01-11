@@ -1,44 +1,39 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+  apr,
+  aprutil,
+  bash,
+  gcc,
+  pycxx,
+  subversion,
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.12";
-  format = "other";
+  version = "1.9.23";
+  pyproject = false;
 
   src = fetchurl {
-    url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
-    sha256 = "sRPa4wNyjDmGdF1gTOgLS0pnrdyZwkkH4/9UCdh/R9Q=";
+    url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
+    hash = "sha256-ABru1nng1RaYfZwe0Z0NxE90rU/J2h/BhzUnvgrasCk=";
   };
 
-  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  patches = [ ./replace-python-first.patch ];
 
-  postPatch = ''
-    sed -i "117s|append(|insert(0, |" Tests/benchmark_diff.py
-  '';
+  buildInputs = [
+    subversion
+    apr
+    aprutil
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
-    ${python.interpreter} setup.py backport
-    ${python.interpreter} setup.py configure \
+    ${python.pythonOnBuildForHost.interpreter} setup.py backport
+    ${python.pythonOnBuildForHost.interpreter} setup.py configure \
       --apr-inc-dir=${apr.dev}/include \
       --apu-inc-dir=${aprutil.dev}/include \
       --pycxx-dir=${pycxx.dev}/include \
@@ -47,23 +42,20 @@ buildPythonPackage rec {
       --apr-lib-dir=${apr.out}/lib \
       --svn-lib-dir=${subversion.out}/lib \
       --svn-bin-dir=${subversion.out}/bin
-  '' + (lib.optionalString (stdenv.isDarwin && !isPy3k) ''
-    sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-  '');
+  '';
 
-  checkInputs = [ glibcLocales  ];
   checkPhase = ''
     runHook preCheck
 
     # It is not only shebangs, some tests also write scripts dynamically
     # so it is easier to simply search and replace
-    sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
+    sed -i "s|/bin/bash|${lib.getExe bash}|" ../Tests/test-*.sh
     make -C ../Tests
-
-    ${python.interpreter} -c "import pysvn"
 
     runHook postCheck
   '';
+
+  pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
@@ -77,9 +69,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Subversion";
-    homepage = "http://pysvn.tigris.org/";
+    homepage = "https://pysvn.sourceforge.io/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
     # g++: command not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

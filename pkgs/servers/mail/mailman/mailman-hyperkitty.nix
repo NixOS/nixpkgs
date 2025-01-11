@@ -1,28 +1,31 @@
-{ lib
-, python3
-, mailman
+{
+  lib,
+  python3,
+  fetchPypi,
+  mailman,
+  nixosTests,
 }:
 
 with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EQBx1KX3z/Wv3QAHOi+s/ihLOjpiupIQBYyE6IPbJto=";
+    hash = "sha256-+Nad+8bMtYKJbUCpppRXqhB1zdbvvFXTTHlwJLQLzDg=";
   };
 
   propagatedBuildInputs = [
     mailman
     requests
-    zope_interface
+    zope-interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose2
   ];
@@ -38,10 +41,12 @@ buildPythonPackage rec {
     "mailman_hyperkitty"
   ];
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = with lib; {
     description = "Mailman archiver plugin for HyperKitty";
     homepage = "https://gitlab.com/mailman/mailman-hyperkitty";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin qyliss ];
+    maintainers = with maintainers; [ qyliss ];
   };
 }

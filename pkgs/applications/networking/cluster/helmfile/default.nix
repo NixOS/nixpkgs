@@ -1,29 +1,63 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pluginsDir ? null,
+}:
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.144.0";
+  version = "0.169.2";
 
   src = fetchFromGitHub {
-    owner = "roboll";
+    owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-mfRPrgnOXqfmbpvaIxJNkgkdTEJKcFycrgFmQ7YDvTU=";
+    hash = "sha256-OoCLFhGeciCUC7Tb6+Md8tmamc/j0AeSlu5Krmkhxyc=";
   };
 
-  vendorSha256 = "sha256-ddf3m0DGsjubzp/aERvhfJ51UKKSNMC1Xu7ybyif8HA=";
+  vendorHash = "sha256-VBgWnDi0jaZ+91kkYeX9QyNBrP9W+mSMjexwzZiKZWs=";
+
+  proxyVendor = true; # darwin/linux hash mismatch
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X go.szostok.io/version.version=v${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (pluginsDir != null) makeWrapper;
+
+  postInstall =
+    lib.optionalString (pluginsDir != null) ''
+      wrapProgram $out/bin/helmfile \
+        --set HELM_PLUGINS "${pluginsDir}"
+    ''
+    + ''
+      installShellCompletion --cmd helmfile \
+        --bash <($out/bin/helmfile completion bash) \
+        --fish <($out/bin/helmfile completion fish) \
+        --zsh <($out/bin/helmfile completion zsh)
+    '';
 
   meta = {
-    description = "Deploy Kubernetes Helm charts";
-    homepage = "https://github.com/roboll/helmfile";
+    description = "Declarative spec for deploying Helm charts";
+    mainProgram = "helmfile";
+    longDescription = ''
+      Declaratively deploy your Kubernetes manifests, Kustomize configs,
+      and charts as Helm releases in one shot.
+    '';
+    homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      pneumaticat
+      yurrriq
+    ];
   };
 }

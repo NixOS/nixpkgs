@@ -1,4 +1,9 @@
-{ lib, stdenv, kernel, fetchFromGitHub, }:
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mbp2018-bridge-drv";
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A driver for MacBook models 2018 and newer, which makes the keyboard, mouse and audio output work.";
+    description = "Driver for MacBook models 2018 and newer, which makes the keyboard, mouse and audio output work";
     longDescription = ''
       A driver for MacBook models 2018 and newer, implementing the VHCI (required for mouse/keyboard/etc.) and audio functionality.
     '';

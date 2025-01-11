@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "unidecode";
-  version = "1.3.2";
+  version = "1.3.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "avian2";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "07789mrq0gjxrg1b9a3ypzzfww224sbj25wl0h9nik22sjwi8qhh";
+    repo = "unidecode";
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-OoJSY+dNNISyVwKuRboMH7Je8nYFKxus2c4v3VsmyRE=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "unidecode"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "unidecode" ];
 
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/Unidecode/";
     description = "ASCII transliterations of Unicode text";
+    mainProgram = "unidecode";
+    homepage = "https://github.com/avian2/unidecode";
+    changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ domenkozar ];
   };

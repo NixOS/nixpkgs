@@ -1,15 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
-  libSM, libXtst, gtk3, libepoxy, polkit, hicolor-icon-theme, mate,
-  wrapGAppsHook, fetchpatch, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  xtrans,
+  dbus-glib,
+  systemd,
+  libSM,
+  libXtst,
+  glib,
+  gtk3,
+  libepoxy,
+  polkit,
+  hicolor-icon-theme,
+  mate-desktop,
+  mate-screensaver,
+  wrapGAppsHook3,
+  fetchpatch,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-session-manager";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05hqi8wlwjr07mp5njhp7h06mgnv98zsxaxkmxc5w3iwb3va45ar";
+    sha256 = "0yzkWVuh2mUpB3cgPyvIK9lzshSjoECAoe9caJkKLXs=";
   };
 
   patches = [
@@ -24,7 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     xtrans
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -33,7 +51,8 @@ stdenv.mkDerivation rec {
     libSM
     libXtst
     gtk3
-    mate.mate-desktop
+    mate-desktop
+    mate-screensaver # for gsm_manager_init
     hicolor-icon-theme
     libepoxy
     polkit
@@ -41,19 +60,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   postFixup = ''
     substituteInPlace $out/share/xsessions/mate.desktop \
-      --replace "Exec=mate-session" "Exec=$out/bin/mate-session"
+      --replace-fail "Exec=mate-session" "Exec=$out/bin/mate-session"
   '';
 
   passthru.providedSessions = [ "mate" ];
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

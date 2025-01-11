@@ -1,48 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytest
-, pytest-asyncio
-, contextvars
-, sqlalchemy
-, isPy27
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pytest-asyncio,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "aiocontextvars";
   version = "0.2.2";
+  pyproject = true;
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "fantix";
-    repo = pname;
+    repo = "aiocontextvars";
     rev = "v${version}";
-    sha256 = "0a2gmrm9csiknc8n3si67sgzffkydplh9d7ga1k87ygk2aj22mmk";
+    hash = "sha256-s1YhpBLz+YNmUO+0BOltfjr3nz4m6mERszNqlmquTyg=";
   };
 
-  buildInputs = [
-    pytest-runner
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner'," ""
+  '';
 
-  checkInputs = [
-    pytest
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
     pytest-asyncio
   ];
-
-  propagatedBuildInputs = [
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Asyncio support for PEP-567 contextvars backport";
     homepage = "https://github.com/fantix/aiocontextvars";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

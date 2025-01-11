@@ -1,19 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
-  inInitrd = any (fs: fs == "jfs") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.jfs or false;
 in
 {
-  config = mkIf (any (fs: fs == "jfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.jfs or false) {
 
     system.fsPackages = [ pkgs.jfsutils ];
 
     boot.initrd.kernelModules = mkIf inInitrd [ "jfs" ];
 
-    boot.initrd.extraUtilsCommands = mkIf (inInitrd && !boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.jfsutils}/sbin/fsck.jfs
     '';
+
+    boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.jfsutils ];
   };
 }

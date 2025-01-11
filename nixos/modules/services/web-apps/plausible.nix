@@ -1,61 +1,39 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.plausible;
 
-in {
+in
+{
   options.services.plausible = {
     enable = mkEnableOption "plausible";
 
-    releaseCookiePath = mkOption {
-      type = with types; either str path;
-      description = ''
-        The path to the file with release cookie. (used for remote connection to the running node).
-      '';
-    };
-
-    adminUser = {
-      name = mkOption {
-        default = "admin";
-        type = types.str;
-        description = ''
-          Name of the admin user that plausible will created on initial startup.
-        '';
-      };
-
-      email = mkOption {
-        type = types.str;
-        example = "admin@localhost";
-        description = ''
-          Email-address of the admin-user.
-        '';
-      };
-
-      passwordFile = mkOption {
-        type = types.either types.str types.path;
-        description = ''
-          Path to the file which contains the password of the admin user.
-        '';
-      };
-
-      activate = mkEnableOption "activating the freshly created admin-user";
-    };
+    package = mkPackageOption pkgs "plausible" { };
 
     database = {
       clickhouse = {
-        setup = mkEnableOption "creating a clickhouse instance" // { default = true; };
+        setup = mkEnableOption "creating a clickhouse instance" // {
+          default = true;
+        };
         url = mkOption {
           default = "http://localhost:8123/default";
           type = types.str;
           description = ''
-            The URL to be used to connect to <package>clickhouse</package>.
+            The URL to be used to connect to `clickhouse`.
           '';
         };
       };
       postgres = {
-        setup = mkEnableOption "creating a postgresql instance" // { default = true; };
+        setup = mkEnableOption "creating a postgresql instance" // {
+          default = true;
+        };
         dbname = mkOption {
           default = "plausible";
           type = types.str;
@@ -67,7 +45,7 @@ in {
           default = "/run/postgresql";
           type = types.str;
           description = ''
-            Path to the UNIX domain-socket to communicate with <package>postgres</package>.
+            Path to the UNIX domain-socket to communicate with `postgres`.
           '';
         };
       };
@@ -76,18 +54,29 @@ in {
     server = {
       disableRegistration = mkOption {
         default = true;
-        type = types.bool;
+        type = types.enum [
+          true
+          false
+          "invite_only"
+        ];
         description = ''
-          Whether to prohibit creating an account in plausible's UI.
+          Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
       };
       secretKeybaseFile = mkOption {
         type = types.either types.path types.str;
         description = ''
-          Path to the secret used by the <literal>phoenix</literal>-framework. Instructions
+          Path to the secret used by the `phoenix`-framework. Instructions
           how to generate one are documented in the
-          <link xlink:href="https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content">
-          framework docs</link>.
+          [
+          framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
+        '';
+      };
+      listenAddress = mkOption {
+        default = "127.0.0.1";
+        type = types.str;
+        description = ''
+          The IP address on which the server is listening.
         '';
       };
       port = mkOption {
@@ -102,10 +91,10 @@ in {
         description = ''
           Public URL where plausible is available.
 
-          Note that <literal>/path</literal> components are currently ignored:
-          <link xlink:href="https://github.com/plausible/analytics/issues/1182">
+          Note that `/path` components are currently ignored:
+          [
             https://github.com/plausible/analytics/issues/1182
-          </link>.
+          ](https://github.com/plausible/analytics/issues/1182).
         '';
       };
     };
@@ -115,7 +104,7 @@ in {
         default = "hello@plausible.local";
         type = types.str;
         description = ''
-          The email id to use for as <emphasis>from</emphasis> address of all communications
+          The email id to use for as *from* address of all communications
           from Plausible.
         '';
       };
@@ -160,16 +149,37 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = [
-      { assertion = cfg.adminUser.activate -> cfg.database.postgres.setup;
-        message = ''
-          Unable to automatically activate the admin-user if no locally managed DB for
-          postgres (`services.plausible.database.postgres.setup') is enabled!
-        '';
-      }
-    ];
+  imports = [
+    (mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ]
+      "Plausible uses no distributed Erlang features, so this option is no longer necessary and was removed"
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "name"
+    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "email"
+    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "passwordFile"
+    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "activate"
+    ] "Admin user is now created using first start wizard")
+  ];
 
+  config = mkIf cfg.enable {
     services.postgresql = mkIf cfg.database.postgres.setup {
       enable = true;
     };
@@ -178,72 +188,108 @@ in {
       enable = true;
     };
 
-    services.epmd.enable = true;
-
-    environment.systemPackages = [ pkgs.plausible ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services = mkMerge [
       {
         plausible = {
-          inherit (pkgs.plausible.meta) description;
+          inherit (cfg.package.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
-          after = optionals cfg.database.postgres.setup [ "postgresql.service" "plausible-postgres.service" ];
-          requires = optional cfg.database.clickhouse.setup "clickhouse.service"
+          after =
+            optional cfg.database.clickhouse.setup "clickhouse.service"
+            ++ optionals cfg.database.postgres.setup [
+              "postgresql.service"
+              "plausible-postgres.service"
+            ];
+          requires =
+            optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
               "postgresql.service"
               "plausible-postgres.service"
             ];
 
-          environment = {
-            # NixOS specific option to avoid that it's trying to write into its store-path.
-            # See also https://github.com/lau/tzdata#data-directory-and-releases
-            STORAGE_DIR = "/var/lib/plausible/elixir_tzdata";
+          environment =
+            {
+              # NixOS specific option to avoid that it's trying to write into its store-path.
+              # See also https://github.com/lau/tzdata#data-directory-and-releases
+              STORAGE_DIR = "/var/lib/plausible/elixir_tzdata";
 
-            # Configuration options from
-            # https://plausible.io/docs/self-hosting-configuration
-            PORT = toString cfg.server.port;
-            DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
+              # Configuration options from
+              # https://plausible.io/docs/self-hosting-configuration
+              PORT = toString cfg.server.port;
+              LISTEN_IP = cfg.server.listenAddress;
 
-            RELEASE_TMP = "/var/lib/plausible/tmp";
-            # Home is needed to connect to the node with iex
-            HOME = "/var/lib/plausible";
+              # Note [plausible-needs-no-erlang-distributed-features]:
+              # Plausible does not use, and does not plan to use, any of
+              # Erlang's distributed features, see:
+              #     https://github.com/plausible/analytics/pull/1190#issuecomment-1018820934
+              # Thus, disable distribution for improved simplicity and security:
+              #
+              # When distribution is enabled,
+              # Elixir spwans the Erlang VM, which will listen by default on all
+              # interfaces for messages between Erlang nodes (capable of
+              # remote code execution); it can be protected by a cookie; see
+              # https://erlang.org/doc/reference_manual/distributed.html#security).
+              #
+              # It would be possible to restrict the interface to one of our choice
+              # (e.g. localhost or a VPN IP) similar to how we do it with `listenAddress`
+              # for the Plausible web server; if distribution is ever needed in the future,
+              # https://github.com/NixOS/nixpkgs/pull/130297 shows how to do it.
+              #
+              # But since Plausible does not use this feature in any way,
+              # we just disable it.
+              RELEASE_DISTRIBUTION = "none";
+              # Additional safeguard, in case `RELEASE_DISTRIBUTION=none` ever
+              # stops disabling the start of EPMD.
+              ERL_EPMD_ADDRESS = "127.0.0.1";
 
-            ADMIN_USER_NAME = cfg.adminUser.name;
-            ADMIN_USER_EMAIL = cfg.adminUser.email;
+              DISABLE_REGISTRATION =
+                if isBool cfg.server.disableRegistration then
+                  boolToString cfg.server.disableRegistration
+                else
+                  cfg.server.disableRegistration;
 
-            DATABASE_SOCKET_DIR = cfg.database.postgres.socket;
-            DATABASE_NAME = cfg.database.postgres.dbname;
-            CLICKHOUSE_DATABASE_URL = cfg.database.clickhouse.url;
+              RELEASE_TMP = "/var/lib/plausible/tmp";
+              # Home is needed to connect to the node with iex
+              HOME = "/var/lib/plausible";
 
-            BASE_URL = cfg.server.baseUrl;
+              DATABASE_URL = "postgresql:///${cfg.database.postgres.dbname}?host=${cfg.database.postgres.socket}";
+              CLICKHOUSE_DATABASE_URL = cfg.database.clickhouse.url;
 
-            MAILER_EMAIL = cfg.mail.email;
-            SMTP_HOST_ADDR = cfg.mail.smtp.hostAddr;
-            SMTP_HOST_PORT = toString cfg.mail.smtp.hostPort;
-            SMTP_RETRIES = toString cfg.mail.smtp.retries;
-            SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
+              BASE_URL = cfg.server.baseUrl;
 
-            SELFHOST = "true";
-          } // (optionalAttrs (cfg.mail.smtp.user != null) {
-            SMTP_USER_NAME = cfg.mail.smtp.user;
-          });
+              MAILER_EMAIL = cfg.mail.email;
+              SMTP_HOST_ADDR = cfg.mail.smtp.hostAddr;
+              SMTP_HOST_PORT = toString cfg.mail.smtp.hostPort;
+              SMTP_RETRIES = toString cfg.mail.smtp.retries;
+              SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
 
-          path = [ pkgs.plausible ]
-            ++ optional cfg.database.postgres.setup config.services.postgresql.package;
+              SELFHOST = "true";
+            }
+            // (optionalAttrs (cfg.mail.smtp.user != null) {
+              SMTP_USER_NAME = cfg.mail.smtp.user;
+            });
+
+          path = [ cfg.package ] ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
-            export CONFIG_DIR=$CREDENTIALS_DIRECTORY
+            # Elixir does not start up if `RELEASE_COOKIE` is not set,
+            # even though we set `RELEASE_DISTRIBUTION=none` so the cookie should be unused.
+            # Thus, make a random one, which should then be ignored.
+            export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
+            export SECRET_KEY_BASE="$(< $CREDENTIALS_DIRECTORY/SECRET_KEY_BASE )"
 
-            export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
+            ${lib.optionalString (
+              cfg.mail.smtp.passwordFile != null
+            ) ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
 
-            # setup
-            ${pkgs.plausible}/createdb.sh
-            ${pkgs.plausible}/migrate.sh
-            ${optionalString cfg.adminUser.activate ''
-              if ! ${pkgs.plausible}/init-admin.sh | grep 'already exists'; then
-                psql -d plausible <<< "UPDATE users SET email_verified=true;"
-              fi
+            ${lib.optionalString cfg.database.postgres.setup ''
+              # setup
+              ${cfg.package}/createdb.sh
             ''}
+
+            ${cfg.package}/migrate.sh
+            export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
 
             exec plausible start
           '';
@@ -253,11 +299,13 @@ in {
             PrivateTmp = true;
             WorkingDirectory = "/var/lib/plausible";
             StateDirectory = "plausible";
-            LoadCredential = [
-              "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
-              "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-              "RELEASE_COOKIE:${cfg.releaseCookiePath}"
-            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
+            LoadCredential =
+              [
+                "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
+              ]
+              ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [
+                "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"
+              ];
           };
         };
       }
@@ -287,6 +335,6 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
-  meta.doc = ./plausible.xml;
+  meta.maintainers = teams.cyberus.members;
+  meta.doc = ./plausible.md;
 }

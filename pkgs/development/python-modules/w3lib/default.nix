@@ -1,32 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "1.22.0";
+  version = "2.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pv02lvvmgz2qb61vz1jkjc04fgm4hpfvaj5zm4i3mjp64hd1mha";
+    hash = "sha256-dW/y2Uxk5ByNfAxZ/qEqXQvFXjOlMceYi0oWPeubB90=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "w3lib" ];
 
-  disabledTests = [
-    "test_add_or_replace_parameter"
-  ];
-
   meta = with lib; {
-    description = "A library of web-related functions";
+    description = "Library of web-related functions";
     homepage = "https://github.com/scrapy/w3lib";
+    changelog = "https://github.com/scrapy/w3lib/blob/v${version}/NEWS";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett ];
+    maintainers = [ ];
   };
 }

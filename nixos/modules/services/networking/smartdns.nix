@@ -43,8 +43,8 @@ in {
         };
       '';
       description = ''
-        A set that will be generated into configuration file, see the <link xlink:href="https://github.com/pymumu/smartdns/blob/master/ReadMe_en.md#configuration-parameter">SmartDNS README</link> for details of configuration parameters.
-        You could override the options here like <option>services.smartdns.bindPort</option> by writing <literal>settings.bind = ":5353 -no-rule -group example";</literal>.
+        A set that will be generated into configuration file, see the [SmartDNS README](https://github.com/pymumu/smartdns/blob/master/ReadMe_en.md#configuration-parameter) for details of configuration parameters.
+        You could override the options here like {option}`services.smartdns.bindPort` by writing `settings.bind = ":5353 -no-rule -group example";`.
       '';
     };
   };

@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, fontconfig, ocaml }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  fontconfig,
+  ocaml,
+}:
 
 stdenv.mkDerivation {
-  pname = "ocaml-fontconfig";
+  pname = "ocaml${ocaml.version}-fontconfig";
   version = "unstable-2013-11-03";
 
   src = fetchFromGitHub {
@@ -11,7 +18,16 @@ stdenv.mkDerivation {
     sha256 = "1fw6bzydmnyh2g4x35mcbg0hypnxqhynivk4nakcsx7prr8zr3yh";
   };
 
-  nativeBuildInputs = [ pkg-config ocaml ];
+  postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "4.03") ''
+    substituteInPlace extract_consts.ml \
+      --replace String.lowercase String.lowercase_ascii \
+      --replace String.capitalize String.capitalize_ascii
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+    ocaml
+  ];
   buildInputs = [ fontconfig ];
 
   strictDeps = true;
@@ -24,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Fontconfig bindings for OCaml";
     license = lib.licenses.gpl2Plus;
-    platforms = ocaml.meta.platforms or [ ];
+    platforms = ocaml.meta.platforms;
     maintainers = with lib.maintainers; [ vbgl ];
   };
 }

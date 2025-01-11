@@ -1,33 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, m2r
-, pyyaml
-, jsonschema
-, sphinxcontrib_httpdomain
+{
+  lib,
+  buildPythonPackage,
+  deepmerge,
+  fetchPypi,
+  isPy27,
+  setuptools-scm,
+  jsonschema,
+  picobox,
+  pyyaml,
+  sphinx-mdinclude,
+  sphinxcontrib-httpdomain,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
-  version = "0.7.0";
+  version = "0.8.4";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c1bd10d7653912c59a42f727c62cbb7b75f7905ddd9ccc477ebfd1bc69f0cf3";
+    hash = "sha256-34g4CKW15LQROtaXGFxDo/Qt89znBFOveLpwdpB+miA=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ pyyaml jsonschema m2r sphinxcontrib_httpdomain ];
+  propagatedBuildInputs = [
+    deepmerge
+    jsonschema
+    picobox
+    pyyaml
+    sphinx-mdinclude
+    sphinxcontrib-httpdomain
+  ];
 
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     license = licenses.bsd0;
+    maintainers = [ maintainers.flokli ];
   };
-
 }

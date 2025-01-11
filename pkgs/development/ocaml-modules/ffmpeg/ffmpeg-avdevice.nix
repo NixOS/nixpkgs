@@ -1,6 +1,21 @@
-{ lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
-, ffmpeg-base ? callPackage ./base.nix { }
-, ffmpeg-av, ffmpeg
+{
+  lib,
+  buildDunePackage,
+  dune-configurator,
+  pkg-config,
+  callPackage,
+  AppKit,
+  AudioToolbox,
+  AVFoundation,
+  Cocoa,
+  CoreImage,
+  ForceFeedback,
+  ffmpeg-base ? callPackage ./base.nix { },
+  ffmpeg-av,
+  ffmpeg,
+  OpenGL,
+  stdenv,
+  VideoToolbox,
 }:
 
 buildDunePackage {
@@ -8,11 +23,26 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src useDune2;
+  inherit (ffmpeg-base) version src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ffmpeg-av ffmpeg.dev ];
+  buildInputs =
+    [ dune-configurator ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      AudioToolbox
+      AVFoundation
+      Cocoa
+      CoreImage
+      ForceFeedback
+      OpenGL
+      VideoToolbox
+    ];
+
+  propagatedBuildInputs = [
+    ffmpeg-av
+    ffmpeg.dev
+  ];
 
   doCheck = true;
 

@@ -1,64 +1,98 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret  }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  electron,
+  libsecret,
+  asar,
+  python3,
+  glib,
+  desktop-file-utils,
+  callPackage,
+}:
 
 let
-  version = "3.11.1";
-  pname = "standardnotes";
-  name = "${pname}-${version}";
+
+  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  plat = {
-    i686-linux = "i386";
-    x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system} or throwSystem;
+in
 
-  sha256 = {
-    i686-linux = "3e83a7eef5c29877eeffefb832543b21627cf027ae6e7b4f662865b6b842649a";
-    x86_64-linux = "fd461e98248a2181afd2ef94a41a291d20f7ffb20abeaf0cfcf81a9f94e27868";
-  }.${stdenv.hostPlatform.system} or throwSystem;
+stdenv.mkDerivation rec {
 
-  src = fetchurl {
-    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
-    inherit sha256;
-  };
+  pname = "standardnotes";
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  src = fetchurl (srcjson.deb.${stdenv.hostPlatform.system} or throwSystem);
 
-  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
+  inherit (srcjson) version;
 
-in appimageTools.wrapType2 rec {
-  inherit name src;
+  dontConfigure = true;
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
+  dontBuild = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    dpkg
+    desktop-file-utils
+    asar
   ];
 
-  extraInstallCommands = ''
-    # directory in /nix/store so readonly
-    cp -r  ${appimageContents}/* $out
-    cd $out
-    chmod -R +w $out
-    mv $out/bin/${name} $out/bin/${pname}
+  installPhase =
+    let
+      libPath = lib.makeLibraryPath [
+        libsecret
+        glib
+        (lib.getLib stdenv.cc.cc)
+      ];
+    in
+    ''
+      runHook preInstall
 
-    # fixup and install desktop file
-    ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} standard-notes.desktop
-    mv usr/share/icons share
+      mkdir -p $out/bin $out/share/standardnotes
+      cp -R usr/share/{applications,icons} $out/share
+      cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
+      cp -R opt/Standard\ Notes/resources/app.asar.unpacked $out/share/standardnotes/
+      rm $out/share/standardnotes/app.asar.unpacked/node_modules/cbor-extract/build/node_gyp_bins/python3
+      ln -s ${python3.interpreter} $out/share/standardnotes/app.asar.unpacked/node_modules/cbor-extract/build/node_gyp_bins/python3
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        rm $out/share/standardnotes/app.asar.unpacked/node_modules/microtime/build/node_gyp_bins/python3
+        ln -s ${python3.interpreter} $out/share/standardnotes/app.asar.unpacked/node_modules/microtime/build/node_gyp_bins/python3
+      ''}
+      asar e $out/share/standardnotes/app.asar asar-unpacked
+      find asar-unpacked -name '*.node' -exec patchelf \
+        --add-rpath "${libPath}" \
+        {} \;
+      asar p asar-unpacked $out/share/standardnotes/app.asar
 
-    rm usr/lib/* AppRun standard-notes.desktop .so*
-  '';
+      makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
+        --add-flags $out/share/standardnotes/app.asar
+
+      ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
+        --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
+
+      runHook postInstall
+    '';
+
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
-    description = "A simple and private notes app";
+    description = "Simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
     homepage = "https://standardnotes.org";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire chuangzhu ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      mgregoire
+      chuangzhu
+      squalus
+    ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    platforms = builtins.attrNames srcjson.deb;
+    mainProgram = "standardnotes";
   };
 }

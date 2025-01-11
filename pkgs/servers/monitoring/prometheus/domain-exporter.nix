@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "domain-exporter";
-  version = "1.11.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "domain_exporter";
     rev = "v${version}";
-    sha256 = "018y0xwdn2f2shhwaa0hqm4y8xsbqwif0733qb0377wpjbj4v137";
+    hash = "sha256-5GyDQkd8zXZ9TtauWfW9uW8xkgtEICFm6f4Q/jVqOBc=";
   };
 
-  vendorSha256 = "0s1hs8byba9y57abg386n09wfg1wcqpzs164ap0km8ap2i96bdlb";
+  vendorHash = "sha256-EPpzrig40WXt5mo/vPTFjh+gYdFOlMknjNJHNChlQwk=";
 
   doCheck = false; # needs internet connection
 
@@ -20,7 +25,13 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/caarlos0/domain_exporter";
     description = "Exports the expiration time of your domains as prometheus metrics";
+    mainProgram = "domain_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmilata prusnak ];
+    maintainers = with maintainers; [
+      mmilata
+      prusnak
+      peterhoeg
+      caarlos0
+    ];
   };
 }

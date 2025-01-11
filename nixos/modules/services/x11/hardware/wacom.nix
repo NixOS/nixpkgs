@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -23,7 +28,7 @@ in
           which will make Xorg reconfigure the device ?
 
           If you're not satisfied by the default behaviour you can override
-          <option>environment.etc."X11/xorg.conf.d/70-wacom.conf"</option> in
+          {option}`environment.etc."X11/xorg.conf.d/70-wacom.conf"` in
           configuration.nix easily.
         '';
       };
@@ -31,7 +36,6 @@ in
     };
 
   };
-
 
   config = mkIf cfg.enable {
 
@@ -41,7 +45,8 @@ in
 
     services.udev.packages = [ pkgs.xf86_input_wacom ];
 
-    environment.etc."X11/xorg.conf.d/70-wacom.conf".source = "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
+    environment.etc."X11/xorg.conf.d/70-wacom.conf".source =
+      "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
 
   };
 

@@ -1,47 +1,95 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  runtimeShell,
+  bcftools,
+  htslib,
 }:
 
+let
+  ssshtest = fetchFromGitHub {
+    owner = "ryanlayer";
+    repo = "ssshtest";
+    rev = "d21f7f928a167fca6e2eb31616673444d15e6fd0";
+    hash = "sha256-zecZHEnfhDtT44VMbHLHOhRtNsIMWeaBASupVXtmrks=";
+  };
+in
 python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "2.1.1";
+  version = "4.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "spiralgenetics";
+    owner = "ACEnglish";
     repo = "truvari";
     rev = "v${version}";
-    sha256 = "14nsdbj063qm175xxixs34cihvsiskc9gym8pg7gbwsh13k5a00h";
+    hash = "sha256-SFBVatcVavBfQtFbBcXifBX3YnKsxJS669vCcyjsBA4=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'python-Levenshtein==0.12.1' 'python-Levenshtein>=0.12.1'
+    substituteInPlace truvari/utils.py \
+      --replace "/bin/bash" "${runtimeShell}"
+    patchShebangs repo_utils/test_files
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    pyvcf
-    python-Levenshtein
-    progressbar2
-    pysam
-    pyfaidx
-    intervaltree
-    pytabix
-    acebinf
-    bwapy
-    joblib
-    pandas
+  build-system = [
+    python3Packages.setuptools
   ];
 
-  # no tests
-  doCheck = false;
+  dependencies = with python3Packages; [
+    pywfa
+    rich
+    edlib
+    pysam
+    intervaltree
+    joblib
+    numpy
+    pytabix
+    bwapy
+    pandas
+    pyabpoa
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bcftools
+      htslib
+    ])
+  ];
+
   pythonImportsCheck = [ "truvari" ];
+
+  nativeCheckInputs =
+    [
+      bcftools
+      htslib
+    ]
+    ++ (with python3Packages; [
+      coverage
+    ]);
+
+  checkPhase = ''
+    runHook preCheck
+
+    ln -s ${ssshtest}/ssshtest .
+    bash repo_utils/truvari_ssshtests.sh
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
-    homepage = "https://github.com/spiralgenetics/truvari";
+    homepage = "https://github.com/ACEnglish/truvari";
+    changelog = "https://github.com/ACEnglish/truvari/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [
+      natsukium
+      scalavision
+    ];
     longDescription = ''
       Truvari is a benchmarking tool for comparison sets of SVs.
       It can calculate the recall, precision, and f-measure of a

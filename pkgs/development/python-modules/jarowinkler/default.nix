@@ -1,53 +1,44 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, cython
-, rapidfuzz-capi
-, scikit-build
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  rapidfuzz,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jarowinkler";
-  version = "1.0.2";
+  version = "2.0.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "JaroWinkler";
-    rev = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-zVAcV6xxqyfXRUcyWo9PcOdagcexJc/D5k4g5ag3hbY=";
+    tag = "v${version}";
+    hash = "sha256-B3upTBNqMyi+CH7Zx04wceEXjGJnr6S3BIl87AQkfbo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    cython
-    rapidfuzz-capi
-    scikit-build
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  dontUseCmakeConfigure = true;
+  propagatedBuildInputs = [ rapidfuzz ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
-
-  preCheck = ''
-    # import from $out
-    rm -r jarowinkler
-  '';
 
   pythonImportsCheck = [ "jarowinkler" ];
 
   meta = with lib; {
     description = "Library for fast approximate string matching using Jaro and Jaro-Winkler similarity";
     homepage = "https://github.com/maxbachmann/JaroWinkler";
+    changelog = "https://github.com/maxbachmann/JaroWinkler/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

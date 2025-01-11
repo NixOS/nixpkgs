@@ -1,27 +1,39 @@
-{ writeScript
-, lib
-, xidel
-, common-updater-scripts
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, attrPath
-, runtimeShell
-, baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
-, versionSuffix ? ""
-, versionKey ? "version"
+{
+  writeScript,
+  lib,
+  xidel,
+  common-updater-scripts,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  attrPath,
+  runtimeShell,
+  baseUrl ? "https://archive.mozilla.org/pub/firefox/releases/",
+  versionPrefix ? "",
+  versionSuffix ? "",
+  versionKey ? "version",
 }:
 
 writeScript "update-${attrPath}" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnupg gnused xidel ]}
+  PATH=${
+    lib.makeBinPath [
+      common-updater-scripts
+      coreutils
+      curl
+      gnugrep
+      gnupg
+      gnused
+      xidel
+    ]
+  }
 
   set -eux
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
-  gpg --receive-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
+  curl https://keys.openpgp.org/vks/v1/by-fingerprint/14F26682D0916CDD81E37B6D61B7B526D98F0353 | gpg --import -
 
   url=${baseUrl}
 
@@ -32,7 +44,7 @@ writeScript "update-${attrPath}" ''
   #  - sorts everything with semver in mind
   #  - picks up latest release
   version=`xidel -s $url --extract "//a" | \
-           grep "^[0-9.]*${versionSuffix}/$" | \
+           grep "^${versionPrefix}[0-9.]*${versionSuffix}/$" | \
            sed s/[/]$// | \
            sort --version-sort | \
            tail -n 1`

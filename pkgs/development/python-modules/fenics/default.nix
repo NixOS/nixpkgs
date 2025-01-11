@@ -1,32 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, blas
-, boost
-, cmake
-, doxygen
-, eigen
-, gtest
-, hdf5
-, lapack
-, mpi
-, mpi4py
-, numpy
-, pkg-config
-, ply
-, pybind11
-, pytest
-, python
-, pythonPackages
-, scotch
-, setuptools
-, six
-, sphinx
-, suitesparse
-, swig
-, sympy
-, zlib
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  blas,
+  boost,
+  cmake,
+  doxygen,
+  eigen,
+  hdf5,
+  lapack,
+  mpi,
+  mpi4py,
+  numpy,
+  pkg-config,
+  ply,
+  pybind11,
+  pytest,
+  python,
+  pythonPackages,
+  scotch,
+  setuptools,
+  six,
+  sphinx,
+  suitesparse,
+  swig,
+  sympy,
+  zlib,
+  nixosTests,
 }:
 
 let
@@ -39,8 +40,11 @@ let
       url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
       sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
     };
-    propagatedBuildInputs = [ numpy six ];
-    checkInputs = [ pytest ];
+    propagatedBuildInputs = [
+      numpy
+      six
+    ];
+    nativeCheckInputs = [ pytest ];
     preCheck = ''
       export HOME=$PWD
     '';
@@ -64,8 +68,12 @@ let
       url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
       sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
     };
-    propagatedBuildInputs = [ numpy six sympy ];
-    checkInputs = [ pytest ];
+    propagatedBuildInputs = [
+      numpy
+      six
+      sympy
+    ];
+    nativeCheckInputs = [ pytest ];
 
     preCheck = ''
       # Workaround pytest 4.6.3 issue.
@@ -73,6 +81,12 @@ let
       rm test/unit/test_quadrature.py
       rm test/unit/test_reference_element.py
       rm test/unit/test_fiat.py
+
+      # Fix `np.float` deprecation in Numpy 1.20
+      grep -lr 'np.float(' test/ | while read -r fn; do
+        substituteInPlace "$fn" \
+          --replace "np.float(" "np.float64("
+      done
     '';
     checkPhase = ''
       runHook preCheck
@@ -94,15 +108,18 @@ let
       url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
       sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
     };
-    propagatedBuildInputs = [ numpy six ];
-    checkInputs = [ pytest ];
+    propagatedBuildInputs = [
+      numpy
+      six
+    ];
+    nativeCheckInputs = [ pytest ];
     checkPhase = ''
       runHook preCheck
       py.test test/
       runHook postCheck
     '';
     meta = {
-      description = "A domain-specific language for finite element variational forms";
+      description = "Domain-specific language for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -116,9 +133,7 @@ let
       url = "https://bitbucket.org/fenics-project/ffc/downloads/ffc-${version}.tar.gz";
       sha256 = "1zdg6pziss4va74pd7jjl8sc3ya2gmhpypccmyd8p7c66ji23y2g";
     };
-    nativeBuildInputs = [
-      pybind11
-    ];
+    nativeBuildInputs = [ pybind11 ];
     propagatedBuildInputs = [
       dijitso
       fiat
@@ -128,7 +143,7 @@ let
       ufl
       setuptools
     ];
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
     preCheck = ''
       export HOME=$PWD
       rm test/unit/ufc/finite_element/test_evaluate.py
@@ -139,7 +154,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "A compiler for finite element variational forms";
+      description = "Compiler for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -158,7 +173,17 @@ let
         url = "https://bitbucket.org/josef_kemetmueller/dolfin/commits/328e94acd426ebaf2243c072b806be3379fd4340/raw";
         sha256 = "1zj7k3y7vsx0hz3gwwlxhq6gdqamqpcw90d4ishwx5ps5ckcsb9r";
       })
+      (fetchpatch {
+        url = "https://bitbucket.org/fenics-project/dolfin/issues/attachments/1116/fenics-project/dolfin/1602778118.04/1116/0001-Use-__BYTE_ORDER__-instead-of-removed-Boost-endian.h.patch";
+        hash = "sha256-wPaDmPU+jaD3ce3nNEbvM5p8e3zBdLozamLTJ/0ai2c=";
+      })
     ];
+    # https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=dolfin&id=a965ad934f7b3d49a5e77fa6fb5e3c710ec2163e
+    postPatch = ''
+      sed -i '20 a #include <algorithm>' dolfin/geometry/IntersectionConstruction.cpp
+      sed -i '26 a #include <algorithm>' dolfin/mesh/MeshFunction.h
+      sed -i '25 a #include <cstdint>' dolfin/mesh/MeshConnectivity.h
+    '';
     propagatedBuildInputs = [
       dijitso
       fiat
@@ -215,7 +240,7 @@ let
       make runtests
     '';
     meta = {
-      description = "The FEniCS Problem Solving Environment in Python and C++";
+      description = "FEniCS Problem Solving Environment in Python and C++";
       homepage = "https://fenicsproject.org/";
       license = lib.licenses.lgpl3;
     };
@@ -253,7 +278,9 @@ let
       pythonPackages.pybind11
     ];
     doCheck = false; # Tries to orte_ess_init and call ssh to localhost
-    passthru.tests = { inherit (nixosTests) fenics; };
+    passthru.tests = {
+      inherit (nixosTests) fenics;
+    };
     meta = {
       description = "Python bindings for the DOLFIN FEM compiler";
       homepage = "https://fenicsproject.org/";
@@ -261,4 +288,5 @@ let
       license = lib.licenses.lgpl3;
     };
   };
-in python-dolfin
+in
+python-dolfin

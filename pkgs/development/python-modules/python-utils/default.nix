@@ -1,45 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
-, pytest-mypy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  loguru,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.1.0";
+  version = "3.9.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+NgcVIDM9f2OKBpJNWlSyFxEONltPWJSWIu400/5RkQ=
-";
+    tag = "v${version}";
+    hash = "sha256-lzLzYI5jShfIwQqvfA8UtPjGawXE80ww7jb/gPzpeDo=";
   };
 
-  # disable coverage and linting
   postPatch = ''
-    sed -i '/--cov/d' pytest.ini
-    sed -i '/--flake8/d' pytest.ini
+    sed -i pytest.ini \
+      -e '/--cov/d' \
+      -e '/--mypy/d'
   '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytest-mypy
+  dependencies = [ typing-extensions ];
+
+  optional-dependencies = {
+    loguru = [ loguru ];
+  };
+
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.loguru;
 
-  pytestFlagsArray = [
-    "_python_utils_tests"
+  pythonImportsCheck = [ "python_utils" ];
+
+  pytestFlagsArray = [ "_python_utils_tests" ];
+
+  disabledTests = [
+    # Flaky tests
+    "test_timeout_generator"
   ];
 
   meta = with lib; {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
+    changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

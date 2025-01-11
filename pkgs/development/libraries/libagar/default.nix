@@ -1,12 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool, perl, bsdbuild, gettext, mandoc
-, libpng, libjpeg, xlibsWrapper, libXinerama, freetype, SDL, libGLU, libGL
-, libsndfile, portaudio, libmysqlclient, fontconfig
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtool,
+  perl,
+  bsdbuild,
+  gettext,
+  mandoc,
+  libpng,
+  libjpeg,
+  libXinerama,
+  freetype,
+  SDL,
+  libGL,
+  libsndfile,
+  portaudio,
+  libmysqlclient,
+  fontconfig,
 }:
 
-let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libagar";
-  inherit (srcs) version src;
+  version = "1.5.0";
+
+  src = fetchurl {
+    url = "http://stable.hypertriton.com/agar/agar-${finalAttrs.version}.tar.gz";
+    sha256 = "001wcqk5z67qg0raw9zlwmv62drxiwqykvsbk10q2mrc6knjsd42";
+  };
 
   preConfigure = ''
     substituteInPlace configure.in \
@@ -24,13 +45,31 @@ stdenv.mkDerivation {
     "--with-manpages=yes"
   ];
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
-  nativeBuildInputs = [ pkg-config libtool gettext ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    gettext
+  ];
 
   buildInputs = [
-    bsdbuild perl xlibsWrapper libXinerama SDL libGL libmysqlclient mandoc
-    freetype.dev libpng libjpeg.dev fontconfig portaudio libsndfile
+    bsdbuild
+    perl
+    libXinerama
+    SDL
+    libGL
+    libmysqlclient
+    mandoc
+    freetype.dev
+    libpng
+    libjpeg.dev
+    fontconfig
+    portaudio
+    libsndfile
   ];
 
   meta = with lib; {
@@ -40,4 +79,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; linux;
   };
-}
+})

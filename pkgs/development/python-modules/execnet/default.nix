@@ -1,43 +1,67 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, fetchPypi
-, pytestCheckHook
-, setuptools-scm
-, apipkg
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  fetchPypi,
+  hatchling,
+  hatch-vcs,
+  gevent,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.9.0";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f694f3ba9cc92cab508b152dcfe322153975c29bda272e2fd7f3f00f36e47c5";
+    hash = "sha256-UYm1LGEhwk/q4ogWarQbMlScfiNIZSc2VAuebn1OcuM=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ apipkg ];
+  postPatch =
+    ''
+      # remove vbox tests
+      rm testing/test_termination.py
+      rm testing/test_channel.py
+      rm testing/test_xspec.py
+      rm testing/test_gateway.py
+    ''
+    + lib.optionalString isPyPy ''
+      rm testing/test_multi.py
+    '';
 
-  # remove vbox tests
-  postPatch = ''
-    rm -v testing/test_termination.py
-    rm -v testing/test_channel.py
-    rm -v testing/test_xspec.py
-    rm -v testing/test_gateway.py
-    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
-  '';
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  # sometimes crashes with: OSError: [Errno 9] Bad file descriptor
+  doCheck = !isPyPy;
+
+  nativeCheckInputs = [
+    gevent
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # gets stuck
+    "test_popen_io"
+    # OSError: [Errno 9] Bad file descriptor
+    "test_stdouterrin_setnull"
+  ];
+
+  pytestFlagsArray = [ "-vvv" ];
 
   pythonImportsCheck = [ "execnet" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Python deployment and communication";
-    license = licenses.mit;
     homepage = "https://execnet.readthedocs.io/";
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/pytest-dev/execnet/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
-
 }

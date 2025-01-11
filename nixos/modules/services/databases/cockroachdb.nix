@@ -1,13 +1,16 @@
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.cockroachdb;
   crdb = cfg.package;
 
-  startupCommand = utils.escapeSystemdExecArgs
-    ([
+  startupCommand = utils.escapeSystemdExecArgs (
+    [
       # Basic startup
       "${crdb}/bin/cockroach"
       "start"
@@ -29,17 +32,18 @@ let
     ]
     ++ lib.optional (cfg.join != null) "--join=${cfg.join}"
     ++ lib.optional (cfg.locality != null) "--locality=${cfg.locality}"
-    ++ cfg.extraArgs);
+    ++ cfg.extraArgs
+  );
 
   addressOption = descr: defaultPort: {
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "Address to bind to for ${descr}";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = defaultPort;
       description = "Port to bind to for ${descr}";
     };
@@ -49,14 +53,14 @@ in
 {
   options = {
     services.cockroachdb = {
-      enable = mkEnableOption "CockroachDB Server";
+      enable = lib.mkEnableOption "CockroachDB Server";
 
       listen = addressOption "intra-cluster communication" 26257;
 
       http = addressOption "http-based Admin UI" 8080;
 
-      locality = mkOption {
-        type = types.nullOr types.str;
+      locality = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           An ordered, comma-separated list of key-value pairs that describe the
@@ -68,69 +72,69 @@ in
           like datacenter.  The tiers and order must be the same on all nodes.
           Including more tiers is better than including fewer. For example:
 
-          <literal>
+          ```
               country=us,region=us-west,datacenter=us-west-1b,rack=12
               country=ca,region=ca-east,datacenter=ca-east-2,rack=4
 
               planet=earth,province=manitoba,colo=secondary,power=3
-          </literal>
+          ```
         '';
       };
 
-      join = mkOption {
-        type = types.nullOr types.str;
+      join = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "The addresses for connecting the node to a cluster.";
       };
 
-      insecure = mkOption {
-        type = types.bool;
+      insecure = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Run in insecure mode.";
       };
 
-      certsDir = mkOption {
-        type = types.nullOr types.path;
+      certsDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = "The path to the certificate directory.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "cockroachdb";
         description = "User account under which CockroachDB runs";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "cockroachdb";
         description = "User account under which CockroachDB runs";
       };
 
-      openPorts = mkOption {
-        type = types.bool;
+      openPorts = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open firewall ports for cluster communication by default";
       };
 
-      cache = mkOption {
-        type = types.str;
+      cache = lib.mkOption {
+        type = lib.types.str;
         default = "25%";
         description = ''
           The total size for caches.
 
           This can be a percentage, expressed with a fraction sign or as a
           decimal-point number, or any bytes-based unit. For example,
-          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          `"25%"`, `"0.25"` both represent
           25% of the available system memory. The values
-          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
 
         '';
       };
 
-      maxSqlMemory = mkOption {
-        type = types.str;
+      maxSqlMemory = lib.mkOption {
+        type = lib.types.str;
         default = "25%";
         description = ''
           The maximum in-memory storage capacity available to store temporary
@@ -138,87 +142,94 @@ in
 
           This can be a percentage, expressed with a fraction sign or as a
           decimal-point number, or any bytes-based unit. For example,
-          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          `"25%"`, `"0.25"` both represent
           25% of the available system memory. The values
-          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.cockroachdb;
-        defaultText = literalExpression "pkgs.cockroachdb";
-        description = ''
-          The CockroachDB derivation to use for running the service.
-
+      package = lib.mkPackageOption pkgs "cockroachdb" {
+        extraDescription = ''
           This would primarily be useful to enable Enterprise Edition features
           in your own custom CockroachDB build (Nixpkgs CockroachDB binaries
           only contain open source features and open source code).
         '';
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "--advertise-addr"
+          "[fe80::f6f2:::]"
+        ];
         description = ''
-          Extra CLI arguments passed to <command>cockroach start</command>.
-          For the full list of supported argumemnts, check <link xlink:href="https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags"/>
+          Extra CLI arguments passed to {command}`cockroach start`.
+          For the full list of supported arguments, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
         '';
       };
     };
   };
 
-  config = mkIf config.services.cockroachdb.enable {
+  config = lib.mkIf config.services.cockroachdb.enable {
     assertions = [
-      { assertion = !cfg.insecure -> cfg.certsDir != null;
+      {
+        assertion = !cfg.insecure -> cfg.certsDir != null;
         message = "CockroachDB must have a set of SSL certificates (.certsDir), or run in Insecure Mode (.insecure = true)";
       }
     ];
 
     environment.systemPackages = [ crdb ];
 
-    users.users = optionalAttrs (cfg.user == "cockroachdb") {
+    users.users = lib.optionalAttrs (cfg.user == "cockroachdb") {
       cockroachdb = {
         description = "CockroachDB Server User";
-        uid         = config.ids.uids.cockroachdb;
-        group       = cfg.group;
+        uid = config.ids.uids.cockroachdb;
+        group = cfg.group;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "cockroachdb") {
+    users.groups = lib.optionalAttrs (cfg.group == "cockroachdb") {
       cockroachdb.gid = config.ids.gids.cockroachdb;
     };
 
-    networking.firewall.allowedTCPPorts = lib.optionals cfg.openPorts
-      [ cfg.http.port cfg.listen.port ];
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openPorts [
+      cfg.http.port
+      cfg.listen.port
+    ];
 
-    systemd.services.cockroachdb =
-      { description   = "CockroachDB Server";
-        documentation = [ "man:cockroach(1)" "https://www.cockroachlabs.com" ];
+    systemd.services.cockroachdb = {
+      description = "CockroachDB Server";
+      documentation = [
+        "man:cockroach(1)"
+        "https://www.cockroachlabs.com"
+      ];
 
-        after    = [ "network.target" "time-sync.target" ];
-        requires = [ "time-sync.target" ];
-        wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "time-sync.target"
+      ];
+      requires = [ "time-sync.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        unitConfig.RequiresMountsFor = "/var/lib/cockroachdb";
+      unitConfig.RequiresMountsFor = "/var/lib/cockroachdb";
 
-        serviceConfig =
-          { ExecStart = startupCommand;
-            Type = "notify";
-            User = cfg.user;
-            StateDirectory = "cockroachdb";
-            StateDirectoryMode = "0700";
+      serviceConfig = {
+        ExecStart = startupCommand;
+        Type = "notify";
+        User = cfg.user;
+        StateDirectory = "cockroachdb";
+        StateDirectoryMode = "0700";
 
-            Restart = "always";
+        Restart = "always";
 
-            # A conservative-ish timeout is alright here, because for Type=notify
-            # cockroach will send systemd pings during startup to keep it alive
-            TimeoutStopSec = 60;
-            RestartSec = 10;
-          };
+        # A conservative-ish timeout is alright here, because for Type=notify
+        # cockroach will send systemd pings during startup to keep it alive
+        TimeoutStopSec = 60;
+        RestartSec = 10;
       };
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ thoughtpolice ];

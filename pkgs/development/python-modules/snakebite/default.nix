@@ -1,41 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tox
-, virtualenv
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "snakebite";
   version = "2.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "085238b4944cb9c658ee62d5794de936ac3d0c337c504b2cc86424a205ae978a";
+    hash = "sha256-CFI4tJRMucZY7mLVeU3pNqw9DDN8UEssyGQkogWul4o=";
   };
 
-  checkInputs = [
-    tox
-    virtualenv
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    protobuf
-  ];
+  dependencies = [ protobuf ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'argparse'" ""
+      --replace-fail "'argparse'" ""
   '';
 
-  # tests require hadoop hdfs
+  # Tests require hadoop hdfs
   doCheck = false;
+
+  pythonImportsCheck = [ "snakebite" ];
 
   meta = with lib; {
     description = "Pure Python HDFS client";
+    mainProgram = "snakebite";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

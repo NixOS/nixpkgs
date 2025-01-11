@@ -1,24 +1,41 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+}:
 
-stdenv.mkDerivation {
-  pname = "mcfgthreads";
-  version = "git";
+stdenv.mkDerivation rec {
+  pname = "mcfgthread";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "lhmouse";
     repo = "mcfgthread";
-    rev = "c446cf4fcdc262fc899a188a4bb7136284c34222";
-    sha256 = "1ib90lrd4dz8irq4yvzwhxqa86i5vxl2q2z3z04sf1i8hw427p2f";
+    rev = "v${lib.versions.majorMinor version}-ga.${lib.versions.patch version}";
+    hash = "sha256-bB7ghhSqAqkyU1PLuVVJfkTYTtEU9f0CR1k+k+u3EgY=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  # Don't want prebuilt binaries sneaking in.
-  postUnpack = ''
-    rm -r "$sourceRoot/debug" "$sourceRoot/release"
+  postPatch = ''
+    sed -z "s/Rules for tests.*//;s/'cpp'/'c'/g" -i meson.build
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
+  meta = {
+    description = "Threading support library for Windows 7 and above";
+    homepage = "https://github.com/lhmouse/mcfgthread/wiki";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.windows;
+  };
 }

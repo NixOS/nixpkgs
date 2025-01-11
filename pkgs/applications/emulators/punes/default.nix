@@ -1,64 +1,86 @@
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, qtbase
-, qtsvg
-, qttools
-, autoreconfHook
-, cmake
-, pkg-config
-, ffmpeg
-, libGLU
-, alsa-lib
-, libX11
-, libXrandr
-, sndio
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  cmake,
+  pkg-config,
+  ffmpeg,
+  libGLU,
+  alsa-lib,
+  libX11,
+  libXrandr,
+  sndio,
+  qtbase,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "punes";
-  version = "0.109";
+  version = "0.111";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "v${version}";
-    sha256 = "sha256-6aRtR/d8nhzmpN9QKSZ62jye7qjfO+FpRMCXkX4Yubk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TIXjYkInWV3yVnvXrdHcmeWYeps5TcvkG2Xjg4roIds=";
   };
 
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace '`$PKG_CONFIG --variable=host_bins Qt5Core`/lrelease' '${qttools.dev}/bin/lrelease'
-  '';
-
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config qttools ];
-
-  buildInputs = [ ffmpeg qtbase qtsvg libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libX11 libXrandr ]
-    ++ lib.optionals stdenv.hostPlatform.isBSD [ sndio ];
-
-  dontUseCmakeConfigure = true;
-
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--prefix=${placeholder "out"}"
-    "--without-opengl-nvidia-cg"
-    "--with-ffmpeg"
+  patches = [
+    # Fix FTBFS with Qt 6.7.1
+    # Remove when https://github.com/punesemu/puNES/pull/403 merged & in release
+    (fetchpatch {
+      name = "0001-punes-Fix-compatibility-with-Qt-6.7.1.patch";
+      url = "https://github.com/punesemu/puNES/commit/78c72d2dfcd570e7463a78da10904cebae6127f5.patch";
+      hash = "sha256-xRalKIOb1qWgqJsFLcm7uUOblEfHDYbkukmcr4/+4Qc=";
+    })
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
+
+  buildInputs =
+    [
+      ffmpeg
+      libGLU
+      qtbase
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libX11
+      libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isBSD [
+      sndio
+    ];
+
+  cmakeFlags = [
+    "-DENABLE_GIT_INFO=OFF"
+    "-DENABLE_RELEASE=ON"
+    "-DENABLE_FFMPEG=ON"
+    "-DENABLE_OPENGL=ON"
+    "-DENABLE_QT6_LIBS=${if lib.versionAtLeast qtbase.version "6.0" then "ON" else "OFF"}"
+  ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   meta = with lib; {
     description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
+    mainProgram = "punes";
     homepage = "https://github.com/punesemu/puNES";
+    changelog = "https://github.com/punesemu/puNES/blob/v${finalAttrs.version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = with platforms; linux ++ freebsd ++ openbsd ++ windows;
   };
-}
+})

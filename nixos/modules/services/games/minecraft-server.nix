@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.minecraft-server;
 
@@ -13,15 +10,24 @@ let
 
   whitelistFile = pkgs.writeText "whitelist.json"
     (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+      (lib.mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
 
-  cfgToString = v: if builtins.isBool v then boolToString v else toString v;
+  cfgToString = v: if builtins.isBool v then lib.boolToString v else toString v;
 
   serverPropertiesFile = pkgs.writeText "server.properties" (''
     # server.properties managed by NixOS configuration
-  '' + concatStringsSep "\n" (mapAttrsToList
+  '' + lib.concatStringsSep "\n" (lib.mapAttrsToList
     (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
+  stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
+    echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
+
+    # Wait for the PID of the minecraft server to disappear before
+    # returning, so systemd doesn't attempt to SIGKILL it.
+    while kill -0 "$1" 2> /dev/null; do
+      sleep 1s
+    done
+  '';
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
@@ -42,74 +48,74 @@ in {
   options = {
     services.minecraft-server = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If enabled, start a Minecraft Server. The server
           data will be loaded from and saved to
-          <option>services.minecraft-server.dataDir</option>.
+          {option}`services.minecraft-server.dataDir`.
         '';
       };
 
-      declarative = mkOption {
-        type = types.bool;
+      declarative = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use a declarative Minecraft server configuration.
-          Only if set to <literal>true</literal>, the options
-          <option>services.minecraft-server.whitelist</option> and
-          <option>services.minecraft-server.serverProperties</option> will be
+          Only if set to `true`, the options
+          {option}`services.minecraft-server.whitelist` and
+          {option}`services.minecraft-server.serverProperties` will be
           applied.
         '';
       };
 
-      eula = mkOption {
-        type = types.bool;
+      eula = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether you agree to
-          <link xlink:href="https://account.mojang.com/documents/minecraft_eula">
-          Mojangs EULA</link>. This option must be set to
-          <literal>true</literal> to run Minecraft server.
+          [
+          Mojangs EULA](https://account.mojang.com/documents/minecraft_eula). This option must be set to
+          `true` to run Minecraft server.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/minecraft";
         description = ''
           Directory to store Minecraft database and other state/data files.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open ports in the firewall for the server.
         '';
       };
 
-      whitelist = mkOption {
+      whitelist = lib.mkOption {
         type = let
-          minecraftUUID = types.strMatching
+          minecraftUUID = lib.types.strMatching
             "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
               description = "Minecraft UUID";
             };
-          in types.attrsOf minecraftUUID;
+          in lib.types.attrsOf minecraftUUID;
         default = {};
         description = ''
           Whitelisted players, only has an effect when
-          <option>services.minecraft-server.declarative</option> is
-          <literal>true</literal> and the whitelist is enabled
-          via <option>services.minecraft-server.serverProperties</option> by
-          setting <literal>white-list</literal> to <literal>true</literal>.
+          {option}`services.minecraft-server.declarative` is
+          `true` and the whitelist is enabled
+          via {option}`services.minecraft-server.serverProperties` by
+          setting `white-list` to `true`.
           This is a mapping from Minecraft usernames to UUIDs.
-          You can use <link xlink:href="https://mcuuid.net/"/> to get a
+          You can use <https://mcuuid.net/> to get a
           Minecraft UUID for a username.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
             username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
@@ -117,10 +123,10 @@ in {
         '';
       };
 
-      serverProperties = mkOption {
-        type = with types; attrsOf (oneOf [ bool int str ]);
+      serverProperties = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ bool int str ]);
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             server-port = 43000;
             difficulty = 3;
@@ -134,23 +140,19 @@ in {
         '';
         description = ''
           Minecraft server properties for the server.properties file. Only has
-          an effect when <option>services.minecraft-server.declarative</option>
-          is set to <literal>true</literal>. See
-          <link xlink:href="https://minecraft.gamepedia.com/Server.properties#Java_Edition_3"/>
+          an effect when {option}`services.minecraft-server.declarative`
+          is set to `true`. See
+          <https://minecraft.gamepedia.com/Server.properties#Java_Edition_3>
           for documentation on these values.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.minecraft-server;
-        defaultText = literalExpression "pkgs.minecraft-server";
-        example = literalExpression "pkgs.minecraft-server_1_12_2";
-        description = "Version of minecraft-server to run.";
+      package = lib.mkPackageOption pkgs "minecraft-server" {
+        example = "minecraft-server_1_12_2";
       };
 
-      jvmOpts = mkOption {
-        type = types.separatedString " ";
+      jvmOpts = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
         # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
         example = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
@@ -161,7 +163,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.minecraft = {
       description     = "Minecraft server service user";
@@ -172,16 +174,35 @@ in {
     };
     users.groups.minecraft = {};
 
+    systemd.sockets.minecraft-server = {
+      bindsTo = [ "minecraft-server.service" ];
+      socketConfig = {
+        ListenFIFO = "/run/minecraft-server.stdin";
+        SocketMode = "0660";
+        SocketUser = "minecraft";
+        SocketGroup = "minecraft";
+        RemoveOnStop = true;
+        FlushPending = true;
+      };
+    };
+
     systemd.services.minecraft-server = {
       description   = "Minecraft Server Service";
       wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      requires      = [ "minecraft-server.socket" ];
+      after         = [ "network.target" "minecraft-server.socket" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
+        ExecStop = "${stopScript} $MAINPID";
         Restart = "always";
         User = "minecraft";
         WorkingDirectory = cfg.dataDir;
+
+        StandardInput = "socket";
+        StandardOutput = "journal";
+        StandardError = "journal";
+
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
@@ -235,11 +256,11 @@ in {
       '');
     };
 
-    networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
+    networking.firewall = lib.mkIf cfg.openFirewall (if cfg.declarative then {
       allowedUDPPorts = [ serverPort ];
       allowedTCPPorts = [ serverPort ]
-        ++ optional (queryPort != null) queryPort
-        ++ optional (rconPort != null) rconPort;
+        ++ lib.optional (queryPort != null) queryPort
+        ++ lib.optional (rconPort != null) rconPort;
     } else {
       allowedUDPPorts = [ defaultServerPort ];
       allowedTCPPorts = [ defaultServerPort ];

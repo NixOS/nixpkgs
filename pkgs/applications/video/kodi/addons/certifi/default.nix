@@ -1,13 +1,35 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  cacert,
+}:
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
-  version = "2020.12.05+matrix.1";
+  version = "2023.5.7";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "1z49b8va7wdyr714c8ixb2sldi0igffcjj3xpbmga58ph0z985vy";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-NQbjx+k9fnQMYLLMR5+N5NSuDcXEzZjlhGPA3qSmjfI=";
   };
+
+  patches = [
+    # Add support for NIX_SSL_CERT_FILE
+    ./env.patch
+  ];
+
+  postPatch = ''
+    # Use our system-wide ca-bundle instead of the bundled one
+    ln -snvf "${cacert}/etc/ssl/certs/ca-bundle.crt" "lib/certifi/cacert.pem"
+  '';
+
+  propagatedNativeBuildInputs = [
+    # propagate cacerts setup-hook to set up `NIX_SSL_CERT_FILE`
+    cacert
+  ];
 
   passthru = {
     pythonPath = "lib";

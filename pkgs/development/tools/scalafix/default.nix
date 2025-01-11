@@ -1,46 +1,59 @@
-{ lib, stdenv, jre, coursier, makeWrapper, installShellFiles, setJavaClassPath }:
-
-let
-  baseName = "scalafix";
-  version = "0.10.0";
+{
+  lib,
+  stdenv,
+  jre,
+  coursier,
+  makeWrapper,
+  installShellFiles,
+  setJavaClassPath,
+  testers,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "scalafix";
+  version = "0.12.0";
   deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
+    name = "${finalAttrs.pname}-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.13.8:${version} > deps
+      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.13.13:${finalAttrs.version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash     = "sha256-lDeg90L484MggtQ2a9OyHv4UcfLPjzG3OJZCaWW2AC8=";
+    outputHash = "sha256-HMTnr3awTIAgLSl4eF36U1kv162ajJxC5MreSk2TfUE=";
   };
-in
-stdenv.mkDerivation {
-  pname = baseName;
-  inherit version;
 
-  nativeBuildInputs = [ makeWrapper installShellFiles setJavaClassPath ];
-  buildInputs = [ deps ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+    setJavaClassPath
+  ];
+  buildInputs = [ finalAttrs.deps ];
 
   dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
 
-    installShellCompletion --cmd ${baseName} \
-      --bash <($out/bin/${baseName} --bash) \
-      --zsh  <($out/bin/${baseName} --zsh)
+    installShellCompletion --cmd ${finalAttrs.pname} \
+      --bash <($out/bin/${finalAttrs.pname} --bash) \
+      --zsh  <($out/bin/${finalAttrs.pname} --zsh)
   '';
 
-  installCheckPhase = ''
-    $out/bin/${baseName} --version | grep -q "${version}"
-  '';
+  passthru.tests = {
+    testVersion = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "${finalAttrs.version}";
+    };
+  };
 
   meta = with lib; {
     description = "Refactoring and linting tool for Scala";
+    mainProgram = "scalafix";
     homepage = "https://scalacenter.github.io/scalafix/";
     license = licenses.bsd3;
     maintainers = [ maintainers.tomahna ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
-}
+})

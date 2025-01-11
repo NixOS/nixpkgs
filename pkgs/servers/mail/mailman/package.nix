@@ -1,36 +1,53 @@
-{ lib, fetchpatch, python3, postfix, lynx
+{
+  lib,
+  fetchpatch,
+  python3,
+  fetchPypi,
+  postfix,
+  lynx,
+  nixosTests,
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.5";
+  version = "3.3.9";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12mgxs1ndhdjjkydx48b95na9k9h0disfqgrr6wxx7vda6dqvcwz";
+    hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     aiosmtpd
     alembic
     authheaders
     click
     dnspython
     falcon
-    flufl_bounce
-    flufl_i18n
-    flufl_lock
+    flufl-bounce
+    flufl-i18n
+    flufl-lock
     gunicorn
-    importlib-resources
-    lazr_config
+    lazr-config
     passlib
+    python-dateutil
     requests
     sqlalchemy
-    zope_component
-    zope_configuration
+    zope-component
+    zope-configuration
+  ];
+
+  checkInputs = [
+    sphinx
   ];
 
   patches = [
@@ -46,9 +63,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "alembic>=1.6.2,<1.7" "alembic>=1.6.2"
-
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
@@ -64,13 +78,12 @@ buildPythonPackage rec {
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
 
-  # requires flufl.testing, which the upstream has archived
-  doCheck = false;
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ qyliss ma27 ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

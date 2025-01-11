@@ -1,10 +1,17 @@
-{ lib, fetchFromGitHub, ppx_deriving, ppxlib, buildDunePackage, ounit }:
+{
+  lib,
+  fetchFromGitHub,
+  ppx_deriving,
+  ppxlib,
+  buildDunePackage,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "lens";
   version = "1.2.5";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "pdonadeo";
@@ -14,7 +21,10 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.10";
-  buildInputs = [ ppx_deriving ppxlib ];
+  buildInputs = [
+    ppx_deriving
+    ppxlib
+  ];
 
   doCheck = true;
   checkInputs = [ ounit ];

@@ -1,9 +1,15 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, python, isPy3k }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "emailthreads";
   version = "0.1.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   # pypi is missing files for tests
@@ -11,14 +17,12 @@ buildPythonPackage rec {
     owner = "emersion";
     repo = "python-emailthreads";
     rev = "v${version}";
-    sha256 = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
+    hash = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 
-  PKGVER = version;
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover test
-  '';
+  PKGVER = version;
 
   meta = with lib; {
     homepage = "https://github.com/emersion/python-emailthreads";

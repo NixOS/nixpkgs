@@ -1,37 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, xfce
+{
+  mkXfceDerivation,
+  lib,
+  vala,
+  glib,
+  gtk3,
+  gtksourceview4,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
 }:
 
-let
+mkXfceDerivation {
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-notes-plugin";
-  version = "1.9.0";
-
-  src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-E/kJyUi2Oflt5kz3k+t0yxd5WJIB05M+/yFO6PNasIg=";
-  };
+  pname = "xfce4-notes-plugin";
+  version = "1.11.1";
+  sha256 = "sha256-LeKQCsnHVataTP0rYn09x0Ddx8lMtVC0WW/jje7yXag=";
+  odd-unstable = false;
 
   nativeBuildInputs = [
-    pkg-config
-    intltool
+    vala
   ];
 
   buildInputs = [
+    glib
+    gtk3
+    gtksourceview4
     libxfce4ui
+    libxfce4util
     xfce4-panel
     xfconf
   ];
-
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-notes-plugin";

@@ -1,24 +1,38 @@
-{ buildPythonPackage, fetchPypi, lib, isPy27, marshmallow, pytestCheckHook
-, pytest-aiohttp, webtest, webtest-aiohttp, flask, django, bottle, tornado
-, pyramid, falcon, aiohttp }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pythonAtLeast,
+  flit-core,
+  marshmallow,
+  pytestCheckHook,
+  pytest-aiohttp,
+  webtest,
+  webtest-aiohttp,
+  flask,
+  django,
+  bottle,
+  tornado,
+  pyramid,
+  falcon,
+  aiohttp,
+}:
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.1.0";
-  disabled = isPy27;
+  version = "8.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1f0b7f054a22263cf750529fc0926709ca47da9a2c417d423ad88d9fa6a5d33";
+    hash = "sha256-uNCYq5K9dMZZ7KcFr6MdaBR18hjLFcHlcnH6IQPAVHo=";
   };
 
-  pythonImportsCheck = [
-    "webargs"
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ marshmallow ];
+  dependencies = [ marshmallow ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
     webtest
@@ -31,6 +45,8 @@ buildPythonPackage rec {
     falcon
     aiohttp
   ];
+
+  pythonImportsCheck = [ "webargs" ];
 
   meta = with lib; {
     description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";

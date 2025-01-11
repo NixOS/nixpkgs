@@ -1,35 +1,51 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  libiconv,
+  Security,
+  SystemConfiguration,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.6.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JhQkoVGJpMesNz2hRe+kWNX4zYrIcKzT0Z6owrXlRN4=";
+    hash = "sha256-t4FdTFXbKs7Xfw8dKoME7WDn+Fpe/uHPXyr5Wj+AXSA=";
   };
 
-  cargoSha256 = "sha256-BikzJr50Aua9llyQgbP/paIoC7dvsG0RYyVXmbdeGIA=";
+  cargoHash = "sha256-lBGcS1+CBYeVIG546aHSBVJ9y96rB3IDDVJPqCFUDZQ=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  OPENSSL_NO_VENDOR = true;
 
-  checkFlagsArray = [ "--skip=tests::cli" ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+      SystemConfiguration
+    ];
+
+  checkFlags = [ "--skip=tests::cli" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
+    mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
-    license = licenses.unlicense;
+    license = licenses.cc0;
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

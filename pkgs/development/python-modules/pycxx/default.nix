@@ -1,15 +1,27 @@
-{ lib, buildPythonPackage, fetchurl, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  setuptools,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "pycxx";
-  version = "7.1.4";
+  version = "7.1.8";
+  pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/cxx/CXX/PyCXX%20V${version}/pycxx-${version}.tar.gz";
-    sha256 = "MUMU+/qsm92WENYFxfjQsSuR8/nE/asYG8HgIbaAaz0=";
+    hash = "sha256-S5Hh4RQcI/vVA532NcS7bnVjIWhUj1a4POF3GTwMmMY=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  build-system = [ setuptools ];
 
   postInstall = ''
     mkdir -p $dev/include
@@ -18,10 +30,10 @@ buildPythonPackage rec {
     sed -i "s|Src|$dev/src|" $dev/src/cxxextensions.c $dev/src/cxxsupport.cxx
   '';
 
-  meta = with lib; {
-    description = "set of classes to help create extensions of Python in the C++ language";
+  meta = {
+    description = "Set of classes to help create extensions of Python in the C++ language";
     homepage = "https://sourceforge.net/projects/cxx/";
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ freezeboy ];
   };
 }

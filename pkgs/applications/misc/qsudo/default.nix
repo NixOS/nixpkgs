@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, sudo
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  sudo,
 }:
 
 mkDerivation rec {
@@ -17,7 +18,7 @@ mkDerivation rec {
     sha256 = "06kg057vwkvafnk69m9rar4wih3vq4h36wbzwbfc2kndsnn47lfl";
   };
 
-  sourceRoot = "source/src-qt5";
+  sourceRoot = "${src.name}/src-qt5";
 
   nativeBuildInputs = [
     qmake
@@ -34,6 +35,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical sudo utility from Project Trident";
+    mainProgram = "qsudo";
     homepage = "https://github.com/project-trident/qsudo";
     license = licenses.bsd2;
     platforms = platforms.linux;

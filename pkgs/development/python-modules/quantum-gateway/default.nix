@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, esprima
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools-scm
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  esprima,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -30,14 +30,12 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "quantum_gateway"
-  ];
+  pythonImportsCheck = [ "quantum_gateway" ];
 
   disabledTests = [
     # Tests require network features

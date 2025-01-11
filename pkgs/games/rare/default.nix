@@ -1,50 +1,51 @@
-{ lib, fetchPypi, buildPythonApplication, makeDesktopItem, copyDesktopItems, qt5
-, pillow, psutil, pypresence, pyqt5, python, qtawesome, requests }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  qt5,
+  legendary-gl,
+  orjson,
+  pypresence,
+  pyqt5,
+  python,
+  qtawesome,
+  requests,
+  setuptools,
+  typing-extensions,
+}:
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.8.9";
+  version = "1.10.11";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Rare";
-    sha256 = "sha256-UEvGwWjr4FCsvyFz6Db3VnhVS6MS3FYzYSucumzOoEA=";
+  src = fetchFromGitHub {
+    owner = "RareDevs";
+    repo = "Rare";
+    tag = version;
+    hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 
   nativeBuildInputs = [
-    copyDesktopItems
+    setuptools
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
-    pillow
-    psutil
+    legendary-gl
+    orjson
     pypresence
     pyqt5
     qtawesome
     requests
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = pname;
-      exec = "rare";
-      icon = "Rare";
-      comment = meta.description;
-      desktopName = "Rare";
-      genericName = "Rare (Epic Games Launcher Open Source Alternative)";
-    })
+    typing-extensions
   ];
 
   dontWrapQtApps = true;
 
-  preBuild = ''
-    # Solves "PermissionError: [Errno 13] Permission denied: '/homeless-shelter'"
-    export HOME=$(mktemp -d)
-  '';
-
   postInstall = ''
-    install -Dm644 $out/${python.sitePackages}/rare/resources/images/Rare.png -t $out/share/pixmaps/
+    install -Dm644 misc/rare.desktop -t $out/share/applications/
+    install -Dm644 $out/${python.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
   '';
 
   preFixup = ''
@@ -56,9 +57,10 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "GUI for Legendary, an Epic Games Launcher open source alternative";
-    homepage = "https://github.com/Dummerle/Rare";
-    maintainers = with maintainers; [ wolfangaukang ];
+    homepage = "https://github.com/RareDevs/Rare";
+    maintainers = [ ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    mainProgram = "rare";
   };
 }

@@ -1,58 +1,57 @@
-{ lib
-, buildPythonPackage
-, certifi
-, circuitbreaker
-, configparser
-, cryptography
-, fetchFromGitHub
-, pyopenssl
-, python-dateutil
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  circuitbreaker,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  python-dateutil,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.63.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.141.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
-    rev = "v${version}";
-    hash = "sha256-EIn7BRXsVf7R2ij8iK3hrNWnLehxKDBlk96lAhFh0xw=";
+    tag = "v${version}";
+    hash = "sha256-D2iaEK25ryU1oRRahnlC3wuEIxtyjR6rAa7TXFTaRi4=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "cryptography"
+    "pyOpenSSL"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     circuitbreaker
-    configparser
     cryptography
     pyopenssl
     python-dateutil
     pytz
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "configparser==4.0.2 ; python_version < '3'" "configparser" \
-      --replace "cryptography>=3.2.1,<=3.4.7" "cryptography" \
-      --replace "pyOpenSSL>=17.5.0,<=19.1.0" "pyOpenSSL"
-  '';
-
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164
   doCheck = false;
 
-  pythonImportsCheck = [
-    "oci"
-  ];
+  pythonImportsCheck = [ "oci" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oracle Cloud Infrastructure Python SDK";
-    homepage = "https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/";
-    license = with licenses; [ asl20 /* or */ upl ];
-    maintainers = with maintainers; [ ilian ];
+    homepage = "https://github.com/oracle/oci-python-sdk";
+    changelog = "https://github.com/oracle/oci-python-sdk/blob/v${version}/CHANGELOG.rst";
+    license = with lib.licenses; [
+      asl20 # or
+      upl
+    ];
+    maintainers = with lib.maintainers; [ ilian ];
   };
 }

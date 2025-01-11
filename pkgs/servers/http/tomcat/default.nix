@@ -1,44 +1,76 @@
-{ stdenv, lib, fetchurl }:
+{
+  fetchurl,
+  gitUpdater,
+  jre,
+  lib,
+  nixosTests,
+  stdenvNoCC,
+  testers,
+}:
 
 let
+  common =
+    { version, hash }:
+    stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = "apache-tomcat";
+      inherit version;
 
-  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
-    pname = "apache-tomcat";
-    version = "${versionMajor}.${versionMinor}";
+      src = fetchurl {
+        url = "mirror://apache/tomcat/tomcat-${lib.versions.major version}/v${version}/bin/apache-tomcat-${version}.tar.gz";
+        inherit hash;
+      };
 
-    src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
-      inherit sha256;
-    };
+      outputs = [
+        "out"
+        "webapps"
+      ];
 
-    outputs = [ "out" "webapps" ];
-    installPhase =
-      ''
+      installPhase = ''
         mkdir $out
         mv * $out
         mkdir -p $webapps/webapps
         mv $out/webapps $webapps/
       '';
 
-    meta = with lib; {
-      homepage = "https://tomcat.apache.org/";
-      description = "An implementation of the Java Servlet and JavaServer Pages technologies";
-      platforms = platforms.all;
-      maintainers = [ ];
-      license = [ licenses.asl20 ];
-    };
-  });
+      passthru = {
+        updateScript = gitUpdater {
+          url = "https://github.com/apache/tomcat.git";
+          allowedVersions = "^${lib.versions.major version}\\.";
+          ignoredVersions = "-M.*";
+        };
+        tests = {
+          inherit (nixosTests) tomcat;
+          version = testers.testVersion {
+            package = finalAttrs.finalPackage;
+            command = "JAVA_HOME=${jre} ${finalAttrs.finalPackage}/bin/version.sh";
+          };
+        };
+      };
 
-in {
+      meta = {
+        homepage = "https://tomcat.apache.org/";
+        description = "Implementation of the Java Servlet and JavaServer Pages technologies";
+        platforms = jre.meta.platforms;
+        maintainers = with lib.maintainers; [ anthonyroussel ];
+        license = lib.licenses.asl20;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      };
+    });
+
+in
+{
   tomcat9 = common {
-    versionMajor = "9";
-    versionMinor = "0.53";
-    sha256 = "1zdnbb0bfbi7762lz69li0wf48jbfz1mv637jzcl42vbsxp4agkv";
+    version = "9.0.98";
+    hash = "sha256-HZoRBMLiNaW6/26cqOKL49hkgD+vxHj1wTwq5qXtPW8=";
   };
 
   tomcat10 = common {
-    versionMajor = "10";
-    versionMinor = "0.11";
-    sha256 = "1hjvsxxxavni7bis1hm56281ffmf4x0zdh65zqkrnhqa1rbs0lg2";
+    version = "10.1.34";
+    hash = "sha256-95lUE4C//ytnTO/YbFN20tfVZrOi58RXnStJHejsbDY=";
+  };
+
+  tomcat11 = common {
+    version = "11.0.2";
+    hash = "sha256-wbMaaYnTCnNEwaNlXadGec6fm0iicehkZHoUHeO3jLg=";
   };
 }

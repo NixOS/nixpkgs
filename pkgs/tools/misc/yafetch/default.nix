@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yafetch";
@@ -15,6 +19,8 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace ./config.h --replace \
       "#include \"ascii/gnu.h\"" "#include \"ascii/nixos.h\""
+
+    sed '1i#include <array>' -i config.h # gcc12
   '';
 
   # Fixes installation path
@@ -24,7 +30,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kira64xyz/yafetch";
     description = "Yet another fetch clone written in C++";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ivar ashley ];
+    maintainers = with maintainers; [ ashley ];
     platforms = platforms.linux;
+    mainProgram = "yafetch";
   };
 }

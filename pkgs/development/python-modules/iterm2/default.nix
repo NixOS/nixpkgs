@@ -1,18 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi
-, protobuf
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "iterm2";
-  version = "2.1";
+  version = "2.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oEXDW+ar3S0gJn2DdaOyq6GDE9dJaghQEpPBCfTL2Kw=";
+    hash = "sha256-kNPobWr12VXDGZk8g1LPPpPHoMkZ7Ysq1VGnQrh+iJs=";
   };
 
-  propagatedBuildInputs = [ protobuf websockets ];
+  propagatedBuildInputs = [
+    protobuf
+    websockets
+  ];
 
   # The tests require pyobjc. We can't use pyobjc because at
   # time of writing the pyobjc derivation is disabled on python 3.

@@ -1,27 +1,72 @@
-{ mkDerivation, lib, fetchpatch, fetchurl,
-  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
-  kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
-  kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
-  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  qtwebengine,
+  qtscript,
+  grantlee,
+  qtxmlpatterns,
+  kxmlgui,
+  kwallet,
+  kparts,
+  kdoctools,
+  kjobwidgets,
+  kdesignerplugin,
+  kiconthemes,
+  knewstuff,
+  sqlcipher,
+  qca-qt5,
+  kactivities,
+  karchive,
+  kguiaddons,
+  knotifyconfig,
+  krunner,
+  kwindowsystem,
+  libofx,
+  shared-mime-info,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {
   pname = "skrooge";
-  version = "2.27.0";
+  version = "2.33.0";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xkl0UyJEDOeYOqqXf3woCDMb8ZyC2c5ChQdDFFERZxE=";
+    url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
+    hash = "sha256-9K4/r3I9VNdUKHi4FCo0SxR+QzewvEKGOQevRM/r9GU=";
   };
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules kdoctools shared-mime-info
+    cmake
+    extra-cmake-modules
+    kdoctools
+    shared-mime-info
   ];
 
   buildInputs = [
-    qtwebengine qtscript grantlee kxmlgui kwallet kparts
-    kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
-    kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
+    qtwebengine
+    qtscript
+    grantlee
+    kxmlgui
+    kwallet
+    kparts
+    qtxmlpatterns
+    kjobwidgets
+    kdesignerplugin
+    kiconthemes
+    knewstuff
+    sqlcipher
+    qca-qt5
+    kactivities
+    karchive
+    kguiaddons
+    knotifyconfig
+    krunner
+    kwindowsystem
+    libofx
+    qtquickcontrols2
   ];
 
   # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
@@ -35,7 +80,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A personal finances manager, powered by KDE";
+    description = "Personal finances manager, powered by KDE";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ joko ];
     homepage = "https://skrooge.org/";

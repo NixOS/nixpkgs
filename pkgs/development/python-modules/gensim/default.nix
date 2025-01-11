@@ -1,59 +1,65 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, mock
-, numpy
-, scipy
-, smart-open
-, testfixtures
-, pyemd
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython_0,
+  oldest-supported-numpy,
+  setuptools,
+  fetchPypi,
+  mock,
+  numpy,
+  scipy,
+  smart-open,
+  pyemd,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.2.0";
-  format = "setuptools";
+  version = "4.3.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  # C code generated with CPython3.12 does not work cython_0.
+  disabled = !(pythonOlder "3.12");
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mV69KXCjHUfBAKqsECEvR+K/EuKwZTbTiIPJUf807vE=";
+    hash = "sha256-hIUgdqaj2I19rFviReJMIcO4GbVl4UwbYfo+Xudtz1c=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
+    cython_0
+    oldest-supported-numpy
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     smart-open
     numpy
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pyemd
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gensim"
+  pythonRelaxDeps = [
+    "scipy"
   ];
+
+  pythonImportsCheck = [ "gensim" ];
 
   # Test setup takes several minutes
   doCheck = false;
 
-  pytestFlagsArray = [
-    "gensim/test"
-  ];
+  pytestFlagsArray = [ "gensim/test" ];
 
   meta = with lib; {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
+    changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ jyp ];
   };

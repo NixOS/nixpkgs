@@ -1,17 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.blackfire-agent;
 
-  agentConfigFile = lib.generators.toINI {} {
-    blackfire =  cfg.settings;
+  agentConfigFile = lib.generators.toINI { } {
+    blackfire = cfg.settings;
   };
 
   agentSock = "blackfire/agent.sock";
-in {
+in
+{
   meta = {
     maintainers = pkgs.blackfire.meta.maintainers;
-    doc = ./blackfire.xml;
+    doc = ./blackfire.md;
   };
 
   options = {

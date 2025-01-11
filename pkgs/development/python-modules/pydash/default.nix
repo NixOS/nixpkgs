@@ -1,48 +1,57 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, invoke
-, mock
-, pytestCheckHook
-, pythonOlder
-, sphinx_rtd_theme
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  invoke,
+  mock,
+  pytest7CheckHook,
+  pythonOlder,
+  setuptools,
+  sphinx-rtd-theme,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "5.1.0";
-  format = "setuptools";
+  version = "8.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgilland";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-BAyiSnILvujUOFOAkiXSgyozs2Q809pYihHwa+6BHcQ=";
+    repo = "pydash";
+    tag = "v${version}";
+    hash = "sha256-4zNljz0U/iQd2DMC43qkdOY/mwtPlizgLmoaB7BVmxw=";
   };
 
-  checkInputs = [
-    invoke
-    mock
-    sphinx_rtd_theme
-    pytestCheckHook
-  ];
-
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov/d" setup.cfg
+    sed -i "/--cov/d" pyproject.toml
+    sed -i "/--no-cov/d" pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "pydash"
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [
+    invoke
+    mock
+    pytest7CheckHook
+    sphinx-rtd-theme
+  ];
+
+  pythonImportsCheck = [ "pydash" ];
+
+  disabledTestPaths = [
+    # Disable mypy testing
+    "tests/pytest_mypy_testing/"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Python utility libraries for doing stuff in a functional way";
     homepage = "https://pydash.readthedocs.io";
+    changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
   };

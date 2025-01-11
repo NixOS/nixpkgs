@@ -27,7 +27,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
         # don't do it with real ssh keys.
         environment.etc."btrbk_key".text = privateKey;
         services.btrbk = {
-          extraPackages = [ pkgs.lz4 ];
           instances = {
             remote = {
               onCalendar = "minutely";
@@ -52,8 +51,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
         environment.systemPackages = with pkgs; [ btrfs-progs ];
         services.openssh = {
           enable = true;
-          passwordAuthentication = false;
-          kbdInteractiveAuthentication = false;
+          settings = {
+            KbdInteractiveAuthentication = false;
+            PasswordAuthentication = false;
+          };
         };
         services.btrbk = {
           extraPackages = [ pkgs.lz4 ];

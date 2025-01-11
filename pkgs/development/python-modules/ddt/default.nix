@@ -1,31 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six, pyyaml, mock
-, pytestCheckHook
-, enum34
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # tests
+  aiounittest,
+  mock,
+  pytestCheckHook,
+  pyyaml,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.4.4";
+  version = "1.7.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8de39a69730442dc835e4d33f9d2e33043ff91151c8d18086959ee556febb9f8";
+    hash = "sha256-0hXWsIOWMBPEoZseTc1qlugOQ6t3UZWXpqz88umj4Es=";
   };
 
-  checkInputs = [ six pyyaml mock pytestCheckHook ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (!isPy3k) [
-    enum34
+  # aiounittest is not compatible with Python 3.12.
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
+    aiounittest
+    mock
+    pytestCheckHook
+    pyyaml
+    six
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/datadriventests/ddt/releases/tag/${version}";
     description = "Data-Driven/Decorated Tests, a library to multiply test cases";
     homepage = "https://github.com/txels/ddt";
+    maintainers = [ ];
     license = licenses.mit;
   };
-
 }

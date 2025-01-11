@@ -7,7 +7,9 @@ let
   settingsFormat = pkgs.formats.yaml { };
   confFile = settingsFormat.generate "stubby.yml" cfg.settings;
 in {
-  imports = map (x:
+  imports = [
+    (mkRemovedOptionModule [ "stubby" "debugLogging" ] "Use services.stubby.logLevel = \"debug\"; instead.")
+  ] ++ map (x:
     (mkRemovedOptionModule [ "services" "stubby" x ]
       "Stubby configuration moved to services.stubby.settings.")) [
         "authenticationMode"
@@ -42,17 +44,29 @@ in {
         description = ''
           Content of the Stubby configuration file. All Stubby settings may be set or queried
           here. The default settings are available at
-          <literal>pkgs.stubby.passthru.settingsExample</literal>. See
-          <link xlink:href="https://dnsprivacy.org/wiki/display/DP/Configuring+Stubby"/>.
+          `pkgs.stubby.passthru.settingsExample`. See
+          <https://dnsprivacy.org/wiki/display/DP/Configuring+Stubby>.
           A list of the public recursive servers can be found here:
-          <link xlink:href="https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers"/>.
+          <https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers>.
         '';
       };
 
-      debugLogging = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Enable or disable debug level logging.";
+      logLevel = let
+        logLevels = {
+          emerg = 0;
+          alert = 1;
+          crit = 2;
+          error = 3;
+          warning = 4;
+          notice = 5;
+          info = 6;
+          debug = 7;
+        };
+      in mkOption {
+        default = null;
+        type = types.nullOr (types.enum (attrNames logLevels ++ attrValues logLevels));
+        apply = v: if isString v then logLevels.${v} else v;
+        description = "Log verbosity (syslog keyword or level).";
       };
 
     };
@@ -80,7 +94,7 @@ in {
         Type = "notify";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
+        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString (cfg.logLevel != null) "-v ${toString cfg.logLevel}"}";
         DynamicUser = true;
         CacheDirectory = "stubby";
       };

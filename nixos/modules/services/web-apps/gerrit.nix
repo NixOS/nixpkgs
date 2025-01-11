@@ -61,19 +61,9 @@ in
     services.gerrit = {
       enable = mkEnableOption "Gerrit service";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gerrit;
-        defaultText = literalExpression "pkgs.gerrit";
-        description = "Gerrit package to use";
-      };
+      package = mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = mkOption {
-        type = types.package;
-        default = pkgs.jre_headless;
-        defaultText = literalExpression "pkgs.jre_headless";
-        description = "Java Runtime Environment package to use";
-      };
+      jvmPackage = mkPackageOption pkgs "jre_headless" { };
 
       jvmOpts = mkOption {
         type = types.listOf types.str;
@@ -96,7 +86,7 @@ in
         type = types.str;
         default = "[::]:8080";
         description = ''
-          <literal>hostname:port</literal> to listen for HTTP traffic.
+          `hostname:port` to listen for HTTP traffic.
 
           This is bound using the systemd socket activation.
         '';
@@ -107,7 +97,7 @@ in
         default = {};
         description = ''
           Gerrit configuration. This will be generated to the
-          <literal>etc/gerrit.config</literal> file.
+          `etc/gerrit.config` file.
         '';
       };
 
@@ -116,7 +106,7 @@ in
         default = {};
         description = ''
           Replication configuration. This will be generated to the
-          <literal>etc/replication.config</literal> file.
+          `etc/replication.config` file.
         '';
       };
 
@@ -134,7 +124,7 @@ in
         default = [];
         description = ''
           List of builtins plugins to install. Those are shipped in the
-          <literal>gerrit.war</literal> file.
+          `gerrit.war` file.
         '';
       };
 
@@ -144,7 +134,7 @@ in
           Set a UUID that uniquely identifies the server.
 
           This can be generated with
-          <literal>nix-shell -p util-linux --run uuidgen</literal>.
+          `nix-shell -p util-linux --run uuidgen`.
         '';
       };
     };
@@ -232,6 +222,27 @@ in
         StandardOutput = "journal";
         StateDirectory = "gerrit";
         WorkingDirectory = "%S/gerrit";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "full";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 027;
       };
     };
   };

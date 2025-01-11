@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
-, pytest
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
+  pytest,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "plyvel";
-  version = "1.4.0";
+  version = "1.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ea98bea04ebf0f44747bacdfafefc8827787106fbb787f0aedc46482b2dfd53";
+    hash = "sha256-PK9gCeT8JPv4cS0/XvPaflZJXCakiN8hYSGPw05GAZw=";
   };
 
   buildInputs = [ pkgs.leveldb ] ++ lib.optional isPy3k pytest;

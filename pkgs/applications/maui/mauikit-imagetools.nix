@@ -1,13 +1,17 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, kconfig
-, kio
-, mauikit
-, qtlocation
-, exiv2
-, kquickimageedit
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kconfig,
+  kio,
+  leptonica,
+  mauikit,
+  opencv,
+  qtlocation,
+  exiv2,
+  kquickimageedit,
+  tesseract,
 }:
 
 mkDerivation {
@@ -21,10 +25,13 @@ mkDerivation {
   buildInputs = [
     kconfig
     kio
+    leptonica
     mauikit
+    opencv
     qtlocation
     exiv2
     kquickimageedit
+    tesseract
   ];
 
   meta = with lib; {

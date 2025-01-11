@@ -1,53 +1,76 @@
-{ lib
-, buildPythonApplication
-, isPy3k
-, daemonize
-, dbus-python
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, makeWrapper
-, pygobject3
-, pyudev
-, setproctitle
-, wrapGAppsHook
+{
+  lib,
+  buildPythonPackage,
+  daemonize,
+  dbus-python,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  pygobject3,
+  pyudev,
+  setproctitle,
+  setuptools,
+  wrapGAppsNoGuiHook,
+  notify2,
+  glib,
 }:
 
 let
   common = import ./common.nix { inherit lib fetchFromGitHub; };
 in
-buildPythonApplication (common // rec {
-  pname = "openrazer_daemon";
+buildPythonPackage (
+  common
+  // {
+    pname = "openrazer-daemon";
 
-  disabled = !isPy3k;
+    outputs = [
+      "out"
+      "man"
+    ];
 
-  outputs = [ "out" "man" ];
+    sourceRoot = "${common.src.name}/daemon";
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+    postPatch = ''
+      substituteInPlace openrazer_daemon/daemon.py \
+        --replace-fail "plugdev" "openrazer"
+    '';
 
-  propagatedBuildInputs = [
-    daemonize
-    dbus-python
-    gobject-introspection
-    gtk3
-    pygobject3
-    pyudev
-    setproctitle
-  ];
+    nativeBuildInputs = [
+      setuptools
+      wrapGAppsNoGuiHook
+      gobject-introspection
+    ];
 
-  prePatch = ''
-    cd daemon
-  '';
+    buildInputs = [
+      glib
+      gtk3
+    ];
 
-  postPatch = ''
-    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
-  '';
+    propagatedBuildInputs = [
+      daemonize
+      dbus-python
+      pygobject3
+      pyudev
+      setproctitle
+      notify2
+    ];
 
-  postBuild = ''
-    DESTDIR="$out" PREFIX="" make install manpages
-  '';
+    postInstall = ''
+      DESTDIR="$out" PREFIX="" make manpages install-resources install-systemd
+    '';
 
-  meta = common.meta // {
-    description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
-  };
-})
+    # no tests run
+    doCheck = false;
+
+    dontWrapGApps = true;
+
+    preFixup = ''
+      makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    '';
+
+    meta = common.meta // {
+      description = "Entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
+      mainProgram = "openrazer-daemon";
+    };
+  }
+)

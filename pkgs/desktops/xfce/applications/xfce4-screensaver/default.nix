@@ -1,26 +1,39 @@
-{ mkXfceDerivation
-, dbus-glib
-, garcon
-, glib
-, gtk3
-, libX11
-, libXScrnSaver
-, libXrandr
-, libwnck
-, libxfce4ui
-, libxklavier
-, pam
-, systemd
-, xfconf
-, lib
+{
+  mkXfceDerivation,
+  gobject-introspection,
+  dbus-glib,
+  garcon,
+  glib,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXrandr,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  pam,
+  python3,
+  systemd,
+  xfconf,
+  xfdesktop,
+  lib,
 }:
 
+let
+  # For xfce4-screensaver-configure
+  pythonEnv = python3.withPackages (pp: [ pp.pygobject3 ]);
+in
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screensaver";
-  version = "4.16.0";
+  version = "4.18.4";
 
-  sha256 = "1vblqhhzhv85yd5bz1xg14yli82ys5qrjdcabg3l53glbk61n99p";
+  sha256 = "sha256-vkxkryi7JQg1L/JdWnO9qmW6Zx6xP5Urq4kXMe7Iiyc=";
+
+  nativeBuildInputs = [
+    gobject-introspection
+  ];
 
   buildInputs = [
     dbus-glib
@@ -32,8 +45,10 @@ mkXfceDerivation {
     libXrandr
     libwnck
     libxfce4ui
+    libxfce4util
     libxklavier
     pam
+    pythonEnv
     systemd
     xfconf
   ];
@@ -42,8 +57,13 @@ mkXfceDerivation {
 
   makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
 
-  meta =  {
+  preFixup = ''
+    # For default wallpaper.
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${xfdesktop}/share")
+  '';
+
+  meta = with lib; {
     description = "Screensaver for Xfce";
-    maintainers = with lib.maintainers; [ symphorien ];
+    maintainers = with maintainers; [ symphorien ] ++ teams.xfce.members;
   };
 }

@@ -1,29 +1,30 @@
-{ lib
-, substituteAll
-, mkDerivation
-, fetchFromGitLab
-, mobile-broadband-provider-info
-, qmake
-, qtbase
-, qtdeclarative
+{
+  lib,
+  substituteAll,
+  mkDerivation,
+  fetchFromGitHub,
+  gitUpdater,
+  mobile-broadband-provider-info,
+  qmake,
+  qtbase,
+  qtdeclarative,
 }:
 
 mkDerivation rec {
   pname = "libqofono";
-  version = "0.103";
+  version = "0.124";
 
-  src = fetchFromGitLab {
-    domain = "git.sailfishos.org";
-    owner = "mer-core";
+  src = fetchFromGitHub {
+    owner = "sailfishos";
     repo = "libqofono";
     rev = version;
-    sha256 = "1ly5aj412ljcjvhqyry6nhiglbzzhczsy1a6w4i4fja60b2m1z45";
+    hash = "sha256-fI7RS0V8wrsJ2AZAyjVgHmG+c13DXdo6xTjIlGbOHI8=";
   };
 
   patches = [
     (substituteAll {
       src = ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch;
-      inherit mobile-broadband-provider-info;
+      mobileBroadbandProviderInfo = mobile-broadband-provider-info;
     })
     ./0001-NixOS-Skip-tests-they-re-shock-full-of-hardcoded-FHS.patch
   ];
@@ -48,11 +49,13 @@ mkDerivation rec {
     qtdeclarative
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
     description = "Library for accessing the ofono daemon, and declarative plugin for it";
     homepage = "https://git.sailfishos.org/mer-core/libqofono/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

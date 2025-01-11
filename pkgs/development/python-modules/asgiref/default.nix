@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, fetchpatch
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "3.5.0";
+  version = "3.8.1";
   pname = "asgiref";
   format = "setuptools";
 
@@ -18,38 +18,29 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "django";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-eWDsd8iWK1C/X3t/fKAM1i4hyTM/daGTd8CDSgDTL/U=";
+    repo = "asgiref";
+    tag = version;
+    hash = "sha256-xepMbxglBpHL7mnJYlnvNUgixrFwf/Tc6b1zL4Wy+to=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "remove-sock-nonblock-in-tests.patch";
-      url = "https://github.com/django/asgiref/commit/d451a724c93043b623e83e7f86743bbcd9a05c45.patch";
-      sha256 = "0whdsn5isln4dqbqqngvsy4yxgaqgpnziz0cndj1zdxim8cdicj7";
-    })
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_multiprocessing"
-  ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "asgiref" ];
 
   meta = with lib; {
+    changelog = "https://github.com/django/asgiref/blob/${src.rev}/CHANGELOG.txt";
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

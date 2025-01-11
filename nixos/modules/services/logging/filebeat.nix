@@ -1,17 +1,25 @@
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     attrValues
     literalExpression
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
-    types;
+    types
+    ;
 
   cfg = config.services.filebeat;
 
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
 in
 {
   options = {
@@ -20,49 +28,48 @@ in
 
       enable = mkEnableOption "filebeat";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.filebeat;
-        defaultText = literalExpression "pkgs.filebeat";
-        example = literalExpression "pkgs.filebeat7";
-        description = ''
-          The filebeat package to use.
-        '';
+      package = mkPackageOption pkgs "filebeat" {
+        example = "filebeat7";
       };
 
       inputs = mkOption {
         description = ''
           Inputs specify how Filebeat locates and processes input data.
 
-          This is like <literal>services.filebeat.settings.filebeat.inputs</literal>,
+          This is like `services.filebeat.settings.filebeat.inputs`,
           but structured as an attribute set. This has the benefit
           that multiple NixOS modules can contribute settings to a
           single filebeat input.
 
           An input type can be specified multiple times by choosing a
-          different <literal>&lt;name></literal> for each, but setting
-          <xref linkend="opt-services.filebeat.inputs._name_.type"/>
+          different `<name>` for each, but setting
+          [](#opt-services.filebeat.inputs._name_.type)
           to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+          See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
-        default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = json.type;
-          options = {
-            type = mkOption {
-              type = types.str;
-              default = name;
-              description = ''
-                The input type.
+        default = { };
+        type = types.attrsOf (
+          types.submodule (
+            { name, ... }:
+            {
+              freeformType = json.type;
+              options = {
+                type = mkOption {
+                  type = types.str;
+                  default = name;
+                  description = ''
+                    The input type.
 
-                Look for the value after <literal>type:</literal> on
-                the individual input pages linked from
-                <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
-              '';
-            };
-          };
-        }));
+                    Look for the value after `type:` on
+                    the individual input pages linked from
+                    <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
+                  '';
+                };
+              };
+            }
+          )
+        );
         example = literalExpression ''
           {
             journald.id = "everything";  # Only for filebeat7
@@ -84,35 +91,40 @@ in
           and Kibana dashboards to help you implement and deploy a log
           monitoring solution.
 
-          This is like <literal>services.filebeat.settings.filebeat.modules</literal>,
+          This is like `services.filebeat.settings.filebeat.modules`,
           but structured as an attribute set. This has the benefit
           that multiple NixOS modules can contribute settings to a
           single filebeat module.
 
           A module can be specified multiple times by choosing a
-          different <literal>&lt;name></literal> for each, but setting
-          <xref linkend="opt-services.filebeat.modules._name_.module"/>
+          different `<name>` for each, but setting
+          [](#opt-services.filebeat.modules._name_.module)
           to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+          See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
-        default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = json.type;
-          options = {
-            module = mkOption {
-              type = types.str;
-              default = name;
-              description = ''
-                The name of the module.
+        default = { };
+        type = types.attrsOf (
+          types.submodule (
+            { name, ... }:
+            {
+              freeformType = json.type;
+              options = {
+                module = mkOption {
+                  type = types.str;
+                  default = name;
+                  description = ''
+                    The name of the module.
 
-                Look for the value after <literal>module:</literal> on
-                the individual input pages linked from
-                <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
-              '';
-            };
-          };
-        }));
+                    Look for the value after `module:` on
+                    the individual input pages linked from
+                    <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
+                  '';
+                };
+              };
+            }
+          )
+        );
         example = literalExpression ''
           {
             nginx = {
@@ -147,29 +159,28 @@ in
                 event is automatically sent to another node. Each
                 Elasticsearch node can be defined as a URL or
                 IP:PORT. For example:
-                <literal>http://192.15.3.2</literal>,
-                <literal>https://es.found.io:9230</literal> or
-                <literal>192.24.3.2:9300</literal>. If no port is
-                specified, <literal>9200</literal> is used.
+                `http://192.15.3.2`,
+                `https://es.found.io:9230` or
+                `192.24.3.2:9300`. If no port is
+                specified, `9200` is used.
               '';
             };
 
             filebeat = {
               inputs = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
                 description = ''
                   Inputs specify how Filebeat locates and processes
-                  input data. Use <xref
-                  linkend="opt-services.filebeat.inputs"/> instead.
+                  input data. Use [](#opt-services.filebeat.inputs) instead.
 
-                  See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+                  See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
                 '';
               };
               modules = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
                 description = ''
                   Filebeat modules provide a quick way to get started
@@ -178,15 +189,15 @@ in
                   definitions, and Kibana dashboards to help you
                   implement and deploy a log monitoring solution.
 
-                  Use <xref linkend="opt-services.filebeat.modules"/> instead.
+                  Use [](#opt-services.filebeat.modules) instead.
 
-                  See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+                  See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
                 '';
               };
             };
           };
         };
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             settings = {
@@ -202,18 +213,18 @@ in
 
         description = ''
           Configuration for filebeat. See
-          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html"/>
+          <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html>
           for supported values.
 
           Options containing secret data should be set to an attribute
-          set containing the attribute <literal>_secret</literal> - a
+          set containing the attribute `_secret` - a
           string pointing to a file containing the value the option
           should be set to. See the example to get a better picture of
           this: in the resulting
-          <filename>filebeat.yml</filename> file, the
-          <literal>output.elasticsearch.password</literal>
+          {file}`filebeat.yml` file, the
+          `output.elasticsearch.password`
           key will be set to the contents of the
-          <filename>/var/keys/elasticsearch_password</filename> file.
+          {file}`/var/keys/elasticsearch_password` file.
         '';
       };
     };
@@ -235,10 +246,7 @@ in
 
           umask u=rwx,g=,o=
 
-          ${utils.genJqSecretsReplacementSnippet
-              cfg.settings
-              "/var/lib/filebeat/filebeat.yml"
-           }
+          ${utils.genJqSecretsReplacementSnippet cfg.settings "/var/lib/filebeat/filebeat.yml"}
         '';
         ExecStart = ''
           ${cfg.package}/bin/filebeat -e \

@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, PyICU
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pyicu,
+  python,
 }:
 
 buildPythonPackage {
   pname = "slob";
   version = "unstable-2020-06-26";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -18,7 +20,7 @@ buildPythonPackage {
     sha256 = "01195hphjnlcvgykw143rf06s6y955sjc1r825a58vhjx7hj54zh";
   };
 
-  propagatedBuildInputs = [ PyICU ];
+  propagatedBuildInputs = [ pyicu ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest slob
@@ -29,6 +31,7 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/itkach/slob/";
     description = "Reference implementation of the slob (sorted list of blobs) format";
+    mainProgram = "slob";
     license = licenses.gpl3Only;
   };
 }

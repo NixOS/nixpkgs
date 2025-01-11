@@ -1,8 +1,20 @@
-{ config, lib, pkgs, options }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
-with lib;
 let
   cfg = config.services.prometheus.exporters.pve;
+  inherit (lib)
+    mkOption
+    types
+    mkPackageOption
+    optionalString
+    optionalAttrs
+    ;
 
   # pve exporter requires a config file so create an empty one if configFile is not provided
   emptyConfigFile = pkgs.writeTextFile {
@@ -10,20 +22,12 @@ let
     text = "default:";
   };
 
-  computedConfigFile = "${if cfg.configFile == null then emptyConfigFile else cfg.configFile}";
+  computedConfigFile = if cfg.configFile == null then emptyConfigFile else cfg.configFile;
 in
 {
   port = 9221;
   extraOpts = {
-    package = mkOption {
-      type = types.package;
-      default = pkgs.prometheus-pve-exporter;
-      defaultText = literalExpression "pkgs.prometheus-pve-exporter";
-      example = literalExpression "pkgs.prometheus-pve-exporter";
-      description = ''
-        The package to use for prometheus-pve-exporter
-      '';
-    };
+    package = mkPackageOption pkgs "prometheus-pve-exporter" { };
 
     environmentFile = mkOption {
       type = with types; nullOr path;
@@ -51,6 +55,26 @@ in
 
         Configuration reference: https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication
       '';
+    };
+
+    server = {
+      keyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        example = "/var/lib/prometheus-pve-exporter/privkey.key";
+        description = ''
+          Path to a SSL private key file for the server
+        '';
+      };
+
+      certFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        example = "/var/lib/prometheus-pve-exporter/full-chain.pem";
+        description = ''
+          Path to a SSL certificate file for the server
+        '';
+      };
     };
 
     collectors = {
@@ -96,23 +120,37 @@ in
           Collect PVE onboot status
         '';
       };
+      replication = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Collect PVE replication info
+        '';
+      };
     };
   };
   serviceOpts = {
-    serviceConfig = {
-      ExecStart = ''
-        ${cfg.package}/bin/pve_exporter \
-          --${if cfg.collectors.status == true then "" else "no-"}collector.status \
-          --${if cfg.collectors.version == true then "" else "no-"}collector.version \
-          --${if cfg.collectors.node == true then "" else "no-"}collector.node \
-          --${if cfg.collectors.cluster == true then "" else "no-"}collector.cluster \
-          --${if cfg.collectors.resources == true then "" else "no-"}collector.resources \
-          --${if cfg.collectors.config == true then "" else "no-"}collector.config \
-          ${computedConfigFile} \
-          ${toString cfg.port} ${cfg.listenAddress}
-      '';
-    } // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = cfg.environmentFile;
-    };
+    serviceConfig =
+      {
+        DynamicUser = cfg.environmentFile == null;
+        LoadCredential = "configFile:${computedConfigFile}";
+        ExecStart = ''
+          ${cfg.package}/bin/pve_exporter \
+            --${optionalString (!cfg.collectors.status) "no-"}collector.status \
+            --${optionalString (!cfg.collectors.version) "no-"}collector.version \
+            --${optionalString (!cfg.collectors.node) "no-"}collector.node \
+            --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
+            --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
+            --${optionalString (!cfg.collectors.config) "no-"}collector.config \
+            --${optionalString (!cfg.collectors.replication) "no-"}collector.replication \
+            ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
+            ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
+            --config.file %d/configFile \
+            --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
+        '';
+      }
+      // optionalAttrs (cfg.environmentFile != null) {
+        EnvironmentFile = cfg.environmentFile;
+      };
   };
 }

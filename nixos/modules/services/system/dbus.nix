@@ -1,27 +1,28 @@
 # D-Bus configuration and system bus daemon.
 
-{ config, lib, options, pkgs, ... }:
-
-with lib;
+{ config, lib, pkgs, ... }:
 
 let
 
   cfg = config.services.dbus;
 
-  homeDir = "/run/dbus";
-
-  configDir = pkgs.makeDBusConf {
+  configDir = pkgs.makeDBusConf.override {
     inherit (cfg) apparmor;
+    dbus = cfg.dbusPackage;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
   };
 
+  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+
 in
 
 {
-  ###### interface
-
   options = {
+
+    boot.initrd.systemd.dbus = {
+      enable = mkEnableOption "dbus in stage 1";
+    };
 
     services.dbus = {
 
@@ -35,6 +36,21 @@ in
         '';
       };
 
+      dbusPackage = lib.mkPackageOption pkgs "dbus" {};
+
+      brokerPackage = lib.mkPackageOption pkgs "dbus-broker" {};
+
+      implementation = mkOption {
+        type = types.enum [ "dbus" "broker" ];
+        default = "dbus";
+        description = ''
+          The implementation to use for the message bus defined by the D-Bus specification.
+          Can be either the classic dbus daemon or dbus-broker, which aims to provide high
+          performance and reliability, while keeping compatibility to the D-Bus
+          reference implementation.
+        '';
+      };
+
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
@@ -43,12 +59,12 @@ in
           the configuration of the D-Bus system-wide or session-wide
           message bus.  Specifically, files in the following directories
           will be included into their respective DBus configuration paths:
-          <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/system.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
-          <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
+          {file}`«pkg»/etc/dbus-1/system.d`
+          {file}`«pkg»/share/dbus-1/system.d`
+          {file}`«pkg»/share/dbus-1/system-services`
+          {file}`«pkg»/etc/dbus-1/session.d`
+          {file}`«pkg»/share/dbus-1/session.d`
+          {file}`«pkg»/share/dbus-1/services`
         '';
       };
 
@@ -57,83 +73,164 @@ in
         description = ''
           AppArmor mode for dbus.
 
-          <literal>enabled</literal> enables mediation when it's
-          supported in the kernel, <literal>disabled</literal>
+          `enabled` enables mediation when it's
+          supported in the kernel, `disabled`
           always disables AppArmor even with kernel support, and
-          <literal>required</literal> fails when AppArmor was not found
+          `required` fails when AppArmor was not found
           in the kernel.
         '';
         default = "disabled";
       };
-
-      socketActivated = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-        visible = false;
-        description = ''
-          Removed option, do not use.
-        '';
-      };
     };
   };
 
-  ###### implementation
+  config = mkIf cfg.enable (mkMerge [
+    {
+      environment.etc."dbus-1".source = configDir;
 
-  config = mkIf cfg.enable {
-    warnings = optional (cfg.socketActivated != null) (
-      let
-        files = showFiles options.services.dbus.socketActivated.files;
-      in
-        "The option 'services.dbus.socketActivated' in ${files} no longer has"
-        + " any effect and can be safely removed: the user D-Bus session is"
-        + " now always socket activated."
-    );
+      environment.pathsToLink = [
+        "/etc/dbus-1"
+        "/share/dbus-1"
+      ];
 
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
+      users.users.messagebus = {
+        uid = config.ids.uids.messagebus;
+        description = "D-Bus system message bus daemon user";
+        home = "/run/dbus";
+        homeMode = "0755";
+        group = "messagebus";
+      };
 
-    environment.etc."dbus-1".source = configDir;
+      users.groups.messagebus.gid = config.ids.gids.messagebus;
 
-    users.users.messagebus = {
-      uid = config.ids.uids.messagebus;
-      description = "D-Bus system message bus daemon user";
-      home = homeDir;
-      group = "messagebus";
-    };
+      # Install dbus for dbus tools even when using dbus-broker
+      environment.systemPackages = [
+        cfg.dbusPackage
+      ];
 
-    users.groups.messagebus.gid = config.ids.gids.messagebus;
+      # You still need the dbus reference implementation installed to use dbus-broker
+      systemd.packages = [
+        cfg.dbusPackage
+      ];
 
-    systemd.packages = [ pkgs.dbus.daemon ];
+      services.dbus.packages = [
+        cfg.dbusPackage
+        config.system.path
+      ];
 
-    security.wrappers.dbus-daemon-launch-helper = {
-      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
-      owner = "root";
-      group = "messagebus";
-      setuid = true;
-      setgid = false;
-      permissions = "u+rx,g+rx,o-rx";
-    };
+      systemd.user.sockets.dbus.wantedBy = [
+        "sockets.target"
+      ];
+    }
 
-    services.dbus.packages = [
-      pkgs.dbus.out
-      config.system.path
-    ];
+    (mkIf config.boot.initrd.systemd.dbus.enable {
+      boot.initrd.systemd = {
+        users.messagebus = { };
+        groups.messagebus = { };
+        contents."/etc/dbus-1".source = pkgs.makeDBusConf.override {
+          inherit (cfg) apparmor;
+          dbus = cfg.dbusPackage;
+          suidHelper = "/bin/false";
+          serviceDirectories = [ cfg.dbusPackage config.boot.initrd.systemd.package ];
+        };
+        packages = [ cfg.dbusPackage ];
+        storePaths = [
+          "${cfg.dbusPackage}/bin/dbus-daemon"
+          "${config.boot.initrd.systemd.package}/share/dbus-1/system-services"
+          "${config.boot.initrd.systemd.package}/share/dbus-1/system.d"
+        ];
+        targets.sockets.wants = [ "dbus.socket" ];
+      };
+    })
 
-    systemd.services.dbus = {
-      # Don't restart dbus-daemon. Bad things tend to happen if we do.
-      reloadIfChanged = true;
-      restartTriggers = [ configDir ];
-      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
-    };
+    (mkIf (cfg.implementation == "dbus") {
+      security.wrappers.dbus-daemon-launch-helper = {
+        source = "${cfg.dbusPackage}/libexec/dbus-daemon-launch-helper";
+        owner = "root";
+        group = "messagebus";
+        setuid = true;
+        setgid = false;
+        permissions = "u+rx,g+rx,o-rx";
+      };
 
-    systemd.user = {
-      services.dbus = {
+      systemd.services.dbus = {
+        aliases = [
+          # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus-broker.service"
+        ];
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
-        restartTriggers = [ configDir ];
+        restartTriggers = [
+          configDir
+        ];
+        environment = {
+          LD_LIBRARY_PATH = config.system.nssModules.path;
+        };
       };
-      sockets.dbus.wantedBy = [ "sockets.target" ];
-    };
 
-    environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
-  };
+      systemd.user.services.dbus = {
+        aliases = [
+          # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus-broker.service"
+        ];
+        # Don't restart dbus-daemon. Bad things tend to happen if we do.
+        reloadIfChanged = true;
+        restartTriggers = [
+          configDir
+        ];
+      };
+
+    })
+
+    (mkIf (cfg.implementation == "broker") {
+      environment.systemPackages = [
+        cfg.brokerPackage
+      ];
+
+      systemd.packages = [
+        cfg.brokerPackage
+      ];
+
+      # Just to be sure we don't restart through the unit alias
+      systemd.services.dbus.reloadIfChanged = true;
+      systemd.user.services.dbus.reloadIfChanged = true;
+
+      # NixOS Systemd Module doesn't respect 'Install'
+      # https://github.com/NixOS/nixpkgs/issues/108643
+      systemd.services.dbus-broker = {
+        aliases = [
+          # allow other services to just depend on dbus,
+          # but also a hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus.service"
+        ];
+        unitConfig = {
+          # We get errors when reloading the dbus-broker service
+          # if /tmp got remounted after this service started
+          RequiresMountsFor = [ "/tmp" ];
+        };
+        # Don't restart dbus. Bad things tend to happen if we do.
+        reloadIfChanged = true;
+        restartTriggers = [
+          configDir
+        ];
+        environment = {
+          LD_LIBRARY_PATH = config.system.nssModules.path;
+        };
+      };
+
+      systemd.user.services.dbus-broker = {
+        aliases = [
+          # allow other services to just depend on dbus,
+          # but also a hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus.service"
+        ];
+        # Don't restart dbus. Bad things tend to happen if we do.
+        reloadIfChanged = true;
+        restartTriggers = [
+          configDir
+        ];
+      };
+    })
+
+  ]);
 }

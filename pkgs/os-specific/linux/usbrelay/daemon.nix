@@ -1,11 +1,21 @@
-{ stdenv, usbrelay, python3 }:
+{
+  stdenv,
+  usbrelay,
+  python3,
+  installShellFiles,
+}:
 let
-  python = python3.withPackages (ps: with ps; [ usbrelay-py paho-mqtt ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      usbrelay-py
+      paho-mqtt
+    ]
+  );
 in
 # This is a separate derivation, not just an additional output of
 # usbrelay, because otherwise, we have a cyclic dependency between
 # usbrelay (default.nix) and the python module (python.nix).
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "usbrelayd";
 
   inherit (usbrelay) src version;
@@ -15,6 +25,8 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/python3' "${python}/bin/python3" \
       --replace '/usr/sbin/usbrelayd' "$out/bin/usbrelayd"
   '';
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ python ];
 
@@ -26,11 +38,17 @@ stdenv.mkDerivation rec {
     install -m 644 -D usbrelayd.service $out/lib/systemd/system/usbrelayd.service
     install -m 644 -D 50-usbrelay.rules $out/lib/udev/rules.d/50-usbrelay.rules
     install -m 644 -D usbrelayd.conf $out/etc/usbrelayd.conf # include this as an example
+    installManPage usbrelayd.8
     runHook postInstall
   '';
 
   meta = {
     description = "USB Relay MQTT service";
-    inherit (usbrelay.meta) homepage license maintainers platforms;
+    inherit (usbrelay.meta)
+      homepage
+      license
+      maintainers
+      platforms
+      ;
   };
 }

@@ -1,9 +1,6 @@
 # This module defines a system-wide environment that will be
 # initialised by pam_env (that is, not only in shells).
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{ config, lib, options, pkgs, ... }:
 let
 
   cfg = config.environment;
@@ -14,7 +11,7 @@ in
 
   options = {
 
-    environment.sessionVariables = mkOption {
+    environment.sessionVariables = lib.mkOption {
       default = {};
       description = ''
         A set of environment variables used in the global environment.
@@ -25,19 +22,18 @@ in
         colon characters.
 
         Note, due to limitations in the PAM format values may not
-        contain the <literal>"</literal> character.
+        contain the `"` character.
 
         Also, these variables are merged into
-        <xref linkend="opt-environment.variables"/> and it is
+        [](#opt-environment.variables) and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        `@{HOME}`.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      inherit (options.environment.variables) type apply;
     };
 
-    environment.profileRelativeSessionVariables = mkOption {
-      type = types.attrsOf (types.listOf types.str);
+    environment.profileRelativeSessionVariables = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
       example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
         Attribute set of environment variable used in the global
@@ -45,20 +41,17 @@ in
         login process.
 
         Variable substitution is available as described in
-        <citerefentry>
-          <refentrytitle>pam_env.conf</refentrytitle>
-          <manvolnum>5</manvolnum>
-        </citerefentry>.
+        {manpage}`pam_env.conf(5)`.
 
         Each attribute maps to a list of relative paths. Each relative
         path is appended to the each profile of
-        <option>environment.profiles</option> to form the content of
+        {option}`environment.profiles` to form the content of
         the corresponding environment variable.
 
         Also, these variables are merged into
-        <xref linkend="opt-environment.profileRelativeEnvVars"/> and it is
+        [](#opt-environment.profileRelativeEnvVars) and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        `@{HOME}`.
       '';
     };
 
@@ -67,8 +60,8 @@ in
   config = {
     environment.etc."pam/environment".text = let
       suffixedVariables =
-        flip mapAttrs cfg.profileRelativeSessionVariables (envVar: suffixes:
-          flip concatMap cfg.profiles (profile:
+        lib.flip lib.mapAttrs cfg.profileRelativeSessionVariables (envVar: suffixes:
+          lib.flip lib.concatMap cfg.profiles (profile:
             map (suffix: "${profile}${suffix}") suffixes
           )
         );
@@ -76,15 +69,15 @@ in
       # We're trying to use the same syntax for PAM variables and env variables.
       # That means we need to map the env variables that people might use to their
       # equivalent PAM variable.
-      replaceEnvVars = replaceStrings ["$HOME" "$USER"] ["@{HOME}" "@{PAM_USER}"];
+      replaceEnvVars = lib.replaceStrings ["$HOME" "$USER"] ["@{HOME}" "@{PAM_USER}"];
 
       pamVariable = n: v:
-        ''${n}   DEFAULT="${concatStringsSep ":" (map replaceEnvVars (toList v))}"'';
+        ''${n}   DEFAULT="${lib.concatStringsSep ":" (map replaceEnvVars (lib.toList v))}"'';
 
       pamVariables =
-        concatStringsSep "\n"
-        (mapAttrsToList pamVariable
-        (zipAttrsWith (n: concatLists)
+        lib.concatStringsSep "\n"
+        (lib.mapAttrsToList pamVariable
+        (lib.zipAttrsWith (n: lib.concatLists)
           [
             # Make sure security wrappers are prioritized without polluting
             # shell environments with an extra entry. Sessions which depend on
@@ -93,7 +86,7 @@ in
             # environment from a shell.
             { PATH = [ config.security.wrapperDir ]; }
 
-            (mapAttrs (n: toList) cfg.sessionVariables)
+            (lib.mapAttrs (n: lib.toList) cfg.sessionVariables)
             suffixedVariables
           ]));
     in ''

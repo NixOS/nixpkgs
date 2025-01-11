@@ -1,104 +1,169 @@
-{ lib, stdenv, fetchurl, pkg-config
-, ncurses, db , popt, libtool
-, libiconv, CoreServices
-# Sound sub-systems
-, alsaSupport ? (!stdenv.isDarwin), alsa-lib
-, pulseSupport ? true, libpulseaudio, autoreconfHook
-, jackSupport ? true, libjack2
-, ossSupport ? true
-# Audio formats
-, aacSupport ? true, faad2, libid3tag
-, flacSupport ? true, flac
-, midiSupport ? true, timidity
-, modplugSupport ? true, libmodplug
-, mp3Support ? true, libmad
-, musepackSupport ? true, libmpc, libmpcdec, taglib
-, vorbisSupport ? true, libvorbis
-, speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg
-, sndfileSupport ? true, libsndfile
-, wavpackSupport ? true, wavpack
-# Misc
-, curlSupport ? true, curl
-, samplerateSupport ? true, libsamplerate
-, withDebug ? false
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  fetchpatch2,
+  pkg-config,
+  autoreconfHook,
+  autoconf-archive,
+  ncurses,
+  db,
+  popt,
+  libtool,
+  libiconv,
+  CoreServices,
+  # Sound sub-systems
+  alsaSupport ? (!stdenv.hostPlatform.isDarwin),
+  alsa-lib,
+  pulseSupport ? true,
+  libpulseaudio,
+  jackSupport ? true,
+  libjack2,
+  ossSupport ? true,
+  # Audio formats
+  aacSupport ? true,
+  faad2,
+  libid3tag,
+  flacSupport ? true,
+  flac,
+  midiSupport ? true,
+  timidity,
+  modplugSupport ? true,
+  libmodplug,
+  mp3Support ? true,
+  libmad,
+  musepackSupport ? true,
+  libmpc,
+  libmpcdec,
+  taglib,
+  vorbisSupport ? true,
+  libvorbis,
+  speexSupport ? true,
+  speex,
+  ffmpegSupport ? true,
+  ffmpeg,
+  sndfileSupport ? true,
+  libsndfile,
+  wavpackSupport ? true,
+  wavpack,
+  # Misc
+  curlSupport ? true,
+  curl,
+  samplerateSupport ? true,
+  libsamplerate,
+  withDebug ? false,
 }:
 
-let
-  opt = lib.optional;
-  mkFlag = c: f: if c then "--with-${f}" else "--without-${f}";
-
-in stdenv.mkDerivation rec {
-
+stdenv.mkDerivation {
   pname = "moc";
-  version = "2.5.2";
+  version = "2.6-alpha3-unstable-2019-09-14";
 
-  src = fetchurl {
-    url = "http://ftp.daper.net/pub/soft/moc/stable/moc-${version}.tar.bz2";
-    sha256 = "026v977kwb0wbmlmf6mnik328plxg8wykfx9ryvqhirac0aq39pk";
+  src = fetchsvn {
+    url = "svn://svn.daper.net/moc/trunk";
+    rev = "3005";
+    hash = "sha256-JksJxHQgQ8hPTFtLvEvZuFh2lflDNrEmDTMWWwVnjZQ=";
   };
 
-  patches = []
-    ++ opt ffmpegSupport ./moc-ffmpeg4.patch
-    ++ opt pulseSupport ./pulseaudio.patch;
+  patches = [
+    # FFmpeg 6 support
+    (fetchpatch2 {
+      url = "https://cygwin.com/cgit/cygwin-packages/moc/plain/Support-for-recent-ffmpeg-change.patch?id=ab70f1306b8416852915be4347003aac3bdc216";
+      hash = "sha256-5hLEFBJ+7Nvxn6pNj4bngcg2qJsCzxiuP6yEj+7tvs0=";
+      stripLen = 1;
+    })
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ opt pulseSupport autoreconfHook;
+    # FFmpeg 7 support
+    (fetchpatch2 {
+      url = "https://cygwin.com/cgit/cygwin-packages/moc/plain/ffmpeg-7.0.patch?id=ab70f1306b8416852915be4347003aac3bdc216e";
+      hash = "sha256-dYw6DNyw61MGfv+GdBz5Dtrr9fVph1tf7vxexWONwF8=";
+      stripLen = 1;
+    })
 
-  buildInputs = [ ncurses db popt libtool ]
+    ./use-ax-check-compile-flag.patch
+  ] ++ lib.optional pulseSupport ./pulseaudio.patch;
+
+  postPatch = ''
+    rm m4/*
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    autoconf-archive
+  ];
+
+  buildInputs =
+    [
+      ncurses
+      db
+      popt
+      libtool
+    ]
     # Sound sub-systems
-    ++ opt alsaSupport alsa-lib
-    ++ opt pulseSupport libpulseaudio
-    ++ opt jackSupport libjack2
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional jackSupport libjack2
     # Audio formats
-    ++ opt (aacSupport || mp3Support) libid3tag
-    ++ opt aacSupport faad2
-    ++ opt flacSupport flac
-    ++ opt midiSupport timidity
-    ++ opt modplugSupport libmodplug
-    ++ opt mp3Support libmad
-    ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
-    ++ opt vorbisSupport libvorbis
-    ++ opt speexSupport speex
-    ++ opt ffmpegSupport ffmpeg
-    ++ opt sndfileSupport libsndfile
-    ++ opt wavpackSupport wavpack
+    ++ lib.optional (aacSupport || mp3Support) libid3tag
+    ++ lib.optional aacSupport faad2
+    ++ lib.optional flacSupport flac
+    ++ lib.optional midiSupport timidity
+    ++ lib.optional modplugSupport libmodplug
+    ++ lib.optional mp3Support libmad
+    ++ lib.optionals musepackSupport [
+      libmpc
+      libmpcdec
+      taglib
+    ]
+    ++ lib.optional vorbisSupport libvorbis
+    ++ lib.optional speexSupport speex
+    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional sndfileSupport libsndfile
+    ++ lib.optional wavpackSupport wavpack
     # Misc
-    ++ opt curlSupport curl
-    ++ opt samplerateSupport libsamplerate
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
+    ++ lib.optional curlSupport curl
+    ++ lib.optional samplerateSupport libsamplerate
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      CoreServices
+    ];
 
   configureFlags = [
     # Sound sub-systems
-    (mkFlag alsaSupport "alsa")
-    (mkFlag pulseSupport "pulse")
-    (mkFlag jackSupport "jack")
-    (mkFlag ossSupport "oss")
+    (lib.withFeature alsaSupport "alsa")
+    (lib.withFeature pulseSupport "pulse")
+    (lib.withFeature jackSupport "jack")
+    (lib.withFeature ossSupport "oss")
     # Audio formats
-    (mkFlag aacSupport "aac")
-    (mkFlag flacSupport "flac")
-    (mkFlag midiSupport "timidity")
-    (mkFlag modplugSupport "modplug")
-    (mkFlag mp3Support "mp3")
-    (mkFlag musepackSupport "musepack")
-    (mkFlag vorbisSupport "vorbis")
-    (mkFlag speexSupport "speex")
-    (mkFlag ffmpegSupport "ffmpeg")
-    (mkFlag sndfileSupport "sndfile")
-    (mkFlag wavpackSupport "wavpack")
+    (lib.withFeature aacSupport "aac")
+    (lib.withFeature flacSupport "flac")
+    (lib.withFeature midiSupport "timidity")
+    (lib.withFeature modplugSupport "modplug")
+    (lib.withFeature mp3Support "mp3")
+    (lib.withFeature musepackSupport "musepack")
+    (lib.withFeature vorbisSupport "vorbis")
+    (lib.withFeature speexSupport "speex")
+    (lib.withFeature ffmpegSupport "ffmpeg")
+    (lib.withFeature sndfileSupport "sndfile")
+    (lib.withFeature wavpackSupport "wavpack")
     # Misc
-    (mkFlag curlSupport "curl")
-    (mkFlag samplerateSupport "samplerate")
+    (lib.withFeature curlSupport "curl")
+    (lib.withFeature samplerateSupport "samplerate")
     ("--enable-debug=" + (if withDebug then "yes" else "no"))
     "--disable-cache"
     "--without-rcc"
   ];
 
   meta = with lib; {
-    description = "An ncurses console audio player designed to be powerful and easy to use";
+    description = "Terminal audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ aethelz pSub jagajaga ];
+    maintainers = with maintainers; [
+      aethelz
+      pSub
+      jagajaga
+    ];
     platforms = platforms.unix;
+    mainProgram = "mocp";
   };
 }

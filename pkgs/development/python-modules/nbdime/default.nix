@@ -1,79 +1,82 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, hypothesis
-, setuptools-scm
-, six
-, attrs
-, py
-, setuptools
-, pytest-cov
-, pytest-timeout
-, pytest-tornado
-, mock
-, tabulate
-, nbformat
-, jsonschema
-, pytestCheckHook
-, colorama
-, pygments
-, tornado
-, requests
-, GitPython
-, jupyter-server-mathjax
-, notebook
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyterlab,
+  nbformat,
+  colorama,
+  pygments,
+  tornado,
+  requests,
+  gitpython,
+  jupyter-server,
+  jupyter-server-mathjax,
+  jinja2,
+  git,
+  pytest-tornado,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "3.1.1";
-  disabled = !isPy3k;
+  version = "4.0.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67767320e971374f701a175aa59abd3a554723039d39fae908e72d16330d648b";
+    hash = "sha256-2Cefj0sjbAslOyDWDEgxu2eEPtjb1uCfI06wEdNvG/I=";
   };
 
-  checkInputs = [
-    hypothesis
-    pytest-cov
-    pytest-timeout
-    pytest-tornado
-    jsonschema
-    mock
-    tabulate
-    pytestCheckHook
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
+    jupyterlab
   ];
 
-  disabledTests = [
-    "test_apply_filter_no_repo"
-    "test_diff_api_checkpoint"
-    "test_filter_cmd_invalid_filter"
-    "test_inline_merge"
-    "test_interrogate_filter_no_repo"
-    "test_merge"
-  ];
-
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    attrs
-    py
-    setuptools
-    six
-    jupyter-server-mathjax
+  dependencies = [
     nbformat
     colorama
     pygments
     tornado
     requests
-    GitPython
-    notebook
+    gitpython
+    jupyter-server
+    jupyter-server-mathjax
     jinja2
-    ];
+  ];
+
+  nativeCheckInputs = [
+    git
+    pytest-tornado
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_git_diffdriver"
+    "test_git_difftool"
+    "test_git_mergedriver"
+    "test_git_mergetool"
+  ];
+
+  preCheck = ''
+    export HOME="$TEMP"
+    git config --global user.email "janedoe@example.com"
+    git config --global user.name "Jane Doe"
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "nbdime" ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";
-    description = "Tools for diffing and merging of Jupyter notebooks.";
+    changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
+    description = "Tools for diffing and merging of Jupyter notebooks";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tbenst ];
   };

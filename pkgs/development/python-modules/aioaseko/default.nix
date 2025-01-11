@@ -1,39 +1,46 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  apischema,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gql,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioaseko";
-  version = "0.0.2";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "milanmeu";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-nJRVNBYfBcLYnBsTpQZYMHYWh0+hQObVKJ7sOXFwDjc=";
+    repo = "aioaseko";
+    tag = "v${version}";
+    hash = "sha256-jUvpu/lOFKRUwEuYD1zRp0oODjf4AgH84fnGngtv9jw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
+    apischema
+    gql
   ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aioaseko"
-  ];
+  pythonImportsCheck = [ "aioaseko" ];
 
   meta = with lib; {
     description = "Module to interact with the Aseko Pool Live API";
     homepage = "https://github.com/milanmeu/aioaseko";
-    license = with licenses; [ lgpl3Plus ];
+    changelog = "https://github.com/milanmeu/aioaseko/releases/tag/v${version}";
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

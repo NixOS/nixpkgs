@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "itemdb";
-  version = "1.1.1";
+  version = "1.2.0";
+  format = "setuptools";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0ksad5j91nlbsn0a11clf994qz7r9ijand5hxnjhgd66i9hl3y78";
+    tag = "v${version}";
+    sha256 = "sha256-egxQ1tGC6R5p1stYm4r05+b2HkuT+nBySTZPGqeAbSE=";
   };
 
   meta = with lib; {
@@ -22,5 +24,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }
-
-

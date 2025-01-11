@@ -1,19 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytest7CheckHook,
+}:
 
 buildPythonPackage rec {
-  pname = "PyMeeus";
-  version = "0.5.11";
+  pname = "pymeeus";
+  version = "0.5.12";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "bb9d670818d8b0594317b48a7dadea02a0594e5344263bf2054e1a011c8fed55";
+    pname = "PyMeeus";
+    inherit version;
+    hash = "sha256-VI9xhr2LlsvAac9kmo6ON33OSax0SGcJhJ/mOpnK1oQ=";
   };
 
-  checkInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    pytest .
-  '';
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/architest/pymeeus";

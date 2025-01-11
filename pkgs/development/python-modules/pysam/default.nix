@@ -1,21 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bzip2
-, bcftools
-, curl
-, cython
-, htslib
-, libdeflate
-, xz
-, pytest
-, samtools
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bzip2,
+  bcftools,
+  curl,
+  cython,
+  htslib,
+  libdeflate,
+  xz,
+  pytestCheckHook,
+  setuptools,
+  samtools,
+  zlib,
 }:
 
-buildPythonPackage rec {
-  pname   = "pysam";
-  version = "0.18.0";
+buildPythonPackage {
+  pname = "pysam";
+  version = "0.22.1-unstable-2024-10-30";
+  pyproject = true;
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
   # missing some files which cause test failures.
@@ -23,15 +26,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysam-developers";
     repo = "pysam";
-    rev = "v${version}";
-    sha256 = "042ca27r6634xg2ixgvq1079cp714wmm6ml7bwc1snn0wxxzywfg";
+    rev = "0eae5be21ac3ab3ac7aa770a3931e2977e37b909";
+    hash = "sha256-i8glYSpuCRNhNtK4i6eUrerz8daiMfY/YgDwgSuELbc=";
   };
 
-  nativeBuildInputs = [ samtools ];
+  nativeBuildInputs = [
+    cython
+    samtools
+    setuptools
+  ];
+
   buildInputs = [
     bzip2
     curl
-    cython
     libdeflate
     xz
     zlib
@@ -46,54 +53,18 @@ buildPythonPackage rec {
     export HTSLIB_INCLUDE_DIR=${htslib}/include
   '';
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    pytestCheckHook
     bcftools
     htslib
   ];
 
-  # See https://github.com/NixOS/nixpkgs/pull/100823 for why we aren't using
-  # disabledTests and pytestFlagsArray through pytestCheckHook
-  checkPhase = ''
-    # Needed to avoid /homeless-shelter error
-    export HOME=$(mktemp -d)
-
-    # To avoid API incompatibilities, these should ideally show the same version
-    echo "> samtools --version"
-    samtools --version
-    echo "> htsfile --version"
-    htsfile --version
-    echo "> bcftools --version"
-    bcftools --version
-
-    # Create auxiliary test data
+  preCheck = ''
+    export HOME=$TMPDIR
     make -C tests/pysam_data
     make -C tests/cbcf_data
-
-    # Delete pysam folder in current directory to avoid importing it during testing
+    make -C tests/tabix_data
     rm -rf pysam
-
-    # Deselect tests that are known to fail due to upstream issues
-    # See https://github.com/pysam-developers/pysam/issues/961
-    py.test \
-      --deselect tests/AlignmentFileHeader_test.py::TestHeaderBAM::test_dictionary_access_works \
-      --deselect tests/AlignmentFileHeader_test.py::TestHeaderBAM::test_header_content_is_as_expected \
-      --deselect tests/AlignmentFileHeader_test.py::TestHeaderCRAM::test_dictionary_access_works \
-      --deselect tests/AlignmentFileHeader_test.py::TestHeaderCRAM::test_header_content_is_as_expected \
-      --deselect tests/AlignmentFile_test.py::TestDeNovoConstruction::testBAMWholeFile \
-      --deselect tests/AlignmentFile_test.py::TestEmptyHeader::testEmptyHeader \
-      --deselect tests/AlignmentFile_test.py::TestHeaderWithProgramOptions::testHeader \
-      --deselect tests/AlignmentFile_test.py::TestIO::testBAM2BAM \
-      --deselect tests/AlignmentFile_test.py::TestIO::testBAM2CRAM \
-      --deselect tests/AlignmentFile_test.py::TestIO::testBAM2SAM \
-      --deselect tests/AlignmentFile_test.py::TestIO::testFetchFromClosedFileObject \
-      --deselect tests/AlignmentFile_test.py::TestIO::testOpenFromFilename \
-      --deselect tests/AlignmentFile_test.py::TestIO::testSAM2BAM \
-      --deselect tests/AlignmentFile_test.py::TestIO::testWriteUncompressedBAMFile \
-      --deselect tests/AlignmentFile_test.py::TestIteratorRowAllBAM::testIterate \
-      --deselect tests/StreamFiledescriptors_test.py::StreamTest::test_text_processing \
-      --deselect tests/compile_test.py::BAMTest::testCount \
-      tests/
   '';
 
   pythonImportsCheck = [
@@ -104,11 +75,12 @@ buildPythonPackage rec {
     "pysam.libcvcf"
   ];
 
-  meta = with lib; {
-    description = "A python module for reading, manipulating and writing genome data sets";
-    homepage = "https://pysam.readthedocs.io/";
-    maintainers = with maintainers; [ unode ];
-    license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+  meta = {
+    description = "Python module for reading, manipulating and writing genome data sets";
+    downloadPage = "https://github.com/pysam-developers/pysam";
+    homepage = "https://pysam.readthedocs.io";
+    maintainers = with lib.maintainers; [ unode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

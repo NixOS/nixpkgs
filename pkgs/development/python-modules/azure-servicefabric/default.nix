@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  msrest,
 }:
 
 buildPythonPackage rec {
   pname = "azure-servicefabric";
   version = "8.2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

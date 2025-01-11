@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymdstat";
-  version = "0.4.2";
+  version = "0.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
-    repo = pname;
+    repo = "pymdstat";
     rev = "v${version}";
-    sha256 = "01hj8vyd9f7610sqvzphpr033rvnazbwvl11gi18ia3yqlnlncp0";
+    hash = "sha256-ifQZXc+it/UTltHc1ZL2zxJu7GvAxYzzmB4D+mCqEoE=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} $src/unitest.py
-  '';
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pymdstat" ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "unitest.py" ];
+
   meta = with lib; {
-    description = "A pythonic library to parse Linux /proc/mdstat file";
+    description = "Pythonic library to parse Linux /proc/mdstat file";
     homepage = "https://github.com/nicolargo/pymdstat";
     maintainers = with maintainers; [ rhoriguchi ];
     license = licenses.mit;

@@ -55,7 +55,7 @@ in {
           default = "${dataDir}/metabase.jks";
           example = "/etc/secrets/keystore.jks";
           description = ''
-            <link xlink:href="https://www.digitalocean.com/community/tutorials/java-keytool-essentials-working-with-java-keystores">Java KeyStore</link> file containing the certificates.
+            [Java KeyStore](https://www.digitalocean.com/community/tutorials/java-keytool-essentials-working-with-java-keystores) file containing the certificates.
           '';
         };
 
@@ -77,6 +77,7 @@ in {
     systemd.services.metabase = {
       description = "Metabase server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
         MB_PLUGINS_DIR = "${dataDir}/plugins";

@@ -1,41 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pytest-mypy-plugins
-, typing-extensions
-, qtpy
-, pyside2
-, psygnal
-, docstring-parser
-, napari # a reverse-dependency, for tests
-}: buildPythonPackage rec {
-  pname = "magicgui";
-  version = "0.3.7";
+{
+  lib,
+  buildPythonPackage,
+  docstring-parser,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  napari, # a reverse-dependency, for tests
+  psygnal,
+  pyside2,
+  pytestCheckHook,
+  pythonOlder,
+  superqt,
+  typing-extensions,
+}:
 
-  format = "pyproject";
+buildPythonPackage rec {
+  pname = "magicgui";
+  version = "0.10.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "napari";
+    owner = "pyapp-kit";
     repo = "magicgui";
-    rev = "v${version}";
-    sha256 = "sha256-LYXNNr5lS3ibQk2NIopZkB8kzC7j3yY8moGMk0Gr+hU=";
+    tag = "v${version}";
+    hash = "sha256-taPnP9uB1y9hNqG/3MF3ZTc0q94+8WUx4E6+TQsJnIU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ typing-extensions qtpy pyside2 psygnal docstring-parser ];
-  checkInputs = [ pytestCheckHook pytest-mypy-plugins ];
+  dependencies = [
+    typing-extensions
+    superqt
+    pyside2
+    psygnal
+    docstring-parser
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = false; # Reports "Fatal Python error"
 
-  passthru.tests = { inherit napari; };
+  passthru.tests = {
+    inherit napari;
+  };
 
   meta = with lib; {
     description = "Build GUIs from python functions, using magic.  (napari/magicgui)";
     homepage = "https://github.com/napari/magicgui";
+    changelog = "https://github.com/pyapp-kit/magicgui/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

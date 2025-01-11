@@ -1,32 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytomorrowio";
-  version = "0.3.3";
+  version = "0.3.6";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d4f81dc90aefa26da18b927473cb7b08b093f7732301983ef5f0b1ca1181c62";
+    hash = "sha256-ZCA+GYuZuRgc4Pi9Bcg4zthOnkmQ+/IddFMkR0WYfKk=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # aiohttp 3.10.6 compat
+    "test_errors"
   ];
 
   pythonImportsCheck = [ "pytomorrowio" ];

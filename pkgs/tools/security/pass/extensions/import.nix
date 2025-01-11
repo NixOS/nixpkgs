@@ -1,33 +1,33 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-, gnupg
-, pass
-, makeWrapper
+{
+  lib,
+  fetchurl,
+  python3Packages,
+  gnupg,
+  pass,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pass-import";
-  version = "3.2";
+  version = "3.5";
 
-  src = fetchFromGitHub {
-    owner = "roddhjav";
-    repo = "pass-import";
-    rev = "v${version}";
-    sha256 = "0hrpg7yiv50xmbajfy0zdilsyhbj5iv0qnlrgkfv99q1dvd5qy56";
+  src = fetchurl {
+    url = "https://github.com/roddhjav/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-+wrff3OxPkAGu1Mn4Kl0KN4FmvIAb+MnaERcD5ScDNc=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     cryptography
     defusedxml
+    jsonpath-ng
     pyaml
     pykeepass
     python-magic # similar API to "file-magic", but already in nixpkgs.
+    requests
     secretstorage
+    zxcvbn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnupg
     pass
     python3Packages.pytestCheckHook
@@ -39,12 +39,12 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/lib/password-store/extensions
-    cp ${src}/import.bash $out/lib/password-store/extensions/import.bash
+    cp import.bash $out/lib/password-store/extensions/import.bash
     wrapProgram $out/lib/password-store/extensions/import.bash \
       --prefix PATH : "${python3Packages.python.withPackages (_: propagatedBuildInputs)}/bin" \
       --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}" \
       --run "export PREFIX"
-    cp -r ${src}/share $out/
+    cp -r share $out/
   '';
 
   postCheck = ''
@@ -53,10 +53,15 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Pass extension for importing data from existing password managers";
+    mainProgram = "pimport";
     homepage = "https://github.com/roddhjav/pass-import";
     changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
+    maintainers = with maintainers; [
+      lovek323
+      fpletz
+      tadfisher
+    ];
     platforms = platforms.unix;
   };
 }

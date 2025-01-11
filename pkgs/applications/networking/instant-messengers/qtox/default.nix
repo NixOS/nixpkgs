@@ -12,7 +12,6 @@
 , qtbase
 , qtsvg
 , qttools
-, qttranslations
 , ffmpeg
 , filter-audio
 , libexif
@@ -44,7 +43,6 @@ mkDerivation rec {
     libXScrnSaver
     qtbase
     qtsvg
-    qttranslations
     ffmpeg
     filter-audio
     libexif
@@ -55,10 +53,10 @@ mkDerivation rec {
     pcre
     qrencode
     sqlcipher
-  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AVFoundation ];
 
   nativeBuildInputs = [ cmake pkg-config qttools ]
-    ++ lib.optionals stdenv.isDarwin [ perl ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
 
   cmakeFlags = [
     "-DGIT_DESCRIBE=v${version}"
@@ -69,8 +67,9 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Qt Tox client";
+    mainProgram = "qtox";
     homepage = "https://tox.chat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ akaWolf peterhoeg ];

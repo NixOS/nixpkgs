@@ -9,6 +9,7 @@ let
   stateDir = cfg.directory;
   driftFile = "${stateDir}/chrony.drift";
   keyFile = "${stateDir}/chrony.keys";
+  rtcFile = "${stateDir}/chrony.rtc";
 
   configFile = pkgs.writeText "chrony.conf" ''
     ${concatMapStringsSep "\n" (server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts") cfg.servers}
@@ -20,14 +21,19 @@ let
 
     driftfile ${driftFile}
     keyfile ${keyFile}
+    ${optionalString (cfg.enableRTCTrimming) "rtcfile ${rtcFile}"}
     ${optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
 
+    ${optionalString (cfg.enableRTCTrimming) "rtcautotrim ${builtins.toString cfg.autotrimThreshold}"}
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
 
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+  chronyFlags =
+    [ "-n" "-u" "chrony" "-f" "${configFile}" ]
+    ++ optional cfg.enableMemoryLocking "-m"
+    ++ cfg.extraFlags;
 in
 {
   options = {
@@ -41,14 +47,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.chrony;
-        defaultText = literalExpression "pkgs.chrony";
-        description = ''
-          Which chrony package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "chrony" { };
 
       servers = mkOption {
         default = config.networking.timeServers;
@@ -70,6 +69,42 @@ in
 
           Use "offline" to prevent polling on startup. Recommended if your
           machine boots offline or is otherwise frequently offline.
+        '';
+      };
+
+      enableMemoryLocking = mkOption {
+        type = types.bool;
+        default = config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light";
+        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
+        description = ''
+          Whether to add the `-m` flag to lock memory.
+        '';
+      };
+
+      enableRTCTrimming = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable tracking of the RTC offset to the system clock and automatic trimming.
+          See also [](#opt-services.chrony.autotrimThreshold)
+
+          ::: {.note}
+          This is not compatible with the `rtcsync` directive, which naively syncs the RTC time every 11 minutes.
+
+          Tracking the RTC drift will allow more precise timekeeping,
+          especially on intermittently running devices, where the RTC is very relevant.
+          :::
+        '';
+      };
+
+      autotrimThreshold = mkOption {
+        type = types.ints.positive;
+        default = 30;
+        example = 10;
+        description = ''
+          Maximum estimated error threshold for the `rtcautotrim` command.
+          When reached, the RTC will be trimmed.
+          Only used when [](#opt-services.chrony.enableRTCTrimming) is enabled.
         '';
       };
 
@@ -115,12 +150,12 @@ in
         default = "";
         description = ''
           Extra configuration directives that should be added to
-          <literal>chrony.conf</literal>
+          `chrony.conf`
         '';
       };
 
       extraFlags = mkOption {
-        default = [];
+        default = [ ];
         example = [ "-s" ];
         type = types.listOf types.str;
         description = "Extra flags passed to the chronyd command.";
@@ -129,14 +164,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+    meta.maintainers = with lib.maintainers; [ thoughtpolice vifino ];
 
     environment.systemPackages = [ chronyPkg ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
 
     users.users.chrony =
-      { uid = config.ids.uids.chrony;
+      {
+        uid = config.ids.uids.chrony;
         group = "chrony";
         description = "chrony daemon user";
         home = stateDir;
@@ -144,35 +180,88 @@ in
 
     services.timesyncd.enable = mkForce false;
 
+    # If chrony controls and tracks the RTC, writing it externally causes clock error.
+    systemd.services.save-hwclock = lib.mkIf cfg.enableRTCTrimming {
+      enable = lib.mkForce false;
+    };
+
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
 
     systemd.tmpfiles.rules = [
-      "d ${stateDir} 0755 chrony chrony - -"
-      "f ${driftFile} 0640 chrony chrony -"
-      "f ${keyFile} 0640 chrony chrony -"
+      "d ${stateDir} 0750 chrony chrony - -"
+      "f ${driftFile} 0640 chrony chrony - -"
+      "f ${keyFile} 0640 chrony chrony - -"
+    ] ++ lib.optionals cfg.enableRTCTrimming [
+      "f ${rtcFile} 0640 chrony chrony - -"
     ];
 
     systemd.services.chronyd =
-      { description = "chrony NTP daemon";
+      {
+        description = "chrony NTP daemon";
 
         wantedBy = [ "multi-user.target" ];
-        wants    = [ "time-sync.target" ];
-        before   = [ "time-sync.target" ];
-        after    = [ "network.target" "nss-lookup.target" ];
+        wants = [ "time-sync.target" ];
+        before = [ "time-sync.target" ];
+        after = [ "network.target" "nss-lookup.target" ];
         conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
         path = [ chronyPkg ];
 
         unitConfig.ConditionCapability = "CAP_SYS_TIME";
-        serviceConfig =
-          { Type = "simple";
-            ExecStart = "${chronyPkg}/bin/chronyd ${chronyFlags}";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
-            ProtectHome = "yes";
-            ProtectSystem = "full";
-            PrivateTmp = "yes";
-          };
-
+          # Proc filesystem
+          ProcSubset = "pid";
+          ProtectProc = "invisible";
+          # Access write directories
+          ReadWritePaths = [ "${stateDir}" ];
+          UMask = "0027";
+          # Capabilities
+          CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_DAC_OVERRIDE" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" "CAP_SYS_RESOURCE" "CAP_SYS_TIME" ];
+          # Device Access
+          DeviceAllow = [ "char-pps rw" "char-ptp rw" "char-rtc rw" ];
+          DevicePolicy = "closed";
+          # Security
+          NoNewPrivileges = true;
+          # Sandboxing
+          ProtectSystem = "full";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = false;
+          PrivateUsers = false;
+          ProtectHostname = true;
+          ProtectClock = false;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          PrivateMounts = true;
+          # System Call Filtering
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "@clock" "@setuid" "capset" "@chown" ];
+        };
       };
+
+    assertions = [
+      {
+        assertion = !(cfg.enableRTCTrimming && builtins.any (line: (builtins.match "^ *rtcsync" line) != null) (lib.strings.splitString "\n" cfg.extraConfig));
+        message = ''
+          The chrony module now configures `rtcfile` and `rtcautotrim` for you.
+          These options conflict with `rtcsync` and cause chrony to crash.
+          Unless you are very sure the former isn't what you want, please remove
+          `rtcsync` from `services.chrony.extraConfig`.
+          Alternatively, disable this behaviour by `services.chrony.enableRTCTrimming = false;`
+        '';
+      }
+    ];
   };
 }

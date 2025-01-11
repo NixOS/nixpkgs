@@ -1,13 +1,19 @@
-{ lib, fetchFromGitHub, buildDunePackage, angstrom, ocaml_lwt }:
+{
+  lib,
+  buildDunePackage,
+  angstrom,
+  lwt,
+}:
 
 buildDunePackage rec {
   pname = "angstrom-lwt-unix";
 
-  inherit (angstrom) version useDune2 src;
+  inherit (angstrom) version src;
 
-  minimumOCamlVersion = "4.03";
-
-  propagatedBuildInputs = [ angstrom ocaml_lwt ];
+  propagatedBuildInputs = [
+    angstrom
+    lwt
+  ];
 
   doCheck = true;
 

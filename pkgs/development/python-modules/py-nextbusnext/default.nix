@@ -1,32 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-nextbusnext";
-  version = "0.1.5";
+  version = "2.0.5";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ViViDboarder";
     repo = "py_nextbus";
-    rev = "v${version}";
-    hash = "sha256-uUHA8v5iTISmPaTgk0RvcLLRM34f3JXUjZClKGXdMoI=";
+    tag = "v${version}";
+    hash = "sha256-/pzlxYGXqWix11G7DsHgwkCrSQFT/N1boKcBJ1YpE0A=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "py_nextbus" ];
 
-  meta = {
+  # upstream has no tests
+  doCheck = false;
+
+  meta = with lib; {
     description = "Minimalistic Python client for the NextBus public API";
     homepage = "https://github.com/ViViDboarder/py_nextbus";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

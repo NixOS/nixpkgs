@@ -1,18 +1,29 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.knot;
-in {
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
+in
+{
   port = 9433;
   extraOpts = {
     knotLibraryPath = mkOption {
-      type = types.str;
-      default = "${pkgs.knot-dns.out}/lib/libknot.so";
-      defaultText = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
+      type = types.nullOr types.str;
+      default = null;
+      example = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = ''
-        Path to the library of <package>knot-dns</package>.
+        Path to the library of `knot-dns`.
       '';
     };
 
@@ -20,13 +31,12 @@ in {
       type = types.str;
       default = "/run/knot/knot.sock";
       description = ''
-        Socket path of <citerefentry><refentrytitle>knotd</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry>.
+        Socket path of {manpage}`knotd(8)`.
       '';
     };
 
     knotSocketTimeout = mkOption {
-      type = types.int;
+      type = types.ints.positive;
       default = 2000;
       description = ''
         Timeout in seconds.
@@ -34,17 +44,22 @@ in {
     };
   };
   serviceOpts = {
+    path = with pkgs; [
+      procps
+    ];
     serviceConfig = {
       ExecStart = ''
-        ${pkgs.prometheus-knot-exporter}/bin/knot_exporter \
+        ${pkgs.prometheus-knot-exporter}/bin/knot-exporter \
           --web-listen-addr ${cfg.listenAddress} \
           --web-listen-port ${toString cfg.port} \
-          --knot-library-path ${cfg.knotLibraryPath} \
           --knot-socket-path ${cfg.knotSocketPath} \
           --knot-socket-timeout ${toString cfg.knotSocketTimeout} \
+          ${lib.optionalString (cfg.knotLibraryPath != null) "--knot-library-path ${cfg.knotLibraryPath}"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
-      SupplementaryGroups = [ "knot" ];
+      SupplementaryGroups = [
+        "knot"
+      ];
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

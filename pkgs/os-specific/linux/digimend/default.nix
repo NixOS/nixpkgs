@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "digimend";
-  version = "10";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
     rev = "v${version}";
-    sha256 = "0lifd6cx6aa6hcms4zn4hlla3alra08r0svj5x1l8nlsv0ydnl6i";
+    hash = "sha256-YYCxTyoZGMnqC2nKkRi5Z1uofldGvJDGY2/sO9iMNIo=";
   };
 
   postPatch = ''
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Fix build on Linux kernel >= 5.18
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.linux;
   };

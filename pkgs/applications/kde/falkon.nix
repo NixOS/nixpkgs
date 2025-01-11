@@ -1,9 +1,23 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkg-config
-, libpthreadstubs, libxcb, libXdmcp
-, qtsvg, qttools, qtwebengine, qtx11extras
-, qtwayland, wrapQtAppsHook
-, kwallet, kpurpose, karchive, kio
+{
+  stdenv,
+  mkDerivation,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  libpthreadstubs,
+  libxcb,
+  libXdmcp,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtx11extras,
+  qtwayland,
+  wrapQtAppsHook,
+  kwallet,
+  kpurpose,
+  karchive,
+  kio,
 }:
 
 mkDerivation rec {
@@ -17,10 +31,18 @@ mkDerivation rec {
   '';
 
   buildInputs = [
-    libpthreadstubs libxcb libXdmcp
-    qtsvg qttools qtwebengine qtx11extras
-    kwallet kpurpose karchive kio
-  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+    libpthreadstubs
+    libxcb
+    libXdmcp
+    qtsvg
+    qttools
+    qtwebengine
+    qtx11extras
+    kwallet
+    kpurpose
+    karchive
+    kio
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   nativeBuildInputs = [
     cmake
@@ -32,9 +54,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "QtWebEngine based cross-platform web browser";
-    homepage    = "https://www.falkon.org";
-    license     = licenses.gpl3;
+    mainProgram = "falkon";
+    homepage = "https://www.falkon.org";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -1,31 +1,49 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  patchutils,
+  perlPackages,
+}:
 let
 
   media = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "efe31531b77efd3a4c94516504a5823d31cdc776";
-    sha256 = "1533qi3sb91v00289hl5zaj4l35r2sf9fqc6z5ky1vbb7byxgnlr";
+    rev = "cf8cf4c06090fe3c2dc2f665764abc580b8a1921";
+    hash = "sha256-YTITVsSktxAoWBsIN6jXZD11pxXaMrMl5N6VZYxfTi0=";
   };
 
   build = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "a0d62eba4d429e0e9d2c2f910fb203e817cac84b";
-    sha256 = "1329s7w9xlqjqwkpaqsd6b5dmzhm97jw0c7c7zzmmbdkl289i4i4";
+    rev = "f362ab16cb88cc1d3599408c22e3abc52aebe1fc";
+    hash = "sha256-xsZdrOgf+dA5B/GVWSnWUw0FInswPd1Kzg/qWE2JmqM=";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "tbs";
-  version = "2018.04.18-${kernel.version}";
+  version = "20241213-${kernel.version}";
 
-  srcs = [ media build ];
+  srcs = [
+    media
+    build
+  ];
   sourceRoot = build.name;
 
+  # https://github.com/tbsdtv/linux_media/wiki
   preConfigure = ''
     make dir DIR=../${media.name}
+    make allyesconfig
+    sed --regexp-extended --in-place v4l/.config \
+      -e 's/(^CONFIG.*_RC.*=)./\1n/g' \
+      -e 's/(^CONFIG.*_IR.*=)./\1n/g' \
+      -e 's/(^CONFIG_VIDEO_VIA_CAMERA=)./\1n/g'
   '';
 
   postPatch = ''
@@ -44,21 +62,24 @@ in stdenv.mkDerivation {
   buildFlags = [ "VER=${kernel.modDirVersion}" ];
   installFlags = [ "DESTDIR=$(out)" ];
 
-  hardeningDisable = [ "all" ];
+  hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ]
-  ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    patchutils
+    kmod
+    perlPackages.ProcProcessTable
+  ] ++ kernel.moduleBuildDependencies;
 
-   postInstall = ''
+  postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tbsdtv.com/";
     description = "Linux driver for TBSDTV cards";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ck3d ];
     priority = -1;
-    broken = true;
+    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.13";
   };
 }

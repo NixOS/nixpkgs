@@ -1,10 +1,28 @@
 {
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
+  mkDerivation,
+  lib,
+  kdepimTeam,
+  extra-cmake-modules,
+  kdoctools,
   qtwebengine,
-  kcmutils, kcrash, kdbusaddons, kparts, kwindowsystem,
-  akonadi, grantleetheme, kontactinterface, kpimtextedit,
-  mailcommon, libkdepim, pimcommon
+  kcmutils,
+  kcrash,
+  kdbusaddons,
+  kparts,
+  kwindowsystem,
+  akonadi,
+  grantleetheme,
+  kontactinterface,
+  kpimtextedit,
+  mailcommon,
+  libkdepim,
+  pimcommon,
+  akregator,
+  kaddressbook,
+  kmail,
+  knotes,
+  korganizer,
+  zanshin,
 }:
 
 mkDerivation {
@@ -12,14 +30,37 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kontact/";
     description = "Personal information manager";
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    mainProgram = "kontact";
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl21Plus
+      fdl12Plus
+    ];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [
     qtwebengine
-    kcmutils kcrash kdbusaddons kparts kwindowsystem
-    akonadi grantleetheme kontactinterface kpimtextedit
-    mailcommon libkdepim pimcommon
+    kcmutils
+    kcrash
+    kdbusaddons
+    kparts
+    kwindowsystem
+    akonadi
+    grantleetheme
+    kontactinterface
+    kpimtextedit
+    mailcommon
+    libkdepim
+    pimcommon
+    akregator
+    kaddressbook
+    kmail
+    knotes
+    korganizer
+    zanshin
   ];
 }

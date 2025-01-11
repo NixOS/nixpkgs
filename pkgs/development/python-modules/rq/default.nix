@@ -1,29 +1,73 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy27, click, redis }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
+  redis,
+
+  # tests
+  psutil,
+  pytestCheckHook,
+  redis-server,
+  sentry-sdk,
+}:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.10.1";
-  disabled = isPy27;
+  version = "1.16.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
-    rev = "v${version}";
-    sha256 = "1f4fi1rvn97d2b524q45k6s10b007pr23k0mf44q7hy8q4vnjmh5";
+    tag = "v${version}";
+    hash = "sha256-8uhCV4aJNbY273jOa9D5OlgEG1w3hXVncClKQTO9Pyk=";
   };
 
-  # test require a running redis rerver, which is something we can't do yet
-  doCheck = false;
+  build-system = [ hatchling ];
+
+  dependencies = [
+    click
+    redis
+  ];
+
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+    sentry-sdk
+  ];
+
+  preCheck = ''
+    PATH=$out/bin:$PATH
+    ${redis-server}/bin/redis-server &
+  '';
+
+  postCheck = ''
+    kill %%
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f
+    "test_clean_large_registry"
+  ];
 
   pythonImportsCheck = [ "rq" ];
 
-  propagatedBuildInputs = [ click redis ];
-
   meta = with lib; {
-    description = "A simple, lightweight library for creating background jobs, and processing them";
+    description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    maintainers = with maintainers; [ mrmebelman ];
+    changelog = "https://github.com/rq/rq/releases/tag/v${version}";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ mrmebelman ];
   };
 }
-

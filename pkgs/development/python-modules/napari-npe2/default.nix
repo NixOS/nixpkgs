@@ -1,54 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, pyyaml
-, pytomlpp
-, pydantic
-, magicgui
-, typer
-, setuptools-scm
-, napari # reverse dependency, for tests
+{
+  lib,
+  appdirs,
+  build,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  magicgui,
+  napari, # reverse dependency, for tests
+  pydantic,
+  pythonOlder,
+  pytomlpp,
+  pyyaml,
+  rich,
+  typer,
+  tomli-w,
 }:
 
-let
+buildPythonPackage rec {
   pname = "napari-npe2";
-  version = "0.3.0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "0.7.7";
+  pyproject = true;
 
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
-    rev = "v${version}";
-    hash = "sha256-IyDUeztWQ8JWXDo//76iHzAlWWaZP6/0lwCh0eZAZsM=";
+    tag = "v${version}";
+    hash = "sha256-HjMf5J1n5NKqtunRQ7cqZiTZMTNmcq5j++O03Sxwvqw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    # npe2 *can* build without it,
-    # but then setuptools refuses to acknowledge it when building napari
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     appdirs
-    pyyaml
-    pytomlpp
-    pydantic
+    build
     magicgui
+    pydantic
+    pytomlpp
+    pyyaml
+    rich
     typer
+    tomli-w
   ];
 
-  passthru.tests = { inherit napari; };
+  pythonImportsCheck = [ "npe2" ];
+
+  passthru.tests = {
+    inherit napari;
+  };
 
   meta = with lib; {
-    description = "Yet another plugin system for napari (the image visualizer)";
+    description = "Plugin system for napari (the image visualizer)";
     homepage = "https://github.com/napari/npe2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
+    mainProgram = "npe2";
   };
 }

@@ -1,31 +1,63 @@
-{ lib, stdenv
-, buildPythonPackage
-, grpc
-, six
-, protobuf
-, enum34 ? null
-, futures ? null
-, isPy27
-, pkg-config
-, cython
-, c-ares
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  c-ares,
+  cython,
+  fetchPypi,
+  openssl,
+  pkg-config,
+  protobuf,
+  pythonOlder,
+  setuptools,
+  zlib,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
-  inherit (grpc) src version;
   pname = "grpcio";
+  version = "1.68.1";
+  pyproject = true;
 
-  outputs = [ "out" "dev" ];
+  disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [ cython pkg-config ];
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-RKhQLdXeZTrmpz4t5QpAHYQYTwMx0Kw9rrBE5m1cUFQ=";
+  };
 
-  buildInputs = [ c-ares openssl zlib ];
-  propagatedBuildInputs = [ six protobuf ]
-    ++ lib.optionals (isPy27) [ enum34 futures ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  preBuild = lib.optionalString stdenv.isDarwin "unset AR";
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    cython
+    pkg-config
+  ];
+
+  buildInputs = [
+    c-ares
+    openssl
+    zlib
+  ];
+
+  dependencies = [ protobuf ];
+
+  preBuild =
+    ''
+      export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+      if [ -z "$enableParallelBuilding" ]; then
+        GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+      fi
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      unset AR
+    '';
 
   GRPC_BUILD_WITH_BORING_SSL_ASM = "";
   GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
@@ -35,12 +67,15 @@ buildPythonPackage rec {
   # does not contain any tests
   doCheck = false;
 
+  enableParallelBuilding = true;
+
   pythonImportsCheck = [ "grpc" ];
 
   meta = with lib; {
     description = "HTTP/2-based RPC framework";
-    license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = [ ];
   };
 }

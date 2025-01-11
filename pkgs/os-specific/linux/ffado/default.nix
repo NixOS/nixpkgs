@@ -1,108 +1,133 @@
-{ lib
-, mkDerivation
-, dbus
-, dbus_cplusplus
-, desktop-file-utils
-, fetchurl
-, glibmm
-, kernel
-, libavc1394
-, libconfig
-, libiec61883
-, libraw1394
-, libxmlxx3
-, pkg-config
-, python3
-, scons
-, which
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  argp-standalone,
+  dbus,
+  dbus_cplusplus,
+  fetchurl,
+  glibmm,
+  libavc1394,
+  libconfig,
+  libiec61883,
+  libraw1394,
+  libxmlxx3,
+  pkg-config,
+  python311,
+  scons,
+  which,
+  withMixer ? false,
+  qt5,
 }:
 
 let
-  inherit (python3.pkgs) pyqt5 dbus-python;
-  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+  python =
+    if withMixer then
+      python311.withPackages (
+        pkgs: with pkgs; [
+          pyqt5
+          dbus-python
+        ]
+      )
+    else
+      python311;
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ffado";
-  version = "2.4.3";
+  version = "2.4.9";
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "08bygzv1k6ai0572gv66h7gfir5zxd9klfy74z2pxqp6s5hms58r";
+    hash = "sha256-xELFL60Ryv1VE7tOhGyFHxAchIT4karFRe0ZDo/U0Q8=";
   };
 
-  prePatch = ''
-    substituteInPlace ./support/tools/ffado-diag.in \
-      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
-  '';
+  prePatch =
+    ''
+      substituteInPlace ./support/tools/ffado-diag.in \
+        --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
 
-  patches = [
-    # fix installing metainfo file
-    ./fix-build.patch
-  ];
+      # prevent build tools from leaking into closure
+      substituteInPlace support/tools/SConscript --replace-fail \
+        'support/tools/ffado-diag --static' \
+        "echo '"'See `nix-store --query --tree ${placeholder "out"}`.'"'"
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      # skip the CC sanity check, since that requires invoking cross-compiled binaries during build
+      substituteInPlace SConstruct \
+        --replace-fail 'conf.CompilerCheck()' 'True' \
+        --replace-fail "pkg-config" "$PKG_CONFIG"
+      substituteInPlace admin/pkgconfig.py \
+        --replace-fail "pkg-config" "$PKG_CONFIG"
+    '';
 
-  outputs = [ "out" "bin" "dev" ];
-
-  nativeBuildInputs = [
-    desktop-file-utils
-    scons
-    pkg-config
-    which
-    python
-    pyqt5
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      (scons.override {
+        # SConstruct script depends on distutils removed in Python 3.12
+        python3Packages = python311.pythonOnBuildForHost.pkgs;
+      })
+      pkg-config
+      which
+    ]
+    ++ lib.optionals withMixer [
+      python
+      python.pkgs.pyqt5
+      qt5.wrapQtAppsHook
+    ];
 
   prefixKey = "PREFIX=";
   sconsFlags = [
+    "CUSTOM_ENV=True" # tell SConstruct to use nixpkgs' CC/CXX/CFLAGS
+    "DETECT_USERSPACE_ENV=False"
     "DEBUG=False"
     "ENABLE_ALL=True"
     "BUILD_TESTS=True"
-    "WILL_DEAL_WITH_XDG_MYSELF=True"
-    "BUILD_MIXER=True"
+    "BUILD_MIXER=${if withMixer then "True" else "False"}"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
-    "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
+    "PYPKGDIR=${placeholder "out"}/${python.sitePackages}"
     "BINDIR=${placeholder "bin"}/bin"
     "INCLUDEDIR=${placeholder "dev"}/include"
     "PYTHON_INTERPRETER=${python.interpreter}"
   ];
 
-  buildInputs = [
-    dbus
-    dbus_cplusplus
-    glibmm
-    libavc1394
-    libconfig
-    libiec61883
-    libraw1394
-    libxmlxx3
-    python
-  ];
+  buildInputs =
+    [
+      dbus
+      dbus_cplusplus
+      glibmm
+      libavc1394
+      libconfig
+      libiec61883
+      libraw1394
+      libxmlxx3
+      python
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
+      argp-standalone
+    ];
+
+  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isGnu) "-largp";
 
   enableParallelBuilding = true;
   dontWrapQtApps = true;
+  strictDeps = true;
 
-  postInstall = ''
-    desktop="$bin/share/applications/ffado-mixer.desktop"
-    install -DT -m 444 support/xdg/ffado.org-ffadomixer.desktop $desktop
-    substituteInPlace "$desktop" \
-      --replace Exec=ffado-mixer "Exec=$bin/bin/ffado-mixer" \
-      --replace hi64-apps-ffado ffado-mixer
-    install -DT -m 444 support/xdg/hi64-apps-ffado.png "$bin/share/icons/hicolor/64x64/apps/ffado-mixer.png"
-
-    # prevent build tools from leaking into closure
-    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
-  '';
-
-  preFixup = ''
-    wrapQtApp $bin/bin/ffado-mixer
+  preFixup = lib.optionalString withMixer ''
+    wrapQtApp "$bin/bin/ffado-mixer"
   '';
 
   meta = with lib; {
     homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu michojel ];
+    maintainers = with maintainers; [
+      michojel
+    ];
     platforms = platforms.linux;
   };
 }

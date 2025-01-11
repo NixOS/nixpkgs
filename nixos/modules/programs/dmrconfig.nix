@@ -1,19 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.dmrconfig;
 
-in {
-  meta.maintainers = [ maintainers.etu ];
+in
+{
+  meta.maintainers = [ ];
 
   ###### interface
   options = {
     programs.dmrconfig = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to configure system to enable use of dmrconfig. This
           enables the required udev rules and installs the program.
@@ -21,17 +25,12 @@ in {
         relatedPackages = [ "dmrconfig" ];
       };
 
-      package = mkOption {
-        default = pkgs.dmrconfig;
-        type = types.package;
-        defaultText = literalExpression "pkgs.dmrconfig";
-        description = "dmrconfig derivation to use";
-      };
+      package = lib.mkPackageOption pkgs "dmrconfig" { };
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
   };

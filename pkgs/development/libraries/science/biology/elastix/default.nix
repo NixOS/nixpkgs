@@ -1,38 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, itk, python3, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  itk,
+  Cocoa,
+}:
 
-stdenv.mkDerivation rec {
-  pname    = "elastix";
-  version = "5.0.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "elastix";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
-    owner  = "SuperElastix";
-    repo   = pname;
-    rev    = version;
-    sha256 = "1mx8kkak2d3ibfrxrh8jkmh2zkdlgl9h578wiw3617zcwaa97bxw";
+    owner = "SuperElastix";
+    repo = "elastix";
+    tag = finalAttrs.version;
+    hash = "sha256-edUMj8sjku8EVYaktteIDS+ouaN3kg+CXQCeSWKlLDI=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "install-executables.patch";  # https://github.com/SuperElastix/elastix/issues/305
-      url = "https://github.com/SuperElastix/elastix/commit/8e26cdc0d66f6030c7be085fdc424d84d4fc7546.patch";
-      sha256 = "12y9wbpi9jlarnw6fk4iby97jxvx5g4daq9zqblbcmn51r134bj5";
-    })
-  ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ itk ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ itk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
-
-  doCheck = !stdenv.isDarwin;  # usual dynamic linker issues
-
-  preCheck = "
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  ";
+  doCheck = !stdenv.hostPlatform.isDarwin; # usual dynamic linker issues
 
   meta = with lib; {
-    homepage = "https://elastix.lumc.nl";
+    homepage = "https://elastix.dev";
     description = "Image registration toolkit based on ITK";
+    changelog = "https://github.com/SuperElastix/elastix/releases/tag/${finalAttrs.version}";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.x86_64;  # libitkpng linker issues with ITK 5.1
+    mainProgram = "elastix";
+    platforms = platforms.x86_64; # libitkpng linker issues with ITK 5.1
     license = licenses.asl20;
   };
-}
+})

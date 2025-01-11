@@ -1,14 +1,35 @@
-{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, ... }:
-
-with lib;
+{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, specialArgs, ... }:
 
 let
+  inherit (lib)
+    cleanSourceFilter
+    concatMapStringsSep
+    evalModules
+    filter
+    functionArgs
+    hasSuffix
+    isAttrs
+    isDerivation
+    isFunction
+    isPath
+    literalExpression
+    mapAttrs
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionalAttrs
+    optionals
+    partition
+    removePrefix
+    types
+    warn
+    ;
 
   cfg = config.documentation;
   allOpts = options;
-
-  /* Modules for which to show options even when not imported. */
-  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
 
   canCacheDocs = m:
     let
@@ -16,14 +37,14 @@ let
       instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
     in
       cfg.nixos.options.splitBuild
-        && builtins.isPath m
+        && isPath m
         && isFunction f
         && instance ? options
         && instance.meta.buildDocsInSandbox or true;
 
   docModules =
     let
-      p = partition canCacheDocs (baseModules ++ extraDocModules);
+      p = partition canCacheDocs (baseModules ++ cfg.nixos.extraModules);
     in
       {
         lazy = p.right;
@@ -41,7 +62,8 @@ let
           modules = [ {
             _module.check = false;
           } ] ++ docModules.eager;
-          specialArgs = {
+          class = "nixos";
+          specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
             # allow access to arbitrary options for eager modules, eg for getting
             # option types from lazy modules
@@ -51,14 +73,20 @@ let
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
+            let
+              wholeName = "${namePrefix}.${name}";
+              guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+            in if isAttrs value then
               scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+              // optionalAttrs (isDerivation value) {
+                outPath = guard "\${${wholeName}}";
+                drvPath = guard value.drvPath;
+              }
             else value
           )
           pkgSet;
       in scrubbedEval.options;
+
     baseOptionsJSON =
       let
         filter =
@@ -70,10 +98,15 @@ let
             );
       in
         pkgs.runCommand "lazy-options.json" {
-          libPath = filter "${toString pkgs.path}/lib";
-          pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
-          nixosPath = filter "${toString pkgs.path}/nixos";
-          modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
+          libPath = filter (pkgs.path + "/lib");
+          pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
+          nixosPath = filter (pkgs.path + "/nixos");
+          NIX_ABORT_ON_WARN = warningsAreErrors;
+          modules =
+            "[ "
+            + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
+            + " ]";
+          passAsFile = [ "modules" ];
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
@@ -83,7 +116,7 @@ let
             --argstr libPath "$libPath" \
             --argstr pkgsLibPath "$pkgsLibPath" \
             --argstr nixosPath "$nixosPath" \
-            --arg modules "[ $modules ]" \
+            --arg modules "import $modulesPath" \
             --argstr stateVersion "${options.system.stateVersion.default}" \
             --argstr release "${config.system.nixos.release}" \
             $nixosPath/lib/eval-cacheable-options.nix > $out \
@@ -102,6 +135,7 @@ let
               exit 1
             } >&2
         '';
+
     inherit (cfg.nixos.options) warningsAreErrors;
   };
 
@@ -127,7 +161,8 @@ let
     desktopItem = pkgs.makeDesktopItem {
       name = "nixos-manual";
       desktopName = "NixOS Manual";
-      genericName = "View NixOS documentation in a web browser";
+      genericName = "System Manual";
+      comment = "View NixOS documentation in a web browser";
       icon = "nix-snowflake";
       exec = "nixos-help";
       categories = ["System"];
@@ -145,9 +180,18 @@ in
 
 {
   imports = [
+    ./man-db.nix
+    ./mandoc.nix
+    ./assertions.nix
+    ./meta.nix
+    ../config/system-path.nix
+    ../system/etc/etc.nix
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRemovedOptionModule
+      [ "documentation" "nixos" "options" "allowDocBook" ]
+      "DocBook option documentation is no longer supported")
   ];
 
   options = {
@@ -159,7 +203,7 @@ in
         default = true;
         description = ''
           Whether to install documentation of packages from
-          <option>environment.systemPackages</option> into the generated system path.
+          {option}`environment.systemPackages` into the generated system path.
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
@@ -171,7 +215,7 @@ in
         default = true;
         description = ''
           Whether to install manual pages.
-          This also includes <literal>man</literal> outputs.
+          This also includes `man` outputs.
         '';
       };
 
@@ -181,16 +225,9 @@ in
         description = ''
           Whether to generate the manual page index caches.
           This allows searching for a page or
-          keyword using utilities like
-          <citerefentry>
-            <refentrytitle>apropos</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>
-          and the <literal>-k</literal> option of
-          <citerefentry>
-            <refentrytitle>man</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>.
+          keyword using utilities like {manpage}`apropos(1)`
+          and the `-k` option of
+          {manpage}`man(1)`.
         '';
       };
 
@@ -198,7 +235,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to install info pages and the <command>info</command> command.
+          Whether to install info pages and the {command}`info` command.
           This also includes "info" outputs.
         '';
       };
@@ -207,7 +244,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to install documentation distributed in packages' <literal>/share/doc</literal>.
+          Whether to install documentation distributed in packages' `/share/doc`.
           Usually plain text and/or HTML.
           This also includes "doc" outputs.
         '';
@@ -218,14 +255,12 @@ in
         default = false;
         description = ''
           Whether to install documentation targeted at developers.
-          <itemizedlist>
-          <listitem><para>This includes man pages targeted at developers if <option>documentation.man.enable</option> is
-                    set (this also includes "devman" outputs).</para></listitem>
-          <listitem><para>This includes info pages targeted at developers if <option>documentation.info.enable</option>
-                    is set (this also includes "devinfo" outputs).</para></listitem>
-          <listitem><para>This includes other pages targeted at developers if <option>documentation.doc.enable</option>
-                    is set (this also includes "devdoc" outputs).</para></listitem>
-          </itemizedlist>
+          * This includes man pages targeted at developers if {option}`documentation.man.enable` is
+            set (this also includes "devman" outputs).
+          * This includes info pages targeted at developers if {option}`documentation.info.enable`
+            is set (this also includes "devinfo" outputs).
+          * This includes other pages targeted at developers if {option}`documentation.doc.enable`
+            is set (this also includes "devdoc" outputs).
         '';
       };
 
@@ -234,14 +269,20 @@ in
         default = true;
         description = ''
           Whether to install NixOS's own documentation.
-          <itemizedlist>
-          <listitem><para>This includes man pages like
-                    <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
-                    set.</para></listitem>
-          <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
-                    <option>documentation.doc.enable</option> is set.</para></listitem>
-          </itemizedlist>
+
+          - This includes man pages like
+            {manpage}`configuration.nix(5)` if {option}`documentation.man.enable` is
+            set.
+          - This includes the HTML manual and the {command}`nixos-help` command if
+            {option}`documentation.doc.enable` is set.
+        '';
+      };
+
+      nixos.extraModules = mkOption {
+        type = types.listOf types.raw;
+        default = [];
+        description = ''
+          Modules for which to show options even when not imported.
         '';
       };
 
@@ -270,8 +311,8 @@ in
         description = ''
           Whether the generated NixOS's documentation should include documentation for all
           the options from all the NixOS modules included in the current
-          <literal>configuration.nix</literal>. Disabling this will make the manual
-          generator to ignore options defined outside of <literal>baseModules</literal>.
+          `configuration.nix`. Disabling this will make the manual
+          generator to ignore options defined outside of `baseModules`.
         '';
       };
 
@@ -326,7 +367,13 @@ in
     })
 
     (mkIf cfg.doc.enable {
-      environment.pathsToLink = [ "/share/doc" ];
+      environment.pathsToLink = [
+        "/share/doc"
+
+        # Legacy paths used by gtk-doc & adjacent tools.
+        "/share/gtk-doc"
+        "/share/devhelp"
+      ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })
 
@@ -334,12 +381,8 @@ in
       system.build.manual = manual;
 
       environment.systemPackages = []
-        ++ optional cfg.man.enable manual.manpages
+        ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
-
-      services.getty.helpLine = mkIf cfg.doc.enable (
-          "\nRun 'nixos-help' for the NixOS manual."
-      );
     })
 
   ]);

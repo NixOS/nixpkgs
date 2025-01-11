@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.webdav;
   format = pkgs.formats.yaml { };
@@ -8,35 +11,35 @@ in
 {
   options = {
     services.webdav = {
-      enable = mkEnableOption "WebDAV server";
+      enable = lib.mkEnableOption "WebDAV server";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "webdav";
         description = "User account under which WebDAV runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "webdav";
         description = "Group under which WebDAV runs.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         description = ''
           Attrset that is converted and passed as config file. Available options
           can be found at
-          <link xlink:href="https://github.com/hacdias/webdav">here</link>.
+          [here](https://github.com/hacdias/webdav).
 
           This program supports reading username and password configuration
           from environment variables, so it's strongly recommended to store
           username and password in a separate
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=">EnvironmentFile</link>.
+          [EnvironmentFile](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=).
           This prevents adding secrets to the world-readable Nix store.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
               address = "0.0.0.0";
               port = 8080;
@@ -53,8 +56,8 @@ in
         '';
       };
 
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = format.generate "webdav.yaml" cfg.settings;
         defaultText = "Config file generated from services.webdav.settings";
         description = ''
@@ -64,20 +67,18 @@ in
         example = "/etc/webdav/config.yaml";
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          Environment file as defined in {manpage}`systemd.exec(5)`.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users = mkIf (cfg.user == "webdav") {
+  config = lib.mkIf cfg.enable {
+    users.users = lib.mkIf (cfg.user == "webdav") {
       webdav = {
         description = "WebDAV daemon user";
         group = cfg.group;
@@ -85,7 +86,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "webdav") {
+    users.groups = lib.mkIf (cfg.group == "webdav") {
       webdav.gid = config.ids.gids.webdav;
     };
 
@@ -98,10 +99,10 @@ in
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;
-        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ pmy ];
+  meta.maintainers = with lib.maintainers; [ pmy ];
 }

@@ -1,15 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib;
-
-let cfg = config.programs.bandwhich;
-in {
-  meta.maintainers = with maintainers; [ Br1ght0ne ];
+let
+  cfg = config.programs.bandwhich;
+in
+{
+  meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 
   options = {
     programs.bandwhich = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add bandwhich to the global environment and configure a
@@ -19,12 +24,12 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ bandwhich ];
     security.wrappers.bandwhich = {
       owner = "root";
       group = "root";
-      capabilities = "cap_net_raw,cap_net_admin+ep";
+      capabilities = "cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep";
       source = "${pkgs.bandwhich}/bin/bandwhich";
     };
   };

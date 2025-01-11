@@ -1,44 +1,35 @@
 diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
-index 87e99fe..253a701 100644
+index da40043f..4f566f01 100644
 --- a/src/pikepdf/_methods.py
 +++ b/src/pikepdf/_methods.py
-@@ -204,7 +204,7 @@ def _mudraw(buffer, fmt) -> bytes:
+@@ -74,7 +74,7 @@ def _mudraw(buffer, fmt) -> bytes:
          tmp_in.flush()
  
          proc = run(
--            ['mudraw', '-F', fmt, '-o', '-', tmp_in.name],
-+            ['@mudraw@', '-F', fmt, '-o', '-', tmp_in.name],
+-            ['mutool', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
++            ['@mutool@', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
              capture_output=True,
              check=True,
          )
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index 04c762d..924727c 100644
+index 901f3b6f..45551820 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
-@@ -26,7 +26,7 @@ def extract_jbig2(
-         output_path = Path(tmpdir) / "outfile"
+@@ -72,7 +72,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+             output_path = Path(tmpdir) / "outfile"
  
-         args = [
--            "jbig2dec",
-+            "@jbig2dec@",
-             "--embedded",
-             "--format",
-             "png",
-@@ -59,7 +59,7 @@ def extract_jbig2_bytes(jbig2: bytes, jbig2_globals: bytes) -> bytes:
-         output_path = Path(tmpdir) / "outfile"
- 
-         args = [
--            "jbig2dec",
-+            "@jbig2dec@",
-             "--embedded",
-             "--format",
-             "png",
-@@ -84,7 +84,7 @@ def extract_jbig2_bytes(jbig2: bytes, jbig2_globals: bytes) -> bytes:
- 
- def jbig2dec_available() -> bool:
-     try:
--        proc = run(['jbig2dec', '--version'], stdout=PIPE, check=True, encoding='ascii')
-+        proc = run(['@jbig2dec@', '--version'], stdout=PIPE, check=True, encoding='ascii')
-     except (CalledProcessError, FileNotFoundError):
-         return False
-     else:
+             args = [
+-                "jbig2dec",
++                "@jbig2dec@",
+                 "--embedded",
+                 "--format",
+                 "png",
+@@ -101,7 +101,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+     def _version(self) -> Version:
+         try:
+             proc = self._run(
+-                ['jbig2dec', '--version'],
++                ['@jbig2dec@', '--version'],
+                 stdout=PIPE,
+                 check=True,
+                 encoding='ascii',

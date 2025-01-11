@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 buildPythonPackage rec {
   pname = "persistent-evdev";
   version = "unstable-2022-05-07";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "aiberia";
@@ -12,7 +18,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    evdev pyudev
+    evdev
+    pyudev
   ];
 
   postPatch = ''
@@ -38,5 +45,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.lodi ];
     platforms = platforms.linux;
+    mainProgram = "persistent-evdev.py";
   };
 }

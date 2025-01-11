@@ -1,14 +1,39 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.rss-bridge;
 
   poolName = "rss-bridge";
 
-  whitelist = pkgs.writeText "rss-bridge_whitelist.txt"
-    (concatStringsSep "\n" cfg.whitelist);
+  cfgHalf = lib.mapAttrsRecursive (
+    path: value:
+    let
+      envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
+      envValue =
+        if lib.isList value then
+          lib.concatStringsSep "," value
+        else if lib.isBool value then
+          lib.boolToString value
+        else
+          toString value;
+    in
+    if (value != null) then "fastcgi_param \"${envName}\" \"${envValue}\";" else null
+  ) cfg.config;
+  cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
 in
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "rss-bridge" "whitelist" ]
+      [ "services" "rss-bridge" "config" "system" "enabled_bridges" ]
+    )
+  ];
+
   options = {
     services.rss-bridge = {
       enable = mkEnableOption "rss-bridge";
@@ -44,7 +69,7 @@ in
         default = "/var/lib/rss-bridge";
         description = ''
           Location in which cache directory will be created.
-          You can put <literal>config.ini.php</literal> in here.
+          You can put `config.ini.php` in here.
         '';
       };
 
@@ -56,20 +81,43 @@ in
         '';
       };
 
-      whitelist = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      config = mkOption {
+        type = types.submodule {
+          freeformType = (pkgs.formats.ini { }).type;
+          options = {
+            system = {
+              enabled_bridges = mkOption {
+                type = with types; nullOr (either str (listOf str));
+                description = "Only enabled bridges are available for feed production";
+                default = null;
+              };
+            };
+            FileCache = {
+              path = mkOption {
+                type = types.str;
+                description = "Directory where to store cache files (if cache.type = \"file\").";
+                default = "${cfg.dataDir}/cache/";
+                defaultText = options.literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
+              };
+            };
+          };
+        };
         example = options.literalExpression ''
-          [
-            "Facebook"
-            "Instagram"
-            "Twitter"
-          ]
+          {
+            system.enabled_bridges = [ "*" ];
+            error = {
+              output = "http";
+              report_limit = 5;
+            };
+            FileCache = {
+              enable_purge = true;
+            };
+          }
         '';
         description = ''
-          List of bridges to be whitelisted.
-          If the list is empty, rss-bridge will use whitelist.default.txt.
-          Use <literal>[ "*" ]</literal> to whitelist all.
+          Attribute set of arbitrary config options.
+          Please consult the documentation at the [wiki](https://rss-bridge.github.io/rss-bridge/For_Hosts/Custom_Configuration.html)
+          and [sample config](https://github.com/RSS-Bridge/rss-bridge/blob/master/config.default.ini.php) to see a list of available options.
         '';
       };
     };
@@ -93,11 +141,14 @@ in
         };
       };
     };
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
-      (mkIf (cfg.whitelist != []) "L+ ${cfg.dataDir}/whitelist.txt - - - - ${whitelist}")
-      "z '${cfg.dataDir}/config.ini.php' 0750 ${cfg.user} ${cfg.group} - -"
-    ];
+
+    systemd.tmpfiles.settings.rss-bridge = {
+      "${cfg.config.FileCache.path}".d = {
+        mode = "0750";
+        user = cfg.user;
+        group = cfg.group;
+      };
+    };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
@@ -115,7 +166,7 @@ in
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param RSSBRIDGE_DATA ${cfg.dataDir};
+              ${cfgEnv}
             '';
           };
         };

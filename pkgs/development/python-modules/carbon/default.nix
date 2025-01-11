@@ -1,25 +1,66 @@
-{ lib, buildPythonPackage, fetchPypi, twisted, whisper, txamqp, cachetools, urllib3
+{
+  lib,
+  buildPythonPackage,
+  cachetools,
+  fetchPypi,
+  nixosTests,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  twisted,
+  txamqp,
+  urllib3,
+  whisper,
 }:
 
 buildPythonPackage rec {
   pname = "carbon";
-  version = "1.1.8";
+  version = "1.1.10";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95918c4b14e1c525d9499554d5e03b349f87e0c2bc17ec5c64d18679a30b69f1";
+    hash = "sha256-wTtbqRHMWBcM2iFN95yzwCf/BQ+EK0vp5MXT4mKX3lw=";
   };
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
-  # carbon is installed as a regular python module.
-  GRAPHITE_NO_PREFIX="True";
+  # carbon is installed as a regular Python module.
+  GRAPHITE_NO_PREFIX = "True";
 
-  propagatedBuildInputs = [ twisted whisper txamqp cachetools urllib3 ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "cf.readfp(f, 'setup.cfg')" "cf.read(f, 'setup.cfg')"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cachetools
+    twisted
+    txamqp
+    urllib3
+    whisper
+  ];
+
+  # Tests are not shipped with PyPI
+  doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) graphite;
+  };
+
+  pythonImportsCheck = [ "carbon" ];
 
   meta = with lib; {
-    homepage = "http://graphiteapp.org/";
     description = "Backend data caching and persistence daemon for Graphite";
-    maintainers = with maintainers; [ offline basvandijk ];
+    homepage = "https://github.com/graphite-project/carbon";
+    changelog = "https://github.com/graphite-project/carbon/releases/tag/${version}";
     license = licenses.asl20;
+    maintainers = with maintainers; [
+      offline
+      basvandijk
+    ];
   };
 }

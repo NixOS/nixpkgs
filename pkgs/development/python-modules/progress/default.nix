@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {
   version = "1.6";
+  format = "setuptools";
   pname = "progress";
 
   src = fetchPypi {
@@ -21,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/verigak/progress/";
     description = "Easy to use progress bars";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

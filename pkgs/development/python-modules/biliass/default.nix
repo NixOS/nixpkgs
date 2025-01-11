@@ -1,27 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, protobuf
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  pytestCheckHook,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "biliass";
-  version = "1.3.4";
-  disabled = pythonOlder "3.6";
+  version = "2.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-kktK+6rLwYhkG7LiTBlgBbiIN8apweg4l8pJSTjKQU4=";
+  src = fetchFromGitHub {
+    owner = "yutto-dev";
+    repo = "yutto";
+    tag = "biliass@${version}";
+    hash = "sha256-IrzFjjMNuD5UgdccHxIxZoeZpM1PGtVQRTWHOocnmAU=";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  sourceRoot = "source/packages/biliass";
+  cargoRoot = "rust";
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit
+      pname
+      version
+      src
+      ;
+    sourceRoot = "${sourceRoot}/${cargoRoot}";
+    hash = "sha256-fXYjIJNrNQSXEACSa/FwxGlBYq5SxfIVIt4LtP0taFc=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  doCheck = false; # test artifacts missing
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "biliass" ];
 
   meta = with lib; {
     homepage = "https://github.com/yutto-dev/biliass";
     description = "Convert Bilibili XML/protobuf danmaku to ASS subtitle";
+    mainProgram = "biliass";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];
   };

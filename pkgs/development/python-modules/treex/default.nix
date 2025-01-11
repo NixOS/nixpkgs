@@ -1,41 +1,45 @@
-{ buildPythonPackage
-, cloudpickle
-, dm-haiku
-, einops
-, fetchFromGitHub
-, flax
-, hypothesis
-, jaxlib
-, keras
-, lib
-, poetry-core
-, pytestCheckHook
-, pyyaml
-, rich
-, tensorflow
-, treeo
+{
+  buildPythonPackage,
+  cloudpickle,
+  dm-haiku,
+  einops,
+  fetchFromGitHub,
+  flax,
+  hypothesis,
+  jaxlib,
+  keras,
+  lib,
+  poetry-core,
+  pytestCheckHook,
+  pyyaml,
+  rich,
+  tensorflow,
+  treeo,
+  torchmetrics,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "treex";
-  version = "0.6.10";
+  version = "0.6.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cgarciae";
     repo = pname;
-    rev = version;
-    hash = "sha256-ZHfgmRNbFh8DFZkmilY0pmRNQhJFqT689I7Lu8FuFm4=";
+    tag = version;
+    hash = "sha256-ObOnbtAT4SlrwOms1jtn7/XKZorGISGY6VuhQlC3DaQ=";
   };
 
   # At the time of writing (2022-03-29), rich is currently at version 11.0.0.
   # The treeo dependency is compatible with a patch, but not marked as such in
   # treex. See https://github.com/cgarciae/treex/issues/68.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'rich = "^11.2.0"' 'rich = "*"' \
-      --replace 'treeo = "^0.0.10"' 'treeo = "*"'
-  '';
+  pythonRelaxDeps = [
+    "certifi"
+    "flax"
+    "rich"
+    "treeo"
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -49,26 +53,20 @@ buildPythonPackage rec {
     pyyaml
     rich
     treeo
+    torch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cloudpickle
     dm-haiku
     hypothesis
     keras
     pytestCheckHook
     tensorflow
+    torchmetrics
   ];
 
-  pythonImportsCheck = [
-    "treex"
-  ];
-
-  disabledTestPaths = [
-    # Require `torchmetrics` which is not packaged in `nixpkgs`.
-    "tests/metrics/test_mean_absolute_error.py"
-    "tests/metrics/test_mean_square_error.py"
-  ];
+  pythonImportsCheck = [ "treex" ];
 
   meta = with lib; {
     description = "Pytree Module system for Deep Learning in JAX";

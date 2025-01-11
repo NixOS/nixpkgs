@@ -1,24 +1,59 @@
-{ lib, mkXfceDerivation, gobject-introspection, vala, gtk3, libICE, libSM
-, libstartup_notification, libgtop, libepoxy, libxfce4util, xfconf }:
+{
+  mkXfceDerivation,
+  lib,
+  gobject-introspection,
+  perl,
+  vala,
+  libICE,
+  libSM,
+  libepoxy,
+  libgtop,
+  libgudev,
+  libstartup_notification,
+  xfconf,
+  gtk3,
+  libxfce4util,
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.16.1";
+  version = "4.20.0";
 
-  sha256 = "sha256-5mwyC3YA1LvdVSvaHN7CXDJh+IXjmdHGLKzhpjtUZkw=";
+  sha256 = "sha256-M+OapPHQ/WxlkUzHPx+ELstVyGoZanCxCL0N8hDWSN8=";
 
-  nativeBuildInputs = [ gobject-introspection vala ];
-  buildInputs =  [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
-  propagatedBuildInputs = [ libxfce4util libICE libSM ];
+  nativeBuildInputs = [
+    gobject-introspection
+    perl
+    vala
+  ];
+
+  buildInputs = [
+    libICE
+    libSM
+    libepoxy
+    libgtop
+    libgudev
+    libstartup_notification
+    xfconf
+  ];
+
+  propagatedBuildInputs = [
+    gtk3
+    libxfce4util
+  ];
 
   configureFlags = [
-    "--with-vendor-info='NixOS'"
+    "--with-vendor-info=NixOS"
   ];
 
   meta = with lib; {
     description = "Widgets library for Xfce";
-    license = with licenses; [ lgpl2Plus lgpl21Plus ];
+    mainProgram = "xfce4-about";
+    license = with licenses; [
+      lgpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

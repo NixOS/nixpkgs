@@ -1,25 +1,32 @@
-{ config, options, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
-  appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
   opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
-  settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (
+    builtins.toJSON cfg.settings
+  );
 
-in {
+in
+{
   options = {
     services.matrix-appservice-discord = {
-      enable = mkEnableOption "a bridge between Matrix and Discord";
+      enable = lib.mkEnableOption "a bridge between Matrix and Discord";
 
-      settings = mkOption rec {
-        # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented
-        type = types.attrs;
-        apply = recursiveUpdate default;
+      package = lib.mkPackageOption pkgs "matrix-appservice-discord" { };
+
+      settings = lib.mkOption rec {
+        # TODO: switch to lib.types.config.json as prescribed by RFC42 once it's implemented
+        type = lib.types.attrs;
+        apply = lib.recursiveUpdate default;
         default = {
           database = {
             filename = "${dataDir}/discord.db";
@@ -32,7 +39,7 @@ in {
             botToken = "";
           };
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             bridge = {
               domain = "public-domain.tld";
@@ -41,67 +48,60 @@ in {
           }
         '';
         description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
-          </para>
+          {file}`config.yaml` configuration as a Nix attribute set.
 
-          <para>
           Configuration options should match those described in
-          <link xlink:href="https://github.com/Half-Shot/matrix-appservice-discord/blob/master/config/config.sample.yaml">
-          config.sample.yaml</link>.
-          </para>
+          [config.sample.yaml](https://github.com/Half-Shot/matrix-appservice-discord/blob/master/config/config.sample.yaml).
 
-          <para>
-          <option>config.bridge.domain</option> and <option>config.bridge.homeserverUrl</option>
+          {option}`config.bridge.domain` and {option}`config.bridge.homeserverUrl`
           should be set to match the public host name of the Matrix homeserver for webhooks and avatars to work.
-          </para>
 
-          <para>
-          Secret tokens should be specified using <option>environmentFile</option>
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           File containing environment variables to be passed to the matrix-appservice-discord service,
           in which secret tokens can be specified securely by defining values for
-          <literal>APPSERVICE_DISCORD_AUTH_CLIENT_I_D</literal> and
-          <literal>APPSERVICE_DISCORD_AUTH_BOT_TOKEN</literal>.
+          `APPSERVICE_DISCORD_AUTH_CLIENT_I_D` and
+          `APPSERVICE_DISCORD_AUTH_BOT_TOKEN`.
         '';
       };
 
-      url = mkOption {
-        type = types.str;
+      url = lib.mkOption {
+        type = lib.types.str;
         default = "http://localhost:${toString cfg.port}";
-        defaultText = literalExpression ''"http://localhost:''${toString config.${opt.port}}"'';
+        defaultText = lib.literalExpression ''"http://localhost:''${toString config.${opt.port}}"'';
         description = ''
           The URL where the application service is listening for HS requests.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9005; # from https://github.com/Half-Shot/matrix-appservice-discord/blob/master/package.json#L11
         description = ''
           Port number on which the bridge should listen for internal communication with the Matrix homeserver.
         '';
       };
 
-      localpart = mkOption {
-        type = with types; nullOr str;
+      localpart = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = ''
           The user_id localpart to assign to the AS.
         '';
       };
 
-      serviceDependencies = mkOption {
-        type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
-        defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      serviceDependencies = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
+        defaultText = lib.literalExpression ''
+          lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
         description = ''
           List of Systemd services to require and wait for when starting the application service,
@@ -111,7 +111,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.matrix-appservice-discord = {
       description = "A bridge between Matrix and Discord.";
 
@@ -121,10 +121,12 @@ in {
 
       preStart = ''
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --generate-registration \
-            --url=${escapeShellArg cfg.url} \
-            ${optionalString (cfg.localpart != null) "--localpart=${escapeShellArg cfg.localpart}"} \
+            --url=${lib.escapeShellArg cfg.url} \
+            ${
+              lib.optionalString (cfg.localpart != null) "--localpart=${lib.escapeShellArg cfg.localpart}"
+            } \
             --config='${settingsFile}' \
             --file='${registrationFile}'
         fi
@@ -142,13 +144,13 @@ in {
 
         DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = appDir;
+        WorkingDirectory = "${cfg.package}/${cfg.package.passthru.nodeAppDir}";
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --file='${registrationFile}' \
             --config='${settingsFile}' \
             --port='${toString cfg.port}'
@@ -157,5 +159,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ euxane ];
 }

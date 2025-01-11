@@ -1,47 +1,72 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.captive-browser;
 
   inherit (lib)
-    concatStringsSep escapeShellArgs optionalString
-    literalExpression mkEnableOption mkIf mkOption mkOptionDefault types;
+    concatStringsSep
+    escapeShellArgs
+    optionalString
+    literalExpression
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    mkOptionDefault
+    types
+    ;
 
-  browserDefault = chromium: concatStringsSep " " [
-    ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
-    ''${chromium}/bin/chromium''
-    ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
-    ''--proxy-server="socks5://$PROXY"''
-    ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-    ''--no-first-run''
-    ''--new-window''
-    ''--incognito''
-    ''-no-default-browser-check''
-    ''http://cache.nixos.org/''
-  ];
+  requiresSetcapWrapper = config.boot.kernelPackages.kernelOlder "5.7" && cfg.bindInterface;
+
+  browserDefault =
+    chromium:
+    concatStringsSep " " [
+      ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
+      ''${chromium}/bin/chromium''
+      ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
+      ''--proxy-server="socks5://$PROXY"''
+      ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
+      ''--no-first-run''
+      ''--new-window''
+      ''--incognito''
+      ''-no-default-browser-check''
+      ''http://cache.nixos.org/''
+    ];
 
   desktopItem = pkgs.makeDesktopItem {
     name = "captive-browser";
     desktopName = "Captive Portal Browser";
-    exec = "/run/wrappers/bin/captive-browser";
+    exec = "captive-browser";
     icon = "nix-snowflake";
     categories = [ "Network" ];
   };
 
+  captive-browser-configured = pkgs.writeShellScriptBin "captive-browser" ''
+    export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
+    export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
+      browser = """${cfg.browser}"""
+      dhcp-dns = """${cfg.dhcp-dns}"""
+      socks5-addr = """${cfg.socks5-addr}"""
+      ${optionalString cfg.bindInterface ''
+        bind-device = """${cfg.interface}"""
+      ''}
+    ''}
+    exec ${cfg.package}/bin/captive-browser
+  '';
 in
 {
   ###### interface
 
   options = {
     programs.captive-browser = {
-      enable = mkEnableOption "captive browser";
+      enable = mkEnableOption "captive browser, a dedicated Chrome instance to log into captive portals without messing with DNS settings";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.captive-browser;
-        defaultText = literalExpression "pkgs.captive-browser";
-        description = "Which package to use for captive-browser";
-      };
+      package = mkPackageOption pkgs "captive-browser" { };
 
       interface = mkOption {
         type = types.str;
@@ -86,8 +111,8 @@ in
         default = true;
         type = types.bool;
         description = ''
-          Binds <package>captive-browser</package> to the network interface declared in
-          <literal>cfg.interface</literal>. This can be used to avoid collisions
+          Binds `captive-browser` to the network interface declared in
+          `cfg.interface`. This can be used to avoid collisions
           with private subnets.
         '';
       };
@@ -101,23 +126,23 @@ in
       (pkgs.runCommand "captive-browser-desktop-item" { } ''
         install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
       '')
+      captive-browser-configured
     ];
 
     programs.captive-browser.dhcp-dns =
       let
-        iface = prefixes:
-          optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
+        iface =
+          prefixes: optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
       in
       mkOptionDefault (
         if config.networking.networkmanager.enable then
-          "${pkgs.networkmanager}/bin/nmcli dev show ${iface []} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
+          "${pkgs.networkmanager}/bin/nmcli dev show ${iface [ ]} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
         else if config.networking.dhcpcd.enable then
-          "${pkgs.dhcpcd}/bin/dhcpcd ${iface ["-U"]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
+          "${pkgs.dhcpcd}/bin/dhcpcd ${iface [ "-U" ]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
         else if config.networking.useNetworkd then
-          "${cfg.package}/bin/systemd-networkd-dns ${iface []}"
+          "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
         else
-          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface ["-i"]} -O dns --script ${
-          pkgs.writeShellScript "udhcp-script" ''
+          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface [ "-i" ]} -O dns --script ${pkgs.writeShellScript "udhcp-script" ''
             if [ "$1" = bound ]; then
               echo "$dns"
             fi
@@ -131,22 +156,11 @@ in
       source = "${pkgs.busybox}/bin/udhcpc";
     };
 
-    security.wrappers.captive-browser = {
+    security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
       owner = "root";
       group = "root";
       capabilities = "cap_net_raw+p";
-      source = pkgs.writeShellScript "captive-browser" ''
-        export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
-        export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
-                                  browser = """${cfg.browser}"""
-                                  dhcp-dns = """${cfg.dhcp-dns}"""
-                                  socks5-addr = """${cfg.socks5-addr}"""
-                                  ${optionalString cfg.bindInterface ''
-                                    bind-device = """${cfg.interface}"""
-                                  ''}
-                                ''}
-        exec ${cfg.package}/bin/captive-browser
-      '';
+      source = "${captive-browser-configured}/bin/captive-browser";
     };
   };
 }

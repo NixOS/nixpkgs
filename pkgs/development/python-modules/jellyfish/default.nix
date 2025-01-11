@@ -1,27 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytest
-, unicodecsv
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  unicodecsv,
 }:
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.9.0";
+  version = "1.1.2";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "40c9a2ffd8bd3016f7611d424120442f627f56d518a106847dc93f0ead6ad79a";
+  src = fetchFromGitHub {
+    owner = "jamesturk";
+    repo = "jellyfish";
+    rev = version;
+    hash = "sha256-xInjoTXYgZuHyvyKm+N4PAwHozE5BOkxoYhRzZnPs3Q=";
   };
 
-  checkInputs = [ pytest unicodecsv ];
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  build-system = [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    rustc
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    unicodecsv
+  ];
+
+  pythonImportsCheck = [ "jellyfish" ];
 
   meta = {
-    homepage = "https://github.com/sunlightlabs/jellyfish";
-    description = "Approximate and phonetic matching of strings";
+    description = "A python library for doing approximate and phonetic matching of strings";
+    homepage = "https://github.com/jamesturk/jellyfish";
+    changelog = "https://github.com/jamesturk/jellyfish/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
 }

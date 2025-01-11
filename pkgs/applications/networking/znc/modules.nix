@@ -1,22 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, znc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  znc,
+}:
 
 let
   zncDerivation =
-    a@{ pname
-    , src
-    , module_name
-    , buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp"
-    , installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so"
-    , ...
-    }: stdenv.mkDerivation (a // {
-      inherit buildPhase;
-      inherit installPhase;
+    a@{
+      pname,
+      src,
+      module_name,
+      buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
+      installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so",
+      ...
+    }:
+    stdenv.mkDerivation (
+      a
+      // {
+        inherit buildPhase;
+        inherit installPhase;
 
-      buildInputs = znc.buildInputs;
+        buildInputs = znc.buildInputs;
 
-      meta = a.meta // { platforms = lib.platforms.unix; };
-      passthru.module_name = module_name;
-    });
+        meta = a.meta // {
+          platforms = lib.platforms.unix;
+        };
+        passthru.module_name = module_name;
+      }
+    );
 
 in
 {
@@ -34,10 +46,10 @@ in
     };
 
     meta = with lib; {
-      description = "Request backlog for IRC channels.";
+      description = "Request backlog for IRC channels";
       homepage = "https://github.com/fruitiex/znc-backlog/";
       license = licenses.asl20;
-      maintainers = with maintainers; [ infinisil ];
+      maintainers = [ ];
     };
   };
 
@@ -57,7 +69,11 @@ in
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
-      maintainers = with maintainers; [ hrdinka szlend ];
+      maintainers = with maintainers; [
+        hrdinka
+        szlend
+        cybershadow
+      ];
     };
   };
 
@@ -77,7 +93,7 @@ in
       description = "ZNC clientaway module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = [ ];
     };
   };
 
@@ -117,27 +133,27 @@ in
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = [ ];
     };
   };
 
   palaver = zncDerivation rec {
     pname = "znc-palaver";
-    version = "2020-07-18";
+    version = "1.2.2";
     module_name = "palaver";
 
     src = fetchFromGitHub {
       owner = "cocodelabs";
       repo = "znc-palaver";
-      rev = "825cb6814d64006ca0f85fec23fa0a8a3a2d14ca";
-      sha256 = "zXWPIxhO5Z2L6f+Hf3vIpEh6V4kjUONWAaKexKLECc8=";
+      rev = version;
+      hash = "sha256-8W3uF1PrLQiEZm7JaFrpqmJLSFioa4F4qlM1J6Zua8U=";
     };
 
     meta = with lib; {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
       license = licenses.mit;
-      maintainers = with maintainers; [ kiwi szlend ];
+      maintainers = with maintainers; [ szlend ];
     };
   };
 
@@ -154,7 +170,7 @@ in
     };
 
     meta = with lib; {
-      description = "An advanced playback module for ZNC";
+      description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = licenses.asl20;
       maintainers = with maintainers; [ hrdinka ];
@@ -195,7 +211,10 @@ in
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ offline schneefux ];
+      maintainers = with lib.maintainers; [
+        offline
+        schneefux
+      ];
     };
   };
 

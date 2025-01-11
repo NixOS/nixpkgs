@@ -1,14 +1,17 @@
 # NixOS module for Buildbot Worker.
-
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.buildbot-worker;
   opt = options.services.buildbot-worker;
 
-  python = cfg.package.pythonModule;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 
   tacFile = pkgs.writeText "aur-buildbot-worker.tac" ''
     import os
@@ -42,116 +45,113 @@ let
     s.setServiceParent(application)
   '';
 
-in {
+in
+{
   options = {
     services.buildbot-worker = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the Buildbot Worker.";
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "bbworker";
-        type = types.str;
+        type = lib.types.str;
         description = "User the buildbot Worker should execute under.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "bbworker";
-        type = types.str;
+        type = lib.types.str;
         description = "Primary group of buildbot Worker user.";
       };
 
-      extraGroups = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      extraGroups = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 
-      home = mkOption {
+      home = lib.mkOption {
         default = "/home/bbworker";
-        type = types.path;
+        type = lib.types.path;
         description = "Buildbot home directory.";
       };
 
-      buildbotDir = mkOption {
+      buildbotDir = lib.mkOption {
         default = "${cfg.home}/worker";
-        defaultText = literalExpression ''"''${config.${opt.home}}/worker"'';
-        type = types.path;
+        defaultText = lib.literalExpression ''"''${config.${opt.home}}/worker"'';
+        type = lib.types.path;
         description = "Specifies the Buildbot directory.";
       };
 
-      workerUser = mkOption {
+      workerUser = lib.mkOption {
         default = "example-worker";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the Buildbot Worker user.";
       };
 
-      workerPass = mkOption {
+      workerPass = lib.mkOption {
         default = "pass";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the Buildbot Worker password.";
       };
 
-      workerPassFile = mkOption {
-        type = types.path;
+      workerPassFile = lib.mkOption {
+        type = lib.types.path;
         description = "File used to store the Buildbot Worker password";
       };
 
-      hostMessage = mkOption {
+      hostMessage = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = "Description of this worker";
       };
 
-      adminMessage = mkOption {
+      adminMessage = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         description = "Name of the administrator of this worker";
       };
 
-      masterUrl = mkOption {
+      masterUrl = lib.mkOption {
         default = "localhost:9989";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the Buildbot Worker connection string.";
       };
 
-      keepalive = mkOption {
+      keepalive = lib.mkOption {
         default = 600;
-        type = types.int;
-        description = "
+        type = lib.types.int;
+        description = ''
           This is a number that indicates how frequently keepalive messages should be sent
           from the worker to the buildmaster, expressed in seconds.
-        ";
+        '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.python3Packages.buildbot-worker;
-        defaultText = literalExpression "pkgs.python3Packages.buildbot-worker";
-        description = "Package to use for buildbot worker.";
-        example = literalExpression "pkgs.python2Packages.buildbot-worker";
-      };
+      package = lib.mkPackageOption pkgs "buildbot-worker" { };
 
-      packages = mkOption {
+      packages = lib.mkOption {
         default = with pkgs; [ git ];
-        defaultText = literalExpression "[ pkgs.git ]";
-        type = types.listOf types.package;
+        defaultText = lib.literalExpression "[ pkgs.git ]";
+        type = lib.types.listOf lib.types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    services.buildbot-worker.workerPassFile = mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
+  config = lib.mkIf cfg.enable {
+    services.buildbot-worker.workerPassFile = lib.mkDefault (
+      pkgs.writeText "buildbot-worker-password" cfg.workerPass
+    );
 
-    users.groups = optionalAttrs (cfg.group == "bbworker") {
+    users.groups = lib.optionalAttrs (cfg.group == "bbworker") {
       bbworker = { };
     };
 
-    users.users = optionalAttrs (cfg.user == "bbworker") {
+    users.users = lib.optionalAttrs (cfg.user == "bbworker") {
       bbworker = {
         description = "Buildbot Worker User.";
         isNormalUser = true;
@@ -165,17 +165,20 @@ in {
 
     systemd.services.buildbot-worker = {
       description = "Buildbot Worker.";
-      after = [ "network.target" "buildbot-master.service" ];
+      after = [
+        "network.target"
+        "buildbot-master.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
-      environment.PYTHONPATH = "${python.withPackages (p: [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (p: [ package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}/info"
-        ${optionalString (cfg.hostMessage != null) ''
+        ${lib.optionalString (cfg.hostMessage != null) ''
           ln -sf "${pkgs.writeText "buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
         ''}
-        ${optionalString (cfg.adminMessage != null) ''
+        ${lib.optionalString (cfg.adminMessage != null) ''
           ln -sf "${pkgs.writeText "buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
         ''}
       '';
@@ -193,6 +196,6 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = lib.teams.buildbot.members;
 
 }

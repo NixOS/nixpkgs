@@ -1,44 +1,38 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pillow
-, scipy
-, numpy
-, pytestCheckHook
-, imread
-, freeimage
-, lib
-, stdenv
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  scipy,
+  numpy,
+  pytestCheckHook,
+  imread,
+  lib,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "mahotas";
-  version = "1.4.12";
+  version = "1.4.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
-    rev = "v${version}";
-    sha256 = "1n19yha1cqyx7hnlici1wkl7n68dh0vbpsyydfhign2c0w9jvg42";
+    tag = "v${version}";
+    hash = "sha256-9tjk3rhcfAYROZKwmwHzHAN7Ui0EgmxPErQyF//K0r8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-freeimage-tests.patch";
-      url = "https://github.com/luispedro/mahotas/commit/08cc4aa0cbd5dbd4c37580d52b822810c03b2c69.patch";
-      sha256 = "0389sz7fyl8h42phw8sn4pxl4wc3brcrj9d05yga21gzil9bfi23";
-      excludes = [ "ChangeLog" ];
-    })
+  propagatedBuildInputs = [
+    imread
+    numpy
+    pillow
+    scipy
   ];
 
-  propagatedBuildInputs = [ numpy imread pillow scipy freeimage ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace mahotas/io/freeimage.py \
-      --replace "ctypes.util.find_library('freeimage')" 'True' \
-      --replace 'ctypes.CDLL(libname)' 'np.ctypeslib.load_library("libfreeimage", "${freeimage}/lib")'
-  '';
+  # mahotas/_morph.cpp:864:10: error: no member named 'random_shuffle' in namespace 'std'
+  env = lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-std=c++14"; };
 
   # tests must be run in the build directory
   preCheck = ''
@@ -53,15 +47,12 @@ buildPythonPackage rec {
     "test_haralick3d"
   ];
 
-  pythonImportsCheck = [
-    "mahotas"
-    "mahotas.freeimage"
-  ];
+  pythonImportsCheck = [ "mahotas" ];
 
-  disabled = stdenv.isi686; # Failing tests
+  disabled = stdenv.hostPlatform.isi686; # Failing tests
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Computer vision package based on numpy";
     homepage = "https://mahotas.readthedocs.io/";
     maintainers = with maintainers; [ luispedro ];

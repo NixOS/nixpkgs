@@ -1,16 +1,28 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.documize;
 
-  mkParams = optional: concatMapStrings (name: let
-    predicate = optional -> cfg.${name} != null;
-    template = " -${name} '${toString cfg.${name}}'";
-  in optionalString predicate template);
+  mkParams =
+    optional:
+    concatMapStrings (
+      name:
+      let
+        predicate = optional -> cfg.${name} != null;
+        template = " -${name} '${toString cfg.${name}}'";
+      in
+      optionalString predicate template
+    );
 
-in {
+in
+{
   options.services.documize = {
     enable = mkEnableOption "Documize Wiki";
 
@@ -18,19 +30,12 @@ in {
       type = types.str;
       default = "documize";
       description = ''
-        The name of the directory below <filename>/var/lib/private</filename>
+        The name of the directory below {file}`/var/lib/private`
         where documize runs in and stores, for example, backups.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.documize-community;
-      defaultText = literalExpression "pkgs.documize-community";
-      description = ''
-        Which package to use for documize.
-      '';
-    };
+    package = mkPackageOption pkgs "documize-community" { };
 
     salt = mkOption {
       type = types.nullOr types.str;
@@ -45,7 +50,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The <filename>cert.pem</filename> file used for https.
+        The {file}`cert.pem` file used for https.
       '';
     };
 
@@ -53,7 +58,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The <filename>key.pem</filename> file used for https.
+        The {file}`key.pem` file used for https.
       '';
     };
 
@@ -77,23 +82,22 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Set <literal>true</literal> for offline mode.
+        Set `true` for offline mode.
       '';
       apply = v: if true == v then 1 else 0;
     };
 
     dbtype = mkOption {
-      type = types.enum [ "mysql" "percona" "mariadb" "postgresql" "sqlserver" ];
+      type = types.enum [
+        "mysql"
+        "percona"
+        "mariadb"
+        "postgresql"
+        "sqlserver"
+      ];
       default = "postgresql";
       description = ''
-        Specify the database provider:
-        <simplelist type='inline'>
-          <member><literal>mysql</literal></member>
-          <member><literal>percona</literal></member>
-          <member><literal>mariadb</literal></member>
-          <member><literal>postgresql</literal></member>
-          <member><literal>sqlserver</literal></member>
-        </simplelist>
+        Specify the database provider: `mysql`, `percona`, `mariadb`, `postgresql`, `sqlserver`
       '';
     };
 
@@ -101,21 +105,15 @@ in {
       type = types.str;
       description = ''
         Database specific connection string for example:
-        <itemizedlist>
-        <listitem><para>MySQL/Percona/MariaDB:
-          <literal>user:password@tcp(host:3306)/documize</literal>
-        </para></listitem>
-        <listitem><para>MySQLv8+:
-          <literal>user:password@tcp(host:3306)/documize?allowNativePasswords=true</literal>
-        </para></listitem>
-        <listitem><para>PostgreSQL:
-          <literal>host=localhost port=5432 dbname=documize user=admin password=secret sslmode=disable</literal>
-        </para></listitem>
-        <listitem><para>MSSQL:
-          <literal>sqlserver://username:password@localhost:1433?database=Documize</literal> or
-          <literal>sqlserver://sa@localhost/SQLExpress?database=Documize</literal>
-        </para></listitem>
-        </itemizedlist>
+        - MySQL/Percona/MariaDB:
+          `user:password@tcp(host:3306)/documize`
+        - MySQLv8+:
+          `user:password@tcp(host:3306)/documize?allowNativePasswords=true`
+        - PostgreSQL:
+          `host=localhost port=5432 dbname=documize user=admin password=secret sslmode=disable`
+        - MSSQL:
+          `sqlserver://username:password@localhost:1433?database=Documize` or
+          `sqlserver://sa@localhost/SQLExpress?database=Documize`
       '';
     };
 
@@ -137,8 +135,19 @@ in {
       serviceConfig = {
         ExecStart = concatStringsSep " " [
           "${cfg.package}/bin/documize"
-          (mkParams false [ "db" "dbtype" "port" ])
-          (mkParams true [ "offline" "location" "forcesslport" "key" "cert" "salt" ])
+          (mkParams false [
+            "db"
+            "dbtype"
+            "port"
+          ])
+          (mkParams true [
+            "offline"
+            "location"
+            "forcesslport"
+            "key"
+            "cert"
+            "salt"
+          ])
         ];
         Restart = "always";
         DynamicUser = "yes";

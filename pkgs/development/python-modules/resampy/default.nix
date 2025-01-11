@@ -1,38 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest-cov
-, numpy
-, scipy
-, cython
-, numba
-, six
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  numba,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.2.2";
+  version = "0.4.3";
+  format = "setuptools";
 
-  # No tests in PyPi Archive
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "bmcfee";
     repo = pname;
-    rev = version;
-    sha256 = "0qmkxl5sbgh0j73n667vyi7ywzh09iaync91yp1j5rrcmwsn0qfs";
+    tag = version;
+    hash = "sha256-LOWpOPAEK+ga7c3bR15QvnHmON6ARS1Qee/7U/VMlTY=";
   };
 
-  checkInputs = [ pytest pytest-cov ];
-  propagatedBuildInputs = [ numpy scipy cython numba six ];
+  propagatedBuildInputs = [
+    numpy
+    cython
+    numba
+  ];
 
-  checkPhase = ''
-    pytest tests
+  nativeCheckInputs = [
+    pytestCheckHook
+    scipy
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov-report term-missing --cov resampy --cov-report=xml" ""
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/bmcfee/resampy";
-    description = "Efficient signal resampling";
-    license = licenses.isc;
-  };
+  pythonImportsCheck = [ "resampy" ];
 
+  meta = with lib; {
+    description = "Efficient signal resampling";
+    homepage = "https://github.com/bmcfee/resampy";
+    license = licenses.isc;
+    maintainers = [ ];
+  };
 }

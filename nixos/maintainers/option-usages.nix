@@ -1,25 +1,26 @@
-{ configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
+{
+  configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>,
 
-# provide an option name, as a string literal.
-, testOption ? null
+  # provide an option name, as a string literal.
+  testOption ? null,
 
-# provide a list of option names, as string literals.
-, testOptions ? [ ]
+  # provide a list of option names, as string literals.
+  testOptions ? [ ],
 }:
 
 # This file is made to be used as follow:
 #
-#   $ nix-instantiate ./option-usage.nix --argstr testOption service.xserver.enable -A txtContent --eval
+#   $ nix-instantiate ./option-usages.nix --argstr testOption service.xserver.enable -A txtContent --eval
 #
 # or
 #
-#   $ nix-build ./option-usage.nix --argstr testOption service.xserver.enable -A txt -o service.xserver.enable._txt
+#   $ nix-build ./option-usages.nix --argstr testOption service.xserver.enable -A txt -o service.xserver.enable._txt
 #
 # Other targets exists such as `dotContent`, `dot`, and `pdf`.  If you are
 # looking for the option usage of multiple options, you can provide a list
 # as argument.
 #
-#   $ nix-build ./option-usage.nix --arg testOptions \
+#   $ nix-build ./option-usages.nix --arg testOptions \
 #      '["boot.loader.gummiboot.enable" "boot.loader.gummiboot.timeout"]' \
 #      -A txt -o gummiboot.list
 #
@@ -46,14 +47,16 @@ with import ../../lib;
 
 let
 
-  evalFun = {
-    specialArgs ? {}
-  }: import ../lib/eval-config.nix {
-       modules = [ configuration ];
-       inherit specialArgs;
-     };
+  evalFun =
+    {
+      specialArgs ? { },
+    }:
+    import ../lib/eval-config.nix {
+      modules = [ configuration ];
+      inherit specialArgs;
+    };
 
-  eval = evalFun {};
+  eval = evalFun { };
   inherit (eval) pkgs;
 
   excludedTestOptions = [
@@ -79,21 +82,18 @@ let
     "systemd.services"
     "kde.extraPackages"
   ];
-  excludeOptions = list:
-    filter (opt: !(elem (showOption opt.loc) excludedOptions)) list;
+  excludeOptions = list: filter (opt: !(elem (showOption opt.loc) excludedOptions)) list;
 
-
-  reportNewFailures = old: new:
+  reportNewFailures =
+    old: new:
     let
-      filterChanges =
-        filter ({fst, snd}:
-          !(fst.success -> snd.success)
-        );
+      filterChanges = filter ({ fst, snd }: !(fst.success -> snd.success));
 
-      keepNames =
-        map ({fst, snd}:
-          /* assert fst.name == snd.name; */ snd.name
-        );
+      keepNames = map (
+        { fst, snd }:
+        # assert fst.name == snd.name;
+        snd.name
+      );
 
       # Use  tryEval (strict ...)  to know if there is any failure while
       # evaluating the option value.
@@ -101,16 +101,13 @@ let
       # Note, the `strict` function is not strict enough, but using toXML
       # builtins multiply by 4 the memory usage and the time used to compute
       # each options.
-      tryCollectOptions = moduleResult:
-        forEach (excludeOptions (collect isOption moduleResult)) (opt:
-          { name = showOption opt.loc; } // builtins.tryEval (strict opt.value));
-     in
-       keepNames (
-         filterChanges (
-           zipLists (tryCollectOptions old) (tryCollectOptions new)
-         )
-       );
-
+      tryCollectOptions =
+        moduleResult:
+        forEach (excludeOptions (collect isOption moduleResult)) (
+          opt: { name = showOption opt.loc; } // builtins.tryEval (strict opt.value)
+        );
+    in
+    keepNames (filterChanges (zipLists (tryCollectOptions old) (tryCollectOptions new)));
 
   # Create a list of modules where each module contains only one failling
   # options.
@@ -119,57 +116,55 @@ let
       setIntrospection = opt: rec {
         name = showOption opt.loc;
         path = opt.loc;
-        config = setAttrByPath path
-          (throw "Usage introspection of '${name}' by forced failure.");
+        config = setAttrByPath path (throw "Usage introspection of '${name}' by forced failure.");
       };
     in
-      map setIntrospection (collect isOption eval.options);
+    map setIntrospection (collect isOption eval.options);
 
-  overrideConfig = thrower:
-    recursiveUpdateUntil (path: old: new:
+  overrideConfig =
+    thrower:
+    recursiveUpdateUntil (
+      path: old: new:
       path == thrower.path
     ) eval.config thrower.config;
 
-
-  graph =
-    map (thrower: {
-      option = thrower.name;
-      usedBy = assert __trace "Investigate ${thrower.name}" true;
-        reportNewFailures eval.options (evalFun {
+  graph = map (thrower: {
+    option = thrower.name;
+    usedBy =
+      assert __trace "Investigate ${thrower.name}" true;
+      reportNewFailures eval.options
+        (evalFun {
           specialArgs = {
             config = overrideConfig thrower;
           };
         }).options;
-    }) introspectionModules;
+  }) introspectionModules;
 
   displayOptionsGraph =
-     let
-       checkList =
-         if testOption != null then [ testOption ]
-         else testOptions;
-       checkAll = checkList == [];
-     in
-       flip filter graph ({option, ...}:
-         (checkAll || elem option checkList)
-         && !(elem option excludedTestOptions)
-       );
+    let
+      checkList = if testOption != null then [ testOption ] else testOptions;
+      checkAll = checkList == [ ];
+    in
+    flip filter graph (
+      { option, ... }: (checkAll || elem option checkList) && !(elem option excludedTestOptions)
+    );
 
   graphToDot = graph: ''
     digraph "Option Usages" {
-      ${concatMapStrings ({option, usedBy}:
-          concatMapStrings (user: ''
-            "${option}" -> "${user}"''
-          ) usedBy
-        ) displayOptionsGraph}
+      ${concatMapStrings (
+        { option, usedBy }: concatMapStrings (user: ''"${option}" -> "${user}"'') usedBy
+      ) displayOptionsGraph}
     }
   '';
 
-  graphToText = graph:
-    concatMapStrings ({usedBy, ...}:
-        concatMapStrings (user: ''
-          ${user}
-        '') usedBy
-      ) displayOptionsGraph;
+  graphToText =
+    graph:
+    concatMapStrings (
+      { usedBy, ... }:
+      concatMapStrings (user: ''
+        ${user}
+      '') usedBy
+    ) displayOptionsGraph;
 
 in
 

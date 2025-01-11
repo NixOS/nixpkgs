@@ -1,61 +1,65 @@
-{ lib
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, importlib-metadata
-, numpy
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, requests-mock
-, shapely
-, wktutils
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  defusedxml,
+  fetchFromGitHub,
+  importlib-metadata,
+  numpy,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  remotezip,
+  requests-mock,
+  requests,
+  setuptools-scm,
+  shapely,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "3.2.2";
-  format = "setuptools";
+  version = "8.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9fJp4P2cD11ppU80Av/aJOcqpaBwuYgdWWBTMo/HCeo=";
+    tag = "v${version}";
+    hash = "sha256-mOhY64Csxdc/DYS1OlbstxYEodtpXTVyPwd4B1jrDK8=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "tenacity" ];
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     dateparser
     importlib-metadata
     numpy
     python-dateutil
     pytz
+    remotezip
     requests
     shapely
-    wktutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
     requests-mock
+    tenacity
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "WKTUtils==" "WKTUtils>="
-  '';
-
-  pythonImportsCheck = [
-    "asf_search"
-  ];
+  pythonImportsCheck = [ "asf_search" ];
 
   meta = with lib; {
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
   };

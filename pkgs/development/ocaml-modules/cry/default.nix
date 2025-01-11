@@ -1,15 +1,25 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 
 buildDunePackage rec {
   pname = "cry";
-  version = "0.6.5";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
-    rev = version;
-    sha256 = "1g4smccj27sv8pb9az5hbzxi99swg3d55mp7j25lz30xyabvksc3";
+    rev = "v${version}";
+    hash = "sha256-ea6f2xTVmYekPmzAKasA9mNG4Voxw2MCkfZ9LB9gwbo=";
   };
+
+  postPatch = ''
+    substituteInPlace src/dune --replace-warn bytes ""
+  '';
+
+  minimalOCamlVersion = "4.12";
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-cry";

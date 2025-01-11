@@ -1,15 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm, zchunk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  pkg-config,
+  libsolv,
+  openssl,
+  check,
+  json_c,
+  libmodulemd,
+  libsmartcols,
+  sqlite,
+  librepo,
+  libyaml,
+  rpm,
+  zchunk,
+  cppunit,
+  python,
+  swig,
+  pcre2,
+  sphinx,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.66.0";
+  version = "0.73.4";
+
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-fQyNm51roz6wn9QAE8/ZIrutyWP45xiKVHzn8n0LcwE=";
+    tag = version;
+    hash = "sha256-O8pN2WFHWxZpr2JEPsQOmkc+7qnMVnptmGJCVxMmSLo=";
   };
 
   nativeBuildInputs = [
@@ -20,13 +48,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     check
-    gpgme
+    cppunit
     openssl
     json_c
     libsmartcols
     libyaml
     libmodulemd
     zchunk
+    python
+    swig
+    sphinx
+    pcre2.dev
   ];
 
   propagatedBuildInputs = [
@@ -41,24 +73,39 @@ stdenv.mkDerivation rec {
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake cmake/modules/
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/107428
+  patches = [ ./fix-python-install-dir.patch ];
+
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "enable_testing()" "" \
-      --replace "add_subdirectory(tests)" ""
+    # https://github.com/rpm-software-management/libdnf/issues/1518
+    substituteInPlace libdnf/libdnf.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+    substituteInPlace cmake/modules/FindPythonInstDir.cmake \
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
   '';
 
   cmakeFlags = [
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
-    "-DWITH_BINDINGS=OFF"
+    "-DPYTHON_DESIRED=${lib.head (lib.splitString [ "." ] python.version)}"
   ];
 
-  meta = with lib; {
-    description = "Package management library.";
+  postInstall = ''
+    rm -r $out/${python.sitePackages}/hawkey/test
+  '';
+
+  postFixup = ''
+    moveToOutput "lib/${python.libPrefix}" "$py"
+  '';
+
+  meta = {
+    description = "Package management library";
     homepage = "https://github.com/rpm-software-management/libdnf";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rb2k ];
+    changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      rb2k
+      katexochen
+    ];
   };
 }

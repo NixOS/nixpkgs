@@ -1,31 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, freezegun
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cached-property";
-  version = "1.5.2";
+  version = "2.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "pydanny";
+    repo = "cached-property";
+    tag = version;
+    hash = "sha256-sOThFJs18DR9aBgIpqkORU4iRmhCVKehyM3DLYUt/Wc=";
   };
 
-  checkInputs = [ pytestCheckHook freezegun ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # https://github.com/pydanny/cached-property/issues/131
     "test_threads_ttl_expiry"
   ];
 
-  meta = {
-    description = "A decorator for caching properties in classes";
+  pythonImportsCheck = [ "cached_property" ];
+
+  meta = with lib; {
+    description = "Decorator for caching properties in classes";
     homepage = "https://github.com/pydanny/cached-property";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ericsagnes ];
+    changelog = "https://github.com/pydanny/cached-property/releases/tag/${version}";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 }

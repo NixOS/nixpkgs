@@ -1,29 +1,38 @@
-{ lib
-, buildPythonPackage
-, numpy
-, scipy
-, pyamg
-, pysparse
-, future
-, matplotlib
-, tkinter
-, mpi4py
-, scikit-fmm
-, isPy27
-, gmsh
-, python
-, stdenv
-, openssh
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  pyamg,
+  future,
+  matplotlib,
+  tkinter,
+  mpi4py,
+  scikit-fmm,
+  gmsh,
+  python,
+  stdenv,
+  openssh,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fipy";
-  version = "3.4.2.1";
+  version = "3.4.5";
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "https://github.com/usnistgov/fipy/releases/download/${version}/FiPy-${version}.tar.gz";
-    sha256 = "0v5yk9b4hksy3176w4vm4gagb9kxqgv75zcyswlqvl371qwy1grk";
+  # Python 3.12 is not yet supported.
+  # https://github.com/usnistgov/fipy/issues/997
+  # https://github.com/usnistgov/fipy/pull/1023
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+
+  src = fetchFromGitHub {
+    owner = "usnistgov";
+    repo = "fipy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-345YrGQgHNq0FULjJjLqHksyfm/EHl+KyGfxwS6xK9U=";
   };
 
   propagatedBuildInputs = [
@@ -36,26 +45,28 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals isPy27 [ pysparse ]
-  ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
-  # Reading version string from Gmsh is broken in latest release of FiPy
-  # This issue is repaired on master branch of FiPy
-  # Fixed with: https://github.com/usnistgov/fipy/pull/848/files
-  # Remove patch with next release.
-  patches = [ ./gmsh.patch ];
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  # NOTE: Two of the doctests in fipy.matrices.scipyMatrix._ScipyMatrix.CSR fail, and there is no
+  # clean way to disable them.
+  doCheck = false;
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
     ${python.interpreter} setup.py test --modules
   '';
 
+  # NOTE: Importing fipy within the sandbox will fail because plm_rsh_agent isn't set and the process isn't able
+  # to start a daemon on the builder.
+  # pythonImportsCheck = [ "fipy" ];
+
   meta = with lib; {
     homepage = "https://www.ctcms.nist.gov/fipy/";
-    description = "A Finite Volume PDE Solver Using Python";
+    description = "Finite Volume PDE Solver Using Python";
+    changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
     license = licenses.free;
-    maintainers = with maintainers; [ costrouc wd15 ];
+    maintainers = with maintainers; [ wd15 ];
   };
 }

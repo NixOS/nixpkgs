@@ -1,4 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ptime, tyxml }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ptime,
+  tyxml,
+}:
 
 buildDunePackage (rec {
   pname = "junit";
@@ -14,13 +20,12 @@ buildDunePackage (rec {
     tyxml
   ];
 
-  useDune2 = true;
   doCheck = true;
 
   meta = with lib; {
-    description = "ocaml-junit is an OCaml package for the creation of JUnit XML reports, proving a typed API to produce valid reports acceptable to Jenkins, comes with packages supporting OUnit and Alcotest.";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    description = "ocaml-junit is an OCaml package for the creation of JUnit XML reports, proving a typed API to produce valid reports acceptable to Jenkins, comes with packages supporting OUnit and Alcotest";
+    license = licenses.lgpl3Plus;
+    maintainers = [ ];
     homepage = "https://github.com/Khady/ocaml-junit";
   };
 })

@@ -1,63 +1,81 @@
-{ config, lib, pkgs, options, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 let
   cfg = config.services.biboumi;
   inherit (config.environment) etc;
   rootDir = "/run/biboumi/mnt-root";
   stateDir = "/var/lib/biboumi";
   settingsFile = pkgs.writeText "biboumi.cfg" (
-    generators.toKeyValue {
-      mkKeyValue = k: v:
-        if v == null then ""
-        else generators.mkKeyValueDefault {} "=" k v;
-    } cfg.settings);
+    lib.generators.toKeyValue {
+      mkKeyValue = k: v: lib.optionalString (v != null) (lib.generators.mkKeyValueDefault { } "=" k v);
+    } cfg.settings
+  );
   need_CAP_NET_BIND_SERVICE = cfg.settings.identd_port != 0 && cfg.settings.identd_port < 1024;
 in
 {
   options = {
     services.biboumi = {
-      enable = mkEnableOption "the Biboumi XMPP gateway to IRC";
+      enable = lib.mkEnableOption "the Biboumi XMPP gateway to IRC";
 
-      settings = mkOption {
+      package = lib.mkPackageOption pkgs "biboumi" { };
+
+      settings = lib.mkOption {
         description = ''
-          See <link xlink:href="https://lab.louiz.org/louiz/biboumi/blob/8.5/doc/biboumi.1.rst">biboumi 8.5</link>
+          See [biboumi 9.0](https://doc.biboumi.louiz.org/9.0/admin.html#configuration)
+
           for documentation.
         '';
-        default = {};
-        type = types.submodule {
-          freeformType = with types;
-            (attrsOf (nullOr (oneOf [str int bool]))) // {
+        default = { };
+        type = lib.types.submodule {
+          freeformType =
+            with lib.types;
+            (attrsOf (
+              nullOr (oneOf [
+                str
+                int
+                bool
+              ])
+            ))
+            // {
               description = "settings option";
             };
-          options.admin = mkOption {
-            type = with types; listOf str;
-            default = [];
-            example = ["admin@example.org"];
-            apply = concatStringsSep ":";
+          options.admin = lib.mkOption {
+            type = with lib.types; listOf str;
+            default = [ ];
+            example = [ "admin@example.org" ];
+            apply = lib.concatStringsSep ":";
             description = ''
               The bare JID of the gateway administrator. This JID will have more
               privileges than other standard users, for example some administration
               ad-hoc commands will only be available to that JID.
             '';
           };
-          options.ca_file = mkOption {
-            type = types.path;
+          options.ca_file = lib.mkOption {
+            type = lib.types.path;
             default = "/etc/ssl/certs/ca-certificates.crt";
             description = ''
               Specifies which file should be used as the list of trusted CA
-              when negociating a TLS session.
+              when negotiating a TLS session.
             '';
           };
-          options.db_name = mkOption {
-            type = with types; either path str;
+          options.db_name = lib.mkOption {
+            type = with lib.types; nullOr (either path str);
             default = "${stateDir}/biboumi.sqlite";
             description = ''
               The name of the database to use.
+
+              Set it to null and use [credentialsFile](#opt-services.biboumi.credentialsFile)
+              if you do not want this connection string to go into the Nix store.
             '';
             example = "postgresql://user:secret@localhost";
           };
-          options.hostname = mkOption {
-            type = types.str;
+          options.hostname = lib.mkOption {
+            type = lib.types.str;
             example = "biboumi.example.org";
             description = ''
               The hostname served by the XMPP gateway.
@@ -65,36 +83,36 @@ in
               as an external component.
             '';
           };
-          options.identd_port = mkOption {
-            type = types.port;
+          options.identd_port = lib.mkOption {
+            type = lib.types.port;
             default = 113;
             example = 0;
             description = ''
               The TCP port on which to listen for identd queries.
             '';
           };
-          options.log_level = mkOption {
-            type = types.ints.between 0 3;
+          options.log_level = lib.mkOption {
+            type = lib.types.ints.between 0 3;
             default = 1;
             description = ''
               Indicate what type of log messages to write in the logs.
               0 is debug, 1 is info, 2 is warning, 3 is error.
             '';
           };
-          options.password = mkOption {
-            type = with types; nullOr str;
+          options.password = lib.mkOption {
+            type = with lib.types; nullOr str;
             description = ''
               The password used to authenticate the XMPP component to your XMPP server.
               This password must be configured in the XMPP server,
               associated with the external component on
-              <link linkend="opt-services.biboumi.settings.hostname">hostname</link>.
+              [hostname](#opt-services.biboumi.settings.hostname).
 
-              Set it to null and use <link linkend="opt-services.biboumi.credentialsFile">credentialsFile</link>
+              Set it to null and use [credentialsFile](#opt-services.biboumi.credentialsFile)
               if you do not want this password to go into the Nix store.
             '';
           };
-          options.persistent_by_default = mkOption {
-            type = types.bool;
+          options.persistent_by_default = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Whether all rooms will be persistent by default:
@@ -104,25 +122,25 @@ in
               “persistent” configuration option to false in order to override this.
             '';
           };
-          options.policy_directory = mkOption {
-            type = types.path;
-            default = "${pkgs.biboumi}/etc/biboumi";
-            defaultText = literalExpression ''"''${pkgs.biboumi}/etc/biboumi"'';
+          options.policy_directory = lib.mkOption {
+            type = lib.types.path;
+            default = "${cfg.package}/etc/biboumi";
+            defaultText = lib.literalExpression ''"''${pkgs.biboumi}/etc/biboumi"'';
             description = ''
               A directory that should contain the policy files,
               used to customize Botan’s behaviour
-              when negociating the TLS connections with the IRC servers.
+              when negotiating the TLS connections with the IRC servers.
             '';
           };
-          options.port = mkOption {
-            type = types.port;
+          options.port = lib.mkOption {
+            type = lib.types.port;
             default = 5347;
             description = ''
               The TCP port to use to connect to the local XMPP component.
             '';
           };
-          options.realname_customization = mkOption {
-            type = types.bool;
+          options.realname_customization = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = ''
               Whether the users will be able to use
@@ -130,8 +148,8 @@ in
               their realname and username.
             '';
           };
-          options.realname_from_jid = mkOption {
-            type = types.bool;
+          options.realname_from_jid = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Whether the realname and username of each biboumi
@@ -140,8 +158,8 @@ in
               they used to connect to the IRC server.
             '';
           };
-          options.xmpp_server_ip = mkOption {
-            type = types.str;
+          options.xmpp_server_ip = lib.mkOption {
+            type = lib.types.str;
             default = "127.0.0.1";
             description = ''
               The IP address to connect to the XMPP server on.
@@ -153,26 +171,27 @@ in
         };
       };
 
-      credentialsFile = mkOption {
-        type = types.path;
+      credentialsFile = lib.mkOption {
+        type = lib.types.path;
         description = ''
           Path to a configuration file to be merged with the settings.
           Beware not to surround "=" with spaces when setting biboumi's options in this file.
           Useful to merge a file which is better kept out of the Nix store
           because it contains sensible data like
-          <link linkend="opt-services.biboumi.settings.password">password</link>.
+          [password](#opt-services.biboumi.settings.password).
         '';
         default = "/dev/null";
         example = "/run/keys/biboumi.cfg";
       };
 
-      openFirewall = mkEnableOption "opening of the identd port in the firewall";
+      openFirewall = lib.mkEnableOption "opening of the identd port in the firewall";
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall = mkIf (cfg.openFirewall && cfg.settings.identd_port != 0)
-      { allowedTCPPorts = [ cfg.settings.identd_port ]; };
+  config = lib.mkIf cfg.enable {
+    networking.firewall = lib.mkIf (cfg.openFirewall && cfg.settings.identd_port != 0) {
+      allowedTCPPorts = [ cfg.settings.identd_port ];
+    };
 
     systemd.services.biboumi = {
       description = "Biboumi, XMPP to IRC gateway";
@@ -185,12 +204,17 @@ in
         WatchdogSec = 20;
         Restart = "always";
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
-        ExecStartPre = [("+" + pkgs.writeShellScript "biboumi-prestart" ''
-          set -eux
-          cat ${settingsFile} '${cfg.credentialsFile}' |
-          install -m 644 /dev/stdin /run/biboumi/biboumi.cfg
-        '')];
-        ExecStart = "${pkgs.biboumi}/bin/biboumi /run/biboumi/biboumi.cfg";
+        ExecStartPre = [
+          (
+            "+"
+            + pkgs.writeShellScript "biboumi-prestart" ''
+              set -eux
+              cat ${settingsFile} '${cfg.credentialsFile}' |
+              install -m 644 /dev/stdin /run/biboumi/biboumi.cfg
+            ''
+          )
+        ];
+        ExecStart = "${lib.getExe cfg.package} /run/biboumi/biboumi.cfg";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         # Firewalls needing opening for output connections can still do that
         # selectively for biboumi with:
@@ -203,7 +227,10 @@ in
         RootDirectory = rootDir;
         RootDirectoryStartOnly = true;
         InaccessiblePaths = [ "-+${rootDir}" ];
-        RuntimeDirectory = [ "biboumi" (removePrefix "/run/" rootDir) ];
+        RuntimeDirectory = [
+          "biboumi"
+          (lib.removePrefix "/run/" rootDir)
+        ];
         RuntimeDirectoryMode = "700";
         StateDirectory = "biboumi";
         StateDirectoryMode = "700";
@@ -222,8 +249,8 @@ in
         ];
         # The following options are only for optimizing:
         # systemd-analyze security biboumi
-        AmbientCapabilities = [ (optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE") ];
-        CapabilityBoundingSet = [ (optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE") ];
+        AmbientCapabilities = [ (lib.optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE") ];
+        CapabilityBoundingSet = [ (lib.optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE") ];
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         LockPersonality = true;
@@ -231,7 +258,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
-        PrivateNetwork = mkDefault false;
+        PrivateNetwork = lib.mkDefault false;
         PrivateTmp = true;
         # PrivateUsers=true breaks AmbientCapabilities=CAP_NET_BIND_SERVICE
         # See https://bugs.archlinux.org/task/65921
@@ -246,7 +273,11 @@ in
         ProtectSystem = "strict";
         RemoveIPC = true;
         # AF_UNIX is for /run/systemd/notify
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -258,7 +289,13 @@ in
           # To run such a perf in ExecStart=, you have to:
           # - AmbientCapabilities="CAP_SYS_ADMIN"
           # - mount -o remount,mode=755 /sys/kernel/debug/{,tracing}
-          "~@aio" "~@chown" "~@ipc" "~@keyring" "~@resources" "~@setuid" "~@timer"
+          "~@aio"
+          "~@chown"
+          "~@ipc"
+          "~@keyring"
+          "~@resources"
+          "~@setuid"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
@@ -266,5 +303,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ julm ];
+  meta.maintainers = with lib.maintainers; [ julm ];
 }

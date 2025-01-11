@@ -1,27 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.1.4";
-  format = "setuptools";
+  version = "0.3.7";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yVDJAJXZU4pwvXSKRKUfSHqU23NcdgedOMmynMAD/Po=";
+    tag = version;
+    hash = "sha256-Pntm/wUv/K0ci8U/+nBUVszuX8KT95gyp+i2N6NshKo=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   postPatch = ''
     # Drop circular dependency on ttp
-    substituteInPlace setup.py \
-      --replace '"ttp>=0.6.0"' ""
+    sed -i '/ttp =/d' pyproject.toml
   '';
 
   # Circular dependency on ttp
@@ -30,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Template Text Parser Templates collections";
     homepage = "https://github.com/dmulyalin/ttp_templates";
+    changelog = "https://github.com/dmulyalin/ttp_templates/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

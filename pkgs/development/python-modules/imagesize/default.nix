@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "imagesize";
-  version = "1.3.0";
+  version = "1.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd1750d452385ca327479d45b64d9c7729ecf0b3969a58148298c77092261f9d";
+    hash = "sha256-aRUERK/7nLDVzFqSs2dvCy+3zZrjnpR6XhGja0SXzUo=";
   };
 
   meta = with lib; {
@@ -17,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/shibukawa/imagesize_py";
     license = with licenses; [ mit ];
   };
-
 }

@@ -1,23 +1,50 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, which, qtbase, qtsvg, qttools, qtwebkit }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  libuchardet,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwebsockets,
+}:
 
 mkDerivation rec {
   pname = "notepadqq";
-  version = "1.4.8";
+  # shipping a beta build as there's no proper release which supports qtwebengine
+  version = "2.0.0-beta";
 
   src = fetchFromGitHub {
     owner = "notepadqq";
     repo = "notepadqq";
     rev = "v${version}";
-    sha256 = "0lbv4s7ng31dkznzbkmp2cvkqglmfj6lv4mbg3r410fif2nrva7k";
+    sha256 = "sha256-XA9Ay9kJApY+bDeOf0iPv+BWYFuTmIuqsLEPgRTCZCE=";
   };
 
+  patches = [
+    # Fix: chmod in the Makefile fails randomly
+    # Move it to preFixup instead
+    ./fix-configure.patch
+  ];
+
   nativeBuildInputs = [
-    pkg-config which qttools
+    pkg-config
+    which
+    qttools
   ];
 
   buildInputs = [
-    qtbase qtsvg qtwebkit
+    libuchardet
+    qtbase
+    qtsvg
+    qtwebengine
+    qtwebsockets
   ];
+
+  strictDeps = false; # breaks qmake
 
   preConfigure = ''
     export LRELEASE="lrelease"
@@ -26,6 +53,7 @@ mkDerivation rec {
   dontWrapQtApps = true;
 
   preFixup = ''
+    chmod +x $out/bin/notepadqq
     wrapQtApp $out/bin/notepadqq
   '';
 
@@ -37,5 +65,6 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.rszibele ];
+    mainProgram = "notepadqq";
   };
 }

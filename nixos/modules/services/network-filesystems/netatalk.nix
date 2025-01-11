@@ -1,28 +1,33 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.netatalk;
   settingsFormat = pkgs.formats.ini { };
   afpConfFile = settingsFormat.generate "afp.conf" cfg.settings;
-in {
+in
+{
   options = {
     services.netatalk = {
 
-      enable = mkEnableOption "the Netatalk AFP fileserver";
+      enable = lib.mkEnableOption "the Netatalk AFP fileserver";
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 548;
         description = "TCP port to be used for AFP.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
         example = {
-          Global = { "uam list" = "uams_guest.so"; };
+          Global = {
+            "uam list" = "uams_guest.so";
+          };
           Homes = {
             path = "afp-data";
             "basedir regex" = "/home";
@@ -34,33 +39,40 @@ in {
         };
         description = ''
           Configuration for Netatalk. See
-          <citerefentry><refentrytitle>afp.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`afp.conf(5)`.
         '';
       };
 
-      extmap = mkOption {
-        type = types.lines;
+      extmap = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           File name extension mappings.
-          See <citerefentry><refentrytitle>extmap.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>. for more information.
+          See {manpage}`extmap.conf(5)`. for more information.
         '';
       };
 
     };
   };
 
-  imports = (map (option:
-    mkRemovedOptionModule [ "services" "netatalk" option ]
-    "This option was removed in favor of `services.netatalk.settings`.") [
-      "extraConfig"
-      "homes"
-      "volumes"
-    ]);
+  imports = (
+    map
+      (
+        option:
+        lib.mkRemovedOptionModule [
+          "services"
+          "netatalk"
+          option
+        ] "This option was removed in favor of `services.netatalk.settings`."
+      )
+      [
+        "extraConfig"
+        "homes"
+        "volumes"
+      ]
+  );
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.netatalk.settings.Global = {
       "afp port" = toString cfg.port;
@@ -69,9 +81,11 @@ in {
 
     systemd.services.netatalk = {
       description = "Netatalk AFP fileserver for Macintosh clients";
-      unitConfig.Documentation =
-        "man:afp.conf(5) man:netatalk(8) man:afpd(8) man:cnid_metad(8) man:cnid_dbd(8)";
-      after = [ "network.target" "avahi-daemon.service" ];
+      unitConfig.Documentation = "man:afp.conf(5) man:netatalk(8) man:afpd(8) man:cnid_metad(8) man:cnid_dbd(8)";
+      after = [
+        "network.target"
+        "avahi-daemon.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ pkgs.netatalk ];

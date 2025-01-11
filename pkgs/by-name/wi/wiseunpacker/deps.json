@@ -1,0 +1,27 @@
+[
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "SabreTools.Compression",
+    "version": "0.4.2",
+    "hash": "sha256-yNgHjyodFbkghYvPq3ginDGTX7rQNgcD9tRaWD3mJYM="
+  },
+  {
+    "pname": "SabreTools.IO",
+    "version": "1.3.3",
+    "hash": "sha256-UMGpU7g11qFafN+kbDmUt9PXlHg8dPHHZOIz6DuXMEU="
+  },
+  {
+    "pname": "SabreTools.Matching",
+    "version": "1.3.1",
+    "hash": "sha256-vPIGGneY0Zq/H75lJLtq5PosCozAXp+KRlQQ6OGAYiU="
+  },
+  {
+    "pname": "SabreTools.Models",
+    "version": "1.4.2",
+    "hash": "sha256-lVj05vrE6duaBa0Hq2ZmlSU0iYlp1o69P6TDtf9KPqo="
+  }
+]

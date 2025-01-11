@@ -1,83 +1,49 @@
-{ stdenv
-, fetchurl
-, lib
-, qtbase
-, qtwebengine
-, qtdeclarative
-, qtwebchannel
-, syntax-highlighting
-, openssl
-, xkeyboard_config
-, patchelfUnstable
-, wrapQtAppsHook
-, writeText
+{
+  stdenv,
+  fetchurl,
+  lib,
+  callPackage,
+  qt6Packages,
 }:
+
 let
-  # This abomination exists because p4v calls CRYPTO_set_mem_functions and
-  # expects it to succeed. The function will fail if CRYPTO_malloc has already
-  # been called, which happens at init time via qtwebengine -> ... -> libssh. I
-  # suspect it was meant to work with a version of Qt where openssl is
-  # statically linked or some other library is used.
-  crypto-hack = writeText "crypto-hack.c" ''
-      #include <stddef.h>
-      int CRYPTO_set_mem_functions(
-            void *(*m)(size_t, const char *, int),
-            void *(*r)(void *, size_t, const char *, int),
-            void (*f)(void *, const char *, int)) { return 1; }
-    '';
-
-in stdenv.mkDerivation rec {
-  pname = "p4v";
-  version = "2021.3.2186916";
-
-  src = fetchurl {
-    url = "http://web.archive.org/web/20211118024745/https://cdist2.perforce.com/perforce/r21.3/bin.linux26x86_64/p4v.tgz";
-    sha256 = "1zldg21xq4srww9pcfbv3p8320ghjnh333pz5r70z1gwbq4vf3jq";
+  # Upstream replaces minor versions, so use archived URLs.
+  srcs = rec {
+    x86_64-linux = fetchurl {
+      url = "https://web.archive.org/web/20240612193642id_/https://ftp.perforce.com/perforce/r24.2/bin.linux26x86_64/p4v.tgz";
+      sha256 = "sha256-HA99fHcmgli/vVnr0M8ZJEsaZ2ZLzpG3M8S77oDYJyE=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://web.archive.org/web/20240612194532id_/https://ftp.perforce.com/perforce/r24.2/bin.macosx12u/P4V.dmg";
+      sha256 = "sha256-PS7gfDdWspyL//YWLkrsGi5wh6SIeAry2yef1/V0d6o=";
+    };
+    # this is universal
+    x86_64-darwin = aarch64-darwin;
   };
 
-  dontBuild = true;
-  nativeBuildInputs = [ patchelfUnstable wrapQtAppsHook ];
+  mkDerivation =
+    if stdenv.hostPlatform.isDarwin then
+      callPackage ./darwin.nix { }
+    else
+      qt6Packages.callPackage ./linux.nix { };
+in
+mkDerivation {
+  pname = "p4v";
+  version = "2024.2/2606884";
 
-  ldLibraryPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtwebengine
-      qtdeclarative
-      qtwebchannel
-      syntax-highlighting
-      openssl
-  ];
-
-  dontWrapQtApps = true;
-  installPhase = ''
-    mkdir $out
-    cp -r bin $out
-    mkdir -p $out/lib
-    cp -r lib/P4VResources $out/lib
-    $CC -fPIC -shared -o $out/lib/libcrypto-hack.so ${crypto-hack}
-
-    for f in $out/bin/*.bin ; do
-      patchelf --set-rpath $ldLibraryPath --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
-      # combining this with above breaks rpath (patchelf bug?)
-      patchelf --add-needed libstdc++.so \
-               --add-needed $out/lib/libcrypto-hack.so \
-               --clear-symbol-version _ZNSt20bad_array_new_lengthD1Ev \
-               --clear-symbol-version _ZTVSt20bad_array_new_length \
-               --clear-symbol-version _ZTISt20bad_array_new_length \
-               --clear-symbol-version _ZdlPvm \
-               $f
-      wrapQtApp $f \
-        --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
-    done
-  '';
-
-  dontFixup = true;
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
-    description = "Perforce Visual Client";
+    description = "Perforce Helix Visual Client";
     homepage = "https://www.perforce.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ nathyong nioncode ];
+    platforms = builtins.attrNames srcs;
+    maintainers = with lib.maintainers; [
+      impl
+      nathyong
+      nioncode
+    ];
   };
 }

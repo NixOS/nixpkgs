@@ -1,10 +1,20 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
-{ channel, version, sha256, vendorSha256 }:
+{
+  channel,
+  version,
+  sha256,
+  vendorHash,
+}:
 
 buildGoModule rec {
   pname = "linkerd-${channel}";
-  inherit version vendorSha256;
+  inherit version vendorHash;
 
   src = fetchFromGitHub {
     owner = "linkerd";
@@ -20,6 +30,11 @@ buildGoModule rec {
     env GOFLAGS="" go generate ./jaeger/static
     env GOFLAGS="" go generate ./multicluster/static
     env GOFLAGS="" go generate ./viz/static
+
+    # Necessary for building Musl
+    if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+    fi
   '';
 
   tags = [
@@ -27,7 +42,8 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
   ];
 
@@ -49,10 +65,14 @@ buildGoModule rec {
   passthru.updateScript = (./. + "/update-${channel}.sh");
 
   meta = with lib; {
-    description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+    description = "Simple Kubernetes service mesh that improves security, observability and reliability";
+    mainProgram = "linkerd";
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih bryanasdev000 ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      Gonzih
+    ];
   };
 }

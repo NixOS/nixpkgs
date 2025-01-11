@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,12 +20,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "py_sneakers"
-  ];
+  pythonImportsCheck = [ "py_sneakers" ];
 
   meta = with lib; {
     description = "Library to emulate the Sneakers movie effect";
+    mainProgram = "py-sneakers";
     homepage = "https://github.com/aenima-x/py-sneakers";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

@@ -1,32 +1,46 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, matplotlib
-, networkx
-, nose
-, numpy
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  matplotlib,
+  networkx,
+  numpy,
+  scipy,
+  pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "scikit-fuzzy";
-  version = "unstable-2021-03-31";
-  disabled = isPy27;
+  version = "0.4.2-unstable-2023-09-14";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "92ad3c382ac19707086204ac6cdf6e81353345a7";
-    sha256 = "0q89p385nsg3lymlsqm3mw6y45vgrk6w9p30igbm59b7r9mkgdj8";
+    owner = "scikit-fuzzy";
+    repo = "scikit-fuzzy";
+    rev = "d7551b649f34c2f5e98836e9b502279226d3b225";
+    hash = "sha256-91Udm2dIaIwTVG6V1EqYA/4qryuS4APgaa7tIa3sSQE=";
   };
 
-  propagatedBuildInputs = [ networkx numpy scipy ];
-  checkInputs = [ matplotlib nose pytestCheckHook ];
+  build-system = [ setuptools ];
 
-  # test error: "ValueError: could not convert string to float: '2.6.2'"
-  disabledTestPaths = [ "skfuzzy/control/tests/test_controlsystem.py" ];
+  propagatedBuildInputs = [
+    networkx
+    numpy
+    scipy
+  ];
+
+  nativeCheckInputs = [
+    matplotlib
+    pytest7CheckHook
+  ];
+
+  preCheck = "rm -rf build";
+
+  pythonImportsCheck = [ "skfuzzy" ];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-fuzzy/scikit-fuzzy";

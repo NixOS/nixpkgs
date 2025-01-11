@@ -1,17 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, glib, nodePackages, gjs }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gjs,
+  typescript,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
-  version = "unstable-2022-03-25";
+  version = "1.2.0-unstable-2024-10-09";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "a317816d02dd2cb20d31aeca81bf09eccc63e370";
-    hash = "sha256-uxoeCv25ew5+NkTpsKjQqDFrqw6ZA/+iYhyCHoCb6jM=";
+    rev = "e25621e2595eb5235ecb1a41167d1324a2b2a297";
+    hash = "sha256-PPJofRzzbH1zcnKtQ/3ulErvN4pAJMo/igzdq1zT06s=";
   };
 
-  nativeBuildInputs = [ glib nodePackages.typescript gjs ];
+  nativeBuildInputs = [
+    glib
+    gjs
+    typescript
+  ];
 
   buildInputs = [ gjs ];
 
@@ -24,6 +36,7 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "pop-shell@system76.com";
     extensionPortalSlug = "pop-shell";
+    updateScript = unstableGitUpdater { };
   };
 
   postPatch = ''

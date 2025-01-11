@@ -1,46 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, docker
-, dockerfile-parse
-, requests
-, stevedore
-, pbr
-, debian-inspector
-, regex
-, GitPython
-, prettytable
-, idna
-, packageurl-python
+{
+  lib,
+  buildPythonPackage,
+  debian-inspector,
+  docker,
+  dockerfile-parse,
+  fetchPypi,
+  gitpython,
+  idna,
+  license-expression,
+  packageurl-python,
+  pbr,
+  prettytable,
+  pythonOlder,
+  pyyaml,
+  regex,
+  requests,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "tern";
-  version = "2.10.0";
+  version = "2.12.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KpkEnpItHC/9IswfboFZ5nCcGaM9bWFX/i+6jxGN5hg=";
+    hash = "sha256-yMIvFiliEHrbZMqvX3ZAROWcqii5VmB54QEYHGRJocA=";
   };
 
   preBuild = ''
     cp requirements.{in,txt}
   '';
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     pyyaml
     docker
     dockerfile-parse
+    license-expression
     requests
     stevedore
     debian-inspector
     regex
-    GitPython
+    gitpython
     prettytable
     idna
     packageurl-python
@@ -49,14 +54,14 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tern"
-  ];
+  pythonImportsCheck = [ "tern" ];
 
   meta = with lib; {
-    description = "A software composition analysis tool and Python library that generates a Software Bill of Materials for container images and Dockerfiles";
+    description = "Software composition analysis tool and Python library that generates a Software Bill of Materials for container images and Dockerfiles";
+    mainProgram = "tern";
     homepage = "https://github.com/tern-tools/tern";
+    changelog = "https://github.com/tern-tools/tern/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

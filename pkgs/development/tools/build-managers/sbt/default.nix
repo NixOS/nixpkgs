@@ -1,27 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, jre
-, autoPatchelfHook
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  autoPatchelfHook,
+  zlib,
+  ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.6.2";
+  version = "1.10.7";
 
   src = fetchurl {
-    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
-    sha256 = "sha256-Y3Y3tsTm+gSrYs02QGHjKxJICwkAHNIzA99is2+t1EA=";
+    url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
+    hash = "sha256-MsFSM8Y2wjPuJaLDGHkEnbcCHP73CAfBh1FcOblrD+Y=";
   };
 
   postPatch = ''
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ zlib ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    stdenv.cc.cc # libstdc++.so.6
+    zlib
+  ];
+
+  propagatedBuildInputs = [
+    # for infocmp
+    ncurses
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -29,8 +39,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
-    ln -sT ../share/sbt/bin/sbtn-x86_64-${
-      if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"
+    ln -sT ../share/sbt/bin/sbtn-${
+      if (stdenv.hostPlatform.isDarwin) then
+        "universal-apple-darwin"
+      else if (stdenv.hostPlatform.isAarch64) then
+        "aarch64-pc-linux"
+      else
+        "x86_64-pc-linux"
     } $out/bin/sbtn
 
     runHook postInstall
@@ -39,8 +54,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.scala-sbt.org/";
     license = licenses.bsd3;
-    description = "A build tool for Scala, Java and more";
-    maintainers = with maintainers; [ nequissimus ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    description = "Build tool for Scala, Java and more";
+    maintainers = with maintainers; [
+      nequissimus
+      kashw2
+    ];
     platforms = platforms.unix;
   };
-}
+})

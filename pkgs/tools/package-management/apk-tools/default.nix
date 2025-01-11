@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "apk-tools";
-  version = "2.12.9";
+  version = "2.14.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "apk-tools";
     rev = "v${version}";
-    sha256 = "sha256-WmL2sjBUwk9qw8+vHgaufaElQnbDAtOCZHoBXLcvJ18=";
+    sha256 = "sha256-4MA+wP8G1Qbv8mbzx1R0eFG7gbwUAfSAFJZ6ulrBHUY=";
   };
 
   nativeBuildInputs = [ pkg-config scdoc ]
@@ -31,16 +31,19 @@ stdenv.mkDerivation rec {
     "PKGCONFIGDIR=$(out)/lib/pkgconfig"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=unused-result"
+    "-Wno-error=deprecated-declarations"
+  ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://gitlab.alpinelinux.org/alpine/apk-tools";
     description = "Alpine Package Keeper";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    platforms = platforms.linux;
+    mainProgram = "apk";
   };
 }

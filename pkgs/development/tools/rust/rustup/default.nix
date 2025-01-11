@@ -1,17 +1,19 @@
-{ stdenv
-, lib
-, runCommand
-, patchelf
-, fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, pkg-config
-, curl
-, zlib
-, Security
-, CoreServices
-, libiconv
-, xz
+{
+  stdenv,
+  lib,
+  runCommand,
+  patchelf,
+  fetchFromGitHub,
+  rustPlatform,
+  makeBinaryWrapper,
+  pkg-config,
+  openssl,
+  curl,
+  zlib,
+  Security,
+  CoreServices,
+  libiconv,
+  xz,
 }:
 
 let
@@ -22,46 +24,75 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.24.3";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-JpOOFwlTgwwBCrXOGYskFTgS6RZ7mHQJGT0jnHavxvI=";
+    sha256 = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
   };
 
-  cargoSha256 = "sha256-hAfGpKaWD94IxFFpnW9XwQp4P9clUX6mmekwodCK0Ag=";
+  cargoHash = "sha256-iQoMPV97V9WJqT+qVtNpQtW5g+Jyl+U2uA+JEoRYTQA=";
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
 
-  buildInputs = [
-    curl
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
+  buildInputs =
+    [
+      (curl.override { inherit openssl; })
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      Security
+      libiconv
+      xz
+    ];
 
   buildFeatures = [ "no-self-update" ];
 
-  checkFeatures = [ ];
+  checkFeatures = [ "test" ];
 
-  patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC = stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
-      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-        --subst-var patchelf \
-        --subst-var dynamicLinker \
-        --subst-var libPath
-    '')
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    (runCommand "0001-dynamically-patchelf-binaries.patch"
+      {
+        CC = stdenv.cc;
+        patchelf = patchelf;
+        libPath = "${libPath}";
+      }
+      ''
+        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+        substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+          --subst-var patchelf \
+          --subst-var dynamicLinker \
+          --subst-var libPath
+      ''
+    )
   ];
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  # Random tests fail nondeterministically on macOS.
+  # TODO: Investigate this.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # skip failing tests
+  checkFlags = [
+    # auto-self-update mode is set to 'disable' for nix rustup
+    "--skip=suite::cli_exact::check_updates_none"
+    "--skip=suite::cli_exact::check_updates_some"
+    "--skip=suite::cli_exact::check_updates_with_update"
+    # rustup-init is not used in nix rustup
+    "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+  ];
 
   postInstall = ''
     pushd $out/bin
     mv rustup-init rustup
     binlinks=(
       cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
-      cargo-clippy clippy-driver cargo-miri
+      cargo-clippy clippy-driver cargo-miri rust-gdbgui rust-analyzer
     )
     for link in ''${binlinks[@]}; do
       ln -s rustup $link
@@ -83,12 +114,37 @@ rustPlatform.buildRustPackage rec {
     # Note: fish completion script is not supported.
     $out/bin/rustup completions bash cargo > "$out/share/bash-completion/completions/cargo"
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
+
+    # add a wrapper script for ld.lld
+    mkdir -p $out/nix-support
+    substituteAll ${../../../../../pkgs/build-support/wrapper-common/utils.bash} $out/nix-support/utils.bash
+    substituteAll ${../../../../../pkgs/build-support/wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
+    substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-flags.sh} $out/nix-support/add-flags.sh
+    substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-hardening.sh} $out/nix-support/add-hardening.sh
+    export prog='$PROG'
+    export use_response_file_by_default=0
+    substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/ld-wrapper.sh} $out/nix-support/ld-wrapper.sh
+    chmod +x $out/nix-support/ld-wrapper.sh
   '';
 
+  env = lib.optionalAttrs (pname == "rustup") {
+    inherit (stdenv.cc.bintools)
+      expandResponseParams
+      shell
+      suffixSalt
+      wrapperName
+      coreutils_bin
+      ;
+    hardening_unsupported_flags = "";
+  };
+
   meta = with lib; {
-    description = "The Rust toolchain installer";
+    description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ maintainers.mic92 ];
   };
 }

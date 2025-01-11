@@ -1,21 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, winacl
-, prompt-toolkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pythonOlder,
+  setuptools,
+  winacl,
 }:
 
 buildPythonPackage rec {
   pname = "aiowinreg";
-  version = "0.0.7";
+  version = "0.0.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1p88q2b6slm1sw3234r40s9jd03fqlkcx8y3iwg6ihf0z4ww14d1";
+  src = fetchFromGitHub {
+    owner = "skelsec";
+    repo = "aiowinreg";
+    tag = version;
+    hash = "sha256-XQDBvBfocz5loUg9eZQz4FKGiCGCaczwhYE/vhy7mC0=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     prompt-toolkit
@@ -30,7 +37,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to parse the registry hive";
     homepage = "https://github.com/skelsec/aiowinreg";
+    changelog = "https://github.com/skelsec/aiowinreg/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "awinreg";
   };
 }

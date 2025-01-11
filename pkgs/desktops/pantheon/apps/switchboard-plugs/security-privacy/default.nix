@@ -1,40 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, python3
-, ninja
-, pkg-config
-, vala
-, elementary-settings-daemon
-, libgee
-, granite
-, gsettings-desktop-schemas
-, gala
-, gtk3
-, glib
-, polkit
-, zeitgeist
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  elementary-settings-daemon,
+  libgee,
+  granite7,
+  gsettings-desktop-schemas,
+  gala,
+  gtk4,
+  glib,
+  polkit,
+  zeitgeist,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.4.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jT8aYE36ZAeB9ng3RojVqxzmLtzpbsNRHPuDQ03XKcI=";
+    sha256 = "sha256-k6dSiiBqqbhH7rmhpBu83LX8at/qJ4gkrg4Xc+VbkIE=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
@@ -42,24 +41,17 @@ stdenv.mkDerivation rec {
     elementary-settings-daemon # settings schema
     gala
     glib
-    granite
+    granite7
     gsettings-desktop-schemas
-    gtk3
+    gtk4
     libgee
     polkit
     switchboard
     zeitgeist
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

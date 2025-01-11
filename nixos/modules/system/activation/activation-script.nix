@@ -33,6 +33,8 @@ let
     ''
       #!${pkgs.runtimeShell}
 
+      source ${./lib/lib.sh}
+
       systemConfig='@out@'
 
       export PATH=/empty
@@ -54,10 +56,6 @@ let
       # (which is a symlink to the store), /run/current-system is still
       # used as a garbage collection root.
       ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
-
-      # Prevent the current configuration from being garbage-collected.
-      mkdir -p /nix/var/nix/gcroots
-      ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
 
       exit $_status
     '';
@@ -92,8 +90,8 @@ let
               Whether this activation script supports being dry-activated.
               These activation scripts will also be executed on dry-activate
               activations with the environment variable
-              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate
-              </literal>.  it's important that these activation scripts  don't
+              `NIXOS_ACTION` being set to `dry-activate`.
+              it's important that these activation scripts  don't
               modify anything about the system when the variable is set.
             '';
           };
@@ -112,14 +110,19 @@ in
       default = {};
 
       example = literalExpression ''
-        { stdio.text =
-          '''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
-          ''';
+        {
+          stdio = {
+            # Run after /dev has been mounted
+            deps = [ "specialfs" ];
+            text =
+              '''
+                # Needed by some programs.
+                ln -sfn /proc/self/fd /dev/fd
+                ln -sfn /proc/self/fd/0 /dev/stdin
+                ln -sfn /proc/self/fd/1 /dev/stdout
+                ln -sfn /proc/self/fd/2 /dev/stderr
+              ''';
+          };
         }
       '';
 
@@ -128,7 +131,7 @@ in
         system configuration is activated.  Examples are updating
         /etc, creating accounts, and so on.  Since these are executed
         every time you boot the system or run
-        <command>nixos-rebuild</command>, it's important that they are
+        {command}`nixos-rebuild`, it's important that they are
         idempotent and fast.
       '';
 
@@ -143,7 +146,7 @@ in
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
-      defaultText = literalDocBook "generated activation script";
+      defaultText = literalMD "generated activation script";
     };
 
     system.userActivationScripts = mkOption {
@@ -164,7 +167,7 @@ in
         service when a NixOS system configuration is activated. Examples are
         rebuilding the .desktop file cache for showing applications in the menu.
         Since these are executed every time you run
-        <command>nixos-rebuild</command>, it's important that they are
+        {command}`nixos-rebuild`, it's important that they are
         idempotent and fast.
       '';
 
@@ -172,7 +175,7 @@ in
 
       apply = set: {
         script = ''
-          unset PATH
+          export PATH=
           for i in ${toString path}; do
             PATH=$PATH:$i/bin:$i/sbin
           done
@@ -201,9 +204,34 @@ in
       visible = false;
       description = ''
         The env(1) executable that is linked system-wide to
-        <literal>/usr/bin/env</literal>.
+        `/usr/bin/env`.
       '';
     };
+
+    system.build.installBootLoader = mkOption {
+      internal = true;
+      default = pkgs.writeShellScript "no-bootloader" ''
+        echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+      '';
+      defaultText = lib.literalExpression ''
+        pkgs.writeShellScript "no-bootloader" '''
+          echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+        '''
+      '';
+      description = ''
+        A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+        See `nixos/modules/system/activation/switch-to-configuration.pl`.
+      '';
+      type = types.unique {
+        message = ''
+          Only one bootloader can be enabled at a time. This requirement has not
+          been checked until NixOS 22.05. Earlier versions defaulted to the last
+          definition. Change your configuration to enable only one bootloader.
+        '';
+      } (types.either types.str types.package);
+    };
+
   };
 
 
@@ -212,32 +240,28 @@ in
   config = {
 
     system.activationScripts.stdio = ""; # obsolete
+    system.activationScripts.var = ""; # obsolete
 
-    system.activationScripts.var =
-      ''
-        # Various log/runtime directories.
-
-        mkdir -m 1777 -p /var/tmp
-
-        # Empty, immutable home directory of many system accounts.
-        mkdir -p /var/empty
-        # Make sure it's really empty
-        ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
-        find /var/empty -mindepth 1 -delete
-        chmod 0555 /var/empty
-        chown root:root /var/empty
-        ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
-      '';
+    systemd.tmpfiles.rules = [
+      "D /var/empty 0555 root root -"
+      "h /var/empty - - - - +i"
+    ] ++ lib.optionals config.nix.enable [
+      # Prevent the current configuration from being garbage-collected.
+      "d /nix/var/nix/gcroots -"
+      "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
+    ];
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
       then ''
-        mkdir -m 0755 -p /usr/bin
+        mkdir -p /usr/bin
+        chmod 0755 /usr/bin
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
       ''
       else ''
         rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
+        if test -d /usr/bin; then rmdir --ignore-fail-on-non-empty /usr/bin; fi
+        if test -d /usr; then rmdir --ignore-fail-on-non-empty /usr; fi
       '';
 
     system.activationScripts.specialfs =
@@ -251,7 +275,8 @@ in
           if mountpoint -q "$mountPoint"; then
             local options="remount,$options"
           else
-            mkdir -m 0755 -p "$mountPoint"
+            mkdir -p "$mountPoint"
+            chmod 0755 "$mountPoint"
           fi
           mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }

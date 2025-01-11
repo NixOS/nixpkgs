@@ -1,22 +1,23 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  colorlog,
+  fetchPypi,
+  pyserial,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyenvisalink";
-  version = "4.4";
+  version = "4.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YUYiCid+XAlfytkyz4Td5CG1zBOrsLx4/nuRubRE14w=";
+    hash = "sha256-IgYOlH0mYqhRLTO3McBAstChqYWHQkwuOVPL8gKdcTo=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Tests require an Envisalink device
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyenvisalink"
-  ];
+  pythonImportsCheck = [ "pyenvisalink" ];
 
   meta = with lib; {
     description = "Python interface for Envisalink 2DS/3 Alarm API";

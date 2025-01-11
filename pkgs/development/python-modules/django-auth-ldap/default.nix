@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 
-# buildtime
-, setuptools-scm
+  # buildtime
+  setuptools-scm,
 
-# runtime
-, ldap
-, django
+  # runtime
+  django,
+  python-ldap,
 
-# tests
-, python
-, pkgs
+  # tests
+  python,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.1.0";
+  version = "4.8.0";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d/dJ07F4B86OtWqcnI5XRv8xZWf4HVumE0ldnHSVqUk=";
+    hash = "sha256-YEJQk43cn9phnyR8elmwsvBuU6fT9GoVbyiqMN1xpzg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     django
-    ldap
+    python-ldap
   ];
 
   # ValueError: SCHEMADIR is None, ldap schemas are missing.
@@ -53,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mmai ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

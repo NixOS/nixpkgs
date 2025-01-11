@@ -1,25 +1,33 @@
-{ stdenv, fetchurl, apacheHttpd, perl, nixosTests }:
+{
+  apacheHttpd,
+  directoryListingUpdater,
+  fetchurl,
+  lib,
+  nixosTests,
+  perl,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_perl";
-  version = "2.0.11";
+  version = "2.0.13";
 
   src = fetchurl {
     url = "mirror://apache/perl/${pname}-${version}.tar.gz";
-    sha256 = "0x3gq4nz96y202cymgrf56n8spm7bffkd1p74dh9q3zrrlc9wana";
+    sha256 = "sha256-reO+McRHuESIaf7N/KziWNbVh7jGx3PF8ic19w2C1to=";
   };
 
-  patches = [
-    # Fix build on perl-5.34.0, https://github.com/Perl/perl5/issues/18617
-    ../../../../development/perl-modules/mod_perl2-PL_hash_seed.patch
+  buildInputs = [
+    apacheHttpd
+    perl
   ];
 
-  buildInputs = [ apacheHttpd perl ];
   buildPhase = ''
     perl Makefile.PL \
       MP_APXS=${apacheHttpd.dev}/bin/apxs
     make
   '';
+
   installPhase = ''
     mkdir -p $out
     make install DESTDIR=$out
@@ -29,5 +37,22 @@ stdenv.mkDerivation rec {
     rm $out/nix -rf
   '';
 
-  passthru.tests = nixosTests.mod_perl;
+  passthru = {
+    updateScript = directoryListingUpdater {
+      url = "https://archive.apache.org/dist/perl/";
+    };
+    tests = nixosTests.mod_perl;
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
+    description = "Integration of perl with the Apache2 web server";
+    homepage = "https://perl.apache.org/download/index.html";
+    changelog = "https://github.com/apache/mod_perl/blob/trunk/Changes";
+    license = licenses.asl20;
+    mainProgram = "mp2bug";
+    maintainers = [ ];
+    platforms = platforms.unix;
+  };
 }

@@ -1,41 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, granite
-, gtk3
-, libgee
-, libgudev
-, libwacom
-, switchboard
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  granite7,
+  gtk4,
+  libadwaita,
+  libgee,
+  libgudev,
+  libwacom,
+  switchboard,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
-  version = "1.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1n2yfq4s9xpnfqjikchjp4z2nk8cmfz4g0p18cplzh5w1lvz17lm";
+    sha256 = "sha256-Ct+1n/GmrS9xi8QIJDWKfwNL1kvNz3o+0tsxLZtwjmI=";
   };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-wacom/pull/29
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-wacom/commit/2a7dee180d73ffb3521d806efb7028f5a71cb511.patch";
-      sha256 = "06ra5c0f14brmj2mmsqscpc4d1114i4qazgnsazzh2hrp04ilnva";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -46,8 +38,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     libgudev
     libwacom
@@ -57,9 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,55 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-
-# propagates
-, jinja2
-, lxml
-, ncclient
-, netaddr
-, ntc-templates
-, paramiko
-, pyparsing
-, pyserial
-, pyyaml
-, scp
-, six
-, transitions
-, yamlordereddictloader
-
-# tests
-, mock
-, nose
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  mock,
+  ncclient,
+  netaddr,
+  nose2,
+  ntc-templates,
+  paramiko,
+  pyparsing,
+  pyserial,
+  pythonOlder,
+  pyyaml,
+  scp,
+  setuptools,
+  pytestCheckHook,
+  six,
+  transitions,
+  yamlordereddictloader,
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.6.3";
-  format = "setuptools";
+  version = "2.7.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
-    rev = version;
-    hash = "sha256-XhQJwtS518AzSwyaWE392nfNdYe9+iYHvXxQsjJfzI8=";
+    tag = version;
+    hash = "sha256-aoi+in5A8qSdQNY3V4S4wBBfPchR1an7G6GQHDhgxpQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fixes tests with lxml>=4.8.0; remove > 2.6.3
-      url = "https://github.com/Juniper/py-junos-eznc/commit/048f750bb7357b6f6b9db8ad64bea479298c74fb.patch";
-      hash = "sha256-DYVj0BNPwDSbxDrzHhaq4F4kz1bliXB6Au3I63mRauc=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "ncclient==0.6.9" "ncclient"
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     lxml
     ncclient
@@ -65,20 +54,31 @@ buildPythonPackage rec {
     yamlordereddictloader
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
-    nose
+    nose2
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    nosetests -v -a unit --exclude=test_sw_put_ftp
-  '';
+  pytestFlagsArray = [ "tests/unit" ];
+
+  disabledTests = [
+    # jnpr.junos.exception.FactLoopError: A loop was detected while gathering the...
+    "TestPersonality"
+    "TestGetSoftwareInformation"
+    "TestIfdStyle"
+    # KeyError: 'mac'
+    "test_textfsm_table_mutli_key"
+    # AssertionError: None != 'juniper.net'
+    "test_domain_fact_from_config"
+  ];
 
   pythonImportsCheck = [ "jnpr.junos" ];
 
   meta = with lib; {
-    homepage = "http://www.github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
+    homepage = "https://github.com/Juniper/py-junos-eznc";
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };

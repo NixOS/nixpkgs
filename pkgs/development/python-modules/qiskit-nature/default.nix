@@ -1,48 +1,56 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
   # Python Inputs
-, h5py
-, numpy
-, psutil
-, qiskit-terra
-, retworkx
-, scikit-learn
-, scipy
-, withPyscf ? false
-, pyscf
+  h5py,
+  numpy,
+  psutil,
+  qiskit-terra,
+  rustworkx,
+  scikit-learn,
+  scipy,
+  withPyscf ? false,
+  pyscf,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pylatexenc
-, qiskit-aer
+  pytestCheckHook,
+  ddt,
+  pylatexenc,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.3.2";
+  version = "0.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-BXUVRZ8X3OJiRexNXZsnvp+Yh8ARNYohYH49/IYFYM0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SVzg3McB885RMyAp90Kr6/iVKw3Su9ucTob2jBckBo0=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     h5py
     numpy
     psutil
     qiskit-terra
-    retworkx
+    rustworkx
     scikit-learn
     scipy
   ] ++ lib.optional withPyscf pyscf;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     pylatexenc
@@ -51,12 +59,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlagsArray = [
-    "--durations=10"
-  ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   disabledTests = [
-    "test_two_qubit_reduction"  # failure cause unclear
+    "test_two_qubit_reduction" # failure cause unclear
   ];
 
   meta = with lib; {
@@ -64,6 +70,10 @@ buildPythonPackage rec {
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # drivers/gaussiand/gauopen/*.so
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

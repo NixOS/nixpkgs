@@ -1,18 +1,21 @@
-{ lib, buildDunePackage, fetchFromGitHub, yojson }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  yojson,
+}:
 
 buildDunePackage rec {
   pname = "ppx_yojson_conv_lib";
-  version = "0.14.0";
+  version = "0.17.0";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12s3xshayy1f8cp9lk6zqwnw60n7cdap55gkksz5w65gdd8bfxmf";
+    hash = "sha256-XGgpcAEemBNEagblBjpK+BiL0OUsU2JPqOq+heHbqVk=";
   };
 
   propagatedBuildInputs = [ yojson ];
@@ -20,7 +23,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Runtime lib for ppx_yojson_conv";
     homepage = "https://github.com/janestreet/ppx_yojson_conv_lib";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

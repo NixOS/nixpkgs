@@ -1,40 +1,64 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, coverage
-, mock
-, pytest
-, pytest-cov
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  packaging,
+
+  # optional-dependencies
+  eventlet,
+  gevent,
+  tornado,
+  setproctitle,
+
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "20.1.0";
-  disabled = isPy27;
+  version = "23.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "benoitc";
+    repo = "gunicorn";
+    tag = version;
+    hash = "sha256-Dq/mrQwo3II6DBvYfD1FHsKHaIlyHlJCZ+ZyrM4Efe0=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytest mock pytest-cov coverage ];
+  dependencies = [ packaging ];
 
-  prePatch = ''
-    substituteInPlace requirements_test.txt --replace "==" ">=" \
-      --replace "coverage>=4.0,<4.4" "coverage"
-  '';
-
-  # better than no tests
-  checkPhase = ''
-    $out/bin/gunicorn --help > /dev/null
-  '';
+  optional-dependencies = {
+    gevent = [ gevent ];
+    eventlet = [ eventlet ];
+    tornado = [ tornado ];
+    gthread = [ ];
+    setproctitle = [ setproctitle ];
+  };
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  meta = {
+    description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     homepage = "https://github.com/benoitc/gunicorn";
-    description = "WSGI HTTP Server for UNIX";
-    license = licenses.mit;
+    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "gunicorn";
   };
 }

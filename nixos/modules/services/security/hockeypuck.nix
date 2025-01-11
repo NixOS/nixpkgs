@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.hockeypuck;
   settingsFormat = pkgs.formats.toml { };
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
@@ -39,8 +45,8 @@ in {
       '';
       description = ''
         Configuration file for hockeypuck, here you can override
-        certain settings (<literal>loglevel</literal> and
-        <literal>openpgp.db.dsn</literal>) by just setting those values.
+        certain settings (`loglevel` and
+        `openpgp.db.dsn`) by just setting those values.
 
         For other settings you need to use lib.mkForce to override them.
 
@@ -49,16 +55,16 @@ in {
         the database yourself.
 
         Example:
-        <literal>
+        ```
           services.postgresql = {
             enable = true;
             ensureDatabases = [ "hockeypuck" ];
             ensureUsers = [{
               name = "hockeypuck";
-              ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
+              ensureDBOwnership = true;
             }];
           };
-        </literal>
+        ```
       '';
     };
   };
@@ -85,11 +91,14 @@ in {
       group = "hockeypuck";
       description = "Hockeypuck user";
     };
-    users.groups.hockeypuck = {};
+    users.groups.hockeypuck = { };
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";
-      after = [ "network.target" "postgresql.target" ];
+      after = [
+        "network.target"
+        "postgresql.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         WorkingDirectory = "/var/lib/hockeypuck";

@@ -1,28 +1,68 @@
-{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
-, wrapQtAppsHook
+{
+  mkDerivation,
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  xdg-utils,
+  dbus,
+  getconf,
+  glibc,
+  libXrandr,
+  libX11,
+  libXext,
+  libXdamage,
+  libXtst,
+  libSM,
+  libXfixes,
+  coreutils,
+  wrapQtAppsHook,
+  icu63,
+  nss,
+  minizip,
 }:
 
 mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
-  outputs = [ "out" "dev" ];
-  version = "15.29.4";
+  outputs = [
+    "out"
+    "dev"
+  ];
+  version = "15.54.3";
 
-  src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-jkFqOtU+D62S7QmNPvz58Z8wJ79lkN11pWQrtNdD+Uk=";
-  };
+  src =
+    let
+      base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major version}x";
+    in
+    {
+      x86_64-linux = fetchurl {
+        url = "${base_url}/teamviewer_${version}_amd64.deb";
+        hash = "sha256-41zVX2svomcRKu2ow1A/EeKojBIpABO4o2EZxappzgo=";
+      };
+      aarch64-linux = fetchurl {
+        url = "${base_url}/teamviewer_${version}_arm64.deb";
+        hash = "sha256-wuQYWeYgXW54/5dpiGzJxZ9JZDlUgFgCKq8Z4xV2HlI=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   unpackPhase = ''
     ar x $src
     tar xf data.tar.*
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11 ];
-  propagatedBuildInputs = [ qtquickcontrols ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    minizip
+    icu63
+    nss
+  ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
@@ -30,9 +70,10 @@ mkDerivation rec {
     rm -R \
       $out/share/teamviewer/logfiles \
       $out/share/teamviewer/config \
-      $out/share/teamviewer/tv_bin/RTlib \
-      $out/share/teamviewer/tv_bin/xdg-utils \
       $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,tv-delayed-start.sh}
+
+    # Teamviewer packages its own qt library files. So do not use nixpkgs qt files. These will cause issues
+    # See https://github.com/NixOS/nixpkgs/issues/321333
 
     ln -s $out/share/teamviewer/tv_bin/script/teamviewer $out/bin
     ln -s $out/share/teamviewer/tv_bin/teamviewerd $out/bin
@@ -46,11 +87,11 @@ mkDerivation rec {
     install -d "$out/share/dbus-1/services"
     install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.service" "$out/share/dbus-1/services"
     substituteInPlace "$out/share/dbus-1/services/com.teamviewer.TeamViewer.service" \
-      --replace '/opt/teamviewer/tv_bin/TeamViewer' \
+      --replace-fail '/opt/teamviewer/tv_bin/TeamViewer' \
         "$out/share/teamviewer/tv_bin/TeamViewer"
     install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.Desktop.service" "$out/share/dbus-1/services"
     substituteInPlace "$out/share/dbus-1/services/com.teamviewer.TeamViewer.Desktop.service" \
-      --replace '/opt/teamviewer/tv_bin/TeamViewer_Desktop' \
+      --replace-fail '/opt/teamviewer/tv_bin/TeamViewer_Desktop' \
         "$out/share/teamviewer/tv_bin/TeamViewer_Desktop"
 
     install -d "$out/share/dbus-1/system.d"
@@ -78,8 +119,25 @@ mkDerivation rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        getconf
+        coreutils
+      ]
+    }"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        libXrandr
+        libX11
+        libXext
+        libXdamage
+        libXtst
+        libSM
+        libXfixes
+        dbus
+        icu63
+      ]
+    }"
   ];
 
   postFixup = ''
@@ -96,9 +154,14 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
+    maintainers = with maintainers; [
+      jagajaga
+      jraygauthier
+      gador
+    ];
   };
 }

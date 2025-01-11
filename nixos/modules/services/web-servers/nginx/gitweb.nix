@@ -1,13 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.nginx.gitweb;
   gitwebConfig = config.services.gitweb;
-  package = pkgs.gitweb.override (optionalAttrs gitwebConfig.gitwebTheme {
-    gitwebTheme = true;
-  });
+  package = pkgs.gitweb.override (
+    optionalAttrs gitwebConfig.gitwebTheme {
+      gitwebTheme = true;
+    }
+  );
 
 in
 {
@@ -42,7 +49,7 @@ in
       default = "nginx";
       type = types.str;
       description = ''
-        Group that the CGI process will belong to. (Set to <literal>config.services.gitolite.group</literal> if you are using gitolite.)
+        Group that the CGI process will belong to. (Set to `config.services.gitolite.group` if you are using gitolite.)
       '';
     };
 
@@ -61,7 +68,7 @@ in
     systemd.services.gitweb = {
       description = "GitWeb service";
       script = "${package}/gitweb.cgi --fastcgi --nproc=1";
-      environment  = {
+      environment = {
         FCGI_SOCKET_PATH = "/run/gitweb/gitweb.sock";
       };
       serviceConfig = {
@@ -89,6 +96,6 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = [ ];
 
 }

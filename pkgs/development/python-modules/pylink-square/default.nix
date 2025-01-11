@@ -1,50 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, mock
-, psutil
-, six
-, future
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mock,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
-let
-  mock' = mock.overridePythonAttrs (old: rec {
-    version = "2.0.0";
-    src = fetchPypi {
-      inherit (old) pname;
-      inherit version;
-      sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
-    };
-  });
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pylink-square";
-  version = "0.8.1";
+  version = "1.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
-    rev = "v${version}";
-    sha256 = "1q5sm1017pcqcgwhsliiiv1wh609lrjdlc8f5ihlschk1d0qidpd";
+    tag = "v${version}";
+    hash = "sha256-4tdtyb0AjsAmFOPdkxbbro8PH3akC5uihN59lgijhkc=";
   };
 
-  buildInputs = [ mock' ];
-  propagatedBuildInputs = [ psutil six future ];
+  build-system = [ setuptools ];
 
-  preCheck = ''
-    # For an unknown reason, `pylink --version` output is different
-    # inside the nix build environment across different python versions
-    substituteInPlace tests/unit/test_main.py --replace \
-      "expected = 'pylink %s' % pylink.__version__" \
-      "return"
-  '';
+  dependencies = [
+    psutil
+    six
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pylink" ];
 
+  disabledTests = [
+    # AttributeError: 'called_once_with' is not a valid assertion
+    "test_cp15_register_write_success"
+    "test_jlink_restarted"
+    "test_set_log_file_success"
+  ];
+
   meta = with lib; {
     description = "Python interface for the SEGGER J-Link";
-    homepage = "https://github.com/Square/pylink";
-    maintainers = with maintainers; [ dump_stack ];
+    homepage = "https://github.com/square/pylink";
+    changelog = "https://github.com/square/pylink/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ dump_stack ];
   };
 }

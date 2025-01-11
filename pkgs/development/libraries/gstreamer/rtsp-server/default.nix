@@ -9,21 +9,22 @@
 , gobject-introspection
 , gst-plugins-base
 , gst-plugins-bad
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.20.1";
+  version = "1.24.10";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "028maajlvfn96v3gqk2ws1k6w9hjfk7dsxnm84d73pnpi99bqia7";
+    hash = "sha256-2yHf3Xvy5xhWTVVzeK2lNYtBHv4qPonp8Ph6dFN+Ktw=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   nativeBuildInputs = [
@@ -33,9 +34,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3
-
-    # documentation
-    # TODO add hotdoc here
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -45,9 +45,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''

@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pillow
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pillow,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "blurhash";
   version = "1.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "halcy";
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' setup.cfg
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pillow
     numpy

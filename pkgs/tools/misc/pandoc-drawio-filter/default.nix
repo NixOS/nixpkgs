@@ -1,14 +1,12 @@
-{ buildPythonApplication
-, drawio-headless
-, fetchFromGitHub
-, lib
-, pandoc
-, pandocfilters
-, runCommand
-, runtimeShell
-, texlive
-, writeScriptBin
-, xvfb-run
+{
+  buildPythonApplication,
+  drawio-headless,
+  fetchFromGitHub,
+  lib,
+  pandoc,
+  pandocfilters,
+  runCommand,
+  texliveTeTeX,
 }:
 
 let
@@ -37,7 +35,7 @@ let
           nativeBuildInputs = [
             pandoc
             pandoc-drawio-filter
-            texlive.combined.scheme-tetex
+            texliveTeTeX
           ];
         };
       in
@@ -51,6 +49,7 @@ let
       description = "Pandoc filter which converts draw.io diagrams to PDF";
       license = licenses.mit;
       maintainers = with maintainers; [ tfc ];
+      mainProgram = "pandoc-drawio";
     };
   };
 

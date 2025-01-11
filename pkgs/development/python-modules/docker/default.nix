@@ -1,50 +1,78 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, backports_ssl_match_hostname
-, mock
-, paramiko
-, pytestCheckHook
-, requests
-, six
-, websocket-client
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
+  packaging,
+  requests,
+  urllib3,
+
+  # optional-dependencies
+  paramiko,
+  websocket-client,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "5.0.3";
+  version = "7.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d916a26b62970e7c2f554110ed6af04c7ccff8e9f81ad17d0d40c75637e227fb";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "docker";
+    repo = "docker-py";
+    tag = version;
+    hash = "sha256-sk6TZLek+fRkKq7kG9g6cR9lvfPC8v8qUXKb7Tq4pLU=";
   };
 
-  nativeBuildInputs = lib.optional isPy27 mock;
-
-  propagatedBuildInputs = [
-    paramiko
-    requests
-    six
-    websocket-client
-  ] ++ lib.optional isPy27 backports_ssl_match_hostname;
-
-  checkInputs = [
-    pytestCheckHook
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
+
+  dependencies = [
+    packaging
+    requests
+    urllib3
+  ];
+
+  optional-dependencies = {
+    ssh = [ paramiko paramiko.optional-dependencies.ed25519 ];
+    tls = [];
+    websockets = [ websocket-client ];
+  };
+
+  pythonImportsCheck = [ "docker" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests/unit" ];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
-  disabledTests = lib.optionals stdenv.isDarwin [ "api_test" "stream_response" "socket_file" ];
-
-  dontUseSetuptoolsCheck = true;
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "api_test"
+    "stream_response"
+    "socket_file"
+  ];
 
   meta = with lib; {
-    description = "An API client for docker written in Python";
+    changelog = "https://github.com/docker/docker-py/releases/tag/${version}";
+    description = "API client for docker written in Python";
     homepage = "https://github.com/docker/docker-py";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

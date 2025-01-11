@@ -1,40 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pytz
-, tzlocal
-, i3ipc
-, pydbus
-, pygobject3
-, pyserial
-, setuptools
-, dbus-python
-
-, file
-, acpi
-, coreutils
-, alsa-utils
-, i3
-, procps
-, lm_sensors
-, libnotify
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  acpi,
+  alsa-utils,
+  coreutils,
+  dbus-python,
+  fetchPypi,
+  file,
+  hatchling,
+  i3,
+  i3ipc,
+  libnotify,
+  lm_sensors,
+  procps,
+  pygobject3,
+  pyserial,
+  pytz,
+  requests,
+  setuptools,
+  tzlocal,
+  wrapGAppsHook3,
+  xorg,
+  glib,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.43";
+  version = "3.61";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-H37Jcd7wZmDiCn7fk0SmlWYj46D3w/B9BdsEwqgEBjw=";
+    hash = "sha256-CL7bD+w8F59aVHAC9k4yG0qaSqJZdkFdEDKkyKkCBTs=";
   };
 
-  doCheck = false;
-  propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python file
+  nativeBuildInputs = [
+    hatchling
+    wrapGAppsHook3
+    gobject-introspection
   ];
+
+  buildInputs = [ glib ];
+
+  propagatedBuildInputs = [
+    pytz
+    requests
+    tzlocal
+    i3ipc
+    pygobject3
+    pyserial
+    setuptools
+    dbus-python
+    file
+  ];
+
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
@@ -48,10 +68,19 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  doCheck = false;
+
   meta = with lib; {
     description = "Extensible i3status wrapper";
-    license = licenses.bsd3;
     homepage = "https://github.com/ultrabug/py3status";
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
+    license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

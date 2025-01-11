@@ -1,25 +1,73 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, augeas, dnsutils, c-ares, curl,
-  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
-  pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
-  docbook_xsl, docbook_xml_dtd_44,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  makeWrapper,
+  glibc,
+  adcli,
+  augeas,
+  dnsutils,
+  c-ares,
+  curl,
+  cyrus_sasl,
+  ding-libs,
+  libnl,
+  libunistring,
+  nss,
+  samba,
+  nfs-utils,
+  doxygen,
+  python3,
+  pam,
+  popt,
+  talloc,
+  tdb,
+  tevent,
+  pkg-config,
+  ldb,
+  openldap,
+  pcre2,
+  libkrb5,
+  cifs-utils,
+  glib,
+  keyutils,
+  dbus,
+  fakeroot,
+  libxslt,
+  libxml2,
+  libuuid,
+  systemd,
+  nspr,
+  check,
+  cmocka,
+  uid_wrapper,
+  p11-kit,
+  nss_wrapper,
+  ncurses,
+  Po4a,
+  jansson,
+  jose,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  testers,
+  nix-update-script,
   nixosTests,
-  withSudo ? false }:
+  withSudo ? false,
+}:
 
 let
-  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
+  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.7.0";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "SSSD";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-aGPt2ZXMnd8TXC+YhVGYZKbsl3YYkjmYF2yDQB4t/BY=";
+    repo = "sssd";
+    tag = finalAttrs.version;
+    hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
   };
 
   postPatch = ''
@@ -27,58 +75,108 @@ stdenv.mkDerivation rec {
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
+    "-I${libxml2.dev}/include/libxml2"
+  ];
 
-  preConfigure = ''
-    export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=$(find ${python3.pkgs.ldap} -type d -name site-packages)
-    export PATH=$PATH:${openldap}/libexec
+  preConfigure =
+    ''
+      export SGML_CATALOG_FILES="${docbookFiles}"
+      export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
+      export PATH=$PATH:${openldap}/libexec
 
-    configureFlagsArray=(
-      --prefix=$out
-      --sysconfdir=/etc
-      --localstatedir=/var
-      --enable-pammoddir=$out/lib/security
-      --with-os=fedora
-      --with-pid-path=/run
-      --with-python3-bindings
-      --with-syslog=journald
-      --without-selinux
-      --without-semanage
-      --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
-      --with-ldb-lib-dir=$out/modules/ldb
-      --with-nscd=${glibc.bin}/sbin/nscd
-    )
-  '' + lib.optionalString withSudo ''
-    configureFlagsArray+=("--with-sudo")
-  '';
+      configureFlagsArray=(
+        --prefix=$out
+        --sysconfdir=/etc
+        --localstatedir=/var
+        --enable-pammoddir=$out/lib/security
+        --with-os=fedora
+        --with-pid-path=/run
+        --with-python3-bindings
+        --with-syslog=journald
+        --without-selinux
+        --without-semanage
+        --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
+        --with-ldb-lib-dir=$out/modules/ldb
+        --with-nscd=${glibc.bin}/sbin/nscd
+      )
+    ''
+    + lib.optionalString withSudo ''
+      configureFlagsArray+=("--with-sudo")
+    '';
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
-  buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba nfs-utils p11-kit python3 popt
-                  talloc tdb tevent ldb pam openldap pcre2 libkrb5
-                  cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid python3.pkgs.ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson jose ];
+  # Disable parallel install due to missing depends:
+  #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
+  enableParallelInstalling = false;
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+    doxygen
+  ];
+  buildInputs = [
+    augeas
+    dnsutils
+    c-ares
+    curl
+    cyrus_sasl
+    ding-libs
+    libnl
+    libunistring
+    nss
+    samba
+    nfs-utils
+    p11-kit
+    python3
+    popt
+    talloc
+    tdb
+    tevent
+    ldb
+    pam
+    openldap
+    pcre2
+    libkrb5
+    cifs-utils
+    glib
+    keyutils
+    dbus
+    fakeroot
+    libxslt
+    libxml2
+    libuuid
+    python3.pkgs.python-ldap
+    systemd
+    nspr
+    check
+    cmocka
+    uid_wrapper
+    nss_wrapper
+    ncurses
+    Po4a
+    jansson
+    jose
+  ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"
   ];
 
   installFlags = [
-     "sysconfdir=$(out)/etc"
-     "localstatedir=$(out)/var"
-     "pidpath=$(out)/run"
-     "sss_statedir=$(out)/var/lib/sss"
-     "logpath=$(out)/var/log/sssd"
-     "pubconfpath=$(out)/var/lib/sss/pubconf"
-     "dbpath=$(out)/var/lib/sss/db"
-     "mcpath=$(out)/var/lib/sss/mc"
-     "pipepath=$(out)/var/lib/sss/pipes"
-     "gpocachepath=$(out)/var/lib/sss/gpo_cache"
-     "secdbpath=$(out)/var/lib/sss/secrets"
-     "initdir=$(out)/rc.d/init"
+    "sysconfdir=$(out)/etc"
+    "localstatedir=$(out)/var"
+    "pidpath=$(out)/run"
+    "sss_statedir=$(out)/var/lib/sss"
+    "logpath=$(out)/var/log/sssd"
+    "pubconfpath=$(out)/var/lib/sss/pubconf"
+    "dbpath=$(out)/var/lib/sss/db"
+    "mcpath=$(out)/var/lib/sss/mc"
+    "pipepath=$(out)/var/lib/sss/pipes"
+    "gpocachepath=$(out)/var/lib/sss/gpo_cache"
+    "secdbpath=$(out)/var/lib/sss/secrets"
+    "initdir=$(out)/rc.d/init"
   ];
 
   postInstall = ''
@@ -93,14 +191,30 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
+  passthru = {
+    tests = {
+      inherit (nixosTests) sssd sssd-ldap;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "sssd --version";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "System Security Services Daemon";
     homepage = "https://sssd.io/";
-    changelog = "https://sssd.io/release-notes/sssd-${version}.html";
+    changelog = "https://sssd.io/release-notes/sssd-${finalAttrs.version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ e-user illustris ];
+    maintainers = with maintainers; [ illustris ];
+    pkgConfigModules = [
+      "ipa_hbac"
+      "sss_certmap"
+      "sss_idmap"
+      "sss_nss_idmap"
+    ];
   };
-}
+})

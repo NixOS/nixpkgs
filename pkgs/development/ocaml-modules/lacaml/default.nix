@@ -6,20 +6,20 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildDunePackage rec {
   pname = "lacaml";
-  version = "11.0.8";
+  version = "11.1.1";
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
-    sha256 = "1i47wqnd9iy6ndbi9zfahpb592gahp6im26rgpwch13vgzk3kifd";
+    sha256 = "sha256-NEs7A/lfA+8AE6k19EPW02e1pseDE7HobGSB/ZwLcoc=";
   };
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ lapack blas ] ++
-    lib.optionals stdenv.isDarwin
+    lib.optionals stdenv.hostPlatform.isDarwin
       [ darwin.apple_sdk.frameworks.Accelerate ];
 
   meta = with lib; {

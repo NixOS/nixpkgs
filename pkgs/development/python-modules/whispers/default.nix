@@ -1,65 +1,95 @@
-{ lib
-, astroid
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, jproperties
-, luhn
-, lxml
-, pytest-mock
-, pytestCheckHook
-, python-Levenshtein
-, pythonOlder
-, pyyaml
+{
+  lib,
+  astroid,
+  beautifulsoup4,
+  buildPythonPackage,
+  crossplane,
+  fetchFromGitHub,
+  jellyfish,
+  jproperties,
+  luhn,
+  lxml,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  wrapt,
+  semgrep,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "whispers";
-  version = "1.5.3";
-  format = "setuptools";
+  version = "2.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Skyscanner";
-    repo = pname;
-    rev = version;
-    hash = "sha256-jruUGyoZCyMu015QKtlvfx5WRMfxo/eYUue9wUIWb6o=";
+    owner = "adeptex";
+    repo = "whispers";
+    tag = version;
+    hash = "sha256-tjDog8+oWTNuK1eK5qUEFspiilB0riUSTX5ugTIiP3M=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"pytest-runner"' ""
+  '';
+
+  pythonRelaxDeps = [
+    "jellyfish"
+    "lxml"
+    "pyyaml"
+    "semgrep"
+    "six"
+    "wrapt"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     astroid
     beautifulsoup4
+    crossplane
+    jellyfish
     jproperties
     luhn
     lxml
-    python-Levenshtein
     pyyaml
+    semgrep
+    six
+    wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-  '';
+  disabledTestPaths = [
+    # pinning tests highly sensitive to semgrep version
+    "tests/unit/plugins/test_semgrep.py"
+  ];
 
   preCheck = ''
+    # pinning test highly sensitive to semgrep version
+    substituteInPlace tests/unit/test_main.py \
+      --replace-fail '("--ast", 421),' ""
+
     # Some tests need the binary available in PATH
     export PATH=$out/bin:$PATH
   '';
 
-  pythonImportsCheck = [
-    "whispers"
-  ];
+  pythonImportsCheck = [ "whispers" ];
 
   meta = with lib; {
     description = "Tool to identify hardcoded secrets in static structured text";
-    homepage = "https://github.com/Skyscanner/whispers";
+    homepage = "https://github.com/adeptex/whispers";
+    changelog = "https://github.com/adeptex/whispers/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "whispers";
   };
 }

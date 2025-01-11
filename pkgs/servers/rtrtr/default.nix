@@ -1,25 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rtrtr";
-  version = "0.1.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8wcmciQ2OcvMNl6gADte40jrP+VfhoKn95ofjyjtRIo=";
+    hash = "sha256-c1jzUP7cYjqn49gbjXLWTge8ywHBI29gSnhzWDzNCV8=";
   };
 
-  cargoSha256 = "sha256-Jdu5U56Duqzakvj3rldzch17y1nhJmuxwJtq4Ydx3IY=";
+  cargoHash = "sha256-2/pm/Tfn6UxFpHW6HW20yOxEtm6N3jOe8kk9k7OPppU=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];
 
   buildNoDefaultFeatures = true;
@@ -38,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${version}/Changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ steamwalker ];
+    mainProgram = "rtrtr";
   };
 }

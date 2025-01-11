@@ -1,53 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chardet
-, attrs
-, commoncode
-, pytestCheckHook
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chardet,
+  attrs,
+  commoncode,
+  pytestCheckHook,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "debian-inspector";
-  version = "30.0.0";
-  format = "setuptools";
+  version = "31.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "debian_inspector";
     inherit version;
-    hash = "sha256-0PT5sT6adaqgYQtWjks12ys0z1C3n116aeJaEKR/Wxg=";
+    hash = "sha256-68+8FwZPEL07bSEizbyXtxpJSvDruvr5qM6t/osWT5k=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     attrs
-    commoncode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    commoncode
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "debian_inspector"
-  ];
+  pythonImportsCheck = [ "debian_inspector" ];
 
   meta = with lib; {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
-    license = with licenses; [ asl20 bsd3 mit ];
-    maintainers = teams.determinatesystems.members;
+    license = with licenses; [
+      asl20
+      bsd3
+      mit
+    ];
+    maintainers = [ ];
   };
 }

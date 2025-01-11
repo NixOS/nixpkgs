@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,8 +13,7 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.mini;
 
-  miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf"
-    ''
+  miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf" ''
     [greeter]
     user = ${cfg.user}
     show-password-label = true
@@ -44,7 +48,7 @@ let
     password-border-width = 2px
 
     ${cfg.extraConfig}
-    '';
+  '';
 
 in
 {
@@ -60,7 +64,7 @@ in
 
           Note that this greeter starts only the default X session.
           You can configure the default X session using
-          <xref linkend="opt-services.xserver.displayManager.defaultSession"/>.
+          [](#opt-services.displayManager.defaultSession).
         '';
       };
 

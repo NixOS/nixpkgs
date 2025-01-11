@@ -1,27 +1,46 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, blessings, mock, nose, pyte, cwcwidth, typing ? null}:
+{
+  lib,
+  stdenv,
+  blessed,
+  buildPythonPackage,
+  cwcwidth,
+  fetchPypi,
+  pyte,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.3.10";
+  version = "0.4.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11efbb153d9cb22223dd9a44041ea0c313b8411e246e7f684aa843f6aa9c1600";
+    hash = "sha256-br4zIVvXyShRpQYEnHIMykz1wZLBZlwdepigTEcCdg4=";
   };
 
-  propagatedBuildInputs = [ blessings cwcwidth ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ mock pyte nose ];
+  propagatedBuildInputs = [
+    blessed
+    cwcwidth
+  ];
 
-  checkPhase = ''
-    nosetests tests
-  '';
+  nativeCheckInputs = [
+    pyte
+    pytestCheckHook
+  ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Curses-like terminal wrapper, with colored strings!";
     homepage = "https://github.com/bpython/curtsies";
+    changelog = "https://github.com/bpython/curtsies/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

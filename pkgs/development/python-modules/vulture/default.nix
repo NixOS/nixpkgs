@@ -1,29 +1,37 @@
-{ lib
-, buildPythonPackage
-, coverage
-, fetchPypi
-, isPy27
-, pytest-cov
-, pytestCheckHook
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pint,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  toml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.3";
-  disabled = isPy27;
+  version = "2.13";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ryrmsm72z3fzaanyblz49q40h9d3bbl4pspn2lvkkp9rcmsdm83";
+    hash = "sha256-eCSL9Y9er/zCreMGFB6tc/Q3M5lQ+ABF3Of4sHjloao=";
   };
 
-  propagatedBuildInputs = [ toml ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    coverage
-    pytest-cov
+  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  nativeCheckInputs = [
+    pint
+    pytest-cov-stub
     pytestCheckHook
+    toml
   ];
 
   pythonImportsCheck = [ "vulture" ];
@@ -31,7 +39,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Finds unused code in Python programs";
     homepage = "https://github.com/jendrikseipp/vulture";
+    changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mcwitt ];
+    mainProgram = "vulture";
   };
 }

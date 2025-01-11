@@ -1,30 +1,31 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, ppx_cstruct, lwt, ounit, stdlib-shims
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  lwt,
+  ounit2,
 }:
 
 buildDunePackage rec {
   pname = "xenstore";
-  version = "2.1.1";
+  version = "2.3.0";
 
-  minimumOCamlVersion = "4.04";
-
-  useDune2 = true;
-
-  src = fetchurl {
-    url = "https://github.com/mirage/ocaml-xenstore/releases/download/${version}/xenstore-${version}.tbz";
-    sha256 = "283814ea21adc345c4d59cfcb17b2f7c1185004ecaecc3871557c961874c84f5";
+  src = fetchFromGitHub {
+    owner = "mirage";
+    repo = "ocaml-xenstore";
+    rev = "v${version}";
+    hash = "sha256-LaynsbCE/+2QfbQCOLZi8nw1rqmZtgrwAov9cSxYZw8=";
   };
 
-  nativeBuildInputs = [ ppx_cstruct ];
-  propagatedBuildInputs = [ stdlib-shims cstruct lwt ];
+  propagatedBuildInputs = [ lwt ];
 
   doCheck = true;
-  checkInputs = [ ounit ];
+  checkInputs = [ ounit2 ];
 
   meta = with lib; {
     description = "Xenstore protocol in pure OCaml";
     license = licenses.lgpl21Only;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = teams.xen.members ++ [ maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/ocaml-xenstore";
   };
 }

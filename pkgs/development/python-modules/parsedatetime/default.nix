@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  future,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "parsedatetime";
   version = "2.6";
+  format = "setuptools";
   disabled = isPy27; # no longer compatible with icu package
 
   src = fetchPypi {
@@ -18,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests/Test*.py" ];
 
@@ -35,6 +37,6 @@ buildPythonPackage rec {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

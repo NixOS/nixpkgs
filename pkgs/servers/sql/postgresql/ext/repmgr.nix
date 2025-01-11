@@ -1,34 +1,31 @@
-{ lib, stdenv, fetchFromGitHub
-, postgresql
-, openssl
-, zlib
-, readline
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  flex,
+  curl,
+  json_c,
+  buildPostgresqlExtension,
 }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "repmgr";
-  version = "5.3.1";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
-    owner = "2ndQuadrant";
+    owner = "EnterpriseDB";
     repo = "repmgr";
     rev = "v${version}";
-    sha256 = "sha256-fHoXbFOF3xj/eNHgQIghF15vbDObnuwl2DAH+zRVGZQ=";
+    sha256 = "sha256-8G2CzzkWTKEglpUt1Gr7d/DuHJvCIEjsbYDMl3Zt3cs=";
   };
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline ];
-
-  installPhase = ''
-    mkdir -p $out/{bin,lib,share/postgresql/extension}
-
-    cp repmgr{,d} $out/bin
-    cp *.so       $out/lib
-    cp *.sql      $out/share/postgresql/extension
-    cp *.control  $out/share/postgresql/extension
-  '';
+  buildInputs = postgresql.buildInputs ++ [
+    curl
+    json_c
+  ];
 
   meta = with lib; {
     homepage = "https://repmgr.org/";

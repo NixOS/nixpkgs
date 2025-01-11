@@ -1,29 +1,24 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "nested-lookup";
-  version = "0.2.23";
+  version = "0.2.25";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "russellballestrini";
-    repo = "nested-lookup";
-    # https://github.com/russellballestrini/nested-lookup/issues/47
-    rev = "c1b0421479efa378545bc71efa3b72882e8fec17";
-    sha256 = "sha256-jgfYLSsFLQSsOH4NzbDPKFIG+tWWZ1zTWcZEaX2lthg=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-b6gydIyQOB8ikdhQgJ4ySSUZ7l8lPWpay8Kdk37KAug=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nested_lookup" ];
 

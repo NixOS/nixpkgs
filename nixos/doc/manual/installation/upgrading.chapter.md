@@ -6,7 +6,7 @@ expressions and associated binaries. The NixOS channels are updated
 automatically from NixOS's Git repository after certain tests have
 passed and all packages have been built. These channels are:
 
--   *Stable channels*, such as [`nixos-22.05`](https://nixos.org/channels/nixos-22.05).
+-   *Stable channels*, such as [`nixos-24.11`](https://channels.nixos.org/nixos-24.11).
     These only get conservative bug fixes and package upgrades. For
     instance, a channel update may cause the Linux kernel on your system
     to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
@@ -14,13 +14,13 @@ passed and all packages have been built. These channels are:
     Stable channels are generally maintained until the next stable
     branch is created.
 
--   The *unstable channel*, [`nixos-unstable`](https://nixos.org/channels/nixos-unstable).
+-   The *unstable channel*, [`nixos-unstable`](https://channels.nixos.org/nixos-unstable).
     This corresponds to NixOS's main development branch, and may thus see
     radical changes between channel updates. It's not recommended for
     production systems.
 
--   *Small channels*, such as [`nixos-22.05-small`](https://nixos.org/channels/nixos-22.05-small)
-    or [`nixos-unstable-small`](https://nixos.org/channels/nixos-unstable-small).
+-   *Small channels*, such as [`nixos-24.11-small`](https://channels.nixos.org/nixos-24.11-small)
+    or [`nixos-unstable-small`](https://channels.nixos.org/nixos-unstable-small).
     These are identical to the stable and unstable channels described above,
     except that they contain fewer binary packages. This means they get updated
     faster than the regular channels (for instance, when a critical security patch
@@ -28,48 +28,48 @@ passed and all packages have been built. These channels are:
     built from source than usual. They're mostly intended for server environments
     and as such contain few GUI applications.
 
-To see what channels are available, go to <https://nixos.org/channels>.
+To see what channels are available, go to <https://channels.nixos.org>.
 (Note that the URIs of the various channels redirect to a directory that
 contains the channel's latest version and includes ISO images and
 VirtualBox appliances.) Please note that during the release process,
 channels that are not yet released will be present here as well. See the
-Getting NixOS page <https://nixos.org/nixos/download.html> to find the
-newest supported stable release.
+Getting NixOS page <https://nixos.org/download/> to find the newest
+supported stable release.
 
 When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For
-instance, if you installed from a 22.05 ISO, you will be subscribed to
-the `nixos-22.05` channel. To see which NixOS channel you're subscribed
+instance, if you installed from a 24.11 ISO, you will be subscribed to
+the `nixos-24.11` channel. To see which NixOS channel you're subscribed
 to, run the following as root:
 
 ```ShellSession
 # nix-channel --list | grep nixos
-nixos https://nixos.org/channels/nixos-unstable
+nixos https://channels.nixos.org/nixos-unstable
 ```
 
 To switch to a different NixOS channel, do
 
 ```ShellSession
-# nix-channel --add https://nixos.org/channels/channel-name nixos
+# nix-channel --add https://channels.nixos.org/channel-name nixos
 ```
 
 (Be sure to include the `nixos` parameter at the end.) For instance, to
-use the NixOS 22.05 stable channel:
+use the NixOS 24.11 stable channel:
 
 ```ShellSession
-# nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
+# nix-channel --add https://channels.nixos.org/nixos-24.11 nixos
 ```
 
 If you have a server, you may want to use the "small" channel instead:
 
 ```ShellSession
-# nix-channel --add https://nixos.org/channels/nixos-22.05-small nixos
+# nix-channel --add https://channels.nixos.org/nixos-24.11-small nixos
 ```
 
 And if you want to live on the bleeding edge:
 
 ```ShellSession
-# nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+# nix-channel --add https://channels.nixos.org/nixos-unstable nixos
 ```
 
 You can then upgrade NixOS to the latest version in your chosen channel
@@ -101,8 +101,10 @@ You can keep a NixOS system up-to-date automatically by adding the
 following to `configuration.nix`:
 
 ```nix
-system.autoUpgrade.enable = true;
-system.autoUpgrade.allowReboot = true;
+{
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = true;
+}
 ```
 
 This enables a periodically executed systemd service named
@@ -114,5 +116,7 @@ the new generation contains a different kernel, initrd or kernel
 modules. You can also specify a channel explicitly, e.g.
 
 ```nix
-system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.05;
+{
+  system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.11";
+}
 ```

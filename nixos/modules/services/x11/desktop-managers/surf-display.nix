@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -42,7 +47,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   options = {
     services.xserver.desktopManager.surf-display = {
       enable = mkEnableOption "surf-display as a kiosk browser session";
@@ -73,7 +79,7 @@ in {
         type = types.separatedString " ";
         default = "";
         description = ''
-          Screensaver settings, see <literal>man 1 xset</literal> for possible options.
+          Screensaver settings, see `man 1 xset` for possible options.
         '';
       };
 
@@ -83,7 +89,7 @@ in {
         description = ''
           Disable right and middle pointer device click in browser sessions
           while keeping scrolling wheels' functionality intact. See pointer
-          subcommand on <literal>man xmodmap</literal> for details.
+          subcommand on `man xmodmap` for details.
         '';
       };
 
@@ -112,14 +118,14 @@ in {
           DISPLAYS['display-host-local-file']="www_uri=file:///usr/share/doc/surf-display/empty-page.html"
         '';
         description = ''
-          Extra configuration options to append to <literal>/etc/default/surf-display</literal>.
+          Extra configuration options to append to `/etc/default/surf-display`.
         '';
       };
     };
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.sessionPackages = [
+    services.displayManager.sessionPackages = [
       pkgs.surf-display
     ];
 

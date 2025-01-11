@@ -1,41 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, tox
-, six
-, python-dateutil
-, kitchen
-, pytz
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # native dependencies
+  taskwarrior2,
+  distutils,
+
+  # dependencies
+  kitchen,
+  python-dateutil,
+  pytz,
+
+  # tests
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "1.3.1";
   pname = "taskw";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a68e49cac2d4f6da73c0ce554fd6f94932d95e20596f2ee44a769a28c12ba7d";
+    hash = "sha256-EQm9+b3nqbMqUAejAsh4MD/2UYi2QiWsdKMomkxUi90=";
   };
 
-  patches = [ ./use-template-for-taskwarrior-install-path.patch ];
+  patches = [
+    ./use-template-for-taskwarrior-install-path.patch
+    # Remove when https://github.com/ralphbean/taskw/pull/151 is merged.
+    ./support-relative-path-in-taskrc.patch
+  ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
-      --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+      --replace '@@taskwarrior@@' '${taskwarrior2}'
   '';
 
-  # https://github.com/ralphbean/taskw/issues/98
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  buildInputs = [ nose pkgs.taskwarrior tox ];
-  propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
+  buildInputs = [
+    taskwarrior2
+    distutils
+  ];
+
+  dependencies = [
+    kitchen
+    python-dateutil
+    pytz
+  ];
+
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
-    homepage =  "https://github.com/ralphbean/taskw";
+    homepage = "https://github.com/ralphbean/taskw";
     description = "Python bindings for your taskwarrior database";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pierron ];
   };
-
 }

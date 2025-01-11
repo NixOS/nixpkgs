@@ -1,36 +1,65 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, untokenize
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  charset-normalizer,
+  tomli,
+  untokenize,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docformatter";
-  version = "1.4";
+  version = "1.7.5";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  format = "setuptools";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "064e6d81f04ac96bc0d176cbaae953a0332482b22d3ad70d47c8a7f2732eef6f";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-QUjeG84KwI5Y3MU1wrmjHBXU2tEJ0CuiR3Y/S+dX7Gs=";
   };
 
+  patches = [ ./test-path.patch ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'charset_normalizer = "^2.0.0"' 'charset_normalizer = ">=2.0.0"'
+    substituteInPlace tests/conftest.py \
+      --subst-var-by docformatter $out/bin/docformatter
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
+    charset-normalizer
+    tomli
     untokenize
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    mock
     pytestCheckHook
+  ];
+
+  # Disable failing tests until https://github.com/PyCQA/docformatter/issues/274 is fixed upstream
+  disabledTests = [
+    "test_do_format_code.py"
+    "test_docformatter.py"
   ];
 
   pythonImportsCheck = [ "docformatter" ];
 
   meta = {
+    changelog = "https://github.com/PyCQA/docformatter/blob/${src.rev}/CHANGELOG.md";
     description = "Formats docstrings to follow PEP 257";
+    mainProgram = "docformatter";
     homepage = "https://github.com/myint/docformatter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];

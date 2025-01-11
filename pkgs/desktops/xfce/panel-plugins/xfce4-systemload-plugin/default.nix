@@ -1,37 +1,46 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, xfce
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  xfce4-panel,
+  libgtop,
+  libxfce4ui,
+  upower,
+  xfconf,
+  gitUpdater,
 }:
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-systemload-plugin";
-  version = "1.3.1";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-systemload-plugin";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-VtEAeAHVLXwrWhO7VHRfbX8G/aKLSc6TYUVjMGiBdlI=";
+    sha256 = "sha256-aFLV2cmnTQ4NtYLG9f5zkOvkii61aSF3rhLhxMzG78k=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [
+    libgtop
     libxfce4ui
+    upower
     xfce4-panel
     xfconf
   ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-systemload-plugin";

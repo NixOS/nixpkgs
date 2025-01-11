@@ -1,66 +1,120 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, boto3
-, google-pasta
-, importlib-metadata
-, numpy
-, protobuf
-, protobuf3-to-dict
-, smdebug-rulesconfig
-, pandas
-, pathos
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  attrs,
+  boto3,
+  cloudpickle,
+  docker,
+  fastapi,
+  google-pasta,
+  importlib-metadata,
+  jsonschema,
+  numpy,
+  omegaconf,
+  packaging,
+  pandas,
+  pathos,
+  platformdirs,
+  protobuf,
+  psutil,
+  pyyaml,
+  requests,
+  sagemaker-core,
+  schema,
+  smdebug-rulesconfig,
+  tblib,
+  tqdm,
+  urllib3,
+  uvicorn,
+
+  # optional-dependencies
+  scipy,
+  accelerate,
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.94.0";
-  format = "setuptools";
+  version = "2.237.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WASgnF1IwqwiYcNEkHlhbV13rKdTTZgwvLcbBZaBNK8=";
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "sagemaker-python-sdk";
+    tag = "v${version}";
+    hash = "sha256-cNBPuXoViHy03ZMBrF3+xeMSUpovi1lloXizBvgNJmw=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    boto3
-    google-pasta
-    importlib-metadata
-    numpy
-    packaging
-    pathos
-    protobuf
-    protobuf3-to-dict
-    smdebug-rulesconfig
-    pandas
+  build-system = [
+    hatchling
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "attrs==20.3.0" "attrs>=20.3.0"
-  '';
+  pythonRelaxDeps = [
+    "attrs"
+    "boto3"
+    "cloudpickle"
+    "importlib-metadata"
+    "numpy"
+    "omegaconf"
+    "protobuf"
+  ];
 
-  postFixup = ''
-    [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
-  '';
+  dependencies = [
+    attrs
+    boto3
+    cloudpickle
+    docker
+    fastapi
+    google-pasta
+    importlib-metadata
+    jsonschema
+    numpy
+    omegaconf
+    packaging
+    pandas
+    pathos
+    platformdirs
+    protobuf
+    psutil
+    pyyaml
+    requests
+    sagemaker-core
+    schema
+    smdebug-rulesconfig
+    tblib
+    tqdm
+    urllib3
+    uvicorn
+  ];
 
-  doCheck = false;
+  doCheck = false; # many test dependencies are not available in nixpkgs
 
   pythonImportsCheck = [
     "sagemaker"
     "sagemaker.lineage.visualizer"
   ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    local = [
+      urllib3
+      docker
+      pyyaml
+    ];
+    scipy = [ scipy ];
+    huggingface = [ accelerate ];
+    # feature-processor = [ pyspark sagemaker-feature-store-pyspark ]; # not available in nixpkgs
+  };
+
+  meta = {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nequissimus ];
+    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

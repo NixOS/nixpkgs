@@ -1,156 +1,113 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
+{ lib
+, stdenv
 , dpkg
-, wrapGAppsHook
-, wrapQtAppsHook
+, autoPatchelfHook
 , alsa-lib
-, atk
-, bzip2
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gperftools
-, gtk2-x11
-, libpng12
+, at-spi2-core
 , libtool
-, libuuid
-, libxml2
-, xz
+, libxkbcommon
 , nspr
-, nss
-, openssl
-, pango
-, qt4
+, libgbm
+, libtiff
+, udev
+, gtk3
 , qtbase
-, sqlite
-, unixODBC
 , xorg
-, zlib
-, steam
-, makeWrapper
+, cups
+, pango
+, runCommandLocal
+, curl
+, coreutils
+, cacert
+, libjpeg
+, useChineseVersion ? false
 }:
-
+let
+  pkgVersion = "11.1.0.11723";
+  url =
+    if useChineseVersion then
+      "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}_amd64.deb"
+    else
+      "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}.XA_amd64.deb";
+  hash =
+    if useChineseVersion then
+      "sha256-vpXK8YyjqhFdmtajO6ZotYACpe5thMct9hwUT3advUM="
+    else
+      "sha256-o8njvwE/UsQpPuLyChxGAZ4euvwfuaHxs5pfUvcM7kI=";
+  uri = builtins.replaceStrings [ "https://wps-linux-personal.wpscdn.cn" ] [ "" ] url;
+  securityKey = "7f8faaaa468174dc1c9cd62e5f218a5b";
+in
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.9615";
+  version = pkgVersion;
 
-  src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
-    sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
-  };
+  src = runCommandLocal (if useChineseVersion then "wps-office_${version}_amd64.deb" else "wps-office_${version}.XA_amd64.deb")
+    {
+      outputHashMode = "recursive";
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+
+      nativeBuildInputs = [ curl coreutils ];
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    } ''
+    timestamp10=$(date '+%s')
+    md5hash=($(echo -n "${securityKey}${uri}$timestamp10" | md5sum))
+
+    curl \
+    --retry 3 --retry-delay 3 \
+    "${url}?t=$timestamp10&k=$md5hash" \
+    > $out
+  '';
+
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
-    # distribution is missing libjsapiservice.so, so we should not let
-    # autoPatchelfHook fail on the following dead libraries
-    rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
-  '';
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper ];
-
-  meta = with lib; {
-    description = "Office suite, formerly Kingsoft Office";
-    homepage = "https://www.wps.com/";
-    platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ mlatus th0rgal ];
-  };
-
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
-    atk
-    bzip2
-    cairo
-    dbus.lib
-    expat
-    ffmpeg
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gperftools
-    gtk2-x11
-    libICE
-    libSM
-    libX11
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libpng12
+    at-spi2-core
     libtool
-    libuuid
-    libxcb
-    libxml2
-    xz
+    libjpeg
+    libxkbcommon
     nspr
-    nss
-    openssl
-    pango
-    qt4
+    libgbm
+    libtiff
+    udev
+    gtk3
     qtbase
-    sqlite
-    unixODBC
-    zlib
-    cups.lib
+    xorg.libXdamage
+    xorg.libXtst
+    xorg.libXv
   ];
 
-  dontPatchELF = true;
+  dontWrapQtApps = true;
 
-  # wpsoffice uses `/build` in its own build system making nix things there
-  # references to nix own build directory
-  noAuditTmpdir = true;
-
-  unvendoredLibraries = [
-    # Have to use parts of the vendored qt4
-    #"Qt"
-    "SDL2"
-    "bz2"
-    "avcodec"
-    "avdevice"
-    "avformat"
-    "avutil"
-    "swresample"
-    "swscale"
-    "jpeg"
-    "png"
-    # File saving breaks unless we are using vendored llvmPackages_8.libcxx
-    #"c++"
-    "ssl" "crypto"
-    "nspr"
-    "nss"
-    "odbc"
-    "tcmalloc" # gperftools
+  runtimeDependencies = map lib.getLib [
+    cups
+    pango
   ];
 
-  installPhase = let
-    steam-run = (steam.override {
-      extraPkgs = p: buildInputs;
-    }).run;
-  in ''
+  autoPatchelfIgnoreMissingDeps = [
+    # distribution is missing libkappessframework.so
+    "libkappessframework.so"
+    # qt4 support is deprecated
+    "libQtCore.so.4"
+    "libQtNetwork.so.4"
+    "libQtXml.so.4"
+  ];
+
+  installPhase = ''
+    runHook preInstall
     prefix=$out/opt/kingsoft/wps-office
     mkdir -p $out
     cp -r opt $out
     cp -r usr/* $out
-    for lib in $unvendoredLibraries; do
-      rm -v "$prefix/office6/lib$lib"*.so{,.*}
-    done
     for i in wps wpp et wpspdf; do
       substituteInPlace $out/bin/$i \
         --replace /opt/kingsoft/wps-office $prefix
@@ -159,23 +116,26 @@ stdenv.mkDerivation rec {
       substituteInPlace $i \
         --replace /usr/bin $out/bin
     done
-
-    for i in wps wpp et wpspdf; do
-      mv $out/bin/$i $out/bin/.$i-orig
-      makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
-        --add-flags $out/bin/.$i-orig \
-        --argv0 $i
-    done
+    runHook postInstall
   '';
 
-  dontWrapQtApps = true;
-  dontWrapGApps = true;
-  postFixup = ''
-    for f in "$out"/bin/*; do
-      echo "Wrapping $f"
-      wrapProgram "$f" \
-        "''${gappsWrapperArgs[@]}" \
-        "''${qtWrapperArgs[@]}"
-    done
+  preFixup = ''
+    # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
+    patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so,addons/pdfbatchcompression/libpdfbatchcompressionapp.so}
+    patchelf --add-needed libtiff.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
+    # Fix: Wrong JPEG library version: library is 62, caller expects 80
+    patchelf --add-needed libjpeg.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
+    # dlopen dependency
+    patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
   '';
+
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    hydraPlatforms = [ ];
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ mlatus th0rgal rewine pokon548 ];
+  };
 }

@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.security.googleOsLogin;
@@ -13,8 +15,8 @@ in
 
   options = {
 
-    security.googleOsLogin.enable = mkOption {
-      type = types.bool;
+    security.googleOsLogin.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable Google OS Login.
@@ -32,7 +34,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.pam.services.sshd = {
       makeHomeDir = true;
       googleOsLoginAccountVerification = true;
@@ -42,6 +44,10 @@ in
     security.sudo.extraConfig = ''
       #includedir /run/google-sudoers.d
     '';
+    security.sudo-rs.extraConfig = ''
+      #includedir /run/google-sudoers.d
+    '';
+
     systemd.tmpfiles.rules = [
       "d /run/google-sudoers.d 750 root root -"
       "d /var/google-users.d 750 root root -"
@@ -52,8 +58,14 @@ in
 
     # enable the nss module, so user lookups etc. work
     system.nssModules = [ package ];
-    system.nssDatabases.passwd = [ "cache_oslogin" "oslogin" ];
-    system.nssDatabases.group = [ "cache_oslogin" "oslogin" ];
+    system.nssDatabases.passwd = [
+      "cache_oslogin"
+      "oslogin"
+    ];
+    system.nssDatabases.group = [
+      "cache_oslogin"
+      "oslogin"
+    ];
 
     # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
     # So indirect by a symlink.

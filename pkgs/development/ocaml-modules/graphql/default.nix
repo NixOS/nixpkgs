@@ -1,11 +1,23 @@
-{ buildDunePackage, alcotest, graphql_parser, rresult, yojson }:
+{
+  buildDunePackage,
+  alcotest,
+  graphql_parser,
+  rresult,
+  yojson,
+}:
 
 buildDunePackage rec {
   pname = "graphql";
 
-  inherit (graphql_parser) version useDune2 src;
+  inherit (graphql_parser) version src;
 
-  propagatedBuildInputs = [ graphql_parser rresult yojson ];
+  duneVersion = "3";
+
+  propagatedBuildInputs = [
+    graphql_parser
+    rresult
+    yojson
+  ];
 
   checkInputs = [ alcotest ];
 

@@ -1,12 +1,18 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "myconnpy";
   namespace = "script.module.myconnpy";
-  version = "8.0.18+matrix.1";
+  version = "8.0.33";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "1cx3qdzw9lkkmbyvyrmc2i193is20fihn2sfl7kmv43f708vam0k";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-NlLMq9RAdWu8rVsMc0FDe1HmQiVp5T7iBXbIH7HB5bI=";
   };
 
   passthru = {

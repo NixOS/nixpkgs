@@ -1,27 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc-google-iam-v1
-, google-api-core
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "2.5.1";
+  version = "2.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y71v505bwXEV1u28WFAHs12Qx0tKY7BDjFCc+oBgZcw=";
+    hash = "sha256-pLQgcwR89F+9jcSDtW/5+6Gy+Wk7XQf4iD49vDPkN9U=";
   };
 
-  propagatedBuildInputs = [ grpc-google-iam-v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    grpc-google-iam-v1
+    libcst
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  # including_default_value_fields was deprecated, the new version is called
+  # always_print_fields_with_no_presence
+  postPatch = ''
+    substituteInPlace "tests/unit/gapic/iot_v1/test_device_manager.py" \
+      --replace-fail "including_default_value_fields" "always_print_fields_with_no_presence"
+    substituteInPlace "google/cloud/iot_v1/services/device_manager/transports/rest.py" \
+      --replace-fail "including_default_value_fields" "always_print_fields_with_no_presence"
+  '';
 
   disabledTests = [
     # requires credentials
@@ -36,7 +61,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud IoT API API client library";
     homepage = "https://github.com/googleapis/python-iot";
+    changelog = "https://github.com/googleapis/python-iot/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

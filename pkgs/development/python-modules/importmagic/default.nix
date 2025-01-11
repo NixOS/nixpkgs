@@ -1,26 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importmagic";
   version = "0.1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f7757a5b74c9a291e20e12023bb3bf71bc2fa3adfb15a08570648ab83eaf8d8";
+    hash = "sha256-P3dXpbdMmikeIOEgI7s79xvC+jrfsVoIVwZIq4Pq+Ng=";
   };
+
+  patches = [
+    # https://github.com/alecthomas/importmagic/issues/67
+    ./python-312.patch
+  ];
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # missing json file from tarball
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "importmagic" ];
+
+  meta = {
     description = "Python Import Magic - automagically add, remove and manage imports";
     homepage = "https://github.com/alecthomas/importmagic";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ onny ];
   };
-
 }

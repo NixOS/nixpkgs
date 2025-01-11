@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -7,7 +12,8 @@ let
 
   settingsFormat = pkgs.formats.toml { };
   configFile = settingsFormat.generate "prosody-filer.toml" cfg.settings;
-in {
+in
+{
 
   options = {
     services.prosody-filer = {
@@ -16,7 +22,7 @@ in {
       settings = mkOption {
         description = ''
           Configuration for Prosody Filer.
-          Refer to <link xlink:href="https://github.com/ThomasLeister/prosody-filer#configure-prosody-filer"/> for details on supported values.
+          Refer to <https://github.com/ThomasLeister/prosody-filer#configure-prosody-filer> for details on supported values.
         '';
 
         type = settingsFormat.type;
@@ -78,8 +84,14 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

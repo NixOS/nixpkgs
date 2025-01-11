@@ -1,19 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysoma";
-  version = "0.0.10";
+  version = "0.0.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q8afi6m3mfh0rfpghyvx6z76kgrpkbnlqzbs4p8ax13n0fnlkdi";
+    hash = "sha256-1bS9zafuqxwcuqpM/AA3ZjNbFpxBNXtoHYFsQOWmLXQ=";
   };
 
   # Project has no test
   doCheck = false;
+
   pythonImportsCheck = [ "api" ];
 
   meta = with lib; {

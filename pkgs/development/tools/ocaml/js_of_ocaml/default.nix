@@ -1,15 +1,17 @@
-{ buildDunePackage, js_of_ocaml-compiler
-, ppxlib, uchar
+{
+  buildDunePackage,
+  js_of_ocaml-compiler,
+  ppxlib,
 }:
 
 buildDunePackage {
   pname = "js_of_ocaml";
 
-  inherit (js_of_ocaml-compiler) version src useDune2;
+  inherit (js_of_ocaml-compiler) version src;
 
   buildInputs = [ ppxlib ];
 
-  propagatedBuildInputs = [ js_of_ocaml-compiler uchar ];
+  propagatedBuildInputs = [ js_of_ocaml-compiler ];
 
   meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

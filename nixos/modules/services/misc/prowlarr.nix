@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.prowlarr;
 
@@ -9,17 +11,19 @@ in
 {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption "Prowlarr";
+      enable = lib.mkEnableOption "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
 
-      openFirewall = mkOption {
-        type = types.bool;
+      package = lib.mkPackageOption pkgs "prowlarr" { };
+
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the Prowlarr web interface.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.prowlarr = {
       description = "Prowlarr";
       after = [ "network.target" ];
@@ -29,12 +33,13 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
-        ExecStart = "${pkgs.prowlarr}/bin/Prowlarr -nobrowser -data=/var/lib/prowlarr";
+        ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
+      environment.HOME = "/var/empty";
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 9696 ];
     };
   };

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, substituteAll
-, file-roller
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  substituteAll,
+  file-roller,
 }:
 
 stdenv.mkDerivation rec {
   pname = "file-roller-contract";
-  version = "unstable-2021-02-22";
+  version = "0-unstable-2021-02-22";
 
   src = fetchFromGitHub {
     owner = "elementary";

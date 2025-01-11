@@ -1,11 +1,11 @@
 { lib
 , pkgs
+, customQemu ? null
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
-      ++ pkgs.lib.optional pkgs.stdenv.hostPlatform.isx86 "rtc_cmos"
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "virtiofs" "crc32c_generic" ]
 }:
 
 let
@@ -35,13 +35,19 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.cc.libc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libm.so.* $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* $out/lib
+      cp -p \
+        ${pkgs.stdenv.cc.libc}/lib/ld-*.so.? \
+        ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libpthread.so.* \
+        ${pkgs.zstd.out}/lib/libzstd.so.* \
+        ${pkgs.xz.out}/lib/liblzma.so.* \
+        $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
+      cp -pd ${pkgs.kmod}/bin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -49,8 +55,13 @@ rec {
       for i in $out/bin/*; do
           if [ -f "$i" -a ! -L "$i" ]; then
               echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              patchelf --set-interpreter $out/lib/ld-*.so.? --set-rpath $out/lib $i || true
           fi
+      done
+
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
       done
     ''; # */
 
@@ -70,16 +81,12 @@ rec {
 
     for o in $(cat /proc/cmdline); do
       case $o in
-        mountDisk=1)
-          mountDisk=1
+        mountDisk=*)
+          mountDisk=''${mountDisk#mountDisk=}
           ;;
         command=*)
           set -- $(IFS==; echo $o)
           command=$2
-          ;;
-        out=*)
-          set -- $(IFS==; echo $o)
-          export out=$2
           ;;
       esac
     done
@@ -101,6 +108,8 @@ rec {
 
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
+    elif [[ -e "$mountDisk" ]]; then
+      mount "$mountDisk" /fs
     else
       mount /dev/${hd} /fs
     fi
@@ -114,7 +123,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
+    mount -t virtiofs store /fs${storeDir}
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -123,7 +132,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
+    mount -t virtiofs xchg /fs/tmp/xchg
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -140,7 +149,7 @@ rec {
     fi
 
     echo "starting stage 2 ($command)"
-    exec switch_root /fs $command $out
+    exec switch_root /fs $command
   '';
 
 
@@ -155,18 +164,21 @@ rec {
 
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
+    set -euo pipefail
     source /tmp/xchg/saved-env
-
-    # Set the system time from the hardware clock.  Works around an
-    # apparent KVM > 1.5.2 bug.
-    ${util-linux}/bin/hwclock -s
+    if [ -f /tmp/xchg/.attrs.sh ]; then
+      source /tmp/xchg/.attrs.sh
+      export NIX_ATTRS_JSON_FILE=/tmp/xchg/.attrs.json
+      export NIX_ATTRS_SH_FILE=/tmp/xchg/.attrs.sh
+    fi
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
     export PATH=/empty
-    out="$1"
     cd "$NIX_BUILD_TOP"
+
+    source $stdenv/setup
 
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
@@ -189,7 +201,9 @@ rec {
     if test -n "$origBuilder" -a ! -e /.debug; then
       exec < /dev/null
       ${coreutils}/bin/touch /.debug
-      $origBuilder $origArgs
+      declare -a argsArray=()
+      concatTo argsArray origArgs
+      "$origBuilder" "''${argsArray[@]}"
       echo $? > /tmp/xchg/in-vm-exit
 
       ${busybox}/bin/mount -o remount,ro dummy /
@@ -205,25 +219,31 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${qemu-common.qemuBinary qemu} \
+    ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
-      -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
-      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+      -chardev socket,id=store,path=virtio-store.sock \
+      -device vhost-user-fs-pci,chardev=store,tag=store \
+      -chardev socket,id=xchg,path=virtio-xchg.sock \
+      -device vhost-user-fs-pci,chardev=xchg,tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
-    export > saved-env
-
+    ${coreutils}/bin/mkdir xchg
+    export > xchg/saved-env
     PATH=${coreutils}/bin
-    mkdir xchg
-    mv saved-env xchg/
+
+    if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
+      cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
+      source "$NIX_ATTRS_SH_FILE"
+    fi
+    source $stdenv/setup
 
     eval "$preVM"
 
@@ -241,12 +261,10 @@ rec {
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    TMPDIR=$TMPDIR
-    cd $TMPDIR
+    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --shared-dir "${storeDir}" &
+    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --shared-dir xchg &
     ${qemuCommand}
     EOF
-
-    mkdir -p -m 0700 $out
 
     chmod +x ./run-vm
     source ./run-vm
@@ -325,7 +343,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = args;
     origBuilder = builder;
-    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
+    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
     passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
@@ -386,7 +404,7 @@ rec {
      filesystem containing a non-NixOS Linux distribution. */
 
   runInLinuxImage = drv: runInLinuxVM (lib.overrideDerivation drv (attrs: {
-    mountDisk = true;
+    mountDisk = attrs.mountDisk or true;
 
     /* Mount `image' as the root FS, but use a temporary copy-on-write
        image since we don't want to (and can't) write to `image'. */
@@ -406,7 +424,7 @@ rec {
       eval "$origPostHook"
     '';
 
-    origPostHook = if attrs ? postHook then attrs.postHook else "";
+    origPostHook = lib.optionalString (attrs ? postHook) attrs.postHook;
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
@@ -466,7 +484,7 @@ rec {
 
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-          rpm -iv --nosignature ${if runScripts then "" else "--noscripts"} $rpms
+          rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} $rpms
 
         echo "running post-install script..."
         eval "$postInstall"
@@ -492,7 +510,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
+      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 -F qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
@@ -527,9 +545,8 @@ rec {
       echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
       if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-      header "installed RPM packages"
+      echo "installed RPM packages"
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-      stopNest
     '';
 
     buildPhase = ''
@@ -559,9 +576,8 @@ rec {
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
-        header "Generated RPM/SRPM: $i"
+        echo "Generated RPM/SRPM: $i"
         rpm -qip $i
-        stopNest
       done
 
       eval "$postInstall"
@@ -576,9 +592,9 @@ rec {
 
   fillDiskWithDebs =
     { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
-    runInLinuxVM (stdenv.mkDerivation {
+    runInLinuxVM (stdenv.mkDerivation ({
       inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
@@ -647,7 +663,6 @@ rec {
 
         echo "running post-install script..."
         eval "$postInstall"
-        ln -sf dash /mnt/bin/sh
 
         rm /mnt/.debug
 
@@ -658,7 +673,7 @@ rec {
       '';
 
       passthru = { inherit fullName; };
-    });
+    } // args));
 
 
   /* Generate a Nix expression containing fetchurl calls for the
@@ -711,7 +726,7 @@ rec {
     {name, packagesLists, urlPrefix, packages}:
 
     runCommand "${name}.nix"
-      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg pkgs.nixfmt-rfc-style ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in
@@ -727,11 +742,9 @@ rec {
         esac
       done
 
-      # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
-      sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
-
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
+      nixfmt $out
     '';
 
 
@@ -744,7 +757,7 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
     , extraDebs ? [], createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
     let
       expr = debClosureGenerator {
@@ -752,10 +765,10 @@ rec {
         packages = packages ++ extraPackages;
       };
     in
-      (fillDiskWithDebs {
+      (fillDiskWithDebs ({
         inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;} ++ extraDebs;
-      }) // {inherit expr;};
+      } // args)) // {inherit expr;};
 
 
   /* The set of supported RPM-based distributions. */
@@ -977,47 +990,103 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian9i386 = {
-      name = "debian-9.13-stretch-i386";
-      fullName = "Debian 9.13 Stretch (i386)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-i386/Packages.xz";
-        sha256 = "sha256-fFRumd20wuVaYxzw0VPkAw5mQo8kIg+eXII15VSz9wA=";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
+    ubuntu2204i386 = {
+      name = "ubuntu-22.04-jammy-i386";
+      fullName = "Ubuntu 22.04 Jammy (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-i386/Packages.xz";
+            sha256 = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-i386/Packages.xz";
+            sha256 = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian9x86_64 = {
-      name = "debian-9.13-stretch-amd64";
-      fullName = "Debian 9.13 Stretch (amd64)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-amd64/Packages.xz";
-        sha256 = "sha256-1p4DEVpTGlBE3PtbQ90kYw4QNHkW0F4rna/Xz+ncMhw=";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
+    ubuntu2204x86_64 = {
+      name = "ubuntu-22.04-jammy-amd64";
+      fullName = "Ubuntu 22.04 Jammy (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
     debian10i386 = {
-      name = "debian-10.9-buster-i386";
-      fullName = "Debian 10.9 Buster (i386)";
+      name = "debian-10.13-buster-i386";
+      fullName = "Debian 10.13 Buster (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-i386/Packages.xz";
-        sha256 = "sha256-zlkbKV+IGBCyWKD4v4LFM/EUA4TYS9fkLBPuF6MgUDo=";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-i386/Packages.xz";
+        hash = "sha256-n9JquhtZgxw3qr9BX0MQoY3ZTIHN0dit+iru3DC31UY=";
       };
-      urlPrefix = "mirror://debian";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20221126T084953Z";
       packages = commonDebianPackages;
     };
 
     debian10x86_64 = {
-      name = "debian-10.9-buster-amd64";
-      fullName = "Debian 10.9 Buster (amd64)";
+      name = "debian-10.13-buster-amd64";
+      fullName = "Debian 10.13 Buster (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-amd64/Packages.xz";
-        sha256 = "sha256-k13toY1b3CX7GBPQ7Jm24OMqCEsgPlGK8M99x57o69o=";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-amd64/Packages.xz";
+        hash = "sha256-YukIIB3u87jgp9oudwklsxyKVKjSL618wFgDSXiFmjU=";
       };
-      urlPrefix = "mirror://debian";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20221126T084953Z";
+      packages = commonDebianPackages;
+    };
+
+    debian11i386 = {
+      name = "debian-11.8-bullseye-i386";
+      fullName = "Debian 11.8 Bullseye (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-0bKSLLPhEC7FB5D1NA2jaQP0wTe/Qp1ddiA/NDVjRaI=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      packages = commonDebianPackages;
+    };
+
+    debian11x86_64 = {
+      name = "debian-11.8-bullseye-amd64";
+      fullName = "Debian 11.8 Bullseye (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-CYPsGgQgJZkh3JmbcAQkYDWP193qrkOADOgrMETZIeo=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      packages = commonDebianPackages;
+    };
+
+    debian12i386 = {
+      name = "debian-12.2-bookworm-i386";
+      fullName = "Debian 12.2 Bookworm (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bookworm/main/binary-i386/Packages.xz";
+        hash = "sha256-OeN9Q2HFM3GsPNhOa4VhM7qpwT66yUNwC+6Z8SbGEeQ=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      packages = commonDebianPackages;
+    };
+
+    debian12x86_64 = {
+      name = "debian-12.2-bookworm-amd64";
+      fullName = "Debian 12.2 Bookworm (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bookworm/main/binary-amd64/Packages.xz";
+        hash = "sha256-SZDElRfe9BlBwDlajQB79Qdn08rv8whYoQDeVCveKVs=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
       packages = commonDebianPackages;
     };
   };
@@ -1156,7 +1225,7 @@ rec {
      of the default image parameters can be given.  In particular,
      `extraPackages' specifies the names of additional packages from
      the distribution that should be included in the image; `packages'
-     allows the entire set of packages to be overriden; and `size'
+     allows the entire set of packages to be overridden; and `size'
      sets the size of the disk in megabytes.  E.g.,
      `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
      size = 8192; }' builds an 8 GiB image containing Firefox in

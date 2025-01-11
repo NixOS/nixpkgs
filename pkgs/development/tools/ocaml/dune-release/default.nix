@@ -1,40 +1,86 @@
-{ lib, buildDunePackage, fetchurl, makeWrapper, fetchpatch
-, curly, fmt, bos, cmdliner, re, rresult, logs, fpath
-, odoc, opam-format, opam-core, opam-state, yojson, astring
-, opam, git, findlib, mercurial, bzip2, gnutar, coreutils
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  makeWrapper,
+  fetchpatch,
+  curly,
+  fmt,
+  bos,
+  cmdliner,
+  re,
+  rresult,
+  logs,
+  fpath,
+  odoc,
+  opam-format,
+  opam-core,
+  opam-state,
+  yojson,
+  astring,
+  opam,
+  git,
+  findlib,
+  mercurial,
+  bzip2,
+  gnutar,
+  coreutils,
+  alcotest,
 }:
 
 # don't include dune as runtime dep, so user can
 # choose between dune and dune_2
-let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
-in buildDunePackage rec {
+let
+  runtimeInputs = [
+    opam
+    findlib
+    git
+    mercurial
+    bzip2
+    gnutar
+    coreutils
+  ];
+in
+buildDunePackage rec {
   pname = "dune-release";
-  version = "1.5.2";
+  version = "2.0.0";
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1r6bz1zz1al5y762ws3w98d8bnyi5ipffajgczixacmbrxvp3zgx";
+    hash = "sha256-u8TgaoeDaDLenu3s1Km/Kh85WHMtvUy7C7Q+OY588Ss=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson astring fpath ];
-  checkInputs = [ alcotest ] ++ runtimeInputs;
-  doCheck = true;
-
-  useDune2 = true;
-
   patches = [
-    # add missing git config calls to avoid failing due to the lack of a global git config
+    # Update tests for dune 3.14 https://github.com/tarides/dune-release/pull/486
     (fetchpatch {
-      name = "tests-missing-git-config.patch";
-      url = "https://github.com/ocamllabs/dune-release/commit/87e7ffe2a9c574620d4e2fc0d79eed8772eab973.patch";
-      sha256 = "0wrzcpzr54dwrdjdc75mijh78xk4bmsmqs1pci06fb2nf03vbd2k";
+      url = "https://github.com/tarides/dune-release/commit/fd0e11cb6d9db2acd772f5cadfb94c72bbcf67a8.patch";
+      hash = "sha256-At24bduds6UwGKGs8cqOn1qaZKElP9TPMSNPimMd1zQ=";
     })
   ];
+
+  nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
+  buildInputs = [
+    curly
+    fmt
+    cmdliner
+    re
+    opam-format
+    opam-state
+    opam-core
+    rresult
+    logs
+    odoc
+    bos
+    yojson
+    astring
+    fpath
+  ];
+  nativeCheckInputs = [ odoc ];
+  checkInputs = [ alcotest ] ++ runtimeInputs;
+  doCheck = true;
 
   postPatch = ''
     # remove check for curl in PATH, since curly is patched
@@ -43,6 +89,10 @@ in buildDunePackage rec {
   '';
 
   preCheck = ''
+    export HOME=$TMPDIR
+    git config --global user.email "nix-builder@nixos.org"
+    git config --global user.name "Nix Builder"
+
     # it fails when it tries to reference "./make_check_deterministic.exe"
     rm -r tests/bin/check
   '';
@@ -55,7 +105,9 @@ in buildDunePackage rec {
 
   meta = with lib; {
     description = "Release dune packages in opam";
+    mainProgram = "dune-release";
     homepage = "https://github.com/ocamllabs/dune-release";
+    changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
     license = licenses.isc;
     maintainers = with maintainers; [ sternenseemann ];
   };

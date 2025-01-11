@@ -1,18 +1,33 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.cde;
-in {
+in
+{
   options.services.xserver.desktopManager.cde = {
     enable = mkEnableOption "Common Desktop Environment";
 
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs.xorg; [
-        xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+        xclock
+        bitmap
+        xlsfonts
+        xfd
+        xrefresh
+        xload
+        xwininfo
+        xdpyinfo
+        xwd
+        xwud
       ];
       defaultText = literalExpression ''
         with pkgs.xorg; [
@@ -36,7 +51,7 @@ in {
         name = "cmsd";
         protocol = "udp";
         user = "root";
-        server = "${pkgs.cdesktopenv}/opt/dt/bin/rpc.cmsd";
+        server = "${pkgs.cdesktopenv}/bin/rpc.cmsd";
         extraConfig = ''
           type  = RPC UNLISTED
           rpc_number  = 100068
@@ -46,7 +61,7 @@ in {
       }
     ];
 
-    users.groups.mail = {};
+    users.groups.mail = { };
     security.wrappers = {
       dtmail = {
         setgid = true;
@@ -62,11 +77,13 @@ in {
     '';
 
     services.xserver.desktopManager.session = [
-    { name = "CDE";
-      start = ''
-        exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
-      '';
-    }];
+      {
+        name = "CDE";
+        start = ''
+          exec ${pkgs.cdesktopenv}/bin/Xsession
+        '';
+      }
+    ];
   };
 
   meta.maintainers = [ ];

@@ -1,39 +1,45 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, setuptools-scm
-, xorg
-, python
-, mock
-, nose
-, pytestCheckHook
-, util-linux
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  setuptools,
+  setuptools-scm,
+  xorg,
+  mock,
+  pytestCheckHook,
+  util-linux,
 }:
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.31";
+  version = "0.33";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = version;
-    sha256 = "155p9xhsk01z9vdml74h07svlqy6gljnx9c6qbydcr14lwghwn06";
+    tag = version;
+    hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
+
   buildInputs = [ xorg.libX11 ];
+
   propagatedBuildInputs = [ six ];
 
-  doCheck = !stdenv.isDarwin;
-  checkInputs = [
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeCheckInputs = [
     pytestCheckHook
     mock
-    nose
     util-linux
     xorg.xauth
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   disabledTestPaths = [
@@ -42,9 +48,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
     description = "Fully functional X client library for Python programs";
-    homepage = "http://python-xlib.sourceforge.net/";
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/python-xlib/python-xlib";
+    license = licenses.lgpl21Plus;
+    maintainers = [ ];
   };
-
 }

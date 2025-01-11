@@ -1,22 +1,25 @@
 diff --git a/Configure b/Configure
-index f0ad787bc4..a48d2008c6 100755
+index a558e5ab1a..9a884f0b0f 100755
 --- a/Configure
 +++ b/Configure
-@@ -1688,17 +1688,6 @@ unless ($disabled{devcryptoeng}) {
+@@ -1714,20 +1714,6 @@ unless ($disabled{devcryptoeng}) {
+ 
  unless ($disabled{ktls}) {
      $config{ktls}="";
-     if ($target =~ m/^linux/) {
--        my $usr = "/usr/$config{cross_compile_prefix}";
--        chop($usr);
--        if ($config{cross_compile_prefix} eq "") {
--            $usr = "/usr";
--        }
--        my $minver = (4 << 16) + (13 << 8) + 0;
--        my @verstr = split(" ",`cat $usr/include/linux/version.h | grep LINUX_VERSION_CODE`);
--
--        if ($verstr[2] < $minver) {
+-    my $cc = $config{CROSS_COMPILE}.$config{CC};
+-    if ($target =~ m/^linux/) {
+-        system("printf '#include <sys/types.h>\n#include <linux/tls.h>' | $cc -E - >/dev/null 2>&1");
+-        if ($? != 0) {
 -            disable('too-old-kernel', 'ktls');
 -        }
-     } elsif ($target =~ m/^BSD/) {
-         my $cc = $config{CROSS_COMPILE}.$config{CC};
-         system("printf '#include <sys/types.h>\n#include <sys/ktls.h>' | $cc -E - >/dev/null 2>&1");
+-    } elsif ($target =~ m/^BSD/) {
+-        system("printf '#include <sys/types.h>\n#include <sys/ktls.h>' | $cc -E - >/dev/null 2>&1");
+-        if ($? != 0) {
+-            disable('too-old-freebsd', 'ktls');
+-        }
+-    } else {
+-        disable('not-linux-or-freebsd', 'ktls');
+-    }
+ }
+ 
+ push @{$config{openssl_other_defines}}, "OPENSSL_NO_KTLS" if ($disabled{ktls});

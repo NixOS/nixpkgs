@@ -1,41 +1,49 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
   # Python Inputs
-, fastdtw
-, numpy
-, pandas
-, psutil
-, qiskit-terra
-, qiskit-optimization
-, scikit-learn
-, scipy
-, quandl
-, yfinance
+  fastdtw,
+  numpy,
+  pandas,
+  psutil,
+  qiskit-terra,
+  qiskit-optimization,
+  scikit-learn,
+  scipy,
+  quandl,
+  yfinance,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
+  pytestCheckHook,
+  ddt,
+  pytest-timeout,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-finance";
-  version = "0.3.1";
+  version = "0.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-wnto3IqrJFAqIv6QAXe3BB9fvXQXe2fw/iUZe3+198M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zYhYhojCzlENzgYSenwewjeVHUBX2X6eQbbzc9znBsk=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     fastdtw
@@ -50,7 +58,7 @@ buildPythonPackage rec {
     yfinance
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt
@@ -67,9 +75,7 @@ buildPythonPackage rec {
     "test_yahoo"
     "test_wikipedia"
   ];
-  pytestFlagsArray = [
-    "--durations=10"
-  ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";

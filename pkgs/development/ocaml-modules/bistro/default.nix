@@ -1,35 +1,37 @@
-{ lib
-, ocaml
-, fetchFromGitHub
-, buildDunePackage
-, base64
-, bos
-, core
-, lwt_react
-, ocamlgraph
-, ppx_sexp_conv
-, rresult
-, sexplib
-, tyxml
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  base64,
+  bos,
+  core,
+  core_kernel,
+  core_unix ? null,
+  lwt_react,
+  ocamlgraph,
+  ppx_sexp_conv,
+  rresult,
+  sexplib,
+  tyxml,
 }:
 
 buildDunePackage rec {
   pname = "bistro";
-  version = "unstable-2021-11-13";
-
-  useDune2 = true;
+  version = "unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "pveber";
     repo = pname;
-    rev = "fb285b2c6d8adccda3c71e2293bceb01febd6624";
-    sha256 = "sha256-JChDU1WH8W9Czkppx9SHiVIu9/7QFWJy2A89oksp0Ek=";
+    rev = "d44c44b52148e58ca3842c3efedf3115e376d800";
+    sha256 = "sha256-naoCEVBfydqSeGGbXYBXfg0PP+Fzk05jFoul7XAz/tM=";
   };
 
   propagatedBuildInputs = [
     base64
     bos
     core
+    core_kernel
+    core_unix
     lwt_react
     ocamlgraph
     ppx_sexp_conv
@@ -38,7 +40,7 @@ buildDunePackage rec {
     tyxml
   ];
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.14";
 
   meta = {
     inherit (src.meta) homepage;

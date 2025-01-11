@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome
-, gtk-doc, gtk3, libX11, libXext, libXrender, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  gnome-common,
+  gtk-doc,
+  gtk3,
+  libX11,
+  libXext,
+  libXrender,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,14 +26,28 @@ stdenv.mkDerivation rec {
     sha256 = "196ibn86j54fywfwwgyh89i9wygm4vh7ls19fn20vrnm6ijlzh9r";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    gnome-common
+    gtk-doc
+    gobject-introspection
+  ];
   buildInputs = [
-    gnome.gnome-common gtk-doc gtk3
-    libX11 libXext libXrender gobject-introspection
+    gtk3
+    libX11
+    libXext
+    libXrender
   ];
 
   preConfigure = ''
-    ./autogen.sh --prefix="$out"
+    # NOCONFIGURE fixes 'If you meant to cross compile, use `--host'.'
+    NOCONFIGURE=1 ./autogen.sh --prefix="$out"
+    substituteInPlace ./configure \
+      --replace "dummy pkg-config" 'dummy ''${ac_tool_prefix}pkg-config'
   '';
 
   meta = with lib; {
@@ -28,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kupferlauncher/keybinder/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = [ ];
   };
 }

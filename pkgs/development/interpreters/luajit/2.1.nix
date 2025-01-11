@@ -1,8 +1,21 @@
-{ self, callPackage }:
+{
+  self,
+  callPackage,
+  fetchFromGitHub,
+  passthruFun,
+}:
+
 callPackage ./default.nix {
-  inherit self;
-  version = "2.1.0-2022-04-05";
-  rev = "5e3c45c43bb0e0f1f2917d432e9d2dba12c42a6e";
-  isStable = false;
-  hash = "sha256-Q+34hJDgyCqmtThHbxR16Nn7zhq4Ql142No2rO57HL0=";
+  # The patch version is the timestamp of the git commit,
+  # obtain via `cat $(nix-build -A luajit_2_1.src)/.relver`
+  version = "2.1.1713773202";
+
+  src = fetchFromGitHub {
+    owner = "LuaJIT";
+    repo = "LuaJIT";
+    rev = "5790d253972c9d78a0c2aece527eda5b134bbbf7";
+    hash = "sha256-WG8AWDI182/9O7NrZlQ6ZH/esyYE2pWXMuSzWUuntSA=";
+  };
+
+  inherit self passthruFun;
 }

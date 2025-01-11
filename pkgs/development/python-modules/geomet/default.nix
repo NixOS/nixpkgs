@@ -1,28 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  setuptools,
+  six,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geomet";
-  version = "0.3.0";
+  version = "1.1.0";
+  format = "pyproject";
 
-  # pypi tarball doesn't include tests
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "geomet";
     repo = "geomet";
-    rev = version;
-    sha256 = "1lb0df78gkivsb7hy3ix0xccvcznvskip11hr5sgq5y76qnfc8p0";
+    tag = version;
+    hash = "sha256-YfI29925nffzRBMJb6Gm3muvlpwP3zSw2YJ2vWcf+Bo=";
   };
 
-  propagatedBuildInputs = [ click six ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    click
+    six
+  ];
+
+  pythonImportsCheck = [ "geomet" ];
 
   meta = with lib; {
+    description = "Convert GeoJSON to WKT/WKB (Well-Known Text/Binary) and vice versa";
+    mainProgram = "geomet";
     homepage = "https://github.com/geomet/geomet";
+    changelog = "https://github.com/geomet/geomet/releases/tag/${version}";
     license = licenses.asl20;
-    description = "Convert GeoJSON to WKT/WKB (Well-Known Text/Binary), and vice versa.";
-    maintainers = with maintainers; [ turion ris ];
+    maintainers = with maintainers; [
+      ris
+    ];
   };
 }

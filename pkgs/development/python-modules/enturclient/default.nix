@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "enturclient";
-  version = "0.2.3";
+  version = "0.2.4";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
@@ -18,12 +19,10 @@ buildPythonPackage rec {
     owner = "hfurubotten";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w0791f4p3yyncc1izx3q97fyaky2ling14qr0yn0acrmq9yh5cc";
+    hash = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -38,9 +37,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "enturclient"
-  ];
+  pythonImportsCheck = [ "enturclient" ];
 
   meta = with lib; {
     description = "Python library for interacting with the Entur.org API";

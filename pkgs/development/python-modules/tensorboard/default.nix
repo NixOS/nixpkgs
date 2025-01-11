@@ -1,20 +1,20 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, numpy
-, wheel
-, werkzeug
-, protobuf
-, grpcio
-, markdown
-, absl-py
-, google-auth-oauthlib
-, setuptools
-, tensorboard-data-server
-, tensorboard-plugin-wit
-, tensorboard-plugin-profile
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  numpy,
+  wheel,
+  werkzeug,
+  protobuf,
+  grpcio,
+  markdown,
+  absl-py,
+  google-auth-oauthlib,
+  setuptools,
+  tensorboard-data-server,
+  tensorboard-plugin-wit,
+  tensorboard-plugin-profile,
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -23,31 +23,21 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.8.0";
+  version = "2.18.0";
   format = "wheel";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-ZaM45EJOkHnyYEkjvb4wF5KtzirOG+aNprPd8AUXDe8=";
+    hash = "sha256-EHykghdF9z4q76AsUP9wqbaU8595CxHm9oL30yZ0Xqs=";
   };
 
-  postPatch = ''
-    chmod u+rwx -R ./dist
-    pushd dist
-    wheel unpack --dest unpacked ./*.whl
-    pushd unpacked/tensorboard-${version}
-
-    substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth (<2,>=1.6.3)" "google-auth (<3,>=1.6.3)" \
-      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<0.6,>=0.4.1)"
-
-    popd
-    wheel pack ./unpacked/tensorboard-${version}
-    popd
-  '';
+  pythonRelaxDeps = [
+    "google-auth-oauthlib"
+    "protobuf"
+  ];
 
   propagatedBuildInputs = [
     absl-py
@@ -82,9 +72,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
     license = licenses.asl20;
+    mainProgram = "tensorboard";
     maintainers = with maintainers; [ abbradar ];
   };
 }

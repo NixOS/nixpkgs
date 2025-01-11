@@ -11,18 +11,24 @@ usage() {
 }
 
 timeout=                # Timeout in centiseconds
+menu=1                  # Enable menu by default
 default=                # Default configuration
 target=/boot            # Target directory
 numGenerations=0        # Number of other generations to include in the menu
 
 while getopts "t:c:d:g:n:r" opt; do
     case "$opt" in
-        t) # U-Boot interprets '0' as infinite and negative as instant boot
+        t) # U-Boot interprets '0' as infinite
             if [ "$OPTARG" -lt 0 ]; then
+                # When negative (or null coerced to -1), disable timeout which means that we wait forever for input
                 timeout=0
             elif [ "$OPTARG" = 0 ]; then
-                timeout=-10
+                # When zero, which means disabled in Nix module, disable menu which results in instant boot of the default item
+                # .. timeout is actually ignored by u-Boot but set here for the rest of the script
+                timeout=1
+                menu=0
             else
+                # Positive results in centi-seconds of timeout, which when passed with no input results in boot of the default item
                 timeout=$((OPTARG * 10))
             fi
             ;;
@@ -126,9 +132,11 @@ cat > $tmpFile <<EOF
 # Change this to e.g. nixos-42 to temporarily boot to an older configuration.
 DEFAULT nixos-default
 
-MENU TITLE ------------------------------------------------------------
 TIMEOUT $timeout
 EOF
+
+[ "$menu" == "1" ] \
+  && echo "MENU TITLE ------------------------------------------------------------" >> $tmpFile
 
 addEntry $default default >> $tmpFile
 
@@ -141,7 +149,13 @@ if [ "$numGenerations" -gt 0 ]; then
             | sort -n -r \
             | head -n $numGenerations); do
         link=/nix/var/nix/profiles/system-$generation-link
-        addEntry $link $generation
+        addEntry $link "${generation}-default"
+        for specialisation in $(
+            ls /nix/var/nix/profiles/system-$generation-link/specialisation \
+            | sort -n -r); do
+            link=/nix/var/nix/profiles/system-$generation-link/specialisation/$specialisation
+            addEntry $link "${generation}-${specialisation}"
+        done
     done >> $tmpFile
 fi
 

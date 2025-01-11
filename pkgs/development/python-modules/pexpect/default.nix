@@ -1,26 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ptyprocess
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ptyprocess,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage (rec {
   pname = "pexpect";
-  version = "4.8.0";
+  version = "4.9.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c";
+    hash = "sha256-7n1BEj88mREFDqLC2sEHVo3EOy07DHVXozISw5jq0w8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Wants to run pythonin a subprocess
   doCheck = false;
 
   propagatedBuildInputs = [ ptyprocess ];
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
     homepage = "http://www.noah.org/wiki/Pexpect";
     description = "Automate interactive console applications such as ssh, ftp, etc";
+    downloadPage = "https://github.com/pexpect/pexpect";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
 

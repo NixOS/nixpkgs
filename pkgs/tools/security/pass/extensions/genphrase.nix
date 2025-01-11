@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pass-genphrase";
@@ -12,6 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
+
+  buildInputs = [ python3 ];
 
   installTargets = [ "globalinstall" ];
 

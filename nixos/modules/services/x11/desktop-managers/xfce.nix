@@ -1,13 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
+  excludePackages = config.environment.xfce.excludePackages;
+
 in
-
 {
-
   meta = {
     maintainers = teams.xfce.members;
   };
@@ -36,6 +36,12 @@ in
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
+
+    # added 2022-06-26
+    # thunar has its own module
+    (mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "xfce" "thunarPlugins" ]
+      [ "programs" "thunar" "plugins" ])
   ];
 
   options = {
@@ -44,15 +50,6 @@ in
         type = types.bool;
         default = false;
         description = "Enable the Xfce desktop environment.";
-      };
-
-      thunarPlugins = mkOption {
-        default = [];
-        type = types.listOf types.package;
-        example = literalExpression "[ pkgs.xfce.thunar-archive-plugin ]";
-        description = ''
-          A list of plugin that should be installed with Thunar.
-        '';
       };
 
       noDesktop = mkOption {
@@ -72,19 +69,42 @@ in
         default = true;
         description = "Enable the XFCE screensaver.";
       };
+
+      enableWaylandSession = mkEnableOption "the experimental Xfce Wayland session";
+
+      waylandSessionCompositor = mkOption {
+        type = lib.types.str;
+        default = "";
+        example = "wayfire";
+        description = ''
+          Command line to run a Wayland compositor, defaults to `labwc --startup`
+          if not specified. Note that `xfce4-session` will be passed to it as an
+          argument, see `startxfce4 --help` for details.
+
+          Some compositors do not have an option equivalent to labwc's `--startup`
+          and you might have to add xfce4-session somewhere in their configurations.
+        '';
+      };
+    };
+
+    environment.xfce.excludePackages = mkOption {
+      default = [];
+      example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
+      type = types.listOf types.package;
+      description = "Which packages XFCE should exclude from the default environment";
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs.xfce // pkgs; [
+    environment.systemPackages = utils.removePackagesByName (with pkgs; [
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
-      gnome.gnome-themes-extra
-      gnome.adwaita-icon-theme
+      gnome-themes-extra
+      adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
-      xfce4-icon-theme
+      xfce.xfce4-icon-theme
 
       desktop-file-utils
       shared-mime-info # for update-mime-database
@@ -95,40 +115,43 @@ in
       # Needed by Xfce's xinitrc script
       xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
 
-      exo
-      garcon
-      libxfce4ui
-      xfconf
+      xfce.exo
+      xfce.garcon
+      xfce.libxfce4ui
 
-      mousepad
-      parole
-      ristretto
-      xfce4-appfinder
-      xfce4-notifyd
-      xfce4-screenshooter
-      xfce4-session
-      xfce4-settings
-      xfce4-taskmanager
-      xfce4-terminal
-
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
+      xfce.mousepad
+      xfce.parole
+      xfce.ristretto
+      xfce.xfce4-appfinder
+      xfce.xfce4-notifyd
+      xfce.xfce4-screenshooter
+      xfce.xfce4-session
+      xfce.xfce4-settings
+      xfce.xfce4-taskmanager
+      xfce.xfce4-terminal
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals config.hardware.pulseaudio.enable [
+      ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
+      ++ lib.optional config.powerManagement.enable xfce.xfce4-power-manager
+      ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
-        xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+        (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce.xfce4-pulseaudio-plugin)
+      ] ++ lib.optionals cfg.enableXfwm [
+        xfce.xfwm4
+        xfce.xfwm4-themes
+      ] ++ lib.optionals (!cfg.noDesktop) [
+        xfce.xfce4-panel
+        xfce.xfdesktop
+      ] ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
+
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
+    programs.xfconf.enable = true;
+    programs.thunar.enable = true;
+    programs.labwc.enable = mkDefault (cfg.enableWaylandSession && (
+      cfg.waylandSessionCompositor == "" || lib.substring 0 5 cfg.waylandSessionCompositor == "labwc"));
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -139,16 +162,33 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      prettyName = "Xfce Session";
       desktopNames = [ "XFCE" ];
-      bgSupport = true;
+      bgSupport = !cfg.noDesktop;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
         waitPID=$!
       '';
     }];
 
+    # Copied from https://gitlab.xfce.org/xfce/xfce4-session/-/blob/xfce4-session-4.19.2/xfce-wayland.desktop.in
+    # to maintain consistent l10n state with X11 session file and to support the waylandSessionCompositor option.
+    services.displayManager.sessionPackages = optionals cfg.enableWaylandSession [
+      ((pkgs.writeTextDir "share/wayland-sessions/xfce-wayland.desktop" ''
+        [Desktop Entry]
+        Version=1.0
+        Name=Xfce Session (Wayland)
+        Comment=Use this session to run Xfce as your desktop environment
+        Exec=startxfce4 --wayland ${cfg.waylandSessionCompositor}
+        Icon=
+        Type=Application
+        DesktopNames=XFCE
+        Keywords=xfce;wayland;desktop;environment;session;
+      '').overrideAttrs (_: { passthru.providedSessions = [ "xfce-wayland" ]; }))
+    ];
+
     services.xserver.updateDbusEnvironment = true;
-    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
@@ -159,7 +199,8 @@ in
     services.gvfs.enable = true;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.colord.enable = mkDefault true;
 
     # Enable default programs
     programs.dconf.enable = true;
@@ -169,11 +210,12 @@ in
     programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
-    systemd.packages = with pkgs.xfce; [
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
+    systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
       xfce4-notifyd
-    ];
+    ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
+
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
   };
 }

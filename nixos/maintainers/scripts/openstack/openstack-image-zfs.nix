@@ -1,6 +1,11 @@
 # nix-build '<nixpkgs/nixos>' -A config.system.build.openstackImage --arg configuration "{ imports = [ ./nixos/maintainers/scripts/openstack/openstack-image.nix ]; }"
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   copyChannel = true;
@@ -10,24 +15,45 @@ in
 {
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
+    ../../../modules/virtualisation/disk-size-option.nix
+    ../../../modules/image/file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "openstackImage"
+        "sizeMB"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "openstackImage"
+        "name"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
-
   options.openstackImage = {
-    name = mkOption {
-      type = types.str;
-      description = "The name of the generated derivation";
-      default = "nixos-openstack-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-    };
-
-    sizeMB = mkOption {
+    ramMB = mkOption {
       type = types.int;
-      default = 8192;
-      description = "The size in MB of the image";
+      default = (3 * 1024);
+      description = "RAM allocation for build VM";
     };
 
     format = mkOption {
-      type = types.enum [ "raw" "qcow2" ];
+      type = types.enum [
+        "raw"
+        "qcow2"
+      ];
       default = "qcow2";
       description = "The image format to output";
     };
@@ -48,24 +74,35 @@ in
       };
     };
 
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
+    virtualisation.diskSizeAutoSupported = false;
+
+    image.extension = cfg.format;
+    system.nixos.tags = [
+      "openstack"
+      "zfs"
+    ];
+    system.build.image = config.system.build.openstackImage;
     system.build.openstackImage = import ../../../lib/make-single-disk-zfs-image.nix {
       inherit lib config;
-      inherit (cfg) contents format name;
+      inherit (cfg) contents format;
+      name = config.image.baseName;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      configFile = pkgs.writeText "configuration.nix"
-        ''
-          { modulesPath, ... }: {
-            imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
-            openstack.zfs.enable = true;
-          }
-        '';
+      configFile = pkgs.writeText "configuration.nix" ''
+        { modulesPath, ... }: {
+          imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
+          openstack.zfs.enable = true;
+        }
+      '';
 
       includeChannel = copyChannel;
 
       bootSize = 1000;
-
-      rootSize = cfg.sizeMB;
+      memSize = cfg.ramMB;
+      rootSize = config.virtualisation.diskSize;
       rootPoolProperties = {
         ashift = 12;
         autoexpand = "on";
@@ -75,7 +112,7 @@ in
 
       postVM = ''
          extension=''${rootDiskImage##*.}
-         friendlyName=$out/${cfg.name}
+         friendlyName=$out/${config.image.baseName}
          rootDisk="$friendlyName.root.$extension"
          mv "$rootDiskImage" "$rootDisk"
 
@@ -85,7 +122,7 @@ in
         ${pkgs.jq}/bin/jq -n \
           --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
           --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-          --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+          --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
           --arg boot_mode "${imageBootMode}" \
           --arg root "$rootDisk" \
          '{}

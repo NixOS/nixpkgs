@@ -1,28 +1,46 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitiles
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitiles,
+  six,
+  python,
 }:
 
 buildPythonPackage {
   pname = "gyp";
-  version = "2020-05-12";
+  version = "unstable-2022-04-01";
+  format = "setuptools";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/external/gyp";
-    rev = "caa60026e223fc501e8b337fd5086ece4028b1c6";
-    sha256 = "0r9phq5yrmj968vdvy9vivli35wn1j9a6iwshp69wl7q4p0x8q2b";
+    rev = "9ecf45e37677743503342ee4c6a76eaee80e4a7f";
+    hash = "sha256-LUlF2VhRnuDwJLdITgmXIQV/IuKdx1KXQkiPVHKrl4Q=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./no-darwin-cflags.patch
     ./no-xcode.patch
   ];
 
+  propagatedBuildInputs = [ six ];
+
+  pythonImportsCheck = [
+    "gyp"
+    "gyp.generator"
+  ];
+
+  # Make mac_tool.py executable so that patchShebangs hook processes it. This
+  # file is copied and run by builds using gyp on macOS
+  preFixup = ''
+    chmod +x "$out/${python.sitePackages}/gyp/mac_tool.py"
+  '';
+
   meta = with lib; {
-    description = "A tool to generate native build files";
-    homepage = "https://chromium.googlesource.com/external/gyp/+/master/README.md";
+    description = "Tool to generate native build files";
+    mainProgram = "gyp";
+    homepage = "https://gyp.gsrc.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
   };
-
 }

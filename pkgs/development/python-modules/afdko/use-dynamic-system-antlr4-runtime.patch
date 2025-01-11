@@ -1,4 +1,4 @@
-commit 1ccbf21a67da0fdbaad881a1f5c2a4df915e8c57
+commit 286b9c6e69691292dce4f2b4beaac8f886da184d
 Author: sternenseemann <sternenseemann@systemli.org>
 Date:   Tue Oct 5 18:16:10 2021 +0200
 
@@ -9,7 +9,7 @@ Date:   Tue Oct 5 18:16:10 2021 +0200
     called antlr4-runtime, not antlr4_static).
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e9c8c08e..dc3a46da 100644
+index 9ce80598..a75b6fb1 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -36,11 +36,11 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -24,10 +24,22 @@ index e9c8c08e..dc3a46da 100644
 +find_path(ANTLR4_HEADER antlr4-runtime.h PATH_SUFFIXES antlr4-runtime)
 +set(ANTLR4_INCLUDE_DIRS ${ANTLR4_HEADER})
  
- # sanitizer support
- # work around https://github.com/pypa/setuptools/issues/1928 with environment
+ FIND_PACKAGE(LibXml2)
+ IF (NOT ${LibXml2_FOUND})
+diff --git a/c/makeotf/lib/cffread/CMakeLists.txt b/c/makeotf/lib/cffread/CMakeLists.txt
+index 9a400fde..5452d987 100644
+--- a/c/makeotf/lib/cffread/CMakeLists.txt
++++ b/c/makeotf/lib/cffread/CMakeLists.txt
+@@ -13,6 +13,6 @@ else ()
+     endif()
+ endif()
+ 
+-target_link_libraries(makeotf_cffread PUBLIC antlr4_static)
++target_link_libraries(makeotf_cffread PUBLIC antlr4-runtime)
+ 
+ target_compile_definitions(makeotf_cffread PRIVATE $<$<CONFIG:Debug>:CFF_DEBUG=1> CFF_T13_SUPPORT=0)
 diff --git a/c/makeotf/lib/hotconv/CMakeLists.txt b/c/makeotf/lib/hotconv/CMakeLists.txt
-index 82257bf2..02eb2e30 100644
+index 3cceceea..9695ea21 100644
 --- a/c/makeotf/lib/hotconv/CMakeLists.txt
 +++ b/c/makeotf/lib/hotconv/CMakeLists.txt
 @@ -69,7 +69,7 @@ add_library(hotconv STATIC
@@ -37,5 +49,5 @@ index 82257bf2..02eb2e30 100644
 -target_link_libraries(hotconv PUBLIC antlr4_static)
 +target_link_libraries(hotconv PUBLIC antlr4-runtime)
  
- if ( CMAKE_COMPILER_IS_GNUCC )
-     target_compile_options(hotconv PRIVATE -Wall -Wno-attributes)
+ if (${LibXml2_FOUND})
+     target_link_libraries(hotconv PUBLIC ${LIBXML2_LIBRARY})

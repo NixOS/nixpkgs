@@ -1,63 +1,50 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, qtbase
-, qtsvg
-, obs-studio
-, asio_1_10
-, websocketpp
-, nlohmann_json
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asio,
+  obs-studio,
+  qtbase,
+  websocketpp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-websocket";
-
-  # We have updated to the alpha version when OBS Studio 27.2 was
-  # released, because this is the only version of obs-websocket that
-  # builds against the new OBS Studio.
-  version = "5.0.0-alpha3";
+  version = "4.9.1-compat";
 
   src = fetchFromGitHub {
-    owner = "Palakis";
+    owner = "obsproject";
     repo = "obs-websocket";
     rev = version;
-    sha256 = "Lr6SBj5rRTAWmn9Tnlu4Sl7SAkOCRCTP6sFWSp4xB+I=";
-    fetchSubmodules = true;
+    sha256 = "sha256-cHsJxoQjwbWLxiHgIa3Es0mu62vyLCAd1wULeZqZsJM=";
   };
-
-  patches = [
-    # This patch can be dropped when obs-websocket is updated to the
-    # next version.
-    (fetchpatch {
-      url = "https://github.com/obsproject/obs-websocket/commit/13c7b83c34eb67b2ee80af05071d81f10d0d2997.patch";
-      sha256 = "TNap/T8+058vhfWzRRr4vmlblFk9tHMUNyG6Ob5PwiM=";
-      name = "obs-addref-werror-fix.patch";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    qtbase
-    qtsvg
+    asio
     obs-studio
-    asio_1_10
+    qtbase
     websocketpp
-    nlohmann_json
   ];
 
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
-  ];
+  postInstall = ''
+    mkdir $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    rm -rf $out/obs-plugins
+    mv $out/data $out/share/obs
+  '';
 
   meta = with lib; {
-    description = "Remote-control OBS Studio through WebSockets";
-    homepage = "https://github.com/Palakis/obs-websocket";
-    maintainers = with maintainers; [ erdnaxe ];
+    description = "Legacy websocket 4.9.1 protocol support for OBS Studio 28 or above";
+    homepage = "https://github.com/obsproject/obs-websocket";
+    maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

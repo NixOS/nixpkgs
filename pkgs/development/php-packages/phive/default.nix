@@ -1,31 +1,28 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{
+  lib,
+  fetchFromGitHub,
+  php,
+}:
 
-mkDerivation rec {
+php.buildComposerProject (finalAttrs: {
   pname = "phive";
-  version = "0.15.0";
+  version = "0.15.3";
 
-  src = fetchurl {
-    url = "https://github.com/phar-io/phive/releases/download/${version}/phive-${version}.phar";
-    sha256 = "sha256-crMr8d5nsVt7+zQ5xPeph/JXmTEn6jJFVtp3mOgylB4=";
+  src = fetchFromGitHub {
+    owner = "phar-io";
+    repo = "phive";
+    rev = finalAttrs.version;
+    hash = "sha256-6vNhmIDE3kwZGMrDnGNGVV6/lb32Yb3ooWDYOC7SUcs=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-iBNH4n4AVE47CYmwO6s6WBAuRe7JzzvoNruYfVbxPck=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phive/phive.phar
-    makeWrapper ${php}/bin/php $out/bin/phive \
-      --add-flags "$out/libexec/phive/phive.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "The Phar Installation and Verification Environment (PHIVE)";
+  meta = {
+    changelog = "https://github.com/phar-io/phive/releases/tag/${finalAttrs.version}";
+    description = "Phar Installation and Verification Environment (PHIVE)";
     homepage = "https://github.com/phar-io/phive";
-    license = licenses.bsd3;
-    maintainers = with maintainers; teams.php.members;
+    license = lib.licenses.bsd3;
+    mainProgram = "phive";
+    maintainers = lib.teams.php.members;
   };
-}
+})

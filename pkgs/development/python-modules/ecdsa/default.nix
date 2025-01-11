@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.17.0";
+  version = "0.19.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b9f500bb439e4153d0330610f5d26baaf18d17b8ced1bc54410d189385ea68aa";
+    hash = "sha256-YOqtEZllmQDdCvUh7UYreTu9+GdDKzlI6HQWrkyva/g=";
   };
 
   propagatedBuildInputs = [ six ];
   # Only needed for tests
-  checkInputs = [ pkgs.openssl ];
+  nativeCheckInputs = [ pkgs.openssl ];
 
   meta = with lib; {
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
     license = licenses.mit;
   };
-
 }

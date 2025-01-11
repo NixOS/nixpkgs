@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchFromGitHub
-, curl, findutils, gnugrep, gnused, shellcheck }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  findutils,
+  gnugrep,
+  gnused,
+  shellcheck,
+}:
 
 let
   pname = "pass-checkup";
-  version = "0.2.1";
-in stdenv.mkDerivation {
+  version = "0.2.2";
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "etu";
     repo = pname;
     rev = version;
-    sha256 = "18b6rx59r7g0hvqs2affvw0g0jyifyzhanwgz2q2b8nhjgqgnar2";
+    sha256 = "1p65yxr00k35g4bnagszp8i03pmhnrcmipgrdsawps2ba8faqp6r";
   };
 
   nativeBuildInputs = [ shellcheck ];
@@ -33,7 +42,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A pass extension to check against the Have I been pwned API to see if your passwords are publicly leaked or not";
+    description = "Pass extension to check against the Have I been pwned API to see if your passwords are publicly leaked or not";
     homepage = "https://github.com/etu/pass-checkup";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ etu ];

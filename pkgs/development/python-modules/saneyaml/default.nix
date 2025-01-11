@@ -1,41 +1,40 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  pyyaml,
+  pytestCheckHook,
+  pythonOlder,
 }:
+
 buildPythonPackage rec {
   pname = "saneyaml";
-  version = "0.5.2";
+  version = "0.6.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6074f1959041342ab41d74a6f904720ffbcf63c94467858e0e22e17e3c43d41";
+    hash = "sha256-Gc+9i/lNcwmYFix5D+XOyau1MAzFiQ/jfcbbyqj7Frs=";
   };
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  dependencies = [ pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "saneyaml"
-  ];
+  pythonImportsCheck = [ "saneyaml" ];
 
   meta = with lib; {
-    description = "A PyYaml wrapper with sane behaviour to read and write readable YAML safely";
+    description = "PyYaml wrapper with sane behaviour to read and write readable YAML safely";
     homepage = "https://github.com/nexB/saneyaml";
+    changelog = "https://github.com/aboutcode-org/saneyaml/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

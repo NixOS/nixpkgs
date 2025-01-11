@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   version = "3.2.2";
+  format = "setuptools";
   pname = "django-cache-url";
 
   src = fetchFromGitHub {
@@ -20,12 +22,12 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/epicserve/django-cache-url";
     description = "Use Cache URLs in your Django application";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

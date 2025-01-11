@@ -1,92 +1,105 @@
-{ stdenv
-, fetchFromGitHub
-, fetchgit
-, lib
-, autoconf
-, automake
-, bison
-, blas
-, flex
-, fftw
-, gfortran
-, lapack
-, libtool_2
-, mpi
-, suitesparse
-, trilinos
-, withMPI ? false
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchgit,
+  lib,
+  autoconf,
+  automake,
+  bison,
+  blas,
+  flex,
+  fftw,
+  gfortran,
+  lapack,
+  libtool_2,
+  mpi,
+  suitesparse,
+  trilinos,
+  withMPI ? false,
   # for doc
-, texlive
-, pandoc
-, enableDocs ? true
+  texliveMedium,
+  enableDocs ? true,
   # for tests
-, bash
-, bc
-, openssh # required by MPI
-, perl
-, perlPackages
-, python3
-, enableTests ? true
+  bash,
+  bc,
+  openssh, # required by MPI
+  perl,
+  python3,
+  enableTests ? true,
 }:
 
 assert withMPI -> trilinos.withMPI;
 
+let
+  version = "7.8.0";
+
+  # useing fetchurl or fetchFromGitHub doesn't include the manuals
+  # due to .gitattributes files
+  xyce_src = fetchgit {
+    url = "https://github.com/Xyce/Xyce.git";
+    rev = "Release-${version}";
+    sha256 = "sha256-+aNy2bGuFQ517FZUvU0YqN0gmChRpVuFEmFGTCx9AgY=";
+  };
+
+  regression_src = fetchFromGitHub {
+    owner = "Xyce";
+    repo = "Xyce_Regression";
+    rev = "Release-${version}";
+    sha256 = "sha256-Fxi/NpXXIw/bseWaLi2iQ4sg4S9Z+othGgSvQoxyJ9c=";
+  };
+in
+
 stdenv.mkDerivation rec {
   pname = "xyce";
-  version = "7.4.0";
+  inherit version;
 
   srcs = [
-    # useing fetchurl or fetchFromGitHub doesn't include the manuals
-    # due to .gitattributes files
-    (fetchgit {
-      url = "https://github.com/Xyce/Xyce.git";
-      rev = "Release-${version}";
-      sha256 = "sha256-sOHjQEo4FqlDseTtxFVdLa0SI/VAf2OkwQV7QSL7SNM=";
-    })
-    (fetchFromGitHub {
-      owner = "Xyce";
-      repo = "Xyce_Regression";
-      rev = "Release-${version}";
-      sha256 = "sha256-kSGUaFarOHDNJ8kA/TAGkmzicm9O7cfJ7mGFZcbqCZM=";
-    })
+    xyce_src
+    regression_src
   ];
 
-  sourceRoot = "./Xyce";
+  sourceRoot = xyce_src.name;
 
   preConfigure = "./bootstrap";
 
-  configureFlags = [
-    "CXXFLAGS=-O3"
-    "--enable-xyce-shareable"
-    "--enable-shared"
-    "--enable-stokhos"
-    "--enable-amesos2"
-  ] ++ lib.optionals withMPI [
-    "--enable-mpi"
-    "CXX=mpicxx"
-    "CC=mpicc"
-    "F77=mpif77"
-  ];
+  configureFlags =
+    [
+      "CXXFLAGS=-O3"
+      "--enable-xyce-shareable"
+      "--enable-shared"
+      "--enable-stokhos"
+      "--enable-amesos2"
+    ]
+    ++ lib.optionals withMPI [
+      "--enable-mpi"
+      "CXX=mpicxx"
+      "CC=mpicc"
+      "F77=mpif77"
+    ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    gfortran
-    libtool_2
-  ] ++ lib.optionals enableDocs [
-    (texlive.combine {
-      inherit (texlive)
-        scheme-medium
-        koma-script
-        optional
-        framed
-        enumitem
-        multirow
-        preprint;
-    })
-  ];
+  nativeBuildInputs =
+    [
+      autoconf
+      automake
+      gfortran
+      libtool_2
+    ]
+    ++ lib.optionals enableDocs [
+      (texliveMedium.withPackages (
+        ps: with ps; [
+          enumitem
+          koma-script
+          optional
+          framed
+          enumitem
+          multirow
+          newtx
+          preprint
+        ]
+      ))
+    ];
 
   buildInputs = [
     bison
@@ -101,7 +114,7 @@ stdenv.mkDerivation rec {
   doCheck = enableTests;
 
   postPatch = ''
-    pushd ../source
+    pushd ../${regression_src.name}
     find Netlists -type f -regex ".*\.sh\|.*\.pl" -exec chmod ugo+x {} \;
     # some tests generate new files, some overwrite netlists
     find . -type d -exec chmod u+w {} \;
@@ -115,17 +128,26 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  checkInputs = [
-    bc
-    perl
-    perlPackages.DigestMD5
-    (python3.withPackages (ps: with ps; [ numpy scipy ]))
-  ] ++ lib.optionals withMPI [ mpi openssh ];
+  nativeCheckInputs =
+    [
+      bc
+      perl
+      (python3.withPackages (
+        ps: with ps; [
+          numpy
+          scipy
+        ]
+      ))
+    ]
+    ++ lib.optionals withMPI [
+      mpi
+      openssh
+    ];
 
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
-    TEST_ROOT="$(pwd)/../source"
+    TEST_ROOT="$(pwd)/../${regression_src.name}"
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh
@@ -145,15 +167,21 @@ stdenv.mkDerivation rec {
       "''${EXECSTRING}"
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postInstall = lib.optionalString enableDocs ''
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
       "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
 
-    # Release notes refer to an image not in the repo.
-    sed -i -E 's/\\includegraphics\[height=(0.5in)\]\{snllineblubrd\}/\\mbox\{\\rule\{0mm\}\{\1\}\}/' ''${docFiles[2]}.tex
+    # SANDIA LaTeX class and some organization logos are not publicly available see
+    # https://groups.google.com/g/xyce-users/c/MxeViRo8CT4/m/ppCY7ePLEAAJ
+    for img in "snllineblubrd" "snllineblk" "DOEbwlogo" "NNSA_logo"; do
+      sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
+    done
 
     install -d $doc/share/doc/${pname}-${version}/
     for d in ''${docFiles[@]}; do
@@ -168,7 +196,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "High-performance analog circuit simulator";
     longDescription = ''
       Xyce is a SPICE-compatible, high-performance analog circuit simulator,

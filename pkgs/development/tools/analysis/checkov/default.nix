@@ -1,57 +1,59 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-let
-  py = python3.override {
-    packageOverrides = self: super: {
 
-      dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "06rn91n2izw7czncgql71w7acsa8wwni51njw0c6s8w4xas1arj9";
-        };
-        doCheck = false;
-      });
-
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.2.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
-        };
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-        doCheck = false;
-      });
-
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1209";
-  format = "setuptools";
+  version = "3.2.352";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
-    repo = pname;
-    rev = version;
-    hash = "sha256-q2TwkmP16SvhMJkBcvYMfjbXP6GKZpzEQh7H9N+H20U=";
+    repo = "checkov";
+    tag = version;
+    hash = "sha256-by1oMAhhN+VbWzv2+OfQRBGQXkUn4EST4OWqyoOhdEQ=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
-    pythonRelaxDepsHook
-    setuptools-scm
+  patches = [ ./flake8-compat-5.x.patch ];
+
+  pythonRelaxDeps = [
+    "bc-detect-secrets"
+    "bc-python-hcl2"
+    "boto3"
+    "botocore"
+    "cloudsplaining"
+    "cyclonedx-python-lib"
+    "dpath"
+    "igraph"
+    "importlib-metadata"
+    "license-expression"
+    "networkx"
+    "openai"
+    "packageurl-python"
+    "packaging"
+    "pycep-parser"
+    "rustworkx"
+    "schema"
+    "termcolor"
+    "urllib3"
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  pythonRemoveDeps = [
+    # pythonRelaxDeps doesn't work with that one
+    "pycep-parser"
+  ];
+
+  build-system = with python3.pkgs; [ setuptools-scm ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
     argcomplete
+    bc-detect-secrets
+    bc-jsonpath-ng
     bc-python-hcl2
     boto3
     cachetools
@@ -60,44 +62,43 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
-    detect-secrets
     docker
     dockerfile-parse
     dpath
     flake8
-    GitPython
+    gitpython
+    igraph
     jmespath
-    jsonpath-ng
     jsonschema
     junit-xml
+    license-expression
     networkx
+    openai
     packaging
     policyuniverse
     prettytable
     pycep-parser
     pyyaml
+    pydantic
+    rustworkx
     semantic-version
+    spdx-tools
     tabulate
     termcolor
     tqdm
     typing-extensions
-    update_checker
+    update-checker
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aioresponses
+    distutils
     mock
     pytest-asyncio
     pytest-mock
     pytest-xdist
     pytestCheckHook
     responses
-  ];
-
-  pythonRelaxDeps = [
-    "bc-python-hcl2"
-    "pycep-parser"
   ];
 
   preCheck = ''
@@ -109,42 +110,68 @@ buildPythonApplication rec {
     "api_key"
     # Requires network access
     "TestSarifReport"
-    # Will probably be fixed in one of the next releases
-    "test_valid_cyclonedx_bom"
-    "test_record_relative_path_with"
-    "test_record_relative_path_with_relative_dir"
-    # Requires prettytable release which is only available in staging
-    "test_skipped_check_exists"
-    # AssertionError: 0 not greater than 0
     "test_skip_mapping_default"
-    # Test is failing
-    "test_SQLServerAuditingEnabled"
+    # Flake8 test
+    "test_file_with_class"
+    "test_dataclass_skip"
+    "test_typing_class_skip"
+    # Tests are comparing console output
+    "cli"
+    "console"
+    # Assertion error
+    "test_runner"
+    "test_same_resources_in_report_and_coordinator"
+    # AssertionError: assert ['<?xml versi...
+    "test_get_cyclonedx_report"
+    # Test fails on Hydra
+    "test_sast_js_filtered_files_by_ts"
+    # Timing sensitive
+    "test_non_multiline_pair_time_limit_creating_report"
   ];
 
   disabledTestPaths = [
     # Tests are pulling from external sources
     # https://github.com/bridgecrewio/checkov/blob/f03a4204d291cf47e3753a02a9b8c8d805bbd1be/.github/workflows/build.yml
     "integration_tests/"
+    "tests/ansible/"
+    "tests/arm/"
+    "tests/bicep/"
+    "tests/cloudformation/"
+    "tests/common/"
+    "tests/dockerfile/"
+    "tests/generic_json/"
+    "tests/generic_yaml/"
+    "tests/github_actions/"
+    "tests/github/"
+    "tests/kubernetes/"
+    "tests/sca_package_2"
     "tests/terraform/"
+    "cdk_integration_tests/"
+    "sast_integration_tests"
     # Performance tests have no value for us
     "performance_tests/test_checkov_performance.py"
-    # Requires prettytable release which is only available in staging
-    "tests/sca_package/"
-    "tests/test_runner_filter.py"
+    # No Helm
+    "dogfood_tests/test_checkov_dogfood.py"
   ];
 
-  pythonImportsCheck = [
-    "checkov"
-  ];
+  pythonImportsCheck = [ "checkov" ];
+
+  postInstall = ''
+    chmod +x $out/bin/checkov
+  '';
 
   meta = with lib; {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
+    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
     longDescription = ''
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 fab ];
+    maintainers = with maintainers; [
+      anhdle14
+      fab
+    ];
   };
 }

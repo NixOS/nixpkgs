@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "hopcroftkarp";
   version = "1.2.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of HopcroftKarp's algorithm";
     homepage = "https://github.com/sofiat-olaosebikan/hopcroftkarp";
-    license = licenses.gpl1;
-    maintainers = [ maintainers.costrouc ];
+    license = licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

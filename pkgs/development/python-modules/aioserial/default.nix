@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyserial,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioserial";
-  version = "1.3.0";
+  version = "1.3.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "080j3ws3j2arj2f16mzqn1qliy0bzmb0gzk5jvm5ldkhsf1s061h";
+    hash = "sha256-cCvwOw64S47y2NrFy5JeHmhdzpj3exJVabxv0rO1gig=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
   # Project has no tests
   doCheck = false;

@@ -1,50 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inflection
-, ruamel-yaml
-, setuptools-scm
-, six
-, coreapi
-, djangorestframework
-, pytestCheckHook
-, pytest-django
-, datadiff
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  django,
+  djangorestframework,
+  inflection,
+  packaging,
+  pytz,
+  pyyaml,
+  uritemplate,
+  datadiff,
+  dj-database-url,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.20.0";
+  version = "1.21.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d50f197c7f02545d0b736df88c6d5cf874f8fea2507ad85ad7de6ae5bf2d9e5a";
+    hash = "sha256-y7f4HD0UDyIHOStLxd3mU4TutY4bfuoabWQd7C9zUqk=";
   };
 
   postPatch = ''
     # https://github.com/axnsan12/drf-yasg/pull/710
-    substituteInPlace requirements/base.txt --replace packaging ""
+    sed -i "/packaging/d" requirements/base.txt
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    six
-    inflection
-    ruamel-yaml
-    coreapi
+  dependencies = [
+    django
     djangorestframework
+    inflection
+    packaging
+    pytz
+    pyyaml
+    uritemplate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     datadiff
+    dj-database-url
   ];
 
-  # ImportError: No module named 'testproj.settings'
+  env.DJANGO_SETTINGS_MODULE = "testproj.settings.local";
+
+  preCheck = ''
+    cd testproj
+  '';
+
+  # a lot of libraries are missing
   doCheck = false;
 
   pythonImportsCheck = [ "drf_yasg" ];
@@ -52,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

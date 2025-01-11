@@ -1,19 +1,43 @@
 { supportedSystems
+, system ? builtins.currentSystem
 , packageSet ? (import ../..)
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  nixpkgsArgs ? {
+    config = { allowUnfree = false; inHydra = true; };
+    __allowFileset = false;
+  }
 }:
 
 let
   lib = import ../../lib;
-in with lib;
 
-rec {
+  inherit (lib)
+    addMetaAttrs
+    any
+    derivations
+    filter
+    flip
+    genAttrs
+    getAttrFromPath
+    hydraJob
+    id
+    isDerivation
+    lists
+    maintainers
+    mapAttrs
+    mapAttrs'
+    mapAttrsRecursive
+    matchAttrs
+    meta
+    nameValuePair
+    platforms
+    recursiveUpdate
+    subtractLists
+    systems
+    ;
 
-  pkgs = packageSet (lib.recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
-  inherit lib;
-
+  pkgs = packageSet (recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } nixpkgsArgs);
 
   hydraJob' = if scrubJobs then hydraJob else id;
 
@@ -27,6 +51,7 @@ rec {
     pkgs_x86_64_linux = packageSet' { system = "x86_64-linux"; };
     pkgs_i686_linux = packageSet' { system = "i686-linux"; };
     pkgs_aarch64_linux = packageSet' { system = "aarch64-linux"; };
+    pkgs_riscv64_linux = packageSet' { system = "riscv64-linux"; };
     pkgs_aarch64_darwin = packageSet' { system = "aarch64-darwin"; };
     pkgs_armv6l_linux = packageSet' { system = "armv6l-linux"; };
     pkgs_armv7l_linux = packageSet' { system = "armv7l-linux"; };
@@ -40,6 +65,7 @@ rec {
       if system == "x86_64-linux" then pkgs_x86_64_linux
       else if system == "i686-linux" then pkgs_i686_linux
       else if system == "aarch64-linux" then pkgs_aarch64_linux
+      else if system == "riscv64-linux" then pkgs_riscv64_linux
       else if system == "aarch64-darwin" then pkgs_aarch64_darwin
       else if system == "armv6l-linux" then pkgs_armv6l_linux
       else if system == "armv7l-linux" then pkgs_armv7l_linux
@@ -55,8 +81,8 @@ rec {
 
   # More poor man's memoisation
   pkgsForCross = let
-    examplesByConfig = lib.flip lib.mapAttrs'
-      lib.systems.examples
+    examplesByConfig = flip mapAttrs'
+      systems.examples
       (_: crossSystem: nameValuePair crossSystem.config {
         inherit crossSystem;
         pkgsFor = mkPkgsFor crossSystem;
@@ -66,7 +92,7 @@ rec {
     candidate = examplesByConfig.${crossSystem.config} or null;
   in if crossSystem == null
       then native
-    else if candidate != null && lib.matchAttrs crossSystem candidate.crossSystem
+    else if candidate != null && matchAttrs crossSystem candidate.crossSystem
       then candidate.pkgsFor
     else mkPkgsFor crossSystem; # uncached fallback
 
@@ -78,12 +104,12 @@ rec {
   # This is written in a funny way so that we only elaborate the systems once.
   supportedMatches = let
       supportedPlatforms = map
-        (system: lib.systems.elaborate { inherit system; })
+        (system: systems.elaborate { inherit system; })
         supportedSystems;
     in metaPatterns: let
       anyMatch = platform:
-        lib.any (lib.meta.platformMatch platform) metaPatterns;
-      matchingPlatforms = lib.filter anyMatch supportedPlatforms;
+        any (meta.platformMatch platform) metaPatterns;
+      matchingPlatforms = filter anyMatch supportedPlatforms;
     in map ({ system, ...}: system) matchingPlatforms;
 
 
@@ -96,7 +122,7 @@ rec {
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */
-  crossMaintainers = [ maintainers.viric ];
+  crossMaintainers = [ ];
 
 
   # Generate attributes for all supported systems.
@@ -133,7 +159,6 @@ rec {
     (path: metaPatterns: testOnCross crossSystem metaPatterns
       (pkgs: f (getAttrFromPath path pkgs)));
 
-
   /* Similar to the testOn function, but with an additional 'crossSystem'
    * parameter for packageSet', defining the target platform for cross builds,
    * and triggering the build of the host derivation. */
@@ -141,20 +166,46 @@ rec {
     (addMetaAttrs { maintainers = crossMaintainers; });
 
 
-  /* Recursively map a (nested) set of derivations to an isomorphic
-     set of meta.platforms values. */
-  packagePlatforms = mapAttrs (name: value:
+  /* Recursive for packages and apply a function to them */
+  recursiveMapPackages = f: mapAttrs (name: value:
       if isDerivation value then
-        value.meta.hydraPlatforms
-          or (value.meta.platforms or [ "x86_64-linux" ])
+        f value
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
-        packagePlatforms value
+        recursiveMapPackages f value
       else
         []
     );
 
+  /* Gets the list of Hydra platforms for a derivation */
+  getPlatforms = drv:
+    drv.meta.hydraPlatforms
+      or (subtractLists (drv.meta.badPlatforms or [])
+           (drv.meta.platforms or supportedSystems));
 
+  /* Recursively map a (nested) set of derivations to an isomorphic
+     set of meta.platforms values. */
+  packagePlatforms = recursiveMapPackages getPlatforms;
+
+in {
   /* Common platform groups on which to test packages. */
-  inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
+  inherit (platforms) unix linux darwin cygwin all;
 
+  inherit
+    assertTrue
+    forAllSystems
+    forMatchingSystems
+    hydraJob'
+    lib
+    mapTestOn
+    mapTestOnCross
+    recursiveMapPackages
+    getPlatforms
+    packagePlatforms
+    pkgs
+    pkgsFor
+    pkgsForCross
+    supportedMatches
+    testOn
+    testOnCross
+    ;
 }

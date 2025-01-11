@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config
-, qmake, qtbase, qtdeclarative, wrapQtAppsHook
-, glib, gobject-introspection
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtdeclarative,
+  wrapQtAppsHook,
+  glib,
+  gobject-introspection,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +64,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     rev-prefix = "v";
   };
 

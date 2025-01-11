@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "django-paintstore";
   version = "0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, EasyProcess
-, entrypoint2
-, jeepney
-, mss
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  easyprocess,
+  entrypoint2,
+  jeepney,
+  mss,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "pyscreenshot";
-  version = "3.0";
+  version = "3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd4fdfaeb617483913a6b16845b9f428de5db28758979f4b6cf8f236d292b908";
+    hash = "sha256-jA6T8K72amv+Vahqv87WvTlq5LT2zB428EoorSYlWU0=";
   };
 
-  propagatedBuildInputs = [
-    EasyProcess
-    entrypoint2
-    pillow
-  ] ++ lib.optionals (isPy3k) [
-    jeepney
-    mss
-  ];
+  propagatedBuildInputs =
+    [
+      easyprocess
+      entrypoint2
+      pillow
+    ]
+    ++ lib.optionals (isPy3k) [
+      jeepney
+      mss
+    ];
 
   # recursive dependency on pyvirtualdisplay
   doCheck = false;
@@ -36,6 +40,6 @@ buildPythonPackage rec {
     description = "python screenshot";
     homepage = "https://github.com/ponty/pyscreenshot";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

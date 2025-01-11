@@ -1,22 +1,26 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, libv4l
-, fltk
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  libv4l,
+  fltk,
 }:
 
 buildOctavePackage rec {
   pname = "image-acquisition";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1amp6npkddnnz2i5rm6gvn65qrbn0nxzl2cja3dvc2xqg396wrhh";
+    sha256 = "sha256-Uehwk68GZ/M4WL5M3GF++mCPUg3M08Y0gkdO36/yhNI=";
   };
 
   buildInputs = [
-    libv4l
     fltk
+  ];
+
+  propagatedBuildInputs = [
+    libv4l
   ];
 
   meta = with lib; {

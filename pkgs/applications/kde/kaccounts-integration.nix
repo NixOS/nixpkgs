@@ -1,4 +1,15 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, kcmutils, kcoreaddons, kwallet, accounts-qt, signond }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  kcmutils,
+  kcoreaddons,
+  kwallet,
+  accounts-qt,
+  signond,
+  qcoro,
+}:
 
 mkDerivation {
   pname = "kaccounts-integration";
@@ -19,5 +30,6 @@ mkDerivation {
     kwallet
     accounts-qt
     signond
+    qcoro
   ];
 }

@@ -1,79 +1,64 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tbb";
-  version = "2020.3";
+  version = "2021.11.0";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneTBB";
     rev = "v${version}";
-    sha256 = "prO2O5hd+Wz5iA0vfrqmyHFr0Ptzk64so5KpSpvuKmU=";
+    hash = "sha256-zGZHMtAUVzBKFbCshpepm3ce3tW6wQ+F30kYYXAQ/TE=";
   };
 
+  nativeBuildInputs = [
+    cmake
+  ];
+
   patches = [
-    # Fixes build with Musl.
-    (fetchurl {
-      url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/GLIBC-PREREQ-is-not-defined-on-musl.patch";
-      sha256 = "gUfXQ9OZQ82qD6brgauBCsKdjLvyHafMc18B+KxZoYs=";
-    })
-
-    # Fixes build with Musl.
-    (fetchurl {
-      url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
-      sha256 = "fhorfqO1hHKZ61uq+yTR7eQ8KYdyLwpM3K7WpwJpV74=";
-    })
-
-    # Fixes build with upcoming gcc-13:
-    #  https://github.com/oneapi-src/oneTBB/pull/833
-    (fetchurl {
-      name = "gcc-13.patch";
-      url = "https://github.com/oneapi-src/oneTBB/pull/833/commits/c18342ba667d1f33f5e9a773aa86b091a9694b97.patch";
-      sha256 = "ZUExE3nsW80Z5GPWZnDNuDiHHaD1EF7qNl/G5M+Wcxg=";
+    # Fix musl build from https://github.com/oneapi-src/oneTBB/pull/899
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
+      hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  # Fix build with modern gcc
+  # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
+  NIX_CFLAGS_COMPILE =
+    lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=array-bounds"
+      "-Wno-error=stringop-overflow"
+    ]
+    ++
+      # error: variable 'val' set but not used
+      lib.optionals stdenv.cc.isClang [ "-Wno-error=unused-but-set-variable" ]
+    ++
+      # Workaround for gcc-12 ICE when using -O3
+      # https://gcc.gnu.org/PR108854
+      lib.optionals (stdenv.cc.isGNU && stdenv.hostPlatform.isx86_32) [ "-O2" ];
 
-  makeFlags = lib.optionals stdenv.cc.isClang [
-    "compiler=clang"
-  ];
+  # Fix undefined reference errors with version script under LLVM.
+  NIX_LDFLAGS = lib.optionalString (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
-  enableParallelBuilding = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib
-    cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
-    mv include $out/
-    rm $out/include/index.html
-
-    runHook postInstall
-  '';
-
-  postInstall = let
-    pcTemplate = fetchurl {
-      url = "https://github.com/oneapi-src/oneTBB/raw/478de5b1887c928e52f029d706af6ea640a877be/integration/pkg-config/tbb.pc.in";
-      sha256 = "2pCad9txSpNbzac0vp/VY3x7HNySaYkbH3Rx8LK53pI=";
-    };
-  in ''
-    # Generate pkg-config file based on upstream template.
-    # It should not be necessary with tbb after 2021.2.
-    mkdir -p "$out/lib/pkgconfig"
-    substitute "${pcTemplate}" "$out/lib/pkgconfig/tbb.pc" \
-      --subst-var-by CMAKE_INSTALL_PREFIX "$out" \
-      --subst-var-by CMAKE_INSTALL_LIBDIR "lib" \
-      --subst-var-by CMAKE_INSTALL_INCLUDEDIR "include" \
-      --subst-var-by TBB_VERSION "${version}" \
-      --subst-var-by TBB_LIB_NAME "tbb"
+  # Disable failing test on musl
+  # test/conformance/conformance_resumable_tasks.cpp:37:24: error: ‘suspend’ is not a member of ‘tbb::v1::task’; did you mean ‘tbb::detail::r1::suspend’?
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace test/CMakeLists.txt \
+      --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
 
   meta = with lib; {
@@ -89,6 +74,9 @@ stdenv.mkDerivation rec {
       details and threading mechanisms for scalability and performance.
     '';
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice dizfer ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      tmarkus
+    ];
   };
 }

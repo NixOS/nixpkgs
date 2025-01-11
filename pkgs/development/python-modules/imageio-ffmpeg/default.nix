@@ -1,48 +1,66 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, substituteAll
-, ffmpeg_4
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  ffmpeg,
+
+  # build-system
+  setuptools,
+
+  # checks
+  psutil,
+  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
-  version = "0.4.5";
+  version = "0.5.1";
+  pyproject = true;
 
-  disabled = !isPy3k;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f2ea4245a2adad25dedf98d343159579167e549ac8c4691cef5eff980e20c139";
+  src = fetchFromGitHub {
+    owner = "imageio";
+    repo = "imageio-ffmpeg";
+    tag = "v${version}";
+    hash = "sha256-i9DBEhRyW5shgnhpaqpPLTI50q+SATJnxur8PAauYX4=";
   };
 
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      ffmpeg = "${ffmpeg_4}/bin/ffmpeg";
+      ffmpeg = lib.getExe ffmpeg;
     })
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  build-system = [ setuptools ];
 
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # network access
+    "tests/test_io.py"
+    "tests/test_special.py"
+    "tests/test_terminate.py"
+  ];
+
+  postCheck = ''
     ${python.interpreter} << EOF
     from imageio_ffmpeg import get_ffmpeg_version
-    assert get_ffmpeg_version() == '${ffmpeg_4.version}'
+    assert get_ffmpeg_version() == '${ffmpeg.version}'
     EOF
-
-    runHook postCheck
   '';
 
   pythonImportsCheck = [ "imageio_ffmpeg" ];
 
   meta = with lib; {
+    changelog = "https://github.com/imageio/imageio-ffmpeg/releases/tag/v${version}";
     description = "FFMPEG wrapper for Python";
     homepage = "https://github.com/imageio/imageio-ffmpeg";
     license = licenses.bsd2;
     maintainers = [ maintainers.pmiddend ];
   };
-
 }

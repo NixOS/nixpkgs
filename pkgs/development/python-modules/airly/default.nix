@@ -1,26 +1,32 @@
-{ lib
-, aiohttp
-, aioresponses
-, aiounittest
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  aiounittest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airly";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ak-ambi";
     repo = "python-airly";
     rev = "v${version}";
-    sha256 = "sha256-weliT/FYnRX+pzVAyRWFly7lfj2z7P+hpq5SIhyIgmI=";
+    hash = "sha256-weliT/FYnRX+pzVAyRWFly7lfj2z7P+hpq5SIhyIgmI=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
     aioresponses
     aiounittest
     pytestCheckHook

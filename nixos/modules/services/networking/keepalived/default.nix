@@ -59,9 +59,11 @@ let
         ${optionalString i.vmacXmitBase "vmac_xmit_base"}
 
         ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
-        unicast_peer {
-          ${concatStringsSep "\n" i.unicastPeers}
-        }
+        ${optionalString (builtins.length i.unicastPeers > 0) ''
+          unicast_peer {
+            ${concatStringsSep "\n" i.unicastPeers}
+          }
+        ''}
 
         virtual_ipaddress {
           ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
@@ -84,13 +86,11 @@ let
     ''
   ) vrrpInstances);
 
-  virtualIpLine = (ip:
-    ip.addr
+  virtualIpLine = ip: ip.addr
     + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
     + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
     + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
-    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}"
-  );
+    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}";
 
   notNullOrEmpty = s: !(s == null || s == "");
 
@@ -140,6 +140,7 @@ let
 
 in
 {
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   options = {
     services.keepalived = {
@@ -149,6 +150,16 @@ in
         default = false;
         description = ''
           Whether to enable Keepalived.
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "keepalived" { };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically allow VRRP and AH packets in the firewall.
         '';
       };
 
@@ -264,6 +275,19 @@ in
         '';
       };
 
+      secretFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/keepalived.env";
+        description = ''
+          Environment variables from this file will be interpolated into the
+          final config file using envsubst with this syntax: `$ENVIRONMENT`
+          or `''${VARIABLE}`.
+          The file should contain lines formatted as `SECRET_VAR=SECRET_VALUE`.
+          This is useful to avoid putting secrets into the nix store.
+        '';
+      };
+
     };
   };
 
@@ -271,9 +295,22 @@ in
 
     assertions = flatten (map vrrpInstanceAssertions vrrpInstances);
 
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      extraCommands = ''
+        # Allow VRRP and AH packets
+        ip46tables -A nixos-fw -p vrrp -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
+        ip46tables -A nixos-fw -p ah -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
+      '';
+
+      extraStopCommands = ''
+        ip46tables -D nixos-fw -p vrrp -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
+        ip46tables -D nixos-fw -p ah -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
+      '';
+    };
+
     systemd.timers.keepalived-boot-delay = {
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       timerConfig = {
@@ -282,16 +319,25 @@ in
       };
     };
 
-    systemd.services.keepalived = {
+    systemd.services.keepalived = let
+      finalConfigFile = if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
+    in {
       description = "Keepalive Daemon (LVS and VRRP)";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {
         Type = "forking";
         PIDFile = pidFile;
         KillMode = "process";
-        ExecStart = "${pkgs.keepalived}/sbin/keepalived"
-          + " -f ${keepalivedConf}"
+        RuntimeDirectory = "keepalived";
+        EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
+        ExecStartPre = lib.optional (cfg.secretFile != null)
+        (pkgs.writeShellScript "keepalived-pre-start" ''
+          umask 077
+          ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
+        '');
+        ExecStart = "${lib.getExe cfg.package}"
+          + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

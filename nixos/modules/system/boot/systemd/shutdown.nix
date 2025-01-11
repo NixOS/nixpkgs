@@ -1,15 +1,22 @@
-{ config, lib, utils, pkgs, ... }: let
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
+let
 
   cfg = config.systemd.shutdownRamfs;
 
-  ramfsContents = let
-    storePaths = map (p: "${p}\n") cfg.storePaths;
-    contents = lib.mapAttrsToList (_: v: "${v.source}\n${v.target}") (lib.filterAttrs (_: v: v.enable) cfg.contents);
-  in pkgs.writeText "shutdown-ramfs-contents" (lib.concatStringsSep "\n" (storePaths ++ contents));
+  ramfsContents = pkgs.writeText "shutdown-ramfs-contents.json" (builtins.toJSON cfg.storePaths);
 
-in {
+in
+{
   options.systemd.shutdownRamfs = {
-    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // { default = true; };
+    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // {
+      default = true;
+    };
     contents = lib.mkOption {
       description = "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''
@@ -24,14 +31,29 @@ in {
       description = ''
         Store paths to copy into the shutdown ramfs as well.
       '';
-      type = lib.types.listOf lib.types.singleLineStr;
-      default = [];
+      type = utils.systemdUtils.types.initrdStorePath;
+      default = [ ];
     };
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.shutdownRamfs.contents."/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
-    systemd.shutdownRamfs.storePaths = [pkgs.runtimeShell "${pkgs.coreutils}/bin"];
+    systemd.shutdownRamfs.contents = {
+      "/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
+      "/etc/initrd-release".source = config.environment.etc.os-release.source;
+      "/etc/os-release".source = config.environment.etc.os-release.source;
+    };
+    systemd.shutdownRamfs.storePaths = [
+      pkgs.runtimeShell
+      "${pkgs.coreutils}/bin"
+    ] ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
+
+    systemd.mounts = [
+      {
+        what = "tmpfs";
+        where = "/run/initramfs";
+        type = "tmpfs";
+      }
+    ];
 
     systemd.services.generate-shutdown-ramfs = {
       description = "Generate shutdown ramfs";
@@ -39,20 +61,18 @@ in {
       before = [ "shutdown.target" ];
       unitConfig = {
         DefaultDependencies = false;
+        RequiresMountsFor = "/run/initramfs";
         ConditionFileIsExecutable = [
           "!/run/initramfs/shutdown"
         ];
       };
 
-      path = [pkgs.util-linux pkgs.makeInitrdNGTool];
-      serviceConfig.Type = "oneshot";
-      script = ''
-        mkdir -p /run/initramfs
-        if ! mountpoint -q /run/initramfs; then
-          mount -t tmpfs tmpfs /run/initramfs
-        fi
-        make-initrd-ng ${ramfsContents} /run/initramfs
-      '';
+      serviceConfig = {
+        Type = "oneshot";
+        ProtectSystem = "strict";
+        ReadWritePaths = "/run/initramfs";
+        ExecStart = "${pkgs.makeInitrdNGTool}/bin/make-initrd-ng ${ramfsContents} /run/initramfs";
+      };
     };
   };
 }

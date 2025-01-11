@@ -14,16 +14,16 @@ file.
 { config, lib, pkgs, ... }:
 {
   options = {
-    ...
+    # ...
   };
 
   config = {
-    ...
+    # ...
   };
 
   meta = {
     maintainers = with lib.maintainers; [ ericsagnes ];
-    doc = ./default.xml;
+    doc = ./default.md;
     buildDocsInSandbox = true;
   };
 }
@@ -31,7 +31,9 @@ file.
 
 -   `maintainers` contains a list of the module maintainers.
 
--   `doc` points to a valid DocBook file containing the module
+-   `doc` points to a valid [Nixpkgs-flavored CommonMark](
+      https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup
+    ) file containing the module
     documentation. Its contents is automatically added to
     [](#ch-configuration). Changes to a module documentation have to
     be checked to not break building the NixOS manual:
@@ -43,7 +45,7 @@ file.
 -  `buildDocsInSandbox` indicates whether the option documentation for the
    module can be built in a derivation sandbox. This option is currently only
    honored for modules shipped by nixpkgs. User modules and modules taken from
-   `NIXOS_EXTRA_MODULE_PATH` are always built outside of the sandbox, as has
+   `extraModules` are always built outside of the sandbox, as has
    been the case in previous releases.
 
    Building NixOS option documentation in a sandbox allows caching of the built

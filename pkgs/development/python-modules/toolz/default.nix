@@ -1,24 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.11.2";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b312d5e15138552f1bda8a4e66c30e236c831b612b2bf0005f8a1df10a4bc33";
+    hash = "sha256-LIbj2aBHmKxVZ5O87YOIFilqLwhQF2ZOSZXLQKEEegI=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # https://github.com/pytoolz/toolz/issues/577
+    "test_inspect_wrapped_property"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pytoolz/toolz";
+    changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

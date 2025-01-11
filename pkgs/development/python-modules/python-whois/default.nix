@@ -1,35 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, nose
-, pytestCheckHook
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "python-whois";
-  version = "0.7.3";
+  version = "0.9.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "05jaxbnlw5wck0hl124py364jqrx7a4mmv0hy3d2jzvmp0012sk5";
+    pname = "python_whois";
+    inherit version;
+    hash = "sha256-GJaMIUhHUvzEuaXwr0d+9rjcLou38b1cM4MUmcDdQco=";
   };
 
-  propagatedBuildInputs = [ future ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    nose
+  dependencies = [ python-dateutil ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     simplejson
   ];
 
-  # Exclude tests that require network access
   disabledTests = [
+    # Exclude tests that require network access
     "test_dk_parse"
     "test_ipv4"
     "test_ipv6"
+    "test_choose_server"
+    "test_simple_ascii_domain"
+    "test_simple_unicode_domain"
   ];
+
   pythonImportsCheck = [ "whois" ];
 
   meta = with lib; {

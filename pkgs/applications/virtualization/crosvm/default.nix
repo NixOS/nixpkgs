@@ -1,61 +1,89 @@
-{ stdenv, lib, rustPlatform, fetchgit
-, pkg-config, wayland-scanner, libcap, minijail, wayland, wayland-protocols
-, linux
+{
+  lib,
+  rustPlatform,
+  fetchgit,
+  fetchpatch,
+  pkg-config,
+  protobuf,
+  python3,
+  wayland-scanner,
+  libcap,
+  libdrm,
+  libepoxy,
+  minijail,
+  virglrenderer,
+  wayland,
+  wayland-protocols,
+  pkgsCross,
 }:
 
-let
+rustPlatform.buildRustPackage rec {
+  pname = "crosvm";
+  version = "130.0";
 
-  upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
+  src = fetchgit {
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
+    rev = "9d42f918373f962b7d035ff52a1629e184cb496e";
+    hash = "sha256-h8nAZ4kTidblKNvugEEZUorBthjGi0FmImcBwYy4EHQ=";
+    fetchSubmodules = true;
+  };
 
-  arch = with stdenv.hostPlatform;
-    if isAarch64 then "arm"
-    else if isx86_64 then "x86_64"
-    else throw "no seccomp policy files available for host platform";
+  patches = [
+    (fetchpatch {
+      name = "cross-domain.patch";
+      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/60053cdf0b360a03084292b39120365fff65d410%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-U5eOxuAtVLjJ+8h16lmbJYNxsP/AOEv/1ec4WlUxP2E=";
+    })
+  ];
 
-in
+  separateDebugInfo = true;
 
-  rustPlatform.buildRustPackage rec {
-    pname = "crosvm";
-    inherit (upstreamInfo) version;
+  cargoHash = "sha256-FvDJhmrSBShxRTpc23C0jEk9YRbtGyYgC1Z8ekxNnb8=";
 
-    src = fetchgit (builtins.removeAttrs upstreamInfo.src [ "date" "path" ]);
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+    python3
+    rustPlatform.bindgenHook
+    wayland-scanner
+  ];
 
-    patches = [
-      ./default-seccomp-policy-dir.diff
-    ];
+  buildInputs = [
+    libcap
+    libdrm
+    libepoxy
+    minijail
+    virglrenderer
+    wayland
+    wayland-protocols
+  ];
 
-    cargoLock.lockFile = ./Cargo.lock;
+  preConfigure = ''
+    patchShebangs third_party/minijail/tools/*.py
+  '';
 
-    nativeBuildInputs = [ pkg-config wayland-scanner ];
+  CROSVM_USE_SYSTEM_MINIGBM = true;
+  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
-    buildInputs = [ libcap minijail wayland wayland-protocols ];
+  buildFeatures = [ "virgl_renderer" ];
 
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-      sed -i "s|/usr/share/policy/crosvm/|$out/share/policy/|g" \
-             seccomp/*/*.policy
-    '';
-
-    preBuild = ''
-      export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
-    '';
-
-    postInstall = ''
-      mkdir -p $out/share/policy/
-      cp seccomp/${arch}/* $out/share/policy/
-    '';
-
-    CROSVM_CARGO_TEST_KERNEL_BINARY =
-      lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
-        "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
-
-    passthru.updateScript = ./update.py;
-
-    meta = with lib; {
-      description = "A secure virtual machine monitor for KVM";
-      homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
-      maintainers = with maintainers; [ qyliss ];
-      license = licenses.bsd3;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      musl = pkgsCross.musl64.crosvm;
     };
-  }
+  };
+
+  meta = with lib; {
+    description = "Secure virtual machine monitor for KVM";
+    homepage = "https://crosvm.dev/";
+    mainProgram = "crosvm";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.bsd3;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+  };
+}

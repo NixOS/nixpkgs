@@ -1,15 +1,21 @@
-{ runCommand, python3, coreutils }:
+{
+  runCommand,
+  python3,
+  coreutils,
+}:
 # Write the references of `path' to a file, in order of how "popular" each
 # reference is. Nix 2 only.
-path: runCommand "closure-paths"
-{
-  exportReferencesGraph.graph = path;
-  __structuredAttrs = true;
-  PATH = "${coreutils}/bin:${python3}/bin";
-  builder = builtins.toFile "builder"
-    ''
-      . .attrs.sh
-      python3 ${./closure-graph.py} .attrs.json graph > ''${outputs[out]}
-    '';
+path:
+runCommand "closure-paths"
+  {
+    exportReferencesGraph.graph = path;
+    __structuredAttrs = true;
+    preferLocalBuild = true;
+    nativeBuildInputs = [
+      coreutils
+      python3
+    ];
   }
-  ""
+  ''
+    python3 ${./closure-graph.py} "$NIX_ATTRS_JSON_FILE" graph > ''${outputs[out]}
+  ''

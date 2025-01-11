@@ -36,7 +36,7 @@ in
       description = "Location of Jirafeau storage directory.";
     };
 
-    enable = mkEnableOption "Jirafeau file upload application.";
+    enable = mkEnableOption "Jirafeau file upload application";
 
     extraConfig = mkOption {
       type = types.lines;
@@ -45,12 +45,11 @@ in
         $cfg['style'] = 'courgette';
         $cfg['organisation'] = 'ACME';
       '';
-      description = let
+      description =  let
         documentationLink =
           "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
-      in
-        ''
-          Jirefeau configuration. Refer to <link xlink:href="${documentationLink}"/> for supported
+      in ''
+          Jirefeau configuration. Refer to <${documentationLink}> for supported
           values.
         '';
     };
@@ -72,11 +71,10 @@ in
       default = "30m";
       description = let
         nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
-      in
-        ''
+      in ''
           Timeout for reading client request bodies and headers. Refer to
-          <link xlink:href="${nginxCoreDocumentation}#client_body_timeout"/> and
-          <link xlink:href="${nginxCoreDocumentation}#client_header_timeout"/> for accepted values.
+          <${nginxCoreDocumentation}#client_body_timeout> and
+          <${nginxCoreDocumentation}#client_header_timeout> for accepted values.
         '';
     };
 
@@ -92,12 +90,7 @@ in
       description = "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.jirafeau;
-      defaultText = literalExpression "pkgs.jirafeau";
-      description = "Jirafeau package to use";
-    };
+    package = mkPackageOption pkgs "jirafeau" { };
 
     poolConfig = mkOption {
       type = with types; attrsOf (oneOf [ str int bool ]);
@@ -110,7 +103,7 @@ in
         "pm.max_requests" = 500;
       };
       description = ''
-        Options for Jirafeau PHP pool. See documentation on <literal>php-fpm.conf</literal> for
+        Options for Jirafeau PHP pool. See documentation on `php-fpm.conf` for
         details on configuration directives.
       '';
     };

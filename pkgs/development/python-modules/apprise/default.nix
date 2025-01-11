@@ -1,75 +1,79 @@
-{ lib
-, babel
-, buildPythonPackage
-, click
-, cryptography
-, fetchPypi
-, gntp
-, installShellFiles
-, markdown
-, mock
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests-oauthlib
-, six
-, slixmpp
+{
+  lib,
+  apprise,
+  babel,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchPypi,
+  gntp,
+  installShellFiles,
+  markdown,
+  paho-mqtt,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests-oauthlib,
+  setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.9";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a6PQ6DB+JkfDJA7BoNVXHzpFP5FD2Ug07LAmYLDo0kQ=";
+    hash = "sha256-eezQLEHYbf/SEbs1zFwGyEbndwQavh0HAfmJmA3kRok=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [
     babel
-    installShellFiles
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     markdown
     pyyaml
     requests
     requests-oauthlib
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gntp
-    mock
     paho-mqtt
+    pytest-mock
     pytestCheckHook
-    slixmpp
-  ];
-
-  disabledTests = [
-    "test_apprise_cli_nux_env"
-    "test_plugin_mqtt_general"
   ];
 
   postInstall = ''
     installManPage packaging/man/apprise.1
   '';
 
-  pythonImportsCheck = [
-    "apprise"
-  ];
+  pythonImportsCheck = [ "apprise" ];
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion {
+      package = apprise;
+      version = "v${version}";
+    };
+  };
+
+  meta = {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "apprise";
   };
 }

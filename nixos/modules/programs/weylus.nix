@@ -1,15 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.weylus;
 in
 {
-  options.programs.weylus = with types; {
-    enable = mkEnableOption "weylus";
+  options.programs.weylus = with lib.types; {
+    enable = lib.mkEnableOption "weylus, which turns your smart phone into a graphic tablet/touch screen for your computer";
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       type = bool;
       default = false;
       description = ''
@@ -17,7 +20,7 @@ in
       '';
     };
 
-     users = mkOption {
+    users = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -26,16 +29,14 @@ in
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.weylus;
-      defaultText = "pkgs.weylus";
-      description = "Weylus package to install.";
-    };
+    package = lib.mkPackageOption pkgs "weylus" { };
   };
-  config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 1701 9001 ];
+  config = lib.mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [
+        1701
+        9001
+      ];
     };
 
     hardware.uinput.enable = true;

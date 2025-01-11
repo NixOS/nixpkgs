@@ -1,33 +1,47 @@
 { lib, fetchgit, fetchzip }:
 
-{ owner, repo, rev, name ? "source"
+lib.makeOverridable (
+{ owner, repo
+, tag ? null
+, rev ? null
+, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
-, sparseCheckout ? ""
+, fetchLFS ? false
+, sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
 , ... # For hash agility
 }@args:
 
+assert (lib.assertMsg (lib.xor (tag == null) (rev == null)) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both).");
+
 let
 
   position = (if args.meta.description or null != null
     then builtins.unsafeGetAttrPos "description" args.meta
-    else builtins.unsafeGetAttrPos "rev" args
+    else if tag != null then
+      builtins.unsafeGetAttrPos "tag" args
+    else
+      builtins.unsafeGetAttrPos "rev" args
   );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   newMeta = meta // {
     homepage = meta.homepage or baseUrl;
-
+  } // lib.optionalAttrs (position != null) {
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
-  varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != "");
+  passthruAttrs = removeAttrs args [ "owner" "repo" "tag" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
+  varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || fetchLFS || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if useFetchGit then fetchgit else fetchzip;
+  fetcher =
+    if useFetchGit then fetchgit
+    # fetchzip may not be overridable when using external tools, for example nix-prefetch
+    else if fetchzip ? override then fetchzip.override { withUnzip = false; }
+    else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -45,12 +59,14 @@ let
 
   gitRepoUrl = "${baseUrl}.git";
 
+  revWithTag = if tag != null then "refs/tags/${tag}" else rev;
+
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
+      inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
-      url = "${baseUrl}/archive/${rev}.tar.gz";
+      url = "${baseUrl}/archive/${revWithTag}.tar.gz";
 
       passthru = {
         inherit gitRepoUrl;
@@ -59,4 +75,5 @@ let
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta = newMeta; inherit rev; }
+fetcher fetcherArgs // { meta = newMeta; inherit owner repo tag; rev = revWithTag; }
+)

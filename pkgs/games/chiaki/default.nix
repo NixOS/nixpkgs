@@ -1,30 +1,32 @@
-{ lib, stdenv
-, fetchgit
-, cmake
-, pkg-config
-, protobuf
-, python3Packages
-, ffmpeg
-, libopus
-, mkDerivation
-, qtbase
-, qtmultimedia
-, qtsvg
-, SDL2
-, libevdev
-, udev
-, qtmacextras
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  pkg-config,
+  protobuf,
+  python3Packages,
+  ffmpeg,
+  libopus,
+  mkDerivation,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  SDL2,
+  libevdev,
+  udev,
+  qtmacextras,
 }:
 
 mkDerivation rec {
   pname = "chiaki";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchgit {
     url = "https://git.sr.ht/~thestr4ng3r/chiaki";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-VkCA8KS4EHuVSgoYt1YDT38hA1NEBckiBwRcgDZUSs4=";
+    hash = "sha256-mLx2ygMlIuDJt9iT4nIj/dcLGjMvvmneKd49L7C3BQk=";
   };
 
   nativeBuildInputs = [
@@ -33,22 +35,26 @@ mkDerivation rec {
     protobuf
     python3Packages.protobuf
     python3Packages.python
+    python3Packages.setuptools
   ];
 
-  buildInputs = [
-    ffmpeg
-    libopus
-    qtbase
-    qtmultimedia
-    qtsvg
-    protobuf
-    SDL2
-  ] ++ lib.optionals stdenv.isLinux [
-    libevdev
-    udev
-  ] ++ lib.optionals stdenv.isDarwin [
-    qtmacextras
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      libopus
+      qtbase
+      qtmultimedia
+      qtsvg
+      protobuf
+      SDL2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libevdev
+      udev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      qtmacextras
+    ];
 
   doCheck = true;
 
@@ -58,7 +64,8 @@ mkDerivation rec {
     homepage = "https://git.sr.ht/~thestr4ng3r/chiaki";
     description = "Free and Open Source PlayStation Remote Play Client";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = [ ];
     platforms = platforms.all;
+    mainProgram = "chiaki";
   };
 }

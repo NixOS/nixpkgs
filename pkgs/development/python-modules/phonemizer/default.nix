@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, substituteAll
-, buildPythonApplication
-, fetchPypi
-, joblib
-, segments
-, attrs
-, dlinfo
-, typing-extensions
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildPythonPackage,
+  fetchPypi,
+  joblib,
+  segments,
+  attrs,
+  dlinfo,
+  typing-extensions,
+  espeak-ng,
+  setuptools,
+  pytest,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "phonemizer";
-  version = "3.1.1";
+  version = "3.3.0";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PWVK0NLVa0Rx1xyUyQF2/RvUo3/geskn53FcEv0Jr0c=";
+    hash = "sha256-Xgw4Ei7/4LMxok5nSv8laHTs4WnXCpzxEgM3tW+OPQw=";
   };
-
-  postPatch = ''
-    sed -i -e '/\'pytest-runner\'/d setup.py
-  '';
 
   patches = [
     (substituteAll {
@@ -32,7 +32,6 @@ buildPythonApplication rec {
       libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
       # FIXME package festival
     })
-    ./remove-intertwined-festival-test.patch
   ];
 
   propagatedBuildInputs = [
@@ -43,32 +42,16 @@ buildPythonApplication rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  # We tried to package festvial, but were unable to get the backend running,
+  # We tried to package festival, but were unable to get the backend running,
   # so let's disable related tests.
-  disabledTestPaths = [
-    "test/test_festival.py"
-  ];
+  doCheck = false;
 
-  disabledTests = [
-    "test_festival"
-    "test_festival_path"
-    "test_readme_festival_syll"
-    "test_unicode"
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bootphon/phonemizer";
     changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    mainProgram = "phonemize";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

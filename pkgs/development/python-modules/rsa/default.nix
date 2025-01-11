@@ -1,36 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittest2
-, pyasn1
-, mock
-, isPy3k
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyasn1,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rsa";
-  version = "4.8";
+  version = "4.9";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5c6bd9dc7a543b7fe4304a631f8a8a3b674e2bbfc49c2ae96200cdbe55df6b17";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "sybrenstuvel";
+    repo = "python-rsa";
+    rev = "version-${version}";
+    hash = "sha256-PwaRe+ICy0UoguXSMSh3PFl5R+YAhJwNdNN9isadlJY=";
   };
 
-  checkInputs = [ unittest2 mock ];
-  propagatedBuildInputs = [ pyasn1 ];
-
-  preConfigure = lib.optionalString (isPy3k && pythonOlder "3.7") ''
+  preConfigure = lib.optionalString (pythonOlder "3.7") ''
     substituteInPlace setup.py --replace "open('README.md')" "open('README.md',encoding='utf-8')"
   '';
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ pyasn1 ];
+
+  preCheck = ''
+    sed -i '/addopts/d' tox.ini
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [ "tests/test_mypy.py" ];
 
   meta = with lib; {
     homepage = "https://stuvel.eu/rsa";
     license = licenses.asl20;
-    description = "A pure-Python RSA implementation";
+    description = "Pure-Python RSA implementation";
   };
-
 }

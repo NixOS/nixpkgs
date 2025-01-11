@@ -1,14 +1,23 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corerenamer";
-  version = "4.3.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WrMyz8Noq0EeBIxL4mSl6e+8wrivmwfoa1yKBrSgrRI=";
+    hash = "sha256-jN1keyo2tDlgUu243173zgChw2nhvbsLPH9af6jDhKs=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +32,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A batch file renamer from the C Suite";
+    description = "Batch file renamer from the C Suite";
+    mainProgram = "corerenamer";
     homepage = "https://gitlab.com/cubocore/coreapps/corerenamer";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

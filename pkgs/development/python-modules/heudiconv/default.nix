@@ -1,48 +1,77 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, mock
-, dcm2niix
-, nibabel
-, pydicom
-, nipype
-, dcmstack
-, etelemetry
-, filelock
+{
+  lib,
+  buildPythonPackage,
+  datalad,
+  dcm2niix,
+  dcmstack,
+  etelemetry,
+  fetchPypi,
+  filelock,
+  git,
+  git-annex,
+  nibabel,
+  nipype,
+  pydicom,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  versioningit,
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
   pname = "heudiconv";
+  version = "1.3.2";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    #sha256 = "0gzqqa4pzhywdbvks2qjniwhr89sgipl5k7h9hcjs7cagmy9gb05";
-    sha256 = "1r6y93125mc84c09970ifps5xysp8ffp62rwlzili3q2k1m3fh4v";
+    hash = "sha256-z7HaouhNuFX16RSY4gsF8gQJIJfmSiBVUANwMM113ds=";
   };
 
   postPatch = ''
-    # doesn't exist as a separate package with Python 3:
-    substituteInPlace heudiconv/info.py --replace "'pathlib'," ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "versioningit ~=" "versioningit >="
   '';
 
-  propagatedBuildInputs = [
-    dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
+  build-system = [
+    setuptools
+    versioningit
   ];
 
-  checkInputs = [ dcm2niix pytest mock ];
+  dependencies = [
+    dcmstack
+    etelemetry
+    filelock
+    nibabel
+    nipype
+    pydicom
+  ];
 
-  # test_monitor and test_dlad require 'inotify' and 'datalad' respectively,
-  # and these aren't in Nixpkgs
-  checkPhase = "pytest -k 'not test_dlad and not test_monitor' heudiconv/tests";
+  nativeCheckInputs = [
+    datalad
+    dcm2niix
+    pytestCheckHook
+    git
+    git-annex
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "heudiconv" ];
+
+  disabledTests = [
+    # No such file or directory
+    "test_bvals_are_zero"
+  ];
 
   meta = with lib; {
-    homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
+    homepage = "https://heudiconv.readthedocs.io";
+    changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

@@ -1,49 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, coverage
-, ghostscript
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  ghostscript,
+  pillow,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.1.2";
-  disabled = !isPy3k;
+  version = "0.11.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit version;
-    pname = "pydyf";
-    sha256 = "sha256-Hi9d5IF09QXeAlp9HnzwG73ZQiyoq5RReCvwDuF4YCw=";
+    inherit pname version;
+    hash = "sha256-OU3d9hnMqdDFVxXjxV6hIam/nLx4DNwSAaJCeRe4a2Q=";
   };
-
-  patches = [
-    # Fix tests for Ghostscript 9.56
-    # Remove after v0.1.3 has been released
-    (fetchpatch {
-      url = "https://github.com/CourtBouillon/pydyf/commit/d4c34823f1d15368753c9c26f7acc7a24fc2d979.patch";
-      sha256 = "sha256-2hHZW/q5CbStbpSJYbm3b23qKXANEb5jbPGQ83uHC+Q=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+      --replace "--isort --flake8" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    coverage
+  nativeBuildInputs = [ flit-core ];
+
+  nativeCheckInputs = [
     ghostscript
     pillow
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
+  pythonImportsCheck = [ "pydyf" ];
+
   meta = with lib; {
-    homepage = "https://doc.courtbouillon.org/pydyf/stable/";
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
+    homepage = "https://doc.courtbouillon.org/pydyf/stable/";
+    changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rprecenth ];
   };

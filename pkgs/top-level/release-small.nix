@@ -1,22 +1,52 @@
-/* A small release file, with few packages to be built.  The aim is to reduce
-   the load on Hydra when testing the `stdenv-updates' branch. */
+/*
+  A small release file, with few packages to be built.  The aim is to reduce
+  the load on Hydra when testing the `stdenv-updates' branch.
+*/
 
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
-, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+{
+  nixpkgs ? {
+    outPath = (import ../../lib).cleanSource ../..;
+    revCount = 1234;
+    shortRev = "abcdef";
+  },
+  supportedSystems ? [
+    "x86_64-linux"
+    "x86_64-darwin"
+  ],
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? {
+    config = {
+      allowUnfree = false;
+      inHydra = true;
+    };
+
+    __allowFileset = false;
+  },
 }:
 
-with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib)
+    all
+    linux
+    darwin
+    mapTestOn
+    unix
+    ;
+in
 
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs supportedSystems;
+    inherit nixpkgs;
     officialRelease = false;
   };
 
-} // (mapTestOn ({
+}
+// (mapTestOn ({
 
   aspell = all;
   at = linux;
@@ -36,7 +66,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   cron = linux;
   cups = linux;
   dbus = linux;
-  dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
   emacs = linux;
@@ -55,9 +84,8 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   gnused = all;
   gnutar = all;
   gnutls = linux;
-  grub = linux;
   grub2 = linux;
-  guile = linux;  # tests fail on Cygwin
+  guile = linux; # tests fail on Cygwin
   gzip = all;
   hddtemp = linux;
   hdparm = linux;
@@ -68,7 +96,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   idutils = all;
   inetutils = linux;
   iputils = linux;
-  kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
   lapack-reference = linux;
@@ -79,7 +106,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   libxml2 = all;
   libxslt = all;
   lout = linux;
-  lsh = linux;
   lsof = linux;
   ltrace = linux;
   lvm2 = linux;
@@ -89,7 +115,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   man-pages = linux;
   mc = all;
   mdadm = linux;
-  mesa = mesaPlatforms;
+  mesa = linux;
   mingetty = linux;
   mktemp = all;
   monotone = linux;
@@ -108,7 +134,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   openssl = all;
   pan = linux;
   pciutils = linux;
-  pdf2xml = all;
   perl = all;
   pkg-config = all;
   pmccabe = linux;
@@ -130,7 +155,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   su = linux;
   sudo = linux;
   sysklogd = linux;
-  syslinux = ["i686-linux"];
+  syslinux = [ "i686-linux" ];
   tcl = linux;
   tcpdump = linux;
   texinfo = all;
@@ -142,7 +167,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   util-linux = linux;
   util-linuxMinimal = linux;
   w3m = all;
-  webkitgtk = linux;
+  webkitgtk_4_0 = linux;
   wget = all;
   which = all;
   wirelesstools = linux;
@@ -150,5 +175,5 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   xfsprogs = linux;
   xkeyboard_config = linux;
   zip = all;
-
-} ))
+  tests-stdenv-gcc-stageCompare = all;
+}))

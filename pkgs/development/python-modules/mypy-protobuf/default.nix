@@ -1,23 +1,56 @@
-{ lib, fetchPypi, buildPythonApplication, protobuf, types-protobuf, grpcio-tools, pythonOlder }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  grpcio-tools,
+  lib,
+  mypy-protobuf,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  testers,
+  types-protobuf,
+}:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mypy-protobuf";
-  version = "3.2.0";
-  format = "pyproject";
+  version = "3.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cwqhUzfDjwRG++CPbGwjcO4B05USU2nUtw4IseLuMO4=";
+    hash = "sha256-AvJC6zQJ9miJ8rGjqlg1bsTZCc3Q+TEVYi6ecDZuyjw=";
   };
 
-  propagatedBuildInputs = [ protobuf types-protobuf grpcio-tools ];
+  pythonRelaxDeps = [ "protobuf" ];
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  dependencies = [
+    grpcio-tools
+    protobuf
+    types-protobuf
+  ];
+
+  doCheck = false; # ModuleNotFoundError: No module named 'testproto'
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "mypy_protobuf" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = mypy-protobuf;
+    command = "${lib.getExe mypy-protobuf} --version";
+  };
+
+  meta = {
+    changelog = "https://github.com/nipunn1313/mypy-protobuf/blob/v${version}/CHANGELOG.md";
     description = "Generate mypy stub files from protobuf specs";
-    homepage = "https://github.com/dropbox/mypy-protobuf";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lnl7 ];
+    homepage = "https://github.com/nipunn1313/mypy-protobuf";
+    license = lib.licenses.asl20;
+    mainProgram = "protoc-gen-mypy";
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
 }

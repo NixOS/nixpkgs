@@ -1,49 +1,42 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, certifi
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  certifi,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-cloud";
-  version = "1.4.9";
-  format = "setuptools";
+  version = "1.4.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "crownstone";
-    repo = "crownstone-lib-python-cloud";
-    rev = version;
-    sha256 = "sha256-CS1zeQiWPnsGCWixCsN9sz08mPORW5sVqIpSFPh0Qt0=";
+  src = fetchPypi {
+    pname = "crownstone_cloud";
+    inherit version;
+    hash = "sha256-s84pK52uMupxQfdMldV14V3nj+yVku1Vw13CRX4o08U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    asynctest
     certifi
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    sed -i '/codecov/d' requirements.txt
-  '';
-
-  pythonImportsCheck = [
-    "crownstone_cloud"
-  ];
+  pythonImportsCheck = [ "crownstone_cloud" ];
 
   meta = with lib; {
     description = "Python module for communicating with Crownstone Cloud and devices";
-    homepage = "https://github.com/crownstone/crownstone-lib-python-cloud";
-    license = with licenses; [ mit ];
+    homepage = "https://github.com/Crownstone-Community/crownstone-lib-python-cloud";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

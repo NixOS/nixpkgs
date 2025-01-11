@@ -1,32 +1,54 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kubernetes-helm,
+}:
 
 buildGoModule rec {
   pname = "kubernetes-helm";
-  version = "3.9.0";
-  gitCommit = "7ceeda6c585217a19a1131663d8cd1f7d641b2a7";
+  version = "3.16.4";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-pdWFCepVGSJmlYnvcJCaNaGSllbeh/oCdosrab8jA4s=";
+    sha256 = "sha256-1dgBPDl5AtbqSKzfbAnCAzdBL+d6ZeO81LJFosmO7Bg=";
   };
-  vendorSha256 = "sha256-r0a38ZB6VlyzKB66+OAllRLXhqwO0qbksZjOrBWdjqM=";
+  vendorHash = "sha256-pkQ4J4JmEByu7bkUa/rg2bipY9s6t6uvPNiNyTyYkD8=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
     "-w"
     "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
 
+  preBuild = ''
+    # set k8s version to client-go version, to match upstream
+    K8S_MODULES_VER="$(go list -f '{{.Version}}' -m k8s.io/client-go)"
+    K8S_MODULES_MAJOR_VER="$(($(cut -d. -f1 <<<"$K8S_MODULES_VER") + 1))"
+    K8S_MODULES_MINOR_VER="$(cut -d. -f2 <<<"$K8S_MODULES_VER")"
+    old_ldflags="''${ldflags}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
+    # restore ldflags for tests
+    ldflags="''${old_ldflags}"
+
     # skipping version tests because they require dot git directory
     substituteInPlace cmd/helm/version_test.go \
       --replace "TestVersion" "SkipVersion"
-  '' + lib.optionalString stdenv.isLinux ''
-    # skipping plugin tests on linux
+    # skipping plugin tests
     substituteInPlace cmd/helm/plugin_test.go \
       --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
       --replace "TestLoadPlugins" "SkipLoadPlugins"
@@ -38,14 +60,28 @@ buildGoModule rec {
   postInstall = ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
-    installShellCompletion helm.{bash,zsh}
+    $out/bin/helm completion fish > helm.fish
+    installShellCompletion helm.{bash,zsh,fish}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kubernetes-helm;
+    command = "helm version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/kubernetes/helm";
-    description = "A package manager for kubernetes";
+    description = "Package manager for kubernetes";
     mainProgram = "helm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man techknowlogick ];
+    maintainers = with maintainers; [
+      rlupton20
+      edude03
+      saschagrunert
+      Frostman
+      Chili-Man
+      techknowlogick
+    ];
   };
 }

@@ -1,57 +1,65 @@
-{ lib
-, brotli
-, buildPythonPackage
-, certifi
-, dpkt
-, fetchPypi
-, gevent
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  dpkt,
+  fetchFromGitHub,
+  gevent,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  stdenv,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "1.5.3";
-  format = "setuptools";
+  version = "2.3.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2A7J/0K3IZ8zVYGFSZ0LQ2VZf8Vf+IYge0X1Yy4Jl4A=";
+  src = fetchFromGitHub {
+    owner = "geventhttpclient";
+    repo = "geventhttpclient";
+    tag = version;
+    # TODO: unvendor llhttp
+    fetchSubmodules = true;
+    hash = "sha256-uOGnwPbvTam14SFTUT0UrwxHfP4a5cn3a7EhLoGBUrA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     brotli
     certifi
     gevent
-    six
+    urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dpkt
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # socket.gaierror: [Errno -2] Name or service not known
-    "test_client_simple"
-    "test_client_without_leading_slas"
-    "test_request_with_headers"
-    "test_response_context_manager"
-    "test_client_ssl"
-    "test_ssl_fail_invalid_certificate"
-    "test_multi_queries_greenlet_safe"
-  ];
+  # lots of: [Errno 48] Address already in use: ('127.0.0.1', 54323)
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  pythonImportsCheck = [
-    "geventhttpclient"
-  ];
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    rm -rf geventhttpclient
+  '';
+
+  pytestFlagsArray = [ "-m 'not network'" ];
+
+  pythonImportsCheck = [ "geventhttpclient" ];
 
   meta = with lib; {
-    homepage = "https://github.com/gwik/geventhttpclient";
-    description = "HTTP client library for gevent";
+    homepage = "https://github.com/geventhttpclient/geventhttpclient";
+    description = "High performance, concurrent HTTP client library using gevent";
+    changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

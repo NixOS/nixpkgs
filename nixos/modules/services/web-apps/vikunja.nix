@@ -1,28 +1,29 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.vikunja;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "config.yaml" cfg.settings;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
-in {
+in
+{
+  imports = [
+    (mkRemovedOptionModule [ "services" "vikunja" "setupNginx" ]
+      "services.vikunja no longer supports the automatic set up of a nginx virtual host. Set up your own webserver config with a proxy pass to the vikunja service."
+    )
+  ];
+
   options.services.vikunja = with lib; {
     enable = mkEnableOption "vikunja service";
-    package-api = mkOption {
-      default = pkgs.vikunja-api;
-      type = types.package;
-      defaultText = literalExpression "pkgs.vikunja-api";
-      description = "vikunja-api derivation to use.";
-    };
-    package-frontend = mkOption {
-      default = pkgs.vikunja-frontend;
-      type = types.package;
-      defaultText = literalExpression "pkgs.vikunja-frontend";
-      description = "vikunja-frontend derivation to use.";
-    };
+    package = mkPackageOption pkgs "vikunja" { };
     environmentFiles = mkOption {
       type = types.listOf types.path;
       default = [ ];
@@ -31,44 +32,41 @@ in {
         For example passwords should be set in one of these files.
       '';
     };
-    setupNginx = mkOption {
-      type = types.bool;
-      default = config.services.nginx.enable;
-      defaultText = literalExpression "config.services.nginx.enable";
-      description = ''
-        Whether to setup NGINX.
-        Further nginx configuration can be done by changing
-        <option>services.nginx.virtualHosts.&lt;frontendHostname&gt;</option>.
-        This does not enable TLS or ACME by default. To enable this, set the
-        <option>services.nginx.virtualHosts.&lt;frontendHostname&gt;.enableACME</option> to
-        <literal>true</literal> and if appropriate do the same for
-        <option>services.nginx.virtualHosts.&lt;frontendHostname&gt;.forceSSL</option>.
-      '';
-    };
     frontendScheme = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum [
+        "http"
+        "https"
+      ];
       description = ''
         Whether the site is available via http or https.
-        This does not configure https or ACME in nginx!
       '';
     };
     frontendHostname = mkOption {
       type = types.str;
       description = "The Hostname under which the frontend is running.";
     };
+    port = mkOption {
+      type = types.port;
+      default = 3456;
+      description = "The TCP port exposed by the API.";
+    };
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       description = ''
         Vikunja configuration. Refer to
-        <link xlink:href="https://vikunja.io/docs/config-options/"/>
+        <https://vikunja.io/docs/config-options/>
         for details on supported values.
-        '';
+      '';
     };
     database = {
       type = mkOption {
-        type = types.enum [ "sqlite" "mysql" "postgres" ];
+        type = types.enum [
+          "sqlite"
+          "mysql"
+          "postgres"
+        ];
         example = "postgres";
         default = "sqlite";
         description = "Database engine to use.";
@@ -98,9 +96,16 @@ in {
   config = lib.mkIf cfg.enable {
     services.vikunja.settings = {
       database = {
-        inherit (cfg.database) type host user database path;
+        inherit (cfg.database)
+          type
+          host
+          user
+          database
+          path
+          ;
       };
       service = {
+        interface = ":${toString cfg.port}";
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
@@ -108,38 +113,30 @@ in {
       };
     };
 
-    systemd.services.vikunja-api = {
-      description = "vikunja-api";
-      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+    systemd.services.vikunja = {
+      description = "vikunja";
+      after =
+        [ "network.target" ]
+        ++ lib.optional usePostgresql "postgresql.service"
+        ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package-api ];
+      path = [ cfg.package ];
       restartTriggers = [ configFile ];
 
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "vikunja";
-        ExecStart = "${cfg.package-api}/bin/vikunja";
+        ExecStart = "${cfg.package}/bin/vikunja";
         Restart = "always";
         EnvironmentFile = cfg.environmentFiles;
       };
     };
 
-    services.nginx.virtualHosts."${cfg.frontendHostname}" = mkIf cfg.setupNginx {
-      locations = {
-        "/" = {
-          root = cfg.package-frontend;
-          tryFiles = "try_files $uri $uri/ /";
-        };
-        "~* ^/(api|dav|\\.well-known)/" = {
-          proxyPass = "http://localhost:3456";
-          extraConfig = ''
-            client_max_body_size 20M;
-          '';
-        };
-      };
-    };
-
     environment.etc."vikunja/config.yaml".source = configFile;
+
+    environment.systemPackages = [
+      cfg.package # for admin `vikunja` CLI
+    ];
   };
 }

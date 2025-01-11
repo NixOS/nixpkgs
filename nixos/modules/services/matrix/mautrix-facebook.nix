@@ -1,33 +1,34 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.mautrix-facebook;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   settingsFile = settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
 
-  puppetRegex = concatStringsSep
-    ".*"
-    (map
-      escapeRegex
-      (splitString
-        "{userid}"
-        cfg.settings.bridge.username_template));
-in {
+  puppetRegex = lib.concatStringsSep ".*" (
+    map lib.escapeRegex (lib.splitString "{userid}" cfg.settings.bridge.username_template)
+  );
+in
+{
   options = {
     services.mautrix-facebook = {
-      enable = mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
+      enable = lib.mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
 
-      settings = mkOption rec {
-        apply = recursiveUpdate default;
+      settings = lib.mkOption rec {
+        apply = lib.recursiveUpdate default;
         type = settingsFormat.type;
         default = {
           homeserver = {
             address = "http://localhost:8008";
+            software = "standard";
           };
 
           appservice = rec {
+            id = "facebook";
             address = "http://${hostname}:${toString port}";
             hostname = "localhost";
             port = 29319;
@@ -44,6 +45,12 @@ in {
             encryption = {
               allow = true;
               default = true;
+
+              verification_levels = {
+                receive = "cross-signed-tofu";
+                send = "cross-signed-tofu";
+                share = "cross-signed-tofu";
+              };
             };
             username_template = "facebook_{userid}";
           };
@@ -58,11 +65,11 @@ in {
             };
             root = {
               level = "INFO";
-              handlers = ["journal"];
+              handlers = [ "journal" ];
             };
           };
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             homeserver = {
               address = "http://localhost:8008";
@@ -76,70 +83,71 @@ in {
           }
         '';
         description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
+          {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
-          <link xlink:href="https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml">
-          example-config.yaml</link>.
-          </para>
+          [example-config.yaml](https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml).
 
-          <para>
-          Secret tokens should be specified using <option>environmentFile</option>
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
-          File containing environment variables to be passed to the mautrix-telegram service.
+          File containing environment variables to be passed to the mautrix-facebook service.
 
-          Any config variable can be overridden by setting <literal>MAUTRIX_FACEBOOK_SOME_KEY</literal> to override the <literal>some.key</literal> variable.
+          Any config variable can be overridden by setting `MAUTRIX_FACEBOOK_SOME_KEY` to override the `some.key` variable.
         '';
       };
 
-      configurePostgresql = mkOption {
-        type = types.bool;
+      configurePostgresql = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
-          Enable PostgreSQL and create a user and database for mautrix-facebook. The default <literal>settings</literal> reference this database, if you disable this option you must provide a database URL.
+          Enable PostgreSQL and create a user and database for mautrix-facebook. The default `settings` reference this database, if you disable this option you must provide a database URL.
         '';
       };
 
-      registrationData = mkOption {
-        type = types.attrs;
-        default = {};
+      registrationData = lib.mkOption {
+        type = lib.types.attrs;
+        default = { };
         description = ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
 
-          Currently <literal>as_token</literal> and <literal>hs_token</literal> need to be added as they are not known to this module.
+          Currently `as_token` and `hs_token` need to be added as they are not known to this module.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    users.groups.mautrix-facebook = { };
+
     users.users.mautrix-facebook = {
       group = "mautrix-facebook";
       isSystemUser = true;
     };
 
-    services.postgresql = mkIf cfg.configurePostgresql {
-      ensureDatabases = ["mautrix-facebook"];
-      ensureUsers = [{
-        name = "mautrix-facebook";
-        ensurePermissions = {
-          "DATABASE \"mautrix-facebook\"" = "ALL PRIVILEGES";
-        };
-      }];
+    services.postgresql = lib.mkIf cfg.configurePostgresql {
+      ensureDatabases = [ "mautrix-facebook" ];
+      ensureUsers = [
+        {
+          name = "mautrix-facebook";
+          ensureDBOwnership = true;
+        }
+      ];
     };
 
     systemd.services.mautrix-facebook = rec {
       wantedBy = [ "multi-user.target" ];
-      wants = [
-        "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
-        ++ optional cfg.configurePostgresql "postgresql.service";
+      wants =
+        [
+          "network-online.target"
+        ]
+        ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+        ++ lib.optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
       serviceConfig = {
@@ -165,20 +173,20 @@ in {
 
     services.mautrix-facebook = {
       registrationData = {
-        id = "mautrix-facebook";
+        id = cfg.settings.appservice.id;
 
         namespaces = {
           users = [
             {
               exclusive = true;
-              regex = escapeRegex "@${cfg.settings.appservice.bot_username}:${cfg.settings.homeserver.domain}";
+              regex = lib.escapeRegex "@${cfg.settings.appservice.bot_username}:${cfg.settings.homeserver.domain}";
             }
             {
               exclusive = true;
-              regex = "@${puppetRegex}:${escapeRegex cfg.settings.homeserver.domain}";
+              regex = "@${puppetRegex}:${lib.escapeRegex cfg.settings.homeserver.domain}";
             }
           ];
-          aliases = [];
+          aliases = [ ];
         };
 
         url = cfg.settings.appservice.address;
@@ -191,5 +199,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ kevincox ];
+  meta.maintainers = with lib.maintainers; [ kevincox ];
 }

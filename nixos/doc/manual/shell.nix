@@ -1,8 +1,20 @@
 let
-  pkgs = import ../../.. { };
-in
-pkgs.mkShell {
-  name = "nixos-manual";
+  pkgs = import ../../.. {
+    config = { };
+    overlays = [ ];
+  };
 
-  packages = with pkgs; [ xmlformat jing xmloscopy ruby ];
+  common = import ./common.nix;
+  inherit (common) outputPath indexPath;
+  devmode = pkgs.devmode.override {
+    buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
+    open = "/${outputPath}/${indexPath}";
+  };
+  nixos-render-docs-redirects = pkgs.writeShellScriptBin "redirects" "${pkgs.lib.getExe pkgs.nixos-render-docs-redirects} --file ${toString ./redirects.json} $@";
+in
+pkgs.mkShellNoCC {
+  packages = [
+    devmode
+    nixos-render-docs-redirects
+  ];
 }

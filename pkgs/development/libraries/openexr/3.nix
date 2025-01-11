@@ -1,32 +1,32 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, zlib
 , cmake
 , imath
+, libdeflate
+, pkg-config
+, libjxl
+, pkgsCross
 }:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.1.3";
-
-  outputs = [ "bin" "dev" "out" "doc" ];
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    sha256 = "sha256-Bi6yTcZBWTsWWMm3A7FVYblvSXKLSkHmhGvpNYGiOzE=";
+    hash = "sha256-mVUxxYe6teiJ18PQ9703/kjBpJ9+a7vcDme+NwtQQQM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2021-45942.patch";
-      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/11cad77da87c4fa2aab7d58dd5339e254db7937e.patch";
-      sha256 = "1qa8662ga5i0lyfi9mkj9s9bygdg7h1i6ahki28c664kxrlsakch";
-    })
-  ];
+  outputs = [ "bin" "dev" "out" "doc" ];
+
+  patches =
+    # Disable broken test on musl libc
+    # https://github.com/AcademySoftwareFoundation/openexr/issues/1556
+    lib.optional stdenv.hostPlatform.isMusl ./disable-iex-test.patch
+  ;
 
   # tests are determined to use /var/tmp on unix
   postPatch = ''
@@ -35,14 +35,26 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ imath zlib ];
+  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
-  doCheck = true;
+  nativeBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [ imath libdeflate ];
+
+  # Without 'sse' enforcement tests fail on i686 as due to excessive precision as:
+  #   error reading back channel B pixel 21,-76 got -nan expected -nan
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
+
+  # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
+  doCheck = !stdenv.hostPlatform.isAarch32;
+
+  passthru.tests = {
+    inherit libjxl;
+    musl = pkgsCross.musl64.openexr_3;
+  };
 
   meta = with lib; {
-    description = "A high dynamic-range (HDR) image file format";
-    homepage = "https://www.openexr.com/";
+    description = "High dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ paperdigits ];
     platforms = platforms.all;
