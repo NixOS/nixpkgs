@@ -1855,7 +1855,22 @@ self: super: {
   semver-range = dontCheck super.semver-range;
 
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
-  reflex = doJailbreak (dontCheck super.reflex);
+  reflex = lib.pipe super.reflex [
+    dontCheck
+    doJailbreak
+    # Until hackage release has https://github.com/reflex-frp/reflex/pull/517
+    (overrideCabal (drv: {
+      postPatch = drv.postPatch or "" + ''
+        substituteInPlace \
+          src/Data/AppendMap.hs \
+          src/Reflex/Class.hs \
+          src/Reflex/FunctorMaybe.hs \
+          src/Reflex/Spider/Internal.hs \
+          test/DebugCycles.hs \
+          --replace-fail Data.Witherable Witherable
+      '';
+    }))
+  ];
 
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
