@@ -11,6 +11,8 @@ buildDunePackage rec {
   pname = "patch";
   version = "2.0.0";
 
+  minimalOCamlVersion = "4.03";
+
   src = fetchFromGitHub {
     owner = "hannesm";
     repo = "patch";
