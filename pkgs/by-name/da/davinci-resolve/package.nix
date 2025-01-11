@@ -281,6 +281,8 @@ resolveIcons = runCommandLocal "${davinci.pname}-icons" {} ''
   ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-monitor.png
   ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-speed-test.png
   ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-speed-test.png
+  ln -s ${davinci}/graphics/blackmagicraw-player_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-player.png
+  ln -s ${davinci}/graphics/blackmagicraw-player_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-player.png
 '';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
@@ -306,6 +308,8 @@ panelSetupWrapper = mkWrapper "${davinci.pname}-panels" "${davinci}/DaVinci Cont
 
 rawSpeedTestWrapper = mkWrapper "${davinci.pname}-raw-speed-test" "${davinci}/BlackmagicRAWSpeedTest/lib" "${davinci}/BlackmagicRAWSpeedTest/plugins" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
 
+rawPlayerWrapper = mkWrapper "${davinci.pname}-raw-player" "${davinci}/BlackmagicRAWPlayer/lib" "${davinci}/BlackmagicRAWPlayer/plugins" ["${davinci}/BlackmagicRAWPlayer/BlackmagicRAWPlayer"];
+
 remoteMonitorWrapper = mkWrapper "${davinci.pname}-monitor" "${davinci}/libs" "${davinci}/libs/plugins" ["${davinci}/bin/DaVinci Remote Monitor"];
 
 product = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
@@ -321,6 +325,7 @@ symlinkJoin {
     resolveShellWrapper
     panelSetupWrapper
     rawSpeedTestWrapper
+    rawPlayerWrapper
     remoteMonitorWrapper
 
     resolveUdev
@@ -362,6 +367,21 @@ symlinkJoin {
       desktopName = "${product} Blackmagic RAW Speed Test";
       exec = "${rawSpeedTestWrapper}/bin/${davinci.pname}-raw-speed-test";
       icon = "${davinci.pname}-raw-speed-test";
+      categories = [
+        "AudioVideo"
+        "AudioVideoEditing"
+        "Video"
+        "Graphics"
+      ];
+    })
+
+    (makeDesktopItem {
+      name = "${davinci.pname}-raw-player";
+      desktopName = "${product} Blackmagic RAW Player";
+      exec = "${rawPlayerWrapper}/bin/${davinci.pname}-raw-player %f";
+      icon = "${davinci.pname}-raw-player";
+      mimeTypes = ["application/x-braw-clip" "application/x-braw-sidecar"];
+      terminal = false;
       categories = [
         "AudioVideo"
         "AudioVideoEditing"
