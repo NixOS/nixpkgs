@@ -253,9 +253,6 @@ fhs = buildFHSEnv {
   ];
 
   runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
-    export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
-    export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${davinci}/libs
     exec "$@"
   ''}";
 
@@ -289,20 +286,27 @@ resolveIcons = runCommandLocal "${davinci.pname}-icons" {} ''
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
 
 # creates a derivation that wraps the "path" command with arguments in "args" list to run inside the FHS
-mkWrapper = path: args: writeShellScriptBin path ''${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([wrapper] ++ args)} "$@"'';
+# the directories in "libs" and "plugins" are put into LD_LIBRARY_PATH and QT_PLUGIN_PATH
+mkWrapper = path: libs: plugins: args: writeShellScriptBin path ''
+    export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
+    export QT_PLUGIN_PATH="${plugins}:$QT_PLUGIN_PATH"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${libs}"
+
+    exec ${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([wrapper] ++ args)} "$@"
+'';
 
 # wrap main executable
-resolveWrapper = mkWrapper "${davinci.pname}" ["${davinci}/bin/resolve"];
+resolveWrapper = mkWrapper "${davinci.pname}" "${davinci}/libs" "${davinci}/libs/plugins" ["${davinci}/bin/resolve"];
 
 # This provides the "davinci-resolve-shell"/"davinci-resolve-studio-shell" command to open a shell in the correct FHS
 # in order to simplify running Resolve and related tools from the command line.
-resolveShellWrapper = mkWrapper "${davinci.pname}-shell" ["/usr/bin/env" "bash"];
+resolveShellWrapper = mkWrapper "${davinci.pname}-shell" "${davinci}/libs" "${davinci}/libs/plugins" ["/usr/bin/env" "bash"];
 
-panelSetupWrapper = mkWrapper "${davinci.pname}-panels" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
+panelSetupWrapper = mkWrapper "${davinci.pname}-panels" "${davinci}/DaVinci Control Panels Setup" "${davinci}/DaVinci Control Panels Setup/plugins" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
 
-rawSpeedTestWrapper = mkWrapper "${davinci.pname}-raw-speed-test" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
+rawSpeedTestWrapper = mkWrapper "${davinci.pname}-raw-speed-test" "${davinci}/BlackmagicRAWSpeedTest/lib" "${davinci}/BlackmagicRAWSpeedTest/plugins" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
 
-remoteMonitorWrapper = mkWrapper "${davinci.pname}-monitor" ["${davinci}/bin/DaVinci Remote Monitor"];
+remoteMonitorWrapper = mkWrapper "${davinci.pname}-monitor" "${davinci}/libs" "${davinci}/libs/plugins" ["${davinci}/bin/DaVinci Remote Monitor"];
 
 product = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
 
@@ -317,6 +321,7 @@ symlinkJoin {
     resolveShellWrapper
     panelSetupWrapper
     rawSpeedTestWrapper
+    remoteMonitorWrapper
 
     resolveUdev
     resolveIcons
