@@ -1,7 +1,7 @@
 diff -Naurd python/private/toolchains_repo.bzl python-use-nix/private/toolchains_repo.bzl
 --- python/private/toolchains_repo.bzl	2024-10-07 06:42:33.209319301 +0000
 +++ python-use-nix/private/toolchains_repo.bzl	2024-10-07 06:53:00.702389154 +0000
-@@ -181,14 +181,14 @@
+@@ -199,7 +199,7 @@
  def py_binary(name, **kwargs):
      return _py_binary(
          name = name,
@@ -10,6 +10,7 @@ diff -Naurd python/private/toolchains_repo.bzl python-use-nix/private/toolchains
          **kwargs
      )
  
+@@ -213,7 +213,7 @@
  def py_test(name, **kwargs):
      return _py_test(
          name = name,
@@ -21,7 +22,7 @@ diff -Naurd python/private/toolchains_repo.bzl python-use-nix/private/toolchains
 diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
 --- python/repositories.bzl	2023-11-29 23:07:55.169106050 +0000
 +++ python-use-nix/repositories.bzl	2023-12-01 12:00:06.746231531 +0000
-@@ -103,60 +103,22 @@
+@@ -119,65 +119,23 @@
          fail("Exactly one of (url, urls) must be set.")
  
      platform = rctx.attr.platform
@@ -30,12 +31,14 @@ diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
      python_short_version = python_version.rpartition(".")[0]
      release_filename = rctx.attr.release_filename
      urls = rctx.attr.urls or [rctx.attr.url]
+     auth = _get_auth(rctx, urls)
  
 -    if release_filename.endswith(".zst"):
 -        rctx.download(
 -            url = urls,
 -            sha256 = rctx.attr.sha256,
 -            output = release_filename,
+-            auth = auth,
 -        )
 -        unzstd = rctx.which("unzstd")
 -        if not unzstd:
@@ -43,10 +46,12 @@ diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
 -            rctx.download_and_extract(
 -                url = url,
 -                sha256 = rctx.attr.zstd_sha256,
+-                auth = auth,
 -            )
 -            working_directory = "zstd-{version}".format(version = rctx.attr.zstd_version)
+-
 -            make_result = rctx.execute(
--                ["make", "--jobs=4"],
+-                [which_with_fail("make", rctx), "--jobs=4"],
 -                timeout = 600,
 -                quiet = True,
 -                working_directory = working_directory,
@@ -62,7 +67,7 @@ diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
 -            rctx.symlink(zstd, unzstd)
 -
 -        exec_result = rctx.execute([
--            "tar",
+-            which_with_fail("tar", rctx),
 -            "--extract",
 -            "--strip-components=2",
 -            "--use-compress-program={unzstd}".format(unzstd = unzstd),
@@ -79,6 +84,7 @@ diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
 -            url = urls,
 -            sha256 = rctx.attr.sha256,
 -            stripPrefix = rctx.attr.strip_prefix,
+-            auth = auth,
 +    lndir_result = rctx.execute([
 +        "lndir",
 +        "@python@",
@@ -93,3 +99,17 @@ diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
  
      patches = rctx.attr.patches
      if patches:
+diff -Naurd python/pip_install/pip_repository.bzl python-use-nix/pip_install/pip_repository.bzl
+--- python/pip_install/pip_repository.bzl	2024-10-08 15:24:23.582898888 +0000
++++ python-use-nix/pip_install/pip_repository.bzl	2024-10-08 16:33:38.733498958 +0000
+@@ -607,6 +607,10 @@
+         # There is an extreme edge-case with entry_points that end with `.py`
+         # See: https://github.com/bazelbuild/bazel/blob/09c621e4cf5b968f4c6cdf905ab142d5961f9ddc/src/test/java/com/google/devtools/build/lib/rules/python/PyBinaryConfiguredTargetTest.java#L174
+         entry_point_without_py = name[:-3] + "_py" if name.endswith(".py") else name
++
++        if entry_point_without_py.startswith("f2py3"):
++            continue
++
+         entry_point_target_name = (
+             _WHEEL_ENTRY_POINT_PREFIX + "_" + entry_point_without_py
+         )
