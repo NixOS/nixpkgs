@@ -335,6 +335,13 @@ rec {
     doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
+  crystal_1_15 = generic {
+    version = "1.15.0";
+    sha256 = "sha256-3D8RFTZZUEheTIKSvI+vf1cfGefNEXwMYzNEXt7oGi8=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+    doCheck = false;
+  };
 
-  crystal = crystal_1_14;
+  crystal = crystal_1_15;
 }
