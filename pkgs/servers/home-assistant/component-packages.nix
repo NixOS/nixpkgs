@@ -3919,7 +3919,8 @@
       ];
     "ohme" =
       ps: with ps; [
-      ]; # missing inputs: ohme
+        ohme
+      ];
     "ollama" =
       ps: with ps; [
         ha-ffmpeg
@@ -7035,6 +7036,7 @@
     "nx584"
     "obihai"
     "octoprint"
+    "ohme"
     "ollama"
     "omnilogic"
     "onboarding"

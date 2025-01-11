@@ -8,6 +8,7 @@
   nix,
   nixosTests,
   shellcheck,
+  runCommand,
   stdenvNoCC,
 }:
 
@@ -19,7 +20,6 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    shellcheck
   ];
 
   env = {
@@ -42,15 +42,6 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    shellcheck $out/bin/nixos-option
-
-    runHook postInstallCheck
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/nixos-option \
       --prefix PATH : ${
@@ -63,7 +54,12 @@ stdenvNoCC.mkDerivation {
       }
   '';
 
-  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
+  passthru.tests = {
+    installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
+    shellcheck = runCommand "nixos-option-shellchecked" { nativeBuildInputs = [ shellcheck ]; } ''
+      shellcheck ${./nixos-option.sh} && touch $out
+    '';
+  };
 
   meta = {
     description = "Evaluate NixOS configuration and return the properties of given option";

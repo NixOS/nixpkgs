@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ohmepy";
+  pname = "ohme";
   version = "1.2.3";
   pyproject = true;
 

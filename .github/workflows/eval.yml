@@ -12,8 +12,7 @@ on:
       - haskell-updates
       - python-updates
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   get-merge-commit:
@@ -23,10 +22,9 @@ jobs:
     name: Attributes
     runs-on: ubuntu-24.04
     needs: get-merge-commit
-    # Skip this and dependent steps if the PR can't be merged
     if: needs.get-merge-commit.outputs.mergedSha
     outputs:
-      baseSha: ${{ steps.baseSha.outputs.baseSha }}
+      targetSha: ${{ steps.targetSha.outputs.targetSha }}
       systems: ${{ steps.systems.outputs.systems }}
     steps:
       - name: Check out the PR at the test merge commit
@@ -36,15 +34,17 @@ jobs:
           fetch-depth: 2
           path: nixpkgs
 
-      - name: Determine base commit
+      - name: Determine target commit
         if: github.event_name == 'pull_request_target'
-        id: baseSha
+        id: targetSha
         run: |
-          baseSha=$(git -C nixpkgs rev-parse HEAD^1)
-          echo "baseSha=$baseSha" >> "$GITHUB_OUTPUT"
+          targetSha=$(git -C nixpkgs rev-parse HEAD^1)
+          echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Evaluate the list of all attributes and get the systems matrix
         id: systems
@@ -61,7 +61,7 @@ jobs:
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
     runs-on: ubuntu-24.04
-    needs: [ attrs, get-merge-commit ]
+    needs: [ get-merge-commit ]
     steps:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -71,6 +71,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
@@ -106,6 +108,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
         env:
@@ -128,7 +132,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [ outpaths, attrs, get-merge-commit ]
     outputs:
-      baseRunId: ${{ steps.baseRunId.outputs.baseRunId }}
+      targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     steps:
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
@@ -145,6 +149,8 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        with:
+          extra_nix_config: sandbox = true
 
       - name: Combine all output paths and eval stats
         run: |
@@ -158,11 +164,11 @@ jobs:
           name: result
           path: prResult/*
 
-      - name: Get base run id
-        if: needs.attrs.outputs.baseSha
-        id: baseRunId
+      - name: Get target run id
+        if: needs.attrs.outputs.targetSha
+        id: targetRunId
         run: |
-          # Get the latest eval.yml workflow run for the PR's base commit
+          # Get the latest eval.yml workflow run for the PR's target commit
           if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
             -f head_sha="$BASE_SHA" -f event=push \
             --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
@@ -185,30 +191,30 @@ jobs:
             exit 0
           fi
 
-          echo "baseRunId=$runId" >> "$GITHUB_OUTPUT"
+          echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
         env:
           REPOSITORY: ${{ github.repository }}
-          BASE_SHA: ${{ needs.attrs.outputs.baseSha }}
+          BASE_SHA: ${{ needs.attrs.outputs.targetSha }}
           GH_TOKEN: ${{ github.token }}
 
       - uses: actions/download-artifact@v4
-        if: steps.baseRunId.outputs.baseRunId
+        if: steps.targetRunId.outputs.targetRunId
         with:
           name: result
-          path: baseResult
+          path: targetResult
           github-token: ${{ github.token }}
-          run-id: ${{ steps.baseRunId.outputs.baseRunId }}
+          run-id: ${{ steps.targetRunId.outputs.targetRunId }}
 
-      - name: Compare against the base branch
-        if: steps.baseRunId.outputs.baseRunId
+      - name: Compare against the target branch
+        if: steps.targetRunId.outputs.targetRunId
         run: |
-          git -C nixpkgs worktree add ../base ${{ needs.attrs.outputs.baseSha }}
-          git -C nixpkgs diff --name-only ${{ needs.attrs.outputs.baseSha }} ${{ needs.attrs.outputs.mergedSha }} \
+          git -C nixpkgs worktree add ../target ${{ needs.attrs.outputs.targetSha }}
+          git -C nixpkgs diff --name-only ${{ needs.attrs.outputs.targetSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
-          # Use the base branch to get accurate maintainer info
-          nix-build base/ci -A eval.compare \
-            --arg beforeResultDir ./baseResult \
+          # Use the target branch to get accurate maintainer info
+          nix-build target/ci -A eval.compare \
+            --arg beforeResultDir ./targetResult \
             --arg afterResultDir ./prResult \
             --arg touchedFilesJson ./touched-files.json \
             -o comparison
@@ -216,7 +222,7 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the combined results
-        if: steps.baseRunId.outputs.baseRunId
+        if: steps.targetRunId.outputs.targetRunId
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: comparison
@@ -227,7 +233,7 @@ jobs:
     name: Tag
     runs-on: ubuntu-24.04
     needs: [ attrs, process ]
-    if: needs.process.outputs.baseRunId
+    if: needs.process.outputs.targetRunId
     permissions:
       pull-requests: write
       statuses: write
@@ -254,7 +260,7 @@ jobs:
       - name: Check out Nixpkgs at the base commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.attrs.outputs.baseSha }}
+          ref: ${{ needs.attrs.outputs.targetSha }}
           path: base
           sparse-checkout: ci
 
