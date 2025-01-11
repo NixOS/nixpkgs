@@ -7149,7 +7149,7 @@ self: super: with self; {
 
   layoutparser = callPackage ../development/python-modules/layoutparser { };
 
-  lazr-config = callPackage ../development/python-modules/lazr/config.nix { };
+  lazr-config = callPackage ../development/python-modules/lazr-config { };
 
   lazr-delegates = callPackage ../development/python-modules/lazr-delegates { };
 
