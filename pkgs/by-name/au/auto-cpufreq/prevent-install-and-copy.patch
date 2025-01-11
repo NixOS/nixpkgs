@@ -1,8 +1,8 @@
-diff --git c/auto_cpufreq/bin/auto_cpufreq.py i/auto_cpufreq/bin/auto_cpufreq.py
-index 7192366..96289e1 100755
---- c/auto_cpufreq/bin/auto_cpufreq.py
-+++ i/auto_cpufreq/bin/auto_cpufreq.py
-@@ -134,20 +134,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
+diff --git a/auto_cpufreq/bin/auto_cpufreq.py b/auto_cpufreq/bin/auto_cpufreq.py
+index d9fcd37..7436a7e 100755
+--- a/auto_cpufreq/bin/auto_cpufreq.py
++++ b/auto_cpufreq/bin/auto_cpufreq.py
+@@ -136,20 +136,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
                  except KeyboardInterrupt: break
              conf.notifier.stop()
          elif install:
@@ -24,7 +24,7 @@ index 7192366..96289e1 100755
          elif update:
              root_check()
              custom_dir = "/opt/auto-cpufreq/source"
-@@ -185,21 +172,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
+@@ -187,21 +174,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
                      run(["auto-cpufreq", "--version"])
                  else: print("Aborted")
          elif remove:
@@ -47,96 +47,3 @@ index 7192366..96289e1 100755
          elif stats:
              not_running_daemon_check()
              config_info_dialog()
-diff --git c/auto_cpufreq/core.py i/auto_cpufreq/core.py
-index b51d55d..4e4b5d3 100755
---- c/auto_cpufreq/core.py
-+++ i/auto_cpufreq/core.py
-@@ -277,18 +277,12 @@ def get_current_gov():
-     )
- 
- def cpufreqctl():
--    """
--    deploy cpufreqctl.auto-cpufreq script
--    """
--    if not (IS_INSTALLED_WITH_SNAP or os.path.isfile("/usr/local/bin/cpufreqctl.auto-cpufreq")):
--        copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/local/bin/cpufreqctl.auto-cpufreq")
-+    # scripts are already in the correct place
-+    pass
- 
- def cpufreqctl_restore():
--    """
--    remove cpufreqctl.auto-cpufreq script
--    """
--    if not IS_INSTALLED_WITH_SNAP and os.path.isfile("/usr/local/bin/cpufreqctl.auto-cpufreq"):
--        os.remove("/usr/local/bin/cpufreqctl.auto-cpufreq")
-+    # no need to restore
-+    pass
- 
- def footer(l=79): print("\n" + "-" * l + "\n")
- 
-@@ -306,27 +300,8 @@ def remove_complete_msg():
-     footer()
- 
- def deploy_daemon():
--    print("\n" + "-" * 21 + " Deploying auto-cpufreq as a daemon " + "-" * 22 + "\n")
--
--    cpufreqctl() # deploy cpufreqctl script func call
--
--    bluetooth_disable() # turn off bluetooth on boot
--
--    auto_cpufreq_stats_path.touch(exist_ok=True)
--
--    print("\n* Deploy auto-cpufreq install script")
--    copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/local/bin/auto-cpufreq-install")
--
--    print("\n* Deploy auto-cpufreq remove script")
--    copy(SCRIPTS_DIR / "auto-cpufreq-remove.sh", "/usr/local/bin/auto-cpufreq-remove")
--
--    # output warning if gnome power profile is running
--    gnome_power_detect_install()
--    gnome_power_svc_disable()
--
--    tlp_service_detect() # output warning if TLP service is detected
--
--    call("/usr/local/bin/auto-cpufreq-install", shell=True)
-+    # prevent needless copying and system changes
-+    pass
- 
- def deploy_daemon_performance():
-     print("\n" + "-" * 21 + " Deploying auto-cpufreq as a daemon (performance) " + "-" * 22 + "\n")
-@@ -359,34 +334,7 @@ def deploy_daemon_performance():
-     call("/usr/local/bin/auto-cpufreq-install", shell=True)
- 
- def remove_daemon():
--    # check if auto-cpufreq is installed
--    if not os.path.exists("/usr/local/bin/auto-cpufreq-remove"):
--        print("\nauto-cpufreq daemon is not installed.\n")
--        sys.exit(1)
--
--    print("\n" + "-" * 21 + " Removing auto-cpufreq daemon " + "-" * 22 + "\n")
--
--    bluetooth_enable() # turn on bluetooth on boot
--
--    # output warning if gnome power profile is stopped
--    gnome_power_rm_reminder()
--    gnome_power_svc_enable()
--
--    # run auto-cpufreq daemon remove script
--    call("/usr/local/bin/auto-cpufreq-remove", shell=True)
--
--    # remove auto-cpufreq-remove
--    os.remove("/usr/local/bin/auto-cpufreq-remove")
--
--    # delete override pickle if it exists
--    if os.path.exists(governor_override_state):  os.remove(governor_override_state)
--
--    # delete stats file
--    if auto_cpufreq_stats_path.exists():
--        if auto_cpufreq_stats_file is not None: auto_cpufreq_stats_file.close()
--        auto_cpufreq_stats_path.unlink()
--
--    cpufreqctl_restore() # restore original cpufrectl script
-+    pass
- 
- def gov_check():
-     for gov in AVAILABLE_GOVERNORS:
