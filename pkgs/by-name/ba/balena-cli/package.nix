@@ -3,8 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  balena-cli,
+  versionCheckHook,
   node-gyp,
   python3,
   udev,
@@ -34,6 +33,7 @@ buildNpmPackage rec {
     [
       node-gyp
       python3
+      versionCheckHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
@@ -47,14 +47,8 @@ buildNpmPackage rec {
       apple-sdk_12
     ];
 
-  passthru.tests.version = testers.testVersion {
-    package = balena-cli;
-    command = ''
-      # Override default cache directory so Balena CLI's unavoidable update check does not fail due to write permissions
-      BALENARC_DATA_DIRECTORY=./ balena --version
-    '';
-    inherit version;
-  };
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/balena";
 
   meta = {
     description = "Command line interface for balenaCloud or openBalena";
