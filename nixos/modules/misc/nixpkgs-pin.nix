@@ -6,10 +6,21 @@
   ...
 }:
 let
-  cfg = config.nixpkgs.flake;
+  cfg = config.nixpkgs;
+  usingFlakes = lib ? nixosSystem;
 in
 {
-  options.nixpkgs.flake = {
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "nixpkgs" "flake" "source" ] [ "nixpkgs" "source" ])
+    (lib.mkRenamedOptionModule [ "nixpkgs" "flake" "setNixPath" ] [ "nixpkgs" "setNixPath" ])
+    (lib.mkRenamedOptionModule
+      [ "nixpkgs" "flake" "setFlakeRegistry" ]
+      [ "nixpkgs" "setFlakeRegistry" ]
+    )
+  ];
+
+  options.nixpkgs = {
     source = lib.mkOption {
       # In newer Nix versions, particularly with lazy trees, outPath of
       # flakes becomes a Nix-language path object. We deliberately allow this
@@ -19,21 +30,23 @@ in
       type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
 
       default = null;
-      defaultText = "if (using nixpkgsFlake.lib.nixosSystem) then self.outPath else null";
+      defaultText = ''if (using nixpkgsFlake.lib.nixosSystem) then self.outPath else "<nixpkgs>"'';
 
       example = ''builtins.fetchTarball { name = "source"; sha256 = "${lib.fakeHash}"; url = "https://github.com/nixos/nixpkgs/archive/somecommit.tar.gz"; }'';
 
       description = ''
-        The path to the nixpkgs sources used to build the system. This is automatically set up to be
-        the store path of the nixpkgs flake used to build the system if using
+        If set, the path to the Nixpkgs sources that will be used by the
+        `nixos-rebuild` tool to build the NixOS system, otherwise the default
+        is to use `nixpkgs` from the {env}`NIX_PATH`.
+
+        When using flakes, this is automatically set up to be the store path of
+        the nixpkgs flake used to build the system if using
         `nixpkgs.lib.nixosSystem`, and is otherwise null by default.
 
-        This can also be optionally set if the NixOS system is not built with a flake but still uses
-        pinned sources: set this to the store path for the nixpkgs sources used to build the system,
-        as may be obtained by `builtins.fetchTarball`, for example.
-
-        Note: the name of the store path must be "source" due to
+        ::: {.note}
+        The name of the store path must be "source" due to
         <https://github.com/NixOS/nix/issues/7075>.
+        :::
       '';
     };
 
@@ -41,27 +54,32 @@ in
       type = lib.types.bool;
 
       default = cfg.source != null;
-      defaultText = "config.nixpkgs.flake.source != null";
+      defaultText = "config.nixpkgs.source != null";
 
       description = ''
-        Whether to set {env}`NIX_PATH` to include `nixpkgs=flake:nixpkgs` such that `<nixpkgs>`
-        lookups receive the version of nixpkgs that the system was built with, in concert with
-        {option}`nixpkgs.flake.setFlakeRegistry`.
+        Whether to set {env}`NIX_PATH` so that `<nixpkgs>` lookups receive the
+        version of Nixpkgs that the system was built with, meaning the value of
+        {option}`nixpkgs.source`.
 
-        This is on by default for NixOS configurations built with flakes.
+        This makes, for example, {command}`nix-build '<nixpkgs>' -A hello` work
+        out of the box on systems built with flakes or with `nix-channel`
+        disabled.
 
-        This makes {command}`nix-build '<nixpkgs>' -A hello` work out of the box on flake systems.
+        When using flakes this option is on by default and will add
+        `nixpkgs=flake:nixpkgs` to the {env}`NIX_PATH`, in concert with
+        {option}`nixpkgs.setFlakeRegistry`.
 
-        Note that this option makes the NixOS closure depend on the nixpkgs sources, which may add
-        undesired closure size if the system will not have any nix commands run on it.
+        Note that this option makes the NixOS closure depend on the nixpkgs
+        sources, which may add undesired closure size if the system will not
+        have any nix commands run on it.
       '';
     };
 
     setFlakeRegistry = lib.mkOption {
       type = lib.types.bool;
 
-      default = cfg.source != null;
-      defaultText = "config.nixpkgs.flake.source != null";
+      default = usingFlakes && cfg.source != null;
+      defaultText = "config.nixpkgs.source != null";
 
       description = ''
         Whether to pin nixpkgs in the system-wide flake registry (`/etc/nix/registry.json`) to the
@@ -83,9 +101,9 @@ in
       {
         assertions = [
           {
-            assertion = cfg.setNixPath -> cfg.setFlakeRegistry;
+            assertion = (usingFlakes && cfg.setNixPath) -> cfg.setFlakeRegistry;
             message = ''
-              Setting `nixpkgs.flake.setNixPath` requires that `nixpkgs.flake.setFlakeRegistry` also
+              Setting `nixpkgs.setNixPath` requires that `nixpkgs.setFlakeRegistry` also
               be set, since it is implemented in terms of indirection through the flake registry.
             '';
           }
@@ -103,8 +121,11 @@ in
         # perhaps, to ever make that work (in order to know where the Nix expr for the system came
         # from and how to call it).
         nix.nixPath = lib.mkDefault (
-          [ "nixpkgs=flake:nixpkgs" ]
-          ++ lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels"
+          lib.optional (!usingFlakes) "nixpkgs=${cfg.source}"
+          ++ lib.optional usingFlakes "nixpkgs=flake:nixpkgs"
+          ++ lib.optional (
+            usingFlakes && config.nix.channel.enable
+          ) "/nix/var/nix/profiles/per-user/root/channels"
         );
       })
     ]
