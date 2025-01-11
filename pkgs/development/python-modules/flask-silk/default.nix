@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "flask-silk";
-  version = "unstable-2018-06-28";
+  version = "0.2-unstable-2018-06-14";
 
   # master fixes flask import syntax and has no major changes
   # new release requested: https://github.com/sublee/flask-silk/pull/6
