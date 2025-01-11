@@ -7217,6 +7217,12 @@
     githubId = 873530;
     name = "Alexey Levan";
   };
+  expenses = {
+    email = "ashley.ruglys@gmail.com";
+    github = "expenses";
+    githubId = 13566135;
+    name = "Ashley Ruglys";
+  };
   exploitoverload = {
     email = "nix@exploitoverload.com";
     github = "exploitoverload";
