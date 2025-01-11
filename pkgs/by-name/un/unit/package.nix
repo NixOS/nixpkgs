@@ -40,14 +40,14 @@ let
   inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
-  version = "1.34.0";
+  version = "1.34.1";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M1Fe/jS+u2cXMjIyCbvrBX37LM6Q3xPib9Uywxp7QCI=";
+    sha256 = "sha256-p3n0j/sZr+aLwfZuXTbb5+J4T48FWdsZBbSH3Yiex9g=";
   };
 
   nativeBuildInputs = [ which ];
