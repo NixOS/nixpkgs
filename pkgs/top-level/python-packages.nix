@@ -1004,7 +1004,7 @@ self: super: with self; {
 
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
-  audioop-lts = callPackage ../development/python-modules/audioop-lts { };
+  audioop-lts = if pythonAtLeast "3.13" then callPackage ../development/python-modules/audioop-lts { } else null;
 
   audioread = callPackage ../development/python-modules/audioread { };
 
@@ -15534,13 +15534,13 @@ self: super: with self; {
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
-  standard-aifc = callPackage ../development/python-modules/standard-aifc { };
+  standard-aifc = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-aifc { } else null;
 
-  standard-chunk = callPackage ../development/python-modules/standard-chunk { };
+  standard-chunk = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-chunk { } else null;
 
-  standard-imghdr = callPackage ../development/python-modules/standard-imghdr { };
+  standard-imghdr = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-imghdr { } else null;
 
-  standard-telnetlib = callPackage ../development/python-modules/standard-telnetlib { };
+  standard-telnetlib = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-telnetlib { } else null;
 
   stone = callPackage ../development/python-modules/stone { };
 
