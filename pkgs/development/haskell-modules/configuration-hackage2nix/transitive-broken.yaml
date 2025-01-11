@@ -2903,7 +2903,6 @@ dont-distribute-packages:
  - nonlinear-optimization-backprop
  - not-gloss
  - not-gloss-examples
- - nothunks_0_3_0_0
  - notmuch-web
  - now-haskell
  - nri-env-parser

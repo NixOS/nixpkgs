@@ -6636,7 +6636,6 @@ broken-packages:
   - werewolf # failure in job https://hydra.nixos.org/build/233250937 at 2023-09-02
   - wgpu-raw-hs # failure in job https://hydra.nixos.org/build/233221814 at 2023-09-02
   - Wheb # failure in job https://hydra.nixos.org/build/233258281 at 2023-09-02
-  - wherefrom-compat # failure in job https://hydra.nixos.org/build/252723758 at 2024-03-16
   - while-lang-parser # failure in job https://hydra.nixos.org/build/233237507 at 2023-09-02
   - whim # failure in job https://hydra.nixos.org/build/234465317 at 2023-09-13
   - whiskers # failure in job https://hydra.nixos.org/build/233258941 at 2023-09-02
