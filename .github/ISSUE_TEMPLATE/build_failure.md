@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## Steps To Reproduce
+## Steps to reproduce
 
 Steps to reproduce the behavior:
 

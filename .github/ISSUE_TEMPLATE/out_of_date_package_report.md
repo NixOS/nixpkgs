@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## Package Information
+## Package information
 
 <!-- Search for the package here: https://search.nixos.org/packages?channel=unstable -->
 
