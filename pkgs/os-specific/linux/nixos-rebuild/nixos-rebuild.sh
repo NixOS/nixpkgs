@@ -218,6 +218,34 @@ runCmd() {
     "$@"
 }
 
+getNixpkgsPath() {
+    nixpkgsPath=
+
+    # Get NixOS configuration
+    NIXOS_CONFIG=${NIXOS_CONFIG:-$(runCmd nix-instantiate --find-file nixos-config 2>/dev/null || true)}
+    if [[ -d $NIXOS_CONFIG ]]; then
+        NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
+    fi
+
+    # Try config.nixpkgs.source from build file
+    if [[ -z $buildingAttribute ]]; then
+        if nixpkgsPath=$(runCmd nix-instantiate "$buildFile" -A "${attr:+$attr.}config.nixpkgs.source" 2>/dev/null | jq -r); then return; fi
+    fi
+
+    # Try config.nixpkgs.source from NixOS config
+    if nixpkgsPath=$(test -n "$NIXOS_CONFIG" && runCmd nix-instantiate --eval --expr "
+     (import <nixpkgs/nixos> {
+       configuration = {
+         imports = [ $NIXOS_CONFIG ];
+         _module.check = false;
+       };
+     }).config.nixpkgs.source
+    " 2>/dev/null | jq -r); then return; fi
+
+    # Fall back to nixpkgs channel
+    nixpkgsPath=$(runCmd nix-instantiate --find-file nixpkgs)
+}
+
 buildHostCmd() {
     local c
     if [[ "${useSudo:-x}" = 1 ]]; then
@@ -383,6 +411,7 @@ nixFlakeBuild() {
     fi
 }
 
+getNixpkgsPath
 
 if [ -z "$action" ]; then showSyntax; fi
 
@@ -489,7 +518,7 @@ if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
         p=$(runCmd nix-build --no-out-link $buildFile -A "${attr:+$attr.}config.system.build.nixos-rebuild" "${extraBuildFlags[@]}")
         SHOULD_REEXEC=1
     elif [[ -z $flake ]]; then
-        if p=$(runCmd nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
+        if p=$(runCmd nix-build --no-out-link --expr "with import '$nixpkgsPath/nixos' {}; config.system.build.nixos-rebuild" "${extraBuildFlags[@]}"); then
             SHOULD_REEXEC=1
         fi
     else
@@ -514,9 +543,9 @@ if [ "$action" = edit ]; then
         log "error: '--file' and '--attr' are not supported with 'edit'"
         exit 1
     elif [[ -z $flake ]]; then
-        NIXOS_CONFIG=${NIXOS_CONFIG:-$(runCmd nix-instantiate --find-file nixos-config)}
-        if [[ -d $NIXOS_CONFIG ]]; then
-            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
+        if [[ -z $NIXOS_CONFIG ]]; then
+            log "error: configuration not found, both NIXOS_CONFIG and <nixos-config> unset"
+            exit 1
         fi
         runCmd exec ${EDITOR:-nano} "$NIXOS_CONFIG"
     else
@@ -559,10 +588,10 @@ getNixDrv() {
     if [[ -z $buildingAttribute ]]; then
         if nixDrv="$(runCmd nix-instantiate $buildFile --add-root "$tmpDir/nix.drv" --indirect -A ${attr:+$attr.}config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
     fi
-    if nixDrv="$(runCmd nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
-    if nixDrv="$(runCmd nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then return; fi
+    if nixDrv="$(runCmd nix-instantiate "$nixpkgsPath/nixos" --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
+    if nixDrv="$(runCmd nix-instantiate "$nixpkgsPath" --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then return; fi
 
-    if ! nixStorePath="$(runCmd nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
+    if ! nixStorePath="$(runCmd nix-instantiate --eval "$nixpkgsPath/nixos/modules/installer/tools/nix-fallback-paths.nix" -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
         nixStorePath="$(prebuiltNix "$(uname -m)")"
     fi
     if ! runCmd nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
@@ -603,7 +632,6 @@ getVersion() {
     fi
 }
 
-
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
     getNixDrv
@@ -624,10 +652,10 @@ fi
 # Update the version suffix if we're building from Git (so that
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
-    if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$(getVersion "$nixpkgs" || true)
+    if [ -n "$nixpkgsPath" ]; then
+        suffix=$(getVersion "$nixpkgsPath" || true)
         if [ -n "$suffix" ]; then
-            echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
+            echo -n "$suffix" > "$nixpkgsPath/.version-suffix" || true
         fi
     fi
 fi
@@ -644,7 +672,7 @@ if [ "$action" = repl ]; then
     if [[ -z $buildingAttribute ]]; then
         exec nix repl --file $buildFile $attr "${extraBuildFlags[@]}"
     elif [[ -z $flake ]]; then
-        exec nix repl --file '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
+        exec nix repl --file "$nixpkgsPath/nixos" "${extraBuildFlags[@]}"
     else
         if [[ -n "${lockFlags[0]}" ]]; then
             # nix repl itself does not support locking flags
@@ -798,7 +826,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
+            pathToConfig="$(nixBuild "$nixpkgsPath/nixos" --no-out-link -A system "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
@@ -808,7 +836,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
+            pathToConfig="$(nixBuild "$nixpkgsPath/nixos" -A system -k "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
@@ -816,7 +844,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.vm" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
+            pathToConfig="$(nixBuild "$nixpkgsPath/nixos" -A vm -k "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vm" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
@@ -824,7 +852,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
+            pathToConfig="$(nixBuild "$nixpkgsPath/nixos" -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
