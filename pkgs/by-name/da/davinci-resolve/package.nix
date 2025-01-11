@@ -266,7 +266,7 @@ fhs = buildFHSEnv {
   '';
 };
 
-resolveUdev = runCommandLocal "davinci-resolve${lib.optionalString studioVariant "-studio"}-udev" {} ''
+resolveUdev = runCommandLocal "${davinci.pname}-udev" {} ''
   mkdir -p $out/etc/udev/rules.d
   # follows the resolve install script, see scripts/post_install.sh
   DVP_RULES=$out/etc/udev/rules.d/75-davincipanel.rules
@@ -278,13 +278,13 @@ resolveUdev = runCommandLocal "davinci-resolve${lib.optionalString studioVariant
   echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' > $SDX_RULES
 '';
 
-resolveIcons = runCommandLocal "davinci-resolve${lib.optionalString studioVariant "-studio"}-icons" {} ''
+resolveIcons = runCommandLocal "${davinci.pname}-icons" {} ''
   mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/apps
-  ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
-  ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels.png
-  ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor.png
-  ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test.png
-  ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test.png
+  ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}.png
+  ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-panels.png
+  ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-monitor.png
+  ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-speed-test.png
+  ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-speed-test.png
 '';
 
 wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
@@ -293,23 +293,24 @@ wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
 mkWrapper = path: args: writeShellScriptBin path ''${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([wrapper] ++ args)} "$@"'';
 
 # wrap main executable
-resolveWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}" ["${davinci}/bin/resolve"];
+resolveWrapper = mkWrapper "${davinci.pname}" ["${davinci}/bin/resolve"];
 
 # This provides the "davinci-resolve-shell"/"davinci-resolve-studio-shell" command to open a shell in the correct FHS
 # in order to simplify running Resolve and related tools from the command line.
-resolveShellWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-shell" ["/usr/bin/env" "bash"];
+resolveShellWrapper = mkWrapper "${davinci.pname}-shell" ["/usr/bin/env" "bash"];
 
-panelSetupWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
+panelSetupWrapper = mkWrapper "${davinci.pname}-panels" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
 
-rawSpeedTestWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
+rawSpeedTestWrapper = mkWrapper "${davinci.pname}-raw-speed-test" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
 
-remoteMonitorWrapper = mkWrapper "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor" ["${davinci}/bin/DaVinci Remote Monitor"];
+remoteMonitorWrapper = mkWrapper "${davinci.pname}-monitor" ["${davinci}/bin/DaVinci Remote Monitor"];
+
+product = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
 
 in
 symlinkJoin {
 
-  pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-  inherit (davinci) version;
+  inherit (davinci) pname version;
 
   paths = [
 
@@ -322,11 +323,11 @@ symlinkJoin {
     resolveIcons
 
     (makeDesktopItem {
-      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
+      name = "${davinci.pname}";
+      desktopName = "${product}";
       genericName = "Video Editor";
-      exec = "${resolveWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+      exec = "${resolveWrapper}/bin/${davinci.pname}";
+      icon = "${davinci.pname}";
       comment = "Professional video editing, color, effects and audio post-processing";
       mimeTypes = ["application/x-resolveproj"];
       startupNotify = true;
@@ -341,10 +342,10 @@ symlinkJoin {
     })
 
     (makeDesktopItem {
-      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
-      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Control Panels Setup";
-      exec = "${panelSetupWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
-      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-panels";
+      name = "${davinci.pname}-panels";
+      desktopName = "${product} Control Panels Setup";
+      exec = "${panelSetupWrapper}/bin/${davinci.pname}-panels";
+      icon = "${davinci.pname}-panels";
       categories = [
         "AudioVideo"
         "AudioVideoEditing"
@@ -354,10 +355,10 @@ symlinkJoin {
     })
 
     (makeDesktopItem {
-      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test";
-      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Blackmagic RAW Speed Test";
-      exec = "${rawSpeedTestWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test";
-      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-raw-speed-test";
+      name = "${davinci.pname}-raw-speed-test";
+      desktopName = "${product} Blackmagic RAW Speed Test";
+      exec = "${rawSpeedTestWrapper}/bin/${davinci.pname}-raw-speed-test";
+      icon = "${davinci.pname}-raw-speed-test";
       categories = [
         "AudioVideo"
         "AudioVideoEditing"
@@ -373,10 +374,10 @@ symlinkJoin {
     remoteMonitorWrapper
 
     (makeDesktopItem {
-      name = "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor";
-      desktopName = "DaVinci Resolve${lib.optionalString studioVariant " Studio"} Remote Monitor";
-      exec = "${remoteMonitorWrapper}/bin/davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor";
-      icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}-monitor";
+      name = "${davinci.pname}-monitor";
+      desktopName = "${product} Remote Monitor";
+      exec = "${remoteMonitorWrapper}/bin/${davinci.pname}-monitor";
+      icon = "${davinci.pname}-monitor";
       startupNotify = true;
       categories = [
         "AudioVideo"
@@ -420,16 +421,18 @@ symlinkJoin {
   meta = {
     description = "Professional video editing, color, effects and audio post-processing";
     longDescription = ''
-      DaVinci Resolve${lib.optionalString studioVariant " Studio"} includes a non-linear video editor, color grading tool, video effects
-      editor and track-based audio post-processing tool. The main executable davinci-resolve{lib.optionalString studioVariant "-studio"}
+      ${product} includes a non-linear video editor, color grading tool, video effects
+      editor and track-based audio post-processing tool. The main executable `${davinci.pname}`
       is wrapped in an FHS environment. For scripting and other purposes, the package provides the
-      davinci-resolve${lib.optionalString studioVariant "-studio"}-shell command, which opens a shell within the FHS environment.
+      `${davinci.pname}-shell` command, which opens a shell within the FHS environment.
 
       Using hardware hardware panels with Resolve requires a physical USB connection and setting `udev` rules via
-          services.udev.packages =
-            with pkgs; [
-              davinci-resolve${lib.optionalString studioVariant "-studio"}
-            ];
+      ```
+      services.udev.packages =
+        with pkgs; [
+          ${davinci.pname}
+        ];
+      ```
     '';
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = lib.licenses.unfree;
@@ -439,6 +442,6 @@ symlinkJoin {
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+    mainProgram = "${davinci.pname}";
   };
 }
