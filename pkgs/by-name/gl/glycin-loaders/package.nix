@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Qccr4eybpV2pDIL8GFc7dC3/WCsJr8N7RWXEfpnMj/Q=";
+    hash = "sha256-0bbVkLaZtmgaZ9ARmKWBp/cQ2Mp0UJNN1/XbJB+hJQA=";
   };
 
   patches = [
