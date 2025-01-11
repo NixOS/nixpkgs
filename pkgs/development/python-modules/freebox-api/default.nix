@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "freebox-api";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = "freebox-api";
     tag = "v${version}";
-    hash = "sha256-a4d7fjSPBcVlCkY8y7dTLPW949YUg9wD62kQxJRxp0I=";
+    hash = "sha256-piPC3F63Yqk1rYPYyIoEHSpC8TS4HyIVa8XbQlAgcqA=";
   };
 
   build-system = [
