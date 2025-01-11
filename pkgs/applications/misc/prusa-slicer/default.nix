@@ -6,8 +6,7 @@
 , cmake
 , pkg-config
 , wrapGAppsHook3
-, boost
-, boost183
+, boost186
 , cereal
 , cgal
 , curl
@@ -72,14 +71,6 @@ let
 
   patches = [
   ];
-
-  # Build requires at least Boost v1.83.  If the mainline package satisfies
-  # that, just use the mainline package, otherwise use an explicitly versioned
-  # package.
-  boost183OrBetter =
-    if lib.versionAtLeast boost.version "1.83"
-    then boost
-    else boost183;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
@@ -111,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     binutils
-    boost183OrBetter
+    boost186  # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
     cereal
     cgal
     curl
