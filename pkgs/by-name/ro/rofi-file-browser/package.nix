@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./fix_incompatible_pointer_type.patch ];
+
   prePatch = ''
     substituteInPlace ./CMakeLists.txt \
       --replace ' ''${ROFI_PLUGINS_DIR}' " $out/lib/rofi" \
