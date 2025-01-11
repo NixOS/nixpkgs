@@ -3937,8 +3937,6 @@ self: super: with self; {
 
   dufte = callPackage ../development/python-modules/dufte { };
 
-  dugong = callPackage ../development/python-modules/dugong { };
-
   dukpy = callPackage ../development/python-modules/dukpy { };
 
   dulwich = callPackage ../development/python-modules/dulwich {
