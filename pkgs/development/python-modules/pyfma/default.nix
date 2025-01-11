@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   importlib-metadata,
   numpy,
   pybind11,
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-1qNa+FcIAP1IMzdNKrEbTVPo6gTOSCvhTRIHm6REJoo=";
   };
+
+  patches = [
+    # Replace deprecated np.find_common_type calls with np.promote_types, https://github.com/nschloe/pyfma/pull/17
+    (fetchpatch {
+      url = "https://github.com/nschloe/pyfma/commit/e12d69d97a97657ab4fec3e8f2b2859f4360bc03.patch";
+      hash = "sha256-BsQe4hpo+Cripa0FRGFnRBs1oQ1GZA1+ZYzycy5M4Ek=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
