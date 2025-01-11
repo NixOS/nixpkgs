@@ -908,6 +908,10 @@ in
     ];
   };
 
+  ddc-source-around = super.ddc-source-around.overrideAttrs {
+    dependencies = [ self.ddc-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = [ self.nvim-yarp ];
   };
