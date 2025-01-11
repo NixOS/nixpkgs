@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -35,7 +36,7 @@ buildGoModule rec {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = lib.nix-update-script { };
+    updateScript = nix-update-script { };
   };
 
   meta = {
