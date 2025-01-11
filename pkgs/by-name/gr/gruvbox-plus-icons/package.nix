@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gruvbox-plus-icons";
-  version = "5.5.0";
+  version = "6.1.1-unstable-2025-02-12";
 
   src = fetchFromGitHub {
     owner = "SylEleuth";
     repo = "gruvbox-plus-icon-pack";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-G7F+69K2aJVBM3yOQIMTH2pDXBfLmYScKIIAza3YNw8=";
+    rev = "f83e7d27528c03ce4a1e769df86a9519993259d4";
+    hash = "sha256-NDdx8BXIIlO+Wi3+TsGOdfhhGYCp7uZ4e+vW6zYpD3I=";
   };
 
   nativeBuildInputs = [ gtk3 ];
