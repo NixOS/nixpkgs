@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchgit,
   setuptools,
   lazr-delegates,
   zope-interface,
@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "lazr-config";
-  version = "3.0";
+  version = "3.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "lazr.config";
-    inherit version;
-    hash = "sha256-oU5PbMCa68HUCxdhWK6g7uIlLBQAO40O8LMcfFFMNkQ=";
+  src = fetchgit {
+    url = "https://git.launchpad.net/lazr.config";
+    rev = "3c659114e8e947fbd46954336f5577351d786de9";
+    hash = "sha256-eYJY4JRoqTMG4j1jyiYrI8xEKdJ+wQYVVU/6OqVIodk=";
   };
 
   nativeBuildInputs = [ setuptools ];
