@@ -52,7 +52,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
-    license = licenses.gpl3;
+    changelog = "https://github.com/aubio/aubio/blob/${version}/ChangeLog";
+    license = licenses.gpl3Plus;
     maintainers = [ ];
   };
 }
