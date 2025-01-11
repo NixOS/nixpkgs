@@ -176,7 +176,7 @@ buildPythonApplication rec {
   ];
 
   passthru.tests = callPackage ./tests.nix {
-    inherit git pre-commit;
+    inherit gitMinimal pre-commit;
   };
 
   meta = with lib; {
