@@ -31,16 +31,6 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      AudioToolbox
-      CoreVideo
-      CoreGraphics
-    ]
-  );
-
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
