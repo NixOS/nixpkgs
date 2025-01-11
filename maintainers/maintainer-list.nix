@@ -11758,6 +11758,12 @@
     githubId = 1730718;
     name = "Hideaki Kawai";
   };
+  kaylorben = {
+    email = "blkaylor22@gmail.com";
+    github = "kaylorben";
+    githubId = 41012641;
+    name = "Benjamin Kaylor";
+  };
   kazcw = {
     email = "kaz@lambdaverse.org";
     github = "kazcw";
@@ -21061,6 +21067,12 @@
     github = "SigmaSquadron";
     githubId = 174749595;
     keys = [ { fingerprint = "E3CD E225 47C6 2DB6 6CCD  BC06 CC3A E2EA 0000 0000"; } ];
+  };
+  sigmike = {
+    email = "mike+nixpkgs@lepton.fr";
+    github = "sigmike";
+    githubId = 28259;
+    name = "Michael Witrant";
   };
   sikmir = {
     email = "sikmir@disroot.org";
