@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  substituteAll,
+  replaceVars,
   pkg-config,
   meson,
   ninja,
@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       elementary_calendar = elementary-calendar;
     })
   ];
