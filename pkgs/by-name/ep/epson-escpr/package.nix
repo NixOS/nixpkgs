@@ -5,8 +5,6 @@
   cups,
   fetchpatch,
   dos2unix,
-  automake115x,
-  autoconf,
 }:
 
 let
@@ -29,17 +27,10 @@ stdenv.mkDerivation {
     ];
     sha256 = "sha256-hVbX4OXPe4y37Szju3uVdXlVdjX4DFSN/A2Emz3eCcQ=";
   };
-  # DOS Line Endings in /lib directory and UNIX Line endings in /src directory.
-  # So convert everything to UNIX style line endings.
-  # Since the files are modified, autoconf and automake is required
-  postUnpack = ''
-    dir=''${src%-*}
-    cd ''${dir#*-}
-    local f
-    for f in $(find ./ -type f || die); do
-      ${dos2unix}/bin/dos2unix $f
-    done
-    cd ..
+  # the patches above are expecting unix line endings, but one of the files
+  # being patched has dos line endings in the source tarball
+  prePatch = ''
+    ${dos2unix}/bin/dos2unix lib/epson-escpr-api.h
   '';
 
   patches = [
@@ -59,10 +50,6 @@ stdenv.mkDerivation {
     "-p1"
   ];
   buildInputs = [ cups ];
-  nativeBuildInputs = [
-    automake115x
-    autoconf
-  ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
