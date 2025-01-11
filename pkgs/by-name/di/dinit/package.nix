@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     owner = "davmac314";
     repo = "dinit";
     rev = "v${version}";
-    hash = "sha256-AgUfU8cKAumICwLg2LvcSiS3YCP5I687Po3vj+ZOSSQ=";
+    # fix for case-insensitive filesystems
+    postFetch = ''
+      [ -f "$out/BUILD" ] && rm "$out/BUILD"
+    '';
+    hash = "sha256-KW75uB9cJY+nKcD6hapjisLGvi2NcfwaDR7/Zw3/YrE=";
   };
 
   postPatch = ''
