@@ -7151,7 +7151,7 @@ self: super: with self; {
 
   lazr-config = callPackage ../development/python-modules/lazr/config.nix { };
 
-  lazr-delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
+  lazr-delegates = callPackage ../development/python-modules/lazr-delegates { };
 
   lazr-restfulclient = callPackage ../development/python-modules/lazr-restfulclient { };
 
