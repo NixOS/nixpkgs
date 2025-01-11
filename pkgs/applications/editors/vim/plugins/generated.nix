@@ -3113,6 +3113,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/ddc-filter-sorter_rank/";
   };
 
+  ddc-source-around = buildVimPlugin {
+    pname = "ddc-source-around";
+    version = "2024-12-28";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-source-around";
+      rev = "32d54dc188b50bcd64f7b410c04aa4ec567ae47f";
+      sha256 = "0a18prpd7znn3gj7g16yldq8ya8iyph2lfxx7yhm11m3rjx286m7";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-source-around/";
+  };
+
   ddc-source-lsp = buildVimPlugin {
     pname = "ddc-source-lsp";
     version = "2025-01-04";
