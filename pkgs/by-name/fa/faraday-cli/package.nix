@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
-  version = "2.1.11";
+  version = "2.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday-cli";
     tag = version;
-    hash = "sha256-bCiiX5dYodnWkKeNo2j3PGMz17F5y2X4ECZiStDdK5U=";
+    hash = "sha256-TZABx76ap4mzZ99Xd8chkwBsGmT9qJWAeMaubUwGiRw=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
