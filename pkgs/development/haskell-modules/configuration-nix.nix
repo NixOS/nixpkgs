@@ -1323,7 +1323,12 @@ self: super: builtins.intersectAttrs super {
       preCheck = drv.preCheck or "" + ''
         export PATH="$PWD/dist/build/happy:$PATH"
       '';
-    })) super)
+    })) {
+      inherit (super) happy;
+      happy_2_1_3 = super.happy_2_1_3.override {
+        happy-lib = self.happy-lib_2_1_3;
+      };
+    })
     happy_2_1_3
     happy
     ;
