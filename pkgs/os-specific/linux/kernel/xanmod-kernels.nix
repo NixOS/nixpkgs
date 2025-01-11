@@ -14,8 +14,8 @@ let
   # kernel config in the xanmod version commit
   variants = {
     lts = {
-      version = "6.6.69";
-      hash = "sha256-ZU0vVea8CCR41Sc+bbM4GOnDsFUpTvBvCEHSHLmWHds=";
+      version = "6.6.70";
+      hash = "sha256-5G3Lo+dWObVDaBRzn2Ho24R2vMjsupx5z2jRIQ0NAl0=";
     };
     main = {
       version = "6.12.8";
