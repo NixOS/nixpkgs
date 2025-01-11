@@ -52,6 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       eureka-cpu
       RGBCube
+      Gliczy
     ];
   };
 })
