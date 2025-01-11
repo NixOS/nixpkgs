@@ -9,6 +9,7 @@
 , flex
 , git
 , gperf
+, llvmPackages_17
 , ninja
 , pkg-config
 , python3
@@ -67,7 +68,15 @@
 , xcbuild
 }:
 
-qtModule {
+let
+  # Error when using clang 16:
+  # .../src/3rdparty/chromium/base/containers/flat_tree.h:354:22:
+  # error: invalid operands to binary expression ('const container_type' (aka 'const std::vector<device::BluetoothUUID>') and 'const container_type')
+  #    return lhs.body_ <=> rhs.body_;
+  #           ~~~~~~~~~ ^   ~~~~~~~~~
+  stdenv' = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
+in
+(qtModule.override { stdenv = stdenv'; }) {
   pname = "qtwebengine";
   nativeBuildInputs = [
     bison
@@ -133,6 +142,10 @@ qtModule {
 
     substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
+
+    # Disable metal shader compilation, Xcode only
+    substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
+      --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
