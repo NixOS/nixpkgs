@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       --inherit-argv0
 
     # Prepare desktop item
-    # install -Dm644 "${icon}" "$out/share/pixmaps/${pname}.png"
+  
 
     runHook postInstall
   '';
