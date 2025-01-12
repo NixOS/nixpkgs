@@ -1,0 +1,13 @@
+diff --git a/src/daemon/CMakeLists.txt b/src/daemon/CMakeLists.txt
+index a04b80c..2969b3b 100644
+--- a/src/daemon/CMakeLists.txt
++++ b/src/daemon/CMakeLists.txt
+@@ -437,7 +437,7 @@ if ("${CKB_NEXT_INIT_SYSTEM}" STREQUAL "launchd")
+ elseif ("${CKB_NEXT_INIT_SYSTEM}" STREQUAL "systemd")
+     install(
+         FILES "${CMAKE_CURRENT_BINARY_DIR}/service/ckb-next-daemon.service"
+-        DESTINATION "${SYSTEMD_UNIT_INSTALL_DIR}"
++        DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/systemd/system"
+         PERMISSIONS
+         OWNER_READ OWNER_WRITE
+         GROUP_READ

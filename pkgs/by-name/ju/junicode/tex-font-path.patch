@@ -1,0 +1,166 @@
+Upstream style file relies on font files being present on the system
+globally.  This is not quite how Nix usually does thing, so this patch
+changes the style file to instead look fonts up in hardcoded
+locations, which are later patched up to refer to the package outputs,
+thus ensuring the style always uses the fonts packaged with it.
+
+diff --git a/TeX/junicode.sty b/TeX/junicode.sty
+index 83bd45d..8fe671c 100644
+--- a/TeX/junicode.sty
++++ b/TeX/junicode.sty
+@@ -208,7 +208,14 @@
+ 
+ \RequirePackage{fontspec}
+ \defaultfontfeatures{Ligatures=TeX, Extension=.\junicode@fonttype}
+-\defaultfontfeatures{Ligatures=TeX}
++
++\def\junicode@fonttype@otf{otf}
++
++\ifx\junicode@fonttype\junicode@fonttype@otf
++  \def\junicode@fontpath{@@@opentype_path@@@}
++\else
++  \def\junicode@fontpath{@@@truetype_path@@@}
++\fi
+ 
+ \ifxetex
+ \typeout{\junicode@regstylename}
+@@ -219,6 +226,7 @@
+    ItalicFont =        *-\junicode@italstylename,
+    BoldFont =          *-\junicode@boldstylename,
+    BoldItalicFont =    *-\junicode@boldstylename Italic,
++   Path =              \junicode@fontpath,
+   ]{Junicode}
+ \fi
+ \ifluatex
+@@ -230,6 +238,7 @@
+    ItalicFont =        *-\junicode@italstylename,
+    BoldFont =          *-\junicode@boldstylename,
+    BoldItalicFont =    *-\junicode@boldstylename Italic,
++   Path =              \junicode@fontpath,
+   ]{Junicode}
+ \fi
+ 
+@@ -242,6 +251,7 @@
+         #3
+         Numbers =           {\junicode@figurealign,\junicode@figurestyle},
+         SmallCapsFeatures = {Letters=SmallCaps},
++        Path =              \junicode@fontpath,
+     ]
+ }
+ \fi
+@@ -252,6 +262,7 @@
+         #3
+         Numbers =           {\junicode@figurealign,\junicode@figurestyle},
+         SmallCapsFeatures = {Letters=SmallCaps},
++        Path =              \junicode@fontpath,
+     ]
+ }
+ \fi
+diff --git a/TeX/junicodevf.lua b/TeX/junicodevf.lua
+index 7148668..acebe82 100644
+--- a/TeX/junicodevf.lua
++++ b/TeX/junicodevf.lua
+@@ -148,7 +148,7 @@ function mkfontcommands()
+          romfontcmd = "jRegular"
+          italfontcmd = "jItalic"
+       end
+-      tex.print("\\junicodevf@newfont{\\" .. romfontcmd .. "}{JunicodeVF}{\\" .. defcmd .. "}{\\" .. defsizecmd .. "}")
++      tex.print("\\junicodevf@newfont{\\" .. romfontcmd .. "}{JunicodeVF-Roman}{\\" .. defcmd .. "}{\\" .. defsizecmd .. "}")
+       tex.print("\\junicodevf@newfont{\\" .. italfontcmd .. "}{JunicodeVF-Italic}{\\" .. defcmd .. "}{\\" .. defsizecmd .. "}")
+    end
+ end
+diff --git a/TeX/junicodevf.sty b/TeX/junicodevf.sty
+index c01ccaf..07a99ad 100644
+--- a/TeX/junicodevf.sty
++++ b/TeX/junicodevf.sty
+@@ -168,11 +168,13 @@ mkwidthcommands(wdindex, adjustment)}}
+ 
+ % DECLARE THE FONTS
+ 
+-\setmainfont{JunicodeVF}[
+-    ItalicFont =         {*-Italic},
+-    BoldFont =           {*},
+-    BoldItalicFont =     {*-Italic},
++\setmainfont{JunicodeVF-Roman}[
++    ItalicFont =         {JunicodeVF-Italic},
++    BoldFont =           {JunicodeVF-Roman},
++    BoldItalicFont =     {JunicodeVF-Italic},
+     Renderer =           HarfBuzz,
++    Extension =          .ttf,
++    Path =               @@@truetype_path@@@,
+     Numbers =            {\junicodevf@figurealign,\junicodevf@figurestyle},
+     \MainDef,
+     UprightFeatures =    {\MainRegDef
+@@ -188,6 +190,8 @@ mkwidthcommands(wdindex, adjustment)}}
+ \newcommand*{\junicodevf@newfont}[4]{
+     \setfontface#1{#2}[
+         Renderer =          HarfBuzz,
++        Extension =          .ttf,
++        Path =               @@@truetype_path@@@,
+         Numbers =           {\junicodevf@figurealign,\junicodevf@figurestyle},
+         SmallCapsFont =     {*},
+         SmallCapsFeatures = {Letters=SmallCaps},
+@@ -200,43 +204,59 @@ mkwidthcommands(wdindex, adjustment)}}
+ 
+ % ENLARGED FACES
+ 
+-\setfontface\EnlargedOne{JunicodeVF}[
++\setfontface\EnlargedOne{JunicodeVF-Roman}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLAOneSizeDef
+ ]
+ 
+ \setfontface\EnlargedOneItalic{JunicodeVF-Italic}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLAOneSizeDef
+ ]
+ 
+-\setfontface\EnlargedTwo{JunicodeVF}[
++\setfontface\EnlargedTwo{JunicodeVF-Roman}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLATwoSizeDef
+ ]
+ 
+ \setfontface\EnlargedTwoItalic{JunicodeVF-Italic}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLATwoSizeDef
+ ]
+ 
+-\setfontface\EnlargedThree{JunicodeVF}[
++\setfontface\EnlargedThree{JunicodeVF-Roman}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLAThreeSizeDef
+ ]
+ 
+ \setfontface\EnlargedThreeItalic{JunicodeVF-Italic}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLAThreeSizeDef
+ ]
+ 
+-\setfontface\EnlargedFour{JunicodeVF}[
++\setfontface\EnlargedFour{JunicodeVF-Roman}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLAFourSizeDef
+ ]
+ 
+ \setfontface\EnlargedFourItalic{JunicodeVF-Italic}[
+     Renderer = HarfBuzz,
++    Extension = .ttf,
++    Path = @@@truetype_path@@@,
+     \ENLAFourSizeDef
+ ]
+ 
