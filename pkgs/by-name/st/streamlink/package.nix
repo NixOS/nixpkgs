@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   ffmpeg,
 }:
 
@@ -17,8 +17,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = lib.getExe ffmpeg;
     })
   ];

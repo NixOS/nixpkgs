@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   stdenv,
 }:
 
@@ -20,8 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-zkPLas+fQQzm7LlWNpTooUR/e30KMS9OET6PMwQ2yAA=";
 
   patches = [
-    (substituteAll {
-      src = ./use-correct-binary-path-in-tests.patch;
+    (replaceVars ./use-correct-binary-path-in-tests.patch {
       target_triple = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];

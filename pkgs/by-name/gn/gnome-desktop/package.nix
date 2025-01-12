@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   libxslt,
   ninja,
@@ -44,8 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
+    (replaceVars ./bubblewrap-paths.patch {
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
       inherit (builtins) storeDir;
     })
