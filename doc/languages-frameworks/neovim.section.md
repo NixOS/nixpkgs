@@ -1,12 +1,22 @@
 # Neovim {#neovim}
 
 Install `neovim-unwrapped` to get a barebone neovim to configure imperatively.
-Neovim can be configured to include your favorite plugins and additional libraries by installing `neovim` instead.
+This is the closest to what you encounter on other distributions.
+
+`neovim` is a wrapper around neovim with some extra configuration to for
+instance set the various language providers like python.
+The wrapper can be further configured to include your favorite plugins and
+configurations for a reproducible neovim across machines.
 See the next section for more details.
 
 ## Custom configuration {#neovim-custom-configuration}
 
-For Neovim the `configure` argument can be overridden to achieve the same:
+There are two wrappers available to provide additionnal configuration around the vanilla package `pkgs.neovim-unwrapped`:
+1. `wrapNeovim`: the historical one you should use
+2. `wrapNeovimUnstable` intended to replace the former. It has more features but
+   the interface is not stable yet.
+
+You can configure the former via:
 
 ```nix
 neovim.override {
@@ -14,9 +24,17 @@ neovim.override {
     customRC = ''
       # here your custom configuration goes!
     '';
+    packages.myVimPackage = with pkgs.vimPlugins; {
+      # see examples below how to use custom packages
+      start = [ ];
+      # If a Vim plugin has a dependency that is not explicitly listed in
+      # opt that dependency will always be added to start to avoid confusion.
+      opt = [ ];
+    };
   };
 }
 ```
+`myVimPackage` is an arbitrary name for the generated package. You can choose any name you like.
 
 If you want to use `neovim-qt` as a graphical editor, you can configure it by overriding Neovim in an overlay
 or passing it an overridden Neovim:
@@ -33,7 +51,63 @@ neovim-qt.override {
 }
 ```
 
+You can use the new unstable wrapper but the interface may change:
+- `autoconfigure`: certain plugins need a custom configuration to work with nix.
+For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs historically patched these in the plugins with several drawbacks: harder maintainance and making upstream work harder. Per convention, these mandatory bits of configuration are bookmarked in nixpkgs in `passthru.initLua`. Enabling `autoconfigure` adds automatically the snippets required for the plugins to work.
+- `autowrapRuntimeDeps`: append to PATH runtime dependencies of your plugins. For instance `rest.nvim` requires `curl` to work. Enabling `autowrapRuntimeDeps` adds it to the PATH visible by your neovim wrapper (but not your global PATH).
+  neovim wrapper.
+- `luaRcContent`: extra lua code to add to the generated `init.lua`
+- `neovimRcContent`: extra vimL code sourced by the generated init.lua
+- `wrapperArgs`: extra arguments forwarded to the `makeWrapper` call
+- `wrapRc`: nix not being able to write in your $HOME, nixpkgs loads the
+  generated neovim configuration via its  `-u` argument, i.e. : `-u /nix/store/...generatedInit.lua`. This has sideeffects like preventing neovim to read your config in `$XDG_CONFIG_HOME` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#_initialization) in neovim). Disable it if you want to generate your own wrapper. You can still reuse while reusing the logic of the nixpkgs wrapper and access the generated config via `neovim.passthru.initRc`.
+- `plugins`: a list of plugins to add to the wrapper.
+
+```
+wrapNeovimUnstable {
+  autoconfigure = true;
+  autowrapRuntimeDeps = true;
+  luaRcContent = ''
+    vim.o.sessionoptions = 'buffers,curdir,help,tabpages,winsize,winpos,localoptions'
+    vim.g.mapleader = ' '
+    vim.g.maplocalleader = ' '
+    vim.opt.smoothscroll = true
+    vim.opt.colorcolumn = { 100 }
+    vim.opt.termguicolors = true
+  '';
+  # plugins accepts a list of either plugins or { plugin = ...; config = ..vimscript.. };
+  plugins = with vimPlugins; [
+    {
+      plugin = vim-obsession;
+      config = ''
+        map <Leader>$ <Cmd>Obsession<CR>
+      '';
+    }
+    (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
+    hex-nvim
+  ];
+}
+```
+
+You can explore the configuration in the `nix repl` to discover these options and
+override them. For instance:
+```nix
+neovim.overrideAttrs(oldAttrs: {
+   autowrapRuntimeDeps = false;
+})
+```
+
 ### Specificities for some plugins {#neovim-plugin-specificities}
+
+### Plugin optional configuration {#neovim-plugin-required-snippet}
+
+Some plugins require specific configuration to work. We choose not to
+patch those plugins but expose the necessary configuration under
+`PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
+needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
+
+### {#neovim-luarocks-based-plugins}
+
 #### Treesitter {#neovim-plugin-treesitter}
 
 By default `nvim-treesitter` encourages you to download, compile and install
